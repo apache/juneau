@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -679,9 +680,21 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public PlainTextSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public PlainTextSerializerBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public PlainTextSerializerBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 }

@@ -15,6 +15,7 @@ package org.apache.juneau.jena;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.jena.RdfSerializer.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -1496,9 +1497,21 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public RdfSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RdfSerializerBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RdfSerializerBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 }

@@ -2182,7 +2182,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 *
-	 * @deprecated Use {@link HtmlDocSerializerBuilder#widgets(Widget[])}
+	 * @deprecated Use {@link HtmlDocSerializerBuilder#widgets(HtmlWidget[])}
 	 */
 	@Deprecated
 	public RestContextBuilder widgets(Widget...values) {
@@ -2203,7 +2203,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 *
-	 * @deprecated Use {@link HtmlDocSerializerBuilder#widgetsReplace(Widget[])}
+	 * @deprecated Use {@link HtmlDocSerializerBuilder#widgetsReplace(HtmlWidget[])}
 	 */
 	@Deprecated
 	public RestContextBuilder widgetsReplace(Widget...values) {
@@ -2657,6 +2657,23 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
+	@Override /* ContextBuilder */
+	public RestContextBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
+		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestContextBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestContextBuilder applyAnnotations(java.lang.reflect.Method fromMethod) {
+		super.applyAnnotations(fromMethod);
+		return this;
+	}
 
 	//----------------------------------------------------------------------------------------------------
 	// Methods inherited from ServletConfig

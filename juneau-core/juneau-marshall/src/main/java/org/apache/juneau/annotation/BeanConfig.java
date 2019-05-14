@@ -14,7 +14,6 @@ package org.apache.juneau.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.BeanTraverseContext.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -1331,7 +1330,7 @@ public @interface BeanConfig {
 	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 	 *
 	 * <p>
-	 * The behavior when recursions are detected depends on the value for {@link #BEANTRAVERSE_ignoreRecursions}.
+	 * The behavior when recursions are detected depends on the value for {@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}.
 	 *
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
@@ -1368,7 +1367,7 @@ public @interface BeanConfig {
 	 * Configuration property:  Ignore recursion errors.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link #BEANTRAVERSE_detectRecursions}.
+	 * Used in conjunction with {@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}.
 	 * <br>Setting is ignored if <jsf>BEANTRAVERSE_detectRecursions</jsf> is <js>"false"</js>.
 	 *
 	 * <p>

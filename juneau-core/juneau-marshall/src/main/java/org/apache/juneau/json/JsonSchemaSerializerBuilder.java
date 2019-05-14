@@ -14,6 +14,7 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -885,9 +886,21 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public JsonSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public JsonSchemaSerializerBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public JsonSchemaSerializerBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 }

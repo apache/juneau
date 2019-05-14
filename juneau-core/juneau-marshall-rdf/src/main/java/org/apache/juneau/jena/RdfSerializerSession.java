@@ -529,7 +529,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Default namespaces.
 	 *
-	 * @see #RDF_namespaces
+	 * @see RdfSerializer#RDF_namespaces
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
 	 */

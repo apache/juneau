@@ -408,7 +408,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	/**
 	 * Configuration property:  Add RDF root identifier property to root node.
 	 *
-	 * @see #RDF_addRootProperty
+	 * @see RdfSerializer#RDF_addRootProperty
 	 * @return
 	 * 	<jk>true</jk> if RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
 	 * 	to identify the root node in the graph.

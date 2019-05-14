@@ -14,6 +14,7 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.urlencoding.UrlEncodingSerializer.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -744,9 +745,21 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public UrlEncodingSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public UrlEncodingSerializerBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public UrlEncodingSerializerBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 }

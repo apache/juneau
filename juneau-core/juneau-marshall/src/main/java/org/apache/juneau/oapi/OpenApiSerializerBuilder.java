@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -680,9 +681,21 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public OpenApiSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public OpenApiSerializerBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public OpenApiSerializerBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 }

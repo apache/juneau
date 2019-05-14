@@ -1632,7 +1632,6 @@ public final class RestContext extends BeanContext {
 	 * 			<li class='jm'>{@link RestContextBuilder#parsers(Object...)}
 	 * 			<li class='jm'>{@link RestContextBuilder#parsers(Class...)}
 	 * 			<li class='jm'>{@link RestContextBuilder#parsersReplace(Object...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#parsersReplace(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *

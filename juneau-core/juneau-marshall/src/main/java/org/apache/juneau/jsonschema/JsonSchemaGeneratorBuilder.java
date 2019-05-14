@@ -14,6 +14,7 @@ package org.apache.juneau.jsonschema;
 
 import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -762,9 +763,21 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public JsonSchemaGeneratorBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public JsonSchemaGeneratorBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public JsonSchemaGeneratorBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 }

@@ -14,6 +14,7 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.parser.ReaderParser.*;
 
+import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -631,9 +632,21 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public ReaderParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public ReaderParserBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public ReaderParserBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 }

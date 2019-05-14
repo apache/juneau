@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.parser.InputStreamParser.*;
 import static org.apache.juneau.parser.ReaderParser.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -825,9 +826,21 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public ParserGroupBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public ParserGroupBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public ParserGroupBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 }

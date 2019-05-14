@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer.annotation;
 
-import static org.apache.juneau.serializer.Serializer.*;
-
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
@@ -88,8 +86,8 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Note the differences between the following settings:
 	 * <ul>
-	 * 	<li class='jf'>{@link #SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -127,8 +125,8 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Note the differences between the following settings:
 	 * <ul>
-	 * 	<li class='jf'>{@link #SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>

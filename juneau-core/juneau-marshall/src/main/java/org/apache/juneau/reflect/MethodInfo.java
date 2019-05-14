@@ -255,10 +255,10 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * Annotations are appended in the following orders:
 	 * <ol>
 	 * 	<li>On this method and matching methods ordered child-to-parent.
-	 * 	<li>On this class.
+	 * 	<li>On the method class.
 	 * 	<li>On parent classes ordered child-to-parent.
 	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On the package of this class.
+	 * 	<li>On the package of the method class.
 	 * </ol>
 	 *
 	 * @return A new {@link AnnotationsMap} object on every call.
@@ -273,10 +273,10 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * <p>
 	 * Annotations are appended in the following orders:
 	 * <ol>
-	 * 	<li>On the package of this class.
+	 * 	<li>On the package of the method class.
 	 * 	<li>On interfaces ordered parent-to-child.
 	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On this class.
+	 * 	<li>On the method class.
 	 * 	<li>On this method and matching methods ordered parent-to-child.
 	 * </ol>
 	 *

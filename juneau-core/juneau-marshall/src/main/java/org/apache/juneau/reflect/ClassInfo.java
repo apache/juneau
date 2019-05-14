@@ -984,7 +984,7 @@ public final class ClassInfo {
 	 * Constructs an {@link ConfigAnnotationsMap} of all annotations found on this class.
 	 *
 	 * <p>
-	 * Annotations are appended in the following orders:
+	 * Annotations are appended in the following order:
 	 * <ol>
 	 * 	<li>On the package of this class.
 	 * 	<li>On interfaces ordered parent-to-child.

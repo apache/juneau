@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html.annotation;
 
-import static org.apache.juneau.html.HtmlSerializer.*;
-
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
@@ -48,7 +46,7 @@ public @interface HtmlConfig {
 	 * through reflection.
 	 *
 	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
+	 * When present, this value overrides the {@link Serializer#SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -129,7 +127,7 @@ public @interface HtmlConfig {
 	 *
 	 * <p>
 	 * If a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
-	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
+	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializer#HTML_uriAnchorText}.
 	 *
 	 * <p>
 	 * The following shows the difference between the two generated outputs:
@@ -180,7 +178,7 @@ public @interface HtmlConfig {
 	 * Configuration property:  Link label parameter name.
 	 *
 	 * <p>
-	 * The parameter name to look for when resolving link labels via {@link #HTML_detectLabelParameters}.
+	 * The parameter name to look for when resolving link labels via {@link HtmlSerializer#HTML_detectLabelParameters}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -194,7 +192,7 @@ public @interface HtmlConfig {
 	 *
 	 * <h5 class=''>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link #HTML_labelParameter}
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_labelParameter}
 	 * </ul>
 	 */
 	String labelParameter() default "";
@@ -206,7 +204,7 @@ public @interface HtmlConfig {
 	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
 	 * <p>
-	 * The parameter name can be changed via the {@link #HTML_labelParameter} property.
+	 * The parameter name can be changed via the {@link HtmlSerializer#HTML_labelParameter} property.
 	 *
 	 * <p>
 	 * The following shows the difference between the two generated outputs.

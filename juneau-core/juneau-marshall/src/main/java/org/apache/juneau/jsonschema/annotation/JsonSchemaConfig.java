@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema.annotation;
 
-import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
-
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
@@ -184,7 +182,7 @@ public @interface JsonSchemaConfig {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		This setting is ignored if {@link #JSONSCHEMA_useBeanDefs} is not enabled.
+	 * 		This setting is ignored if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} is not enabled.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>

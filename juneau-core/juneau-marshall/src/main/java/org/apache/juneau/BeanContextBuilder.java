@@ -1706,9 +1706,21 @@ public class BeanContextBuilder extends ContextBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public BeanContextBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public BeanContextBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public BeanContextBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 }

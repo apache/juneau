@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -179,7 +180,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * When this property is specified, the {@link #HTMLDOC_navlinks} property is ignored.
+	 * When this property is specified, the {@link HtmlDocSerializer#HTMLDOC_navlinks} property is ignored.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -236,7 +237,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_navlinks} property.
+	 * Configuration property:  Add to the {@link HtmlDocSerializer#HTMLDOC_navlinks} property.
 	 *
 	 * @param value
 	 * 	The value to add to this property.
@@ -312,7 +313,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_script} property.
+	 * Configuration property:  Add to the {@link HtmlDocSerializer#HTMLDOC_script} property.
 	 *
 	 * @param value
 	 * 	The value to add to this property.
@@ -349,7 +350,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_style} property.
+	 * Configuration property:  Add to the {@link HtmlDocSerializer#HTMLDOC_style} property.
 	 *
 	 * @param value
 	 * 	The value to add to this property.
@@ -379,7 +380,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_stylesheet} property.
+	 * Configuration property:  Add to the {@link HtmlDocSerializer#HTMLDOC_stylesheet} property.
 	 *
 	 * @param value
 	 * 	The value to add to this property.
@@ -1204,9 +1205,21 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public HtmlDocSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public HtmlDocSerializerBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public HtmlDocSerializerBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 }

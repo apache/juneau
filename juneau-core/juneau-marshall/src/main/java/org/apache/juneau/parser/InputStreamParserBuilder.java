@@ -14,6 +14,7 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.parser.InputStreamParser.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -592,9 +593,21 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public InputStreamParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public InputStreamParserBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public InputStreamParserBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 

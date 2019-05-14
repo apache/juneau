@@ -14,6 +14,7 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.serializer.Serializer.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -1019,9 +1020,21 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public SerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 

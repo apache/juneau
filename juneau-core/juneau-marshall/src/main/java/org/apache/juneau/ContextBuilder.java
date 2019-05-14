@@ -12,10 +12,26 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.csv.annotation.*;
+import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.jso.annotation.*;
+import org.apache.juneau.json.annotation.*;
+import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.msgpack.annotation.*;
+import org.apache.juneau.oapi.annotation.*;
+import org.apache.juneau.parser.annotation.*;
+import org.apache.juneau.plaintext.annotation.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.serializer.annotation.*;
+import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.uon.annotation.*;
+import org.apache.juneau.urlencoding.annotation.*;
+import org.apache.juneau.xml.annotation.*;
 
 /**
  * Builder class for building instances of serializers and parsers.
@@ -97,6 +113,91 @@ public abstract class ContextBuilder {
 	 */
 	public ContextBuilder applyAnnotations(AnnotationsMap annotationsMap, VarResolverSession r) {
 		this.psb.applyAnnotations(annotationsMap, r);
+		return this;
+	}
+
+	/**
+	 * Applies any of the various <ja>@XConfig</ja> annotations on the specified class to this context.
+	 *
+	 * <p>
+	 * Applies any of the following annotations:
+	 * <ul class='doctree'>
+	 * 	<li class ='ja'>{@link BeanConfig}
+	 * 	<li class ='ja'>{@link CsvConfig}
+	 * 	<li class ='ja'>{@link HtmlConfig}
+	 * 	<li class ='ja'>{@link HtmlDocConfig}
+	 * 	<li class ='ja'>{@link JsoConfig}
+	 * 	<li class ='ja'>{@link JsonConfig}
+	 * 	<li class ='ja'>{@link JsonSchemaConfig}
+	 * 	<li class ='ja'>{@link MsgPackConfig}
+	 * 	<li class ='ja'>{@link OpenApiConfig}
+	 * 	<li class ='ja'>{@link ParserConfig}
+	 * 	<li class ='ja'>{@link PlainTextConfig}
+	 * 	<li class ='ja'>{@link SerializerConfig}
+	 * 	<li class ='ja'>{@link SoapXmlConfig}
+	 * 	<li class ='ja'>{@link UonConfig}
+	 * 	<li class ='ja'>{@link UrlEncodingConfig}
+	 * 	<li class ='ja'>{@link XmlConfig}
+	 * 	<li class ='ja'><code>RdfConfig</code>
+	 * </ul>
+	 *
+	 * <p>
+	 * Annotations are appended in the following order:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param fromClass The class on which the annotations are defined.
+	 * @return This object (for method chaining).
+	 */
+	public ContextBuilder applyAnnotations(Class<?> fromClass) {
+		applyAnnotations(ClassInfo.of(fromClass).getConfigAnnotationsMapParentFirst(), VarResolver.DEFAULT.createSession());
+		return this;
+	}
+
+	/**
+	 * Applies any of the various <ja>@XConfig</ja> annotations on the specified method to this context.
+	 *
+	 * <p>
+	 * Applies any of the following annotations:
+	 * <ul class='doctree'>
+	 * 	<li class ='ja'>{@link BeanConfig}
+	 * 	<li class ='ja'>{@link CsvConfig}
+	 * 	<li class ='ja'>{@link HtmlConfig}
+	 * 	<li class ='ja'>{@link HtmlDocConfig}
+	 * 	<li class ='ja'>{@link JsoConfig}
+	 * 	<li class ='ja'>{@link JsonConfig}
+	 * 	<li class ='ja'>{@link JsonSchemaConfig}
+	 * 	<li class ='ja'>{@link MsgPackConfig}
+	 * 	<li class ='ja'>{@link OpenApiConfig}
+	 * 	<li class ='ja'>{@link ParserConfig}
+	 * 	<li class ='ja'>{@link PlainTextConfig}
+	 * 	<li class ='ja'>{@link SerializerConfig}
+	 * 	<li class ='ja'>{@link SoapXmlConfig}
+	 * 	<li class ='ja'>{@link UonConfig}
+	 * 	<li class ='ja'>{@link UrlEncodingConfig}
+	 * 	<li class ='ja'>{@link XmlConfig}
+	 * 	<li class ='ja'><code>RdfConfig</code>
+	 * </ul>
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of the method class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On the method class.
+	 * 	<li>On this method and matching methods ordered parent-to-child.
+	 * </ol>
+	 *
+	 * @param fromMethod The method on which the annotations are defined.
+	 * @return This object (for method chaining).
+	 */
+	public ContextBuilder applyAnnotations(Method fromMethod) {
+		applyAnnotations(MethodInfo.of(fromMethod).getConfigAnnotationsMapParentFirst(), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 

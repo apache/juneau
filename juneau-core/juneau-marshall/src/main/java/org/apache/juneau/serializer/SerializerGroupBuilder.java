@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -1098,9 +1099,21 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public SerializerGroupBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerGroupBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerGroupBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 }

@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.BeanTraverseContext.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.http.*;
@@ -619,9 +620,21 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public BeanTraverseBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public BeanTraverseBuilder applyAnnotations(Class<?> fromClass) {
+		super.applyAnnotations(fromClass);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public BeanTraverseBuilder applyAnnotations(Method fromMethod) {
+		super.applyAnnotations(fromMethod);
 		return this;
 	}
 

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack.annotation;
 
-import static org.apache.juneau.msgpack.MsgPackSerializer.*;
-
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
@@ -48,7 +46,7 @@ public @interface MsgPackConfig {
 	 * through reflection.
 	 *
 	 * <p>
-	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
+	 * When present, this value overrides the {@link Serializer#SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
