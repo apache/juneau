@@ -89,7 +89,7 @@
 	<li>Added <ja>@Bean.properties</ja> annotations on various DTO beans to make the ordering consistent
 		between IBM and Oracle JVMs.<br>
 		IBM JVMs maintain the order of methods in a class, whereas Oracle JVMs do not.
-	<li>Serializers and parsers now automatically convert {@link java.lang.Class} objects to readable names via {@link oaj.internal.ClassUtils#getReadableClassName(Class)}.
+	<li>Serializers and parsers now automatically convert {@link java.lang.Class} objects to readable names via <code><del>ClassUtils.getReadableClassName(Class)</del></code>.
 	<li>Eliminated the <code>ClassFilter</code> class since it's no longer needed.
 	<li>Code and concurrency improvements to {@link oaj.serializer.SerializerGroup} and {@link oaj.parser.ParserGroup}.
 	<li>Various enhancements to <code><del>BeanContext.convertToType(Object,Class)</del></code>.

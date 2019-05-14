@@ -138,7 +138,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 				r = n.asResource();
 			}
 
-			if (isAddRootProperty())
+			if (isAddRootProp())
 				r.addProperty(pRoot, "true");
 		}
 
@@ -511,8 +511,8 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	 * 	<jk>true</jk> if RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
 	 * 	to identify the root node in the graph.
 	 */
-	protected final boolean isAddRootProperty() {
-		return ctx.isAddRootProperty();
+	protected final boolean isAddRootProp() {
+		return ctx.isAddRootProp();
 	}
 
 	/**

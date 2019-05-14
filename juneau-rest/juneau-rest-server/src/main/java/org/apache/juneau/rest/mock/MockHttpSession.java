@@ -20,11 +20,6 @@ import javax.servlet.http.*;
 /**
  * An implementation of {@link HttpSession} for mocking purposes.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.UnitTesting}
- * </ul>
- *
  * @deprecated Use <code>org.apache.juneau.rest.mock2</code>
  */
 @Deprecated

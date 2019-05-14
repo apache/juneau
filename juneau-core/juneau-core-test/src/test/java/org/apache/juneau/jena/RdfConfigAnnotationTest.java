@@ -103,7 +103,7 @@ public class RdfConfigAnnotationTest {
 		RdfSerializerSession x = RdfSerializer.create().applyAnnotations(m, sr).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddLiteralTypes());
-		check("true", x.isAddRootProperty());
+		check("true", x.isAddRootProp());
 		check("true", x.isAutoDetectNamespaces());
 		check("SEQ", x.getCollectionFormat());
 		check("foo:http://foo", x.getJuneauBpNs());
@@ -189,7 +189,7 @@ public class RdfConfigAnnotationTest {
 		RdfSerializerSession x = RdfSerializer.create().applyAnnotations(m, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddLiteralTypes());
-		check("false", x.isAddRootProperty());
+		check("false", x.isAddRootProp());
 		check("true", x.isAutoDetectNamespaces());
 		check("DEFAULT", x.getCollectionFormat());
 		check("jp:http://www.apache.org/juneaubp/", x.getJuneauBpNs());
@@ -273,7 +273,7 @@ public class RdfConfigAnnotationTest {
 		RdfSerializerSession x = RdfSerializer.create().applyAnnotations(m, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddLiteralTypes());
-		check("false", x.isAddRootProperty());
+		check("false", x.isAddRootProp());
 		check("true", x.isAutoDetectNamespaces());
 		check("DEFAULT", x.getCollectionFormat());
 		check("jp:http://www.apache.org/juneaubp/", x.getJuneauBpNs());

@@ -2627,7 +2627,7 @@
 	}
 </p>
 <p>
-	The {@link org.apache.juneau.annoation.Name @Name} annotation is a shortcut for specifying a bean property name:
+	The {@link org.apache.juneau.annotation.Name @Name} annotation is a shortcut for specifying a bean property name:
 </p>
 <p class='bpcode w800'>
 	<jk>public class</jk> MyBean {
@@ -9895,7 +9895,6 @@
 		<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showXmlDeclaration RDF_rdfxml_showXmlDeclaration}
 		<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_tab RDF_rdfxml_tab}
 		<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_xmlBase RDF_rdfxml_xmlBase}
-		<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_useXmlNamespaces RDF_useXmlNamespaces}					
 	</ul>
 	<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
 	<ul>
@@ -9904,6 +9903,7 @@
 		<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_addRootProperty RDF_addRootProperty}
 		<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_autoDetectNamespaces RDF_autoDetectNamespaces}
 		<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_namespaces RDF_namespaces}				
+		<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#RDF_useXmlNamespaces RDF_useXmlNamespaces}					
 	</ul>
 </ul>
 <p>
@@ -9998,7 +9998,6 @@
 		<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showXmlDeclaration RDF_rdfxml_showXmlDeclaration}
 		<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_tab RDF_rdfxml_tab}
 		<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_xmlBase RDF_rdfxml_xmlBase}
-		<li class='jf'>{@link org.apache.juneau.jena.RdfCommon#RDF_useXmlNamespaces RDF_useXmlNamespaces}					
 	</ul>
 	<li class='jc'>{@link org.apache.juneau.jena.RdfParser}
 	<ul>
@@ -19896,7 +19895,7 @@
 </p>
 <p>
 	Examples can also be specified via generic properties as well using the {@link org.apache.juneau.BeanContext#BEAN_examples} property 
-	or {@link org.apache.juneau.annoation.BeanConfig#examples @BeanConfig(examples)} annotation at either the class or method level.
+	or {@link org.apache.juneau.annotation.BeanConfig#examples @BeanConfig(examples)} annotation at either the class or method level.
 </p>
 <p class='bpcode w800'>
 	<jc>// Examples defined at class level.</jc>
@@ -20100,7 +20099,7 @@
 <h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation' id='juneau-rest-server.HtmlDocAnnotation'>7.29 - @HtmlDocConfig</a></h3>
 <div class='topic'><!-- START: 7.29 - juneau-rest-server.HtmlDocAnnotation -->
 <p>
-	The {@link org.apache.juneau.rest.annotation.HtmlDocConfig @HtmlDocConfig} annotation is used to customize the HTML 
+	The {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig} annotation is used to customize the HTML 
 	view of your serialized POJOs.
 	It's used in the following locations:
 </p>
@@ -20801,7 +20800,7 @@
 </p>
 <img class='bordered w800' src='doc-files/juneau-rest-server.Stylesheets.3.png'>
 <p>
-	The stylesheet URL is controlled by the {@link org.apache.juneau.rest.annotation.HtmlDocConfig#stylesheet() @HtmlDocConfig(stylesheet)} annotation.
+	The stylesheet URL is controlled by the {@link org.apache.juneau.html.annotation.HtmlDocConfig#stylesheet() @HtmlDocConfig(stylesheet)} annotation.
 	The {@link org.apache.juneau.rest.BasicRestServlet} class defines the stylesheet served up as a static file:
 <p class='bpcode w800'>
 	<ja>@RestResource</ja>(
@@ -29617,7 +29616,7 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		New {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod} annoation on {@link org.apache.juneau.rest.RestServlet} methods.<br>
+		New {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod} annotation on {@link org.apache.juneau.rest.RestServlet} methods.<br>
 		Allows the usage of URL pattern matching and automatic conversion of URL variables to arguments passed to method handlers.<br>
 		See {@link org.apache.juneau.rest.RestServlet} for more information.
 	</li>
@@ -31364,7 +31363,7 @@
 <h5 class='topic w800'>Core</h5>		
 <ul class='spaced-list'>
 	<li>Simplified {@link org.apache.juneau.utils.PojoIntrospector} class.
-	<li>New {@link org.apache.juneau.internal.ClassUtils#getMethodSignature(Method)} method.
+	<li>New <code><del>ClassUtils.getMethodSignature(Method)</del></code> method.
 </ul>
 
 <h5 class='topic w800'>Client</h5>		
@@ -31853,7 +31852,7 @@
 			<li>{@link org.apache.juneau.Streamable} interface for identifying objects that can be serialized directly to an output stream.
 			<li>{@link org.apache.juneau.Writable} interface for identifying objects that can be serialized directly to a writer.
 			<li><code><del>StringObject</del></code> class that can be used for delayed object serialization.
-			<li>{@link org.apache.juneau.internal.ByteArrayCache}
+			<li><code><del>ByteArrayCache</del></code>
 			<li>{@link org.apache.juneau.internal.ByteArrayInOutStream} 
 			<li>{@link org.apache.juneau.internal.FileUtils}
 			<li>{@link org.apache.juneau.internal.ThrowableUtils}
@@ -32337,7 +32336,7 @@
 	<li>Added <ja>@Bean.properties</ja> annotations on various DTO beans to make the ordering consistent
 		between IBM and Oracle JVMs.<br>
 		IBM JVMs maintain the order of methods in a class, whereas Oracle JVMs do not.
-	<li>Serializers and parsers now automatically convert {@link java.lang.Class} objects to readable names via {@link org.apache.juneau.internal.ClassUtils#getReadableClassName(Class)}.
+	<li>Serializers and parsers now automatically convert {@link java.lang.Class} objects to readable names via <code><del>ClassUtils.getReadableClassName(Class)</del></code>.
 	<li>Eliminated the <code>ClassFilter</code> class since it's no longer needed.
 	<li>Code and concurrency improvements to {@link org.apache.juneau.serializer.SerializerGroup} and {@link org.apache.juneau.parser.ParserGroup}.
 	<li>Various enhancements to <code><del>BeanContext.convertToType(Object,Class)</del></code>.

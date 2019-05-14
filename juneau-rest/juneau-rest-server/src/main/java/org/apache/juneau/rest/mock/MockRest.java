@@ -49,12 +49,6 @@ import org.apache.juneau.utils.*;
  *  }
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.UnitTesting}
- * 	<li class='link'>{@doc juneau-rest-client.UnitTesting}
- * </ul>
- *
  * @deprecated Use <code>org.apache.juneau.rest.mock2</code>
  */
 @Deprecated
