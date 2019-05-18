@@ -867,6 +867,16 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
+	 *
+	 * @param s The string to check.
+	 * @return <jk>true</jk> if specified string is <jk>null</jk> or emptyor consists of only blanks.
+	 */
+	public static boolean isEmptyOrBlank(String s) {
+		return s == null || s.trim().isEmpty();
+	}
+
+	/**
 	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or it's {@link #toString()} method returns an empty
 	 * string.
 	 *
