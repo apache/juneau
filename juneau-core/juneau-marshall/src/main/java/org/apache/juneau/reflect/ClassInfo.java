@@ -56,7 +56,7 @@ import org.apache.juneau.utils.*;
 public final class ClassInfo {
 
 	private final Type t;
-	private final Class<?> c;
+	final Class<?> c;
 	private final boolean isParameterizedType;
 	private List<ClassInfo> interfaces, declaredInterfaces, parents, allParents;
 	private List<MethodInfo> publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
@@ -871,7 +871,7 @@ public final class ClassInfo {
 	 */
 	public <T extends Annotation> AnnotationInfo<T> getPackageAnnotationInfo(Class<T> a) {
 		T ca = getPackageAnnotation(a);
-		return ca == null ? null : AnnotationInfo.of(this, ca);
+		return ca == null ? null : AnnotationInfo.of(getPackage(), ca);
 	}
 
 	/**
@@ -1104,21 +1104,29 @@ public final class ClassInfo {
 
 	AnnotationsMap appendAnnotationsMap(AnnotationsMap m) {
 		for (ClassInfo ci : getParents())
-			m.addAll(ci.c.getDeclaredAnnotations());
+			for (Annotation a : ci.c.getDeclaredAnnotations())
+				m.add(AnnotationInfo.of(ci, a));
 		for (ClassInfo ci : getInterfaces())
-			m.addAll(ci.c.getDeclaredAnnotations());
-		if (c.getPackage() != null)
-			m.addAll(c.getPackage().getDeclaredAnnotations());
+			for (Annotation a : ci.c.getDeclaredAnnotations())
+				m.add(AnnotationInfo.of(ci, a));
+		Package p = c.getPackage();
+		if (p != null)
+			for (Annotation a : p.getDeclaredAnnotations())
+				m.add(AnnotationInfo.of(p, a));
 		return m;
 	}
 
 	AnnotationsMap appendAnnotationsMapParentFirst(AnnotationsMap m) {
-		if (c.getPackage() != null)
-			m.addAll(c.getPackage().getDeclaredAnnotations());
+		Package p = c.getPackage();
+		if (p != null)
+			for (Annotation a : p.getDeclaredAnnotations())
+				m.add(AnnotationInfo.of(p, a));
 		for (ClassInfo ci : getInterfacesParentFirst())
-			m.addAll(ci.c.getDeclaredAnnotations());
+			for (Annotation a : ci.c.getDeclaredAnnotations())
+				m.add(AnnotationInfo.of(ci, a));
 		for (ClassInfo ci : getParentsParentFirst())
-			m.addAll(ci.c.getDeclaredAnnotations());
+			for (Annotation a : ci.c.getDeclaredAnnotations())
+				m.add(AnnotationInfo.of(ci, a));
 		return m;
 	}
 

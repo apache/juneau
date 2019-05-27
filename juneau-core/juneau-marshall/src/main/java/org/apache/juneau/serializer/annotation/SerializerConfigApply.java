@@ -17,6 +17,7 @@ import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
@@ -36,7 +37,8 @@ public class SerializerConfigApply extends ConfigApply<SerializerConfig> {
 	}
 
 	@Override
-	public void apply(SerializerConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<SerializerConfig> ai, PropertyStoreBuilder psb) {
+		SerializerConfig a = ai.getAnnotation();
 		if (! a.addBeanTypes().isEmpty())
 			psb.set(SERIALIZER_addBeanTypes, bool(a.addBeanTypes()));
 		if (! a.addRootType().isEmpty())

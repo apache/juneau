@@ -23,8 +23,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 import org.junit.*;
 
 public class MethodInfoTest {
@@ -49,8 +52,18 @@ public class MethodInfoTest {
 	@Target({METHOD,TYPE})
 	@Retention(RUNTIME)
 	@Inherited
+	@PropertyStoreApply(AConfigApply.class)
 	public static @interface AConfig {
 		String value();
+	}
+
+	public static class AConfigApply extends ConfigApply<AConfig> {
+		protected AConfigApply(Class<AConfig> c, VarResolverSession r) {
+			super(c, r);
+		}
+		@Override
+		public void apply(AnnotationInfo<AConfig> a, PropertyStoreBuilder ps) {
+		}
 	}
 
 	private static void check(String expected, Object o) {
@@ -69,6 +82,8 @@ public class MethodInfoTest {
 				return ((Method)t).getDeclaringClass().getSimpleName() + '.' + MethodInfo.of((Method)t).getShortName();
 			if (t instanceof List)
 				return ((List<?>)t).stream().map(this).collect(Collectors.joining(","));
+			if (t instanceof AnnotationInfo)
+				return apply(((AnnotationInfo)t).getAnnotation());
 			if (t instanceof A)
 				return "@A(" + ((A)t).value() + ")";
 			if (t instanceof PA)
@@ -254,18 +269,18 @@ public class MethodInfoTest {
 
 	@Test
 	public void getAnnotationsMap() {
-		check("A=[@A(a1),@A(C3),@A(C2),@A(C1)],PA=[@PA(10)]", c_a1.getAnnotationsMap());
-		check("A=[@A(a2b),@A(a2a),@A(C3),@A(C2),@A(C1)],PA=[@PA(10)]", c_a2.getAnnotationsMap());
-		check("A=[@A(a3),@A(C3),@A(C2),@A(C1)],PA=[@PA(10)]", c_a3.getAnnotationsMap());
+		check("A=[@A(C3),@A(C2),@A(a1),@A(C1)],PA=[@PA(10)]", c_a1.getAnnotationsMap());
+		check("A=[@A(C3),@A(a2b),@A(C2),@A(a2a),@A(C1)],PA=[@PA(10)]", c_a2.getAnnotationsMap());
+		check("A=[@A(C3),@A(C2),@A(a3),@A(C1)],PA=[@PA(10)]", c_a3.getAnnotationsMap());
 		check("A=[@A(a4),@A(C3),@A(C2),@A(C1)],PA=[@PA(10)]", c_a4.getAnnotationsMap());
 		check("A=[@A(C3),@A(C2),@A(C1)],PA=[@PA(10)]", c_a5.getAnnotationsMap());
 	}
 
 	@Test
 	public void getAnnotationsMapParentFirst() {
-		check("A=[@A(C1),@A(C2),@A(C3),@A(a1)],PA=[@PA(10)]", c_a1.getAnnotationsMapParentFirst());
-		check("A=[@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)],PA=[@PA(10)]", c_a2.getAnnotationsMapParentFirst());
-		check("A=[@A(C1),@A(C2),@A(C3),@A(a3)],PA=[@PA(10)]", c_a3.getAnnotationsMapParentFirst());
+		check("A=[@A(C1),@A(a1),@A(C2),@A(C3)],PA=[@PA(10)]", c_a1.getAnnotationsMapParentFirst());
+		check("A=[@A(C1),@A(a2a),@A(C2),@A(a2b),@A(C3)],PA=[@PA(10)]", c_a2.getAnnotationsMapParentFirst());
+		check("A=[@A(C1),@A(a3),@A(C2),@A(C3)],PA=[@PA(10)]", c_a3.getAnnotationsMapParentFirst());
 		check("A=[@A(C1),@A(C2),@A(C3),@A(a4)],PA=[@PA(10)]", c_a4.getAnnotationsMapParentFirst());
 		check("A=[@A(C1),@A(C2),@A(C3)],PA=[@PA(10)]", c_a5.getAnnotationsMapParentFirst());
 	}
@@ -306,18 +321,18 @@ public class MethodInfoTest {
 
 	@Test
 	public void getConfigAnnotationsMap() {
-		check("AConfig=[@AConfig(a1),@AConfig(C3),@AConfig(C2),@AConfig(C1)]", cb_a1.getConfigAnnotationsMap());
-		check("AConfig=[@AConfig(a2b),@AConfig(a2a),@AConfig(C3),@AConfig(C2),@AConfig(C1)]", cb_a2.getConfigAnnotationsMap());
-		check("AConfig=[@AConfig(a3),@AConfig(C3),@AConfig(C2),@AConfig(C1)]", cb_a3.getConfigAnnotationsMap());
+		check("AConfig=[@AConfig(C3),@AConfig(C2),@AConfig(a1),@AConfig(C1)]", cb_a1.getConfigAnnotationsMap());
+		check("AConfig=[@AConfig(C3),@AConfig(a2b),@AConfig(C2),@AConfig(a2a),@AConfig(C1)]", cb_a2.getConfigAnnotationsMap());
+		check("AConfig=[@AConfig(C3),@AConfig(C2),@AConfig(a3),@AConfig(C1)]", cb_a3.getConfigAnnotationsMap());
 		check("AConfig=[@AConfig(a4),@AConfig(C3),@AConfig(C2),@AConfig(C1)]", cb_a4.getConfigAnnotationsMap());
 		check("AConfig=[@AConfig(C3),@AConfig(C2),@AConfig(C1)]", cb_a5.getConfigAnnotationsMap());
 	}
 
 	@Test
 	public void getConfigAnnotationsMapParentFirst() {
-		check("AConfig=[@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a1)]", cb_a1.getConfigAnnotationsMapParentFirst());
-		check("AConfig=[@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a2a),@AConfig(a2b)]", cb_a2.getConfigAnnotationsMapParentFirst());
-		check("AConfig=[@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a3)]", cb_a3.getConfigAnnotationsMapParentFirst());
+		check("AConfig=[@AConfig(C1),@AConfig(a1),@AConfig(C2),@AConfig(C3)]", cb_a1.getConfigAnnotationsMapParentFirst());
+		check("AConfig=[@AConfig(C1),@AConfig(a2a),@AConfig(C2),@AConfig(a2b),@AConfig(C3)]", cb_a2.getConfigAnnotationsMapParentFirst());
+		check("AConfig=[@AConfig(C1),@AConfig(a3),@AConfig(C2),@AConfig(C3)]", cb_a3.getConfigAnnotationsMapParentFirst());
 		check("AConfig=[@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)]", cb_a4.getConfigAnnotationsMapParentFirst());
 		check("AConfig=[@AConfig(C1),@AConfig(C2),@AConfig(C3)]", cb_a5.getConfigAnnotationsMapParentFirst());
 	}

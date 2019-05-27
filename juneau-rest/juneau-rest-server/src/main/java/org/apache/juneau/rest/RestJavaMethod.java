@@ -151,7 +151,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		@SuppressWarnings("deprecation")
 		Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
-			MethodInfo mi = getMethodInfo(method);
+			MethodInfo mi = getMethodInfo(servlet.getClass(), method);
 
 			try {
 
@@ -254,7 +254,8 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				VarResolverSession sr = vr.createSession();
 
-				PropertyStoreBuilder psb = PropertyStore.create().add(properties).set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps);
+				PropertyStoreBuilder psb = PropertyStore.create().apply(context.getPropertyStore2()).set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps);
+
 				for (Property p1 : m.properties())
 					psb.set(p1.name(), p1.value());
 				for (String p1 : m.flags())

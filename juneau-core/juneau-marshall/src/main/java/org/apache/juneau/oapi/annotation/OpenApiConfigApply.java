@@ -13,6 +13,7 @@
 package org.apache.juneau.oapi.annotation;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -31,6 +32,6 @@ public class OpenApiConfigApply extends ConfigApply<OpenApiConfig> {
 	}
 
 	@Override
-	public void apply(OpenApiConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<OpenApiConfig> ai, PropertyStoreBuilder psb) {
 	}
 }

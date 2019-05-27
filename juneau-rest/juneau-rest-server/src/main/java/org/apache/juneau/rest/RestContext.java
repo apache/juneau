@@ -2167,6 +2167,119 @@ public final class RestContext extends BeanContext {
 	public static final String REST_responseHandlers = PREFIX + "responseHandlers.lo";
 
 	/**
+	 * Configuration property:  Declared roles.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.rolesDeclared.ss"</js>
+	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestResource#rolesDeclared()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#rolesDeclared(String...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * A comma-delimited list of all possible user roles.
+	 *
+	 * <p>
+	 * Used in conjunction with {@link RestContextBuilder#roleGuard(String)} is used with patterns.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
+	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE && ROLE_SPECIAL)"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
+	 * </ul>
+	 */
+	public static final String REST_rolesDeclared = PREFIX + "rolesDeclared.ss";
+
+	/**
+	 * Configuration property:  Role guard.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.roleGuard.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  empty string
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestResource#roleGuard()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#roleGuard(String)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * An expression defining if a user with the specified roles are allowed to access methods on this class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		path=<js>"/foo"</js>,
+	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE && ROLE_SPECIAL)"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports any of the following expression constructs:
+	 * 		<ul>
+	 * 			<li><js>"foo"</js> - Single arguments.
+	 * 			<li><js>"foo,bar,baz"</js> - Multiple OR'ed arguments.
+	 * 			<li><js>"foo | bar | bqz"</js> - Multiple OR'ed arguments, pipe syntax.
+	 * 			<li><js>"foo || bar || bqz"</js> - Multiple OR'ed arguments, Java-OR syntax.
+	 * 			<li><js>"fo*"</js> - Patterns including <js>'*'</js> and <js>'?'</js>.
+	 * 			<li><js>"fo* & *oo"</js> - Multiple AND'ed arguments, ampersand syntax.
+	 * 			<li><js>"fo* && *oo"</js> - Multiple AND'ed arguments, Java-AND syntax.
+	 * 			<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
+	 * 		</ul>
+	 * 	<li>
+	 * 		AND operations take precedence over OR operations (as expected).
+	 * 	<li>
+	 * 		Whitespace is ignored.
+	 * 	<li>
+	 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
+	 * 	<li>
+	 * 		If patterns are used, you must specify the list of declared roles using {@link RestResource#rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_roleGuard}
+	 * </ul>
+	 */
+	public static final String REST_roleGuard = PREFIX + "roleGuard.s";
+
+	/**
 	 * Configuration property:  Serializers.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -3008,6 +3121,7 @@ public final class RestContext extends BeanContext {
 
 	private final RestContextProperties properties;
 	private final Map<Class<?>,RestMethodParam> paramResolvers;
+	private final PropertyStore propertyStore2;  // Temporary - Should by using Context.propertyStore.
 	private final SerializerGroup serializers;
 	private final ParserGroup parsers;
 	private final HttpPartSerializer partSerializer;
@@ -3143,7 +3257,7 @@ public final class RestContext extends BeanContext {
 			Class<?> resourceClass = resource.getClass();
 			ClassInfo rci = getClassInfo(resourceClass);
 			configAnnotationsMap = rci.getConfigAnnotationsMapParentFirst();
-			PropertyStore ps = getPropertyStore().builder().add(builder.properties).applyAnnotations(configAnnotationsMap, vrs).build();
+			PropertyStore ps = getPropertyStore().builder().apply(builder.getPropertyStore()).applyAnnotations(configAnnotationsMap, vrs).build();
 
 			uriContext = nullIfEmpty(getStringProperty(REST_uriContext, null));
 			uriAuthority = nullIfEmpty(getStringProperty(REST_uriAuthority, null));
@@ -3214,6 +3328,7 @@ public final class RestContext extends BeanContext {
 				.build();
 			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], resourceResolver, resource, ps)).build();
 			beanContext = BeanContext.create().apply(ps).build();
+			propertyStore2 = ps;
 
 			mimetypesFileTypeMap = new ExtendedMimetypesFileTypeMap();
 			for (String mimeType : getArrayProperty(REST_mimeTypes, String.class))
@@ -3601,6 +3716,15 @@ public final class RestContext extends BeanContext {
 	 */
 	public Config getConfig() {
 		return config;
+	}
+
+	/**
+	 * Temporary method for override the property store.
+	 * Eventually we want the property store on the Context object to be used.
+	 * @return The overridden property store.
+	 */
+	protected PropertyStore getPropertyStore2() {
+		return propertyStore2;
 	}
 
 	/**

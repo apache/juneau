@@ -16,6 +16,7 @@ import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -34,7 +35,8 @@ public class JsonSchemaConfigApply extends ConfigApply<JsonSchemaConfig> {
 	}
 
 	@Override
-	public void apply(JsonSchemaConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<JsonSchemaConfig> ai, PropertyStoreBuilder psb) {
+		JsonSchemaConfig a = ai.getAnnotation();
 		if (! a.addDescriptionsTo().isEmpty())
 			psb.set(JSONSCHEMA_addDescriptionsTo, string(a.addDescriptionsTo()));
 		if (! a.addExamplesTo().isEmpty())

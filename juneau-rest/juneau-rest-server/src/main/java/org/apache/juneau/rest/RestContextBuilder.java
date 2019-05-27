@@ -1542,6 +1542,88 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Configuration property:  Declared roles.
+	 *
+	 * <p>
+	 * A comma-delimited list of all possible user roles.
+	 *
+	 * <p>
+	 * Used in conjunction with {@link RestContextBuilder#roleGuard(String)} is used with patterns.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
+	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE && ROLE_SPECIAL)"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
+	 * </ul>
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder rolesDeclared(String...values) {
+		return addTo(REST_rolesDeclared, values);
+	}
+
+	/**
+	 * Configuration property:  Role guard.
+	 *
+	 * <p>
+	 * An expression defining if a user with the specified roles are allowed to access methods on this class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		path=<js>"/foo"</js>,
+	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE && ROLE_SPECIAL)"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports any of the following expression constructs:
+	 * 		<ul>
+	 * 			<li><js>"foo"</js> - Single arguments.
+	 * 			<li><js>"foo,bar,baz"</js> - Multiple OR'ed arguments.
+	 * 			<li><js>"foo | bar | bqz"</js> - Multiple OR'ed arguments, pipe syntax.
+	 * 			<li><js>"foo || bar || bqz"</js> - Multiple OR'ed arguments, Java-OR syntax.
+	 * 			<li><js>"fo*"</js> - Patterns including <js>'*'</js> and <js>'?'</js>.
+	 * 			<li><js>"fo* & *oo"</js> - Multiple AND'ed arguments, ampersand syntax.
+	 * 			<li><js>"fo* && *oo"</js> - Multiple AND'ed arguments, Java-AND syntax.
+	 * 			<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
+	 * 		</ul>
+	 * 	<li>
+	 * 		AND operations take precedence over OR operations (as expected).
+	 * 	<li>
+	 * 		Whitespace is ignored.
+	 * 	<li>
+	 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
+	 * 	<li>
+	 * 		If patterns are used, you must specify the list of declared roles using {@link RestResource#rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * @param value The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder roleGuard(String value) {
+		return set(REST_roleGuard, value);
+	}
+
+	/**
 	 * Configuration property:  Serializer listener.
 	 *
 	 * <p>

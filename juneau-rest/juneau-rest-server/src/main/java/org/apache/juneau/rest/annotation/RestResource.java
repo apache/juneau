@@ -26,6 +26,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.serializer.annotation.*;
@@ -47,6 +48,7 @@ import org.apache.juneau.utils.*;
 @Target(TYPE)
 @Retention(RUNTIME)
 @Inherited
+@PropertyStoreApply(RestResourceConfigApply.class)
 public @interface RestResource {
 
 	/**
@@ -566,7 +568,10 @@ public @interface RestResource {
 	 * <ul>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
 	 * </ul>
+	 *
+	 * @deprecated Use {@link ParserConfig#listener()}
 	 */
+	@Deprecated
 	Class<? extends ParserListener> parserListener() default ParserListener.Null.class;
 
 	/**
@@ -732,6 +737,84 @@ public @interface RestResource {
 	 * </ul>
 	 */
 	Class<? extends ResponseHandler>[] responseHandlers() default {};
+
+	/**
+	 * Declared roles.
+	 *
+	 * <p>
+	 * A comma-delimited list of all possible user roles.
+	 *
+	 * <p>
+	 * Used in conjunction with {@link #roleGuard()} is used with patterns.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
+	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE && ROLE_SPECIAL)"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
+	 * </ul>
+	 */
+	String rolesDeclared() default "";
+
+	/**
+	 * Role guard.
+	 *
+	 * <p>
+	 * An expression defining if a user with the specified roles are allowed to access methods on this class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		path=<js>"/foo"</js>,
+	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE && ROLE_SPECIAL)"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports any of the following expression constructs:
+	 * 		<ul>
+	 * 			<li><js>"foo"</js> - Single arguments.
+	 * 			<li><js>"foo,bar,baz"</js> - Multiple OR'ed arguments.
+	 * 			<li><js>"foo | bar | bqz"</js> - Multiple OR'ed arguments, pipe syntax.
+	 * 			<li><js>"foo || bar || bqz"</js> - Multiple OR'ed arguments, Java-OR syntax.
+	 * 			<li><js>"fo*"</js> - Patterns including <js>'*'</js> and <js>'?'</js>.
+	 * 			<li><js>"fo* & *oo"</js> - Multiple AND'ed arguments, ampersand syntax.
+	 * 			<li><js>"fo* && *oo"</js> - Multiple AND'ed arguments, Java-AND syntax.
+	 * 			<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
+	 * 		</ul>
+	 * 	<li>
+	 * 		AND operations take precedence over OR operations (as expected).
+	 * 	<li>
+	 * 		Whitespace is ignored.
+	 * 	<li>
+	 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
+	 * 	<li>
+	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_roleGuard}
+	 * </ul>
+	 */
+	String roleGuard() default "";
 
 	/**
 	 * Serializer listener.

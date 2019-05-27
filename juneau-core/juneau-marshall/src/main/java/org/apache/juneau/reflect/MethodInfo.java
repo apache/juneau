@@ -121,6 +121,13 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		return l;
 	}
 
+	private Method findMatchingOnClass(ClassInfo c) {
+		for (Method m2 : c.inner().getDeclaredMethods())
+			if (m.getName().equals(m2.getName()) && Arrays.equals(m.getParameterTypes(), m2.getParameterTypes()))
+				return m2;
+		return null;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotations
 	//-----------------------------------------------------------------------------------------------------------------
@@ -310,17 +317,50 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	AnnotationsMap appendAnnotationsMap(AnnotationsMap m) {
-		for (Method m2 : getMatching())
-			m.addAll(m2.getDeclaredAnnotations());
-		declaringClass.appendAnnotationsMap(m);
+		ClassInfo c = this.declaringClass;
+		for (ClassInfo ci : c.getParents()) {
+			appendMethodAnnotations(m, ci);
+			appendAnnotations(m, ci);
+		}
+		for (ClassInfo ci : c.getInterfaces()) {
+			appendMethodAnnotations(m, ci);
+			appendAnnotations(m, ci);
+		}
+		appendAnnotations(m, c.getPackage());
 		return m;
 	}
 
 	AnnotationsMap appendAnnotationsMapParentFirst(AnnotationsMap m) {
-		declaringClass.appendAnnotationsMapParentFirst(m);
-		for (Method m2 : getMatchingParentFirst())
-			m.addAll(m2.getDeclaredAnnotations());
+		ClassInfo c = this.declaringClass;
+		appendAnnotations(m, c.getPackage());
+		for (ClassInfo ci : c.getInterfacesParentFirst()) {
+			appendAnnotations(m, ci);
+			appendMethodAnnotations(m, ci);
+		}
+		for (ClassInfo ci : c.getParentsParentFirst()) {
+			appendAnnotations(m, ci);
+			appendMethodAnnotations(m, ci);
+		}
 		return m;
+	}
+
+	void appendAnnotations(AnnotationsMap m, Package p) {
+		if (p != null)
+			for (Annotation a : p.getDeclaredAnnotations())
+				m.add(AnnotationInfo.of(p, a));
+	}
+
+	void appendAnnotations(AnnotationsMap m, ClassInfo ci) {
+		if (ci != null)
+			for (Annotation a : ci.c.getDeclaredAnnotations())
+				m.add(AnnotationInfo.of(ci, a));
+	}
+
+	void appendMethodAnnotations(AnnotationsMap m, ClassInfo ci) {
+		Method m2 = findMatchingOnClass(ci);
+		if (m2 != null)
+			for (Annotation a : m2.getDeclaredAnnotations())
+				m.add(AnnotationInfo.of(MethodInfo.of(m2), a));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

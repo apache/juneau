@@ -14,6 +14,7 @@ package org.apache.juneau.soap.annotation;
 
 import static org.apache.juneau.soap.SoapXmlSerializer.*;
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -32,7 +33,8 @@ public class SoapXmlConfigApply extends ConfigApply<SoapXmlConfig> {
 	}
 
 	@Override
-	public void apply(SoapXmlConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<SoapXmlConfig> ai, PropertyStoreBuilder psb) {
+		SoapXmlConfig a = ai.getAnnotation();
 		if (! a.soapAction().isEmpty())
 			psb.set(SOAPXML_SOAPAction, string(a.soapAction()));
 	}

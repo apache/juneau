@@ -15,6 +15,7 @@ package org.apache.juneau.json.annotation;
 import static org.apache.juneau.json.JsonSerializer.*;
 import static org.apache.juneau.json.JsonParser.*;
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -33,7 +34,8 @@ public class JsonConfigApply extends ConfigApply<JsonConfig> {
 	}
 
 	@Override
-	public void apply(JsonConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<JsonConfig> ai, PropertyStoreBuilder psb) {
+		JsonConfig a = ai.getAnnotation();
 		if (! a.addBeanTypes().isEmpty())
 			psb.set(JSON_addBeanTypes, bool(a.addBeanTypes()));
 		if (! a.escapeSolidus().isEmpty())

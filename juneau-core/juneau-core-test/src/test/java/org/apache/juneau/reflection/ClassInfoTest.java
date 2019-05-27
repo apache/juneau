@@ -25,9 +25,12 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.reflection.MethodInfoTest.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
@@ -53,8 +56,18 @@ public class ClassInfoTest {
 	@Target(TYPE)
 	@Retention(RUNTIME)
 	@Inherited
+	@PropertyStoreApply(AConfigApply.class)
 	static @interface AConfig {
 		int value();
+	}
+
+	public static class AConfigApply extends ConfigApply<AConfig> {
+		protected AConfigApply(Class<AConfig> c, VarResolverSession r) {
+			super(c, r);
+		}
+		@Override
+		public void apply(AnnotationInfo<AConfig> a, PropertyStoreBuilder ps) {
+		}
 	}
 
 	private static void check(String expected, Object o) {
@@ -2134,7 +2147,7 @@ public class ClassInfoTest {
 	public static class MA extends HashMap<String,Integer> {}
 	@SuppressWarnings("serial")
 	public static class MB extends MA {}
-	@SuppressWarnings("serial")
+	@SuppressWarnings({ "serial", "hiding" })
 	public static class MC<K,E> extends HashMap<K,E> {}
 	@SuppressWarnings("serial")
 	public static class MD extends MC<String,Integer> {}

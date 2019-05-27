@@ -14,6 +14,8 @@ package org.apache.juneau.reflect;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
+
 /**
  * Specialized {@link AnnotationsMap} that accepts only <js>"*Config"</js> annotations.
  */
@@ -22,7 +24,8 @@ public class ConfigAnnotationsMap extends AnnotationsMap {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public boolean accept(Annotation a) {
-		return a.annotationType().getName().endsWith("Config");
+	public boolean accept(AnnotationInfo<? extends Annotation> a) {
+		Class<? extends Annotation> aa = a.getAnnotation().annotationType();
+		return aa.getAnnotation(PropertyStoreApply.class) != null;
 	}
 }

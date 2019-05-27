@@ -122,15 +122,16 @@ public class PropertyStoreBuilder {
 	 * @param r The string resolver used to resolve any variables in the annotations.
 	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("unchecked")
 	public PropertyStoreBuilder applyAnnotations(AnnotationsMap annotationsMap, VarResolverSession r) {
-		for (Map.Entry<Class<? extends Annotation>,List<Annotation>> e : annotationsMap.entrySet()) {
+		for (Map.Entry<Class<? extends Annotation>,List<AnnotationInfo<? extends Annotation>>> e : annotationsMap.entrySet()) {
 			Class<? extends Annotation> ac = e.getKey();
 			PropertyStoreApply apply = ac.getAnnotation(PropertyStoreApply.class);
 			if (apply != null) {
 				try {
 					ConfigApply<Annotation> ca = apply.value().getConstructor(Class.class, VarResolverSession.class).newInstance(ac, r);
-					for (Annotation a : e.getValue()) {
-						ca.apply(a, this);
+					for (AnnotationInfo<?> a : e.getValue()) {
+						ca.apply((AnnotationInfo<Annotation>) a, this);
 					}
 				} catch (ConfigException ex) {
 					throw ex;

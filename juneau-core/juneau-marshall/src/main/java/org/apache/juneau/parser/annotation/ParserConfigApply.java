@@ -18,6 +18,7 @@ import static org.apache.juneau.parser.InputStreamParser.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -36,7 +37,8 @@ public class ParserConfigApply extends ConfigApply<ParserConfig> {
 	}
 
 	@Override
-	public void apply(ParserConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<ParserConfig> ai, PropertyStoreBuilder psb) {
+		ParserConfig a = ai.getAnnotation();
 		if (! a.autoCloseStreams().isEmpty())
 			psb.set(PARSER_autoCloseStreams, bool(a.autoCloseStreams()));
 		if (! a.debugOutputLines().isEmpty())

@@ -15,6 +15,7 @@ package org.apache.juneau.xml.annotation;
 import static org.apache.juneau.xml.XmlSerializer.*;
 import static org.apache.juneau.xml.XmlParser.*;
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 
@@ -34,7 +35,8 @@ public class XmlConfigApply extends ConfigApply<XmlConfig> {
 	}
 
 	@Override
-	public void apply(XmlConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<XmlConfig> ai, PropertyStoreBuilder psb) {
+		XmlConfig a = ai.getAnnotation();
 		if (! a.addBeanTypes().isEmpty())
 			psb.set(XML_addBeanTypes, bool(a.addBeanTypes()));
 		if (! a.addNamespaceUrisToRoot().isEmpty())

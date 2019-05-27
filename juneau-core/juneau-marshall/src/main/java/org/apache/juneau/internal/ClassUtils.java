@@ -55,6 +55,20 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Shortcut for calling {@link MethodInfo#of(ClassInfo, Method)}.
+	 * 
+	 * @param c 
+	 * 	The class containing the method.
+	 * 	<br>Note that this isn't necessarily the declaring class, but could be a subclass
+	 * 	of the declaring class.
+	 * @param m The method being wrapped.
+	 * @return The wrapped method.
+	 */
+	public static MethodInfo getMethodInfo(Class<?> c, Method m) {
+		return MethodInfo.of(ClassInfo.of(c), m);
+	}
+
+	/**
 	 * Shortcut for calling {@link FieldInfo#of(Field)}.
 	 *
 	 * @param f The field being wrapped.

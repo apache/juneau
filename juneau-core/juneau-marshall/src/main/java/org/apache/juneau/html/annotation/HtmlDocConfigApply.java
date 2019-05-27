@@ -20,6 +20,7 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -38,7 +39,8 @@ public class HtmlDocConfigApply extends ConfigApply<HtmlDocConfig> {
 	}
 
 	@Override
-	public void apply(HtmlDocConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<HtmlDocConfig> ai, PropertyStoreBuilder psb) {
+		HtmlDocConfig a = ai.getAnnotation();
 		if (a.aside().length > 0)
 			psb.set(HTMLDOC_aside, resolveList(a.aside(), psb.peek(String[].class, HTMLDOC_aside)));
 		if (a.footer().length > 0)

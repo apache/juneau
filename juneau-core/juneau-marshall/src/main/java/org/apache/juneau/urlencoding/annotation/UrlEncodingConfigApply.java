@@ -13,6 +13,7 @@
 package org.apache.juneau.urlencoding.annotation;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -32,7 +33,8 @@ public class UrlEncodingConfigApply extends ConfigApply<UrlEncodingConfig> {
 	}
 
 	@Override
-	public void apply(UrlEncodingConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<UrlEncodingConfig> ai, PropertyStoreBuilder psb) {
+		UrlEncodingConfig a = ai.getAnnotation();
 		if (! a.expandedParams().isEmpty()) {
 			psb.set(UrlEncodingSerializer.URLENC_expandedParams, bool(a.expandedParams()));
 			psb.set(UrlEncodingParser.URLENC_expandedParams, bool(a.expandedParams()));

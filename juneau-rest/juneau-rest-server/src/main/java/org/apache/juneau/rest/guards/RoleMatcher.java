@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.rest.guards;
 
 import java.text.*;
 import java.util.*;
@@ -21,10 +21,10 @@ import org.apache.juneau.internal.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 
 /**
- * Utility class for matching strings against string expressions.
+ * Utility class for matching JEE user roles against string expressions.
  *
  * <p>
- * Supports the following string constructs:
+ * Supports the following expression constructs:
  * <ul>
  * 	<li><js>"foo"</js> - Single arguments.
  * 	<li><js>"foo,bar,baz"</js> - Multiple OR'ed arguments.
@@ -43,7 +43,7 @@ import static org.apache.juneau.internal.StateMachineState.*;
  * 	<li><jk>null</jk> or empty expressions always match as <jk>false</jk>.
  * </ul>
  */
-public class StringExpressionMatcher {
+public class RoleMatcher {
 
 	private final Exp exp;
 	private static final AsciiSet
@@ -57,20 +57,20 @@ public class StringExpressionMatcher {
 	 * @param expression The string expression.
 	 * @throws ParseException If the expression is malformed.
 	 */
-	public StringExpressionMatcher(String expression) throws ParseException {
+	public RoleMatcher(String expression) throws ParseException {
 		this.exp = parse(expression);
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified string matches this expression.
 	 *
-	 * @param input The input string.
+	 * @param roles The user roles.
 	 * @return
 	 * 	<jk>true</jk> if the specified string matches this expression.
 	 * 	<br>Always <jk>false</jk> if the string is <jk>null</jk>.
 	 */
-	public boolean matches(String input) {
-		return input != null && exp.matches(input);
+	public boolean matches(Set<String> roles) {
+		return roles != null && exp.matches(roles);
 	}
 
 	@Override /* Object */
@@ -83,7 +83,7 @@ public class StringExpressionMatcher {
 	 *
 	 * @return All the tokens used in this expression.
 	 */
-	public Set<String> getTokens() {
+	public Set<String> getRolesInExpression() {
 		Set<String> set = new TreeSet<>();
 		exp.appendTokens(set);
 		return set;
@@ -227,13 +227,15 @@ public class StringExpressionMatcher {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	abstract static class Exp {
-		abstract boolean matches(String input);
+
+		abstract boolean matches(Set<String> roles);
+
 		void appendTokens(Set<String> set) {}
 	}
 
 	static class Never extends Exp {
 		@Override
-		boolean matches(String input) {
+		boolean matches(Set<String> roles) {
 			return false;
 		}
 
@@ -251,9 +253,9 @@ public class StringExpressionMatcher {
 		}
 
 		@Override /* Exp */
-		boolean matches(String input) {
+		boolean matches(Set<String> roles) {
 			for (Exp e : clauses)
-				if (! e.matches(input))
+				if (! e.matches(roles))
 					return false;
 			return true;
 		}
@@ -278,9 +280,9 @@ public class StringExpressionMatcher {
 		}
 
 		@Override
-		boolean matches(String input) {
+		boolean matches(Set<String> roles) {
 			for (Exp e : clauses)
-				if (e.matches(input))
+				if (e.matches(roles))
 					return true;
 			return false;
 		}
@@ -305,8 +307,11 @@ public class StringExpressionMatcher {
 		}
 
 		@Override /* Exp */
-		boolean matches(String input) {
-			return operand.equals(input);
+		boolean matches(Set<String> roles) {
+			for (String role : roles)
+				if (operand.equals(role))
+					return true;
+			return false;
 		}
 
 		@Override /* Exp */
@@ -330,8 +335,11 @@ public class StringExpressionMatcher {
 		}
 
 		@Override /* Exp */
-		boolean matches(String input) {
-			return p.matcher(input).matches();
+		boolean matches(Set<String> roles) {
+			for (String role : roles)
+				if (p.matcher(role).matches())
+					return true;
+			return false;
 		}
 
 		@Override /* Exp */

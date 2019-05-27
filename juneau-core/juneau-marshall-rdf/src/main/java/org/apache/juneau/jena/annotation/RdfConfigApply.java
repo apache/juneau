@@ -17,6 +17,7 @@ import static org.apache.juneau.jena.RdfSerializer.*;
 import static org.apache.juneau.jena.RdfParser.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -35,7 +36,8 @@ public class RdfConfigApply extends ConfigApply<RdfConfig> {
 	}
 
 	@Override
-	public void apply(RdfConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<RdfConfig> ai, PropertyStoreBuilder psb) {
+		RdfConfig a = ai.getAnnotation();
 		if (! a.language().isEmpty())
 			psb.set(RDF_language, string(a.language()));
 		if (! a.juneauNs().isEmpty())

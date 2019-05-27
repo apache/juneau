@@ -13,6 +13,7 @@
 package org.apache.juneau.csv.annotation;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -31,6 +32,6 @@ public class CsvConfigApply extends ConfigApply<CsvConfig> {
 	}
 
 	@Override
-	public void apply(CsvConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<CsvConfig> ai, PropertyStoreBuilder psb) {
 	}
 }

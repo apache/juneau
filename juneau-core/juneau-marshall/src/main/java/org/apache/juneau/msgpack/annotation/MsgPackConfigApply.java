@@ -14,6 +14,7 @@ package org.apache.juneau.msgpack.annotation;
 
 import static org.apache.juneau.msgpack.MsgPackSerializer.*;
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -32,7 +33,8 @@ public class MsgPackConfigApply extends ConfigApply<MsgPackConfig> {
 	}
 
 	@Override
-	public void apply(MsgPackConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<MsgPackConfig> ai, PropertyStoreBuilder psb) {
+		MsgPackConfig a = ai.getAnnotation();
 		if (! a.addBeanTypes().isEmpty())
 			psb.set(MSGPACK_addBeanTypes, bool(a.addBeanTypes()));
 	}

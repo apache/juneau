@@ -126,6 +126,19 @@
 		</ul>
 	<li>
 		HTML widgets now have access to the <code>RestResponse</code> object if they need access to the output bean.
+	<li>
+		New annotations for simplified role-based guards on classes and methods:
+		<ul>
+			<li class='ja'>{@link oajr.annotation.RestResource} 
+			<ul>
+				<li class='jm'>{@link oajr.annotation.RestResource#roleGuard roleGuard()}
+				<li class='jm'>{@link oajr.annotation.RestResource#rolesDeclared rolesDeclared()}
+			</ul>
+		<li class='ja'>{@link oajr.annotation.RestMethod} 
+		<ul>
+			<li class='jm'>{@link oajr.annotation.RestMethod#roleGuard roleGuard()}
+			<li class='jm'>{@link oajr.annotation.RestMethod#rolesDeclared rolesDeclared()}
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>

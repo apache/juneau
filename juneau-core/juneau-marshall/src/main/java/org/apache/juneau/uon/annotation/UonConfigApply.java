@@ -15,6 +15,7 @@ package org.apache.juneau.uon.annotation;
 import static org.apache.juneau.uon.UonSerializer.*;
 import static org.apache.juneau.uon.UonParser.*;
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -33,7 +34,8 @@ public class UonConfigApply extends ConfigApply<UonConfig> {
 	}
 
 	@Override
-	public void apply(UonConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<UonConfig> ai, PropertyStoreBuilder psb) {
+		UonConfig a = ai.getAnnotation();
 		if (! a.addBeanTypes().isEmpty())
 			psb.set(UON_addBeanTypes, bool(a.addBeanTypes()));
 		if (! a.encoding().isEmpty())

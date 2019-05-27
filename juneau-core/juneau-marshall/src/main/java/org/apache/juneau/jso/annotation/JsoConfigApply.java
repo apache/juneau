@@ -13,6 +13,7 @@
 package org.apache.juneau.jso.annotation;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -31,6 +32,6 @@ public class JsoConfigApply extends ConfigApply<JsoConfig> {
 	}
 
 	@Override
-	public void apply(JsoConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<JsoConfig> ai, PropertyStoreBuilder psb) {
 	}
 }

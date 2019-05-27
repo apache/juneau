@@ -18,6 +18,7 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -47,7 +48,7 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @param a The annotation.
 	 * @param ps The property store builder.
 	 */
-	public abstract void apply(T a, PropertyStoreBuilder ps);
+	public abstract void apply(AnnotationInfo<T> a, PropertyStoreBuilder ps);
 
 
 	/**

@@ -21,6 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -39,7 +40,8 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 	}
 
 	@Override
-	public void apply(BeanConfig a, PropertyStoreBuilder psb) {
+	public void apply(AnnotationInfo<BeanConfig> ai, PropertyStoreBuilder psb) {
+		BeanConfig a = ai.getAnnotation();
 		if (! a.beanClassVisibility().isEmpty())
 			psb.set(BEAN_beanClassVisibility, visibility(a.beanClassVisibility(), "beanClassVisibility"));
 		if (! a.beanConstructorVisibility().isEmpty())
