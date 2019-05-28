@@ -52,15 +52,15 @@ public class MsgPackConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAddBeanTypes());
 	}
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		MsgPackParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -73,15 +73,15 @@ public class MsgPackConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 	}
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		MsgPackParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -93,14 +93,14 @@ public class MsgPackConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		MsgPackParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 }

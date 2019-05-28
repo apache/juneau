@@ -621,8 +621,8 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public BeanTraverseBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public BeanTraverseBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

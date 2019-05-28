@@ -681,8 +681,8 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public PlainTextSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

@@ -118,26 +118,19 @@ public class PropertyStoreBuilder {
 	/**
 	 * Applies the settings in the specified annotations to this property store.
 	 *
-	 * @param annotationsMap The map of annotations to apply.
+	 * @param al The list of annotations to apply.
 	 * @param r The string resolver used to resolve any variables in the annotations.
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("unchecked")
-	public PropertyStoreBuilder applyAnnotations(AnnotationsMap annotationsMap, VarResolverSession r) {
-		for (Map.Entry<Class<? extends Annotation>,List<AnnotationInfo<? extends Annotation>>> e : annotationsMap.entrySet()) {
-			Class<? extends Annotation> ac = e.getKey();
-			PropertyStoreApply apply = ac.getAnnotation(PropertyStoreApply.class);
-			if (apply != null) {
-				try {
-					ConfigApply<Annotation> ca = apply.value().getConstructor(Class.class, VarResolverSession.class).newInstance(ac, r);
-					for (AnnotationInfo<?> a : e.getValue()) {
-						ca.apply((AnnotationInfo<Annotation>) a, this);
-					}
-				} catch (ConfigException ex) {
-					throw ex;
-				} catch (Exception ex) {
-					throw new ConfigException(ex, "Could not instantiate ConfigApply class {0}", apply.value());
-				}
+	public PropertyStoreBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+		for (AnnotationInfo<?> ai : al) {
+			try {
+				ai.getConfigApply(r).apply((AnnotationInfo<Annotation>)ai, this);
+			} catch (ConfigException ex) {
+				throw ex;
+			} catch (Exception ex) {
+				throw new ConfigException(ex, "Could not instantiate ConfigApply class {0}", ai);
 			}
 		}
 		return this;
@@ -181,7 +174,7 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public PropertyStoreBuilder applyAnnotations(Class<?> fromClass) {
-		applyAnnotations(ClassInfo.of(fromClass).getConfigAnnotationsMapParentFirst(), VarResolver.DEFAULT.createSession());
+		applyAnnotations(ClassInfo.of(fromClass).getConfigAnnotationListParentFirst(), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 
@@ -224,7 +217,7 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public PropertyStoreBuilder applyAnnotations(Method fromMethod) {
-		applyAnnotations(MethodInfo.of(fromMethod).getConfigAnnotationsMapParentFirst(), VarResolver.DEFAULT.createSession());
+		applyAnnotations(MethodInfo.of(fromMethod).getConfigAnnotationListParentFirst(), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 

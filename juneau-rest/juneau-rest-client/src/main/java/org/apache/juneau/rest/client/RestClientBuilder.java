@@ -2691,8 +2691,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public RestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

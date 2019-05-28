@@ -561,8 +561,8 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override
-	public JsoParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public JsoParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 }

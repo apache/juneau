@@ -887,8 +887,8 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public JsonSchemaSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

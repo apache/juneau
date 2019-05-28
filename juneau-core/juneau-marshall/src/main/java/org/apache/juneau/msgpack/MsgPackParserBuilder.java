@@ -561,8 +561,8 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override
-	public MsgPackParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public MsgPackParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 }

@@ -52,15 +52,15 @@ public class UrlEncodingConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isExpandedParams());
 	}
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		UrlEncodingParserSession x = UrlEncodingParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		UrlEncodingParserSession x = UrlEncodingParser.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isExpandedParams());
 	}
 
@@ -74,15 +74,15 @@ public class UrlEncodingConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		UrlEncodingParserSession x = UrlEncodingParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		UrlEncodingParserSession x = UrlEncodingParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isExpandedParams());
 	}
 
@@ -95,15 +95,15 @@ public class UrlEncodingConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		UrlEncodingParserSession x = UrlEncodingParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		UrlEncodingParserSession x = UrlEncodingParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isExpandedParams());
 	}
 }

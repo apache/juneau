@@ -724,8 +724,8 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public XmlSchemaSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

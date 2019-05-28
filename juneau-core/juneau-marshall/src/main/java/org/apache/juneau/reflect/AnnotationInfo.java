@@ -17,8 +17,10 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Represents an annotation instance on a class and the class it was found on.
@@ -145,6 +147,41 @@ public class AnnotationInfo<T extends Annotation> {
 		}
 		om.put("@" + ca.getSimpleName(), oa);
 		return om;
+	}
+
+	private Constructor<? extends ConfigApply<?>> configApplyConstructor;
+
+	/**
+	 * If this annotation has a {@link PropertyStoreApply} annotation, returns an instance of the specified {@link ConfigApply} class.
+	 *
+	 * @param vrs Variable resolver passed to the {@link ConfigApply} object.
+	 * @return A new {@link ConfigApply} object.  Never <jk>null</jk>.
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public ConfigApply<Annotation> getConfigApply(VarResolverSession vrs) throws Exception {
+		if (configApplyConstructor == null) {
+			PropertyStoreApply psa = a.annotationType().getAnnotation(PropertyStoreApply.class);
+			if (psa != null)
+				configApplyConstructor = (Constructor<? extends ConfigApply<?>>)psa.value().getConstructor(Class.class, VarResolverSession.class);
+			if (configApplyConstructor == null)
+				throw new NoSuchFieldError("Could not find ConfigApply constructor for annotation:\n" + toString());
+		}
+		ClassInfo ci = getClassInfo();
+		return (ConfigApply<Annotation>) configApplyConstructor.newInstance(ci == null ? null : ci.inner(), vrs);
+	}
+
+	/**
+	 * Returns the class that this annotation was found on.
+	 *
+	 * @return The class that this annotation was found on, or <jk>null</jk> if it was found on a package.
+	 */
+	public ClassInfo getClassInfo() {
+		if (this.c != null)
+			return this.c;
+		if (this.m != null)
+			return this.m.getDeclaringClass();
+		return null;
 	}
 
 	@Override

@@ -1498,8 +1498,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RdfSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public RdfSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

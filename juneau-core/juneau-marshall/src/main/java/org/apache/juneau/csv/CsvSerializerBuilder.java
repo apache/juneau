@@ -681,8 +681,8 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public CsvSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public CsvSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

@@ -651,8 +651,8 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public MsgPackSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public MsgPackSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

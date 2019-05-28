@@ -107,12 +107,12 @@ public abstract class ContextBuilder {
 	/**
 	 * Applies a set of annotations to this property store.
 	 *
-	 * @param annotationsMap The annotations map.
+	 * @param al The list of all annotations annotated with {@link PropertyStoreApply}.
 	 * @param r The string resolver for resolving variables in annotation values.
 	 * @return This object (for method chaining).
 	 */
-	public ContextBuilder applyAnnotations(AnnotationsMap annotationsMap, VarResolverSession r) {
-		this.psb.applyAnnotations(annotationsMap, r);
+	public ContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+		this.psb.applyAnnotations(al, r);
 		return this;
 	}
 
@@ -154,7 +154,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ContextBuilder applyAnnotations(Class<?> fromClass) {
-		applyAnnotations(ClassInfo.of(fromClass).getConfigAnnotationsMapParentFirst(), VarResolver.DEFAULT.createSession());
+		applyAnnotations(ClassInfo.of(fromClass).getConfigAnnotationListParentFirst(), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 
@@ -197,7 +197,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ContextBuilder applyAnnotations(Method fromMethod) {
-		applyAnnotations(MethodInfo.of(fromMethod).getConfigAnnotationsMapParentFirst(), VarResolver.DEFAULT.createSession());
+		applyAnnotations(MethodInfo.of(fromMethod).getConfigAnnotationListParentFirst(), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 

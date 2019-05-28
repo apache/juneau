@@ -764,8 +764,8 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaGeneratorBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public JsonSchemaGeneratorBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

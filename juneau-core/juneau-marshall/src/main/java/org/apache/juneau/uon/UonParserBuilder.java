@@ -646,8 +646,8 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override
-	public UonParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public UonParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 }

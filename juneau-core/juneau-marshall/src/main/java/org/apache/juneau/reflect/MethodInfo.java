@@ -218,7 +218,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	/**
-	 * Constructs an {@link AnnotationsMap} of all annotations found on this method.
+	 * Constructs an {@link AnnotationList} of all annotations found on this method.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -230,14 +230,14 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<li>On the package of this class.
 	 * </ol>
 	 *
-	 * @return A new {@link AnnotationsMap} object on every call.
+	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationsMap getAnnotationsMap() {
-		return appendAnnotationsMap(new AnnotationsMap());
+	public AnnotationList getAnnotationList() {
+		return appendAnnotationList(new AnnotationList());
 	}
 
 	/**
-	 * Constructs an {@link AnnotationsMap} of all annotations found on this method.
+	 * Constructs an {@link AnnotationList} of all annotations found on this method.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -249,14 +249,14 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<li>On this method and matching methods ordered parent-to-child.
 	 * </ol>
 	 *
-	 * @return A new {@link AnnotationsMap} object on every call.
+	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationsMap getAnnotationsMapParentFirst() {
-		return appendAnnotationsMapParentFirst(new AnnotationsMap());
+	public AnnotationList getAnnotationListParentFirst() {
+		return appendAnnotationListParentFirst(new AnnotationList());
 	}
 
 	/**
-	 * Constructs an {@link ConfigAnnotationsMap} of all annotations found on this class.
+	 * Constructs an {@link ConfigAnnotationList} of all annotations found on this class.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -268,14 +268,14 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<li>On the package of the method class.
 	 * </ol>
 	 *
-	 * @return A new {@link AnnotationsMap} object on every call.
+	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationsMap getConfigAnnotationsMap() {
-		return appendAnnotationsMap(new ConfigAnnotationsMap());
+	public AnnotationList getConfigAnnotationList() {
+		return appendAnnotationList(new ConfigAnnotationList());
 	}
 
 	/**
-	 * Constructs an {@link ConfigAnnotationsMap} of all annotations found on this class.
+	 * Constructs an {@link ConfigAnnotationList} of all annotations found on this class.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -287,10 +287,10 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<li>On this method and matching methods ordered parent-to-child.
 	 * </ol>
 	 *
-	 * @return A new {@link AnnotationsMap} object on every call.
+	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationsMap getConfigAnnotationsMapParentFirst() {
-		return appendAnnotationsMapParentFirst(new ConfigAnnotationsMap());
+	public AnnotationList getConfigAnnotationListParentFirst() {
+		return appendAnnotationListParentFirst(new ConfigAnnotationList());
 	}
 
 	/**
@@ -316,51 +316,51 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		return getReturnType().resolved().getAnnotation(a);
 	}
 
-	AnnotationsMap appendAnnotationsMap(AnnotationsMap m) {
+	AnnotationList appendAnnotationList(AnnotationList al) {
 		ClassInfo c = this.declaringClass;
 		for (ClassInfo ci : c.getParents()) {
-			appendMethodAnnotations(m, ci);
-			appendAnnotations(m, ci);
+			appendMethodAnnotations(al, ci);
+			appendAnnotations(al, ci);
 		}
 		for (ClassInfo ci : c.getInterfaces()) {
-			appendMethodAnnotations(m, ci);
-			appendAnnotations(m, ci);
+			appendMethodAnnotations(al, ci);
+			appendAnnotations(al, ci);
 		}
-		appendAnnotations(m, c.getPackage());
-		return m;
+		appendAnnotations(al, c.getPackage());
+		return al;
 	}
 
-	AnnotationsMap appendAnnotationsMapParentFirst(AnnotationsMap m) {
+	AnnotationList appendAnnotationListParentFirst(AnnotationList al) {
 		ClassInfo c = this.declaringClass;
-		appendAnnotations(m, c.getPackage());
+		appendAnnotations(al, c.getPackage());
 		for (ClassInfo ci : c.getInterfacesParentFirst()) {
-			appendAnnotations(m, ci);
-			appendMethodAnnotations(m, ci);
+			appendAnnotations(al, ci);
+			appendMethodAnnotations(al, ci);
 		}
 		for (ClassInfo ci : c.getParentsParentFirst()) {
-			appendAnnotations(m, ci);
-			appendMethodAnnotations(m, ci);
+			appendAnnotations(al, ci);
+			appendMethodAnnotations(al, ci);
 		}
-		return m;
+		return al;
 	}
 
-	void appendAnnotations(AnnotationsMap m, Package p) {
+	void appendAnnotations(AnnotationList al, Package p) {
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())
-				m.add(AnnotationInfo.of(p, a));
+				al.add(AnnotationInfo.of(p, a));
 	}
 
-	void appendAnnotations(AnnotationsMap m, ClassInfo ci) {
+	void appendAnnotations(AnnotationList al, ClassInfo ci) {
 		if (ci != null)
 			for (Annotation a : ci.c.getDeclaredAnnotations())
-				m.add(AnnotationInfo.of(ci, a));
+				al.add(AnnotationInfo.of(ci, a));
 	}
 
-	void appendMethodAnnotations(AnnotationsMap m, ClassInfo ci) {
-		Method m2 = findMatchingOnClass(ci);
-		if (m2 != null)
-			for (Annotation a : m2.getDeclaredAnnotations())
-				m.add(AnnotationInfo.of(MethodInfo.of(m2), a));
+	void appendMethodAnnotations(AnnotationList al, ClassInfo ci) {
+		Method m = findMatchingOnClass(ci);
+		if (m != null)
+			for (Annotation a : m.getDeclaredAnnotations())
+				al.add(AnnotationInfo.of(MethodInfo.of(m), a));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

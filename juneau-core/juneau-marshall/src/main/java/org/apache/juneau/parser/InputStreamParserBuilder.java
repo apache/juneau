@@ -594,8 +594,8 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public InputStreamParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public InputStreamParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

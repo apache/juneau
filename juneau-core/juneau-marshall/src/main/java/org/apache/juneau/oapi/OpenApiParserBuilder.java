@@ -543,8 +543,8 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override
-	public OpenApiParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public OpenApiParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 }

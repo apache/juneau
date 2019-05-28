@@ -3156,7 +3156,7 @@ public final class RestContext extends BeanContext {
 	private final RestResourceResolver resourceResolver;
 	private final UriResolution uriResolution;
 	private final UriRelativity uriRelativity;
-	private final AnnotationsMap configAnnotationsMap;
+	private final AnnotationList configAnnotationList;
 
 	// Lifecycle methods
 	private final Method[]
@@ -3256,8 +3256,8 @@ public final class RestContext extends BeanContext {
 
 			Class<?> resourceClass = resource.getClass();
 			ClassInfo rci = getClassInfo(resourceClass);
-			configAnnotationsMap = rci.getConfigAnnotationsMapParentFirst();
-			PropertyStore ps = getPropertyStore().builder().apply(builder.getPropertyStore()).applyAnnotations(configAnnotationsMap, vrs).build();
+			configAnnotationList = rci.getConfigAnnotationListParentFirst();
+			PropertyStore ps = getPropertyStore().builder().apply(builder.getPropertyStore()).applyAnnotations(configAnnotationList, vrs).build();
 
 			uriContext = nullIfEmpty(getStringProperty(REST_uriContext, null));
 			uriAuthority = nullIfEmpty(getStringProperty(REST_uriAuthority, null));
@@ -4995,8 +4995,8 @@ public final class RestContext extends BeanContext {
 		this.res.set(res);
 	}
 
-	AnnotationsMap getConfigAnnotationsMap() {
-		return configAnnotationsMap;
+	AnnotationList getConfigAnnotationList() {
+		return configAnnotationList;
 	}
 
 	/**

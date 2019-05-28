@@ -775,8 +775,8 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override
-	public JsonSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public JsonSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 }

@@ -172,7 +172,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				properties = new RestMethodProperties(context.getProperties());
 				defaultCharset = context.getDefaultCharset();
 				maxInput = context.getMaxInput();
-				AnnotationsMap configAnnotationsMap = hasConfigAnnotations ? mi.getConfigAnnotationsMapParentFirst() : context.getConfigAnnotationsMap();
+				AnnotationList configAnnotationList = hasConfigAnnotations ? mi.getConfigAnnotationListParentFirst() : context.getConfigAnnotationList();
 
 				if (! m.defaultCharset().isEmpty())
 					defaultCharset = vr.resolve(m.defaultCharset());
@@ -261,7 +261,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				for (String p1 : m.flags())
 					psb.set(p1, true);
 				if (hasConfigAnnotations)
-					psb.applyAnnotations(configAnnotationsMap, sr);
+					psb.applyAnnotations(configAnnotationList, sr);
 				this.propertyStore = psb.build();
 
 				if (sgb != null) {
@@ -407,7 +407,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					partParser = (HttpPartParser)pp
 						.builder()
 						.apply(uepb.getPropertyStore())
-						.applyAnnotations(configAnnotationsMap, sr)
+						.applyAnnotations(configAnnotationList, sr)
 						.build();
 				}
 				if (bcb != null)

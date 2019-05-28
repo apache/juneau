@@ -633,8 +633,8 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public ReaderParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public ReaderParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

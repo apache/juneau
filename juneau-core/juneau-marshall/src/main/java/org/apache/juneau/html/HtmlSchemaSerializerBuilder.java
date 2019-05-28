@@ -821,8 +821,8 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public HtmlSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public HtmlSchemaSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

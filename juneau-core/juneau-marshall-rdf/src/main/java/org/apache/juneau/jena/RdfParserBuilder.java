@@ -1261,8 +1261,8 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override
-	public RdfParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public RdfParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 }

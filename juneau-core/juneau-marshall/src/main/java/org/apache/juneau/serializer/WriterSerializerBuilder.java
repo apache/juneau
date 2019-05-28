@@ -549,8 +549,8 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public WriterSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public WriterSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

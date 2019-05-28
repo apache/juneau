@@ -75,8 +75,8 @@ public class SerializerConfigAnnotationTest {
 
 	@Test
 	public void basicWriterSerializer() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
 		check("true", x.isAddRootType());
 		check("AA", x.getListener());
@@ -96,8 +96,8 @@ public class SerializerConfigAnnotationTest {
 
 	@Test
 	public void basicOutputStreamSerializer() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
 		check("true", x.isAddRootType());
 		check("HEX", x.getBinaryFormat());
@@ -124,8 +124,8 @@ public class SerializerConfigAnnotationTest {
 
 	@Test
 	public void noValuesWriterSerializer() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
 		check(null, x.getListener());
@@ -145,8 +145,8 @@ public class SerializerConfigAnnotationTest {
 
 	@Test
 	public void noValuesOutputStreamSerializer() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
 		check("HEX", x.getBinaryFormat());
@@ -172,8 +172,8 @@ public class SerializerConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationWriterSerializer() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
 		check(null, x.getListener());
@@ -193,8 +193,8 @@ public class SerializerConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationOutputStreamSerializer() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
 		check("HEX", x.getBinaryFormat());

@@ -567,8 +567,8 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override
-	public CsvParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public CsvParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 }

@@ -55,8 +55,8 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEscapeSolidus());
 		check("true", x.isSimpleMode());
@@ -64,8 +64,8 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		JsonParserSession x = JsonParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isValidateEnd());
 	}
 
@@ -79,8 +79,8 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
 		check("false", x.isSimpleMode());
@@ -88,8 +88,8 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		JsonParserSession x = JsonParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isValidateEnd());
 	}
 
@@ -102,8 +102,8 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
 		check("false", x.isSimpleMode());
@@ -111,8 +111,8 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		JsonParserSession x = JsonParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isValidateEnd());
 	}
 }

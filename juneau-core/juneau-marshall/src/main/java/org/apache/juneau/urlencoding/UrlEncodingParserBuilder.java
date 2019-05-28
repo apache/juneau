@@ -589,8 +589,8 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override
-	public UrlEncodingParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public UrlEncodingParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 }

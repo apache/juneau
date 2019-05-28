@@ -927,7 +927,7 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Constructs an {@link AnnotationsMap} of all annotations found on this class.
+	 * Constructs an {@link AnnotationList} of all annotations found on this class.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -938,14 +938,14 @@ public final class ClassInfo {
 	 * 	<li>On the package of this class.
 	 * </ol>
 	 *
-	 * @return A new {@link AnnotationsMap} object on every call.
+	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationsMap getAnnotationsMap() {
-		return appendAnnotationsMap(new AnnotationsMap());
+	public AnnotationList getAnnotationList() {
+		return appendAnnotationList(new AnnotationList());
 	}
 
 	/**
-	 * Constructs an {@link AnnotationsMap} of all annotations found on this class.
+	 * Constructs an {@link AnnotationList} of all annotations found on this class.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -956,14 +956,14 @@ public final class ClassInfo {
 	 * 	<li>On this class.
 	 * </ol>
 	 *
-	 * @return A new {@link AnnotationsMap} object on every call.
+	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationsMap getAnnotationsMapParentFirst() {
-		return appendAnnotationsMapParentFirst(new AnnotationsMap());
+	public AnnotationList getAnnotationListParentFirst() {
+		return appendAnnotationListParentFirst(new AnnotationList());
 	}
 
 	/**
-	 * Constructs an {@link ConfigAnnotationsMap} of all annotations found on this class.
+	 * Constructs an {@link ConfigAnnotationList} of all annotations found on this class.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -974,14 +974,14 @@ public final class ClassInfo {
 	 * 	<li>On the package of this class.
 	 * </ol>
 	 *
-	 * @return A new {@link AnnotationsMap} object on every call.
+	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationsMap getConfigAnnotationsMap() {
-		return appendAnnotationsMap(new ConfigAnnotationsMap());
+	public AnnotationList getConfigAnnotationList() {
+		return appendAnnotationList(new ConfigAnnotationList());
 	}
 
 	/**
-	 * Constructs an {@link ConfigAnnotationsMap} of all annotations found on this class.
+	 * Constructs an {@link ConfigAnnotationList} of all annotations found on this class.
 	 *
 	 * <p>
 	 * Annotations are appended in the following order:
@@ -992,10 +992,10 @@ public final class ClassInfo {
 	 * 	<li>On this class.
 	 * </ol>
 	 *
-	 * @return A new {@link AnnotationsMap} object on every call.
+	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationsMap getConfigAnnotationsMapParentFirst() {
-		return appendAnnotationsMapParentFirst(new ConfigAnnotationsMap());
+	public AnnotationList getConfigAnnotationListParentFirst() {
+		return appendAnnotationListParentFirst(new ConfigAnnotationList());
 	}
 
 	/**
@@ -1102,7 +1102,7 @@ public final class ClassInfo {
 		return l;
 	}
 
-	AnnotationsMap appendAnnotationsMap(AnnotationsMap m) {
+	AnnotationList appendAnnotationList(AnnotationList m) {
 		for (ClassInfo ci : getParents())
 			for (Annotation a : ci.c.getDeclaredAnnotations())
 				m.add(AnnotationInfo.of(ci, a));
@@ -1116,7 +1116,7 @@ public final class ClassInfo {
 		return m;
 	}
 
-	AnnotationsMap appendAnnotationsMapParentFirst(AnnotationsMap m) {
+	AnnotationList appendAnnotationListParentFirst(AnnotationList m) {
 		Package p = c.getPackage();
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())

@@ -681,8 +681,8 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public ParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public ParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

@@ -746,8 +746,8 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public UrlEncodingSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

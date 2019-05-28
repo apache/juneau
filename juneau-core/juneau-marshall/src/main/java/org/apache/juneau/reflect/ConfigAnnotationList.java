@@ -13,68 +13,18 @@
 package org.apache.juneau.reflect;
 
 import java.lang.annotation.*;
-import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.annotation.*;
 
 /**
- * A mapping of annotation classes to lists of annotations.
+ * Subclass of {@link AnnotationList} that filters out annotations not annotated with {@link PropertyStoreApply}.
  */
-public class AnnotationsMap extends HashMap<Class<? extends Annotation>,List<AnnotationInfo<? extends Annotation>>> {
-
+public class ConfigAnnotationList extends AnnotationList {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Adds an annotation to this map.
-	 *
-	 * @param a The annotation to add.
-	 * @return This object (for method chaining).
-	 */
-	public AnnotationsMap add(AnnotationInfo<? extends Annotation> a) {
-		if (a == null || ! accept(a))
-			return this;
-		Class<? extends Annotation> c = a.getAnnotation().annotationType();
-		List<AnnotationInfo<? extends Annotation>> l = super.get(c);
-		if (l == null) {
-			l = new ArrayList<>();
-			put(c, l);
-		}
-		l.add(a);
-		return this;
-	}
-
-	/**
-	 * Overridable method for filtering annotations added to this map.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if annotation should be added to this map.
-	 */
+	@Override /* AnnotationList */
 	public boolean accept(AnnotationInfo<? extends Annotation> a) {
-		return true;
-	}
-
-	/**
-	 * Returns the list of annotations of the specified type.
-	 *
-	 * @param <T> The annotation type.
-	 * @param c The annotation type.
-	 * @return The list of annotations, <jk>null</jk> if not found.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T extends AnnotationInfo<? extends Annotation>> List<T> get(Class<T> c) {
-		return (List<T>)super.get(c);
-	}
-
-	@Override
-	public String toString() {
-		ObjectMap m = new ObjectMap();
-		for (Class<?> k : this.keySet()) {
-			ObjectList l = new ObjectList();
-			for (AnnotationInfo<?> ai : get(k))
-				l.add(ai.toObjectMap());
-			m.put(k.getSimpleName(), l);
-		}
-		return SimpleJson.DEFAULT_READABLE.toString(m);
+		Class<? extends Annotation> aa = a.getAnnotation().annotationType();
+		return aa.getAnnotation(PropertyStoreApply.class) != null;
 	}
 }

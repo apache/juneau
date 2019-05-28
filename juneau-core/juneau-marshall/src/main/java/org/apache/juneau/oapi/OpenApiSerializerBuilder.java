@@ -682,8 +682,8 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public OpenApiSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public OpenApiSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

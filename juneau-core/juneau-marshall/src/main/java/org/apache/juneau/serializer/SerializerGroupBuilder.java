@@ -1100,8 +1100,8 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public SerializerGroupBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public SerializerGroupBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

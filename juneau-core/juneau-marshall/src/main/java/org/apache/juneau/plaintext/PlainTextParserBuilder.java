@@ -567,8 +567,8 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override
-	public PlainTextParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public PlainTextParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 }

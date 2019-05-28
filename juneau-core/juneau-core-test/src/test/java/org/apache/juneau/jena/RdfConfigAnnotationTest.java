@@ -99,8 +99,8 @@ public class RdfConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		RdfSerializerSession x = RdfSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		RdfSerializerSession x = RdfSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddLiteralTypes());
 		check("true", x.isAddRootProp());
@@ -141,8 +141,8 @@ public class RdfConfigAnnotationTest {
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		RdfParserSession x = RdfParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		RdfParserSession x = RdfParser.create().applyAnnotations(al, sr).build().createSession();
 		check("SEQ", x.getCollectionFormat());
 		check("foo:http://foo", x.getJuneauBpNs());
 		check("foo:http://foo", x.getJuneauNs());
@@ -185,8 +185,8 @@ public class RdfConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		RdfSerializerSession x = RdfSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		RdfSerializerSession x = RdfSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddLiteralTypes());
 		check("false", x.isAddRootProp());
@@ -226,8 +226,8 @@ public class RdfConfigAnnotationTest {
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		RdfParserSession x = RdfParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		RdfParserSession x = RdfParser.create().applyAnnotations(al, sr).build().createSession();
 		check("DEFAULT", x.getCollectionFormat());
 		check("jp:http://www.apache.org/juneaubp/", x.getJuneauBpNs());
 		check("j:http://www.apache.org/juneau/", x.getJuneauNs());
@@ -269,8 +269,8 @@ public class RdfConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		RdfSerializerSession x = RdfSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		RdfSerializerSession x = RdfSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddLiteralTypes());
 		check("false", x.isAddRootProp());
@@ -310,8 +310,8 @@ public class RdfConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		RdfParserSession x = RdfParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		RdfParserSession x = RdfParser.create().applyAnnotations(al, sr).build().createSession();
 		check("DEFAULT", x.getCollectionFormat());
 		check("jp:http://www.apache.org/juneaubp/", x.getJuneauBpNs());
 		check("j:http://www.apache.org/juneau/", x.getJuneauNs());

@@ -2740,8 +2740,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* ContextBuilder */
-	public RestContextBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public RestContextBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

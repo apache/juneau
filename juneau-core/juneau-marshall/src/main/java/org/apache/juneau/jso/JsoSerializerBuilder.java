@@ -651,8 +651,8 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsoSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public JsoSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

@@ -35,14 +35,14 @@ public class PlainTextConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		PlainTextSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		PlainTextSerializer.create().applyAnnotations(al, sr).build().createSession();
 	}
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		PlainTextParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		PlainTextParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -54,13 +54,13 @@ public class PlainTextConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		PlainTextSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		PlainTextSerializer.create().applyAnnotations(al, sr).build().createSession();
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		PlainTextParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		PlainTextParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 }

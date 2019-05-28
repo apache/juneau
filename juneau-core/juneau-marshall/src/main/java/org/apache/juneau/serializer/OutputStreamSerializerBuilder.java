@@ -532,8 +532,8 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public OutputStreamSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public OutputStreamSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

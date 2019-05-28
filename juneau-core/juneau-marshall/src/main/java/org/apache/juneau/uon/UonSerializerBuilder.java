@@ -777,8 +777,8 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UonSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public UonSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

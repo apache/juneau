@@ -157,8 +157,8 @@ public class BeanConfigAnnotationTest {
 
 	@Test
 	public void basic() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		BeanTraverseSession bc = JsonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		BeanTraverseSession bc = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 
 		System.err.println(bc.getImplClasses().values().iterator().next().getClass().getSimpleName());
 
@@ -212,8 +212,8 @@ public class BeanConfigAnnotationTest {
 
 	@Test
 	public void noValues() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		JsonSerializer bc = JsonSerializer.create().applyAnnotations(m, sr).build();
+		AnnotationList al = b.getAnnotationList();
+		JsonSerializer bc = JsonSerializer.create().applyAnnotations(al, sr).build();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
 		check("", bc.getBeanDictionaryClasses());
@@ -262,8 +262,8 @@ public class BeanConfigAnnotationTest {
 
 	@Test
 	public void noAnnotation() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		JsonSerializer bc = JsonSerializer.create().applyAnnotations(m, sr).build();
+		AnnotationList al = c.getAnnotationList();
+		JsonSerializer bc = JsonSerializer.create().applyAnnotations(al, sr).build();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
 		check("", bc.getBeanDictionaryClasses());

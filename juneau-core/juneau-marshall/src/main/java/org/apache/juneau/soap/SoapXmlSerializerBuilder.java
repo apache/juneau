@@ -701,8 +701,8 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public SoapXmlSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public SoapXmlSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

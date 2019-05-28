@@ -827,8 +827,8 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public ParserGroupBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public ParserGroupBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

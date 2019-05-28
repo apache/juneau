@@ -13,19 +13,30 @@
 package org.apache.juneau.reflect;
 
 import java.lang.annotation.*;
-
-import org.apache.juneau.annotation.*;
+import java.util.ArrayList;
 
 /**
- * Specialized {@link AnnotationsMap} that accepts only <js>"*Config"</js> annotations.
+ * An ordered list of annotations and the classes/methods/packages they were found on.
  */
-public class ConfigAnnotationsMap extends AnnotationsMap {
-
+public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public boolean accept(AnnotationInfo<? extends Annotation> a) {
-		Class<? extends Annotation> aa = a.getAnnotation().annotationType();
-		return aa.getAnnotation(PropertyStoreApply.class) != null;
+	@Override /* List */
+	public boolean add(AnnotationInfo<?> ai) {
+		if (accept(ai)) {
+			super.add(ai);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Overridable method for filtering annotations added to this list.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if annotation should be added to this list.
+	 */
+	protected boolean accept(AnnotationInfo<? extends Annotation> a) {
+		return true;
 	}
 }

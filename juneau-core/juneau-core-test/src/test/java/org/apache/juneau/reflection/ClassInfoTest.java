@@ -27,7 +27,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.reflection.MethodInfoTest.*;
 import org.apache.juneau.svl.*;
@@ -89,7 +88,6 @@ public class ClassInfoTest {
 	}
 
 	private static final Function<Object,String> TO_STRING = new Function<Object,String>() {
-		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public String apply(Object t) {
 			if (t == null)
@@ -114,9 +112,9 @@ public class ClassInfoTest {
 				return "@AConfig(" + ((AConfig)t).value() + ")";
 			if (t instanceof AnnotationInfo)
 				return apply(((AnnotationInfo<?>)t).getAnnotation());
-			if (t instanceof AnnotationsMap) {
-				AnnotationsMap m = (AnnotationsMap)t;
-				return new ClassTreeSet((Set)m.keySet()).stream().map(x -> x.getSimpleName() + "=[" + (m.get(x).stream().map(y -> apply(y))).collect(Collectors.joining(",")) +"]").collect(Collectors.joining(","));
+			if (t instanceof AnnotationList) {
+				AnnotationList al = (AnnotationList)t;
+				return al.toString();
 			}
 			return t.toString();
 		}
@@ -940,16 +938,16 @@ public class ClassInfoTest {
 
 	@Test
 	public void getAnnotationsMap() {
-		check("A=[@A(7),@A(6),@A(5),@A(3),@A(1),@A(2)],PA=[@PA(10)]", g3.getAnnotationsMap());
-		check("A=[@A(7),@A(6),@A(5),@A(3),@A(1),@A(2)],PA=[@PA(10)]", g4.getAnnotationsMap());
-		check("A=[@A(3)],PA=[@PA(10)]", g5.getAnnotationsMap());
+		check("@A(7),@A(6),@A(5),@A(3),@A(1),@A(2),@PA(10)", g3.getAnnotationList());
+		check("@A(7),@A(6),@A(5),@A(3),@A(1),@A(2),@PA(10)", g4.getAnnotationList());
+		check("@A(3),@PA(10)", g5.getAnnotationList());
 	}
 
 	@Test
 	public void getAnnotationsMapParentFirst() {
-		check("A=[@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)],PA=[@PA(10)]", g3.getAnnotationsMapParentFirst());
-		check("A=[@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)],PA=[@PA(10)]", g4.getAnnotationsMapParentFirst());
-		check("A=[@A(3)],PA=[@PA(10)]", g5.getAnnotationsMapParentFirst());
+		check("@PA(10),@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationListParentFirst());
+		check("@PA(10),@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g4.getAnnotationListParentFirst());
+		check("@PA(10),@A(3)", g5.getAnnotationListParentFirst());
 	}
 
 	@A(1) @AConfig(1) static interface GBI1 {}
@@ -966,16 +964,16 @@ public class ClassInfoTest {
 
 	@Test
 	public void getConfigAnnotationsMap() {
-		check("AConfig=[@AConfig(7),@AConfig(6),@AConfig(5),@AConfig(3),@AConfig(1),@AConfig(2)]", gb3.getConfigAnnotationsMap());
-		check("AConfig=[@AConfig(7),@AConfig(6),@AConfig(5),@AConfig(3),@AConfig(1),@AConfig(2)]", gb4.getConfigAnnotationsMap());
-		check("AConfig=[@AConfig(3)]", gb5.getConfigAnnotationsMap());
+		check("@AConfig(7),@AConfig(6),@AConfig(5),@AConfig(3),@AConfig(1),@AConfig(2)", gb3.getConfigAnnotationList());
+		check("@AConfig(7),@AConfig(6),@AConfig(5),@AConfig(3),@AConfig(1),@AConfig(2)", gb4.getConfigAnnotationList());
+		check("@AConfig(3)", gb5.getConfigAnnotationList());
 	}
 
 	@Test
 	public void getConfigAnnotationsMapParentFirst() {
-		check("AConfig=[@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)]", gb3.getConfigAnnotationsMapParentFirst());
-		check("AConfig=[@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)]", gb4.getConfigAnnotationsMapParentFirst());
-		check("AConfig=[@AConfig(3)]", gb5.getConfigAnnotationsMapParentFirst());
+		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb3.getConfigAnnotationListParentFirst());
+		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb4.getConfigAnnotationListParentFirst());
+		check("@AConfig(3)", gb5.getConfigAnnotationListParentFirst());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

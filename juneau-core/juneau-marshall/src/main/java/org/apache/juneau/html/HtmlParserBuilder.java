@@ -589,8 +589,8 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override
-	public HtmlParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public HtmlParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 }

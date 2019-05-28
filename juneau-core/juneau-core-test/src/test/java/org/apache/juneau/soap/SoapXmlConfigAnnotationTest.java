@@ -52,8 +52,8 @@ public class SoapXmlConfigAnnotationTest {
 
 	@Test
 	public void basic() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		SoapXmlSerializerSession x = SoapXmlSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		SoapXmlSerializerSession x = SoapXmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("foo", x.getSoapAction());
 	}
 
@@ -67,8 +67,8 @@ public class SoapXmlConfigAnnotationTest {
 
 	@Test
 	public void noValues() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		SoapXmlSerializerSession x = SoapXmlSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		SoapXmlSerializerSession x = SoapXmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}
 
@@ -81,8 +81,8 @@ public class SoapXmlConfigAnnotationTest {
 
 	@Test
 	public void noAnnotation() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		SoapXmlSerializerSession x = SoapXmlSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		SoapXmlSerializerSession x = SoapXmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}
 }

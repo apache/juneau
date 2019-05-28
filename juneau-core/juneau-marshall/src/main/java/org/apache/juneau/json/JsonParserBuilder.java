@@ -607,8 +607,8 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override
-	public JsonParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public JsonParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 }

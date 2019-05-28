@@ -766,8 +766,8 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public HtmlStrippedDocSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
-		super.applyAnnotations(m, sr);
+	public HtmlStrippedDocSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
+		super.applyAnnotations(al, vrs);
 		return this;
 	}
 

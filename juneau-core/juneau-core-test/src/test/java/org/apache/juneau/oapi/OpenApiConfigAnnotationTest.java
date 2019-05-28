@@ -35,14 +35,14 @@ public class OpenApiConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		OpenApiSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		OpenApiSerializer.create().applyAnnotations(al, sr).build().createSession();
 	}
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		OpenApiParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		OpenApiParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -54,13 +54,13 @@ public class OpenApiConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		OpenApiSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		OpenApiSerializer.create().applyAnnotations(al, sr).build().createSession();
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		OpenApiParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		OpenApiParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 }

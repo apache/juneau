@@ -56,8 +56,8 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		UonSerializerSession x = UonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		UonSerializerSession x = UonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEncoding());
 		check("UON", x.getParamFormat());
@@ -65,8 +65,8 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationsMap m = a.getAnnotationsMap();
-		UonParserSession x = UonParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = a.getAnnotationList();
+		UonParserSession x = UonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isDecoding());
 		check("true", x.isValidateEnd());
 	}
@@ -81,8 +81,8 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		UonSerializerSession x = UonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		UonSerializerSession x = UonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEncoding());
 		check("UON", x.getParamFormat());
@@ -90,8 +90,8 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationsMap m = b.getAnnotationsMap();
-		UonParserSession x = UonParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = b.getAnnotationList();
+		UonParserSession x = UonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isDecoding());
 		check("false", x.isValidateEnd());
 	}
@@ -105,8 +105,8 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		UonSerializerSession x = UonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		UonSerializerSession x = UonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEncoding());
 		check("UON", x.getParamFormat());
@@ -114,8 +114,8 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationsMap m = c.getAnnotationsMap();
-		UonParserSession x = UonParser.create().applyAnnotations(m, sr).build().createSession();
+		AnnotationList al = c.getAnnotationList();
+		UonParserSession x = UonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isDecoding());
 		check("false", x.isValidateEnd());
 	}
