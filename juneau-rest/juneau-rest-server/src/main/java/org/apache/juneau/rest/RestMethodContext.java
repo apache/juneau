@@ -55,7 +55,7 @@ import org.apache.juneau.svl.*;
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
  */
-public class RestJavaMethod implements Comparable<RestJavaMethod>  {
+public class RestMethodContext implements Comparable<RestMethodContext>  {
 	private final String httpMethod;
 	private final UrlPathPattern pathPattern;
 	final RestMethodParam[] methodParams;
@@ -92,7 +92,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	final Map<Class<?>,ResponsePartMeta> bodyPartMetas = new ConcurrentHashMap<>();
 	final ResponseBeanMeta responseMeta;
 
-	RestJavaMethod(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
+	RestMethodContext(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 		Builder b = new Builder(servlet, method, context);
 		this.context = context;
 		this.method = method;
@@ -646,7 +646,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	 * It maintains the order in which matches are made during requests.
 	 */
 	@Override /* Comparable */
-	public int compareTo(RestJavaMethod o) {
+	public int compareTo(RestMethodContext o) {
 		int c;
 
 		c = priority.compareTo(o.priority);
@@ -719,9 +719,9 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		if (! (o instanceof RestJavaMethod))
+		if (! (o instanceof RestMethodContext))
 			return false;
-		return (compareTo((RestJavaMethod)o) == 0);
+		return (compareTo((RestMethodContext)o) == 0);
 	}
 
 	@Override /* Object */

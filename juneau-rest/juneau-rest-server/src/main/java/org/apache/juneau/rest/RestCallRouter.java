@@ -27,9 +27,9 @@ import javax.servlet.http.*;
  * dispatched to the appropriate RestJavaMethod.
  */
 public class RestCallRouter {
-	private final RestJavaMethod[] restJavaMethods;
+	private final RestMethodContext[] restJavaMethods;
 
-	RestCallRouter(RestJavaMethod[] callMethods) {
+	RestCallRouter(RestMethodContext[] callMethods) {
 		this.restJavaMethods = callMethods;
 	}
 
@@ -37,7 +37,7 @@ public class RestCallRouter {
 	 * Builder class.
 	 */
 	static final class Builder {
-		private List<RestJavaMethod> childMethods = new ArrayList<>();
+		private List<RestMethodContext> childMethods = new ArrayList<>();
 		private Set<String> collisions = new HashSet<>();
 		private String httpMethodName;
 
@@ -49,7 +49,7 @@ public class RestCallRouter {
 			return httpMethodName;
 		}
 
-		Builder add(RestJavaMethod m) throws RestServletException {
+		Builder add(RestMethodContext m) throws RestServletException {
 			if (! m.hasGuardsOrMatchers()) {
 				String p = m.getHttpMethod() + ":" + m.getPathPattern();
 				if (collisions.contains(p))
@@ -62,7 +62,7 @@ public class RestCallRouter {
 
 		RestCallRouter build() {
 			Collections.sort(childMethods);
-			return new RestCallRouter(childMethods.toArray(new RestJavaMethod[childMethods.size()]));
+			return new RestCallRouter(childMethods.toArray(new RestMethodContext[childMethods.size()]));
 		}
 	}
 
@@ -80,7 +80,7 @@ public class RestCallRouter {
 			return restJavaMethods[0].invoke(pathInfo, req, res);
 
 		int maxRc = 0;
-		for (RestJavaMethod m : restJavaMethods) {
+		for (RestMethodContext m : restJavaMethods) {
 			int rc = m.invoke(pathInfo, req, res);
 			if (rc == SC_OK)
 				return SC_OK;
@@ -92,7 +92,7 @@ public class RestCallRouter {
 	@Override /* Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder("RestCallRouter: [\n");
-		for (RestJavaMethod sm : restJavaMethods)
+		for (RestMethodContext sm : restJavaMethods)
 			sb.append("\t" + sm + "\n");
 		sb.append("]");
 		return sb.toString();

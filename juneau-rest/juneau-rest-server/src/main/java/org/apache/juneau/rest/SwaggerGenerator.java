@@ -222,7 +222,7 @@ final class SwaggerGenerator {
 			js.addBeanDef(defId, definitions.getObjectMap(defId));
 
 		// Iterate through all the @RestMethod methods.
-		for (RestJavaMethod sm : context.getCallMethods().values()) {
+		for (RestMethodContext sm : context.getCallMethods().values()) {
 
 			// Skip it if user doesn't have access.
 			if (! sm.isRequestAllowed(req))
@@ -768,7 +768,7 @@ final class SwaggerGenerator {
 		return nullIfEmpty(om);
 	}
 
-	private void addBodyExamples(RestJavaMethod sm, ObjectMap piri, boolean response, Type type) throws Exception {
+	private void addBodyExamples(RestMethodContext sm, ObjectMap piri, boolean response, Type type) throws Exception {
 
 		String sex = piri.getString("x-example");
 
@@ -818,7 +818,7 @@ final class SwaggerGenerator {
 			piri.put(examplesKey, examples);
 	}
 
-	private void addParamExample(RestJavaMethod sm, ObjectMap piri, RestParamType in, Type type) throws Exception {
+	private void addParamExample(RestMethodContext sm, ObjectMap piri, RestParamType in, Type type) throws Exception {
 
 		String s = piri.getString("x-example");
 

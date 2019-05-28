@@ -92,7 +92,7 @@ import org.apache.juneau.utils.*;
 public final class RestRequest extends HttpServletRequestWrapper {
 
 	private final RestContext context;
-	private RestJavaMethod restJavaMethod;
+	private RestMethodContext restJavaMethod;
 
 	private final String method;
 	private RequestBody body;
@@ -176,7 +176,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestJavaMethod rjm, RequestProperties properties) {
+	final void init(RestMethodContext rjm, RequestProperties properties) {
 		this.restJavaMethod = rjm;
 		this.javaMethod = rjm.method;
 		this.properties = properties;

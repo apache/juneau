@@ -61,7 +61,7 @@ import org.apache.juneau.serializer.*;
 public final class RestResponse extends HttpServletResponseWrapper {
 
 	private final RestRequest request;
-	private RestJavaMethod restJavaMethod;
+	private RestMethodContext restJavaMethod;
 	private Object output;                       // The POJO being sent to the output.
 	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
 	private RequestProperties properties;                // Response properties
@@ -99,7 +99,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestJavaMethod rjm, RequestProperties properties) throws NotAcceptable {
+	final void init(RestMethodContext rjm, RequestProperties properties) throws NotAcceptable {
 		this.restJavaMethod = rjm;
 		this.properties = properties;
 

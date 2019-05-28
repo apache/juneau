@@ -3146,7 +3146,7 @@ public final class RestContext extends BeanContext {
 	private final Config config;
 	private final VarResolver varResolver;
 	private final Map<String,RestCallRouter> callRouters;
-	private final Map<String,RestJavaMethod> callMethods;
+	private final Map<String,RestMethodContext> callMethods;
 	private final Map<String,RestContext> childResources;
 	private final RestLogger logger;
 	private final RestCallHandler callHandler;
@@ -3373,7 +3373,7 @@ public final class RestContext extends BeanContext {
 			//----------------------------------------------------------------------------------------------------
 			List<String> methodsFound = new LinkedList<>();   // Temporary to help debug transient duplicate method issue.
 			Map<String,RestCallRouter.Builder> routers = new LinkedHashMap<>();
-			Map<String,RestJavaMethod> _javaRestMethods = new LinkedHashMap<>();
+			Map<String,RestMethodContext> _javaRestMethods = new LinkedHashMap<>();
 			Map<String,Method>
 				_startCallMethods = new LinkedHashMap<>(),
 				_preCallMethods = new LinkedHashMap<>(),
@@ -3400,7 +3400,7 @@ public final class RestContext extends BeanContext {
 						if (mi.isNotPublic())
 							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), mi.getSimpleName());
 
-						RestJavaMethod sm = new RestJavaMethod(resource, mi.inner(), this);
+						RestMethodContext sm = new RestMethodContext(resource, mi.inner(), this);
 						String httpMethod = sm.getHttpMethod();
 
 						// RRPC is a special case where a method returns an interface that we
@@ -3413,7 +3413,7 @@ public final class RestContext extends BeanContext {
 							if (rim.getMethodsByPath().isEmpty())
 								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getFullName());
 
-							sm = new RestJavaMethod(resource, mi.inner(), this) {
+							sm = new RestMethodContext(resource, mi.inner(), this) {
 
 								@Override
 								int invoke(String pathInfo, RestRequest req, RestResponse res) throws Throwable {
@@ -3618,7 +3618,7 @@ public final class RestContext extends BeanContext {
 		}
 	}
 
-	private static void addToRouter(Map<String, RestCallRouter.Builder> routers, String httpMethodName, RestJavaMethod cm) throws RestServletException {
+	private static void addToRouter(Map<String, RestCallRouter.Builder> routers, String httpMethodName, RestMethodContext cm) throws RestServletException {
 		if (! routers.containsKey(httpMethodName))
 			routers.put(httpMethodName, new RestCallRouter.Builder(httpMethodName));
 		routers.get(httpMethodName).add(cm);
@@ -4739,7 +4739,7 @@ public final class RestContext extends BeanContext {
 	 * @return
 	 * 	An unmodifiable map of Java method names to call method objects.
 	 */
-	public Map<String,RestJavaMethod> getCallMethods() {
+	public Map<String,RestMethodContext> getCallMethods() {
 		return callMethods;
 	}
 
