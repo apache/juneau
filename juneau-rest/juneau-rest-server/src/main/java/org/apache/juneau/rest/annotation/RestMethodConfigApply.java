@@ -37,6 +37,12 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 	public void apply(AnnotationInfo<RestMethod> ai, PropertyStoreBuilder psb) {
 		RestMethod a = ai.getAnnotation();
 
+		if (! a.defaultCharset().isEmpty())
+			psb.set(REST_defaultCharset, string(a.defaultCharset()));
+
+		if (! a.maxInput().isEmpty())
+			psb.set(REST_maxInput, string(a.maxInput()));
+
 		if (! a.rolesDeclared().isEmpty())
 			psb.set(REST_rolesDeclared, string(a.rolesDeclared()));
 

@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.rest.RestContext.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -30,6 +31,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
@@ -43,7 +45,7 @@ import org.apache.juneau.svl.*;
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
  */
-public class RestMethodContext implements Comparable<RestMethodContext>  {
+public class RestMethodContext extends BeanContext implements Comparable<RestMethodContext>  {
 	private final String httpMethod;
 	private final UrlPathPattern pathPattern;
 	final RestMethodParam[] methodParams;
@@ -80,12 +82,18 @@ public class RestMethodContext implements Comparable<RestMethodContext>  {
 	final Map<Class<?>,ResponsePartMeta> bodyPartMetas = new ConcurrentHashMap<>();
 	final ResponseBeanMeta responseMeta;
 
-	RestMethodContext(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
-		RestMethodContextBuilder b = new RestMethodContextBuilder(servlet, method, context);
-		this.context = context;
-		this.method = method;
-		this.info = MethodInfo.of(method);
+	RestMethodContext(RestMethodContextBuilder b) {
+		super(b.getPropertyStore());
+
+		this.context = b.context;
+		this.method = b.method;
 		this.httpMethod = b.httpMethod;
+
+		this.info = MethodInfo.of(method);
+
+		defaultCharset = getProperty(REST_defaultCharset, String.class, context.getDefaultCharset());
+		maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, String.valueOf(context.getMaxInput())));
+
 		this.pathPattern = b.pathPattern;
 		this.methodParams = b.methodParams;
 		this.guards = b.guards;
@@ -104,8 +112,6 @@ public class RestMethodContext implements Comparable<RestMethodContext>  {
 		this.defaultRequestHeaders = b.defaultRequestHeaders;
 		this.defaultQuery = b.defaultQuery;
 		this.defaultFormData = b.defaultFormData;
-		this.defaultCharset = b.defaultCharset;
-		this.maxInput = b.maxInput;
 		this.priority = b.priority;
 		this.supportedAcceptTypes = b.supportedAcceptTypes;
 		this.supportedContentTypes = b.supportedContentTypes;

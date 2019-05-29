@@ -44,7 +44,10 @@ import org.apache.juneau.svl.*;
  */
 public class RestMethodContextBuilder extends BeanContextBuilder {
 
-	String httpMethod, defaultCharset;
+	RestContext context;
+	java.lang.reflect.Method method;
+
+	String httpMethod;
 	UrlPathPattern pathPattern;
 	RestMethodParam[] methodParams;
 	RestGuard[] guards;
@@ -60,7 +63,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	RestMethodProperties properties;
 	PropertyStore propertyStore;
 	Map<String,Object> defaultRequestHeaders, defaultQuery, defaultFormData;
-	long maxInput;
 	Integer priority;
 	Map<String,Widget> widgets;
 	List<MediaType> supportedAcceptTypes, supportedContentTypes;
@@ -68,6 +70,9 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 	@SuppressWarnings("deprecation")
 	RestMethodContextBuilder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
+		this.context = context;
+		this.method = method;
+
 		String sig = method.getDeclaringClass().getName() + '.' + method.getName();
 		MethodInfo mi = getMethodInfo(servlet.getClass(), method);
 
@@ -103,14 +108,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 			beanContext = context.getBeanContext();
 			encoders = context.getEncoders();
 			properties = new RestMethodProperties(context.getProperties());
-			defaultCharset = context.getDefaultCharset();
-			maxInput = context.getMaxInput();
 			AnnotationList configAnnotationList = hasConfigAnnotations ? mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE) : context.getConfigAnnotationList();
-
-			if (! m.defaultCharset().isEmpty())
-				defaultCharset = vr.resolve(m.defaultCharset());
-			if (! m.maxInput().isEmpty())
-				maxInput = StringUtils.parseLongWithSuffix(vr.resolve(m.maxInput()));
 
 			HtmlDocBuilder hdb = new HtmlDocBuilder(properties);
 

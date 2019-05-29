@@ -510,7 +510,7 @@ public abstract class Context {
 	}
 
 	@Override /* Object */
-	public final boolean equals(Object o) {
+	public boolean equals(Object o) {
 		// Context objects are considered equal if they're the same class and have the same set of properties.
 		if (o == null)
 			return false;

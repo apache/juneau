@@ -3398,7 +3398,8 @@ public final class RestContext extends BeanContext {
 						if (mi.isNotPublic())
 							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), mi.getSimpleName());
 
-						RestMethodContext sm = new RestMethodContext(resource, mi.inner(), this);
+						RestMethodContextBuilder rmcb = new RestMethodContextBuilder(resource, mi.inner(), this);
+						RestMethodContext sm = new RestMethodContext(rmcb);
 						String httpMethod = sm.getHttpMethod();
 
 						// RRPC is a special case where a method returns an interface that we
@@ -3411,7 +3412,8 @@ public final class RestContext extends BeanContext {
 							if (rim.getMethodsByPath().isEmpty())
 								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getFullName());
 
-							sm = new RestMethodContext(resource, mi.inner(), this) {
+							RestMethodContextBuilder smb = new RestMethodContextBuilder(resource, mi.inner(), this);
+							sm = new RestMethodContext(smb) {
 
 								@Override
 								int invoke(String pathInfo, RestRequest req, RestResponse res) throws Throwable {
