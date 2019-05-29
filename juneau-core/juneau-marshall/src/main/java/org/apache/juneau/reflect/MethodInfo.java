@@ -294,6 +294,15 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	/**
+	 * Same as {@link #getConfigAnnotationListParentFirst()} except only returns annotations defined on methods.
+	 *
+	 * @return A new {@link AnnotationList} object on every call.
+	 */
+	public AnnotationList getConfigAnnotationListMethodOnlyParentFirst() {
+		return appendAnnotationListMethodOnlyParentFirst(new ConfigAnnotationList());
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this method or parent methods have any annotations annotated with {@link PropertyStoreApply}.
 	 *
 	 * @return <jk>true</jk> if this method or parent methods have any annotations annotated with {@link PropertyStoreApply}.
@@ -341,6 +350,15 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 			appendAnnotations(al, ci);
 			appendMethodAnnotations(al, ci);
 		}
+		return al;
+	}
+
+	AnnotationList appendAnnotationListMethodOnlyParentFirst(AnnotationList al) {
+		ClassInfo c = this.declaringClass;
+		for (ClassInfo ci : c.getInterfacesParentFirst()) 
+			appendMethodAnnotations(al, ci);
+		for (ClassInfo ci : c.getParentsParentFirst()) 
+			appendMethodAnnotations(al, ci);
 		return al;
 	}
 

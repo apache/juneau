@@ -2244,16 +2244,19 @@ public final class StringUtils {
 	public static String format(String pattern, Object...args) {
 		if (args == null || args.length == 0)
 			return pattern;
+		Object[] args2 = new Object[args.length];
 		for (int i = 0; i < args.length; i++)
-			args[i] = convertToReadable(args[i]);
-		return MessageFormat.format(pattern, args);
+			args2[i] = convertToReadable(args[i]);
+		return MessageFormat.format(pattern, args2);
 	}
 
-	private static Object convertToReadable(Object o) {
+	private static String convertToReadable(Object o) {
 		if (o == null)
 			return null;
 		if (o instanceof ClassMeta)
 			return ((ClassMeta<?>)o).getFullName();
+		if (o instanceof Class)
+			return ((Class<?>)o).getName();
 		if (BeanContext.DEFAULT == null)
 			return o.toString();
 		ClassMeta<?> cm = BeanContext.DEFAULT.getClassMetaForObject(o);

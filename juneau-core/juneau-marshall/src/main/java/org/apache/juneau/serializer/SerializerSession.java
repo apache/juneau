@@ -513,6 +513,8 @@ public abstract class SerializerSession extends BeanTraverseSession {
 			return null;
 		if (o.getClass() == Class.class)
 			return ClassInfo.of((Class<?>)o).getFullName();
+		if (o.getClass() == ClassInfo.class)
+			return ((ClassInfo)o).getFullName();
 		if (o.getClass().isEnum())
 			return getClassMetaForObject(o).toString(o);
 		String s = o.toString();

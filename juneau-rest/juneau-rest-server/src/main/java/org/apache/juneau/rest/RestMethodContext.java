@@ -160,7 +160,15 @@ public class RestMethodContext implements Comparable<RestMethodContext>  {
 					throw new RestServletException("@RestMethod annotation not found on method ''{0}''", sig);
 
 				VarResolver vr = context.getVarResolver();
-				boolean hasConfigAnnotations = mi.hasConfigAnnotations();
+				
+				// If this method doesn't have any config annotations (e.g. @BeanConfig), then we want to 
+				// reuse the serializers/parsers on the class.
+				boolean hasConfigAnnotations = false;
+				for (AnnotationInfo<?> ai : mi.getConfigAnnotationListMethodOnlyParentFirst()) {
+					hasConfigAnnotations = ! ai.isType(RestMethod.class);
+					if (hasConfigAnnotations)
+						break;
+				}
 
 				serializers = context.getSerializers();
 				parsers = context.getParsers();

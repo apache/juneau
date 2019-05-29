@@ -12,13 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.BeanContext.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
-import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 
 import java.nio.charset.*;
@@ -109,7 +106,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	RestContextProperties properties;
 	Config config;
 	VarResolverBuilder varResolverBuilder;
-	String path;
 	@SuppressWarnings("deprecation")
 	HtmlDocBuilder htmlDocBuilder;
 
@@ -172,79 +168,16 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				}
 			}
 
+			applyAnnotations(rci.getConfigAnnotationListParentFirst(), vr.createSession());
+
 			// Load stuff from parent-to-child order.
 			// This allows child settings to overwrite parent settings.
 			for (AnnotationInfo<RestResource> e : restResourceAnnotationsParentFirst) {
-				ClassInfo c = e.getClassOn();
 				RestResource r = e.getAnnotation();
 				for (Property p : r.properties())
 					set(vr.resolve(p.name()), vr.resolve(p.value()));
 				for (String p : r.flags())
 					set(p, true);
-				serializers(merge(ObjectUtils.toType(psb.peek(REST_serializers), Object[].class), r.serializers()));
-				parsers(merge(ObjectUtils.toType(psb.peek(REST_parsers), Object[].class), r.parsers()));
-				partSerializer(r.partSerializer());
-				partParser(r.partParser());
-				encoders(r.encoders());
-				if (r.produces().length > 0)
-					producesReplace(resolveVars(vr, r.produces()));
-				if (r.consumes().length > 0)
-					consumesReplace(resolveVars(vr, r.consumes()));
-				defaultRequestHeaders(resolveVars(vr, r.defaultRequestHeaders()));
-				defaultAccept(vr.resolve(r.defaultAccept()));
-				defaultContentType(vr.resolve(r.defaultContentType()));
-				defaultResponseHeaders(resolveVars(vr, r.defaultResponseHeaders()));
-				responseHandlers(r.responseHandlers());
-				converters(r.converters());
-				guards(reverse(r.guards()));
-				children(r.children());
-				beanFilters(merge(ObjectUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), r.beanFilters()));
-				pojoSwaps(merge(ObjectUtils.toType(psb.peek(BEAN_pojoSwaps), Object[].class), r.pojoSwaps()));
-				paramResolvers(r.paramResolvers());
-				serializerListener(r.serializerListener());
-				parserListener(r.parserListener());
-				uriContext(vr.resolve(r.uriContext()));
-				uriAuthority(vr.resolve(r.uriAuthority()));
-				uriRelativity(vr.resolve(r.uriRelativity()));
-				uriResolution(vr.resolve(r.uriResolution()));
-				for (String mapping : r.staticFiles())
-					staticFiles(c.inner(), vr.resolve(mapping));
-				if (! r.messages().isEmpty())
-					messages(c.inner(), vr.resolve(r.messages()));
-				staticFileResponseHeaders(resolveVars(vr, r.staticFileResponseHeaders()));
-				if (! r.useClasspathResourceCaching().isEmpty())
-					useClasspathResourceCaching(Boolean.valueOf(vr.resolve(r.useClasspathResourceCaching())));
-				if (r.classpathResourceFinder() != ClasspathResourceFinder.Null.class)
-					classpathResourceFinder(r.classpathResourceFinder());
-				if (! r.path().isEmpty())
-					path(vr.resolve(r.path()));
-				if (! r.clientVersionHeader().isEmpty())
-					clientVersionHeader(vr.resolve(r.clientVersionHeader()));
-				if (r.resourceResolver() != RestResourceResolver.Null.class)
-					resourceResolver(r.resourceResolver());
-				if (r.logger() != RestLogger.Null.class)
-					logger(r.logger());
-				if (r.callHandler() != RestCallHandler.Null.class)
-					callHandler(r.callHandler());
-				if (r.infoProvider() != RestInfoProvider.Null.class)
-					infoProvider(r.infoProvider());
-				if (! r.allowHeaderParams().isEmpty())
-					allowHeaderParams(Boolean.valueOf(vr.resolve(r.allowHeaderParams())));
-				if (! r.allowedMethodParams().isEmpty())
-					allowedMethodParams(vr.resolve(r.allowedMethodParams()));
-				if (! r.allowBodyParam().isEmpty())
-					allowBodyParam(Boolean.valueOf(vr.resolve(r.allowBodyParam())));
-				if (! r.renderResponseStackTraces().isEmpty())
-					renderResponseStackTraces(Boolean.valueOf(vr.resolve(r.renderResponseStackTraces())));
-				if (! r.useStackTraceHashes().isEmpty())
-					useStackTraceHashes(Boolean.valueOf(vr.resolve(r.useStackTraceHashes())));
-				if (! r.defaultCharset().isEmpty())
-					defaultCharset(vr.resolve(r.defaultCharset()));
-				if (! r.maxInput().isEmpty())
-					maxInput(vr.resolve(r.maxInput()));
-				if (! r.debug().isEmpty())
-					debug(Boolean.valueOf(vr.resolve(r.debug())));
-				mimeTypes(resolveVars(vr, r.mimeTypes()));
 
 				HtmlDoc hd = r.htmldoc();
 				widgets(hd.widgets());
@@ -271,13 +204,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	private static String[] resolveVars(VarResolver vr, String[] in) {
-		String[] out = new String[in.length];
-		for (int i = 0; i < in.length; i++)
-			out[i] = vr.resolve(in[i]);
-		return out;
 	}
 
 	/*
@@ -489,6 +415,16 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public VarResolverBuilder getVarResolverBuilder() {
 		return varResolverBuilder;
+	}
+
+	/**
+	 * Returns the REST path defined on this builder.
+	 *
+	 * @return The REST path defined on this builder.
+	 */
+	public String getPath() {
+		Object p = peek(REST_path);
+		return p == null ? "_" : p.toString();
 	}
 
 	//----------------------------------------------------------------------------------------------------
@@ -1420,7 +1356,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public RestContextBuilder path(String value) {
 		if (startsWith(value, '/'))
 			value = value.substring(1);
-		this.path = value;
+		set(REST_path, value);
 		return this;
 	}
 

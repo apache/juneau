@@ -184,6 +184,17 @@ public class AnnotationInfo<T extends Annotation> {
 		return null;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this annotation is the specified type.
+	 *
+	 * @param a The type to test against.
+	 * @return <jk>true</jk> if this annotation is the specified type.
+	 */
+	public boolean isType(Class<? extends Annotation> a) {
+		Class<? extends Annotation> at = this.a.annotationType();
+		return at == a;
+	}
+
 	@Override
 	public String toString() {
 		return SimpleJson.DEFAULT_READABLE.toString(toObjectMap());
