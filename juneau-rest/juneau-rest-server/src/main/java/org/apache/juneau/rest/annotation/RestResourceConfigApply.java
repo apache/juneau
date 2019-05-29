@@ -52,11 +52,15 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 		String s = null;
 		ClassInfo c = ai.getClassOn();
 
-		for (Property p : a.properties())
-			psb.set(string(p.name()), string(p.value()));
+		for (Property p1 : a.properties()) {
+			psb.set(p1.name(), string(p1.value()));  // >>> DEPRECATED - Remove in 9.0 <<<
+			psb.addTo(REST_properties, string(p1.name()), string(p1.value()));
+		}
 
-		for (String p : a.flags())
-			psb.set(p, true);
+		for (String p1 : a.flags()) {
+			psb.set(p1, true);  // >>> DEPRECATED - Remove in 9.0 <<<
+			psb.addTo(REST_properties, string(p1), true);
+		}
 
 		if (a.serializers().length > 0)
 			psb.set(REST_serializers, merge(ObjectUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));

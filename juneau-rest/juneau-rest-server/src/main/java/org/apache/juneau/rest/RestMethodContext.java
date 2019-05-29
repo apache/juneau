@@ -94,6 +94,16 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		defaultCharset = getProperty(REST_defaultCharset, String.class, context.getDefaultCharset());
 		maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, String.valueOf(context.getMaxInput())));
 
+//		Object[] empty = new Object[0];
+//		boolean needsNewContext =
+//			b.hasConfigAnnotations
+//			|| getArrayProperty(REST_serializers, Object.class, empty).length > 0
+//			|| getArrayProperty(REST_parsers, Object.class, empty).length > 0
+//			|| getArrayProperty(BEAN_beanFilters, Object.class, empty).length > 0
+//			|| getArrayProperty(BEAN_pojoSwaps, Object.class, empty).length > 0
+//			|| getArrayProperty(BEAN_includeProperties, Object.class, empty).length > 0
+//			|| getArrayProperty(BEAN_excludeProperties, Object.class, empty).length > 0;
+
 		this.pathPattern = b.pathPattern;
 		this.methodParams = b.methodParams;
 		this.guards = b.guards;

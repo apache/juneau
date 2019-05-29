@@ -180,6 +180,8 @@ public final class RestUtils {
 	public static String[] parseHeader(String s) {
 		int i = s.indexOf(':');
 		if (i == -1)
+			i = s.indexOf('=');
+		if (i == -1)
 			return null;
 		String name = s.substring(0, i).trim().toLowerCase(Locale.ENGLISH);
 		String val = s.substring(i+1).trim();
@@ -394,6 +396,9 @@ public final class RestUtils {
 	 * @return A new merged array.
 	 */
 	public static Object[] merge(Object[] fromParent, Object[] fromChild) {
+
+		if (fromParent == null)
+			fromParent = new Object[0];
 
 		if (ArrayUtils.contains(None.class, fromChild))
 			return new Object[0];

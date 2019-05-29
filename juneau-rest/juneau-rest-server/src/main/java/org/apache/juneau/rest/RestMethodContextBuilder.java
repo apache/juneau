@@ -46,6 +46,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 	RestContext context;
 	java.lang.reflect.Method method;
+	boolean hasConfigAnnotations;
 
 	String httpMethod;
 	UrlPathPattern pathPattern;
@@ -87,7 +88,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 			// If this method doesn't have any config annotations (e.g. @BeanConfig), then we want to
 			// reuse the serializers/parsers on the class.
-			boolean hasConfigAnnotations = false;
 			for (AnnotationInfo<?> ai : mi.getAnnotationListMethodOnlyParentFirst(ConfigAnnotationFilter.INSTANCE)) {
 				hasConfigAnnotations = ! ai.isType(RestMethod.class);
 				if (hasConfigAnnotations)
@@ -193,6 +193,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				psb.set(p1, true);
 			if (hasConfigAnnotations)
 				psb.applyAnnotations(configAnnotationList, sr);
+
 			this.propertyStore = psb.build();
 
 			if (sgb != null) {

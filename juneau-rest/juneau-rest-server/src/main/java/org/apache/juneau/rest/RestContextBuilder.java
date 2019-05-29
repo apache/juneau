@@ -2010,6 +2010,41 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Configuration property:  Properties.
+	 *
+	 * <p>
+	 * Defines arbitrary properties that can be retrieved via the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestRequest#getProperties()}
+	 * 	<li class='jm'>{@link RestResponse#getProperties()}
+	 * </ul>
+	 *
+	 * @param values The values to set on this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder properties(Map<String,Object> values) {
+		return addTo(REST_properties, values);
+	}
+
+	/**
+	 * Configuration property:  Properties.
+	 *
+	 * <p>
+	 * Defines arbitrary properties that can be retrieved via the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestRequest#getProperties()}
+	 * 	<li class='jm'>{@link RestResponse#getProperties()}
+	 * </ul>
+	 *
+	 * @param name The key to add to the properties.
+	 * @param value The value to add to the properties.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder property(String name, Object value) {
+		return addTo(REST_properties, name, value);
+	}
+
+	/**
 	 * Configuration property:  Resource authority path.
 	 *
 	 * <p>
@@ -2637,6 +2672,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public RestContextBuilder set(String name, Object value) {
 		super.set(name, value);
 		this.properties.put(name, value);
+		addTo(REST_properties, name, value);
 		return this;
 	}
 
@@ -2645,6 +2681,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		super.set(properties);
 		this.properties.clear();
 		this.properties.putAll(properties);
+		addTo(REST_properties, properties);
 		return this;
 	}
 

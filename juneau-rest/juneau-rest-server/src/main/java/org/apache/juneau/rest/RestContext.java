@@ -2586,6 +2586,39 @@ public final class RestContext extends BeanContext {
 	public static final String REST_produces = PREFIX + "produces.ls";
 
 	/**
+	 * Configuration property:  Properties.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.properties.sms"</js>
+	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b>  empty map
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestResource#properties()}
+	 * 			<li class='ja'>{@link RestResource#flags()}
+	 * 			<li class='ja'>{@link RestMethod#properties()}
+	 * 			<li class='ja'>{@link RestMethod#flags()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#property(String,Object)}
+	 * 			<li class='jm'>{@link RestContextBuilder#properties(Map)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Defines arbitrary properties that can be retrieved via the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestRequest#getProperties()}
+	 * 	<li class='jm'>{@link RestResponse#getProperties()}
+	 * </ul>
+	 */
+	public static final String REST_properties = PREFIX + "properties.sms";
+
+	/**
 	 * Configuration property:  Supported content media types.
 	 *
 	 * <h5 class='section'>Property:</h5>
