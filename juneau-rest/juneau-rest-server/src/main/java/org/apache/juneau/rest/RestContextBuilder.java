@@ -106,6 +106,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	RestContextProperties properties;
 	Config config;
 	VarResolverBuilder varResolverBuilder;
+
+	// This is being replaced with the @HtmlDocConfig annotation
 	@SuppressWarnings("deprecation")
 	HtmlDocBuilder htmlDocBuilder;
 
@@ -124,10 +126,16 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		partParser(OpenApiParser.class);
 		staticFileResponseHeader("Cache-Control", "max-age=86400, public");
 		encoders(IdentityEncoder.INSTANCE);
+		responseHandlers(
+			ReaderHandler.class,
+			InputStreamHandler.class,
+			DefaultHandler.class
+		);
 
 		try {
 
 			htmlDocBuilder = new HtmlDocBuilder(properties);
+
 			varResolverBuilder = new VarResolverBuilder()
 				.defaultVars()
 				.vars(ConfigVar.class)
@@ -173,6 +181,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			// Load stuff from parent-to-child order.
 			// This allows child settings to overwrite parent settings.
 			for (AnnotationInfo<RestResource> e : restResourceAnnotationsParentFirst) {
+
 				RestResource r = e.getAnnotation();
 				for (Property p : r.properties())
 					set(vr.resolve(p.name()), vr.resolve(p.value()));
@@ -183,12 +192,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				widgets(hd.widgets());
 				htmlDocBuilder.process(hd);
 			}
-
-			responseHandlers(
-				ReaderHandler.class,
-				InputStreamHandler.class,
-				DefaultHandler.class
-			);
 
 		} catch (Exception e) {
 			throw new ServletException(e);

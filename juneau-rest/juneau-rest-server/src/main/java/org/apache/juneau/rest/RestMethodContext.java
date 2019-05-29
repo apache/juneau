@@ -160,8 +160,8 @@ public class RestMethodContext implements Comparable<RestMethodContext>  {
 					throw new RestServletException("@RestMethod annotation not found on method ''{0}''", sig);
 
 				VarResolver vr = context.getVarResolver();
-				
-				// If this method doesn't have any config annotations (e.g. @BeanConfig), then we want to 
+
+				// If this method doesn't have any config annotations (e.g. @BeanConfig), then we want to
 				// reuse the serializers/parsers on the class.
 				boolean hasConfigAnnotations = false;
 				for (AnnotationInfo<?> ai : mi.getConfigAnnotationListMethodOnlyParentFirst()) {
@@ -262,7 +262,7 @@ public class RestMethodContext implements Comparable<RestMethodContext>  {
 
 				VarResolverSession sr = vr.createSession();
 
-				PropertyStoreBuilder psb = PropertyStore.create().apply(context.getPropertyStore2()).set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps);
+				PropertyStoreBuilder psb = PropertyStore.create().apply(context.getPropertyStore()).set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps);
 
 				for (Property p1 : m.properties())
 					psb.set(p1.name(), p1.value());

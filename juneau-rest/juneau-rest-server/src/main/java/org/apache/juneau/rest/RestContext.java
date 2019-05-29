@@ -3121,7 +3121,6 @@ public final class RestContext extends BeanContext {
 
 	private final RestContextProperties properties;
 	private final Map<Class<?>,RestMethodParam> paramResolvers;
-	private final PropertyStore propertyStore2;  // Temporary - Should by using Context.propertyStore.
 	private final SerializerGroup serializers;
 	private final ParserGroup parsers;
 	private final HttpPartSerializer partSerializer;
@@ -3257,7 +3256,7 @@ public final class RestContext extends BeanContext {
 			Class<?> resourceClass = resource.getClass();
 			ClassInfo rci = getClassInfo(resourceClass);
 			configAnnotationList = rci.getConfigAnnotationListParentFirst();
-			PropertyStore ps = getPropertyStore().builder().apply(builder.getPropertyStore()).applyAnnotations(configAnnotationList, vrs).build();
+			PropertyStore ps = getPropertyStore();
 
 			uriContext = nullIfEmpty(getStringProperty(REST_uriContext, null));
 			uriAuthority = nullIfEmpty(getStringProperty(REST_uriAuthority, null));
@@ -3328,7 +3327,6 @@ public final class RestContext extends BeanContext {
 				.build();
 			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], resourceResolver, resource, ps)).build();
 			beanContext = BeanContext.create().apply(ps).build();
-			propertyStore2 = ps;
 
 			mimetypesFileTypeMap = new ExtendedMimetypesFileTypeMap();
 			for (String mimeType : getArrayProperty(REST_mimeTypes, String.class))
@@ -3716,15 +3714,6 @@ public final class RestContext extends BeanContext {
 	 */
 	public Config getConfig() {
 		return config;
-	}
-
-	/**
-	 * Temporary method for override the property store.
-	 * Eventually we want the property store on the Context object to be used.
-	 * @return The overridden property store.
-	 */
-	protected PropertyStore getPropertyStore2() {
-		return propertyStore2;
 	}
 
 	/**
