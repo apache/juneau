@@ -154,7 +154,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ContextBuilder applyAnnotations(Class<?> fromClass) {
-		applyAnnotations(ClassInfo.of(fromClass).getConfigAnnotationListParentFirst(), VarResolver.DEFAULT.createSession());
+		applyAnnotations(ClassInfo.of(fromClass).getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 
@@ -197,7 +197,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ContextBuilder applyAnnotations(Method fromMethod) {
-		applyAnnotations(MethodInfo.of(fromMethod).getConfigAnnotationListParentFirst(), VarResolver.DEFAULT.createSession());
+		applyAnnotations(MethodInfo.of(fromMethod).getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 

@@ -268,20 +268,20 @@ public class MethodInfoTest {
 
 	@Test
 	public void getAnnotationsMap() {
-		check("@A(C3),@A(C2),@A(a1),@A(C1),@PA(10)", c_a1.getAnnotationList());
-		check("@A(C3),@A(a2b),@A(C2),@A(a2a),@A(C1),@PA(10)", c_a2.getAnnotationList());
-		check("@A(C3),@A(C2),@A(a3),@A(C1),@PA(10)", c_a3.getAnnotationList());
-		check("@A(a4),@A(C3),@A(C2),@A(C1),@PA(10)", c_a4.getAnnotationList());
-		check("@A(C3),@A(C2),@A(C1),@PA(10)", c_a5.getAnnotationList());
+		check("@A(C3),@A(C2),@A(a1),@A(C1),@PA(10)", c_a1.getAnnotationList(null));
+		check("@A(C3),@A(a2b),@A(C2),@A(a2a),@A(C1),@PA(10)", c_a2.getAnnotationList(null));
+		check("@A(C3),@A(C2),@A(a3),@A(C1),@PA(10)", c_a3.getAnnotationList(null));
+		check("@A(a4),@A(C3),@A(C2),@A(C1),@PA(10)", c_a4.getAnnotationList(null));
+		check("@A(C3),@A(C2),@A(C1),@PA(10)", c_a5.getAnnotationList(null));
 	}
 
 	@Test
 	public void getAnnotationsMapParentFirst() {
-		check("@PA(10),@A(C1),@A(a1),@A(C2),@A(C3)", c_a1.getAnnotationListParentFirst());
-		check("@PA(10),@A(C1),@A(a2a),@A(C2),@A(a2b),@A(C3)", c_a2.getAnnotationListParentFirst());
-		check("@PA(10),@A(C1),@A(a3),@A(C2),@A(C3)", c_a3.getAnnotationListParentFirst());
-		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.getAnnotationListParentFirst());
-		check("@PA(10),@A(C1),@A(C2),@A(C3)", c_a5.getAnnotationListParentFirst());
+		check("@PA(10),@A(C1),@A(a1),@A(C2),@A(C3)", c_a1.getAnnotationListParentFirst(null));
+		check("@PA(10),@A(C1),@A(a2a),@A(C2),@A(a2b),@A(C3)", c_a2.getAnnotationListParentFirst(null));
+		check("@PA(10),@A(C1),@A(a3),@A(C2),@A(C3)", c_a3.getAnnotationListParentFirst(null));
+		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.getAnnotationListParentFirst(null));
+		check("@PA(10),@A(C1),@A(C2),@A(C3)", c_a5.getAnnotationListParentFirst(null));
 	}
 
 	@A("C1") @AConfig("C1")
@@ -320,20 +320,20 @@ public class MethodInfoTest {
 
 	@Test
 	public void getConfigAnnotationsMap() {
-		check("@AConfig(C3),@AConfig(C2),@AConfig(a1),@AConfig(C1)", cb_a1.getConfigAnnotationList());
-		check("@AConfig(C3),@AConfig(a2b),@AConfig(C2),@AConfig(a2a),@AConfig(C1)", cb_a2.getConfigAnnotationList());
-		check("@AConfig(C3),@AConfig(C2),@AConfig(a3),@AConfig(C1)", cb_a3.getConfigAnnotationList());
-		check("@AConfig(a4),@AConfig(C3),@AConfig(C2),@AConfig(C1)", cb_a4.getConfigAnnotationList());
-		check("@AConfig(C3),@AConfig(C2),@AConfig(C1)", cb_a5.getConfigAnnotationList());
+		check("@AConfig(C3),@AConfig(C2),@AConfig(a1),@AConfig(C1)", cb_a1.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C3),@AConfig(a2b),@AConfig(C2),@AConfig(a2a),@AConfig(C1)", cb_a2.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C3),@AConfig(C2),@AConfig(a3),@AConfig(C1)", cb_a3.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(a4),@AConfig(C3),@AConfig(C2),@AConfig(C1)", cb_a4.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C3),@AConfig(C2),@AConfig(C1)", cb_a5.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
 	}
 
 	@Test
 	public void getConfigAnnotationsMapParentFirst() {
-		check("@AConfig(C1),@AConfig(a1),@AConfig(C2),@AConfig(C3)", cb_a1.getConfigAnnotationListParentFirst());
-		check("@AConfig(C1),@AConfig(a2a),@AConfig(C2),@AConfig(a2b),@AConfig(C3)", cb_a2.getConfigAnnotationListParentFirst());
-		check("@AConfig(C1),@AConfig(a3),@AConfig(C2),@AConfig(C3)", cb_a3.getConfigAnnotationListParentFirst());
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", cb_a4.getConfigAnnotationListParentFirst());
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", cb_a5.getConfigAnnotationListParentFirst());
+		check("@AConfig(C1),@AConfig(a1),@AConfig(C2),@AConfig(C3)", cb_a1.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(a2a),@AConfig(C2),@AConfig(a2b),@AConfig(C3)", cb_a2.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(a3),@AConfig(C2),@AConfig(C3)", cb_a3.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", cb_a4.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", cb_a5.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

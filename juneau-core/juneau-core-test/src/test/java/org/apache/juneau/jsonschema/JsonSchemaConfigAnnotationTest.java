@@ -69,7 +69,7 @@ public class JsonSchemaConfigAnnotationTest {
 
 	@Test
 	public void basic() throws Exception {
-		AnnotationList al = a.getAnnotationList();
+		AnnotationList al = a.getAnnotationList(null);
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().applyAnnotations(al, sr).build().createSession();
 		check("BEAN", x.getAddDescriptionsTo());
 		check("BEAN", x.getAddExamplesTo());
@@ -91,7 +91,7 @@ public class JsonSchemaConfigAnnotationTest {
 
 	@Test
 	public void noValues() throws Exception {
-		AnnotationList al = b.getAnnotationList();
+		AnnotationList al = b.getAnnotationList(null);
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().applyAnnotations(al, sr).build().createSession();
 		check("", x.getAddDescriptionsTo());
 		check("", x.getAddExamplesTo());
@@ -112,7 +112,7 @@ public class JsonSchemaConfigAnnotationTest {
 
 	@Test
 	public void noAnnotation() throws Exception {
-		AnnotationList al = c.getAnnotationList();
+		AnnotationList al = c.getAnnotationList(null);
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().applyAnnotations(al, sr).build().createSession();
 		check("", x.getAddDescriptionsTo());
 		check("", x.getAddExamplesTo());

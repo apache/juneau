@@ -3255,7 +3255,7 @@ public final class RestContext extends BeanContext {
 
 			Class<?> resourceClass = resource.getClass();
 			ClassInfo rci = getClassInfo(resourceClass);
-			configAnnotationList = rci.getConfigAnnotationListParentFirst();
+			configAnnotationList = rci.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE);
 			PropertyStore ps = getPropertyStore();
 
 			uriContext = nullIfEmpty(getStringProperty(REST_uriContext, null));

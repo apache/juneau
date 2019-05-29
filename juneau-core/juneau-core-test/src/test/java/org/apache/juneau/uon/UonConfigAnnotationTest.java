@@ -56,7 +56,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationList al = a.getAnnotationList();
+		AnnotationList al = a.getAnnotationList(null);
 		UonSerializerSession x = UonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEncoding());
@@ -65,7 +65,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationList al = a.getAnnotationList();
+		AnnotationList al = a.getAnnotationList(null);
 		UonParserSession x = UonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isDecoding());
 		check("true", x.isValidateEnd());
@@ -81,7 +81,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationList();
+		AnnotationList al = b.getAnnotationList(null);
 		UonSerializerSession x = UonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEncoding());
@@ -90,7 +90,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationList al = b.getAnnotationList();
+		AnnotationList al = b.getAnnotationList(null);
 		UonParserSession x = UonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isDecoding());
 		check("false", x.isValidateEnd());
@@ -105,7 +105,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationList();
+		AnnotationList al = c.getAnnotationList(null);
 		UonSerializerSession x = UonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEncoding());
@@ -114,7 +114,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationList();
+		AnnotationList al = c.getAnnotationList(null);
 		UonParserSession x = UonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isDecoding());
 		check("false", x.isValidateEnd());

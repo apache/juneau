@@ -31,13 +31,13 @@ public class JsoConfigAnnotationTest {
 
 	@Test
 	public void defaultsSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationList();
+		AnnotationList al = b.getAnnotationList(null);
 		JsoSerializer.create().applyAnnotations(al, null).build().createSession();
 	}
 
 	@Test
 	public void defaultsParser() throws Exception {
-		AnnotationList al = b.getAnnotationList();
+		AnnotationList al = b.getAnnotationList(null);
 		JsoParser.create().applyAnnotations(al, null).build().createSession();
 	}
 
@@ -50,13 +50,13 @@ public class JsoConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationList();
+		AnnotationList al = c.getAnnotationList(null);
 		JsoSerializer.create().applyAnnotations(al, null).build().createSession();
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationList();
+		AnnotationList al = c.getAnnotationList(null);
 		JsoParser.create().applyAnnotations(al, null).build().createSession();
 	}
 }

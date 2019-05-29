@@ -68,7 +68,7 @@ public class ParserConfigAnnotationTest {
 
 	@Test
 	public void basicReaderParser() throws Exception {
-		AnnotationList al = a.getAnnotationList();
+		AnnotationList al = a.getAnnotationList(null);
 		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAutoCloseStreams());
 		check("1", x.getDebugOutputLines());
@@ -82,7 +82,7 @@ public class ParserConfigAnnotationTest {
 
 	@Test
 	public void basicInputStreamParser() throws Exception {
-		AnnotationList al = a.getAnnotationList();
+		AnnotationList al = a.getAnnotationList(null);
 		MsgPackParserSession x = MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAutoCloseStreams());
 		check("HEX", x.getBinaryFormat());
@@ -103,7 +103,7 @@ public class ParserConfigAnnotationTest {
 
 	@Test
 	public void noValuesReaderParser() throws Exception {
-		AnnotationList al = b.getAnnotationList();
+		AnnotationList al = b.getAnnotationList(null);
 		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAutoCloseStreams());
 		check("5", x.getDebugOutputLines());
@@ -117,7 +117,7 @@ public class ParserConfigAnnotationTest {
 
 	@Test
 	public void noValuesInputStreamParser() throws Exception {
-		AnnotationList al = b.getAnnotationList();
+		AnnotationList al = b.getAnnotationList(null);
 		MsgPackParserSession x = MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAutoCloseStreams());
 		check("HEX", x.getBinaryFormat());
@@ -137,7 +137,7 @@ public class ParserConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationReaderParser() throws Exception {
-		AnnotationList al = c.getAnnotationList();
+		AnnotationList al = c.getAnnotationList(null);
 		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAutoCloseStreams());
 		check("5", x.getDebugOutputLines());
@@ -151,7 +151,7 @@ public class ParserConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationInputStreamParser() throws Exception {
-		AnnotationList al = c.getAnnotationList();
+		AnnotationList al = c.getAnnotationList(null);
 		MsgPackParserSession x = MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAutoCloseStreams());
 		check("HEX", x.getBinaryFormat());

@@ -36,8 +36,10 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 	@Override
 	public void apply(AnnotationInfo<RestMethod> ai, PropertyStoreBuilder psb) {
 		RestMethod a = ai.getAnnotation();
+
 		if (! a.rolesDeclared().isEmpty())
 			psb.set(REST_rolesDeclared, string(a.rolesDeclared()));
+
 		if (! a.roleGuard().isEmpty())
 			psb.set(REST_roleGuard, string(a.roleGuard()));
 	}

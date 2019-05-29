@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import java.lang.annotation.*;
 import java.util.ArrayList;
+import java.util.function.*;
 
 /**
  * An ordered list of annotations and the classes/methods/packages they were found on.
@@ -21,22 +21,32 @@ import java.util.ArrayList;
 public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	private static final long serialVersionUID = 1L;
 
+	private final Predicate<AnnotationInfo<?>> filter;
+
+	/**
+	 * Constructor.
+	 *
+	 * No filtering.
+	 */
+	public AnnotationList() {
+		this(null);
+	}
+
+	/**
+	 * Constructor with optional filter.
+	 *
+	 * @param filter The filter to use to filter entries added to this list.
+	 */
+	public AnnotationList(Predicate<AnnotationInfo<?>> filter) {
+		this.filter = filter;
+	}
+
 	@Override /* List */
 	public boolean add(AnnotationInfo<?> ai) {
-		if (accept(ai)) {
+		if (filter == null || filter.test(ai)) {
 			super.add(ai);
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Overridable method for filtering annotations added to this list.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if annotation should be added to this list.
-	 */
-	protected boolean accept(AnnotationInfo<? extends Annotation> a) {
-		return true;
 	}
 }

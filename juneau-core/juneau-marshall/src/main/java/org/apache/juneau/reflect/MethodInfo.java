@@ -18,6 +18,7 @@ import java.beans.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
@@ -230,10 +231,13 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<li>On the package of this class.
 	 * </ol>
 	 *
+	 * @param filter
+	 * 	Optional filter to apply to limit which annotations are added to the list.
+	 * 	<br>Can be <jk>null</jk> for no filtering.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationList() {
-		return appendAnnotationList(new AnnotationList());
+	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
+		return appendAnnotationList(new AnnotationList(filter));
 	}
 
 	/**
@@ -249,57 +253,25 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<li>On this method and matching methods ordered parent-to-child.
 	 * </ol>
 	 *
+	 * @param filter
+	 * 	Optional filter to apply to limit which annotations are added to the list.
+	 * 	<br>Can be <jk>null</jk> for no filtering.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationListParentFirst() {
-		return appendAnnotationListParentFirst(new AnnotationList());
+	public AnnotationList getAnnotationListParentFirst(Predicate<AnnotationInfo<?>> filter) {
+		return appendAnnotationListParentFirst(new AnnotationList(filter));
 	}
 
 	/**
-	 * Constructs an {@link ConfigAnnotationList} of all annotations found on this class.
+	 * Same as {@link #getAnnotationListParentFirst(Predicate)} except only returns annotations defined on methods.
 	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On this method and matching methods ordered child-to-parent.
-	 * 	<li>On the method class.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On the package of the method class.
-	 * </ol>
-	 *
+	 * @param filter
+	 * 	Optional filter to apply to limit which annotations are added to the list.
+	 * 	<br>Can be <jk>null</jk> for no filtering.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getConfigAnnotationList() {
-		return appendAnnotationList(new ConfigAnnotationList());
-	}
-
-	/**
-	 * Constructs an {@link ConfigAnnotationList} of all annotations found on this class.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of the method class.
-	 * 	<li>On interfaces ordered parent-to-child.
-	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On the method class.
-	 * 	<li>On this method and matching methods ordered parent-to-child.
-	 * </ol>
-	 *
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public AnnotationList getConfigAnnotationListParentFirst() {
-		return appendAnnotationListParentFirst(new ConfigAnnotationList());
-	}
-
-	/**
-	 * Same as {@link #getConfigAnnotationListParentFirst()} except only returns annotations defined on methods.
-	 *
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public AnnotationList getConfigAnnotationListMethodOnlyParentFirst() {
-		return appendAnnotationListMethodOnlyParentFirst(new ConfigAnnotationList());
+	public AnnotationList getAnnotationListMethodOnlyParentFirst(Predicate<AnnotationInfo<?>> filter) {
+		return appendAnnotationListMethodOnlyParentFirst(new AnnotationList(filter));
 	}
 
 	/**
@@ -355,9 +327,9 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 
 	AnnotationList appendAnnotationListMethodOnlyParentFirst(AnnotationList al) {
 		ClassInfo c = this.declaringClass;
-		for (ClassInfo ci : c.getInterfacesParentFirst()) 
+		for (ClassInfo ci : c.getInterfacesParentFirst())
 			appendMethodAnnotations(al, ci);
-		for (ClassInfo ci : c.getParentsParentFirst()) 
+		for (ClassInfo ci : c.getParentsParentFirst())
 			appendMethodAnnotations(al, ci);
 		return al;
 	}

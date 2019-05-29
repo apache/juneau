@@ -195,6 +195,16 @@ public class AnnotationInfo<T extends Annotation> {
 		return at == a;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this annotation has the specified annotation defined on it.
+	 *
+	 * @param a The annotation to test for.
+	 * @return <jk>true</jk> if this annotation has the specified annotation defined on it.
+	 */
+	public boolean hasAnnotation(Class<? extends Annotation> a) {
+		return this.a.annotationType().getAnnotation(a) != null;
+	}
+
 	@Override
 	public String toString() {
 		return SimpleJson.DEFAULT_READABLE.toString(toObjectMap());

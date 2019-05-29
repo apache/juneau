@@ -20,6 +20,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -938,10 +939,13 @@ public final class ClassInfo {
 	 * 	<li>On the package of this class.
 	 * </ol>
 	 *
+	 * @param filter
+	 * 	Optional filter to apply to limit which annotations are added to the list.
+	 * 	<br>Can be <jk>null</jk> for no filtering.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationList() {
-		return appendAnnotationList(new AnnotationList());
+	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
+		return appendAnnotationList(new AnnotationList(filter));
 	}
 
 	/**
@@ -956,46 +960,13 @@ public final class ClassInfo {
 	 * 	<li>On this class.
 	 * </ol>
 	 *
+	 * @param filter
+	 * 	Optional filter to apply to limit which annotations are added to the list.
+	 * 	<br>Can be <jk>null</jk> for no filtering.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationListParentFirst() {
-		return appendAnnotationListParentFirst(new AnnotationList());
-	}
-
-	/**
-	 * Constructs an {@link ConfigAnnotationList} of all annotations found on this class.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On this class.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On the package of this class.
-	 * </ol>
-	 *
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public AnnotationList getConfigAnnotationList() {
-		return appendAnnotationList(new ConfigAnnotationList());
-	}
-
-	/**
-	 * Constructs an {@link ConfigAnnotationList} of all annotations found on this class.
-	 *
-	 * <p>
-	 * Annotations are appended in the following order:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered parent-to-child.
-	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public AnnotationList getConfigAnnotationListParentFirst() {
-		return appendAnnotationListParentFirst(new ConfigAnnotationList());
+	public AnnotationList getAnnotationListParentFirst(Predicate<AnnotationInfo<?>> filter) {
+		return appendAnnotationListParentFirst(new AnnotationList(filter));
 	}
 
 	/**

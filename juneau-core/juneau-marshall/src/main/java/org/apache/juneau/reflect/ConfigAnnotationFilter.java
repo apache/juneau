@@ -13,18 +13,22 @@
 package org.apache.juneau.reflect;
 
 import java.lang.annotation.*;
+import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 
 /**
- * Subclass of {@link AnnotationList} that filters out annotations not annotated with {@link PropertyStoreApply}.
+ * Filter used to accept only annotations that themselves have the {@link PropertyStoreApply} annotation.
  */
-public class ConfigAnnotationList extends AnnotationList {
-	private static final long serialVersionUID = 1L;
+public class ConfigAnnotationFilter implements Predicate<AnnotationInfo<?>> {
 
-	@Override /* AnnotationList */
-	public boolean accept(AnnotationInfo<? extends Annotation> a) {
-		Class<? extends Annotation> aa = a.getAnnotation().annotationType();
-		return aa.getAnnotation(PropertyStoreApply.class) != null;
+	/**
+	 * Reusable instance.
+	 */
+	public static final ConfigAnnotationFilter INSTANCE = new ConfigAnnotationFilter();
+
+	@Override
+	public boolean test(AnnotationInfo<? extends Annotation> t) {
+		return t.hasAnnotation(PropertyStoreApply.class);
 	}
 }

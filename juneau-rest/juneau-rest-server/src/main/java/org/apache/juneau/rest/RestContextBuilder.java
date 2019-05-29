@@ -176,7 +176,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				}
 			}
 
-			applyAnnotations(rci.getConfigAnnotationListParentFirst(), vr.createSession());
+			applyAnnotations(rci.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), vr.createSession());
 
 			// Load stuff from parent-to-child order.
 			// This allows child settings to overwrite parent settings.

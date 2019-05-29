@@ -174,7 +174,7 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public PropertyStoreBuilder applyAnnotations(Class<?> fromClass) {
-		applyAnnotations(ClassInfo.of(fromClass).getConfigAnnotationListParentFirst(), VarResolver.DEFAULT.createSession());
+		applyAnnotations(ClassInfo.of(fromClass).getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 
@@ -217,7 +217,7 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public PropertyStoreBuilder applyAnnotations(Method fromMethod) {
-		applyAnnotations(MethodInfo.of(fromMethod).getConfigAnnotationListParentFirst(), VarResolver.DEFAULT.createSession());
+		applyAnnotations(MethodInfo.of(fromMethod).getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 
