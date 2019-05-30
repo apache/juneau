@@ -101,21 +101,17 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.context = b.context;
 		this.method = b.method;
 		this.httpMethod = b.httpMethod;
-
 		this.info = MethodInfo.of(method);
+
+		PropertyStore ps = getPropertyStore();
 
 		defaultCharset = getProperty(REST_defaultCharset, String.class, context.getDefaultCharset());
 		maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, String.valueOf(context.getMaxInput())));
 
-//		Object[] empty = new Object[0];
-//		boolean needsNewContext =
-//			b.hasConfigAnnotations
-//			|| getArrayProperty(REST_serializers, Object.class, empty).length > 0
-//			|| getArrayProperty(REST_parsers, Object.class, empty).length > 0
-//			|| getArrayProperty(BEAN_beanFilters, Object.class, empty).length > 0
-//			|| getArrayProperty(BEAN_pojoSwaps, Object.class, empty).length > 0
-//			|| getArrayProperty(BEAN_includeProperties, Object.class, empty).length > 0
-//			|| getArrayProperty(BEAN_excludeProperties, Object.class, empty).length > 0;
+		this.serializers = SerializerGroup.create().append(getArrayProperty(REST_serializers, Object.class)).apply(ps).build();
+		this.parsers = ParserGroup.create().append(getArrayProperty(REST_parsers, Object.class)).apply(ps).build();
+
+		this.responseMeta = ResponseBeanMeta.create(info, ps);
 
 		this.pathPattern = b.pathPattern;
 		this.methodParams = b.methodParams;
@@ -123,8 +119,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.optionalMatchers = b.optionalMatchers;
 		this.requiredMatchers = b.requiredMatchers;
 		this.converters = b.converters;
-		this.serializers = b.serializers;
-		this.parsers = b.parsers;
 		this.encoders = b.encoders;
 		this.partParser = b.partParser;
 		this.partSerializer = b.partSerializer;
@@ -136,10 +130,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.defaultQuery = b.defaultQuery;
 		this.defaultFormData = b.defaultFormData;
 		this.priority = b.priority;
-		this.supportedAcceptTypes = b.supportedAcceptTypes;
-		this.supportedContentTypes = b.supportedContentTypes;
-		this.responseMeta = b.responseMeta;
 		this.widgets = unmodifiableMap(b.widgets);
+
+		this.supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
+		this.supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 	}
 
 	ResponseBeanMeta getResponseBeanMeta(Object o) {

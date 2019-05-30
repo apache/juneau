@@ -18,6 +18,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -96,6 +98,34 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		psb.set(BEAN_beanFilters, merge(ObjectUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), a.beanFilters()));
 
 		psb.set(BEAN_pojoSwaps, merge(ObjectUtils.toType(psb.peek(BEAN_pojoSwaps), Object[].class), a.pojoSwaps()));
+
+		if (a.bpi().length > 0) {
+			Map<String,String> bpiMap = new LinkedHashMap<>();
+			for (String s1 : a.bpi()) {
+				for (String s2 : split(s1, ';')) {
+					int i = s2.indexOf(':');
+					if (i == -1)
+						throw new ConfigException(
+							"Invalid format for @RestMethod(bpi).  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {0}", s1);
+					bpiMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
+				}
+			}
+			psb.addTo(BEAN_includeProperties, bpiMap);
+		}
+
+		if (a.bpx().length > 0) {
+			Map<String,String> bpxMap = new LinkedHashMap<>();
+			for (String s1 : a.bpx()) {
+				for (String s2 : split(s1, ';')) {
+					int i = s2.indexOf(':');
+					if (i == -1)
+						throw new ConfigException(
+							"Invalid format for @RestMethod(bpx).  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {0}", s1);
+					bpxMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
+				}
+			}
+			psb.addTo(BEAN_excludeProperties, bpxMap);
+		}
 
 		if (! a.defaultCharset().isEmpty())
 			psb.set(REST_defaultCharset, string(a.defaultCharset()));

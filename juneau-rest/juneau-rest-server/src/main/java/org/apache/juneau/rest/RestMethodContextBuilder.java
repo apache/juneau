@@ -14,9 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.lang.annotation.*;
@@ -36,7 +34,6 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -54,8 +51,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	RestGuard[] guards;
 	RestMatcher[] optionalMatchers, requiredMatchers;
 	RestConverter[] converters;
-	SerializerGroup serializers;
-	ParserGroup parsers;
 	EncoderGroup encoders;
 	HttpPartParser partParser;
 	HttpPartSerializer partSerializer;
@@ -94,14 +89,8 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 					break;
 			}
 
-			if (hasConfigAnnotations) {
-				applyAnnotations(mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), vrs);
-			} else {
-				applyAnnotations(mi.getAnnotationListMethodOnlyParentFirst(ConfigAnnotationFilter.INSTANCE), vrs);
-			}
+			applyAnnotations(mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), vrs);
 
-			serializers = context.getSerializers();
-			parsers = context.getParsers();
 			partSerializer = context.getPartSerializer();
 			partParser = context.getPartParser();
 			jsonSchemaGenerator = context.getJsonSchemaGenerator();
@@ -123,28 +112,20 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				hdb.style("INHERIT", "$W{"+w.getName()+".style}");
 			}
 
-			SerializerGroupBuilder sgb = null;
-			ParserGroupBuilder pgb = null;
 			ParserBuilder uepb = null;
 			BeanContextBuilder bcb = null;
 			JsonSchemaGeneratorBuilder jsgb = null;
 			PropertyStore cps = context.getPropertyStore();
 
-			Object[] mSerializers = merge(cps.getArrayProperty(REST_serializers, Object.class), m.serializers());
-			Object[] mParsers = merge(cps.getArrayProperty(REST_parsers, Object.class), m.parsers());
 			Object[] mPojoSwaps = merge(cps.getArrayProperty(BEAN_pojoSwaps, Object.class), m.pojoSwaps());
 			Object[] mBeanFilters = merge(cps.getArrayProperty(BEAN_beanFilters, Object.class), m.beanFilters());
 
 			if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
 					|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpi().length > 0
 					|| m.bpx().length > 0 || hasConfigAnnotations) {
-				sgb = SerializerGroup.create();
-				pgb = ParserGroup.create();
 				uepb = Parser.create();
 				bcb = beanContext.builder();
 				jsgb = JsonSchemaGenerator.create();
-				sgb.append(mSerializers);
-				pgb.append(mParsers);
 			}
 
 			//String p = trimTrailingSlashes(m.path());
@@ -195,44 +176,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				psb.applyAnnotations(configAnnotationList, sr);
 
 			this.propertyStore = psb.build();
-
-			if (sgb != null) {
-				sgb.apply(propertyStore);
-				if (m.bpi().length > 0) {
-					Map<String,String> bpiMap = new LinkedHashMap<>();
-					for (String s : m.bpi()) {
-						for (String s2 : split(s, ';')) {
-							int i = s2.indexOf(':');
-							if (i == -1)
-								throw new RestServletException(
-									"Invalid format for @RestMethod(bpi) on method ''{0}''.  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {1}", sig, s);
-							bpiMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
-						}
-					}
-					sgb.includeProperties(bpiMap);
-				}
-				if (m.bpx().length > 0) {
-					Map<String,String> bpxMap = new LinkedHashMap<>();
-					for (String s : m.bpx()) {
-						for (String s2 : split(s, ';')) {
-							int i = s2.indexOf(':');
-							if (i == -1)
-								throw new RestServletException(
-									"Invalid format for @RestMethod(bpx) on method ''{0}''.  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {1}", sig, s);
-							bpxMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
-						}
-					}
-					sgb.excludeProperties(bpxMap);
-				}
-				sgb.beanFilters(mBeanFilters);
-				sgb.pojoSwaps(mPojoSwaps);
-			}
-
-			if (pgb != null) {
-				pgb.apply(propertyStore);
-				pgb.beanFilters(mBeanFilters);
-				pgb.pojoSwaps(mPojoSwaps);
-			}
 
 			if (uepb != null) {
 				uepb.apply(propertyStore);
@@ -330,10 +273,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 			pathPattern = new UrlPathPattern(p);
 
-			if (sgb != null)
-				serializers = sgb.build();
-			if (pgb != null)
-				parsers = pgb.build();
 			if (uepb != null && partParser instanceof Parser) {
 				Parser pp = (Parser)partParser;
 				partParser = (HttpPartParser)pp
@@ -347,19 +286,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 			if (jsgb != null)
 				jsonSchemaGenerator = jsgb.build();
 
-			supportedAcceptTypes =
-				m.produces().length > 0
-				? immutableList(MediaType.forStrings(RestMethodContext.resolveVars(vr, m.produces())))
-				: serializers.getSupportedMediaTypes();
-			supportedContentTypes =
-				m.consumes().length > 0
-				? immutableList(MediaType.forStrings(RestMethodContext.resolveVars(vr, m.consumes())))
-				: parsers.getSupportedMediaTypes();
-
 			methodParams = context.findParams(mi, false, pathPattern);
-
-			if (mi.hasAnnotation(Response.class))
-				responseMeta = ResponseBeanMeta.create(mi, serializers.getPropertyStore());
 
 			// Need this to access methods in anonymous inner classes.
 			mi.setAccessible();
