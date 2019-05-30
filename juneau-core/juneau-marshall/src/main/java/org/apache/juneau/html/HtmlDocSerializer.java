@@ -15,6 +15,7 @@ package org.apache.juneau.html;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -72,13 +73,14 @@ import org.apache.juneau.svl.*;
  * <br>These variables are replaced at runtime based on the HTTP request locale.
  * <br>Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  */
+@ConfigurableContext
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "HtmlDocSerializer.";
+	static final String PREFIX = "HtmlDocSerializer";
 
 	/**
 	 * Configuration property:  Aside section contents.
@@ -115,7 +117,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_aside = PREFIX + "aside.ls";
+	public static final String HTMLDOC_aside = PREFIX + ".aside.ls";
 
 	/**
 	 * Configuration property:  Footer section contents.
@@ -146,7 +148,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_footer = PREFIX + "footer.ls";
+	public static final String HTMLDOC_footer = PREFIX + ".footer.ls";
 
 	/**
 	 * Configuration property:  Additional head section content.
@@ -185,7 +187,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_head = PREFIX + "head.ls";
+	public static final String HTMLDOC_head = PREFIX + ".head.ls";
 
 	/**
 	 * Configuration property:  Header section contents.
@@ -214,7 +216,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_header = PREFIX + "header.ls";
+	public static final String HTMLDOC_header = PREFIX + ".header.ls";
 
 	/**
 	 * Configuration property:  Nav section contents.
@@ -246,7 +248,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * When this property is specified, the {@link #HTMLDOC_navlinks} property is ignored.
 	 */
-	public static final String HTMLDOC_nav = PREFIX + "nav.ls";
+	public static final String HTMLDOC_nav = PREFIX + ".nav.ls";
 
 	/**
 	 * Configuration property:  Page navigation links.
@@ -309,12 +311,12 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
 	 * </p>
 	 */
-	public static final String HTMLDOC_navlinks = PREFIX + "navlinks.ls";
+	public static final String HTMLDOC_navlinks = PREFIX + ".navlinks.ls";
 
 	/**
 	 * Configuration property:  Add to the {@link #HTMLDOC_navlinks} property.
 	 */
-	public static final String HTMLDOC_navlinks_add = PREFIX + "navlinks.ls/add";
+	public static final String HTMLDOC_navlinks_add = PREFIX + ".navlinks.ls/add";
 
 	/**
 	 * Configuration property:  No-results message.
@@ -343,7 +345,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_noResultsMessage = PREFIX + "noResultsMessage.s";
+	public static final String HTMLDOC_noResultsMessage = PREFIX + ".noResultsMessage.s";
 
 	/**
 	 * Configuration property:  Prevent word wrap on page.
@@ -360,7 +362,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
 	 */
-	public static final String HTMLDOC_nowrap = PREFIX + "nowrap.b";
+	public static final String HTMLDOC_nowrap = PREFIX + ".nowrap.b";
 
 	/**
 	 * Configuration property:  Javascript code.
@@ -399,12 +401,12 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_script = PREFIX + "script.ls";
+	public static final String HTMLDOC_script = PREFIX + ".script.ls";
 
 	/**
 	 * Configuration property:  Add to the {@link #HTMLDOC_script} property.
 	 */
-	public static final String HTMLDOC_script_add = PREFIX + "script.ls/add";
+	public static final String HTMLDOC_script_add = PREFIX + ".script.ls/add";
 
 	/**
 	 * Configuration property:  CSS style code.
@@ -444,12 +446,12 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_style = PREFIX + "style.ls";
+	public static final String HTMLDOC_style = PREFIX + ".style.ls";
 
 	/**
 	 * Configuration property:  Add to the {@link #HTMLDOC_style} property.
 	 */
-	public static final String HTMLDOC_style_add = PREFIX + "style.ls/add";
+	public static final String HTMLDOC_style_add = PREFIX + ".style.ls/add";
 
 	/**
 	 * Configuration property:  Stylesheet import URLs.
@@ -469,12 +471,12 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
 	 */
-	public static final String HTMLDOC_stylesheet = PREFIX + "stylesheet.ls";
+	public static final String HTMLDOC_stylesheet = PREFIX + ".stylesheet.ls";
 
 	/**
 	 * Configuration property:  Add to the {@link #HTMLDOC_stylesheet} property.
 	 */
-	public static final String HTMLDOC_stylesheet_add = PREFIX + "stylesheet.ls/add";
+	public static final String HTMLDOC_stylesheet_add = PREFIX + ".stylesheet.ls/add";
 
 	/**
 	 * Configuration property:  HTML document template.
@@ -504,7 +506,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 */
-	public static final String HTMLDOC_template = PREFIX + "template.c";
+	public static final String HTMLDOC_template = PREFIX + ".template.c";
 
 	/**
 	 * Configuration property:  HTML Widgets.
@@ -573,7 +575,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
 	 * </ul>
 	 */
-	public static final String HTMLDOC_widgets = PREFIX + "widgets.lo";
+	public static final String HTMLDOC_widgets = PREFIX + ".widgets.lo";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances

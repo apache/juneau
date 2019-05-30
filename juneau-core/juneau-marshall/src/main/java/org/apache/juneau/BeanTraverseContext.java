@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -22,13 +23,14 @@ import org.apache.juneau.parser.*;
  *
  * Base class that serves as the parent class for all serializers and other classes that traverse POJOs.
  */
+@ConfigurableContext
 public abstract class BeanTraverseContext extends BeanContext {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "BeanTraverseContext.";
+	static final String PREFIX = "BeanTraverseContext";
 
 	/**
 	 * Configuration property:  Automatically detect POJO recursions.
@@ -99,7 +101,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	String json = s.serialize(a);
 	 * </p>
 	 */
-	public static final String BEANTRAVERSE_detectRecursions = PREFIX + "detectRecursions.b";
+	public static final String BEANTRAVERSE_detectRecursions = PREFIX + ".detectRecursions.b";
 
 	/**
 	 * Configuration property:  Ignore recursion errors.
@@ -126,7 +128,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * If <jk>true</jk>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 * <br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
 	 */
-	public static final String BEANTRAVERSE_ignoreRecursions = PREFIX + "ignoreRecursions.b";
+	public static final String BEANTRAVERSE_ignoreRecursions = PREFIX + ".ignoreRecursions.b";
 
 	/**
 	 * Configuration property:  Initial depth.
@@ -168,7 +170,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 */
-	public static final String BEANTRAVERSE_initialDepth = PREFIX + "initialDepth.i";
+	public static final String BEANTRAVERSE_initialDepth = PREFIX + ".initialDepth.i";
 
 	/**
 	 * Configuration property:  Max traversal depth.
@@ -205,7 +207,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEANTRAVERSE_maxDepth = PREFIX + "maxDepth.i";
+	public static final String BEANTRAVERSE_maxDepth = PREFIX + ".maxDepth.i";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

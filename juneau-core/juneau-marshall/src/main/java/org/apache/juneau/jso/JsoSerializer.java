@@ -15,6 +15,7 @@ package org.apache.juneau.jso;
 import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -26,7 +27,14 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Produces <code>Content-Type</code> types:  <code><b>application/x-java-serialized-object</b></code>
  */
+@ConfigurableContext
 public class JsoSerializer extends OutputStreamSerializer {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "JsoSerializer";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -34,7 +42,6 @@ public class JsoSerializer extends OutputStreamSerializer {
 
 	/** Default serializer, all default settings.*/
 	public static final JsoSerializer DEFAULT = new JsoSerializer(PropertyStore.DEFAULT);
-
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

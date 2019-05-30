@@ -15,6 +15,7 @@ package org.apache.juneau.json;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -86,13 +87,14 @@ import org.apache.juneau.serializer.*;
  * 	String json = serializer.serialize(someObject);
  * </p>
  */
+@ConfigurableContext
 public class JsonSerializer extends WriterSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "JsonSerializer.";
+	static final String PREFIX = "JsonSerializer";
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
@@ -118,7 +120,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String JSON_addBeanTypes = PREFIX + "addBeanTypes.b";
+	public static final String JSON_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
@@ -163,7 +165,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	String json = s.serialize(<jk>new</jk> ObjectMap().append(<js>"foo"</js>, <js>"&lt;/bar&gt;"</js>);
 	 * </p>
 	 */
-	public static final String JSON_escapeSolidus = PREFIX + "escapeSolidus.b";
+	public static final String JSON_escapeSolidus = PREFIX + ".escapeSolidus.b";
 
 	/**
 	 * Configuration property:  Simple JSON mode.
@@ -246,7 +248,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	String json2 = s2.serialize(m);
 	 * </p>
 	 */
-	public static final String JSON_simpleMode = PREFIX + "simpleMode.b";
+	public static final String JSON_simpleMode = PREFIX + ".simpleMode.b";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances

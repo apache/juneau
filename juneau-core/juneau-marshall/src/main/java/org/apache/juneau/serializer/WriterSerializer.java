@@ -13,18 +13,20 @@
 package org.apache.juneau.serializer;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.utils.*;
 
 /**
  * Subclass of {@link Serializer} for character-based serializers.
  */
+@ConfigurableContext
 public abstract class WriterSerializer extends Serializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "WriterSerializer.";
+	static final String PREFIX = "WriterSerializer";
 
 	/**
 	 * Configuration property:  Maximum indentation.
@@ -63,7 +65,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String WSERIALIZER_maxIndent = PREFIX + "maxIndent.i";
+	public static final String WSERIALIZER_maxIndent = PREFIX + ".maxIndent.i";
 
 	/**
 	 * Configuration property:  Quote character.
@@ -103,7 +105,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String WSERIALIZER_quoteChar = PREFIX + "quoteChar.s";
+	public static final String WSERIALIZER_quoteChar = PREFIX + ".quoteChar.s";
 
 	static final WriterSerializer DEFAULT = new WriterSerializer(PropertyStore.create().build(), "", "") {
 		@Override

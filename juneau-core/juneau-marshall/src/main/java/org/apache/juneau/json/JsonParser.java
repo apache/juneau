@@ -13,6 +13,7 @@
 package org.apache.juneau.json;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -98,13 +99,14 @@ import org.apache.juneau.parser.*;
  * ObjectList(CharSequence)} constructors instead of using this class.
  * The end result should be the same.
  */
+@ConfigurableContext
 public class JsonParser extends ReaderParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "JsonParser.";
+	static final String PREFIX = "JsonParser";
 
 	/**
 	 * Configuration property:  Validate end.
@@ -146,7 +148,7 @@ public class JsonParser extends ReaderParser {
 	 * 	MyBean myBean = p.parse(in, MyBean.<jk>class</jk>);
 	 * </p>
 	 */
-	public static final String JSON_validateEnd = PREFIX + "validateEnd.b";
+	public static final String JSON_validateEnd = PREFIX + ".validateEnd.b";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances

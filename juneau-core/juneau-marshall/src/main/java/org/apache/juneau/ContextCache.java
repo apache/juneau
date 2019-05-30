@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -97,8 +98,12 @@ public class ContextCache {
 	 * @return The
 	 */
 	public <T extends Context> T create(Class<T> c, PropertyStore ps) {
-		ConcurrentHashMap<Integer,CacheEntry> m = getContextCache(c);
 		String[] prefixes = getPrefixes(c);
+
+		if (prefixes == null)
+			return instantiate(c, ps);
+
+		ConcurrentHashMap<Integer,CacheEntry> m = getContextCache(c);
 
 		Integer hashCode = ps.hashCode(prefixes);
 		CacheEntry ce = m.get(hashCode);
@@ -109,17 +114,21 @@ public class ContextCache {
 		logCache(c, ce != null);
 
 		if (ce == null) {
-			try {
-				ce = new CacheEntry(ps, newInstance(c, ps));
-			} catch (ContextRuntimeException e) {
-				throw e;
-			} catch (Exception e) {
-				throw new ContextRuntimeException(e, "Could not create instance of class ''{0}''", c);
-			}
+			ce = new CacheEntry(ps, instantiate(c, ps));
 			m.putIfAbsent(hashCode, ce);
 		}
 
 		return (T)ce.context;
+	}
+
+	private <T extends Context> T instantiate(Class<T> c, PropertyStore ps) {
+		try {
+			return newInstance(c, ps);
+		} catch (ContextRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ContextRuntimeException(e, "Could not create instance of class ''{0}''", c);
+		}
 	}
 
 	private ConcurrentHashMap<Integer,CacheEntry> getContextCache(Class<?> c) {
@@ -137,14 +146,25 @@ public class ContextCache {
 		String[] prefixes = prefixCache.get(c);
 		if (prefixes == null) {
 			Set<String> ps = new HashSet<>();
-			for (ClassInfo c2 : getClassInfo(c).getAllParents())
-				ps.add(c2.getSimpleName());
+			for (ClassInfo c2 : getClassInfo(c).getAllParents()) {
+				ConfigurableContext cc = c2.getAnnotation(ConfigurableContext.class);
+				if (cc != null) {
+					if (cc.nocache()) {
+						prefixes = new String[0];
+						break;
+					}
+					if (cc.prefixes().length == 0)
+						ps.add(c2.getSimpleName());
+					else
+						ps.addAll(Arrays.asList(cc.prefixes()));
+				}
+			}
 			prefixes = ps.toArray(new String[ps.size()]);
 			String[] p2 = prefixCache.putIfAbsent(c, prefixes);
 			if (p2 != null)
 				prefixes = p2;
 		}
-		return prefixes;
+		return prefixes.length == 0 ? null : prefixes;
 	}
 
 	private <T> T newInstance(Class<T> cc, PropertyStore ps) throws Exception {

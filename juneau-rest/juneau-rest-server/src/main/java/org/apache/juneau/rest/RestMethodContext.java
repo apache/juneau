@@ -26,6 +26,7 @@ import java.util.concurrent.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -45,7 +46,19 @@ import org.apache.juneau.svl.*;
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
  */
+@ConfigurableContext(nocache=true)
 public class RestMethodContext extends BeanContext implements Comparable<RestMethodContext>  {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "RestMethodContext";
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
 	private final String httpMethod;
 	private final UrlPathPattern pathPattern;
 	final RestMethodParam[] methodParams;

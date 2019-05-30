@@ -18,6 +18,7 @@ import java.io.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * Filesystem-based storage location for configuration files.
@@ -25,7 +26,14 @@ import org.apache.juneau.*;
  * <p>
  * Points to a file system directory containing configuration files.
  */
+@ConfigurableContext
 public class ConfigMemoryStore extends ConfigStore {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "ConfigMemoryStore";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances

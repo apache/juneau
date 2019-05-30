@@ -146,9 +146,10 @@ import org.apache.juneau.transform.*;
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
+@ConfigurableContext
 public class BeanContext extends Context {
 
-	static final String PREFIX = "BeanContext.";
+	static final String PREFIX = "BeanContext";
 
 	/**
 	 * Configuration property:  Minimum bean class visibility.
@@ -189,7 +190,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_beanClassVisibility = PREFIX + "beanClassVisibility.s";
+	public static final String BEAN_beanClassVisibility = PREFIX + ".beanClassVisibility.s";
 
 	/**
 	 * Configuration property:  Minimum bean constructor visibility.
@@ -230,7 +231,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_beanConstructorVisibility = PREFIX + "beanConstructorVisibility.s";
+	public static final String BEAN_beanConstructorVisibility = PREFIX + ".beanConstructorVisibility.s";
 
 	/**
 	 * Configuration property:  Bean dictionary.
@@ -313,17 +314,17 @@ public class BeanContext extends Context {
 	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
 	 * </ul>
 	 */
-	public static final String BEAN_beanDictionary = PREFIX + "beanDictionary.lc";
+	public static final String BEAN_beanDictionary = PREFIX + ".beanDictionary.lc";
 
 	/**
 	 * Configuration property:  Add to bean dictionary.
 	 */
-	public static final String BEAN_beanDictionary_add = PREFIX + "beanDictionary.lc/add";
+	public static final String BEAN_beanDictionary_add = PREFIX + ".beanDictionary.lc/add";
 
 	/**
 	 * Configuration property:  Remove from bean dictionary.
 	 */
-	public static final String BEAN_beanDictionary_remove = PREFIX + "beanDictionary.lc/remove";
+	public static final String BEAN_beanDictionary_remove = PREFIX + ".beanDictionary.lc/remove";
 
 	/**
 	 * Configuration property:  Minimum bean field visibility.
@@ -370,7 +371,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_beanFieldVisibility = PREFIX + "beanFieldVisibility.s";
+	public static final String BEAN_beanFieldVisibility = PREFIX + ".beanFieldVisibility.s";
 
 	/**
 	 * Configuration property:  Bean filters.
@@ -440,17 +441,17 @@ public class BeanContext extends Context {
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.InterfaceFilters}
 	 * </ul>
 	 */
-	public static final String BEAN_beanFilters = PREFIX + "beanFilters.lc";
+	public static final String BEAN_beanFilters = PREFIX + ".beanFilters.lc";
 
 	/**
 	 * Configuration property:  Add to bean filters.
 	 */
-	public static final String BEAN_beanFilters_add = PREFIX + "beanFilters.lc/add";
+	public static final String BEAN_beanFilters_add = PREFIX + ".beanFilters.lc/add";
 
 	/**
 	 * Configuration property:  Remove from bean filters.
 	 */
-	public static final String BEAN_beanFilters_remove = PREFIX + "beanFilters.lc/remove";
+	public static final String BEAN_beanFilters_remove = PREFIX + ".beanFilters.lc/remove";
 
 	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
@@ -496,7 +497,7 @@ public class BeanContext extends Context {
 	 * 	Object oldValue = bm.put(<js>"foo"</js>, <js>"baz"</js>);  <jc>// oldValue == "bar"</jc>
 	 * </p>
 	 */
-	public static final String BEAN_beanMapPutReturnsOldValue = PREFIX + "beanMapPutReturnsOldValue.b";
+	public static final String BEAN_beanMapPutReturnsOldValue = PREFIX + ".beanMapPutReturnsOldValue.b";
 
 	/**
 	 * Configuration property:  Minimum bean method visibility.
@@ -537,7 +538,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_beanMethodVisibility = PREFIX + "beanMethodVisibility.s";
+	public static final String BEAN_beanMethodVisibility = PREFIX + ".beanMethodVisibility.s";
 
 	/**
 	 * Configuration property:  Beans require no-arg constructors.
@@ -578,7 +579,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_beansRequireDefaultConstructor = PREFIX + "beansRequireDefaultConstructor.b";
+	public static final String BEAN_beansRequireDefaultConstructor = PREFIX + ".beansRequireDefaultConstructor.b";
 
 	/**
 	 * Configuration property:  Beans require Serializable interface.
@@ -619,7 +620,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_beansRequireSerializable = PREFIX + "beansRequireSerializable.b";
+	public static final String BEAN_beansRequireSerializable = PREFIX + ".beansRequireSerializable.b";
 
 	/**
 	 * Configuration property:  Beans require setters for getters.
@@ -657,7 +658,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_beansRequireSettersForGetters = PREFIX + "beansRequireSettersForGetters.b";
+	public static final String BEAN_beansRequireSettersForGetters = PREFIX + ".beansRequireSettersForGetters.b";
 
 	/**
 	 * Configuration property:  Beans require at least one property.
@@ -697,7 +698,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_beansRequireSomeProperties = PREFIX + "beansRequireSomeProperties.b";
+	public static final String BEAN_beansRequireSomeProperties = PREFIX + ".beansRequireSomeProperties.b";
 
 	/**
 	 * Configuration property:  Bean type property name.
@@ -742,7 +743,7 @@ public class BeanContext extends Context {
 	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
 	 * </ul>
 	 */
-	public static final String BEAN_beanTypePropertyName = PREFIX + "beanTypePropertyName.s";
+	public static final String BEAN_beanTypePropertyName = PREFIX + ".beanTypePropertyName.s";
 
 	/**
 	 * Configuration property:  Debug mode.
@@ -795,7 +796,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_debug = PREFIX + "debug.b";
+	public static final String BEAN_debug = PREFIX + ".debug.b";
 
 	/**
 	 * Configuration property:  POJO examples.
@@ -849,7 +850,7 @@ public class BeanContext extends Context {
 	 * 	<li>A static method with name <code>example</code> with no arguments or one {@link BeanSession} argument.
 	 * </ul>
 	 */
-	public static final String BEAN_examples = PREFIX + "examples.smo";
+	public static final String BEAN_examples = PREFIX + ".examples.smo";
 
 	/**
 	 * Configuration property:  Bean property excludes.
@@ -910,7 +911,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_excludeProperties = PREFIX + "excludeProperties.sms";
+	public static final String BEAN_excludeProperties = PREFIX + ".excludeProperties.sms";
 
 	/**
 	 * Configuration property:  Find fluent setters.
@@ -962,7 +963,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_fluentSetters = PREFIX + "fluentSetters.b";
+	public static final String BEAN_fluentSetters = PREFIX + ".fluentSetters.b";
 
 	/**
 	 * Configuration property:  Ignore invocation errors on getters.
@@ -1000,7 +1001,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_ignoreInvocationExceptionsOnGetters = PREFIX + "ignoreInvocationExceptionsOnGetters.b";
+	public static final String BEAN_ignoreInvocationExceptionsOnGetters = PREFIX + ".ignoreInvocationExceptionsOnGetters.b";
 
 	/**
 	 * Configuration property:  Ignore invocation errors on setters.
@@ -1038,7 +1039,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_ignoreInvocationExceptionsOnSetters = PREFIX + "ignoreInvocationExceptionsOnSetters.b";
+	public static final String BEAN_ignoreInvocationExceptionsOnSetters = PREFIX + ".ignoreInvocationExceptionsOnSetters.b";
 
 	/**
 	 * Configuration property:  Ignore properties without setters.
@@ -1075,7 +1076,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_ignorePropertiesWithoutSetters = PREFIX + "ignorePropertiesWithoutSetters.b";
+	public static final String BEAN_ignorePropertiesWithoutSetters = PREFIX + ".ignorePropertiesWithoutSetters.b";
 
 	/**
 	 * Configuration property:  Ignore unknown properties.
@@ -1113,7 +1114,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_ignoreUnknownBeanProperties = PREFIX + "ignoreUnknownBeanProperties.b";
+	public static final String BEAN_ignoreUnknownBeanProperties = PREFIX + ".ignoreUnknownBeanProperties.b";
 
 	/**
 	 * Configuration property:  Ignore unknown properties with null values.
@@ -1150,7 +1151,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_ignoreUnknownNullBeanProperties = PREFIX + "ignoreUnknownNullBeanProperties.b";
+	public static final String BEAN_ignoreUnknownNullBeanProperties = PREFIX + ".ignoreUnknownNullBeanProperties.b";
 
 	/**
 	 * Configuration property:  Implementation classes.
@@ -1189,7 +1190,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_implClasses = PREFIX + "implClasses.smc";
+	public static final String BEAN_implClasses = PREFIX + ".implClasses.smc";
 
 	/**
 	 * Configuration property:  Bean property includes.
@@ -1251,7 +1252,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_includeProperties = PREFIX + "includeProperties.sms";
+	public static final String BEAN_includeProperties = PREFIX + ".includeProperties.sms";
 
 	/**
 	 * Configuration property:  Locale.
@@ -1294,7 +1295,7 @@ public class BeanContext extends Context {
 	 * 	}
 	 * </p>
 	 */
-	public static final String BEAN_locale = PREFIX + "locale.s";
+	public static final String BEAN_locale = PREFIX + ".locale.s";
 
 	/**
 	 * Configuration property:  Media type.
@@ -1337,7 +1338,7 @@ public class BeanContext extends Context {
 	 * 	}
 	 * </p>
 	 */
-	public static final String BEAN_mediaType = PREFIX + "mediaType.s";
+	public static final String BEAN_mediaType = PREFIX + ".mediaType.s";
 
 	/**
 	 * Configuration property:  Bean class exclusions.
@@ -1390,17 +1391,17 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_notBeanClasses = PREFIX + "notBeanClasses.sc";
+	public static final String BEAN_notBeanClasses = PREFIX + ".notBeanClasses.sc";
 
 	/**
 	 * Configuration property:  Add to classes that should not be considered beans.
 	 */
-	public static final String BEAN_notBeanClasses_add = PREFIX + "notBeanClasses.sc/add";
+	public static final String BEAN_notBeanClasses_add = PREFIX + ".notBeanClasses.sc/add";
 
 	/**
 	 * Configuration property:  Remove from classes that should not be considered beans.
 	 */
-	public static final String BEAN_notBeanClasses_remove = PREFIX + "notBeanClasses.sc/remove";
+	public static final String BEAN_notBeanClasses_remove = PREFIX + ".notBeanClasses.sc/remove";
 
 	/**
 	 * Configuration property:  Bean package exclusions.
@@ -1465,17 +1466,17 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_notBeanPackages = PREFIX + "notBeanPackages.ss";
+	public static final String BEAN_notBeanPackages = PREFIX + ".notBeanPackages.ss";
 
 	/**
 	 * Configuration property:  Add to packages whose classes should not be considered beans.
 	 */
-	public static final String BEAN_notBeanPackages_add = PREFIX + "notBeanPackages.ss/add";
+	public static final String BEAN_notBeanPackages_add = PREFIX + ".notBeanPackages.ss/add";
 
 	/**
 	 * Configuration property:  Remove from packages whose classes should not be considered beans.
 	 */
-	public static final String BEAN_notBeanPackages_remove = PREFIX + "notBeanPackages.ss/remove";
+	public static final String BEAN_notBeanPackages_remove = PREFIX + ".notBeanPackages.ss/remove";
 
 	/**
 	 * Configuration property:  POJO swaps.
@@ -1582,17 +1583,17 @@ public class BeanContext extends Context {
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SurrogateClasses}
 	 * </ul>
 	 */
-	public static final String BEAN_pojoSwaps = PREFIX + "pojoSwaps.lo";
+	public static final String BEAN_pojoSwaps = PREFIX + ".pojoSwaps.lo";
 
 	/**
 	 * Configuration property:  Add to POJO swap classes.
 	 */
-	public static final String BEAN_pojoSwaps_add = PREFIX + "pojoSwaps.lo/add";
+	public static final String BEAN_pojoSwaps_add = PREFIX + ".pojoSwaps.lo/add";
 
 	/**
 	 * Configuration property:  Remove from POJO swap classes.
 	 */
-	public static final String BEAN_pojoSwaps_remove = PREFIX + "pojoSwaps.lo/remove";
+	public static final String BEAN_pojoSwaps_remove = PREFIX + ".pojoSwaps.lo/remove";
 
 	/**
 	 * Configuration property:  Bean property namer.
@@ -1642,7 +1643,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_propertyNamer = PREFIX + "propertyNamer.c";
+	public static final String BEAN_propertyNamer = PREFIX + ".propertyNamer.c";
 
 	/**
 	 * Configuration property:  Sort bean properties.
@@ -1693,7 +1694,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_sortProperties = PREFIX + "sortProperties.b";
+	public static final String BEAN_sortProperties = PREFIX + ".sortProperties.b";
 
 	/**
 	 * Configuration property:  Time zone.
@@ -1736,7 +1737,7 @@ public class BeanContext extends Context {
 	 * 	}
 	 * </p>
 	 */
-	public static final String BEAN_timeZone = PREFIX + "timeZone.s";
+	public static final String BEAN_timeZone = PREFIX + ".timeZone.s";
 
 	/**
 	 * Configuration property:  Use enum names.
@@ -1790,7 +1791,7 @@ public class BeanContext extends Context {
 	 * 		}
 	 * </p>
 	 */
-	public static final String BEAN_useEnumNames = PREFIX + "useEnumNames.b";
+	public static final String BEAN_useEnumNames = PREFIX + ".useEnumNames.b";
 
 	/**
 	 * Configuration property:  Use interface proxies.
@@ -1828,7 +1829,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_useInterfaceProxies = PREFIX + "useInterfaceProxies.b";
+	public static final String BEAN_useInterfaceProxies = PREFIX + ".useInterfaceProxies.b";
 
 	/**
 	 * Configuration property:  Use Java Introspector.
@@ -1866,7 +1867,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String BEAN_useJavaBeanIntrospector = PREFIX + "useJavaBeanIntrospector.b";
+	public static final String BEAN_useJavaBeanIntrospector = PREFIX + ".useJavaBeanIntrospector.b";
 
 	/*
 	 * The default package pattern exclusion list.

@@ -26,7 +26,7 @@ public interface RdfCommon {
 	/**
 	 * Property prefix.
 	 */
-	static final String PREFIX = "RdfCommon.";
+	static final String PREFIX = "RdfCommon";
 
 	/**
 	 * Maps RDF writer names to property prefixes that apply to them.
@@ -98,7 +98,7 @@ public interface RdfCommon {
 	 * 		http://www.dajobe.org/2004/01/turtle/
 	 * </ul>
 	 */
-	public static final String RDF_language = PREFIX + "language.s";
+	public static final String RDF_language = PREFIX + ".language.s";
 
 	/**
 	 * Configuration property:  XML namespace for Juneau properties.
@@ -115,7 +115,7 @@ public interface RdfCommon {
 	 * 		</ul>
 	 * </ul>
 	 */
-	public static final String RDF_juneauNs = PREFIX + "juneauNs.s";
+	public static final String RDF_juneauNs = PREFIX + ".juneauNs.s";
 
 	/**
 	 * Configuration property:  Default XML namespace for bean properties.
@@ -132,7 +132,7 @@ public interface RdfCommon {
 	 * 		</ul>
 	 * </ul>
 	 */
-	public static final String RDF_juneauBpNs = PREFIX + "juneauBpNs.s";
+	public static final String RDF_juneauBpNs = PREFIX + ".juneauBpNs.s";
 
 	/**
 	 * Configuration property:  RDF/XML property: <code>iri_rules</code>.
@@ -163,7 +163,7 @@ public interface RdfCommon {
 	 * 		{@doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
 	 * </ul>
 	 */
-	public static final String RDF_arp_iriRules = PREFIX + "jena.rdfXml.iri-rules.s";
+	public static final String RDF_arp_iriRules = PREFIX + ".jena.rdfXml.iri-rules.s";
 
 	/**
 	 * Configuration property:  RDF/XML ARP property: <code>error-mode</code>.
@@ -204,7 +204,7 @@ public interface RdfCommon {
 	 * 		{@doc ARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
 	 * </ul>
 	 */
-	public static final String RDF_arp_errorMode = PREFIX + "jena.rdfXml.error-mode.s";
+	public static final String RDF_arp_errorMode = PREFIX + ".jena.rdfXml.error-mode.s";
 
 	/**
 	 * Configuration property:  RDF/XML ARP property: <code>embedding</code>.
@@ -227,7 +227,7 @@ public interface RdfCommon {
 	 * 		{@doc ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 	 * </ul>
 	 */
-	public static final String RDF_arp_embedding = PREFIX + "jena.rdfXml.embedding.b";
+	public static final String RDF_arp_embedding = PREFIX + ".jena.rdfXml.embedding.b";
 
 	/**
 	 * Configuration property:  RDF/XML ARP property: <code>ERR_xxx</code>.
@@ -260,7 +260,7 @@ public interface RdfCommon {
 	 * 		{@doc ARP/ARPOptions.html#setErrorMode(int,%20int) ARPOptions.setErrorMode(int, int)}
 	 * </ul>
 	 */
-	public static final String RDF_arp_err_ = PREFIX + "jena.rdfXml.ERR_";
+	public static final String RDF_arp_err_ = PREFIX + ".jena.rdfXml.ERR_";
 
 	/**
 	 * Configuration property:  RDF/XML ARP property: <code>WARN_xxx</code>.
@@ -275,7 +275,7 @@ public interface RdfCommon {
 	 * <p>
 	 * See {@link #RDF_arp_err_} for details.
 	 */
-	public static final String RDF_arp_warn_ = PREFIX + "jena.rdfXml.WARN_";
+	public static final String RDF_arp_warn_ = PREFIX + ".jena.rdfXml.WARN_";
 
 	/**
 	 * RDF/XML ARP property: <code>IGN_xxx</code>.
@@ -290,7 +290,7 @@ public interface RdfCommon {
 	 * <p>
 	 * See {@link #RDF_arp_err_} for details.
 	 */
-	public static final String RDF_arp_ign_ = PREFIX + "jena.rdfXml.IGN_";
+	public static final String RDF_arp_ign_ = PREFIX + ".jena.rdfXml.IGN_";
 
 	/**
 	 * Configuration property:  RDF/XML property: <code>xmlbase</code>.
@@ -306,7 +306,7 @@ public interface RdfCommon {
 	 * <p>
 	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
 	 */
-	public static final String RDF_rdfxml_xmlBase = PREFIX + "jena.rdfXml.xmlbase.s";
+	public static final String RDF_rdfxml_xmlBase = PREFIX + ".jena.rdfXml.xmlbase.s";
 
 	/**
 	 * Configuration property:  RDF/XML property: <code>longId</code>.
@@ -323,7 +323,7 @@ public interface RdfCommon {
 	 * Whether to use long ID's for anon resources.
 	 * Short ID's are easier to read, but can run out of memory on very large models.
 	 */
-	public static final String RDF_rdfxml_longId = PREFIX + "jena.rdfXml.longId.b";
+	public static final String RDF_rdfxml_longId = PREFIX + ".jena.rdfXml.longId.b";
 
 	/**
 	 * Configuration property:  RDF/XML property: <code>allowBadURIs</code>.
@@ -339,7 +339,7 @@ public interface RdfCommon {
 	 * <p>
 	 * URIs in the graph are, by default, checked prior to serialization.
 	 */
-	public static final String RDF_rdfxml_allowBadUris = PREFIX + "jena.rdfXml.allowBadURIs.b";
+	public static final String RDF_rdfxml_allowBadUris = PREFIX + ".jena.rdfXml.allowBadURIs.b";
 
 	/**
 	 * Configuration property:  RDF/XML property: <code>relativeURIs</code>.
@@ -377,7 +377,7 @@ public interface RdfCommon {
 	 * To switch off relative URIs use the value <js>""</js>.
 	 * Relative URIs of any of these types are output where possible if and only if the option has been specified.
 	 */
-	public static final String RDF_rdfxml_relativeUris = PREFIX + "jena.rdfXml.relativeURIs.s";
+	public static final String RDF_rdfxml_relativeUris = PREFIX + ".jena.rdfXml.relativeURIs.s";
 
 	/**
 	 * Configuration property:  RDF/XML property: <code>showXmlDeclaration</code>.
@@ -403,7 +403,7 @@ public interface RdfCommon {
 	 * 		In this case the encoding is shown in the XML declaration.
 	 * </ul>
 	 */
-	public static final String RDF_rdfxml_showXmlDeclaration = PREFIX + "jena.rdfXml.showXmlDeclaration.s";
+	public static final String RDF_rdfxml_showXmlDeclaration = PREFIX + ".jena.rdfXml.showXmlDeclaration.s";
 
 	/**
 	 * Configuration property:  RDF/XML property: <code>showDoctypeDeclaration</code>.
@@ -422,7 +422,7 @@ public interface RdfCommon {
 	 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
 	 * invocation.
 	 */
-	public static final String RDF_rdfxml_showDoctypeDeclaration = PREFIX + "jena.rdfXml.showDoctypeDeclaration.b";
+	public static final String RDF_rdfxml_showDoctypeDeclaration = PREFIX + ".jena.rdfXml.showDoctypeDeclaration.b";
 
 	/**
 	 * Configuration property:  RDF/XML property: <code>tab</code>.
@@ -438,7 +438,7 @@ public interface RdfCommon {
 	 * <p>
 	 * The number of spaces with which to indent XML child elements.
 	 */
-	public static final String RDF_rdfxml_tab = PREFIX + "jena.rdfXml.tab.i";
+	public static final String RDF_rdfxml_tab = PREFIX + ".jena.rdfXml.tab.i";
 
 	/**
 	 * Configuration property:  RDF/XML property: <code>attributeQuoteChar</code>.
@@ -454,7 +454,7 @@ public interface RdfCommon {
 	 * <p>
 	 * The XML attribute quote character.
 	 */
-	public static final String RDF_rdfxml_attributeQuoteChar = PREFIX + "jena.rdfXml.attributeQuoteChar.s";
+	public static final String RDF_rdfxml_attributeQuoteChar = PREFIX + ".jena.rdfXml.attributeQuoteChar.s";
 
 	/**
 	 * Configuration property:  RDF/XML property: <code>blockRules</code>.
@@ -472,7 +472,7 @@ public interface RdfCommon {
 	 * {@doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
 	 * rules that will not be used.
 	 */
-	public static final String RDF_rdfxml_blockRules = PREFIX + "jena.rdfXml.blockRules.s";
+	public static final String RDF_rdfxml_blockRules = PREFIX + ".jena.rdfXml.blockRules.s";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <code>minGap</code>.
@@ -488,7 +488,7 @@ public interface RdfCommon {
 	 * <p>
 	 * Minimum gap between items on a line.
 	 */
-	public static final String RDF_n3_minGap = PREFIX + "jena.n3.minGap.i";
+	public static final String RDF_n3_minGap = PREFIX + ".jena.n3.minGap.i";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <code>objectLists</code>.
@@ -504,7 +504,7 @@ public interface RdfCommon {
 	 * <p>
 	 * Print object lists as comma separated lists.
 	 */
-	public static final String RDF_n3_objectLists = PREFIX + "jena.n3.objectLists.b";
+	public static final String RDF_n3_objectLists = PREFIX + ".jena.n3.objectLists.b";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <code>subjectColumn</code>.
@@ -520,7 +520,7 @@ public interface RdfCommon {
 	 * <p>
 	 * If the subject is shorter than this value, the first property may go on the same line.
 	 */
-	public static final String RDF_n3_subjectColumn = PREFIX + "jena.n3.subjectColumn.i";
+	public static final String RDF_n3_subjectColumn = PREFIX + ".jena.n3.subjectColumn.i";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <code>propertyColumn</code>.
@@ -536,7 +536,7 @@ public interface RdfCommon {
 	 * <p>
 	 * Width of the property column.
 	 */
-	public static final String RDF_n3_propertyColumn = PREFIX + "jena.n3.propertyColumn.i";
+	public static final String RDF_n3_propertyColumn = PREFIX + ".jena.n3.propertyColumn.i";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <code>indentProperty</code>.
@@ -552,7 +552,7 @@ public interface RdfCommon {
 	 * <p>
 	 * Width to indent properties.
 	 */
-	public static final String RDF_n3_indentProperty = PREFIX + "jena.n3.indentProperty.i";
+	public static final String RDF_n3_indentProperty = PREFIX + ".jena.n3.indentProperty.i";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <code>widePropertyLen</code>.
@@ -569,7 +569,7 @@ public interface RdfCommon {
 	 * Width of the property column.
 	 * Must be longer than <code>propertyColumn</code>.
 	 */
-	public static final String RDF_n3_widePropertyLen = PREFIX + "jena.n3.widePropertyLen.i";
+	public static final String RDF_n3_widePropertyLen = PREFIX + ".jena.n3.widePropertyLen.i";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <code>abbrevBaseURI</code>.
@@ -585,7 +585,7 @@ public interface RdfCommon {
 	 * <p>
 	 * Control whether to use abbreviations <code>&lt;&gt;</code> or <code>&lt;#&gt;</code>.
 	 */
-	public static final String RDF_n3_abbrevBaseUri = PREFIX + "jena.n3.abbrevBaseURI.b";
+	public static final String RDF_n3_abbrevBaseUri = PREFIX + ".jena.n3.abbrevBaseURI.b";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <code>usePropertySymbols</code>.
@@ -601,7 +601,7 @@ public interface RdfCommon {
 	 * <p>
 	 * Control whether to use <code>a</code>, <code>=</code> and <code>=&gt;</code> in output
 	 */
-	public static final String RDF_n3_usePropertySymbols = PREFIX + "jena.n3.usePropertySymbols.b";
+	public static final String RDF_n3_usePropertySymbols = PREFIX + ".jena.n3.usePropertySymbols.b";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <code>useTripleQuotedStrings</code>.
@@ -617,7 +617,7 @@ public interface RdfCommon {
 	 * <p>
 	 * Allow the use of <code>"""</code> to delimit long strings.
 	 */
-	public static final String RDF_n3_useTripleQuotedStrings = PREFIX + "jena.n3.useTripleQuotedStrings.b";
+	public static final String RDF_n3_useTripleQuotedStrings = PREFIX + ".jena.n3.useTripleQuotedStrings.b";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <code>useDoubles</code>.
@@ -633,7 +633,7 @@ public interface RdfCommon {
 	 * <p>
 	 * Allow the use doubles as <code>123.456</code>.
 	 */
-	public static final String RDF_n3_useDoubles = PREFIX + "jena.n3.useDoubles.b";
+	public static final String RDF_n3_useDoubles = PREFIX + ".jena.n3.useDoubles.b";
 
 	/**
 	 * Configuration property:  RDF format for representing collections and arrays.
@@ -673,7 +673,7 @@ public interface RdfCommon {
 	 * 		lost.
 	 * </ul>
 	 */
-	public static final String RDF_collectionFormat = PREFIX + "collectionFormat.s";
+	public static final String RDF_collectionFormat = PREFIX + ".collectionFormat.s";
 
 	/**
 	 * Configuration property:  Collections should be serialized and parsed as loose collections.
@@ -728,5 +728,5 @@ public interface RdfCommon {
 	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
 	 * </p>
 	 */
-	public static final String RDF_looseCollections = PREFIX + "looseCollections.b";
+	public static final String RDF_looseCollections = PREFIX + ".looseCollections.b";
 }

@@ -13,6 +13,7 @@
 package org.apache.juneau.msgpack;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -24,13 +25,14 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Produces <code>Content-Type</code> types: <code><b>octal/msgpack</b></code>
  */
+@ConfigurableContext
 public class MsgPackSerializer extends OutputStreamSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "MsgPackSerializer.";
+	static final String PREFIX = "MsgPackSerializer";
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
@@ -56,7 +58,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String MSGPACK_addBeanTypes = PREFIX + "addBeanTypes.b";
+	public static final String MSGPACK_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

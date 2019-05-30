@@ -33,6 +33,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
@@ -83,13 +84,14 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
  * 	<li class='link'>{@doc juneau-rest-server.RestContext}
  * </ul>
  */
+@ConfigurableContext(nocache=true)
 public final class RestContext extends BeanContext {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "RestContext.";
+	static final String PREFIX = "RestContext";
 
 	/**
 	 * Configuration property:  Allow body URL parameter.
@@ -152,7 +154,7 @@ public final class RestContext extends BeanContext {
 	 * 		Useful for debugging PUT and POST methods using only a browser.
 	 * </ul>
 	 */
-	public static final String REST_allowBodyParam = PREFIX + "allowBodyParam.b";
+	public static final String REST_allowBodyParam = PREFIX + ".allowBodyParam.b";
 
 	/**
 	 * Configuration property:  Allowed method parameters.
@@ -221,7 +223,7 @@ public final class RestContext extends BeanContext {
 	 * Note that per the {@doc RFC2616.section9 HTTP specification}, special care should
 	 * be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
 	 */
-	public static final String REST_allowedMethodParams = PREFIX + "allowedMethodParams.s";
+	public static final String REST_allowedMethodParams = PREFIX + ".allowedMethodParams.s";
 
 	/**
 	 * Configuration property:  Allow header URL parameters.
@@ -284,7 +286,7 @@ public final class RestContext extends BeanContext {
 	 * 		Useful for debugging REST interface using only a browser.
 	 * </ul>
 	 */
-	public static final String REST_allowHeaderParams = PREFIX + "allowHeaderParams.b";
+	public static final String REST_allowHeaderParams = PREFIX + ".allowHeaderParams.b";
 
 	/**
 	 * Configuration property:  REST call handler.
@@ -374,7 +376,7 @@ public final class RestContext extends BeanContext {
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
-	public static final String REST_callHandler = PREFIX + "callHandler.o";
+	public static final String REST_callHandler = PREFIX + ".callHandler.o";
 
 	/**
 	 * Configuration property:  Children.
@@ -487,7 +489,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='link'>{@doc juneau-rest-server.Instantiation.Children}
 	 * </ul>
 	 */
-	public static final String REST_children = PREFIX + "children.lo";
+	public static final String REST_children = PREFIX + ".children.lo";
 
 	/**
 	 * Configuration property:  Classpath resource finder.
@@ -589,7 +591,7 @@ public final class RestContext extends BeanContext {
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
-	public static final String REST_classpathResourceFinder = PREFIX + "classpathResourceFinder.o";
+	public static final String REST_classpathResourceFinder = PREFIX + ".classpathResourceFinder.o";
 
 	/**
 	 * Configuration property:  Client version header.
@@ -662,7 +664,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String REST_clientVersionHeader = PREFIX + "clientVersionHeader.s";
+	public static final String REST_clientVersionHeader = PREFIX + ".clientVersionHeader.s";
 
 	/**
 	 * Configuration property:  Class-level response converters.
@@ -760,7 +762,7 @@ public final class RestContext extends BeanContext {
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
-	public static final String REST_converters = PREFIX + "converters.lo";
+	public static final String REST_converters = PREFIX + ".converters.lo";
 
 	/**
 	 * Configuration property:  Debug mode.
@@ -788,7 +790,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, Throwable)} is called.
 	 * </ul>
 	 */
-	public static final String REST_debug = PREFIX + "debug.b";
+	public static final String REST_debug = PREFIX + ".debug.b";
 
 	/**
 	 * Configuration property:  Default character encoding.
@@ -843,7 +845,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String REST_defaultCharset = PREFIX + "defaultCharset.s";
+	public static final String REST_defaultCharset = PREFIX + ".defaultCharset.s";
 
 	/**
 	 * Configuration property:  Default request headers.
@@ -911,7 +913,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String REST_defaultRequestHeaders = PREFIX + "defaultRequestHeaders.smo";
+	public static final String REST_defaultRequestHeaders = PREFIX + ".defaultRequestHeaders.smo";
 
 	/**
 	 * Configuration property:  Default response headers.
@@ -976,7 +978,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String REST_defaultResponseHeaders = PREFIX + "defaultResponseHeaders.omo";
+	public static final String REST_defaultResponseHeaders = PREFIX + ".defaultResponseHeaders.omo";
 
 	/**
 	 * Configuration property:  Compression encoders.
@@ -1048,7 +1050,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='link'>{@doc juneau-rest-server.Encoders}
 	 * </ul>
 	 */
-	public static final String REST_encoders = PREFIX + "encoders.lo";
+	public static final String REST_encoders = PREFIX + ".encoders.lo";
 
 	/**
 	 * Configuration property:  Class-level guards.
@@ -1133,7 +1135,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='link'>{@doc juneau-rest-server.Guards}
 	 * </ul>
 	 */
-	public static final String REST_guards = PREFIX + "guards.lo";
+	public static final String REST_guards = PREFIX + ".guards.lo";
 
 	/**
 	 * Configuration property:  REST info provider.
@@ -1222,7 +1224,7 @@ public final class RestContext extends BeanContext {
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
-	public static final String REST_infoProvider = PREFIX + "infoProvider.o";
+	public static final String REST_infoProvider = PREFIX + ".infoProvider.o";
 
 	/**
 	 * Configuration property:  REST logger.
@@ -1300,7 +1302,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
 	 * </ul>
 	 */
-	public static final String REST_logger = PREFIX + "logger.o";
+	public static final String REST_logger = PREFIX + ".logger.o";
 
 	/**
 	 * Configuration property:  The maximum allowed input size (in bytes) on HTTP requests.
@@ -1366,7 +1368,7 @@ public final class RestContext extends BeanContext {
 	 * 		A value of <js>"-1"</js> can be used to represent no limit.
 	 * </ul>
 	 */
-	public static final String REST_maxInput = PREFIX + "maxInput.s";
+	public static final String REST_maxInput = PREFIX + ".maxInput.s";
 
 	/**
 	 * Configuration property:  Messages.
@@ -1453,7 +1455,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='link'>{@doc juneau-rest-server.Messages}
 	 * </ul>
 	 */
-	public static final String REST_messages = PREFIX + "messages.lo";
+	public static final String REST_messages = PREFIX + ".messages.lo";
 
 	/**
 	 * Configuration property:  MIME types.
@@ -1521,7 +1523,7 @@ public final class RestContext extends BeanContext {
 	 * 		<br>Example: <js>"image/svg+xml svg"</js>
 	 * </ul>
 	 */
-	public static final String REST_mimeTypes = PREFIX + "mimeTypes.ss";
+	public static final String REST_mimeTypes = PREFIX + ".mimeTypes.ss";
 
 	/**
 	 * Configuration property:  Java method parameter resolvers.
@@ -1611,7 +1613,7 @@ public final class RestContext extends BeanContext {
 	 * 		Refer to {@link RestMethodParam} for the list of predefined parameter resolvers.
 	 * </ul>
 	 */
-	public static final String REST_paramResolvers = PREFIX + "paramResolvers.lo";
+	public static final String REST_paramResolvers = PREFIX + ".paramResolvers.lo";
 
 	/**
 	 * Configuration property:  Parsers.
@@ -1706,7 +1708,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='link'>{@doc juneau-rest-server.Parsers}
 	 * </ul>
 	 */
-	public static final String REST_parsers = PREFIX + "parsers.lo";
+	public static final String REST_parsers = PREFIX + ".parsers.lo";
 
 	/**
 	 * Configuration property:  HTTP part parser.
@@ -1774,7 +1776,7 @@ public final class RestContext extends BeanContext {
 	 * 		When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
 	 * </ul>
 	 */
-	public static final String REST_partParser = PREFIX + "partParser.o";
+	public static final String REST_partParser = PREFIX + ".partParser.o";
 
 	/**
 	 * Configuration property:  HTTP part serializer.
@@ -1847,7 +1849,7 @@ public final class RestContext extends BeanContext {
 	 * 		When defined as an instance, properties/transforms defined on the resource/method are NOT inherited.
 	 * </ul>
 	 */
-	public static final String REST_partSerializer = PREFIX + "partSerializer.o";
+	public static final String REST_partSerializer = PREFIX + ".partSerializer.o";
 
 	/**
 	 * Configuration property:  Resource path.
@@ -1919,7 +1921,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 */
-	public static final String REST_path = PREFIX + "path.s";
+	public static final String REST_path = PREFIX + ".path.s";
 
 	/**
 	 * Configuration property:  Render response stack traces in responses.
@@ -1982,7 +1984,7 @@ public final class RestContext extends BeanContext {
 	 * 		That method is used by {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, Throwable)}.
 	 * </ul>
 	 */
-	public static final String REST_renderResponseStackTraces = PREFIX + "renderResponseStackTraces.b";
+	public static final String REST_renderResponseStackTraces = PREFIX + ".renderResponseStackTraces.b";
 
 	/**
 	 * Configuration property:  REST resource resolver.
@@ -2070,7 +2072,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='link'>{@doc juneau-rest-server.Injection}
 	 * </ul>
 	 */
-	public static final String REST_resourceResolver = PREFIX + "resourceResolver.o";
+	public static final String REST_resourceResolver = PREFIX + ".resourceResolver.o";
 
 	/**
 	 * Configuration property:  Response handlers.
@@ -2164,7 +2166,7 @@ public final class RestContext extends BeanContext {
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 */
-	public static final String REST_responseHandlers = PREFIX + "responseHandlers.lo";
+	public static final String REST_responseHandlers = PREFIX + ".responseHandlers.lo";
 
 	/**
 	 * Configuration property:  Declared roles.
@@ -2209,7 +2211,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
 	 * </ul>
 	 */
-	public static final String REST_rolesDeclared = PREFIX + "rolesDeclared.ss";
+	public static final String REST_rolesDeclared = PREFIX + ".rolesDeclared.ss";
 
 	/**
 	 * Configuration property:  Role guard.
@@ -2277,7 +2279,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='jf'>{@link RestContext#REST_roleGuard}
 	 * </ul>
 	 */
-	public static final String REST_roleGuard = PREFIX + "roleGuard.s";
+	public static final String REST_roleGuard = PREFIX + ".roleGuard.s";
 
 	/**
 	 * Configuration property:  Serializers.
@@ -2381,7 +2383,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 * <p>
 	 */
-	public static final String REST_serializers = PREFIX + "serializers.lo";
+	public static final String REST_serializers = PREFIX + ".serializers.lo";
 
 	/**
 	 * Configuration property:  Static file response headers.
@@ -2447,7 +2449,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='jf'>{@link #REST_staticFiles} for information about statically-served files.
 	 * </ul>
 	 */
-	public static final String REST_staticFileResponseHeaders = PREFIX + "staticFileResponseHeaders.omo";
+	public static final String REST_staticFileResponseHeaders = PREFIX + ".staticFileResponseHeaders.omo";
 
 	/**
 	 * Configuration property:  Static file mappings.
@@ -2520,7 +2522,7 @@ public final class RestContext extends BeanContext {
 	 * 		Child resources can override mappings made on parent class resources.
 	 * </ul>
 	 */
-	public static final String REST_staticFiles = PREFIX + "staticFiles.lo";
+	public static final String REST_staticFiles = PREFIX + ".staticFiles.lo";
 
 	/**
 	 * Configuration property:  Supported accept media types.
@@ -2583,7 +2585,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)} - Affects produces field.
 	 * </ul>
 	 */
-	public static final String REST_produces = PREFIX + "produces.ls";
+	public static final String REST_produces = PREFIX + ".produces.ls";
 
 	/**
 	 * Configuration property:  Properties.
@@ -2616,7 +2618,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='jm'>{@link RestResponse#getProperties()}
 	 * </ul>
 	 */
-	public static final String REST_properties = PREFIX + "properties.sms";
+	public static final String REST_properties = PREFIX + ".properties.sms";
 
 	/**
 	 * Configuration property:  Supported content media types.
@@ -2679,7 +2681,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)} - Affects consumes field.
 	 * </ul>
 	 */
-	public static final String REST_consumes = PREFIX + "consumes.ls";
+	public static final String REST_consumes = PREFIX + ".consumes.ls";
 
 	/**
 	 * Configuration property:  Use classpath resource caching.
@@ -2734,7 +2736,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='jf'>{@link #REST_staticFiles} for information about static files.
 	 * </ul>
 	 */
-	public static final String REST_useClasspathResourceCaching = PREFIX + "useClasspathResourceCaching.b";
+	public static final String REST_useClasspathResourceCaching = PREFIX + ".useClasspathResourceCaching.b";
 
 	/**
 	 * Configuration property:  Use stack trace hashes.
@@ -2791,7 +2793,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String REST_useStackTraceHashes = PREFIX + "useStackTraceHashes.b";
+	public static final String REST_useStackTraceHashes = PREFIX + ".useStackTraceHashes.b";
 
 	/**
 	 * Configuration property:  Resource URI authority path.
@@ -2861,7 +2863,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String REST_uriAuthority = PREFIX + "uriAuthority.s";
+	public static final String REST_uriAuthority = PREFIX + ".uriAuthority.s";
 
 	/**
 	 * Configuration property:  Resource URI context path.
@@ -2924,7 +2926,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String REST_uriContext = PREFIX + "uriContext.s";
+	public static final String REST_uriContext = PREFIX + ".uriContext.s";
 
 	/**
 	 * Configuration property:  URI resolution relativity.
@@ -2985,7 +2987,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String REST_uriRelativity = PREFIX + "uriRelativity.s";
+	public static final String REST_uriRelativity = PREFIX + ".uriRelativity.s";
 
 	/**
 	 * Configuration property:  URI resolution.
@@ -3046,7 +3048,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String REST_uriResolution = PREFIX + "uriResolution.s";
+	public static final String REST_uriResolution = PREFIX + ".uriResolution.s";
 
 	/**
 	 * Configuration property:  HTML Widgets.
@@ -3120,7 +3122,7 @@ public final class RestContext extends BeanContext {
 	 * @deprecated Use {@link HtmlDocSerializer#HTMLDOC_widgets}
 	 */
 	@Deprecated
-	public static final String REST_widgets = PREFIX + "widgets.lo";
+	public static final String REST_widgets = PREFIX + ".widgets.lo";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

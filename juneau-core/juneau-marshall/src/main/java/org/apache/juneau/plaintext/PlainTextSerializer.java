@@ -13,6 +13,7 @@
 package org.apache.juneau.plaintext;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -33,7 +34,14 @@ import org.apache.juneau.transform.*;
  * Also serializes objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;}
  * transform defined on it.
  */
+@ConfigurableContext
 public class PlainTextSerializer extends WriterSerializer {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "PlainTextSerializer";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances

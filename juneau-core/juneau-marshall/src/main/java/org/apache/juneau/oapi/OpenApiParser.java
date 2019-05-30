@@ -13,6 +13,7 @@
 package org.apache.juneau.oapi;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 
@@ -24,7 +25,14 @@ import org.apache.juneau.uon.*;
  * 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Parsers}
  * </ul>
  */
+@ConfigurableContext
 public class OpenApiParser extends UonParser {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "OpenApiParser";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances

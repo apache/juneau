@@ -13,6 +13,7 @@
 package org.apache.juneau.oapi;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -25,7 +26,14 @@ import org.apache.juneau.uon.*;
  * 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
  * </ul>
  */
+@ConfigurableContext
 public class OpenApiSerializer extends UonSerializer {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "OpenApiSerializer";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances

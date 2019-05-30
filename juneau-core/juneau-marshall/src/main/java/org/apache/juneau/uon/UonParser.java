@@ -15,6 +15,7 @@ package org.apache.juneau.uon;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.urlencoding.*;
@@ -30,13 +31,14 @@ import org.apache.juneau.urlencoding.*;
  *
  * This parser uses a state machine, which makes it very fast and efficient.
  */
+@ConfigurableContext
 public class UonParser extends ReaderParser implements HttpPartParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "UonParser.";
+	static final String PREFIX = "UonParser";
 
 	/**
 	 * Configuration property: Decode <js>"%xx"</js> sequences.
@@ -77,7 +79,7 @@ public class UonParser extends ReaderParser implements HttpPartParser {
 	 * 	String[] foo = p.parse(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
 	 * </p>
 	 */
-	public static final String UON_decoding = PREFIX + "decoding.b";
+	public static final String UON_decoding = PREFIX + ".decoding.b";
 
 	/**
 	 * Configuration property:  Validate end.
@@ -119,7 +121,7 @@ public class UonParser extends ReaderParser implements HttpPartParser {
 	 * 	MyBean myBean = p.parse(in, MyBean.<jk>class</jk>);
 	 * </p>
 	 */
-	public static final String UON_validateEnd = PREFIX + "validateEnd.b";
+	public static final String UON_validateEnd = PREFIX + ".validateEnd.b";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances

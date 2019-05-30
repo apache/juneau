@@ -13,6 +13,7 @@
 package org.apache.juneau.urlencoding;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.annotation.*;
@@ -34,13 +35,14 @@ import org.apache.juneau.urlencoding.annotation.*;
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
  */
+@ConfigurableContext
 public class UrlEncodingParser extends UonParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "UrlEncodingParser.";
+	static final String PREFIX = "UrlEncodingParser";
 
 	/**
 	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
@@ -93,7 +95,7 @@ public class UrlEncodingParser extends UonParser {
 	 * 		is added to it.
 	 * </ul>
 	 */
-	public static final String URLENC_expandedParams = PREFIX + "expandedParams.b";
+	public static final String URLENC_expandedParams = PREFIX + ".expandedParams.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

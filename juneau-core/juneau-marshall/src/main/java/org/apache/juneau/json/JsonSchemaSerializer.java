@@ -13,6 +13,7 @@
 package org.apache.juneau.json;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
@@ -29,8 +30,14 @@ import org.apache.juneau.serializer.*;
  *
  * Produces the JSON-schema for the JSON produced by the {@link JsonSerializer} class with the same properties.
  */
+@ConfigurableContext
 public class JsonSchemaSerializer extends JsonSerializer {
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "JsonSchemaSerializer";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances

@@ -15,6 +15,7 @@ package org.apache.juneau.html;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
@@ -122,13 +123,14 @@ import org.apache.juneau.xml.*;
  * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
  * </p>
  */
+@ConfigurableContext
 public class HtmlSerializer extends XmlSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "HtmlSerializer.";
+	static final String PREFIX = "HtmlSerializer";
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
@@ -154,7 +156,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String HTML_addBeanTypes = PREFIX + "addBeanTypes.b";
+	public static final String HTML_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Add key/value headers on bean/map tables.
@@ -225,7 +227,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	</tr>
 	 * </table>
 	 */
-	public static final String HTML_addKeyValueTableHeaders = PREFIX + "addKeyValueTableHeaders.b";
+	public static final String HTML_addKeyValueTableHeaders = PREFIX + ".addKeyValueTableHeaders.b";
 
 	/**
 	 * Configuration property:  Look for URLs in {@link String Strings}.
@@ -295,7 +297,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	</tr>
 	 * </table>
 	 */
-	public static final String HTML_detectLinksInStrings = PREFIX + "detectLinksInStrings.b";
+	public static final String HTML_detectLinksInStrings = PREFIX + ".detectLinksInStrings.b";
 
 	/**
 	 * Configuration property:  Link label parameter name.
@@ -320,7 +322,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li class='jf'>{@link #HTML_detectLabelParameters}
 	 * </ul>
 	 */
-	public static final String HTML_labelParameter = PREFIX + "labelParameter.s";
+	public static final String HTML_labelParameter = PREFIX + ".labelParameter.s";
 
 	/**
 	 * Configuration property:  Look for link labels in URIs.
@@ -393,7 +395,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	</tr>
 	 * </table>
 	 */
-	public static final String HTML_detectLabelParameters = PREFIX + "detectLabelParameters.b";
+	public static final String HTML_detectLabelParameters = PREFIX + ".detectLabelParameters.b";
 
 	/**
 	 * Configuration property:  Anchor text source.
@@ -566,7 +568,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	</ul>
 	 * </ul>
 	 */
-	public static final String HTML_uriAnchorText = PREFIX + "uriAnchorText.s";
+	public static final String HTML_uriAnchorText = PREFIX + ".uriAnchorText.s";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

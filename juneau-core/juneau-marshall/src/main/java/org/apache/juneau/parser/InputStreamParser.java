@@ -13,6 +13,7 @@
 package org.apache.juneau.parser;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * Subclass of {@link Parser} for byte-based parsers.
@@ -25,14 +26,14 @@ import org.apache.juneau.*;
  * 	<li><code>parse(InputStream, ClassMeta, Parser)</code>
  * </ul>
   */
+@ConfigurableContext
 public abstract class InputStreamParser extends Parser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "InputStreamParser.";
-
+	static final String PREFIX = "InputStreamParser";
 
 	/**
 	 * Configuration property:  Binary input format.
@@ -70,7 +71,7 @@ public abstract class InputStreamParser extends Parser {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String ISPARSER_binaryFormat = PREFIX + "binaryFormat.s";
+	public static final String ISPARSER_binaryFormat = PREFIX + ".binaryFormat.s";
 
 	static final InputStreamParser DEFAULT = new InputStreamParser(PropertyStore.create().build(), "") {
 		@Override

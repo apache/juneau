@@ -22,6 +22,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.encode.*;
 import org.apache.juneau.config.encode.ConfigEncoder;
 import org.apache.juneau.config.event.*;
@@ -44,6 +45,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@ConfigurableContext
 public final class Config extends Context implements ConfigEventListener, Writable {
 
 	private static boolean DISABLE_AUTO_SYSTEM_PROPS = Boolean.getBoolean("juneau.disableAutoSystemProps");
@@ -150,7 +152,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "Config.";
+	static final String PREFIX = "Config";
 
 	/**
 	 * Configuration property:  Configuration name.
@@ -172,7 +174,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <br>This is typically the configuration file name, although
 	 * the name can be anything identifiable by the {@link ConfigStore} used for retrieving and storing the configuration.
 	 */
-	public static final String CONFIG_name = PREFIX + "name.s";
+	public static final String CONFIG_name = PREFIX + ".name.s";
 
 	/**
 	 * Configuration property:  Configuration store.
@@ -192,7 +194,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <p>
 	 * The configuration store used for retrieving and storing configurations.
 	 */
-	public static final String CONFIG_store = PREFIX + "store.o";
+	public static final String CONFIG_store = PREFIX + ".store.o";
 
 	/**
 	 * Configuration property:  POJO serializer.
@@ -213,7 +215,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <p>
 	 * The serializer to use for serializing POJO values.
 	 */
-	public static final String CONFIG_serializer = PREFIX + "serializer.o";
+	public static final String CONFIG_serializer = PREFIX + ".serializer.o";
 
 	/**
 	 * Configuration property:  POJO parser.
@@ -234,7 +236,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <p>
 	 * The parser to use for parsing values to POJOs.
 	 */
-	public static final String CONFIG_parser = PREFIX + "parser.o";
+	public static final String CONFIG_parser = PREFIX + ".parser.o";
 
 	/**
 	 * Configuration property:  Value encoder.
@@ -255,7 +257,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <p>
 	 * The encoder to use for encoding encoded configuration values.
 	 */
-	public static final String CONFIG_encoder = PREFIX + "encoder.o";
+	public static final String CONFIG_encoder = PREFIX + ".encoder.o";
 
 	/**
 	 * Configuration property:  SVL variable resolver.
@@ -276,7 +278,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <p>
 	 * The resolver to use for resolving SVL variables.
 	 */
-	public static final String CONFIG_varResolver = PREFIX + "varResolver.o";
+	public static final String CONFIG_varResolver = PREFIX + ".varResolver.o";
 
 	/**
 	 * Configuration property:  Binary value line length.
@@ -297,7 +299,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * When serializing binary values, lines will be split after this many characters.
 	 * <br>Use <code>-1</code> to represent no line splitting.
 	 */
-	public static final String CONFIG_binaryLineLength = PREFIX + "binaryLineLength.i";
+	public static final String CONFIG_binaryLineLength = PREFIX + ".binaryLineLength.i";
 
 	/**
 	 * Configuration property:  Binary value format.
@@ -325,7 +327,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<li>{@link BinaryFormat#SPACED_HEX} - Hexadecimal with spaces between bytes.
 	 * </ul>
 	 */
-	public static final String CONFIG_binaryFormat = PREFIX + "binaryFormat.s";
+	public static final String CONFIG_binaryFormat = PREFIX + ".binaryFormat.s";
 
 	/**
 	 * Configuration property:  Multi-line values should always be on separate lines.
@@ -345,7 +347,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <p>
 	 * When enabled, multi-line values will always be placed on a separate line from the key.
 	 */
-	public static final String CONFIG_multiLineValuesOnSeparateLines = PREFIX + "multiLineValuesOnSeparateLines.b";
+	public static final String CONFIG_multiLineValuesOnSeparateLines = PREFIX + ".multiLineValuesOnSeparateLines.b";
 
 	/**
 	 * Configuration property:  Read-only.
@@ -365,7 +367,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <p>
 	 * When enabled, attempts to call any setters on this object will throw an {@link UnsupportedOperationException}.
 	 */
-	public static final String CONFIG_readOnly = PREFIX + "readOnly.b";
+	public static final String CONFIG_readOnly = PREFIX + ".readOnly.b";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

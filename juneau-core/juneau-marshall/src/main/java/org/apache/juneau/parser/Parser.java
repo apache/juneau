@@ -17,6 +17,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
@@ -115,13 +116,14 @@ import org.apache.juneau.xml.*;
  * 	<tr><td>string</td><td>{@link String}</td></tr>
  * </table>
  */
+@ConfigurableContext
 public abstract class Parser extends BeanContext {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "Parser.";
+	static final String PREFIX = "Parser";
 
 	/**
 	 * Configuration property:  Auto-close streams.
@@ -164,7 +166,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<jsm>assertTrue</jsm>(r.isClosed());
 	 * </p>
 	 */
-	public static final String PARSER_autoCloseStreams = PREFIX + "autoCloseStreams.b";
+	public static final String PARSER_autoCloseStreams = PREFIX + ".autoCloseStreams.b";
 
 	/**
 	 * Configuration property:  Debug output lines.
@@ -210,7 +212,7 @@ public abstract class Parser extends BeanContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String PARSER_debugOutputLines = PREFIX + "debugOutputLines.i";
+	public static final String PARSER_debugOutputLines = PREFIX + ".debugOutputLines.i";
 
 	/**
 	 * Configuration property:  Parser listener.
@@ -273,7 +275,7 @@ public abstract class Parser extends BeanContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String PARSER_listener = PREFIX + "listener.c";
+	public static final String PARSER_listener = PREFIX + ".listener.c";
 
 	/**
 	 * Configuration property:  Strict mode.
@@ -346,7 +348,7 @@ public abstract class Parser extends BeanContext {
 	 *  	}
 	 * </p>
 	 */
-	public static final String PARSER_strict = PREFIX + "strict.b";
+	public static final String PARSER_strict = PREFIX + ".strict.b";
 
 	/**
 	 * Configuration property:  Trim parsed strings.
@@ -389,7 +391,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, m.get(<js>"foo"</js>));
 	 * </p>
 	 */
-	public static final String PARSER_trimStrings = PREFIX + "trimStrings.b";
+	public static final String PARSER_trimStrings = PREFIX + ".trimStrings.b";
 
 	/**
 	 * Configuration property:  Unbuffered.
@@ -458,7 +460,7 @@ public abstract class Parser extends BeanContext {
 	 *
 	 * If <jk>true</jk>, don't use internal buffering during parsing.
 	 */
-	public static final String PARSER_unbuffered = PREFIX + "unbuffered.b";
+	public static final String PARSER_unbuffered = PREFIX + ".unbuffered.b";
 
 	static Parser DEFAULT = new Parser(PropertyStore.create().build()) {
 		@Override

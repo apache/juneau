@@ -16,6 +16,7 @@ import javax.xml.stream.*;
 import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -29,13 +30,14 @@ import org.apache.juneau.parser.*;
  *
  * See the {@link XmlSerializer} class for a description of Juneau-generated XML.
  */
+@ConfigurableContext
 public class XmlParser extends ReaderParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "XmlParser.";
+	static final String PREFIX = "XmlParser";
 
 	/**
 	 * Configuration property:  XML event allocator.
@@ -56,7 +58,7 @@ public class XmlParser extends ReaderParser {
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 */
-	public static final String XML_eventAllocator = PREFIX + "eventAllocator.c";
+	public static final String XML_eventAllocator = PREFIX + ".eventAllocator.c";
 
 	/**
 	 * Configuration property:  Preserve root element during generalized parsing.
@@ -102,7 +104,7 @@ public class XmlParser extends ReaderParser {
 	 * 	ObjectMap m2 = p2.parse(xml, ObjectMap.<jk>class)</jk>;
 	 * </p>
 	 */
-	public static final String XML_preserveRootElement = PREFIX + "preserveRootElement.b";
+	public static final String XML_preserveRootElement = PREFIX + ".preserveRootElement.b";
 
 	/**
 	 * Configuration property:  XML reporter.
@@ -129,7 +131,7 @@ public class XmlParser extends ReaderParser {
 	 * 		Reporters are not copied to new parsers during a clone.
 	 * </ul>
 	 */
-	public static final String XML_reporter = PREFIX + "reporter.c";
+	public static final String XML_reporter = PREFIX + ".reporter.c";
 
 	/**
 	 * Configuration property:  XML resolver.
@@ -150,7 +152,7 @@ public class XmlParser extends ReaderParser {
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 */
-	public static final String XML_resolver = PREFIX + "resolver.c";
+	public static final String XML_resolver = PREFIX + ".resolver.c";
 
 	/**
 	 * Configuration property:  Enable validation.
@@ -175,7 +177,7 @@ public class XmlParser extends ReaderParser {
 	 * <p>
 	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
 	 */
-	public static final String XML_validating = PREFIX + "validating.b";
+	public static final String XML_validating = PREFIX + ".validating.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

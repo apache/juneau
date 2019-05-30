@@ -24,13 +24,14 @@ import org.apache.juneau.json.*;
 /**
  * Generates JSON-schema metadata about POJOs.
  */
+@ConfigurableContext
 public class JsonSchemaGenerator extends BeanTraverseContext {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "JsonSchemaGenerator.";
+	static final String PREFIX = "JsonSchemaGenerator";
 
 	/**
 	 * Configuration property:  Add descriptions to types.
@@ -67,7 +68,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * 	<li class='jf'>{@link TypeCategory#OTHER OTHER}
 	 * </ul>
 	 */
-	public static final String JSONSCHEMA_addDescriptionsTo = PREFIX + "addDescriptionsTo.s";
+	public static final String JSONSCHEMA_addDescriptionsTo = PREFIX + ".addDescriptionsTo.s";
 
 	/**
 	 * Configuration property:  Add examples.
@@ -110,7 +111,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * 	<li class='jf'>{@link TypeCategory#OTHER OTHER}
 	 * </ul>
 	 */
-	public static final String JSONSCHEMA_addExamplesTo = PREFIX + "addExamplesTo.s";
+	public static final String JSONSCHEMA_addExamplesTo = PREFIX + ".addExamplesTo.s";
 
 	/**
 	 * Configuration property:  Allow nested descriptions.
@@ -131,7 +132,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <p>
 	 * Identifies whether nested descriptions are allowed in schema definitions.
 	 */
-	public static final String JSONSCHEMA_allowNestedDescriptions = PREFIX + "allowNestedDescriptions.b";
+	public static final String JSONSCHEMA_allowNestedDescriptions = PREFIX + ".allowNestedDescriptions.b";
 
 	/**
 	 * Configuration property:  Allow nested examples.
@@ -152,7 +153,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <p>
 	 * Identifies whether nested examples are allowed in schema definitions.
 	 */
-	public static final String JSONSCHEMA_allowNestedExamples = PREFIX + "allowNestedExamples.b";
+	public static final String JSONSCHEMA_allowNestedExamples = PREFIX + ".allowNestedExamples.b";
 
 	/**
 	 * Configuration property:  Bean schema definition mapper.
@@ -178,7 +179,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <p>
 	 * This setting is ignored if {@link #JSONSCHEMA_useBeanDefs} is not enabled.
 	 */
-	public static final String JSONSCHEMA_beanDefMapper = PREFIX + "beanDefMapper.o";
+	public static final String JSONSCHEMA_beanDefMapper = PREFIX + ".beanDefMapper.o";
 
 	/**
 	 * Configuration property:  Default schemas.
@@ -201,7 +202,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <p>
 	 * Keys are full class names.
 	 */
-	public static final String JSONSCHEMA_defaultSchemas = PREFIX + "defaultSchemas.smo";
+	public static final String JSONSCHEMA_defaultSchemas = PREFIX + ".defaultSchemas.smo";
 
 	/**
 	 * Configuration property:  Ignore types from schema definitions.
@@ -229,7 +230,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * 	<jk>public class</jk> MyResource {...}
 	 * </p>
 	 */
-	public static final String JSONSCHEMA_ignoreTypes = PREFIX + "ignoreTypes.s";
+	public static final String JSONSCHEMA_ignoreTypes = PREFIX + ".ignoreTypes.s";
 
 	/**
 	 * Configuration property:  Use bean definitions.
@@ -260,7 +261,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <p>
 	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, ObjectMap)}.
 	 */
-	public static final String JSONSCHEMA_useBeanDefs = PREFIX + "useBeanDefs.b";
+	public static final String JSONSCHEMA_useBeanDefs = PREFIX + ".useBeanDefs.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

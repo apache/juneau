@@ -13,6 +13,7 @@
 package org.apache.juneau.urlencoding;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 
@@ -110,13 +111,14 @@ import org.apache.juneau.uon.*;
  * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
  */
+@ConfigurableContext
 public class UrlEncodingSerializer extends UonSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "UrlEncodingSerializer.";
+	static final String PREFIX = "UrlEncodingSerializer";
 
 	/**
 	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
@@ -172,7 +174,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * </p>
 	 *
 	 */
-	public static final String URLENC_expandedParams = PREFIX + "expandedParams.b";
+	public static final String URLENC_expandedParams = PREFIX + ".expandedParams.b";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

@@ -18,6 +18,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 
 /**
@@ -71,6 +72,7 @@ import org.apache.juneau.http.*;
  * 	AddressBook addressBook = p.parse(json, AddressBook.<jk>class</jk>);
  * </p>
  */
+@ConfigurableContext(nocache=true)
 public final class ParserGroup extends BeanContext {
 
 	/**

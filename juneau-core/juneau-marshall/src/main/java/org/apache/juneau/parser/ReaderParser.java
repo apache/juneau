@@ -15,6 +15,7 @@ package org.apache.juneau.parser;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * Subclass of {@link Parser} for characters-based parsers.
@@ -27,13 +28,14 @@ import org.apache.juneau.*;
  * 	<li><code>parse(ParserSession, ClassMeta)</code>
  * </ul>
  */
+@ConfigurableContext
 public abstract class ReaderParser extends Parser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "ReaderParser.";
+	static final String PREFIX = "ReaderParser";
 
 	/**
 	 * Configuration property:  File charset.
@@ -79,7 +81,7 @@ public abstract class ReaderParser extends Parser {
 	 * 	MyBean myBean = p.parse(<jk>new</jk> File(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
 	 * </p>
 	 */
-	public static final String RPARSER_fileCharset = PREFIX + "fileCharset.s";
+	public static final String RPARSER_fileCharset = PREFIX + ".fileCharset.s";
 
 	/**
 	 * Configuration property:  Input stream charset.
@@ -122,7 +124,7 @@ public abstract class ReaderParser extends Parser {
 	 * 	MyBean myBean = p.parse(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
 	 * </p>
 	 */
-	public static final String RPARSER_inputStreamCharset = PREFIX + "inputStreamCharset.s";
+	public static final String RPARSER_inputStreamCharset = PREFIX + ".inputStreamCharset.s";
 
 	static final ReaderParser DEFAULT = new ReaderParser(PropertyStore.create().build(), "") {
 		@Override

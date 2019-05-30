@@ -17,6 +17,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.internal.*;
 
 /**
@@ -29,7 +30,18 @@ import org.apache.juneau.config.internal.*;
  * 	<li class='jm'>{@link #write(String,String,String)} - ConfigStore a config file.
  * </ul>
  */
+@ConfigurableContext
 public abstract class ConfigStore extends Context implements Closeable {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "ConfigStore";
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
 
 	private final ConcurrentHashMap<String,Set<ConfigStoreListener>> listeners = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String,ConfigMap> configMaps = new ConcurrentHashMap<>();

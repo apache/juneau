@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
@@ -36,7 +37,18 @@ import org.apache.juneau.serializer.*;
  * The easiest way to create instances of this class is through the {@link HtmlSerializer#getSchemaSerializer()},
  * which will create a schema serializer with the same settings as the originating serializer.
  */
+@ConfigurableContext
 public class HtmlSchemaSerializer extends HtmlSerializer {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "HtmlSchemaSerializer";
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined instances
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, all default settings.*/
 	public static final HtmlSchemaSerializer DEFAULT = new HtmlSchemaSerializer(PropertyStore.DEFAULT);

@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
 
@@ -42,6 +43,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'>{@doc juneau-marshall-rdf}
  * </ul>
  */
+@ConfigurableContext(prefixes={RdfCommon.PREFIX,RdfParser.PREFIX})
 public class RdfParser extends ReaderParser implements RdfCommon {
 
 	private static final Namespace
@@ -52,7 +54,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "RdfParser.";
+	static final String PREFIX = "RdfParser";
 
 	/**
 	 * Configuration property:  Trim whitespace from text elements.
@@ -91,7 +93,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String RDF_trimWhitespace = PREFIX + "trimWhitespace.b";
+	public static final String RDF_trimWhitespace = PREFIX + ".trimWhitespace.b";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

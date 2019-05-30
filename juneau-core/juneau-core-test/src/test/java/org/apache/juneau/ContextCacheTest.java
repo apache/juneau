@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
+import org.apache.juneau.annotation.*;
 import org.junit.*;
 
 /**
@@ -122,7 +123,7 @@ public class ContextCacheTest {
 		assertTrue(a != a2);
 	}
 
-
+	@ConfigurableContext
 	public static class A extends Context {
 		public final String f1;
 
@@ -142,6 +143,7 @@ public class ContextCacheTest {
 		}
 	}
 
+	@ConfigurableContext
 	public static class B extends A {
 		public int f2;
 
@@ -152,6 +154,7 @@ public class ContextCacheTest {
 		}
 	}
 
+	@ConfigurableContext
 	public static class C extends B {
 		public boolean f3;
 		public C(PropertyStore ps) {

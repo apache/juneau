@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
@@ -41,6 +42,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='link'>{@doc juneau-marshall-rdf}
  * </ul>
  */
+@ConfigurableContext(prefixes={RdfCommon.PREFIX,RdfSerializer.PREFIX})
 public class RdfSerializer extends WriterSerializer implements RdfCommon {
 
 	private static final Namespace
@@ -51,7 +53,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "RdfSerializer.";
+	static final String PREFIX = "RdfSerializer";
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
@@ -77,7 +79,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String RDF_addBeanTypes = PREFIX + "addBeanTypes.b";
+	public static final String RDF_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
@@ -95,7 +97,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 		</ul>
 	 * </ul>
 	 */
-	public static final String RDF_addLiteralTypes = PREFIX + "addLiteralTypes.b";
+	public static final String RDF_addLiteralTypes = PREFIX + ".addLiteralTypes.b";
 
 	/**
 	 * Configuration property:  Add RDF root identifier property to root node.
@@ -123,7 +125,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to
 	 * identify root notes, which can introduce a considerable performance degradation.
 	 */
-	public static final String RDF_addRootProperty = PREFIX + "addRootProperty.b";
+	public static final String RDF_addRootProperty = PREFIX + ".addRootProperty.b";
 
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
@@ -148,7 +150,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
 	 * the root element is serialized.
 	 */
-	public static final String RDF_autoDetectNamespaces = PREFIX + "autoDetectNamespaces.b";
+	public static final String RDF_autoDetectNamespaces = PREFIX + ".autoDetectNamespaces.b";
 
 	/**
 	 * Configuration property:  Default namespaces.
@@ -173,7 +175,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 */
-	public static final String RDF_namespaces = PREFIX + "namespaces.ls";
+	public static final String RDF_namespaces = PREFIX + ".namespaces.ls";
 
 	/**
 	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
@@ -194,7 +196,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
 	 * <br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 */
-	public static final String RDF_useXmlNamespaces = PREFIX + "useXmlNamespaces.b";
+	public static final String RDF_useXmlNamespaces = PREFIX + ".useXmlNamespaces.b";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

@@ -24,6 +24,7 @@ import java.nio.file.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -32,13 +33,14 @@ import org.apache.juneau.internal.*;
  * <p>
  * Points to a file system directory containing configuration files.
  */
+@ConfigurableContext
 public class ConfigFileStore extends ConfigStore {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "ConfigFileStore.";
+	static final String PREFIX = "ConfigFileStore";
 
 	/**
 	 * Configuration property:  Local file system directory.
@@ -59,7 +61,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * <p>
 	 * Identifies the path of the directory containing the configuration files.
 	 */
-	public static final String FILESTORE_directory = PREFIX + "directory.s";
+	public static final String FILESTORE_directory = PREFIX + ".directory.s";
 
 	/**
 	 * Configuration property:  Charset.
@@ -80,7 +82,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * <p>
 	 * Identifies the charset of external files.
 	 */
-	public static final String FILESTORE_charset = PREFIX + "charset.s";
+	public static final String FILESTORE_charset = PREFIX + ".charset.s";
 
 	/**
 	 * Configuration property:  Use watcher.
@@ -105,7 +107,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * 	<li>Calling {@link #close()} on this object closes the watcher.
 	 * </ul>
 	 */
-	public static final String FILESTORE_useWatcher = PREFIX + "useWatcher.s";
+	public static final String FILESTORE_useWatcher = PREFIX + ".useWatcher.s";
 
 	/**
 	 * Configuration property:  Watcher sensitivity.
@@ -131,7 +133,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * 	<li>This relies on internal Sun packages and may not work on all JVMs.
 	 * </ul>
 	 */
-	public static final String FILESTORE_watcherSensitivity = PREFIX + "watcherSensitivity.s";
+	public static final String FILESTORE_watcherSensitivity = PREFIX + ".watcherSensitivity.s";
 
 	/**
 	 * Configuration property:  Update-on-write.
@@ -155,7 +157,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * polling watchers.
 	 * <br>This may cause double-triggering of {@link ConfigStoreListener ConfigStoreListeners}.
 	 */
-	public static final String FILESTORE_updateOnWrite = PREFIX + "updateOnWrite.b";
+	public static final String FILESTORE_updateOnWrite = PREFIX + ".updateOnWrite.b";
 
 	/**
 	 * Configuration property:  File extensions.
@@ -175,7 +177,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * <p>
 	 * Defines what file extensions to search for when the config name does not have an extension.
 	 */
-	public static final String FILESTORE_extensions = PREFIX + "extensions.ls";
+	public static final String FILESTORE_extensions = PREFIX + ".extensions.ls";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances

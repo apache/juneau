@@ -13,6 +13,7 @@
 package org.apache.juneau.xmlschema;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
@@ -29,7 +30,14 @@ import org.apache.juneau.xml.*;
  *
  * Produces the XML-schema representation of the XML produced by the {@link XmlSerializer} class with the same properties.
  */
+@ConfigurableContext
 public class XmlSchemaSerializer extends XmlSerializer {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "XmlSchemaSerializer";
 
 	/**
 	 * Constructor.

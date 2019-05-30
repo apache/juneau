@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xmlschema.XmlSchemaSerializer;
@@ -109,13 +110,14 @@ import org.apache.juneau.xmlschema.XmlSchemaSerializer;
  * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.
  * </ul>
  */
+@ConfigurableContext
 public class XmlSerializer extends WriterSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "XmlSerializer.";
+	static final String PREFIX = "XmlSerializer";
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
@@ -141,7 +143,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String XML_addBeanTypes = PREFIX + "addBeanTypes.b";
+	public static final String XML_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Add namespace URLs to the root element.
@@ -171,7 +173,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>
 	 */
-	public static final String XML_addNamespaceUrisToRoot = PREFIX + "addNamespaceUrisToRoot.b";
+	public static final String XML_addNamespaceUrisToRoot = PREFIX + ".addNamespaceUrisToRoot.b";
 
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
@@ -216,7 +218,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>
 	 */
-	public static final String XML_autoDetectNamespaces = PREFIX + "autoDetectNamespaces.b";
+	public static final String XML_autoDetectNamespaces = PREFIX + ".autoDetectNamespaces.b";
 
 	/**
 	 * Configuration property:  Default namespace.
@@ -242,7 +244,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>
 	 */
-	public static final String XML_defaultNamespace = PREFIX + "defaultNamespace.s";
+	public static final String XML_defaultNamespace = PREFIX + ".defaultNamespace.s";
 
 	/**
 	 * Configuration property:  Enable support for XML namespaces.
@@ -268,7 +270,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>
 	 */
-	public static final String XML_enableNamespaces = PREFIX + "enableNamespaces.b";
+	public static final String XML_enableNamespaces = PREFIX + ".enableNamespaces.b";
 
 	/**
 	 * Configuration property:  Default namespaces.
@@ -294,7 +296,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>
 	 */
-	public static final String XML_namespaces = PREFIX + "namespaces.ls";
+	public static final String XML_namespaces = PREFIX + ".namespaces.ls";
 
 	/**
 	 * Configuration property:  XMLSchema namespace.
@@ -321,7 +323,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>
 	 */
-	public static final String XML_xsNamespace = PREFIX + "xsNamespace.s";
+	public static final String XML_xsNamespace = PREFIX + ".xsNamespace.s";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

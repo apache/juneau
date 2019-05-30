@@ -13,17 +13,19 @@
 package org.apache.juneau.serializer;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
  */
+@ConfigurableContext
 public abstract class OutputStreamSerializer extends Serializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "OutputStreamSerializer.";
+	static final String PREFIX = "OutputStreamSerializer";
 
 	/**
 	 * Configuration property:  Binary output format.
@@ -67,7 +69,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 * 	String msgPack = s.serializeToString(<jk>new</jk> MyBean());
 	 * </p>
 	 */
-	public static final String OSSERIALIZER_binaryFormat = PREFIX + "binaryFormat.s";
+	public static final String OSSERIALIZER_binaryFormat = PREFIX + ".binaryFormat.s";
 
 	static final OutputStreamSerializer DEFAULT = new OutputStreamSerializer(PropertyStore.create().build(), "", "") {
 		@Override

@@ -13,6 +13,7 @@
 package org.apache.juneau.xmlschema;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -29,7 +30,14 @@ import org.apache.juneau.serializer.*;
  * Same as {@link XmlSchemaSerializer}, except prepends <code><xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs>
  * <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt></code> to the response to make it a valid XML document.
  */
+@ConfigurableContext
 public class XmlSchemaDocSerializer extends XmlSchemaSerializer {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "XmlSchemaDocSerializer";
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods

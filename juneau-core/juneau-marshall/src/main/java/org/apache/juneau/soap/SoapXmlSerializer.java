@@ -13,6 +13,7 @@
 package org.apache.juneau.soap;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
@@ -29,13 +30,14 @@ import org.apache.juneau.xml.*;
  *
  * Essentially the same output as {@link XmlDocSerializer}, except wrapped in a standard SOAP envelope.
  */
+@ConfigurableContext
 public final class SoapXmlSerializer extends XmlSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "SoapXmlSerializer.";
+	static final String PREFIX = "SoapXmlSerializer";
 
 	/**
 	 * Configuration property:  The <code>SOAPAction</code> HTTP header value to set on responses.
@@ -51,7 +53,7 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	 * 		</ul>
 	 * </ul>
 	 */
-	public static final String SOAPXML_SOAPAction = PREFIX + "SOAPAction.s";
+	public static final String SOAPXML_SOAPAction = PREFIX + ".SOAPAction.s";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

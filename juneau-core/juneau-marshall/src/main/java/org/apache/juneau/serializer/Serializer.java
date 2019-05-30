@@ -38,13 +38,14 @@ import org.apache.juneau.internal.*;
  * Subclasses should extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer} depending on
  * whether it's a stream or character based serializer.
  */
+@ConfigurableContext
 public abstract class Serializer extends BeanTraverseContext {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "Serializer.";
+	static final String PREFIX = "Serializer";
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
@@ -104,7 +105,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	String json = s.serialize(m);
 	 * </p>
 	 */
-	public static final String SERIALIZER_addBeanTypes = PREFIX + "addBeanTypes.b";
+	public static final String SERIALIZER_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Add type attribute to root nodes.
@@ -160,7 +161,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 */
-	public static final String SERIALIZER_addRootType = PREFIX + "addRootType.b";
+	public static final String SERIALIZER_addRootType = PREFIX + ".addRootType.b";
 
 	/**
 	 * Configuration property:  Serializer listener.
@@ -223,7 +224,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String SERIALIZER_listener = PREFIX + "listener.c";
+	public static final String SERIALIZER_listener = PREFIX + ".listener.c";
 
 	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
@@ -264,7 +265,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String SERIALIZER_sortCollections = PREFIX + "sortCollections.b";
+	public static final String SERIALIZER_sortCollections = PREFIX + ".sortCollections.b";
 
 	/**
 	 * Configuration property:  Sort maps alphabetically.
@@ -305,7 +306,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String SERIALIZER_sortMaps = PREFIX + "sortMaps.b";
+	public static final String SERIALIZER_sortMaps = PREFIX + ".sortMaps.b";
 
 	/**
 	 * Configuration property:  Trim empty lists and arrays.
@@ -352,7 +353,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String SERIALIZER_trimEmptyCollections = PREFIX + "trimEmptyCollections.b";
+	public static final String SERIALIZER_trimEmptyCollections = PREFIX + ".trimEmptyCollections.b";
 
 	/**
 	 * Configuration property:  Trim empty maps.
@@ -396,7 +397,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String SERIALIZER_trimEmptyMaps = PREFIX + "trimEmptyMaps.b";
+	public static final String SERIALIZER_trimEmptyMaps = PREFIX + ".trimEmptyMaps.b";
 
 	/**
 	 * Configuration property:  Trim null bean property values.
@@ -439,7 +440,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.build();
 	 * </p>
 	 */
-	public static final String SERIALIZER_trimNullProperties = PREFIX + "trimNullProperties.b";
+	public static final String SERIALIZER_trimNullProperties = PREFIX + ".trimNullProperties.b";
 
 	/**
 	 * Configuration property:  Trim strings.
@@ -482,7 +483,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.toString(m);
 	 * </p>
 	 */
-	public static final String SERIALIZER_trimStrings = PREFIX + "trimStrings.b";
+	public static final String SERIALIZER_trimStrings = PREFIX + ".trimStrings.b";
 
 	/**
 	 * Configuration property:  URI context bean.
@@ -540,7 +541,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	}
 	 * </p>
 	 */
-	public static final String SERIALIZER_uriContext = PREFIX + "uriContext.s";
+	public static final String SERIALIZER_uriContext = PREFIX + ".uriContext.s";
 
 	/**
 	 * Configuration property:  URI relativity.
@@ -592,7 +593,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
 	 */
-	public static final String SERIALIZER_uriRelativity = PREFIX + "uriRelativity.s";
+	public static final String SERIALIZER_uriRelativity = PREFIX + ".uriRelativity.s";
 
 	/**
 	 * Configuration property:  URI resolution.
@@ -646,7 +647,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
 	 */
-	public static final String SERIALIZER_uriResolution = PREFIX + "uriResolution.s";
+	public static final String SERIALIZER_uriResolution = PREFIX + ".uriResolution.s";
 
 	/**
 	 * Configuration property:  Use whitespace.
@@ -688,7 +689,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 */
-	public static final String SERIALIZER_useWhitespace = PREFIX + "useWhitespace.b";
+	public static final String SERIALIZER_useWhitespace = PREFIX + ".useWhitespace.b";
 
 
 	static final Serializer DEFAULT = new Serializer(PropertyStore.create().build(), "", "") {

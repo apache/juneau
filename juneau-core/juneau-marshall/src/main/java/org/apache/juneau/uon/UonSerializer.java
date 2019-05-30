@@ -13,6 +13,7 @@
 package org.apache.juneau.uon;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
@@ -114,13 +115,14 @@ import org.apache.juneau.urlencoding.*;
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
  */
+@ConfigurableContext
 public class UonSerializer extends WriterSerializer implements HttpPartSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String PREFIX = "UonSerializer.";
+	static final String PREFIX = "UonSerializer";
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
@@ -146,7 +148,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 */
-	public static final String UON_addBeanTypes = PREFIX + "addBeanTypes.b";
+	public static final String UON_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
 	/**
 	 * Configuration property:  Encode non-valid URI characters.
@@ -195,7 +197,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 	String uon2 = s2.serialize(m)
 	 * </p>
 	 */
-	public static final String UON_encoding = PREFIX + "encoding.b";
+	public static final String UON_encoding = PREFIX + ".encoding.b";
 
 	/**
 	 * Configuration property:  Format to use for query/form-data/header values.
@@ -248,7 +250,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 	String uon2 = s2.serialize(m)
 	 * </p>
 	 */
-	public static final String UON_paramFormat = PREFIX + "paramFormat.s";
+	public static final String UON_paramFormat = PREFIX + ".paramFormat.s";
 
 
 	//-------------------------------------------------------------------------------------------------------------------

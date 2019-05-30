@@ -13,12 +13,20 @@
 package org.apache.juneau.csv;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
  * TODO - Work in progress.  CSV parser.
  */
+@ConfigurableContext
 public class CsvParser extends ReaderParser {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "CsvParser";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances

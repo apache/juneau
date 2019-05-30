@@ -20,6 +20,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
 import java.net.*;
+import java.net.URI;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
@@ -30,6 +31,7 @@ import org.apache.http.client.utils.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
@@ -66,6 +68,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 @SuppressWarnings("rawtypes")
+@ConfigurableContext(nocache=true)
 public class RestClient extends BeanContext implements Closeable {
 
 	//-------------------------------------------------------------------------------------------------------------------

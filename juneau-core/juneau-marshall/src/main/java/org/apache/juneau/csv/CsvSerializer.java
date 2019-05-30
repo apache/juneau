@@ -13,12 +13,20 @@
 package org.apache.juneau.csv;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**
  * TODO - Work in progress.  CSV serializer.
  */
+@ConfigurableContext
 public final class CsvSerializer extends WriterSerializer {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "CsvSerializer";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances

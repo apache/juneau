@@ -13,6 +13,7 @@
 package org.apache.juneau.msgpack;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -22,7 +23,14 @@ import org.apache.juneau.parser.*;
  *
  * Handles <code>Content-Type</code> types:  <code><b>octal/msgpack</b></code>
  */
+@ConfigurableContext
 public class MsgPackParser extends InputStreamParser {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Configurable properties
+	//-------------------------------------------------------------------------------------------------------------------
+
+	static final String PREFIX = "MsgPackParser";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
