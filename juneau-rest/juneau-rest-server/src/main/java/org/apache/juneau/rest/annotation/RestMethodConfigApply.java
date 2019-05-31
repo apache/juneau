@@ -14,17 +14,20 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.RestMethodContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
-
+import static org.apache.juneau.html.HtmlDocSerializer.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -192,5 +195,14 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 
 		if (a.priority() != 0)
 			psb.set(RESTMETHOD_priority, a.priority());
+
+		HtmlDoc hd = a.htmldoc();
+		new HtmlDocBuilder(psb).process(hd);
+		for (Class<? extends Widget> wc : hd.widgets()) {
+			Widget w = castOrCreate(Widget.class, wc);
+			psb.addTo(REST_widgets, w);
+			psb.addTo(HTMLDOC_script, "$W{"+w.getName()+".script}");
+			psb.addTo(HTMLDOC_script, "$W{"+w.getName()+".style}");
+		}
 	}
 }

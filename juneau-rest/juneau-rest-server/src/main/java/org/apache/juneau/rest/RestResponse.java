@@ -244,7 +244,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	@Deprecated
 	public HtmlDocBuilder getHtmlDocBuilder() {
 		if (htmlDocBuilder == null)
-			htmlDocBuilder = new HtmlDocBuilder(properties);
+			htmlDocBuilder = new HtmlDocBuilder(PropertyStore.create());
 		return htmlDocBuilder;
 	}
 

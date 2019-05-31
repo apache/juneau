@@ -443,6 +443,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final Map<Class<?>,ResponsePartMeta> bodyPartMetas = new ConcurrentHashMap<>();
 	final ResponseBeanMeta responseMeta;
 
+	@SuppressWarnings("deprecation")
 	RestMethodContext(RestMethodContextBuilder b) throws ServletException {
 		super(b.getPropertyStore());
 
@@ -569,8 +570,12 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.priority = getIntegerProperty(RESTMETHOD_priority, 0);
 
+		Map<String,Widget> _widgets = new HashMap<>();
+		for (Widget w : getInstanceArrayProperty(REST_widgets, Widget.class, new Widget[0]))
+			_widgets.put(w.getName(), w);
+		this.widgets = unmodifiableMap(_widgets);
+
 		this.properties = b.properties;
-		this.widgets = unmodifiableMap(b.widgets);
 
 		this.supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
 		this.supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());

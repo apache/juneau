@@ -241,11 +241,23 @@ public abstract class ContextBuilder {
 	/**
 	 * Peeks at a configuration property on this object.
 	 *
-	 * @param name The property name.
+	 * @param key The property name.
 	 * @return This object (for method chaining).
 	 */
-	public Object peek(String name) {
-		return psb.peek(name);
+	public Object peek(String key) {
+		return psb.peek(key);
+	}
+
+	/**
+	 * Peeks at a configuration property on this object.
+	 *
+	 * @param c The type to convert to.
+	 * @param key The property name.
+	 * @return This object (for method chaining).
+	 * @param <T>
+	 */
+	public <T> T peek(Class<T> c, String key) {
+		return psb.peek(c, key);
 	}
 
 	/**

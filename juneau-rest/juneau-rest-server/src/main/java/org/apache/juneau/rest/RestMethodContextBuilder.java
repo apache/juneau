@@ -14,12 +14,9 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -31,9 +28,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	java.lang.reflect.Method method;
 
 	RestMethodProperties properties;
-	Map<String,Widget> widgets;
 
-	@SuppressWarnings("deprecation")
 	RestMethodContextBuilder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 		this.context = context;
 		this.method = method;
@@ -53,19 +48,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 			applyAnnotations(mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), vrs);
 
 			properties = new RestMethodProperties(context.getProperties());
-
-			HtmlDocBuilder hdb = new HtmlDocBuilder(properties);
-
-			HtmlDoc hd = m.htmldoc();
-			hdb.process(hd);
-
-			widgets = new HashMap<>(context.getWidgets());
-			for (Class<? extends Widget> wc : hd.widgets()) {
-				Widget w = castOrCreate(Widget.class, wc);
-				widgets.put(w.getName(), w);
-				hdb.script("INHERIT", "$W{"+w.getName()+".script}");
-				hdb.style("INHERIT", "$W{"+w.getName()+".style}");
-			}
 
 			if (m.properties().length > 0 || m.flags().length > 0) {
 				properties = new RestMethodProperties(properties);

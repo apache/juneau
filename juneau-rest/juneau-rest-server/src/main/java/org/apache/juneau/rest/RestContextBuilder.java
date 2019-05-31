@@ -28,7 +28,6 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -107,11 +106,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Config config;
 	VarResolverBuilder varResolverBuilder;
 
-	// This is being replaced with the @HtmlDocConfig annotation
-	@SuppressWarnings("deprecation")
-	HtmlDocBuilder htmlDocBuilder;
-
-	@SuppressWarnings("deprecation")
 	RestContextBuilder(ServletConfig servletConfig, Class<?> resourceClass, RestContext parentContext) throws ServletException {
 		this.inner = servletConfig;
 		this.resourceClass = resourceClass;
@@ -133,8 +127,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		);
 
 		try {
-
-			htmlDocBuilder = new HtmlDocBuilder(properties);
 
 			varResolverBuilder = new VarResolverBuilder()
 				.defaultVars()
@@ -187,10 +179,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 					set(vr.resolve(p.name()), vr.resolve(p.value()));
 				for (String p : r.flags())
 					set(p, true);
-
-				HtmlDoc hd = r.htmldoc();
-				widgets(hd.widgets());
-				htmlDocBuilder.process(hd);
 			}
 
 		} catch (Exception e) {
@@ -212,23 +200,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/*
 	 * Calls all @RestHook(INIT) methods on the specified resource object.
 	 */
-	@SuppressWarnings("deprecation")
 	RestContextBuilder init(Object resource) throws ServletException {
 		this.resource = resource;
 		ClassInfo rci = getClassInfo(resourceClass);
-
-		// >>> DEPRECATED - Remove in 9.0 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		// Once we have the resource object, we can construct the Widgets.
-		// We want to do that here so that we can update the script/style properties while they're still modifiable.
-		HtmlDocBuilder hdb = getHtmlDocBuilder();
-		PropertyStore ps = getPropertyStore();
-		Widget[] widgets = ps.getInstanceArrayProperty(REST_widgets, Widget.class, new Widget[0], ResourceResolver.FUZZY, ps, resource);
-		for (Widget w : widgets) {
-			hdb.script("INHERIT", "$W{"+w.getName()+".script}");
-			hdb.style("INHERIT", "$W{"+w.getName()+".style}");
-		}
-		widgetsReplace(widgets);
-		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 		Map<String,MethodInfo> map = new LinkedHashMap<>();
 		for (MethodInfo m : rci.getAllMethodsParentFirst()) {
@@ -325,18 +299,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public RestContextBuilder config(Config config) {
 		this.config = config;
 		return this;
-	}
-
-	/**
-	 * Returns an instance of an HTMLDOC builder for setting HTMLDOC-related properties.
-	 *
-	 * @return An instance of an HTMLDOC builder for setting HTMLDOC-related properties.
-	 *
-	 * @deprecated Use {@link HtmlDocConfig}
-	 */
-	@Deprecated
-	public HtmlDocBuilder getHtmlDocBuilder() {
-		return htmlDocBuilder;
 	}
 
 	/**

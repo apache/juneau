@@ -34,7 +34,6 @@ import org.apache.juneau.utils.*;
  * <p>
  * This class is instantiated through the following methods:
  * <ul>
- * 	<li class='jm'>{@link RestContextBuilder#getHtmlDocBuilder()} - Set values programmatically during servlet initialization.
  * 	<li class='jm'>{@link RestResponse#getHtmlDocBuilder()} - Set values programmatically during a REST request.
  * </ul>
  *
@@ -48,13 +47,23 @@ import org.apache.juneau.utils.*;
 @Deprecated
 public class HtmlDocBuilder {
 
-	private final ObjectMap properties;
+	private final PropertyStoreBuilder builder;
 
-	HtmlDocBuilder(ObjectMap properties) {
-		this.properties = properties;
+	/**
+	 * Constructor.
+	 *
+	 * @param builder
+	 */
+	public HtmlDocBuilder(PropertyStoreBuilder builder) {
+		this.builder = builder;
 	}
 
-	void process(HtmlDoc hd) {
+	/**
+	 * Processes the contents of an {@link HtmlDoc} tag.
+	 *
+	 * @param hd
+	 */
+	public void process(HtmlDoc hd) {
 		if (hd.header().length > 0)
 			header((Object[])hd.header());
 		if (hd.nav().length > 0)
@@ -117,7 +126,7 @@ public class HtmlDocBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder header(Object...value) {
-		return set(HTMLDOC_header, resolveList(value, properties.getStringArray(HTMLDOC_header)));
+		return set(HTMLDOC_header, resolveList(value, getStringArray(HTMLDOC_header)));
 	}
 
 	/**
@@ -155,7 +164,7 @@ public class HtmlDocBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder navlinks(Object...value) {
-		return set(HTMLDOC_navlinks, resolveLinks(value, properties.getStringArray(HTMLDOC_navlinks)));
+		return set(HTMLDOC_navlinks, resolveLinks(value, getStringArray(HTMLDOC_navlinks)));
 	}
 
 	/**
@@ -194,7 +203,7 @@ public class HtmlDocBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder nav(Object...value) {
-		return set(HTMLDOC_nav, resolveList(value, properties.getStringArray(HTMLDOC_nav)));
+		return set(HTMLDOC_nav, resolveList(value, getStringArray(HTMLDOC_nav)));
 	}
 
 	/**
@@ -230,7 +239,7 @@ public class HtmlDocBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder aside(Object...value) {
-		return set(HTMLDOC_aside, resolveList(value, properties.getStringArray(HTMLDOC_aside)));
+		return set(HTMLDOC_aside, resolveList(value, getStringArray(HTMLDOC_aside)));
 	}
 
 	/**
@@ -266,7 +275,7 @@ public class HtmlDocBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder footer(Object...value) {
-		return set(HTMLDOC_footer, resolveList(value, properties.getStringArray(HTMLDOC_footer)));
+		return set(HTMLDOC_footer, resolveList(value, getStringArray(HTMLDOC_footer)));
 	}
 
 	/**
@@ -299,7 +308,7 @@ public class HtmlDocBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder style(Object...value) {
-		return set(HTMLDOC_style, resolveList(value, properties.getStringArray(HTMLDOC_style)));
+		return set(HTMLDOC_style, resolveList(value, getStringArray(HTMLDOC_style)));
 	}
 
 	/**
@@ -331,7 +340,7 @@ public class HtmlDocBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder stylesheet(Object...value) {
-		return set(HTMLDOC_stylesheet, resolveSet(value, properties.getStringArray(HTMLDOC_nav)));
+		return set(HTMLDOC_stylesheet, resolveSet(value, getStringArray(HTMLDOC_nav)));
 	}
 
 	/**
@@ -364,7 +373,7 @@ public class HtmlDocBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder script(Object...value) {
-		return set(HTMLDOC_script, resolveList(value, properties.getStringArray(HTMLDOC_script)));
+		return set(HTMLDOC_script, resolveList(value, getStringArray(HTMLDOC_script)));
 	}
 
 	/**
@@ -396,7 +405,7 @@ public class HtmlDocBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder head(Object...value) {
-		return set(HTMLDOC_head, resolveList(value, properties.getStringArray(HTMLDOC_head)));
+		return set(HTMLDOC_head, resolveList(value, getStringArray(HTMLDOC_head)));
 	}
 
 	/**
@@ -538,7 +547,11 @@ public class HtmlDocBuilder {
 	}
 
 	private HtmlDocBuilder set(String key, Object value) {
-		properties.put(key, value);
+		builder.set(key, value);
 		return this;
+	}
+
+	private String[] getStringArray(String name) {
+		return builder.peek(String[].class, name);
 	}
 }
