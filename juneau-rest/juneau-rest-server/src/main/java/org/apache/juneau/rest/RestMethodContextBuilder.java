@@ -44,8 +44,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	boolean hasConfigAnnotations;
 
 	String httpMethod;
-	UrlPathPattern pathPattern;
-	RestMethodParam[] methodParams;
 	RestGuard[] guards;
 	RestMatcher[] optionalMatchers, requiredMatchers;
 	RestConverter[] converters;
@@ -119,11 +117,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				bcb = beanContext.builder();
 				jsgb = JsonSchemaGenerator.create();
 			}
-
-			//String p = trimTrailingSlashes(m.path());
-			String p = fixMethodPath(m.path());
-			if (isEmpty(p))
-				p = HttpUtils.detectHttpPath(method, true);
 
 			httpMethod = emptyIfNull(firstNonEmpty(m.name(), m.method())).toUpperCase(Locale.ENGLISH);
 			if (httpMethod.isEmpty())
@@ -257,14 +250,10 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				}
 			}
 
-			pathPattern = new UrlPathPattern(p);
-
 			if (bcb != null)
 				beanContext = bcb.build();
 			if (jsgb != null)
 				jsonSchemaGenerator = jsgb.build();
-
-			methodParams = context.findParams(mi, false, pathPattern);
 
 			// Need this to access methods in anonymous inner classes.
 			mi.setAccessible();

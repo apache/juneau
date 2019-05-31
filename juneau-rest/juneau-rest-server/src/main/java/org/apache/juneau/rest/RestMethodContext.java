@@ -23,6 +23,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
@@ -33,6 +34,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.internal.HttpUtils;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
@@ -54,6 +56,38 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	//-------------------------------------------------------------------------------------------------------------------
 
 	static final String PREFIX = "RestMethodContext";
+
+	/**
+	 * Configuration property:  Resource method path.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.path.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#path()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Identifies the URL subpath relative to the servlet class.
+	 *
+	 *
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This method is only applicable for Java methods.
+	 * 	<li>
+	 * 		Slashes are trimmed from the path ends.
+	 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_path = PREFIX + ".path.s";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -95,7 +129,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final Map<Class<?>,ResponsePartMeta> bodyPartMetas = new ConcurrentHashMap<>();
 	final ResponseBeanMeta responseMeta;
 
-	RestMethodContext(RestMethodContextBuilder b) {
+	RestMethodContext(RestMethodContextBuilder b) throws ServletException {
 		super(b.getPropertyStore());
 
 		this.context = b.context;
@@ -124,8 +158,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.responseMeta = ResponseBeanMeta.create(info, ps);
 
-		this.pathPattern = b.pathPattern;
-		this.methodParams = b.methodParams;
+		this.pathPattern = new UrlPathPattern(getProperty(RESTMETHOD_path, String.class, HttpUtils.detectHttpPath(method, true)));
+
+		this.methodParams = context.findParams(info, false, pathPattern);
+
 		this.guards = b.guards;
 		this.optionalMatchers = b.optionalMatchers;
 		this.requiredMatchers = b.requiredMatchers;

@@ -16,6 +16,7 @@ import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
+import static org.apache.juneau.rest.RestMethodContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.util.*;
@@ -135,6 +136,9 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 
 		if (! a.maxInput().isEmpty())
 			psb.set(REST_maxInput, string(a.maxInput()));
+
+		if (! a.path().isEmpty())
+			psb.set(RESTMETHOD_path, string(a.path()));
 
 		if (! a.rolesDeclared().isEmpty())
 			psb.set(REST_rolesDeclared, string(a.rolesDeclared()));
