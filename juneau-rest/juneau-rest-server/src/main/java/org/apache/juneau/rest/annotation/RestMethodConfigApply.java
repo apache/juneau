@@ -189,5 +189,8 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 
 		if (! a.name().isEmpty())
 			psb.set(RESTMETHOD_httpMethod, a.name());
+
+		if (a.priority() != 0)
+			psb.set(RESTMETHOD_priority, a.priority());
 	}
 }

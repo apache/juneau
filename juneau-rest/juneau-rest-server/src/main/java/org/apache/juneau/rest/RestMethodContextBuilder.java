@@ -17,8 +17,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
-import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;
@@ -31,13 +29,9 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 	RestContext context;
 	java.lang.reflect.Method method;
-	boolean hasConfigAnnotations;
 
 	RestMethodProperties properties;
-	Integer priority;
 	Map<String,Widget> widgets;
-	List<MediaType> supportedAcceptTypes, supportedContentTypes;
-	ResponseBeanMeta responseMeta;
 
 	@SuppressWarnings("deprecation")
 	RestMethodContextBuilder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
@@ -56,14 +50,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 			VarResolver vr = context.getVarResolver();
 			VarResolverSession vrs = vr.createSession();
 
-			// If this method doesn't have any config annotations (e.g. @BeanConfig), then we want to
-			// reuse the serializers/parsers on the class.
-			for (AnnotationInfo<?> ai : mi.getAnnotationListMethodOnlyParentFirst(ConfigAnnotationFilter.INSTANCE)) {
-				hasConfigAnnotations = ! ai.isType(RestMethod.class);
-				if (hasConfigAnnotations)
-					break;
-			}
-
 			applyAnnotations(mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), vrs);
 
 			properties = new RestMethodProperties(context.getProperties());
@@ -81,8 +67,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				hdb.style("INHERIT", "$W{"+w.getName()+".style}");
 			}
 
-			priority = m.priority();
-
 			if (m.properties().length > 0 || m.flags().length > 0) {
 				properties = new RestMethodProperties(properties);
 				for (Property p1 : m.properties())
@@ -91,8 +75,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 					properties.put(p1, true);
 			}
 
-			// Need this to access methods in anonymous inner classes.
-			mi.setAccessible();
 		} catch (RestServletException e) {
 			throw e;
 		} catch (Exception e) {

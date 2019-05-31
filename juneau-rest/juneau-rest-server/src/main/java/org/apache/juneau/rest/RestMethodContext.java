@@ -367,7 +367,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <p>
 	 * Identifies the URL subpath relative to the servlet class.
 	 *
-	 *
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -379,6 +378,32 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * </ul>
 	 */
 	public static final String RESTMETHOD_path = PREFIX + ".path.s";
+
+	/**
+	 * Configuration property:  Priority
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.priority.i"</js>
+	 * 	<li><b>Data type:</b>  <code>Integer</code>
+	 * 	<li><b>Default:</b>  <code>0</code>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#priority()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * URL path pattern priority.
+	 *
+	 * <p>
+	 * To force path patterns to be checked before other path patterns, use a higher priority number.
+	 *
+	 * <p>
+	 * By default, it's <code>0</code>, which means it will use an internal heuristic to determine a best match.
+	 */
+	public static final String RESTMETHOD_priority = PREFIX + ".priority.i";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -395,7 +420,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	private final Integer priority;
 	private final RestContext context;
 	final java.lang.reflect.Method method;
-	final MethodInfo info;
+	final MethodInfo mi;
 	final SerializerGroup serializers;
 	final ParserGroup parsers;
 	final EncoderGroup encoders;
@@ -423,7 +448,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.context = b.context;
 		this.method = b.method;
-		this.info = MethodInfo.of(method);
+		this.mi = MethodInfo.of(method);
+
+		// Need this to access methods in anonymous inner classes.
+		mi.setAccessible();
 
 		PropertyStore ps = getPropertyStore();
 		ResourceResolver rr = context.getResourceResolver();
@@ -461,11 +489,11 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.partSerializer = context.getPartSerializer();
 
-		this.responseMeta = ResponseBeanMeta.create(info, ps);
+		this.responseMeta = ResponseBeanMeta.create(mi, ps);
 
 		this.pathPattern = new UrlPathPattern(getProperty(RESTMETHOD_path, String.class, HttpUtils.detectHttpPath(method, true)));
 
-		this.methodParams = context.findParams(info, false, pathPattern);
+		this.methodParams = context.findParams(mi, false, pathPattern);
 
 		this.converters = getInstanceArrayProperty(REST_converters, RestConverter.class, new RestConverter[0], rr, r, this);
 
@@ -480,7 +508,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		}
 		String clientVersion = getProperty(RESTMETHOD_clientVersion, String.class, null);
 		if (clientVersion != null)
-			requiredMatchers.add(new ClientVersionMatcher(context.getClientVersionHeader(), info));
+			requiredMatchers.add(new ClientVersionMatcher(context.getClientVersionHeader(), mi));
 
 		this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
 		this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
@@ -539,8 +567,9 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.defaultQuery = Collections.unmodifiableMap(_defaultQuery);
 		this.defaultFormData = Collections.unmodifiableMap(_defaultFormData);
 
+		this.priority = getIntegerProperty(RESTMETHOD_priority, 0);
+
 		this.properties = b.properties;
-		this.priority = b.priority;
 		this.widgets = unmodifiableMap(b.widgets);
 
 		this.supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
@@ -690,7 +719,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			} catch (Exception e) {
 				throw new BadRequest(e,
 					"Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.",
-					methodParams[i].getParamType().name(), methodParams[i].getName(), methodParams[i].getType(), info.getDeclaringClass().getFullName(), info.getSimpleName()
+					methodParams[i].getParamType().name(), methodParams[i].getName(), methodParams[i].getType(), mi.getDeclaringClass().getFullName(), mi.getSimpleName()
 				);
 			}
 		}
@@ -729,7 +758,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		} catch (IllegalArgumentException e) {
 			throw new BadRequest(e,
 				"Invalid argument type passed to the following method: ''{0}''.\n\tArgument types: {1}",
-				info.toString(), info.getFullName()
+				mi.toString(), mi.getFullName()
 			);
 		} catch (InvocationTargetException e) {
 			Throwable e2 = e.getTargetException();		// Get the throwable thrown from the doX() method.
