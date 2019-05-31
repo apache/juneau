@@ -65,7 +65,6 @@ final class SwaggerGenerator {
 
 	private final RestRequest req;
 	private final VarResolverSession vr;
-	private final BeanSession bs;
 	private final Locale locale;
 	private final RestContext context;
 	private final JsonParser jp = JsonParser.create().ignoreUnknownBeanProperties().build();
@@ -87,11 +86,6 @@ final class SwaggerGenerator {
 		this.c = context.getResource().getClass();
 		this.resource = context.getResource();
 		this.mb = context.getMessages();
-
-		BeanSession bs = req.getBeanSession();
-		if (bs == null)
-			bs = BeanContext.DEFAULT.createBeanSession();
-		this.bs = bs;
 	}
 
 	/**
@@ -227,6 +221,8 @@ final class SwaggerGenerator {
 			// Skip it if user doesn't have access.
 			if (! sm.isRequestAllowed(req))
 				continue;
+
+			BeanSession bs = sm.createBeanSession();
 
 			Method m = sm.method;
 			MethodInfo mi = getMethodInfo(m);
@@ -368,10 +364,10 @@ final class SwaggerGenerator {
 						param.put("required", true);
 
 					if (in == BODY) {
-						param.appendSkipEmpty("schema", getSchema(param.getObjectMap("schema"), mp.getType()));
+						param.appendSkipEmpty("schema", getSchema(param.getObjectMap("schema"), mp.getType(), bs));
 						addBodyExamples(sm, param, false, mp.getType());
 					} else {
-						mergePartSchema(param, getSchema(param.getObjectMap("schema"), mp.getType()));
+						mergePartSchema(param, getSchema(param.getObjectMap("schema"), mp.getType(), bs));
 						addParamExample(sm, param, in, mp.getType());
 					}
 				}
@@ -391,7 +387,7 @@ final class SwaggerGenerator {
 							ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
 							merge(om, a);
 							if (! om.containsKey("schema"))
-								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), eci.inner()));
+								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), eci.inner(), bs));
 						}
 					}
 					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {
@@ -401,7 +397,7 @@ final class SwaggerGenerator {
 							for (Integer code : codes) {
 								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
 								merge(header, a);
-								mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType()));
+								mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType(), bs));
 							}
 						}
 					}
@@ -416,7 +412,7 @@ final class SwaggerGenerator {
 						ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
 						merge(om, a);
 						if (! om.containsKey("schema"))
-							om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), m.getGenericReturnType()));
+							om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), m.getGenericReturnType(), bs));
 						addBodyExamples(sm, om, true, m.getGenericReturnType());
 					}
 				}
@@ -428,7 +424,7 @@ final class SwaggerGenerator {
 							for (Integer code : codes) {
 								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
 								merge(header, a);
-								mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType()));
+								mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType(), bs));
 							}
 						}
 					}
@@ -436,7 +432,7 @@ final class SwaggerGenerator {
 			} else if (m.getGenericReturnType() != void.class) {
 				ObjectMap om = responses.getObjectMap("200", true);
 				if (! om.containsKey("schema"))
-					om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), m.getGenericReturnType()));
+					om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), m.getGenericReturnType(), bs));
 				addBodyExamples(sm, om, true, m.getGenericReturnType());
 			}
 
@@ -453,7 +449,7 @@ final class SwaggerGenerator {
 						for (Integer code : codes) {
 							ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(mp.name, true);
 							merge(header, a);
-							mergePartSchema(header, getSchema(header, Value.getParameterType(mp.type)));
+							mergePartSchema(header, getSchema(header, Value.getParameterType(mp.type), bs));
 						}
 					}
 
@@ -471,7 +467,7 @@ final class SwaggerGenerator {
 						for (String code : responses.keySet()) {
 							ObjectMap om = responses.getObjectMap(code);
 							if (! om.containsKey("schema"))
-								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), type));
+								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), type, bs));
 						}
 					}
 				}
@@ -739,7 +735,10 @@ final class SwaggerGenerator {
 		return nullIfEmpty(ol);
 	}
 
-	private ObjectMap getSchema(ObjectMap schema, Type type) throws Exception {
+	private ObjectMap getSchema(ObjectMap schema, Type type, BeanSession bs) throws Exception {
+
+		if (type == Swagger.class)
+			return null;
 
 		schema = newMap(schema);
 

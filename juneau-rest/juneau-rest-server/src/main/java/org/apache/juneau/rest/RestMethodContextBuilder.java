@@ -25,11 +25,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.*;
@@ -52,8 +50,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	RestMatcher[] optionalMatchers, requiredMatchers;
 	RestConverter[] converters;
 	EncoderGroup encoders;
-	HttpPartParser partParser;
-	HttpPartSerializer partSerializer;
 	JsonSchemaGenerator jsonSchemaGenerator;
 	BeanContext beanContext;
 	RestMethodProperties properties;
@@ -91,8 +87,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 			applyAnnotations(mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), vrs);
 
-			partSerializer = context.getPartSerializer();
-			partParser = context.getPartParser();
 			jsonSchemaGenerator = context.getJsonSchemaGenerator();
 			beanContext = context.getBeanContext();
 			encoders = context.getEncoders();
@@ -112,7 +106,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				hdb.style("INHERIT", "$W{"+w.getName()+".style}");
 			}
 
-			ParserBuilder uepb = null;
 			BeanContextBuilder bcb = null;
 			JsonSchemaGeneratorBuilder jsgb = null;
 			PropertyStore cps = context.getPropertyStore();
@@ -123,7 +116,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 			if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
 					|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpi().length > 0
 					|| m.bpx().length > 0 || hasConfigAnnotations) {
-				uepb = Parser.create();
 				bcb = beanContext.builder();
 				jsgb = JsonSchemaGenerator.create();
 			}
@@ -176,12 +168,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				psb.applyAnnotations(configAnnotationList, sr);
 
 			this.propertyStore = psb.build();
-
-			if (uepb != null) {
-				uepb.apply(propertyStore);
-				uepb.beanFilters(mBeanFilters);
-				uepb.pojoSwaps(mPojoSwaps);
-			}
 
 			if (bcb != null) {
 				bcb.apply(propertyStore);
@@ -273,14 +259,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 			pathPattern = new UrlPathPattern(p);
 
-			if (uepb != null && partParser instanceof Parser) {
-				Parser pp = (Parser)partParser;
-				partParser = (HttpPartParser)pp
-					.builder()
-					.apply(uepb.getPropertyStore())
-					.applyAnnotations(configAnnotationList, sr)
-					.build();
-			}
 			if (bcb != null)
 				beanContext = bcb.build();
 			if (jsgb != null)

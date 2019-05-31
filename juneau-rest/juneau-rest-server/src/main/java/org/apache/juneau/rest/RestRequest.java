@@ -180,7 +180,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.restJavaMethod = rjm;
 		this.javaMethod = rjm.method;
 		this.properties = properties;
-		this.beanSession = rjm.beanContext.createSession();
+		this.beanSession = rjm.createSession();
 		this.pathParams
 			.parser(rjm.partParser);
 		this.queryParams

@@ -105,11 +105,22 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		PropertyStore ps = getPropertyStore();
 
-		defaultCharset = getProperty(REST_defaultCharset, String.class, context.getDefaultCharset());
-		maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, String.valueOf(context.getMaxInput())));
+		this.defaultCharset = getProperty(REST_defaultCharset, String.class, context.getDefaultCharset());
+
+		this.maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, String.valueOf(context.getMaxInput())));
 
 		this.serializers = SerializerGroup.create().append(getArrayProperty(REST_serializers, Object.class)).apply(ps).build();
+
 		this.parsers = ParserGroup.create().append(getArrayProperty(REST_parsers, Object.class)).apply(ps).build();
+
+		HttpPartParser hpp = context.getPartParser();
+		if (hpp instanceof Parser) {
+			Parser pp = (Parser)hpp;
+			hpp = (HttpPartParser)pp.builder().apply(ps).build();
+		}
+		this.partParser = hpp;
+
+		this.partSerializer = context.getPartSerializer();
 
 		this.responseMeta = ResponseBeanMeta.create(info, ps);
 
@@ -120,8 +131,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.requiredMatchers = b.requiredMatchers;
 		this.converters = b.converters;
 		this.encoders = b.encoders;
-		this.partParser = b.partParser;
-		this.partSerializer = b.partSerializer;
 		this.jsonSchemaGenerator = b.jsonSchemaGenerator;
 		this.beanContext = b.beanContext;
 		this.properties = b.properties;
