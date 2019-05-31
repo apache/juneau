@@ -22,12 +22,10 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.*;
@@ -44,8 +42,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	boolean hasConfigAnnotations;
 
 	String httpMethod;
-	EncoderGroup encoders;
-	JsonSchemaGenerator jsonSchemaGenerator;
 	BeanContext beanContext;
 	RestMethodProperties properties;
 	PropertyStore propertyStore;
@@ -82,9 +78,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 			applyAnnotations(mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), vrs);
 
-			jsonSchemaGenerator = context.getJsonSchemaGenerator();
 			beanContext = context.getBeanContext();
-			encoders = context.getEncoders();
 			properties = new RestMethodProperties(context.getProperties());
 			AnnotationList configAnnotationList = hasConfigAnnotations ? mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE) : context.getConfigAnnotationList();
 
@@ -102,7 +96,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 			}
 
 			BeanContextBuilder bcb = null;
-			JsonSchemaGeneratorBuilder jsgb = null;
 			PropertyStore cps = context.getPropertyStore();
 
 			Object[] mPojoSwaps = merge(cps.getArrayProperty(BEAN_pojoSwaps, Object.class), m.pojoSwaps());
@@ -112,7 +105,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 					|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpi().length > 0
 					|| m.bpx().length > 0 || hasConfigAnnotations) {
 				bcb = beanContext.builder();
-				jsgb = JsonSchemaGenerator.create();
 			}
 
 			httpMethod = emptyIfNull(firstNonEmpty(m.name(), m.method())).toUpperCase(Locale.ENGLISH);
@@ -142,12 +134,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				bcb.pojoSwaps(mPojoSwaps);
 			}
 
-			if (jsgb != null) {
-				jsgb.apply(propertyStore);
-				jsgb.beanFilters(mBeanFilters);
-				jsgb.pojoSwaps(mPojoSwaps);
-			}
-
 			if (m.properties().length > 0 || m.flags().length > 0) {
 				properties = new RestMethodProperties(properties);
 				for (Property p1 : m.properties())
@@ -156,18 +142,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 					properties.put(p1, true);
 			}
 
-			if (m.encoders().length > 0) {
-				EncoderGroupBuilder g = EncoderGroup.create().append(IdentityEncoder.INSTANCE);
-				for (Class<?> c : m.encoders()) {
-					try {
-						g.append(c);
-					} catch (Exception e) {
-						throw new RestServletException(
-							"Exception occurred while trying to instantiate ConfigEncoder on method ''{0}'': ''{1}''", sig, c.getSimpleName()).initCause(e);
-					}
-				}
-				encoders = g.build();
-			}
 
 			defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 			for (String s : m.defaultRequestHeaders()) {
@@ -226,8 +200,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 			if (bcb != null)
 				beanContext = bcb.build();
-			if (jsgb != null)
-				jsonSchemaGenerator = jsgb.build();
 
 			// Need this to access methods in anonymous inner classes.
 			mi.setAccessible();

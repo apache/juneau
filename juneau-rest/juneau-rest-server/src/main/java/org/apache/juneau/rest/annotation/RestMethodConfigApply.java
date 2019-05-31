@@ -64,7 +64,8 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		if (a.parsers().length > 0)
 			psb.set(REST_parsers, merge(ObjectUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
 
-		psb.addTo(REST_encoders, a.encoders());
+		if (a.encoders().length > 0)
+			psb.set(REST_encoders, merge(ObjectUtils.toType(psb.peek(REST_encoders), Object[].class), a.encoders()));
 
 		if (a.produces().length > 0)
 			psb.set(REST_produces, strings(a.produces()));

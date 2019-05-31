@@ -252,14 +252,24 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.info = MethodInfo.of(method);
 
 		PropertyStore ps = getPropertyStore();
+		ResourceResolver rr = context.getResourceResolver();
+		Object r = context.getResource();
 
 		this.defaultCharset = getProperty(REST_defaultCharset, String.class, context.getDefaultCharset());
 
 		this.maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, String.valueOf(context.getMaxInput())));
 
-		this.serializers = SerializerGroup.create().append(getArrayProperty(REST_serializers, Object.class)).apply(ps).build();
+		this.serializers = SerializerGroup
+			.create()
+			.append(getArrayProperty(REST_serializers, Object.class))
+			.apply(ps)
+			.build();
 
-		this.parsers = ParserGroup.create().append(getArrayProperty(REST_parsers, Object.class)).apply(ps).build();
+		this.parsers = ParserGroup
+			.create()
+			.append(getArrayProperty(REST_parsers, Object.class))
+			.apply(ps)
+			.build();
 
 		HttpPartParser hpp = context.getPartParser();
 		if (hpp instanceof Parser) {
@@ -276,12 +286,12 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.methodParams = context.findParams(info, false, pathPattern);
 
-		this.converters = getInstanceArrayProperty(REST_converters, RestConverter.class, new RestConverter[0], context.getResourceResolver(), context.getResource(), this);
+		this.converters = getInstanceArrayProperty(REST_converters, RestConverter.class, new RestConverter[0], rr, r, this);
 
-		this.guards = getInstanceArrayProperty(REST_guards, RestGuard.class, new RestGuard[0], context.getResourceResolver(), context.getResource(), this);
+		this.guards = getInstanceArrayProperty(REST_guards, RestGuard.class, new RestGuard[0], rr, r, this);
 
 		List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
-		for (RestMatcher matcher : getInstanceArrayProperty(RESTMETHOD_matchers, RestMatcher.class, new RestMatcher[0], context.getResourceResolver(), context.getResource(), this)) {
+		for (RestMatcher matcher : getInstanceArrayProperty(RESTMETHOD_matchers, RestMatcher.class, new RestMatcher[0], rr, r, this)) {
 			if (matcher.mustMatch())
 				requiredMatchers.add(matcher);
 			else
@@ -294,8 +304,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
 		this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
 
-		this.encoders = b.encoders;
-		this.jsonSchemaGenerator = b.jsonSchemaGenerator;
+		this.encoders = EncoderGroup
+			.create()
+			.append(IdentityEncoder.INSTANCE)
+			.append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], rr, r, this))
+			.build();
+
+		this.jsonSchemaGenerator = JsonSchemaGenerator.create().apply(ps).build();
+
 		this.beanContext = b.beanContext;
 		this.properties = b.properties;
 		this.propertyStore = b.propertyStore;
