@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
@@ -43,7 +42,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 	String httpMethod;
 	RestMethodProperties properties;
-	PropertyStore propertyStore;
 	Map<String,Object> defaultRequestHeaders, defaultQuery, defaultFormData;
 	Integer priority;
 	Map<String,Widget> widgets;
@@ -78,7 +76,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 			applyAnnotations(mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), vrs);
 
 			properties = new RestMethodProperties(context.getProperties());
-			AnnotationList configAnnotationList = hasConfigAnnotations ? mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE) : context.getConfigAnnotationList();
 
 			HtmlDocBuilder hdb = new HtmlDocBuilder(properties);
 
@@ -93,11 +90,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				hdb.style("INHERIT", "$W{"+w.getName()+".style}");
 			}
 
-			PropertyStore cps = context.getPropertyStore();
-
-			Object[] mPojoSwaps = merge(cps.getArrayProperty(BEAN_pojoSwaps, Object.class), m.pojoSwaps());
-			Object[] mBeanFilters = merge(cps.getArrayProperty(BEAN_beanFilters, Object.class), m.beanFilters());
-
 			httpMethod = emptyIfNull(firstNonEmpty(m.name(), m.method())).toUpperCase(Locale.ENGLISH);
 			if (httpMethod.isEmpty())
 				httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
@@ -105,19 +97,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				httpMethod = "*";
 
 			priority = m.priority();
-
-			VarResolverSession sr = vr.createSession();
-
-			PropertyStoreBuilder psb = PropertyStore.create().apply(context.getPropertyStore()).set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps);
-
-			for (Property p1 : m.properties())
-				psb.set(p1.name(), p1.value());
-			for (String p1 : m.flags())
-				psb.set(p1, true);
-			if (hasConfigAnnotations)
-				psb.applyAnnotations(configAnnotationList, sr);
-
-			this.propertyStore = psb.build();
 
 			if (m.properties().length > 0 || m.flags().length > 0) {
 				properties = new RestMethodProperties(properties);

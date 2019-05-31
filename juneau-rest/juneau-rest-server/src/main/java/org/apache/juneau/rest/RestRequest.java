@@ -410,7 +410,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public PropertyStore getPropertyStore() {
-		return restJavaMethod == null ? PropertyStore.DEFAULT : restJavaMethod.propertyStore;
+		return restJavaMethod == null ? PropertyStore.DEFAULT : restJavaMethod.getPropertyStore();
 	}
 
 	/**

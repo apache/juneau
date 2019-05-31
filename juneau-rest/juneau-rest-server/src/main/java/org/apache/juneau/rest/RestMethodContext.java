@@ -219,7 +219,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	private final RestContext context;
 	final java.lang.reflect.Method method;
 	final MethodInfo info;
-	final PropertyStore propertyStore;
 	final SerializerGroup serializers;
 	final ParserGroup parsers;
 	final EncoderGroup encoders;
@@ -312,7 +311,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.jsonSchemaGenerator = JsonSchemaGenerator.create().apply(ps).build();
 
 		this.properties = b.properties;
-		this.propertyStore = b.propertyStore;
 		this.defaultRequestHeaders = b.defaultRequestHeaders;
 		this.defaultQuery = b.defaultQuery;
 		this.defaultFormData = b.defaultFormData;
