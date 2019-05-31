@@ -183,5 +183,11 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 					"Invalid default form data parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
 			psb.addTo(RESTMETHOD_defaultFormData, h2[0], h2[1]);
 		}
+
+		if (! a.method().isEmpty())
+			psb.set(RESTMETHOD_httpMethod, a.method());
+
+		if (! a.name().isEmpty())
+			psb.set(RESTMETHOD_httpMethod, a.name());
 	}
 }

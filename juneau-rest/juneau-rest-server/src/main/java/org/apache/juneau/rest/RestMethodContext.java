@@ -42,7 +42,9 @@ import org.apache.juneau.internal.HttpUtils;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Method;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
@@ -249,6 +251,68 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	public static final String RESTMETHOD_defaultRequestHeaders = PREFIX + ".defaultRequestHeaders.smo";
 
 	/**
+	 * Configuration property:  HTTP method name.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.httpMethod.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#name()}
+	 * 			<li class='ja'>{@link RestMethod#method()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * REST method name.
+	 *
+	 * <p>
+	 * Typically <js>"GET"</js>, <js>"PUT"</js>, <js>"POST"</js>, <js>"DELETE"</js>, or <js>"OPTIONS"</js>.
+	 *
+	 * <p>
+	 * Method names are case-insensitive (always folded to upper-case).
+	 *
+	 * <p>
+	 * Note that you can use {@link org.apache.juneau.http.HttpMethodName} for constant values.
+	 *
+	 * <p>
+	 * Besides the standard HTTP method names, the following can also be specified:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"*"</js>
+	 * 		- Denotes any method.
+	 * 		<br>Use this if you want to capture any HTTP methods in a single Java method.
+	 * 		<br>The {@link Method @Method} annotation and/or {@link RestRequest#getMethod()} method can be used to
+	 * 		distinguish the actual HTTP method name.
+	 * 	<li>
+	 * 		<js>""</js>
+	 * 		- Auto-detect.
+	 * 		<br>The method name is determined based on the Java method name.
+	 * 		<br>For example, if the method is <code>doPost(...)</code>, then the method name is automatically detected
+	 * 		as <js>"POST"</js>.
+	 * 		<br>Otherwise, defaults to <js>"GET"</js>.
+	 * 	<li>
+	 * 		<js>"RRPC"</js>
+	 * 		- Remote-proxy interface.
+	 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the
+	 * 		{@link RemoteInterface @RemoteInterface} annotation) to be used as a remote proxy using
+	 * 		<code>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</code>.
+	 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
+	 * 		<br>Conceptually, this is simply a fancy <code>POST</code> against the url <js>"/{path}/{javaMethodName}"</js>
+	 * 		where the arguments are marshalled from the client to the server as an HTTP body containing an array of
+	 * 		objects, passed to the method as arguments, and then the resulting object is marshalled back to the client.
+	 * 	<li>
+	 * 		Anything else
+	 * 		- Overloaded non-HTTP-standard names that are passed in through a <code>&amp;method=methodName</code> URL
+	 * 		parameter.
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_httpMethod = PREFIX + ".httpMethod.s";
+
+	/**
 	 * Configuration property:  Method-level matchers.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -359,12 +423,18 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.context = b.context;
 		this.method = b.method;
-		this.httpMethod = b.httpMethod;
 		this.info = MethodInfo.of(method);
 
 		PropertyStore ps = getPropertyStore();
 		ResourceResolver rr = context.getResourceResolver();
 		Object r = context.getResource();
+
+		String _httpMethod = getProperty(RESTMETHOD_httpMethod, String.class, null);
+		if (_httpMethod == null)
+			_httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
+		if ("METHOD".equals(_httpMethod))
+			_httpMethod = "*";
+		this.httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
 
 		this.defaultCharset = getProperty(REST_defaultCharset, String.class, context.getDefaultCharset());
 

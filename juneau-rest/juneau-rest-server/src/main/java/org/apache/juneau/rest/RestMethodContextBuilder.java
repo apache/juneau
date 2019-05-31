@@ -13,14 +13,12 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;
@@ -35,7 +33,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	java.lang.reflect.Method method;
 	boolean hasConfigAnnotations;
 
-	String httpMethod;
 	RestMethodProperties properties;
 	Integer priority;
 	Map<String,Widget> widgets;
@@ -84,12 +81,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				hdb.style("INHERIT", "$W{"+w.getName()+".style}");
 			}
 
-			httpMethod = emptyIfNull(firstNonEmpty(m.name(), m.method())).toUpperCase(Locale.ENGLISH);
-			if (httpMethod.isEmpty())
-				httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
-			if ("METHOD".equals(httpMethod))
-				httpMethod = "*";
-
 			priority = m.priority();
 
 			if (m.properties().length > 0 || m.flags().length > 0) {
@@ -99,7 +90,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				for (String p1 : m.flags())
 					properties.put(p1, true);
 			}
-
 
 			// Need this to access methods in anonymous inner classes.
 			mi.setAccessible();
