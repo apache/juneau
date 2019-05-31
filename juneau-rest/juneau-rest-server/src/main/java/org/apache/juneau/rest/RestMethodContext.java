@@ -232,7 +232,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		defaultFormData;
 	final String defaultCharset;
 	final long maxInput;
-	final BeanContext beanContext;
 	final Map<String,Widget> widgets;
 	final List<MediaType>
 		supportedAcceptTypes,
@@ -312,7 +311,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.jsonSchemaGenerator = JsonSchemaGenerator.create().apply(ps).build();
 
-		this.beanContext = b.beanContext;
 		this.properties = b.properties;
 		this.propertyStore = b.propertyStore;
 		this.defaultRequestHeaders = b.defaultRequestHeaders;

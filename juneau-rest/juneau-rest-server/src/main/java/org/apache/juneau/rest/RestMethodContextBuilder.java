@@ -42,7 +42,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	boolean hasConfigAnnotations;
 
 	String httpMethod;
-	BeanContext beanContext;
 	RestMethodProperties properties;
 	PropertyStore propertyStore;
 	Map<String,Object> defaultRequestHeaders, defaultQuery, defaultFormData;
@@ -78,7 +77,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 			applyAnnotations(mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), vrs);
 
-			beanContext = context.getBeanContext();
 			properties = new RestMethodProperties(context.getProperties());
 			AnnotationList configAnnotationList = hasConfigAnnotations ? mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE) : context.getConfigAnnotationList();
 
@@ -95,17 +93,10 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				hdb.style("INHERIT", "$W{"+w.getName()+".style}");
 			}
 
-			BeanContextBuilder bcb = null;
 			PropertyStore cps = context.getPropertyStore();
 
 			Object[] mPojoSwaps = merge(cps.getArrayProperty(BEAN_pojoSwaps, Object.class), m.pojoSwaps());
 			Object[] mBeanFilters = merge(cps.getArrayProperty(BEAN_beanFilters, Object.class), m.beanFilters());
-
-			if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
-					|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpi().length > 0
-					|| m.bpx().length > 0 || hasConfigAnnotations) {
-				bcb = beanContext.builder();
-			}
 
 			httpMethod = emptyIfNull(firstNonEmpty(m.name(), m.method())).toUpperCase(Locale.ENGLISH);
 			if (httpMethod.isEmpty())
@@ -128,12 +119,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 			this.propertyStore = psb.build();
 
-			if (bcb != null) {
-				bcb.apply(propertyStore);
-				bcb.beanFilters(mBeanFilters);
-				bcb.pojoSwaps(mPojoSwaps);
-			}
-
 			if (m.properties().length > 0 || m.flags().length > 0) {
 				properties = new RestMethodProperties(properties);
 				for (Property p1 : m.properties())
@@ -141,7 +126,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				for (String p1 : m.flags())
 					properties.put(p1, true);
 			}
-
 
 			defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 			for (String s : m.defaultRequestHeaders()) {
@@ -197,9 +181,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 					}
 				}
 			}
-
-			if (bcb != null)
-				beanContext = bcb.build();
 
 			// Need this to access methods in anonymous inner classes.
 			mi.setAccessible();
