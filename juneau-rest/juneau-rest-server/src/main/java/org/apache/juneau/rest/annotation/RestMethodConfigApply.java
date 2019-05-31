@@ -96,6 +96,11 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 
 		psb.addTo(REST_guards, reverse(a.guards()));
 
+		psb.addTo(RESTMETHOD_matchers, a.matchers());
+
+		if (! a.clientVersion().isEmpty())
+			psb.set(RESTMETHOD_clientVersion, a.clientVersion());
+
 		psb.set(BEAN_beanFilters, merge(ObjectUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), a.beanFilters()));
 
 		psb.set(BEAN_pojoSwaps, merge(ObjectUtils.toType(psb.peek(BEAN_pojoSwaps), Object[].class), a.pojoSwaps()));

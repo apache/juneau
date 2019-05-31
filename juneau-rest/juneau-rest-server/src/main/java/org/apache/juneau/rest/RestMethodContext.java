@@ -58,6 +58,120 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	static final String PREFIX = "RestMethodContext";
 
 	/**
+	 * Configuration property:  Client version pattern matcher.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.clientVersion.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  empty string
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#clientVersion()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * Specifies whether this method can be called based on the client version.
+	 *
+	 * <p>
+	 * The client version is identified via the HTTP request header identified by
+	 * {@link RestResource#clientVersionHeader() @RestResource(clientVersionHeader)} which by default is <js>"X-Client-Version"</js>.
+	 *
+	 * <p>
+	 * This is a specialized kind of {@link RestMatcher} that allows you to invoke different Java methods for the same
+	 * method/path based on the client version.
+	 *
+	 * <p>
+	 * The format of the client version range is similar to that of OSGi versions.
+	 *
+	 * <p>
+	 * In the following example, the Java methods are mapped to the same HTTP method and URL <js>"/foobar"</js>.
+	 * <p class='bcode w800'>
+	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.
+	 * 	// Note that this also matches 2.0.1.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<jk>public</jk> Object method1()  {...}
+	 *
+	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
+	 * 	<jk>public</jk> Object method2()  {...}
+	 *
+	 * 	<jc>// Call this method if X-Client-Version is less than 1.1.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
+	 * 	<jk>public</jk> Object method3()  {...}
+	 * </p>
+	 *
+	 * <p>
+	 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for
+	 * backwards compatibility.
+	 * <p class='bcode w800'>
+	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<jk>public</jk> NewPojo newMethod()  {...}
+	 *
+	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
+	 * 	<jk>public</jk> NewPojo oldMethod() {
+	 * 		<jk>return</jk> newMethod();
+	 * 	}
+	 *
+	 * <p>
+	 * Note that in the previous example, we're returning the exact same POJO, but using a transform to convert it into
+	 * an older form.
+	 * The old method could also just return back a completely different object.
+	 * The range can be any of the following:
+	 * <ul>
+	 * 	<li><js>"[0,1.0)"</js> = Less than 1.0.  1.0 and 1.0.0 does not match.
+	 * 	<li><js>"[0,1.0]"</js> = Less than or equal to 1.0.  Note that 1.0.1 will match.
+	 * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_clientVersion = PREFIX + ".clientVersion.s";
+
+	/**
+	 * Configuration property:  Method-level matchers.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.matchers.lo"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;{@link RestMatcher} | Class&lt;? <jk>extends</jk> {@link RestMatcher}&gt;&gt;</code>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#matchers()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Associates one or more {@link RestMatcher RestMatchers} with the specified method.
+	 *
+	 * <p>
+	 * If multiple matchers are specified, <b>ONE</b> matcher must pass.
+	 * <br>Note that this is different than guards where <b>ALL</b> guards needs to pass.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.Matchers}
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_matchers = PREFIX + ".matchers.lo";
+
+	/**
 	 * Configuration property:  Resource method path.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -162,10 +276,24 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.methodParams = context.findParams(info, false, pathPattern);
 
-		this.guards = b.guards;
-		this.optionalMatchers = b.optionalMatchers;
-		this.requiredMatchers = b.requiredMatchers;
-		this.converters = b.converters;
+		this.converters = getInstanceArrayProperty(REST_converters, RestConverter.class, new RestConverter[0], context.getResourceResolver(), context.getResource(), this);
+
+		this.guards = getInstanceArrayProperty(REST_guards, RestGuard.class, new RestGuard[0], context.getResourceResolver(), context.getResource(), this);
+
+		List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
+		for (RestMatcher matcher : getInstanceArrayProperty(RESTMETHOD_matchers, RestMatcher.class, new RestMatcher[0], context.getResourceResolver(), context.getResource(), this)) {
+			if (matcher.mustMatch())
+				requiredMatchers.add(matcher);
+			else
+				optionalMatchers.add(matcher);
+		}
+		String clientVersion = getProperty(RESTMETHOD_clientVersion, String.class, null);
+		if (clientVersion != null)
+			requiredMatchers.add(new ClientVersionMatcher(context.getClientVersionHeader(), info));
+
+		this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
+		this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
+
 		this.encoders = b.encoders;
 		this.jsonSchemaGenerator = b.jsonSchemaGenerator;
 		this.beanContext = b.beanContext;

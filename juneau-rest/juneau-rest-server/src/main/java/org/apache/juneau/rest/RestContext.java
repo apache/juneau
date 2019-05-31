@@ -1080,7 +1080,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * If multiple guards are specified, <b>ALL</b> guards must pass.
-	 * <br>Note that this is different than matchers were only ONE matcher needs to pass.
+	 * <br>Note that this is different than matchers where only ONE matcher needs to pass.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

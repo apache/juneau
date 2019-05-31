@@ -44,9 +44,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	boolean hasConfigAnnotations;
 
 	String httpMethod;
-	RestGuard[] guards;
-	RestMatcher[] optionalMatchers, requiredMatchers;
-	RestConverter[] converters;
 	EncoderGroup encoders;
 	JsonSchemaGenerator jsonSchemaGenerator;
 	BeanContext beanContext;
@@ -125,29 +122,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				httpMethod = "*";
 
 			priority = m.priority();
-
-			converters = new RestConverter[m.converters().length];
-			for (int i = 0; i < converters.length; i++)
-				converters[i] = castOrCreate(RestConverter.class, m.converters()[i]);
-
-			guards = new RestGuard[m.guards().length];
-			for (int i = 0; i < guards.length; i++)
-				guards[i] = castOrCreate(RestGuard.class, m.guards()[i]);
-
-			List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
-			for (int i = 0; i < m.matchers().length; i++) {
-				Class<? extends RestMatcher> c = m.matchers()[i];
-				RestMatcher matcher = castOrCreate(RestMatcher.class, c, true, servlet, method);
-				if (matcher.mustMatch())
-					requiredMatchers.add(matcher);
-				else
-					optionalMatchers.add(matcher);
-			}
-			if (! m.clientVersion().isEmpty())
-				requiredMatchers.add(new ClientVersionMatcher(context.getClientVersionHeader(), mi));
-
-			this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
-			this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
 
 			VarResolverSession sr = vr.createSession();
 
