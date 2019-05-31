@@ -465,9 +465,9 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			_httpMethod = "*";
 		this.httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
 
-		this.defaultCharset = getProperty(REST_defaultCharset, String.class, context.getDefaultCharset());
+		this.defaultCharset = getProperty(REST_defaultCharset, String.class, "utf-8");
 
-		this.maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, String.valueOf(context.getMaxInput())));
+		this.maxInput = StringUtils.parseLongWithSuffix(getProperty(REST_maxInput, String.class, "100M"));
 
 		this.serializers = SerializerGroup
 			.create()
@@ -695,11 +695,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		req.init(this, requestProperties);
 		res.init(this, requestProperties);
-
-		// Class-level guards
-		for (RestGuard guard : context.getGuards())
-			if (! guard.guard(req, res))
-				return SC_UNAUTHORIZED;
 
 		// If the method implements matchers, test them.
 		for (RestMatcher m : requiredMatchers)

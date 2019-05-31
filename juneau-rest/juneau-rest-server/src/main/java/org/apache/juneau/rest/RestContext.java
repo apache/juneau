@@ -3139,18 +3139,10 @@ public final class RestContext extends BeanContext {
 		useClasspathResourceCaching,
 		debug;
 	private final String
-		defaultCharset,
 		clientVersionHeader,
 		uriAuthority,
 		uriContext;
-	private final long
-		maxInput;
-
 	final String fullPath;
-
-	// >>> DEPRECATED - Remove in 9.0 >>>
-	private final Map<String,Widget> widgets;
-	// <<<<<<
 
 	private final Set<String> allowedMethodParams;
 
@@ -3161,7 +3153,6 @@ public final class RestContext extends BeanContext {
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final JsonSchemaGenerator jsonSchemaGenerator;
-	private final EncoderGroup encoders;
 	private final List<MediaType>
 		consumes,
 		produces;
@@ -3170,8 +3161,6 @@ public final class RestContext extends BeanContext {
 		defaultResponseHeaders,
 		staticFileResponseHeaders;
 	private final BeanContext beanContext;
-	private final RestConverter[] converters;
-	private final RestGuard[] guards;
 	private final ResponseHandler[] responseHandlers;
 	private final MimetypesFileTypeMap mimetypesFileTypeMap;
 	private final StaticFileMapping[] staticFiles;
@@ -3304,12 +3293,8 @@ public final class RestContext extends BeanContext {
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces, false);
 			useStackTraceHashes = getBooleanProperty(REST_useStackTraceHashes, true);
 			debug = getBooleanProperty(REST_debug, super.isDebug());
-			defaultCharset = getStringProperty(REST_defaultCharset, "utf-8");
-			maxInput = getLongProperty(REST_maxInput, 100_000_000l);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
 
-			converters = getInstanceArrayProperty(REST_converters, resource, RestConverter.class, new RestConverter[0], resourceResolver, this);
-			guards = getInstanceArrayProperty(REST_guards, resource, RestGuard.class, new RestGuard[0], resourceResolver, this);
 			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], resourceResolver, this);
 
 			Map<Class<?>,RestMethodParam> _paramResolvers = new HashMap<>();
@@ -3360,7 +3345,6 @@ public final class RestContext extends BeanContext {
 				.create()
 				.apply(ps)
 				.build();
-			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], resourceResolver, resource, ps)).build();
 			beanContext = BeanContext.create().apply(ps).build();
 
 			mimetypesFileTypeMap = new ExtendedMimetypesFileTypeMap();
@@ -3393,12 +3377,12 @@ public final class RestContext extends BeanContext {
 
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 
-			// >>> DEPRECATED - Remove in 9.0 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-			Map<String,Widget> _widgets = new LinkedHashMap<>();
-			for (Widget w : getInstanceArrayProperty(REST_widgets, resource, Widget.class, new Widget[0], resourceResolver, ps))
-				_widgets.put(w.getName(), w);
-			this.widgets = unmodifiableMap(_widgets);
-			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+//			// >>> DEPRECATED - Remove in 9.0 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//			Map<String,Widget> _widgets = new LinkedHashMap<>();
+//			for (Widget w : getInstanceArrayProperty(REST_widgets, resource, Widget.class, new Widget[0], resourceResolver, ps))
+//				_widgets.put(w.getName(), w);
+//			this.widgets = unmodifiableMap(_widgets);
+//			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
@@ -4081,20 +4065,6 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * The widgets used for resolving <js>"$W{...}"<js> variables.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link #REST_widgets}
-	 * </ul>
-	 *
-	 * @return The var resolver widgets as a map with keys being the name returned by {@link Widget#getName()}.
-	 */
-	public Map<String,Widget> getWidgets() {
-		return widgets;
-	}
-
-	/**
 	 * Returns the logger to use for this resource.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -4378,36 +4348,6 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the default charset to use on requests and responses when not specified on the request.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
-	 * </ul>
-	 *
-	 * @return
-	 * 	The default charset.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public String getDefaultCharset() {
-		return defaultCharset;
-	}
-
-	/**
-	 * Returns the maximum request input size in bytes.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
-	 * </ul>
-	 *
-	 * @return The maximum request input size in bytes.
-	 */
-	public long getMaxInput() {
-		return maxInput;
-	}
-
-	/**
 	 * Returns the name of the client version header name used by this resource.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -4483,22 +4423,6 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the encoders associated with this resource.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_encoders}
-	 * </ul>
-	 *
-	 * @return
-	 * 	The encoders associated with this resource.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public EncoderGroup getEncoders() {
-		return encoders;
-	}
-
-	/**
 	 * Returns the explicit list of supported accept types for this resource.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -4562,38 +4486,6 @@ public final class RestContext extends BeanContext {
 	 */
 	public Map<String,Object> getDefaultResponseHeaders() {
 		return defaultResponseHeaders;
-	}
-
-	/**
-	 * Returns the converters associated with this resource at the class level.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_converters}
-	 * </ul>
-	 *
-	 * @return
-	 * 	The converters associated with this resource.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public RestConverter[] getConverters() {
-		return converters;
-	}
-
-	/**
-	 * Returns the guards associated with this resource at the class level.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_guards}
-	 * </ul>
-	 *
-	 * @return
-	 * 	The guards associated with this resource.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public RestGuard[] getGuards() {
-		return guards;
 	}
 
 	/**

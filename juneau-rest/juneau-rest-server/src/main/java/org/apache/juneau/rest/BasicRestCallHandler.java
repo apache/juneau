@@ -179,11 +179,6 @@ public class BasicRestCallHandler implements RestCallHandler {
 			}
 
 			if (res.hasOutput()) {
-
-				// Do any class-level transforming.
-				for (RestConverter converter : context.getConverters())
-					res.setOutput(converter.convert(req, res.getOutput()));
-
 				// Now serialize the output if there was any.
 				// Some subclasses may write to the OutputStream or Writer directly.
 				handleResponse(req, res);
