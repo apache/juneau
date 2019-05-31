@@ -16,9 +16,13 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.StringUtils.firstNonEmpty;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.rest.RestContext.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -134,6 +138,115 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * </ul>
 	 */
 	public static final String RESTMETHOD_clientVersion = PREFIX + ".clientVersion.s";
+
+	/**
+	 * Configuration property:  Default form data.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultFormData.omo"</js>
+	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
+	 * 	<li><b>Default:</b>  empty map
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#defaultFormData()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * Specifies default values for form-data parameters.
+	 *
+	 * <p>
+	 * Strings are of the format <js>"name=value"</js>.
+	 *
+	 * <p>
+	 * Affects values returned by {@link RestRequest#getFormData(String)} when the parameter is not present on the
+	 * request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo)  {...}
+	 * </p>
+	 */
+	public static final String RESTMETHOD_defaultFormData = PREFIX + ".defaultFormData.omo";
+
+	/**
+	 * Configuration property:  Default query parameters.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultQuery.omo"</js>
+	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
+	 * 	<li><b>Default:</b>  empty map
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#defaultQuery()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * Specifies default values for query parameters.
+	 *
+	 * <p>
+	 * Strings are of the format <js>"name=value"</js>.
+	 *
+	 * <p>
+	 * Affects values returned by {@link RestRequest#getQuery(String)} when the parameter is not present on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
+	 * </p>
+	 */
+	public static final String RESTMETHOD_defaultQuery = PREFIX + ".defaultQuery.omo";
+
+	/**
+	 * Configuration property:  Default request headers.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultRequestHeaders.smo"</js>
+	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#defaultRequestHeaders()}
+	 * 			<li class='ja'>{@link RestMethod#defaultAccept()}
+	 * 			<li class='ja'>{@link RestMethod#defaultContentType()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * Default request headers.
+	 *
+	 * <p>
+	 * Specifies default values for request headers if they're not passed in through the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_defaultRequestHeaders = PREFIX + ".defaultRequestHeaders.smo";
 
 	/**
 	 * Configuration property:  Method-level matchers.
@@ -310,10 +423,53 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.jsonSchemaGenerator = JsonSchemaGenerator.create().apply(ps).build();
 
+		Map<String,Object> _defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+		_defaultRequestHeaders.putAll(getMapProperty(RESTMETHOD_defaultRequestHeaders, Object.class));
+
+		Map<String,Object> _defaultQuery = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultQuery, Object.class));
+
+		Map<String,Object> _defaultFormData = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultFormData, Object.class));
+
+		Type[] pt = method.getGenericParameterTypes();
+		Annotation[][] pa = method.getParameterAnnotations();
+		for (int i = 0; i < pt.length; i++) {
+			for (Annotation a : pa[i]) {
+				if (a instanceof Header) {
+					Header h = (Header)a;
+					if (h._default().length > 0) {
+						try {
+							_defaultRequestHeaders.put(firstNonEmpty(h.name(), h.value()), parseAnything(joinnl(h._default())));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @Header annotation");
+						}
+					}
+				} else if (a instanceof Query) {
+					Query q = (Query)a;
+					if (q._default().length > 0) {
+						try {
+							_defaultQuery.put(firstNonEmpty(q.name(), q.value()), parseAnything(joinnl(q._default())));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @Query annotation");
+						}
+					}
+				} else if (a instanceof FormData) {
+					FormData f = (FormData)a;
+					if (f._default().length > 0) {
+						try {
+							_defaultFormData.put(firstNonEmpty(f.name(), f.value()), parseAnything(joinnl(f._default())));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @FormData annotation");
+						}
+					}
+				}
+			}
+		}
+
+		this.defaultRequestHeaders = Collections.unmodifiableMap(_defaultRequestHeaders);
+		this.defaultQuery = Collections.unmodifiableMap(_defaultQuery);
+		this.defaultFormData = Collections.unmodifiableMap(_defaultFormData);
+
 		this.properties = b.properties;
-		this.defaultRequestHeaders = b.defaultRequestHeaders;
-		this.defaultQuery = b.defaultQuery;
-		this.defaultFormData = b.defaultFormData;
 		this.priority = b.priority;
 		this.widgets = unmodifiableMap(b.widgets);
 

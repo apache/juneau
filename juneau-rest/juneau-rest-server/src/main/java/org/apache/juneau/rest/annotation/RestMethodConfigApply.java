@@ -46,6 +46,8 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 	@Override
 	public void apply(AnnotationInfo<RestMethod> ai, PropertyStoreBuilder psb) {
 		RestMethod a = ai.getAnnotation();
+		MethodInfo mi = ai.getMethodOn();
+		String sig = mi == null ? "Unknown" : mi.getSignature();
 		String s = null;
 
 		for (Property p1 : a.properties()) {
@@ -76,7 +78,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		for (String header : strings(a.defaultRequestHeaders())) {
 			String[] h = RestUtils.parseHeader(header);
 			if (h == null)
-				throw new FormattedRuntimeException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
+				throw new ConfigException("Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''Header-Name: header-value''", sig, header);
 			if (isNotEmpty(h[1]))
 				psb.addTo(REST_defaultRequestHeaders, h[0], h[1]);
 		}
@@ -113,7 +115,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 					int i = s2.indexOf(':');
 					if (i == -1)
 						throw new ConfigException(
-							"Invalid format for @RestMethod(bpi).  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {0}", s1);
+							"Invalid format for @RestMethod(bpi) on method ''{0}''.  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {1}", sig, s1);
 					bpiMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
 				}
 			}
@@ -127,7 +129,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 					int i = s2.indexOf(':');
 					if (i == -1)
 						throw new ConfigException(
-							"Invalid format for @RestMethod(bpx).  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {0}", s1);
+							"Invalid format for @RestMethod(bpx) on method ''{0}''.  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {1}", sig, s1);
 					bpxMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
 				}
 			}
@@ -151,5 +153,35 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 
 		if (! a.roleGuard().isEmpty())
 			psb.set(REST_roleGuard, string(a.roleGuard()));
+
+		for (String h : a.defaultRequestHeaders()) {
+			String[] h2 = RestUtils.parseKeyValuePair(string(h));
+			if (h == null)
+				throw new ConfigException(
+					"Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
+			psb.addTo(RESTMETHOD_defaultRequestHeaders, h2[0], h2[1]);
+		}
+
+		if (! a.defaultAccept().isEmpty())
+			psb.addTo(RESTMETHOD_defaultRequestHeaders, "Accept", string(a.defaultAccept()));
+
+		if (! a.defaultContentType().isEmpty())
+			psb.addTo(RESTMETHOD_defaultRequestHeaders, string(a.defaultContentType()));
+
+		for (String h : a.defaultQuery()) {
+			String[] h2 = RestUtils.parseKeyValuePair(string(h));
+			if (h == null)
+				throw new ConfigException(
+					"Invalid default query parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
+			psb.addTo(RESTMETHOD_defaultQuery, h2[0], h2[1]);
+		}
+
+		for (String h : a.defaultFormData()) {
+			String[] h2 = RestUtils.parseKeyValuePair(string(h));
+			if (h == null)
+				throw new ConfigException(
+					"Invalid default form data parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
+			psb.addTo(RESTMETHOD_defaultFormData, h2[0], h2[1]);
+		}
 	}
 }

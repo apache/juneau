@@ -14,20 +14,15 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.util.RestUtils.*;
 
-import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.svl.*;
 
@@ -42,7 +37,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 
 	String httpMethod;
 	RestMethodProperties properties;
-	Map<String,Object> defaultRequestHeaders, defaultQuery, defaultFormData;
 	Integer priority;
 	Map<String,Widget> widgets;
 	List<MediaType> supportedAcceptTypes, supportedContentTypes;
@@ -106,60 +100,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 					properties.put(p1, true);
 			}
 
-			defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-			for (String s : m.defaultRequestHeaders()) {
-				String[] h = RestUtils.parseKeyValuePair(vr.resolve(s));
-				if (h == null)
-					throw new RestServletException(
-						"Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-				defaultRequestHeaders.put(h[0], h[1]);
-			}
-
-			String defaultAccept = vr.resolve(m.defaultAccept());
-			if (isNotEmpty(defaultAccept))
-				defaultRequestHeaders.put("Accept", defaultAccept);
-
-			String defaultContentType = vr.resolve(m.defaultContentType());
-			if (isNotEmpty(defaultContentType))
-				defaultRequestHeaders.put("Content-Type", defaultAccept);
-
-			defaultQuery = new LinkedHashMap<>();
-			for (String s : m.defaultQuery()) {
-				String[] h = RestUtils.parseKeyValuePair(vr.resolve(s));
-				if (h == null)
-					throw new RestServletException(
-						"Invalid default query parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-				defaultQuery.put(h[0], h[1]);
-			}
-
-			defaultFormData = new LinkedHashMap<>();
-			for (String s : m.defaultFormData()) {
-				String[] h = RestUtils.parseKeyValuePair(vr.resolve(s));
-				if (h == null)
-					throw new RestServletException(
-						"Invalid default form data parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-				defaultFormData.put(h[0], h[1]);
-			}
-
-			Type[] pt = method.getGenericParameterTypes();
-			Annotation[][] pa = method.getParameterAnnotations();
-			for (int i = 0; i < pt.length; i++) {
-				for (Annotation a : pa[i]) {
-					if (a instanceof Header) {
-						Header h = (Header)a;
-						if (h._default().length > 0)
-							defaultRequestHeaders.put(firstNonEmpty(h.name(), h.value()), parseAnything(joinnl(h._default())));
-					} else if (a instanceof Query) {
-						Query q = (Query)a;
-						if (q._default().length > 0)
-							defaultQuery.put(firstNonEmpty(q.name(), q.value()), parseAnything(joinnl(q._default())));
-					} else if (a instanceof FormData) {
-						FormData f = (FormData)a;
-						if (f._default().length > 0)
-							defaultFormData.put(firstNonEmpty(f.name(), f.value()), parseAnything(joinnl(f._default())));
-					}
-				}
-			}
 
 			// Need this to access methods in anonymous inner classes.
 			mi.setAccessible();
