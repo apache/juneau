@@ -139,6 +139,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			// mock key/value pair with a "_value" key.
 			out.append("_value=");
 			super.serializeAnything(out, o, null, null, null);
+			return out;
 		}
 
 		pop();
