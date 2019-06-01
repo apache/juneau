@@ -133,11 +133,7 @@ public @interface RestResource {
 	 * Class-level bean filters.
 	 *
 	 * <p>
-	 * Shortcut to add bean filters to the bean contexts of the objects returned by the following methods:
-	 * <ul>
-	 * 	<li>{@link RestContext#getSerializers()}
-	 * 	<li>{@link RestContext#getParsers()}
-	 * </ul>
+	 * Shortcut to add bean filters to the bean contexts of all serializers and parsers on all methods in the class.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -636,11 +632,7 @@ public @interface RestResource {
 	 * Class-level POJO swaps.
 	 *
 	 * <p>
-	 * Shortcut to add POJO swaps to the bean contexts of the objects returned by the following methods:
-	 * <ul>
-	 * 	<li>{@link RestContext#getSerializers()}
-	 * 	<li>{@link RestContext#getParsers()}
-	 * </ul>
+	 * Shortcut to add POJO swaps to the bean contexts of all serializers and parsers on all methods in the class.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -656,11 +648,7 @@ public @interface RestResource {
 	 * Class-level properties.
 	 *
 	 * <p>
-	 * Shortcut for specifying class-level properties on this servlet to the objects returned by the following methods:
-	 * <ul>
-	 * 	<li>{@link RestContext#getSerializers()}
-	 * 	<li>{@link RestContext#getParsers()}
-	 * </ul>
+	 * Shortcut to add properties to the bean contexts of all serializers and parsers on all methods in the class.
 	 *
 	 * <p>
 	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.

@@ -3178,7 +3178,6 @@ public final class RestContext extends BeanContext {
 	private final RestResourceResolver resourceResolver;
 	private final UriResolution uriResolution;
 	private final UriRelativity uriRelativity;
-	private final AnnotationList configAnnotationList;
 
 	// Lifecycle methods
 	private final Method[]
@@ -3278,7 +3277,6 @@ public final class RestContext extends BeanContext {
 
 			Class<?> resourceClass = resource.getClass();
 			ClassInfo rci = getClassInfo(resourceClass);
-			configAnnotationList = rci.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE);
 			PropertyStore ps = getPropertyStore();
 
 			uriContext = nullIfEmpty(getStringProperty(REST_uriContext, null));
@@ -4202,35 +4200,6 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the serializers registered with this resource.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_serializers}
-	 * </ul>
-	 *
-	 * @return The serializers registered with this resource.
-	 */
-	public SerializerGroup getSerializers() {
-		return serializers;
-	}
-
-	/**
-	 * Returns the parsers registered with this resource.
-	 *
-	 * <p>
-	 * Parsers at the class level are defined via the following:
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_parsers}
-	 * </ul>
-	 *
-	 * @return The parsers registered with this resource.
-	 */
-	public ParserGroup getParsers() {
-		return parsers;
-	}
-
-	/**
 	 * Returns the servlet init parameter returned by {@link ServletConfig#getInitParameter(String)}.
 	 *
 	 * @param name The init parameter name.
@@ -4877,10 +4846,6 @@ public final class RestContext extends BeanContext {
 		if (this.res.get() != null)
 			System.err.println("WARNING:  Thread-local response object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
 		this.res.set(res);
-	}
-
-	AnnotationList getConfigAnnotationList() {
-		return configAnnotationList;
 	}
 
 	/**
