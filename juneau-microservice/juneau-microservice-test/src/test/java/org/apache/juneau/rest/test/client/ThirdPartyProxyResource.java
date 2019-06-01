@@ -86,7 +86,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestHook(HookEvent.END_CALL)
 	public static void endCall(HttpServletRequest req) {
 		try {
-			Exception e = (Exception)req.getAttribute("Exception");
+			Throwable e = (Throwable)req.getAttribute("Exception");
 			Long execTime = (Long)req.getAttribute("ExecTime");
 			logFile.append("END["+new Date()+"]-").append(req.getQueryString()).append(", time=").append(""+execTime).append(", exception=").append(e == null ? null : e.toString()).append("\n");
 			logFile.flush();

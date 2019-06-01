@@ -1569,7 +1569,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 							HttpPartParser pp = pm.getParser(getPartParser());
 							HttpPartSchema schema = pm.getSchema();
 							String name = pm.getPartName();
-							ClassMeta<?> type = getContext().getBeanContext().getClassMeta(method.getGenericReturnType());
+							ClassMeta<?> type = getContext().getClassMeta(method.getGenericReturnType());
 							HttpPartType pt = pm.getPartType();
 							if (pt == HttpPartType.BODY)
 								return getBody().schema(schema).asType(type);

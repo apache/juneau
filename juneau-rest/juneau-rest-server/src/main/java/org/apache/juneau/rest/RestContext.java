@@ -3160,7 +3160,6 @@ public final class RestContext extends BeanContext {
 		defaultRequestHeaders,
 		defaultResponseHeaders,
 		staticFileResponseHeaders;
-	private final BeanContext beanContext;
 	private final ResponseHandler[] responseHandlers;
 	private final MimetypesFileTypeMap mimetypesFileTypeMap;
 	private final StaticFileMapping[] staticFiles;
@@ -3345,7 +3344,6 @@ public final class RestContext extends BeanContext {
 				.create()
 				.apply(ps)
 				.build();
-			beanContext = BeanContext.create().apply(ps).build();
 
 			mimetypesFileTypeMap = new ExtendedMimetypesFileTypeMap();
 			for (String mimeType : getArrayProperty(REST_mimeTypes, String.class))
@@ -3376,13 +3374,6 @@ public final class RestContext extends BeanContext {
 			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
 
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
-
-//			// >>> DEPRECATED - Remove in 9.0 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-//			Map<String,Widget> _widgets = new LinkedHashMap<>();
-//			for (Widget w : getInstanceArrayProperty(REST_widgets, resource, Widget.class, new Widget[0], resourceResolver, ps))
-//				_widgets.put(w.getName(), w);
-//			this.widgets = unmodifiableMap(_widgets);
-//			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
@@ -3426,7 +3417,7 @@ public final class RestContext extends BeanContext {
 						// We override the CallMethod.invoke() method to insert our logic.
 						if ("RRPC".equals(httpMethod)) {
 
-							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(mi.inner().getGenericReturnType());
+							final ClassMeta<?> interfaceClass = getClassMeta(mi.inner().getGenericReturnType());
 							final RemoteInterfaceMeta rim = new RemoteInterfaceMeta(interfaceClass.getInnerClass(), null);
 							if (rim.getMethodsByPath().isEmpty())
 								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getFullName());
@@ -4187,15 +4178,6 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the {@link BeanContext} object used for parsing path variables and header values.
-	 *
-	 * @return The bean context used for parsing path variables and header values.
-	 */
-	public BeanContext getBeanContext() {
-		return beanContext;
-	}
-
-	/**
 	 * Returns the class-level properties associated with this servlet.
 	 *
 	 * <p>
@@ -4863,22 +4845,6 @@ public final class RestContext extends BeanContext {
 			if (r.resource instanceof Servlet)
 				((Servlet)r.resource).destroy();
 		}
-	}
-
-	/**
-	 * Unused.
-	 */
-	@Override /* BeanContextBuilder */
-	public BeanSession createSession(BeanSessionArgs args) {
-		throw new NoSuchMethodError();
-	}
-
-	/**
-	 * Unused.
-	 */
-	@Override /* BeanContextBuilder */
-	public BeanSessionArgs createDefaultSessionArgs() {
-		throw new NoSuchMethodError();
 	}
 
 	/**

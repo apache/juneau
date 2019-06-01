@@ -87,7 +87,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			String passThroughHeaders = req.getHeader("x-response-headers");
 			if (passThroughHeaders != null) {
 				HttpPartParser p = context.getPartParser();
-				ObjectMap m = p.createPartSession(req.getParserSessionArgs()).parse(HttpPartType.HEADER, null, passThroughHeaders, context.getBeanContext().getClassMeta(ObjectMap.class));
+				ObjectMap m = p.createPartSession(req.getParserSessionArgs()).parse(HttpPartType.HEADER, null, passThroughHeaders, context.getClassMeta(ObjectMap.class));
 				for (Map.Entry<String,Object> e : m.entrySet())
 					setHeader(e.getKey(), e.getValue().toString());
 			}
