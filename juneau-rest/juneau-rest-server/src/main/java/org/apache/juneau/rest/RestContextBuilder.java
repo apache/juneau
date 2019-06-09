@@ -1565,7 +1565,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder roleGuard(String value) {
-		return set(REST_roleGuard, value);
+		return addTo(REST_roleGuard, value);
 	}
 
 	/**

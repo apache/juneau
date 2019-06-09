@@ -46,6 +46,7 @@ import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Method;
 import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.rest.guards.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
@@ -542,7 +543,19 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.converters = getInstanceArrayProperty(REST_converters, RestConverter.class, new RestConverter[0], rr, r, this);
 
-		this.guards = getInstanceArrayProperty(REST_guards, RestGuard.class, new RestGuard[0], rr, r, this);
+		List<RestGuard> _guards = new ArrayList<>();
+		_guards.addAll(Arrays.asList(getInstanceArrayProperty(REST_guards, RestGuard.class, new RestGuard[0], rr, r, this)));
+		Set<String> rolesDeclared = getSetProperty(REST_rolesDeclared, String.class, null);
+		Set<String> roleGuard = getSetProperty(REST_roleGuard, String.class, Collections.emptySet());
+
+		for (String rg : roleGuard) {
+			try {
+				_guards.add(new RoleBasedRestGuard(rolesDeclared, rg));
+			} catch (java.text.ParseException e1) {
+				throw new ServletException(e1);
+			}
+		}
+		this.guards = _guards.toArray(new RestGuard[_guards.size()]);
 
 		List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
 		for (RestMatcher matcher : getInstanceArrayProperty(RESTMETHOD_matchers, RestMatcher.class, new RestMatcher[0], rr, r, this)) {

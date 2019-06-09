@@ -225,10 +225,10 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 		psb.addTo(REST_mimeTypes, strings(a.mimeTypes()));
 
 		if (! a.rolesDeclared().isEmpty())
-			psb.set(REST_rolesDeclared, string(a.rolesDeclared()));
+			psb.addTo(REST_rolesDeclared, strings(a.rolesDeclared()));
 
 		if (! a.roleGuard().isEmpty())
-			psb.set(REST_roleGuard, string(a.roleGuard()));
+			psb.addTo(REST_roleGuard, string(a.roleGuard()));
 
 		HtmlDoc hd = a.htmldoc();
 		new HtmlDocBuilder(psb).process(hd);

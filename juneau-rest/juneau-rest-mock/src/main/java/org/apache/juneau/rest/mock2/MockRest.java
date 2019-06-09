@@ -487,6 +487,16 @@ public class MockRest implements MockHttpConnection {
 	}
 
 	/**
+	 * Shortcut for <code>get(<js>""</js>)</code>
+	 *
+	 * @return A new servlet request.
+	 * @throws Exception
+	 */
+	public MockServletRequest get() throws Exception {
+		return get("");
+	}
+
+	/**
 	 * Perform a PUT request.
 	 *
 	 * @param path The URI path.

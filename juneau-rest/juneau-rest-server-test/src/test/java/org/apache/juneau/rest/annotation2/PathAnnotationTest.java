@@ -70,7 +70,7 @@ public class PathAnnotationTest {
 	@Test
 	public void a01_noPath() throws Exception {
 		a.get(null).execute().assertBody("GET");
-		a.get("").execute().assertBody("GET");
+		a.get().execute().assertBody("GET");
 	}
 	@Test
 	public void a02_simplePath() throws Exception {

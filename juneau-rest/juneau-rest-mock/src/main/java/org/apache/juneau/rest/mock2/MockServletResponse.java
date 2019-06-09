@@ -44,7 +44,6 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	private String msg;
 	private Map<String,String[]> headerMap = new LinkedHashMap<>();
 
-
 	/**
 	 * Creates a new servlet response.
 	 *

@@ -18,6 +18,7 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -72,6 +73,17 @@ public abstract class ConfigApply<T extends Annotation> {
 		for (int i = 0; i < in.length; i++)
 			out[i] = r.resolve(in[i]);
 		return out;
+	}
+
+	/**
+	 * Resolves the specified string as a comma-delimited list of strings.
+	 *
+	 * @param in The CDL string containing variables to resolve.
+	 * @return An array with resolved strings.
+	 */
+	protected String[] strings(String in) {
+		in = r.resolve(in);
+		return StringUtils.split(in);
 	}
 
 	/**

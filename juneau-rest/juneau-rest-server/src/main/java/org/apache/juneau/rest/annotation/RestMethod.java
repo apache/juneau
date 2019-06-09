@@ -795,8 +795,8 @@ public @interface RestMethod {
 	 * 		<ul>
 	 * 			<li><js>"foo"</js> - Single arguments.
 	 * 			<li><js>"foo,bar,baz"</js> - Multiple OR'ed arguments.
-	 * 			<li><js>"foo | bar | bqz"</js> - Multiple OR'ed arguments, pipe syntax.
-	 * 			<li><js>"foo || bar || bqz"</js> - Multiple OR'ed arguments, Java-OR syntax.
+	 * 			<li><js>"foo | bar | baz"</js> - Multiple OR'ed arguments, pipe syntax.
+	 * 			<li><js>"foo || bar || baz"</js> - Multiple OR'ed arguments, Java-OR syntax.
 	 * 			<li><js>"fo*"</js> - Patterns including <js>'*'</js> and <js>'?'</js>.
 	 * 			<li><js>"fo* & *oo"</js> - Multiple AND'ed arguments, ampersand syntax.
 	 * 			<li><js>"fo* && *oo"</js> - Multiple AND'ed arguments, Java-AND syntax.
@@ -813,6 +813,8 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>

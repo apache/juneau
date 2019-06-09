@@ -75,6 +75,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	private RestContext restContext;
 	private String uri = "";
 	private boolean debug = false;
+	private Set<String> roles = new LinkedHashSet<>();
 
 	/**
 	 * Creates a new servlet request.
@@ -234,6 +235,17 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 */
 	public MockServletRequest restContext(RestContext restContext) {
 		this.restContext = restContext;
+		return this;
+	}
+
+	/**
+	 * Adds the specified roles on this request.
+	 *
+	 * @param roles The roles to add to this request.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest roles(String...roles) {
+		this.roles.addAll(Arrays.asList(roles));
 		return this;
 	}
 
@@ -901,7 +913,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 
 	@Override /* HttpServletRequest */
 	public boolean isUserInRole(String role) {
-		return false;
+		return roles.contains(role);
 	}
 
 	@Override /* HttpServletRequest */

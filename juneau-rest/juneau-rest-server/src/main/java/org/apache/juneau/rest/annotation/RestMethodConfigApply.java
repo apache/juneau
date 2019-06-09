@@ -152,10 +152,10 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			psb.set(RESTMETHOD_path, string(a.path()));
 
 		if (! a.rolesDeclared().isEmpty())
-			psb.set(REST_rolesDeclared, string(a.rolesDeclared()));
+			psb.addTo(REST_rolesDeclared, strings(a.rolesDeclared()));
 
 		if (! a.roleGuard().isEmpty())
-			psb.set(REST_roleGuard, string(a.roleGuard()));
+			psb.addTo(REST_roleGuard, string(a.roleGuard()));
 
 		for (String h : a.defaultRequestHeaders()) {
 			String[] h2 = RestUtils.parseKeyValuePair(string(h));

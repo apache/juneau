@@ -2287,13 +2287,14 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.roleGuard.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
-	 * 	<li><b>Default:</b>  empty string
+	 * 	<li><b>Name:</b>  <js>"RestContext.roleGuard.ss"</js>
+	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code>
+	 * 	<li><b>Default:</b>  empty set
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#roleGuard()}
+	 * 			<li class='ja'>{@link RestMethod#roleGuard()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -2341,6 +2342,8 @@ public final class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Role guards defined at both the class and method level must both pass.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -2348,7 +2351,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='jf'>{@link RestContext#REST_roleGuard}
 	 * </ul>
 	 */
-	public static final String REST_roleGuard = PREFIX + ".roleGuard.s";
+	public static final String REST_roleGuard = PREFIX + ".roleGuard.ss";
 
 	/**
 	 * Configuration property:  Serializers.
