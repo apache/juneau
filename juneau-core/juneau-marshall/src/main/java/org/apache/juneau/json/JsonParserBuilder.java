@@ -14,6 +14,7 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.json.JsonParser.*;
 
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -91,14 +92,14 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ReaderParserBuilder */
-	public JsonParserBuilder fileCharset(String value) {
+	public JsonParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* ReaderParserBuilder */
-	public JsonParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
+	public JsonParserBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -51,14 +52,14 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ReaderParserBuilder */
-	public CsvParserBuilder fileCharset(String value) {
+	public CsvParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* ReaderParserBuilder */
-	public CsvParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
+	public CsvParserBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

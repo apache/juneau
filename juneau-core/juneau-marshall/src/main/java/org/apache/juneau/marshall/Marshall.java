@@ -203,9 +203,9 @@ public abstract class Marshall {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_inputStreamCharset} property value).
+	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_inputStreamCharset} property value).
+	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
 	 * 			{@link ReaderParser#RPARSER_fileCharset} property value).
 	 * 	</ul>

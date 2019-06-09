@@ -17,6 +17,7 @@ import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -485,7 +486,52 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return set(SERIALIZER_uriResolution, value);
 	}
 
+	//--- OutputStreamSerializer ---
+
+	/**
+	 * Configuration property:  Binary string format.
+	 *
+	 * <p>
+	 * When using the {@link Serializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
+	 * when converting the resulting byte array to a string.
+	 *
+	 * <ul>
+	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link BinaryFormat#HEX}.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder binaryOutputFormat(BinaryFormat value) {
+		return set(OSSERIALIZER_binaryFormat, value);
+	}
+
 	//--- WriterSerializer ---
+
+	/**
+	 * Configuration property: File charset.
+	 *
+	 * <p>
+	 * The character set to use for writing Files to the file system.
+	 *
+	 * <p>
+	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_fileCharset}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is the system JVM setting.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder fileCharset(Charset value) {
+		return set(WSERIALIZER_fileCharset, value);
+	}
 
 	/**
 	 * Configuration property:  Maximum indentation.
@@ -528,7 +574,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Use single quotes.
+	 * Configuration property:  Quote character.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
@@ -545,6 +591,29 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
+	 * Configuration property: Output stream charset.
+	 *
+	 * <p>
+	 * The character set to use when writing to OutputStreams.
+	 *
+	 * <p>
+	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_streamCharset}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is the system JVM setting.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder streamCharset(Charset value) {
+		return set(WSERIALIZER_streamCharset, value);
+	}
+
+	/**
 	 * Configuration property:  Use whitespace.
 	 *
 	 * <p>
@@ -552,7 +621,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 *
 	 * @param value
@@ -561,7 +630,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder useWhitespace(boolean value) {
-		return set(SERIALIZER_useWhitespace, value);
+		return set(WSERIALIZER_useWhitespace, value);
 	}
 
 	/**
@@ -572,12 +641,12 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder useWhitespace() {
-		return set(SERIALIZER_useWhitespace, true);
+		return set(WSERIALIZER_useWhitespace, true);
 	}
 
 	/**
@@ -588,35 +657,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder ws() {
 		return useWhitespace();
-	}
-
-	//--- OutputStreamSerializer ---
-
-	/**
-	 * Configuration property:  Binary string format.
-	 *
-	 * <p>
-	 * When using the {@link Serializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
-	 * when converting the resulting byte array to a string.
-	 *
-	 * <ul>
-	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is {@link BinaryFormat#HEX}.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder binaryOutputFormat(BinaryFormat value) {
-		return set(OSSERIALIZER_binaryFormat, value);
 	}
 
 	@Override /* BeanTraverseBuilder */

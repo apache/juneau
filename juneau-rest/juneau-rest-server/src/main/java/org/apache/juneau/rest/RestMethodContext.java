@@ -64,6 +64,48 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	static final String PREFIX = "RestMethodContext";
 
 	/**
+	 * Configuration property:  Default request attributes.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultRequestAttributes.smo"</js>
+	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#attrs()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * Default request attributes.
+	 *
+	 * <p>
+	 * Specifies default values for request attributes if they are not already set on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo: bar"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_attrs}
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_attrs = PREFIX + ".attrs.smo";
+
+	/**
 	 * Configuration property:  Client version pattern matcher.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -416,6 +458,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
 	private final RestConverter[] converters;
+	@SuppressWarnings("deprecation")
 	private final RestMethodProperties properties;
 	private final Integer priority;
 	private final RestContext context;
@@ -431,6 +474,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		defaultRequestHeaders,
 		defaultQuery,
 		defaultFormData;
+	final ObjectMap defaultRequestAttributes;
 	final String defaultCharset;
 	final long maxInput;
 	final Map<String,Widget> widgets;
@@ -525,6 +569,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		Map<String,Object> _defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 		_defaultRequestHeaders.putAll(getMapProperty(RESTMETHOD_defaultRequestHeaders, Object.class));
 
+		ObjectMap _defaultRequestAttributes = new ObjectMap(context.getDefaultRequestAttributes()).appendAll(getMapProperty(RESTMETHOD_attrs, Object.class));
+
 		Map<String,Object> _defaultQuery = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultQuery, Object.class));
 
 		Map<String,Object> _defaultFormData = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultFormData, Object.class));
@@ -565,6 +611,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		}
 
 		this.defaultRequestHeaders = Collections.unmodifiableMap(_defaultRequestHeaders);
+		this.defaultRequestAttributes = _defaultRequestAttributes.unmodifiable();
 		this.defaultQuery = Collections.unmodifiableMap(_defaultQuery);
 		this.defaultFormData = Collections.unmodifiableMap(_defaultFormData);
 
@@ -691,6 +738,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			req.getPathMatch().put(pathPattern.getVars()[i], patternVals[i]);
 		req.getPathMatch().pattern(pathPattern.getPatternString()).remainder(remainder);
 
+		@SuppressWarnings("deprecation")
 		RequestProperties requestProperties = new RequestProperties(req.getVarResolverSession(), properties);
 
 		req.init(this, requestProperties);

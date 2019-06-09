@@ -15,6 +15,7 @@ package org.apache.juneau.serializer;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -46,6 +47,29 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property: File charset.
+	 *
+	 * <p>
+	 * The character set to use for writing Files to the file system.
+	 *
+	 * <p>
+	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_fileCharset}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is the system JVM setting.
+	 * @return This object (for method chaining).
+	 */
+	public WriterSerializerBuilder fileCharset(Charset value) {
+		return set(WSERIALIZER_fileCharset, value);
+	}
 
 	/**
 	 * Configuration property:  Maximum indentation.
@@ -102,6 +126,82 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 */
 	public WriterSerializerBuilder sq() {
 		return quoteChar('\'');
+	}
+
+	/**
+	 * Configuration property: Output stream charset.
+	 *
+	 * <p>
+	 * The character set to use when writing to OutputStreams.
+	 *
+	 * <p>
+	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_streamCharset}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is the system JVM setting.
+	 * @return This object (for method chaining).
+	 */
+	public WriterSerializerBuilder streamCharset(Charset value) {
+		return set(WSERIALIZER_streamCharset, value);
+	}
+
+	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public WriterSerializerBuilder useWhitespace(boolean value) {
+		return set(WSERIALIZER_useWhitespace, value);
+	}
+
+	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * </ul>
+	 * @return This object (for method chaining).
+	 */
+	public WriterSerializerBuilder useWhitespace() {
+		return set(WSERIALIZER_useWhitespace, true);
+	}
+
+	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public SerializerBuilder ws() {
+		return useWhitespace();
 	}
 
 	@Override /* BeanContextBuilder */

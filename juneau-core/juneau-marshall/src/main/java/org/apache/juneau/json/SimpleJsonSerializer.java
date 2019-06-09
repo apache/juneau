@@ -65,7 +65,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 				ps.builder()
 					.set(JSON_simpleMode, true)
 					.set(WSERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
+					.set(WSERIALIZER_useWhitespace, true)
 					.build()
 			);
 		}

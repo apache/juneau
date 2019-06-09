@@ -111,7 +111,6 @@ public class SerializerConfigAnnotationTest {
 		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
 		check("ABSOLUTE", x.getUriResolution());
-		check("true", x.isUseWhitespace());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -160,7 +159,6 @@ public class SerializerConfigAnnotationTest {
 		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
 		check("NONE", x.getUriResolution());
-		check("false", x.isUseWhitespace());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -208,6 +206,5 @@ public class SerializerConfigAnnotationTest {
 		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
 		check("NONE", x.getUriResolution());
-		check("false", x.isUseWhitespace());
 	}
 }

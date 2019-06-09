@@ -737,6 +737,31 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Configuration property:  Default request attributes.
+	 *
+	 * <p>
+	 * Specifies default values for request attributes if they're not already set on the request.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_attrs}
+	 * </ul>
+	 *
+	 * @param values The attributes in the format <js>"Name: value"</js>.
+	 * @return This object (for method chaining).
+	 * @throws RestServletException If malformed header is found.
+	 */
+	public RestContextBuilder attrs(String...values) throws RestServletException {
+		for (String v : values) {
+			String[] p = RestUtils.parseKeyValuePair(v);
+			if (p == null)
+				throw new RestServletException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", v);
+			defaultRequestHeader(p[0], p[1]);
+		}
+		return this;
+	}
+
+	/**
 	 * Configuration property:  Default request headers.
 	 *
 	 * <p>
@@ -787,6 +812,25 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		if (isNotEmpty(value))
 			defaultRequestHeader("Content-Type", value);
 		return this;
+	}
+
+	/**
+	 * Configuration property:  Default request attribute.
+	 *
+	 * <p>
+	 * Same as {@link #attrs(String...)} but adds a single attribute name/value pair.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_attrs}
+	 * </ul>
+	 *
+	 * @param name The HTTP header name.
+	 * @param value The HTTP header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder attr(String name, Object value) {
+		return addTo(REST_attrs, name, value);
 	}
 
 	/**
@@ -1975,10 +2019,17 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Configuration property:  Properties.
 	 *
 	 * <p>
-	 * Defines arbitrary properties that can be retrieved via the following methods:
+	 * Shortcut to add properties to the bean contexts of all serializers and parsers on all methods in the class.
+	 *
+	 * <p>
+	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
+	 *
+	 * <p>
+	 * Property values will be converted to the appropriate type.
+	 *
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jm'>{@link RestRequest#getProperties()}
-	 * 	<li class='jm'>{@link RestResponse#getProperties()}
+	 * 	<li class='jm'>{@link RestContext#REST_properties}
 	 * </ul>
 	 *
 	 * @param values The values to set on this setting.
@@ -1992,10 +2043,17 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Configuration property:  Properties.
 	 *
 	 * <p>
-	 * Defines arbitrary properties that can be retrieved via the following methods:
+	 * Shortcut to add properties to the bean contexts of all serializers and parsers on all methods in the class.
+	 *
+	 * <p>
+	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
+	 *
+	 * <p>
+	 * Property values will be converted to the appropriate type.
+	 *
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jm'>{@link RestRequest#getProperties()}
-	 * 	<li class='jm'>{@link RestResponse#getProperties()}
+	 * 	<li class='jm'>{@link RestContext#REST_properties}
 	 * </ul>
 	 *
 	 * @param name The key to add to the properties.

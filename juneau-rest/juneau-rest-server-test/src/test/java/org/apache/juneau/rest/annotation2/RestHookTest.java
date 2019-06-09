@@ -45,30 +45,30 @@ public class RestHookTest {
 
 	@RestResource(
 		parsers=A01.class,
-		properties={
-			@Property(name="p1",value="sp1"), // Unchanged servlet-level property.
-			@Property(name="p2",value="sp2"), // Servlet-level property overridden by onPreCall.
-			@Property(name="p3",value="sp3"), // Servlet-level property overridded by method.
-			@Property(name="p4",value="sp4")  // Servlet-level property overridden by method then onPreCall.
+		attrs={
+			"p1:sp1", // Unchanged servlet-level property.
+			"p2:sp2", // Servlet-level property overridden by onPreCall.
+			"p3:sp3", // Servlet-level property overridded by method.
+			"p4:sp4"  // Servlet-level property overridden by method then onPreCall.
 		}
 	)
 	public static class A {
 
 		@RestHook(PRE_CALL)
 		public void onPreCall(RestRequest req) {
-			RequestProperties properties = req.getProperties();
-			properties.put("p2", "xp2");
-			properties.put("p4", "xp4");
-			properties.put("p5", "xp5"); // New property
+			RequestAttributes attrs = req.getAttributes();
+			attrs.put("p2", "xp2");
+			attrs.put("p4", "xp4");
+			attrs.put("p5", "xp5"); // New property
 			String overrideContentType = req.getHeader("Override-Content-Type");
 			if (overrideContentType != null)
 				req.getHeaders().put("Content-Type", overrideContentType);
 		}
 
 		@RestMethod(name=PUT, path="/propertiesOverriddenByAnnotation",
-			properties={
-				@Property(name="p3",value="mp3"),
-				@Property(name="p4",value="mp4")
+			attrs={
+				"p3:mp3",
+				"p4:mp4"
 			}
 		)
 		public String a01(@Body String in) {
@@ -76,9 +76,9 @@ public class RestHookTest {
 		}
 
 		@RestMethod(name=PUT, path="/propertiesOverriddenProgrammatically")
-		public String a02(RestRequest req, RequestProperties properties) throws Exception {
-			properties.put("p3", "pp3");
-			properties.put("p4", "pp4");
+		public String a02(RestRequest req, RequestAttributes attrs) throws Exception {
+			attrs.put("p3", "pp3");
+			attrs.put("p4", "pp4");
 			return req.getBody().asType(String.class);
 		}
 	}
@@ -94,8 +94,7 @@ public class RestHookTest {
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
 				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-					String matchingContentType = getProperty("mediaType", String.class);
-					return (T)("p1="+getProperty("p1", String.class)+",p2="+getProperty("p2", String.class)+",p3="+getProperty("p3", String.class)+",p4="+getProperty("p4", String.class)+",p5="+getProperty("p5", String.class)+",contentType="+matchingContentType);
+					return (T)("p1="+getProperty("p1", String.class)+",p2="+getProperty("p2", String.class)+",p3="+getProperty("p3", String.class)+",p4="+getProperty("p4", String.class)+",p5="+getProperty("p5", String.class));
 				}
 			};
 		}
@@ -103,14 +102,14 @@ public class RestHookTest {
 
 	@Test
 	public void a01_preCall_propertiesOverriddenByAnnotation() throws Exception {
-		a.put("/propertiesOverriddenByAnnotation", null).contentType("text/a1").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/a1");
-		a.put("/propertiesOverriddenByAnnotation", null).contentType("text/a1").header("Override-Content-Type", "text/a2").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/a2");
+		a.put("/propertiesOverriddenByAnnotation", null).contentType("text/a1").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		a.put("/propertiesOverriddenByAnnotation", null).contentType("text/a1").header("Override-Content-Type", "text/a2").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
 	}
 
 	@Test
 	public void a02_preCall_propertiesOverriddenProgrammatically() throws Exception {
-		a.put("/propertiesOverriddenProgrammatically", null).contentType("text/a1").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5,contentType=text/a1");
-		a.put("/propertiesOverriddenProgrammatically", null).contentType("text/a1").header("Override-Content-Type", "text/a2").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5,contentType=text/a2");
+		a.put("/propertiesOverriddenProgrammatically", null).contentType("text/a1").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
+		a.put("/propertiesOverriddenProgrammatically", null).contentType("text/a1").header("Override-Content-Type", "text/a2").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
 	}
 
 	//=================================================================================================================
@@ -119,33 +118,33 @@ public class RestHookTest {
 
 	@RestResource(
 		serializers=B01.class,
-		properties={
-			@Property(name="p1",value="sp1"), // Unchanged servlet-level property.
-			@Property(name="p2",value="sp2"), // Servlet-level property overridden by onPostCall.
-			@Property(name="p3",value="sp3"), // Servlet-level property overridded by method.
-			@Property(name="p4",value="sp4")  // Servlet-level property overridden by method then onPostCall.
+		attrs={
+			"p1:sp1", // Unchanged servlet-level property.
+			"p2:sp2", // Servlet-level property overridden by onPostCall.
+			"p3:sp3", // Servlet-level property overridded by method.
+			"p4:sp4"  // Servlet-level property overridden by method then onPostCall.
 		}
 	)
 	public static class B {
 
 		@RestHook(POST_CALL)
 		public void onPostCall(RestRequest req, RestResponse res) {
-			RequestProperties properties = req.getProperties();
-			properties.put("p2", "xp2");
-			properties.put("p4", "xp4");
-			properties.put("p5", "xp5"); // New property
+			RequestAttributes attrs = req.getAttributes();
+			attrs.put("p2", "xp2");
+			attrs.put("p4", "xp4");
+			attrs.put("p5", "xp5"); // New property
 			String overrideAccept = req.getHeader("Override-Accept");
 			if (overrideAccept != null)
 				req.getHeaders().put("Accept", overrideAccept);
 			String overrideContentType = req.getHeader("Override-Content-Type");
 			if (overrideContentType != null)
-				properties.put("Override-Content-Type", overrideContentType);
+				attrs.put("Override-Content-Type", overrideContentType);
 		}
 
 		@RestMethod(name=PUT, path="/propertiesOverridenByAnnotation",
-			properties={
-				@Property(name="p3",value="mp3"),
-				@Property(name="p4",value="mp4")
+			attrs={
+				"p3:mp3",
+				"p4:mp4"
 			},
 			defaultRequestHeaders="Accept: text/s2"
 		)
@@ -154,9 +153,9 @@ public class RestHookTest {
 		}
 
 		@RestMethod(name=PUT, path="/propertiesOverriddenProgramatically")
-		public String b02(RestRequest req, RequestProperties properties) throws Exception {
-			properties.put("p3", "pp3");
-			properties.put("p4", "pp4");
+		public String b02(RestRequest req, RequestAttributes attrs) throws Exception {
+			attrs.put("p3", "pp3");
+			attrs.put("p4", "pp4");
 			String accept = req.getHeader("Accept");
 			if (accept == null || accept.isEmpty())
 				req.getHeaders().put("Accept", "text/s2");
@@ -174,7 +173,7 @@ public class RestHookTest {
 			return new WriterSerializerSession(args) {
 				@Override /* SerializerSession */
 				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-					out.getWriter().write("p1="+getProperty("p1", String.class)+",p2="+getProperty("p2", String.class)+",p3="+getProperty("p3", String.class)+",p4="+getProperty("p4", String.class)+",p5="+getProperty("p5", String.class)+",contentType="+getProperty("mediaType", String.class));
+					out.getWriter().write("p1="+getProperty("p1", String.class)+",p2="+getProperty("p2", String.class)+",p3="+getProperty("p3", String.class)+",p4="+getProperty("p4", String.class)+",p5="+getProperty("p5", String.class));
 				}
 				@Override /* SerializerSession */
 				public Map<String,String> getResponseHeaders() {
@@ -189,27 +188,27 @@ public class RestHookTest {
 
 	@Test
 	public void b01a_postCall_propertiesOverridenByAnnotation() throws Exception {
-		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s1");
-		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").header("Override-Accept", "text/s2").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s2");
-		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s1");
+		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").header("Override-Accept", "text/s2").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
 	}
 	@Test
 	public void b01b_postCall_propertiesOverridenByAnnotation_defaultAccept() throws Exception {
-		b.put("/propertiesOverridenByAnnotation", null).execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s2");
-		b.put("/propertiesOverridenByAnnotation", null).header("Override-Accept", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s3");
-		b.put("/propertiesOverridenByAnnotation", null).header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s2");
+		b.put("/propertiesOverridenByAnnotation", null).execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverridenByAnnotation", null).header("Override-Accept", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverridenByAnnotation", null).header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
 	}
 	@Test
 	public void b02a_postCall_propertiesOverriddenProgramatically() throws Exception {
-		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s1");
-		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").header("Override-Accept", "text/s2").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2");
-		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s1");
+		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").header("Override-Accept", "text/s2").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
 	}
 	@Test
 	public void b02b_postCall_propertiesOverriddenProgramatically_defaultAccept() throws Exception {
-		b.put("/propertiesOverriddenProgramatically", null).execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2");
-		b.put("/propertiesOverriddenProgramatically", null).header("Override-Accept", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s3");
-		b.put("/propertiesOverriddenProgramatically", null).header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2");
+		b.put("/propertiesOverriddenProgramatically", null).execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverriddenProgramatically", null).header("Override-Accept", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverriddenProgramatically", null).header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
 	}
 
 	//====================================================================================================

@@ -14,6 +14,7 @@ package org.apache.juneau.rest.vars;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Swagger attribute variable resolver.
@@ -71,7 +72,7 @@ public class SwaggerVar extends MultipartResolvingVar {
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
-		return req.getProperties().getString(key);
+		return new PojoRest(req.getSwagger()).getString(key);
 	}
 
 	@Override /* Var */

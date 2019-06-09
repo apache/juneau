@@ -64,6 +64,11 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 		return false;
 	}
 
+	@Override /* SerializerSession */
+	protected SerializerPipe createPipe(Object output) {
+		return new SerializerPipe(output);
+	}
+
 	/**
 	 * Convenience method for serializing an object to a <code><jk>byte</jk></code>.
 	 *
@@ -83,7 +88,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 		byte[] b = serialize(o);
 		switch(getBinaryFormat()) {
 			case SPACED_HEX:  return StringUtils.toSpacedHex(b);
-			case HEX:  return isUseWhitespace() ? StringUtils.toSpacedHex(b) : StringUtils.toHex(b);
+			case HEX:  return StringUtils.toHex(b);
 			case BASE64:  return StringUtils.base64Encode(b);
 			default: return null;
 		}

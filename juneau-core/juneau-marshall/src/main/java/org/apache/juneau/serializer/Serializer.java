@@ -649,49 +649,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	 */
 	public static final String SERIALIZER_uriResolution = PREFIX + ".uriResolution.s";
 
-	/**
-	 * Configuration property:  Use whitespace.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.useWhitespace.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#useWhitespace(boolean)}
-	 * 			<li class='jm'>{@link SerializerBuilder#useWhitespace()}
-	 * 			<li class='jm'>{@link SerializerBuilder#ws()}
-	 * 			<li class='jm'>{@link SerializerSessionArgs#useWhitespace(Boolean)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.ws()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces "\{\n\t'foo': 'bar'\n\}\n"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 */
-	public static final String SERIALIZER_useWhitespace = PREFIX + ".useWhitespace.b";
-
-
 	static final Serializer DEFAULT = new Serializer(PropertyStore.create().build(), "", "") {
 		@Override
 		public SerializerSession createSession(SerializerSessionArgs args) {
@@ -711,8 +668,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		trimStrings,
 		sortCollections,
 		sortMaps,
-		addRootType,
-		useWhitespace;
+		addRootType;
 	private final UriContext uriContext;
 	private final UriResolution uriResolution;
 	private final UriRelativity uriRelativity;
@@ -762,7 +718,6 @@ public abstract class Serializer extends BeanTraverseContext {
 		uriContext = getProperty(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
 		uriResolution = getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.NONE);
 		uriRelativity = getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
-		useWhitespace = getBooleanProperty(SERIALIZER_useWhitespace, false);
 		listener = getClassProperty(SERIALIZER_listener, SerializerListener.class, null);
 
 		this.produces = MediaType.forString(produces);
@@ -1069,17 +1024,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	 */
 	protected final UriResolution getUriResolution() {
 		return uriResolution;
-	}
-
-	/**
-	 * Configuration property:  Trim strings.
-	 *
-	 * @see #SERIALIZER_trimStrings
-	 * @return
-	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
-	 */
-	protected final boolean isUseWhitespace() {
-		return useWhitespace;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

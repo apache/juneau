@@ -14,6 +14,9 @@ package org.apache.juneau.parser.annotation;
 
 import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.parser.ReaderParser.*;
+
+import java.nio.charset.*;
+
 import static org.apache.juneau.parser.InputStreamParser.*;
 
 import org.apache.juneau.*;
@@ -56,8 +59,15 @@ public class ParserConfigApply extends ConfigApply<ParserConfig> {
 			psb.set(ISPARSER_binaryFormat, string(a.binaryFormat()));
 
 		if (! a.fileCharset().isEmpty())
-			psb.set(RPARSER_fileCharset, string(a.fileCharset()));
-		if (! a.inputStreamCharset().isEmpty())
-			psb.set(RPARSER_inputStreamCharset, string(a.inputStreamCharset()));
+			psb.set(RPARSER_fileCharset, charset(a.fileCharset()));
+		if (! a.streamCharset().isEmpty())
+			psb.set(RPARSER_streamCharset, charset(a.streamCharset()));
+	}
+	
+	private Object charset(String in) {
+		String s = string(in);
+		if ("default".equalsIgnoreCase(s))
+			return Charset.defaultCharset();
+		return s;
 	}
 }

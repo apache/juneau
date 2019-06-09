@@ -13,6 +13,7 @@
 package org.apache.juneau.csv;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -52,6 +53,12 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* WriterSerializerBuilder */
+	public CsvSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
 	public CsvSerializerBuilder maxIndent(int value) {
 		super.maxIndent(value);
 		return this;
@@ -66,6 +73,12 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* WriterSerializerBuilder */
 	public CsvSerializerBuilder sq() {
 		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public CsvSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

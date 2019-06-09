@@ -29,8 +29,10 @@ import org.apache.juneau.rest.annotation.*;
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.Properties}
  * </ul>
+ * @deprecated Use {@link RequestAttributes}
  */
 @SuppressWarnings("serial")
+@Deprecated
 public class RestMethodProperties extends ObjectMap {
 
 	/**

@@ -14,6 +14,7 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.serializer.Serializer.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -56,7 +57,6 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	private final Method javaMethod;                                                // Java method that invoked this serializer.
 
 	// Writable properties
-	private final boolean useWhitespace;
 	private final SerializerListener listener;
 
 	/**
@@ -77,11 +77,9 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		this.ctx = ctx;
 		args = args == null ? SerializerSessionArgs.DEFAULT : args;
 		this.javaMethod = args.javaMethod;
-		this.uriResolver = new UriResolver(ctx.getUriResolution(), ctx.getUriRelativity(), args.uriContext == null ? ctx.getUriContext() : args.uriContext);
+		this.uriResolver = new UriResolver(ctx.getUriResolution(), ctx.getUriRelativity(), getProperty(SERIALIZER_uriContext, UriContext.class, ctx.getUriContext()));
 		this.listener = castOrCreate(SerializerListener.class, ctx.getListener());
-		this.useWhitespace = args.useWhitespace != null ? args.useWhitespace : ctx.isUseWhitespace();
 		this.vrs = args.resolver;
-
 	}
 
 	/**
@@ -137,32 +135,6 @@ public abstract class SerializerSession extends BeanTraverseSession {
 			);
 	}
 
-	/**
-	 * Wraps the specified input object into a {@link ParserPipe} object so that it can be easily converted into
-	 * a stream or reader.
-	 *
-	 * @param output
-	 * 	The output location.
-	 * 	<br>For character-based serializers, this can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link Writer}
-	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
-	 * 		<li>{@link StringBuilder}
-	 * 	</ul>
-	 * 	<br>For byte-based serializers, this can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link OutputStream}
-	 * 		<li>{@link File}
-	 * 	</ul>
-	 * @return
-	 * 	A new {@link ParserPipe} wrapper around the specified input object.
-	 */
-	protected SerializerPipe createPipe(Object output) {
-		return new SerializerPipe(output);
-	}
-
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Abstract methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -211,6 +183,28 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 */
 	public abstract boolean isWriterSerializer();
 
+	/**
+	 * Wraps the specified input object into a {@link ParserPipe} object so that it can be easily converted into
+	 * a stream or reader.
+	 *
+	 * @param output
+	 * 	The output location.
+	 * 	<br>For character-based serializers, this can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link Writer}
+	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
+	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
+	 * 		<li>{@link StringBuilder}
+	 * 	</ul>
+	 * 	<br>For byte-based serializers, this can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link OutputStream}
+	 * 		<li>{@link File}
+	 * 	</ul>
+	 * @return
+	 * 	A new {@link ParserPipe} wrapper around the specified input object.
+	 */
+	protected abstract SerializerPipe createPipe(Object output);
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
@@ -773,16 +767,5 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 */
 	protected final UriResolution getUriResolution() {
 		return ctx.getUriResolution();
-	}
-
-	/**
-	 * Configuration property:  Use whitespace.
-	 *
-	 * @see Serializer#SERIALIZER_useWhitespace
-	 * @return
-	 * 	<jk>true</jk> if whitespace is added to the output to improve readability.
-	 */
-	protected final boolean isUseWhitespace() {
-		return useWhitespace;
 	}
 }

@@ -15,6 +15,7 @@ package org.apache.juneau.xml;
 import static org.apache.juneau.xml.XmlSerializer.*;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -263,6 +264,12 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* WriterSerializerBuilder */
+	public XmlSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
 	public XmlSerializerBuilder maxIndent(int value) {
 		super.maxIndent(value);
 		return this;
@@ -277,6 +284,12 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* WriterSerializerBuilder */
 	public XmlSerializerBuilder sq() {
 		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -51,14 +52,14 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ReaderParserBuilder */
-	public PlainTextParserBuilder fileCharset(String value) {
+	public PlainTextParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* ReaderParserBuilder */
-	public PlainTextParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
+	public PlainTextParserBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

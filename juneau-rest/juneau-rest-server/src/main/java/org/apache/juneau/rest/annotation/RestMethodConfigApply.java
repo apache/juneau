@@ -159,10 +159,18 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 
 		for (String h : a.defaultRequestHeaders()) {
 			String[] h2 = RestUtils.parseKeyValuePair(string(h));
-			if (h == null)
+			if (h2 == null)
 				throw new ConfigException(
 					"Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
 			psb.addTo(RESTMETHOD_defaultRequestHeaders, h2[0], h2[1]);
+		}
+
+		for (String ra : a.attrs()) {
+			String[] ra2 = RestUtils.parseKeyValuePair(string(ra));
+			if (ra2 == null)
+				throw new ConfigException(
+					"Invalid default request attribute specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
+			psb.addTo(RESTMETHOD_attrs, ra2[0], ra2[1]);
 		}
 
 		if (! a.defaultAccept().isEmpty())

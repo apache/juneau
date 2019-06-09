@@ -14,6 +14,7 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.xml.XmlParser.*;
 
+import java.nio.charset.*;
 import java.util.*;
 
 import javax.xml.stream.*;
@@ -239,14 +240,14 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ReaderParserBuilder */
-	public XmlParserBuilder fileCharset(String value) {
+	public XmlParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* ReaderParserBuilder */
-	public XmlParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
+	public XmlParserBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

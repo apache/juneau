@@ -25,6 +25,12 @@
 		New utility class for diffing beans: {@link oaj.utils.BeanDiff}
 	<li>
 		New annotation for defining bean property names: {@link oaj.annotation.Name}
+	<li>
+		New serializer properties:
+		<ul class='doctree'>
+			<li class='jf'>{@link oaj.serializer.WriterSerializer#WSERIALIZER_fileCharset}
+			<li class='jf'>{@link oaj.serializer.WriterSerializer#WSERIALIZER_streamCharset}
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-config</h5>
@@ -115,6 +121,46 @@
 			<li class='ja'>{@link oaj.xml.annotation.XmlConfig XmlConfig}
 		</ul>
 	<li>
+		New support for using Servlet request attributes.  
+		<ul class='doctree'>
+			<li class='jc'>{@link oajr.RequestAttributes}
+			<li class='jc'>{@link oajr.RestContext}
+			<ul>
+				<li class='jf'>{@link oajr.RestContext#REST_attrs REST_attrs}
+			</ul>
+			<li class='jc'>{@link oajr.RestContextBuilder}
+			<ul>
+				<li class='jm'>{@link oajr.RestContextBuilder#attrs(String...) attrs(String...)}
+				<li class='jm'>{@link oajr.RestContextBuilder#attr(String,Object) attr(String,Object)}
+			</ul>
+			<li class='jc'>{@link oajr.RestMethodContext}
+			<ul>
+				<li class='jf'>{@link oajr.RestMethodContext#RESTMETHOD_attrs RESTMETHOD_attrs}
+			</ul>
+			<li class='jc'>{@link oajr.RestRequest}
+			<ul>
+				<li class='jm'>{@link oajr.RestRequest#getAttributes() getAttributes()}
+			</ul>
+			<li class='jc'>{@link oajr.RestResponse}
+			<ul>
+				<li class='jm'>{@link oajr.RestResponse#getAttributes() getAttributes()}
+				<li class='jm'>{@link oajr.RestResponse#attr(String,Object) attr(String,Object)}
+			</ul>
+			<li class='ja'>{@link oajr.annotation.Attr}
+			<li class='ja'>{@link oajr.annotation.RestMethod#attrs()}
+			<li class='ja'>{@link oajr.annotation.RestResource#attrs()}
+		</ul>
+		<br>This deprecates the following APIs:
+		<ul class='doctree'>
+			<li class='jc'>{@link oajr.RequestProperties}
+			<li class='jc'>{@link oajr.RestMethodProperties}
+			<li class='jc'>{@link oajr.RestRequest}
+			<ul>
+				<li class='jm'>{@link oajr.RestRequest#getProperties() getProperties()}
+				<li class='jm'>{@link oajr.RestRequest#prop(String,Object) prop(String,Object)}
+			</ul>
+		</ul>
+	<li>
 		Added the following classes that provide the same support as the servlet classes but doesn't extend from <code>HttpServlet</code>.
 		<br>This fixes an issue where instances of {@link oajr.BasicRestServlet} are registered as top-level servlets even though
 		you don't want them to be.  
@@ -138,6 +184,18 @@
 		<ul>
 			<li class='jm'>{@link oajr.annotation.RestMethod#roleGuard roleGuard()}
 			<li class='jm'>{@link oajr.annotation.RestMethod#rolesDeclared rolesDeclared()}
+		</ul>
+	<li>
+		New methods:
+		<ul class='doctree'>
+			<li class='jc'>{@link oajr.RestRequest}
+			<ul>
+				<li class='jm'>{@link oajr.RestRequest#getCharset() getCharset()}
+			</ul>
+			<li class='jc'>{@link oajr.RestResponse}
+			<ul>
+				<li class='jm'>{@link oajr.RestResponse#getCharset() getCharset()}
+			</ul>
 		</ul>
 </ul>
 

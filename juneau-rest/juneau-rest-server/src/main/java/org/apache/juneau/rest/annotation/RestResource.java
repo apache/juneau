@@ -130,6 +130,26 @@ public @interface RestResource {
 	String allowHeaderParams() default "";
 
 	/**
+	 * Default request attributes.
+	 *
+	 * <p>
+	 * Specifies default values for request attributes if they're not already set on the request.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_attrs}
+	 * </ul>
+	 */
+	String[] attrs() default {};
+
+	/**
 	 * Class-level bean filters.
 	 *
 	 * <p>
@@ -655,11 +675,6 @@ public @interface RestResource {
 	 *
 	 * <p>
 	 * Property values will be converted to the appropriate type.
-	 *
-	 * <p>
-	 * In some cases, properties can be overridden at runtime through the
-	 * {@link RestResponse#prop(String, Object)} method or through an {@link RequestProperties}
-	 * method parameter.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>

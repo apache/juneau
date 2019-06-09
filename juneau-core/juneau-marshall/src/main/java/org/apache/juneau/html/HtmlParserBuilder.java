@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import java.nio.charset.*;
 import java.util.*;
 
 import javax.xml.stream.*;
@@ -85,14 +86,14 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* ReaderParserBuilder */
-	public HtmlParserBuilder fileCharset(String value) {
+	public HtmlParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* ReaderParserBuilder */
-	public HtmlParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
+	public HtmlParserBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

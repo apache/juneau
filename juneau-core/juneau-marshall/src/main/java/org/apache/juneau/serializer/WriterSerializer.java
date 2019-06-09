@@ -12,8 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import java.nio.charset.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -27,6 +30,51 @@ public abstract class WriterSerializer extends Serializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	static final String PREFIX = "WriterSerializer";
+
+	/**
+	 * Configuration property:  File charset.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"WriterSerializer.fileCharset.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"DEFAULT"</js>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link WriterSerializerBuilder#fileCharset(Charset)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * The character set to use for writing <code>Files</code> to the file system.
+	 *
+	 * <p>
+	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
+	 *
+	 * <p>
+	 * <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
+	 * 	WriterSerializer s = JsonSerializer.
+	 * 		.<jsm>create</jsm>()
+	 * 		.fileCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>WSERIALIZER_fileCharset</jsf>, <js>"UTF-8"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
+	 * 	s.serialize(<jk>new</jk> File(<js>"MyBean.txt"</js>), myBean);
+	 * </p>
+	 */
+	public static final String WSERIALIZER_fileCharset = PREFIX + ".fileCharset.s";
 
 	/**
 	 * Configuration property:  Maximum indentation.
@@ -107,6 +155,89 @@ public abstract class WriterSerializer extends Serializer {
 	 */
 	public static final String WSERIALIZER_quoteChar = PREFIX + ".quoteChar.s";
 
+	/**
+	 * Configuration property:  Output stream charset.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"WriterSerializer.streamCharset.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Default:</b>  <js>"UTF-8"</js>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link WriterSerializerBuilder#streamCharset(Charset)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * The character set to use when writing to <code>OutputStreams</code>.
+	 *
+	 * <p>
+	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
+	 * 	WriterSerializer s = JsonSerializer.
+	 * 		.<jsm>create</jsm>()
+	 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer.
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>WSERIALIZER_streamCharset</jsf>, <js>"UTF-8"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Use it to write to a UTF-8 encoded output stream.</jc>
+	 * 	s.serializer(<jk>new</jk> FileOutputStreamStream(<js>"MyBean.txt"</js>), myBean);
+	 * </p>
+	 */
+	public static final String WSERIALIZER_streamCharset = PREFIX + ".streamCharset.s";
+
+	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"WriterSerializer.useWhitespace.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link WriterSerializerBuilder#useWhitespace(boolean)}
+	 * 			<li class='jm'>{@link WriterSerializerBuilder#useWhitespace()}
+	 * 			<li class='jm'>{@link WriterSerializerBuilder#ws()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.ws()
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces "\{\n\t'foo': 'bar'\n\}\n"</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 */
+	public static final String WSERIALIZER_useWhitespace = PREFIX + ".useWhitespace.b";
+
 	static final WriterSerializer DEFAULT = new WriterSerializer(PropertyStore.create().build(), "", "") {
 		@Override
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
@@ -118,8 +249,11 @@ public abstract class WriterSerializer extends Serializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
+	private final Charset fileCharset;
 	private final int maxIndent;
 	private final char quoteChar;
+	private final Charset streamCharset;
+	private final boolean useWhitespace;
 
 	/**
 	 * Constructor.
@@ -152,8 +286,10 @@ public abstract class WriterSerializer extends Serializer {
 
 		maxIndent = getIntegerProperty(WSERIALIZER_maxIndent, 100);
 		quoteChar = getStringProperty(WSERIALIZER_quoteChar, "\"").charAt(0);
+		streamCharset = getProperty(WSERIALIZER_streamCharset, Charset.class, IOUtils.UTF8);
+		fileCharset = getProperty(WSERIALIZER_fileCharset, Charset.class, Charset.defaultCharset());
+		useWhitespace = getBooleanProperty(WSERIALIZER_useWhitespace, false);
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Abstract methods
@@ -161,7 +297,6 @@ public abstract class WriterSerializer extends Serializer {
 
 	@Override /* SerializerSession */
 	public abstract WriterSerializerSession createSession(SerializerSessionArgs args);
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
@@ -232,6 +367,17 @@ public abstract class WriterSerializer extends Serializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Configuration property:  File charset.
+	 *
+	 * @see #WSERIALIZER_fileCharset
+	 * @return
+	 * 	The character set to use when writing to <code>Files</code> on the file system.
+	 */
+	protected final Charset getFileCharset() {
+		return fileCharset;
+	}
+
+	/**
 	 * Configuration property:  Maximum indentation.
 	 *
 	 * @see #WSERIALIZER_maxIndent
@@ -253,6 +399,28 @@ public abstract class WriterSerializer extends Serializer {
 		return quoteChar;
 	}
 
+	/**
+	 * Configuration property:  Output stream charset.
+	 *
+	 * @see #WSERIALIZER_streamCharset
+	 * @return
+	 * 	The character set to use when writing to <code>OutputStreams</code> and byte arrays.
+	 */
+	protected final Charset getStreamCharset() {
+		return streamCharset;
+	}
+
+	/**
+	 * Configuration property:  Trim strings.
+	 *
+	 * @see #WSERIALIZER_useWhitespace
+	 * @return
+	 * 	If <jk>true</jk>, whitespace is added to the output to improve readability.
+	 */
+	protected final boolean isUseWhitespace() {
+		return useWhitespace;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -261,8 +429,11 @@ public abstract class WriterSerializer extends Serializer {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("WriterSerializer", new ObjectMap()
+				.append("fileCharset", fileCharset)
 				.append("maxIndent", maxIndent)
 				.append("quoteChar", quoteChar)
+				.append("streamCharset", streamCharset)
+				.appendSkipFalse("useWhitespace", useWhitespace)
 			);
 	}
 }

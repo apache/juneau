@@ -16,6 +16,7 @@ import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.jena.RdfSerializer.*;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -869,6 +870,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* WriterSerializerBuilder */
+	public RdfSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
 	public RdfSerializerBuilder maxIndent(int value) {
 		super.maxIndent(value);
 		return this;
@@ -883,6 +890,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* WriterSerializerBuilder */
 	public RdfSerializerBuilder sq() {
 		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public RdfSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

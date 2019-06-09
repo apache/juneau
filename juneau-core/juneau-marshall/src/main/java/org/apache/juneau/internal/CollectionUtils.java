@@ -113,6 +113,36 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Returns an iterable over the specified enumeration.
+	 *
+	 * @param e The collection to iterate over.
+	 * @return An iterable over the enumeration.
+	 */
+	public static <E> Iterable<E> iterable(final Enumeration<E> e) {
+		if (e == null)
+			return null;
+		return new Iterable<E>() {
+			@Override
+			public Iterator<E> iterator() {
+				return new Iterator<E>() {
+					@Override
+					public boolean hasNext() {
+						return e.hasMoreElements();
+					}
+					@Override
+					public E next() {
+						return e.nextElement();
+					}
+					@Override
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
+				};
+			}
+		};
+	}
+
+	/**
 	 * Creates an unmodifiable list from the specified list.
 	 *
 	 * @param l The collection to copy from.

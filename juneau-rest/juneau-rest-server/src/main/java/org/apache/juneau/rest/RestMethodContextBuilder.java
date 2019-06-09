@@ -22,6 +22,7 @@ import org.apache.juneau.svl.*;
 /**
  * Builder class for {@link RestMethodContext} objects.
  */
+@SuppressWarnings("deprecation")
 public class RestMethodContextBuilder extends BeanContextBuilder {
 
 	RestContext context;

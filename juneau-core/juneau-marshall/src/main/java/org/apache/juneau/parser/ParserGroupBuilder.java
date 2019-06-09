@@ -17,6 +17,7 @@ import static org.apache.juneau.parser.InputStreamParser.*;
 import static org.apache.juneau.parser.ReaderParser.*;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -337,7 +338,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
 	 * @return This object (for method chaining).
 	 */
-	public ParserGroupBuilder fileCharset(String value) {
+	public ParserGroupBuilder fileCharset(Charset value) {
 		return set(RPARSER_fileCharset, value);
 	}
 
@@ -349,7 +350,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link ReaderParser#RPARSER_inputStreamCharset}
+	 * 	<li class='jf'>{@link ReaderParser#RPARSER_streamCharset}
 	 * </ul>
 	 *
 	 * @param value
@@ -357,8 +358,8 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is <js>"UTF-8"</js>.
 	 * @return This object (for method chaining).
 	 */
-	public ParserGroupBuilder inputStreamCharset(String value) {
-		return set(RPARSER_inputStreamCharset, value);
+	public ParserGroupBuilder streamCharset(Charset value) {
+		return set(RPARSER_streamCharset, value);
 	}
 
 	/**

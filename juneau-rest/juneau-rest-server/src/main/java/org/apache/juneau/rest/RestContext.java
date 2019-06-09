@@ -848,6 +848,75 @@ public final class RestContext extends BeanContext {
 	public static final String REST_defaultCharset = PREFIX + ".defaultCharset.s";
 
 	/**
+	 * Configuration property:  Default request attributes.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.attrs.smo"</js>
+	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
+	 * 	<li><b>Default:</b>  empty map
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestResource#attrs()}
+	 * 			<li class='ja'>{@link RestMethod#attrs()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#attrs(String...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#attr(String,Object)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies default values for request attributes if they're not already set on the request.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Strings are in the format <js>"Name: value"</js>.
+	 * 	<li>
+	 * 		Affects values returned by the following methods:
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestRequest#getAttribute(String)}.
+	 * 			<li class='jm'>{@link RestRequest#getAttributes()}.
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@RestResource</ja>(defaultRequestAttributes={<js>"Foo: bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder
+	 * 				.attr(<js>"Foo"</js>, <js>"bar"</js>);
+	 * 				.attr(<js>"Baz: true"</js>);
+	 *
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.addTo(<jsf>REST_attrs</jsf>, <js>"Foo"</js>, <js>"bar"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.attr(<js>"Foo"</js>, <js>"bar"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestMethod</ja>(attrs={<js>"Foo: bar"</js>})
+	 * 		public Object myMethod() {...}
+	 * 	}
+	 * </p>
+	 */
+	public static final String REST_attrs = PREFIX + ".attrs.smo";
+
+	/**
 	 * Configuration property:  Default request headers.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2612,10 +2681,25 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Defines arbitrary properties that can be retrieved via the following methods:
+	 * Shortcut to add properties to the bean contexts of all serializers and parsers on all methods in the class.
+	 *
+	 * <p>
+	 * Any of the properties defined on {@link RestContext} or any of the serializers and parsers can be specified.
+	 *
+	 * <p>
+	 * Property values will be converted to the appropriate type.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jm'>{@link RestRequest#getProperties()}
-	 * 	<li class='jm'>{@link RestResponse#getProperties()}
+	 * 	<li class='jm'>{@link RestContextBuilder#set(String,Object)}
+	 * 	<li class='jm'>{@link RestContextBuilder#set(java.util.Map)}
 	 * </ul>
 	 */
 	public static final String REST_properties = PREFIX + ".properties.sms";
@@ -3160,6 +3244,7 @@ public final class RestContext extends BeanContext {
 		defaultRequestHeaders,
 		defaultResponseHeaders,
 		staticFileResponseHeaders;
+	private final ObjectMap defaultRequestAttributes;
 	private final ResponseHandler[] responseHandlers;
 	private final MimetypesFileTypeMap mimetypesFileTypeMap;
 	private final StaticFileMapping[] staticFiles;
@@ -3303,6 +3388,7 @@ public final class RestContext extends BeanContext {
 			_defaultRequestHeaders.putAll(getMapProperty(REST_defaultRequestHeaders, String.class));
 			defaultRequestHeaders = unmodifiableMap(new LinkedHashMap<>(_defaultRequestHeaders));
 
+			defaultRequestAttributes = new ObjectMap(getMapProperty(REST_attrs, Object.class)).unmodifiable();
 			defaultResponseHeaders = getMapProperty(REST_defaultResponseHeaders, Object.class);
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);
 
@@ -4424,6 +4510,22 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
+	 * Returns the default request headers for this resource.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The default request headers for this resource.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public ObjectMap getDefaultRequestAttributes() {
+		return defaultRequestAttributes;
+	}
+
+	/**
 	 * Returns the default response headers for this resource.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -4641,6 +4743,8 @@ public final class RestContext extends BeanContext {
 
 			if (mpi.hasAnnotation(Header.class)) {
 				rp[i] = new RestParamDefaults.HeaderObject(mpi, ps);
+			} else if (mpi.hasAnnotation(Attr.class)) {
+				rp[i] = new RestParamDefaults.AttributeObject(mpi, ps);
 			} else if (mpi.hasAnnotation(Query.class)) {
 				rp[i] = new RestParamDefaults.QueryObject(mpi, ps);
 			} else if (mpi.hasAnnotation(FormData.class)) {

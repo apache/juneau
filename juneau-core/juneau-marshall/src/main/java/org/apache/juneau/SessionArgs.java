@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import org.apache.juneau.json.*;
+import org.apache.juneau.serializer.*;
+
 /**
  * Runtime arguments common to all bean, serializer, and parser sessions.
  */
@@ -20,7 +23,7 @@ public class SessionArgs {
 	/**
 	 * Default empty session arguments.
 	 */
-	public static final SessionArgs DEFAULT = new SessionArgs(ObjectMap.EMPTY_MAP);
+	public static final SessionArgs DEFAULT = new SessionArgs();
 
 	ObjectMap properties;
 
@@ -29,30 +32,75 @@ public class SessionArgs {
 	 */
 	public SessionArgs() {}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param properties
-	 * 	Session-level properties.
-	 * 	<br>These override context-level properties.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public SessionArgs(ObjectMap properties) {
-		this.properties = properties != null ? properties : ObjectMap.EMPTY_MAP;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Session-level properties.
 	 *
-	 * @param properties
-	 * 	Session-level properties.
-	 * 	<br>These override context-level properties.
+	 * <p>
+	 * Overrides context-level properties.
+	 *
+	 * @param value
+	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SessionArgs properties(ObjectMap properties) {
-		this.properties = properties != null ? properties : ObjectMap.EMPTY_MAP;
+	public SessionArgs properties(ObjectMap value) {
+		this.properties = value;
 		return this;
 	}
 
+	/**
+	 * Adds a property to this session.
+	 *
+	 * @param key The property key.
+	 * @param value The property value.
+	 * @return This object (for method chaining).
+	 */
+	public SessionArgs property(String key, Object value) {
+		if (value == null) {
+			if (properties != null)
+				properties.remove(key);
+		} else {
+			if (properties == null)
+				properties = new ObjectMap();
+			properties.put(key, value);
+		}
+		return this;
+	}
+
+	/**
+	 * Returns a property on this session.
+	 *
+	 * @param key The property key.
+	 * @return The property value, or <jk>null</jk> if not set.
+	 */
+	public Object getProperty(String key) {
+		if (properties != null)
+			return properties.get(key);
+		return null;
+	}
+
+	/**
+	 * Returns the properties defined on this object as a simple map for debugging purposes.
+	 *
+	 * @return A new map containing the properties defined on this object.
+	 */
+	public ObjectMap asMap() {
+		return new ObjectMap()
+			.append("SessionArgs", new ObjectMap()
+				.appendSkipNull("properties", properties)
+			);
+	}
+
+	@Override /* Object */
+	public String toString() {
+		try {
+			return asMap().toString(SimpleJsonSerializer.DEFAULT_READABLE);
+		} catch (SerializeException e) {
+			return e.getLocalizedMessage();
+		}
+	}
 }

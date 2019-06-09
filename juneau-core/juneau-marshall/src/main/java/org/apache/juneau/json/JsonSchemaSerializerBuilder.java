@@ -15,6 +15,7 @@ package org.apache.juneau.json;
 import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -257,6 +258,54 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
+	@Override /* WriterSerializerBuilder */
+	public JsonSchemaSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSchemaSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSchemaSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSchemaSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSchemaSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSchemaSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSchemaSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSchemaSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
+
 	@Override /* SerializerBuilder */
 	public JsonSchemaSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
@@ -323,18 +372,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public JsonSchemaSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -355,12 +392,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public JsonSchemaSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -421,24 +452,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public JsonSchemaSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

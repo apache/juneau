@@ -275,7 +275,7 @@ public class JsonSerializer extends WriterSerializer {
 		 */
 		public Readable(PropertyStore ps) {
 			super(
-				ps.builder().set(SERIALIZER_useWhitespace, true).build()
+				ps.builder().set(WSERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -296,7 +296,7 @@ public class JsonSerializer extends WriterSerializer {
 				ps.builder()
 					.set(JSON_simpleMode, true)
 					.set(WSERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
+					.set(WSERIALIZER_useWhitespace, true)
 					.set(BEANTRAVERSE_detectRecursions, true)
 					.build()
 			);

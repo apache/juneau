@@ -13,7 +13,10 @@
 package org.apache.juneau.parser;
 
 
+import static org.apache.juneau.parser.ReaderParser.*;
+
 import java.io.*;
+import java.nio.charset.*;
 
 import org.apache.juneau.*;
 
@@ -26,6 +29,7 @@ import org.apache.juneau.*;
 public abstract class ReaderParserSession extends ParserSession {
 
 	private final ReaderParser ctx;
+	private final Charset fileCharset, streamCharset;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -39,6 +43,8 @@ public abstract class ReaderParserSession extends ParserSession {
 	protected ReaderParserSession(ReaderParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
+		this.fileCharset = getProperty(RPARSER_fileCharset, Charset.class, ctx.getFileCharset());
+		this.streamCharset = getProperty(RPARSER_streamCharset, Charset.class, ctx.getStreamCharset());
 	}
 
 	/**
@@ -69,9 +75,9 @@ public abstract class ReaderParserSession extends ParserSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser#RPARSER_inputStreamCharset}).
+	 * 			{@link ReaderParser#RPARSER_streamCharset}).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser#RPARSER_inputStreamCharset}).
+	 * 			{@link ReaderParser#RPARSER_streamCharset}).
 	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
 	 * 			{@link ReaderParser#RPARSER_fileCharset}).
 	 * 	</ul>
@@ -81,7 +87,7 @@ public abstract class ReaderParserSession extends ParserSession {
 	@SuppressWarnings("resource")
 	@Override /* ParserSesson */
 	public final ParserPipe createPipe(Object input) {
-		return setPipe(new ParserPipe(input, isDebug(), ctx.isStrict(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), getFileCharset(), getInputStreamCharset()));
+		return setPipe(new ParserPipe(input, isDebug(), ctx.isStrict(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), streamCharset, fileCharset));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -89,25 +95,21 @@ public abstract class ReaderParserSession extends ParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  File charset.
+	 * Returns the file charset defined on this session.
 	 *
-	 * @see ReaderParser#RPARSER_fileCharset
-	 * @return
-	 * 	The character set to use for reading <code>Files</code> from the file system.
+	 * @return the file charset defined on this session.
 	 */
-	protected final String getFileCharset() {
-		return ctx.getFileCharset();
+	protected Charset getFileCharset() {
+		return fileCharset;
 	}
 
 	/**
-	 * Configuration property:  Input stream charset.
+	 * Returns the stream charset defined on this session.
 	 *
-	 * @see ReaderParser#RPARSER_inputStreamCharset
-	 * @return
-	 * 	The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 * @return the stream charset defined on this session.
 	 */
-	protected final String getInputStreamCharset() {
-		return ctx.getInputStreamCharset();
+	protected Charset getStreamCharset() {
+		return streamCharset;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -118,6 +120,8 @@ public abstract class ReaderParserSession extends ParserSession {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("ReaderParserSession", new ObjectMap()
+				.append("fileCharset", fileCharset)
+				.append("streamCharset", streamCharset)
 			);
 	}
 }

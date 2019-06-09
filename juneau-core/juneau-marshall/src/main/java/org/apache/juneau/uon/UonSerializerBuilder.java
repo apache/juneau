@@ -15,6 +15,7 @@ package org.apache.juneau.uon;
 import static org.apache.juneau.uon.UonSerializer.*;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -148,6 +149,12 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* WriterSerializerBuilder */
+	public UonSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
 	public UonSerializerBuilder maxIndent(int value) {
 		super.maxIndent(value);
 		return this;
@@ -162,6 +169,12 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* WriterSerializerBuilder */
 	public UonSerializerBuilder sq() {
 		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UonSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

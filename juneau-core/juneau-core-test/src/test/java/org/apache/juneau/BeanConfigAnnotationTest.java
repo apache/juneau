@@ -240,7 +240,7 @@ public class BeanConfigAnnotationTest {
 		check("", bc.getImplClasses());
 		check("", bc.getIncludeProperties());
 		check("0", bc.getInitialDepth());
-		check(null, bc.getLocale());
+		check(Locale.getDefault().toString(), bc.getLocale());
 		check("100", bc.getMaxDepth());
 		check(null, bc.getMediaType());
 		check("java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bc.getNotBeanPackagesNames());
@@ -290,7 +290,7 @@ public class BeanConfigAnnotationTest {
 		check("", bc.getImplClasses());
 		check("", bc.getIncludeProperties());
 		check("0", bc.getInitialDepth());
-		check(null, bc.getLocale());
+		check(Locale.getDefault().toString(), bc.getLocale());
 		check("100", bc.getMaxDepth());
 		check(null, bc.getMediaType());
 		check("java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bc.getNotBeanPackagesNames());

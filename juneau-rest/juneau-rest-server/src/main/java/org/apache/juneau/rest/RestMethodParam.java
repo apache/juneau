@@ -91,12 +91,12 @@ import org.apache.juneau.utils.*;
  * 		<li class='jc'>{@link RequestBody}
  * 		<li class='jc'>{@link RequestFormData}
  * 		<li class='jc'>{@link RequestHeaders}
+ * 		<li class='jc'>{@link RequestAttributes}
  * 		<li class='jc'>{@link RequestPath}
  * 		<li class='jc'>{@link RequestQuery}
  * 		<li class='jc'>{@link ResourceBundle}
  * 		<li class='jc'>{@link RestContext}
  * 		<li class='jc'>{@link RestLogger}
- * 		<li class='jc'>{@link RequestProperties}
  * 		<li class='jc'>{@link ServletInputStream}
  * 		<li class='jc'>{@link ServletOutputStream}
  * 		<li class='jc'>{@link Swagger}

@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -136,6 +137,54 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
+	@Override /* WriterSerializerBuilder */
+	public HtmlStrippedDocSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlStrippedDocSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlStrippedDocSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlStrippedDocSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlStrippedDocSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlStrippedDocSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlStrippedDocSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlStrippedDocSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
+
 	@Override /* SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
@@ -202,18 +251,6 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public HtmlStrippedDocSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public HtmlStrippedDocSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -234,12 +271,6 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public HtmlStrippedDocSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -300,24 +331,6 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public HtmlStrippedDocSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public HtmlStrippedDocSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public HtmlStrippedDocSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

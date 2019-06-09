@@ -97,6 +97,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private final String method;
 	private RequestBody body;
 	private Method javaMethod;
+	@SuppressWarnings("deprecation")
 	private RequestProperties properties;
 	private final boolean debug;
 	private BeanSession beanSession;
@@ -108,6 +109,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private UriContext uriContext;
 	private String charset, authorityPath;
 	private RequestHeaders headers;
+	private RequestAttributes attributes;
 	private Config cf;
 	private Swagger swagger;
 	private SerializerSessionArgs serializerSessionArgs;
@@ -176,7 +178,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestMethodContext rjm, RequestProperties properties) {
+	final void init(RestMethodContext rjm, @SuppressWarnings("deprecation") RequestProperties properties) {
 		this.restJavaMethod = rjm;
 		this.javaMethod = rjm.method;
 		this.properties = properties;
@@ -190,6 +192,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.addDefault(rjm.defaultRequestHeaders)
 			.addDefault(context.getDefaultRequestHeaders())
 			.parser(rjm.partParser);
+		this.attributes = new RequestAttributes(this, rjm.defaultRequestAttributes);
 		this.body
 			.encoders(rjm.encoders)
 			.parsers(rjm.parsers)
@@ -226,31 +229,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		String qs = getQueryString();
 		return "HTTP " + getMethod() + " " + getRequestURI() + (qs == null ? "" : "?" + qs);
 	}
-
-	/**
-	 * Same as {@link #getAttribute(String)} but returns a default value if not found.
-	 *
-	 * @param name The request attribute name.
-	 * @param def The default value if the attribute doesn't exist.
-	 * @return The request attribute value.
-	 */
-	public Object getAttribute(String name, Object def) {
-		Object o = super.getAttribute(name);
-		return (o == null ? def : o);
-	}
-
-	/**
-	 * Shorthand method for calling {@link #setAttribute(String, Object)} fluently.
-	 *
-	 * @param name The request attribute name.
-	 * @param value The request attribute value.
-	 * @return This object (for method chaining).
-	 */
-	public RestRequest attr(String name, Object value) {
-		setAttribute(name, value);
-		return this;
-	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -296,7 +274,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * @return The properties active for this request.
+	 * @deprecated Use {@link #getAttributes()}
 	 */
+	@Deprecated
 	public RequestProperties getProperties() {
 		return this.properties;
 	}
@@ -307,7 +287,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @param name The property name.
 	 * @param value The property value.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link RequestAttributes#put(String, Object)} or {@link #setAttribute(String, Object)}.
 	 */
+	@Deprecated
 	public RestRequest prop(String name, Object value) {
 		this.properties.append(name, value);
 		return this;
@@ -335,7 +317,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		<jc>// Add a default value.</jc>
 	 * 		h.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
 	 *
-	 *  		<jc>// Get a header value as a POJO.</jc>
+	 *  	<jc>// Get a header value as a POJO.</jc>
 	 * 		UUID etag = h.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
 	 *
 	 * 		<jc>// Get a standard header.</jc>
@@ -446,6 +428,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return charset;
 	}
 
+	/**
+	 * Wrapper around {@link #getCharacterEncoding()} that converts the value to a {@link Charset}.
+	 *
+	 * @return The request character encoding converted to a {@link Charset}.
+	 */
+	public Charset getCharset() {
+		String s = getCharacterEncoding();
+		return s == null ? null : Charset.forName(s);
+	}
+
 	@Override /* ServletRequest */
 	public Locale getLocale() {
 		String h = headers.getString("Accept-Language");
@@ -472,6 +464,77 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return super.getLocales();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Attributes
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Request attributes.
+	 *
+	 * <p>
+	 * Returns a {@link RequestAttributes} object that encapsulates access to attributes on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<jk>public</jk> Object myMethod(RestRequest req) {
+	 *
+	 * 		<jc>// Get access to attributes.</jc>
+	 * 		RequestAttributes a = req.getAttributes();
+	 *
+	 *  	<jc>// Get a header value as a POJO.</jc>
+	 * 		UUID etag = a.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This object is modifiable.
+	 * 	<li>
+	 * 		Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
+	 * 	<li>
+	 * 		The {@link RequestAttributes} object can also be passed as a parameter on the method.
+	 * 	<li>
+	 * 		The {@link Attr @Attr} annotation can be used to access individual attribute values.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestAttributes}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The headers on this request.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public RequestAttributes getAttributes() {
+		return attributes;
+	}
+
+	/**
+	 * Same as {@link #getAttribute(String)} but returns a default value if not found.
+	 *
+	 * @param name The request attribute name.
+	 * @param def The default value if the attribute doesn't exist.
+	 * @return The request attribute value.
+	 */
+	public Object getAttribute(String name, Object def) {
+		Object o = super.getAttribute(name);
+		return (o == null ? def : o);
+	}
+
+	/**
+	 * Shorthand method for calling {@link #setAttribute(String, Object)} fluently.
+	 *
+	 * @param name The request attribute name.
+	 * @param value The request attribute value.
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest attr(String name, Object value) {
+		setAttribute(name, value);
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Query parameters
@@ -1626,7 +1689,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public SerializerSessionArgs getSerializerSessionArgs() {
 		if (serializerSessionArgs == null)
-			serializerSessionArgs = new SerializerSessionArgs(getProperties(), getJavaMethod(), getLocale(), getHeaders().getTimeZone(), null, null, isDebug() ? true : null, getUriContext(), isPlainText() ? true : null, getVarResolverSession());
+			serializerSessionArgs = SerializerSessionArgs
+				.create()
+				.properties(getProperties())
+				.javaMethod(getJavaMethod())
+				.locale(getLocale())
+				.timeZone(getHeaders().getTimeZone())
+				.debug(isDebug() ? true : null)
+				.uriContext(getUriContext())
+				.resolver(getVarResolverSession())
+				.useWhitespace(isPlainText() ? true : null);
 		return serializerSessionArgs;
 	}
 
@@ -1637,7 +1709,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public ParserSessionArgs getParserSessionArgs() {
 		if (parserSessionArgs == null)
-			parserSessionArgs = new ParserSessionArgs(getProperties(), getJavaMethod(), getLocale(), getHeaders().getTimeZone(), null, null, isDebug() ? true : null, getUriContext());
+			parserSessionArgs =
+				ParserSessionArgs
+					.create()
+					.properties(getProperties())
+					.javaMethod(getJavaMethod())
+					.locale(getLocale())
+					.timeZone(getHeaders().getTimeZone())
+					.debug(isDebug() ? true : null);
 		return parserSessionArgs;
 	}
 

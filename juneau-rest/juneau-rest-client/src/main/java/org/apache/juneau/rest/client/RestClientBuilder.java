@@ -1898,7 +1898,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 *
 	 * @param value
@@ -1907,7 +1907,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder useWhitespace(boolean value) {
-		return set(SERIALIZER_useWhitespace, value);
+		return set(WSERIALIZER_useWhitespace, value);
 	}
 
 	/**
@@ -1918,12 +1918,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder useWhitespace() {
-		return set(SERIALIZER_useWhitespace, true);
+		return set(WSERIALIZER_useWhitespace, true);
 	}
 
 	/**
@@ -1934,13 +1934,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder ws() {
-		return set(SERIALIZER_useWhitespace, true);
+		return set(WSERIALIZER_useWhitespace, true);
 	}
 
 	/**
@@ -2178,7 +2178,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link ReaderParser#RPARSER_inputStreamCharset}
+	 * 	<li class='jf'>{@link ReaderParser#RPARSER_streamCharset}
 	 * </ul>
 	 *
 	 * @param value
@@ -2187,7 +2187,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder inputStreamCharset(String value) {
-		return set(RPARSER_inputStreamCharset, value);
+		return set(RPARSER_streamCharset, value);
 	}
 
 	/**

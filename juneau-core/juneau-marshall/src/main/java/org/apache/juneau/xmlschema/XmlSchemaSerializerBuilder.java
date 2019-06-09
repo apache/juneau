@@ -13,6 +13,7 @@
 package org.apache.juneau.xmlschema;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -94,6 +95,54 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
+	@Override /* WriterSerializerBuilder */
+	public XmlSchemaSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSchemaSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSchemaSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSchemaSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSchemaSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSchemaSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSchemaSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public XmlSchemaSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
+
 	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
@@ -160,18 +209,6 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -192,12 +229,6 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -258,24 +289,6 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

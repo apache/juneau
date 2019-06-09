@@ -14,6 +14,7 @@ package org.apache.juneau.parser;
 
 import static org.junit.Assert.*;
 
+import java.nio.charset.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -56,8 +57,8 @@ public class ParserConfigAnnotationTest {
 		autoCloseStreams="$X{true}",
 		binaryFormat="$X{HEX}",
 		debugOutputLines="$X{1}",
-		fileCharset="$X{foo}",
-		inputStreamCharset="$X{foo}",
+		fileCharset="$X{US-ASCII}",
+		streamCharset="$X{US-ASCII}",
 		listener=AA.class,
 		strict="$X{true}",
 		trimStrings="$X{true}",
@@ -72,8 +73,8 @@ public class ParserConfigAnnotationTest {
 		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAutoCloseStreams());
 		check("1", x.getDebugOutputLines());
-		check("foo", x.getFileCharset());
-		check("foo", x.getInputStreamCharset());
+		check("US-ASCII", x.getFileCharset());
+		check("US-ASCII", x.getStreamCharset());
 		check("AA", x.getListener());
 		check("true", x.isStrict());
 		check("true", x.isTrimStrings());
@@ -107,8 +108,8 @@ public class ParserConfigAnnotationTest {
 		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAutoCloseStreams());
 		check("5", x.getDebugOutputLines());
-		check("DEFAULT", x.getFileCharset());
-		check("UTF-8", x.getInputStreamCharset());
+		check(Charset.defaultCharset().toString(), x.getFileCharset());
+		check("UTF-8", x.getStreamCharset());
 		check(null, x.getListener());
 		check("false", x.isStrict());
 		check("false", x.isTrimStrings());
@@ -141,8 +142,8 @@ public class ParserConfigAnnotationTest {
 		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAutoCloseStreams());
 		check("5", x.getDebugOutputLines());
-		check("DEFAULT", x.getFileCharset());
-		check("UTF-8", x.getInputStreamCharset());
+		check(Charset.defaultCharset().toString(), x.getFileCharset());
+		check("UTF-8", x.getStreamCharset());
 		check(null, x.getListener());
 		check("false", x.isStrict());
 		check("false", x.isTrimStrings());

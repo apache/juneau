@@ -15,6 +15,7 @@ package org.apache.juneau.serializer;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
+import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
@@ -45,15 +46,32 @@ public final class SerializerPipe implements Closeable {
 
 	private OutputStream outputStream;
 	private Writer writer;
+	private Charset charset;
 
 	/**
-	 * Constructor.
+	 * Writer-based constructor.
+	 *
+	 * @param output The object to pipe the serializer output to.
+	 */
+	SerializerPipe(Object output, Charset streamCharset, Charset fileCharset) {
+		boolean isFile = (output instanceof File);
+		this.output = output;
+		this.autoClose = isFile;
+		Charset cs = isFile ? fileCharset : streamCharset;
+		if (cs == null)
+			cs = isFile ? Charset.defaultCharset() : UTF8;
+		this.charset = cs;
+	}
+
+	/**
+	 * Stream-based constructor.
 	 *
 	 * @param output The object to pipe the serializer output to.
 	 */
 	SerializerPipe(Object output) {
 		this.output = output;
-		this.autoClose = (output instanceof File);
+		this.autoClose = false;
+		this.charset = null;
 	}
 
 	/**
@@ -117,7 +135,7 @@ public final class SerializerPipe implements Closeable {
 		if (output instanceof Writer)
 			writer = (Writer)output;
 		else if (output instanceof OutputStream)
-			writer = new OutputStreamWriter((OutputStream)output, UTF8);
+			writer = new OutputStreamWriter((OutputStream)output, charset);
 		else if (output instanceof File)
 			writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream((File)output)));
 		else if (output instanceof StringBuilder)

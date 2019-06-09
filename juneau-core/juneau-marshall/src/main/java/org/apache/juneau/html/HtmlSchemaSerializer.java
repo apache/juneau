@@ -76,7 +76,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 */
 		public Readable(PropertyStore ps) {
 			super(
-				ps.builder().set(SERIALIZER_useWhitespace, true).build()
+				ps.builder().set(WSERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -110,7 +110,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 			super(
 				ps.builder()
 					.set(WSERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
+					.set(WSERIALIZER_useWhitespace, true)
 					.build()
 			);
 		}

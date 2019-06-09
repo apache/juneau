@@ -86,6 +86,9 @@ public abstract class Session {
 	public final <T> T getProperty(String key, Class<T> type, T def) {
 		if (properties == null)
 			return def;
+		Object o = properties.get(key);
+		if (o == null)
+			return def;
 		type = (Class<T>)getClassInfo(type).getWrapperIfPrimitive();
 		T t = properties.get(key, type);
 		return t == null ? def : t;

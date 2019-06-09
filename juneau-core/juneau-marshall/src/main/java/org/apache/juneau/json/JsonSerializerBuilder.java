@@ -14,6 +14,7 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.json.JsonSerializer.*;
 
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -146,6 +147,12 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* WriterSerializerBuilder */
+	public JsonSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
 	public JsonSerializerBuilder maxIndent(int value) {
 		super.maxIndent(value);
 		return this;
@@ -160,6 +167,12 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* WriterSerializerBuilder */
 	public JsonSerializerBuilder sq() {
 		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public JsonSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

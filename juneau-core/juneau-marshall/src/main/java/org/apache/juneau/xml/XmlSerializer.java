@@ -382,7 +382,7 @@ public class XmlSerializer extends WriterSerializer {
 			super(
 				ps.builder()
 					.set(WSERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
+					.set(WSERIALIZER_useWhitespace, true)
 					.build()
 				);
 		}
@@ -438,7 +438,7 @@ public class XmlSerializer extends WriterSerializer {
 				ps.builder()
 					.set(XML_enableNamespaces, true)
 					.set(WSERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
+					.set(WSERIALIZER_useWhitespace, true)
 					.build()
 				);
 		}

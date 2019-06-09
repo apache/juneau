@@ -64,6 +64,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	private RestMethodContext restJavaMethod;
 	private Object output;                       // The POJO being sent to the output.
 	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
+	@SuppressWarnings("deprecation")
 	private RequestProperties properties;                // Response properties
 	private ServletOutputStream sos;
 	private FinishableServletOutputStream os;
@@ -99,7 +100,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestMethodContext rjm, RequestProperties properties) throws NotAcceptable {
+	final void init(RestMethodContext rjm, @SuppressWarnings("deprecation") RequestProperties properties) throws NotAcceptable {
 		this.restJavaMethod = rjm;
 		this.properties = properties;
 
@@ -288,7 +289,9 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * </ul>
 	 *
 	 * @return The properties active for this request.
+	 * @deprecated Use {@link RestResponse#getAttributes()}.
 	 */
+	@Deprecated
 	public RequestProperties getProperties() {
 		return properties;
 	}
@@ -299,9 +302,32 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @param name The property name.
 	 * @param value The property value.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #attr(String,Object)}.
 	 */
+	@Deprecated
 	public RestResponse prop(String name, Object value) {
 		this.properties.append(name, value);
+		return this;
+	}
+
+	/**
+	 * Shortcut for calling <code>getRequest().getAttributes()</code>.
+	 *
+	 * @return The request attributes object.
+	 */
+	public RequestAttributes getAttributes() {
+		return request.getAttributes();
+	}
+
+	/**
+	 * Shortcut for calling <code>getRequest().setAttribute(String,Object)</code>.
+	 *
+	 * @param name The property name.
+	 * @param value The property value.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse attr(String name, Object value) {
+		request.setAttribute(name, value);
 		return this;
 	}
 
@@ -485,6 +511,16 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 */
 	public MediaType getMediaType() {
 		return MediaType.forString(getContentType());
+	}
+
+	/**
+	 * Wrapper around {@link #getCharacterEncoding()} that converts the value to a {@link Charset}.
+	 *
+	 * @return The request character encoding converted to a {@link Charset}.
+	 */
+	public Charset getCharset() {
+		String s = getCharacterEncoding();
+		return s == null ? null : Charset.forName(s);
 	}
 
 	/**

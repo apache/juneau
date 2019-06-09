@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.BeanContext.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -59,11 +60,11 @@ public class BeanSession extends Session {
 	protected BeanSession(BeanContext ctx, BeanSessionArgs args) {
 		super(args);
 		this.ctx = ctx;
-		locale = ObjectUtils.firstNonNull(args.locale, ctx.getLocale(), Locale.getDefault());
-		timeZone = ObjectUtils.firstNonNull(args.timeZone, ctx.getTimeZone());
-		debug = ObjectUtils.firstNonNull(args.debug, ctx.isDebug(), false);
+		locale = getProperty(BEAN_locale, Locale.class, ctx.getLocale());
+		timeZone = getProperty(BEAN_timeZone, TimeZone.class, ctx.getTimeZone());
+		debug = getProperty(BEAN_debug, Boolean.class, ctx.isDebug());
+		mediaType = getProperty(BEAN_mediaType, MediaType.class, ctx.getMediaType());
 		schema = args.schema;
-		mediaType = ObjectUtils.firstNonNull(args.mediaType, ctx.getMediaType());
 	}
 
 	@Override /* Session */

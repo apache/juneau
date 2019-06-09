@@ -84,6 +84,14 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 		if (a.consumes().length > 0)
 			psb.set(REST_consumes, strings(a.consumes()));
 
+		for (String ra : strings(a.attrs())) {
+			String[] ra2 = RestUtils.parseKeyValuePair(ra);
+			if (ra2 == null)
+				throw new FormattedRuntimeException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", ra);
+			if (isNotEmpty(ra2[1]))
+				psb.addTo(REST_attrs, ra2[0], ra2[1]);
+		}
+
 		for (String header : strings(a.defaultRequestHeaders())) {
 			String[] h = RestUtils.parseHeader(header);
 			if (h == null)

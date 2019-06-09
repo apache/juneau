@@ -13,6 +13,7 @@
 package org.apache.juneau.plaintext;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -52,6 +53,12 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* WriterSerializerBuilder */
+	public PlainTextSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
 	public PlainTextSerializerBuilder maxIndent(int value) {
 		super.maxIndent(value);
 		return this;
@@ -66,6 +73,12 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* WriterSerializerBuilder */
 	public PlainTextSerializerBuilder sq() {
 		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public PlainTextSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

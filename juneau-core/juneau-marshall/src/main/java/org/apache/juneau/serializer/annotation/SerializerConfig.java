@@ -445,36 +445,41 @@ public @interface SerializerConfig {
 	 */
 	String uriResolution() default "";
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// WriterSerializer
+	//-------------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Configuration property:  Use whitespace.
+	 * Configuration property:  File charset.
 	 *
 	 * <p>
-	 * If <js>"true"</js>, whitespace is added to the output to improve readability.
+	 * The character set to use for writing Files to the file system.
+	 *
+	 * <p>
+	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
+	 * 		Format: string
+	 * 	<li>
+	 * 		"DEFAULT" can be used to indicate the JVM default file system charset.
+	 * 	<li>
+	 * 		Default: JVM system default.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.useWhitespace.b"</js>.
+	 * 		A default global value can be set via the system property <js>"WriterSerializer.fileCharset.s"</js>.
+	 * 	<li>
+	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_fileCharset}
 	 * </ul>
 	 */
-	String useWhitespace() default "";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// WriterSerializer
-	//-------------------------------------------------------------------------------------------------------------------
+	String fileCharset() default "";
 
 	/**
 	 * Configuration property:  Maximum indentation.
@@ -527,4 +532,61 @@ public @interface SerializerConfig {
 	 * </ul>
 	 */
 	String quoteChar() default "";
+
+	/**
+	 * Configuration property:  Output stream charset.
+	 *
+	 * <p>
+	 * The character set to use when writing to OutputStreams.
+	 *
+	 * <p>
+	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: string
+	 * 	<li>
+	 * 		Default: <js>"utf-8"</js>.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"WriterSerializer.streamCharset.s"</js>.
+	 * 	<li>
+	 * 		This setting does not apply to the RDF serializers.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_streamCharset}
+	 * </ul>
+	 */
+	String streamCharset() default "";
+
+	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * <p>
+	 * If <js>"true"</js>, whitespace is added to the output to improve readability.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"Serializer.useWhitespace.b"</js>.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * </ul>
+	 */
+	String useWhitespace() default "";
 }

@@ -53,7 +53,7 @@ public final class ParserPipe implements Closeable {
 
 	private final Object input;
 	final boolean debug, strict, autoCloseStreams, unbuffered;
-	private final String fileCharset, inputStreamCharset;
+	private final Charset charset;
 
 	private String inputString;
 	private InputStream inputStream;
@@ -83,19 +83,20 @@ public final class ParserPipe implements Closeable {
 	 * 	<br>Otherwise, we read character data into a reusable buffer.
 	 * @param fileCharset
 	 * 	The charset to expect when reading from {@link File Files}.
-	 * 	Use <js>"default"</js> to specify {@link Charset#defaultCharset()}.
-	 * @param inputStreamCharset
+	 * @param streamCharset
 	 * 	The charset to expect when reading from {@link InputStream InputStreams}.
-	 * 	Use <js>"default"</js> to specify {@link Charset#defaultCharset()}.
 	 */
-	public ParserPipe(Object input, boolean debug, boolean strict, boolean autoCloseStreams, boolean unbuffered, String fileCharset, String inputStreamCharset) {
+	public ParserPipe(Object input, boolean debug, boolean strict, boolean autoCloseStreams, boolean unbuffered, Charset streamCharset, Charset fileCharset) {
+		boolean isFile = input instanceof File;
 		this.input = input;
 		this.debug = debug;
 		this.strict = strict;
 		this.autoCloseStreams = autoCloseStreams;
 		this.unbuffered = unbuffered;
-		this.fileCharset = fileCharset;
-		this.inputStreamCharset = inputStreamCharset;
+		Charset cs = isFile ? fileCharset : streamCharset;
+		if (cs == null)
+			cs = (isFile ? Charset.defaultCharset() : UTF8); 
+		this.charset = cs;
 		if (input instanceof CharSequence)
 			this.inputString = input.toString();
 		this.binaryFormat = null;
@@ -123,8 +124,7 @@ public final class ParserPipe implements Closeable {
 		this.strict = false;
 		this.autoCloseStreams = autoCloseStreams;
 		this.unbuffered = unbuffered;
-		this.fileCharset = null;
-		this.inputStreamCharset = null;
+		this.charset = null;
 		if (input instanceof CharSequence)
 			this.inputString = input.toString();
 		this.binaryFormat = binaryFormat;
@@ -230,11 +230,7 @@ public final class ParserPipe implements Closeable {
 				? (InputStream)input
 				: new ByteArrayInputStream((byte[])input)
 			);
-			CharsetDecoder cd = (
-				"default".equalsIgnoreCase(inputStreamCharset)
-				? Charset.defaultCharset()
-				: Charset.forName(inputStreamCharset)
-			).newDecoder();
+			CharsetDecoder cd = charset.newDecoder();
 			if (strict) {
 				cd.onMalformedInput(CodingErrorAction.REPORT);
 				cd.onUnmappableCharacter(CodingErrorAction.REPORT);
@@ -248,11 +244,7 @@ public final class ParserPipe implements Closeable {
 				reader = new StringReader(inputString);
 			}
 		} else if (input instanceof File) {
-			CharsetDecoder cd = (
-				"DEFAULT".equalsIgnoreCase(fileCharset)
-				? Charset.defaultCharset()
-				: Charset.forName(fileCharset)
-			).newDecoder();
+			CharsetDecoder cd = charset.newDecoder();
 			if (strict) {
 				cd.onMalformedInput(CodingErrorAction.REPORT);
 				cd.onUnmappableCharacter(CodingErrorAction.REPORT);

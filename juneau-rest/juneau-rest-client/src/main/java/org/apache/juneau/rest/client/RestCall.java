@@ -2296,7 +2296,13 @@ public final class RestCall extends BeanSession implements Closeable {
 						}
 					}
 
-					ParserSessionArgs pArgs = new ParserSessionArgs(this.getProperties(), null, response.getLocale(), null, mt, responseBodySchema, false, null);
+					ParserSessionArgs pArgs =
+						ParserSessionArgs
+							.create()
+							.properties(new ObjectMap().setInner(getProperties()))
+							.locale(response.getLocale())
+							.mediaType(mt)
+							.schema(responseBodySchema);
 					return parser.createSession(pArgs).parse(in, type);
 				}
 			}

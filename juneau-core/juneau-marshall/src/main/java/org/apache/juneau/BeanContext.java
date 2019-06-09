@@ -2058,7 +2058,7 @@ public class BeanContext extends Context {
 			m2.put(e.getKey(), StringUtils.split(e.getValue()));
 		excludeProperties = unmodifiableMap(m2);
 
-		locale = getInstanceProperty(BEAN_locale, Locale.class, null);
+		locale = getInstanceProperty(BEAN_locale, Locale.class, Locale.getDefault());
 		timeZone = getInstanceProperty(BEAN_timeZone, TimeZone.class, null);
 		mediaType = getInstanceProperty(BEAN_mediaType, MediaType.class, null);
 

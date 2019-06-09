@@ -35,33 +35,30 @@ public class RestResourcePropertiesTest {
 
 	@RestResource(
 		path="/p1",
-		properties={
-			@Property(name="A1",value="a1"),
-			@Property(name="A2",value="a2"),
-			@Property(name="foo",value="bar"),
-			@Property(name="bar",value="baz"),
-			@Property(name="R1a",value="$R{requestURI}"),
-			@Property(name="R1b",value="$R{requestParentURI}"),
-			@Property(name="R2",value="$R{foo}"),
-			@Property(name="R3",value="$R{$R{foo}}"),
-			@Property(name="R4",value="$R{A1}"),
-			@Property(name="R5",value="$R{A2}"),
-			@Property(name="R6",value="$R{C}"),
+		attrs={
+			"A1: a1",
+			"A2: a2",
+			"foo: bar",
+			"bar: baz",
+			"R1a: $R{requestURI}",
+			"R1b: $R{requestParentURI}",
+			"R2: $R{foo}",
+			"R3: $R{$R{foo}}",
+			"R4: $R{A1}",
+			"R5: $R{A2}",
+			"R6: $R{C}",
 		}
 	)
 	public static class A {
 
 		@RestMethod(name=GET, path="/p2",
-			properties={
-				@Property(name="B1",value="b1"),
-				@Property(name="B2",value="b2")
-			},
+			attrs={"B1: b1", "B2:b"},
 			serializers=A01.class
 		)
 		public void testPropertiesDefinedOnMethod(RestResponse res) {
-			res.prop("A2", "c");
-			res.prop("B2", "c");
-			res.prop("C", "c");
+			res.attr("A2", "c");
+			res.attr("B2", "c");
+			res.attr("C", "c");
 			res.setOutput(null);
 		}
 

@@ -64,26 +64,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
 	 * @return This object (for method chaining).
 	 */
-	public ReaderParserBuilder fileCharset(String value) {
-		return set(RPARSER_fileCharset, value);
-	}
-
-	/**
-	 * Configuration property:  File charset.
-	 *
-	 * <p>
-	 * The character set to use for reading <code>Files</code> from the file system.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
-	 * @return This object (for method chaining).
-	 */
 	public ReaderParserBuilder fileCharset(Charset value) {
 		return set(RPARSER_fileCharset, value);
 	}
@@ -96,7 +76,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link ReaderParser#RPARSER_inputStreamCharset}
+	 * 	<li class='jf'>{@link ReaderParser#RPARSER_streamCharset}
 	 * </ul>
 	 *
 	 * @param value
@@ -104,28 +84,8 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * 	<br>The default value is <js>"UTF-8"</js>.
 	 * @return This object (for method chaining).
 	 */
-	public ReaderParserBuilder inputStreamCharset(String value) {
-		return set(RPARSER_inputStreamCharset, value);
-	}
-
-	/**
-	 * Configuration property:  Input stream charset.
-	 *
-	 * <p>
-	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link ReaderParser#RPARSER_inputStreamCharset}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <js>"UTF-8"</js>.
-	 * @return This object (for method chaining).
-	 */
-	public ReaderParserBuilder inputStreamCharset(Charset value) {
-		return set(RPARSER_inputStreamCharset, value);
+	public ReaderParserBuilder streamCharset(Charset value) {
+		return set(RPARSER_streamCharset, value);
 	}
 
 	@Override /* ParserBuilder */

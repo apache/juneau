@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.serializer.WriterSerializer.*;
+
 import java.io.*;
+import java.nio.charset.*;
 
 import org.apache.juneau.*;
 
@@ -35,6 +38,8 @@ import org.apache.juneau.*;
 public abstract class WriterSerializerSession extends SerializerSession {
 
 	private final WriterSerializer ctx;
+	private final boolean useWhitespace;
+	private final Charset streamCharset, fileCharset;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -51,6 +56,9 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	protected WriterSerializerSession(WriterSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
+		this.streamCharset = getProperty(WSERIALIZER_streamCharset, Charset.class, ctx.getStreamCharset());
+		this.fileCharset = getProperty(WSERIALIZER_fileCharset, Charset.class, ctx.getFileCharset());
+		this.useWhitespace = getProperty(WSERIALIZER_useWhitespace, Boolean.class, ctx.isUseWhitespace());
 	}
 
 	/**
@@ -66,6 +74,11 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	@Override /* SerializerSession */
 	public final boolean isWriterSerializer() {
 		return true;
+	}
+
+	@Override /* SerializerSession */
+	protected SerializerPipe createPipe(Object output) {
+		return new SerializerPipe(output, streamCharset, fileCharset);
 	}
 
 	/**
@@ -113,6 +126,17 @@ public abstract class WriterSerializerSession extends SerializerSession {
 		return ctx.getQuoteChar();
 	}
 
+	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * @see WriterSerializer#WSERIALIZER_useWhitespace
+	 * @return
+	 * 	The character used for quoting attributes and values.
+	 */
+	protected final boolean isUseWhitespace() {
+		return useWhitespace;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -121,6 +145,6 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("WriterSerializerSession", new ObjectMap()
-			);
+		);
 	}
 }

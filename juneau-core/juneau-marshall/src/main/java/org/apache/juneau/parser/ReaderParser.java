@@ -16,6 +16,7 @@ import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Subclass of {@link Parser} for characters-based parsers.
@@ -48,7 +49,6 @@ public abstract class ReaderParser extends Parser {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ReaderParserBuilder#fileCharset(String)}
 	 * 			<li class='jm'>{@link ReaderParserBuilder#fileCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
@@ -74,7 +74,7 @@ public abstract class ReaderParser extends Parser {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>PARSER_fileCharset</jsf>, <js>"UTF-8"</js>)
+	 * 		.set(<jsf>RPARSER_fileCharset</jsf>, <js>"UTF-8"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
@@ -88,14 +88,13 @@ public abstract class ReaderParser extends Parser {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"ReaderParser.inputStreamCharset.s"</js>
+	 * 	<li><b>Name:</b>  <js>"ReaderParser.streamCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"UTF-8"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ReaderParserBuilder#inputStreamCharset(String)}
-	 * 			<li class='jm'>{@link ReaderParserBuilder#inputStreamCharset(Charset)}
+	 * 			<li class='jm'>{@link ReaderParserBuilder#streamCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -111,20 +110,20 @@ public abstract class ReaderParser extends Parser {
 	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
-	 * 		.inputStreamCharset(<js>"UTF-8"</js>)
+	 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>PARSER_inputStreamCharset</jsf>, <js>"UTF-8"</js>)
+	 * 		.set(<jsf>RPARSER_streamCharset</jsf>, <js>"UTF-8"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it to read a UTF-8 encoded input stream.</jc>
 	 * 	MyBean myBean = p.parse(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
 	 * </p>
 	 */
-	public static final String RPARSER_inputStreamCharset = PREFIX + ".inputStreamCharset.s";
+	public static final String RPARSER_streamCharset = PREFIX + ".streamCharset.s";
 
 	static final ReaderParser DEFAULT = new ReaderParser(PropertyStore.create().build(), "") {
 		@Override
@@ -137,7 +136,7 @@ public abstract class ReaderParser extends Parser {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final String inputStreamCharset, fileCharset;
+	private final Charset streamCharset, fileCharset;
 
 	/**
 	 * Constructor.
@@ -148,8 +147,8 @@ public abstract class ReaderParser extends Parser {
 	protected ReaderParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
 
-		inputStreamCharset = getStringProperty(RPARSER_inputStreamCharset, "UTF-8");
-		fileCharset = getStringProperty(RPARSER_fileCharset, "DEFAULT");
+		streamCharset = getProperty(RPARSER_streamCharset, Charset.class, IOUtils.UTF8);
+		fileCharset = getProperty(RPARSER_fileCharset, Charset.class, Charset.defaultCharset());
 	}
 
 	@Override /* Parser */
@@ -168,19 +167,19 @@ public abstract class ReaderParser extends Parser {
 	 * @return
 	 * 	The character set to use for reading <code>Files</code> from the file system.
 	 */
-	protected final String getFileCharset() {
+	protected final Charset getFileCharset() {
 		return fileCharset;
 	}
 
 	/**
 	 * Configuration property:  Input stream charset.
 	 *
-	 * @see #RPARSER_inputStreamCharset
+	 * @see #RPARSER_streamCharset
 	 * @return
 	 * 	The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
 	 */
-	protected final String getInputStreamCharset() {
-		return inputStreamCharset;
+	protected final Charset getStreamCharset() {
+		return streamCharset;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -191,8 +190,8 @@ public abstract class ReaderParser extends Parser {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("ReaderParser", new ObjectMap()
-				.append("inputStreamCharset", inputStreamCharset)
 				.append("fileCharset", fileCharset)
+				.append("streamCharset", streamCharset)
 			);
 	}
 }

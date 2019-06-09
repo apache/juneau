@@ -31,8 +31,10 @@ import org.apache.juneau.svl.*;
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.Properties}
  * </ul>
+ * @deprecated Use {@link RequestAttributes}
  */
 @SuppressWarnings("serial")
+@Deprecated
 public class RequestProperties extends ResolvingObjectMap {
 
 	/**

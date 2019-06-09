@@ -267,36 +267,36 @@ public class RestMethodInheritTest {
 	// Test properties inheritance.
 	//=================================================================================================================
 
-	@RestResource(properties={@Property(name="p1",value="v1"), @Property(name="p2",value="v2")})
+	@RestResource(attrs={"p1:v1","p2:v2"})
 	public static class E {}
 
-	@RestResource(properties={@Property(name="p2",value="v2a"), @Property(name="p3",value="v3"), @Property(name="p4",value="v4")})
+	@RestResource(attrs={"p2:v2a","p3:v3","p4:v4"})
 	public static class E01 extends E {}
 
 	@RestResource
 	public static class E02 extends E01 {
 		@RestMethod
-		public ObjectMap e01(RequestProperties properties) {
+		public ObjectMap e01(RequestAttributes attrs) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
-			return transform(properties);
+			return transform(attrs);
 		}
-		@RestMethod(properties={@Property(name="p4",value="v4a"), @Property(name="p5", value="v5")})
-		public ObjectMap e02(RequestProperties properties, @HasQuery("override") boolean override) {
+		@RestMethod(attrs={"p4:v4a","p5:v5"})
+		public ObjectMap e02(RequestAttributes attrs, @HasQuery("override") boolean override) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
-				properties.put("p1", "x");
-				properties.put("p2", "x");
-				properties.put("p3", "x");
-				properties.put("p4", "x");
-				properties.put("p5", "x");
+				attrs.put("p1", "x");
+				attrs.put("p2", "x");
+				attrs.put("p3", "x");
+				attrs.put("p4", "x");
+				attrs.put("p5", "x");
 			}
-			return transform(properties);
+			return transform(attrs);
 		}
 
-		private ObjectMap transform(RequestProperties properties) {
+		private ObjectMap transform(RequestAttributes attrs) {
 			ObjectMap m = new ObjectMap();
-			for (Map.Entry<String,Object> e : properties.entrySet()) {
+			for (Map.Entry<String,Object> e : attrs.entrySet()) {
 				if (e.getKey().startsWith("p"))
 					m.put(e.getKey(), e.getValue());
 			}

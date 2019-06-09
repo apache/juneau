@@ -16,6 +16,8 @@ import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 
+import java.nio.charset.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -63,16 +65,27 @@ public class SerializerConfigApply extends ConfigApply<SerializerConfig> {
 			psb.set(SERIALIZER_uriRelativity, string(a.uriRelativity()));
 		if (! a.uriResolution().isEmpty())
 			psb.set(SERIALIZER_uriResolution, string(a.uriResolution()));
-		if (! a.useWhitespace().isEmpty())
-			psb.set(SERIALIZER_useWhitespace, bool(a.useWhitespace()));
 
 		if (! a.binaryFormat().isEmpty())
 			psb.set(OSSERIALIZER_binaryFormat, string(a.binaryFormat()));
 
+		if (! a.fileCharset().isEmpty())
+			psb.set(WSERIALIZER_fileCharset, charset(a.fileCharset()));
 		if (! a.maxIndent().isEmpty())
 			psb.set(WSERIALIZER_maxIndent, integer(a.maxIndent(), "maxIndent"));
 		if (! a.quoteChar().isEmpty())
 			psb.set(WSERIALIZER_quoteChar, character(a.quoteChar(), "quoteChar"));
+		if (! a.streamCharset().isEmpty())
+			psb.set(WSERIALIZER_streamCharset, charset(a.streamCharset()));
+		if (! a.useWhitespace().isEmpty())
+			psb.set(WSERIALIZER_useWhitespace, bool(a.useWhitespace()));
+	}
+
+	private Object charset(String in) {
+		String s = string(in);
+		if ("default".equalsIgnoreCase(s))
+			return Charset.defaultCharset();
+		return s;
 	}
 
 	private char character(String in, String loc) {

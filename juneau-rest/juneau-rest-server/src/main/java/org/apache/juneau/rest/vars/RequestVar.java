@@ -131,7 +131,7 @@ public class RequestVar extends MultipartResolvingVar {
 			if ("siteName".equals(key))
 				return req.getSiteName();
 		}
-		return req.getProperties().getString(key);
+		return req.getAttributes().getString(key);
 	}
 
 	@Override /* Var */

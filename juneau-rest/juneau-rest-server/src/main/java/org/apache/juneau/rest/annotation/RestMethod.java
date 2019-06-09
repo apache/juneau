@@ -39,6 +39,33 @@ import org.apache.juneau.html.annotation.*;
 public @interface RestMethod {
 
 	/**
+	 * Default request attributes.
+	 *
+	 * <p>
+	 * Specifies default values for request attributes if they're not already set on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, attrs={<js>"Foo: bar"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_attrs}
+	 * </ul>
+	 */
+	String[] attrs() default {};
+
+	/**
 	 * Sets the bean filters for the serializers and parsers defined on this method.
 	 *
 	 * <p>

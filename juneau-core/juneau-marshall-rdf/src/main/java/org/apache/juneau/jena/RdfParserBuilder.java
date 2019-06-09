@@ -15,6 +15,7 @@ package org.apache.juneau.jena;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.jena.RdfParser.*;
 
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -745,14 +746,14 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ReaderParserBuilder */
-	public RdfParserBuilder fileCharset(String value) {
+	public RdfParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* ReaderParserBuilder */
-	public RdfParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
+	public RdfParserBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

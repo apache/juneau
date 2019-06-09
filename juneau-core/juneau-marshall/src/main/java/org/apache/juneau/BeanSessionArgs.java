@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.BeanContext.*;
+
 import java.util.*;
 
 import org.apache.juneau.http.*;
@@ -27,10 +29,6 @@ public class BeanSessionArgs extends SessionArgs {
 	 */
 	public static final BeanSessionArgs DEFAULT = new BeanSessionArgs();
 
-	Locale locale;
-	TimeZone timeZone;
-	MediaType mediaType;
-	Boolean debug;
 	HttpPartSchema schema;
 
 	/**
@@ -38,93 +36,122 @@ public class BeanSessionArgs extends SessionArgs {
 	 */
 	public BeanSessionArgs() {}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Constructor.
+	 * Debug mode.
 	 *
-	 * @param properties
-	 * 	Session-level properties.
-	 * 	<br>These override context-level properties.
+	 * <p>
+	 * Enables the following additional information during parsing:
+	 * <ul>
+	 * 	<li> When bean setters throws exceptions, the exception includes the object stack information in order to determine how that method was invoked.
+	 * </ul>
+	 *
+	 * <p>
+	 * If not specified, defaults to {@link BeanContext#BEAN_debug}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @param locale
-	 * 	The session locale.
-	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	<br>If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType
-	 * 	The session media type (e.g. <js>"application/json"</js>).
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param schema
-	 * 	The part schema for the serialized part.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param debug
-	 * 	Enable debug mode for this session.
-	 * 	<br>Can be <jk>null</jk> to use the debug setting on the bean context..
+	 * @return This object (for method chaining).
 	 */
-	public BeanSessionArgs(ObjectMap properties, Locale locale, TimeZone timeZone, MediaType mediaType, HttpPartSchema schema, Boolean debug) {
-		super(properties);
-		this.locale = locale;
-		this.timeZone = timeZone;
-		this.mediaType = mediaType;
-		this.schema = schema;
-		this.debug = debug;
+	public BeanSessionArgs debug(Boolean value) {
+		property(BEAN_debug, value);
+		return this;
 	}
 
 	/**
 	 * The session locale.
 	 *
-	 * @param locale
-	 * 	The session locale.
+	 * <p>
+	 * Specifies the default locale for serializer and parser sessions.
+	 *
+	 * <p>
+	 * If not specified, defaults to {@link BeanContext#BEAN_locale}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
 	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 	 * @return This object (for method chaining).
 	 */
-	public BeanSessionArgs locale(Locale locale) {
-		this.locale = locale;
-		return this;
-	}
-
-	/**
-	 * The session timezone.
-	 *
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	<br>If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @return This object (for method chaining).
-	 */
-	public BeanSessionArgs timeZone(TimeZone timeZone) {
-		this.timeZone = timeZone;
+	public BeanSessionArgs locale(Locale value) {
+		property(BEAN_locale, value);
 		return this;
 	}
 
 	/**
 	 * The session media type.
 	 *
-	 * @param mediaType
-	 * 	The session media type (e.g. <js>"application/json"</js>).
+	 * <p>
+	 * Specifies the default media type value for serializer and parser sessions.
+	 *
+	 * <p>
+	 * If not specified, defaults to {@link BeanContext#BEAN_mediaType}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public BeanSessionArgs mediaType(MediaType mediaType) {
-		this.mediaType = mediaType;
+	public BeanSessionArgs mediaType(MediaType value) {
+		property(BEAN_mediaType, value);
 		return this;
 	}
 
 	/**
-	 * Debug mode.
+	 * HTTP-part schema.
 	 *
-	 * @param debug
-	 * 	Debug mode flag.
+	 * <p>
+	 * Used for schema-based serializers and parsers to define additional formatting.
+	 *
+	 * @param value
+	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public BeanSessionArgs debug(Boolean debug) {
-		this.debug = debug;
+	public BeanSessionArgs schema(HttpPartSchema value) {
+		this.schema = value;
+		return this;
+	}
+
+	/**
+	 * The session timezone.
+	 *
+	 * <p>
+	 * Specifies the default timezone for serializer and parser sessions.
+	 *
+	 * <p>
+	 * If not specified, defaults to {@link BeanContext#BEAN_timeZone}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public BeanSessionArgs timeZone(TimeZone value) {
+		property(BEAN_timeZone, value);
 		return this;
 	}
 
 	@Override /* SessionArgs */
-	public BeanSessionArgs properties(ObjectMap properties) {
-		super.properties(properties);
+	public BeanSessionArgs properties(ObjectMap value) {
+		super.properties(value);
 		return this;
+	}
+
+	@Override /* SessionArgs */
+	public BeanSessionArgs property(String key, Object value) {
+		super.property(key, value);
+		return this;
+	}
+
+	@Override /* SessionArgs */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("BeanSessionArgs", new ObjectMap()
+				.appendSkipNull("schema", schema)
+			);
 	}
 }

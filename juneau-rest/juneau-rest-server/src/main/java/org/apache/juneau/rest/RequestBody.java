@@ -433,8 +433,17 @@ public class RequestBody {
 		if (pm != null) {
 			Parser p = pm.getParser();
 			MediaType mediaType = pm.getMediaType();
-			req.getProperties().append("mediaType", mediaType).append("characterEncoding", req.getCharacterEncoding());
-			ParserSessionArgs pArgs = new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, schema, req.isDebug() ? true : null, req.getContext().getResource());
+			ParserSessionArgs pArgs = ParserSessionArgs
+				.create()
+				.properties(req.getAttributes())
+				.javaMethod(req.getJavaMethod())
+				.locale(locale)
+				.timeZone(timeZone)
+				.mediaType(mediaType)
+				.streamCharset(req.getCharset())
+				.schema(schema)
+				.debug(req.isDebug() ? true : null)
+				.outer(req.getContext().getResource());
 			ParserSession session = p.createSession(pArgs);
 			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
 				T o = session.parse(in, cm);
@@ -452,7 +461,7 @@ public class RequestBody {
 
 		MediaType mt = getMediaType();
 
-		if ((isEmpty(mt) || mt.toString().startsWith("text/plain")) && cm.hasStringTransform()) 
+		if ((isEmpty(mt) || mt.toString().startsWith("text/plain")) && cm.hasStringTransform())
 			return cm.getStringTransform().transform(asString());
 
 		throw new UnsupportedMediaType(

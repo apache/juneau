@@ -116,7 +116,6 @@ public abstract class OutputStreamSerializer extends Serializer {
 		binaryFormat = getProperty(OSSERIALIZER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Abstract methods
 	//-----------------------------------------------------------------------------------------------------------------

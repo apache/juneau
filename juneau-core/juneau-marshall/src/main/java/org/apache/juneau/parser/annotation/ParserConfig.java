@@ -320,8 +320,8 @@ public @interface ParserConfig {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link ReaderParser#RPARSER_inputStreamCharset}
+	 * 	<li class='jf'>{@link ReaderParser#RPARSER_streamCharset}
 	 * </ul>
 	 */
-	String inputStreamCharset() default "";
+	String streamCharset() default "";
 }

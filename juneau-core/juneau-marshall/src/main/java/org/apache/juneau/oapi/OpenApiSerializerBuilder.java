@@ -13,6 +13,7 @@
 package org.apache.juneau.oapi;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -51,6 +52,54 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* WriterSerializerBuilder */
+	public OpenApiSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public OpenApiSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public OpenApiSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public OpenApiSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public OpenApiSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public OpenApiSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public OpenApiSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public OpenApiSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
 
 	@Override /* SerializerBuilder */
 	public OpenApiSerializerBuilder addBeanTypes(boolean value) {
@@ -118,18 +167,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public OpenApiSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public OpenApiSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -150,12 +187,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public OpenApiSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public OpenApiSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -216,24 +247,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public OpenApiSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public OpenApiSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public OpenApiSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public OpenApiSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

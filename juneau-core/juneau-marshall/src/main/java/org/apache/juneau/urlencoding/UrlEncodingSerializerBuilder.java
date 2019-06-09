@@ -15,6 +15,7 @@ package org.apache.juneau.urlencoding;
 import static org.apache.juneau.urlencoding.UrlEncodingSerializer.*;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -116,6 +117,54 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
+	@Override /* WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
+
 	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
@@ -182,18 +231,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -214,12 +251,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -280,24 +311,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

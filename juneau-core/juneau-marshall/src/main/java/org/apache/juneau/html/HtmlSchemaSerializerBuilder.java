@@ -15,6 +15,7 @@ package org.apache.juneau.html;
 import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -227,6 +228,54 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return set(JSONSCHEMA_useBeanDefs, true);
 	}
 
+	@Override /* WriterSerializerBuilder */
+	public HtmlSchemaSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlSchemaSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlSchemaSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlSchemaSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlSchemaSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlSchemaSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlSchemaSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public HtmlSchemaSerializerBuilder ws() {
+		super.ws();
+		return this;
+	}
+
 	@Override /* SerializerBuilder */
 	public HtmlSchemaSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
@@ -293,18 +342,6 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public HtmlSchemaSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public HtmlSchemaSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public HtmlSchemaSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -325,12 +362,6 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public HtmlSchemaSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public HtmlSchemaSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -391,24 +422,6 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public HtmlSchemaSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public HtmlSchemaSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public HtmlSchemaSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public HtmlSchemaSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

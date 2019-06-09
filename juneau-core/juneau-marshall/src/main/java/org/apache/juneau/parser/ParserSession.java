@@ -130,9 +130,9 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser#RPARSER_inputStreamCharset}).
+	 * 			{@link ReaderParser#RPARSER_streamCharset}).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser#RPARSER_inputStreamCharset}).
+	 * 			{@link ReaderParser#RPARSER_streamCharset}).
 	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
 	 * 			{@link ReaderParser#RPARSER_fileCharset}).
 	 * 	</ul>
@@ -375,9 +375,9 @@ public abstract class ParserSession extends BeanSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_inputStreamCharset} property value).
+	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser#RPARSER_inputStreamCharset} property value).
+	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
 	 * 			{@link ReaderParser#RPARSER_fileCharset} property value).
 	 * 	</ul>

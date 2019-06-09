@@ -65,7 +65,7 @@ public class AcceptCharsetTest {
 	// Validate various Accept-Charset variations.
 	//=================================================================================================================
 
-	@RestResource(defaultCharset="utf-8")
+	@RestResource(defaultCharset="utf-8", debug="true")
 	public static class B {
 
 		@RestMethod(name=PUT, parsers=TestParser.class, serializers=TestSerializer.class)
@@ -78,12 +78,12 @@ public class AcceptCharsetTest {
 				super(ps, "text/plain");
 			}
 			@Override /* Parser */
-			public InputStreamParserSession createSession(ParserSessionArgs args) {
+			public InputStreamParserSession createSession(final ParserSessionArgs args) {
 				return new InputStreamParserSession(args) {
 					@Override /* ParserSession */
 					@SuppressWarnings("unchecked")
 					protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-						return (T)getProperty("characterEncoding", String.class);
+						return (T)args.getProperty(ReaderParser.RPARSER_streamCharset).toString();
 					}
 				};
 			}
@@ -99,7 +99,8 @@ public class AcceptCharsetTest {
 					@Override /* SerializerSession */
 					protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 						try (Writer w = new OutputStreamWriter(out.getOutputStream())) {
-							w.append(o.toString()).append('/').append(getProperty("characterEncoding", String.class));
+							Object sc = args.getProperty(WriterSerializer.WSERIALIZER_streamCharset);
+							w.append(o.toString()).append('/').append(sc == null ? null : sc.toString());
 						}
 					}
 				};
@@ -110,12 +111,12 @@ public class AcceptCharsetTest {
 
 	@Test
 	public void b01_testCharsetOnResponse() throws Exception {
-		b.put("/charsetOnResponse", null).plainText().execute().assertBody("utf-8/utf-8");
-		b.put("/charsetOnResponse", null).plainText().acceptCharset("Shift_JIS").execute().assertBody("utf-8/Shift_JIS");
+		b.put("/charsetOnResponse", null).plainText().execute().assertBody("UTF-8/UTF-8");
+		b.put("/charsetOnResponse", null).plainText().acceptCharset("Shift_JIS").execute().assertBody("UTF-8/Shift_JIS");
 		b.put("/charsetOnResponse?noTrace=true", null).plainText().acceptCharset("BAD").execute().assertStatus(406).assertBodyContains("No supported charsets in header 'Accept-Charset': 'BAD'");
-		b.put("/charsetOnResponse", null).plainText().acceptCharset("UTF-8").execute().assertBody("utf-8/UTF-8");
-		b.put("/charsetOnResponse", null).plainText().acceptCharset("bad,iso-8859-1").execute().assertBody("utf-8/iso-8859-1");
-		b.put("/charsetOnResponse", null).plainText().acceptCharset("bad;q=0.9,iso-8859-1;q=0.1").execute().assertBody("utf-8/iso-8859-1");
-		b.put("/charsetOnResponse", null).plainText().acceptCharset("bad;q=0.1,iso-8859-1;q=0.9").execute().assertBody("utf-8/iso-8859-1");
+		b.put("/charsetOnResponse", null).plainText().acceptCharset("UTF-8").execute().assertBody("UTF-8/UTF-8");
+		b.put("/charsetOnResponse", null).plainText().acceptCharset("bad,iso-8859-1").execute().assertBody("UTF-8/ISO-8859-1");
+		b.put("/charsetOnResponse", null).plainText().acceptCharset("bad;q=0.9,iso-8859-1;q=0.1").execute().assertBody("UTF-8/ISO-8859-1");
+		b.put("/charsetOnResponse", null).plainText().acceptCharset("bad;q=0.1,iso-8859-1;q=0.9").execute().assertBody("UTF-8/ISO-8859-1");
 	}
 }

@@ -14,6 +14,7 @@ package org.apache.juneau.uon;
 
 import static org.apache.juneau.uon.UonParser.*;
 
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -130,14 +131,14 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ReaderParserBuilder */
-	public UonParserBuilder fileCharset(String value) {
+	public UonParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* ReaderParserBuilder */
-	public UonParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
+	public UonParserBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

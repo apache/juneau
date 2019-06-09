@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -57,14 +58,13 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public OpenApiParserBuilder fileCharset(String value) {
-		super.fileCharset(value);
+	public OpenApiParserBuilder fileCharset(Charset value) {
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public OpenApiParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
+	public OpenApiParserBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

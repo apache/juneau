@@ -89,6 +89,7 @@ class RestParamDefaults {
 			ServletOutputStreamObject.class,
 			WriterObject.class,
 			RequestHeadersObject.class,
+			RequestAttributesObject.class,
 			RequestQueryObject.class,
 			RequestFormDataObject.class,
 			HttpMethodObject.class,
@@ -275,6 +276,28 @@ class RestParamDefaults {
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getHeaders().get(partParser, schema, name, type);
+		}
+	}
+
+	static final class AttributeObject extends RestMethodParam {
+
+		protected AttributeObject(ParamInfo mpi, PropertyStore ps) {
+			super(OTHER, mpi, getName(mpi));
+		}
+
+		private static String getName(ParamInfo mpi) {
+			for (Attr h : mpi.getAnnotations(Attr.class)) {
+				if (! h.name().isEmpty())
+					return h.name();
+				if (! h.value().isEmpty())
+					return h.value();
+			}
+			throw new InternalServerError("@Attr used without name or value on method parameter ''{0}''.", mpi);
+		}
+
+		@Override /* RestMethodParam */
+		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			return req.getAttributes().get(name, type);
 		}
 	}
 
@@ -515,6 +538,7 @@ class RestParamDefaults {
 		}
 	}
 
+	@Deprecated
 	static final class RestRequestPropertiesObject extends RestMethodParam {
 
 		protected RestRequestPropertiesObject() {
@@ -636,6 +660,18 @@ class RestParamDefaults {
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getHeaders();
+		}
+	}
+
+	static final class RequestAttributesObject extends RestMethodParam {
+
+		protected RequestAttributesObject() {
+			super(OTHER, RequestAttributes.class);
+		}
+
+		@Override /* RestMethodParam */
+		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			return req.getAttributes();
 		}
 	}
 

@@ -13,6 +13,7 @@
 package org.apache.juneau.parser;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -33,91 +34,136 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	public static final ParserSessionArgs DEFAULT = new ParserSessionArgs();
 
 	/**
-	 * Constructor
-	 */
-	public ParserSessionArgs() {}
-
-	/**
-	 * Constructor.
+	 * Creator.
 	 *
-	 * @param properties
-	 * 	Session-level properties.
-	 * 	<br>These override context-level properties.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param javaMethod
-	 * 	The java method that called this serializer, usually the method in a REST servlet.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param locale
-	 * 	The session locale.
-	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	<br>If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType
-	 * 	The session media type (e.g. <js>"application/json"</js>).
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param schema
-	 * 	The part schema for the serialized part.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param debug
-	 * 	Enable debug mode for this session.
-	 * 	<br>Can be <jk>null</jk> to use the debug setting on the bean context..
-	 * @param outer
-	 * 	The outer object for instantiating top-level non-static inner classes.
+	 * @return A new parser session arguments object.
 	 */
-	public ParserSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, HttpPartSchema schema, Boolean debug, Object outer) {
-		super(properties, locale, timeZone, mediaType, schema, debug);
-		this.javaMethod = javaMethod;
-		this.outer = outer;
+	public static final ParserSessionArgs create() {
+		return new ParserSessionArgs();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * File charset.
+	 *
+	 * <p>
+	 * The character set to use for reading Files from the file system.
+	 *
+	 * <p>
+	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
+	 *
+	 * <p>
+	 * If not specified, defaults to the JVM system default charset.
+	 *
+	 * @param value
+	 * 	The new property value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public ParserSessionArgs fileCharset(Charset value) {
+		property(ReaderParser.RPARSER_fileCharset, value);
+		return this;
+	}
 
 	/**
 	 * The java method that called this serializer, usually the method in a REST servlet.
 	 *
-	 * @param javaMethod
-	 * 	The java method that called this serializer, usually the method in a REST servlet.
+	 * @param value
+	 * 	The new property value.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public ParserSessionArgs javaMethod(Method javaMethod) {
-		this.javaMethod = javaMethod;
+	public ParserSessionArgs javaMethod(Method value) {
+		this.javaMethod = value;
 		return this;
 	}
 
 	/**
-	 * 	The outer object for instantiating top-level non-static inner classes.
+	 * The outer object for instantiating top-level non-static inner classes.
 	 *
-	 * @param outer
-	 * 	The outer object for instantiating top-level non-static inner classes.
+	 * @param value
+	 * 	The new property value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public ParserSessionArgs outer(Object outer) {
-		this.outer = outer;
+	public ParserSessionArgs outer(Object value) {
+		this.outer = value;
+		return this;
+	}
+
+	/**
+	 * Input stream charset.
+	 *
+	 * <p>
+	 * The character set to use for converting InputStreams and byte arrays to readers.
+	 *
+	 * <p>
+	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+	 *
+	 * <p>
+	 * If not specified, defaults to UTF-8.
+	 *
+	 * @param value
+	 * 	The new property value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public ParserSessionArgs streamCharset(Charset value) {
+		property(ReaderParser.RPARSER_streamCharset, value);
 		return this;
 	}
 
 	@Override /* BeanSessionArgs */
-	public ParserSessionArgs locale(Locale locale) {
-		super.locale(locale);
+	public ParserSessionArgs debug(Boolean value) {
+		super.debug(value);
 		return this;
 	}
 
 	@Override /* BeanSessionArgs */
-	public ParserSessionArgs timeZone(TimeZone timeZone) {
-		super.timeZone(timeZone);
+	public ParserSessionArgs locale(Locale value) {
+		super.locale(value);
 		return this;
 	}
 
 	@Override /* BeanSessionArgs */
-	public ParserSessionArgs mediaType(MediaType mediaType) {
-		super.mediaType(mediaType);
+	public ParserSessionArgs mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* BeanSessionArgs */
+	public ParserSessionArgs schema(HttpPartSchema value) {
+		super.schema(value);
+		return this;
+	}
+
+	@Override /* BeanSessionArgs */
+	public ParserSessionArgs timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* SessionArgs */
-	public ParserSessionArgs properties(ObjectMap properties) {
-		super.properties(properties);
+	public ParserSessionArgs properties(ObjectMap value) {
+		super.properties(value);
 		return this;
+	}
+
+	@Override /* SessionArgs */
+	public ParserSessionArgs property(String key, Object value) {
+		super.property(key, value);
+		return this;
+	}
+
+	@Override /* SessionArgs */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("ParserSessionArgs", new ObjectMap()
+				.appendSkipNull("javaMethod", javaMethod)
+				.appendSkipNull("outer", outer)
+			);
 	}
 }

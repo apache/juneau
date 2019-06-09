@@ -642,7 +642,11 @@ public class LocalizedDatesTest {
 
 	@Test
 	public void test() {
-		BeanSession session = bc.createSession(new BeanSessionArgs(null, sessionLocale, sessionTimeZone, null, null, null));
+		BeanSession session = bc.createSession(
+			new BeanSessionArgs()
+				.locale(sessionLocale)
+				.timeZone(sessionTimeZone)
+		);
 		String actual = session.convertToType(calendar, String.class);
 		String actual2 = actual;
 		if (expected.indexOf('(') == -1)

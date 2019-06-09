@@ -15,6 +15,7 @@ package org.apache.juneau.soap;
 import static org.apache.juneau.soap.SoapXmlSerializer.*;
 
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -69,6 +70,54 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	 */
 	public SoapXmlSerializerBuilder soapAction(String value) {
 		return set(SOAPXML_SOAPAction, value);
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public SoapXmlSerializerBuilder fileCharset(Charset value) {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public SoapXmlSerializerBuilder maxIndent(int value) {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public SoapXmlSerializerBuilder quoteChar(char value) {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public SoapXmlSerializerBuilder sq() {
+		super.sq();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public SoapXmlSerializerBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public SoapXmlSerializerBuilder useWhitespace(boolean value) {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public SoapXmlSerializerBuilder useWhitespace() {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* WriterSerializerBuilder */
+	public SoapXmlSerializerBuilder ws() {
+		super.ws();
+		return this;
 	}
 
 	@Override /* SerializerBuilder */
@@ -137,18 +186,6 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public SoapXmlSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public SoapXmlSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public SoapXmlSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -169,12 +206,6 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public SoapXmlSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public SoapXmlSerializerBuilder sq() {
-		super.sq();
 		return this;
 	}
 
@@ -235,24 +266,6 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public SoapXmlSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public SoapXmlSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public SoapXmlSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public SoapXmlSerializerBuilder ws() {
-		super.ws();
 		return this;
 	}
 

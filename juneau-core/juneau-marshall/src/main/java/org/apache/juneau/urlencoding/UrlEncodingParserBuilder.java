@@ -14,6 +14,7 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.urlencoding.UrlEncodingParser.*;
 
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -103,14 +104,14 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ParserBuilder */
-	public UrlEncodingParserBuilder fileCharset(String value) {
+	public UrlEncodingParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* ParserBuilder */
-	public UrlEncodingParserBuilder inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
+	public UrlEncodingParserBuilder streamCharset(Charset value) {
+		super.streamCharset(value);
 		return this;
 	}
 

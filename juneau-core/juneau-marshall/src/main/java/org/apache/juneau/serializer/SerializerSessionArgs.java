@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.serializer.Serializer.*;
+
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -34,100 +37,65 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	public static final SerializerSessionArgs DEFAULT = new SerializerSessionArgs();
 
 	Method javaMethod;
-	UriContext uriContext;
-	Boolean useWhitespace;
 	VarResolverSession resolver;
 
 	/**
-	 * Constructor
+	 * Creator.
+	 *
+	 * @return A new parser session arguments object.
 	 */
-	public SerializerSessionArgs() {}
+	public static final SerializerSessionArgs create() {
+		return new SerializerSessionArgs();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
+	 * File charset.
 	 *
-	 * @param properties
-	 * 	Session-level properties.
-	 * 	<br>These override context-level properties.
+	 * <p>
+	 * The character set to use for writing Files to the file system.
+	 *
+	 * <p>
+	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
+	 *
+	 * <p>
+	 * If not specified, defaults to the JVM system default charset.
+	 *
+	 * @param value
+	 * 	The new property value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @param javaMethod
-	 * 	The java method that called this serializer, usually the method in a REST servlet.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param locale
-	 * 	The session locale.
-	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
-	 * @param timeZone
-	 * 	The session timezone.
-	 * 	<br>If <jk>null</jk>, then the timezone defined on the context is used.
-	 * @param mediaType
-	 * 	The session media type (e.g. <js>"application/json"</js>).
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param schema
-	 * 	The part schema for the serialized part.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param debug
-	 * 	Enable debug mode for this session.
-	 * 	<br>Can be <jk>null</jk> to use the debug setting on the bean context..
-	 * @param uriContext
-	 * 	The URI context.
-	 * 	<br>Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
-	 * @param useWhitespace
-	 * 	Override the use-whitespace flag on the serializer.
-	 * @param resolver
-	 * 	String variable resolver.
+	 * @return This object (for method chaining).
 	 */
-	public SerializerSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, HttpPartSchema schema, Boolean debug, UriContext uriContext, Boolean useWhitespace, VarResolverSession resolver) {
-		super(properties, locale, timeZone, mediaType, schema, debug);
-		this.javaMethod = javaMethod;
-		this.uriContext = uriContext;
-		this.useWhitespace = useWhitespace;
-		this.resolver = resolver == null ? null : resolver;
+	public SerializerSessionArgs fileCharset(Charset value) {
+		property(WriterSerializer.WSERIALIZER_fileCharset, value);
+		return this;
 	}
 
 	/**
 	 * The java method that called this serializer, usually the method in a REST servlet.
 	 *
-	 * @param javaMethod
-	 * 	The java method that called this serializer, usually the method in a REST servlet.
+	 * @param value
+	 * 	The new property value.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SerializerSessionArgs javaMethod(Method javaMethod) {
-		this.javaMethod = javaMethod;
-		return this;
-	}
-
-	/**
-	 * The URI context.
-	 *
-	 * @param uriContext
-	 * 	The URI context.
-	 * 	<br>Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerSessionArgs uriContext(UriContext uriContext) {
-		this.uriContext = uriContext;
-		return this;
-	}
-
-	/**
-	 * Use-whitespace flag
-	 *
-	 * @param useWhitespace
-	 * 	The use-whitespace flag.
-	 * 	<br>Overrides the use-whitespace flag on the serializer.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerSessionArgs useWhitespace(Boolean useWhitespace) {
-		this.useWhitespace = useWhitespace;
+	public SerializerSessionArgs javaMethod(Method value) {
+		this.javaMethod = value;
 		return this;
 	}
 
 	/**
 	 * String variable resolver.
 	 *
+	 * <p>
+	 * If not specified, defaults to session created by {@link VarResolver#DEFAULT}.
+	 *
 	 * @param value
-	 * 	String variable resolver.
+	 * 	The new property value.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerSessionArgs resolver(VarResolverSession value) {
@@ -135,33 +103,111 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 		return this;
 	}
 
-	@Override /* BeanSessionArgs */
-	public SerializerSessionArgs locale(Locale locale) {
-		super.locale(locale);
+	/**
+	 * Output stream charset.
+	 *
+	 * <p>
+	 * The character set to use when writing to OutputStreams.
+	 *
+	 * <p>
+	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+	 *
+	 * <p>
+	 * If not specified, defaults to UTF-8.
+	 *
+	 * @param value
+	 * 	The new property value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerSessionArgs streamCharset(Charset value) {
+		property(WriterSerializer.WSERIALIZER_streamCharset, value);
+		return this;
+	}
+
+	/**
+	 * URI context bean.
+	 *
+	 * <p>
+	 * Bean used for resolution of URIs to absolute or root-relative form.
+	 *
+	 * <p>
+	 * If not specified, defaults to {@link Serializer#SERIALIZER_uriContext}.
+	 *
+	 * @param value
+	 * 	The new property value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerSessionArgs uriContext(UriContext value) {
+		property(SERIALIZER_uriContext, value);
+		return this;
+	}
+
+	/**
+	 * Use whitespace.
+	 *
+	 * <p>
+	 * If true, whitespace is added to the output to improve readability.
+	 *
+	 * @param value
+	 * 	The new property value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerSessionArgs useWhitespace(Boolean value) {
+		property(WriterSerializer.WSERIALIZER_useWhitespace, value);
 		return this;
 	}
 
 	@Override /* BeanSessionArgs */
-	public SerializerSessionArgs timeZone(TimeZone timeZone) {
-		super.timeZone(timeZone);
+	public SerializerSessionArgs debug(Boolean value) {
+		super.debug(value);
 		return this;
 	}
 
 	@Override /* BeanSessionArgs */
-	public SerializerSessionArgs mediaType(MediaType mediaType) {
-		super.mediaType(mediaType);
+	public SerializerSessionArgs locale(Locale value) {
+		super.locale(value);
 		return this;
 	}
 
 	@Override /* BeanSessionArgs */
-	public SerializerSessionArgs debug(Boolean debug) {
-		super.debug(debug);
+	public SerializerSessionArgs mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* BeanSessionArgs */
+	public SerializerSessionArgs schema(HttpPartSchema value) {
+		super.schema(value);
+		return this;
+	}
+
+	@Override /* BeanSessionArgs */
+	public SerializerSessionArgs timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* SessionArgs */
-	public SerializerSessionArgs properties(ObjectMap properties) {
-		super.properties(properties);
+	public SerializerSessionArgs properties(ObjectMap value) {
+		super.properties(value);
 		return this;
+	}
+
+	@Override /* SessionArgs */
+	public SerializerSessionArgs property(String key, Object value) {
+		super.property(key, value);
+		return this;
+	}
+
+	@Override /* SessionArgs */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("SerializerSessionArgs", new ObjectMap()
+				.appendSkipNull("javaMethod", javaMethod)
+				.appendSkipNull("resolver", resolver)
+			);
 	}
 }
