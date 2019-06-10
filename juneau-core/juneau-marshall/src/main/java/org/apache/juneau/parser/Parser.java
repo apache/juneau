@@ -809,16 +809,6 @@ public abstract class Parser extends BeanContext {
 		return consumes == null || consumes.length == 0 ? null : consumes[0];
 	}
 
-	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("Parser", new ObjectMap()
-				.append("trimStrings", trimStrings)
-				.append("strict", strict)
-				.append("listener", listener)
-			);
-	}
-
 	/**
 	 * Returns <jk>true</jk> if this parser can handle the specified content type.
 	 *
@@ -903,5 +893,22 @@ public abstract class Parser extends BeanContext {
 	 */
 	protected final boolean isUnbuffered() {
 		return unbuffered;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("Parser", new DefaultFilteringObjectMap()
+				.append("autoCloseStreams", autoCloseStreams)
+				.append("debugOutputLines", debugOutputLines)
+				.append("listener", listener)
+				.append("strict", strict)
+				.append("trimStrings", trimStrings)
+				.append("unbuffered", unbuffered)
+			);
 	}
 }

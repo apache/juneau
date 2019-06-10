@@ -16,6 +16,7 @@ import static org.apache.juneau.soap.SoapXmlSerializer.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
@@ -90,5 +91,17 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	 */
 	public String getSoapAction() {
 		return soapAction;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("SoapXmlSerializerSession", new DefaultFilteringObjectMap()
+				.append("soapAction", soapAction)
+			);
 	}
 }

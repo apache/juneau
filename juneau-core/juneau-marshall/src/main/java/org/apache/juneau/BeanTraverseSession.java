@@ -287,4 +287,15 @@ public class BeanTraverseSession extends BeanSession {
 	protected final int getMaxDepth() {
 		return ctx.getMaxDepth();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("BeanTraverseSession", new DefaultFilteringObjectMap()
+			);
+	}
 }

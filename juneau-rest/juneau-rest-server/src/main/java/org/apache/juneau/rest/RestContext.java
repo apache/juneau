@@ -4964,9 +4964,43 @@ public final class RestContext extends BeanContext {
 		res.remove();
 	}
 
-	@Override
-	public String toString() {
-		Object r = getResource();
-		return "RestContext: hashCode=["+System.identityHashCode(this)+"], resource=["+(r == null ? null : r.getClass()+","+System.identityHashCode(r))+"]";
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("RestContext", new DefaultFilteringObjectMap()
+				.append("allowBodyParam", allowBodyParam)
+				.append("allowedMethodParams", allowedMethodParams)
+				.append("allowHeaderParams", allowHeaderParams)
+				.append("callHandler", callHandler)
+				.append("clientVersionHeader", clientVersionHeader)
+				.append("consumes", consumes)
+				.append("debug", debug)
+				.append("defaultRequestHeaders", defaultRequestHeaders)
+				.append("defaultResponseHeaders", defaultResponseHeaders)
+				.append("infoProvider", infoProvider)
+				.append("logger", logger)
+				.append("paramResolvers", paramResolvers)
+				.append("parsers", parsers)
+				.append("partParser", partParser)
+				.append("partSerializer", partSerializer)
+				.append("produces", produces)
+				.append("properties", properties)
+				.append("renderResponseStackTraces", renderResponseStackTraces)
+				.append("resourceResolver", resourceResolver)
+				.append("responseHandlers", responseHandlers)
+				.append("serializers", serializers)
+				.append("staticFileResponseHeaders", staticFileResponseHeaders)
+				.append("staticFiles", staticFiles)
+				.append("uriAuthority", uriAuthority)
+				.append("uriContext", uriContext)
+				.append("uriRelativity", uriRelativity)
+				.append("uriResolution", uriResolution)
+				.append("useClasspathResourceCaching", useClasspathResourceCaching)
+				.append("useStackTraceHashes", useStackTraceHashes)
+			);
 	}
 }

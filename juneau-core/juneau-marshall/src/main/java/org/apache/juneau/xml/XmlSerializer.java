@@ -644,7 +644,7 @@ public class XmlSerializer extends WriterSerializer {
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("XmlSerializer", new ObjectMap()
+			.append("XmlSerializer", new DefaultFilteringObjectMap()
 				.append("autoDetectNamespaces", autoDetectNamespaces)
 				.append("enableNamespaces", enableNamespaces)
 				.append("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)

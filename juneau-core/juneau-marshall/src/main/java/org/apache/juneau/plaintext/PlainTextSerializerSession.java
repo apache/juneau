@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
+import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -42,5 +43,16 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 		out.getWriter().write(o == null ? "null" : convertToType(o, String.class));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("PlainTextSerializerSession", new DefaultFilteringObjectMap()
+		);
 	}
 }

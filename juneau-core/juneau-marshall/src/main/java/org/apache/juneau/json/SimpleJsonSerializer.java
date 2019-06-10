@@ -85,4 +85,15 @@ public class SimpleJsonSerializer extends JsonSerializer {
 			"application/json", "application/json+simple,text/json+simple,application/json;q=0.9,text/json;q=0.9"
 		);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("SimpleJsonSerializer", new DefaultFilteringObjectMap()
+			);
+	}
 }

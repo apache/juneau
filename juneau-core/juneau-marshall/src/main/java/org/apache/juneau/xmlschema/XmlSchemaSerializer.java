@@ -63,4 +63,15 @@ public class XmlSchemaSerializer extends XmlSerializer {
 	public XmlSchemaSerializerSession createSession(SerializerSessionArgs args) {
 		return new XmlSchemaSerializerSession(this, args);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("XmlSchemaSerializer", new DefaultFilteringObjectMap()
+			);
+	}
 }

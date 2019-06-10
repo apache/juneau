@@ -133,4 +133,15 @@ public class ConfigClasspathStore extends ConfigStore {
 	public void close() throws IOException {
 		// No-op
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("ConfigClasspathStore", new DefaultFilteringObjectMap()
+			);
+	}
 }

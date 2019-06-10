@@ -357,7 +357,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("UrlEncodingSerializer", new ObjectMap()
+			.append("UrlEncodingSerializer", new DefaultFilteringObjectMap()
 				.append("expandedParams", expandedParams)
 			);
 	}

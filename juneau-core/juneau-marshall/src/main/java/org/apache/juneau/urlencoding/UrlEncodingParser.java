@@ -186,7 +186,7 @@ public class UrlEncodingParser extends UonParser {
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("UrlEncodingParser", new ObjectMap()
+			.append("UrlEncodingParser", new DefaultFilteringObjectMap()
 				.append("expandedParams", expandedParams)
 			);
 	}

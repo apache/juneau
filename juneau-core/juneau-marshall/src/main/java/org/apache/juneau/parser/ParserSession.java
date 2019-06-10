@@ -74,16 +74,6 @@ public abstract class ParserSession extends BeanSession {
 		this(Parser.DEFAULT, args);
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("ParserSession", new ObjectMap()
-				.append("javaMethod", javaMethod)
-				.append("listener", listener)
-				.append("outer", outer)
-			);
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Abstract methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -881,5 +871,15 @@ public abstract class ParserSession extends BeanSession {
 	 */
 	protected final Class<? extends ParserListener> getListenerClass() {
 		return ctx.getListener();
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("ParserSession", new DefaultFilteringObjectMap()
+				.append("javaMethod", javaMethod)
+				.append("listener", listener)
+				.append("outer", outer)
+			);
 	}
 }

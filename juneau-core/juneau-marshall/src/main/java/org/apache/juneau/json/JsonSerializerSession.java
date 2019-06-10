@@ -48,13 +48,6 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		this.ctx = ctx;
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("JsonSerializerSession", new ObjectMap()
-			);
-	}
-
 	@Override /* SerializerSesssion */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 		serializeAnything(getJsonWriter(out), o, getExpectedRootType(o), "root", null);
@@ -304,5 +297,16 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 */
 	protected final boolean isSimpleMode() {
 		return ctx.isSimpleMode();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsonSerializerSession", new DefaultFilteringObjectMap()
+		);
 	}
 }

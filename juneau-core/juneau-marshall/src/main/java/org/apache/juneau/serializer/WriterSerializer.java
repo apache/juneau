@@ -428,12 +428,12 @@ public abstract class WriterSerializer extends Serializer {
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("WriterSerializer", new ObjectMap()
+			.append("WriterSerializer", new DefaultFilteringObjectMap()
 				.append("fileCharset", fileCharset)
 				.append("maxIndent", maxIndent)
 				.append("quoteChar", quoteChar)
 				.append("streamCharset", streamCharset)
-				.appendSkipFalse("useWhitespace", useWhitespace)
+				.append("useWhitespace", useWhitespace)
 			);
 	}
 }

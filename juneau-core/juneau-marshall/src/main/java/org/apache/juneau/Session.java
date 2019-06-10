@@ -297,12 +297,24 @@ public abstract class Session {
 	}
 
 	/**
+	 * Throws a {@link BeanRuntimeException} if any warnings occurred in this session.
+	 */
+	public void checkForWarnings() {
+		if (warnings != null && ! warnings.isEmpty())
+			throw new BeanRuntimeException("Warnings occurred in session: \n" + join(getWarnings(), "\n"));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	/**
 	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
 	 *
 	 * @return A new map containing the properties defined on this context.
 	 */
 	public ObjectMap asMap() {
-		return new ObjectMap();
+		return new DefaultFilteringObjectMap();
 	}
 
 	@Override /* Object */
@@ -312,13 +324,5 @@ public abstract class Session {
 		} catch (SerializeException e) {
 			return e.getLocalizedMessage();
 		}
-	}
-
-	/**
-	 * Throws a {@link BeanRuntimeException} if any warnings occurred in this session.
-	 */
-	public void checkForWarnings() {
-		if (warnings != null && ! warnings.isEmpty())
-			throw new BeanRuntimeException("Warnings occurred in session: \n" + join(getWarnings(), "\n"));
 	}
 }

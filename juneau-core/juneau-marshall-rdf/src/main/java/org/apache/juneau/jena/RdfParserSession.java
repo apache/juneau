@@ -68,13 +68,6 @@ public class RdfParserSession extends ReaderParserSession {
 		}
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("RdfParser", new ObjectMap()
-			);
-	}
-
 	@Override /* ReaderParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
 
@@ -516,5 +509,16 @@ public class RdfParserSession extends ReaderParserSession {
 	 */
 	protected final boolean isTrimWhitespace() {
 		return ctx.isTrimWhitespace();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("RdfParserSession", new DefaultFilteringObjectMap()
+			);
 	}
 }

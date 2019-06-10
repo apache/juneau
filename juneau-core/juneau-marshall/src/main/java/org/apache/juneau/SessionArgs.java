@@ -83,15 +83,19 @@ public class SessionArgs {
 		return null;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+	
 	/**
 	 * Returns the properties defined on this object as a simple map for debugging purposes.
 	 *
 	 * @return A new map containing the properties defined on this object.
 	 */
 	public ObjectMap asMap() {
-		return new ObjectMap()
-			.append("SessionArgs", new ObjectMap()
-				.appendSkipNull("properties", properties)
+		return new DefaultFilteringObjectMap()
+			.append("SessionArgs", new DefaultFilteringObjectMap()
+				.append("properties", properties)
 			);
 	}
 

@@ -86,4 +86,15 @@ public class JsoSerializer extends OutputStreamSerializer {
 	public JsoSerializerSession createSession(SerializerSessionArgs args) {
 		return new JsoSerializerSession(this, args);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsoSerializer", new DefaultFilteringObjectMap()
+			);
+	}
 }

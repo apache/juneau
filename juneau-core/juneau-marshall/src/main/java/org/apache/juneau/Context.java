@@ -485,16 +485,6 @@ public abstract class Context {
 	 */
 	public abstract SessionArgs createDefaultSessionArgs();
 
-	/**
-	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
-	 *
-	 * @return A new map containing the properties defined on this context.
-	 */
-	@BeanIgnore
-	public ObjectMap asMap() {
-		return new ObjectMap();
-	}
-
 	@Override /* Object */
 	public int hashCode() {
 		return identityCode;
@@ -520,6 +510,10 @@ public abstract class Context {
 		return (c.propertyStore.equals(propertyStore));
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+	
 	@Override /* Object */
 	public String toString() {
 		try {
@@ -528,4 +522,20 @@ public abstract class Context {
 			return e.getLocalizedMessage();
 		}
 	}
+	
+	/**
+	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
+	 *
+	 * @return A new map containing the properties defined on this context.
+	 */
+	@BeanIgnore
+	public ObjectMap asMap() {
+		return new DefaultFilteringObjectMap()
+			.append("Context", new DefaultFilteringObjectMap()
+				.append("identityCode", identityCode)
+				.append("propertyStore", propertyStore)
+			);
+	}
+
+	
 }

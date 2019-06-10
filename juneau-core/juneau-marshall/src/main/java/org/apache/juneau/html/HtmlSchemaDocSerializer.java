@@ -103,4 +103,15 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	JsonSchemaGenerator getGenerator() {
 		return generator;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlSchemaDocSerializer", new DefaultFilteringObjectMap()
+			);
+	}
 }

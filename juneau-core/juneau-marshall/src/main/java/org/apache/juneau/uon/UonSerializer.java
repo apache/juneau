@@ -458,7 +458,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("UonSerializer", new ObjectMap()
+			.append("UonSerializer", new DefaultFilteringObjectMap()
 				.append("encoding", encoding)
 				.append("addBeanTypes", addBeanTypes)
 				.append("paramFormat", paramFormat)

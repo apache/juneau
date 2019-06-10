@@ -108,4 +108,15 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	protected final BinaryFormat getBinaryFormat() {
 		return ctx.getBinaryFormat();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("OutputStreamSerializerSession", new DefaultFilteringObjectMap()
+			);
+	}
 }

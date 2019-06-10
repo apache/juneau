@@ -564,4 +564,15 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 		}
 		return "string";
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("XmlSchemaSerializerSession", new DefaultFilteringObjectMap()
+			);
+	}
 }

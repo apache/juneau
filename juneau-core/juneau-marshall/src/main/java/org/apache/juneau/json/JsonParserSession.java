@@ -797,4 +797,15 @@ public final class JsonParserSession extends ReaderParserSession {
 	protected final boolean isValidateEnd() {
 		return ctx.isValidateEnd();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsonParserSession", new DefaultFilteringObjectMap()
+			);
+	}
 }

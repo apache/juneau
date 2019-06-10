@@ -56,13 +56,6 @@ public class XmlParserSession extends ReaderParserSession {
 		this.ctx = ctx;
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("XmlParser", new ObjectMap()
-			);
-	}
-
 	/**
 	 * Wrap the specified reader in a STAX reader based on settings in this context.
 	 *
@@ -740,5 +733,16 @@ public class XmlParserSession extends ReaderParserSession {
 	 */
 	protected final boolean isValidating() {
 		return ctx.isValidating();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("XmlParserSession", new DefaultFilteringObjectMap()
+			);
 	}
 }

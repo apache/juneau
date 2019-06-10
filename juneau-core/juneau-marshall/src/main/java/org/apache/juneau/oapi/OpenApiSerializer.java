@@ -144,4 +144,15 @@ public class OpenApiSerializer extends UonSerializer {
 	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
 		return createPartSession().serialize(null, schema, value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("OpenApiSerializer", new DefaultFilteringObjectMap()
+			);
+	}
 }

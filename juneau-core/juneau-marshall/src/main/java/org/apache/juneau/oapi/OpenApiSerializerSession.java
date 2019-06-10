@@ -304,4 +304,15 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			throw new SerializeException(e.getMessage());
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("OpenApiSerializerSession", new DefaultFilteringObjectMap()
+		);
+	}
 }

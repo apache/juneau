@@ -452,7 +452,7 @@ public class JsonSerializer extends WriterSerializer {
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("JsonSerializer", new ObjectMap()
+			.append("JsonSerializer", new DefaultFilteringObjectMap()
 				.append("simpleMode", simpleMode)
 				.append("escapeSolidus", escapeSolidus)
 				.append("addBeanTypes", addBeanTypes)

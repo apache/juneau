@@ -117,4 +117,16 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	public String getSoapAction() {
 		return soapAction;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("SoapXmlSerializer", new DefaultFilteringObjectMap()
+				.append("soapAction", soapAction)
+			);
+	}
 }

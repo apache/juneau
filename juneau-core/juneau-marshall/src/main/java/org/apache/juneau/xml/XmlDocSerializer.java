@@ -71,4 +71,15 @@ public class XmlDocSerializer extends XmlSerializer {
 	public XmlDocSerializerSession createSession(SerializerSessionArgs args) {
 		return new XmlDocSerializerSession(this, args);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("XmlDocSerializer", new DefaultFilteringObjectMap()
+			);
+	}
 }

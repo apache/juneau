@@ -73,23 +73,6 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		return DEFAULT_VR.createSession();
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("HtmlDocSerializerSession", new ObjectMap()
-				.append("aside", aside)
-				.append("head", head)
-				.append("header", header)
-				.append("footer", footer)
-				.append("nav", nav)
-				.append("navlinks", navlinks)
-				.append("script", script)
-				.append("style", style)
-				.append("stylesheet", stylesheet)
-				.append("varResolver", getVarResolver())
-			);
-	}
-
 	/**
 	 * Returns the {@link HtmlDocSerializer#HTMLDOC_navlinks} setting value in this context.
 	 *
@@ -270,4 +253,24 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		return ctx.getWidgets().values();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlDocSerializerSession", new DefaultFilteringObjectMap()
+				.append("aside", aside)
+				.append("head", head)
+				.append("header", header)
+				.append("footer", footer)
+				.append("nav", nav)
+				.append("navlinks", navlinks)
+				.append("script", script)
+				.append("style", style)
+				.append("stylesheet", stylesheet)
+				.append("varResolver", getVarResolver())
+			);
+	}
 }

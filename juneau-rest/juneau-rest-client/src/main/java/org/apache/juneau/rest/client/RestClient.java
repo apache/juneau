@@ -1411,4 +1411,30 @@ public class RestClient extends BeanContext implements Closeable {
 			}
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("RestClient", new DefaultFilteringObjectMap()
+				.append("debug", debug)
+				.append("executorService", executorService)
+				.append("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
+				.append("headers", headers)
+				.append("interceptors", interceptors)
+				.append("keepHttpClientOpen", keepHttpClientOpen)
+				.append("parser", parser)
+				.append("partParser", partParser)
+				.append("partSerializer", partSerializer)
+				.append("query", query)
+				.append("retries", retries)
+				.append("retryInterval", retryInterval)
+				.append("retryOn", retryOn)
+				.append("rootUri", rootUrl)
+				.append("serializer", serializer)
+			);
+	}
 }

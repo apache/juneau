@@ -158,4 +158,16 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	JsonSchemaGenerator getGenerator() {
 		return generator;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlSchemaSerializer", new DefaultFilteringObjectMap()
+				.append("generator", generator)
+			);
+	}
 }

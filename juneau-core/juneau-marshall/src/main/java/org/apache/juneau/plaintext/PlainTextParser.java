@@ -110,4 +110,15 @@ public class PlainTextParser extends ReaderParser {
 	public PlainTextParserSession createSession(ParserSessionArgs args) {
 		return new PlainTextParserSession(this, args);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("PlainTextParser", new DefaultFilteringObjectMap()
+			);
+	}
 }

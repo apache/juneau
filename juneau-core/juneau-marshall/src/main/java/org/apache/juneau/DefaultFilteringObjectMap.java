@@ -10,47 +10,39 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.jso;
+package org.apache.juneau;
 
-import java.io.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
- * Session object that lives for the duration of a single use of {@link JsoParser}.
- *
- * <p>
- * This class is NOT thread safe.
- * It is typically discarded after one-time use although it can be reused against multiple inputs.
+ * Subclass of {@link ObjectMap} that avoids adding common default values.
  */
-@SuppressWarnings("unchecked")
-public class JsoParserSession extends InputStreamParserSession {
+public class DefaultFilteringObjectMap extends ObjectMap {
+
+	private static final long serialVersionUID = 1L;
+
+	@Override /* ObjectMap */
+	public ObjectMap append(String key, Object value) {
+		if (! shouldSkip(value))
+			super.append(key, value);
+		return this;
+	}
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Returns <jk>true</jk> if the specified value should be skipped.
 	 *
-	 * @param args
-	 * 	Runtime session arguments.
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if the specified value should be skipped.
 	 */
-	protected JsoParserSession(ParserSessionArgs args) {
-		super(args);
-	}
+	protected boolean shouldSkip(Object value) {
+		return
+			value == null
+			|| (value instanceof Boolean && value.equals(false))
+			|| (value instanceof Number && ((Number)value).intValue() == -1)
+			|| (value.getClass().isArray() && Array.getLength(value) == 0)
+			|| (value instanceof Map && ((Map<?,?>)value).isEmpty())
+			|| (value instanceof Collection && ((Collection<?>)value).isEmpty());
 
-	@Override /* ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-		ObjectInputStream ois = new ObjectInputStream(pipe.getInputStream());
-		return (T)ois.readObject();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("JsoParserSession", new DefaultFilteringObjectMap()
-			);
 	}
 }

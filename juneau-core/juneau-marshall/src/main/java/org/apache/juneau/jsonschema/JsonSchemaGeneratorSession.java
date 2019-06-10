@@ -448,4 +448,15 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			return getClassMeta((Type)o);
 		return getClassMetaForObject(o);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsonSchemaGeneratorSession", new DefaultFilteringObjectMap()
+			);
+	}
 }

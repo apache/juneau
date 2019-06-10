@@ -43,4 +43,15 @@ public class PlainTextParserSession extends ReaderParserSession {
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
 		return convertToType(read(pipe.getReader()), type);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("PlainTextParserSession", new DefaultFilteringObjectMap()
+			);
+	}
 }

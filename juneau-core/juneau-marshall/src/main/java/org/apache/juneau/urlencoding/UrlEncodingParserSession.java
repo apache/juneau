@@ -47,13 +47,6 @@ public class UrlEncodingParserSession extends UonParserSession {
 		this.ctx = ctx;
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("UrlEncodingParser", new ObjectMap()
-			);
-	}
-
 	/**
 	 * Returns <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
 	 *
@@ -372,5 +365,16 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 */
 	protected final boolean isExpandedParams() {
 		return ctx.isExpandedParams();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UrlEncodingParserSession", new DefaultFilteringObjectMap()
+			);
 	}
 }

@@ -2495,4 +2495,38 @@ public final class RestCall extends BeanSession implements Closeable {
 	private static String className(Object o) {
 		return ClassInfo.of(o).getFullName();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("RestCall", new DefaultFilteringObjectMap()
+				.append("allowRedirectsOnPosts", allowRedirectsOnPosts)
+				.append("byLines", byLines)
+				.append("capturedResponse", capturedResponse)
+				.append("client", client)
+				.append("hasInput", hasInput)
+				.append("ignoreErrors", ignoreErrors)
+				.append("interceptors", interceptors)
+				.append("isClosed", isClosed)
+				.append("isConnected", isConnected)
+				.append("isFailed", isFailed)
+				.append("parser", parser)
+				.append("partParser", partParser)
+				.append("partSerializer", partSerializer)
+				.append("redirectOnPostsTries", redirectOnPostsTries)
+				.append("requestBodySchema", requestBodySchema)
+				.append("response", response)
+				.append("responseBodySchema", responseBodySchema)
+				.append("retries", retries)
+				.append("retryInterval", retryInterval)
+				.append("retryOn", retryOn)
+				.append("serializer", serializer)
+				.append("softClose", softClose)
+				.append("uriBuilder", uriBuilder)
+			);
+	}
 }

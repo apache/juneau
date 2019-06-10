@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -49,5 +50,16 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 			w.flush();
 			super.doSerialize(out, o);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("XmlDocSerializerSession", new DefaultFilteringObjectMap()
+			);
 	}
 }

@@ -50,13 +50,6 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		plainTextParams = ctx.getParamFormat() == ParamFormat.PLAINTEXT;
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("UonSerializerSession", new ObjectMap()
-		);
-	}
-
 	/**
 	 * Converts the specified output target object to an {@link UonWriter}.
 	 *
@@ -331,5 +324,16 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 */
 	protected final ParamFormat getParamFormat() {
 		return ctx.getParamFormat();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UonSerializerSession", new DefaultFilteringObjectMap()
+		);
 	}
 }

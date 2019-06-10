@@ -227,4 +227,15 @@ public class OpenApiParserSession extends UonParserSession {
 			throw new ParseException(e.getMessage());
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("OpenApiParserSession", new DefaultFilteringObjectMap()
+			);
+	}
 }

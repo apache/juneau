@@ -206,4 +206,15 @@ public abstract class ConfigStore extends Context implements Closeable {
 	public final SessionArgs createDefaultSessionArgs() {
 		throw new NoSuchMethodError();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("ConfigStore", new DefaultFilteringObjectMap()
+			);
+	}
 }

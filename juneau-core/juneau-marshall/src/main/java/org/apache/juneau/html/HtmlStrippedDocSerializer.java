@@ -110,4 +110,15 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	public HtmlSerializerSession createSession(SerializerSessionArgs args) {
 		return new HtmlStrippedDocSerializerSession(this, args);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlStrippedDocSerializer", new DefaultFilteringObjectMap()
+			);
+	}
 }

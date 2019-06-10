@@ -124,7 +124,7 @@ public abstract class InputStreamParser extends Parser {
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("InputStreamParser", new ObjectMap()
+			.append("InputStreamParser", new DefaultFilteringObjectMap()
 				.append("binaryFormat", binaryFormat)
 			);
 	}

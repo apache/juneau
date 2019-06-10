@@ -91,9 +91,13 @@ public class HtmlParser extends XmlParser {
 		return new HtmlParserSession(this, args);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("HtmlParser", new ObjectMap());
+			.append("HtmlParser", new DefaultFilteringObjectMap());
 	}
 }

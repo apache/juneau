@@ -123,9 +123,13 @@ public class MsgPackParser extends InputStreamParser {
 		return new MsgPackParserSession(this, args);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("MsgPackParser", new ObjectMap());
+			.append("MsgPackParser", new DefaultFilteringObjectMap());
 	}
 }

@@ -58,14 +58,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		decoding = getProperty(UON_decoding, boolean.class, ctx.isDecoding());
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("UonParser", new ObjectMap()
-				.append("decoding", decoding)
-			);
-	}
-
 	/**
 	 * Create a specialized parser session for parsing URL parameters.
 	 *
@@ -863,5 +855,17 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 */
 	protected final boolean isValidateEnd() {
 		return ctx.isValidateEnd();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UonParserSession", new DefaultFilteringObjectMap()
+				.append("decoding", decoding)
+			);
 	}
 }

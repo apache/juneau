@@ -47,13 +47,6 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 		this.ctx = ctx;
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("MsgPackSerializerSession", new ObjectMap()
-			);
-	}
-
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 		serializeAnything(getMsgPackOutputStream(out), o, getExpectedRootType(o), "root", null);
@@ -228,5 +221,16 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	@Override
 	protected final boolean isAddBeanTypes() {
 		return ctx.isAddBeanTypes();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("MsgPackSerializerSession", new DefaultFilteringObjectMap()
+			);
 	}
 }

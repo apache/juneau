@@ -804,7 +804,7 @@ public class HtmlSerializer extends XmlSerializer {
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("HtmlSerializer", new ObjectMap()
+			.append("HtmlSerializer", new DefaultFilteringObjectMap()
 				.append("uriAnchorText", uriAnchorText)
 				.append("detectLabelParameters", detectLabelParameters)
 				.append("detectLinksInStrings", detectLinksInStrings)

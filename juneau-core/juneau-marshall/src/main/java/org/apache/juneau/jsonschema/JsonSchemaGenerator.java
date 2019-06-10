@@ -450,4 +450,23 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 				return true;
 		return false;
 	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsonSchemaGenerator", new DefaultFilteringObjectMap()
+				.append("useBeanDefs", useBeanDefs)
+				.append("allowNestedExamples", allowNestedExamples)
+				.append("allowNestedDescriptions", allowNestedDescriptions)
+				.append("beanDefMapper", beanDefMapper)
+				.append("addExamplesTo", addExamplesTo)
+				.append("addDescriptionsTo", addDescriptionsTo)
+				.append("defaultSchemas", defaultSchemas)
+				.append("ignoreTypes", ignoreTypes)
+			);
+	}
 }

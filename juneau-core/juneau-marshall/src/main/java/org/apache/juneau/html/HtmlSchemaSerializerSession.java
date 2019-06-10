@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import org.apache.juneau.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
@@ -42,5 +43,16 @@ public class HtmlSchemaSerializerSession extends HtmlSerializerSession {
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 		super.doSerialize(out, genSession.getSchema(o));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlSchemaSerializerSession", new DefaultFilteringObjectMap()
+		);
 	}
 }

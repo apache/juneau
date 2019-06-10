@@ -930,6 +930,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods.
 	//-----------------------------------------------------------------------------------------------------------------
+
 	static String[] resolveVars(VarResolver vr, String[] in) {
 		String[] out = new String[in.length];
 		for (int i = 0; i < in.length; i++)
@@ -940,5 +941,21 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, PropertyStore ps, HttpPartSerializer _default) {
 		HttpPartSerializer hps = castOrCreate(HttpPartSerializer.class, c, true, ps);
 		return hps == null ? _default : hps;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("RestMethodContext", new DefaultFilteringObjectMap()
+				.append("defaultFormData", defaultFormData)
+				.append("defaultQuery", defaultQuery)
+				.append("defaultRequestHeaders", defaultRequestHeaders)
+				.append("httpMethod", httpMethod)
+				.append("priority", priority)
+			);
 	}
 }

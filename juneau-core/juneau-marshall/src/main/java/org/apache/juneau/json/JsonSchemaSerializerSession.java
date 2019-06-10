@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
+import org.apache.juneau.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
@@ -46,5 +47,16 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 		super.doSerialize(out, genSession.getSchema(o));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsonSchemaSerializerSession", new DefaultFilteringObjectMap()
+		);
 	}
 }

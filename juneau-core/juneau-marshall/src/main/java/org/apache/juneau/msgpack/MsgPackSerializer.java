@@ -165,10 +165,14 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		return addBeanTypes;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("MsgPackSerializer", new ObjectMap()
+			.append("MsgPackSerializer", new DefaultFilteringObjectMap()
 				.append("addBeanTypes", addBeanTypes)
 			);
 	}

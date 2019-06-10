@@ -53,13 +53,6 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		this.ctx = ctx;
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("UrlEncodingSerializerSession", new ObjectMap()
-			);
-	}
-
 	/*
 	 * Returns <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
 	 */
@@ -279,5 +272,16 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	protected final boolean isExpandedParams() {
 		return ctx.isExpandedParams();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UrlEncodingSerializerSession", new DefaultFilteringObjectMap()
+			);
 	}
 }

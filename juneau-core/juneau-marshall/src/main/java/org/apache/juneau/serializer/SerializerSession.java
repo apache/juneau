@@ -127,14 +127,6 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		this(Serializer.DEFAULT, args);
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("SerializerSession", new ObjectMap()
-				.append("uriResolver", uriResolver)
-			);
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Abstract methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -767,5 +759,17 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 */
 	protected final UriResolution getUriResolution() {
 		return ctx.getUriResolution();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("SerializerSession", new DefaultFilteringObjectMap()
+				.append("uriResolver", uriResolver)
+			);
 	}
 }

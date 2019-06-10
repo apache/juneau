@@ -101,4 +101,15 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 				w.append(s);
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("CsvSerializerSession", new DefaultFilteringObjectMap()
+		);
+	}
 }

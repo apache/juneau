@@ -126,4 +126,15 @@ public class PlainTextSerializer extends WriterSerializer {
 	public PlainTextSerializerSession createSession(SerializerSessionArgs args) {
 		return new PlainTextSerializerSession(this, args);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("PlainTextSerializer", new DefaultFilteringObjectMap()
+			);
+	}
 }

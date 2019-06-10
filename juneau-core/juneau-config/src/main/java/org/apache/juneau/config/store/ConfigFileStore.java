@@ -417,7 +417,6 @@ public class ConfigFileStore extends ConfigStore {
 			dir.toPath().register(watchService, kinds, modifier);
 		}
 
-		@SuppressWarnings("restriction")
 		private WatchEvent.Modifier lookupModifier(WatcherSensitivity s) {
 			try {
 				switch(s) {
@@ -479,5 +478,19 @@ public class ConfigFileStore extends ConfigStore {
 		if (! isEquals(oldContents, newContents)) {
 			update(fn, newContents);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("ConfigFileStore", new DefaultFilteringObjectMap()
+				.append("charset", charset)
+				.append("extensions", extensions)
+				.append("updateOnWrite", updateOnWrite)
+			);
 	}
 }

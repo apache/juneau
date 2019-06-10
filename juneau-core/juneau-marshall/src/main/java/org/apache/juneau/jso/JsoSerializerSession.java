@@ -14,6 +14,7 @@ package org.apache.juneau.jso;
 
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -46,5 +47,16 @@ public class JsoSerializerSession extends OutputStreamSerializerSession {
 		try (ObjectOutputStream oos = new ObjectOutputStream(out.getOutputStream())) {
 			oos.writeObject(o);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsoSerializerSession", new DefaultFilteringObjectMap()
+			);
 	}
 }

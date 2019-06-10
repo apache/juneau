@@ -100,7 +100,7 @@ public abstract class InputStreamParserSession extends ParserSession {
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("InputStreamParserSession", new ObjectMap()
+			.append("InputStreamParserSession", new DefaultFilteringObjectMap()
 			);
 	}
 }

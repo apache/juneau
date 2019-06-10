@@ -79,13 +79,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		return n;
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("XmlSerializerSession", new ObjectMap()
-			);
-	}
-
 	/*
 	 * Add a namespace to this session.
 	 *
@@ -821,5 +814,16 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 */
 	protected final Namespace getXsNamespace() {
 		return ctx.getXsNamespace();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("XmlSerializerSession", new DefaultFilteringObjectMap()
+			);
 	}
 }

@@ -202,12 +202,16 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+	
 	@Override /* SessionArgs */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("SerializerSessionArgs", new ObjectMap()
-				.appendSkipNull("javaMethod", javaMethod)
-				.appendSkipNull("resolver", resolver)
+			.append("SerializerSessionArgs", new DefaultFilteringObjectMap()
+				.append("javaMethod", javaMethod)
+				.append("resolver", resolver)
 			);
 	}
 }

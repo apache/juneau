@@ -119,7 +119,7 @@ public abstract class ReaderParserSession extends ParserSession {
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("ReaderParserSession", new ObjectMap()
+			.append("ReaderParserSession", new DefaultFilteringObjectMap()
 				.append("fileCharset", fileCharset)
 				.append("streamCharset", streamCharset)
 			);

@@ -158,12 +158,16 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+	
 	@Override /* SessionArgs */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("ParserSessionArgs", new ObjectMap()
-				.appendSkipNull("javaMethod", javaMethod)
-				.appendSkipNull("outer", outer)
+			.append("ParserSessionArgs", new DefaultFilteringObjectMap()
+				.append("javaMethod", javaMethod)
+				.append("outer", outer)
 			);
 	}
 }

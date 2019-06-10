@@ -60,13 +60,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(ctx.getLabelParameter()) + "=([^\\&]*)");
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("HtmlSerializerSession", new ObjectMap()
-			);
-	}
-
 	/**
 	 * Converts the specified output target object to an {@link HtmlWriter}.
 	 *
@@ -890,5 +883,16 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	protected final AnchorText getUriAnchorText() {
 		return ctx.getUriAnchorText();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlSerializerSession", new DefaultFilteringObjectMap()
+		);
 	}
 }

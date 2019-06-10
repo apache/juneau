@@ -101,4 +101,15 @@ public class OpenApiParser extends UonParser {
 	public OpenApiParserSession createPartSession(ParserSessionArgs args) {
 		return new OpenApiParserSession(this, args);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("OpenApiParser", new DefaultFilteringObjectMap()
+			);
+	}
 }

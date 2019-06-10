@@ -460,7 +460,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("RdfSerializer", new ObjectMap()
+			.append("RdfSerializer", new DefaultFilteringObjectMap()
 				.append("addLiteralTypes", addLiteralTypes)
 				.append("addRootProperty", addRootProperty)
 				.append("useXmlNamespaces", useXmlNamespaces)

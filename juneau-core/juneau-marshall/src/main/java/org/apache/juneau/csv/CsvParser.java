@@ -76,10 +76,14 @@ public class CsvParser extends ReaderParser {
 	public CsvParserSession createSession(ParserSessionArgs args) {
 		return new CsvParserSession(this, args);
 	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("CsvParser", new ObjectMap());
+			.append("CsvParser", new DefaultFilteringObjectMap());
 	}
 }

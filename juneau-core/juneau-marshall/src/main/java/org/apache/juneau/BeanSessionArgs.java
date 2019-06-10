@@ -150,8 +150,8 @@ public class BeanSessionArgs extends SessionArgs {
 	@Override /* SessionArgs */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("BeanSessionArgs", new ObjectMap()
-				.appendSkipNull("schema", schema)
+			.append("BeanSessionArgs", new DefaultFilteringObjectMap()
+				.append("schema", schema)
 			);
 	}
 }

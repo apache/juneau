@@ -144,7 +144,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("WriterSerializerSession", new ObjectMap()
-		);
+			.append("WriterSerializerSession", new DefaultFilteringObjectMap()
+			);
 	}
 }

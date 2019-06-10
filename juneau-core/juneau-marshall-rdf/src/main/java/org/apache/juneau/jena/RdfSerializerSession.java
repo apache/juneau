@@ -88,13 +88,6 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 				writer.setProperty(k.substring(15 + propPrefix.length()), getProperty(k));
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("RdfSerializerSession", new ObjectMap()
-			);
-	}
-
 	/*
 	 * Adds the specified namespace as a model prefix.
 	 */
@@ -547,5 +540,16 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	 */
 	protected final boolean isUseXmlNamespaces() {
 		return ctx.isUseXmlNamespaces();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("RdfSerializerSession", new DefaultFilteringObjectMap()
+			);
 	}
 }

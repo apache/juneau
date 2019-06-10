@@ -116,4 +116,15 @@ public class ConfigMemoryStore extends ConfigStore {
 	public void close() throws IOException {
 		// No-op
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("ConfigMemoryStore", new DefaultFilteringObjectMap()
+			);
+	}
 }

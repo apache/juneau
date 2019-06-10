@@ -166,4 +166,16 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	JsonSchemaGenerator getGenerator() {
 		return generator;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsonSchemaSerializer", new DefaultFilteringObjectMap()
+				.append("generator", generator)
+			);
+	}
 }

@@ -84,4 +84,15 @@ public final class JsoParser extends InputStreamParser {
 	public JsoParserSession createSession(ParserSessionArgs args) {
 		return new JsoParserSession(args);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsoParser", new DefaultFilteringObjectMap()
+			);
+	}
 }

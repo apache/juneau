@@ -67,19 +67,6 @@ public class BeanSession extends Session {
 		schema = args.schema;
 	}
 
-	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.appendAll(ctx.asMap())
-			.append("BeanSession", new ObjectMap()
-				.append("debug", debug)
-				.append("locale", locale)
-				.append("schema", schema)
-				.append("mediaType", mediaType)
-				.append("timeZone", timeZone)
-			);
-	}
-
 	/**
 	 * Converts the specified value to the specified class type.
 	 *
@@ -1566,5 +1553,18 @@ public class BeanSession extends Session {
 	public void checkForWarnings() {
 		if (debug)
 			super.checkForWarnings();
+	}
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("Context", ctx.asMap())
+			.append("BeanSession", new DefaultFilteringObjectMap()
+				.append("debug", debug)
+				.append("locale", locale)
+				.append("mediaType", mediaType)
+				.append("schema", schema)
+				.append("timeZone", timeZone)
+			);
 	}
 }

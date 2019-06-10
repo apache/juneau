@@ -1033,7 +1033,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
-			.append("Serializer", new ObjectMap()
+			.append("Serializer", new DefaultFilteringObjectMap()
 				.append("addBeanTypes", addBeanTypes)
 				.append("trimNullProperties", trimNullProperties)
 				.append("trimEmptyCollections", trimEmptyCollections)

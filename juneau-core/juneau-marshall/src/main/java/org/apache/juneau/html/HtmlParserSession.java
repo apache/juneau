@@ -730,4 +730,15 @@ public final class HtmlParserSession extends XmlParserSession {
 			throw new ParseException(this, "Invalid tag found in parseWhitespaceElement(): ''{0}''", tag);
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Session */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlParserSession", new DefaultFilteringObjectMap()
+			);
+	}
 }
