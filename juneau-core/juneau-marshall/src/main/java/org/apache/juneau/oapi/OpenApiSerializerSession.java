@@ -310,8 +310,8 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("OpenApiSerializerSession", new DefaultFilteringObjectMap()
 		);
 	}

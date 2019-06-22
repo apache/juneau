@@ -10,49 +10,67 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.plaintext;
+package org.apache.juneau.rest.util;
+
+import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.marshall.*;
 
 /**
- * Session object that lives for the duration of a single use of {@link PlainTextSerializer}.
+ * Represents a URL path pattern match.
  *
- * <p>
- * This class is NOT thread safe.
- * It is typically discarded after one-time use although it can be reused within the same thread.
+ * For example, given the pattern <js>"/foo/{bar}/*"</js> and the path <js>"/foo/123/baz/qux"</js>, this match gives
+ * you a map containing <js>"{bar:123}"</js> and a remainder string containing <js>"baz/qux"</js>.
  */
-public class PlainTextSerializerSession extends WriterSerializerSession {
+public class UrlPathPatternMatch {
+
+	private final String remainder;
+	private final Map<String,String> vars;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime arguments.
-	 * 	These specify session-level information such as locale and URI context.
-	 * 	It also include session-level properties that override the properties defined on the bean and
-	 * 	serializer contexts.
+	 * @param keys The variable keys.  Can be <jk>null</jk>.
+	 * @param values The variable values.  Can be <jk>null</jk>.
+	 * @param remainder
 	 */
-	protected PlainTextSerializerSession(PlainTextSerializer ctx, SerializerSessionArgs args) {
-		super(ctx, args);
+	protected UrlPathPatternMatch(String[] keys, String[] values, String remainder) {
+		this.remainder = remainder;
+		this.vars = keys == null ? Collections.emptyMap() : new SimpleMap<>(keys, values);
 	}
 
-	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		out.getWriter().write(o == null ? "null" : convertToType(o, String.class));
+	/**
+	 * Returns a map of the path variables and values.
+	 *
+	 * @return An unmodifiable map of variable keys/values.
+	 */
+	public Map<String,String> getVars() {
+		return vars;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns the remainder of the path after the pattern match has been made.
+	 *
+	 * @return The remainder of the path after the pattern match has been made.
+	 */
+	public String getRemainder() {
+		return remainder;
+	}
 
-	@Override /* Session */
+	/**
+	 * Converts this object to a map.
+	 *
+	 * @return This object converted to a map.
+	 */
 	public ObjectMap toMap() {
-		return super.toMap()
-			.append("PlainTextSerializerSession", new DefaultFilteringObjectMap()
-		);
+		return new DefaultFilteringObjectMap().append("v", getVars()).append("r", getRemainder());
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return SimpleJson.DEFAULT.toString(toMap());
 	}
 }
+

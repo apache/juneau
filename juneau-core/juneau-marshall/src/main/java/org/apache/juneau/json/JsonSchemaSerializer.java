@@ -172,8 +172,8 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("JsonSchemaSerializer", new DefaultFilteringObjectMap()
 				.append("generator", generator)
 			);

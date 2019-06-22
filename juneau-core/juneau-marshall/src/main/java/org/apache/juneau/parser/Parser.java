@@ -900,8 +900,8 @@ public abstract class Parser extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 	
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("Parser", new DefaultFilteringObjectMap()
 				.append("autoCloseStreams", autoCloseStreams)
 				.append("debugOutputLines", debugOutputLines)

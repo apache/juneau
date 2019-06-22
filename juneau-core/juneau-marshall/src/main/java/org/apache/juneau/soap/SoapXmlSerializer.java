@@ -123,8 +123,8 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("SoapXmlSerializer", new DefaultFilteringObjectMap()
 				.append("soapAction", soapAction)
 			);

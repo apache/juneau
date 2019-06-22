@@ -132,8 +132,8 @@ public class PlainTextSerializer extends WriterSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("PlainTextSerializer", new DefaultFilteringObjectMap()
 			);
 	}

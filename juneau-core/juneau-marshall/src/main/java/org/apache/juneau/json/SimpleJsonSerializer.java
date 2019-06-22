@@ -91,8 +91,8 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("SimpleJsonSerializer", new DefaultFilteringObjectMap()
 			);
 	}

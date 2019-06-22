@@ -740,8 +740,8 @@ public class XmlParserSession extends ReaderParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("XmlParserSession", new DefaultFilteringObjectMap()
 			);
 	}

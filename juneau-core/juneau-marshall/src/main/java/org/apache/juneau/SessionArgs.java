@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Runtime arguments common to all bean, serializer, and parser sessions.
@@ -86,13 +85,13 @@ public class SessionArgs {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the properties defined on this object as a simple map for debugging purposes.
 	 *
 	 * @return A new map containing the properties defined on this object.
 	 */
-	public ObjectMap asMap() {
+	public ObjectMap toMap() {
 		return new DefaultFilteringObjectMap()
 			.append("SessionArgs", new DefaultFilteringObjectMap()
 				.append("properties", properties)
@@ -101,10 +100,6 @@ public class SessionArgs {
 
 	@Override /* Object */
 	public String toString() {
-		try {
-			return asMap().toString(SimpleJsonSerializer.DEFAULT_READABLE);
-		} catch (SerializeException e) {
-			return e.getLocalizedMessage();
-		}
+		return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());
 	}
 }

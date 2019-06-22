@@ -322,8 +322,8 @@ public class XmlParser extends ReaderParser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("XmlParser", new DefaultFilteringObjectMap()
 				.append("validating", validating)
 				.append("preserveRootElement", preserveRootElement)

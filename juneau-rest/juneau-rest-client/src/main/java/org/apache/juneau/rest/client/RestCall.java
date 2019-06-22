@@ -2501,8 +2501,8 @@ public final class RestCall extends BeanSession implements Closeable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("RestCall", new DefaultFilteringObjectMap()
 				.append("allowRedirectsOnPosts", allowRedirectsOnPosts)
 				.append("byLines", byLines)

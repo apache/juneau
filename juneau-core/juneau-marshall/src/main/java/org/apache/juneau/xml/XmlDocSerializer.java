@@ -77,8 +77,8 @@ public class XmlDocSerializer extends XmlSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("XmlDocSerializer", new DefaultFilteringObjectMap()
 			);
 	}

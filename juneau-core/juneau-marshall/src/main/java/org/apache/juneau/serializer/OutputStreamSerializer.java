@@ -170,8 +170,8 @@ public abstract class OutputStreamSerializer extends Serializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("OutputStreamSerializer", new DefaultFilteringObjectMap()
 				.append("binaryFormat", binaryFormat)
 			);

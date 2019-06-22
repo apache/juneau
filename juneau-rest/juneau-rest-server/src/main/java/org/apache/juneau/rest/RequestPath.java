@@ -39,7 +39,6 @@ public class RequestPath extends TreeMap<String,String> {
 
 	private final RestRequest req;
 	private HttpPartParser parser;
-	private String pattern;
 
 	RequestPath(RestRequest req) {
 		super(String.CASE_INSENSITIVE_ORDER);
@@ -54,11 +53,6 @@ public class RequestPath extends TreeMap<String,String> {
 	RequestPath remainder(String remainder) {
 		put("/**", remainder);
 		put("/*", urlDecode(remainder));
-		return this;
-	}
-
-	RequestPath pattern(String pattern) {
-		this.pattern = pattern;
 		return this;
 	}
 
@@ -348,15 +342,6 @@ public class RequestPath extends TreeMap<String,String> {
 	 */
 	public String getRemainderUndecoded() {
 		return get("/**");
-	}
-
-	/**
-	 * Returns the path pattern that matched this request.
-	 *
-	 * @return The path pattern that matched this request.
-	 */
-	public String getPattern() {
-		return pattern;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

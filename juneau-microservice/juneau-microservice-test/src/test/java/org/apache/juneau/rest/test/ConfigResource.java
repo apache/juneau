@@ -29,7 +29,7 @@ public class ConfigResource extends BasicRestServlet {
 
 	@RestMethod(name=GET, path="/")
 	public Object test1(RestRequest req) {
-		return req.getConfig().asMap();
+		return req.getConfig().toMap();
 	}
 
 	@RestMethod(name=GET, path="/{key}/{class}")

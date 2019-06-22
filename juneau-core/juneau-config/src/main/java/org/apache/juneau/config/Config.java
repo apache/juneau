@@ -1795,7 +1795,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @return A copy of this config as a map of maps.
 	 */
 	@Override /* Context */
-	public ObjectMap asMap() {
+	public ObjectMap toMap() {
 		return configMap.asMap();
 	}
 

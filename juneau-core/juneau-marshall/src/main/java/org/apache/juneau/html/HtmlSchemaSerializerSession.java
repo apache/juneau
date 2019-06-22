@@ -50,8 +50,8 @@ public class HtmlSchemaSerializerSession extends HtmlSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("HtmlSchemaSerializerSession", new DefaultFilteringObjectMap()
 		);
 	}

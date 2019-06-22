@@ -128,8 +128,8 @@ public class MsgPackParser extends InputStreamParser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("MsgPackParser", new DefaultFilteringObjectMap());
 	}
 }

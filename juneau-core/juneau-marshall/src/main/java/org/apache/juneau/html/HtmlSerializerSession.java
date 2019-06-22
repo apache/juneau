@@ -890,8 +890,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("HtmlSerializerSession", new DefaultFilteringObjectMap()
 		);
 	}

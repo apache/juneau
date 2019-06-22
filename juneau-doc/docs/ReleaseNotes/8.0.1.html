@@ -31,6 +31,29 @@
 			<li class='jf'>{@link oaj.serializer.WriterSerializer#WSERIALIZER_fileCharset}
 			<li class='jf'>{@link oaj.serializer.WriterSerializer#WSERIALIZER_streamCharset}
 		</ul>
+	<li>
+		The following POJO methods can be used to convert a POJO to/from a Map before serialization and after parsing.
+		<br>It's a convenient way of defining a POJO transform.
+		<ul class='doctree'>
+			<li class='jm'><code><jk>public</jk> Map toMap()</code> -  Can be any type of map with string keys and object vals. 
+			<li class='jm'><code><jk>public</jk> ObjectMap toMap()</code>
+			<li class='jm'><code><jk>public</jk> Map toMap(BeanSession bs)</code> -  Can be any type of map with string keys and object vals. 
+			<li class='jm'><code><jk>public</jk> ObjectMap toMap(BeanSession bs)</code>
+			<li class='jm'><code><jk>public static</jk> T fromMap(Map m)</code> -  Can be any type of map with string keys and object vals. 
+			<li class='jm'><code><jk>public static</jk> T fromMap(ObjectMap m)</code>
+			<li class='jm'><code><jk>public static</jk> T fromMap(BeanSession bs, Map m)</code> -  Can be any type of map with string keys and object vals. 
+			<li class='jm'><code><jk>public static</jk> T fromMap(BeanSession bs, ObjectMap m)</code>
+		</ul>
+	<li>
+		New convenience debugging methods on Marshall API:
+		<ul class='doctree'>
+			<li class='jc'>{@link oaj.marshall.Marshall}
+			<ul>
+				<li class='jm'>{@link oaj.marshall.Marshall#format(String,Object...)} - <code>MessageFormat</code>-style formatter.
+				<li class='jm'>{@link oaj.marshall.Marshall#out(String,Object...)} - Prints <code>MessageFormat</code>-style messages to STDOUT.
+				<li class='jm'>{@link oaj.marshall.Marshall#err(String,Object...)} - Prints <code>MessageFormat</code>-style messages to STDERR.
+			</ul>
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-config</h5>

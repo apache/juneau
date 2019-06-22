@@ -262,8 +262,8 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("RdfParser", new DefaultFilteringObjectMap()
 				.append("trimWhitespace", trimWhitespace)
 				.append("looseCollections", looseCollections)

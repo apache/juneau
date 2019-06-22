@@ -207,8 +207,8 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	//-----------------------------------------------------------------------------------------------------------------
 	
 	@Override /* SessionArgs */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("SerializerSessionArgs", new DefaultFilteringObjectMap()
 				.append("javaMethod", javaMethod)
 				.append("resolver", resolver)

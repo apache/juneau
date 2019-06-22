@@ -141,6 +141,11 @@ public class ContextCacheTest {
 		public SessionArgs createDefaultSessionArgs() {
 			return null;
 		}
+
+		@Override
+		public ObjectMap toMap() {
+			return new ObjectMap().append("f1", f1);
+		}
 	}
 
 	@ConfigurableContext
@@ -152,6 +157,11 @@ public class ContextCacheTest {
 			f2 = getIntegerProperty("B.f2.i", -1);
 
 		}
+
+		@Override
+		public ObjectMap toMap() {
+			return super.toMap().append("f2", f2);
+		}
 	}
 
 	@ConfigurableContext
@@ -160,6 +170,11 @@ public class ContextCacheTest {
 		public C(PropertyStore ps) {
 			super(ps);
 			f3 = getBooleanProperty("C.f3.b", false);
+		}
+
+		@Override
+		public ObjectMap toMap() {
+			return super.toMap().append("f3", f3);
 		}
 	}
 

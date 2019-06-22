@@ -61,7 +61,7 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public ObjectMap getConfig() {
-		return getServletConfig().getConfig().asMap();
+		return getServletConfig().getConfig().toMap();
 	}
 
 	@RestMethod(
@@ -155,7 +155,7 @@ public class ConfigResource extends BasicRestServlet {
 			@Body(description="New contents in INI file format.") Reader contents
 		) throws Exception {
 
-		return getServletConfig().getConfig().load(contents, true).asMap();
+		return getServletConfig().getConfig().load(contents, true).toMap();
 	}
 
 	@RestMethod(

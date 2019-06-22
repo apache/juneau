@@ -92,8 +92,8 @@ public class JsoSerializer extends OutputStreamSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("JsoSerializer", new DefaultFilteringObjectMap()
 			);
 	}

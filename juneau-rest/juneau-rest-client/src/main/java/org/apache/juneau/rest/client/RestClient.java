@@ -1417,8 +1417,8 @@ public class RestClient extends BeanContext implements Closeable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("RestClient", new DefaultFilteringObjectMap()
 				.append("debug", debug)
 				.append("executorService", executorService)

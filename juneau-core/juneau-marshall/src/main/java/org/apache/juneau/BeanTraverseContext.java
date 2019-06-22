@@ -304,8 +304,8 @@ public abstract class BeanTraverseContext extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("BeanTraverseContext", new DefaultFilteringObjectMap()
 				.append("detectRecursions", detectRecursions)
 				.append("maxDepth", maxDepth)

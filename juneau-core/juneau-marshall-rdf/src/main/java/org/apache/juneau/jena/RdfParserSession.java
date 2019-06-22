@@ -516,8 +516,8 @@ public class RdfParserSession extends ReaderParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("RdfParserSession", new DefaultFilteringObjectMap()
 			);
 	}

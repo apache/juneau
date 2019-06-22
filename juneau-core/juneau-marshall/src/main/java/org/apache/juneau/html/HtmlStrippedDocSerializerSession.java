@@ -56,8 +56,8 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("HtmlStrippedDocSerializerSession", new DefaultFilteringObjectMap()
 		);
 	}

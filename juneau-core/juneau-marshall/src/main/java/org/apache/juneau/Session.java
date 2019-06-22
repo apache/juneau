@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
@@ -307,22 +306,18 @@ public abstract class Session {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
 	 *
 	 * @return A new map containing the properties defined on this context.
 	 */
-	public ObjectMap asMap() {
+	public ObjectMap toMap() {
 		return new DefaultFilteringObjectMap();
 	}
 
 	@Override /* Object */
 	public String toString() {
-		try {
-			return asMap().toString(SimpleJsonSerializer.DEFAULT_READABLE);
-		} catch (SerializeException e) {
-			return e.getLocalizedMessage();
-		}
+		return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());
 	}
 }

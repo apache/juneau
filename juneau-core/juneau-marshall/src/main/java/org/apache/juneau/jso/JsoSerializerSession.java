@@ -54,8 +54,8 @@ public class JsoSerializerSession extends OutputStreamSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("JsoSerializerSession", new DefaultFilteringObjectMap()
 			);
 	}

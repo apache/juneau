@@ -874,8 +874,8 @@ public abstract class ParserSession extends BeanSession {
 	}
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("ParserSession", new DefaultFilteringObjectMap()
 				.append("javaMethod", javaMethod)
 				.append("listener", listener)

@@ -290,8 +290,8 @@ public class UonParser extends ReaderParser implements HttpPartParser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("UonParser", new DefaultFilteringObjectMap()
 				.append("decoding", decoding)
 				.append("validateEnd", validateEnd)

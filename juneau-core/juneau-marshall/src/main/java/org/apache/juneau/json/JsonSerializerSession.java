@@ -304,8 +304,8 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("JsonSerializerSession", new DefaultFilteringObjectMap()
 		);
 	}

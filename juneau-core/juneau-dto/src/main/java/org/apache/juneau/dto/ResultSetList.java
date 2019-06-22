@@ -66,7 +66,7 @@ public final class ResultSetList extends LinkedList<Map<String,Object>> {
 					Object o = readEntry(rs, i+1, colTypes[i]);
 					row[i+offset] = o;
 				}
-				add(new SimpleMap(columns, row));
+				add(new SimpleMap<>(columns, row));
 			}
 		} finally {
 			rs.close();

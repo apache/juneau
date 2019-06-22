@@ -458,8 +458,8 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("RdfSerializer", new DefaultFilteringObjectMap()
 				.append("addLiteralTypes", addLiteralTypes)
 				.append("addRootProperty", addRootProperty)

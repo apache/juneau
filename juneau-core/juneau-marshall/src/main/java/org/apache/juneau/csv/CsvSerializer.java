@@ -85,8 +85,8 @@ public final class CsvSerializer extends WriterSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("CsvSerializer", new DefaultFilteringObjectMap());
 	}
 }

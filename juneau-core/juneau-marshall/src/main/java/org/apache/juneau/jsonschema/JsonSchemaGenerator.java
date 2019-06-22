@@ -456,8 +456,8 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("JsonSchemaGenerator", new DefaultFilteringObjectMap()
 				.append("useBeanDefs", useBeanDefs)
 				.append("allowNestedExamples", allowNestedExamples)

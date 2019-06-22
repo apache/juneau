@@ -426,8 +426,8 @@ public abstract class WriterSerializer extends Serializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("WriterSerializer", new DefaultFilteringObjectMap()
 				.append("fileCharset", fileCharset)
 				.append("maxIndent", maxIndent)

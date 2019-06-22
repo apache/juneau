@@ -122,8 +122,8 @@ public class ConfigMemoryStore extends ConfigStore {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("ConfigMemoryStore", new DefaultFilteringObjectMap()
 			);
 	}

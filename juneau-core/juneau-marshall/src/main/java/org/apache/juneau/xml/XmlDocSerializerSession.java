@@ -57,8 +57,8 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("XmlDocSerializerSession", new DefaultFilteringObjectMap()
 			);
 	}

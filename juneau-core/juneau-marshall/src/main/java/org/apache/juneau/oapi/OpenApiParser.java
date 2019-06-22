@@ -107,8 +107,8 @@ public class OpenApiParser extends UonParser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("OpenApiParser", new DefaultFilteringObjectMap()
 			);
 	}

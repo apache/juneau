@@ -494,7 +494,7 @@ public final class ClassMeta<T> implements Type {
 
 			// Find swap() method if present.
 			for (MethodInfo m : ci.getPublicMethods()) {
-				if (m.isAll(PUBLIC, NOT_DEPRECATED, NOT_STATIC) && m.hasName("swap") && m.hasFuzzyArgs(BeanSession.class)) {
+				if (m.isAll(PUBLIC, NOT_DEPRECATED, NOT_STATIC) && (m.hasName("swap") || m.hasName("toMap")) && m.hasFuzzyArgs(BeanSession.class)) {
 					swapMethod = m.inner();
 					swapMethodType = m.getReturnType().inner();
 					break;
@@ -503,7 +503,7 @@ public final class ClassMeta<T> implements Type {
 			// Find unswap() method if present.
 			if (swapMethod != null) {
 				for (MethodInfo m : ci.getPublicMethods()) {
-					if (m.isAll(PUBLIC, NOT_DEPRECATED, STATIC) && m.hasName("unswap") && m.hasFuzzyArgs(BeanSession.class, swapMethodType)) {
+					if (m.isAll(PUBLIC, NOT_DEPRECATED, STATIC) && (m.hasName("unswap") || m.hasName("fromMap")) && m.hasFuzzyArgs(BeanSession.class, swapMethodType)) {
 						unswapMethod = m.inner();
 						break;
 					}

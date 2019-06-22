@@ -331,8 +331,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("UonSerializerSession", new DefaultFilteringObjectMap()
 		);
 	}

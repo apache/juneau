@@ -372,8 +372,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("UrlEncodingParserSession", new DefaultFilteringObjectMap()
 			);
 	}

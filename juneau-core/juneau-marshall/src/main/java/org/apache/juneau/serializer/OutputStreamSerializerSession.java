@@ -114,8 +114,8 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("OutputStreamSerializerSession", new DefaultFilteringObjectMap()
 			);
 	}

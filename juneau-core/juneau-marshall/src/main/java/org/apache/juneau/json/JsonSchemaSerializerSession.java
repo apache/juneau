@@ -54,8 +54,8 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("JsonSchemaSerializerSession", new DefaultFilteringObjectMap()
 		);
 	}

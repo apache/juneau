@@ -485,8 +485,8 @@ public class ConfigFileStore extends ConfigStore {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("ConfigFileStore", new DefaultFilteringObjectMap()
 				.append("charset", charset)
 				.append("extensions", extensions)

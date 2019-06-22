@@ -766,8 +766,8 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("SerializerSession", new DefaultFilteringObjectMap()
 				.append("uriResolver", uriResolver)
 			);

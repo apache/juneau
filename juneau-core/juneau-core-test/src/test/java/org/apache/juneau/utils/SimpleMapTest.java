@@ -24,7 +24,7 @@ public class SimpleMapTest {
 	public void doTest() throws Exception {
 		String[] keys = {"a","b"};
 		Object[] vals = {"A","B"};
-		SimpleMap m = new SimpleMap(keys, vals);
+		SimpleMap<String,Object> m = new SimpleMap<>(keys, vals);
 		assertEquals(2, m.size());
 		assertEquals("A", m.get("a"));
 		assertEquals("B", m.get("b"));
@@ -38,11 +38,11 @@ public class SimpleMapTest {
 
 		assertNull(m.get("c"));
 
-		try { m = new SimpleMap(null, vals); fail(); } catch (IllegalArgumentException e) {}
-		try { m = new SimpleMap(keys, null); fail(); } catch (IllegalArgumentException e) {}
-		try { m = new SimpleMap(keys, new Object[0]); fail(); } catch (IllegalArgumentException e) {}
+		try { m = new SimpleMap<>(null, vals); fail(); } catch (IllegalArgumentException e) {}
+		try { m = new SimpleMap<>(keys, null); fail(); } catch (IllegalArgumentException e) {}
+		try { m = new SimpleMap<>(keys, new Object[0]); fail(); } catch (IllegalArgumentException e) {}
 
 		keys[0] = null;
-		try { m = new SimpleMap(keys, vals); fail(); } catch (IllegalArgumentException e) {}
+		try { m = new SimpleMap<>(keys, vals); fail(); } catch (IllegalArgumentException e) {}
 	}
 }

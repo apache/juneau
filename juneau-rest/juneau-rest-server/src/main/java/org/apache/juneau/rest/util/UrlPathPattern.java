@@ -12,11 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.util.*;
 import java.util.regex.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -25,12 +24,14 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Handles aspects of matching and precedence ordering.
  */
+@BeanIgnore
 public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 
-	private final Pattern pattern;
-	private final String patternString;
-	private final boolean isOnlyDotAll, isDotAll;
-	private final String[] vars;
+	private static final Pattern VAR_PATTERN = Pattern.compile("\\{([^\\}]+)\\}");
+
+	private final String pattern, comparator;
+	private final String[] parts, vars, varKeys;
+	private final boolean hasRemainder;
 
 	/**
 	 * Constructor.
@@ -38,39 +39,34 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	 * @param patternString The raw pattern string from the {@link RestMethod#path() @RestMethod(path)} annotation.
 	 */
 	public UrlPathPattern(String patternString) {
-		this.patternString = patternString;
-		Builder b = new Builder(patternString);
-		pattern = b.pattern;
-		isDotAll = b.isDotAll;
-		isOnlyDotAll = b.isOnlyDotAll;
-		vars = b.vars.toArray(new String[b.vars.size()]);
-	}
+		this.pattern = patternString;
 
-	private final class Builder {
-		boolean isDotAll, isOnlyDotAll;
-		Pattern pattern;
-		List<String> vars = new LinkedList<>();
+		String c = patternString.replaceAll("\\{[^\\}]+\\}", ".").replaceAll("\\w+", "X").replaceAll("\\.", "W");
+		if (c.isEmpty())
+			c = "+";
+		if (! c.endsWith("/*"))
+			c = c + "/W";
+		this.comparator = c;
 
-		Builder(String patternString) {
-			if (! startsWith(patternString, '/'))
-				patternString = '/' + patternString;
-			if (patternString.equals("/*")) {
-				isOnlyDotAll = true;
-				return;
+		String[] parts = new UrlPathParts(patternString).getParts();
+
+		this.hasRemainder = parts.length > 0 && "*".equals(parts[parts.length-1]);
+
+		parts = hasRemainder ? Arrays.copyOf(parts, parts.length-1) : parts;
+
+		this.parts = parts;
+		this.vars = new String[parts.length];
+		List<String> vars = new ArrayList<>();
+
+		for (int i = 0; i < parts.length; i++) {
+			Matcher m = VAR_PATTERN.matcher(parts[i]);
+			if (m.matches()) {
+				this.vars[i] = m.group(1);
+				vars.add(this.vars[i]);
 			}
-			if (patternString.endsWith("/*"))
-				isDotAll = true;
-
-			// Find all {xxx} variables.
-			Pattern p = Pattern.compile("\\{([^\\}]+)\\}");
-			Matcher m = p.matcher(patternString);
-			while (m.find())
-				vars.add(m.group(1));
-
-			patternString = patternString.replaceAll("\\{[^\\}]+\\}", "([^\\/]+)");
-			patternString = patternString.replaceAll("\\/\\*$", "((?:)|(?:\\/.*))");
-			pattern = Pattern.compile(patternString);
 		}
+
+		this.varKeys = vars.isEmpty() ? null : vars.toArray(new String[vars.size()]);
 	}
 
 	/**
@@ -78,41 +74,63 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	 *
 	 * @param path The path to match against.
 	 * @return
-	 * 	An array of values matched against <js>"{var}"</js> variable in the pattern, or an empty array if the
-	 * 	pattern matched but no vars were present, or <jk>null</jk> if the specified path didn't match the pattern.
+	 * 	A pattern match object, or <jk>null</jk> if the path didn't match this pattern.
 	 */
-	public String[] match(String path) {
+	public UrlPathPatternMatch match(String path) {
+		return match(new UrlPathParts(path));
+	}
 
-		if (isOnlyDotAll) {
-			// Remainder always gets leading slash trimmed.
-			if (path != null)
-				path = path.substring(1);
-			return new String[]{path};
+	/**
+	 * Returns a non-<jk>null</jk> value if the specified path matches this pattern.
+	 *
+	 * @param path The path to match against.
+	 * @return
+	 * 	A pattern match object, or <jk>null</jk> if the path didn't match this pattern.
+	 */
+	public UrlPathPatternMatch match(UrlPathParts path) {
+
+		String[] pp = path.getParts();
+
+		if (parts.length != pp.length) {
+			if (hasRemainder) {
+				if (pp.length == parts.length - 1 && ! path.isTrailingSlash())
+					return null;
+				else if (pp.length < parts.length)
+					return null;
+			} else {
+				if (pp.length != parts.length + 1)
+					return null;
+				if (! path.isTrailingSlash())
+					return null;
+			}
 		}
 
-		if (path == null)
-			return (patternString.equals("/") ? new String[]{} : null);
+		for (int i = 0; i < parts.length; i++)
+			if (vars[i] == null && (pp.length <= i || ! ("*".equals(parts[i]) || pp[i].equals(parts[i]))))
+				return null;
 
-		// If we're not doing a /* match, ignore all trailing slashes.
-		if (! isDotAll)
-			while (path.length() > 1 && path.charAt(path.length()-1) == '/')
-				path = path.substring(0, path.length()-1);
+		String[] vals = varKeys == null ? null : new String[varKeys.length];
 
-		Matcher m = pattern.matcher(path);
-		if (! m.matches())
-			return null;
+		int j = 0;
+		if (vals != null)
+			for (int i = 0; i < parts.length; i++)
+				if (vars[i] != null)
+					vals[j++] = pp[i];
 
-		int len = m.groupCount();
-		String[] v = new String[len];
+		String remainder = path.getRemainder(parts.length);
 
-		for (int i = 0; i < len; i++) {
-			if (isDotAll && i == len-1)
-				v[i] = m.group(i+1).isEmpty() ? null : m.group(i+1).substring(1);
-			else
-			v[i] = urlDecode(m.group(i+1));
-		}
+		return new UrlPathPatternMatch(varKeys, vals, remainder);
+	}
 
-		return v;
+	/**
+	 * Returns the variable names found in the pattern.
+	 *
+	 * @return
+	 * 	The variable names or an empty array if no variables found.
+	 *	<br>Modifying the returned array does not modify this object.
+	 */
+	public String[] getVars() {
+		return varKeys == null ? new String[0] : Arrays.copyOf(varKeys, varKeys.length);
 	}
 
 	/**
@@ -134,66 +152,11 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	 */
 	@Override /* Comparable */
 	public int compareTo(UrlPathPattern o) {
-		String s1 = patternString.replaceAll("\\{[^\\}]+\\}", ".").replaceAll("\\w+", "X").replaceAll("\\.", "W");
-		String s2 = o.patternString.replaceAll("\\{[^\\}]+\\}", ".").replaceAll("\\w+", "X").replaceAll("\\.", "W");
-		if (s1.isEmpty())
-			s1 = "+";
-		if (s2.isEmpty())
-			s2 = "+";
-		if (! s1.endsWith("/*"))
-			s1 = s1 + "/W";
-		if (! s2.endsWith("/*"))
-			s2 = s2 + "/W";
-		int c = s2.compareTo(s1);
-		if (c == 0)
-			return o.toRegEx().compareTo(toRegEx());
-		return c;
-	}
-
-	@Override /* Object */
-	public boolean equals(Object o) {
-		if (! (o instanceof UrlPathPattern))
-			return false;
-		return (compareTo((UrlPathPattern)o) == 0);
-	}
-
-	@Override /* Object */
-	public int hashCode() {
-		return super.hashCode();
+		return o.comparator.compareTo(comparator);
 	}
 
 	@Override /* Object */
 	public String toString() {
-		return patternString;
-	}
-
-	/**
-	 * Returns this path pattern as the compiled regular expression.
-	 *
-	 * <p>
-	 * Useful for debugging.
-	 *
-	 * @return The path pattern.
-	 */
-	public String toRegEx() {
-		return isOnlyDotAll ? "*" : pattern.pattern();
-	}
-
-	/**
-	 * Bean property getter:  <property>vars</property>.
-	 *
-	 * @return The value of the <property>vars</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	public String[] getVars() {
-		return vars;
-	}
-
-	/**
-	 * Bean property getter:  <property>patternString</property>.
-	 *
-	 * @return The value of the <property>patternString</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	public String getPatternString() {
-		return patternString;
+		return pattern.toString();
 	}
 }

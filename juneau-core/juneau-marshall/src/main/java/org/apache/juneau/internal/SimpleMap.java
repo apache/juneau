@@ -15,13 +15,13 @@ package org.apache.juneau.internal;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 
 /**
- * An instance of a <code>Map</code> where the keys and values are simple <code>String[]</code> and
- * <code>Object[]</code> arrays.
+ * An instance of a <code>Map</code> where the keys and values are simple arrays.
  *
  * <p>
  * Typically more efficient than <code>HashMaps</code> for small maps (e.g. &lt;10 entries).
@@ -31,12 +31,15 @@ import org.apache.juneau.*;
  *
  * <p>
  * Setting values overwrites the value on the underlying value array.
+ *
+ * @param <K> The key type.
+ * @param <V> The value type.
  */
-public final class SimpleMap extends AbstractMap<String,Object> {
+public final class SimpleMap<K,V> extends AbstractMap<K,V> {
 
-	final String[] keys;
-	final Object[] values;
-	final Map.Entry<String,Object>[] entries;
+	final K[] keys;
+	final V[] values;
+	final SimpleMapEntry[] entries;
 
 	/**
 	 * Constructor.
@@ -44,7 +47,8 @@ public final class SimpleMap extends AbstractMap<String,Object> {
 	 * @param keys The map keys.  Must not be <jk>null</jk>.
 	 * @param values The map values.  Must not be <jk>null</jk>.
 	 */
-	public SimpleMap(String[] keys, Object[] values) {
+	@SuppressWarnings("unchecked")
+	public SimpleMap(K[] keys, V[] values) {
 		assertFieldNotNull(keys, "keys");
 		assertFieldNotNull(values, "values");
 		if (keys.length != values.length)
@@ -52,7 +56,7 @@ public final class SimpleMap extends AbstractMap<String,Object> {
 
 		this.keys = keys;
 		this.values = values;
-		entries = new SimpleMapEntry[keys.length];
+		entries = (SimpleMapEntry[]) Array.newInstance(SimpleMapEntry.class, keys.length);
 		for (int i = 0; i < keys.length; i++) {
 			if (keys[i] == null)
 				illegalArg("Keys array cannot contain a null value.");
@@ -61,12 +65,12 @@ public final class SimpleMap extends AbstractMap<String,Object> {
 	}
 
 	@Override /* Map */
-	public Set<Map.Entry<String,Object>> entrySet() {
+	public Set<Map.Entry<K,V>> entrySet() {
 		return asSet(entries);
 	}
 
 	@Override /* Map */
-	public Object get(Object key) {
+	public V get(Object key) {
 		for (int i = 0; i < keys.length; i++)
 			if (keys[i].equals(key))
 				return values[i];
@@ -74,15 +78,15 @@ public final class SimpleMap extends AbstractMap<String,Object> {
 	}
 
 	@Override /* Map */
-	public Set<String> keySet() {
+	public Set<K> keySet() {
 		return asSet(keys);
 	}
 
 	@Override /* Map */
-	public Object put(String key, Object value) {
+	public V put(K key, V value) {
 		for (int i = 0; i < keys.length; i++) {
 			if (keys[i].equals(key)) {
-				Object v = values[i];
+				V v = values[i];
 				values[i] = value;
 				return v;
 			}
@@ -90,7 +94,7 @@ public final class SimpleMap extends AbstractMap<String,Object> {
 		throw new FormattedIllegalArgumentException("No key ''{0}'' defined in map", key);
 	}
 
-	final class SimpleMapEntry implements Map.Entry<String,Object> {
+	final class SimpleMapEntry implements Map.Entry<K,V> {
 
 		private int index;
 
@@ -99,18 +103,18 @@ public final class SimpleMap extends AbstractMap<String,Object> {
 		}
 
 		@Override /* Map.Entry */
-		public String getKey() {
+		public K getKey() {
 			return keys[index];
 		}
 
 		@Override /* Map.Entry */
-		public Object getValue() {
+		public V getValue() {
 			return values[index];
 		}
 
 		@Override /* Map.Entry */
-		public Object setValue(Object val) {
-			Object v = values[index];
+		public V setValue(V val) {
+			V v = values[index];
 			values[index] = val;
 			return v;
 		}

@@ -450,8 +450,8 @@ public class JsonSerializer extends WriterSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("JsonSerializer", new DefaultFilteringObjectMap()
 				.append("simpleMode", simpleMode)
 				.append("escapeSolidus", escapeSolidus)

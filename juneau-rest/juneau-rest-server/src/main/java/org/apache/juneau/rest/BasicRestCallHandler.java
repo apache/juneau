@@ -115,6 +115,28 @@ public class BasicRestCallHandler implements RestCallHandler {
 
 			// If this resource has child resources, try to recursively call them.
 			if (pathInfo != null && context.hasChildResources() && (! pathInfo.equals("/"))) {
+//				for (Map.Entry<UrlPathPattern,RestContext> e : context.getChildResources().entrySet()) {
+//					UrlPathPattern upp = e.getKey();
+//					String[] vars = upp.match(pathInfo);
+//					if (vars != null) {
+//						for (int i = 0; i < vars.length; i++)
+//							r1.setAttribute(upp.getVars()[i], vars[i]);
+//						final String pathInfoRemainder = upp.(i == -1 ? null : pathInfo.substring(i));
+//						final String servletPath = r1.getServletPath() + "/" + pathInfoPart;
+//						final HttpServletRequest childRequest = new HttpServletRequestWrapper(r1) {
+//							@Override /* ServletRequest */
+//							public String getPathInfo() {
+//								return urlDecode(pathInfoRemainder);
+//							}
+//							@Override /* ServletRequest */
+//							public String getServletPath() {
+//								return servletPath;
+//							}
+//						};
+//						childResource.getCallHandler().service(childRequest, r2);
+//						return;
+//					}
+//				}
 				int i = pathInfo.indexOf('/', 1);
 				String pathInfoPart = i == -1 ? pathInfo.substring(1) : pathInfo.substring(1, i);
 				RestContext childResource = context.getChildResource(pathInfoPart);

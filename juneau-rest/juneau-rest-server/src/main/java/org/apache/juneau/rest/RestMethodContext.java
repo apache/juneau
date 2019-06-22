@@ -740,16 +740,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	int invoke(String pathInfo, RestRequest req, RestResponse res) throws Throwable {
 
-		String[] patternVals = pathPattern.match(pathInfo);
-		if (patternVals == null)
+		UrlPathPatternMatch pm = pathPattern.match(pathInfo);
+		if (pm == null)
 			return SC_NOT_FOUND;
 
-		String remainder = null;
-		if (patternVals.length > pathPattern.getVars().length)
-			remainder = patternVals[pathPattern.getVars().length];
-		for (int i = 0; i < pathPattern.getVars().length; i++)
-			req.getPathMatch().put(pathPattern.getVars()[i], patternVals[i]);
-		req.getPathMatch().pattern(pathPattern.getPatternString()).remainder(remainder);
+		RequestPath rp = req.getPathMatch();
+		for (Map.Entry<String,String> e : pm.getVars().entrySet())
+			rp.put(e.getKey(), e.getValue());
+		rp.remainder(pm.getRemainder());
 
 		@SuppressWarnings("deprecation")
 		RequestProperties requestProperties = new RequestProperties(req.getVarResolverSession(), properties);
@@ -832,11 +830,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			throw e2;
 		}
 		return SC_OK;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return "SimpleMethod: name=" + httpMethod + ", path=" + pathPattern.getPatternString();
 	}
 
 	/*
@@ -948,8 +941,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("RestMethodContext", new DefaultFilteringObjectMap()
 				.append("defaultFormData", defaultFormData)
 				.append("defaultQuery", defaultQuery)

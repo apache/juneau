@@ -269,8 +269,8 @@ public class JsonParser extends ReaderParser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("JsonParser", new DefaultFilteringObjectMap());
 	}
 }

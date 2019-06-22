@@ -233,8 +233,8 @@ public class OpenApiParserSession extends UonParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("OpenApiParserSession", new DefaultFilteringObjectMap()
 			);
 	}

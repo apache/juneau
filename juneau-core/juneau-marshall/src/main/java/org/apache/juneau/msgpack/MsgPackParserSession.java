@@ -207,8 +207,8 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("MsgPackParserSession", new DefaultFilteringObjectMap()
 			);
 	}

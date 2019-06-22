@@ -4969,8 +4969,8 @@ public final class RestContext extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("RestContext", new DefaultFilteringObjectMap()
 				.append("allowBodyParam", allowBodyParam)
 				.append("allowedMethodParams", allowedMethodParams)

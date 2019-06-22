@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-Swap Methods
+{updated} Swap Methods
 
 <p>
 	Various methods can be defined on a class directly to affect how it gets serialized.
@@ -62,8 +62,23 @@ Swap Methods
 	class:
 </p>			
 <ul>
-	<li><code><jk>public</jk> X swap(BeanSession)</code> method, where <code>X</code> is any serializable 
-	object.
+	<li><code><jk>public</jk> X swap()</code> method, where <code>X</code> is any serializable object.
+	<li><code><jk>public</jk> X swap(BeanSession)</code> method, where <code>X</code> is any serializable object.
+	<li><code><jk>public static</jk> MyPojo unswap(X)</code> method, where <code>X</code> is any serializable object.
+	<li><code><jk>public static</jk> MyPojo swap(X,BeanSession)</code> method, where <code>X</code> is any serializable object.
+</ul>
+<p>
+	Serializing to and from Maps can be accomplished by defining any of the following methods:
+</p>			
+<ul>
+	<li><code><jk>public</jk> Map toMap()</code> method.  Can be any type of map with string keys and object vals. 
+	<li><code><jk>public</jk> ObjectMap toMap()</code> method. 
+	<li><code><jk>public</jk> Map toMap(BeanSession)</code> method.  Can be any type of map with string keys and object vals. 
+	<li><code><jk>public</jk> ObjectMap toMap(BeanSession)</code> method.
+	<li><code><jk>public static</jk> MyPojo fromMap(Map)</code> method.  Can be any type of map with string keys and object vals. 
+	<li><code><jk>public static</jk> MyPojo fromMap(ObjectMap)</code> method.
+	<li><code><jk>public static</jk> MyPojo fromMap(Map,BeanSession)</code> method.  Can be any type of map with string keys and object vals. 
+	<li><code><jk>public static</jk> MyPojo fromMap(ObjectMap,BeanSession)</code> method.
 </ul>
 <p>
 	The <code>BeanSession</code> parameter allows you access to various information about the current 

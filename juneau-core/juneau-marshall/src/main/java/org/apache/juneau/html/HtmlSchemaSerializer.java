@@ -164,8 +164,8 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("HtmlSchemaSerializer", new DefaultFilteringObjectMap()
 				.append("generator", generator)
 			);

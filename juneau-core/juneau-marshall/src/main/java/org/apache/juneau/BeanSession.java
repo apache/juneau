@@ -1556,9 +1556,9 @@ public class BeanSession extends Session {
 	}
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
-			.append("Context", ctx.asMap())
+	public ObjectMap toMap() {
+		return super.toMap()
+			.append("Context", ctx.toMap())
 			.append("BeanSession", new DefaultFilteringObjectMap()
 				.append("debug", debug)
 				.append("locale", locale)

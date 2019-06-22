@@ -56,8 +56,8 @@ public final class CsvParserSession extends ReaderParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("CsvParserSession", new DefaultFilteringObjectMap()
 			);
 	}

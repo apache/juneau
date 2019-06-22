@@ -14,9 +14,11 @@ package org.apache.juneau.marshall;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.text.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -151,6 +153,76 @@ public abstract class Marshall {
 	public final Marshall println(Object o) {
 		System.out.println(toString(o));
 		return this;
+	}
+
+	/**
+	 * Prints a message with arguments to {@link System#out}.
+	 *
+	 * <p>
+	 * Arguments are automatically converted to strings using this marshaller.
+	 *
+	 * <p>
+	 * Useful for debug messages.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	SimpleJson.<jsf>DEFAULT</jsf>.out(<js>"myPojo={0}"</js>, myPojo);
+	 * </p>
+	 *
+	 * @param msg The {@link MessageFormat}-styled message.
+	 * @param args The arguments sent to the the formatter after running them through this marshaller.
+	 * @return This object (for method chaining).
+	 */
+	public final Marshall out(String msg, Object...args) {
+		System.out.println(format(msg, args));
+		return this;
+	}
+
+	/**
+	 * Prints a message with arguments to {@link System#err}.
+	 *
+	 * <p>
+	 * Arguments are automatically converted to strings using this marshaller.
+	 *
+	 * <p>
+	 * Useful for debug messages.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	SimpleJson.<jsf>DEFAULT</jsf>.err(<js>"myPojo={0}"</js>, myPojo);
+	 * </p>
+	 *
+	 * @param msg The {@link MessageFormat}-styled message.
+	 * @param args The arguments sent to the the formatter after running them through this marshaller.
+	 * @return This object (for method chaining).
+	 */
+	public final Marshall err(String msg, Object...args) {
+		System.err.println(format(msg, args));
+		return this;
+	}
+
+	/**
+	 * Formats a message with arguments.
+	 *
+	 * <p>
+	 * Arguments are automatically converted to strings using this marshaller.
+	 *
+	 * <p>
+	 * Useful for debug messages.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	String msg = SimpleJson.<jsf>DEFAULT</jsf>.format(<js>"myPojo={0}"</js>, myPojo);
+	 * </p>
+	 *
+	 * @param msg The {@link MessageFormat}-styled message.
+	 * @param args The arguments sent to the the formatter after running them through this marshaller.
+	 * @return This object (for method chaining).
+	 */
+	public final String format(String msg, Object...args) {
+		for (int i = 0; i < args.length; i++)
+			args[i] = toString(args[i]);
+		return MessageFormat.format(msg, args);
 	}
 
 	/**

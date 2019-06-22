@@ -17,7 +17,6 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session}
@@ -513,29 +512,22 @@ public abstract class Context {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@Override /* Object */
 	public String toString() {
-		try {
-			return asMap().toString(SimpleJsonSerializer.DEFAULT_READABLE);
-		} catch (SerializeException e) {
-			return e.getLocalizedMessage();
-		}
+		return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());
 	}
-	
+
 	/**
 	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
 	 *
 	 * @return A new map containing the properties defined on this context.
 	 */
-	@BeanIgnore
-	public ObjectMap asMap() {
+	public ObjectMap toMap() {
 		return new DefaultFilteringObjectMap()
 			.append("Context", new DefaultFilteringObjectMap()
 				.append("identityCode", identityCode)
 				.append("propertyStore", propertyStore)
 			);
 	}
-
-	
 }

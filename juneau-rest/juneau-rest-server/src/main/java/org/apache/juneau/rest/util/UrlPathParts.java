@@ -10,48 +10,67 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.util;
+
+import static org.apache.juneau.internal.StringUtils.*;
 
 /**
- * Represents a simple child REST resource / path mapping.
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Parent resource.</jc>
- * 	<jk>public class</jk> MyResource {
- * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
- *
- * 			<jc>// Register a child resource.</jc>
- * 			builder.children(<jk>new</jk> RestChild(<js>"/child"</js>, <jk>new</jk> MyChildResource());
- *
- * 			<jc>// The above is equivalent to...</jc>
- * 			builder.child(<js>"/child"</js>, <jk>new</jk> MyChildResource());
- * 		}
- * 	}
- * </p>
- *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.Instantiation.Children}
- * </ul>
+ * Represents a parsed URL path.
  */
-public class RestChild {
+public class UrlPathParts {
 
-	// final UrlPathPattern path;
-	final String path;
-	final Object resource;
+	final String[] parts;
+	final String raw;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param path The child resource path relative to the parent resource URI.
-	 * @param resource
-	 * 	The child resource.
-	 * 	<br>Can either be a Class (which will be instantiated using the registered {@link RestResourceResolver})
-	 * 	or an already-instantiated object.
+	 * @param path The path.
 	 */
-	public RestChild(/*UrlPathPattern path, */ String path, Object resource) {
-		this.path = path;
-		this.resource = resource;
+	public UrlPathParts(String path) {
+		path = emptyIfNull(path);
+		raw = path;
+		if (path.length() > 0 && path.charAt(0) == '/')
+			path = path.substring(1);
+		parts = split(path, '/');
+		for (int i = 0; i < parts.length; i++)
+			parts[i] = urlDecode(parts[i]);
+	}
+
+	/**
+	 * Returns the path parts.
+	 *
+	 * @return The path parts.
+	 */
+	public String[] getParts() {
+		return parts;
+	}
+
+	/**
+	 * Returns a path remainder given the specified number of prefix parts.
+	 *
+	 * @param i The number of prefix parts to discard.
+	 * @return The remainder.
+	 */
+	public String getRemainder(int i) {
+		String s = raw;
+		if (s.length() > 0 && s.charAt(0) == '/')
+			s = s.substring(1);
+		for (int j = 0; j < s.length(); j++) {
+			if (i == 0)
+				return s.substring(j);
+			if (i > 0 && s.charAt(j) == '/')
+				i--;
+		}
+		return isTrailingSlash() ? "" : null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this path ends with a slash.
+	 *
+	 * @return <jk>true</jk> if this path ends with a slash.
+	 */
+	public boolean isTrailingSlash() {
+		return raw.endsWith("/");
 	}
 }

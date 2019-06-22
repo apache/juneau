@@ -187,8 +187,8 @@ public abstract class ReaderParser extends Parser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("ReaderParser", new DefaultFilteringObjectMap()
 				.append("fileCharset", fileCharset)
 				.append("streamCharset", streamCharset)

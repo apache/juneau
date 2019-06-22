@@ -1031,8 +1031,8 @@ public abstract class Serializer extends BeanTraverseContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("Serializer", new DefaultFilteringObjectMap()
 				.append("addBeanTypes", addBeanTypes)
 				.append("trimNullProperties", trimNullProperties)

@@ -109,8 +109,8 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("HtmlSchemaDocSerializer", new DefaultFilteringObjectMap()
 			);
 	}

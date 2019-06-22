@@ -3212,8 +3212,8 @@ public class BeanContext extends Context {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap asMap() {
-		return super.asMap()
+	public ObjectMap toMap() {
+		return super.toMap()
 			.append("BeanContext", new DefaultFilteringObjectMap()
 				.append("id", System.identityHashCode(this))
 				.append("beanClassVisibility", beanClassVisibility)
