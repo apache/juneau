@@ -64,7 +64,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.reshandlers.*;
-import org.apache.juneau.rest.util.UrlPathPattern;
+import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
@@ -3230,6 +3230,7 @@ public final class RestContext extends BeanContext {
 		uriAuthority,
 		uriContext;
 	final String fullPath;
+	final UrlPathPattern pathPattern;
 
 	private final Set<String> allowedMethodParams;
 
@@ -3458,7 +3459,12 @@ public final class RestContext extends BeanContext {
 					msgs.addSearchPath(mbl[i] != null ? mbl[i].baseClass : resourceClass, mbl[i].bundlePath);
 			}
 
-			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
+			this.fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
+			
+			String p = builder.getPath();
+			if (! p.endsWith("/*"))
+				p += "/*";
+			this.pathPattern = new UrlPathPattern(p);
 
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 
@@ -3513,7 +3519,7 @@ public final class RestContext extends BeanContext {
 							sm = new RestMethodContext(smb) {
 
 								@Override
-								int invoke(String pathInfo, RestRequest req, RestResponse res) throws Throwable {
+								int invoke(UrlPathInfo pathInfo, RestRequest req, RestResponse res) throws Throwable {
 
 									int rc = super.invoke(pathInfo, req, res);
 									if (rc != SC_OK)
@@ -3526,10 +3532,11 @@ public final class RestContext extends BeanContext {
 										return SC_OK;
 
 									} else if ("POST".equals(req.getMethod())) {
-										if (pathInfo.indexOf('/') != -1)
-											pathInfo = pathInfo.substring(pathInfo.lastIndexOf('/')+1);
-										pathInfo = urlDecode(pathInfo);
-										RemoteInterfaceMethod rmm = rim.getMethodMetaByPath(pathInfo);
+										String pip = pathInfo.getPath();
+										if (pip.indexOf('/') != -1)
+											pip = pip.substring(pip.lastIndexOf('/')+1);
+										pip = urlDecode(pip);
+										RemoteInterfaceMethod rmm = rim.getMethodMetaByPath(pip);
 										if (rmm != null) {
 											Method m = rmm.getJavaMethod();
 											try {

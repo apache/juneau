@@ -738,7 +738,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
 	 * @return The HTTP response code.
 	 */
-	int invoke(String pathInfo, RestRequest req, RestResponse res) throws Throwable {
+	int invoke(UrlPathInfo pathInfo, RestRequest req, RestResponse res) throws Throwable {
 
 		UrlPathPatternMatch pm = pathPattern.match(pathInfo);
 		if (pm == null)

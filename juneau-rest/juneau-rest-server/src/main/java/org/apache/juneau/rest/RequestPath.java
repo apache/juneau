@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.rest.Constants.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -43,6 +44,11 @@ public class RequestPath extends TreeMap<String,String> {
 	RequestPath(RestRequest req) {
 		super(String.CASE_INSENSITIVE_ORDER);
 		this.req = req;
+		@SuppressWarnings("unchecked")
+		Map<String,String> parentVars = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
+		if (parentVars != null)
+			for (Map.Entry<String,String> e : parentVars.entrySet())
+				put(e.getKey(), e.getValue());
 	}
 
 	RequestPath parser(HttpPartParser parser) {

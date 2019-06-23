@@ -14,25 +14,27 @@ package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
+
 /**
- * Represents a parsed URL path.
+ * Represents a parsed URL path-info string.
  */
-public class UrlPathParts {
+public class UrlPathInfo {
 
 	final String[] parts;
-	final String raw;
+	final String path;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param path The path.
 	 */
-	public UrlPathParts(String path) {
-		path = emptyIfNull(path);
-		raw = path;
-		if (path.length() > 0 && path.charAt(0) == '/')
-			path = path.substring(1);
-		parts = split(path, '/');
+	public UrlPathInfo(String path) {
+		if (path != null && ! path.startsWith("/"))
+			throw new RuntimeException("Invalid path specified.  Must be null or start with '/' per HttpServletRequest.getPathInfo().");
+		this.path = path;
+		parts = path == null ? new String[0] : split(path.substring(1), '/');
 		for (int i = 0; i < parts.length; i++)
 			parts[i] = urlDecode(parts[i]);
 	}
@@ -47,22 +49,12 @@ public class UrlPathParts {
 	}
 
 	/**
-	 * Returns a path remainder given the specified number of prefix parts.
+	 * Returns the raw path passed into this object.
 	 *
-	 * @param i The number of prefix parts to discard.
-	 * @return The remainder.
+	 * @return The raw path passed into this object.
 	 */
-	public String getRemainder(int i) {
-		String s = raw;
-		if (s.length() > 0 && s.charAt(0) == '/')
-			s = s.substring(1);
-		for (int j = 0; j < s.length(); j++) {
-			if (i == 0)
-				return s.substring(j);
-			if (i > 0 && s.charAt(j) == '/')
-				i--;
-		}
-		return isTrailingSlash() ? "" : null;
+	public String getPath() {
+		return path;
 	}
 
 	/**
@@ -71,6 +63,20 @@ public class UrlPathParts {
 	 * @return <jk>true</jk> if this path ends with a slash.
 	 */
 	public boolean isTrailingSlash() {
-		return raw.endsWith("/");
+		return path.endsWith("/");
+	}
+
+	/**
+	 * Converts this object to a map.
+	 *
+	 * @return This object converted to a map.
+	 */
+	public ObjectMap toMap() {
+		return new DefaultFilteringObjectMap().append("raw", path).append("parts", parts);
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return SimpleJson.DEFAULT.toString(toMap());
 	}
 }

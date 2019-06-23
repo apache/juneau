@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 import java.util.regex.*;
 
@@ -39,7 +41,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	 * @param patternString The raw pattern string from the {@link RestMethod#path() @RestMethod(path)} annotation.
 	 */
 	public UrlPathPattern(String patternString) {
-		this.pattern = patternString;
+		this.pattern = isEmpty(patternString) ? "/" : patternString.charAt(0) != '/' ? '/' + patternString : patternString;
 
 		String c = patternString.replaceAll("\\{[^\\}]+\\}", ".").replaceAll("\\w+", "X").replaceAll("\\.", "W");
 		if (c.isEmpty())
@@ -48,7 +50,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 			c = c + "/W";
 		this.comparator = c;
 
-		String[] parts = new UrlPathParts(patternString).getParts();
+		String[] parts = new UrlPathInfo(pattern).getParts();
 
 		this.hasRemainder = parts.length > 0 && "*".equals(parts[parts.length-1]);
 
@@ -77,36 +79,36 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	 * 	A pattern match object, or <jk>null</jk> if the path didn't match this pattern.
 	 */
 	public UrlPathPatternMatch match(String path) {
-		return match(new UrlPathParts(path));
+		return match(new UrlPathInfo(path));
 	}
 
 	/**
 	 * Returns a non-<jk>null</jk> value if the specified path matches this pattern.
 	 *
-	 * @param path The path to match against.
+	 * @param pathInfo The path to match against.
 	 * @return
 	 * 	A pattern match object, or <jk>null</jk> if the path didn't match this pattern.
 	 */
-	public UrlPathPatternMatch match(UrlPathParts path) {
+	public UrlPathPatternMatch match(UrlPathInfo pathInfo) {
 
-		String[] pp = path.getParts();
+		String[] pip = pathInfo.getParts();
 
-		if (parts.length != pp.length) {
+		if (parts.length != pip.length) {
 			if (hasRemainder) {
-				if (pp.length == parts.length - 1 && ! path.isTrailingSlash())
+				if (pip.length == parts.length - 1 && ! pathInfo.isTrailingSlash())
 					return null;
-				else if (pp.length < parts.length)
+				else if (pip.length < parts.length)
 					return null;
 			} else {
-				if (pp.length != parts.length + 1)
+				if (pip.length != parts.length + 1)
 					return null;
-				if (! path.isTrailingSlash())
+				if (! pathInfo.isTrailingSlash())
 					return null;
 			}
 		}
 
 		for (int i = 0; i < parts.length; i++)
-			if (vars[i] == null && (pp.length <= i || ! ("*".equals(parts[i]) || pp[i].equals(parts[i]))))
+			if (vars[i] == null && (pip.length <= i || ! ("*".equals(parts[i]) || pip[i].equals(parts[i]))))
 				return null;
 
 		String[] vals = varKeys == null ? null : new String[varKeys.length];
@@ -115,11 +117,9 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 		if (vals != null)
 			for (int i = 0; i < parts.length; i++)
 				if (vars[i] != null)
-					vals[j++] = pp[i];
+					vals[j++] = pip[i];
 
-		String remainder = path.getRemainder(parts.length);
-
-		return new UrlPathPatternMatch(varKeys, vals, remainder);
+		return new UrlPathPatternMatch(pathInfo.getPath(), parts.length, varKeys, vals);
 	}
 
 	/**

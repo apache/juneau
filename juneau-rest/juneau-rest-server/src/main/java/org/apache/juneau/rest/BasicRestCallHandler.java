@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.rest.Constants.*;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.IOUtils.*;
@@ -27,7 +28,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.rest.RestContext.*;
 import org.apache.juneau.rest.exception.*;
-import org.apache.juneau.rest.util.RestUtils;
+import org.apache.juneau.rest.util.*;
 
 /**
  * Default implementation of {@link RestCallHandler}.
@@ -112,49 +113,38 @@ public class BasicRestCallHandler implements RestCallHandler {
 			context.checkForInitException();
 
 			String pathInfo = RestUtils.getPathInfoUndecoded(r1);  // Can't use r1.getPathInfo() because we don't want '%2F' resolved.
+			UrlPathInfo upi = new UrlPathInfo(pathInfo);
 
 			// If this resource has child resources, try to recursively call them.
 			if (pathInfo != null && context.hasChildResources() && (! pathInfo.equals("/"))) {
-//				for (Map.Entry<UrlPathPattern,RestContext> e : context.getChildResources().entrySet()) {
-//					UrlPathPattern upp = e.getKey();
-//					String[] vars = upp.match(pathInfo);
-//					if (vars != null) {
-//						for (int i = 0; i < vars.length; i++)
-//							r1.setAttribute(upp.getVars()[i], vars[i]);
-//						final String pathInfoRemainder = upp.(i == -1 ? null : pathInfo.substring(i));
-//						final String servletPath = r1.getServletPath() + "/" + pathInfoPart;
-//						final HttpServletRequest childRequest = new HttpServletRequestWrapper(r1) {
-//							@Override /* ServletRequest */
-//							public String getPathInfo() {
-//								return urlDecode(pathInfoRemainder);
-//							}
-//							@Override /* ServletRequest */
-//							public String getServletPath() {
-//								return servletPath;
-//							}
-//						};
-//						childResource.getCallHandler().service(childRequest, r2);
-//						return;
-//					}
-//				}
-				int i = pathInfo.indexOf('/', 1);
-				String pathInfoPart = i == -1 ? pathInfo.substring(1) : pathInfo.substring(1, i);
-				RestContext childResource = context.getChildResource(pathInfoPart);
-				if (childResource != null) {
-					final String pathInfoRemainder = (i == -1 ? null : pathInfo.substring(i));
-					final String servletPath = r1.getServletPath() + "/" + pathInfoPart;
-					final HttpServletRequest childRequest = new HttpServletRequestWrapper(r1) {
-						@Override /* ServletRequest */
-						public String getPathInfo() {
-							return urlDecode(pathInfoRemainder);
+				for (RestContext rc : context.getChildResources().values()) {
+					UrlPathPattern upp = rc.pathPattern;
+					final UrlPathPatternMatch uppm = upp.match(upi);
+					if (uppm != null) {
+						if (uppm.hasVars()) {
+							@SuppressWarnings("unchecked")
+							Map<String,String> vars = (Map<String,String>)r1.getAttribute(REST_PATHVARS_ATTR);
+							if (vars == null) {
+								vars = new TreeMap<>();
+								r1.setAttribute(REST_PATHVARS_ATTR, vars);
+							}
+							vars.putAll(uppm.getVars());
 						}
-						@Override /* ServletRequest */
-						public String getServletPath() {
-							return servletPath;
-						}
-					};
-					childResource.getCallHandler().service(childRequest, r2);
-					return;
+						final String afterMatch = uppm.getSuffix();
+						final String servletPath = r1.getServletPath() + uppm.getPrefix();
+						final HttpServletRequest childRequest = new HttpServletRequestWrapper(r1) {
+							@Override /* ServletRequest */
+							public String getPathInfo() {
+								return urlDecode(afterMatch);
+							}
+							@Override /* ServletRequest */
+							public String getServletPath() {
+								return servletPath;
+							}
+						};
+						rc.getCallHandler().service(childRequest, r2);
+						return;
+					}
 				}
 			}
 
@@ -187,9 +177,9 @@ public class BasicRestCallHandler implements RestCallHandler {
 				// If the specified method has been defined in a subclass, invoke it.
 				int rc = SC_METHOD_NOT_ALLOWED;
 				if (restCallRouters.containsKey(methodUC)) {
-					rc = restCallRouters.get(methodUC).invoke(pathInfo, req, res);
+					rc = restCallRouters.get(methodUC).invoke(upi, req, res);
 				} else if (restCallRouters.containsKey("*")) {
-					rc = restCallRouters.get("*").invoke(pathInfo, req, res);
+					rc = restCallRouters.get("*").invoke(upi, req, res);
 				}
 
 				// If not invoked above, see if it's an OPTIONs request

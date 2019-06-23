@@ -58,7 +58,7 @@ public class UrlPathPatternTest {
 		l.add(new UrlPathPattern("/foo/{id}/bar/*"));
 
 		Collections.sort(l);
-		assertEquals("['/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*','/','/*','','*']", SimpleJsonSerializer.DEFAULT.toString(l));
+		assertEquals("['/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*','/','/*','/','/*']", SimpleJsonSerializer.DEFAULT.toString(l));
 	}
 
 	@Test
@@ -79,7 +79,7 @@ public class UrlPathPatternTest {
 		l.add(new UrlPathPattern(""));
 
 		Collections.sort(l);
-		assertEquals("['/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*','/','/*','','*']", SimpleJsonSerializer.DEFAULT.toString(l));
+		assertEquals("['/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*','/','/*','/','/*']", SimpleJsonSerializer.DEFAULT.toString(l));
 	}
 
 	@Test
@@ -118,7 +118,7 @@ public class UrlPathPatternTest {
 	public void b03_simple_match_2parts() throws Exception {
 		UrlPathPattern p = new UrlPathPattern("/foo/bar");
 		shouldMatch(p, "/foo/bar", "{}");
-		shouldMatch(p, "foo/bar/", "{r:''}");
+		shouldMatch(p, "/foo/bar/", "{r:''}");
 	}
 
 	@Test
@@ -134,7 +134,6 @@ public class UrlPathPatternTest {
 	public void b05_simple_match_0parts() throws Exception {
 		UrlPathPattern p = new UrlPathPattern("/");
 		shouldMatch(p, "/", "{r:''}");
-		shouldMatch(p, "", "{}");
 	}
 
 	@Test
@@ -148,7 +147,6 @@ public class UrlPathPatternTest {
 	public void b07_simple_match_blank() throws Exception {
 		UrlPathPattern p = new UrlPathPattern("");
 		shouldMatch(p, "/", "{r:''}");
-		shouldMatch(p, "", "{}");
 	}
 
 	@Test
@@ -186,7 +184,6 @@ public class UrlPathPatternTest {
 	public void c03_simple_withRemainder_match_2parts() throws Exception {
 		UrlPathPattern p = new UrlPathPattern("/foo/bar/*");
 		shouldMatch(p, "/foo/bar", "{}");
-		shouldMatch(p, "foo/bar/", "{r:''}");
 		shouldMatch(p, "/foo/bar/baz", "{r:'baz'}");
 		shouldMatch(p, "/foo/bar/baz/", "{r:'baz/'}");
 	}

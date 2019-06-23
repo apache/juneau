@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -26,18 +28,21 @@ import org.apache.juneau.marshall.*;
  */
 public class UrlPathPatternMatch {
 
-	private final String remainder;
+	private final int matchedParts;
+	private final String path;
 	private final Map<String,String> vars;
 
 	/**
 	 * Constructor.
 	 *
+	 * @param path The path being matched against.  Can be <jk>null</jk>.
+	 * @param matchedParts The number of parts that were matched against the path.
 	 * @param keys The variable keys.  Can be <jk>null</jk>.
 	 * @param values The variable values.  Can be <jk>null</jk>.
-	 * @param remainder
 	 */
-	protected UrlPathPatternMatch(String[] keys, String[] values, String remainder) {
-		this.remainder = remainder;
+	protected UrlPathPatternMatch(String path, int matchedParts, String[] keys, String[] values) {
+		this.path = path;
+		this.matchedParts = matchedParts;
 		this.vars = keys == null ? Collections.emptyMap() : new SimpleMap<>(keys, values);
 	}
 
@@ -51,12 +56,61 @@ public class UrlPathPatternMatch {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this match contains one or more variables.
+	 *
+	 * @return <jk>true</jk> if this match contains one or more variables.
+	 */
+	public boolean hasVars() {
+		return ! vars.isEmpty();
+	}
+
+	/**
 	 * Returns the remainder of the path after the pattern match has been made.
 	 *
 	 * @return The remainder of the path after the pattern match has been made.
 	 */
 	public String getRemainder() {
-		return remainder;
+		String suffix = getSuffix();
+		if (isNotEmpty(suffix) && suffix.charAt(0) == '/')
+			suffix = suffix.substring(1);
+		return suffix;
+	}
+
+	/**
+	 * Returns the remainder of the URL after the pattern was matched.
+	 *
+	 * @return
+	 * The remainder of the URL after the pattern was matched.
+	 * <br>Can be <jk>null</jk> if nothing remains to be matched.
+	 * <br>Otherwise, always starts with <js>'/'</js>.
+	 */
+	public String getSuffix() {
+		String s = path;
+		for (int j = 0; j < matchedParts; j++) {
+			int k = s.indexOf('/', 1);
+			if (k == -1)
+				return null;
+			s = s.substring(k);
+		}
+		return s;
+	}
+
+	/**
+	 * Returns the part of the URL that the pattern matched against.
+	 *
+	 * @return
+	 * The part of the URL that the pattern matched against.
+	 * <br>Can be <jk>null</jk> if nothing matched.
+	 * <br>Otherwise, always starts with <js>'/'</js>.
+	 */
+	public String getPrefix() {
+		int c = 0;
+		for (int j = 0; j < matchedParts; j++) {
+			c = path.indexOf('/', c+1);
+			if (c == -1)
+				c = path.length();
+		}
+		return nullIfEmpty(path.substring(0, c));
 	}
 
 	/**

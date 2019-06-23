@@ -18,6 +18,8 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
+import org.apache.juneau.rest.util.*;
+
 /**
  * Represents a group of CallMethods on a REST resource that handle the same HTTP Method name but with different
  * paths/matchers/guards/etc...
@@ -75,7 +77,7 @@ public class RestCallRouter {
 	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
 	 * @return The HTTP response code.
 	 */
-	int invoke(String pathInfo, RestRequest req, RestResponse res) throws Throwable {
+	int invoke(UrlPathInfo pathInfo, RestRequest req, RestResponse res) throws Throwable {
 		if (restJavaMethods.length == 1)
 			return restJavaMethods[0].invoke(pathInfo, req, res);
 
