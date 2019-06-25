@@ -276,4 +276,35 @@ public class RestUtilsTest {
 		assertEquals("/", trimContextPath("/foo", "/foo/"));
 		assertEquals("/", trimContextPath("/foo", "/foo"));
 	}
+
+	@Test
+	public void testIsValidContextPath() {
+		assertTrue(isValidContextPath(""));
+		assertTrue(isValidContextPath("/foo"));
+		assertFalse(isValidContextPath("/"));
+		assertFalse(isValidContextPath("/foo/"));
+		assertFalse(isValidContextPath(null));
+		assertFalse(isValidContextPath("foo"));
+	}
+
+	@Test
+	public void testIsValidServletPath() {
+		assertTrue(isValidServletPath(""));
+		assertTrue(isValidServletPath("/foo"));
+		assertFalse(isValidServletPath("/"));
+		assertFalse(isValidServletPath("/foo/"));
+		assertFalse(isValidServletPath(null));
+		assertFalse(isValidServletPath("foo"));
+	}
+
+	@Test
+	public void testIsValidPathInfo() {
+		assertFalse(isValidPathInfo(""));
+		assertTrue(isValidPathInfo("/foo"));
+		assertTrue(isValidPathInfo("/"));
+		assertTrue(isValidPathInfo("/foo/"));
+		assertTrue(isValidPathInfo(null));
+		assertFalse(isValidPathInfo("foo"));
+	}
+
 }

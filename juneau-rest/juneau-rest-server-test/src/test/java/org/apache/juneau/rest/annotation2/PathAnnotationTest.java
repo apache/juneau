@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.Path;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
@@ -330,6 +331,349 @@ public class PathAnnotationTest {
 	@Test
 	public void e05_numbers3() throws Exception {
 		e.get("/z/z1/z/z2/z").execute().assertBody("{m:'numbers3','0':'z2','1':'z1'}");
+	}
+
+	//=================================================================================================================
+	// Path variables on class.
+	//=================================================================================================================
+
+	@RestResource(path="/f/{a}/{b}")
+	public static class F  {
+		@RestMethod(name=GET, path="/")
+		public String noPath(RequestPath path) {
+			return format("noPath: {0}", path);
+		}
+		@RestMethod(name=GET, path="/*")
+		public String noPath2(RequestPath path) {
+			return format("noPath2: {0}", path);
+		}
+		@RestMethod(name=GET, path="/a")
+		public String noVars(RequestPath path) {
+			return format("noVars: {0}", path);
+		}
+		@RestMethod(name=GET, path="/b/{c}/{d}")
+		public String twoVars(RequestPath path) {
+			return format("twoVars: {0}", path);
+		}
+		@RestMethod(name=GET, path="/c/{a}/{b}")
+		public String twoVarsOverlapping(RequestPath path) {
+			return format("twoVarsOverlapping: {0}", path);
+		}
+		@RestMethod(name=GET, path="/d/{c}/{d}/*")
+		public String withRemainder(RequestPath path) {
+			return format("withRemainder: {0}", path);
+		}
+		private String format(String msg, Object...args) {
+			return SimpleJson.DEFAULT.format(msg, args);
+		}
+	}
+	static MockRest f = MockRest.create(F.class).servletPath("/f").build();
+
+	@Test
+	public void f01a_noPath() throws Exception {
+		f.get("/f/x1/x2").execute().assertBody("noPath: {a:'x1',b:'x2'}");
+	}
+
+	@Test
+	public void f01b_incompletePath() throws Exception {
+		f.get("/f/x1").execute().assertStatus(404);
+		f.get("/f").execute().assertStatus(404);
+	}
+
+	@Test
+	public void f01c_noPath_blanks() throws Exception {
+		f.get("/f//").execute().assertStatus(404);
+		f.get("/f/x/").execute().assertStatus(404);
+		f.get("/f//x").execute().assertStatus(404);
+	}
+
+	@Test
+	public void f02a_noPath2() throws Exception {
+		f.get("/f/x1/x2/foo").execute().assertBody("noPath2: {'/*':'foo','/**':'foo',a:'x1',b:'x2'}");
+	}
+
+	@Test
+	public void f02b_noPath2_blanks() throws Exception {
+		f.get("/f///foo").execute().assertStatus(404);
+		f.get("/f/x1//foo").execute().assertStatus(404);
+		f.get("/f//x2/foo").execute().assertStatus(404);
+	}
+
+	@Test
+	public void f03a_noVars() throws Exception {
+		f.get("/f/x1/x2/a").execute().assertBody("noVars: {a:'x1',b:'x2'}");
+	}
+
+	@Test
+	public void f03b_noVars_blanks() throws Exception {
+		f.get("/f///a").execute().assertStatus(404);
+		f.get("/f/x1//a").execute().assertStatus(404);
+		f.get("/f//x2/a").execute().assertStatus(404);
+	}
+
+	@Test
+	public void f04a_twoVars() throws Exception {
+		f.get("/f/x1/x2/b/x3/x4").execute().assertBody("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4'}");
+	}
+
+	@Test
+	public void f04b_twoVars_blanks() throws Exception {
+		f.get("/f//x2/b/x3/x4").execute().assertStatus(404);
+		f.get("/f/x1//b/x3/x4").execute().assertStatus(404);
+		f.get("/f/x1/x2/b//x4").execute().assertStatus(200);
+		f.get("/f/x1/x2/b/x3/").execute().assertStatus(200);
+		f.get("/f///b//").execute().assertStatus(404);
+	}
+
+	@Test
+	public void f05_twoVarsOverlapping() throws Exception {
+		f.get("/f/x1/x2/c/x3/x4").execute().assertBody("twoVarsOverlapping: {a:'x3',b:'x4'}");
+	}
+
+	@Test
+	public void f06a_withRemainder() throws Exception {
+		f.get("/f/x1/x2/d/x3/x4").execute().assertBody("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4'}");
+	}
+
+	@Test
+	public void f06b_withRemainder_lank() throws Exception {
+		f.get("/f/x1/x2/d/x3/x4/").execute().assertBody("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4'}");
+	}
+
+	@Test
+	public void f06c_withRemainderWithStuff() throws Exception {
+		f.get("/f/x1/x2/d/x3/x4/foo/bar").execute().assertBody("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4'}");
+	}
+
+	//=================================================================================================================
+	// Path variables on child class.
+	//=================================================================================================================
+
+	@RestResource(children={F.class})
+	public static class G {}
+
+	static MockRest g = MockRest.create(G.class).build();
+
+	@Test
+	public void g01a_noPath() throws Exception {
+		g.get("/f/x1/x2").execute().assertBody("noPath: {a:'x1',b:'x2'}");
+	}
+
+	@Test
+	public void g01b_incompletePath() throws Exception {
+		g.get("/f/x1").execute().assertStatus(404);
+		g.get("/f").execute().assertStatus(404);
+	}
+
+	@Test
+	public void g01c_noPath_blanks() throws Exception {
+		g.get("/f//").execute().assertStatus(404);
+		g.get("/f/x1/").execute().assertStatus(404);
+		g.get("/f//x2").execute().assertStatus(404);
+	}
+
+	@Test
+	public void g02a_noVars() throws Exception {
+		g.get("/f/x1/x2/a").execute().assertBody("noVars: {a:'x1',b:'x2'}");
+	}
+
+	@Test
+	public void g02b_noVars_blanks() throws Exception {
+		g.get("/f///a").execute().assertStatus(404);
+		g.get("/f/x1//a").execute().assertStatus(404);
+		g.get("/f//x2/a").execute().assertStatus(404);
+	}
+
+	@Test
+	public void g03a_twoVars() throws Exception {
+		g.get("/f/x1/x2/b/x3/x4").execute().assertBody("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4'}");
+	}
+
+	@Test
+	public void g03b_twoVars_blanks() throws Exception {
+		g.get("/f//x2/b/x3/x4").execute().assertStatus(404);
+		g.get("/f/x1//b/x3/x4").execute().assertStatus(404);
+		g.get("/f/x1/x2/b//x4").execute().assertStatus(200);
+		g.get("/f/x1/x2/b/x3/").execute().assertStatus(200);
+		g.get("/f///b//").execute().assertStatus(404);
+	}
+
+	@Test
+	public void g04_twoVarsOverlapping() throws Exception {
+		g.get("/f/x1/x2/c/x3/x4").execute().assertBody("twoVarsOverlapping: {a:'x3',b:'x4'}");
+	}
+
+	@Test
+	public void g05a_withRemainder() throws Exception {
+		g.get("/f/x1/x2/d/x3/x4").execute().assertBody("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4'}");
+	}
+
+	@Test
+	public void g05b_withRemainderBlank() throws Exception {
+		g.get("/f/x1/x2/d/x3/x4/").execute().assertBody("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4'}");
+	}
+
+	@Test
+	public void g05c_withRemainderWithStuff() throws Exception {
+		g.get("/f/x1/x2/d/x3/x4/foo/bar").execute().assertBody("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4'}");
+	}
+
+	//=================================================================================================================
+	// Path variables on parent and child class.
+	//=================================================================================================================
+
+	@RestResource(path="/h/{ha}/{hb}", children={F.class})
+	public static class H {}
+
+	static MockRest h = MockRest.create(H.class).servletPath("/h").build();
+
+	@Test
+	public void h01a_noPath() throws Exception {
+		h.get("/h/ha1/hb1/f/x1/x2").execute().assertBody("noPath: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
+	}
+
+	@Test
+	public void h01b_incompletePath() throws Exception {
+		// These are 405 instead of 404 because when children don't match, we try to find a matching Java method.
+		h.get("/h/ha1/hb1/f/x1").execute().assertStatus(404);
+		h.get("/h/ha1/hb1/f").execute().assertStatus(404);
+		h.get("/h/ha1/hb1").execute().assertStatus(404);
+		h.get("/h/ha1").execute().assertStatus(404);
+		h.get("/h").execute().assertStatus(404);
+	}
+
+	@Test
+	public void h01c_noPath_blanks() throws Exception {
+		h.get("/h//hb1/f/x1/x2").execute().assertStatus(404);
+		h.get("/h/ha1//f/x1/x2").execute().assertStatus(404);
+		h.get("/h/ha1/hb1/f//x2").execute().assertStatus(404);
+		h.get("/h/ha1/hb1/f/x1/").execute().assertStatus(404);
+		h.get("/h///f//").execute().assertStatus(404);
+	}
+
+	@Test
+	public void h02a_noPath2() throws Exception {
+		h.get("/h/ha1/hb1/f/x1/x2/foo").execute().assertBody("noPath2: {'/*':'foo','/**':'foo',a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
+	}
+
+	@Test
+	public void h02b_noPath2_blanks() throws Exception {
+		h.get("/h//hb1/f/x1/x2/foo").execute().assertStatus(404);
+		h.get("/h/ha1//f/x1/x2/foo").execute().assertStatus(404);
+		h.get("/h/ha1/hb1/f//x2/foo").execute().assertStatus(404);
+		h.get("/h/ha1/hb1/f/x1//foo").execute().assertStatus(404);
+		h.get("/h///f///foo").execute().assertStatus(404);
+	}
+
+	@Test
+	public void h03a_noVars() throws Exception {
+		h.get("/h/ha1/hb1/f/x1/x2/a").execute().assertBody("noVars: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
+	}
+
+	@Test
+	public void h03b_noVars_blanks() throws Exception {
+		h.get("/h//hb1/f/x1/x2/a").execute().assertStatus(404);
+		h.get("/h/ha1//f/x1/x2/a").execute().assertStatus(404);
+		h.get("/h/ha1/hb1/f//x2/a").execute().assertStatus(404);
+		h.get("/h/ha1/hb1/f/x1//a").execute().assertStatus(404);
+		h.get("/h///f///a").execute().assertStatus(404);
+	}
+
+	@Test
+	public void h04_twoVars() throws Exception {
+		h.get("/h/ha1/hb1/f/x1/x2/b/x3/x4").execute().assertBody("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
+	}
+
+	@Test
+	public void h05_twoVarsOverlapping() throws Exception {
+		h.get("/h/ha1/hb1/f/x1/x2/c/x3/x4").execute().assertBody("twoVarsOverlapping: {a:'x3',b:'x4',ha:'ha1',hb:'hb1'}");
+	}
+
+	@Test
+	public void h06a_withRemainder() throws Exception {
+		h.get("/h/ha1/hb1/f/x1/x2/d/x3/x4").execute().assertBody("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
+	}
+
+	@Test
+	public void h06b_withRemainderBlank() throws Exception {
+		h.get("/h/ha1/hb1/f/x1/x2/d/x3/x4/").execute().assertBody("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
+	}
+
+	@Test
+	public void h06c_withRemainderWithStuff() throws Exception {
+		h.get("/h/ha1/hb1/f/x1/x2/d/x3/x4/foo/bar").execute().assertBody("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
+	}
+
+	//=================================================================================================================
+	// Path variables on parents and child class.
+	//=================================================================================================================
+
+	@RestResource(path="/i/{ia}/{ib}", children={H.class})
+	public static class I {}
+
+	static MockRest i = MockRest.create(I.class).servletPath("/i").build();
+
+	@Test
+	public void i01a_noPath() throws Exception {
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2").execute().assertBody("noPath: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+	}
+
+	@Test
+	public void i01b_incompletePath() throws Exception {
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1").execute().assertStatus(404);
+		i.get("/i/ia1/ib1/h/ha1/hb1/f").execute().assertStatus(404);
+		i.get("/i/ia1/ib1/h/ha1/hb1").execute().assertStatus(404);
+		i.get("/i/ia1/ib1/h/ha1").execute().assertStatus(404);
+		i.get("/i/ia1/ib1/h").execute().assertStatus(404);
+		i.get("/i/ia1/ib1").execute().assertStatus(404);
+		i.get("/i/ia1").execute().assertStatus(404);
+		i.get("/i").execute().assertStatus(404);
+	}
+
+	@Test
+	public void i01c_noPath_blanks() throws Exception {
+		i.get("/i//ib1/h/ha1/hb1/f/x1/x2").execute().assertStatus(404);
+		i.get("/i/ia1//h/ha1/hb1/f/x1/x2").execute().assertStatus(404);
+		i.get("/i/ia1/ib1/h//hb1/f/x1/x2").execute().assertStatus(404);
+		i.get("/i/ia1/ib1/h/ha1//f/x1/x2").execute().assertStatus(404);
+		i.get("/i/ia1/ib1/h/ha1/hb1/f//x2").execute().assertStatus(404);
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/").execute().assertStatus(404);
+		i.get("/i///h///f//").execute().assertStatus(404);
+	}
+
+	@Test
+	public void i02_noPath2() throws Exception {
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/foo").execute().assertBody("noPath2: {'/*':'foo','/**':'foo',a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+	}
+
+	@Test
+	public void i03_noVars() throws Exception {
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/a").execute().assertBody("noVars: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+	}
+
+	@Test
+	public void i04_twoVars() throws Exception {
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/b/x3/x4").execute().assertBody("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+	}
+
+	@Test
+	public void i05_twoVarsOverlapping() throws Exception {
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/c/x3/x4").execute().assertBody("twoVarsOverlapping: {a:'x3',b:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+	}
+
+	@Test
+	public void i06a_withRemainder() throws Exception {
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4").execute().assertBody("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+	}
+
+	@Test
+	public void i06b_withRemainderBlank() throws Exception {
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4/").execute().assertBody("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+	}
+
+	@Test
+	public void i06c_withRemainderWithStuff() throws Exception {
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4/foo/bar").execute().assertBody("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	//=================================================================================================================

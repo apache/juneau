@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.rest.Constants.*;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.IOUtils.*;
@@ -115,34 +114,42 @@ public class BasicRestCallHandler implements RestCallHandler {
 			String pathInfo = RestUtils.getPathInfoUndecoded(r1);  // Can't use r1.getPathInfo() because we don't want '%2F' resolved.
 			UrlPathInfo upi = new UrlPathInfo(pathInfo);
 
+			// If the resource path contains variables (e.g. @RestResource(path="/f/{a}/{b}"), then we want to resolve
+			// those variables and push the servletPath to include the resolved variables.  The new pathInfo will be
+			// the remainder after the new servletPath.
+			// Only do this for the top-level resource because the logic for child resources are processed next.
+			if (context.pathPattern.hasVars() && context.getParentContext() == null) {
+				String sp = r1.getServletPath();
+				UrlPathInfo upi2 = new UrlPathInfo(pathInfo == null ? sp : sp + pathInfo);
+				UrlPathPatternMatch uppm = context.pathPattern.match(upi2);
+				if (uppm != null && ! uppm.hasEmptyVars()) {
+					RequestPath.addPathVars(r1, uppm.getVars());
+					r1 = new OverrideableHttpServletRequest(r1)
+						.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
+						.servletPath(uppm.getPrefix());
+					pathInfo = RestUtils.getPathInfoUndecoded(r1);  // Can't use r1.getPathInfo() because we don't want '%2F' resolved.
+					upi = new UrlPathInfo(pathInfo);
+				} else {
+					r2.setStatus(SC_NOT_FOUND);
+					return;
+				}
+			}
+
 			// If this resource has child resources, try to recursively call them.
-			if (pathInfo != null && context.hasChildResources() && (! pathInfo.equals("/"))) {
+			if (context.hasChildResources() && pathInfo != null && ! pathInfo.equals("/")) {
 				for (RestContext rc : context.getChildResources().values()) {
 					UrlPathPattern upp = rc.pathPattern;
-					final UrlPathPatternMatch uppm = upp.match(upi);
+					UrlPathPatternMatch uppm = upp.match(upi);
 					if (uppm != null) {
-						if (uppm.hasVars()) {
-							@SuppressWarnings("unchecked")
-							Map<String,String> vars = (Map<String,String>)r1.getAttribute(REST_PATHVARS_ATTR);
-							if (vars == null) {
-								vars = new TreeMap<>();
-								r1.setAttribute(REST_PATHVARS_ATTR, vars);
-							}
-							vars.putAll(uppm.getVars());
+						if (! uppm.hasEmptyVars()) {
+							RequestPath.addPathVars(r1, uppm.getVars());
+							HttpServletRequest childRequest = new OverrideableHttpServletRequest(r1)
+								.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
+								.servletPath(r1.getServletPath() + uppm.getPrefix());
+							rc.getCallHandler().service(childRequest, r2);
+						} else {
+							r2.setStatus(SC_NOT_FOUND);
 						}
-						final String afterMatch = uppm.getSuffix();
-						final String servletPath = r1.getServletPath() + uppm.getPrefix();
-						final HttpServletRequest childRequest = new HttpServletRequestWrapper(r1) {
-							@Override /* ServletRequest */
-							public String getPathInfo() {
-								return urlDecode(afterMatch);
-							}
-							@Override /* ServletRequest */
-							public String getServletPath() {
-								return servletPath;
-							}
-						};
-						rc.getCallHandler().service(childRequest, r2);
 						return;
 					}
 				}
@@ -174,13 +181,24 @@ public class BasicRestCallHandler implements RestCallHandler {
 				res.setStatus(SC_OK);
 				res.setOutput(r);
 			} else {
+
 				// If the specified method has been defined in a subclass, invoke it.
-				int rc = SC_METHOD_NOT_ALLOWED;
+				int rc = 0;
 				if (restCallRouters.containsKey(methodUC)) {
 					rc = restCallRouters.get(methodUC).invoke(upi, req, res);
 				} else if (restCallRouters.containsKey("*")) {
 					rc = restCallRouters.get("*").invoke(upi, req, res);
 				}
+
+				// Should be 405 if the URL pattern matched but HTTP method did not.
+				if (rc == 0)
+					for (RestCallRouter rcc : restCallRouters.values())
+						if (rcc.matches(upi))
+							rc = SC_METHOD_NOT_ALLOWED;
+
+				// Should be 404 if URL pattern didn't match.
+				if (rc == 0)
+					rc = SC_NOT_FOUND;
 
 				// If not invoked above, see if it's an OPTIONs request
 				if (rc != SC_OK)

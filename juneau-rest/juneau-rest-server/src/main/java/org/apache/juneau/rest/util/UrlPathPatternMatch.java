@@ -49,7 +49,9 @@ public class UrlPathPatternMatch {
 	/**
 	 * Returns a map of the path variables and values.
 	 *
-	 * @return An unmodifiable map of variable keys/values.
+	 * @return
+	 * 	An unmodifiable map of variable keys/values.
+	 * 	<br>Returns an empty map if no variables were found in the path.
 	 */
 	public Map<String,String> getVars() {
 		return vars;
@@ -62,6 +64,19 @@ public class UrlPathPatternMatch {
 	 */
 	public boolean hasVars() {
 		return ! vars.isEmpty();
+	}
+
+
+	/**
+	 * Returns <jk>true</jk> if any of the variable values are blank.
+	 *
+	 * @return <jk>true</jk> if any of the variable values are blank.
+	 */
+	public boolean hasEmptyVars() {
+		for (String v : vars.values())
+			if (isEmpty(v))
+				return true;
+		return false;
 	}
 
 	/**

@@ -3460,7 +3460,7 @@ public final class RestContext extends BeanContext {
 			}
 
 			this.fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
-			
+
 			String p = builder.getPath();
 			if (! p.endsWith("/*"))
 				p += "/*";

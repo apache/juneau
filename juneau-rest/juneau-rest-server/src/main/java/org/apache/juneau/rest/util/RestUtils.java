@@ -459,4 +459,98 @@ public final class RestUtils {
 			return path;
 		return trimTrailingSlashes(path);
 	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified value is a valid context path.
+	 *
+	 * The path must start with a "/" character but not end with a "/" character.
+	 * For servlets in the default (root) context, the value should be "".
+	 *
+	 * @param value The value to test.
+	 * @return <jk>true</jk> if the specified value is a valid context path.
+	 */
+	public static boolean isValidContextPath(String value) {
+		if (value == null)
+			return false;
+		if (value.isEmpty())
+			return true;
+		if (value.charAt(value.length()-1) == '/')
+			return false;
+		if (value.charAt(0) != '/')
+			return false;
+		return true;
+	}
+
+	/**
+	 * Throws a {@link RuntimeException} if the method {@link #isValidContextPath(String)} returns <jk>false</jk> for the specified value.
+	 *
+	 * @param value The value to test.
+	 */
+	public static void validateContextPath(String value) {
+		if (! isValidContextPath(value))
+			throw new RuntimeException("Value is not a valid context path: ["+value+"]");
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified value is a valid servlet path.
+	 *
+	 * This path must with a "/" character and includes either the servlet name or a path to the servlet,
+	 * but does not include any extra path information or a query string.
+	 * Should be an empty string ("") if the servlet used to process this request was matched using the "/*" pattern.
+	 *
+	 * @param value The value to test.
+	 * @return <jk>true</jk> if the specified value is a valid servlet path.
+	 */
+	public static boolean isValidServletPath(String value) {
+		if (value == null)
+			return false;
+		if (value.isEmpty())
+			return true;
+		if (value.equals("/"))
+			return false;
+		if (value.charAt(value.length()-1) == '/')
+			return false;
+		if (value.charAt(0) != '/')
+			return false;
+		return true;
+	}
+
+	/**
+	 * Throws a {@link RuntimeException} if the method {@link #isValidServletPath(String)} returns <jk>false</jk> for the specified value.
+	 *
+	 * @param value The value to test.
+	 */
+	public static void validateServletPath(String value) {
+		if (! isValidServletPath(value))
+			throw new RuntimeException("Value is not a valid servlet path: ["+value+"]");
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified value is a valid path-info path.
+	 *
+	 * The extra path information follows the servlet path but precedes the query string and will start with a "/" character.
+	 * The value should be null if there was no extra path information.
+	 *
+	 * @param value The value to test.
+	 * @return <jk>true</jk> if the specified value is a valid path-info path.
+	 */
+	public static boolean isValidPathInfo(String value) {
+		if (value == null)
+			return true;
+		if (value.isEmpty())
+			return false;
+		if (value.charAt(0) != '/')
+			return false;
+		return true;
+	}
+
+	/**
+	 * Throws a {@link RuntimeException} if the method {@link #isValidPathInfo(String)} returns <jk>false</jk> for the specified value.
+	 *
+	 * @param value The value to test.
+	 */
+	public static void validatePathInfo(String value) {
+		if (! isValidPathInfo(value))
+			throw new RuntimeException("Value is not a valid path-info path: ["+value+"]");
+	}
 }

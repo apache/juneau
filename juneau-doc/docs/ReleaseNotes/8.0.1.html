@@ -220,6 +220,9 @@
 				<li class='jm'>{@link oajr.RestResponse#getCharset() getCharset()}
 			</ul>
 		</ul>
+	<li>
+		Fixed a bug where the HTTP response was returning 405 (method not found) but should really be 404 (not found)
+		when no path patterns match on any of the Java methods.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>

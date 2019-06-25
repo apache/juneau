@@ -732,6 +732,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		return true;
 	}
 
+	boolean matches(UrlPathInfo pathInfo) {
+		return pathPattern.match(pathInfo) != null;
+	}
+
 	/**
 	 * Workhorse method.
 	 *
@@ -747,7 +751,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		RequestPath rp = req.getPathMatch();
 		for (Map.Entry<String,String> e : pm.getVars().entrySet())
 			rp.put(e.getKey(), e.getValue());
-		rp.remainder(pm.getRemainder());
+		if (pm.getRemainder() != null)
+			rp.remainder(pm.getRemainder());
 
 		@SuppressWarnings("deprecation")
 		RequestProperties requestProperties = new RequestProperties(req.getVarResolverSession(), properties);

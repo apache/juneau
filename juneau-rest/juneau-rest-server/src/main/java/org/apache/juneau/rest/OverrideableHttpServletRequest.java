@@ -12,13 +12,48 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.rest.util.RestUtils.*;
+
+import javax.servlet.http.*;
+
 /**
- * Constant strings.
+ * A wrapper class that allows you to override basic fields.
  */
-class Constants {
+class OverrideableHttpServletRequest extends HttpServletRequestWrapper {
+
+	private String pathInfo, servletPath;
 
 	/**
-	 * Request attribute name for passing path variables from parent to child.
+	 * Constructor.
+	 *
+	 * @param request The wrapped servlet request.
 	 */
-	static final String REST_PATHVARS_ATTR = "juneau.pathVars";
+	public OverrideableHttpServletRequest(HttpServletRequest request) {
+		super(request);
+	}
+
+	public OverrideableHttpServletRequest pathInfo(String value) {
+		validatePathInfo(value);
+		if (value == null)
+			value = "\u0000";
+		this.pathInfo = value;
+		return this;
+	}
+
+	public OverrideableHttpServletRequest servletPath(String value) {
+		validateServletPath(value);
+		this.servletPath = value;
+		return this;
+	}
+
+	@Override /* HttpServletRequest */
+	public String getPathInfo() {
+		// Note that pathInfo can never be empty.
+		return pathInfo == null ? super.getPathInfo() : pathInfo.charAt(0) == (char)0 ? null : pathInfo;
+	}
+
+	@Override /* HttpServletRequest */
+	public String getServletPath() {
+		return servletPath == null ? super.getServletPath() : servletPath;
+	}
 }

@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
+import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -70,6 +73,8 @@ public class MockRest implements MockHttpConnection {
 	/** Debug mode enabled. */
 	protected final boolean debug;
 
+	final String contextPath, servletPath;
+
 	/**
 	 * Constructor.
 	 *
@@ -93,6 +98,8 @@ public class MockRest implements MockHttpConnection {
 			}
 			ctx = contexts.get(c);
 			headers = new LinkedHashMap<>(b.headers);
+			contextPath = b.contextPath;
+			servletPath = b.servletPath;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -199,6 +206,7 @@ public class MockRest implements MockHttpConnection {
 		Object impl;
 		boolean debug;
 		Map<String,Object> headers = new LinkedHashMap<>();
+		String contextPath, servletPath;
 
 		Builder(Object impl) {
 			this.impl = impl;
@@ -394,6 +402,40 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
+		 * Identifies the context path for the REST resource.
+		 *
+		 * <p>
+		 * If not specified, uses <js>""</js>.
+		 *
+		 * @param value
+		 * 	The context path.
+		 * 	<br>Must not be <jk>null</jk> and must either be blank or start but not end with a <js>'/'</js> character.
+		 * @return This object (for method chaining).
+		 */
+		public Builder contextPath(String value) {
+			validateContextPath(value);
+			this.contextPath = value;
+			return this;
+		}
+
+		/**
+		 * Identifies the servlet path for the REST resource.
+		 *
+		 * <p>
+		 * If not specified, uses <js>""</js>.
+		 *
+		 * @param value
+		 * 	The servlet path.
+		 * 	<br>Must not be <jk>null</jk> and must either be blank or start but not end with a <js>'/'</js> character.
+		 * @return This object (for method chaining).
+		 */
+		public Builder servletPath(String value) {
+			validateServletPath(value);
+			this.servletPath = value;
+			return this;
+		}
+
+		/**
 		 * Create a new {@link MockRest} object based on the settings on this builder.
 		 *
 		 * @return A new {@link MockRest} object.
@@ -425,7 +467,7 @@ public class MockRest implements MockHttpConnection {
 	@Override /* MockHttpConnection */
 	public MockServletRequest request(String method, String path, Map<String,Object> headers, Object body) throws Exception {
 		String p = RestUtils.trimContextPath(ctx.getPath(), path);
-		return MockServletRequest.create(method, p).body(body).headers(this.headers).headers(headers).debug(debug).restContext(ctx);
+		return MockServletRequest.create(method, p).contextPath(emptyIfNull(contextPath)).servletPath(emptyIfNull(servletPath)).body(body).headers(this.headers).headers(headers).debug(debug).restContext(ctx);
 	}
 
 	/**

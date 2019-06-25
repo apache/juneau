@@ -134,6 +134,15 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this path pattern contains variables.
+	 *
+	 * @return <jk>true</jk> if this path pattern contains variables.
+	 */
+	public boolean hasVars() {
+		return varKeys != null;
+	}
+
+	/**
 	 * Comparator for this object.
 	 *
 	 * <p>

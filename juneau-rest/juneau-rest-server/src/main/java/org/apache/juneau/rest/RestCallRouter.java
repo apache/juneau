@@ -68,6 +68,13 @@ public class RestCallRouter {
 		}
 	}
 
+	boolean matches(UrlPathInfo pathInfo) {
+		for (RestMethodContext m : restJavaMethods)
+			if (m.matches(pathInfo))
+				return true;
+		return false;
+	}
+
 	/**
 	 * Workhorse method.
 	 *
