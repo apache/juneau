@@ -99,7 +99,7 @@
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.OneWayPojoSwaps'>One-way PojoSwaps</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.SwapAnnotation'>@Swap Annotation</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.TemplatedSwaps'>Templated Swaps</a></p>
-			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.SwapMethods'>Swap Methods</a></p>
+			<li><p class='updated'><a class='doclink' href='#juneau-marshall.Transforms.SwapMethods'>Swap Methods</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.SurrogateClasses'>Surrogate Classes</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.BeanAnnotation'>@Bean Annotation</a></p>
 			<li><p class='updated'><a class='doclink' href='#juneau-marshall.Transforms.BeanPropertyAnnotation'>@BeanProperty Annotation</a></p>
@@ -270,6 +270,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.RestResource'>@RestResource</a></p>
 		<ol>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestResource.AnnotationInheritance'>Annotation Inheritance</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RestResource.RestResourcePath'>@RestResource(path)</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.RestContext'>RestContext</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod'>@RestMethod</a></p>
@@ -313,7 +314,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HandlingMultiPartFormPosts'>Handling Multi-Part Form Posts</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Serializers'>Serializers</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Parsers'>Parsers</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-rest-server.Properties'>Properties</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-rest-server.Properties'>Properties</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.ConfigAnnotations'>Config annotations</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Transforms'>Transforms</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.URIs'>URIs</a></p>
@@ -2272,7 +2273,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.SwapMethods' id='juneau-marshall.Transforms.SwapMethods'>2.11.6 - Swap Methods</a></h4>
+<h4 class='topic updated' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.SwapMethods' id='juneau-marshall.Transforms.SwapMethods'>2.11.6 - Swap Methods</a></h4>
 <div class='topic'><!-- START: 2.11.6 - juneau-marshall.Transforms.SwapMethods -->
 <p>
 	Various methods can be defined on a class directly to affect how it gets serialized.
@@ -2321,8 +2322,23 @@
 	class:
 </p>			
 <ul>
-	<li><code><jk>public</jk> X swap(BeanSession)</code> method, where <code>X</code> is any serializable 
-	object.
+	<li><code><jk>public</jk> X swap()</code> method, where <code>X</code> is any serializable object.
+	<li><code><jk>public</jk> X swap(BeanSession)</code> method, where <code>X</code> is any serializable object.
+	<li><code><jk>public static</jk> MyPojo unswap(X)</code> method, where <code>X</code> is any serializable object.
+	<li><code><jk>public static</jk> MyPojo swap(X,BeanSession)</code> method, where <code>X</code> is any serializable object.
+</ul>
+<p>
+	Serializing to and from Maps can be accomplished by defining any of the following methods:
+</p>			
+<ul>
+	<li><code><jk>public</jk> Map toMap()</code> method.  Can be any type of map with string keys and object vals. 
+	<li><code><jk>public</jk> ObjectMap toMap()</code> method. 
+	<li><code><jk>public</jk> Map toMap(BeanSession)</code> method.  Can be any type of map with string keys and object vals. 
+	<li><code><jk>public</jk> ObjectMap toMap(BeanSession)</code> method.
+	<li><code><jk>public static</jk> MyPojo fromMap(Map)</code> method.  Can be any type of map with string keys and object vals. 
+	<li><code><jk>public static</jk> MyPojo fromMap(ObjectMap)</code> method.
+	<li><code><jk>public static</jk> MyPojo fromMap(Map,BeanSession)</code> method.  Can be any type of map with string keys and object vals. 
+	<li><code><jk>public static</jk> MyPojo fromMap(ObjectMap,BeanSession)</code> method.
 </ul>
 <p>
 	The <code>BeanSession</code> parameter allows you access to various information about the current 
@@ -14003,6 +14019,13 @@
 	</tr>
 </table>
 </div><!-- END: 7.4.1 - juneau-rest-server.RestResource.AnnotationInheritance -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestResource.RestResourcePath' id='juneau-rest-server.RestResource.RestResourcePath'>7.4.2 - @RestResource(path)</a></h4>
+<div class='topic'><!-- START: 7.4.2 - juneau-rest-server.RestResource.RestResourcePath -->
+<p>
+</div><!-- END: 7.4.2 - juneau-rest-server.RestResource.RestResourcePath -->
 </div><!-- END: 7.4 - juneau-rest-server.RestResource -->
 
 <!-- ==================================================================================================== -->
@@ -17753,7 +17776,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Properties' id='juneau-rest-server.Properties'>7.15 - Properties</a></h3>
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.Properties' id='juneau-rest-server.Properties'>7.15 - Properties</a></h3>
 <div class='topic'><!-- START: 7.15 - juneau-rest-server.Properties -->
 <p>
 	As shown in previous sections, Juneau serializers and parsers are highly-configurable through properties.
@@ -35583,6 +35606,29 @@
 			<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_fileCharset}
 			<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_streamCharset}
 		</ul>
+	<li>
+		The following POJO methods can be used to convert a POJO to/from a Map before serialization and after parsing.
+		<br>It's a convenient way of defining a POJO transform.
+		<ul class='doctree'>
+			<li class='jm'><code><jk>public</jk> Map toMap()</code> -  Can be any type of map with string keys and object vals. 
+			<li class='jm'><code><jk>public</jk> ObjectMap toMap()</code>
+			<li class='jm'><code><jk>public</jk> Map toMap(BeanSession bs)</code> -  Can be any type of map with string keys and object vals. 
+			<li class='jm'><code><jk>public</jk> ObjectMap toMap(BeanSession bs)</code>
+			<li class='jm'><code><jk>public static</jk> T fromMap(Map m)</code> -  Can be any type of map with string keys and object vals. 
+			<li class='jm'><code><jk>public static</jk> T fromMap(ObjectMap m)</code>
+			<li class='jm'><code><jk>public static</jk> T fromMap(BeanSession bs, Map m)</code> -  Can be any type of map with string keys and object vals. 
+			<li class='jm'><code><jk>public static</jk> T fromMap(BeanSession bs, ObjectMap m)</code>
+		</ul>
+	<li>
+		New convenience debugging methods on Marshall API:
+		<ul class='doctree'>
+			<li class='jc'>{@link org.apache.juneau.marshall.Marshall}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#format(String,Object...)} - <code>MessageFormat</code>-style formatter.
+				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#out(String,Object...)} - Prints <code>MessageFormat</code>-style messages to STDOUT.
+				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#err(String,Object...)} - Prints <code>MessageFormat</code>-style messages to STDERR.
+			</ul>
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-config</h5>
@@ -35653,7 +35699,7 @@
 		<p>
 			Config annotations are provided for all serializers and parsers:
 		</p>
-		<ul>
+		<ul class='doctree'>
 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig BeanConfig}
 			<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvConfig CsvConfig}
 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig HtmlConfig}
@@ -35716,7 +35762,7 @@
 		Added the following classes that provide the same support as the servlet classes but doesn't extend from <code>HttpServlet</code>.
 		<br>This fixes an issue where instances of {@link org.apache.juneau.rest.BasicRestServlet} are registered as top-level servlets even though
 		you don't want them to be.  
-		<ul>
+		<ul class='doctree'>
 			<li class='jac'>{@link org.apache.juneau.rest.BasicRest} - Non-servlet equivalent to {@link org.apache.juneau.rest.BasicRestServlet}
 			<li class='jac'>{@link org.apache.juneau.rest.BasicRestGroup} - Non-servlet equivalent to {@link org.apache.juneau.rest.BasicRestServletGroup}
 			<li class='jac'>{@link org.apache.juneau.rest.BasicRestJena} - Non-servlet equivalent to {@link org.apache.juneau.rest.BasicRestServletJena}
@@ -35726,17 +35772,26 @@
 		HTML widgets now have access to the <code>RestResponse</code> object if they need access to the output bean.
 	<li>
 		New annotations for simplified role-based guards on classes and methods:
-		<ul>
+		<ul class='doctree'>
 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource} 
 			<ul>
 				<li class='jm'>{@link org.apache.juneau.rest.annotation.RestResource#roleGuard roleGuard()}
 				<li class='jm'>{@link org.apache.juneau.rest.annotation.RestResource#rolesDeclared rolesDeclared()}
 			</ul>
-		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod} 
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.rest.annotation.RestMethod#roleGuard roleGuard()}
-			<li class='jm'>{@link org.apache.juneau.rest.annotation.RestMethod#rolesDeclared rolesDeclared()}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod} 
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.annotation.RestMethod#roleGuard roleGuard()}
+				<li class='jm'>{@link org.apache.juneau.rest.annotation.RestMethod#rolesDeclared rolesDeclared()}
+			</ul>
 		</ul>
+	<li>
+		The {@link org.apache.juneau.rest.annotation.RestResource#path() @RestResource(path)} annotation can now use variables:
+		<p class='bcode'>
+	<ja>@RestResource</ja>(
+		path=<js>"/myResource/{foo}/{bar}"</js>
+	)
+	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
+		</p>		
 	<li>
 		New methods:
 		<ul class='doctree'>
@@ -35749,6 +35804,9 @@
 				<li class='jm'>{@link org.apache.juneau.rest.RestResponse#getCharset() getCharset()}
 			</ul>
 		</ul>
+	<li>
+		Fixed a bug where the HTTP response was returning 405 (method not found) but should really be 404 (not found)
+		when no path patterns match on any of the Java methods.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>

@@ -124,7 +124,7 @@
 		<p>
 			Config annotations are provided for all serializers and parsers:
 		</p>
-		<ul>
+		<ul class='doctree'>
 			<li class='ja'>{@link oaj.annotation.BeanConfig BeanConfig}
 			<li class='ja'>{@link oaj.csv.annotation.CsvConfig CsvConfig}
 			<li class='ja'>{@link oaj.html.annotation.HtmlConfig HtmlConfig}
@@ -187,7 +187,7 @@
 		Added the following classes that provide the same support as the servlet classes but doesn't extend from <code>HttpServlet</code>.
 		<br>This fixes an issue where instances of {@link oajr.BasicRestServlet} are registered as top-level servlets even though
 		you don't want them to be.  
-		<ul>
+		<ul class='doctree'>
 			<li class='jac'>{@link oajr.BasicRest} - Non-servlet equivalent to {@link oajr.BasicRestServlet}
 			<li class='jac'>{@link oajr.BasicRestGroup} - Non-servlet equivalent to {@link oajr.BasicRestServletGroup}
 			<li class='jac'>{@link oajr.BasicRestJena} - Non-servlet equivalent to {@link oajr.BasicRestServletJena}
@@ -197,17 +197,26 @@
 		HTML widgets now have access to the <code>RestResponse</code> object if they need access to the output bean.
 	<li>
 		New annotations for simplified role-based guards on classes and methods:
-		<ul>
+		<ul class='doctree'>
 			<li class='ja'>{@link oajr.annotation.RestResource} 
 			<ul>
 				<li class='jm'>{@link oajr.annotation.RestResource#roleGuard roleGuard()}
 				<li class='jm'>{@link oajr.annotation.RestResource#rolesDeclared rolesDeclared()}
 			</ul>
-		<li class='ja'>{@link oajr.annotation.RestMethod} 
-		<ul>
-			<li class='jm'>{@link oajr.annotation.RestMethod#roleGuard roleGuard()}
-			<li class='jm'>{@link oajr.annotation.RestMethod#rolesDeclared rolesDeclared()}
+			<li class='ja'>{@link oajr.annotation.RestMethod} 
+			<ul>
+				<li class='jm'>{@link oajr.annotation.RestMethod#roleGuard roleGuard()}
+				<li class='jm'>{@link oajr.annotation.RestMethod#rolesDeclared rolesDeclared()}
+			</ul>
 		</ul>
+	<li>
+		The {@link oajr.annotation.RestResource#path() @RestResource(path)} annotation can now use variables:
+		<p class='bcode'>
+	<ja>@RestResource</ja>(
+		path=<js>"/myResource/{foo}/{bar}"</js>
+	)
+	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
+		</p>		
 	<li>
 		New methods:
 		<ul class='doctree'>

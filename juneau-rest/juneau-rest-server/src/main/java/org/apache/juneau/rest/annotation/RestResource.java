@@ -639,7 +639,127 @@ public @interface RestResource {
 	 * Resource path.
 	 *
 	 * <p>
-	 * Identifies the URL subpath relative to the parent resource.
+	 * Used in the following situations:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		On child resources (resource classes attached to parents via the {@link #children()} annotation) to identify
+	 * 		the subpath used to access the child resource relative to the parent.
+	 * 	<li>
+	 * 		On top-level {@link RestServlet} classes deployed as Spring beans when <code>JuneauRestInitializer</code> is being used.
+	 * </ul>
+	 *
+	 * <h5 class='topic'>On child resources</h5>
+	 * <p>
+	 * The typical usage is to define a path to a child resource relative to the parent resource.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bpcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		children={ChildResource.<jk>class</jk>}
+	 * 	)
+	 * 	<jk>public class</jk> TopLevelResource <jk>extends</jk> BasicRestServlet {...}
+	 *
+	 * 	<ja>@RestResource</ja>(
+	 *		path=<js>"/child"</js>,
+	 *		children={GrandchildResource.<jk>class</jk>}
+	 *	)
+	 *	<jk>public class</jk> ChildResource {...}
+	 *
+	 *	<ja>@RestResource</ja>(
+	 *		path=<js>"/grandchild"</js>
+	 *	)
+	 *	<jk>public class</jk> GrandchildResource {
+	 *		<ja>@RestMethod</ja>(
+	 *			path=<js>"/"</js>
+	 *		)
+	 *		<jk>public</jk> String sayHello() {
+	 *			<jk>return</jk> <js>"Hello!"</js>;
+	 *		}
+	 *	}
+	 * </p>
+	 * <p>
+	 * In the example above, assuming the <code>TopLevelResource</code> servlet is deployed to path <code>/myContext/myServlet</code>,
+	 * then the <code>sayHello</code> method is accessible through the URI <code>/myContext/myServlet/child/grandchild</code>.
+	 *
+	 * <p>
+	 * Note that in this scenario, the <code>path</code> attribute is not defined on the top-level resource.
+	 * Specifying the path on the top-level resource has no effect, but can be used for readability purposes.
+	 *
+	 * <h5 class='topic'>On top-level resources deployed as Spring beans</h5>
+	 * <p>
+	 * The path can also be used on top-level resources deployed as Spring beans when used with the <code>JuneauRestInitializer</code>
+	 * Spring Boot initializer class:
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bpcode'>
+	 * 	<ja>@SpringBootApplication</ja>
+	 * 	<ja>@Controller</ja>
+	 * 	<jk>public class</jk> App {
+	 *
+	 *		<jc>// Our entry-point method.</jc>
+	 * 		<jk>public static void</jk> main(String[] args) {
+	 * 			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
+	 * 				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
+	 * 				.run(args);
+	 * 		}
+	 *
+	 * 		<jc>// Our top-level servlet.</jc>
+	 * 		<ja>@Bean</ja>
+	 * 		<ja>@JuneauRestRoot</ja>
+	 * 		<jk>public</jk> MyResource getMyResource() {
+	 * 			<jk>return new</jk> MyResource();
+	 * 		}
+	 * 	}
+	 *
+	 * 	<ja>@RestResource</ja>(
+	 * 		path=<js>"/myResource"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
+	 * </p>
+	 *
+	 * <p>
+	 * In this case, the servlet will get registered using the path defined on the resource class.
+	 *
+	 * <h5 class='topic'>Path variables</h5>
+	 * <p>
+	 * The path can contain variables that get resolved to {@link org.apache.juneau.http.annotation.Path @Path} parameters
+	 * or access through the {@link RestRequest#getPathMatch()} method.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bpcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		path=<js>"/myResource/{foo}/{bar}"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 *
+	 *		<ja>@RestMethod</ja>(
+	 *			path=<js>"/{baz}"</js>
+	 *		)
+	 *		<jk>public void</jk> String doX(<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> MyPojo baz) {
+	 *			...
+	 *		}
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * Variables can be used on either top-level or child resources and can be defined on multiple levels.
+	 *
+	 * <p>
+	 * All variables in the path must be specified or else the target will not resolve and a <code>404</code> will result.
+	 *
+	 * <p>
+	 * When variables are used on a path of a top-level resource deployed as a Spring bean in a Spring Boot application,
+	 * the first part of the URL must be a literal which will be used as the servlet path of the registered servlet.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The leading slash is optional.  <js>"/myResource"</js> and <js>"myResource"</js> is equivalent.
+	 * 	<li>
+	 * 		The paths <js>"/myResource"</js> and <js>"/myResource/*"</js> are equivalent.
+	 * 	<li>
+	 * 		Paths must not end with <js>"/"</js> (per the servlet spec).
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

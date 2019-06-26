@@ -336,6 +336,7 @@ juneau-rest-server.RestMethod.RestResponse = #juneau-rest-server.RestMethod.Rest
 juneau-rest-server.RestMethod.StreamResource = #juneau-rest-server.RestMethod.StreamResource, Overview > juneau-rest-server > @RestMethod > StreamResource
 juneau-rest-server.RestResource = #juneau-rest-server.RestResource, Overview > juneau-rest-server > @RestResource
 juneau-rest-server.RestResource.AnnotationInheritance = #juneau-rest-server.RestResource.AnnotationInheritance, Overview > juneau-rest-server > @RestResource > Annotation Inheritance
+juneau-rest-server.RestResource.RestResourcePath = #juneau-rest-server.RestResource.RestResourcePath, Overview > juneau-rest-server > @RestResource > @RestResource(path)
 juneau-rest-server.RoleGuards = #juneau-rest-server.RoleGuards, Overview > juneau-rest-server > Role guards
 juneau-rest-server.Serializers = #juneau-rest-server.Serializers, Overview > juneau-rest-server > Serializers
 juneau-rest-server.StaticFiles = #juneau-rest-server.StaticFiles, Overview > juneau-rest-server > Static files
