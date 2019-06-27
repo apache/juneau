@@ -54,7 +54,7 @@
 
 	<Set name="requestLog">
 		<New id="RequestLogImpl" class="org.eclipse.jetty.server.NCSARequestLog">
-			<Set name="filename"><Property name="jetty.logs" default="$C{Logging/logDir,logs}"/>/jetty-requests.log</Set>
+			<Set name="filename"><Property name="jetty.logs" default="$S{juneau.logDir,logs}"/>/jetty-requests.log</Set>
 			<Set name="filenameDateFormat">yyyy_MM_dd</Set>
 			<Set name="LogTimeZone">GMT</Set>
 			<Set name="retainDays">90</Set>

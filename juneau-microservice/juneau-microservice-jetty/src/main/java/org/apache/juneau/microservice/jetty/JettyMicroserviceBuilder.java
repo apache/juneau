@@ -108,7 +108,7 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 	 */
 	public JettyMicroserviceBuilder jettyXml(Object jettyXml, boolean resolveVars) throws IOException {
 		if (jettyXml instanceof String)
-			this.jettyXml = IOUtils.read(new File(jettyXml.toString()));
+			this.jettyXml = IOUtils.read(resolveFile(jettyXml.toString()));
 		else if (jettyXml instanceof File)
 			this.jettyXml = IOUtils.read((File)jettyXml);
 		else if (jettyXml instanceof InputStream)
@@ -279,7 +279,6 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 		return this;
 	}
 
-
 	@Override /* MicroserviceBuilder */
 	public JettyMicroserviceBuilder logConfig(LogConfig logConfig) {
 		return this;
@@ -331,6 +330,18 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 	@Override /* MicroserviceBuilder */
 	public JettyMicroserviceBuilder varContext(String name, Object object) {
 		super.varContext(name, object);
+		return this;
+	}
+
+	@Override /* MicroserviceBuilder */
+	public JettyMicroserviceBuilder workingDir(File path) {
+		super.workingDir(path);
+		return this;
+	}
+
+	@Override /* MicroserviceBuilder */
+	public JettyMicroserviceBuilder workingDir(String path) {
+		super.workingDir(path);
 		return this;
 	}
 

@@ -25,8 +25,8 @@
 
 	<artifactId>juneau-sc</artifactId>
 	<packaging>pom</packaging>
-	<name>Apache Juneau - SERVER CONFIG</name>
-	<description>Apache Juneau Server Config</description>
+	<name>Apache Juneau - Configuration Server</name>
+	<description>Apache Juneau Configuration Server</description>
 
 	<modules>
 		<module>juneau-server-config</module>

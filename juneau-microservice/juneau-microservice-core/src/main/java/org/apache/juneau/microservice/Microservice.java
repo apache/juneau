@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.Paths;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -124,6 +125,8 @@ public class Microservice implements ConfigEventListener {
 	private final Scanner consoleReader;
 	private final PrintWriter consoleWriter;
 	private final Thread consoleThread;
+	protected final File workingDir;
+	private final String configName;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties set in init()
@@ -148,8 +151,9 @@ public class Microservice implements ConfigEventListener {
 	@SuppressWarnings("resource")
 	protected Microservice(MicroserviceBuilder builder) throws Exception {
 		setInstance(this);
-
 		this.builder = builder.copy();
+		this.workingDir = builder.workingDir;
+		this.configName = builder.configName;
 
 		this.args = builder.args != null ? builder.args : new Args(new String[0]);
 
@@ -161,7 +165,7 @@ public class Microservice implements ConfigEventListener {
 			Manifest m = new Manifest();
 
 			// If running within an eclipse workspace, need to get it from the file system.
-			File f = new File("META-INF/MANIFEST.MF");
+			File f = resolveFile("META-INF/MANIFEST.MF");
 			if (f.exists() && f.canRead()) {
 				try (FileInputStream fis = new FileInputStream(f)) {
 					m.read(fis);
@@ -191,6 +195,7 @@ public class Microservice implements ConfigEventListener {
 		ConfigBuilder configBuilder = builder.configBuilder.varResolver(builder.varResolverBuilder.build()).store(ConfigMemoryStore.DEFAULT);
 		if (config == null) {
 			ConfigStore store = builder.configStore;
+			ConfigFileStore cfs = workingDir == null ? ConfigFileStore.DEFAULT : ConfigFileStore.create().directory(workingDir).build();
 			for (String name : getCandidateConfigNames()) {
 				 if (store != null) {
 					 if (store.exists(name)) {
@@ -198,8 +203,8 @@ public class Microservice implements ConfigEventListener {
 						 break;
 					 }
 				 } else {
-					 if (ConfigFileStore.DEFAULT.exists(name)) {
-						 configBuilder.store(ConfigFileStore.DEFAULT).name(name);
+					 if (cfs.exists(name)) {
+						 configBuilder.store(cfs).name(name);
 						 break;
 					 }
 					 if (ConfigClasspathStore.DEFAULT.exists(name)) {
@@ -278,6 +283,9 @@ public class Microservice implements ConfigEventListener {
 	}
 
 	private List<String> getCandidateConfigNames() {
+		if (configName != null)
+			return Collections.singletonList(configName);
+
 		Args args = getArgs();
 		if (getArgs().hasArg("configFile"))
 			return Collections.singletonList(args.getArg("configFile"));
@@ -287,6 +295,20 @@ public class Microservice implements ConfigEventListener {
 			return Collections.singletonList(manifest.getString("Main-Config"));
 
 		return Config.getCandidateSystemDefaultConfigNames();
+	}
+
+	/**
+	 * Resolves the specified path.
+	 *
+	 * <p>
+	 * If the working directory has been explicitly specified, relative paths are resolved relative to that.
+	 */
+	protected File resolveFile(String path) {
+		if (Paths.get(path).isAbsolute())
+			return new File(path);
+		if (workingDir != null)
+			return new File(workingDir, path);
+		return new File(path);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -327,7 +349,10 @@ public class Microservice implements ConfigEventListener {
 
 			if (isNotEmpty(logFile)) {
 				String logDir = firstNonNull(logConfig.logDir, config.getString("Logging/logDir", "."));
-				mkdirs(new File(logDir), false);
+				File logDirFile = resolveFile(logDir);
+				mkdirs(logDirFile, false);
+				logDir = logDirFile.getAbsolutePath();
+				System.setProperty("juneau.logDir", logDir);
 
 				boolean append = firstNonNull(logConfig.append, config.getBoolean("Logging/append"));
 				int limit = firstNonNull(logConfig.limit, config.getInt("Logging/limit", 1024*1024));

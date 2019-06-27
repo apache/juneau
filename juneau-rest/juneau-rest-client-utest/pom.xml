@@ -23,20 +23,14 @@
 		<version>8.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-rest-mock</artifactId>
-	<name>Apache Juneau REST Mock API</name>
-	<description>REST mock API</description>
-	<packaging>bundle</packaging>
+	<artifactId>juneau-rest-client-utest</artifactId>
+	<name>Apache Juneau REST Client API (Unit Tests)</name>
+	<description>REST client API - Tests</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-client</artifactId>
+			<artifactId>juneau-marshall</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -50,6 +44,33 @@
 		<dependency>
 			<groupId>com.sun.activation</groupId>
 			<artifactId>javax.activation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-mock</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-core-utest</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-mock</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-mock-utest</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -68,80 +89,34 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>3.2.0</version>
-				<extensions>true</extensions>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<instructions>
-						<Automatic-Module-Name>org.apache.juneau.rest.mock</Automatic-Module-Name>
-					</instructions>
+					<includes>
+						<include>**/*Test.class</include>
+					</includes>
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.2</version>
 				<executions>
 					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
+						<id>default-prepare-agent</id>
 						<goals>
-							<goal>jar-no-fork</goal>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
-			<!--plugin>
-				<groupId>com.github.siom79.japicmp</groupId>
-				<artifactId>japicmp-maven-plugin</artifactId>
-				<version>0.13.0</version>
-				<configuration>
-					<oldVersion>
-						<dependency>
-							<groupId>org.apache.juneau</groupId>
-							<artifactId>${project.artifactId}</artifactId>
-							<version>${juneau.compare.version}</version>
-							<type>jar</type>
-						</dependency>
-					</oldVersion>
-					<newVersion>
-						<file>
-							<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
-						</file>
-					</newVersion>
-					<parameter>
-						<onlyModified>true</onlyModified>
-						<accessModifier>public</accessModifier>
-						<excludes>
-						</excludes>
-						<ignoreMissingClasses>true</ignoreMissingClasses>
-						<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
-						<breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
-						<breakBuildIfCausedByExclusion>false</breakBuildIfCausedByExclusion>
-						<breakBuildBasedOnSemanticVersioning>true</breakBuildBasedOnSemanticVersioning>
-						<overrideCompatibilityChangeParameters>
-							<overrideCompatibilityChangeParameter>
-								<binaryCompatible>true</binaryCompatible>
-								<compatibilityChange>SUPERCLASS_REMOVED</compatibilityChange>
-								<sourceCompatible>true</sourceCompatible>
-							</overrideCompatibilityChangeParameter>
-							<overrideCompatibilityChangeParameter>
-								<binaryCompatible>true</binaryCompatible>
-								<compatibilityChange>FIELD_REMOVED_IN_SUPERCLASS</compatibilityChange>
-								<sourceCompatible>true</sourceCompatible>
-							</overrideCompatibilityChangeParameter>
-						</overrideCompatibilityChangeParameters>
-					</parameter>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>verify</phase>
-						<goals>
-							<goal>cmp</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin-->
 		</plugins>
 	</build>
 </project>

@@ -34,6 +34,6 @@
 		<module>juneau-dto</module>
 		<module>juneau-svl</module>
 		<module>juneau-config</module>
-		<module>juneau-core-test</module>
+		<module>juneau-core-utest</module>
 	</modules>
 </project>

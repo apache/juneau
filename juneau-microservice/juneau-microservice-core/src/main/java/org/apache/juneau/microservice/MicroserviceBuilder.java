@@ -13,6 +13,7 @@
 package org.apache.juneau.microservice;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.jar.*;
 import java.util.logging.*;
@@ -46,6 +47,7 @@ public class MicroserviceBuilder {
 	Scanner consoleReader;
 	PrintWriter consoleWriter;
 	MicroserviceListener listener;
+	File workingDir = System.getProperty("juneau.workingDir") == null ? null : new File(System.getProperty("juneau.workingDir"));
 
 	/**
 	 * Constructor.
@@ -68,6 +70,7 @@ public class MicroserviceBuilder {
 		this.varResolverBuilder = copyFrom.varResolverBuilder;
 		this.consoleReader = copyFrom.consoleReader;
 		this.consoleWriter = copyFrom.consoleWriter;
+		this.workingDir = copyFrom.workingDir;
 	}
 
 	/**
@@ -166,7 +169,7 @@ public class MicroserviceBuilder {
 		else if (value instanceof File)
 			this.manifest = new ManifestFile((File)value);
 		else if (value instanceof String)
-			this.manifest = new ManifestFile(new File((String)value));
+			this.manifest = new ManifestFile(resolveFile((String)value));
 		else if (value instanceof Class)
 			this.manifest = new ManifestFile((Class<?>)value);
 		else
@@ -377,6 +380,28 @@ public class MicroserviceBuilder {
 	}
 
 	/**
+	 * Specifies the directory to use to resolve the config file and other paths defined with the config file.
+	 *
+	 * @param workingDir The working directory, or <jk>null</jk> to use the underlying working directory.
+	 * @return This object (for method chaining).
+	 */
+	public MicroserviceBuilder workingDir(File workingDir) {
+		this.workingDir = workingDir;
+		return this;
+	}
+
+	/**
+	 * Specifies the directory to use to resolve the config file and other paths defined with the config file.
+	 *
+	 * @param workingDir The working directory, or <jk>null</jk> to use the underlying working directory.
+	 * @return This object (for method chaining).
+	 */
+	public MicroserviceBuilder workingDir(String workingDir) {
+		this.workingDir = new File(workingDir);
+		return this;
+	}
+
+	/**
 	 * Registers an event listener for this microservice.
 	 *
 	 * @param listener An event listener for this microservice.
@@ -385,5 +410,19 @@ public class MicroserviceBuilder {
 	public MicroserviceBuilder listener(MicroserviceListener listener) {
 		this.listener = listener;
 		return this;
+	}
+
+	/**
+	 * Resolves the specified path.
+	 * 
+	 * <p>
+	 * If the working directory has been explicitly specified, relative paths are resolved relative to that.
+	 */
+	protected File resolveFile(String path) {
+		if (Paths.get(path).isAbsolute())
+			return new File(path);
+		if (workingDir != null)
+			return new File(workingDir, path);
+		return new File(path);
 	}
 }

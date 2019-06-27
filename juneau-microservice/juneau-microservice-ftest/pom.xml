@@ -19,79 +19,113 @@
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau-examples</artifactId>
+		<artifactId>juneau-microservice</artifactId>
 		<version>8.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-examples-rest-jetty</artifactId>
-	<name>Apache Juneau REST Examples using Jetty</name>
-	<description>Sample code deployed using Jetty.</description>
+	<artifactId>juneau-microservice-ftest</artifactId>
+	<name>Apache Juneau Microservice (Function Tests)</name>
+	<description>Tests for Juneau Client/Server/Microservice.</description>
 
 	<properties>
-		<encoding>UTF-8</encoding>
-
-		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-
+		
+		<!-- Java 8 required because Jetty requires it. -->
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
-
 	<dependencies>
-		<!-- Juneau dependencies -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-examples-rest</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-microservice-jetty</artifactId>
+			<artifactId>juneau-rest-server-jaxrs</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
-		<!-- Other -->
 		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-mock-utest</artifactId>
+			<version>${project.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-mock</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-marshall-rdf</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>jsr311-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>javax.activation-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.activation</groupId>
+			<artifactId>javax.activation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-core-utest</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-mock-utest</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+		</dependency>
 	</dependencies>
-
+	
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>
+							**/_TestSuite.java
+						</include>
+					</includes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.2</version>
 				<executions>
 					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
+						<id>default-prepare-agent</id>
 						<goals>
-							<goal>jar-no-fork</goal>
+							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<escapeString>\</escapeString>
-				</configuration>
-				<executions>
 					<execution>
-						<id>juneau-assembly</id>
-						<phase>package</phase>
+						<id>default-report</id>
+						<phase>prepare-package</phase>
 						<goals>
-							<goal>single</goal>
+							<goal>report</goal>
 						</goals>
-						<configuration>
-							<finalName>juneau-examples-rest-jetty-${project.version}</finalName>
-							<descriptors>
-								<descriptor>src/assembly/bin.xml</descriptor>
-							</descriptors>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>

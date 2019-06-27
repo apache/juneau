@@ -35,8 +35,9 @@
 		<module>juneau-rest-server-springboot</module>
 		<module>juneau-rest-client</module>
 		<module>juneau-rest-mock</module>
-		<module>juneau-rest-server-test</module>
-		<module>juneau-rest-client-test</module>
+		<module>juneau-rest-mock-utest</module>
+		<module>juneau-rest-server-utest</module>
+		<module>juneau-rest-client-utest</module>
 	</modules>
 
 </project>

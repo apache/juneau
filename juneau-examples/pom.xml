@@ -33,6 +33,7 @@
 		<module>juneau-examples-rest</module>
 		<module>juneau-examples-rest-jetty</module>
 		<module>juneau-examples-rest-springboot</module>
+		<module>juneau-examples-rest-jetty-ftest</module>
 	</modules>
 
 </project>
