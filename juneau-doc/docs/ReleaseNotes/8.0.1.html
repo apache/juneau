@@ -230,6 +230,19 @@
 			</ul>
 		</ul>
 	<li>
+		New interface method for catching arbitrary thrown objects and converting them to other throwables.
+		<ul class='doctree'>
+			<li class='jc'>{@link oajr.RestCallHandler}
+			<ul>
+				<li class='jm'>{@link oajr.RestCallHandler#convertThrowable(Throwable) convertThrowable(Throwable)}
+			</ul>
+			<li class='jc'>{@link oajr.BasicRestCallHandler}
+			<ul>
+				<li class='jm'>{@link oajr.BasicRestCallHandler#convertThrowable(Throwable) convertThrowable(Throwable)}
+			</ul>
+		</ul>
+		
+	<li>
 		Fixed a bug where the HTTP response was returning 405 (method not found) but should really be 404 (not found)
 		when no path patterns match on any of the Java methods.
 </ul>

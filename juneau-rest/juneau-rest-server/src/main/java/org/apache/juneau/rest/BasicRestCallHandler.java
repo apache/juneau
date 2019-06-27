@@ -221,6 +221,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 
 		} catch (Throwable e) {
+			e = convertThrowable(e);
 			r1.setAttribute("Exception", e);
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 			handleError(r1, r2, e);
@@ -262,6 +263,32 @@ public class BasicRestCallHandler implements RestCallHandler {
 	}
 
 	/**
+	 * Method that can be subclassed to allow uncaught throwables to be treated as other types of throwables.
+	 *
+	 * <p>
+	 * The default implementation looks at the throwable class name to determine whether it can be converted to another type:
+	 *
+	 * <ul>
+	 * 	<li><js>"*AccessDenied*"</js> - Converted to {@link Unauthorized}.
+	 * 	<li><js>"*Empty*"</js>,<js>"*NotFound*"</js> - Converted to {@link NotFound}.
+	 * </ul>
+	 *
+	 * @param t The thrown object.
+	 * @return The converted thrown object.
+	 */
+	@Override
+	public Throwable convertThrowable(Throwable t) {
+		if (t instanceof RestException)
+			return t;
+		String n = t.getClass().getName();
+		if (n.contains("AccessDenied"))
+			return new Unauthorized(t);
+		if (n.contains("Empty") || n.contains("NotFound"))
+			return new NotFound(t);
+		return t;
+	}
+
+	/**
 	 * Handle the case where a matching method was not found.
 	 *
 	 * <p>
@@ -273,7 +300,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 * @param res The HTTP response.
 	 */
 	@Override /* RestCallHandler */
-	public void handleNotFound(int rc, RestRequest req, RestResponse res) throws NotFound, PreconditionFailed, MethodNotAllowed, ServletException {
+	public void handleNotFound(int rc, RestRequest req, RestResponse res) throws Exception {
 		String pathInfo = req.getPathInfo();
 		String methodUC = req.getMethod();
 		String onPath = pathInfo == null ? " on no pathInfo"  : String.format(" on path '%s'", pathInfo);

@@ -100,6 +100,14 @@ public interface RestCallHandler {
 	public void handleError(HttpServletRequest req, HttpServletResponse res, Throwable e) throws IOException;
 
 	/**
+	 * Method for converting thrown exceptions into other types before they are handled.
+	 *
+	 * @param t The thrown object.
+	 * @return The converted thrown object.
+	 */
+	public Throwable convertThrowable(Throwable t);
+
+	/**
 	 * Returns the session objects for the specified request.
 	 *
 	 * @param req The REST request.
