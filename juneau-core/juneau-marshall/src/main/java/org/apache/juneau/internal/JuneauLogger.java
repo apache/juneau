@@ -51,7 +51,17 @@ public class JuneauLogger extends java.util.logging.Logger {
 	 * @return A new <l>Logger</l>.
 	 */
 	public static JuneauLogger getLogger(Class<?> forClass) {
-		return new JuneauLogger(java.util.logging.Logger.getLogger(forClass.getName()));
+		return getLogger(forClass.getName());
+	}
+
+	/**
+	 * Get logger for specified class.
+	 *
+	 * @param loggerName The logger name.
+	 * @return A new <l>Logger</l>.
+	 */
+	public static JuneauLogger getLogger(String loggerName) {
+		return new JuneauLogger(java.util.logging.Logger.getLogger(loggerName));
 	}
 
 	/**

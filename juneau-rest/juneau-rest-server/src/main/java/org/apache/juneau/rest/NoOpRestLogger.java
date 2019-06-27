@@ -30,6 +30,13 @@ import java.util.logging.*;
 public class NoOpRestLogger extends BasicRestLogger {
 
 	/**
+	 * Constructor.
+	 */
+	public NoOpRestLogger() {
+		super(null);
+	}
+
+	/**
 	 * Log a message to the logger.
 	 *
 	 * <p>

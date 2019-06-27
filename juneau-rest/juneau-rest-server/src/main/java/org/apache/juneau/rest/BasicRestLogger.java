@@ -37,7 +37,34 @@ import org.apache.juneau.json.*;
  */
 public class BasicRestLogger implements RestLogger {
 
-	private final JuneauLogger logger = JuneauLogger.getLogger(getClass());
+	private final JuneauLogger logger;
+	private final RestContext context;
+
+
+	/**
+	 * Constructor.
+	 *
+	 * @param context The context of the resource object.
+	 */
+	public BasicRestLogger(RestContext context) {
+		this.context = context;
+		this.logger = JuneauLogger.getLogger(getLoggerName());
+	}
+
+	/**
+	 * Returns the logger name.
+	 *
+	 * <p>
+	 * By default returns the class name of the servlet class passed in to the context.
+	 *
+	 * <p>
+	 * Subclasses can override this to provide their own customized logger names.
+	 *
+	 * @return The logger name.
+	 */
+	protected String getLoggerName() {
+		return context == null ? getClass().getName() : context.getResource().getClass().getName();
+	}
 
 	/**
 	 * Returns the Java logger used for logging.
@@ -56,7 +83,7 @@ public class BasicRestLogger implements RestLogger {
 	public void setLevel(Level level) {
 		getLogger().setLevel(level);
 	}
-	
+
 	/**
 	 * Log a message to the logger.
 	 *
