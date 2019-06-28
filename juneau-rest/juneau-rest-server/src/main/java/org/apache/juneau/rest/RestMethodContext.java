@@ -806,8 +806,11 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			} catch (InvocationTargetException e) {
 				Throwable e2 = e.getTargetException();		// Get the throwable thrown from the doX() method.
 				res.setStatus(500);
-				if (getResponseBodyMeta(e2) != null || getResponseBeanMeta(e2) != null) {
+				ResponsePartMeta rpm = getResponseBodyMeta(e2);
+				ResponseBeanMeta rbm = getResponseBeanMeta(e2);
+				if (rpm != null || rbm != null) {
 					res.setOutput(e2);
+					res.setResponseMeta(rbm);
 				} else {
 					throw e;
 				}

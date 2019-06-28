@@ -18,6 +18,7 @@ import static org.apache.juneau.rest.testutils.TestUtils.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -955,5 +956,22 @@ public class BasicTest {
 	public void f33_variantAlsoNegotiates() throws Exception {
 		ResponseInfo ri = f.getPaths().get("/variantAlsoNegotiates").get("get").getResponse(VariantAlsoNegotiates.CODE);
 		assertEquals(VariantAlsoNegotiates.MESSAGE, ri.getDescription());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Thrown object doesn't match return type.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class G {
+		@RestMethod
+		public SeeOtherRoot thrownObjectDoesntMatchReturnType() throws Exception { throw new NotFound(); }
+	}
+
+	static MockRest g = MockRest.create(G.class).build();
+
+	@Test
+	public void g01_thrownObjectDoesntMatchReturnType() throws Exception {
+		g.get("/thrownObjectDoesntMatchReturnType").execute().assertStatus(404);
 	}
 }
