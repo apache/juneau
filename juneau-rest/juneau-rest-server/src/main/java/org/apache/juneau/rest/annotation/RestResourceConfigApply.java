@@ -196,14 +196,20 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 		if (a.infoProvider() != RestInfoProvider.Null.class)
 			psb.set(REST_infoProvider, a.infoProvider());
 
-		if (! a.allowHeaderParams().isEmpty())
-			psb.set(REST_allowHeaderParams, bool(a.allowHeaderParams()));
+		if (! a.allowBodyParam().isEmpty())
+			psb.set(REST_allowBodyParam, bool(a.allowBodyParam()));
+
+		if (! a.allowedHeaderParams().isEmpty())
+			psb.set(REST_allowedHeaderParams, string(a.allowedHeaderParams()));
+
+		if (! a.allowedMethodHeaders().isEmpty())
+			psb.set(REST_allowedMethodHeaders, string(a.allowedMethodHeaders()));
 
 		if (! a.allowedMethodParams().isEmpty())
 			psb.set(REST_allowedMethodParams, string(a.allowedMethodParams()));
 
-		if (! a.allowBodyParam().isEmpty())
-			psb.set(REST_allowBodyParam, bool(a.allowBodyParam()));
+		if (! a.allowHeaderParams().isEmpty())
+			psb.set(REST_allowHeaderParams, bool(a.allowHeaderParams()));
 
 		if (! a.renderResponseStackTraces().isEmpty())
 			psb.set(REST_renderResponseStackTraces, bool(a.renderResponseStackTraces()));

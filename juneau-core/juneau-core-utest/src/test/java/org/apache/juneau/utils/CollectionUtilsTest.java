@@ -12,6 +12,51 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.Assert.*;
+
+import java.util.*;
+
+import org.apache.commons.lang3.*;
+import org.junit.*;
+
 public class CollectionUtilsTest {
 
+	private String[] strings(String s) {
+		return StringUtils.split(s, ',');
+	}
+
+	@Test
+	public void testSortedCaseInsensitiveSet() {
+		Set<String> s = newSortedCaseInsensitiveSet("foo,Bar,BAZ");
+		for (String ss : strings("foo,Foo,FOO,bar,Bar,BAR,baz,Baz,BAZ"))
+			assertTrue(s.contains(ss));
+		for (String ss : strings("qux"))
+			assertFalse(s.contains(ss));
+	}
+
+	@Test
+	public void testSortedCaseInsensitiveSet_empty() {
+		Set<String> s = newSortedCaseInsensitiveSet("");
+		assertFalse(s.contains("foo"));
+		assertFalse(s.contains(""));
+		assertFalse(s.contains(null));
+	}
+
+	@Test
+	public void testSortedCaseInsensitiveSet_null() {
+		String ss = null;
+		Set<String> s = newSortedCaseInsensitiveSet(ss);
+		assertFalse(s.contains("foo"));
+		assertFalse(s.contains(""));
+		assertFalse(s.contains(null));
+	}
+
+	@Test
+	public void testSortedCaseInsensitiveSet_containsNull() {
+		Set<String> s = newSortedCaseInsensitiveSet(null, "foo");
+		assertTrue(s.contains("foo"));
+		assertFalse(s.contains(""));
+		assertFalse(s.contains(null));
+	}
 }

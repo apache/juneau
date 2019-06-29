@@ -30,7 +30,6 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
@@ -423,6 +422,58 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Configuration property:  Allowed header URL parameters.
+	 *
+	 * <p>
+	 * When specified, allows headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
+	 * parameters.
+	 * <br>
+	 * For example:
+	 * <p class='bcode w800'>
+	 *  ?Accept=text/json&amp;Content-Type=text/json
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowedHeaderParams}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is <jk>true</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder allowedHeaderParams(String value) {
+		return set(REST_allowedHeaderParams, value);
+	}
+
+	/**
+	 * Configuration property:  Allowed method headers.
+	 *
+	 * <p>
+	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <code>X-Method</code> HTTP header
+	 * to override the real HTTP method name.
+	 * <p>
+	 * Allows you to override the actual HTTP method with a simulated method.
+	 * <br>For example, if an HTTP Client API doesn't support <code>PATCH</code> but does support <code>POST</code> (because
+	 * <code>PATCH</code> is not part of the original HTTP spec), you can add a <code>X-Method: PATCH</code> header on a normal
+	 * <code>HTTP POST /foo</code> request call which will make the HTTP call look like a <code>PATCH</code> request in any of the REST APIs.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodHeaders}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is <jk>true</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder allowedMethodHeaders(String value) {
+		return set(REST_allowedMethodHeaders, value);
+	}
+
+	/**
 	 * Configuration property:  Allowed method parameters.
 	 *
 	 * <p>
@@ -445,8 +496,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<br>Individual values can also be comma-delimited lists.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder allowedMethodParams(String...value) {
-		return set(REST_allowedMethodParams, StringUtils.join(value, ','));
+	public RestContextBuilder allowedMethodParams(String value) {
+		return set(REST_allowedMethodParams, value);
 	}
 
 	/**
@@ -470,9 +521,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	The new value for this setting.
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #allowedHeaderParams(String)}
 	 */
+	@Deprecated
 	public RestContextBuilder allowHeaderParams(boolean value) {
-		return set(REST_allowHeaderParams, value);
+		return set(REST_allowedHeaderParams, value ? "*" : null);
 	}
 
 	/**

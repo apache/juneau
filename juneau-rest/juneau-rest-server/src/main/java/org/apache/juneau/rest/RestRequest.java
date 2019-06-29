@@ -134,14 +134,23 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			else
 				queryParams.putAll(req.getParameterMap());
 
-
 			// Get the HTTP method.
 			// Can be overridden through a "method" GET attribute.
 			String _method = super.getMethod();
 
 			String m = getQuery().getString("method");
-			if (context.allowMethodParam(m))
-				_method = m;
+			if (m != null) {
+				Set<String> s = context.getAllowedMethodParams();
+				if (! s.isEmpty() && (s.contains("*") || s.contains(m)))
+					_method = m;
+			}
+
+			m = req.getHeader("X-Method");
+			if (m != null) {
+				Set<String> s = context.getAllowedMethodHeaders();
+				if (! s.isEmpty() && (s.contains("*") || s.contains(m)))
+					_method = m;
+			}
 
 			method = _method;
 
@@ -161,8 +170,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				}
 			}
 
-			if (context.isAllowHeaderParams())
-				headers.queryParams(queryParams);
+			Set<String> s = context.getAllowedHeaderParams();
+			if (! s.isEmpty()) {
+				if (s.contains("*"))
+					headers.queryParams(queryParams);
+				else for (String q : s) {
+					Object o = queryParams.getString(q);
+					if (o != null)
+						headers.put(q, o);
+				}
+			}
 
 			debug = "true".equals(getQuery().getString("debug", "false")) || "true".equals(getHeaders().getString("Debug", "false"));
 

@@ -210,6 +210,16 @@
 			</ul>
 		</ul>
 	<li>
+		New annotations for fine-tuned handling of http-methods/http-headers as query parameters and others:
+		<ul class='doctree'>
+			<li class='ja'>{@link oajr.annotation.RestResource} 
+			<ul>
+				<li class='jm'>{@link oajr.annotation.RestResource#allowedHeaderParams() allowedHeaderParams()}
+				<li class='jm'>{@link oajr.annotation.RestResource#allowedMethodHeaders() allowedMethodHeaders()}
+				<li class='jm'>{@link oajr.annotation.RestResource#allowedMethodParams() allowedMethodParams()}
+			</ul>
+		</ul>
+	<li>
 		The {@link oajr.annotation.RestResource#path() @RestResource(path)} annotation can now use variables:
 		<p class='bcode'>
 	<ja>@RestResource</ja>(

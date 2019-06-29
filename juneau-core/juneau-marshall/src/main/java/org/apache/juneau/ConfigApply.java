@@ -59,7 +59,8 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @return The resolved string.
 	 */
 	protected String string(String in) {
-		return r.resolve(in);
+		String s = r.resolve(in);
+		return "NONE".equalsIgnoreCase(in) ? null : s;
 	}
 
 	/**

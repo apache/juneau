@@ -80,6 +80,8 @@ public class HtmlDocConfigApply extends ConfigApply<HtmlDocConfig> {
 		List<String> list = new ArrayList<>();
 		for (Object v : value) {
 			String s = string(stringify(v));
+			if (s == null)
+				return new String[0];
 			if ("INHERIT".equals(s)) {
 				if (prev != null)
 					list.addAll(Arrays.asList(prev));

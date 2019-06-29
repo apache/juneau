@@ -394,6 +394,48 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Creates a case-insensitive ordered set out of the specified string values.
+	 *
+	 * @param values The values to populate the set with.
+	 * @return A new ordered set.
+	 */
+	public static Set<String> newSortedCaseInsensitiveSet(String...values) {
+		Set<String> s = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER) {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public boolean contains(Object v) {
+				return v == null ? false : super.contains(v);
+			}
+		};
+		for (String v : values)
+			if (v != null)
+				s.add(v);
+		return s;
+	}
+
+	/**
+	 * Creates a case-insensitive ordered set out of the specified string values.
+	 *
+	 * @param values
+	 * 	A comma-delimited list of the values to populate the set with.
+	 * @return A new ordered set.
+	 */
+	public static Set<String> newSortedCaseInsensitiveSet(String values) {
+		return newSortedCaseInsensitiveSet(StringUtils.split(StringUtils.emptyIfNull(values)));
+	}
+
+	/**
+	 * Same as {@link #newSortedCaseInsensitiveSet(String)} but makes the set unmodifiable.
+	 *
+	 * @param values
+	 * 	A comma-delimited list of the values to populate the set with.
+	 * @return A new ordered set.
+	 */
+	public static Set<String> newUnmodifiableSortedCaseInsensitiveSet(String values) {
+		return Collections.unmodifiableSet(newSortedCaseInsensitiveSet(StringUtils.split(StringUtils.emptyIfNull(values))));
+	}
+
+	/**
 	 * Copies the specified values into an existing map.
 	 *
 	 * @param m

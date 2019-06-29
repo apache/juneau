@@ -78,6 +78,63 @@ public @interface RestResource {
 	String allowBodyParam() default "";
 
 	/**
+	 * Configuration property:  Allowed header URL parameters.
+	 *
+	 * <p>
+	 * When specified, allows headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
+	 * parameters.
+	 * <br>
+	 * For example:
+	 * <p class='bcode w800'>
+	 *  ?Accept=text/json&amp;Content-Type=text/json
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Use <js>"*"</js> to represent all methods.
+	 * 	<li>
+	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowedHeaderParams}
+	 * </ul>
+	 */
+	String allowedHeaderParams() default "";
+
+	/**
+	 * Configuration property:  Allowed method headers.
+	 *
+	 * <p>
+	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <code>X-Method</code> HTTP header
+	 * to override the real HTTP method name.
+	 * <p>
+	 * Allows you to override the actual HTTP method with a simulated method.
+	 * <br>For example, if an HTTP Client API doesn't support <code>PATCH</code> but does support <code>POST</code> (because
+	 * <code>PATCH</code> is not part of the original HTTP spec), you can add a <code>X-Method: PATCH</code> header on a normal
+	 * <code>HTTP POST /foo</code> request call which will make the HTTP call look like a <code>PATCH</code> request in any of the REST APIs.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Method names are case-insensitive.
+	 * 	<li>
+	 * 		Use <js>"*"</js> to represent all methods.
+	 * 	<li>
+	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
+	 * </ul>
+	 */
+	String allowedMethodHeaders() default "";
+
+	/**
 	 * Allowed method parameters.
 	 *
 	 * <p>
@@ -94,6 +151,10 @@ public @interface RestResource {
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Use <js>"*"</js> to represent all methods.
+	 * 	<li>
+	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -126,7 +187,9 @@ public @interface RestResource {
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
 	 * </ul>
+	 * @deprecated Use {@link #allowedHeaderParams()}
 	 */
+	@Deprecated
 	String allowHeaderParams() default "";
 
 	/**

@@ -157,12 +157,145 @@ public final class RestContext extends BeanContext {
 	public static final String REST_allowBodyParam = PREFIX + ".allowBodyParam.b";
 
 	/**
-	 * Configuration property:  Allowed method parameters.
+	 * Configuration property:  Allowed header URL parameters.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.allowedHeaderParams.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> (comma-delimited list)
+	 * 	<li><b>Default:</b>  <js>"Accept,Content-Type"</js>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestResource#allowedHeaderParams()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#allowedHeaderParams(String)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * When specified, allows headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
+	 * parameters.
+	 * <br>
+	 * For example:
+	 * <p class='bcode w800'>
+	 *  ?Accept=text/json&amp;Content-Type=text/json
+	 * </p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(allowedHeaderParams=<js>"Accept,Content-Type"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.allowedHeaderParams(<js>"Accept,Content-Type"</js>);
+	 *
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_allowedHeaderParams</jsf>, <js>"Accept,Content-Type"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.allowedHeaderParams(<js>"Accept,Content-Type"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Useful for debugging REST interface using only a browser so that you can quickly simulate header values
+	 * 		in the URL bar.
+	 * 	<li>
+	 * 		Header names are case-insensitive.
+	 * 	<li>
+	 * 		Use <js>"*"</js> to allow any headers to be specified as URL parameters.
+	 * 	<li>
+	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
+	 * </ul>
+	 */
+	public static final String REST_allowedHeaderParams = PREFIX + ".allowedHeaderParams.s";
+
+	/**
+	 * Configuration property:  Allowed method headers.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.allowedMethodHeaders.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> (comma-delimited list)
+	 * 	<li><b>Default:</b>  empty string
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestResource#allowedMethodHeaders()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#allowedMethodHeaders(String)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <code>X-Method</code> HTTP header
+	 * to override the real HTTP method name.
+	 * <p>
+	 * Allows you to override the actual HTTP method with a simulated method.
+	 * <br>For example, if an HTTP Client API doesn't support <code>PATCH</code> but does support <code>POST</code> (because
+	 * <code>PATCH</code> is not part of the original HTTP spec), you can add a <code>X-Method: PATCH</code> header on a normal
+	 * <code>HTTP POST /foo</code> request call which will make the HTTP call look like a <code>PATCH</code> request in any of the REST APIs.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@RestResource</ja>(allowedMethodHeaders=<js>"PATCH"</js>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.allowedMethodHeaders(<js>"PATCH"</js>);
+	 *
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_allowedMethodHeaders</jsf>, <js>"PATCH"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.allowedMethodHeaders(<js>"PATCH"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Method names are case-insensitive.
+	 * 	<li>
+	 * 		Use <js>"*"</js> to represent all methods.
+	 * 	<li>
+	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
+	 * </ul>
+	 */
+	public static final String REST_allowedMethodHeaders = PREFIX + ".allowedMethodHeaders.s";
+
+	/**
+	 * Configuration property:  Allowed method URL parameters.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowedMethodParams.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <code>String</code> (comma-delimited list)
 	 * 	<li><b>Default:</b>  <js>"HEAD,OPTIONS"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -171,40 +304,49 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#allowedMethodParams(String...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#allowedMethodParams(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
+	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> (case-insensitive) URL parameter on a regular
 	 * GET request.
 	 * <br>
 	 * For example:
 	 * <p class='bcode w800'>
-	 *  ?method=OPTIONS
+	 *  /myservlet/myendpoint?method=OPTIONS
 	 * </p>
+	 * <p>
+	 * 	Useful in cases where you want to simulate a non-GET request in a browser by simply adding a parameter.
+	 * 	<br>Also useful if you want to construct hyperlinks to non-GET REST endpoints such as links to <code>OPTIONS</code>
+	 * pages.
+	 *
+	 * <p>
+	 * Note that per the {@doc RFC2616.section9 HTTP specification}, special care should
+	 * be taken when allowing non-safe (<code>POST</code>, <code>PUT</code>, <code>DELETE</code>) methods to be invoked through GET requests.
+	 *
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(allowMethodParams=<js>"$C{REST/allowMethodParams,HEAD\,OPTIONS\,PUT}"</js>)
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(allowedMethodParams=<js>"HEAD,OPTIONS,PUT"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 *
 	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.allowMethodParams(<js>"HEAD,OPTIONS,PUT"</js>);
+	 * 			builder.allowedMethodParams(<js>"HEAD,OPTIONS,PUT"</js>);
 	 *
 	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.set(<jsf>REST_allowMethodParams</jsf>, <js>"HEAD,OPTIONS,PUT"</js>);
+	 * 			builder.set(<jsf>REST_allowedMethodParams</jsf>, <js>"HEAD,OPTIONS,PUT"</js>);
 	 * 		}
 	 *
 	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.allowMethodParams(<js>"HEAD"</js>, <js>"OPTIONS"</js>, <js>"PUT"</js>);
+	 * 			builder.allowedMethodParams(<js>"HEAD,OPTIONS,PUT"</js>);
 	 * 		}
 	 * 	}
 	 * </p>
@@ -217,11 +359,9 @@ public final class RestContext extends BeanContext {
 	 * 		<js>'method'</js> parameter name is case-insensitive.
 	 * 	<li>
 	 * 		Use <js>"*"</js> to represent all methods.
+	 * 	<li>
+	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 	 * </ul>
-	 *
-	 * <p>
-	 * Note that per the {@doc RFC2616.section9 HTTP specification}, special care should
-	 * be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
 	 */
 	public static final String REST_allowedMethodParams = PREFIX + ".allowedMethodParams.s";
 
@@ -285,7 +425,9 @@ public final class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		Useful for debugging REST interface using only a browser.
 	 * </ul>
+	 * @deprecated Use {@link #REST_allowedHeaderParams}
 	 */
+	@Deprecated
 	public static final String REST_allowHeaderParams = PREFIX + ".allowHeaderParams.b";
 
 	/**
@@ -3219,7 +3361,6 @@ public final class RestContext extends BeanContext {
 	private final Object resource;
 	final RestContextBuilder builder;
 	private final boolean
-		allowHeaderParams,
 		allowBodyParam,
 		renderResponseStackTraces,
 		useStackTraceHashes,
@@ -3232,7 +3373,7 @@ public final class RestContext extends BeanContext {
 	final String fullPath;
 	final UrlPathPattern pathPattern;
 
-	private final Set<String> allowedMethodParams;
+	private final Set<String> allowedMethodParams, allowedHeaderParams, allowedMethodHeaders;
 
 	private final RestContextProperties properties;
 	private final Map<Class<?>,RestMethodParam> paramResolvers;
@@ -3373,9 +3514,10 @@ public final class RestContext extends BeanContext {
 			uriResolution = getProperty(REST_uriResolution, UriResolution.class, UriResolution.ROOT_RELATIVE);
 			uriRelativity = getProperty(REST_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
 
-			allowHeaderParams = getBooleanProperty(REST_allowHeaderParams, true);
 			allowBodyParam = getBooleanProperty(REST_allowBodyParam, true);
-			allowedMethodParams = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(StringUtils.split(getStringProperty(REST_allowedMethodParams, "HEAD,OPTIONS")))));
+			allowedHeaderParams = newUnmodifiableSortedCaseInsensitiveSet(getStringProperty(REST_allowedHeaderParams, "Accept,Content-Type"));
+			allowedMethodParams = newUnmodifiableSortedCaseInsensitiveSet(getStringProperty(REST_allowedMethodParams, "HEAD,OPTIONS"));
+			allowedMethodHeaders = newUnmodifiableSortedCaseInsensitiveSet(getStringProperty(REST_allowedMethodHeaders, ""));
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces, false);
 			useStackTraceHashes = getBooleanProperty(REST_useStackTraceHashes, true);
 			debug = getBooleanProperty(REST_debug, super.isDebug());
@@ -4351,19 +4493,19 @@ public final class RestContext extends BeanContext {
 		return renderResponseStackTraces;
 	}
 
-	/**
-	 * Returns whether it's safe to pass header values in as GET parameters.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
-	 * </ul>
-	 *
-	 * @return <jk>true</jk> if setting is enabled.
-	 */
-	public boolean isAllowHeaderParams() {
-		return allowHeaderParams;
-	}
+//	/**
+//	 * Returns whether it's safe to pass header values in as GET parameters.
+//	 *
+//	 * <h5 class='section'>See Also:</h5>
+//	 * <ul>
+//	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
+//	 * </ul>
+//	 *
+//	 * @return <jk>true</jk> if setting is enabled.
+//	 */
+//	public boolean isAllowHeaderParams() {
+//		return allowHeaderParams;
+//	}
 
 	/**
 	 * Returns whether it's safe to pass the HTTP body as a <js>"body"</js> GET parameter.
@@ -4377,6 +4519,54 @@ public final class RestContext extends BeanContext {
 	 */
 	public boolean isAllowBodyParam() {
 		return allowBodyParam;
+	}
+
+	/**
+	 * Allowed header URL parameters.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowedHeaderParams}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The header names allowed to be passed as URL parameters.
+	 * 	<br>The set is case-insensitive ordered.
+	 */
+	public Set<String> getAllowedHeaderParams() {
+		return allowedHeaderParams;
+	}
+
+	/**
+	 * Allowed method headers.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodHeaders}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The method names allowed to be passed as <code>X-Method</code> headers.
+	 * 	<br>The set is case-insensitive ordered.
+	 */
+	public Set<String> getAllowedMethodHeaders() {
+		return allowedMethodHeaders;
+	}
+
+	/**
+	 * Allowed method URL parameters.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The method names allowed to be passed as <code>method</code> URL parameters.
+	 * 	<br>The set is case-insensitive ordered.
+	 */
+	public Set<String> getAllowedMethodParams() {
+		return allowedMethodParams;
 	}
 
 	/**
@@ -4410,22 +4600,22 @@ public final class RestContext extends BeanContext {
 		return clientVersionHeader;
 	}
 
-	/**
-	 * Returns <jk>true</jk> if the specified <code>Method</code> GET parameter value can be used to override
-	 * the method name in the HTTP header.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
-	 * </ul>
-	 *
-	 * @param m The method name, upper-cased.
-	 * @return <jk>true</jk> if this resource allows the specified method to be overridden.
-	 */
-	public boolean allowMethodParam(String m) {
-		return (isNotEmpty(m) && (allowedMethodParams.contains(m) || allowedMethodParams.contains("*")));
-	}
-
+//	/**
+//	 * Returns <jk>true</jk> if the specified <code>Method</code> GET parameter value can be used to override
+//	 * the method name in the HTTP header.
+//	 *
+//	 * <h5 class='section'>See Also:</h5>
+//	 * <ul>
+//	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
+//	 * </ul>
+//	 *
+//	 * @param m The method name, upper-cased.
+//	 * @return <jk>true</jk> if this resource allows the specified method to be overridden.
+//	 */
+//	public boolean allowMethodParam(String m) {
+//		return (isNotEmpty(m) && (allowedMethodParams.contains(m) || allowedMethodParams.contains("*")));
+//	}
+//
 	/**
 	 * Returns the HTTP-part parser associated with this resource.
 	 *
@@ -4980,8 +5170,9 @@ public final class RestContext extends BeanContext {
 		return super.toMap()
 			.append("RestContext", new DefaultFilteringObjectMap()
 				.append("allowBodyParam", allowBodyParam)
+				.append("allowedMethodHeader", allowedMethodHeaders)
 				.append("allowedMethodParams", allowedMethodParams)
-				.append("allowHeaderParams", allowHeaderParams)
+				.append("allowedHeaderParams", allowedHeaderParams)
 				.append("callHandler", callHandler)
 				.append("clientVersionHeader", clientVersionHeader)
 				.append("consumes", consumes)

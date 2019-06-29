@@ -40,7 +40,8 @@ public class HeadersTest {
 	@RestResource(
 		serializers=AnythingSerializer.class,
 		parsers=AnythingParser.class,
-		encoders=AnythingEncoder.class
+		encoders=AnythingEncoder.class,
+		allowedHeaderParams="*"
 	)
 	public static class A {
 
@@ -410,7 +411,10 @@ public class HeadersTest {
 	// Custom header.
 	//====================================================================================================
 
-	@RestResource(paramResolvers=CustomHeaderParam.class)
+	@RestResource(
+		paramResolvers=CustomHeaderParam.class,
+		allowedHeaderParams="Custom"
+	)
 	public static class B {
 		@RestMethod
 		public String customHeader(CustomHeader customHeader) {
