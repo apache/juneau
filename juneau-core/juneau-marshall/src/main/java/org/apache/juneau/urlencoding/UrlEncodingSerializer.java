@@ -22,9 +22,9 @@ import org.apache.juneau.uon.*;
  *
  * <h5 class='section'>Media types:</h5>
  *
- * Handles <code>Accept</code> types:  <code><b>application/x-www-form-urlencoded</b></code>
+ * Handles <c>Accept</c> types:  <bc>application/x-www-form-urlencoded</bc>
  * <p>
- * Produces <code>Content-Type</code> types:  <code><b>application/x-www-form-urlencoded</b></code>
+ * Produces <c>Content-Type</c> types:  <bc>application/x-www-form-urlencoded</bc>
  *
  * <h5 class='topic'>Description</h5>
  *
@@ -126,7 +126,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingSerializer.expandedParams.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -138,8 +138,8 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * <br>If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 * If <jk>false</jk>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
+	 * <br>If <jk>true</jk>, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 	 *
 	 * <p>
 	 * This option only applies to beans.
@@ -147,7 +147,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		If parsing multi-part parameters, it's highly recommended to use <code>Collections</code> or <code>Lists</code>
+	 * 		If parsing multi-part parameters, it's highly recommended to use <c>Collections</c> or <c>Lists</c>
 	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
 	 * 		is added to it.
 	 * </ul>
@@ -271,9 +271,9 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * @param accept
 	 * 	The accept media types that the serializer can handle.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of {@doc RFC2616.section14.1}
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc RFC2616.section14.1}
 	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
@@ -343,8 +343,8 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 *
 	 * @see #URLENC_expandedParams
 	 * @return
-	 * 	<jk>false</jk> if serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * 	<br><jk>true</jk> if serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 * 	<jk>false</jk> if serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
+	 * 	<br><jk>true</jk> if serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 	 */
 	protected final boolean isExpandedParams() {
 		return expandedParams;

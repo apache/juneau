@@ -23,7 +23,7 @@ import org.apache.juneau.urlencoding.annotation.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Content-Type</code> types:  <code><b>application/x-www-form-urlencoded</b></code>
+ * Handles <c>Content-Type</c> types:  <bc>application/x-www-form-urlencoded</bc>
  *
  * <h5 class='topic'>Description</h5>
  *
@@ -50,7 +50,7 @@ public class UrlEncodingParser extends UonParser {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingParser.expandedParams.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -66,8 +66,8 @@ public class UrlEncodingParser extends UonParser {
 	 * This is the parser-side equivalent of the {@link #URLENC_expandedParams} setting.
 	 *
 	 * <p>
-	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * <br>If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 * If <jk>false</jk>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
+	 * <br>If <jk>true</jk>, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -172,8 +172,8 @@ public class UrlEncodingParser extends UonParser {
 	 *
 	 * @see #URLENC_expandedParams
 	 * @return
-	 * <jk>false</jk> if serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * <br><jk>true</jk> if serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 * <jk>false</jk> if serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
+	 * <br><jk>true</jk> if serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 	 */
 	protected final boolean isExpandedParams() {
 		return expandedParams;

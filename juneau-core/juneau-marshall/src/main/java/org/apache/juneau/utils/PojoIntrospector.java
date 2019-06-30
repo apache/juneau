@@ -70,7 +70,7 @@ public final class PojoIntrospector {
 	 * 	Can be <jk>null</jk> if method has no arguments.
 	 * @return The object returned by the call to the method, or <jk>null</jk> if target object is <jk>null</jk>.
 	 * @throws IllegalAccessException
-	 * 	If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is
+	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
 	 * 	inaccessible.
 	 * @throws IllegalArgumentException
 	 * 	If one of the following occurs:
@@ -108,7 +108,7 @@ public final class PojoIntrospector {
 	 * @return The object returned by the call to the method, or <jk>null</jk> if target object is <jk>null</jk>.
 	 * @throws NoSuchMethodException If method does not exist.
 	 * @throws IllegalAccessException
-	 * 	If the <code>Constructor</code> object enforces Java language access control and
+	 * 	If the <c>Constructor</c> object enforces Java language access control and
 	 * 	the underlying constructor is inaccessible.
 	 * @throws IllegalArgumentException
 	 * 	If one of the following occurs:

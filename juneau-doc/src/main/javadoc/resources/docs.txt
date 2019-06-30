@@ -306,6 +306,7 @@ juneau-rest-server.Instantiation.LifecycleHooks = #juneau-rest-server.Instantiat
 juneau-rest-server.Instantiation.ResourceResolvers = #juneau-rest-server.Instantiation.ResourceResolvers, Overview > juneau-rest-server > Instantiation > Resource Resolvers
 juneau-rest-server.Instantiation.RestServlet = #juneau-rest-server.Instantiation.RestServlet, Overview > juneau-rest-server > Instantiation > RestServlet
 juneau-rest-server.LoggingAndErrorHandling = #juneau-rest-server.LoggingAndErrorHandling, Overview > juneau-rest-server > Logging and Error Handling
+juneau-rest-server.LoggingAndErrorHandling.LOG4J = #juneau-rest-server.LoggingAndErrorHandling.LOG4J, Overview > juneau-rest-server > Logging and Error Handling > Using LOG4J for logging
 juneau-rest-server.Messages = #juneau-rest-server.Messages, Overview > juneau-rest-server > Messages
 juneau-rest-server.OpenApiSchemaPartParsing = #juneau-rest-server.OpenApiSchemaPartParsing, Overview > juneau-rest-server > OpenAPI Schema Part Parsing
 juneau-rest-server.OpenApiSchemaPartSerializing = #juneau-rest-server.OpenApiSchemaPartSerializing, Overview > juneau-rest-server > OpenAPI Schema Part Serializing

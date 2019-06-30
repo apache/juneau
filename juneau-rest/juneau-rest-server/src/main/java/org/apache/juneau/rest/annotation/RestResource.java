@@ -111,13 +111,13 @@ public @interface RestResource {
 	 * Configuration property:  Allowed method headers.
 	 *
 	 * <p>
-	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <code>X-Method</code> HTTP header
+	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <c>X-Method</c> HTTP header
 	 * to override the real HTTP method name.
 	 * <p>
 	 * Allows you to override the actual HTTP method with a simulated method.
-	 * <br>For example, if an HTTP Client API doesn't support <code>PATCH</code> but does support <code>POST</code> (because
-	 * <code>PATCH</code> is not part of the original HTTP spec), you can add a <code>X-Method: PATCH</code> header on a normal
-	 * <code>HTTP POST /foo</code> request call which will make the HTTP call look like a <code>PATCH</code> request in any of the REST APIs.
+	 * <br>For example, if an HTTP Client API doesn't support <c>PATCH</c> but does support <c>POST</c> (because
+	 * <c>PATCH</c> is not part of the original HTTP spec), you can add a <c>X-Method: PATCH</c> header on a normal
+	 * <c>HTTP POST /foo</c> request call which will make the HTTP call look like a <c>PATCH</c> request in any of the REST APIs.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -299,7 +299,7 @@ public @interface RestResource {
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		Use the keyword <code>SYSTEM_DEFAULT</code> to refer to the system default configuration
+	 * 		Use the keyword <c>SYSTEM_DEFAULT</c> to refer to the system default configuration
 	 * 		returned by the {@link Config#getSystemDefault()}.
 	 * </ul>
 	 *
@@ -324,10 +324,10 @@ public @interface RestResource {
 	Class<? extends RestConverter>[] converters() default {};
 
 	/**
-	 * Default <code>Accept</code> header.
+	 * Default <c>Accept</c> header.
 	 *
 	 * <p>
-	 * The default value for the <code>Accept</code> header if not specified on a request.
+	 * The default value for the <c>Accept</c> header if not specified on a request.
 	 *
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
@@ -362,10 +362,10 @@ public @interface RestResource {
 	String defaultCharset() default "";
 
 	/**
-	 * Default <code>Content-Type</code> header.
+	 * Default <c>Content-Type</c> header.
 	 *
 	 * <p>
-	 * The default value for the <code>Content-Type</code> header if not specified on a request.
+	 * The default value for the <c>Content-Type</c> header if not specified on a request.
 	 *
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
@@ -626,7 +626,7 @@ public @interface RestResource {
 	 *
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
-	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
+	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
 	 * <br>This setting allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -708,7 +708,7 @@ public @interface RestResource {
 	 * 		On child resources (resource classes attached to parents via the {@link #children()} annotation) to identify
 	 * 		the subpath used to access the child resource relative to the parent.
 	 * 	<li>
-	 * 		On top-level {@link RestServlet} classes deployed as Spring beans when <code>JuneauRestInitializer</code> is being used.
+	 * 		On top-level {@link RestServlet} classes deployed as Spring beans when <c>JuneauRestInitializer</c> is being used.
 	 * </ul>
 	 *
 	 * <h5 class='topic'>On child resources</h5>
@@ -741,16 +741,16 @@ public @interface RestResource {
 	 *	}
 	 * </p>
 	 * <p>
-	 * In the example above, assuming the <code>TopLevelResource</code> servlet is deployed to path <code>/myContext/myServlet</code>,
-	 * then the <code>sayHello</code> method is accessible through the URI <code>/myContext/myServlet/child/grandchild</code>.
+	 * In the example above, assuming the <c>TopLevelResource</c> servlet is deployed to path <c>/myContext/myServlet</c>,
+	 * then the <c>sayHello</c> method is accessible through the URI <c>/myContext/myServlet/child/grandchild</c>.
 	 *
 	 * <p>
-	 * Note that in this scenario, the <code>path</code> attribute is not defined on the top-level resource.
+	 * Note that in this scenario, the <c>path</c> attribute is not defined on the top-level resource.
 	 * Specifying the path on the top-level resource has no effect, but can be used for readability purposes.
 	 *
 	 * <h5 class='topic'>On top-level resources deployed as Spring beans</h5>
 	 * <p>
-	 * The path can also be used on top-level resources deployed as Spring beans when used with the <code>JuneauRestInitializer</code>
+	 * The path can also be used on top-level resources deployed as Spring beans when used with the <c>JuneauRestInitializer</c>
 	 * Spring Boot initializer class:
 	 *
 	 * <h5 class='figure'>Example:</h5>
@@ -808,7 +808,7 @@ public @interface RestResource {
 	 * Variables can be used on either top-level or child resources and can be defined on multiple levels.
 	 *
 	 * <p>
-	 * All variables in the path must be specified or else the target will not resolve and a <code>404</code> will result.
+	 * All variables in the path must be specified or else the target will not resolve and a <c>404</c> will result.
 	 *
 	 * <p>
 	 * When variables are used on a path of a top-level resource deployed as a Spring bean in a Spring Boot application,
@@ -1194,7 +1194,7 @@ public @interface RestResource {
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		Corresponds to the swagger field <code>/info/title</code>.
+	 * 		Corresponds to the swagger field <c>/info/title</c>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>

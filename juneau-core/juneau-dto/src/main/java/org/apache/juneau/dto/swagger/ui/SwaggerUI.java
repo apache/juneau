@@ -37,21 +37,21 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	private static final String PREFIX = "SwaggerUI.";
 
 	/**
-	 * Configuration property:  Resolve <code>$ref</code> references in schema up to the specified depth.
+	 * Configuration property:  Resolve <c>$ref</c> references in schema up to the specified depth.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"SwaggerUI.resolveRefsMaxDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>1</code>
+	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Default:</b>  <c>1</c>
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Defines the maximum recursive depth to resolve <code>$ref</code> variables in schema infos.
-	 * <br>The default <code>1</code> means only resolve the first reference encountered.
-	 * <br>A value of <code>0</code> disables reference resolution altogether.
+	 * Defines the maximum recursive depth to resolve <c>$ref</c> variables in schema infos.
+	 * <br>The default <c>1</c> means only resolve the first reference encountered.
+	 * <br>A value of <c>0</c> disables reference resolution altogether.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

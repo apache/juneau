@@ -61,7 +61,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -82,12 +82,12 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	public static final String RDF_addBeanTypes = PREFIX + ".addBeanTypes.b";
 
 	/**
-	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
+	 * Configuration property:  Add XSI data types to non-<c>String</c> literals.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addLiteralTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -105,7 +105,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addRootProperty.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -117,7 +117,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
+	 * When enabled an RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
 	 * to identify the root node in the graph.
 	 * <br>This helps locate the root node during parsing.
 	 *
@@ -133,7 +133,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.autoDetectNamespaces.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -158,7 +158,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.namespaces.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code> (serialized {@link Namespace} objects)
+	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c> (serialized {@link Namespace} objects)
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -183,7 +183,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Rdf.useXmlNamespaces.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -226,9 +226,9 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * @param accept
 	 * 	The accept media types that the serializer can handle.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of {@doc RFC2616.section14.1}
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc RFC2616.section14.1}
 	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
@@ -397,7 +397,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	}
 
 	/**
-	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
+	 * Configuration property:  Add XSI data types to non-<c>String</c> literals.
 	 *
 	 * @see #RDF_addLiteralTypes
 	 * @return
@@ -412,7 +412,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 *
 	 * @see RdfSerializer#RDF_addRootProperty
 	 * @return
-	 * 	<jk>true</jk> if RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
+	 * 	<jk>true</jk> if RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
 	 * 	to identify the root node in the graph.
 	 */
 	protected final boolean isAddRootProp() {

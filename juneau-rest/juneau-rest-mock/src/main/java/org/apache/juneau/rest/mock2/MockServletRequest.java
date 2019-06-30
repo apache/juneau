@@ -82,8 +82,8 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 *
 	 * Initialized with the following:
 	 * <ul>
-	 * 	<li><code>"Accept: text/json+simple"</code>
-	 * 	<li><code>"Content-Type: text/json"</code>
+	 * 	<li><c>"Accept: text/json+simple"</c>
+	 * 	<li><c>"Content-Type: text/json"</c>
 	 * </ul>
 	 *
 	 * @return A new request.
@@ -98,8 +98,8 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 *
 	 * Initialized with the following:
 	 * <ul>
-	 * 	<li><code>"Accept: text/json+simple"</code>
-	 * 	<li><code>"Content-Type: text/json"</code>
+	 * 	<li><c>"Accept: text/json+simple"</c>
+	 * 	<li><c>"Content-Type: text/json"</c>
 	 * </ul>
 	 *
 	 * @param method The HTTP method  name.
@@ -115,9 +115,9 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Accept</code> header value.
+	 * Specifies the <c>Accept</c> header value.
 	 *
-	 * @param value The <code>Accept</code> header value.
+	 * @param value The <c>Accept</c> header value.
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest accept(String value) {
@@ -125,9 +125,9 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Content-Type</code> header value.
+	 * Specifies the <c>Content-Type</c> header value.
 	 *
-	 * @param value The <code>Content-Type</code> header value.
+	 * @param value The <c>Content-Type</c> header value.
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest contentType(String value) {
@@ -135,7 +135,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/json"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/json"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -144,7 +144,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/json+simple"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/json+simple"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -153,7 +153,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/xml"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/xml"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -162,7 +162,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/html"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/html"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -171,7 +171,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/plain"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/plain"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -180,7 +180,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"octal/msgpack"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"octal/msgpack"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -189,7 +189,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/uon"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/uon"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -198,7 +198,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/x-www-form-urlencoded"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/x-www-form-urlencoded"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -207,7 +207,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/yaml"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/yaml"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -1067,7 +1067,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * 		<li>{@link InputStream}
 	 * 		<li>{@link CharSequence}
 	 * 	</ul>
-	 * 	Any other types are converted to a string using the <code>toString()</code> method.
+	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return This object (for method chaining).
 	 */
 	@Override /* MockHttpRequest */
@@ -1136,7 +1136,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	//=================================================================================================================
 
 	/**
-	 * Specifies the <code>Accept</code> header value on the request.
+	 * Specifies the <c>Accept</c> header value on the request.
 	 *
 	 * @param value The new value.
 	 * @return This object (for method chaining).
@@ -1146,7 +1146,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Accept-Charset</code> header value on the request.
+	 * Specifies the <c>Accept-Charset</c> header value on the request.
 	 *
 	 * @param value The new value.
 	 * @return This object (for method chaining).
@@ -1156,7 +1156,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Accept-Encoding</code> header value on the request.
+	 * Specifies the <c>Accept-Encoding</c> header value on the request.
 	 *
 	 * @param value The new value.
 	 * @return This object (for method chaining).
@@ -1166,7 +1166,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Accept-Language</code> header value on the request.
+	 * Specifies the <c>Accept-Language</c> header value on the request.
 	 *
 	 * @param value The new value.
 	 * @return This object (for method chaining).
@@ -1176,7 +1176,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Authorization</code> header value on the request.
+	 * Specifies the <c>Authorization</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1186,7 +1186,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Cache-Control</code> header value on the request.
+	 * Specifies the <c>Cache-Control</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1196,7 +1196,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>X-Client-Version</code> header value on the request.
+	 * Specifies the <c>X-Client-Version</c> header value on the request.
 	 *
 	 * @param value The new value.
 	 * @return This object (for method chaining).
@@ -1206,7 +1206,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Connection</code> header value on the request.
+	 * Specifies the <c>Connection</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1216,7 +1216,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Content-Encoding</code> header value on the request.
+	 * Specifies the <c>Content-Encoding</c> header value on the request.
 	 *
 	 * @param value The new value.
 	 * @return This object (for method chaining).
@@ -1226,7 +1226,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Content-Length</code> header value on the request.
+	 * Specifies the <c>Content-Length</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1236,7 +1236,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Content-Type</code> header value on the request.
+	 * Specifies the <c>Content-Type</c> header value on the request.
 	 *
 	 * @param value The new value.
 	 * @return This object (for method chaining).
@@ -1246,7 +1246,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Date</code> header value on the request.
+	 * Specifies the <c>Date</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1256,7 +1256,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Expect</code> header value on the request.
+	 * Specifies the <c>Expect</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1266,7 +1266,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>From</code> header value on the request.
+	 * Specifies the <c>From</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1276,7 +1276,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Host</code> header value on the request.
+	 * Specifies the <c>Host</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1286,7 +1286,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>If-Match</code> header value on the request.
+	 * Specifies the <c>If-Match</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1296,7 +1296,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>If-Modified-Since</code> header value on the request.
+	 * Specifies the <c>If-Modified-Since</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1306,7 +1306,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>If-None-Match</code> header value on the request.
+	 * Specifies the <c>If-None-Match</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1316,7 +1316,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>If-Range</code> header value on the request.
+	 * Specifies the <c>If-Range</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1326,7 +1326,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>If-Unmodified-Since</code> header value on the request.
+	 * Specifies the <c>If-Unmodified-Since</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1336,7 +1336,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Max-Forwards</code> header value on the request.
+	 * Specifies the <c>Max-Forwards</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1346,7 +1346,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Pragma</code> header value on the request.
+	 * Specifies the <c>Pragma</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1356,7 +1356,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Proxy-Authorization</code> header value on the request.
+	 * Specifies the <c>Proxy-Authorization</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1366,7 +1366,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Range</code> header value on the request.
+	 * Specifies the <c>Range</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1376,7 +1376,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Referer</code> header value on the request.
+	 * Specifies the <c>Referer</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1386,7 +1386,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>TE</code> header value on the request.
+	 * Specifies the <c>TE</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1396,7 +1396,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Upgrade</code> header value on the request.
+	 * Specifies the <c>Upgrade</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1406,7 +1406,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>User-Agent</code> header value on the request.
+	 * Specifies the <c>User-Agent</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).
@@ -1416,7 +1416,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Specifies the <code>Warning</code> header value on the request.
+	 * Specifies the <c>Warning</c> header value on the request.
 	 *
 	 * @param value The new value for the header.
 	 * @return This object (for method chaining).

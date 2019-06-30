@@ -54,10 +54,10 @@ import org.apache.juneau.http.annotation.*;
 public final class ProxyAuthorization extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Proxy-Authorization</code> header.
+	 * Returns a parsed <c>Proxy-Authorization</c> header.
 	 *
-	 * @param value The <code>Proxy-Authorization</code> header string.
-	 * @return The parsed <code>Proxy-Authorization</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Proxy-Authorization</c> header string.
+	 * @return The parsed <c>Proxy-Authorization</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static ProxyAuthorization forString(String value) {
 		if (value == null)

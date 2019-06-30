@@ -235,11 +235,11 @@ public class ConfigBuilder extends ContextBuilder {
 	 *
 	 * <p>
 	 * When serializing binary values, lines will be split after this many characters.
-	 * <br>Use <code>-1</code> to represent no line splitting.
+	 * <br>Use <c>-1</c> to represent no line splitting.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <code>-1</code>.
+	 * 	<br>The default is <c>-1</c>.
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder binaryLineLength(int value) {

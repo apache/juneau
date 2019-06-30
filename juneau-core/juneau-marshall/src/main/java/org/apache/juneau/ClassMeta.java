@@ -144,7 +144,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	Can be <jk>null</jk>.
 	 * @param childPojoSwap
 	 * 	The child {@link PojoSwap PojoSwaps} programmatically associated with this class.
-	 * 	These are the <code>PojoSwaps</code> that have normal classes that are subclasses of this class.
+	 * 	These are the <c>PojoSwaps</c> that have normal classes that are subclasses of this class.
 	 * 	Can be <jk>null</jk>.
 	 * @param delayedInit
 	 * 	Don't call init() in constructor.
@@ -1736,7 +1736,7 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns any exception that was throw in the <code>init()</code> method.
+	 * Returns any exception that was throw in the <c>init()</c> method.
 	 *
 	 * @return The cached exception.
 	 */
@@ -1778,7 +1778,7 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Create a new instance of the main class of this declared type from a <code>String</code> input.
+	 * Create a new instance of the main class of this declared type from a <c>String</c> input.
 	 *
 	 * <p>
 	 * In order to use this method, the class must have one of the following methods:
@@ -1793,7 +1793,7 @@ public final class ClassMeta<T> implements Type {
 	 * @param arg The input argument value.
 	 * @return A new instance of the object, or <jk>null</jk> if there is no string constructor on the object.
 	 * @throws IllegalAccessException
-	 * 	If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is
+	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
 	 * 	inaccessible.
 	 * @throws IllegalArgumentException If the parameter type on the method was invalid.
 	 * @throws InstantiationException
@@ -1820,7 +1820,7 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Create a new instance of the main class of this declared type from a <code>Number</code> input.
+	 * Create a new instance of the main class of this declared type from a <c>Number</c> input.
 	 *
 	 * <p>
 	 * In order to use this method, the class must have one of the following methods:
@@ -1835,7 +1835,7 @@ public final class ClassMeta<T> implements Type {
 	 * @param arg The input argument value.
 	 * @return A new instance of the object, or <jk>null</jk> if there is no numeric constructor on the object.
 	 * @throws IllegalAccessException
-	 * 	If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is
+	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
 	 * 	inaccessible.
 	 * @throws IllegalArgumentException If the parameter type on the method was invalid.
 	 * @throws InstantiationException
@@ -1859,7 +1859,7 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @return A new instance of the object, or <jk>null</jk> if there is no no-arg constructor on the object.
 	 * @throws IllegalAccessException
-	 * 	If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is
+	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
 	 * 	inaccessible.
 	 * @throws IllegalArgumentException
 	 * 	If one of the following occurs:
@@ -1900,7 +1900,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	Can be <jk>null</jk> if instantiating a non-member or static class.
 	 * @return A new instance of the object, or <jk>null</jk> if there is no no-arg constructor on the object.
 	 * @throws IllegalAccessException
-	 * 	If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is
+	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
 	 * 	inaccessible.
 	 * @throws IllegalArgumentException
 	 * 	If one of the following occurs:
@@ -1940,7 +1940,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Similar to {@link #equals(Object)} except primitive and Object types that are similar are considered the same.
-	 * (e.g. <jk>boolean</jk> == <code>Boolean</code>).
+	 * (e.g. <jk>boolean</jk> == <c>Boolean</c>).
 	 *
 	 * @param cm The class meta to compare to.
 	 * @return <jk>true</jk> if the specified class-meta is equivalent to this one.
@@ -2248,7 +2248,7 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Shortcut for calling <code>getInnerClass().getAnnotation(a)</code>.
+	 * Shortcut for calling <c>getInnerClass().getAnnotation(a)</c>.
 	 *
 	 * @param a The annotation to retrieve.
 	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.

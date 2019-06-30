@@ -38,16 +38,16 @@
 	</li>
 	<li>
 		Simplified Filter API for handling non-standard POJOs.<br>
-		The API for handling non-standard POJOs has been simplified by introducing the concept of a <code><del>Transform</del></code> class, which is associated with the <code>BeanContext</code> class (and thus the Serializer and Parser classes too) through the <code>BeanContext.addTransforms(Class[])</code> method.<br>
-		Two new subclasses of <code><del>Transform</del></code>:
+		The API for handling non-standard POJOs has been simplified by introducing the concept of a <dc>Transform</dc> class, which is associated with the <c>BeanContext</c> class (and thus the Serializer and Parser classes too) through the <c>BeanContext.addTransforms(Class[])</c> method.<br>
+		Two new subclasses of <dc>Transform</dc>:
 		<ul>
 			<li>{@link oaj.transform.BeanFilter} - Filter POJO beans.</li>
 			<li>{@link oaj.transform.PojoSwap} - Filter POJOs that aren't beans.</li>
 		</ul>
-		This new API replaces the previous separate <code>Cast</code> and <code>BeanFilter</code> APIs which were considerably more complicated and puts them under a common API. 
+		This new API replaces the previous separate <c>Cast</c> and <c>BeanFilter</c> APIs which were considerably more complicated and puts them under a common API. 
 	</li>
 	<li>
-		Elimination of <code>_class</code> attributes in parsable output.<br>
+		Elimination of <c>_class</c> attributes in parsable output.<br>
 		One of the complaints about the previous version of JJSON was that if you wanted to have the resulting JSON or XML be parsable back into beans, you had to enable the <js>"addClassAttrs"</js> property on the bean map factory class so that <js>"_class"</js> attributes could be added to the output.<br>
 		This requirement is virtually eliminated in v5.  In many cases, the parsers are able to determine through reflection what the correct target type is based on the top-level class passed in on the parse method. 
 	</li>
@@ -65,13 +65,13 @@
 				The old XML parser was based on DOM.  The new XML parser uses a StAX parser which significantly reduces memory consumption.
 			</li>
 			<li>
-				Caching of reflection data in the <code>BeanMap</code> API.<br>
-				The number of reflection calls have been significantly reduced in the <code>BeanMap</code> API code.  
+				Caching of reflection data in the <c>BeanMap</c> API.<br>
+				The number of reflection calls have been significantly reduced in the <c>BeanMap</c> API code.  
 				Reflection is used to determine the class types of property values on beans.  
 				This information is now cached and persisted so that the reflection API calls to determine class types are only performed the first time a bean type is encountered.
    				</li>
    				<li>
-				Automatic support for GZIP compression/decompression in <code>RestServlets</code>.<br>
+				Automatic support for GZIP compression/decompression in <c>RestServlets</c>.<br>
 				This is completely transparent to the developer.  
 				The output writer is negotiated by the framework to automatically handle compression and charset requests without the developer needing to know anything about it.
 			</li>
@@ -98,17 +98,17 @@
 			</li>
 			<li>
 				Other improvments have been made in the area of automatic negotiation of input and output type streams.  
-				For example, automatic support is provided for GZIP (<code>Accept-Encoding: gzip</code>) and charsets (e.g <code>Accept-Charset: SJIS</code>) on both incoming and outgoing data.  
+				For example, automatic support is provided for GZIP (<c>Accept-Encoding: gzip</c>) and charsets (e.g <c>Accept-Charset: SJIS</c>) on both incoming and outgoing data.  
 				It's all transparent from a developers perspective.  
 				The developer simply working with POJOs, and all details about content types, encoding, charsets, and so forth are handled by the framework.
 			</li>
 			<li>
-				Support for generating complex <code>OPTIONS</code> pages for resources.
+				Support for generating complex <c>OPTIONS</c> pages for resources.
 			</li>
 		</ul>
 	</li>
 	<li>
-		Automatic support for SOAP XML output on <js>"text/soap+xml"</js> requests against <code>RestServlet</code>.
+		Automatic support for SOAP XML output on <js>"text/soap+xml"</js> requests against <c>RestServlet</c>.
 	</li>
 	<li>
 		Support for XML namespaces. 
@@ -120,10 +120,10 @@
 		Support for loading beans directly from Readers and Strings. 
 	</li>
 	<li>
-		Parsing support for POJOs of type <code>Enum</code>.
+		Parsing support for POJOs of type <c>Enum</c>.
 	</li>
 		<li>
-		Significant improved support for various flavors of parameterized types, such as subclasses of parameterized types (e.g. <code>MyBeanList <jk>extends</jk> LinkedList&lt;MyBean&gt;</code>).
+		Significant improved support for various flavors of parameterized types, such as subclasses of parameterized types (e.g. <c>MyBeanList <jk>extends</jk> LinkedList&lt;MyBean&gt;</c>).
 		</li>
 		<li>
 		Improved ordering of bean properties (should now be ordered as they are defined in the class).

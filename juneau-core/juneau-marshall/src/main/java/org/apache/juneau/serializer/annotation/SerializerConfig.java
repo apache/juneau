@@ -80,7 +80,7 @@ public @interface SerializerConfig {
 	 *
 	 * <p>
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * <br>For example, when serializing a <code>Map&lt;String,Object&gt;</code> field where the bean class cannot be determined from
+	 * <br>For example, when serializing a <c>Map&lt;String,Object&gt;</c> field where the bean class cannot be determined from
 	 * the type of the values.
 	 *
 	 * <p>

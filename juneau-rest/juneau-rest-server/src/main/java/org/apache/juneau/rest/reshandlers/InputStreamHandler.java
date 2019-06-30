@@ -25,7 +25,7 @@ import org.apache.juneau.utils.*;
  * Simply pipes the contents of the {@link InputStream} to {@link RestResponse#getNegotiatedOutputStream()}.
  *
  * <p>
- * Sets the <code>Content-Type</code> response header to whatever was set via {@link RestResponse#setContentType(String)}.
+ * Sets the <c>Content-Type</c> response header to whatever was set via {@link RestResponse#setContentType(String)}.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>

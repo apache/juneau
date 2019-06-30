@@ -50,7 +50,7 @@ import org.apache.juneau.json.*;
  * <h5 class='topic'>PropertyStoreBuilder</h5>
  *
  * <p>
- * The {@link PropertyStoreBuilder} class is used to build up and instantiate immutable <code>PropertyStore</code>
+ * The {@link PropertyStoreBuilder} class is used to build up and instantiate immutable <c>PropertyStore</c>
  * objects.
  *
  * <p>
@@ -85,32 +85,32 @@ import org.apache.juneau.json.*;
  * 		<br>A 1 or 2 character string that identifies the data type of the property.
  * 		<br>Valid values are:
  * 		<ul>
- * 			<li><js>"s"</js>:  <code>String</code>
- * 			<li><js>"b"</js>:  <code>Boolean</code>
- * 			<li><js>"i"</js>:  <code>Integer</code>
- * 			<li><js>"c"</js>:  <code>Class</code>
- * 			<li><js>"o"</js>:  <code>Object</code>
- * 			<li><js>"ss"</js>:  <code>TreeSet&lt;String&gt;</code>
- * 			<li><js>"si"</js>:  <code>TreeSet&lt;Integer&gt;</code>
- * 			<li><js>"sc"</js>:  <code>TreeSet&lt;Class&gt;</code>
- * 			<li><js>"ls"</js>:  <code>Linkedlist&lt;String&gt;</code>
- * 			<li><js>"li"</js>:  <code>Linkedlist&lt;Integer&gt;</code>
- * 			<li><js>"lc"</js>:  <code>Linkedlist&lt;Class&gt;</code>
- * 			<li><js>"lo"</js>:  <code>Linkedlist&lt;Object&gt;</code>
- * 			<li><js>"sms"</js>:  <code>TreeMap&lt;String,String&gt;</code>
- * 			<li><js>"smi"</js>:  <code>TreeMap&lt;String,Integer&gt;</code>
- * 			<li><js>"smc"</js>:  <code>TreeMap&lt;String,Class&gt;</code>
- * 			<li><js>"smo"</js>:  <code>TreeMap&lt;String,Object&gt;</code>
- * 			<li><js>"oms"</js>:  <code>LinkedHashMap&lt;String,String&gt;</code>
- * 			<li><js>"omi"</js>:  <code>LinkedHashMap&lt;String,Integer&gt;</code>
- * 			<li><js>"omc"</js>:  <code>LinkedHashMap&lt;String,Class&gt;</code>
- * 			<li><js>"omo"</js>:  <code>LinkedHashMap&lt;String,Object&gt;</code>
+ * 			<li><js>"s"</js>:  <c>String</c>
+ * 			<li><js>"b"</js>:  <c>Boolean</c>
+ * 			<li><js>"i"</js>:  <c>Integer</c>
+ * 			<li><js>"c"</js>:  <c>Class</c>
+ * 			<li><js>"o"</js>:  <c>Object</c>
+ * 			<li><js>"ss"</js>:  <c>TreeSet&lt;String&gt;</c>
+ * 			<li><js>"si"</js>:  <c>TreeSet&lt;Integer&gt;</c>
+ * 			<li><js>"sc"</js>:  <c>TreeSet&lt;Class&gt;</c>
+ * 			<li><js>"ls"</js>:  <c>Linkedlist&lt;String&gt;</c>
+ * 			<li><js>"li"</js>:  <c>Linkedlist&lt;Integer&gt;</c>
+ * 			<li><js>"lc"</js>:  <c>Linkedlist&lt;Class&gt;</c>
+ * 			<li><js>"lo"</js>:  <c>Linkedlist&lt;Object&gt;</c>
+ * 			<li><js>"sms"</js>:  <c>TreeMap&lt;String,String&gt;</c>
+ * 			<li><js>"smi"</js>:  <c>TreeMap&lt;String,Integer&gt;</c>
+ * 			<li><js>"smc"</js>:  <c>TreeMap&lt;String,Class&gt;</c>
+ * 			<li><js>"smo"</js>:  <c>TreeMap&lt;String,Object&gt;</c>
+ * 			<li><js>"oms"</js>:  <c>LinkedHashMap&lt;String,String&gt;</c>
+ * 			<li><js>"omi"</js>:  <c>LinkedHashMap&lt;String,Integer&gt;</c>
+ * 			<li><js>"omc"</js>:  <c>LinkedHashMap&lt;String,Class&gt;</c>
+ * 			<li><js>"omo"</js>:  <c>LinkedHashMap&lt;String,Object&gt;</c>
  * 		</ul>
  * </ul>
  *
  * <p>
- * For example, <js>"BeanContext.pojoSwaps.lc"</js> refers to a property on the <code>BeanContext</code> class
- * called <code>pojoSwaps</code> that has a data type of <code>List&lt;Class&gt;</code>.
+ * For example, <js>"BeanContext.pojoSwaps.lc"</js> refers to a property on the <c>BeanContext</c> class
+ * called <c>pojoSwaps</c> that has a data type of <c>List&lt;Class&gt;</c>.
  *
  * <h5 class='topic'>Property value normalization</h5>
  *
@@ -124,7 +124,7 @@ import org.apache.juneau.json.*;
  * <p>
  * The <js>"sX"</js> property types are sorted sets.
  * <br>Use these for collections of objects where the order is not important.
- * <br>Internally, a <code>TreeSet</code> is used so that the order in which you add elements does not affect the
+ * <br>Internally, a <c>TreeSet</c> is used so that the order in which you add elements does not affect the
  * resulting order of the property.
  *
  * <h5 class='topic'>List types</h5>
@@ -138,7 +138,7 @@ import org.apache.juneau.json.*;
  * <br>This ensures that the resulting order of the list is in most-to-least importance.
  *
  * <p>
- * For example, multiple calls to <code>pojoSwaps()</code> causes new entries to be added to the beginning of the list
+ * For example, multiple calls to <c>pojoSwaps()</c> causes new entries to be added to the beginning of the list
  * so that previous values can be 'overridden':
  * <p class='bcode w800'>
  * 	<jc>// Swap order:  [MySwap2.class, MySwap1.class]</jc>
@@ -146,7 +146,7 @@ import org.apache.juneau.json.*;
  * </p>
  *
  * <p>
- * Note that the order is different when passing multiple values into the <code>pojoSwaps()</code> method, in which
+ * Note that the order is different when passing multiple values into the <c>pojoSwaps()</c> method, in which
  * case the order should be first-match-wins:
  * <p class='bcode w800'>
  * 	<jc>// Swap order:  [MySwap1.class, MySwap2.class]</jc>
@@ -343,7 +343,7 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or an empty set if it doesn't exist.
+	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or an empty set if it doesn't exist.
 	 */
 	public <T> Set<T> getSetProperty(String key, Class<T> eType) {
 		Property p = findProperty(key);
@@ -356,7 +356,7 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @param def The default value if the property doesn't exist or is empty.
-	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or the default value if it doesn't exist or is empty.
+	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or the default value if it doesn't exist or is empty.
 	 */
 	public <T> Set<T> getSetProperty(String key, Class<T> eType, Set<T> def) {
 		Set<T> l = getSetProperty(key, eType);
@@ -367,7 +367,7 @@ public final class PropertyStore {
 	 * Returns the class set property with the specified name.
 	 *
 	 * @param key The property name.
-	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or an empty set if it doesn't exist.
+	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or an empty set if it doesn't exist.
 	 */
 	@SuppressWarnings("rawtypes")
 	public Set<Class<?>> getClassSetProperty(String key) {
@@ -380,7 +380,7 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or an empty set if it doesn't exist.
+	 * @return The property value as an unmodifiable <c>LinkedHashSet</c>, or an empty set if it doesn't exist.
 	 */
 	@SuppressWarnings("rawtypes")
 	public <T> Set<Class<T>> getClassSetProperty(String key, Class<T> eType) {
@@ -393,7 +393,7 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <code>ArrayList</code>, or an empty list if it doesn't exist.
+	 * @return The property value as an unmodifiable <c>ArrayList</c>, or an empty list if it doesn't exist.
 	 */
 	public <T> List<T> getListProperty(String key, Class<T> eType) {
 		Property p = findProperty(key);
@@ -406,7 +406,7 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
 	 * @param def The default value if the property doesn't exist or is empty.
-	 * @return The property value as an unmodifiable <code>ArrayList</code>, or the default value if it doesn't exist or is empty.
+	 * @return The property value as an unmodifiable <c>ArrayList</c>, or the default value if it doesn't exist or is empty.
 	 */
 	public <T> List<T> getListProperty(String key, Class<T> eType, List<T> def) {
 		List<T> l = getListProperty(key, eType);
@@ -417,7 +417,7 @@ public final class PropertyStore {
 	 * Returns the class list property with the specified name.
 	 *
 	 * @param key The property name.
-	 * @return The property value as an unmodifiable <code>ArrayList</code>, or an empty list if it doesn't exist.
+	 * @return The property value as an unmodifiable <c>ArrayList</c>, or an empty list if it doesn't exist.
 	 */
 	@SuppressWarnings("rawtypes")
 	public List<Class<?>> getClassListProperty(String key) {
@@ -430,7 +430,7 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <code>ArrayList</code>, or an empty list if it doesn't exist.
+	 * @return The property value as an unmodifiable <c>ArrayList</c>, or an empty list if it doesn't exist.
 	 */
 	@SuppressWarnings("rawtypes")
 	public <T> List<Class<T>> getClassListProperty(String key, Class<T> eType) {
@@ -443,7 +443,7 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <code>LinkedHashMap</code>, or an empty map if it doesn't exist.
+	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, or an empty map if it doesn't exist.
 	 */
 	public <T> Map<String,T> getMapProperty(String key, Class<T> eType) {
 		Property p = findProperty(key);
@@ -454,7 +454,7 @@ public final class PropertyStore {
 	 * Returns the class map property with the specified name.
 	 *
 	 * @param key The property name.
-	 * @return The property value as an unmodifiable <code>LinkedHashMap</code>, or an empty map if it doesn't exist.
+	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, or an empty map if it doesn't exist.
 	 */
 	@SuppressWarnings("rawtypes")
 	public Map<String,Class<?>> getClassMapProperty(String key) {
@@ -467,7 +467,7 @@ public final class PropertyStore {
 	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
-	 * @return The property value as an unmodifiable <code>LinkedHashMap</code>, or an empty map if it doesn't exist.
+	 * @return The property value as an unmodifiable <c>LinkedHashMap</c>, or an empty map if it doesn't exist.
 	 */
 	@SuppressWarnings("rawtypes")
 	public <T> Map<String,Class<T>> getClassMapProperty(String key, Class<T> eType) {
@@ -486,7 +486,7 @@ public final class PropertyStore {
 	 * @param type The class type of the property.
 	 * @param def
 	 * 	The default value if the property doesn't exist.
-	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>, or <jk>null</jk>.
+	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>, or <jk>null</jk>.
 	 * @return A new property instance.
 	 */
 	public <T> T getInstanceProperty(String key, Class<T> type, Object def) {
@@ -500,7 +500,7 @@ public final class PropertyStore {
 	 * @param type The class type of the property.
 	 * @param def
 	 * 	The default value if the property doesn't exist.
-	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
+	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
 	 * @param resolver
 	 * 	The resolver to use for instantiating objects.
 	 * @param args
@@ -520,7 +520,7 @@ public final class PropertyStore {
 	 * @param type The class type of the property.
 	 * @param def
 	 * 	The default value if the property doesn't exist.
-	 * 	<br>Can either be an instance of <code>T</code>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
+	 * 	<br>Can either be an instance of <c>T</c>, or a <code>Class&lt;? <jk>extends</jk> T&gt;</code>.
 	 * @param resolver
 	 * 	The resolver to use for instantiating objects.
 	 * @param args

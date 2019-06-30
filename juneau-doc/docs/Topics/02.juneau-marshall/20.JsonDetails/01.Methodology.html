@@ -40,48 +40,48 @@ JSON Methodology
 	<tr>
 		<td>String</td>
 		<td>String</td>
-		<td><code>serialize(<js>"foobar"</js>);</code></td>
-		<td><code><js>'foobar'</js></code>
+		<td><c>serialize(<js>"foobar"</js>);</c></td>
+		<td><c><js>'foobar'</js></c>
 	</tr>
 	<tr>
 		<td>Number</td>
 		<td>Number</td>
-		<td><code>serialize(123);</code></td>
-		<td><code>123</code>
+		<td><c>serialize(123);</c></td>
+		<td><c>123</c>
 	</tr>
 	<tr>
 		<td>Boolean</td>
 		<td>Boolean</td>
-		<td><code>serialize(<jk>true</jk>);</code></td>
-		<td><code><jk>true</jk></code>
+		<td><c>serialize(<jk>true</jk>);</c></td>
+		<td><c><jk>true</jk></c>
 	</tr>
 	<tr>
 		<td>Null</td>
 		<td>Null</td>
-		<td><code>serialize(<jk>null</jk>);</code></td>
-		<td><code><jk>null</jk></code>
+		<td><c>serialize(<jk>null</jk>);</c></td>
+		<td><c><jk>null</jk></c>
 	</tr>
 	<tr>
 		<td>Beans with properties of any type on this list</td>
 		<td>Object</td>
-		<td><code>serialize(<jk>new</jk> MyBean());</code></td>
-		<td><code>{p1:<js>'val1'</js>,p2:<jk>true</jk>}</code>
+		<td><c>serialize(<jk>new</jk> MyBean());</c></td>
+		<td><c>{p1:<js>'val1'</js>,p2:<jk>true</jk>}</c>
 	</tr>
 	<tr>
 		<td>Maps with values of any type on this list</td>
 		<td>Object</td>
-		<td><code>serialize(<jk>new</jk> TreeMap());</code></td>
-		<td><code>{key1:<js>'val1'</js>,key2:<jk>true</jk>}</code>
+		<td><c>serialize(<jk>new</jk> TreeMap());</c></td>
+		<td><c>{key1:<js>'val1'</js>,key2:<jk>true</jk>}</c>
 	</tr>
 	<tr>
 		<td>Collections and arrays of any type on this list</td>
 		<td>Array</td>
-		<td><code>serialize(<jk>new</jk> Object[]{1,<js>"foo"</js>,<jk>true</jk>});</code></td>
-		<td><code>[1,<js>'foo'</js>,<jk>true</jk>]</code>
+		<td><c>serialize(<jk>new</jk> Object[]{1,<js>"foo"</js>,<jk>true</jk>});</c></td>
+		<td><c>[1,<js>'foo'</js>,<jk>true</jk>]</c>
 	</tr>
 </table>
 <p>
 	In addition, swaps can be used to convert non-serializable POJOs into serializable forms, such as converting 
-	<code>Calendar</code> object to ISO8601 strings, or <code><jk>byte</jk>[]</code> arrays to Base-64 
+	<c>Calendar</c> object to ISO8601 strings, or <c><jk>byte</jk>[]</c> arrays to Base-64 
 	encoded strings.
 </p>

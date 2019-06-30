@@ -100,7 +100,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * @param o The current object being traversed.
 	 * @param eType The expected class type.
 	 * @return
-	 * 	The {@link ClassMeta} of the object so that <code>instanceof</code> operations only need to be performed
+	 * 	The {@link ClassMeta} of the object so that <c>instanceof</c> operations only need to be performed
 	 * 	once (since they can be expensive).
 	 * @throws BeanRecursionException If recursion occurred.
 	 */
@@ -225,7 +225,7 @@ public class BeanTraverseSession extends BeanSession {
 	/**
 	 * Returns information used to determine at what location in the parse a failure occurred.
 	 *
-	 * @return A map, typically containing something like <code>{line:123,column:456,currentProperty:"foobar"}</code>
+	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
 	 */
 	public final ObjectMap getLastLocation() {
 		ObjectMap m = new ObjectMap();

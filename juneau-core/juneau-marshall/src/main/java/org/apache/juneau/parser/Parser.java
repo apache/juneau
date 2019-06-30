@@ -131,7 +131,7 @@ public abstract class Parser extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.autoCloseStreams.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -174,8 +174,8 @@ public abstract class Parser extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.debugOutputLines.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>5</code>
+	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Default:</b>  <c>5</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -220,7 +220,7 @@ public abstract class Parser extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.listener.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends ParserListener&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends ParserListener&gt;</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -283,7 +283,7 @@ public abstract class Parser extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.strict.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -356,7 +356,7 @@ public abstract class Parser extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.trimStrings.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -399,7 +399,7 @@ public abstract class Parser extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Parser.unbuffered.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -581,10 +581,10 @@ public abstract class Parser extends BeanContext {
 	 * </p>
 	 *
 	 * <p>
-	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 * <c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
 	 *
 	 * <p>
-	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
 	 *
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
@@ -792,7 +792,7 @@ public abstract class Parser extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the media types handled based on the values passed to the <code>consumes</code> constructor parameter.
+	 * Returns the media types handled based on the values passed to the <c>consumes</c> constructor parameter.
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
@@ -801,7 +801,7 @@ public abstract class Parser extends BeanContext {
 	}
 
 	/**
-	 * Returns the first media type handled based on the values passed to the <code>consumes</code> constructor parameter.
+	 * Returns the first media type handled based on the values passed to the <c>consumes</c> constructor parameter.
 	 *
 	 * @return The media type.
 	 */

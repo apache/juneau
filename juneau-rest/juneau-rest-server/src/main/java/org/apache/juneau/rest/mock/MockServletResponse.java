@@ -29,7 +29,7 @@ import org.apache.juneau.utils.*;
 /**
  * An implementation of {@link HttpServletResponse} for mocking purposes.
  *
- * @deprecated Use <code>org.apache.juneau.rest.mock2</code>
+ * @deprecated Use <c>org.apache.juneau.rest.mock2</c>
 */
 @Deprecated
 public class MockServletResponse implements HttpServletResponse, MockHttpResponse {

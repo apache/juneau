@@ -43,7 +43,7 @@ public class ProcBuilder {
 	 * Creates a process builder with the specified arguments.
 	 *
 	 * <p>
-	 * Equivalent to calling <code>ProcessBuilder.create().command(args);</code>
+	 * Equivalent to calling <c>ProcessBuilder.create().command(args);</c>
 	 *
 	 * @param args The command-line arguments.
 	 * @return A new process builder.

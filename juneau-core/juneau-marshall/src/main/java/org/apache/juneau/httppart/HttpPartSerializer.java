@@ -37,7 +37,7 @@ import org.apache.juneau.serializer.*;
  * 	<li class='ja'>{@link Path#serializer()}
  * 	<li class='ja'>{@link Request#partSerializer()}
  * 	<li class='ja'>{@link Response#partSerializer()}
- * 	<li class='jc'><code>RestClientBuilder.partSerializer(Class)</code>
+ * 	<li class='jc'><c>RestClientBuilder.partSerializer(Class)</c>
  * </ul>
  *
  * <p>

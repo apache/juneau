@@ -96,10 +96,10 @@ import org.apache.juneau.http.annotation.*;
 public final class IfNoneMatch extends HeaderEntityValidatorArray {
 
 	/**
-	 * Returns a parsed <code>If-None-Match</code> header.
+	 * Returns a parsed <c>If-None-Match</c> header.
 	 *
-	 * @param value The <code>If-None-Match</code> header string.
-	 * @return The parsed <code>If-None-Match</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>If-None-Match</c> header string.
+	 * @return The parsed <c>If-None-Match</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static IfNoneMatch forString(String value) {
 		if (value == null)

@@ -26,102 +26,102 @@
 		<ul>
 			<li>Deleted the following methods which are now unnecessary:
 				<ul>
-					<li><code>BeanMap.getFiltered(String)</code>
-					<li><code>BeanMap.putFiltered(String,Object)</code>
-					<li><code>BeanMapEntry.getFiltered(String)</code>
-					<li><code>BeanMapEntry.putFiltered(String,Object)</code>
-					<li><code>BeanMapEntry.putFiltered(String,Object)</code>
-					<li><code>BeanPropertyMeta.getFiltered()</code>
-					<li><code>BeanPropertyMeta.setFiltered(Object)</code>
-					<li><code>BeanPropertyMeta.getTransformedClassMeta()</code>
+					<li><c>BeanMap.getFiltered(String)</c>
+					<li><c>BeanMap.putFiltered(String,Object)</c>
+					<li><c>BeanMapEntry.getFiltered(String)</c>
+					<li><c>BeanMapEntry.putFiltered(String,Object)</c>
+					<li><c>BeanMapEntry.putFiltered(String,Object)</c>
+					<li><c>BeanPropertyMeta.getFiltered()</c>
+					<li><c>BeanPropertyMeta.setFiltered(Object)</c>
+					<li><c>BeanPropertyMeta.getTransformedClassMeta()</c>
 				</ul>
 			<li>{@link oaj.BeanPropertyMeta#getClassMeta()} now returns the filtered type of the property.
 		</ul> 
-	<li><code><del>StringVarResolver</del></code> now has support for chained resolvers.
-	<li><code><del>StringVarResolver</del></code>  now resolves variables inside resolved values.
+	<li><dc>StringVarResolver</dc> now has support for chained resolvers.
+	<li><dc>StringVarResolver</dc>  now resolves variables inside resolved values.
 		i.e. if a resolved variable value itself contains a variable, it now resolves that variable too.
-	<li>Fixed bug where inner interface classes being used in <code>RestResource.filters()</code> were being
+	<li>Fixed bug where inner interface classes being used in <c>RestResource.filters()</c> were being
 		interpreted as surrogate classes because they have hidden 1-arg constructors due to being inner classes.
 	<li>Fixed bug in {@link oaj.internal.MultiSet} where exception was being thrown if last set was empty.
 	<li>New {@link oaj.utils.ZipFileList} class for providing efficiently zipped directories through the REST interface.
-	<li>New <code>RdfProperties.RDF_useXmlNamespaces</code> property.			
-	<li>New <code><del>XmlParserContext.XML_preserveRootElement</del></code> property.
+	<li>New <c>RdfProperties.RDF_useXmlNamespaces</c> property.			
+	<li>New <dc>XmlParserContext.XML_preserveRootElement</dc> property.
 	<li>Worked around bug in Sun VM on OS/X where XML parser was throwing an exception when trying to set a reporter.			
 </ul>
 
 
 <h5 class='topic w800'>Server</h5>
 <ul class='spaced-list'>
-	<li>New <code><del>ZipFileListResponseHandler</del></code> class.
+	<li>New <dc>ZipFileListResponseHandler</dc> class.
 	<li>Simplified labels in servlet resource bundles:
 		<ul>
-			<li><code>"[ClassName].ResourceDescription"</code> is now <code>"[ClassName].label"</code>.
-			<li><code>"[ClassName].MethodDescription.[methodName]"</code> is now <code>"[ClassName].[methodName]"</code>.
+			<li><c>"[ClassName].ResourceDescription"</c> is now <c>"[ClassName].label"</c>.
+			<li><c>"[ClassName].MethodDescription.[methodName]"</c> is now <c>"[ClassName].[methodName]"</c>.
 		</ul>
 	<li>Several changes to {@link oajr.RestRequest}:
 		<ul>
 			<li>Added new methods:
 				<ul>
-					<li><code><del>RestRequest.getQueryParameterMap()</del></code>
-					<li><code><del>RestRequest.getQueryParameterNames()</del></code>
-					<li><code><del>RestRequest.getPathInfoUndecoded()</del></code>
-					<li><code><del>RestRequest.getPathRemainderUndecoded()</del></code>
-					<li><code><del>RestRequest.getTrimmedRequestURI()</del></code>
-					<li><code><del>RestRequest.getTrimmedRequestURL()</del></code>
-					<li><code><del>RestRequest.getServletTitle()</del></code>
-					<li><code><del>RestRequest.getServletDescription()</del></code>
+					<li><dc>RestRequest.getQueryParameterMap()</dc>
+					<li><dc>RestRequest.getQueryParameterNames()</dc>
+					<li><dc>RestRequest.getPathInfoUndecoded()</dc>
+					<li><dc>RestRequest.getPathRemainderUndecoded()</dc>
+					<li><dc>RestRequest.getTrimmedRequestURI()</dc>
+					<li><dc>RestRequest.getTrimmedRequestURL()</dc>
+					<li><dc>RestRequest.getServletTitle()</dc>
+					<li><dc>RestRequest.getServletDescription()</dc>
 					<li>{@link oajr.RestRequest#getMethodDescription()}
 				</ul>
 			<li>Behavior changes to {@link oajr.RestRequest#getPathInfo()} to follow Servlet specs.
 				Returns <jk>null</jk> instead of blank for no path info.
-			<li><code><del>RestRequest.getPathRemainder()</del></code> now automatically decodes the path remainder. 
-				Use <code><del>RestRequest.getPathRemainderUndecoded()</del></code> to get the unencoded path remainder.
-			<li>Bug fixes in <code><del>RestRequest.getRequestParentURI()</del></code> when servlet is mapped to <js>"/*"</js>.
-			<li>Bug fixes in <code><del>RestRequest.getServletURI()</del></code> when servlet is mapped to <js>"/*"</js>.
+			<li><dc>RestRequest.getPathRemainder()</dc> now automatically decodes the path remainder. 
+				Use <dc>RestRequest.getPathRemainderUndecoded()</dc> to get the unencoded path remainder.
+			<li>Bug fixes in <dc>RestRequest.getRequestParentURI()</dc> when servlet is mapped to <js>"/*"</js>.
+			<li>Bug fixes in <dc>RestRequest.getServletURI()</dc> when servlet is mapped to <js>"/*"</js>.
 		</ul>
 	<li>New string replacement variables:
 		<ul>
-			<li><code>$R{contextPath}</code> - Returns value from {@link oajr.RestRequest#getContextPath()}
-			<li><code>$R{methodDescription}</code> - Returns value from {@link oajr.RestRequest#getMethodDescription()}
-			<li><code>$R{resourceTitle}</code> - Returns value from <code><del>RestRequest.getServletTitle()</del></code>
-			<li><code>$R{resourceDescription}</code> - Returns value from <code><del>RestRequest.getServletDescription()</del></code>
-			<li><code>$R{trimmedRequestURI}</code> - Returns value from <code><del>RestRequest.getTrimmedRequestURI()</del></code>
-			<li><code>$E{var}</code> - Environment variables.
+			<li><c>$R{contextPath}</c> - Returns value from {@link oajr.RestRequest#getContextPath()}
+			<li><c>$R{methodDescription}</c> - Returns value from {@link oajr.RestRequest#getMethodDescription()}
+			<li><c>$R{resourceTitle}</c> - Returns value from <dc>RestRequest.getServletTitle()</dc>
+			<li><c>$R{resourceDescription}</c> - Returns value from <dc>RestRequest.getServletDescription()</dc>
+			<li><c>$R{trimmedRequestURI}</c> - Returns value from <dc>RestRequest.getTrimmedRequestURI()</dc>
+			<li><c>$E{var}</c> - Environment variables.
 		</ul>
-	<li>Added methods <code><del>RestServlet.getDescription(RestRequest)</del></code> and <code><del>RestServlet.getLabel(RestRequest)</del></code>.
-	<li>{@link oajr.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code> now provide default HTML titles
+	<li>Added methods <dc>RestServlet.getDescription(RestRequest)</dc> and <dc>RestServlet.getLabel(RestRequest)</dc>.
+	<li>{@link oajr.BasicRestServlet} and <dc>RestServletJenaDefault</dc> now provide default HTML titles
 		and descriptions:
 		<p class='bcode w800'>
 	<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"$R{resourceTitle}"</js>),
 	<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"$R{resourceDescription}"</js>)
 		</p>
-	<li>Options pages on {@link oajr.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code> now provide default descriptions and back links:
+	<li>Options pages on {@link oajr.BasicRestServlet} and <dc>RestServletJenaDefault</dc> now provide default descriptions and back links:
 		and descriptions:
 		<p class='bcode w800'>
 	<ja>@Property</ja>(name=<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{back:'$R{servletURI}"</js>),
 	<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"Resource options"</js>)
 		</p>
 	<li>New {@link oajr.BasicRestServletGroup} class.
-	<li>Removed <code>RestServletProperties.REST_trimTrailingUriSlashes</code> and <code>RestServletProperties.REST_pathInfoBlankForNull</code>. 
+	<li>Removed <c>RestServletProperties.REST_trimTrailingUriSlashes</c> and <c>RestServletProperties.REST_pathInfoBlankForNull</c>. 
 	<li>New annotations for providing labels and descriptions.  Useful if you don't plan on having to support other languages, so you don't 
 		want to provide labels in resource bundles.
 		<ul>
-			<li><code><del>RestResource.label()</del></code>
+			<li><dc>RestResource.label()</dc>
 			<li>{@link oajr.annotation.RestResource#description() @RestResource(description)}
 			<li>{@link oajr.annotation.RestMethod#description() @RestMethod(description)}
-			<li><code><del>RestMethod#responses()</del></code>
-			<li><code><del>Attr.description()</del></code>
-			<li><code><del>Content.description()</del></code>
-			<li><code><del>HasParam.description()</del></code>
-			<li><code><del>HasQParam.description()</del></code>
-			<li><code><del>Header.description()</del></code>
-			<li><code><del>Param.description()</del></code>
-			<li><code><del>QParam.description()</del></code>
+			<li><dc>RestMethod#responses()</dc>
+			<li><dc>Attr.description()</dc>
+			<li><dc>Content.description()</dc>
+			<li><dc>HasParam.description()</dc>
+			<li><dc>HasQParam.description()</dc>
+			<li><dc>Header.description()</dc>
+			<li><dc>Param.description()</dc>
+			<li><dc>QParam.description()</dc>
 		</ul>
-	<li>Support for sorting resources by name in <code><del>ChildResourceDescriptions</del></code>.
+	<li>Support for sorting resources by name in <dc>ChildResourceDescriptions</dc>.
 </ul>
 
 <h5 class='topic w800'>Samples</h5>
 <ul class='spaced-list'>
-	<li>Added <code>/tempDir/upload</code> showing how to use <code>ServletFileUpload</code> with multipart form posts.
+	<li>Added <c>/tempDir/upload</c> showing how to use <c>ServletFileUpload</c> with multipart form posts.
 </ul>

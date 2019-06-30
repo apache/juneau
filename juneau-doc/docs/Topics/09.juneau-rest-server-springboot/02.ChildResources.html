@@ -41,9 +41,9 @@
 	}
 </p>
 <p>
-	The root resource class must extend from <code>HttpServlet</code> so that it can be registered as a normal
+	The root resource class must extend from <c>HttpServlet</c> so that it can be registered as a normal
 	servlet using the Spring Boot architecture.  The {@link oajr.BasicRestServletGroup} class is our router class
-	that extends from <code>HttpServlet</code>:
+	that extends from <c>HttpServlet</c>:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestResource</ja>(
@@ -57,8 +57,8 @@
 	}
 </p>
 <p>
-	Because Spring Boot will automatically register any beans that extend from <code>HttpServlet</code>, we
-	DON'T want the child classes to extend from <code>HttpServlet</code>.  Instead, we extend from
+	Because Spring Boot will automatically register any beans that extend from <c>HttpServlet</c>, we
+	DON'T want the child classes to extend from <c>HttpServlet</c>.  Instead, we extend from
 	{@link oajr.BasicRestGroup} and {@link oajr.BasicRest} instead:
 </p>
 

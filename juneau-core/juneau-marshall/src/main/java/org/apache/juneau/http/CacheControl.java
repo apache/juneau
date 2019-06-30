@@ -98,10 +98,10 @@ import org.apache.juneau.http.annotation.*;
 public final class CacheControl extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Cache-Control</code> header.
+	 * Returns a parsed <c>Cache-Control</c> header.
 	 *
-	 * @param value The <code>Cache-Control</code> header string.
-	 * @return The parsed <code>Cache-Control</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Cache-Control</c> header string.
+	 * @return The parsed <c>Cache-Control</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static CacheControl forString(String value) {
 		if (value == null)

@@ -26,7 +26,7 @@ import org.apache.juneau.utils.*;
  *
  * This implementation is NOT thread safe.
  * 
- * @deprecated Use <code>org.apache.juneau.rest.mock2</code>
+ * @deprecated Use <c>org.apache.juneau.rest.mock2</c>
  */
 @Deprecated
 public class MockHttpClientConnectionManager implements HttpClientConnectionManager {

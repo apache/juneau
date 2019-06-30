@@ -102,7 +102,7 @@ public final class Namespace {
 	 * <ul>
 	 * 	<li>A {@link Namespace} array
 	 * 	<li>A comma-delimited string with key/value pairs of the form <js>"name:uri"</js>.
-	 * 	<li>A <code>Collection</code> containing any of object that can be passed to {@link #createArray(Object)}.
+	 * 	<li>A <c>Collection</c> containing any of object that can be passed to {@link #createArray(Object)}.
 	 * </ul>
 	 *
 	 * @param o The input.

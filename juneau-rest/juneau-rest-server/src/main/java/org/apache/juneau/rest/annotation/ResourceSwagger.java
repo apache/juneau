@@ -27,7 +27,7 @@ public @interface ResourceSwagger {
 
 
 	/**
-	 * Defines the swagger field <code>/info/title</code>.
+	 * Defines the swagger field <c>/info/title</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -46,7 +46,7 @@ public @interface ResourceSwagger {
 	 * 	<li>
 	 * 		The precedence of lookup for this field is:
 	 * 		<ol>
-	 * 			<li><code>{resource-class}.title</code> property in resource bundle.
+	 * 			<li><c>{resource-class}.title</c> property in resource bundle.
 	 * 			<li>{@link ResourceSwagger#title()} on this class, then any parent classes.
 	 * 			<li>Value defined in Swagger JSON file.
 	 * 			<li>{@link RestResource#title()} on this class, then any parent classes.
@@ -60,7 +60,7 @@ public @interface ResourceSwagger {
 	String[] title() default {};
 
 	/**
-	 * Defines the swagger field <code>/info/description</code>.
+	 * Defines the swagger field <c>/info/description</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -82,7 +82,7 @@ public @interface ResourceSwagger {
 	 * 	<li>
 	 * 		The precedence of lookup for this field is:
 	 * 		<ol>
-	 * 			<li><code>{resource-class}.description</code> property in resource bundle.
+	 * 			<li><c>{resource-class}.description</c> property in resource bundle.
 	 * 			<li>{@link ResourceSwagger#description()} on this class, then any parent classes.
 	 * 			<li>Value defined in Swagger JSON file.
 	 * 			<li>{@link RestResource#description()} on this class, then any parent classes.
@@ -96,7 +96,7 @@ public @interface ResourceSwagger {
 	String[] description() default {};
 
 	/**
-	 * Defines the swagger field <code>/info/contact</code>.
+	 * Defines the swagger field <c>/info/contact</c>.
 	 *
 	 * <p>
 	 * A {@doc juneau-marshall.JsonDetails.SimplifiedJson} string with the following fields:
@@ -109,7 +109,7 @@ public @interface ResourceSwagger {
 	 * </p>
 	 *
 	 * <p>
-	 * The default value pulls the description from the <code>contact</code> entry in the servlet resource bundle.
+	 * The default value pulls the description from the <c>contact</c> entry in the servlet resource bundle.
 	 * (e.g. <js>"contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js> or
 	 * <js>"MyServlet.contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js>).
 	 *
@@ -152,13 +152,13 @@ public @interface ResourceSwagger {
 	Contact contact() default @Contact;
 
 	/**
-	 * Defines the swagger field <code>/externalDocs</code>.
+	 * Defines the swagger field <c>/externalDocs</c>.
 	 *
 	 * <p>
 	 * It is used to populate the Swagger external documentation field and to display on HTML pages.
 	 * 	 *
 	 * <p>
-	 * The default value pulls the description from the <code>externalDocs</code> entry in the servlet resource bundle.
+	 * The default value pulls the description from the <c>externalDocs</c> entry in the servlet resource bundle.
 	 * (e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or
 	 * <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
 	 *
@@ -174,7 +174,7 @@ public @interface ResourceSwagger {
 	ExternalDocs externalDocs() default @ExternalDocs;
 
 	/**
-	 * Defines the swagger field <code>/info/license</code>.
+	 * Defines the swagger field <c>/info/license</c>.
 	 *
 	 * <p>
 	 * It is used to populate the Swagger license field and to display on HTML pages.
@@ -189,7 +189,7 @@ public @interface ResourceSwagger {
 	 * </p>
 	 *
 	 * <p>
-	 * The default value pulls the description from the <code>license</code> entry in the servlet resource bundle.
+	 * The default value pulls the description from the <c>license</c> entry in the servlet resource bundle.
 	 * (e.g. <js>"license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js> or
 	 * <js>"MyServlet.license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>).
 	 *
@@ -215,7 +215,7 @@ public @interface ResourceSwagger {
 	License license() default @License;
 
 	/**
-	 * Defines the swagger field <code>/tags</code>.
+	 * Defines the swagger field <c>/tags</c>.
 	 *
 	 *
 	 * Optional tagging information for the exposed API.
@@ -239,7 +239,7 @@ public @interface ResourceSwagger {
 	 * </p>
 	 *
 	 * <p>
-	 * The default value pulls the description from the <code>tags</code> entry in the servlet resource bundle.
+	 * The default value pulls the description from the <c>tags</c> entry in the servlet resource bundle.
 	 * (e.g. <js>"tags = [{name:'Foo',description:'Foobar'}]"</js> or
 	 * <js>"MyServlet.tags = [{name:'Foo',description:'Foobar'}]"</js>).
 	 *
@@ -265,7 +265,7 @@ public @interface ResourceSwagger {
 	Tag[] tags() default {};
 
 	/**
-	 * Defines the swagger field <code>/info/termsOfService</code>.
+	 * Defines the swagger field <c>/info/termsOfService</c>.
 	 *
 	 *
 	 * Optional servlet terms-of-service for this API.
@@ -274,7 +274,7 @@ public @interface ResourceSwagger {
 	 * It is used to populate the Swagger terms-of-service field.
 	 *
 	 * <p>
-	 * The default value pulls the description from the <code>termsOfService</code> entry in the servlet resource bundle.
+	 * The default value pulls the description from the <c>termsOfService</c> entry in the servlet resource bundle.
 	 * (e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -290,7 +290,7 @@ public @interface ResourceSwagger {
 	String[] termsOfService() default {};
 
 	/**
-	 * Defines the swagger field <code>/info/version</code>.
+	 * Defines the swagger field <c>/info/version</c>.
 	 *
 	 *
 	 *
@@ -300,7 +300,7 @@ public @interface ResourceSwagger {
 	 * It is used to populate the Swagger version field and to display on HTML pages.
 	 *
 	 * <p>
-	 * The default value pulls the description from the <code>version</code> entry in the servlet resource bundle.
+	 * The default value pulls the description from the <c>version</c> entry in the servlet resource bundle.
 	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -410,7 +410,7 @@ public @interface ResourceSwagger {
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
 	 * 		<p class='bcode w800'>
 	 * 	<ja>@ResourceSwagger</ja>(<js>"{title:'Petstore application'}"</js>)

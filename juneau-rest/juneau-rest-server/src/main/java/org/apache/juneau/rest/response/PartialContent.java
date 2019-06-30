@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.PartialContent.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 206 Partial Content</code> response.
+ * Represents an <c>HTTP 206 Partial Content</c> response.
  *
  * <p>
  * The server is delivering only part of the resource (byte serving) due to a range header sent by the client.

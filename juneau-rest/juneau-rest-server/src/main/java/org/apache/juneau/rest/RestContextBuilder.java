@@ -44,7 +44,7 @@ import org.apache.juneau.svl.vars.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Defines the initial configuration of a <code>RestServlet</code> or <code>@RestResource</code> annotated object.
+ * Defines the initial configuration of a <c>RestServlet</c> or <c>@RestResource</c> annotated object.
  *
  * <p>
  * An extension of the {@link ServletConfig} object used during servlet initialization.
@@ -451,13 +451,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Configuration property:  Allowed method headers.
 	 *
 	 * <p>
-	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <code>X-Method</code> HTTP header
+	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <c>X-Method</c> HTTP header
 	 * to override the real HTTP method name.
 	 * <p>
 	 * Allows you to override the actual HTTP method with a simulated method.
-	 * <br>For example, if an HTTP Client API doesn't support <code>PATCH</code> but does support <code>POST</code> (because
-	 * <code>PATCH</code> is not part of the original HTTP spec), you can add a <code>X-Method: PATCH</code> header on a normal
-	 * <code>HTTP POST /foo</code> request call which will make the HTTP call look like a <code>PATCH</code> request in any of the REST APIs.
+	 * <br>For example, if an HTTP Client API doesn't support <c>PATCH</c> but does support <c>POST</c> (because
+	 * <c>PATCH</c> is not part of the original HTTP spec), you can add a <c>X-Method: PATCH</c> header on a normal
+	 * <c>HTTP POST /foo</c> request call which will make the HTTP call look like a <c>PATCH</c> request in any of the REST APIs.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -840,10 +840,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Specifies a default <code>Accept</code> header value if not specified on a request.
+	 * Specifies a default <c>Accept</c> header value if not specified on a request.
 	 *
 	 * @param value
-	 * 	The default value of the <code>Accept</code> header.
+	 * 	The default value of the <c>Accept</c> header.
 	 * 	<br>Ignored if <jk>null</jk> or empty.
 	 * @return This object (for method chaining).
 	 */
@@ -854,10 +854,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Specifies a default <code>Content-Type</code> header value if not specified on a request.
+	 * Specifies a default <c>Content-Type</c> header value if not specified on a request.
 	 *
 	 * @param value
-	 * 	The default value of the <code>Content-Type</code> header.
+	 * 	The default value of the <c>Content-Type</c> header.
 	 * 	<br>Ignored if <jk>null</jk> or empty.
 	 * @return This object (for method chaining).
 	 */
@@ -1205,7 +1205,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
-	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
+	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
 	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
 	 * <h5 class='section'>See Also:</h5>

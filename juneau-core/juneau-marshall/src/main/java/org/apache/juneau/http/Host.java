@@ -71,10 +71,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Host extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Host</code> header.
+	 * Returns a parsed <c>Host</c> header.
 	 *
-	 * @param value The <code>Host</code> header string.
-	 * @return The parsed <code>Host</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Host</c> header string.
+	 * @return The parsed <c>Host</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Host forString(String value) {
 		if (value == null)

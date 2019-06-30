@@ -132,7 +132,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * Configuration property:  Simple JSON mode and single quote.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>simple().sq()</code>.
+	 * Shortcut for calling <c>simple().sq()</c>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

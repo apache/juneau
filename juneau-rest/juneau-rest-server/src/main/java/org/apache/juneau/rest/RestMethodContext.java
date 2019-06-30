@@ -70,7 +70,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultRequestAttributes.smo"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -112,7 +112,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.clientVersion.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  empty string
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -190,7 +190,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultFormData.omo"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -223,7 +223,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultQuery.omo"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -255,7 +255,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultRequestHeaders.smo"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -299,7 +299,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.httpMethod.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -334,7 +334,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 		<js>""</js>
 	 * 		- Auto-detect.
 	 * 		<br>The method name is determined based on the Java method name.
-	 * 		<br>For example, if the method is <code>doPost(...)</code>, then the method name is automatically detected
+	 * 		<br>For example, if the method is <c>doPost(...)</c>, then the method name is automatically detected
 	 * 		as <js>"POST"</js>.
 	 * 		<br>Otherwise, defaults to <js>"GET"</js>.
 	 * 	<li>
@@ -342,14 +342,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 		- Remote-proxy interface.
 	 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the
 	 * 		{@link RemoteInterface @RemoteInterface} annotation) to be used as a remote proxy using
-	 * 		<code>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</code>.
+	 * 		<c>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</c>.
 	 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
-	 * 		<br>Conceptually, this is simply a fancy <code>POST</code> against the url <js>"/{path}/{javaMethodName}"</js>
+	 * 		<br>Conceptually, this is simply a fancy <c>POST</c> against the url <js>"/{path}/{javaMethodName}"</js>
 	 * 		where the arguments are marshalled from the client to the server as an HTTP body containing an array of
 	 * 		objects, passed to the method as arguments, and then the resulting object is marshalled back to the client.
 	 * 	<li>
 	 * 		Anything else
-	 * 		- Overloaded non-HTTP-standard names that are passed in through a <code>&amp;method=methodName</code> URL
+	 * 		- Overloaded non-HTTP-standard names that are passed in through a <c>&amp;method=methodName</c> URL
 	 * 		parameter.
 	 * </ul>
 	 */
@@ -397,7 +397,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.path.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -428,8 +428,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.priority.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>0</code>
+	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Default:</b>  <c>0</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -444,7 +444,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * To force path patterns to be checked before other path patterns, use a higher priority number.
 	 *
 	 * <p>
-	 * By default, it's <code>0</code>, which means it will use an internal heuristic to determine a best match.
+	 * By default, it's <c>0</c>, which means it will use an internal heuristic to determine a best match.
 	 */
 	public static final String RESTMETHOD_priority = PREFIX + ".priority.i";
 

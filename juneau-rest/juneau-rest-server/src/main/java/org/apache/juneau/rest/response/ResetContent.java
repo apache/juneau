@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.ResetContent.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 205 Reset Content</code> response.
+ * Represents an <c>HTTP 205 Reset Content</c> response.
  *
  * <p>
  * The server successfully processed the request, but is not returning any content.

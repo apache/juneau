@@ -37,11 +37,11 @@ import org.apache.juneau.serializer.*;
  * This uses the serializers defined on the response to serialize the POJO.
  *
  * <p>
- * The {@link Serializer} used is based on the <code>Accept</code> header on the request.
+ * The {@link Serializer} used is based on the <c>Accept</c> header on the request.
  *
  * <p>
- * The <code>Content-Type</code> header is set to the mime-type defined on the selected serializer based on the
- * <code>produces</code> value passed in through the constructor.
+ * The <c>Content-Type</c> header is set to the mime-type defined on the selected serializer based on the
+ * <c>produces</c> value passed in through the constructor.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>

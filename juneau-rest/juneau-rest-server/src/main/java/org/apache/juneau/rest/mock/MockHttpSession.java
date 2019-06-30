@@ -20,7 +20,7 @@ import javax.servlet.http.*;
 /**
  * An implementation of {@link HttpSession} for mocking purposes.
  *
- * @deprecated Use <code>org.apache.juneau.rest.mock2</code>
+ * @deprecated Use <c>org.apache.juneau.rest.mock2</c>
  */
 @Deprecated
 public class MockHttpSession implements HttpSession {

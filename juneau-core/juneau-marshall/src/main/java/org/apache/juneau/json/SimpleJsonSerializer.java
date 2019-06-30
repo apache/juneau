@@ -19,9 +19,9 @@ import org.apache.juneau.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Accept</code> types:  <code><b>application/json, text/json</b></code>
+ * Handles <c>Accept</c> types:  <bc>application/json, text/json</bc>
  * <p>
- * Produces <code>Content-Type</code> types:  <code><b>application/json+simple</b></code>
+ * Produces <c>Content-Type</c> types:  <bc>application/json+simple</bc>
  *
  * <h5 class='topic'>Description</h5>
  * <p>

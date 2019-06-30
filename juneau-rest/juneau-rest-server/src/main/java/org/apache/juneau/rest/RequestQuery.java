@@ -101,7 +101,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * 	The query parameter name.
 	 * @param value
 	 * 	The query parameter value.
-	 * 	<br>Converted to a String using <code>toString()</code>.
+	 * 	<br>Converted to a String using <c>toString()</c>.
 	 * 	<br>Ignored if value is <jk>null</jk> or blank.
 	 * @return This object (for method chaining).
 	 */
@@ -201,7 +201,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 *
 	 * @param name The URL parameter name.
 	 * @return
-	 * 	The parameter value, or <code>0</code> if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>).
+	 * 	The parameter value, or <c>0</c> if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>).
 	 */
 	public int getInt(String name) {
 		return getInt(name, 0);
@@ -365,9 +365,9 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
 	 * 	<li>
-	 * 		<code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * 		<c>Maps</c> must be followed by zero or two parameters representing the key and value types.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -574,7 +574,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * 		<br>Example: <js>"&amp;p=100"</js>
 	 * 	<li>
 	 * 		<js>"&amp;l="</js> - The number of rows to return.
-	 * 		<br><code>0</code> implies return all rows.
+	 * 		<br><c>0</c> implies return all rows.
 	 * 		<br>Example: <js>"&amp;l=100"</js>
 	 * 	<li>
 	 * 		<js>"&amp;i="</js> - The case-insensitive search flag.

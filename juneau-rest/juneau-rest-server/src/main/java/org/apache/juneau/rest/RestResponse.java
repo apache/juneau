@@ -143,7 +143,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Returns the media types that are valid for <code>Accept</code> headers on the request.
+	 * Returns the media types that are valid for <c>Accept</c> headers on the request.
 	 *
 	 * @return The set of media types registered in the parser group of this request.
 	 */
@@ -152,7 +152,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Returns the codings that are valid for <code>Accept-Encoding</code> and <code>Content-Encoding</code> headers on
+	 * Returns the codings that are valid for <c>Accept-Encoding</c> and <c>Content-Encoding</c> headers on
 	 * the request.
 	 *
 	 * @return The set of media types registered in the parser group of this request.
@@ -184,7 +184,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Calling this method with a <jk>null</jk> value is NOT the same as not calling this method at all.
-	 * 		<br>A <jk>null</jk> output value means we want to serialize <jk>null</jk> as a response (e.g. as a JSON <code>null</code>).
+	 * 		<br>A <jk>null</jk> output value means we want to serialize <jk>null</jk> as a response (e.g. as a JSON <c>null</c>).
 	 * 		<br>Not calling this method or returning a value means you're handing the response yourself via the underlying stream or writer.
 	 * 		<br>This distinction affects the {@link #hasOutput()} method behavior.
 	 * </ul>
@@ -297,7 +297,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <code>getProperties().append(name, value);</code> fluently.
+	 * Shortcut for calling <c>getProperties().append(name, value);</c> fluently.
 	 *
 	 * @param name The property name.
 	 * @param value The property value.
@@ -311,7 +311,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <code>getRequest().getAttributes()</code>.
+	 * Shortcut for calling <c>getRequest().getAttributes()</c>.
 	 *
 	 * @return The request attributes object.
 	 */
@@ -320,7 +320,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <code>getRequest().setAttribute(String,Object)</code>.
+	 * Shortcut for calling <c>getRequest().setAttribute(String,Object)</c>.
 	 *
 	 * @param name The property name.
 	 * @param value The property value.
@@ -384,7 +384,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Equivalent to {@link HttpServletResponse#getOutputStream()}, except wraps the output stream if an {@link Encoder}
-	 * was found that matched the <code>Accept-Encoding</code> header.
+	 * was found that matched the <c>Accept-Encoding</c> header.
 	 *
 	 * @return A negotiated output stream.
 	 * @throws NotAcceptable If unsupported Accept-Encoding value specified.
@@ -460,7 +460,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * <p>
 	 * This can be useful if you want to render a streaming 'console' on a web page.
 	 *
-	 * @param contentType The value to set as the <code>Content-Type</code> on the response.
+	 * @param contentType The value to set as the <c>Content-Type</c> on the response.
 	 * @return The raw writer.
 	 * @throws IOException
 	 */
@@ -473,7 +473,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Equivalent to {@link HttpServletResponse#getWriter()}, except wraps the output stream if an {@link Encoder} was
-	 * found that matched the <code>Accept-Encoding</code> header and sets the <code>Content-Encoding</code>
+	 * found that matched the <c>Accept-Encoding</c> header and sets the <c>Content-Encoding</c>
 	 * header to the appropriate value.
 	 *
 	 * @return The negotiated writer.
@@ -505,9 +505,9 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Returns the <code>Content-Type</code> header stripped of the charset attribute if present.
+	 * Returns the <c>Content-Type</c> header stripped of the charset attribute if present.
 	 *
-	 * @return The <code>media-type</code> portion of the <code>Content-Type</code> header.
+	 * @return The <c>media-type</c> portion of the <c>Content-Type</c> header.
 	 */
 	public MediaType getMediaType() {
 		return MediaType.forString(getContentType());

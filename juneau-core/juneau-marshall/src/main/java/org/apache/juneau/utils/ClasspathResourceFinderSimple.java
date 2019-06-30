@@ -25,7 +25,7 @@ import java.util.ResourceBundle.*;
  * Same as {@link Class#getResourceAsStream(String)} except looks for resources with localized file names.
  *
  * <p>
- * If the <code>locale</code> is specified, then we look for resources whose name matches that locale.
+ * If the <c>locale</c> is specified, then we look for resources whose name matches that locale.
  * For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will look for
  * files in the following order:
  * <ol>
@@ -146,7 +146,7 @@ public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {
 	 * Returns the candidate locales for the specified locale.
 	 *
 	 * <p>
-	 * For example, if <code>locale</code> is <js>"ja_JP"</js>, then this method will return:
+	 * For example, if <c>locale</c> is <js>"ja_JP"</js>, then this method will return:
 	 * <ol>
 	 * 	<li><js>"ja_JP"</js>
 	 * 	<li><js>"ja"</js>

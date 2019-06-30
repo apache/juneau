@@ -37,25 +37,25 @@
 	<li>
 		In the home directory:
 		<ol>
-			<li><code>&lt;jar-name&gt;.cfg</code>
-			<li>Any file that end with <code>.cfg</code>.  First one matched alphabetically is used.
+			<li><c>&lt;jar-name&gt;.cfg</c>
+			<li>Any file that end with <c>.cfg</c>.  First one matched alphabetically is used.
 		</ol>
 	<li>
 		In the context classpath root package (i.e. inside the jar itself):
 		<ol>
-			<li><code>&lt;jar-name&gt;.cfg</code>
-			<li><code>juneau.cfg</code>
-			<li><code>default.cfg</code>
-			<li><code>application.cfg</code>
-			<li><code>app.cfg</code>
-			<li><code>settings.cfg</code>
-			<li><code>application.properties</code>
+			<li><c>&lt;jar-name&gt;.cfg</c>
+			<li><c>juneau.cfg</c>
+			<li><c>default.cfg</c>
+			<li><c>application.cfg</c>
+			<li><c>app.cfg</c>
+			<li><c>settings.cfg</c>
+			<li><c>application.properties</c>
 		</ol>
 </ol>
 <p>
 	Later in the section on REST resources, we describe how to associate configurations with REST resources
 	using the {@link oajr.annotation.RestResource#config() @RestResource(config)} annotation.
-	The system default configuration can be referenced with the keyword <code>SYSTEM_DEFAULT</code> like so:
+	The system default configuration can be referenced with the keyword <c>SYSTEM_DEFAULT</c> like so:
 </p>
 <p class='bpcode w800'>
 	<jc>// Always use system default.</jc>

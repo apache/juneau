@@ -17,7 +17,7 @@ import java.io.*;
 import org.apache.juneau.parser.*;
 
 /**
- * Same functionality as {@link ParserReader} except automatically decoded <code>%xx</code> escape sequences.
+ * Same functionality as {@link ParserReader} except automatically decoded <c>%xx</c> escape sequences.
  *
  * <p>
  * Escape sequences are assumed to be encoded UTF-8.  Extended Unicode (&gt;\u10000) is supported.

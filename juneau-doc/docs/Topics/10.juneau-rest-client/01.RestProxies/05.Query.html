@@ -91,7 +91,7 @@
 <ul class='spaced-list'>
 	<li>
 		Any serializable POJO - Converted to a string using the {@link oaj.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> ({@link oaj.oapi.OpenApiSerializer} by default) or associated via the {@link oaj.http.annotation.Query#serializer() @Query(serializer)} annotation.
+		<c>RestClient</c> ({@link oaj.oapi.OpenApiSerializer} by default) or associated via the {@link oaj.http.annotation.Query#serializer() @Query(serializer)} annotation.
 </ul>
 
 <p>
@@ -101,15 +101,15 @@
 	<li>
 		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized directly a query string.
 	<li>
-		<code>NameValuePairs</code> - Serialized as individual query parameters.
+		<c>NameValuePairs</c> - Serialized as individual query parameters.
 	<li>
-		<code>Map</code> - Converted to key-value pairs.
+		<c>Map</c> - Converted to key-value pairs.
 			<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.oapi.OpenApiSerializer} by default).
 	<li>
 		Bean - Converted to key-value pairs.
 			<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.oapi.OpenApiSerializer} by default).
 	<li>
-		<code>CharSequence</code> - Serialized directly a query string.
+		<c>CharSequence</c> - Serialized directly a query string.
 </ul>
 
 <p>

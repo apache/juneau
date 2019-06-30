@@ -132,13 +132,13 @@ public final class ArrayUtils {
 	}
 
 	/**
-	 * Converts the specified array to a <code>Set</code>.
+	 * Converts the specified array to a <c>Set</c>.
 	 *
 	 * <p>
 	 * The order of the entries in the set are the same as the array.
 	 *
 	 * @param <T> The entry type of the array.
-	 * @param array The array being wrapped in a <code>Set</code> interface.
+	 * @param array The array being wrapped in a <c>Set</c> interface.
 	 * @return The new set.
 	 */
 	public static <T> Set<T> asSet(final T[] array) {
@@ -182,7 +182,7 @@ public final class ArrayUtils {
 	 * Returns an iterator against an array.
 	 *
 	 * <p>
-	 * This works with any array type (e.g. <code>String[]</code>, <code>Object[]</code>,
+	 * This works with any array type (e.g. <c>String[]</c>, <c>Object[]</c>,
 	 * <code><jk>int</jk>[]</code>, etc...).
 	 *
 	 * @param array The array to create an iterator over.
@@ -242,7 +242,7 @@ public final class ArrayUtils {
 	}
 
 	/**
-	 * Converts the specified array to an <code>ArrayList</code>
+	 * Converts the specified array to an <c>ArrayList</c>
 	 *
 	 * @param array The array to convert.
 	 * @param componentType
@@ -259,7 +259,7 @@ public final class ArrayUtils {
 	}
 
 	/**
-	 * Shortcut for calling <code>myList.toArray(new T[myList.size()]);</code>
+	 * Shortcut for calling <c>myList.toArray(new T[myList.size()]);</c>
 	 *
 	 * @param c The collection being converted to an array.
 	 * @param componentType The component type of the array.
@@ -332,7 +332,7 @@ public final class ArrayUtils {
 	 * @param element The element to check for.
 	 * @param array The array to check.
 	 * @return
-	 * 	The index position of the element in the specified array, or <code>-1</code> if the array doesn't contain the
+	 * 	The index position of the element in the specified array, or <c>-1</c> if the array doesn't contain the
 	 * 	element, or the array or element is <jk>null</jk>.
 	 */
 	public static <T> int indexOf(T element, T[] array) {
@@ -367,7 +367,7 @@ public final class ArrayUtils {
 	 * @param array The array to check.
 	 * @return
 	 * 	The index position of the element in the specified array, or
-	 * 	<code>-1</code> if the array doesn't contain the element, or the array or element is <jk>null</jk>.
+	 * 	<c>-1</c> if the array doesn't contain the element, or the array or element is <jk>null</jk>.
 	 */
 	public static int indexOf(String element, String[] array) {
 		if (element == null)
@@ -381,7 +381,7 @@ public final class ArrayUtils {
 	}
 
 	/**
-	 * Converts a primitive wrapper array (e.g. <code>Integer[]</code>) to a primitive array (e.g. <code><jk>int</jk>[]</code>).
+	 * Converts a primitive wrapper array (e.g. <c>Integer[]</c>) to a primitive array (e.g. <code><jk>int</jk>[]</code>).
 	 *
 	 * @param o The array to convert.  Must be a primitive wrapper array.
 	 * @return A new array.

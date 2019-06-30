@@ -23,15 +23,15 @@
 	<li>
 		New support for {@link oaj.dto.atom ATOM}.
 		<ul>
-			<li>New <code>AtomFeedResource</code> class added to sample war.
+			<li>New <c>AtomFeedResource</c> class added to sample war.
 		</ul>
 	</li>
 	<li>
-		New <code><del>XmlFormat.CONTENT</del></code> enum value.<br>
+		New <dc>XmlFormat.CONTENT</dc> enum value.<br>
 		Allows bean properties to be persisted as XML element text.
 	</li>
 	<li>
-		New <code><del>XmlContentHandler</del></code> class and <code><del>@Xml.contentHandler</del></code> annotation.<br>
+		New <dc>XmlContentHandler</dc> class and <dc>@Xml.contentHandler</dc> annotation.<br>
 		Allows customized serialization and parsing of beans to XML element text.<br>
 		Added for support of ATOM text content that must support both plain text and embedded XHTML.
 	</li>
@@ -39,13 +39,13 @@
 		New {@link oaj.xml.annotation.XmlSchema @XmlSchema} and updated {@link oaj.xml.annotation.XmlNs @XmlNs} annotations to better mimic JAXB.
 	</li>
 	<li>
-		Removed <code><ja>@Xml</ja>.valAttr</code> annotation since it's now redundant with <code><ja>@Xml</ja>(format=<jsf>CONTENT</jsf>)</code>.
+		Removed <c><ja>@Xml</ja>.valAttr</c> annotation since it's now redundant with <c><ja>@Xml</ja>(format=<jsf>CONTENT</jsf>)</c>.
 		</li>
 		<li>
 		Fixed timezone bug in {@link oaj.transforms.CalendarSwap}.
 	</li>
 		<li>
-		Simplified <code>Serializer.serialize(Object,Object,SerializerContext)</code> method.
+		Simplified <c>Serializer.serialize(Object,Object,SerializerContext)</c> method.
 	</li>
 	<li>
 		Fixed bug where lists returned by {@link oaj.ObjectMap#getObjectList(String)} were not updatable.

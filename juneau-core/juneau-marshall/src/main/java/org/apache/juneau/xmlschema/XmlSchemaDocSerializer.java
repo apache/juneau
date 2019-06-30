@@ -21,9 +21,9 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Accept</code> types:  <code><b>text/xml+schema</b></code>
+ * Handles <c>Accept</c> types:  <bc>text/xml+schema</bc>
  * <p>
- * Produces <code>Content-Type</code> types:  <code><b>text/xml</b></code>
+ * Produces <c>Content-Type</c> types:  <bc>text/xml</bc>
  *
  * <h5 class='topic'>Description</h5>
  *

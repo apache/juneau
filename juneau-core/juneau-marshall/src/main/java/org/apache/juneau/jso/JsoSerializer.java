@@ -23,9 +23,9 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Accept</code> types:  <code><b>application/x-java-serialized-object</b></code>
+ * Handles <c>Accept</c> types:  <bc>application/x-java-serialized-object</bc>
  * <p>
- * Produces <code>Content-Type</code> types:  <code><b>application/x-java-serialized-object</b></code>
+ * Produces <c>Content-Type</c> types:  <bc>application/x-java-serialized-object</bc>
  */
 @ConfigurableContext
 public class JsoSerializer extends OutputStreamSerializer {

@@ -24,23 +24,23 @@
 			<li>Rewrote {@link oaj.parser.ParserReader} class to handle it's own buffering.
 				The change allowed several optimizations to be made when dealing with JSON and URL-Encoding
 				text by avoiding char array copies.  
-			<li>Added a <code>estimatedSize</code> parameter to the {@link oaj.parser.Parser} parse methods to 
+			<li>Added a <c>estimatedSize</c> parameter to the {@link oaj.parser.Parser} parse methods to 
 				optimize buffering when the input size is known beforehand.
 		</ul>
 	</li>
 	<li>Revamped the {@link oaj.BeanContext} API to perform better in multi-threaded environments.
 		<ul>
-			<li>Introduced a new <code>BeanPropertyStore</code> class that handles creation of {@link oaj.BeanContext} objects.
-				This allows <code>BeanContext</code> objects to be considered immutable, and therefore cacheable/reusable by the framework.
+			<li>Introduced a new <c>BeanPropertyStore</c> class that handles creation of {@link oaj.BeanContext} objects.
+				This allows <c>BeanContext</c> objects to be considered immutable, and therefore cacheable/reusable by the framework.
 				While this was technically possible to cache these objects beforehand, it relied on a locking mechanism to prevent bean contexts
 					from being modified after being created.  The new mechanism is much more straightforward.
 		</ul>
 	</li>
 	<li>Modifications to the <del>org.apache.juneau.rest.client</del> APIs to make it easier to work with custom Apache HTTP clients.
 		<ul>
-			<li>Added overridable <code><del>RestClient#createHttpClient()</del></code> to allow customized subclasses to construct customized HTTP clients.
-			<li>Removed the <code>DefaultRestClient</code> class since it's now fully redundant with <code>RestClient</code>.
-			<li>Added <code>RestClient.shutdown()</code> method for cleaning up the internal HTTP client when you're done using a REST client.
+			<li>Added overridable <dc>RestClient#createHttpClient()</dc> to allow customized subclasses to construct customized HTTP clients.
+			<li>Removed the <c>DefaultRestClient</c> class since it's now fully redundant with <c>RestClient</c>.
+			<li>Added <c>RestClient.shutdown()</c> method for cleaning up the internal HTTP client when you're done using a REST client.
 		</ul>
 	</li>
 </ul>

@@ -58,10 +58,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Location extends HeaderUri {
 
 	/**
-	 * Returns a parsed <code>Location</code> header.
+	 * Returns a parsed <c>Location</c> header.
 	 *
-	 * @param value The <code>Location</code> header string.
-	 * @return The parsed <code>Location</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Location</c> header string.
+	 * @return The parsed <c>Location</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Location forString(String value) {
 		if (value == null)

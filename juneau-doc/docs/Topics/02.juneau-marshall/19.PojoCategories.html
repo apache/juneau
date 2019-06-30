@@ -51,10 +51,10 @@ POJO Categories
 		</td>
 		<td>
 			<ul class='normal'>
-				<li><code>HashSet&lt;String,Integer&gt;</code>
-				<li><code>TreeMap&lt;Integer,Bean&gt;</code>
-				<li><code>List&lt;<jk>int</jk>[][]&gt;</code>
-				<li><code>Bean[]</code>
+				<li><c>HashSet&lt;String,Integer&gt;</c>
+				<li><c>TreeMap&lt;Integer,Bean&gt;</c>
+				<li><c>List&lt;<jk>int</jk>[][]&gt;</c>
+				<li><c>Bean[]</c>
 			</ul>
 		</td>
 		<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -69,8 +69,8 @@ POJO Categories
 		</td>
 		<td>
 			<ul class='normal'>
-				<li><code>HashSet&lt;Bean,Integer&gt;</code>
-				<li><code>TreeMap&lt;Integer,Reader&gt;</code>
+				<li><c>HashSet&lt;Bean,Integer&gt;</c>
+				<li><c>TreeMap&lt;Integer,Reader&gt;</c>
 			</ul>
 		</td>
 		<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -154,8 +154,8 @@ POJO Categories
 		</td>
 		<td>
 			<ul class='normal'>
-				<li><code>java.util.Date</code>
-				<li><code>java.util.GregorianCalendar</code>
+				<li><c>java.util.Date</c>
+				<li><c>java.util.GregorianCalendar</c>
 			</ul>
 		</td>
 		<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -170,7 +170,7 @@ POJO Categories
 		</td>
 		<td>
 			<ul class='normal'>
-				<li><code>java.util.Iterator</code>
+				<li><c>java.util.Iterator</c>
 			</ul>
 		</td>
 		<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -208,34 +208,34 @@ POJO Categories
 		<td>
 			Classes with a method that converts it to a serializable form:
 			<ul>
-				<li><code><jk>public</jk> X swap(BeanSession);</code> where <code>X</code> is in groups 
+				<li><c><jk>public</jk> X swap(BeanSession);</c> where <c>X</c> is in groups 
 					[1, 2a, 3ac].
-				<li><code><jk>public</jk> String toString();</code> where the string is any meaningful data.
+				<li><c><jk>public</jk> String toString();</c> where the string is any meaningful data.
 			</ul>
 			And a method that converts it back into the original object:
 			<ul>
-				<li><code><jk>public static</jk> T fromString(String);</code>		
-				<li><code><jk>public static</jk> T valueOf(String);</code>		
-				<li><code><jk>public static</jk> T parse(String);</code>		
-				<li><code><jk>public static</jk> T parseString(String);</code>		
-				<li><code><jk>public static</jk> T forName(String);</code>		
-				<li><code><jk>public static</jk> T forString(String);</code>		
-				<li><code><jk>public</jk> T(X);</code> where <code>X</code> is in groups [1, 2a, 3ac].
-				<li><code><jk>public static</jk> T unswap(BeanSession,X);</code> where <code>X</code> is in 
+				<li><c><jk>public static</jk> T fromString(String);</c>		
+				<li><c><jk>public static</jk> T valueOf(String);</c>		
+				<li><c><jk>public static</jk> T parse(String);</c>		
+				<li><c><jk>public static</jk> T parseString(String);</c>		
+				<li><c><jk>public static</jk> T forName(String);</c>		
+				<li><c><jk>public static</jk> T forString(String);</c>		
+				<li><c><jk>public</jk> T(X);</c> where <c>X</c> is in groups [1, 2a, 3ac].
+				<li><c><jk>public static</jk> T unswap(BeanSession,X);</c> where <c>X</c> is in 
 					groups [1, 2a, 3ac].		
 			</ul>
 		</td>
 		<td>
 			<ul class='normal'>
-				<li><code>java.lang.Class</code>
-				<li><code>java.sql.Time</code>
-				<li><code>java.sql.Timestamp</code>
-				<li><code>java.text.MessageFormat</code>
-				<li><code>java.text.NumberFormat</code>
-				<li><code>java.util.Date</code>
-				<li><code>java.util.UUID</code>
-				<li><code>java.util.logging.Level</code>
-				<li><code>javax.xml.bind.DatatypeConverter</code>
+				<li><c>java.lang.Class</c>
+				<li><c>java.sql.Time</c>
+				<li><c>java.sql.Timestamp</c>
+				<li><c>java.text.MessageFormat</c>
+				<li><c>java.text.NumberFormat</c>
+				<li><c>java.util.Date</c>
+				<li><c>java.util.UUID</c>
+				<li><c>java.util.logging.Level</c>
+				<li><c>javax.xml.bind.DatatypeConverter</c>
 			</ul>
 		</td>
 		<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -246,9 +246,9 @@ POJO Categories
 		<td>
 			Classes that only have a method to convert to a serializable form:
 			<ul>
-				<li><code><jk>public</jk> X swap(BeanSession);</code> where <code>X</code> is in groups 
+				<li><c><jk>public</jk> X swap(BeanSession);</c> where <c>X</c> is in groups 
 					[1, 2, 3].
-				<li><code><jk>public</jk> String toString();</code> where the string is any meaningful data.
+				<li><c><jk>public</jk> String toString();</c> where the string is any meaningful data.
 			</ul>
 		</td>
 		<td>&nbsp;</td>
@@ -289,7 +289,7 @@ POJO Categories
 </ul>
 
 <p>
-	As a general rule, all POJOs are converted to Strings using the <code>toString()</code> method.
+	As a general rule, all POJOs are converted to Strings using the <c>toString()</c> method.
 	However, there is one exception:
 </p>
 <ul class='spaced-list'>
@@ -302,16 +302,16 @@ POJO Categories
 <ul class='spaced-list'>
 	<li>Any any of the following public static non-deprecated methods:
 	<ul>
-		<li><code>create(String)</code>
-		<li><code>fromString(String)</code>
-		<li><code>fromValue(String)</code>
-		<li><code>valueOf(String)</code>
-		<li><code>parse(String)</code>
-		<li><code>parseString(String)</code>
-		<li><code>forName(String)</code>
-		<li><code>forString(String)</code>
+		<li><c>create(String)</c>
+		<li><c>fromString(String)</c>
+		<li><c>fromValue(String)</c>
+		<li><c>valueOf(String)</c>
+		<li><c>parse(String)</c>
+		<li><c>parseString(String)</c>
+		<li><c>forName(String)</c>
+		<li><c>forString(String)</c>
 	</ul>
-	<li>Has a public constructor that takes in a <code>String</code>.
+	<li>Has a public constructor that takes in a <c>String</c>.
 </ul>
 <p>
 	Exceptions exist for the following classes:
@@ -320,13 +320,13 @@ POJO Categories
 	<li>{@link java.util.TimeZone} - Uses {@link java.util.TimeZone#getTimeZone(String)}
 	<li>{@link java.util.Locale} - Uses {@link java.util.Locale#forLanguageTag(String)} after replacing <js>'_'</js> with <js>'-'</js>.
 	<li>{@link java.lang.Boolean} - Blank and <js>"null"</js> are interpreted as null values.
-	<li>Primitives (except for <code><jk>void</jk>.<jk>class</jk></code>) - Uses the primitive wrapper classes for instantiating from Strings.
+	<li>Primitives (except for <c><jk>void</jk>.<jk>class</jk></c>) - Uses the primitive wrapper classes for instantiating from Strings.
 </ul>
 
 <h5 class='topic' id='PojosConveribleToOtherTypes'>POJOs convertible to/from other types</h5>
 <p>
 	POJOs are also converted to various other types in places such as the Open-API serializers and parsers. 
-	In this section, the type being converted to will be referred to as <code>X</code>.
+	In this section, the type being converted to will be referred to as <c>X</c>.
 </p>
 <p>
 	POJOs are considered convertible from X if it has any of the following (matched in the specified order):
@@ -334,11 +334,11 @@ POJO Categories
 <ul class='spaced-list'>
 	<li>Any any of the following public static non-deprecated methods:
 	<ul>
-		<li><code>create(X)</code>
-		<li><code>from*(X)</code>
+		<li><c>create(X)</c>
+		<li><c>from*(X)</c>
 	</ul>
-	<li>Has a public constructor that takes in an <code>X</code>.
-	<li>The X class has a public non-static no-arg non-deprecated method called <code>to*()</code>.
+	<li>Has a public constructor that takes in an <c>X</c>.
+	<li>The X class has a public non-static no-arg non-deprecated method called <c>to*()</c>.
 </ul>
 <p>
 	POJOs are considered convertible from X if any of the reverse of above are true.

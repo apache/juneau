@@ -75,7 +75,7 @@ public @interface Response {
 	/**
 	 * The HTTP response code.
 	 *
-	 * The default value is <code>500</code> for exceptions and <code>200</code> for return types.
+	 * The default value is <c>500</c> for exceptions and <c>200</c> for return types.
 	 */
 	int[] code() default {};
 
@@ -295,7 +295,7 @@ public @interface Response {
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object with string keys (media type) and string values (example for that media type) .
 	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable:
 	 * 	<li>
@@ -377,7 +377,7 @@ public @interface Response {
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
 	 * 		<p class='bcode w800'>
 	 * 	<ja>@Response</ja>(api=<js>"{description: 'Redirect'}"</js>)

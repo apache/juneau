@@ -17,71 +17,71 @@
 
 <p>
 	Various methods can be defined on a class directly to affect how it gets serialized.
-	This can often be simpler than using <code>PojoSwaps</code>.
+	This can often be simpler than using <c>PojoSwaps</c>.
 </p>
 <p>
-	Objects serialized as <code>Strings</code> can be parsed back into their original objects by 
+	Objects serialized as <c>Strings</c> can be parsed back into their original objects by 
 	implementing one of the following methods on the class:
 </p>		
 <ul class='spaced-list'>
 	<li>
-		<code><jk>public static</jk> T fromString(String)</code> method.
+		<c><jk>public static</jk> T fromString(String)</c> method.
 		<br>Any of the following method names also work: 
 		<ul>
-			<li><code>valueOf(String)</code>
-			<li><code>parse(String)</code>
-			<li><code>parseString(String)</code>
-			<li><code>forName(String)</code>
-			<li><code>forString(String)</code>
+			<li><c>valueOf(String)</c>
+			<li><c>parse(String)</c>
+			<li><c>parseString(String)</c>
+			<li><c>forName(String)</c>
+			<li><c>forString(String)</c>
 		</ul>
 	<li>
-		<code><jk>public</jk> T(String)</code> constructor.
+		<c><jk>public</jk> T(String)</c> constructor.
 </ul>
 <p>
 	Note that these methods cover conversion from several built-in Java types, meaning the parsers can 
 	automatically construct these objects from strings:
 </p>
 <ul>
-	<li><code>fromString(String)</code> - {@link java.util.UUID}
-	<li><code>valueOf(String)</code> - {@link java.lang.Boolean}, {@link java.lang.Byte}, 
+	<li><c>fromString(String)</c> - {@link java.util.UUID}
+	<li><c>valueOf(String)</c> - {@link java.lang.Boolean}, {@link java.lang.Byte}, 
 		{@link java.lang.Double}, {@link java.lang.Float}, 
 		{@link java.lang.Integer}, {@link java.lang.Long}, {@link java.lang.Short}, {@link java.sql.Date}, 
 		{@link java.sql.Time}, {@link java.sql.Timestamp}
-	<li><code>parse(String)</code> - {@link java.text.DateFormat}, {@link java.text.MessageFormat}, 
+	<li><c>parse(String)</c> - {@link java.text.DateFormat}, {@link java.text.MessageFormat}, 
 		{@link java.text.NumberFormat}, {@link java.util.Date}, {@link java.util.logging.Level}
-	<li><code>parseString(String)</code> - {@link javax.xml.bind.DatatypeConverter}
-	<li><code>forName(String)</code> - {@link java.lang.Class}
+	<li><c>parseString(String)</c> - {@link javax.xml.bind.DatatypeConverter}
+	<li><c>forName(String)</c> - {@link java.lang.Class}
 </ul>
 <p>
 	If you want to force a bean-like class to be serialized as a string, you can use the 
 	{@link oaj.annotation.BeanIgnore @BeanIgnore} annotation on the class to force it to be 
-	serialized to a string using the <code>toString()</code> method.
+	serialized to a string using the <c>toString()</c> method.
 </p>
 <p>
 	Serializing to other intermediate objects can be accomplished by defining a swap method directly on the 
 	class:
 </p>			
 <ul>
-	<li><code><jk>public</jk> X swap()</code> method, where <code>X</code> is any serializable object.
-	<li><code><jk>public</jk> X swap(BeanSession)</code> method, where <code>X</code> is any serializable object.
-	<li><code><jk>public static</jk> MyPojo unswap(X)</code> method, where <code>X</code> is any serializable object.
-	<li><code><jk>public static</jk> MyPojo swap(X,BeanSession)</code> method, where <code>X</code> is any serializable object.
+	<li><c><jk>public</jk> X swap()</c> method, where <c>X</c> is any serializable object.
+	<li><c><jk>public</jk> X swap(BeanSession)</c> method, where <c>X</c> is any serializable object.
+	<li><c><jk>public static</jk> MyPojo unswap(X)</c> method, where <c>X</c> is any serializable object.
+	<li><c><jk>public static</jk> MyPojo swap(X,BeanSession)</c> method, where <c>X</c> is any serializable object.
 </ul>
 <p>
 	Serializing to and from Maps can be accomplished by defining any of the following methods:
 </p>			
 <ul>
-	<li><code><jk>public</jk> Map toMap()</code> method.  Can be any type of map with string keys and object vals. 
-	<li><code><jk>public</jk> ObjectMap toMap()</code> method. 
-	<li><code><jk>public</jk> Map toMap(BeanSession)</code> method.  Can be any type of map with string keys and object vals. 
-	<li><code><jk>public</jk> ObjectMap toMap(BeanSession)</code> method.
-	<li><code><jk>public static</jk> MyPojo fromMap(Map)</code> method.  Can be any type of map with string keys and object vals. 
-	<li><code><jk>public static</jk> MyPojo fromMap(ObjectMap)</code> method.
-	<li><code><jk>public static</jk> MyPojo fromMap(Map,BeanSession)</code> method.  Can be any type of map with string keys and object vals. 
-	<li><code><jk>public static</jk> MyPojo fromMap(ObjectMap,BeanSession)</code> method.
+	<li><c><jk>public</jk> Map toMap()</c> method.  Can be any type of map with string keys and object vals. 
+	<li><c><jk>public</jk> ObjectMap toMap()</c> method. 
+	<li><c><jk>public</jk> Map toMap(BeanSession)</c> method.  Can be any type of map with string keys and object vals. 
+	<li><c><jk>public</jk> ObjectMap toMap(BeanSession)</c> method.
+	<li><c><jk>public static</jk> MyPojo fromMap(Map)</c> method.  Can be any type of map with string keys and object vals. 
+	<li><c><jk>public static</jk> MyPojo fromMap(ObjectMap)</c> method.
+	<li><c><jk>public static</jk> MyPojo fromMap(Map,BeanSession)</c> method.  Can be any type of map with string keys and object vals. 
+	<li><c><jk>public static</jk> MyPojo fromMap(ObjectMap,BeanSession)</c> method.
 </ul>
 <p>
-	The <code>BeanSession</code> parameter allows you access to various information about the current 
+	The <c>BeanSession</c> parameter allows you access to various information about the current 
 	serialization session.
 	For example, you could provide customized results based on the media type being produced 
 	({@link oaj.BeanSession#getMediaType()}).
@@ -123,9 +123,9 @@
 	following methods:
 </p>
 <ul>
-	<li><code><jk>public static</jk> T unswap(BeanSession, X)</code> method where <code>X</code> is the 
+	<li><c><jk>public static</jk> T unswap(BeanSession, X)</c> method where <c>X</c> is the 
 		swap class type.
-	<li><code><jk>public</jk> T(X)</code> constructor where <code>X</code> is the swap class type.
+	<li><c><jk>public</jk> T(X)</c> constructor where <c>X</c> is the swap class type.
 </ul>
 <p>
 	The following shows how our form template class can be modified to allow the parsers to reconstruct our 

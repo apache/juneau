@@ -19,7 +19,7 @@ import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Converter for enabling of {@link PojoRest} support on response objects returned by a <code>@RestMethod</code> method.
+ * Converter for enabling of {@link PojoRest} support on response objects returned by a <c>@RestMethod</c> method.
  *
  * <p>
  * When enabled, objects in a POJO tree returned by the REST method can be addressed through additional URL path

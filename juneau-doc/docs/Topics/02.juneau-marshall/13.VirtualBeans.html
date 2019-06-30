@@ -52,12 +52,12 @@ Virtual Beans
 	Getter and setter values can be any {@doc PojoCategories parsable} values, even other virtual beans.
 </p>
 <p>
-	Under-the-covers, a virtual bean is simply a proxy interface on top of an existing <code>BeanMap</code>
+	Under-the-covers, a virtual bean is simply a proxy interface on top of an existing <c>BeanMap</c>
 	instance.  From a programmatic point-of-view, they're indistinguishable from real beans, and can be 
 	manipulated and serialized like any other bean.
 </p>	
 <p>
-	Virtual beans can also be created programmatically using the <code>BeanContext</code> class:
+	Virtual beans can also be created programmatically using the <c>BeanContext</c> class:
 </p>
 <p class='bpcode w800'>
 	Address address = BeanContext.<jsf>DEFAULT</jsf>.createSession().newBean(Address.<jk>class</jk>);

@@ -94,10 +94,10 @@ public final class TE extends HeaderRangeArray {
 	private static final Cache<String,TE> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <code>TE</code> header.
+	 * Returns a parsed <c>TE</c> header.
 	 *
-	 * @param value The <code>TE</code> header string.
-	 * @return The parsed <code>TE</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>TE</c> header string.
+	 * @return The parsed <c>TE</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static TE forString(String value) {
 		if (value == null)

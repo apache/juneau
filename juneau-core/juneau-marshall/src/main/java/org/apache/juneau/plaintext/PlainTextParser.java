@@ -25,13 +25,13 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Accept</code> types:  <code><b>text/plain</b></code>
+ * Handles <c>Accept</c> types:  <bc>text/plain</bc>
  * <p>
- * Produces <code>Content-Type</code> types:  <code><b>text/plain</b></code>
+ * Produces <c>Content-Type</c> types:  <bc>text/plain</bc>
  *
  * <h5 class='topic'>Description</h5>
  *
- * Essentially just converts plain text to POJOs via static <code>fromString()</code> or <code>valueOf()</code>, or
+ * Essentially just converts plain text to POJOs via static <c>fromString()</c> or <c>valueOf()</c>, or
  * through constructors that take a single string argument.
  *
  * <p>
@@ -74,7 +74,7 @@ public class PlainTextParser extends ReaderParser {
 	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The media types that this parser consumes.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of {@doc RFC2616.section14.1}
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc RFC2616.section14.1}
 	 */
 	public PlainTextParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);

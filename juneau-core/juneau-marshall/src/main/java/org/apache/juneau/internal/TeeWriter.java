@@ -95,7 +95,7 @@ public class TeeWriter extends Writer {
 	}
 
 	/**
-	 * Returns the writer identified through the <code>id</code> parameter passed in through the
+	 * Returns the writer identified through the <c>id</c> parameter passed in through the
 	 * {@link #add(String, Writer, boolean)} method.
 	 *
 	 * @param id The ID associated with the writer.

@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.NoContent.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 204 No Content</code> response.
+ * Represents an <c>HTTP 204 No Content</c> response.
  *
  * <p>
  * The server successfully processed the request and is not returning any content.

@@ -19,7 +19,7 @@ Root Property
 	For all RDF languages, the POJO objects get broken down into simple triplets.
 	Unfortunately, for tree-structured data like the POJOs shown above, this causes the root node of the tree 
 	to become lost.
-	There is no easy way to identify that <code>person/1</code> is the root node in our tree once in triplet 
+	There is no easy way to identify that <c>person/1</c> is the root node in our tree once in triplet 
 	form, and in some cases it's impossible.
 </p>
 <p>
@@ -32,7 +32,7 @@ Root Property
 <p>
 	To resolve this issue, the property {@link oaj.jena.RdfSerializer#RDF_addRootProperty} 
 	was introduced.
-	When enabled, this adds a special <code>root</code> attribute to the root node to make it easy to locate 
+	When enabled, this adds a special <c>root</c> attribute to the root node to make it easy to locate 
 	by the parser.
 </p>
 <p>
@@ -47,7 +47,7 @@ Root Property
 		.build();
 </p>	
 <p>
-	Now when we rerun the sample code, we'll see the added <code>root</code> attribute on the root resource.
+	Now when we rerun the sample code, we'll see the added <c>root</c> attribute on the root resource.
 </p>
 <p class='bpcode w800'>
 	<xt>&lt;rdf:RDF</xt>

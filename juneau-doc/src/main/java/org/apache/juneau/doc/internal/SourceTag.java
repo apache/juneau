@@ -19,7 +19,7 @@ import java.io.*;
 import java.util.Map;
 
 /**
- * Implements the <code>{@doc source}</code> tag.
+ * Implements the <c>{@doc source}</c> tag.
  */
 public class SourceTag implements Taglet {
 

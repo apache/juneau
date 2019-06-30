@@ -22,7 +22,7 @@ import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 303 See Other</code> response.
+ * Represents an <c>HTTP 303 See Other</c> response.
  *
  * <p>
  * The response to the request can be found under another URI using the GET method.
@@ -66,7 +66,7 @@ public class SeeOther extends HttpResponse {
 	 * Constructor using custom message.
 	 *
 	 * @param message Message to send as the response.
-	 * @param location <code>Location</code> header value.
+	 * @param location <c>Location</c> header value.
 	 */
 	public SeeOther(String message, URI location) {
 		super(message);
@@ -87,7 +87,7 @@ public class SeeOther extends HttpResponse {
 	/**
 	 * Constructor.
 	 *
-	 * @param location <code>Location</code> header value.
+	 * @param location <c>Location</c> header value.
 	 */
 	public SeeOther(URI location) {
 		this(MESSAGE, location);
@@ -104,7 +104,7 @@ public class SeeOther extends HttpResponse {
 	}
 
 	/**
-	 * @return <code>Location</code> header value.
+	 * @return <c>Location</c> header value.
 	 */
 	@ResponseHeader(name="Location", description="Other location.")
 	public URI getLocation() {

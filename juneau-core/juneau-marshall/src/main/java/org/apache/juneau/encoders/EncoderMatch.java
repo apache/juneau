@@ -13,7 +13,7 @@
 package org.apache.juneau.encoders;
 
 /**
- * Represents a encoder and encoding that matches an HTTP <code>Accept-Encoding</code> header value.
+ * Represents a encoder and encoding that matches an HTTP <c>Accept-Encoding</c> header value.
  */
 public final class EncoderMatch {
 
@@ -26,7 +26,7 @@ public final class EncoderMatch {
 	}
 
 	/**
-	 * Returns the encoding of the encoder that matched the HTTP <code>Accept-Encoding</code> header value.
+	 * Returns the encoding of the encoder that matched the HTTP <c>Accept-Encoding</c> header value.
 	 *
 	 * @return The encoding of the match.
 	 */
@@ -35,7 +35,7 @@ public final class EncoderMatch {
 	}
 
 	/**
-	 * Returns the encoder that matched the HTTP <code>Accept-Encoding</code> header value.
+	 * Returns the encoder that matched the HTTP <c>Accept-Encoding</c> header value.
 	 *
 	 * @return The encoder of the match.
 	 */

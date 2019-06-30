@@ -25,8 +25,8 @@ juneau-marshall
 	Fortunately, Juneau does not support an open-ended <js>"class</js> attribute.  
 	As a rule, it should not be possible to create arbitrary POJOs by any of the parsers.
 	The demarshalled object types are inferred via reflection of the class objects passed in through the parser 
-	method (e.g. <code>JsonParser.<jsf>DEFAULT</jsf>.parse(input, MyBean.<jk>class</jk>)</code>).
-	As long as the <code>Class</code> object passed into this method is not constructed from user-generated input,
+	method (e.g. <c>JsonParser.<jsf>DEFAULT</jsf>.parse(input, MyBean.<jk>class</jk>)</c>).
+	As long as the <c>Class</c> object passed into this method is not constructed from user-generated input,
 	it should be free from demarshalling vulnerabilities.   
 </p> 
 <p>
@@ -68,7 +68,7 @@ juneau-marshall
 	top of plain-old Java Object Serialization which itself is vulnerable to demarshalling issues.  
 	Due to this, the JSO parser is not included in any of the default REST servlet implementations. 
 	Be especially careful when using this parser, particularly if you want to use it for handing 
-	<code>application/x-java-serialized-object</code> input through REST servlets. 
+	<c>application/x-java-serialized-object</c> input through REST servlets. 
 </p>
 <p>
 	All other parsers (JSON, URL-Encoding, MessagePack, etc...) work the same way in determining POJO types, so
@@ -85,5 +85,5 @@ juneau-marshall
 	<li>The XML and HTML parsers uses the built-in Java StAX parser.
 		This *should* be free from vulnerabilities.    
 	<li>The RDF parsers rely on Apache Jena 2.7.1.  
-		As of <code>7.0.1</code>, no known security vulnerabilities exist that affect Juneau at this time.
+		As of <c>7.0.1</c>, no known security vulnerabilities exist that affect Juneau at this time.
 </ul>

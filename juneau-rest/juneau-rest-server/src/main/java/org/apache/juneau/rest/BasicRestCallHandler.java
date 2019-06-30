@@ -378,7 +378,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 * Returns the session objects for the specified request.
 	 *
 	 * <p>
-	 * The default implementation simply returns a single map containing <code>{'req':req}</code>.
+	 * The default implementation simply returns a single map containing <c>{'req':req}</c>.
 	 *
 	 * @param req The REST request.
 	 * @return The session objects for that request.

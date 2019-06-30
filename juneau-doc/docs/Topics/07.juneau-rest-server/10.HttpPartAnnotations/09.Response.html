@@ -109,7 +109,7 @@
 	When applied type classes returned by a Java method, this annotation defines schema and Swagger information on the body of responses.
 </p>
 <p>
-	In the example above, we're using the <code>Ok</code> class which is defined like so:
+	In the example above, we're using the <c>Ok</c> class which is defined like so:
 </p>
 <p class='bpcode w800'>
 	<ja>@Response</ja>(
@@ -236,7 +236,7 @@
 <p>
 	The {@link oaj.http.annotation.ResponseStatus @ResponseStatus} annotation can be used on 
 	the method of a <ja>@Response</ja>-annotated class to identify HTTP response
-	statuses other than <code>200</code> (the default).	
+	statuses other than <c>200</c> (the default).	
 </p>
 
 <h5 class='figure'>Example:</h5>
@@ -299,13 +299,13 @@
 
 <p>
 	If a <ja>@Response</ja> class does not have a <ja>@ResponseBody</ja>-annotated method, then the response
-	object itself is serialized in the response (typically using <code>toString()</code>).
+	object itself is serialized in the response (typically using <c>toString()</c>).
 </p>
 
 <h5 class='topic'>Notes about OpenAPI part serialization</h5>
 <p>
 	By default, POJOs representing the body of the request are serialized using the Juneau serializer
-	matching the requesting <code>Accept</code> header.
+	matching the requesting <c>Accept</c> header.
 	The {@link oaj.oapi.OpenApiSerializer} class can be used to serialize response bodies using OpenAPI rules.
 </p>
 <p>
@@ -340,7 +340,7 @@
 	}
 </p>
 <p>
-	The <code><ja>@Response</ja>(schema)</code> annotation can be used to define the format of the output using OpenAPI-based rules.
+	The <c><ja>@Response</ja>(schema)</c> annotation can be used to define the format of the output using OpenAPI-based rules.
 </p>
 <p class='bpcode w800'>
 	<ja>@RestResource</ja>
@@ -361,7 +361,7 @@
 <h5 class='topic'>Swagger documentation</h5>
 <p>
 	The attributes on this annotation are also used to populate the generated Swagger for the method.
-	For example, in the case of the <code>InvalidLogin</code> example above, the following Swagger is generated:
+	For example, in the case of the <c>InvalidLogin</c> example above, the following Swagger is generated:
 </p>
 <p class='bpcode w800'>
 	<jok>'/user/login'</jok>: {

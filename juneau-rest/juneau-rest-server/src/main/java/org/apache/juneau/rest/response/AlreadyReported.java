@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.AlreadyReported.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 208 Already Reported</code> response.
+ * Represents an <c>HTTP 208 Already Reported</c> response.
  *
  * <p>
  * The members of a DAV binding have already been enumerated in a preceding part of the (multistatus) response, and are not being included again.

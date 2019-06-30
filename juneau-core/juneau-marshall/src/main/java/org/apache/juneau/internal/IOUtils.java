@@ -41,7 +41,7 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Reads the specified object to a <code>String</code>.
+	 * Reads the specified object to a <c>String</c>.
 	 *
 	 * <p>
 	 * Can be any of the following object types:
@@ -279,7 +279,7 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Shortcut for calling <code>readBytes(in, 1024);</code>
+	 * Shortcut for calling <c>readBytes(in, 1024);</c>
 	 *
 	 * @param in
 	 * 	The object to read into a byte array.
@@ -320,7 +320,7 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Writes the contents of the specified <code>Reader</code> to the specified file.
+	 * Writes the contents of the specified <c>Reader</c> to the specified file.
 	 *
 	 * @param out The file to write the output to.
 	 * @param in The reader to pipe from.
@@ -336,7 +336,7 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Writes the contents of the specified <code>InputStream</code> to the specified file.
+	 * Writes the contents of the specified <c>InputStream</c> to the specified file.
 	 *
 	 * @param out The file to write the output to.
 	 * @param in The input stream to pipe from.
@@ -595,7 +595,7 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Converts an object to a <code>Reader</code>.
+	 * Converts an object to a <c>Reader</c>.
 	 *
 	 * @param o
 	 * 	The object to convert to a reader.
@@ -629,7 +629,7 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Converts an object to an <code>InputStream</code>.
+	 * Converts an object to an <c>InputStream</c>.
 	 *
 	 * @param o
 	 * 	The object to convert to an input stream.

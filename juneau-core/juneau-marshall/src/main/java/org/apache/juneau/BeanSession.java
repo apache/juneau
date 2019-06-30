@@ -224,7 +224,7 @@ public class BeanSession extends Session {
 	 * 			<br><code><jk>public</jk> T(String)</code>
 	 * 		</td>
 	 * 		<td>
-	 * 			<code>String</code>
+	 * 			<c>String</c>
 	 * 		</td>
 	 * 		<td>
 	 * 			<br>
@@ -945,15 +945,15 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Used to resolve <code>ClassMetas</code> of type <code>Collection</code> and <code>Map</code> that have
-	 * <code>ClassMeta</code> values that themselves could be collections or maps.
+	 * Used to resolve <c>ClassMetas</c> of type <c>Collection</c> and <c>Map</c> that have
+	 * <c>ClassMeta</c> values that themselves could be collections or maps.
 	 *
 	 * <p>
-	 * <code>Collection</code> meta objects are assumed to be followed by zero or one meta objects indicating the
+	 * <c>Collection</c> meta objects are assumed to be followed by zero or one meta objects indicating the
 	 * element type.
 	 *
 	 * <p>
-	 * <code>Map</code> meta objects are assumed to be followed by zero or two meta objects indicating the key and value
+	 * <c>Map</c> meta objects are assumed to be followed by zero or two meta objects indicating the key and value
 	 * types.
 	 *
 	 * <p>
@@ -1067,48 +1067,48 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <code>Object</code>.
+	 * Returns a reusable {@link ClassMeta} representation for the class <c>Object</c>.
 	 *
 	 * <p>
-	 * This <code>ClassMeta</code> is often used to represent "any object type" when an object type is not known.
+	 * This <c>ClassMeta</c> is often used to represent "any object type" when an object type is not known.
 	 *
 	 * <p>
 	 * This method is identical to calling <code>getClassMeta(Object.<jk>class</jk>)</code> but uses a cached copy to
 	 * avoid a hashmap lookup.
 	 *
-	 * @return The {@link ClassMeta} object associated with the <code>Object</code> class.
+	 * @return The {@link ClassMeta} object associated with the <c>Object</c> class.
 	 */
 	public final ClassMeta<Object> object() {
 		return ctx.object();
 	}
 
 	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <code>String</code>.
+	 * Returns a reusable {@link ClassMeta} representation for the class <c>String</c>.
 	 *
 	 * <p>
-	 * This <code>ClassMeta</code> is often used to represent key types in maps.
+	 * This <c>ClassMeta</c> is often used to represent key types in maps.
 	 *
 	 * <p>
 	 * This method is identical to calling <code>getClassMeta(String.<jk>class</jk>)</code> but uses a cached copy to
 	 * avoid a hashmap lookup.
 	 *
-	 * @return The {@link ClassMeta} object associated with the <code>String</code> class.
+	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
 	 */
 	public final ClassMeta<String> string() {
 		return ctx.string();
 	}
 
 	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <code>Class</code>.
+	 * Returns a reusable {@link ClassMeta} representation for the class <c>Class</c>.
 	 *
 	 * <p>
-	 * This <code>ClassMeta</code> is often used to represent key types in maps.
+	 * This <c>ClassMeta</c> is often used to represent key types in maps.
 	 *
 	 * <p>
 	 * This method is identical to calling <code>getClassMeta(Class.<jk>class</jk>)</code> but uses a cached copy to
 	 * avoid a hashmap lookup.
 	 *
-	 * @return The {@link ClassMeta} object associated with the <code>String</code> class.
+	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
 	 */
 	public final ClassMeta<Class> _class() {
 		return ctx._class();
@@ -1393,7 +1393,7 @@ public class BeanSession extends Session {
 	 * <p>
 	 * The locale is determined in the following order:
 	 * <ol>
-	 * 	<li><code>locale</code> parameter passed in through constructor.
+	 * 	<li><c>locale</c> parameter passed in through constructor.
 	 * 	<li>{@link BeanContext#BEAN_locale} entry in parameter passed in through constructor.
 	 * 	<li>{@link BeanContext#BEAN_locale} setting on bean context.
 	 * 	<li>Locale returned by {@link Locale#getDefault()}.
@@ -1490,7 +1490,7 @@ public class BeanSession extends Session {
 	 * <p>
 	 * The timezone is determined in the following order:
 	 * <ol>
-	 * 	<li><code>timeZone</code> parameter passed in through constructor.
+	 * 	<li><c>timeZone</c> parameter passed in through constructor.
 	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in parameter passed in through constructor.
 	 * 	<li>{@link BeanContext#BEAN_timeZone} setting on bean context.
 	 * </ol>

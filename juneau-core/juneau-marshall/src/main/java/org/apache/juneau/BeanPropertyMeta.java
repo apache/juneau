@@ -883,7 +883,7 @@ public final class BeanPropertyMeta {
 	 * Sets an array field on this bean.
 	 *
 	 * <p>
-	 * Works on both <code>Object</code> and primitive arrays.
+	 * Works on both <c>Object</c> and primitive arrays.
 	 *
 	 * @param bean The bean of the field.
 	 * @param l The collection to use to set the array field.

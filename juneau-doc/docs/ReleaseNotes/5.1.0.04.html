@@ -20,15 +20,15 @@
 </p>
 
 <ul class='spaced-list'>
-	<li>New <code><del>RestServlet.getPath()</del></code> method.
-	<li>New <code>SerializerContext.getJavaMethod()</code> and <code>ParserContext.getJavaMethod()</code>
+	<li>New <dc>RestServlet.getPath()</dc> method.
+	<li>New <c>SerializerContext.getJavaMethod()</c> and <c>ParserContext.getJavaMethod()</c>
 			to allow access to REST methods that invoked the serializers or parsers.
 		For example, can be used to access additional annotations on REST methods to perform special handing
 			during serialization or parsing.
-	<li>Better behavior on overriding of filters in <code>BeanContext.addTransforms(Class[])</code>.
+	<li>Better behavior on overriding of filters in <c>BeanContext.addTransforms(Class[])</c>.
 		Previously, adding multiple conflicting filters resulted in random behavior.  
 		Now filters are overridden when multiple matching filters are applied.
-	<li>Allow <code><del>HtmlDocSerializerContext</del></code> properties to be set via <code><del>Serializer.setProperty(String,Object)</del></code>.
+	<li>Allow <dc>HtmlDocSerializerContext</dc> properties to be set via <dc>Serializer.setProperty(String,Object)</dc>.
 		Previously, these could only be defined through override properties (e.g. through REST class and method annotations).
 	<li>Fixed memory leak in XML parser.	
 </ul>

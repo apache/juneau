@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Transforms {@link Calendar Calendars} to {@link Map Maps} of the format <code>{time:long,timeZone:string}</code>.
+ * Transforms {@link Calendar Calendars} to {@link Map Maps} of the format <c>{time:long,timeZone:string}</c>.
  */
 @SuppressWarnings("rawtypes")
 public class CalendarMapSwap extends PojoSwap<Calendar,Map> {

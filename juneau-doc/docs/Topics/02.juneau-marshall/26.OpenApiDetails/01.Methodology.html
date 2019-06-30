@@ -17,25 +17,25 @@ OpenAPI Methodology
 
 <p>
 	Unlike the other Juneau serializers and parsers that convert input and output directly to-and-from POJOs,
-	the OpenAPI serializers and parsers use intermediate objects based on the <code>type</code> and <code>format</code>
+	the OpenAPI serializers and parsers use intermediate objects based on the <c>type</c> and <c>format</c>
 	of the schema.
 </p>
 <p>
-	The following table shows the "natural" intermediate type of the object based on the <code>type/format</code>:
+	The following table shows the "natural" intermediate type of the object based on the <c>type/format</c>:
 </p>
 <table class='styled w800'>
 	<tr><th>Type</th><th>Format</th><th>Intermediate Java Type</th></tr>
 	<tr class='dark bb'>
-		<td rowspan='4'><code>string</code> or empty</td>
-		<td><code>byte<br>binary<br>binary-spaced</code></td>
-		<td><code><jk>byte</jk>[]</code></td>
+		<td rowspan='4'><c>string</c> or empty</td>
+		<td><c>byte<br>binary<br>binary-spaced</c></td>
+		<td><c><jk>byte</jk>[]</c></td>
 	</tr>
 	<tr class='dark bb'>
-		<td><code>date<br>date-time</code></td>
+		<td><c>date<br>date-time</c></td>
 		<td>{@link java.util.Calendar}</td>
 	</tr>
 	<tr class='dark bb'>
-		<td><code>uon</code></td>
+		<td><c>uon</c></td>
 		<td>No intermediate type.<br>(serialized directly to/from POJO)</td>
 	</tr>
 	<tr class='dark bb'>
@@ -43,44 +43,44 @@ OpenAPI Methodology
 		<td>{@link java.lang.String}</td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan='1'><code>boolean</code></td>
+		<td rowspan='1'><c>boolean</c></td>
 		<td>empty</td>
 		<td>{@link java.lang.Boolean}</td>
 	</tr>
 	<tr class='dark bb'>
-		<td rowspan='2'><code>integer</code></td>
-		<td><code>int32</code></td>
+		<td rowspan='2'><c>integer</c></td>
+		<td><c>int32</c></td>
 		<td>{@link java.lang.Integer}</td>
 	</tr>
 	<tr class='dark bb'>
-		<td><code>int64</code></td>
+		<td><c>int64</c></td>
 		<td>{@link java.lang.Long}</td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan='2'><code>number</code></td>
-		<td><code>float</code></td>
+		<td rowspan='2'><c>number</c></td>
+		<td><c>float</c></td>
 		<td>{@link java.lang.Float}</td>
 	</tr>
 	<tr class='light bb'>
-		<td><code>double</code></td>
+		<td><c>double</c></td>
 		<td>{@link java.lang.Double}</td>
 	</tr>
 	<tr class='dark bb'>
-		<td rowspan='2'><code>array</code></td>
+		<td rowspan='2'><c>array</c></td>
 		<td>empty</td>
 		<td>Arrays of intermediate types on this list.</td>
 	</tr>
 	<tr class='dark bb'>
-		<td><code>uon</code></td>
+		<td><c>uon</c></td>
 		<td>No intermediate type.<br>(serialized directly to/from POJO)</td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan='2'><code>object</code></td>
+		<td rowspan='2'><c>object</c></td>
 		<td>empty</td>
-		<td><code>Map&lt;String,Object&gt;</code></td>
+		<td><c>Map&lt;String,Object&gt;</c></td>
 	</tr>
 	<tr class='light bb'>
-		<td><code>uon</code></td>
+		<td><c>uon</c></td>
 		<td>No intermediate type.<br>(serialized directly to/from POJO)</td>
 	</tr>
 </table>

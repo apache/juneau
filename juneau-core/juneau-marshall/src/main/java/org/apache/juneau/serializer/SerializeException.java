@@ -78,7 +78,7 @@ public class SerializeException extends FormattedException {
 	}
 
 	/**
-	 * Returns the highest-level <code>ParseException</code> in the stack trace.
+	 * Returns the highest-level <c>ParseException</c> in the stack trace.
 	 * Useful for JUnit testing of error conditions.
 	 *
 	 * @return The root parse exception, or this exception if there isn't one.

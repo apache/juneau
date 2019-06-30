@@ -150,10 +150,10 @@ public final class Accept {
 	private static final Cache<String,Accept> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <code>Accept</code> header.
+	 * Returns a parsed <c>Accept</c> header.
 	 *
-	 * @param value The <code>Accept</code> header string.
-	 * @return The parsed <code>Accept</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Accept</c> header string.
+	 * @return The parsed <c>Accept</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Accept forString(String value) {
 		if (value == null)
@@ -186,22 +186,22 @@ public final class Accept {
 	}
 
 	/**
-	 * Given a list of media types, returns the best match for this <code>Accept</code> header.
+	 * Given a list of media types, returns the best match for this <c>Accept</c> header.
 	 *
 	 * <p>
-	 * Note that fuzzy matching is allowed on the media types where the <code>Accept</code> header may
+	 * Note that fuzzy matching is allowed on the media types where the <c>Accept</c> header may
 	 * contain additional subtype parts.
-	 * <br>For example, given identical q-values and an <code>Accept</code> value of <js>"text/json+activity"</js>,
+	 * <br>For example, given identical q-values and an <c>Accept</c> value of <js>"text/json+activity"</js>,
 	 * the media type <js>"text/json"</js> will match if <js>"text/json+activity"</js> or <js>"text/activity+json"</js>
 	 * isn't found.
-	 * <br>The purpose for this is to allow serializers to match when artifacts such as <code>id</code> properties are
+	 * <br>The purpose for this is to allow serializers to match when artifacts such as <c>id</c> properties are
 	 * present in the header.
 	 *
 	 * <p>
 	 * See {@doc https://www.w3.org/TR/activitypub/#retrieving-objects ActivityPub / Retrieving Objects}
 	 *
 	 * @param mediaTypes The media types to match against.
-	 * @return The index into the array of the best match, or <code>-1</code> if no suitable matches could be found.
+	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int findMatch(MediaType[] mediaTypes) {
 		int matchQuant = 0, matchIndex = -1;
@@ -234,13 +234,13 @@ public final class Accept {
 	 * Same as {@link #findMatch(MediaType[])} but matching against media type ranges.
 	 *
 	 * <p>
-	 * Note that the q-types on both the <code>mediaTypeRanges</code> parameter and this header
+	 * Note that the q-types on both the <c>mediaTypeRanges</c> parameter and this header
 	 * are taken into account when trying to find the best match.
 	 * <br>When both this header and the matching range have q-values, the q-value for the match is the result of multiplying them.
-	 * <br>(e.g. Accept=<js>"text/html;q=0.9"</js> and mediaTypeRange=<js>"text/html;q=0.9"</js> ==>, q-value=<code>0.81</code>).
+	 * <br>(e.g. Accept=<js>"text/html;q=0.9"</js> and mediaTypeRange=<js>"text/html;q=0.9"</js> ==>, q-value=<c>0.81</c>).
 	 *
 	 * @param mediaTypeRanges The media type ranges to match against.
-	 * @return The index into the array of the best match, or <code>-1</code> if no suitable matches could be found.
+	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int findMatch(MediaTypeRange[] mediaTypeRanges) {
 		float matchQuant = 0;

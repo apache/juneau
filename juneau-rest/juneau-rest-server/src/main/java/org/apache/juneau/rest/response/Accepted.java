@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.Accepted.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 202 Accepted</code> response.
+ * Represents an <c>HTTP 202 Accepted</c> response.
  *
  * <p>
  * The request has been accepted for processing, but the processing has not been completed.

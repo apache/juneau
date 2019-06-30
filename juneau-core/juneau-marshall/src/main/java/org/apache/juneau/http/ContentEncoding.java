@@ -71,10 +71,10 @@ import org.apache.juneau.http.annotation.*;
 public final class ContentEncoding extends HeaderEnum<ContentEncodingEnum> {
 
 	/**
-	 * Returns a parsed <code>Content-Encoding</code> header.
+	 * Returns a parsed <c>Content-Encoding</c> header.
 	 *
-	 * @param value The <code>Content-Encoding</code> header string.
-	 * @return The parsed <code>Content-Encoding</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Content-Encoding</c> header string.
+	 * @return The parsed <c>Content-Encoding</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static ContentEncoding forString(String value) {
 		if (value == null)

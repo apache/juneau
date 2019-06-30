@@ -53,22 +53,22 @@ import org.apache.juneau.transform.*;
  *
  * <p>
  * Each bean context maintains a cache of {@link ClassMeta} objects that describe information about classes encountered.
- * These <code>ClassMeta</code> objects are time-consuming to construct.
+ * These <c>ClassMeta</c> objects are time-consuming to construct.
  * Therefore, instances of {@link BeanContext} that share the same <js>"BeanContext.*"</js> property values share
- * the same cache.  This allows for efficient reuse of <code>ClassMeta</code> objects so that the information about
+ * the same cache.  This allows for efficient reuse of <c>ClassMeta</c> objects so that the information about
  * classes only needs to be calculated once.
  * Because of this, many of the properties defined on the {@link BeanContext} class cannot be overridden on the session.
  *
  * <h5 class='topic'>Bean Sessions</h5>
  *
- * Whereas <code>BeanContext</code> objects are permanent, unchangeable, cached, and thread-safe,
+ * Whereas <c>BeanContext</c> objects are permanent, unchangeable, cached, and thread-safe,
  * {@link BeanSession} objects are ephemeral and not thread-safe.
  * They are meant to be used as quickly-constructed scratchpads for creating bean maps.
  * {@link BeanMap} objects can only be created through the session.
  *
  * <h5 class='topic'>BeanContext configuration properties</h5>
  *
- * <code>BeanContexts</code> have several configuration properties that can be used to tweak behavior on how beans are
+ * <c>BeanContexts</c> have several configuration properties that can be used to tweak behavior on how beans are
  * handled.  These are denoted as the static <jsf>BEAN_*</jsf> fields on this class.
  *
  * <p>
@@ -157,7 +157,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanClassVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
+	 * 	<li><b>Data type:</b>  <c>String</c> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -171,7 +171,7 @@ public class BeanContext extends Context {
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
 	 *
 	 * <p>
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
+	 * For example, if the visibility is <c>PUBLIC</c> and the bean class is <jk>protected</jk>, then the class
 	 * will not be interpreted as a bean class and be serialized as a string.
 	 * <br>Use this setting to reduce the visibility requirement.
 	 *
@@ -198,7 +198,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanConstructorVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
+	 * 	<li><b>Data type:</b>  <c>String</c> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -239,7 +239,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanDictionary.lc"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;Class&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -267,7 +267,7 @@ public class BeanContext extends Context {
 	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
 	 * through reflection.
 	 * <br>The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined on the bean class.
-	 * <br>For example, if a class <code>Foo</code> has a type-name of <js>"myfoo"</js>, then it would end up serialized
+	 * <br>For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up serialized
 	 * as <js>"{_type:'myfoo',...}"</js>.
 	 *
 	 * <p>
@@ -332,7 +332,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFieldVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
+	 * 	<li><b>Data type:</b>  <c>String</c> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -379,7 +379,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFilters.lc"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;Class&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -396,7 +396,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * <br>It's useful when you want to use the <code>@Bean</code> annotation functionality, but you don't have the ability to alter
+	 * <br>It's useful when you want to use the <c>@Bean</c> annotation functionality, but you don't have the ability to alter
 	 * the bean classes.
 	 *
 	 * <p>
@@ -459,7 +459,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMapPutReturnsOldValue.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -505,7 +505,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMethodVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
+	 * 	<li><b>Data type:</b>  <c>String</c> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -546,7 +546,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireDefaultConstructor.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -587,7 +587,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSerializable.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -628,7 +628,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSettersForGetters.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -666,7 +666,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSomeProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -706,7 +706,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanTypePropertyName.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"_type"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -751,7 +751,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.debug.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b>
@@ -804,8 +804,8 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.examples.smo"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
-	 * 	<li><b>Default:</b>  <code>{}</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
+	 * 	<li><b>Default:</b>  <c>{}</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -847,7 +847,7 @@ public class BeanContext extends Context {
 	 * <ul class='spaced-list'>
 	 * 	<li>A static field annotated with {@link Example @Example}.
 	 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-	 * 	<li>A static method with name <code>example</code> with no arguments or one {@link BeanSession} argument.
+	 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
 	 * </ul>
 	 */
 	public static final String BEAN_examples = PREFIX + ".examples.smo";
@@ -858,8 +858,8 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.excludeProperties.sms"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
-	 * 	<li><b>Default:</b>  <code>{}</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>Default:</b>  <c>{}</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -884,8 +884,8 @@ public class BeanContext extends Context {
 	 * The key <js>"*"</js> means all bean classes.
 	 *
 	 * <p>
-	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means don't serialize the <code>foo</code> and
-	 * <code>bar</code> properties on any beans whose simple class name is <code>Bean1</code>.
+	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means don't serialize the <c>foo</c> and
+	 * <c>bar</c> properties on any beans whose simple class name is <c>Bean1</c>.
 	 *
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
@@ -919,7 +919,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.fluentSetters.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -971,7 +971,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreInvocationExceptionsOnGetters.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -1009,7 +1009,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreInvocationExceptionsOnSetters.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -1047,7 +1047,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignorePropertiesWithoutSetters.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -1084,7 +1084,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownBeanProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -1122,7 +1122,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownNullBeanProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -1159,7 +1159,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.implClasses.smc"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Class&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Class&gt;</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -1198,8 +1198,8 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.properties.sms"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
-	 * 	<li><b>Default:</b>  <code>{}</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>Default:</b>  <c>{}</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -1225,8 +1225,8 @@ public class BeanContext extends Context {
 	 * The key <js>"*"</js> means all bean classes.
 	 *
 	 * <p>
-	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means only serialize the <code>foo</code> and
-	 * <code>bar</code> properties on the specified bean.
+	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means only serialize the <c>foo</c> and
+	 * <c>bar</c> properties on the specified bean.
 	 *
 	 * <p>
 	 * Setting applies to specified class and all subclasses.
@@ -1260,7 +1260,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.locale.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Locale})
+	 * 	<li><b>Data type:</b>  <c>String</c> ({@link Locale})
 	 * 	<li><b>Default:</b>  <jk>null</jk> (defaults to {@link Locale#getDefault()})
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b>
@@ -1303,7 +1303,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.mediaType.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link MediaType})
+	 * 	<li><b>Data type:</b>  <c>String</c> ({@link MediaType})
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b>
@@ -1346,7 +1346,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanClasses.sc"</js>
-	 * 	<li><b>Data type:</b>  <code>Set&lt;Class&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Set&lt;Class&gt;</c>
 	 * 	<li><b>Default:</b>  empty set
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -1367,7 +1367,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
-	 * <br>Not-bean classes are converted to <code>Strings</code> during serialization.
+	 * <br>Not-bean classes are converted to <c>Strings</c> during serialization.
 	 *
 	 * <p>
 	 * Values can consist of any of the following types:
@@ -1409,17 +1409,17 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanPackages.ss"</js>
-	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>
 	 * 	<ul>
-	 * 		<li><code>java.lang</code>
-	 * 		<li><code>java.lang.annotation</code>
-	 * 		<li><code>java.lang.ref</code>
-	 * 		<li><code>java.lang.reflect</code>
-	 * 		<li><code>java.io</code>
-	 * 		<li><code>java.net</code>
-	 * 		<li><code>java.nio.*</code>
-	 * 		<li><code>java.util.*</code>
+	 * 		<li><c>java.lang</c>
+	 * 		<li><c>java.lang.annotation</c>
+	 * 		<li><c>java.lang.ref</c>
+	 * 		<li><c>java.lang.reflect</c>
+	 * 		<li><c>java.io</c>
+	 * 		<li><c>java.net</c>
+	 * 		<li><c>java.nio.*</c>
+	 * 		<li><c>java.util.*</c>
 	 * 	</ul>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -1484,7 +1484,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.pojoSwaps.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Object&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;Object&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -1509,7 +1509,7 @@ public class BeanContext extends Context {
 	 * and "swap in" the non-serializable class during parsing.
 	 *
 	 * <p>
-	 * An example of a POJO swap would be a <code>Calendar</code> object that gets swapped out for an ISO8601 string.
+	 * An example of a POJO swap would be a <c>Calendar</c> object that gets swapped out for an ISO8601 string.
 	 *
 	 * <p>
 	 * Multiple POJO swaps can be associated with a single class.
@@ -1651,7 +1651,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.sortProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -1702,7 +1702,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.timeZone.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link TimeZone})
+	 * 	<li><b>Data type:</b>  <c>String</c> ({@link TimeZone})
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b>
@@ -1745,7 +1745,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useEnumNames.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -1799,7 +1799,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useInterfaceProxies.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -1837,7 +1837,7 @@ public class BeanContext extends Context {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useJavaBeanIntrospector.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -2217,7 +2217,7 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Prints meta cache statistics to <code>System.out</code>.
+	 * Prints meta cache statistics to <c>System.out</c>.
 	 */
 	protected static void dumpCacheStats() {
 		try {
@@ -2297,14 +2297,14 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Used to resolve <code>ClassMetas</code> of type <code>Collection</code> and <code>Map</code> that have
-	 * <code>ClassMeta</code> values that themselves could be collections or maps.
+	 * Used to resolve <c>ClassMetas</c> of type <c>Collection</c> and <c>Map</c> that have
+	 * <c>ClassMeta</c> values that themselves could be collections or maps.
 	 *
 	 * <p>
-	 * <code>Collection</code> meta objects are assumed to be followed by zero or one meta objects indicating the element type.
+	 * <c>Collection</c> meta objects are assumed to be followed by zero or one meta objects indicating the element type.
 	 *
 	 * <p>
-	 * <code>Map</code> meta objects are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <c>Map</c> meta objects are assumed to be followed by zero or two meta objects indicating the key and value types.
 	 *
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
@@ -2748,48 +2748,48 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <code>Object</code>.
+	 * Returns a reusable {@link ClassMeta} representation for the class <c>Object</c>.
 	 *
 	 * <p>
-	 * This <code>ClassMeta</code> is often used to represent "any object type" when an object type is not known.
+	 * This <c>ClassMeta</c> is often used to represent "any object type" when an object type is not known.
 	 *
 	 * <p>
 	 * This method is identical to calling <code>getClassMeta(Object.<jk>class</jk>)</code> but uses a cached copy to
 	 * avoid a hashmap lookup.
 	 *
-	 * @return The {@link ClassMeta} object associated with the <code>Object</code> class.
+	 * @return The {@link ClassMeta} object associated with the <c>Object</c> class.
 	 */
 	protected final ClassMeta<Object> object() {
 		return cmObject;
 	}
 
 	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <code>String</code>.
+	 * Returns a reusable {@link ClassMeta} representation for the class <c>String</c>.
 	 *
 	 * <p>
-	 * This <code>ClassMeta</code> is often used to represent key types in maps.
+	 * This <c>ClassMeta</c> is often used to represent key types in maps.
 	 *
 	 * <p>
 	 * This method is identical to calling <code>getClassMeta(String.<jk>class</jk>)</code> but uses a cached copy to
 	 * avoid a hashmap lookup.
 	 *
-	 * @return The {@link ClassMeta} object associated with the <code>String</code> class.
+	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
 	 */
 	protected final ClassMeta<String> string() {
 		return cmString;
 	}
 
 	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <code>Class</code>.
+	 * Returns a reusable {@link ClassMeta} representation for the class <c>Class</c>.
 	 *
 	 * <p>
-	 * This <code>ClassMeta</code> is often used to represent key types in maps.
+	 * This <c>ClassMeta</c> is often used to represent key types in maps.
 	 *
 	 * <p>
 	 * This method is identical to calling <code>getClassMeta(Class.<jk>class</jk>)</code> but uses a cached copy to
 	 * avoid a hashmap lookup.
 	 *
-	 * @return The {@link ClassMeta} object associated with the <code>String</code> class.
+	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
 	 */
 	protected final ClassMeta<Class> _class() {
 		return cmClass;

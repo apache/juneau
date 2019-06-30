@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.MultiStatus.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 207 Multi-Status</code> response.
+ * Represents an <c>HTTP 207 Multi-Status</c> response.
  *
  * <p>
  * The message body that follows is by default an XML message and can contain a number of separate response codes, depending on how many sub-requests were made.

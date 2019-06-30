@@ -29,7 +29,7 @@
 </ul>
 <h5 class='topic'>@RemoteMethod(method/path)</h5>
 <p>
-	The HTTP method and path are mapped to a Java method using the <code>method</code> and <code>path</code> annotations.
+	The HTTP method and path are mapped to a Java method using the <c>method</c> and <c>path</c> annotations.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
@@ -47,11 +47,11 @@
 
 <h5 class='topic'>Inferred method/path</h5>
 <p>
-	In such cases, <code>method</code> and <code>path</code> annotations are optional if you follow certain naming
+	In such cases, <c>method</c> and <c>path</c> annotations are optional if you follow certain naming
 	conventions on your method that identify the method and path.
 </p>
 <p>
-	For example, the <code>getPet</code> method below defaults to <code>GET /pet</code>:
+	For example, the <c>getPet</c> method below defaults to <c>GET /pet</c>:
 </p>
 <p class='bpcode w800'>	
 	<ja>@RemoteResource</ja>
@@ -131,12 +131,12 @@
 	<li>
 		Any {@doc PojoCategories parsable} POJO 
 		- The body of the response will be converted to the POJO using the parser defined on the 
-		<code>RestClient</code> based on the <code>Content-Type</code> of the response.
+		<c>RestClient</c> based on the <c>Content-Type</c> of the response.
 	<li>
 		Any {@link oaj.http.annotation.Response @Response}-annotated type. (described later)
 	<li>
-		<code>HttpResponse</code> 
-		- Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
+		<c>HttpResponse</c> 
+		- Returns the raw <c>HttpResponse</c> returned by the inner <c>HttpClient</c>.
 	<li>
 		{@link java.io.Reader} 
 		- Returns access to the raw reader of the response.
@@ -161,6 +161,6 @@
 	}
 </p>
 <p>
-	If your <code>RestClient</code> does not have a parser associated with it, then the value is converted directly from a String using
+	If your <c>RestClient</c> does not have a parser associated with it, then the value is converted directly from a String using
 	the rules defined in {@doc PojosConveribleToStrings}. 
 </p>

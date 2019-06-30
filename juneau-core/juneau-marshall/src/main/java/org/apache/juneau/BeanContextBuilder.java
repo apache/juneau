@@ -99,7 +99,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
 	 *
 	 * <p>
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
+	 * For example, if the visibility is <c>PUBLIC</c> and the bean class is <jk>protected</jk>, then the class
 	 * will not be interpreted as a bean class and will be treated as a string.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -1138,7 +1138,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
-	 * <br>Not-bean classes are converted to <code>Strings</code> during serialization.
+	 * <br>Not-bean classes are converted to <c>Strings</c> during serialization.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -1157,7 +1157,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
-	 * <br>Not-bean classes are converted to <code>Strings</code> during serialization.
+	 * <br>Not-bean classes are converted to <c>Strings</c> during serialization.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -1181,7 +1181,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Configuration property:  Bean class exclusions.
 	 *
 	 * <p>
-	 * Not-bean classes are converted to <code>Strings</code> during serialization even if they appear to be
+	 * Not-bean classes are converted to <c>Strings</c> during serialization even if they appear to be
 	 * bean-like.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -1201,7 +1201,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Configuration property:  Bean class exclusions.
 	 *
 	 * <p>
-	 * Not-bean classes are converted to <code>Strings</code> during serialization even if they appear to be
+	 * Not-bean classes are converted to <c>Strings</c> during serialization even if they appear to be
 	 * bean-like.
 	 *
 	 * <h5 class='section'>See Also:</h5>

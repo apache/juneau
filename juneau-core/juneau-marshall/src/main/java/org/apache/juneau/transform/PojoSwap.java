@@ -30,7 +30,7 @@ import org.apache.juneau.serializer.*;
  * <h5 class='topic'>Description</h5>
  *
  * <p>
- * <code>PojoSwaps</code> are used to extend the functionality of the serializers and parsers to be able to handle
+ * <c>PojoSwaps</c> are used to extend the functionality of the serializers and parsers to be able to handle
  * POJOs that aren't automatically handled by the serializers or parsers.
  * <br>For example, JSON does not have a standard representation for rendering dates.
  * By defining a special {@code Date} swap and associating it with a serializer and parser, you can convert a
@@ -41,7 +41,7 @@ import org.apache.juneau.serializer.*;
  * Swaps MUST declare a public no-arg constructor so that the bean context can instantiate them.
  *
  * <p>
- * <code>PojoSwaps</code> are associated with serializers and parsers through the following:
+ * <c>PojoSwaps</c> are associated with serializers and parsers through the following:
  * <ul>
  * 	<li class='ja'>{@link Swap @Swap}
  * 	<li class='ja'>{@link Swaps @Swaps}
@@ -54,7 +54,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <p>
- * <code>PojoSwaps</code> have two parameters:
+ * <c>PojoSwaps</c> have two parameters:
  * <ol>
  * 	<li>{@code <T>} - The normal representation of an object.
  * 	<li>{@code <S>} - The swapped representation of an object.
@@ -88,7 +88,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <p>
- * For OpenAPI serialization, the valid swapped types also include <code><jk>byte</jk>[]</code> and <code>Calendar</code>.
+ * For OpenAPI serialization, the valid swapped types also include <code><jk>byte</jk>[]</code> and <c>Calendar</c>.
  *
  * <h5 class='topic'>Normal Class Type {@code <T>}</h5>
  *
@@ -237,11 +237,11 @@ public abstract class PojoSwap<T,S> {
 	 * For example, if the session media type is <js>"text/json"</js>, then the match values are shown below:
 	 *
 	 * <ul>
-	 * 	<li><js>"text/json"</js> = <code>100,000</code>
-	 * 	<li><js>"&#42;/json"</js> = <code>5,100</code>
-	 * 	<li><js>"&#42;/&#42;"</js> = <code>5,000</code>
-	 * 	<li>No media types specified on swap = <code>1</code>
-	 * 	<li><js>"text/xml"</js> = <code>0</code>
+	 * 	<li><js>"text/json"</js> = <c>100,000</c>
+	 * 	<li><js>"&#42;/json"</js> = <c>5,100</c>
+	 * 	<li><js>"&#42;/&#42;"</js> = <c>5,000</c>
+	 * 	<li>No media types specified on swap = <c>1</c>
+	 * 	<li><js>"text/xml"</js> = <c>0</c>
 	 * </ul>
 	 *
 	 * @param session The bean session.

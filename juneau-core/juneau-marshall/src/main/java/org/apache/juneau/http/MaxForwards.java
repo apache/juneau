@@ -70,10 +70,10 @@ public final class MaxForwards extends HeaderInteger {
 	}
 
 	/**
-	 * Returns a parsed <code>Max-Forwards</code> header.
+	 * Returns a parsed <c>Max-Forwards</c> header.
 	 *
-	 * @param value The <code>Max-Forwards</code> header string.
-	 * @return The parsed <code>Max-Forwards</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Max-Forwards</c> header string.
+	 * @return The parsed <c>Max-Forwards</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static MaxForwards forString(String value) {
 		if (value == null)

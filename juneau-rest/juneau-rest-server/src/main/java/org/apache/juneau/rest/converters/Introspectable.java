@@ -21,7 +21,7 @@ import org.apache.juneau.utils.*;
 
 /**
  * Converter for enablement of {@link PojoIntrospector} support on response objects returned by a
- * <code>@RestMethod</code> method.
+ * <c>@RestMethod</c> method.
  *
  * <p>
  * When enabled, public methods can be called on objects returned through the {@link RestResponse#setOutput(Object)}
@@ -35,10 +35,10 @@ import org.apache.juneau.utils.*;
  * Java methods are invoked by passing in the following URL parameters:
  * <ul class='spaced-list'>
  * 	<li>
- * 		<code>&amp;invokeMethod</code> - The Java method name, optionally with arguments if necessary to
+ * 		<c>&amp;invokeMethod</c> - The Java method name, optionally with arguments if necessary to
  * 		differentiate between methods.
  * 	<li>
- * 		<code>&amp;invokeArgs</code> - The arguments as an array.
+ * 		<c>&amp;invokeArgs</c> - The arguments as an array.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>

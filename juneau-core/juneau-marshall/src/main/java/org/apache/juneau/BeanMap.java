@@ -155,7 +155,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * Returns the wrapped bean object.
 	 *
 	 * <p>
-	 * If <code>create</code> is <jk>false</jk>, then this method may return <jk>null</jk> if the bean has read-only
+	 * If <c>create</c> is <jk>false</jk>, then this method may return <jk>null</jk> if the bean has read-only
 	 * properties set through a constructor defined by the {@link BeanConstructor @BeanConstructor} annotation.
 	 *
 	 * <p>
@@ -353,7 +353,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param p The parser to use to parse the text.
 	 * @return This object (for method chaining).
 	 * @throws ParseException If the input contains a syntax error or is malformed.
-	 * @throws IOException Thrown by <code>Reader</code>.
+	 * @throws IOException Thrown by <c>Reader</c>.
 	 */
 	public BeanMap<T> load(Reader r, ReaderParser p) throws ParseException, IOException {
 		putAll(new ObjectMap(r, p));
@@ -491,7 +491,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	}
 
 	/**
-	 * Given a string containing variables of the form <code>"{property}"</code>, replaces those variables with property
+	 * Given a string containing variables of the form <c>"{property}"</c>, replaces those variables with property
 	 * values in this bean.
 	 *
 	 * @param s The string containing variables.

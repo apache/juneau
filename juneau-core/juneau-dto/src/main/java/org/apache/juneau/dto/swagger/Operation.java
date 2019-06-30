@@ -263,13 +263,13 @@ public class Operation extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Collection&lt;String&gt;</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;String&gt;</code>
+	 * 		<li><c>Collection&lt;String&gt;</c>
+	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;String&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	tags(<js>"['foo','bar']"</js>);
 	 * 			</p>
-	 * 		<li><code>String</code> - Individual values
+	 * 		<li><c>String</c> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	tags(<js>"foo"</js>, <js>"bar"</js>);
@@ -315,7 +315,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -357,7 +357,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -402,7 +402,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link ExternalDocumentation}
-	 * 		<li><code>String</code> - JSON object representation of {@link ExternalDocumentation}
+	 * 		<li><c>String</c> - JSON object representation of {@link ExternalDocumentation}
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
@@ -454,7 +454,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>The id MUST be unique among all operations described in the API.
 	 * 	<br>Tools and libraries MAY use the operationId to uniquely identify an operation, therefore, it is recommended to
 	 * 	follow common programming naming conventions.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -469,7 +469,7 @@ public class Operation extends SwaggerElement {
 	 * A list of MIME types the operation can consume.
 	 *
 	 * <p>
-	 * This overrides the <code>consumes</code> definition at the Swagger Object.
+	 * This overrides the <c>consumes</c> definition at the Swagger Object.
 	 * <br>An empty value MAY be used to clear the global definition.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -485,7 +485,7 @@ public class Operation extends SwaggerElement {
 	 * A list of MIME types the operation can consume.
 	 *
 	 * <p>
-	 * This overrides the <code>consumes</code> definition at the Swagger Object.
+	 * This overrides the <c>consumes</c> definition at the Swagger Object.
 	 * <br>An empty value MAY be used to clear the global definition.
 	 *
 	 * @param value
@@ -506,7 +506,7 @@ public class Operation extends SwaggerElement {
 	 * A list of MIME types the operation can consume.
 	 *
 	 * <p>
-	 * This overrides the <code>consumes</code> definition at the Swagger Object.
+	 * This overrides the <c>consumes</c> definition at the Swagger Object.
 	 * <br>An empty value MAY be used to clear the global definition.
 	 *
 	 * @param value
@@ -528,14 +528,14 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link MediaType}
-	 * 		<li><code>Collection&lt;{@link MediaType}|String&gt;</code>
-	 * 		<li><code>{@link MediaType}[]</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;{@link MediaType}&gt;</code>
+	 * 		<li><c>Collection&lt;{@link MediaType}|String&gt;</c>
+	 * 		<li><c>{@link MediaType}[]</c>
+	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link MediaType}&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	consumes(<js>"['text/json']"</js>);
 	 * 			</p>
-	 * 		<li><code>String</code> - Individual values
+	 * 		<li><c>String</c> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	consumes(<js>"text/json"</js>);
@@ -556,7 +556,7 @@ public class Operation extends SwaggerElement {
 	 * A list of MIME types the operation can produce.
 	 *
 	 * <p>
-	 * This overrides the <code>produces</code> definition at the Swagger Object.
+	 * This overrides the <c>produces</c> definition at the Swagger Object.
 	 * <br>An empty value MAY be used to clear the global definition.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -572,7 +572,7 @@ public class Operation extends SwaggerElement {
 	 * A list of MIME types the operation can produce.
 	 *
 	 * <p>
-	 * This overrides the <code>produces</code> definition at the Swagger Object.
+	 * This overrides the <c>produces</c> definition at the Swagger Object.
 	 * <br>An empty value MAY be used to clear the global definition.
 	 *
 	 * @param value
@@ -593,7 +593,7 @@ public class Operation extends SwaggerElement {
 	 * A list of MIME types the operation can produces.
 	 *
 	 * <p>
-	 * This overrides the <code>produces</code> definition at the Swagger Object.
+	 * This overrides the <c>produces</c> definition at the Swagger Object.
 	 * <br>An empty value MAY be used to clear the global definition.
 	 *
 	 * @param value
@@ -614,14 +614,14 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link MediaType}
-	 * 		<li><code>Collection&lt;{@link MediaType}|String&gt;</code>
-	 * 		<li><code>{@link MediaType}[]</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;{@link MediaType}&gt;</code>
+	 * 		<li><c>Collection&lt;{@link MediaType}|String&gt;</c>
+	 * 		<li><c>{@link MediaType}[]</c>
+	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link MediaType}&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	produces(<js>"['text/json']"</js>);
 	 * 			</p>
-	 * 		<li><code>String</code> - Individual values
+	 * 		<li><c>String</c> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	produces(<js>"text/json"</js>);
@@ -649,7 +649,7 @@ public class Operation extends SwaggerElement {
 	 * 	<li>
 	 * 		The list MUST NOT include duplicated parameters.
 	 * 	<li>
-	 * 		A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
+	 * 		A unique parameter is defined by a combination of a <c>name</c> and <c>location</c>.
 	 * 	<li>
 	 * 		The list can use the {@doc SwaggerReferenceObject}
 	 * 		to link to parameters that are defined at the {@doc SwaggerParameterObject Swagger Object's parameters}.
@@ -667,7 +667,7 @@ public class Operation extends SwaggerElement {
 	 * Returns the parameter with the specified type and name.
 	 *
 	 * @param in The parameter in.
-	 * @param name The parameter name.  Can be <jk>null</jk> for parameter type <code>body</code>.
+	 * @param name The parameter name.  Can be <jk>null</jk> for parameter type <c>body</c>.
 	 * @return The matching parameter info, or <jk>null</jk> if not found.
 	 */
 	public ParameterInfo getParameter(String in, String name) {
@@ -693,7 +693,7 @@ public class Operation extends SwaggerElement {
 	 * 	<li>
 	 * 		The list MUST NOT include duplicated parameters.
 	 * 	<li>
-	 * 		A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
+	 * 		A unique parameter is defined by a combination of a <c>name</c> and <c>location</c>.
 	 * 	<li>
 	 * 		The list can use the {@doc SwaggerReferenceObject}
 	 * 		to link to parameters that are defined at the {@doc SwaggerParameterObject Swagger Object's parameters}.
@@ -725,7 +725,7 @@ public class Operation extends SwaggerElement {
 	 * 	<li>
 	 * 		The list MUST NOT include duplicated parameters.
 	 * 	<li>
-	 * 		A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
+	 * 		A unique parameter is defined by a combination of a <c>name</c> and <c>location</c>.
 	 * 	<li>
 	 * 		The list can use the {@doc SwaggerReferenceObject}
 	 * 		to link to parameters that are defined at the {@doc SwaggerParameterObject Swagger Object's parameters}.
@@ -751,13 +751,13 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link ParameterInfo}
-	 * 		<li><code>Collection&lt;{@link ParameterInfo}|String&gt;</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;{@link ParameterInfo}&gt;</code>
+	 * 		<li><c>Collection&lt;{@link ParameterInfo}|String&gt;</c>
+	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link ParameterInfo}&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	parameters(<js>"[{path:'path',id:'id'}]"</js>);
 	 * 			</p>
-	 * 		<li><code>String</code> - JSON object representation of {@link ParameterInfo}
+	 * 		<li><c>String</c> - JSON object representation of {@link ParameterInfo}
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	parameters(<js>"{path:'path',id:'id'}"</js>);
@@ -846,8 +846,8 @@ public class Operation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Map&lt;Integer,{@link ResponseInfo}|String&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;Integer,{@link ResponseInfo}&gt;</code>
+	 * 		<li><c>Map&lt;Integer,{@link ResponseInfo}|String&gt;</c>
+	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;Integer,{@link ResponseInfo}&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	responses(<js>"{'404':{description:'description',...}}"</js>);
@@ -865,7 +865,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * <p>
 	 * The transfer protocol for the operation.
-	 * <br>The value overrides the Swagger Object <code>schemes</code> definition.
+	 * <br>The value overrides the Swagger Object <c>schemes</c> definition.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -878,7 +878,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * <p>
 	 * The transfer protocol for the operation.
-	 * <br>The value overrides the Swagger Object <code>schemes</code> definition.
+	 * <br>The value overrides the Swagger Object <c>schemes</c> definition.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -902,7 +902,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * <p>
 	 * The transfer protocol for the operation.
-	 * <br>The value overrides the Swagger Object <code>schemes</code> definition.
+	 * <br>The value overrides the Swagger Object <c>schemes</c> definition.
 	 *
 	 * @param value
 	 * 	The values to add to this property.
@@ -921,13 +921,13 @@ public class Operation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Collection&lt;String&gt;</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;String&gt;</code>
+	 * 		<li><c>Collection&lt;String&gt;</c>
+	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;String&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	schemes(<js>"['scheme1','scheme2']"</js>);
 	 * 			</p>
-	 * 		<li><code>String</code> - Individual values
+	 * 		<li><c>String</c> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	schemes(<js>"scheme1</js>, <js>"scheme2"</js>);
@@ -1002,7 +1002,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * <p>
 	 * This definition overrides any declared top-level security.
-	 * <br>To remove a top-level <code>security</code> declaration, an empty array can be used.
+	 * <br>To remove a top-level <c>security</c> declaration, an empty array can be used.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -1020,7 +1020,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * <p>
 	 * This definition overrides any declared top-level security.
-	 * <br>To remove a top-level <code>security</code> declaration, an empty array can be used.
+	 * <br>To remove a top-level <c>security</c> declaration, an empty array can be used.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -1042,7 +1042,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * <p>
 	 * This definition overrides any declared top-level security.
-	 * <br>To remove a top-level <code>security</code> declaration, an empty array can be used.
+	 * <br>To remove a top-level <c>security</c> declaration, an empty array can be used.
 	 *
 	 * @param values
 	 * 	The values to add to this property.
@@ -1078,8 +1078,8 @@ public class Operation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Map&lt;String,List&lt;String&gt;&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of a <code>Map&lt;String,List&lt;String&gt;&gt;</code>
+	 * 		<li><c>Map&lt;String,List&lt;String&gt;&gt;</c>
+	 * 		<li><c>String</c> - JSON object representation of a <c>Map&lt;String,List&lt;String&gt;&gt;</c>
 	 * 		<h5 class='figure'>Example:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	securities(<js>"{key:['val1','val2']}"</js>);

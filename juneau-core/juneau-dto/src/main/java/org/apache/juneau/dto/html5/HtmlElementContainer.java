@@ -73,7 +73,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * Indexes are zero-indexed.
 	 *
 	 * <p>
-	 * For example, calling <code>getChild(1,2,3);</code> will return the 4th child of the 3rd child of the 2nd child.
+	 * For example, calling <c>getChild(1,2,3);</c> will return the 4th child of the 3rd child of the 2nd child.
 	 *
 	 * @param index The child indexes.
 	 * @return The child node, or <jk>null</jk> if it doesn't point to a valid child.

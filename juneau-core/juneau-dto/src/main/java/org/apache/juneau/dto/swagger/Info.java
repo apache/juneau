@@ -145,7 +145,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -187,7 +187,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -229,7 +229,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -273,7 +273,7 @@ public class Info extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link Contact}
-	 * 		<li><code>String</code> - JSON object representation of {@link Contact}
+	 * 		<li><c>String</c> - JSON object representation of {@link Contact}
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	contact(<js>"{name:'name',url:'url',...}"</js>);
@@ -322,7 +322,7 @@ public class Info extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link License}
-	 * 		<li><code>String</code> - JSON object representation of {@link License}
+	 * 		<li><c>String</c> - JSON object representation of {@link License}
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	license(<js>"{name:'name',url:'url',...}"</js>);
@@ -368,7 +368,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */

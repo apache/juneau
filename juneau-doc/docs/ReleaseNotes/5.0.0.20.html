@@ -28,8 +28,8 @@
 		New Jena-based {@link oaj.jena.RdfParser} for parsing RDF/XML, RDF/XML-ABBREV, N3, Turtle, and N-Triple back into POJOs.
 	</li>
 	<li>
-		<code><del>XmlSerializerContext.XML_autoDetectNamespaces</del></code> default changed to <jk>true</jk>.<br>
-		The old default value would cause XML with unmapped namespaces if you didn't manually specify them via the <code><del>XmlSerializerContext.XML_namespaces</del></code> annotation.<br>
+		<dc>XmlSerializerContext.XML_autoDetectNamespaces</dc> default changed to <jk>true</jk>.<br>
+		The old default value would cause XML with unmapped namespaces if you didn't manually specify them via the <dc>XmlSerializerContext.XML_namespaces</dc> annotation.<br>
 		While setting the default to <jk>true</jk> is somewhat slower (since the serializer must crawl the POJO tree to find namespaces), the benefits of having it work out-of-the-box outweighs the performance concerns.<br>
 		For developers concerned about performance, they can always change it back to false and specify the namespaces themselves.	
 	</li>
@@ -44,36 +44,36 @@
 		Enhancements to {@link oajr.annotation.RestMethod @RestMethod} annotation:
 		<ul>
 			<li>
-				New <code>RestMethod.filters()</code> annotation for defining POJO filters at the method level.
+				New <c>RestMethod.filters()</c> annotation for defining POJO filters at the method level.
 			</li>
 			<li>
-				New <code><del>RestMethod.serializersInherit()</del></code> and <code><del>RestMethod.parsersInherit()</del></code> annotations for controlling how serializers and parsers (and associated filters and properties) are inherited from the class.<br>
-				This replaces the previous <code>addSerializers</code> and <code>addParsers</code> annotations.
+				New <dc>RestMethod.serializersInherit()</dc> and <dc>RestMethod.parsersInherit()</dc> annotations for controlling how serializers and parsers (and associated filters and properties) are inherited from the class.<br>
+				This replaces the previous <c>addSerializers</c> and <c>addParsers</c> annotations.
 		</ul>
 	</li>
 	<li>
-		New <code><del>RestServletJenaDefault</del></code> servlet that includes serialization/parsing support for all Jena-based serializers and parsers.
+		New <dc>RestServletJenaDefault</dc> servlet that includes serialization/parsing support for all Jena-based serializers and parsers.
 	</li>
 	<li>
-		New <code><del>DefaultJenaProvider</del></code> JAX-RS provider that includes serialization/parsing support for all Jena-based serializers and parsers.
+		New <dc>DefaultJenaProvider</dc> JAX-RS provider that includes serialization/parsing support for all Jena-based serializers and parsers.
 	</li>
 	<li>
-		Eliminated <code>RestServletChild</code> class.<br>  
+		Eliminated <c>RestServletChild</c> class.<br>  
 		It's redundant with the introduction of inheritable annotations.
 	</li>
 	<li>
 		New methods on {@link oajr.RestServlet}:
 		<ul>
-			<li><code>RestServlet.createConfigFactory()</code></li>
-			<li><code>RestServlet.createSerializers()</code></li>
-			<li><code>RestServlet.createParsers()</code></li>
+			<li><c>RestServlet.createConfigFactory()</c></li>
+			<li><c>RestServlet.createSerializers()</c></li>
+			<li><c>RestServlet.createParsers()</c></li>
 		</ul>
-		These augment the existing <code>getBeanContext()</code> / <code>getSerializers()</code> / <code>getParsers()</code> methods.		
+		These augment the existing <c>getBeanContext()</c> / <c>getSerializers()</c> / <c>getParsers()</c> methods.		
 	</li>
 </ul>
 <h5 class='topic w800'>REST client API changes</h5>
 <ul class='spaced-list'>
 	<li>
-		New <code>RestCall.setDateHeader(String,Object)</code> method for setting ISO8601 datetime headers.
+		New <c>RestCall.setDateHeader(String,Object)</c> method for setting ISO8601 datetime headers.
 	</li>
 </ul>

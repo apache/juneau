@@ -28,29 +28,29 @@ Collections
 	</ul>
 </ul>
 <p>
-	The <code>Type,Type...</code> arguments allow you to specify the component types for maps and collections.
-	<code>List</code> class arguments can be followed by zero or one arguments representing the entry types.
-	<code>Map</code> class arguments can be followed by zero or two arguments representing the key and value types.
+	The <c>Type,Type...</c> arguments allow you to specify the component types for maps and collections.
+	<c>List</c> class arguments can be followed by zero or one arguments representing the entry types.
+	<c>Map</c> class arguments can be followed by zero or two arguments representing the key and value types.
 	The arguments can be chained to produce any data structure consisting of maps, collections, or POJOs.
 </p>
 <p>
 	Examples are shown below:
 </p>
 <ul class='spaced-list'>
-	<li><code>getObject(<js>"..."</js>, List.<jk>class</jk>)</code>
-		<br>Produces: <code>List&lt;?&gt;</code>
-	<li><code>getObject(<js>"..."</js>, LinkedList.<jk>class</jk>)</code>
-		<br>Produces: <code>LinkedList&lt;?&gt;</code>
-	<li><code>getObject(<js>"..."</js>, HashSet.<jk>class</jk>, Integer.<jk>class</jk>)</code>
-		<br>Produces: <code>HashSet&lt;Integer&gt;</code>
-	<li><code>getObject(<js>"..."</js>, Map.<jk>class</jk>)</code>
-		<br>Produces: <code>Map&lt;?,?&gt;</code>
-	<li><code>getObject(<js>"..."</js>, HashMap.<jk>class</jk>)</code>
-		<br>Produces: <code>HashMap&lt;?,?&gt;</code>
-	<li><code>getObject(<js>"..."</js>, LinkedHashMap.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>)</code>
-		<br>Produces: <code>LinkedHashMap&lt;String,MyBean&gt;</code> 
-	<li><code>getObject(<js>"..."</js>, HashMap.<jk>class</jk>, Integer.<jk>class</jk>, ArrayList.<jk>class</jk>, MyBean[].<jk>class</jk>)</code>
-		<br>Produces: <code>LinkedHashMap&lt;Integer,ArrayList&lt;MyBean[]&gt;&gt;</code> 
+	<li><c>getObject(<js>"..."</js>, List.<jk>class</jk>)</c>
+		<br>Produces: <c>List&lt;?&gt;</c>
+	<li><c>getObject(<js>"..."</js>, LinkedList.<jk>class</jk>)</c>
+		<br>Produces: <c>LinkedList&lt;?&gt;</c>
+	<li><c>getObject(<js>"..."</js>, HashSet.<jk>class</jk>, Integer.<jk>class</jk>)</c>
+		<br>Produces: <c>HashSet&lt;Integer&gt;</c>
+	<li><c>getObject(<js>"..."</js>, Map.<jk>class</jk>)</c>
+		<br>Produces: <c>Map&lt;?,?&gt;</c>
+	<li><c>getObject(<js>"..."</js>, HashMap.<jk>class</jk>)</c>
+		<br>Produces: <c>HashMap&lt;?,?&gt;</c>
+	<li><c>getObject(<js>"..."</js>, LinkedHashMap.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>)</c>
+		<br>Produces: <c>LinkedHashMap&lt;String,MyBean&gt;</c> 
+	<li><c>getObject(<js>"..."</js>, HashMap.<jk>class</jk>, Integer.<jk>class</jk>, ArrayList.<jk>class</jk>, MyBean[].<jk>class</jk>)</c>
+		<br>Produces: <c>LinkedHashMap&lt;Integer,ArrayList&lt;MyBean[]&gt;&gt;</c> 
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>

@@ -25,9 +25,9 @@ import org.apache.juneau.xml.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Accept</code> types:  <code><b>text/html</b></code>
+ * Handles <c>Accept</c> types:  <bc>text/html</bc>
  * <p>
- * Produces <code>Content-Type</code> types:  <code><b>text/html</b></code>
+ * Produces <c>Content-Type</c> types:  <bc>text/html</bc>
  *
  * <h5 class='topic'>Description</h5>
  *
@@ -138,7 +138,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -164,7 +164,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -179,7 +179,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * </ul>
 	 *
 	 * <p>
-	 * When enabled, <code><b>key</b></code> and <code><b>value</b></code> column headers are added to tables.
+	 * When enabled, <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -207,8 +207,8 @@ public class HtmlSerializer extends XmlSerializer {
 	 *
 	 * <table class='styled'>
 	 * 	<tr>
-	 * 		<th><code>withoutHeaders</code></th>
-	 * 		<th><code>withHeaders</code></th>
+	 * 		<th><c>withoutHeaders</c></th>
+	 * 		<th><c>withHeaders</c></th>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>
@@ -235,7 +235,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLinksInStrings.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -278,8 +278,8 @@ public class HtmlSerializer extends XmlSerializer {
 	 *
 	 * <table class='styled'>
 	 * 	<tr>
-	 * 		<th><code>withLinks</code></th>
-	 * 		<th><code>withoutLinks</code></th>
+	 * 		<th><c>withLinks</c></th>
+	 * 		<th><c>withoutLinks</c></th>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>
@@ -305,7 +305,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.labelParameter.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"label"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -330,7 +330,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLabelParameters.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -376,8 +376,8 @@ public class HtmlSerializer extends XmlSerializer {
 	 *
 	 * <table class='styled'>
 	 * 	<tr>
-	 * 		<th><code>withLabels</code></th>
-	 * 		<th><code>withoutLabels</code></th>
+	 * 		<th><c>withLabels</c></th>
+	 * 		<th><c>withoutLabels</c></th>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>
@@ -403,7 +403,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.uriAnchorText.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link AnchorText})
+	 * 	<li><b>Data type:</b>  <c>String</c> ({@link AnchorText})
 	 * 	<li><b>Default:</b>  <js>"TO_STRING"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -659,10 +659,10 @@ public class HtmlSerializer extends XmlSerializer {
 	 * @param accept
 	 * 	The accept media types that the serializer can handle.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of
 	 * 	{@doc RFC2616.section14.1}
 	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
@@ -746,7 +746,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 *
 	 * @see #HTML_addKeyValueTableHeaders
 	 * @return
-	 * 	<jk>true</jk> if <code><b>key</b></code> and <code><b>value</b></code> column headers are added to tables.
+	 * 	<jk>true</jk> if <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 	 */
 	protected final boolean isAddKeyValueTableHeaders() {
 		return addKeyValueTableHeaders;

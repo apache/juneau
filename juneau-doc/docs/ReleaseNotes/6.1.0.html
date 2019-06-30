@@ -43,28 +43,28 @@
 				<li>New {@link oaj.xml.annotation.XmlFormat#XMLTEXT} format that's identical to {@link oaj.xml.annotation.XmlFormat#TEXT} except 
 					XML content is not escaped and serialized directly as the child content.  The parser will reconvert this to the original XML text during parsing.
 			</ul>
-			<li>New support methodology and other improvements to <code><del>org.apache.juneau.xml</del></code> documentation.
+			<li>New support methodology and other improvements to <dc>org.apache.juneau.xml</dc> documentation.
 			<li>Eliminated unnecessary <xt>&lt;string&gt;</xt> elements.
-			<li>Eliminated <code><del>XmlContentHandler</del></code> class.
+			<li>Eliminated <dc>XmlContentHandler</dc> class.
 			<li>Parser efficiency improvements through reuse of string builders.
 			<li>Reworked and simplified the default XML serializers.  The {@link oaj.xml.XmlSerializer#DEFAULT} serializer now has namespaces disabled,
 				and {@link oaj.xml.XmlSerializer#DEFAULT_NS} has namespaces enabled.  The 'XML-JSON' serializers have been eliminated.
-			<li>Eliminated the <code>addJsonTypeAttrs</code> and <code>addJsonStringTypeAttrs</code> settings.
+			<li>Eliminated the <c>addJsonTypeAttrs</c> and <c>addJsonStringTypeAttrs</c> settings.
 			<li>Namespace support is now disabled by default.
 		</ul>
 	<li>Significant modifications and improvements to HTML serialization support.
 		<ul>
-			<li>Parser converted from <code>XMLEventReader</code>-based to <code>XMLStreamReader</code>.
+			<li>Parser converted from <c>XMLEventReader</c>-based to <c>XMLStreamReader</c>.
 			<li>Eliminated many unnecessary type tags and <xt>&lt;string&gt;</xt> elements and improved the readable layout.  
 				The new format is much leaner.
-			<li>New exhaustive support methodology section added to <code><del>org.apache.juneau.html</del></code> documentation.
+			<li>New exhaustive support methodology section added to <dc>org.apache.juneau.html</dc> documentation.
 		</ul>
-	<li>New HTML5 DTO support:  <code><del>org.apache.juneau.dto.html5</del></code>.
+	<li>New HTML5 DTO support:  <dc>org.apache.juneau.dto.html5</dc>.
 	<li>{@link oaj.BeanContext} class split into separate {@link oaj.BeanContext} and {@link oaj.BeanSession} classes.
 	<ul>
 		<li>Session object meant to be single-use that can be discarded after use and contains session-level object cache and overridable Locale and TimeZone.
 	</ul>  
-	<li><code><del>SerializerContext</del></code> and <code><del>ParserContext</del></code>
+	<li><dc>SerializerContext</dc> and <dc>ParserContext</dc>
 		now extend directly from {@link oaj.BeanContext}.
 	<li>{@link oaj.serializer.SerializerSession} and {@link oaj.parser.ParserSession}
 		now extend directly from {@link oaj.BeanSession}.
@@ -77,14 +77,14 @@
 	</ul>
 	<li>Improvements to Parser class:  
 	<ul>
-		<li>Simplified the parse methods (e.g. <code>parseMap()</code>, <code>parseCollection()</code>)
+		<li>Simplified the parse methods (e.g. <c>parseMap()</c>, <c>parseCollection()</c>)
 		by replacing them with two simple methods: 
 		<ul>
 			<li>{@link oaj.parser.Parser#parse(Object,Class)} - Normal method.
 			<li>{@link oaj.parser.Parser#parse(Object,Type,Type...)} - Method for parsing into parameterized maps and collections.
 		</ul>
 		Using these methods, you can construct arbitrarily complex objects consisting of maps and collections.
-		You could do this before, but it required constructing a <code>ClassMeta</code> object.  
+		You could do this before, but it required constructing a <c>ClassMeta</c> object.  
 		<br>For example:
 			<p class='bcode w800'>
 	<jc>// Old way:</jc>
@@ -101,9 +101,9 @@
 	<jc>// New way:</jc>
 	Map&lt;String,List&lt;MyBean&gt;&gt; map = parser.parse(input, HashMap.<jk>class</jk>, String.<jk>class</jk>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 			</p>
-		<li>Arbitrarily-complex parameterized maps and collections can now be parsed without the need for creating intermediate <code>ClassMeta</code> objects.
-		<li>No need for casting anymore if you were using the old <code>parseMap()</code> and <code>parseCollection()</code> methods!
-		<li>Changes allow me to eliminate <code>BeanContext.normalizeClassMeta()</code> method.
+		<li>Arbitrarily-complex parameterized maps and collections can now be parsed without the need for creating intermediate <c>ClassMeta</c> objects.
+		<li>No need for casting anymore if you were using the old <c>parseMap()</c> and <c>parseCollection()</c> methods!
+		<li>Changes allow me to eliminate <c>BeanContext.normalizeClassMeta()</c> method.
 		<li>Convenience methods added for setting parser properties:
 			<p class='bcode w800'>
 	<jc>// Old way:</jc>
@@ -132,9 +132,9 @@
 	<li>General code improvements made to {@link oaj.ClassMeta} class.
 	<ul>
 		<li>All fields are now final which should improve overall performance.
-		<li>Replaced support for <code>toObjectMap()</code> and <code>fromObjectMap()/T(ObjectMap)</code> methods with
-			generalized <code>swap(BeanSession)</code>/<code>unswap(BeanSession,X)</code>/<code>T(BeanSession,X)</code> methods.<br>
-			See new section <code><del>Swap methods</del></code> for information.
+		<li>Replaced support for <c>toObjectMap()</c> and <c>fromObjectMap()/T(ObjectMap)</c> methods with
+			generalized <c>swap(BeanSession)</c>/<c>unswap(BeanSession,X)</c>/<c>T(BeanSession,X)</c> methods.<br>
+			See new section <dc>Swap methods</dc> for information.
 	</ul>
 	<li>Session-level media type now available through {@link oaj.BeanSession#getMediaType()} method.
 		Allows for swaps and serializer/parser behavior to be tailored to individual media types.
@@ -180,65 +180,65 @@
 		<ul>
 			<li>New {@link oaj.dto.atom.AtomBuilder} class.
 			<li>New setter method names for a better fluent design.
-			<li>Updated <code><del>org.apache.juneau.dto.atom</del></code> documentation.
+			<li>Updated <dc>org.apache.juneau.dto.atom</dc> documentation.
 		</ul>
 	<li>New {@link oaj.transform.MapSwap} and {@link oaj.transform.StringSwap} classes.
 	<li>New {@link oaj.serializer.WriterSerializer#println(Object)} method.  Useful for debugging purposes.
 	<li>New {@link oaj.BeanContext#getClassMeta(Type,Type...)} and {@link oaj.BeanSession#getClassMeta(Type,Type...)}
 		methods for retrieving Map and Collection class metas.  
-		Replaces the various <code>getMapClassMeta()</code>/<code>getCollectionClassMeta()</code> methods.  
-	<li>New section added to this document:	<code><del>Juneau Data Transfer Objects (org.apache.juneau.dto)</del></code>
+		Replaces the various <c>getMapClassMeta()</c>/<c>getCollectionClassMeta()</c> methods.  
+	<li>New section added to this document:	<dc>Juneau Data Transfer Objects (org.apache.juneau.dto)</dc>
 	<li>Modified the UON specification to work with mixed content.
 	<ul>
 		<li>The new specification is considerably cleaner and eliminates the need for separate normal/simple modes.
 			<br>It also allows for arbitrary whitespace to be added to the output without any confusion.
-		<li>Eliminated the <code>UonParser.<jsf>DEFAULT_WS_AWARE</jsf></code> and <code>UrlEncodingParser.<jsf>DEFAULT_WS_AWARE</jsf></code> parsers.
+		<li>Eliminated the <c>UonParser.<jsf>DEFAULT_WS_AWARE</jsf></c> and <c>UrlEncodingParser.<jsf>DEFAULT_WS_AWARE</jsf></c> parsers.
 			<br>The normal {@link oaj.uon.UonParser#DEFAULT} and {@link oaj.urlencoding.UrlEncodingParser#DEFAULT} parsers will now handle whitespace.
-		<li>Eliminated the <code>UonParserContext.<jsf>UON_whitespaceAware</jsf></code> configuration setting.
-		<li>Eliminated the <code>UonSerializer.<jsf>DEFAULT_SIMPLE</jsf></code>, <code>UonSerializer.<jsf>DEFAULT_SIMPLE_ENCODING</jsf></code>
-			and <code>UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf></code>
+		<li>Eliminated the <c>UonParserContext.<jsf>UON_whitespaceAware</jsf></c> configuration setting.
+		<li>Eliminated the <c>UonSerializer.<jsf>DEFAULT_SIMPLE</jsf></c>, <c>UonSerializer.<jsf>DEFAULT_SIMPLE_ENCODING</jsf></c>
+			and <c>UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf></c>
 			serializers since there is no separate simple mode anymore.
-		<li>Eliminated the <code>UonParserContext.<jsf>UON_simpleMode</jsf></code> configuration setting.
+		<li>Eliminated the <c>UonParserContext.<jsf>UON_simpleMode</jsf></c> configuration setting.
 	</ul>
-	<li>Added new <code><del>OutputStreamSerializer.serializeToHex(Object)</del></code> method. 
+	<li>Added new <dc>OutputStreamSerializer.serializeToHex(Object)</dc> method. 
 		<br>Useful mostly for testing purposes.
 		<br>Equivalently, the {@link oaj.parser.InputStreamParser#parse(Object,Class)} method can now 
 			read the output from this method.
-	<li>Eliminated the <code><ja>@Bean</ja>(subTypeProperty)</code> and <code><ja>@Bean</ja>(subTypes)</code> annotations
+	<li>Eliminated the <c><ja>@Bean</ja>(subTypeProperty)</c> and <c><ja>@Bean</ja>(subTypes)</c> annotations
 		and replaced them with the ability to define subtypes using the existing {@link oaj.annotation.Bean#beanDictionary() @Bean(beanDictionary)}
 		annotation on parent classes and interfaces.
 		<br>This has the added benefit of simplifying the overall code.
-	<li>The <code><del>SerializerContext.SERIALIZER_addBeanTypeProperties</del></code> setting is now enabled by default.
-	<li>Combined the <code>SERIALIZER_addIndentation</code>/<code>JSON_addWhitespace</code>/<code>UON_addWhitespace</code>
-		properties into a single <code><del>SerializerContext.SERIALIZER_useWhitespace</del></code> setting.
+	<li>The <dc>SerializerContext.SERIALIZER_addBeanTypeProperties</dc> setting is now enabled by default.
+	<li>Combined the <c>SERIALIZER_addIndentation</c>/<c>JSON_addWhitespace</c>/<c>UON_addWhitespace</c>
+		properties into a single <dc>SerializerContext.SERIALIZER_useWhitespace</dc> setting.
 </ul>
 
 <h5 class='topic w800'>org.apache.juneau.rest</h5>
 <ul class='spaced-list'>
 	<li>{@link oajr.RestRequest} now passes locale and timezone to serializers/parsers/transforms.
-	<li><code><del>RestRequest.getTimeZone()</del></code> method.
-	<li>Standardized the following methods in {@link oajr.RestRequest} to remove dependency on <code>ClassMeta</code>
+	<li><dc>RestRequest.getTimeZone()</dc> method.
+	<li>Standardized the following methods in {@link oajr.RestRequest} to remove dependency on <c>ClassMeta</c>
 		objects and eliminate the need for casts:
 		<ul>
-			<li><code><del>RestRequest.getHeader(String,Class)</del></code>
-			<li><code><del>RestRequest.getHeader(String,Object,Class)</del></code>
-			<li><code><del>RestRequest.getHeader(String,Type,Type...)</del></code>
-			<li><code><del>RestRequest.getQueryParameter(String,Class)</del></code>
-			<li><code><del>RestRequest.getQueryParameter(String,Object,Class)</del></code>
-			<li><code><del>RestRequest.getQueryParameter(String,Type,Type...)</del></code>
-			<li><code><del>RestRequest.getQueryParameter(String,Object,Type,Type...)</del></code>
-			<li><code><del>RestRequest.getQueryParameters(String,Class)</del></code>
-			<li><code><del>RestRequest.getQueryParameters(String,Type,Type...)</del></code>
-			<li><code><del>RestRequest.getFormDataParameter(String,Class)</del></code>
-			<li><code><del>RestRequest.getFormDataParameter(String,Object,Class)</del></code>
-			<li><code><del>RestRequest.getFormDataParameters(String,Class)</del></code>
-			<li><code><del>RestRequest.getFormDataParameter(String,Type,Type...)</del></code>
-			<li><code><del>RestRequest.getFormDataParameters(String,Type,Type...)</del></code>
-			<li><code><del>RestRequest.getPathParameter(String,Class)</del></code>
-			<li><code><del>RestRequest.getPathParameter(String,Type,Type...)</del></code>
-			<li><code><del>RestRequest.getBody(Class)</del></code>
-			<li><code><del>RestRequest.getBody(Type,Type...)</del></code>
+			<li><dc>RestRequest.getHeader(String,Class)</dc>
+			<li><dc>RestRequest.getHeader(String,Object,Class)</dc>
+			<li><dc>RestRequest.getHeader(String,Type,Type...)</dc>
+			<li><dc>RestRequest.getQueryParameter(String,Class)</dc>
+			<li><dc>RestRequest.getQueryParameter(String,Object,Class)</dc>
+			<li><dc>RestRequest.getQueryParameter(String,Type,Type...)</dc>
+			<li><dc>RestRequest.getQueryParameter(String,Object,Type,Type...)</dc>
+			<li><dc>RestRequest.getQueryParameters(String,Class)</dc>
+			<li><dc>RestRequest.getQueryParameters(String,Type,Type...)</dc>
+			<li><dc>RestRequest.getFormDataParameter(String,Class)</dc>
+			<li><dc>RestRequest.getFormDataParameter(String,Object,Class)</dc>
+			<li><dc>RestRequest.getFormDataParameters(String,Class)</dc>
+			<li><dc>RestRequest.getFormDataParameter(String,Type,Type...)</dc>
+			<li><dc>RestRequest.getFormDataParameters(String,Type,Type...)</dc>
+			<li><dc>RestRequest.getPathParameter(String,Class)</dc>
+			<li><dc>RestRequest.getPathParameter(String,Type,Type...)</dc>
+			<li><dc>RestRequest.getBody(Class)</dc>
+			<li><dc>RestRequest.getBody(Type,Type...)</dc>
 		</ul>
 	<li>New methods on {@link oajrc.NameValuePairs}
-	<li>Fixed issue where whitespace was not added to UON/URL-Encoding output when <code>&amp;plainText=true</code> specified.
+	<li>Fixed issue where whitespace was not added to UON/URL-Encoding output when <c>&amp;plainText=true</c> specified.
 </ul>

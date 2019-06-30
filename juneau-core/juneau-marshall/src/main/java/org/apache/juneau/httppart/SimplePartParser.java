@@ -26,17 +26,17 @@ import org.apache.juneau.parser.*;
  * 	<li>
  * 		An <jk>enum</jk>.
  * 	<li>
- * 		Have a public constructor with a single <code>String</code> parameter.
+ * 		Have a public constructor with a single <c>String</c> parameter.
  * 	<li>
- * 		Have one of the following public static methods that takes in a single <code>String</code> parameter:
+ * 		Have one of the following public static methods that takes in a single <c>String</c> parameter:
  * 		<ul>
- * 			<li><code>fromString</code>
- * 			<li><code>fromValue</code>
- * 			<li><code>valueOf</code>
- * 			<li><code>parse</code>
- * 			<li><code>parseString</code>
- * 			<li><code>forName</code>
- * 			<li><code>forString</code>
+ * 			<li><c>fromString</c>
+ * 			<li><c>fromValue</c>
+ * 			<li><c>valueOf</c>
+ * 			<li><c>parse</c>
+ * 			<li><c>parseString</c>
+ * 			<li><c>forName</c>
+ * 			<li><c>forString</c>
  * 	</ul>
  * </ul>
  */

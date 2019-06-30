@@ -68,7 +68,7 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <p>
- * The actual connection and request/response transaction occurs when calling one of the <code>getResponseXXX()</code>
+ * The actual connection and request/response transaction occurs when calling one of the <c>getResponseXXX()</c>
  * methods.
  *
  * <h5 class='section'>See Also:</h5>
@@ -769,7 +769,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Accept</code> request header.
+	 * Sets the value for the <c>Accept</c> request header.
 	 *
 	 * <p>
 	 * This overrides the media type specified on the parser, but is overridden by calling
@@ -784,7 +784,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Accept-Charset</code> request header.
+	 * Sets the value for the <c>Accept-Charset</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Charset"</js>, value);</code>
@@ -798,7 +798,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Accept-Encoding</code> request header.
+	 * Sets the value for the <c>Accept-Encoding</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Encoding"</js>, value);</code>
@@ -812,7 +812,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Accept-Language</code> request header.
+	 * Sets the value for the <c>Accept-Language</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Language"</js>, value);</code>
@@ -826,7 +826,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Authorization</code> request header.
+	 * Sets the value for the <c>Authorization</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Authorization"</js>, value);</code>
@@ -840,7 +840,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Cache-Control</code> request header.
+	 * Sets the value for the <c>Cache-Control</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Cache-Control"</js>, value);</code>
@@ -854,7 +854,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Connection</code> request header.
+	 * Sets the value for the <c>Connection</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Connection"</js>, value);</code>
@@ -868,7 +868,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Content-Length</code> request header.
+	 * Sets the value for the <c>Content-Length</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Content-Length"</js>, value);</code>
@@ -882,7 +882,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Content-Type</code> request header.
+	 * Sets the value for the <c>Content-Type</c> request header.
 	 *
 	 * <p>
 	 * This overrides the media type specified on the serializer, but is overridden by calling
@@ -897,7 +897,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Date</code> request header.
+	 * Sets the value for the <c>Date</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Date"</js>, value);</code>
@@ -911,7 +911,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Expect</code> request header.
+	 * Sets the value for the <c>Expect</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Expect"</js>, value);</code>
@@ -925,7 +925,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Forwarded</code> request header.
+	 * Sets the value for the <c>Forwarded</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Forwarded"</js>, value);</code>
@@ -939,7 +939,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>From</code> request header.
+	 * Sets the value for the <c>From</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"From"</js>, value);</code>
@@ -953,7 +953,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Host</code> request header.
+	 * Sets the value for the <c>Host</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Host"</js>, value);</code>
@@ -967,7 +967,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>If-Match</code> request header.
+	 * Sets the value for the <c>If-Match</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Match"</js>, value);</code>
@@ -981,7 +981,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>If-Modified-Since</code> request header.
+	 * Sets the value for the <c>If-Modified-Since</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Modified-Since"</js>, value);</code>
@@ -995,7 +995,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>If-None-Match</code> request header.
+	 * Sets the value for the <c>If-None-Match</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-None-Match"</js>, value);</code>
@@ -1009,7 +1009,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>If-Range</code> request header.
+	 * Sets the value for the <c>If-Range</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Range"</js>, value);</code>
@@ -1023,7 +1023,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>If-Unmodified-Since</code> request header.
+	 * Sets the value for the <c>If-Unmodified-Since</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Unmodified-Since"</js>, value);</code>
@@ -1037,7 +1037,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Max-Forwards</code> request header.
+	 * Sets the value for the <c>Max-Forwards</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Max-Forwards"</js>, value);</code>
@@ -1051,7 +1051,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Origin</code> request header.
+	 * Sets the value for the <c>Origin</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Origin"</js>, value);</code>
@@ -1065,7 +1065,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Pragma</code> request header.
+	 * Sets the value for the <c>Pragma</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Pragma"</js>, value);</code>
@@ -1079,7 +1079,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Proxy-Authorization</code> request header.
+	 * Sets the value for the <c>Proxy-Authorization</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Proxy-Authorization"</js>, value);</code>
@@ -1093,7 +1093,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Range</code> request header.
+	 * Sets the value for the <c>Range</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Range"</js>, value);</code>
@@ -1107,7 +1107,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Referer</code> request header.
+	 * Sets the value for the <c>Referer</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Referer"</js>, value);</code>
@@ -1121,7 +1121,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>TE</code> request header.
+	 * Sets the value for the <c>TE</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"TE"</js>, value);</code>
@@ -1135,7 +1135,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>User-Agent</code> request header.
+	 * Sets the value for the <c>User-Agent</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"User-Agent"</js>, value);</code>
@@ -1149,7 +1149,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Upgrade</code> request header.
+	 * Sets the value for the <c>Upgrade</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Upgrade"</js>, value);</code>
@@ -1163,7 +1163,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Via</code> request header.
+	 * Sets the value for the <c>Via</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Via"</js>, value);</code>
@@ -1177,7 +1177,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets the value for the <code>Warning</code> request header.
+	 * Sets the value for the <c>Warning</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Warning"</js>, value);</code>
@@ -1589,7 +1589,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * Connects to the REST resource.
 	 *
 	 * <p>
-	 * If this is a <code>PUT</code> or <code>POST</code>, also sends the input to the remote resource.<br>
+	 * If this is a <c>PUT</c> or <c>POST</c>, also sends the input to the remote resource.<br>
 	 *
 	 * <p>
 	 * Typically, you would only call this method if you're not interested in retrieving the body of the HTTP response.
@@ -1597,7 +1597,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * methods directly which automatically call this method already.
 	 *
 	 * @return This object (for method chaining).
-	 * @throws RestCallException If an exception or <code>400+</code> HTTP status code occurred during the connection attempt.
+	 * @throws RestCallException If an exception or <c>400+</c> HTTP status code occurred during the connection attempt.
 	 */
 	public RestCall connect() throws RestCallException {
 		return connect(null);
@@ -1736,15 +1736,15 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Connects to the remote resource (if <code>connect()</code> hasn't already been called) and returns the HTTP
+	 * Connects to the remote resource (if <c>connect()</c> hasn't already been called) and returns the HTTP
 	 * response message body as a reader.
 	 *
 	 * <p>
 	 * If an {@link Encoder} has been registered with the {@link RestClient}, then the underlying input stream will be
-	 * wrapped in the encoded stream (e.g. a <code>GZIPInputStream</code>).
+	 * wrapped in the encoded stream (e.g. a <c>GZIPInputStream</c>).
 	 *
 	 * <p>
-	 * If present, automatically handles the <code>charset</code> value in the <code>Content-Type</code> response header.
+	 * If present, automatically handles the <c>charset</c> value in the <c>Content-Type</c> response header.
 	 *
 	 * <p>
 	 * <b>IMPORTANT:</b>  It is your responsibility to close this reader once you have finished with it.
@@ -1806,9 +1806,9 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Returns the value of the <code>Content-Length</code> header.
+	 * Returns the value of the <c>Content-Length</c> header.
 	 *
-	 * @return The value of the <code>Content-Length</code> header, or <code>-1</code> if header is not present.
+	 * @return The value of the <c>Content-Length</c> header, or <c>-1</c> if header is not present.
 	 * @throws IOException
 	 */
 	public int getContentLength() throws IOException {
@@ -1823,12 +1823,12 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Connects to the remote resource (if <code>connect()</code> hasn't already been called) and returns the HTTP
+	 * Connects to the remote resource (if <c>connect()</c> hasn't already been called) and returns the HTTP
 	 * response message body as an input stream.
 	 *
 	 * <p>
 	 * If an {@link Encoder} has been registered with the {@link RestClient}, then the underlying input stream will be
-	 * wrapped in the encoded stream (e.g. a <code>GZIPInputStream</code>).
+	 * wrapped in the encoded stream (e.g. a <c>GZIPInputStream</c>).
 	 *
 	 * <p>
 	 * <b>IMPORTANT:</b>  It is your responsibility to close this reader once you have finished with it.
@@ -2040,7 +2040,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	<li>
 	 * 		You can also specify any of the following types:
 	 * 		<ul>
-	 * 			<li>{@link HttpResponse} - Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
+	 * 			<li>{@link HttpResponse} - Returns the raw <c>HttpResponse</c> returned by the inner <c>HttpClient</c>.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 		</ul>
@@ -2111,10 +2111,10 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * </p>
 	 *
 	 * <p>
-	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 * <c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
 	 *
 	 * <p>
-	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
 	 *
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
@@ -2126,7 +2126,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	<li>
 	 * 		You can also specify any of the following types:
 	 * 		<ul>
-	 * 			<li>{@link HttpResponse} - Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
+	 * 			<li>{@link HttpResponse} - Returns the raw <c>HttpResponse</c> returned by the inner <c>HttpClient</c>.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 		</ul>
@@ -2217,7 +2217,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @return The parsed output wrapped in a {@link PojoRest}.
 	 * @throws IOException If a connection error occurred.
 	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed for the <code>Content-Type</code> header.
+	 * 	If the input contains a syntax error or is malformed for the <c>Content-Type</c> header.
 	 */
 	public PojoRest getResponsePojoRest(Class<?> innerType) throws IOException, ParseException {
 		return new PojoRest(getResponse(innerType));
@@ -2232,7 +2232,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @return The parsed output wrapped in a {@link PojoRest}.
 	 * @throws IOException If a connection error occurred.
 	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed for the <code>Content-Type</code> header.
+	 * 	If the input contains a syntax error or is malformed for the <c>Content-Type</c> header.
 	 */
 	public PojoRest getResponsePojoRest() throws IOException, ParseException {
 		return getResponsePojoRest(ObjectMap.class);
@@ -2399,7 +2399,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Shortcut for calling <code>getRequest().setHeader(header)</code>
+	 * Shortcut for calling <c>getRequest().setHeader(header)</c>
 	 *
 	 * @param header The header to set on the request.
 	 * @return This object (for method chaining).
@@ -2443,7 +2443,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Sets <code>Debug: value</code> header on this request.
+	 * Sets <c>Debug: value</c> header on this request.
 	 *
 	 * @return This object (for method chaining).
 	 * @throws RestCallException

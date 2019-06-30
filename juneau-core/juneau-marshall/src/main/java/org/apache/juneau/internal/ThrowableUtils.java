@@ -47,7 +47,7 @@ public class ThrowableUtils {
 	}
 
 	/**
-	 * Throws an {@link IllegalArgumentException} if the specified field is <code>&lt;=0</code>.
+	 * Throws an {@link IllegalArgumentException} if the specified field is <c>&lt;=0</c>.
 	 *
 	 * @param fieldValue The object to check.
 	 * @param fieldName The name of the field.

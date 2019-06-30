@@ -21,21 +21,21 @@
 <ul class='spaced-list'>
 	<li>
 		New support for generating and consuming fully-compliant JSON-Schema documents.<br>
-		See <code><del>org.apache.juneau.dto.jsonschema</del></code> for information.
+		See <dc>org.apache.juneau.dto.jsonschema</dc> for information.
 	</li>
 	<li>
 		New methods added to {@link oaj.parser.Parser}:
 		<ul>
-			<li><code>org.apache.juneau.parser.Parser.parseMap(Object,int,Class,Class,Class)</code></li>
-			<li><code>org.apache.juneau.parser.Parser.parseCollection(Object,int,Class,Class)</code></li>
+			<li><c>org.apache.juneau.parser.Parser.parseMap(Object,int,Class,Class,Class)</c></li>
+			<li><c>org.apache.juneau.parser.Parser.parseCollection(Object,int,Class,Class)</c></li>
 		</ul>
 	</li>
 		<li>
 		{@link oaj.annotation.Bean @Bean} annotation can now be defined on interfaces and inherited by subclasses.
 	</li>
 	<li>
-			Support for customizing serialized values for <code>Enums</code> through overriding <code>toString()</code> and <code>fromString()</code> on the enum class.<br>
-		Previously used <code>Enum.valueOf()</code> to convert strings back into <code>Enums</code>.<br>
+			Support for customizing serialized values for <c>Enums</c> through overriding <c>toString()</c> and <c>fromString()</c> on the enum class.<br>
+		Previously used <c>Enum.valueOf()</c> to convert strings back into <c>Enums</c>.<br>
 		Used for JSON-Schema support to allow {@link oaj.dto.jsonschema.JsonType} enum to be serialized to lowercase per the specification (e.g. <js>"string"</js> instead of <js>"STRING"</js>).
 		</li>
 		<li>
@@ -44,18 +44,18 @@
 		<li>
 		Support for generic bean objects whose type was erased at compile time.<br> 
 		Previous behavior gave you an error message that the type could not be determined.<br>
-		New behavior assumes a type of <code>Object</code> when the type is erased.
+		New behavior assumes a type of <c>Object</c> when the type is erased.
 		</li>
 		<li>
 			Bug fixes:
 			<ul>
 				<li>
-				When duplicate fluent-style setters were defined with different parameter types (e.g. <code>setFoo(Foo f)</code>, <code>setFoo(Bar b)</code>), the {@link oaj.BeanMap} API would sometime choose the wrong setter as the bean property setter. <br>
+				When duplicate fluent-style setters were defined with different parameter types (e.g. <c>setFoo(Foo f)</c>, <c>setFoo(Bar b)</c>), the {@link oaj.BeanMap} API would sometime choose the wrong setter as the bean property setter. <br>
 				Now validates that the setter being chosen is the one whose return type matches the property getter.
 			</li>
 			<li>
-				Passing in <code>Accept</code> GET parameters with <js>'+'</js> (e.g. <code>&amp;Accept=text/json+simple</code>) wasn't working anymore.<br>
-				The <code>Accept</code> parameter is supposed to interpret spaces as <js>'+'</js> to allow you to not have to write <code>&amp;Accept=text/json%2Bsimple</code>.
+				Passing in <c>Accept</c> GET parameters with <js>'+'</js> (e.g. <c>&amp;Accept=text/json+simple</c>) wasn't working anymore.<br>
+				The <c>Accept</c> parameter is supposed to interpret spaces as <js>'+'</js> to allow you to not have to write <c>&amp;Accept=text/json%2Bsimple</c>.
 				</li>
 				<li>
 				Parsers would not set bean properties of abstract type {@link java.lang.Number}.<br> 

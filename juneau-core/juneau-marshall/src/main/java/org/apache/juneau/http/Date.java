@@ -81,10 +81,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Date extends HeaderDate {
 
 	/**
-	 * Returns a parsed <code>Date</code> header.
+	 * Returns a parsed <c>Date</c> header.
 	 *
-	 * @param value The <code>Date</code> header string.
-	 * @return The parsed <code>Date</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Date</c> header string.
+	 * @return The parsed <c>Date</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Date forString(String value) {
 		if (value == null)

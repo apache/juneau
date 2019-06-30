@@ -48,7 +48,7 @@ public @interface BeanConfig {
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
 	 *
 	 * <p>
-	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then the class
+	 * For example, if the visibility is <c>PUBLIC</c> and the bean class is <jk>protected</jk>, then the class
 	 * will not be interpreted as a bean class and be serialized as a string.
 	 * <br>Use this setting to reduce the visibility requirement.
 	 *
@@ -119,7 +119,7 @@ public @interface BeanConfig {
 	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
 	 * through reflection.
 	 * <br>The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined on the bean class.
-	 * <br>For example, if a class <code>Foo</code> has a type-name of <js>"myfoo"</js>, then it would end up serialized
+	 * <br>For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up serialized
 	 * as <js>"{_type:'myfoo',...}"</js>.
 	 *
 	 * <p>
@@ -192,7 +192,7 @@ public @interface BeanConfig {
 	 *
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * <br>It's useful when you want to use the <code>@Bean</code> annotation functionality, but you don't have the ability to alter
+	 * <br>It's useful when you want to use the <c>@Bean</c> annotation functionality, but you don't have the ability to alter
 	 * the bean classes.
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -641,7 +641,7 @@ public @interface BeanConfig {
 	 * 		<ul class='spaced-list'>
 	 * 			<li>A static field annotated with {@link Example @Example}.
 	 * 			<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-	 * 			<li>A static method with name <code>example</code> with no arguments or one {@link BeanSession} argument.
+	 * 			<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
@@ -1009,7 +1009,7 @@ public @interface BeanConfig {
 	 *
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
-	 * <br>Not-bean classes are converted to <code>Strings</code> during serialization.
+	 * <br>Not-bean classes are converted to <c>Strings</c> during serialization.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -1063,14 +1063,14 @@ public @interface BeanConfig {
 	 * 	<li>
 	 * 		The default value excludes the following packages:
 	 * 		<ul>
-	 * 			<li><code>java.lang</code>
-	 * 			<li><code>java.lang.annotation</code>
-	 * 			<li><code>java.lang.ref</code>
-	 * 			<li><code>java.lang.reflect</code>
-	 * 			<li><code>java.io</code>
-	 * 			<li><code>java.net</code>
-	 * 			<li><code>java.nio.*</code>
-	 * 			<li><code>java.util.*</code>
+	 * 			<li><c>java.lang</c>
+	 * 			<li><c>java.lang.annotation</c>
+	 * 			<li><c>java.lang.ref</c>
+	 * 			<li><c>java.lang.reflect</c>
+	 * 			<li><c>java.io</c>
+	 * 			<li><c>java.net</c>
+	 * 			<li><c>java.nio.*</c>
+	 * 			<li><c>java.util.*</c>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
@@ -1113,7 +1113,7 @@ public @interface BeanConfig {
 	 * and "swap in" the non-serializable class during parsing.
 	 *
 	 * <p>
-	 * An example of a POJO swap would be a <code>Calendar</code> object that gets swapped out for an ISO8601 string.
+	 * An example of a POJO swap would be a <c>Calendar</c> object that gets swapped out for an ISO8601 string.
 	 *
 	 * <p>
 	 * Multiple POJO swaps can be associated with a single class.

@@ -36,9 +36,9 @@ import org.apache.juneau.utils.*;
  * 	<li><js>"path"</js> - Used together with Path Templating, where the parameter value is actually part of the
  * 		operation's URL.
  * 		This does not include the host or base path of the API.
- * 		For example, in <code>/items/{itemId}</code>, the path parameter is <code>itemId</code>.
+ * 		For example, in <c>/items/{itemId}</c>, the path parameter is <c>itemId</c>.
  * 	<li><js>"query"</js> - Parameters that are appended to the URL.
- * 		For example, in <code>/items?id=###</code>, the query parameter is <code>id</code>.
+ * 		For example, in <c>/items?id=###</c>, the query parameter is <c>id</c>.
  * 	<li><js>"header"</js> - Custom headers that are expected as part of the request.
  * 	<li><js>"body"</js> - The payload that's appended to the HTTP request.
  * 		Since there can only be one payload, there can only be one body parameter.
@@ -47,22 +47,22 @@ import org.apache.juneau.utils.*;
  * 		Since Form parameters are also in the payload, body and form parameters cannot exist together for the same
  * 		operation.
  * 	<li><js>"formData"</js> - Used to describe the payload of an HTTP request when either
- * 		<code>application/x-www-form-urlencoded</code>, <code>multipart/form-data</code> or both are used as the
+ * 		<c>application/x-www-form-urlencoded</c>, <c>multipart/form-data</c> or both are used as the
  * 		content type of the request (in Swagger's definition, the consumes property of an operation).
  * 		This is the only parameter type that can be used to send files, thus supporting the file type.
  * 		Since form parameters are sent in the payload, they cannot be declared together with a body parameter for the
  * 		same operation.
  * 		Form parameters have a different format based on the content-type used (for further details, consult
- * 		<code>http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4</code>):
+ * 		<c>http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4</c>):
  * 		<ul>
  * 			<li><js>"application/x-www-form-urlencoded"</js> - Similar to the format of Query parameters but as a
  * 				payload.
- * 				For example, <code>foo=1&amp;bar=swagger</code> - both <code>foo</code> and <code>bar</code> are form
+ * 				For example, <c>foo=1&amp;bar=swagger</c> - both <c>foo</c> and <c>bar</c> are form
  * 				parameters.
  * 				This is normally used for simple parameters that are being transferred.
  * 			<li><js>"multipart/form-data"</js> - each parameter takes a section in the payload with an internal header.
- * 				For example, for the header <code>Content-Disposition: form-data; name="submit-name"</code> the name of
- * 				the parameter is <code>submit-name</code>.
+ * 				For example, for the header <c>Content-Disposition: form-data; name="submit-name"</c> the name of
+ * 				the parameter is <c>submit-name</c>.
  * 				This type of form parameters is more commonly used for file transfers.
  * 		</ul>
  * 	</li>
@@ -263,10 +263,10 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<li>
 	 * 		Parameter names are case sensitive.
 	 * 	<li>
-	 * 		If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment
-	 * 		from the <code>path</code> field in the {@doc SwaggerPathsObject Paths Object}.
+	 * 		If <c>in</c> is <js>"path"</js>, the <c>name</c> field MUST correspond to the associated path segment
+	 * 		from the <c>path</c> field in the {@doc SwaggerPathsObject Paths Object}.
 	 * 	<li>
-	 * 		For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
+	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -291,10 +291,10 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<li>
 	 * 		Parameter names are case sensitive.
 	 * 	<li>
-	 * 		If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment
-	 * 		from the <code>path</code> field in the {@doc SwaggerPathsObject Paths Object}.
+	 * 		If <c>in</c> is <js>"path"</js>, the <c>name</c> field MUST correspond to the associated path segment
+	 * 		from the <c>path</c> field in the {@doc SwaggerPathsObject Paths Object}.
 	 * 	<li>
-	 * 		For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
+	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -318,7 +318,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -374,7 +374,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Valid values:
 	 * 	<ul>
 	 * 		<li><js>"query"</js>
@@ -427,7 +427,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>{@doc GFM} can be used for rich text representation.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -457,7 +457,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>If the parameter is <code>in</code> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
+	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
 	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -473,7 +473,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>If the parameter is <code>in</code> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
+	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
 	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -518,7 +518,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link SchemaInfo}
-	 * 		<li><code>String</code> - JSON object representation of {@link SchemaInfo}
+	 * 		<li><c>String</c> - JSON object representation of {@link SchemaInfo}
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
@@ -565,8 +565,8 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		<li><js>"array"</js>
 	 * 		<li><js>"file"</js>
 	 * 	</ul>
-	 * 	<br>If type is <js>"file"</js>, the <code>consumes</code> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
-	 * 		or both and the parameter MUST be <code>in</code> <js>"formData"</js>.
+	 * 	<br>If type is <js>"file"</js>, the <c>consumes</c> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
+	 * 		or both and the parameter MUST be <c>in</c> <js>"formData"</js>.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
@@ -585,7 +585,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Valid values:
 	 * 	<ul>
 	 * 		<li><js>"string"</js>
@@ -595,8 +595,8 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		<li><js>"array"</js>
 	 * 		<li><js>"file"</js>
 	 * 	</ul>
-	 * 	<br>If type is <js>"file"</js>, the <code>consumes</code> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
-	 * 		or both and the parameter MUST be <code>in</code> <js>"formData"</js>.
+	 * 	<br>If type is <js>"file"</js>, the <c>consumes</c> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
+	 * 		or both and the parameter MUST be <c>in</c> <js>"formData"</js>.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
@@ -645,7 +645,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -660,7 +660,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Sets the ability to pass empty-valued parameters.
 	 *
 	 * <p>
-	 * This is valid only for either <code>query</code> or <code>formData</code> parameters and allows you to send a
+	 * This is valid only for either <c>query</c> or <c>formData</c> parameters and allows you to send a
 	 * parameter with a name only or an empty value.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -676,7 +676,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Sets the ability to pass empty-valued parameters.
 	 *
 	 * <p>
-	 * This is valid only for either <code>query</code> or <code>formData</code> parameters and allows you to send a
+	 * This is valid only for either <c>query</c> or <c>formData</c> parameters and allows you to send a
 	 * parameter with a name only or an empty value.
 	 *
 	 * @param value
@@ -724,7 +724,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
+	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -738,11 +738,11 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
+	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link Items}
-	 * 		<li><code>String</code> - JSON object representation of {@link Items}
+	 * 		<li><c>String</c> - JSON object representation of {@link Items}
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
@@ -777,13 +777,13 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
 	 * 	<ul>
-	 * 		<li><js>"csv"</js> (default) - comma separated values <code>foo,bar</code>.
-	 * 		<li><js>"ssv"</js> - space separated values <code>foo bar</code>.
-	 * 		<li><js>"tsv"</js> - tab separated values <code>foo\tbar</code>.
-	 * 		<li><js>"pipes"</js> - pipe separated values <code>foo|bar</code>.
+	 * 		<li><js>"csv"</js> (default) - comma separated values <c>foo,bar</c>.
+	 * 		<li><js>"ssv"</js> - space separated values <c>foo bar</c>.
+	 * 		<li><js>"tsv"</js> - tab separated values <c>foo\tbar</c>.
+	 * 		<li><js>"pipes"</js> - pipe separated values <c>foo|bar</c>.
 	 * 		<li><js>"multi"</js> - corresponds to multiple parameter instances instead of multiple values for a single
-	 * 			instance <code>foo=bar&amp;foo=baz</code>.
-	 * 			<br>This is valid only for parameters <code>in</code> <js>"query"</js> or <js>"formData"</js>.
+	 * 			instance <c>foo=bar&amp;foo=baz</c>.
+	 * 			<br>This is valid only for parameters <c>in</c> <js>"query"</js> or <js>"formData"</js>.
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -803,16 +803,16 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Valid values:
 	 * 	<ul>
-	 * 		<li><js>"csv"</js> (default) - comma separated values <code>foo,bar</code>.
-	 * 		<li><js>"ssv"</js> - space separated values <code>foo bar</code>.
-	 * 		<li><js>"tsv"</js> - tab separated values <code>foo\tbar</code>.
-	 * 		<li><js>"pipes"</js> - pipe separated values <code>foo|bar</code>.
+	 * 		<li><js>"csv"</js> (default) - comma separated values <c>foo,bar</c>.
+	 * 		<li><js>"ssv"</js> - space separated values <c>foo bar</c>.
+	 * 		<li><js>"tsv"</js> - tab separated values <c>foo\tbar</c>.
+	 * 		<li><js>"pipes"</js> - pipe separated values <c>foo|bar</c>.
 	 * 		<li><js>"multi"</js> - corresponds to multiple parameter instances instead of multiple values for a single
-	 * 			instance <code>foo=bar&amp;foo=baz</code>.
-	 * 			<br>This is valid only for parameters <code>in</code> <js>"query"</js> or <js>"formData"</js>.
+	 * 			instance <c>foo=bar&amp;foo=baz</c>.
+	 * 			<br>This is valid only for parameters <c>in</c> <js>"query"</js> or <js>"formData"</js>.
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -829,7 +829,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
 	 *
 	 * (Note: <js>"default"</js> has no meaning for required parameters.)
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -849,7 +849,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
 	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
 	 * (Note: <js>"default"</js> has no meaning for required parameters.)
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -909,7 +909,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
+	 * 	<br>Non-Number values will be converted to Number using <c>toString()</c> then best number match.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -995,7 +995,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
+	 * 	<br>Non-Number values will be converted to Number using <c>toString()</c> then best number match.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -1170,7 +1170,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -1359,14 +1359,14 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Object</code>
-	 * 		<li><code>Collection&lt;Object&gt;</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
+	 * 		<li><c>Object</c>
+	 * 		<li><c>Collection&lt;Object&gt;</c>
+	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;Object&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	_enum(<js>"['foo','bar']"</js>);
 	 * 			</p>
-	 * 		<li><code>String</code> - Individual values
+	 * 		<li><c>String</c> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
@@ -1417,7 +1417,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
+	 * 	<br>Non-Number values will be converted to Number using <c>toString()</c> then best number match.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -1516,8 +1516,8 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Map&lt;String,String&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Object&gt;</code>
+	 * 		<li><c>Map&lt;String,String&gt;</c>
+	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,Object&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	examples(<js>"{'text/json':'{foo:\\'bar\\'}'}"</js>);
@@ -1639,7 +1639,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
 	 * @param maxDepth
 	 * 	The maximum depth to resolve references.
-	 * 	<br>After that level is reached, <code>$ref</code> references will be left alone.
+	 * 	<br>After that level is reached, <c>$ref</c> references will be left alone.
 	 * 	<br>Useful if you have very complex models and you don't want your swagger page to be overly-complex.
 	 * @return
 	 * 	This object with references resolved.

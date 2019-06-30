@@ -65,10 +65,10 @@ import org.apache.juneau.http.annotation.*;
 public final class AcceptRanges extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Accept-Ranges</code> header.
+	 * Returns a parsed <c>Accept-Ranges</c> header.
 	 *
-	 * @param value The <code>Accept-Ranges</code> header string.
-	 * @return The parsed <code>Accept-Ranges</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Accept-Ranges</c> header string.
+	 * @return The parsed <c>Accept-Ranges</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static AcceptRanges forString(String value) {
 		if (value == null)

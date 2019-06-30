@@ -55,19 +55,19 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		Any serializable POJO - Converted to output using the {@link oaj.serializer.Serializer} registered with the <code>RestClient</code>.
-		<br><code>Content-Type</code> is set to that of the <code>Serializer</code>.
+		Any serializable POJO - Converted to output using the {@link oaj.serializer.Serializer} registered with the <c>RestClient</c>.
+		<br><c>Content-Type</c> is set to that of the <c>Serializer</c>.
 	<li>
 		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-		<br><code>Content-Type</code> is set to <js>"text/plain"</js>.
+		<br><c>Content-Type</c> is set to <js>"text/plain"</js>.
 	<li>
 		{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-		<br><code>Content-Type</code> is set to <js>"application/octet-stream"</js>.
+		<br><c>Content-Type</c> is set to <js>"application/octet-stream"</js>.
 	<li>
-		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
-		<br><code>Content-Type</code> is set to <js>"aplication/x-www-form-urlencoded"</js>.
+		<c>NameValuePairs</c> - Converted to a URL-encoded FORM post.
+		<br><c>Content-Type</c> is set to <js>"aplication/x-www-form-urlencoded"</js>.
 	<li>
-		<code>HttpEntity</code> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+		<c>HttpEntity</c> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 </ul>
  
 <p>
@@ -101,7 +101,7 @@
 </p>
 
 <p>
-	If your <code>RestClient</code> class does not have a serializer associated with it, the body will automatically be serialized to a 
+	If your <c>RestClient</c> class does not have a serializer associated with it, the body will automatically be serialized to a 
 	string using the rules defined in {@doc PojosConveribleToStrings}.
 </p>
 

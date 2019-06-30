@@ -46,7 +46,7 @@ import org.eclipse.jetty.servlet.*;
  *
  * <h5 class='topic'>Defining REST Resources</h5>
  *
- * Top-level REST resources are defined in the <code>jetty.xml</code> file as normal servlets.
+ * Top-level REST resources are defined in the <c>jetty.xml</c> file as normal servlets.
  */
 public class JettyMicroservice extends Microservice {
 
@@ -200,7 +200,7 @@ public class JettyMicroservice extends Microservice {
 	/**
 	 * Returns the port that this microservice started up on.
 	 * <p>
-	 * The value is determined by looking at the <code>Server/Connectors[ServerConnector]/port</code> value in the
+	 * The value is determined by looking at the <c>Server/Connectors[ServerConnector]/port</c> value in the
 	 * Jetty configuration.
 	 *
 	 * @return The port that this microservice started up on.
@@ -215,7 +215,7 @@ public class JettyMicroservice extends Microservice {
 	/**
 	 * Returns the context path that this microservice is using.
 	 * <p>
-	 * The value is determined by looking at the <code>Server/Handlers[ServletContextHandler]/contextPath</code> value
+	 * The value is determined by looking at the <c>Server/Handlers[ServletContextHandler]/contextPath</c> value
 	 * in the Jetty configuration.
 	 *
 	 * @return The context path that this microservice is using.
@@ -236,7 +236,7 @@ public class JettyMicroservice extends Microservice {
 	 * Returns whether this microservice is using <js>"http"</js> or <js>"https"</js>.
 	 * <p>
 	 * The value is determined by looking for the existence of an SSL Connection Factorie by looking for the
-	 * <code>Server/Connectors[ServerConnector]/ConnectionFactories[SslConnectionFactory]</code> value in the Jetty
+	 * <c>Server/Connectors[ServerConnector]/ConnectionFactories[SslConnectionFactory]</c> value in the Jetty
 	 * configuration.
 	 *
 	 * @return Whether this microservice is using <js>"http"</js> or <js>"https"</js>.
@@ -253,7 +253,7 @@ public class JettyMicroservice extends Microservice {
 	/**
 	 * Returns the hostname of this microservice.
 	 * <p>
-	 * Simply uses <code>InetAddress.getLocalHost().getHostName()</code>.
+	 * Simply uses <c>InetAddress.getLocalHost().getHostName()</c>.
 	 *
 	 * @return The hostname of this microservice.
 	 */
@@ -287,7 +287,7 @@ public class JettyMicroservice extends Microservice {
 	 *
 	 * <p>
 	 * The default implementation is configured by the following values in the config file
-	 * if a jetty.xml is not specified via a <code>REST/jettyXml</code> setting:
+	 * if a jetty.xml is not specified via a <c>REST/jettyXml</c> setting:
 	 * <p class='bcode w800'>
 	 * 	<cc>#================================================================================
 	 * 	# Jetty settings

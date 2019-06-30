@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 308 Permanent Redirect</code> response.
+ * Represents an <c>HTTP 308 Permanent Redirect</c> response.
  *
  * <p>
  * The request and all future requests should be repeated using another URI. 307 and 308 parallel the behaviors of 302 and 301, but do not allow the HTTP method to change.
@@ -63,7 +63,7 @@ public class PermanentRedirect extends HttpResponse {
 	/**
 	 * Constructor using custom message.
 	 * @param message Message to send as the response.
-	 * @param location <code>Location</code> header value.
+	 * @param location <c>Location</c> header value.
 	 */
 	public PermanentRedirect(String message, URI location) {
 		super(message);
@@ -72,14 +72,14 @@ public class PermanentRedirect extends HttpResponse {
 
 	/**
 	 * Constructor.
-	 * @param location <code>Location</code> header value.
+	 * @param location <c>Location</c> header value.
 	 */
 	public PermanentRedirect(URI location) {
 		this(MESSAGE, location);
 	}
 
 	/**
-	 * @return <code>Location</code> header value.
+	 * @return <c>Location</c> header value.
 	 */
 	@ResponseHeader(name="Location", description="New location of resource.")
 	public URI getLocation() {

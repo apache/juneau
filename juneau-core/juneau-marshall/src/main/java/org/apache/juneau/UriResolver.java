@@ -118,7 +118,7 @@ public class UriResolver {
 	 *
 	 * <p>
 	 * Similar to {@link URI#relativize(URI)}, except supports special protocols (e.g. <js>"servlet:/"</js>) for both
-	 * the <code>relativeTo</code> and <code>uri</code> parameters.
+	 * the <c>relativeTo</c> and <c>uri</c> parameters.
 	 *
 	 * <p>
 	 * For example, to relativize a URI to its servlet-relative form:

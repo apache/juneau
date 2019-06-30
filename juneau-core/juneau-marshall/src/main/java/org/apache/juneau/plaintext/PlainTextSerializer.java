@@ -18,17 +18,17 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Serializes POJOs to plain text using just the <code>toString()</code> method on the serialized object.
+ * Serializes POJOs to plain text using just the <c>toString()</c> method on the serialized object.
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Accept</code> types:  <code><b>text/plain</b></code>
+ * Handles <c>Accept</c> types:  <bc>text/plain</bc>
  * <p>
- * Produces <code>Content-Type</code> types:  <code><b>text/plain</b></code>
+ * Produces <c>Content-Type</c> types:  <bc>text/plain</bc>
  *
  * <h5 class='topic'>Description</h5>
  *
- * Essentially converts POJOs to plain text using the <code>toString()</code> method.
+ * Essentially converts POJOs to plain text using the <c>toString()</c> method.
  *
  * <p>
  * Also serializes objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;}
@@ -75,9 +75,9 @@ public class PlainTextSerializer extends WriterSerializer {
 	 * @param accept
 	 * 	The accept media types that the serializer can handle.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of {@doc RFC2616.section14.1}
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc RFC2616.section14.1}
 	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:

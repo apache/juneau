@@ -21,27 +21,27 @@
 <h5 class='topic w800'>Core API changes</h5>
 <ul class='spaced-list'>
 	<li>
-		New <code><del>HtmlDocSerializerContext.HTMLDOC_navlinks</del></code> annotation for addint links to HTML page views.
+		New <dc>HtmlDocSerializerContext.HTMLDOC_navlinks</dc> annotation for addint links to HTML page views.
 	</li>
 	<li>
-		Renamed the properties in <code><del>HtmlDocSerializerContext</del></code> for clarity.
+		Renamed the properties in <dc>HtmlDocSerializerContext</dc> for clarity.
 	</li>
 </ul>		
 <h5 class='topic w800'>Servlet API changes</h5>
 <ul class='spaced-list'>
 	<li>
-		Added new <code>RestServlet.addDefaultProperties(ObjectMap,RestRequest)</code> method for programatically adding properties to the property map per request.
+		Added new <c>RestServlet.addDefaultProperties(ObjectMap,RestRequest)</c> method for programatically adding properties to the property map per request.
 	</li>
 	<li>
 		Added the following new properties in the properties map to make them easily available to serializers and parsers (since they don't have access to the HTTP request object).<br>  
-		Note that the <code>SerializerContext.SERIALIZER_uriAuthority</code> and <code>SerializerContext.SERIALIZER_uriContext</code> properties were previously available.
+		Note that the <c>SerializerContext.SERIALIZER_uriAuthority</c> and <c>SerializerContext.SERIALIZER_uriContext</c> properties were previously available.
 		<ul>
-			<li><code>RestServletProperties.REST_servletPath</code></li>
-			<li><code>RestServletProperties.REST_pathInfo</code></li>
-			<li><code>RestServletProperties.REST_method</code></li>
+			<li><c>RestServletProperties.REST_servletPath</c></li>
+			<li><c>RestServletProperties.REST_pathInfo</c></li>
+			<li><c>RestServletProperties.REST_method</c></li>
 		</ul>
 	</li>
 	<li>
-		Path variables annotated with <code><del>@Attr</del></code> are now automatically URL-decoded.
+		Path variables annotated with <dc>@Attr</dc> are now automatically URL-decoded.
 	</li>
 </ul>		

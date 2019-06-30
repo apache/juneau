@@ -33,7 +33,7 @@ import org.apache.juneau.*;
  *
  * <p>
  * When present, bean instantiation is delayed until the call to {@link BeanMap#getBean()}.
- * Until then, bean property values are stored in a local cache until <code>getBean()</code> is called.
+ * Until then, bean property values are stored in a local cache until <c>getBean()</c> is called.
  * Because of this additional caching step, parsing into read-only beans tends to be slower and use more memory than
  * parsing into beans with writable properties.
  *

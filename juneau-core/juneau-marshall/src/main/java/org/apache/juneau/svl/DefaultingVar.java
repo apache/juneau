@@ -15,7 +15,7 @@ package org.apache.juneau.svl;
 import static org.apache.juneau.internal.StringUtils.*;
 
 /**
- * Interface for the resolution of vars with a default value if the <code>resolve()</code> method returns <jk>null</jk>.
+ * Interface for the resolution of vars with a default value if the <c>resolve()</c> method returns <jk>null</jk>.
  *
  * <p>
  * For example, to resolve the system property <js>"myProperty"</js> but resolve to <js>"not found"</js> if the

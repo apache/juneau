@@ -222,7 +222,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	}
 
 	/**
-	 * Return the <code>Class</code> given it's name if it exists in the services map.
+	 * Return the <c>Class</c> given it's name if it exists in the services map.
 	 */
 	private RemoteInterfaceMeta getInterfaceClass(String javaInterface) throws NotFound, Exception {
 		RemoteInterfaceMeta rm = serviceMap.get(javaInterface);

@@ -99,7 +99,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	The form-data parameter name.
 	 * @param value
 	 * 	The form-data parameter value.
-	 * 	<br>Converted to a String using <code>toString()</code>.
+	 * 	<br>Converted to a String using <c>toString()</c>.
 	 * 	<br>Ignored if value is <jk>null</jk> or blank.
 	 * @return This object (for method chaining).
 	 */
@@ -170,7 +170,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * Same as {@link #getString(String)} but converts the value to an integer.
 	 *
 	 * @param name The form-data parameter name.
-	 * @return The parameter value, or <code>0</code> if parameter does not exist or is <jk>null</jk> or empty.
+	 * @return The parameter value, or <c>0</c> if parameter does not exist or is <jk>null</jk> or empty.
 	 */
 	public int getInt(String name) {
 		return getInt(name, 0);
@@ -372,9 +372,9 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
 	 * 	<li>
-	 * 		<code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * 		<c>Maps</c> must be followed by zero or two parameters representing the key and value types.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>

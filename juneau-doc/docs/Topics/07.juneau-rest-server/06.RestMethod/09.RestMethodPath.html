@@ -84,7 +84,7 @@
 	Paths that end with <js>"/*"</js> will do a prefix match on the incoming URL.  
 	Any remainder after the match can be accessed through 
 	{@link oajr.RequestPath#getRemainder()} or parameters with the 
-	<code><ja>@Path</ja>(<js>"/*"</js>)</code> annotation.
+	<c><ja>@Path</ja>(<js>"/*"</js>)</c> annotation.
 	On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will 
 	require an exact URL match, and if any remainder exists, a 404 (not found) error will be thrown.
 </p>

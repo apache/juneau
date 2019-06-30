@@ -42,7 +42,7 @@ public class Value<T> {
 	 *
 	 * @param m The method containing the parameter.
 	 * @param i The index of the parameter.
-	 * @return The parameter type of the value, or <jk>null</jk> if the method parameter is not of type <code>Value</code>.
+	 * @return The parameter type of the value, or <jk>null</jk> if the method parameter is not of type <c>Value</c>.
 	 */
 	public static Type getParameterType(Method m, int i) {
 		return getParameterType(m.getGenericParameterTypes()[i]);
@@ -52,7 +52,7 @@ public class Value<T> {
 	 * Returns the generic parameter type of the Value type.
 	 *
 	 * @param t The type to find the parameter type of.
-	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <code>Value</code>.
+	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Value</c>.
 	 */
 	public static Type getParameterType(Type t) {
 		if (t instanceof ParameterizedType) {

@@ -120,7 +120,7 @@ public class ParseException extends FormattedException {
 	}
 
 	/**
-	 * Returns the highest-level <code>ParseException</code> in the stack trace.
+	 * Returns the highest-level <c>ParseException</c> in the stack trace.
 	 *
 	 * <p>
 	 * Useful for JUnit testing of error conditions.

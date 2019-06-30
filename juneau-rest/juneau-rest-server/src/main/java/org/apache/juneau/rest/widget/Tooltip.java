@@ -23,7 +23,7 @@ import org.apache.juneau.dto.html5.*;
  * Simple template for adding tooltips to HTML5 bean constructs, typically in menu item widgets.
  *
  * <p>
- * Tooltips depend on the existence of the <code>tooltip</code> and <code>tooltiptext</code> styles that should be
+ * Tooltips depend on the existence of the <c>tooltip</c> and <c>tooltiptext</c> styles that should be
  * present in the stylesheet for the document.
  *
  * <h5 class='section'>See Also:</h5>

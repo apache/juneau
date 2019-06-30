@@ -41,15 +41,7 @@
  *
  * Available tags:
  * 	<l> - A literal.
- *	<property> - A property.
  ***************************************************************************************************************************/
-
-property {
-	font-size: 9pt;
-	white-space: pre;
-	font-family: monospace;
-	font-weight: bold;
-}
 
 .fixedWidth {
 	max-width: 800px;

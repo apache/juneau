@@ -28,16 +28,16 @@
 			<li>{@link oaj.BeanContext#BEAN_beanFieldVisibility} - Control which fields are visible to Juno as bean properties.
 			<li>{@link oaj.BeanContext#BEAN_beanMethodVisibility} - Control which getters/setters are visible to Juno as bean properties.
 		</ul>
-		Removed <code>BeanContext.<jsf>INCLUDE_BEAN_FIELD_PROPERTIES</jsf></code> and <code>BeanContext.<jsf>INCLUDE_BEAN_METHOD_PROPERTIES</jsf></code> properties, since ignoring fields and methods
+		Removed <c>BeanContext.<jsf>INCLUDE_BEAN_FIELD_PROPERTIES</jsf></c> and <c>BeanContext.<jsf>INCLUDE_BEAN_METHOD_PROPERTIES</jsf></c> properties, since ignoring fields and methods
 		can be accomplished by setting the appropriate properties above to {@link oaj.Visibility#NONE NONE}.
 		Also, the {@link oaj.annotation.BeanProperty @BeanProperty} annotation can now be used on non-public fields/getters/setters to override
-		the default behavior defined by the <code>VISIBILITY</code> properties identified above.  This is a convenient way of identifying protected or
+		the default behavior defined by the <c>VISIBILITY</c> properties identified above.  This is a convenient way of identifying protected or
 		private fields or methods as bean properties.  Previously, you could only identify public fields/getters/setters using this annotation.
 	</li>
-	<li>New {@link oaj.BeanContext#BEAN_useJavaBeanIntrospector} property that lets Juno use the Java bean <code>Introspector</code>
+	<li>New {@link oaj.BeanContext#BEAN_useJavaBeanIntrospector} property that lets Juno use the Java bean <c>Introspector</c>
 		class to determine bean properties.  In the previous release, the method for determining bean properties was a mixture of Juno-based and Introspector-based.
 		Now it's either pure Juno-based or pure Introspector-based.  The result is considerably cleaner code and consistent behavior.
-	<li>New {@link oaj.annotation.BeanIgnore @BeanIgnore} annotation.  Replaces the previous <code><ja>@BeanProperty</ja>(hidden=<jk>true</jk>)</code> annotation
+	<li>New {@link oaj.annotation.BeanIgnore @BeanIgnore} annotation.  Replaces the previous <c><ja>@BeanProperty</ja>(hidden=<jk>true</jk>)</c> annotation
 		for ignoring bean properties.  Can also be used on classes that look like beans so that they're not treated as beans.
 	<li>Support for parsing into non-static member classes.  This applies to all parsers.
 	<li>New {@link oaj.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)}	annotation that automatically wraps beans and objects in a wrapper
@@ -45,11 +45,11 @@
 	<li>Changed the default ordering of bean properties to be in parent-to-child class order.
 	<li>New {@link oaj.transform.BeanFilter#readProperty(Object,String,Object) readProperty()} and {@link oaj.transform.BeanFilter#writeProperty(Object,String,Object) writeProperty()}
 		methods added to {@link oaj.transform.BeanFilter} class to allow individualized serialization and parsing behavior on a class-by-class basis.
-	<li>Eliminated previous restriction where bean subtype attributes had to be listed first in JSON objects when using the <code><del>Bean.subTypeProperty()</del></code> annotation.
+	<li>Eliminated previous restriction where bean subtype attributes had to be listed first in JSON objects when using the <dc>Bean.subTypeProperty()</dc> annotation.
 		The previous behavior was not strictly JSON-compliant since JSON objects are supposed to consist of unordered lists of key/value pairs.
 		While targeted for JSON, the restriction is also lifted for all other parsers.  	
 	<li>New fluent-style {@link oaj.BeanMap#load(String) BeanMap.load()} methods for initializing bean maps.
-	<li>{@link oaj.html.HtmlDocSerializer} will now embed the data portion of the output in a <code><xt>&lt;div</xt> <xa>id</xa>=<xs>'data'</xs><xt>&gt;</xt></code> element to make it easier to extract the data portion of the page in Javascript in browsers.
+	<li>{@link oaj.html.HtmlDocSerializer} will now embed the data portion of the output in a <c><xt>&lt;div</xt> <xa>id</xa>=<xs>'data'</xs><xt>&gt;</xt></c> element to make it easier to extract the data portion of the page in Javascript in browsers.
 </ul>
 
 <h5 class='topic w800'>REST Server API updates</h5>
@@ -57,5 +57,5 @@
 	<li>New {@link oajr.RestRequest#getJavaMethod()} method for getting access to the method used to handle a request.
 		Useful for accessing the method name or annotations during requests, such as in calls to {@link oajr.RestGuard#guard(RestRequest,RestResponse)}.
 	<li>Fixed bug when using Jetty where you tried to read text input after a header was written.
-	<li>Added new string variables <code><del>$A{...}</del></code> (request attributes) and <code><del>$P{...}</del></code> (request parameters) to <code>RestServlet.createRequestVarResolver(RestRequest)</code>.
+	<li>Added new string variables <dc>$A{...}</dc> (request attributes) and <dc>$P{...}</dc> (request parameters) to <c>RestServlet.createRequestVarResolver(RestRequest)</c>.
 </ul>

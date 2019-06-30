@@ -32,19 +32,19 @@
 	<li>Several improvements to URL-Encoding support.
 		<ul>
 			<li>Improved whitespace handling in {@link oaj.uon.UonParser}.
-			<li>New <code><del>UonParserContext.UON_whitespaceAware</del></code> property for controlling whether whitespace is ignored.
-			<li>New <code><del>UrlEncodingContext.URLENC_expandedParams</del></code> property for controlling whether arrays/Collections 
+			<li>New <dc>UonParserContext.UON_whitespaceAware</dc> property for controlling whether whitespace is ignored.
+			<li>New <dc>UrlEncodingContext.URLENC_expandedParams</dc> property for controlling whether arrays/Collections 
 				should be serialized/parsed as multi-part parameters.
 			<li>New {@link oaj.urlencoding.annotation.UrlEncoding#expandedParams() @UrlEncoding(expandedParams)}
-				annotation that specifies that bean properties of type array/Collection be serialized as multi-part parameters (e.g. <code>&amp;key=val1&amp;key=val2</code>).
+				annotation that specifies that bean properties of type array/Collection be serialized as multi-part parameters (e.g. <c>&amp;key=val1&amp;key=val2</c>).
 		</ul>
 	</li>
-	<li>New <code><del>JsonSerializerContext.JSON_escapeSolidus</del></code> property for controlling whether slash characters should be escaped.
+	<li>New <dc>JsonSerializerContext.JSON_escapeSolidus</dc> property for controlling whether slash characters should be escaped.
 	<li>New {@link oaj.internal.TeeOutputStream} and {@link oaj.internal.TeeWriter} classes.
 	<li>New {@link oaj.ClassMeta#isInstance(Object)} method.
 	<li>Performance improvements when using the {@link oaj.BeanMap#add(String,Object)} method.  
 		Array properties are stored in a temporary list cache until {@link oaj.BeanMap#getBean()} is called.
-	<li>New <code><del>BeanPropertyMeta.add(BeanMap,Object)</del></code> method for adding values to Collection and array properties.
+	<li>New <dc>BeanPropertyMeta.add(BeanMap,Object)</dc> method for adding values to Collection and array properties.
 	<li>Config INI files now support keys with name <js>"*"</js>.
 </ul>
 
@@ -52,48 +52,48 @@
 <ul class='spaced-list'>
 	<li>REST method parameters can now be generic types (e.g. <del><ja>@Param</ja>(<js>"foo"</js>) Map&lt;String,Integer&gt; foo</del>).
 		This applies to headers, attributes, and parameters.
-	<li>New <code><del>@Param(multipart)</del></code>
-		and <code><del>@Query(multipart)</del></code> annotations
+	<li>New <dc>@Param(multipart)</dc>
+		and <dc>@Query(multipart)</dc> annotations
 		for handling multi-part GET and POST parameters.	
 	<li>GET parameters are now CASE-SENSITIVE per W3C standards.
 		<ul>
 			<li>
-			<li><code>&amp;Content</code> must now be specified as <code>&amp;content</code>.
-			<li><code>&amp;Method</code> must now be specified as <code>&amp;method</code>.
-			<li><code>&amp;debug</code> must now be specified as <code>&amp;debug=true</code>.
-			<li><code>&amp;plainText</code> must now be specified as <code>&amp;plainText=true</code>.
-			<li><code>&amp;notrace</code> must now be specified as <code>&amp;noTrace=true</code>.
+			<li><c>&amp;Content</c> must now be specified as <c>&amp;content</c>.
+			<li><c>&amp;Method</c> must now be specified as <c>&amp;method</c>.
+			<li><c>&amp;debug</c> must now be specified as <c>&amp;debug=true</c>.
+			<li><c>&amp;plainText</c> must now be specified as <c>&amp;plainText=true</c>.
+			<li><c>&amp;notrace</c> must now be specified as <c>&amp;noTrace=true</c>.
 		</ul>
 	</li>
 	<li>Performance improvements around query parameters.
 	<li>New methods on {@link oajr.RestRequest} for handling multi-part parameters:
 		<ul>
-			<li><code><del>RestRequest.getParameters(String,Class)</del></code>
-			<li><code><del>RestRequest#getQueryParameters(String,Class)</del></code>
+			<li><dc>RestRequest.getParameters(String,Class)</dc>
+			<li><dc>RestRequest#getQueryParameters(String,Class)</dc>
 		</ul>
 	</li>
 	<li>Fixed Jetty issue in {@link oajr.RestResponse#setHeader(String,String)} where setting 
-		the <code>Content-Type</code> through this method was inconsistent with the behavior in WAS/Tomcat.
-	<li><code>&amp;noTrace=true</code> now prevents any errors from being logged in log file.
-	<li>Workaround for Jetty issue where <code>ServletContext.getContextPath()</code> always ends with <js>"null"</js>.
-	<li><code>RestServletProperties.REST_allowMethodParam</code> is now <jk>true</jk> by default on all subclasses 
-		of {@link oajr.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code>.
+		the <c>Content-Type</c> through this method was inconsistent with the behavior in WAS/Tomcat.
+	<li><c>&amp;noTrace=true</c> now prevents any errors from being logged in log file.
+	<li>Workaround for Jetty issue where <c>ServletContext.getContextPath()</c> always ends with <js>"null"</js>.
+	<li><c>RestServletProperties.REST_allowMethodParam</c> is now <jk>true</jk> by default on all subclasses 
+		of {@link oajr.BasicRestServlet} and <dc>RestServletJenaDefault</dc>.
 </ul>
 		
 <h5 class='topic w800'>Client</h5>		
 <ul class='spaced-list'>
 	<li>New method {@link oajrc.RestCall#allowRedirectsOnPosts(boolean)}.
-	<li>New method <code>RestCall.peekInputStream()</code> allows you to read response bodies without interrupting execution flow.
+	<li>New method <c>RestCall.peekInputStream()</c> allows you to read response bodies without interrupting execution flow.
 	<li>New method {@link oajrc.RestCall#toString()} now useful for debugging purposes.  
 		Shows all request/response headers and bodies.
-	<li>{@link oajrc.RestCallException} now includes <code>HttpResponse</code> object for easier debugging.
-	<li>New method <code>RestClient.addListener(RestClientListener)</code> for registering request/response listeners.
-	<li>New <code><del>RestClient.setClassLoader(ClassLoader)</del></code> method.
-	<li>TLS support in <code>JazzRestClient</code>.
+	<li>{@link oajrc.RestCallException} now includes <c>HttpResponse</c> object for easier debugging.
+	<li>New method <c>RestClient.addListener(RestClientListener)</c> for registering request/response listeners.
+	<li>New <dc>RestClient.setClassLoader(ClassLoader)</dc> method.
+	<li>TLS support in <c>JazzRestClient</c>.
 </ul>
 
 <h5 class='topic w800'>Other changes</h5>	
 <ul class='spaced-list'>
-	<li><code>samples.ear</code> and <code>samples.war</code> projects
-		have been replaced with an OSGi bundle with activated servlets in <code>juno.samples</code>.
+	<li><c>samples.ear</c> and <c>samples.war</c> projects
+		have been replaced with an OSGi bundle with activated servlets in <c>juno.samples</c>.
 </ul>

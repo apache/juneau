@@ -56,7 +56,7 @@ public @interface RdfSchema {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 *
-	 * Contents of <code>package-info.java</code>...
+	 * Contents of <c>package-info.java</c>...
 	 * <p class='bcode w800'>
 	 * 	<jc>// XML namespaces used within this package.</jc>
 	 * 	<ja>@RdfSchema</ja>(prefix=<js>"ab"</js>,

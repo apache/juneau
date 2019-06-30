@@ -96,7 +96,7 @@ public class MicroserviceBuilder {
 	 * Specifies the command-line arguments passed into the Java command.
 	 *
 	 * <p>
-	 * This is required if you use {@link Microservice#getArgs()} or <code>$A</code> string variables.
+	 * This is required if you use {@link Microservice#getArgs()} or <c>$A</c> string variables.
 	 *
 	 * @param args
 	 * 	The command-line arguments passed into the Java command as a pre-parsed {@link Args} object.
@@ -111,7 +111,7 @@ public class MicroserviceBuilder {
 	 * Specifies the command-line arguments passed into the Java command.
 	 *
 	 * <p>
-	 * This is required if you use {@link Microservice#getArgs()} or <code>$A</code> string variables.
+	 * This is required if you use {@link Microservice#getArgs()} or <c>$A</c> string variables.
 	 *
 	 * @param args
 	 * 	The command-line arguments passed into the Java command as the raw command-line arguments.
@@ -127,7 +127,7 @@ public class MicroserviceBuilder {
 	 *
 	 * <p>
 	 * This is required if you use {@link Microservice#getManifest()}.
-	 * It's also used to locate initialization values such as <code>Main-Config</code>.
+	 * It's also used to locate initialization values such as <c>Main-Config</c>.
 	 *
 	 * <p>
 	 * If you do not specify the manifest file, we attempt to resolve it through the following methods:
@@ -235,7 +235,7 @@ public class MicroserviceBuilder {
 	 * 			<li>
 	 * 				The <js>"configFile"</js> argument in the command line arguments passed in through the constructor.
 	 * 			<li>
-	 * 				The value of the <code>Main-Config</code> entry in the manifest file.
+	 * 				The value of the <c>Main-Config</c> entry in the manifest file.
 	 * 			<li>
 	 * 				A config file in the same location and with the same name as the executable jar file.
 	 * 				(e.g. <js>"java -jar myjar.jar"</js> will look for <js>"myjar.cfg"</js>).

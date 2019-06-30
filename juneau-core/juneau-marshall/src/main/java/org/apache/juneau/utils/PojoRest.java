@@ -169,7 +169,7 @@ public final class PojoRest {
 	}
 
 	/**
-	 * Call this method to prevent the root object from being overwritten on <code>put("", xxx);</code> calls.
+	 * Call this method to prevent the root object from being overwritten on <c>put("", xxx);</c> calls.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -281,10 +281,10 @@ public final class PojoRest {
 	 * </p>
 	 *
 	 * <p>
-	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 * <c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
 	 *
 	 * <p>
-	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
 	 *
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
@@ -601,7 +601,7 @@ public final class PojoRest {
 	 * 	This must be an array, like a JSON array.
 	 * @return The returned object from the method call.
 	 * @throws IllegalAccessException
-	 * 	If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is
+	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
 	 * 	inaccessible.
 	 * @throws IllegalArgumentException
 	 * 	If one of the following occurs:

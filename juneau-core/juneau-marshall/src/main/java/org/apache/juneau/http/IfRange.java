@@ -66,10 +66,10 @@ import org.apache.juneau.internal.*;
 public final class IfRange extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>If-Range</code> header.
+	 * Returns a parsed <c>If-Range</c> header.
 	 *
-	 * @param value The <code>If-Range</code> header string.
-	 * @return The parsed <code>If-Range</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>If-Range</c> header string.
+	 * @return The parsed <c>If-Range</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static IfRange forString(String value) {
 		if (value == null)

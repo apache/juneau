@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.UseProxy.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 305 Use Proxy</code> response.
+ * Represents an <c>HTTP 305 Use Proxy</c> response.
  *
  * <p>
  * The requested resource is available only through a proxy, the address for which is provided in the response.

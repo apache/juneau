@@ -18,7 +18,7 @@ package org.apache.juneau.html.annotation;
 public enum HtmlFormat {
 
 	/**
-	 * Object is serialized to a String using the <code>toString()</code> method and written directly to output.
+	 * Object is serialized to a String using the <c>toString()</c> method and written directly to output.
 	 * <br>Useful when you want to serialize custom HTML.
 	 */
 	PLAIN_TEXT,

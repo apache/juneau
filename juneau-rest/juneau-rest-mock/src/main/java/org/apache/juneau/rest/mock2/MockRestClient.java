@@ -101,7 +101,7 @@ public class MockRestClient extends RestClientBuilder {
 	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param m
-	 * 	The marshall to use for specifying the <code>Accept</code> and <code>Content-Type</code> headers.
+	 * 	The marshall to use for specifying the <c>Accept</c> and <c>Content-Type</c> headers.
 	 * 	<br>If <jk>null</jk>, headers will be reset.
 	 * @return A new {@link MockRest} object.
 	 */
@@ -152,7 +152,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/json"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/json"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -163,7 +163,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/json+simple"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/json+simple"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -174,7 +174,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/xml"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/xml"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -185,7 +185,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/html"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/html"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -196,7 +196,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/plain"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/plain"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -207,7 +207,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"octal/msgpack"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"octal/msgpack"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -218,7 +218,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/uon"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/uon"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -229,7 +229,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/x-www-form-urlencoded"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/x-www-form-urlencoded"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -240,7 +240,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/openapi"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/openapi"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */

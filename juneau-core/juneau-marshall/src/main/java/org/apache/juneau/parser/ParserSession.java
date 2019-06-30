@@ -88,8 +88,8 @@ public abstract class ParserSession extends BeanSession {
 	 * @param type
 	 * 	The class type of the object to create.
 	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
-	 * 	For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>,
-	 * 	<code>ObjectMap</code>, etc...
+	 * 	For example, when parsing JSON text, it may return a <c>String</c>, <c>Number</c>,
+	 * 	<c>ObjectMap</c>, etc...
 	 * @param <T> The class type of the object to create.
 	 * @return The parsed object.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
@@ -144,7 +144,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Returns information used to determine at what location in the parse a failure occurred.
 	 *
-	 * @return A map, typically containing something like <code>{line:123,column:456,currentProperty:"foobar"}</code>
+	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
 	 */
 	public final ObjectMap getLastLocation() {
 		ObjectMap m = new ObjectMap();
@@ -199,7 +199,7 @@ public abstract class ParserSession extends BeanSession {
 	}
 
 	/**
-	 * Trims the specified object if it's a <code>String</code> and {@link #isTrimStrings()} returns <jk>true</jk>.
+	 * Trims the specified object if it's a <c>String</c> and {@link #isTrimStrings()} returns <jk>true</jk>.
 	 *
 	 * @param o The object to trim.
 	 * @return The trimmed string if it's a string.
@@ -225,7 +225,7 @@ public abstract class ParserSession extends BeanSession {
 	}
 
 	/**
-	 * Converts the specified <code>ObjectMap</code> into a bean identified by the <js>"_type"</js> property in the map.
+	 * Converts the specified <c>ObjectMap</c> into a bean identified by the <js>"_type"</js> property in the map.
 	 *
 	 * @param m The map to convert to a bean.
 	 * @param pMeta The current bean property being parsed.
@@ -342,10 +342,10 @@ public abstract class ParserSession extends BeanSession {
 	 * </p>
 	 *
 	 * <p>
-	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 * <c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
 	 *
 	 * <p>
-	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
 	 *
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.

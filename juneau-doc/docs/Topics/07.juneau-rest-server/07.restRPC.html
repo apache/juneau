@@ -57,7 +57,7 @@ restRPC
 	<li>
 		Can return a {@doc PojoCategories serializable and parsable} value.
 	<li>
-		Can throw any <code>Throwables</code>.
+		Can throw any <c>Throwables</c>.
 </ul>
 <p>
 	Throwables with public no-arg or single-arg-string constructors are automatically recreated on the client side
@@ -77,9 +77,9 @@ restRPC
 	</ul>
 </ul>
 <p>
-	Since we build upon the existing <code>RestClient</code> API, we inherit all of it's features.
+	Since we build upon the existing <c>RestClient</c> API, we inherit all of it's features.
 	For example, convenience methods for setting POJO filters and properties to customize the behavior of the 
-	serializers and parsers, and the ability to provide your own customized Apache <code>HttpClient</code> for 
+	serializers and parsers, and the ability to provide your own customized Apache <c>HttpClient</c> for 
 	handling various scenarios involving authentication and Internet proxies.
 </p>
 <p>
@@ -142,7 +142,7 @@ restRPC
 	<li>
 		Extending from {@link oajr.remote.RrpcServlet}.
 	<li>
-		Using a <code><ja>@RestMethod</ja>(name=<jsf>RRPC</jsf>)</code> annotation on a Java method.
+		Using a <c><ja>@RestMethod</ja>(name=<jsf>RRPC</jsf>)</c> annotation on a Java method.
 </ol>
 <p>
 	In either case, the proxy communications layer is pure REST.
@@ -155,7 +155,7 @@ restRPC
 <h5 class='topic'>RrpcServlet</h5>
 <p>
 	The {@link oajr.remote.RrpcServlet} class is a simple specialized servlet with an abstract 
-	<code>getServiceMap()</code> method to define the server-side POJOs:
+	<c>getServiceMap()</c> method to define the server-side POJOs:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestResource</ja>(
@@ -182,7 +182,7 @@ restRPC
 
 <h5 class='topic'>@RestMethod(name=RRPC)</h5>
 <p>
-	The <code><ja>@RestMethod</ja>(name=<jsf>RRPC</jsf>)</code> approach is easier if you only have a single 
+	The <c><ja>@RestMethod</ja>(name=<jsf>RRPC</jsf>)</c> approach is easier if you only have a single 
 	interface you want to expose.  
 	You simply define a Java method whose return type is an interface, and return the implementation of that 
 	interface:
@@ -205,8 +205,8 @@ restRPC
 <img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.1.png'>
 <p>
 	Clicking the hyperlinks on each shows you the list of methods that can be invoked on that service.
-	Note that the <code>IAddressBook</code> link shows that you can only invoke methods defined on that
-	interface, whereas the <code>AddressBook</code> link shows ALL public methods defined on that class.
+	Note that the <c>IAddressBook</c> link shows that you can only invoke methods defined on that
+	interface, whereas the <c>AddressBook</c> link shows ALL public methods defined on that class.
 </p>
 <h5 class='figure'>IAddressBook</h5>
 <p class='bpcode w800'>
@@ -214,7 +214,7 @@ restRPC
 </p>
 <img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.2.png'>
 <p>
-	Since <code>AddressBook</code> extends from <code>LinkedList</code>, you may notice familiar collections
+	Since <c>AddressBook</c> extends from <c>LinkedList</c>, you may notice familiar collections
 	framework methods listed.
 </p>
 <h5 class='figure'>AddressBook</h5>
@@ -271,14 +271,14 @@ restRPC
 	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.CreatePerson)
 </p>
 <p>
-	Make sure that we specify the <code>Content-Type</code> of the body as <code>text/json</code>.
-	We also want the results to be returned as JSON, so we set the <code>Accept</code> header to 
-	<code>text/json</code> as well.
+	Make sure that we specify the <c>Content-Type</c> of the body as <c>text/json</c>.
+	We also want the results to be returned as JSON, so we set the <c>Accept</c> header to 
+	<c>text/json</c> as well.
 </p>
 <img class='bordered w400' src='doc-files/juneau-rest-server.restRPC.4.png'>
 <p>
 	When we execute the POST, we should see the following successful response whose body contains the returned 
-	<code>Person</code> bean serialized to JSON:
+	<c>Person</c> bean serialized to JSON:
 </p>
 <img class='bordered w400' src='doc-files/juneau-rest-server.restRPC.5.png'>
 <p>
@@ -302,15 +302,15 @@ restRPC
 	<jk>public class</jk> SampleRrpcServlet <jk>extends</jk> RrpcServlet {
 </p>
 <p>
-	For example, to invoke the <code>getPeople()</code> method on our bean:
+	For example, to invoke the <c>getPeople()</c> method on our bean:
 </p>
 <p class='bpcode w800'>
 	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/getPeople?method=POST
 </p>			
 <img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.6.png'>
 <p>
-	Here we call the <code>findPerson(<jk>int</jk>)</code> method to retrieve a person and get the 
-	returned POJO (in this case as HTML since that's what's in the <code>Accept</code> header when calling from a 
+	Here we call the <c>findPerson(<jk>int</jk>)</c> method to retrieve a person and get the 
+	returned POJO (in this case as HTML since that's what's in the <c>Accept</c> header when calling from a 
 	browser):
 </p>
 <p class='bpcode w800'>
@@ -318,10 +318,10 @@ restRPC
 </p>			
 <img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.7.png'>
 <p>
-	When specifying the POST body as a <code>&amp;body</code> parameter, the method arguments should be in UON 
+	When specifying the POST body as a <c>&amp;body</c> parameter, the method arguments should be in UON 
 	notation.
 	See {@link oaj.uon.UonSerializer} for more information about this encoding.
-	Usually you can also pass in JSON if you specify <code>&amp;Content-Type=text/json</code> in the URL parameters
+	Usually you can also pass in JSON if you specify <c>&amp;Content-Type=text/json</c> in the URL parameters
 	but passing in unencoded JSON in a URL may not work in all browsers.  
 	Therefore, UON is preferred.
 </p>

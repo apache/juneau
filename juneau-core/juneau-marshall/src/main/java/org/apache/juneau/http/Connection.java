@@ -81,10 +81,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Connection extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Connection</code> header.
+	 * Returns a parsed <c>Connection</c> header.
 	 *
-	 * @param value The <code>Connection</code> header string.
-	 * @return The parsed <code>Connection</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Connection</c> header string.
+	 * @return The parsed <c>Connection</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Connection forString(String value) {
 		if (value == null)
@@ -98,27 +98,27 @@ public final class Connection extends HeaderString {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the header value is <code>close</code>.
+	 * Returns <jk>true</jk> if the header value is <c>close</c>.
 	 *
-	 * @return <jk>true</jk> if the header value is <code>close</code>.
+	 * @return <jk>true</jk> if the header value is <c>close</c>.
 	 */
 	public boolean isClose() {
 		return eqIC("close");
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the header value is <code>keep-alive</code>.
+	 * Returns <jk>true</jk> if the header value is <c>keep-alive</c>.
 	 *
-	 * @return <jk>true</jk> if the header value is <code>keep-alive</code>.
+	 * @return <jk>true</jk> if the header value is <c>keep-alive</c>.
 	 */
 	public boolean isKeepAlive() {
 		return eqIC("keep-alive");
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the header value is <code>upgrade</code>.
+	 * Returns <jk>true</jk> if the header value is <c>upgrade</c>.
 	 *
-	 * @return <jk>true</jk> if the header value is <code>upgrade</code>.
+	 * @return <jk>true</jk> if the header value is <c>upgrade</c>.
 	 */
 	public boolean isUpgrade() {
 		return eqIC("upgrade");

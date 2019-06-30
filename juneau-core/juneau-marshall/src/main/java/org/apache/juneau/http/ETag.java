@@ -52,10 +52,10 @@ import org.apache.juneau.http.annotation.*;
 public final class ETag extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>ETag</code> header.
+	 * Returns a parsed <c>ETag</c> header.
 	 *
-	 * @param value The <code>ETag</code> header string.
-	 * @return The parsed <code>ETag</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>ETag</c> header string.
+	 * @return The parsed <c>ETag</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static ETag forString(String value) {
 		if (value == null)

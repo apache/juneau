@@ -38,7 +38,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.detectRecursions.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -109,7 +109,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.ignoreRecursions.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -136,8 +136,8 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.initialDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>0</code>
+	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Default:</b>  <c>0</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -178,8 +178,8 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.maxDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>100</code>
+	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Default:</b>  <c>100</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>

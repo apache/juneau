@@ -13,7 +13,7 @@
 package org.apache.juneau.internal;
 
 /**
- * An interface for creating objects from other objects such as a <code>String</code> or <code>Reader</code>.
+ * An interface for creating objects from other objects such as a <c>String</c> or <c>Reader</c>.
  *
  * @param <I> Input type.
  * @param <O> Output type.

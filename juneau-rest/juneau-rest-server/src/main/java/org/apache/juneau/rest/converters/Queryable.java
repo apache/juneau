@@ -16,7 +16,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Converter for enabling of {@link PojoQuery} support on response objects returned by a <code>@RestMethod</code> method.
+ * Converter for enabling of {@link PojoQuery} support on response objects returned by a <c>@RestMethod</c> method.
  *
  * <p>
  * When enabled, objects in a POJO tree can be filtered using the functionality described in the {@link PojoQuery}
@@ -27,21 +27,21 @@ import org.apache.juneau.utils.*;
  * arrays of beans, etc...):
  * <ul class='spaced-list'>
  * 	<li>
- * 		<code>&amp;s=</code> Search arguments.
+ * 		<c>&amp;s=</c> Search arguments.
  * 		<br>Comma-delimited list of key/value pairs representing column names and search tokens.
  * 		<br>Example:
  * 		<p class='bcode w800'>
  * 	&amp;s=name=Bill*,birthDate&gt;2000
  * 		</p>
  * 	<li>
- * 		<code>&amp;v=</code> Visible columns.
+ * 		<c>&amp;v=</c> Visible columns.
  * 		<br>Comma-delimited list of column names to display.
  * 		<br>Example:
  * 		<p class='bcode w800'>
  * 	&amp;v=name,birthDate
  * 		</p>
  * 	<li>
- * 		<code>&amp;o=</code> Sort commands.
+ * 		<c>&amp;o=</c> Sort commands.
  * 		<br>Comma-delimited list of columns to sort by.
  * 		<br>Column names can be suffixed with <js>'+'</js> or <js>'-'</js> to indicate ascending or descending order.
  * 		<br>The default is ascending order.
@@ -50,14 +50,14 @@ import org.apache.juneau.utils.*;
  * 	&amp;o=name,birthDate-
  * 		</p>
  * 	<li>
- * 		<code>&amp;i=</code> Case-insensitive parameter.
+ * 		<c>&amp;i=</c> Case-insensitive parameter.
  * 		<br>Boolean flag for case-insensitive matching on the search parameters.
  * 	<li>
- * 		<code>&amp;p=</code> - Position parameter.
+ * 		<c>&amp;p=</c> - Position parameter.
  * 		<br>Only return rows starting at the specified index position (zero-indexed).
  * 		<br>Default is {@code 0}.
  * 	<li>
- * 		<code>&amp;l=</code> Limit parameter.
+ * 		<c>&amp;l=</c> Limit parameter.
  * 		<br>Only return the specified number of rows.
  * 		<br>Default is {@code 0} (meaning return all rows).
  * </ul>

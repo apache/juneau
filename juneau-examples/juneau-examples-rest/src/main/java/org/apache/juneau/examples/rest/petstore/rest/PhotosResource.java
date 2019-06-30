@@ -72,7 +72,7 @@ import org.apache.juneau.serializer.*;
 	aside={
 		"<div style='max-width:400px;min-width:200px' class='text'>",
 		"	<p>Shows an example of using custom serializers and parsers to create REST interfaces over binary resources.</p>",
-		"	<p>In this case, our resources are marshalled jpeg and png binary streams and are stored in an in-memory 'database' (also known as a <code>TreeMap</code>).</p>",
+		"	<p>In this case, our resources are marshalled jpeg and png binary streams and are stored in an in-memory 'database' (also known as a <c>TreeMap</c>).</p>",
 		"</div>"
 	},
 	widgets={

@@ -99,7 +99,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowBodyParam.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -162,7 +162,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowedHeaderParams.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> (comma-delimited list)
+	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited list)
 	 * 	<li><b>Default:</b>  <js>"Accept,Content-Type"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -230,7 +230,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowedMethodHeaders.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> (comma-delimited list)
+	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited list)
 	 * 	<li><b>Default:</b>  empty string
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -245,13 +245,13 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <code>X-Method</code> HTTP header
+	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <c>X-Method</c> HTTP header
 	 * to override the real HTTP method name.
 	 * <p>
 	 * Allows you to override the actual HTTP method with a simulated method.
-	 * <br>For example, if an HTTP Client API doesn't support <code>PATCH</code> but does support <code>POST</code> (because
-	 * <code>PATCH</code> is not part of the original HTTP spec), you can add a <code>X-Method: PATCH</code> header on a normal
-	 * <code>HTTP POST /foo</code> request call which will make the HTTP call look like a <code>PATCH</code> request in any of the REST APIs.
+	 * <br>For example, if an HTTP Client API doesn't support <c>PATCH</c> but does support <c>POST</c> (because
+	 * <c>PATCH</c> is not part of the original HTTP spec), you can add a <c>X-Method: PATCH</c> header on a normal
+	 * <c>HTTP POST /foo</c> request call which will make the HTTP call look like a <c>PATCH</c> request in any of the REST APIs.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -295,7 +295,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowedMethodParams.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> (comma-delimited list)
+	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited list)
 	 * 	<li><b>Default:</b>  <js>"HEAD,OPTIONS"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -319,12 +319,12 @@ public final class RestContext extends BeanContext {
 	 * </p>
 	 * <p>
 	 * 	Useful in cases where you want to simulate a non-GET request in a browser by simply adding a parameter.
-	 * 	<br>Also useful if you want to construct hyperlinks to non-GET REST endpoints such as links to <code>OPTIONS</code>
+	 * 	<br>Also useful if you want to construct hyperlinks to non-GET REST endpoints such as links to <c>OPTIONS</c>
 	 * pages.
 	 *
 	 * <p>
 	 * Note that per the {@doc RFC2616.section9 HTTP specification}, special care should
-	 * be taken when allowing non-safe (<code>POST</code>, <code>PUT</code>, <code>DELETE</code>) methods to be invoked through GET requests.
+	 * be taken when allowing non-safe (<c>POST</c>, <c>PUT</c>, <c>DELETE</c>) methods to be invoked through GET requests.
 	 *
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -371,7 +371,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowHeaderParams.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -526,7 +526,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.children.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class | Object | {@link RestChild}&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;Class | Object | {@link RestChild}&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -549,8 +549,8 @@ public final class RestContext extends BeanContext {
 	 * A REST child resource is simply another servlet or object that is initialized as part of the ascendant resource and has a
 	 * servlet path directly under the ascendant resource object path.
 	 * <br>The main advantage to defining servlets as REST children is that you do not need to define them in the
-	 * <code>web.xml</code> file of the web application.
-	 * <br>This can cut down on the number of entries that show up in the <code>web.xml</code> file if you are defining
+	 * <c>web.xml</c> file of the web application.
+	 * <br>This can cut down on the number of entries that show up in the <c>web.xml</c> file if you are defining
 	 * large numbers of servlets.
 	 *
 	 * <p>
@@ -573,13 +573,13 @@ public final class RestContext extends BeanContext {
 	 * 	<dt>Runtime behavior:</dt>
 	 * 	<dd>
 	 * 		<p>
-	 * 			As a rule, methods defined on the <code>HttpServletRequest</code> object will behave as if the child
+	 * 			As a rule, methods defined on the <c>HttpServletRequest</c> object will behave as if the child
 	 * 			servlet were deployed as a top-level resource under the child's servlet path.
-	 * 			<br>For example, the <code>getServletPath()</code> and <code>getPathInfo()</code> methods on the
-	 * 			<code>HttpServletRequest</code> object will behave as if the child resource were deployed using the
+	 * 			<br>For example, the <c>getServletPath()</c> and <c>getPathInfo()</c> methods on the
+	 * 			<c>HttpServletRequest</c> object will behave as if the child resource were deployed using the
 	 * 			child's servlet path.
 	 * 			<br>Therefore, the runtime behavior should be equivalent to deploying the child servlet in the
-	 * 			<code>web.xml</code> file of the web application.
+	 * 			<c>web.xml</c> file of the web application.
 	 * 		</p>
 	 * 	</dd>
 	 * </dl>
@@ -741,7 +741,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.clientVersionHeader.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"X-Client-Version"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -912,7 +912,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.debug.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -940,7 +940,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.defaultCharset.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"utf-8"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -995,7 +995,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.attrs.smo"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -1064,7 +1064,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.defaultRequestHeaders.smo"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -1090,7 +1090,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
 	 * 	<li>
-	 * 		The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not
+	 * 		The most useful reason for this annotation is to provide a default <c>Accept</c> header when one is not
 	 * 		specified so that a particular default {@link Serializer} is picked.
 	 * </ul>
 	 *
@@ -1132,7 +1132,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.defaultResponseHeaders.omo"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -1521,7 +1521,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.maxInput.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"100M"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -1587,7 +1587,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.messages.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;{@link MessageBundleLocation}&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link MessageBundleLocation}&gt;</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -1674,7 +1674,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.mimeTypes.ss"</js>
-	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -1759,11 +1759,11 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
-	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
+	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
 	 * This setting allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
 	 * <p>
-	 * For example, if you want to pass in instances of <code>MySpecialObject</code> to your Java method, define
+	 * For example, if you want to pass in instances of <c>MySpecialObject</c> to your Java method, define
 	 * the following resolver:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
@@ -1855,7 +1855,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Parsers are used to convert the body of HTTP requests into POJOs.
 	 * <br>Any of the Juneau framework parsers can be used in this setting.
-	 * <br>The parser selected is based on the request <code>Content-Type</code> header matched against the values returned by the following method
+	 * <br>The parser selected is based on the request <c>Content-Type</c> header matched against the values returned by the following method
 	 * using a best-match algorithm:
 	 * <ul>
 	 * 	<li class='jm'>{@link Parser#getMediaTypes()}
@@ -2068,7 +2068,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.path.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -2116,7 +2116,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
+	 * 		This annotation is ignored on top-level servlets (i.e. servlets defined in <c>web.xml</c> files).
 	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
 	 * 	<li>
 	 * 		Typically, this setting is only applicable to resources defined as children through the
@@ -2140,7 +2140,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.renderResponseStackTraces.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -2385,7 +2385,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.rolesDeclared.ss"</js>
-	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -2430,7 +2430,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.roleGuard.ss"</js>
-	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty set
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -2525,7 +2525,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Serializer are used to convert POJOs to HTTP response bodies.
 	 * <br>Any of the Juneau framework serializers can be used in this setting.
-	 * <br>The serializer selected is based on the request <code>Accept</code> header matched against the values returned by the following method
+	 * <br>The serializer selected is based on the request <c>Accept</c> header matched against the values returned by the following method
 	 * using a best-match algorithm:
 	 * <ul>
 	 * 	<li class='jm'>{@link Serializer#getMediaTypeRanges()}
@@ -2605,7 +2605,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.staticFileResponseHeaders.omo"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
 	 * 	<li><b>Default:</b>  <code>{<js>'Cache-Control'</js>: <js>'max-age=86400, public</js>}</code>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -2671,7 +2671,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.staticFiles.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;StaticFileMapping&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;StaticFileMapping&gt;</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -2713,10 +2713,10 @@ public final class RestContext extends BeanContext {
 	 * <p class='bcode w800'>
 	 *  	/myresource/htdocs/foobar.html
 	 * </p>
-	 * <br>...the servlet will attempt to find the <code>foobar.html</code> file in the following ordered locations:
+	 * <br>...the servlet will attempt to find the <c>foobar.html</c> file in the following ordered locations:
 	 * <ol class='spaced-list'>
-	 * 	<li><code>com.foo.mypackage.docs</code> package.
-	 * 	<li><code>[working-dir]/docs</code> directory.
+	 * 	<li><c>com.foo.mypackage.docs</c> package.
+	 * 	<li><c>[working-dir]/docs</c> directory.
 	 * </ol>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -2744,7 +2744,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.produces.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -2807,7 +2807,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.properties.sms"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -2855,7 +2855,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.consumes.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -2918,7 +2918,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.useClasspathResourceCaching.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -2973,7 +2973,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.useStackTraceHashes.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -3030,7 +3030,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.uriAuthority.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -3100,7 +3100,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.uriContext.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -3163,7 +3163,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.uriRelativity.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"RESOURCE"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -3224,7 +3224,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.uriResolution.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"ROOT_RELATIVE"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -4040,7 +4040,7 @@ public final class RestContext extends BeanContext {
 	 * If the resource cannot be found in the classpath, then an attempt is made to look in the JVM working directory.
 	 *
 	 * <p>
-	 * If the <code>locale</code> is specified, then we look for resources whose name matches that locale.
+	 * If the <c>locale</c> is specified, then we look for resources whose name matches that locale.
 	 * <br>For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will look for
 	 * files in the following order:
 	 * <ol>
@@ -4468,7 +4468,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @param e The exception to check.
 	 * @return
-	 * 	The number of times this exception was thrown, or <code>0</code> if {@link #REST_useStackTraceHashes}
+	 * 	The number of times this exception was thrown, or <c>0</c> if {@link #REST_useStackTraceHashes}
 	 * 	setting is not enabled.
 	 */
 	public int getStackTraceOccurrence(Throwable e) {
@@ -4546,7 +4546,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * @return
-	 * 	The method names allowed to be passed as <code>X-Method</code> headers.
+	 * 	The method names allowed to be passed as <c>X-Method</c> headers.
 	 * 	<br>The set is case-insensitive ordered.
 	 */
 	public Set<String> getAllowedMethodHeaders() {
@@ -4562,7 +4562,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * @return
-	 * 	The method names allowed to be passed as <code>method</code> URL parameters.
+	 * 	The method names allowed to be passed as <c>method</c> URL parameters.
 	 * 	<br>The set is case-insensitive ordered.
 	 */
 	public Set<String> getAllowedMethodParams() {
@@ -4601,7 +4601,7 @@ public final class RestContext extends BeanContext {
 	}
 
 //	/**
-//	 * Returns <jk>true</jk> if the specified <code>Method</code> GET parameter value can be used to override
+//	 * Returns <jk>true</jk> if the specified <c>Method</c> GET parameter value can be used to override
 //	 * the method name in the HTTP header.
 //	 *
 //	 * <h5 class='section'>See Also:</h5>
@@ -4669,7 +4669,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * @return
-	 * 	The supported <code>Accept</code> header values for this resource.
+	 * 	The supported <c>Accept</c> header values for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public List<MediaType> getProduces() {
@@ -4686,7 +4686,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * @return
-	 * 	The supported <code>Content-Type</code> header values for this resource.
+	 * 	The supported <c>Content-Type</c> header values for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public List<MediaType> getConsumes() {

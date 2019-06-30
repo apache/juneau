@@ -164,7 +164,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Valid values:
 	 * 	<ul>
 	 * 		<li><js>"basic"</js>
@@ -211,7 +211,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -252,7 +252,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -298,7 +298,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Valid values:
 	 * 	<ul>
 	 * 		<li><js>"query"</js>
@@ -351,7 +351,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Valid values:
 	 * 	<ul>
 	 * 		<li><js>"implicit"</js>
@@ -400,7 +400,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>This SHOULD be in the form of a URL.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -443,7 +443,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>This SHOULD be in the form of a URL.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -500,8 +500,8 @@ public class SecurityScheme extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Map&lt;String,{@link HeaderInfo}|String&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,{@link HeaderInfo}&gt;</code>
+	 * 		<li><c>Map&lt;String,{@link HeaderInfo}|String&gt;</c>
+	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link HeaderInfo}&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	scopes(<js>"{name:'value'}"</js>);

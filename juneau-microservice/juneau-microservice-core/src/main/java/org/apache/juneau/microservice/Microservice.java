@@ -471,7 +471,7 @@ public class Microservice implements ConfigEventListener {
 	 * 	<li>
 	 * 		The first argument passed to the microservice jar.
 	 * 	<li>
-	 * 		The <code>Main-Config</code> entry in the microservice jar manifest file.
+	 * 		The <c>Main-Config</c> entry in the microservice jar manifest file.
 	 * 	<li>
 	 * 		The name of the microservice jar with a <js>".cfg"</js> suffix (e.g.
 	 * 		<js>"mymicroservice.jar"</js>-&gt;<js>"mymicroservice.cfg"</js>).
@@ -702,7 +702,7 @@ public class Microservice implements ConfigEventListener {
 	}
 
 	/**
-	 * Kill the JVM by calling <code>System.exit(2);</code>.
+	 * Kill the JVM by calling <c>System.exit(2);</c>.
 	 */
 	public void kill() {
 		// This triggers the shutdown hook.

@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.Created.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 201 Created</code> response.
+ * Represents an <c>HTTP 201 Created</c> response.
  *
  * <p>
  * The request has been fulfilled, resulting in the creation of a new resource.

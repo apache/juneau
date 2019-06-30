@@ -53,7 +53,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -70,7 +70,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <p>
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * <br>For example, when serializing a <code>Map&lt;String,Object&gt;</code> field where the bean class cannot be determined from
+	 * <br>For example, when serializing a <c>Map&lt;String,Object&gt;</c> field where the bean class cannot be determined from
 	 * the type of the values.
 	 *
 	 * <p>
@@ -113,7 +113,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.addRootType.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -169,7 +169,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.listener.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends SerializerListener&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends SerializerListener&gt;</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -232,7 +232,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.sortCollections.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -273,7 +273,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.sortMaps.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -314,7 +314,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyCollections.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -361,7 +361,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyMaps.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -405,7 +405,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimNullProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -448,7 +448,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimStrings.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -491,7 +491,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriContext.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> (JSON object representing a {@link UriContext})
+	 * 	<li><b>Data type:</b>  <c>String</c> (JSON object representing a {@link UriContext})
 	 * 	<li><b>Default:</b>  <js>"{}"</js>
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b>
@@ -549,7 +549,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriRelativity.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link UriRelativity})
+	 * 	<li><b>Data type:</b>  <c>String</c> ({@link UriRelativity})
 	 * 	<li><b>Default:</b>  <js>"RESOURCE"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -601,7 +601,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriResolution.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link UriResolution})
+	 * 	<li><b>Data type:</b>  <c>String</c> ({@link UriResolution})
 	 * 	<li><b>Default:</b>  <js>"NONE"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -688,9 +688,9 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * @param accept
 	 * 	The accept media types that the serializer can handle.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of {@doc RFC2616.section14.1}
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc RFC2616.section14.1}
 	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
@@ -775,7 +775,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Serializes a POJO to the specified output stream or writer.
 	 *
 	 * <p>
-	 * Equivalent to calling <code>serializer.createSession().serialize(o, output);</code>
+	 * Equivalent to calling <c>serializer.createSession().serialize(o, output);</c>
 	 *
 	 * @param o The object to serialize.
 	 * @param output
@@ -799,13 +799,13 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Shortcut method for serializing objects directly to either a <code>String</code> or <code><jk>byte</jk>[]</code>
+	 * Shortcut method for serializing objects directly to either a <c>String</c> or <code><jk>byte</jk>[]</code>
 	 * depending on the serializer type.
 	 *
 	 * @param o The object to serialize.
 	 * @return
 	 * 	The serialized object.
-	 * 	<br>Character-based serializers will return a <code>String</code>
+	 * 	<br>Character-based serializers will return a <c>String</c>
 	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
@@ -834,7 +834,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the media types handled based on the value of the <code>accept</code> parameter passed into the constructor.
+	 * Returns the media types handled based on the value of the <c>accept</c> parameter passed into the constructor.
 	 *
 	 * <p>
 	 * Note that the order of these ranges are from high to low q-value.
@@ -846,7 +846,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Returns the first entry in the <code>accept</code> parameter passed into the constructor.
+	 * Returns the first entry in the <c>accept</c> parameter passed into the constructor.
 	 *
 	 * <p>
 	 * This signifies the 'primary' media type for this serializer.
@@ -858,10 +858,10 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Returns the media types handled based on the value of the <code>accept</code> parameter passed into the constructor.
+	 * Returns the media types handled based on the value of the <c>accept</c> parameter passed into the constructor.
 	 *
 	 * <p>
-	 * The order of the media types are the same as those in the <code>accept</code> parameter.
+	 * The order of the media types are the same as those in the <c>accept</c> parameter.
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
@@ -870,14 +870,14 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Optional method that returns the response <code>Content-Type</code> for this serializer if it is different from
+	 * Optional method that returns the response <c>Content-Type</c> for this serializer if it is different from
 	 * the matched media type.
 	 *
 	 * <p>
 	 * This method is specified to override the content type for this serializer.
 	 * For example, the {@link org.apache.juneau.json.SimpleJsonSerializer} class returns that it handles media type
 	 * <js>"text/json+simple"</js>, but returns <js>"text/json"</js> as the actual content type.
-	 * This allows clients to request specific 'flavors' of content using specialized <code>Accept</code> header values.
+	 * This allows clients to request specific 'flavors' of content using specialized <c>Accept</c> header values.
 	 *
 	 * <p>
 	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server

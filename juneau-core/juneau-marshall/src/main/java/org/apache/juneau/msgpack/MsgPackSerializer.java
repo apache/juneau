@@ -21,9 +21,9 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Media types:</h5>
  *
- * Handles <code>Accept</code> types:  <code><b>octal/msgpack</b></code>
+ * Handles <c>Accept</c> types:  <bc>octal/msgpack</bc>
  * <p>
- * Produces <code>Content-Type</code> types: <code><b>octal/msgpack</b></code>
+ * Produces <c>Content-Type</c> types: <bc>octal/msgpack</bc>
  */
 @ConfigurableContext
 public class MsgPackSerializer extends OutputStreamSerializer {
@@ -40,7 +40,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"MsgPackSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>

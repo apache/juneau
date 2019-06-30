@@ -24,10 +24,10 @@ OpenAPI Schema Part Parsing
 	<li class='ja'>{@link oaj.http.annotation.Query}
 	<li class='ja'>{@link oaj.http.annotation.FormData}
 	<li class='ja'>{@link oaj.http.annotation.Path}
-	<li class='ja'>{@link oaj.http.annotation.Body} (<code>Content-Type</code> must match <js>"text/openapi"</js>)
+	<li class='ja'>{@link oaj.http.annotation.Body} (<c>Content-Type</c> must match <js>"text/openapi"</js>)
 </ul>
 <p>
-	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) in a query parameter can be converted to a 2-dimensional array of <code>Longs</code>:
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) in a query parameter can be converted to a 2-dimensional array of <c>Longs</c>:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/testQuery"</js>)	
@@ -52,7 +52,7 @@ OpenAPI Schema Part Parsing
 </p>
 <p>
 	Input will be converted based on the types and formats defined in the schema definition.
-	Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+	Input validations such as <c>minLength/maxLength</c> that don't match the input will result in automatic <c>400 Bad Request</c> responses.
 </p>
 <p>
 	The following shows the same for a request body:
@@ -85,7 +85,7 @@ OpenAPI Schema Part Parsing
 </p>
 <p>
 	The list of valid POJO types for parameters depends on type and format of the value or items/entries of the value.
-	For example, instead of <code>Longs</code> in the example above, we could also define a 2-dimensional array of POJOs convertible from <code>Longs</code>:
+	For example, instead of <c>Longs</c> in the example above, we could also define a 2-dimensional array of POJOs convertible from <c>Longs</c>:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
@@ -97,7 +97,7 @@ OpenAPI Schema Part Parsing
 	}
 </p>
 <p>
-	Or even POJOs that take in arrays of <code>Longs[]</code>:
+	Or even POJOs that take in arrays of <c>Longs[]</c>:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	

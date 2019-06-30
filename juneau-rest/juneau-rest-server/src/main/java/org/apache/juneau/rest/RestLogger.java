@@ -90,7 +90,7 @@ public interface RestLogger {
 	 * Typically, subclasses will override this method and log errors themselves.
 	 *
 	 * <p>
-	 * The default implementation simply logs errors to the <code>RestServlet</code> logger.
+	 * The default implementation simply logs errors to the <c>RestServlet</c> logger.
 	 *
 	 * <p>
 	 * Here's a typical implementation showing how stack trace hashing can be used to reduce log file sizes...

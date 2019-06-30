@@ -65,7 +65,7 @@ public abstract class ContextBuilder {
 	 *
 	 * <p>
 	 * Used in cases where multiple context builder are sharing the same property store builder.
-	 * <br>(e.g. <code>HtlmlDocBuilder</code>)
+	 * <br>(e.g. <c>HtlmlDocBuilder</c>)
 	 *
 	 * @param psb The property store builder to use.
 	 */
@@ -138,7 +138,7 @@ public abstract class ContextBuilder {
 	 * 	<li class ='ja'>{@link UonConfig}
 	 * 	<li class ='ja'>{@link UrlEncodingConfig}
 	 * 	<li class ='ja'>{@link XmlConfig}
-	 * 	<li class ='ja'><code>RdfConfig</code>
+	 * 	<li class ='ja'><c>RdfConfig</c>
 	 * </ul>
 	 *
 	 * <p>
@@ -180,7 +180,7 @@ public abstract class ContextBuilder {
 	 * 	<li class ='ja'>{@link UonConfig}
 	 * 	<li class ='ja'>{@link UrlEncodingConfig}
 	 * 	<li class ='ja'>{@link XmlConfig}
-	 * 	<li class ='ja'><code>RdfConfig</code>
+	 * 	<li class ='ja'><c>RdfConfig</c>
 	 * </ul>
 	 *
 	 * <p>

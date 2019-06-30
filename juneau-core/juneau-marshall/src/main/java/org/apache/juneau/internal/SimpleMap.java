@@ -21,10 +21,10 @@ import java.util.*;
 import org.apache.juneau.*;
 
 /**
- * An instance of a <code>Map</code> where the keys and values are simple arrays.
+ * An instance of a <c>Map</c> where the keys and values are simple arrays.
  *
  * <p>
- * Typically more efficient than <code>HashMaps</code> for small maps (e.g. &lt;10 entries).
+ * Typically more efficient than <c>HashMaps</c> for small maps (e.g. &lt;10 entries).
  *
  * <p>
  * Does not support adding or removing entries.

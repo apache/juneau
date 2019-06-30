@@ -66,8 +66,8 @@ public interface RestInfoProvider {
 	 * This object is made available through the following:
 	 * <ul>
 	 * 	<li class='jm'>{@link RestRequest#getSiteName()}
-	 * 	<li><code>$RI{siteName}</code> variable.
-	 * 	<li><code>$R{siteName}</code> variable.
+	 * 	<li><c>$RI{siteName}</c> variable.
+	 * 	<li><c>$R{siteName}</c> variable.
 	 * </ul>
 	 *
 	 * @param req The current request.
@@ -85,8 +85,8 @@ public interface RestInfoProvider {
 	 * This object is made available through the following:
 	 * <ul>
 	 * 	<li class='jm'>{@link RestRequest#getResourceTitle()}
-	 * 	<li><code>$RI{title}</code> variable.
-	 * 	<li><code>$R{resourceTitle}</code> variable.
+	 * 	<li><c>$RI{title}</c> variable.
+	 * 	<li><c>$R{resourceTitle}</c> variable.
 	 * </ul>
 	 *
 	 * @param req The current request.
@@ -104,8 +104,8 @@ public interface RestInfoProvider {
 	 * This object is made available through the following:
 	 * <ul>
 	 * 	<li class='jm'>{@link RestRequest#getResourceDescription()}
-	 * 	<li><code>$RI{description}</code> variable.
-	 * 	<li><code>$R{resourceDescription}</code> variable.
+	 * 	<li><c>$RI{description}</c> variable.
+	 * 	<li><c>$R{resourceDescription}</c> variable.
 	 * </ul>
 	 *
 	 * @param req The current request.
@@ -123,8 +123,8 @@ public interface RestInfoProvider {
 	 * This object is made available through the following:
 	 * <ul>
 	 * 	<li class='jm'>{@link RestRequest#getMethodSummary()}
-	 * 	<li><code>$RI{methodSummary}</code> variable.
-	 * 	<li><code>$R{methodSummary}</code> variable.
+	 * 	<li><c>$RI{methodSummary}</c> variable.
+	 * 	<li><c>$R{methodSummary}</c> variable.
 	 * </ul>
 	 *
 	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
@@ -143,8 +143,8 @@ public interface RestInfoProvider {
 	 * This object is made available through the following:
 	 * <ul>
 	 * 	<li class='jm'>{@link RestRequest#getMethodDescription()}
-	 * 	<li><code>$RI{methodDescription}</code> variable.
-	 * 	<li><code>$R{methodDescription}</code> variable.
+	 * 	<li><c>$RI{methodDescription}</c> variable.
+	 * 	<li><c>$R{methodDescription}</c> variable.
 	 * </ul>
 	 *
 	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.

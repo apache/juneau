@@ -129,10 +129,10 @@ public final class Via extends HeaderStringArray {
 	}
 
 	/**
-	 * Returns a parsed <code>Via</code> header.
+	 * Returns a parsed <c>Via</c> header.
 	 *
-	 * @param value The <code>Via</code> header string.
-	 * @return The parsed <code>Via</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Via</c> header string.
+	 * @return The parsed <c>Via</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Via forString(String value) {
 		if (value == null)

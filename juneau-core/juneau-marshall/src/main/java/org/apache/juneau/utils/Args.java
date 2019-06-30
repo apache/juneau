@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Utility class to make it easier to work with command-line arguments pass in through a
- * <code>main(String[] args)</code> method.
+ * <c>main(String[] args)</c> method.
  *
  * <p>
  * Used to parse command-line arguments of the form
@@ -35,13 +35,13 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='topic'>Command-line examples</h5>
  * <ul>
- * 	<li><code>java com.sample.MyClass mainArg1</code>
- * 	<li><code>java com.sample.MyClass mainArg1 mainArg2</code>
- * 	<li><code>java com.sample.MyClass mainArg1 -optArg1</code>
- * 	<li><code>java com.sample.MyClass -optArg1</code>
- * 	<li><code>java com.sample.MyClass mainArg1 -optArg1 optArg1Val</code>
- * 	<li><code>java com.sample.MyClass mainArg1 -optArg1 optArg1Val1 optArg1Val2</code>
- * 	<li><code>java com.sample.MyClass mainArg1 -optArg1 optArg1Val1 -optArg1 optArg1Val2</code>
+ * 	<li><c>java com.sample.MyClass mainArg1</c>
+ * 	<li><c>java com.sample.MyClass mainArg1 mainArg2</c>
+ * 	<li><c>java com.sample.MyClass mainArg1 -optArg1</c>
+ * 	<li><c>java com.sample.MyClass -optArg1</c>
+ * 	<li><c>java com.sample.MyClass mainArg1 -optArg1 optArg1Val</c>
+ * 	<li><c>java com.sample.MyClass mainArg1 -optArg1 optArg1Val1 optArg1Val2</c>
+ * 	<li><c>java com.sample.MyClass mainArg1 -optArg1 optArg1Val1 -optArg1 optArg1Val2</c>
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
@@ -90,7 +90,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * Main arguments are available through numeric string keys (e.g. <js>"0"</js>, <js>"1"</js>, ...).
- * So you could use the {@link ObjectMap} API to convert main arguments directly to POJOs, such as an <code>Enum</code>
+ * So you could use the {@link ObjectMap} API to convert main arguments directly to POJOs, such as an <c>Enum</c>
  * <p class='bcode w800'>
  * 	<jc>// Get 1st main argument as an Enum</jc>
  * 	MyEnum e = a.get(MyEnum.<jk>class</jk>, <js>"0"</js>);
@@ -109,7 +109,7 @@ public final class Args extends ObjectMap {
 	/**
 	 * Constructor.
 	 *
-	 * @param args Arguments passed in through a <code>main(String[] args)</code> method.
+	 * @param args Arguments passed in through a <c>main(String[] args)</c> method.
 	 */
 	public Args(String[] args) {
 		List<String> argList = new LinkedList<>(Arrays.asList(args));

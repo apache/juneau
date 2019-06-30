@@ -21,7 +21,7 @@ import org.apache.juneau.svl.vars.*;
  * Utility class for resolving variables of the form <js>"$X{key}"</js> in strings.
  *
  * <p>
- * Variables are of the form <code>$X{key}</code>, where <code>X</code> can consist of zero or more ASCII characters.
+ * Variables are of the form <c>$X{key}</c>, where <c>X</c> can consist of zero or more ASCII characters.
  * <br>The variable key can contain anything, even nested variables that get recursively resolved.
  *
  * <p>
@@ -63,21 +63,21 @@ public class VarResolver {
 	 * Default string variable resolver with support for system properties and environment variables:
 	 *
 	 * <ul>
-	 * 	<li><code>$S{key[,default]}</code> - {@link SystemPropertiesVar}
-	 * 	<li><code>$E{key[,default]}</code> - {@link EnvVariablesVar}
-	 * 	<li><code>$A{key[,default]}</code> - {@link ArgsVar}
-	 * 	<li><code>$MF{key[,default]}</code> - {@link ManifestFileVar}
-	 * 	<li><code>$SW{stringArg,pattern:thenValue[,pattern:thenValue...]}</code> - {@link SwitchVar}
-	 * 	<li><code>$IF{arg,then[,else]}</code> - {@link IfVar}
-	 * 	<li><code>$CO{arg[,arg2...]}</code> - {@link CoalesceVar}
-	 * 	<li><code>$PM{arg,pattern}</code> - {@link PatternMatchVar}
-	 * 	<li><code>$PR{stringArg,pattern,replace}</code>- {@link PatternReplaceVar}
-	 * 	<li><code>$PE{arg,pattern,groupIndex}</code> - {@link PatternExtractVar}
-	 * 	<li><code>$UC{arg}</code> - {@link UpperCaseVar}
-	 * 	<li><code>$LC{arg}</code> - {@link LowerCaseVar}
-	 * 	<li><code>$NE{arg}</code> - {@link NotEmptyVar}
-	 * 	<li><code>$LN{arg[,delimiter]}</code> - {@link LenVar}
-	 * 	<li><code>$ST{arg,start[,end]}</code> - {@link SubstringVar}
+	 * 	<li><c>$S{key[,default]}</c> - {@link SystemPropertiesVar}
+	 * 	<li><c>$E{key[,default]}</c> - {@link EnvVariablesVar}
+	 * 	<li><c>$A{key[,default]}</c> - {@link ArgsVar}
+	 * 	<li><c>$MF{key[,default]}</c> - {@link ManifestFileVar}
+	 * 	<li><c>$SW{stringArg,pattern:thenValue[,pattern:thenValue...]}</c> - {@link SwitchVar}
+	 * 	<li><c>$IF{arg,then[,else]}</c> - {@link IfVar}
+	 * 	<li><c>$CO{arg[,arg2...]}</c> - {@link CoalesceVar}
+	 * 	<li><c>$PM{arg,pattern}</c> - {@link PatternMatchVar}
+	 * 	<li><c>$PR{stringArg,pattern,replace}</c>- {@link PatternReplaceVar}
+	 * 	<li><c>$PE{arg,pattern,groupIndex}</c> - {@link PatternExtractVar}
+	 * 	<li><c>$UC{arg}</c> - {@link UpperCaseVar}
+	 * 	<li><c>$LC{arg}</c> - {@link LowerCaseVar}
+	 * 	<li><c>$NE{arg}</c> - {@link NotEmptyVar}
+	 * 	<li><c>$LN{arg[,delimiter]}</c> - {@link LenVar}
+	 * 	<li><c>$ST{arg,start[,end]}</c> - {@link SubstringVar}
 	 * </ul>
 	 */
 	public static final VarResolver DEFAULT = new VarResolverBuilder().defaultVars().build();

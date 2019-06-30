@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.SwitchingProtocols.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 101 Switching Protocols</code> response.
+ * Represents an <c>HTTP 101 Switching Protocols</c> response.
  *
  * <p>
  * The requester has asked the server to switch protocols and the server has agreed to do so.

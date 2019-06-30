@@ -59,28 +59,28 @@ OpenAPI Parsers
 	}
 </p>
 <p>
-	As a general rule, any POJO convertible from the intermediate type for the <code>type/format</code> of the schema can
+	As a general rule, any POJO convertible from the intermediate type for the <c>type/format</c> of the schema can
 	be parsed using the OpenAPI parser.
 	Here are the rules of POJO types allowed for various type/format combinations:
 </p>
 <table class='styled w800'>
 	<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>
 	<tr class='dark bb'>
-		<td rowspan='4'><code>string</code> or empty</td>
-		<td><code>byte<br>binary<br>binary-spaced</code></td>
+		<td rowspan='4'><c>string</c> or empty</td>
+		<td><c>byte<br>binary<br>binary-spaced</c></td>
 		<td>
 			<ul>
-				<li><code><jk>byte</jk>[]</code> (default)
+				<li><c><jk>byte</jk>[]</c> (default)
 				<li>{@link java.io.InputStream} - Returns a {@link java.io.ByteArrayInputStream}.
 				<li>{@link java.io.Reader} - Returns a {@link java.io.InputStreamReader} wrapped around a {@link java.io.ByteArrayInputStream}.
 				<li>{@link java.lang.String} - Constructed using {@link java.lang.String#String(byte[])}.
-				<li>{@link java.lang.Object} - Returns the default <code><jk>byte</jk>[]</code>.
-				<li>Any POJO transformable from a <code><jk>byte</jk>[]</code> (via constructors or static create methods).
+				<li>{@link java.lang.Object} - Returns the default <c><jk>byte</jk>[]</c>.
+				<li>Any POJO transformable from a <c><jk>byte</jk>[]</c> (via constructors or static create methods).
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td><code>date<br>date-time</code></td>
+		<td><c>date<br>date-time</c></td>
 		<td>
 			<ul>
 				<li>{@link java.util.Calendar} (default)
@@ -93,7 +93,7 @@ OpenAPI Parsers
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td><code>uon</code></td>
+		<td><c>uon</c></td>
 		<td>
 			<ul>
 				<li>Any {@doc PojoCategories Parsable POJO} type.
@@ -111,7 +111,7 @@ OpenAPI Parsers
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan='1'><code>boolean</code></td>
+		<td rowspan='1'><c>boolean</c></td>
 		<td>empty</td>
 		<td>
 			<ul>
@@ -124,8 +124,8 @@ OpenAPI Parsers
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td rowspan='2'><code>integer</code></td>
-		<td><code>int32</code></td>
+		<td rowspan='2'><c>integer</c></td>
+		<td><c>int32</c></td>
 		<td>
 			<ul>
 				<li>{@link java.lang.Integer} (default)
@@ -138,7 +138,7 @@ OpenAPI Parsers
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td><code>int64</code></td>
+		<td><c>int64</c></td>
 		<td>
 			<ul>
 				<li>{@link java.lang.Long} (default)
@@ -151,8 +151,8 @@ OpenAPI Parsers
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan='2'><code>number</code></td>
-		<td><code>float</code></td>
+		<td rowspan='2'><c>number</c></td>
+		<td><c>float</c></td>
 		<td>
 			<ul>
 				<li>{@link java.lang.Float} (default)
@@ -165,7 +165,7 @@ OpenAPI Parsers
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td><code>double</code></td>
+		<td><c>double</c></td>
 		<td>
 			<ul>
 				<li>{@link java.lang.Double} (default)
@@ -178,17 +178,17 @@ OpenAPI Parsers
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td rowspan='2'><code>array</code></td>
+		<td rowspan='2'><c>array</c></td>
 		<td>empty</td>
 		<td>
 			<ul>
 				<li>Arrays or Collections of anything on this list.
-				<li>Any POJO transformable from arrays of the default types (e.g. <code>Integer[]</code>, <code>Boolean[][]</code>, etc...).
+				<li>Any POJO transformable from arrays of the default types (e.g. <c>Integer[]</c>, <c>Boolean[][]</c>, etc...).
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td><code>uon</code></td>
+		<td><c>uon</c></td>
 		<td>
 			<ul>
 				<li>Any {@doc PojoCategories Parsable POJO} type.
@@ -196,18 +196,18 @@ OpenAPI Parsers
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan='2'><code>object</code></td>
+		<td rowspan='2'><c>object</c></td>
 		<td>empty</td>
 		<td>
 			<ul>
-				<li><code>Map&lt;String,Object&gt;</code> (default)
+				<li><c>Map&lt;String,Object&gt;</c> (default)
 				<li>Beans with properties of anything on this list.
 				<li>Maps with string keys.
 			</ul>
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td><code>uon</code></td>
+		<td><c>uon</c></td>
 		<td>
 			<ul>
 				<li>Any {@doc PojoCategories Parsable POJO} type.
@@ -244,7 +244,7 @@ OpenAPI Parsers
 	}
 </p>
 <p>
-	Just like serialization, the <code>object</code> type is not officially part of the OpenAPI standard, but
+	Just like serialization, the <c>object</c> type is not officially part of the OpenAPI standard, but
 	Juneau supports parsing HTTP parts in UON notation to Maps and beans.
 </p>
 <p>
@@ -299,7 +299,7 @@ OpenAPI Parsers
 	MyBean b = p.parse(schema, input, MyBean.<jk>class</jk>);
 </p>
 <p>
-	Note that serializing into generic <code>Object</code> properties would have produced similar results:
+	Note that serializing into generic <c>Object</c> properties would have produced similar results:
 </p>
 <p class='bpcode w800'>
 	<jk>public class</jk> MyBean {
@@ -340,6 +340,6 @@ OpenAPI Parsers
 		They can be skipped or partially defined.
 	<li>
 		We make our best attempt to convert the output to the matching type.  
-		However, you will get <code>ParseExceptions</code> if you attempt an impossible conversion.
+		However, you will get <c>ParseExceptions</c> if you attempt an impossible conversion.
 		(e.g. trying to parse the string "foo" into a boolean). 
 </ul>

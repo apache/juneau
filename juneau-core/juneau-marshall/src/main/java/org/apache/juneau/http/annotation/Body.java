@@ -180,8 +180,8 @@ public @interface Body {
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -410,7 +410,7 @@ public @interface Body {
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object with string keys (media type) and string values (example for that media type) .
 	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable:
 	 * 	<li>
@@ -486,7 +486,7 @@ public @interface Body {
 	 * 		Schema-based serialization is NOT affected by values defined in this annotation.
 	 * 		<br>It only affects the generated Swagger documentation.
 	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
 	 * 		<p class='bcode w800'>
 	 * 	<ja>@Body</ja>(<js>"{description: 'Pet object to add to the store'}"</js>)

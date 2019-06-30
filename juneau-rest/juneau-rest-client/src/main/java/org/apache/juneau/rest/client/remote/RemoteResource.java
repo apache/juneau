@@ -38,7 +38,7 @@ public @interface RemoteResource {
 	 * The possible values are:
 	 * <ul class='spaced-list'>
 	 * 	<li>An absolute URL.
-	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <code>RestClient</code>
+	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <c>RestClient</c>
 	 * 	<li>No path interpreted as the class name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
 	 * </ul>
 	 */

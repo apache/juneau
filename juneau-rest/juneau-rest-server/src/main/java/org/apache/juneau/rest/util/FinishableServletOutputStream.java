@@ -19,7 +19,7 @@ import javax.servlet.*;
 import org.apache.juneau.encoders.*;
 
 /**
- * A wrapped {@link ServletOutputStream} with an added <code>finish()</code> method.
+ * A wrapped {@link ServletOutputStream} with an added <c>finish()</c> method.
  */
 public class FinishableServletOutputStream extends ServletOutputStream implements Finishable {
 

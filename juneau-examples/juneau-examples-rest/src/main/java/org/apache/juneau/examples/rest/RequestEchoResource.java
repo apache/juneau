@@ -59,7 +59,7 @@ import org.apache.juneau.transforms.*;
 	},
 	aside={
 		"<div style='max-width:400px;min-width:200px' class='text'>",
-		"	<p>Shows how even arbitrary POJOs such as <code>HttpServletRequest</code> can be serialized by the framework.</p>",
+		"	<p>Shows how even arbitrary POJOs such as <c>HttpServletRequest</c> can be serialized by the framework.</p>",
 		"	<p>Also shows how to specify serializer properties, filters, and swaps at the servlet level to control how POJOs are serialized.</p>",
 		"	<p>Also provides an example of how to use the Traversable and Queryable APIs.</p>",
 		"</div>"

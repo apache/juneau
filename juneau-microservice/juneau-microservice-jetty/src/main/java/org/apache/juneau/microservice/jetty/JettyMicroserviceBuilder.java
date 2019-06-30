@@ -72,23 +72,23 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 	}
 
 	/**
-	 * Specifies the contents or location of the <code>jetty.xml</code> file used by the Jetty server.
+	 * Specifies the contents or location of the <c>jetty.xml</c> file used by the Jetty server.
 	 *
 	 * <p>
 	 * If you do not specify this value, it is pulled from the following in the specified order:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<code>Jetty/config</code> setting in the config file.
-	 * 		<code>Jetty-Config</code> setting in the manifest file.
+	 * 		<c>Jetty/config</c> setting in the config file.
+	 * 		<c>Jetty-Config</c> setting in the manifest file.
 	 * </ul>
 	 *
 	 * <p>
-	 * By default, we look for the <code>jetty.xml</code> file in the following locations:
+	 * By default, we look for the <c>jetty.xml</c> file in the following locations:
 	 * <ul class='spaced-list'>
-	 * 	<li><code>jetty.xml</code> in home directory.
-	 * 	<li><code>files/jetty.xml</code> in home directory.
-	 * 	<li><code>/jetty.xml</code> in classpath.
-	 * 	<li><code>/files/jetty.xml</code> in classpath.
+	 * 	<li><c>jetty.xml</c> in home directory.
+	 * 	<li><c>files/jetty.xml</c> in home directory.
+	 * 	<li><c>/jetty.xml</c> in classpath.
+	 * 	<li><c>/files/jetty.xml</c> in classpath.
 	 * </ul>
 	 *
 	 * @param jettyXml
@@ -97,7 +97,7 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 	 * 	<ul>
 	 * 		<li>{@link String} - Relative path to file on file system or classpath.
 	 * 		<li>{@link File} - File on file system.
-	 * 		<li>{@link InputStream} - Raw contents as <code>UTF-8</code> encoded stream.
+	 * 		<li>{@link InputStream} - Raw contents as <c>UTF-8</c> encoded stream.
 	 * 		<li>{@link Reader} - Raw contents.
 	 * 	</ul>
 	 *
@@ -127,17 +127,17 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 	 * <p>
 	 * You can specify multiple ports.  The first available will be used.  <js>'0'</js> indicates to try a random port.
 	 * The resulting available port gets set as the system property <js>"availablePort"</js> which can be referenced in the
-	 * <code>jetty.xml</code> file as <js>"$S{availablePort}"</js> (assuming resolveVars is enabled).
+	 * <c>jetty.xml</c> file as <js>"$S{availablePort}"</js> (assuming resolveVars is enabled).
 	 *
 	 * <p>
 	 * If you do not specify this value, it is pulled from the following in the specified order:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<code>Jetty/port</code> setting in the config file.
+	 * 		<c>Jetty/port</c> setting in the config file.
 	 * 	<li>
-	 * 		<code>Jetty-Port</code> setting in the manifest file.
+	 * 		<c>Jetty-Port</c> setting in the manifest file.
 	 * 	<li>
-	 * 		<code>8000</code>
+	 * 		<c>8000</c>
 	 * </ul>
 	 *
 	 * Jetty/port", mf.getWithDefault("Jetty-Port", new int[]{8000}

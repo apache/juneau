@@ -19,7 +19,7 @@
 	The major change in this release is the project structure.
 </p>
 <p>
-	The library now consists of the following artifacts found in the Maven group <code>"org.apache.juneau"</code>:
+	The library now consists of the following artifacts found in the Maven group <c>"org.apache.juneau"</c>:
 </p>
 <table class='styled w800'>
 	<tr>
@@ -160,14 +160,14 @@
 	</tr>
 	<tr class='light bb'>
 		<td rowspan='2' style='text-align:center;font-weight:bold;padding:20px;'>Examples</td>
-		<td class='code'><code>juneau-examples-core</code></td>
+		<td class='code'><c>juneau-examples-core</c></td>
 		<td>
 			Core code examples
 		</td>
 		<td></td>
 	</tr>
 	<tr class='light bb'>
-		<td class='code'><code>juneau-examples-rest</code></td>
+		<td class='code'><c>juneau-examples-rest</c></td>
 		<td>
 			REST code examples
 		</td>
@@ -175,7 +175,7 @@
 	</tr>
 	<tr class='dark bb'>
 		<td rowspan='1' style='text-align:center;font-weight:bold;padding:20px;'>Juneau All</td>
-		<td class='code'><code>juneau-all</code></td>
+		<td class='code'><c>juneau-all</c></td>
 		<td>
 			Combination of the following:
 			<ul style='margin:0px 10px;'>
@@ -203,7 +203,7 @@
 		Improvements to swap support.
 		<ul>
 			<li>New {@link oaj.annotation.Swap @Swap} annotation.
-				<br>Replaces the <code>@Pojo</code> and <code>@BeanProperty(swap)</code> annotations.
+				<br>Replaces the <c>@Pojo</c> and <c>@BeanProperty(swap)</c> annotations.
 			<li>Support for per-media-type swaps.
 				<br>Programmatic example:
 				<p class='bcode w800'>
@@ -270,7 +270,7 @@
 	<li>
 		Serializers now serialize the contents of {@link java.io.Reader Readers} and {@link java.io.InputStream InputStreams}
 		directly to the output stream or writer.
-		<br>When used with conjunction with <code>PojoSwaps</code>, this can be used to provide customized
+		<br>When used with conjunction with <c>PojoSwaps</c>, this can be used to provide customized
 		output for specific content types.
 		<p class='bcode w800'>
 	<ja>@Pojo</ja>(swap=MyBeanSwap.<jk>class</jk>)
@@ -311,7 +311,7 @@
 		This is mostly an internal change and doesn't affect the existing APIs.
 	<li>
 		{@link oaj.transform.PojoSwap#swap(BeanSession,Object)} and {@link oaj.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)} 
-		can now throw arbitrary exceptions instead of having to wrap them in <code>SerializeException</code>/<code>ParseException</code>.
+		can now throw arbitrary exceptions instead of having to wrap them in <c>SerializeException</c>/<c>ParseException</c>.
 	<li>
 		New {@link oaj.utils.CalendarUtils} class that encapsulates serialization/parsing logic from {@link oaj.transforms.CalendarSwap} and 
 		{@link oaj.transforms.DateSwap}.
@@ -354,8 +354,8 @@
 		Eliminated the <ja>@Consumes</ja> and <ja>@Produces</ja> annotations.
 		<br>The supported media types are now passed in through the constructors.
 		<br>This was changed to eliminate a performance issue where a field could not be set as final because
-		the call to <code>getClass()</code> to retrieve the annotation value could not be called before calling
-		the <code><jk>super</jk>()</code> method.
+		the call to <c>getClass()</c> to retrieve the annotation value could not be called before calling
+		the <c><jk>super</jk>()</c> method.
 	<li>
 		New class: {@link oaj.utils.PojoMerge}
 	<li>
@@ -370,8 +370,8 @@
 		{@link oaj.dto.html5.HtmlElementMixed#children(Object...)} can now take in collections
 		of objects.
 	<li>
-		The DTO beans can now be serialized to strings of their typical language by calling the <code>toString()</code> method.
-		<br>For example, <code>Swagger.toString()</code> produces JSON and the HTML5 <code>Form.toString()</code>
+		The DTO beans can now be serialized to strings of their typical language by calling the <c>toString()</c> method.
+		<br>For example, <c>Swagger.toString()</c> produces JSON and the HTML5 <c>Form.toString()</c>
 		produces HTML.
 </ul>
 
@@ -388,19 +388,19 @@
 				{@link oajr.annotation.HookEvent#POST_INIT} for initialization.
 			<li>The following methods on {@link oajr.RestServlet} have been removed:
 				<ul>
-					<li><code>init(RestConfig)</code> 
+					<li><c>init(RestConfig)</c> 
 						- Use {@link oajr.annotation.HookEvent#INIT} instead.
-					<li><code>onSuccess(RestRequest, RestResponse, long)</code>
+					<li><c>onSuccess(RestRequest, RestResponse, long)</c>
 						- Use {@link oajr.annotation.HookEvent#END_CALL} instead.
-					<li><code>onPreCall(RestRequest)</code>
+					<li><c>onPreCall(RestRequest)</c>
 						- Use {@link oajr.annotation.HookEvent#PRE_CALL} instead.
-					<li><code>onPostCall(RestRequest, RestResponse)</code>
+					<li><c>onPostCall(RestRequest, RestResponse)</c>
 						- Use {@link oajr.annotation.HookEvent#POST_CALL} instead.
 				</ul> 	
 		</ul>
 	<li>
 		Simplified {@link oajr.widget.MenuItemWidget}.
-		<br>Exposes an abstract method <code><del>getContent(RestRequest)</del></code> that
+		<br>Exposes an abstract method <dc>getContent(RestRequest)</dc> that
 		can return raw HTML via readers or char-sequences, or any other object (such as HTML5 beans) that will
 		get converted to HTML using {@link oaj.html.HtmlSerializer#DEFAULT}.
 	<li>
@@ -412,29 +412,29 @@
 			<li>{@link oajr.annotation.RestResource#resourceResolver() resourceResolver()}
 				<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
 				dependency injection frameworks.
-			<li><code><del>RestResource.contextPath()</del></code> - 
+			<li><dc>RestResource.contextPath()</dc> - 
 				<br>Allows you to override the context path value inherited from the servlet container.
 			<li>{@link oajr.annotation.RestResource#allowHeaderParams() allowHeaderParams()} - 
-				<br>Replaces the <code>RestContext.REST_allowHeaderParams</code> setting.
-			<li><code><del>RestResource.allowMethodParam()</del></code> - 
-				<br>Replaces the <code>RestContext.REST_allowMethodParam</code> setting.
+				<br>Replaces the <c>RestContext.REST_allowHeaderParams</c> setting.
+			<li><dc>RestResource.allowMethodParam()</dc> - 
+				<br>Replaces the <c>RestContext.REST_allowMethodParam</c> setting.
 			<li>{@link oajr.annotation.RestResource#allowBodyParam() allowBodyParam()} - 
-				<br>Replaces the <code>RestContext.REST_allowBodyParam</code> setting.
+				<br>Replaces the <c>RestContext.REST_allowBodyParam</c> setting.
 			<li>{@link oajr.annotation.RestResource#renderResponseStackTraces() renderResponseStackTraces()} - 
-				<br>Replaces the <code>RestContext.REST_xxx</code> setting.
+				<br>Replaces the <c>RestContext.REST_xxx</c> setting.
 			<li>{@link oajr.annotation.RestResource#useStackTraceHashes() useStackTraceHashes()} - 
-				<br>Replaces the <code>RestContext.REST_useStackTraceHashes</code> setting.
+				<br>Replaces the <c>RestContext.REST_useStackTraceHashes</c> setting.
 			<li>{@link oajr.annotation.RestResource#defaultCharset() defaultCharset()} - 
-				<br>Replaces the <code>RestContext.REST_defaultCharset</code> setting.
-			<li><code><del>RestResource.paramFormat()</del></code> - 
-				<br>Replaces the <code>RestContext.REST_paramFormat</code> setting.
+				<br>Replaces the <c>RestContext.REST_defaultCharset</c> setting.
+			<li><dc>RestResource.paramFormat()</dc> - 
+				<br>Replaces the <c>RestContext.REST_paramFormat</c> setting.
 		</ul>
 	<li>New annotations on {@link oajr.annotation.RestMethod @RestMethod}:
 		<ul>
 			<li>{@link oajr.annotation.RestMethod#defaultCharset() defaultCharset()} - 
-				<br>Replaces the <code>RestContext.REST_defaultCharset</code> setting.
-			<li><code><del>RestMethod.paramFormat()</del></code> - 
-				<br>Replaces the <code>RestContext.REST_paramFormat</code> setting.
+				<br>Replaces the <c>RestContext.REST_defaultCharset</c> setting.
+			<li><dc>RestMethod.paramFormat()</dc> - 
+				<br>Replaces the <c>RestContext.REST_paramFormat</c> setting.
 		</ul>
 	<li>
 		The following implementation classes can now be defined as non-static inner classes of servlets/resources:
@@ -455,33 +455,33 @@
 		New dark theme:
 		<br><img src='doc-files/ReleaseNotes.632.DarkStyle.png'>
 	<li>
-		Stylesheet selection now stored in HTTP session when passed in via <code>?stylesheet</code> query parameter.
+		Stylesheet selection now stored in HTTP session when passed in via <c>?stylesheet</c> query parameter.
 	<li>
 		New doc: <del>Lifecycle Hooks</del>
 	<li>
-		Eliminated the <code>RestServletJenaDefault</code> class to remove the Jena dependency class on 
-		the <code>juneau-rest-server</code> artifact. 
-		<br>It's simple enough to simply extend <code>BasicRestServlet</code> and add the RDF serializers and
+		Eliminated the <c>RestServletJenaDefault</c> class to remove the Jena dependency class on 
+		the <c>juneau-rest-server</c> artifact. 
+		<br>It's simple enough to simply extend <c>BasicRestServlet</c> and add the RDF serializers and
 		parsers.
 </ul>
 
 <h5 class='topic w800'>juneau-microservice</h5>
 <ul class='spaced-list'>
 	<li>
-		The microservice has been significantly modified to be configured via a <code>jetty.xml</code> file
+		The microservice has been significantly modified to be configured via a <c>jetty.xml</c> file
 		for maximum flexibility instead of the hodge-podge of support in the config file.
-		<br>Top-level servlets should now be defined in the provided <code>jetty.xml</code> file.
+		<br>Top-level servlets should now be defined in the provided <c>jetty.xml</c> file.
 	<li>
-		New methods on <code><del>RestMicroservice</del></code>:
+		New methods on <dc>RestMicroservice</dc>:
 		<ul>
-			<li><code><del>addServlet(Servlet,String)</del></code>
-			<li><code><del>addServletAttribute(String,Object)</del></code>
-			<li><code><del>getServer()</del></code>
-			<li><code><del>getInstance()</del></code>
-			<li><code><del>getPort()</del></code>
-			<li><code><del>getContextPath()</del></code>
-			<li><code><del>getProtocol()</del></code>
-			<li><code><del>getHostName()</del></code>
+			<li><dc>addServlet(Servlet,String)</dc>
+			<li><dc>addServletAttribute(String,Object)</dc>
+			<li><dc>getServer()</dc>
+			<li><dc>getInstance()</dc>
+			<li><dc>getPort()</dc>
+			<li><dc>getContextPath()</dc>
+			<li><dc>getProtocol()</dc>
+			<li><dc>getHostName()</dc>
 		</ul>
 	<li>
 		New methods on {@link oaj.microservice.Microservice}:
@@ -489,10 +489,10 @@
 			<li>{@link oaj.microservice.Microservice#getInstance() getInstance()}
 		</ul>
 	<li>
-		New class <code><del>JettyLogger</del></code> for directing Jetty logging to the
+		New class <dc>JettyLogger</dc> for directing Jetty logging to the
 		java.util.logging framework.
 	<li>
-		New class <code><del>DebugResource</del></code> for viewing and generating
+		New class <dc>DebugResource</dc> for viewing and generating
 		Jetty thread dumps through REST calls.
 </ul>
 

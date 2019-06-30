@@ -24,8 +24,8 @@ import java.lang.annotation.*;
  * Any of the properties defined on any of the serializers or parsers can be defined.
  *
  * <p>
- * Property values types that are not <code>Strings</code> will automatically be converted to the correct type
- * (e.g. <code>Boolean</code>, etc...).
+ * Property values types that are not <c>Strings</c> will automatically be converted to the correct type
+ * (e.g. <c>Boolean</c>, etc...).
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>

@@ -51,7 +51,7 @@ public class HeaderRangeArray {
 	 * Given a list of type values, returns the best match for this header.
 	 *
 	 * @param types The types to match against.
-	 * @return The index into the array of the best match, or <code>-1</code> if no suitable matches could be found.
+	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int findMatch(String[] types) {
 

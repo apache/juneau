@@ -82,7 +82,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	}
 
 	/**
-	 * Convenience method for serializing an object to a <code>String</code>.
+	 * Convenience method for serializing an object to a <c>String</c>.
 	 *
 	 * @param o The object to serialize.
 	 * @return The output serialized to a string.

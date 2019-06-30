@@ -22,7 +22,7 @@ import org.apache.juneau.xml.annotation.*;
  * Represents a Cognos dataset.
  *
  * <p>
- * When serialized to XML, creates the following construct (example pulled from <code>AddressBookResource</code>):
+ * When serialized to XML, creates the following construct (example pulled from <c>AddressBookResource</c>):
  * <p class='bcode w800'>
  * 	<xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs> <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt>
  * 	<xt>&lt;c:dataset <xa>xmlns:c</xa>=<xs>'http://developer.cognos.com/schemas/xmldata/1/'</xs>&gt;</xt>
@@ -52,8 +52,8 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  *
- * The construct shown above is a serialized <code>AddressBook</code> object which is a subclass of
- * <code>LinkedList&lt;Person&gt;</code>.
+ * The construct shown above is a serialized <c>AddressBook</c> object which is a subclass of
+ * <c>LinkedList&lt;Person&gt;</c>.
  * The code for generating the XML is as follows...
  * <p class='bcode w800'>
  * 	Column[] items = {
@@ -128,7 +128,7 @@ public class DataSet {
 	 * Represents a row of data.
 	 *
 	 * <p>
-	 * When serialized to XML, creates the following construct (example pulled from <code>AddressBookResource</code>):
+	 * When serialized to XML, creates the following construct (example pulled from <c>AddressBookResource</c>):
 	 * <p class='bcode w800'>
 	 * 	<xt>&lt;row&gt;</xt>
 	 * 		<xt>&lt;value&gt;</xt>Barack Obama<xt>&lt;/value&gt;</xt>

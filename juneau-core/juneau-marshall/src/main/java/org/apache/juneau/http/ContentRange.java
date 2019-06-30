@@ -131,10 +131,10 @@ import org.apache.juneau.http.annotation.*;
 public final class ContentRange extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Content-Range</code> header.
+	 * Returns a parsed <c>Content-Range</c> header.
 	 *
-	 * @param value The <code>Content-Range</code> header string.
-	 * @return The parsed <code>Content-Range</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Content-Range</c> header string.
+	 * @return The parsed <c>Content-Range</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static ContentRange forString(String value) {
 		if (value == null)

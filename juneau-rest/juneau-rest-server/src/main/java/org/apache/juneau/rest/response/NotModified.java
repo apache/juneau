@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.NotModified.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 304 Not Modified</code> response.
+ * Represents an <c>HTTP 304 Not Modified</c> response.
  *
  * <p>
  * Indicates that the resource has not been modified since the version specified by the request headers If-Modified-Since or If-None-Match.

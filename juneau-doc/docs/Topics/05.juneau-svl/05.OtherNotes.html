@@ -18,15 +18,15 @@ Other Notes
 <ul class='spaced-list'>
 	<li>
 		The escape character <js>'\'</js> can be used when necessary to escape the following characters: 
-		<code>$ , { }</code>
+		<c>$ , { }</c>
 	<li>
 		<b>WARNING:</b>  It is possible to cause {@link java.lang.StackOverflowError StackOverflowErrors} if 
 		your nested variables result in a recursive loop (e.g. the environment variable 
-		<code>'MYPROPERTY'</code> has the value <code>'$E{MYPROPERTY}'</code>).
+		<c>'MYPROPERTY'</c> has the value <c>'$E{MYPROPERTY}'</c>).
 		So don't do that!
 	<li>
 		As a general rule, this class tries to be as efficient as possible by not creating new strings when not 
 		needed.
 		<br>For example, calling the resolve method on a string that doesn't contain variables (e.g. 
-		<code>resolver.resolve(<js>"foobar"</js>)</code>) will simply be a no-op and return the same string.
+		<c>resolver.resolve(<js>"foobar"</js>)</c>) will simply be a no-op and return the same string.
 </ul>

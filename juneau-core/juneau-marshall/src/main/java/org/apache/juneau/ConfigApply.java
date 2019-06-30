@@ -25,7 +25,7 @@ import org.apache.juneau.svl.*;
 /**
  * Class used to add properties to a {@link PropertyStore} from an annotation (e.g. {@link BeanConfig}).
  *
- * @param <T> The annotation that this <code>ConfigApply</code> reads from.
+ * @param <T> The annotation that this <c>ConfigApply</c> reads from.
  */
 public abstract class ConfigApply<T extends Annotation> {
 

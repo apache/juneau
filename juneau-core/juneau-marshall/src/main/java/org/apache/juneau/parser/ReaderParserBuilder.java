@@ -52,7 +52,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * Configuration property:  File charset.
 	 *
 	 * <p>
-	 * The character set to use for reading <code>Files</code> from the file system.
+	 * The character set to use for reading <c>Files</c> from the file system.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -72,7 +72,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * Configuration property:  Input stream charset.
 	 *
 	 * <p>
-	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

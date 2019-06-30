@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 302 Found</code> response.
+ * Represents an <c>HTTP 302 Found</c> response.
  *
  * <p>
  * Tells the client to look at (browse to) another url. 302 has been superseded by 303 and 307.
@@ -66,7 +66,7 @@ public class Found extends HttpResponse {
 	/**
 	 * Constructor using custom message.
 	 * @param message Message to send as the response.
-	 * @param location <code>Location</code> header value.
+	 * @param location <c>Location</c> header value.
 	 */
 	public Found(String message, URI location) {
 		super(message);
@@ -75,14 +75,14 @@ public class Found extends HttpResponse {
 
 	/**
 	 * Constructor.
-	 * @param location <code>Location</code> header value.
+	 * @param location <c>Location</c> header value.
 	 */
 	public Found(URI location) {
 		this(MESSAGE, location);
 	}
 
 	/**
-	 * @return <code>Location</code> header value.
+	 * @return <c>Location</c> header value.
 	 */
 	@ResponseHeader(name="Location", description="Location of resource.")
 	public URI getLocation() {

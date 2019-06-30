@@ -128,10 +128,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Warning extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Warning</code> header.
+	 * Returns a parsed <c>Warning</c> header.
 	 *
-	 * @param value The <code>Warning</code> header string.
-	 * @return The parsed <code>Warning</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Warning</c> header string.
+	 * @return The parsed <c>Warning</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Warning forString(String value) {
 		if (value == null)

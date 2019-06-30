@@ -502,8 +502,8 @@ public @interface Schema {
 	 * items are supposed to be represented.
 	 *
 	 * <p>
-	 * Determines the format of the array if <code>type</code> <js>"array"</js> is used.
-	 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
+	 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
+	 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
 	 *
 	 * <br>Possible values are:
 	 * <ul class='spaced-list'>
@@ -651,7 +651,7 @@ public @interface Schema {
 	 * A free-form property to include an example of an instance for this schema.
 	 *
 	 * <p>
-	 * This attribute defines a JSON representation of the body value that is used by <code>BasicRestInfoProvider</code> to construct
+	 * This attribute defines a JSON representation of the body value that is used by <c>BasicRestInfoProvider</c> to construct
 	 * media-type-based examples of the body of the request.
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -736,7 +736,7 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
 	 * 		<p class='bcode w800'>
 	 * 	<ja>@Schema</ja>(<js>"{type: 'array'}"</js>)

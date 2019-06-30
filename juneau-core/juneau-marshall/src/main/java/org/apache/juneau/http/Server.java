@@ -61,10 +61,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Server extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Server</code> header.
+	 * Returns a parsed <c>Server</c> header.
 	 *
-	 * @param value The <code>Server</code> header string.
-	 * @return The parsed <code>Server</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Server</c> header string.
+	 * @return The parsed <c>Server</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Server forString(String value) {
 		if (value == null)

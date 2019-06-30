@@ -368,7 +368,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Supported SSL protocols.
 	 *
 	 * <p>
-	 * This is the value passed to the <code>supportedProtocols</code> parameter of the
+	 * This is the value passed to the <c>supportedProtocols</c> parameter of the
 	 * {@link SSLConnectionSocketFactory#SSLConnectionSocketFactory(SSLContext,String[],String[],HostnameVerifier)}
 	 * constructor.
 	 *
@@ -392,7 +392,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Supported cipher suites.
 	 *
 	 * <p>
-	 * This is the value passed to the <code>supportedCipherSuites</code> parameter of the
+	 * This is the value passed to the <c>supportedCipherSuites</c> parameter of the
 	 * {@link SSLConnectionSocketFactory#SSLConnectionSocketFactory(SSLContext,String[],String[],HostnameVerifier)}
 	 * constructor.
 	 *
@@ -415,7 +415,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Hostname verifier.
 	 *
 	 * <p>
-	 * This is the value passed to the <code>hostnameVerifier</code> parameter of the
+	 * This is the value passed to the <c>hostnameVerifier</c> parameter of the
 	 * {@link SSLConnectionSocketFactory#SSLConnectionSocketFactory(SSLContext,String[],String[],HostnameVerifier)}
 	 * constructor.
 	 *
@@ -438,7 +438,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Key managers.
 	 *
 	 * <p>
-	 * This is the value passed to the <code>keyManagers</code> parameter of the
+	 * This is the value passed to the <c>keyManagers</c> parameter of the
 	 * {@link SSLContext#init(KeyManager[],TrustManager[],SecureRandom)} method.
 	 *
 	 * <p>
@@ -460,7 +460,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Trust managers.
 	 *
 	 * <p>
-	 * This is the value passed to the <code>trustManagers</code> parameter of the
+	 * This is the value passed to the <c>trustManagers</c> parameter of the
 	 * {@link SSLContext#init(KeyManager[],TrustManager[],SecureRandom)} method.
 	 *
 	 * <p>
@@ -482,7 +482,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Trust managers.
 	 *
 	 * <p>
-	 * This is the value passed to the <code>random</code> parameter of the
+	 * This is the value passed to the <c>random</c> parameter of the
 	 * {@link SSLContext#init(KeyManager[],TrustManager[],SecureRandom)} method.
 	 *
 	 * <p>
@@ -609,7 +609,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Accept</code> request header.
+	 * Sets the value for the <c>Accept</c> request header.
 	 *
 	 * <p>
 	 * This overrides the media type specified on the parser, but is overridden by calling
@@ -623,7 +623,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Accept-Charset</code> request header.
+	 * Sets the value for the <c>Accept-Charset</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Charset"</js>, value);</code>
@@ -636,7 +636,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Accept-Encoding</code> request header.
+	 * Sets the value for the <c>Accept-Encoding</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Encoding"</js>, value);</code>
@@ -649,7 +649,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Accept-Language</code> request header.
+	 * Sets the value for the <c>Accept-Language</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Accept-Language"</js>, value);</code>
@@ -662,7 +662,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Authorization</code> request header.
+	 * Sets the value for the <c>Authorization</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Authorization"</js>, value);</code>
@@ -675,7 +675,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Cache-Control</code> request header.
+	 * Sets the value for the <c>Cache-Control</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Cache-Control"</js>, value);</code>
@@ -688,7 +688,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Connection</code> request header.
+	 * Sets the value for the <c>Connection</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Connection"</js>, value);</code>
@@ -701,7 +701,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Content-Length</code> request header.
+	 * Sets the value for the <c>Content-Length</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Content-Length"</js>, value);</code>
@@ -714,7 +714,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Content-Type</code> request header.
+	 * Sets the value for the <c>Content-Type</c> request header.
 	 *
 	 * <p>
 	 * This overrides the media type specified on the serializer, but is overridden by calling
@@ -728,7 +728,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Date</code> request header.
+	 * Sets the value for the <c>Date</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Date"</js>, value);</code>
@@ -741,7 +741,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Expect</code> request header.
+	 * Sets the value for the <c>Expect</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Expect"</js>, value);</code>
@@ -754,7 +754,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Forwarded</code> request header.
+	 * Sets the value for the <c>Forwarded</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Forwarded"</js>, value);</code>
@@ -767,7 +767,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>From</code> request header.
+	 * Sets the value for the <c>From</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"From"</js>, value);</code>
@@ -780,7 +780,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Host</code> request header.
+	 * Sets the value for the <c>Host</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Host"</js>, value);</code>
@@ -793,7 +793,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>If-Match</code> request header.
+	 * Sets the value for the <c>If-Match</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Match"</js>, value);</code>
@@ -806,7 +806,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>If-Modified-Since</code> request header.
+	 * Sets the value for the <c>If-Modified-Since</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Modified-Since"</js>, value);</code>
@@ -819,7 +819,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>If-None-Match</code> request header.
+	 * Sets the value for the <c>If-None-Match</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-None-Match"</js>, value);</code>
@@ -832,7 +832,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>If-Range</code> request header.
+	 * Sets the value for the <c>If-Range</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Range"</js>, value);</code>
@@ -845,7 +845,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>If-Unmodified-Since</code> request header.
+	 * Sets the value for the <c>If-Unmodified-Since</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"If-Unmodified-Since"</js>, value);</code>
@@ -858,7 +858,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Max-Forwards</code> request header.
+	 * Sets the value for the <c>Max-Forwards</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Max-Forwards"</js>, value);</code>
@@ -871,7 +871,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * When called, <code>No-Trace: true</code> is added to requests.
+	 * When called, <c>No-Trace: true</c> is added to requests.
 	 *
 	 * <p>
 	 * This gives the opportunity for the servlet to not log errors on invalid requests.
@@ -885,7 +885,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Origin</code> request header.
+	 * Sets the value for the <c>Origin</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Origin"</js>, value);</code>
@@ -898,7 +898,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Pragma</code> request header.
+	 * Sets the value for the <c>Pragma</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Pragma"</js>, value);</code>
@@ -911,7 +911,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Proxy-Authorization</code> request header.
+	 * Sets the value for the <c>Proxy-Authorization</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Proxy-Authorization"</js>, value);</code>
@@ -924,7 +924,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Range</code> request header.
+	 * Sets the value for the <c>Range</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Range"</js>, value);</code>
@@ -937,7 +937,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Referer</code> request header.
+	 * Sets the value for the <c>Referer</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Referer"</js>, value);</code>
@@ -950,7 +950,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>TE</code> request header.
+	 * Sets the value for the <c>TE</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"TE"</js>, value);</code>
@@ -963,7 +963,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>User-Agent</code> request header.
+	 * Sets the value for the <c>User-Agent</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"User-Agent"</js>, value);</code>
@@ -976,7 +976,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Upgrade</code> request header.
+	 * Sets the value for the <c>Upgrade</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Upgrade"</js>, value);</code>
@@ -989,7 +989,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Via</code> request header.
+	 * Sets the value for the <c>Via</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Via"</js>, value);</code>
@@ -1002,7 +1002,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets the value for the <code>Warning</code> request header.
+	 * Sets the value for the <c>Warning</c> request header.
 	 *
 	 * <p>
 	 * This is a shortcut for calling <code>header(<js>"Warning"</js>, value);</code>
@@ -1285,7 +1285,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value
 	 * 	The root URL to prefix to relative URL strings.
 	 * 	<br>Trailing slashes are trimmed.
-	 * 	<br>Usually a <code>String</code> but you can also pass in <code>URI</code> and <code>URL</code> objects as well.
+	 * 	<br>Usually a <c>String</c> but you can also pass in <c>URI</c> and <c>URL</c> objects as well.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder rootUrl(Object value) {
@@ -1524,7 +1524,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <code>0</code>.
+	 * 	<br>The default is <c>0</c>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder initialDepth(int value) {
@@ -1565,7 +1565,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <code>100</code>.
+	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder maxDepth(int value) {
@@ -1846,7 +1846,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <code>100</code>.
+	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder maxIndent(int value) {
@@ -2013,7 +2013,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default value is <code>5</code>.
+	 * 	<br>The default value is <c>5</c>.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder debugOutputLines(int value) {
@@ -2154,7 +2154,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  File charset.
 	 *
 	 * <p>
-	 * The character set to use for reading <code>Files</code> from the file system.
+	 * The character set to use for reading <c>Files</c> from the file system.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -2174,7 +2174,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Input stream charset.
 	 *
 	 * <p>
-	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

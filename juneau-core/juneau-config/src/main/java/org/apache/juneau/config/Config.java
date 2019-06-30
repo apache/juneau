@@ -160,7 +160,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.name.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"Configuration.cfg"</js>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -286,8 +286,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.binaryLineLength.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>-1</code>
+	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Default:</b>  <c>-1</c>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#binaryLineLength(int)}
@@ -297,7 +297,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When serializing binary values, lines will be split after this many characters.
-	 * <br>Use <code>-1</code> to represent no line splitting.
+	 * <br>Use <c>-1</c> to represent no line splitting.
 	 */
 	public static final String CONFIG_binaryLineLength = PREFIX + ".binaryLineLength.i";
 
@@ -335,7 +335,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.multiLineValuesOnSeparateLines.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -355,7 +355,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.readOnly.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -579,7 +579,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * serializer.
 	 *
 	 * <p>
-	 * Equivalent to calling <code>put(key, value, isEncoded(key))</code>.
+	 * Equivalent to calling <c>put(key, value, isEncoded(key))</c>.
 	 *
 	 * @param key The key.
 	 * @param value The new value POJO.
@@ -727,7 +727,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * The key can be in one of the following formats...
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <code>[section]</code> header).
+	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <c>[section]</c> header).
 	 * 	<li>
 	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
@@ -751,7 +751,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * The key can be in one of the following formats...
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <code>[section]</code> header).
+	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <c>[section]</c> header).
 	 * 	<li>
 	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
@@ -818,7 +818,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * </ul>
 	 *
 	 * @param key The key.
-	 * @return The value, or <code>0</code> if the value does not exist or the value is empty.
+	 * @return The value, or <c>0</c> if the value does not exist or the value is empty.
 	 */
 	public int getInt(String key) {
 		return getInt(key, 0);
@@ -884,7 +884,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * </ul>
 	 *
 	 * @param key The key.
-	 * @return The value, or <code>0</code> if the value does not exist or the value is empty.
+	 * @return The value, or <c>0</c> if the value does not exist or the value is empty.
 	 */
 	public long getLong(String key) {
 		return getLong(key, 0);
@@ -917,7 +917,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * </ul>
 	 *
 	 * @param key The key.
-	 * @return The value, or <code>0</code> if the value does not exist or the value is empty.
+	 * @return The value, or <c>0</c> if the value does not exist or the value is empty.
 	 */
 	public double getDouble(String key) {
 		return getDouble(key, 0);
@@ -950,7 +950,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * </ul>
 	 *
 	 * @param key The key.
-	 * @return The value, or <code>0</code> if the value does not exist or the value is empty.
+	 * @return The value, or <c>0</c> if the value does not exist or the value is empty.
 	 */
 	public float getFloat(String key) {
 		return getFloat(key, 0);
@@ -1018,7 +1018,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * The key can be in one of the following formats...
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <code>[section]</code> header).
+	 * 		<js>"key"</js> - A value in the default section (i.e. defined above any <c>[section]</c> header).
 	 * 	<li>
 	 * 		<js>"section/key"</js> - A value from the specified section.
 	 * </ul>
@@ -1050,10 +1050,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * </p>
 	 *
 	 * <p>
-	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 * <c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
 	 *
 	 * <p>
-	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value
+	 * <c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value
 	 * types.
 	 *
 	 * <p>

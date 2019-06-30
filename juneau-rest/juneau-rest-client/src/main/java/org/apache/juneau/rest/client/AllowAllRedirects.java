@@ -15,13 +15,13 @@ package org.apache.juneau.rest.client;
 import org.apache.http.impl.client.*;
 
 /**
- * Redirect strategy that allows for redirects on any request type, not just <code>GET</code> or <code>HEAD</code>.
+ * Redirect strategy that allows for redirects on any request type, not just <c>GET</c> or <c>HEAD</c>.
  *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
- * 		This class is similar to <code>org.apache.http.impl.client.LaxRedirectStrategy</code>
- * 		in Apache HttpClient 4.2, but also allows for redirects on <code>PUTs</code> and <code>DELETEs</code>.
+ * 		This class is similar to <c>org.apache.http.impl.client.LaxRedirectStrategy</c>
+ * 		in Apache HttpClient 4.2, but also allows for redirects on <c>PUTs</c> and <c>DELETEs</c>.
  * </ul>
  */
 public class AllowAllRedirects extends DefaultRedirectStrategy {

@@ -93,10 +93,10 @@ public final class Upgrade extends HeaderStringArray {
 	}
 
 	/**
-	 * Returns a parsed <code>Upgrade</code> header.
+	 * Returns a parsed <c>Upgrade</c> header.
 	 *
-	 * @param value The <code>Upgrade</code> header string.
-	 * @return The parsed <code>Upgrade</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Upgrade</c> header string.
+	 * @return The parsed <c>Upgrade</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Upgrade forString(String value) {
 		if (value == null)

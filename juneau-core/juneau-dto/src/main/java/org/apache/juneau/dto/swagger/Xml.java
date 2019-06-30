@@ -101,9 +101,9 @@ public class Xml extends SwaggerElement {
 	 * Replaces the name of the element/attribute used for the described schema property.
 	 *
 	 * <p>
-	 * When defined within the Items Object (<code>items</code>), it will affect the name of the individual XML elements
+	 * When defined within the Items Object (<c>items</c>), it will affect the name of the individual XML elements
 	 * within the list.
-	 * <br>When defined alongside <code>type</code> being array (outside the <code>items</code>), it will affect the
+	 * <br>When defined alongside <c>type</c> being array (outside the <c>items</c>), it will affect the
 	 * wrapping element and only if wrapped is <jk>true</jk>.
 	 * <br>If wrapped is <jk>false</jk>, it will be ignored.
 	 *
@@ -120,9 +120,9 @@ public class Xml extends SwaggerElement {
 	 * Replaces the name of the element/attribute used for the described schema property.
 	 *
 	 * <p>
-	 * When defined within the Items Object (<code>items</code>), it will affect the name of the individual XML elements
+	 * When defined within the Items Object (<c>items</c>), it will affect the name of the individual XML elements
 	 * within the list.
-	 * <br>When defined alongside <code>type</code> being array (outside the <code>items</code>), it will affect the
+	 * <br>When defined alongside <c>type</c> being array (outside the <c>items</c>), it will affect the
 	 * wrapping element and only if wrapped is <jk>true</jk>.
 	 * <br>If wrapped is <jk>false</jk>, it will be ignored.
 	 *
@@ -141,7 +141,7 @@ public class Xml extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -182,7 +182,7 @@ public class Xml extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -223,7 +223,7 @@ public class Xml extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -282,10 +282,10 @@ public class Xml extends SwaggerElement {
 	 *
 	 * <p>
 	 * Signifies whether the array is wrapped (for example,
-	 * <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped
-	 * (<code>&lt;book/&gt;&lt;book/&gt;</code>).
-	 * <br>The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
-	 * (outside the <code>items</code>).
+	 * <c>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</c>) or unwrapped
+	 * (<c>&lt;book/&gt;&lt;book/&gt;</c>).
+	 * <br>The definition takes effect only when defined alongside <c>type</c> being <c>array</c>
+	 * (outside the <c>items</c>).
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -301,10 +301,10 @@ public class Xml extends SwaggerElement {
 	 *
 	 * <p>
 	 * Signifies whether the array is wrapped (for example,
-	 * <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped
-	 * (<code>&lt;book/&gt;&lt;book/&gt;</code>).
-	 * <br>The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
-	 * (outside the <code>items</code>).
+	 * <c>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</c>) or unwrapped
+	 * (<c>&lt;book/&gt;&lt;book/&gt;</c>).
+	 * <br>The definition takes effect only when defined alongside <c>type</c> being <c>array</c>
+	 * (outside the <c>items</c>).
 	 *
 	 * @param value
 	 * 	The new value for this property.

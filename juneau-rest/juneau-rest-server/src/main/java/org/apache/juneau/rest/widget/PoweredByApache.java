@@ -23,7 +23,7 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * It produces a simple Apache icon floating on the right.
- * Typically it's used in the footer of the page, as shown below in the <code>RootResources</code> from the examples:
+ * Typically it's used in the footer of the page, as shown below in the <c>RootResources</c> from the examples:
  *
  * <p class='bcode'>
  * 	<ja>@RestResource</ja>(

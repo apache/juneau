@@ -60,10 +60,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Referer extends HeaderUri {
 
 	/**
-	 * Returns a parsed <code>Referer</code> header.
+	 * Returns a parsed <c>Referer</c> header.
 	 *
-	 * @param value The <code>Referer</code> header string.
-	 * @return The parsed <code>Referer</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Referer</c> header string.
+	 * @return The parsed <c>Referer</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Referer forString(String value) {
 		if (value == null)

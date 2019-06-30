@@ -30,7 +30,7 @@ import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
 
 /**
- * Exception representing a <code>400+</code> HTTP response code against a remote resource.
+ * Exception representing a <c>400+</c> HTTP response code against a remote resource.
  */
 public final class RestCallException extends IOException {
 
@@ -115,9 +115,9 @@ public final class RestCallException extends IOException {
 	/**
 	 * Sets the server-side exception details.
 	 *
-	 * @param exceptionName The <code>Exception-Name:</code> header specifying the full name of the exception.
+	 * @param exceptionName The <c>Exception-Name:</c> header specifying the full name of the exception.
 	 * @param exceptionMessage
-	 * 	The <code>Exception-Message:</code> header specifying the message returned by {@link Throwable#getMessage()}.
+	 * 	The <c>Exception-Message:</c> header specifying the message returned by {@link Throwable#getMessage()}.
 	 * @param exceptionTrace The stack trace of the exception returned by {@link Throwable#printStackTrace()}.
 	 * @return This object (for method chaining).
 	 */
@@ -137,16 +137,16 @@ public final class RestCallException extends IOException {
 	 * <p>
 	 * The exception is based on the following HTTP response headers:
 	 * <ul>
-	 * 	<li><code>Exception-Name:</code> - The full class name of the exception.
-	 * 	<li><code>Exception-Message:</code> - The message returned by {@link Throwable#getMessage()}.
-	 * 	<li><code>Exception-Trace:</code> - The stack trace of the exception returned by {@link Throwable#printStackTrace()}.
+	 * 	<li><c>Exception-Name:</c> - The full class name of the exception.
+	 * 	<li><c>Exception-Message:</c> - The message returned by {@link Throwable#getMessage()}.
+	 * 	<li><c>Exception-Trace:</c> - The stack trace of the exception returned by {@link Throwable#printStackTrace()}.
 	 * </ul>
 	 *
 	 * <p>
 	 * Does nothing if the server-side exception could not be reconstructed.
 	 *
 	 * <p>
-	 * Currently only supports <code>Throwables</code> with either a public no-arg constructor
+	 * Currently only supports <c>Throwables</c> with either a public no-arg constructor
 	 * or a public constructor that takes in a simple string message.
 	 *
 	 * @param cl The classloader to use to resolve the throwable class name.
@@ -207,7 +207,7 @@ public final class RestCallException extends IOException {
 	/**
 	 * Returns the HTTP response status code.
 	 *
-	 * @return The response status code.  If a connection could not be made at all, returns <code>0</code>.
+	 * @return The response status code.  If a connection could not be made at all, returns <c>0</c>.
 	 */
 	public int getResponseCode() {
 		return responseCode;

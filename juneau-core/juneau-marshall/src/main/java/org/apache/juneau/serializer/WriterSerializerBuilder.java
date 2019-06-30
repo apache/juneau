@@ -84,7 +84,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <code>100</code>.
+	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */
 	public WriterSerializerBuilder maxIndent(int value) {

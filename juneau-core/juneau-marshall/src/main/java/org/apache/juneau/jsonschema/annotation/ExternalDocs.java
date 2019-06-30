@@ -151,7 +151,7 @@ public @interface ExternalDocs {
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
 	 * 		<p class='bcode w800'>
 	 * 	<ja>@ExternalDocs</ja>(<js>"{url:'http://juneau.apache.org'}"</js>)

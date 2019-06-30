@@ -23,9 +23,9 @@ import org.apache.juneau.urlencoding.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Accept</code> types:  <code><b>text/uon</b></code>
+ * Handles <c>Accept</c> types:  <bc>text/uon</bc>
  * <p>
- * Produces <code>Content-Type</code> types:  <code><b>text/uon</b></code>
+ * Produces <c>Content-Type</c> types:  <bc>text/uon</bc>
  *
  * <h5 class='topic'>Description</h5>
  *
@@ -130,7 +130,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -156,7 +156,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.encoding.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -205,7 +205,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.paramFormat.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> ({@link ParamFormat})
+	 * 	<li><b>Data type:</b>  <c>String</c> ({@link ParamFormat})
 	 * 	<li><b>Default:</b>  <js>"UON"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -333,9 +333,9 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * @param accept
 	 * 	The accept media types that the serializer can handle.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of {@doc RFC2616.section14.1}
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc RFC2616.section14.1}
 	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:

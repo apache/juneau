@@ -25,7 +25,7 @@ import org.apache.juneau.http.*;
  *
  * <p>
  * Useful for delayed serialization of arguments for logging.
- * Message string will not be constructed until the <code>toString()</code> method is called.
+ * Message string will not be constructed until the <c>toString()</c> method is called.
  */
 public class StringMessage implements CharSequence, Writable {
 

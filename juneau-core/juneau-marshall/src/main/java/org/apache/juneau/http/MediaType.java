@@ -103,13 +103,13 @@ public class MediaType implements Comparable<MediaType> {
 	}
 
 	/**
-	 * Same as {@link #forString(String)} but allows you to construct an array of <code>MediaTypes</code> from an
+	 * Same as {@link #forString(String)} but allows you to construct an array of <c>MediaTypes</c> from an
 	 * array of strings.
 	 *
 	 * @param s
 	 * 	The media type strings.
 	 * @return
-	 * 	An array of <code>MediaType</code> objects.
+	 * 	An array of <c>MediaType</c> objects.
 	 * 	<br>Always the same length as the input string array.
 	 */
 	public static MediaType[] forStrings(String...s) {
@@ -244,7 +244,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * 	<li>Exact matches (e.g. <js>"text/json"<js>/</js>"text/json"</js>) should match
 	 * 		better than meta-character matches (e.g. <js>"text/*"<js>/</js>"text/json"</js>)
 	 * 	<li>The comparison media type can have additional subtype tokens (e.g. <js>"text/json+foo"</js>)
-	 * 		that will not prevent a match if the <code>allowExtraSubTypes</code> flag is set.
+	 * 		that will not prevent a match if the <c>allowExtraSubTypes</c> flag is set.
 	 * 		The reverse is not true, e.g. the comparison media type must contain all subtype tokens found in the
 	 * 		comparing media type.
 	 * 		<ul>
@@ -255,18 +255,18 @@ public class MediaType implements Comparable<MediaType> {
 	 * 		More token matches should result in a higher match number.
 	 * </ul>
 	 *
-	 * The formula is as follows for <code>type/subTypes</code>:
+	 * The formula is as follows for <c>type/subTypes</c>:
 	 * <ul>
-	 * 	<li>An exact match is <code>100,000</code>.
+	 * 	<li>An exact match is <c>100,000</c>.
 	 * 	<li>Add the following for type (assuming subtype match is &lt;0):
 	 * 	<ul>
-	 * 		<li><code>10,000</code> for an exact match (e.g. <js>"text"</js>==<js>"text"</js>).
-	 * 		<li><code>5,000</code> for a meta match (e.g. <js>"*"</js>==<js>"text"</js>).
+	 * 		<li><c>10,000</c> for an exact match (e.g. <js>"text"</js>==<js>"text"</js>).
+	 * 		<li><c>5,000</c> for a meta match (e.g. <js>"*"</js>==<js>"text"</js>).
 	 * 	</ul>
 	 * 	<li>Add the following for subtype (assuming type match is &lt;0):
 	 * 	<ul>
-	 * 		<li><code>7,500</code> for an exact match (e.g. <js>"json+foo"</js>==<js>"json+foo"</js> or <js>"json+foo"</js>==<js>"foo+json"</js>)
-	 * 		<li><code>100</code> for every subtype entry match (e.g. <js>"json"</js>/<js>"json+foo"</js>)
+	 * 		<li><c>7,500</c> for an exact match (e.g. <js>"json+foo"</js>==<js>"json+foo"</js> or <js>"json+foo"</js>==<js>"foo+json"</js>)
+	 * 		<li><c>100</c> for every subtype entry match (e.g. <js>"json"</js>/<js>"json+foo"</js>)
 	 * 	</ul>
 	 * </ul>
 	 *

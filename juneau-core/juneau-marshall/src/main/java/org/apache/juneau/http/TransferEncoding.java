@@ -61,10 +61,10 @@ import org.apache.juneau.http.annotation.*;
 public final class TransferEncoding extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Transfer-Encoding</code> header.
+	 * Returns a parsed <c>Transfer-Encoding</c> header.
 	 *
-	 * @param value The <code>Transfer-Encoding</code> header string.
-	 * @return The parsed <code>Transfer-Encoding</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Transfer-Encoding</c> header string.
+	 * @return The parsed <c>Transfer-Encoding</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static TransferEncoding forString(String value) {
 		if (value == null)

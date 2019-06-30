@@ -54,10 +54,10 @@ public class ContentType extends MediaType {
 	private static Cache<String,ContentType> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <code>Content-Type</code> header.
+	 * Returns a parsed <c>Content-Type</c> header.
 	 *
-	 * @param value The <code>Content-Type</code> header string.
-	 * @return The parsed <code>Content-Type</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Content-Type</c> header string.
+	 * @return The parsed <c>Content-Type</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static ContentType forString(String value) {
 		if (value == null)
@@ -74,19 +74,19 @@ public class ContentType extends MediaType {
 	}
 
 	/**
-	 * Given a list of media types, returns the best match for this <code>Content-Type</code> header.
+	 * Given a list of media types, returns the best match for this <c>Content-Type</c> header.
 	 *
 	 * <p>
-	 * Note that fuzzy matching is allowed on the media types where the <code>Content-Types</code> header may
+	 * Note that fuzzy matching is allowed on the media types where the <c>Content-Types</c> header may
 	 * contain additional subtype parts.
-	 * <br>For example, given a <code>Content-Type</code> value of <js>"text/json+activity"</js>,
+	 * <br>For example, given a <c>Content-Type</c> value of <js>"text/json+activity"</js>,
 	 * the media type <js>"text/json"</js> will match if <js>"text/json+activity"</js> or <js>"text/activity+json"</js>
 	 * isn't found.
-	 * <br>The purpose for this is to allow parsers to match when artifacts such as <code>id</code> properties are
+	 * <br>The purpose for this is to allow parsers to match when artifacts such as <c>id</c> properties are
 	 * present in the header.
 	 *
 	 * @param mediaTypes The media types to match against.
-	 * @return The index into the array of the best match, or <code>-1</code> if no suitable matches could be found.
+	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int findMatch(MediaType[] mediaTypes) {
 		int matchQuant = 0, matchIndex = -1;

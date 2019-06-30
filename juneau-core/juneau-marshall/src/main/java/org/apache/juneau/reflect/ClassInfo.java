@@ -412,13 +412,13 @@ public final class ClassInfo {
 	 * <p>
 	 * Looks for the following method names:
 	 * <ul>
-	 * 	<li><code>fromString</code>
-	 * 	<li><code>fromValue</code>
-	 * 	<li><code>valueOf</code>
-	 * 	<li><code>parse</code>
-	 * 	<li><code>parseString</code>
-	 * 	<li><code>forName</code>
-	 * 	<li><code>forString</code>
+	 * 	<li><c>fromString</c>
+	 * 	<li><c>fromValue</c>
+	 * 	<li><c>valueOf</c>
+	 * 	<li><c>parse</c>
+	 * 	<li><c>parseString</c>
+	 * 	<li><c>forName</c>
+	 * 	<li><c>forString</c>
 	 * </ul>
 	 *
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
@@ -440,9 +440,9 @@ public final class ClassInfo {
 	 * <p>
 	 * Looks for the following method names:
 	 * <ul>
-	 * 	<li><code>create</code>
-	 * 	<li><code>from</code>
-	 * 	<li><code>fromIC</code>
+	 * 	<li><c>create</c>
+	 * 	<li><c>from</c>
+	 * 	<li><c>fromIC</c>
 	 * </ul>
 	 *
 	 * @param ic The argument type.
@@ -463,9 +463,9 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the <code>public static Builder create()</code> method on this class.
+	 * Returns the <c>public static Builder create()</c> method on this class.
 	 *
-	 * @return The <code>public static Builder create()</code> method on this class, or <jk>null</jk> if it doesn't exist.
+	 * @return The <c>public static Builder create()</c> method on this class, or <jk>null</jk> if it doesn't exist.
 	 */
 	public MethodInfo getBuilderCreateMethod() {
 		for (MethodInfo m : getDeclaredMethods())
@@ -475,9 +475,9 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the <code>T build()</code> method on this class.
+	 * Returns the <c>T build()</c> method on this class.
 	 *
-	 * @return The <code>T build()</code> method on this class, or <jk>null</jk> if it doesn't exist.
+	 * @return The <c>T build()</c> method on this class, or <jk>null</jk> if it doesn't exist.
 	 */
 	public MethodInfo getBuilderBuildMethod() {
 		for (MethodInfo m : getDeclaredMethods())
@@ -539,7 +539,7 @@ public final class ClassInfo {
 	 * Same as {@link #getPublicConstructor(Class...)} but allows for inexact arg type matching.
 	 *
 	 * <p>
-	 * For example, the method <code>foo(CharSequence)</code> will be matched by <code>getAvailablePublicConstructor(String.<jk>class</jk>)</code>
+	 * For example, the method <c>foo(CharSequence)</c> will be matched by <code>getAvailablePublicConstructor(String.<jk>class</jk>)</code>
 	 *
 	 * @param args The exact argument types.
 	 * @return
@@ -1699,20 +1699,20 @@ public final class ClassInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns <jk>true</jk> if this class is a parent or the same as <code>child</code>.
+	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 *
 	 * @param child The child class.
-	 * @return <jk>true</jk> if this class is a parent or the same as <code>child</code>.
+	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
 	public boolean isParentOf(Class<?> child) {
 		return c != null && child != null && c.isAssignableFrom(child);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class is a parent or the same as <code>child</code>.
+	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 *
 	 * @param child The child class.
-	 * @return <jk>true</jk> if this class is a parent or the same as <code>child</code>.
+	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
 	public boolean isParentOf(Type child) {
 		if (child instanceof Class)
@@ -1721,30 +1721,30 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class is a child of <code>parent</code>.
+	 * Returns <jk>true</jk> if this class is a child of <c>parent</c>.
 	 *
 	 * @param parent The parent class.
-	 * @return <jk>true</jk> if this class is a parent of <code>child</code>.
+	 * @return <jk>true</jk> if this class is a parent of <c>child</c>.
 	 */
 	public boolean isStrictChildOf(Class<?> parent) {
 		return c != null && parent != null && parent.isAssignableFrom(c) && ! c.equals(parent);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class is a child or the same as <code>parent</code>.
+	 * Returns <jk>true</jk> if this class is a child or the same as <c>parent</c>.
 	 *
 	 * @param parent The parent class.
-	 * @return <jk>true</jk> if this class is a child or the same as <code>parent</code>.
+	 * @return <jk>true</jk> if this class is a child or the same as <c>parent</c>.
 	 */
 	public boolean isChildOf(Class<?> parent) {
 		return c != null && parent != null && parent.isAssignableFrom(c);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class is a child or the same as any of the <code>parents</code>.
+	 * Returns <jk>true</jk> if this class is a child or the same as any of the <c>parents</c>.
 	 *
 	 * @param parents The parents class.
-	 * @return <jk>true</jk> if this class is a child or the same as any of the <code>parents</code>.
+	 * @return <jk>true</jk> if this class is a child or the same as any of the <c>parents</c>.
 	 */
 	public boolean isChildOfAny(Class<?>...parents) {
 		for (Class<?> p : parents)
@@ -1754,10 +1754,10 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class is a child or the same as <code>parent</code>.
+	 * Returns <jk>true</jk> if this class is a child or the same as <c>parent</c>.
 	 *
 	 * @param parent The parent class.
-	 * @return <jk>true</jk> if this class is a parent or the same as <code>parent</code>.
+	 * @return <jk>true</jk> if this class is a parent or the same as <c>parent</c>.
 	 */
 	public boolean isChildOf(Type parent) {
 		if (parent instanceof Class)
@@ -1821,7 +1821,7 @@ public final class ClassInfo {
 	/**
 	 * Returns the number of dimensions if this is an array type.
 	 *
-	 * @return The number of dimensions if this is an array type, or <code>0</code> if it is not.
+	 * @return The number of dimensions if this is an array type, or <c>0</c> if it is not.
 	 */
 	public int getDimensions() {
 		if (dim == -1) {
@@ -1877,7 +1877,7 @@ public final class ClassInfo {
 	 * Finds the real parameter type of this class.
 	 *
 	 * @param index The zero-based index of the parameter to resolve.
-	 * @param pt The parameterized type class containing the parameterized type to resolve (e.g. <code>HashMap</code>).
+	 * @param pt The parameterized type class containing the parameterized type to resolve (e.g. <c>HashMap</c>).
 	 * @return The resolved real class.
 	 */
 	public Class<?> getParameterType(int index, Class<?> pt) {

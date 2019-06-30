@@ -16,11 +16,11 @@
 {updated} Parameter Examples
 
 <p>
-	The <code>model</code> select box in the parameters can be expanded to show examples:
+	The <c>model</c> select box in the parameters can be expanded to show examples:
 </p>
 <img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Parameters.1.png'>
 <p>
-	The examples for query/form-data/path/header parameters can be defined using the <code>example</code> attribute on your annotated parameters as shown here:
+	The examples for query/form-data/path/header parameters can be defined using the <c>example</c> attribute on your annotated parameters as shown here:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(
@@ -46,7 +46,7 @@
 	}
 </p>
 <p>
-	This value gets converted to an <code>x-examples</code> attribute in your parameter information:
+	This value gets converted to an <c>x-examples</c> attribute in your parameter information:
 </p>
 <p class='bpcode w800'>
 	{
@@ -68,7 +68,7 @@
 	...
 </p>
 <p>
-	Examples for request bodies includes all supported <code>Content-Type</code> values: 
+	Examples for request bodies includes all supported <c>Content-Type</c> values: 
 </p>
 <img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Parameters.3.png'> 
 <p>
@@ -87,7 +87,7 @@
 	<li>
 		{@link oaj.http.annotation.Body#examples() @Body(examples)} annotation.
 	<li>
-		Defining an <js>"x-examples"</js> field in the inherited Swagger JSON body field (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
+		Defining an <js>"x-examples"</js> field in the inherited Swagger JSON body field (classpath file or <c><ja>@ResourceSwagger</ja>(value)</c>/<c><ja>@MethodSwagger</ja>(value)</c>).
 	<li>
 		Defining an <js>"x-examples"</js> field in the Swagger Schema Object for the body (including referenced <js>"$ref"</js> schemas).
 	<li>
@@ -123,7 +123,7 @@
 	)
 </p>
 <p>
-	The Swagger generator uses these to create an <code>x-examples</code> entry in your generated Swagger:
+	The Swagger generator uses these to create an <c>x-examples</c> entry in your generated Swagger:
 </p>
 <p class='bpcode w800'>
 	<jok>"/pet"</jok>: {

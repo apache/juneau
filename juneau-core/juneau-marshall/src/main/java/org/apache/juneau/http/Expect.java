@@ -71,10 +71,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Expect extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Expect</code> header.
+	 * Returns a parsed <c>Expect</c> header.
 	 *
-	 * @param value The <code>Expect</code> header string.
-	 * @return The parsed <code>Expect</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Expect</c> header string.
+	 * @return The parsed <c>Expect</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Expect forString(String value) {
 		if (value == null)

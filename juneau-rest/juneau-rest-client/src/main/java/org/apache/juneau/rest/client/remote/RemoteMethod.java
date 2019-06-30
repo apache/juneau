@@ -41,7 +41,7 @@ public @interface RemoteMethod {
 	 * The possible values are:
 	 * <ul class='spaced-list'>
 	 * 	<li>An absolute URL.
-	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <code>RestClient</code> and/or {@link RemoteResource#path()}.
+	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <c>RestClient</c> and/or {@link RemoteResource#path()}.
 	 * 	<li>No path.
 	 * </ul>
 	 *
@@ -89,13 +89,13 @@ public @interface RemoteMethod {
 	 * 				error HTTP status is returned.
 	 * 			<li>
 	 * 				Any parsable POJO - The body of the response will be converted to the POJO using the parser defined
-	 * 				on the <code>RestClient</code>.
+	 * 				on the <c>RestClient</c>.
 	 * 			<li>
 	 * 				Any POJO annotated with the {@link Response @Response} annotation.
 	 * 				This allows for response beans to be used which also allows for OpenAPI-based parsing and validation.
 	 * 			<li>
-	 * 				<code>HttpResponse</code> - Returns the raw <code>HttpResponse</code> returned by the inner
-	 * 				<code>HttpClient</code>.
+	 * 				<c>HttpResponse</c> - Returns the raw <c>HttpResponse</c> returned by the inner
+	 * 				<c>HttpClient</c>.
 	 * 			<li>
 	 * 				{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>
@@ -105,8 +105,8 @@ public @interface RemoteMethod {
 	 * 		{@link RemoteReturn#STATUS} - The HTTP status code on the response.
 	 * 		<br>The return type on the Java method can be any of the following:
 	 * 		<ul>
-	 * 			<li><jk>int</jk>/<code>Integer</code> - The HTTP response code.
-	 * 			<li><jk>boolean</jk>/<code>Boolean</code> - <jk>true</jk> if the response code is <code>&lt;400</code>
+	 * 			<li><jk>int</jk>/<c>Integer</c> - The HTTP response code.
+	 * 			<li><jk>boolean</jk>/<c>Boolean</c> - <jk>true</jk> if the response code is <c>&lt;400</c>
 	 * 		</ul>
 	 * </ul>
 	 */

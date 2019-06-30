@@ -427,7 +427,7 @@ public class VarResolverSession {
 	 * Returns the {@link Var} with the specified name.
 	 *
 	 * @param name The var name (e.g. <js>"S"</js>).
-	 * @return The {@link Var} instance, or <jk>null</jk> if no <code>Var</code> is associated with the specified name.
+	 * @return The {@link Var} instance, or <jk>null</jk> if no <c>Var</c> is associated with the specified name.
 	 */
 	protected Var getVar(String name) {
 		Var v = this.context.getVarMap().get(name);

@@ -109,7 +109,7 @@ public class MockRest implements MockHttpConnection {
 	 * Creates a new builder with the specified REST implementation bean or bean class.
 	 *
 	 * <p>
-	 * No <code>Accept</code> or <code>Content-Type</code> header is specified by default.
+	 * No <c>Accept</c> or <c>Content-Type</c> header is specified by default.
 	 *
 	 * @param impl
 	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
@@ -124,8 +124,8 @@ public class MockRest implements MockHttpConnection {
 	 * Convenience method for creating a MockRest over the specified REST implementation bean or bean class.
 	 *
 	 * <p>
-	 * <code>Accept</code> header is set to <code>"application/json+simple"</code> by default.
-	 * <code>Content-Type</code> header is set to <code>"application/json"</code> by default.
+	 * <c>Accept</c> header is set to <c>"application/json+simple"</c> by default.
+	 * <c>Content-Type</c> header is set to <c>"application/json"</c> by default.
 	 *
 	 * <p>
 	 * Equivalent to calling:
@@ -146,7 +146,7 @@ public class MockRest implements MockHttpConnection {
 	 * Convenience method for creating a MockRest over the specified REST implementation bean or bean class.
 	 *
 	 * <p>
-	 * <code>Accept</code> and <code>Content-Type</code> headers are set to the primary media types on the specified marshall.
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to the primary media types on the specified marshall.
 	 *
 	 * <p>
 	 * Note that the marshall itself is not involved in any serialization or parsing.
@@ -161,7 +161,7 @@ public class MockRest implements MockHttpConnection {
 	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param m
-	 * 	The marshall to use for specifying the <code>Accept</code> and <code>Content-Type</code> headers.
+	 * 	The marshall to use for specifying the <c>Accept</c> and <c>Content-Type</c> headers.
 	 * 	<br>If <jk>null</jk>, headers will be reset.
 	 * @return A new {@link MockRest} object.
 	 */
@@ -173,7 +173,7 @@ public class MockRest implements MockHttpConnection {
 	 * Convenience method for creating a MockRest over the specified REST implementation bean or bean class.
 	 *
 	 * <p>
-	 * <code>Accept</code> and <code>Content-Type</code> headers are set to the primary media types on the specified serializer and parser.
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to the primary media types on the specified serializer and parser.
 	 *
 	 * <p>
 	 * Note that the marshall itself is not involved in any serialization or parsing.
@@ -188,10 +188,10 @@ public class MockRest implements MockHttpConnection {
 	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param s
-	 * 	The serializer to use for specifying the <code>Content-Type</code> header.
+	 * 	The serializer to use for specifying the <c>Content-Type</c> header.
 	 * 	<br>If <jk>null</jk>, header will be reset.
 	 * @param p
-	 * 	The parser to use for specifying the <code>Accept</code> header.
+	 * 	The parser to use for specifying the <c>Accept</c> header.
 	 * 	<br>If <jk>null</jk>, header will be reset.
 	 * @return A new {@link MockRest} object.
 	 */
@@ -254,7 +254,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Specifies the <code>Accept</code> header to every request.
+		 * Specifies the <c>Accept</c> header to every request.
 		 *
 		 * @param value The <code>Accept/code> header value.
 		 * @return This object (for method chaining).
@@ -264,9 +264,9 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Specifies the  <code>Content-Type</code> header to every request.
+		 * Specifies the  <c>Content-Type</c> header to every request.
 		 *
-		 * @param value The <code>Content-Type</code> header value.
+		 * @param value The <c>Content-Type</c> header value.
 		 * @return This object (for method chaining).
 		 */
 		public Builder contentType(String value) {
@@ -274,7 +274,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/json"</js>.
+		 * Convenience method for setting the <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/json"</js>.
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -283,7 +283,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/json+simple"</js>.
+		 * Convenience method for setting the <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/json+simple"</js>.
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -292,7 +292,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/xml"</js>.
+		 * Convenience method for setting the <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/xml"</js>.
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -301,7 +301,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/html"</js>.
+		 * Convenience method for setting the <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/html"</js>.
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -310,7 +310,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/plain"</js>.
+		 * Convenience method for setting the <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/plain"</js>.
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -319,7 +319,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Accept</code> and <code>Content-Type</code> headers to <js>"octal/msgpack"</js>.
+		 * Convenience method for setting the <c>Accept</c> and <c>Content-Type</c> headers to <js>"octal/msgpack"</js>.
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -328,7 +328,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/uon"</js>.
+		 * Convenience method for setting the <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/uon"</js>.
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -337,7 +337,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/x-www-form-urlencoded"</js>.
+		 * Convenience method for setting the <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/x-www-form-urlencoded"</js>.
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -346,7 +346,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/yaml"</js>.
+		 * Convenience method for setting the <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/yaml"</js>.
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -355,7 +355,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/openapi"</js>.
+		 * Convenience method for setting the <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/openapi"</js>.
 		 *
 		 * @return This object (for method chaining).
 		 */
@@ -364,7 +364,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Content-Type</code> header to the primary media type on the specified serializer.
+		 * Convenience method for setting the <c>Content-Type</c> header to the primary media type on the specified serializer.
 		 *
 		 * @param value
 		 * 	The serializer to get the media type from.
@@ -376,7 +376,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Accept</code> header to the primary media type on the specified parser.
+		 * Convenience method for setting the <c>Accept</c> header to the primary media type on the specified parser.
 		 *
 		 * @param value
 		 * 	The parser to get the media type from.
@@ -388,7 +388,7 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
-		 * Convenience method for setting the <code>Accept</code> and <code>Content-Type</code> headers to the primary media types on the specified marshall.
+		 * Convenience method for setting the <c>Accept</c> and <c>Content-Type</c> headers to the primary media types on the specified marshall.
 		 *
 		 * @param value
 		 * 	The marshall to get the media types from.
@@ -460,7 +460,7 @@ public class MockRest implements MockHttpConnection {
 	 * 		<li>{@link InputStream}
 	 * 		<li>{@link CharSequence}
 	 * 	</ul>
-	 * 	Any other types are converted to a string using the <code>toString()</code> method.
+	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return A new servlet request.
 	 * @throws Exception
 	 */
@@ -496,7 +496,7 @@ public class MockRest implements MockHttpConnection {
 	 * 		<li>{@link InputStream}
 	 * 		<li>{@link CharSequence}
 	 * 	</ul>
-	 * 	Any other types are converted to a string using the <code>toString()</code> method.
+	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return A new servlet request.
 	 * @throws Exception
 	 */
@@ -551,7 +551,7 @@ public class MockRest implements MockHttpConnection {
 	 * 		<li>{@link InputStream}
 	 * 		<li>{@link CharSequence}
 	 * 	</ul>
-	 * 	Any other types are converted to a string using the <code>toString()</code> method.
+	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return A new servlet request.
 	 * @throws Exception
 	 */
@@ -572,7 +572,7 @@ public class MockRest implements MockHttpConnection {
 	 * 		<li>{@link InputStream}
 	 * 		<li>{@link CharSequence}
 	 * 	</ul>
-	 * 	Any other types are converted to a string using the <code>toString()</code> method.
+	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return A new servlet request.
 	 * @throws Exception
 	 */
@@ -626,7 +626,7 @@ public class MockRest implements MockHttpConnection {
 	 * 		<li>{@link InputStream}
 	 * 		<li>{@link CharSequence}
 	 * 	</ul>
-	 * 	Any other types are converted to a string using the <code>toString()</code> method.
+	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return A new servlet request.
 	 * @throws Exception
 	 */

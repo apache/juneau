@@ -77,10 +77,10 @@ public final class AcceptCharset extends HeaderRangeArray {
 	private static final Cache<String,AcceptCharset> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <code>Accept-Charset</code> header.
+	 * Returns a parsed <c>Accept-Charset</c> header.
 	 *
-	 * @param value The <code>Accept-Charset</code> header string.
-	 * @return The parsed <code>Accept-Charset</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Accept-Charset</c> header string.
+	 * @return The parsed <c>Accept-Charset</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static AcceptCharset forString(String value) {
 		if (value == null)

@@ -95,7 +95,7 @@ public class IOPipe {
 	/**
 	 * Specifies the temporary buffer size.
 	 *
-	 * @param buffSize The buffer size.  Default is <code>1024</code>.
+	 * @param buffSize The buffer size.  Default is <c>1024</c>.
 	 * @return This object (for method chaining).
 	 */
 	public IOPipe buffSize(int buffSize) {

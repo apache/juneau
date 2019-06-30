@@ -16,8 +16,8 @@ package org.apache.juneau.rest.mock2;
  * Represent the basic interface for an HTTP request.
  *
  * <p>
- * Used as a shim between the server and client APIs that allow the <code>RestClient</code>
- * class to send and receive mocked requests using the <code>MockRest</code> interface.
+ * Used as a shim between the server and client APIs that allow the <c>RestClient</c>
+ * class to send and receive mocked requests using the <c>MockRest</c> interface.
  */
 public interface MockHttpRequest {
 

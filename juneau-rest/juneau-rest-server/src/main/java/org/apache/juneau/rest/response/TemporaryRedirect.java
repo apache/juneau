@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 307 Temporary Redirect</code> response.
+ * Represents an <c>HTTP 307 Temporary Redirect</c> response.
  *
  * <p>
  * In this case, the request should be repeated with another URI; however, future requests should still use the original URI.
@@ -64,7 +64,7 @@ public class TemporaryRedirect extends HttpResponse {
 	/**
 	 * Constructor using custom message.
 	 * @param message Message to send as the response.
-	 * @param location <code>Location</code> header value.
+	 * @param location <c>Location</c> header value.
 	 */
 	public TemporaryRedirect(String message, URI location) {
 		super(message);
@@ -73,14 +73,14 @@ public class TemporaryRedirect extends HttpResponse {
 
 	/**
 	 * Constructor.
-	 * @param location <code>Location</code> header value.
+	 * @param location <c>Location</c> header value.
 	 */
 	public TemporaryRedirect(URI location) {
 		this(MESSAGE, location);
 	}
 
 	/**
-	 * @return <code>Location</code> header value.
+	 * @return <c>Location</c> header value.
 	 */
 	@ResponseHeader(name="Location", description="Temporary location of resource.")
 	public URI getLocation() {

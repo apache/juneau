@@ -19,13 +19,13 @@
 	Juno 5.0.0.36 is a minor update.
 </p>
 <ul class='spaced-list'>
-	<li>Implemented <code>org.apache.juneau.urlencoding.UrlEncodingParser.parseArgs(Reader,int,ClassMeta[])</code>.
-	<li><code>name</code> parameter of <code><del>ResourceDescription#ResourceDescription(String,String,String)</del></code>. 
+	<li>Implemented <c>org.apache.juneau.urlencoding.UrlEncodingParser.parseArgs(Reader,int,ClassMeta[])</c>.
+	<li><c>name</c> parameter of <dc>ResourceDescription#ResourceDescription(String,String,String)</dc>. 
 		is now automatically URL-encoded so that the name can contain special characters (e.g. <js>"foo/bar(baz)"</js>).
 	<li>Support for URL-matching and path info containing encoded characters (e.g. <js>'/'</js>) now supported.	
 	<li>Removed some lazy-initialization of bean information in {@link oaj.ClassMeta} that allowed the removal of
 		some synchronized blocks.
-	<li>Improved support of <code><del>BeanContext.getClassMetaFromString(String)</del></code>.
+	<li>Improved support of <dc>BeanContext.getClassMetaFromString(String)</dc>.
 		Now supports primitive arrays such as <js>"long[]"</js> in addition to the previous support for the equivalent <js>"[J"</js>.
 	<li>Various new convenience methods added to {@link oaj.internal.StringUtils} and {@link oaj.internal.ClassUtils}.
 </ul>	

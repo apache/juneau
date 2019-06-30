@@ -277,7 +277,7 @@ public @interface ParserConfig {
 	 * Configuration property:  File charset.
 	 *
 	 * <p>
-	 * The character set to use for reading <code>Files</code> from the file system.
+	 * The character set to use for reading <c>Files</c> from the file system.
 	 *
 	 * <p>
 	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
@@ -303,7 +303,7 @@ public @interface ParserConfig {
 	 * Configuration property:  Input stream charset.
 	 *
 	 * <p>
-	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 	 *
 	 * <p>
 	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.

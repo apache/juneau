@@ -274,8 +274,8 @@ public class BeanFilterBuilder<T> {
 	 * <br>Any properties in the stop class or in its base classes will be ignored during analysis.
 	 *
 	 * <p>
-	 * For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>,
-	 * but not <code>p1</code> or <code>p2</code>.
+	 * For example, in the following class hierarchy, instances of <c>C3</c> will include property <c>p3</c>,
+	 * but not <c>p1</c> or <c>p2</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

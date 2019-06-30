@@ -62,40 +62,40 @@
 	<li>
 		{@link java.io.Reader}
 		<br><ja>@Body</ja> annotation is optional.
-		<br><code>Content-Type</code> is ignored.
+		<br><c>Content-Type</c> is ignored.
 	<li>
 		{@link java.io.InputStream}
 		<br><ja>@Body</ja> annotation is optional.
-		<br><code>Content-Type</code> is ignored.
+		<br><c>Content-Type</c> is ignored.
 	<li>
 		Any {@doc PojoCategories Parsable POJO} type.
-		<br><code>Content-Type</code> is required to identify correct parser.
+		<br><c>Content-Type</c> is required to identify correct parser.
 	<li>
 		Objects convertible from {@link java.io.Reader} by having one of the following non-deprecated methods:
 		<ul>
-			<li><code><jk>public</jk> T(Reader in) {...}</code>
-			<li><code><jk>public static</jk> T <jsm>create</jsm>(Reader in) {...}</code>
-			<li><code><jk>public static</jk> T <jsm>fromReader</jsm>(Reader in) {...}</code>
+			<li><c><jk>public</jk> T(Reader in) {...}</c>
+			<li><c><jk>public static</jk> T <jsm>create</jsm>(Reader in) {...}</c>
+			<li><c><jk>public static</jk> T <jsm>fromReader</jsm>(Reader in) {...}</c>
 		</ul>
-		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+		<c>Content-Type</c> must not be present or match an existing parser so that it's not parsed as a POJO.
 	<li>
 		Objects convertible from {@link java.io.InputStream} by having one of the following non-deprecated methods:
 		<ul>
-			<li><code><jk>public</jk> T(InputStream in) {...}</code>
-			<li><code><jk>public static</jk> T <jsm>create</jsm>(InputStream in) {...}</code>
-			<li><code><jk>public static</jk> T <jsm>fromInputStream</jsm>(InputStream in) {...}</code>
+			<li><c><jk>public</jk> T(InputStream in) {...}</c>
+			<li><c><jk>public static</jk> T <jsm>create</jsm>(InputStream in) {...}</c>
+			<li><c><jk>public static</jk> T <jsm>fromInputStream</jsm>(InputStream in) {...}</c>
 		</ul>
-		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+		<c>Content-Type</c> must not be present or match an existing parser so that it's not parsed as a POJO.
 	<li>
 		Objects convertible from {@link java.lang.String} by having one of the following non-deprecated methods:
 		<ul>
-			<li><code><jk>public</jk> T(String in) {...}</code>
-			<li><code><jk>public static</jk> T <jsm>create</jsm>(String in) {...}</code>
-			<li><code><jk>public static</jk> T <jsm>fromString</jsm>(String in) {...}</code>
-			<li><code><jk>public static</jk> T <jsm>parse</jsm>(String in) {...}</code>
-			<li><code><jk>public static</jk> T <jsm>parseString</jsm>(String in) {...}</code>
-			<li><code><jk>public static</jk> T <jsm>forName</jsm>(String in) {...}</code>
-			<li><code><jk>public static</jk> T <jsm>forString</jsm>(String in) {...}</code>
+			<li><c><jk>public</jk> T(String in) {...}</c>
+			<li><c><jk>public static</jk> T <jsm>create</jsm>(String in) {...}</c>
+			<li><c><jk>public static</jk> T <jsm>fromString</jsm>(String in) {...}</c>
+			<li><c><jk>public static</jk> T <jsm>parse</jsm>(String in) {...}</c>
+			<li><c><jk>public static</jk> T <jsm>parseString</jsm>(String in) {...}</c>
+			<li><c><jk>public static</jk> T <jsm>forName</jsm>(String in) {...}</c>
+			<li><c><jk>public static</jk> T <jsm>forString</jsm>(String in) {...}</c>
 		</ul>
 		Note that this also includes all enums.
 </ol>
@@ -103,7 +103,7 @@
 	The {@link oaj.oapi.OpenApiSerializer} class can be used to serialize HTTP bodies to OpenAPI-based output.
 </p>
 <p>
-	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <c>Longs</c>:
 </p>
 <p class='bpcode w800'>
 	<jc>// Body is a pipe-delimited list of comma-delimited lists of longs.</jc>
@@ -137,7 +137,7 @@
 </p>
 <p>
 	Input will be converted based on the types and formats defined in the schema definition.
-	Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+	Input validations such as <c>minLength/maxLength</c> that don't match the input will result in automatic <c>400 Bad Request</c> responses.
 </p>
 <p>
 	For more information about valid parameter types when using OpenAPI parsing, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}

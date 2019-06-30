@@ -79,10 +79,10 @@ public final class Allow extends HeaderStringArray {
 	}
 
 	/**
-	 * Returns a parsed <code>Allow</code> header.
+	 * Returns a parsed <c>Allow</c> header.
 	 *
-	 * @param value The <code>Allow</code> header string.
-	 * @return The parsed <code>Allow</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Allow</c> header string.
+	 * @return The parsed <c>Allow</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Allow forString(String value) {
 		if (value == null)

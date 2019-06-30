@@ -19,7 +19,7 @@ import com.sun.javadoc.*;
 import java.util.Map;
 
 /**
- * Implements the <code>{@property link}</code> tag that simply resolves system properties.
+ * Implements the <c>{@property link}</c> tag that simply resolves system properties.
  */
 public class PropertyTag implements Taglet {
 

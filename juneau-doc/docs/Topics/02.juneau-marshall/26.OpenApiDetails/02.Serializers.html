@@ -88,47 +88,47 @@ OpenAPI Serializers
 	}
 </p>
 <p>
-	As a general rule, any POJO convertible to the intermediate type for the <code>type/format</code> of the schema can
+	As a general rule, any POJO convertible to the intermediate type for the <c>type/format</c> of the schema can
 	be serialized using the OpenAPI serializer.
 	Here are the rules of POJO types allowed for various type/format combinations:
 </p>
 <table class='styled w800'>
 	<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>
 	<tr class='dark bb'>
-		<td rowspan='4'><code>string</code> or empty</td>
-		<td><code>byte<br>binary<br>binary-spaced</code></td>
+		<td rowspan='4'><c>string</c> or empty</td>
+		<td><c>byte<br>binary<br>binary-spaced</c></td>
 		<td>
 			<ul>
-				<li><code><jk>byte</jk>[]</code> (default)
+				<li><c><jk>byte</jk>[]</c> (default)
 				<li>{@link java.io.InputStream}
 				<li>{@link java.io.Reader} - Read into String and then converted using {@link java.lang.String#getBytes()}.
 				<li>{@link java.lang.Object} - Converted to String and then converted using {@link java.lang.String#getBytes()}.
-				<li>Any POJO transformable to a <code><jk>byte</jk>[]</code> via the following methods:
+				<li>Any POJO transformable to a <c><jk>byte</jk>[]</c> via the following methods:
 					<ul>
-						<li><code><jk>public byte</jk>[] toBytes() {...}</code>
-						<li><code><jk>public byte</jk>[]</jk> toFoo() {...}</code> (any method name starting with "to")
+						<li><c><jk>public byte</jk>[] toBytes() {...}</c>
+						<li><c><jk>public byte</jk>[]</jk> toFoo() {...}</c> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a <code><jk>byte</jk>[]</code> via a {@link oaj.transform.PojoSwap}.
+				<li>Any POJO transformable to a <c><jk>byte</jk>[]</c> via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td><code>date<br>date-time</code></td>
+		<td><c>date<br>date-time</c></td>
 		<td>
 			<ul>
 				<li>{@link java.util.Calendar} (default)
 				<li>{@link java.util.Date}
 				<li>Any POJO transformable to a {@link java.util.Calendar} via the following methods:
 					<ul>
-						<li><code><jk>public</jk> Calendar toCalendar() {...}</code>
-						<li><code><jk>public</jk> Calendar toFoo() {...}</code> (any method name starting with "to")
+						<li><c><jk>public</jk> Calendar toCalendar() {...}</c>
+						<li><c><jk>public</jk> Calendar toFoo() {...}</c> (any method name starting with "to")
 					</ul>
 				<li>Any POJO transformable to a {@link java.util.Calendar} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td><code>uon</code></td>
+		<td><c>uon</c></td>
 		<td>
 			<ul>
 				<li>Any {@doc PojoCategories Serializable POJO} type.
@@ -142,14 +142,14 @@ OpenAPI Serializers
 				<li>{@link java.lang.String} (default)
 				<li>Any POJO transformable to a {@link java.lang.String} via the following methods:
 					<ul>
-						<li><code><jk>public</jk> String toString() {...}</code>
+						<li><c><jk>public</jk> String toString() {...}</c>
 					</ul>
 				<li>Any POJO transformable to a {@link java.lang.String} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan='1'><code>boolean</code></td>
+		<td rowspan='1'><c>boolean</c></td>
 		<td>empty</td>
 		<td>
 			<ul>
@@ -158,16 +158,16 @@ OpenAPI Serializers
 				<li>{@link java.lang.String} - Converted to a {@link java.lang.Boolean}.
 				<li>Any POJO transformable to a {@link java.lang.Boolean} via the following methods:
 					<ul>
-						<li><code><jk>public</jk> Boolean toBoolean() {...}</code>
-						<li><code><jk>public</jk> Boolean toFoo() {...}</code> (any method name starting with "to")
+						<li><c><jk>public</jk> Boolean toBoolean() {...}</c>
+						<li><c><jk>public</jk> Boolean toFoo() {...}</c> (any method name starting with "to")
 					</ul>
 				<li>Any POJO transformable to a {@link java.lang.Boolean} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td rowspan='2'><code>integer</code></td>
-		<td><code>int32</code></td>
+		<td rowspan='2'><c>integer</c></td>
+		<td><c>int32</c></td>
 		<td>
 			<ul>
 				<li>{@link java.lang.Integer} (default)
@@ -175,15 +175,15 @@ OpenAPI Serializers
 				<li>{@link java.lang.String} - Converted to an {@link java.lang.String}.
 				<li>Any POJO transformable to an {@link java.lang.Integer} via the following methods:
 					<ul>
-						<li><code><jk>public</jk> Integer toInteger() {...}</code>
-						<li><code><jk>public</jk> Integer toFoo() {...}</code> (any method name starting with "to")
+						<li><c><jk>public</jk> Integer toInteger() {...}</c>
+						<li><c><jk>public</jk> Integer toFoo() {...}</c> (any method name starting with "to")
 					</ul>
 				<li>Any POJO transformable to an {@link java.lang.Integer} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td><code>int64</code></td>
+		<td><c>int64</c></td>
 		<td>
 			<ul>
 				<li>{@link java.lang.Long} (default)
@@ -191,16 +191,16 @@ OpenAPI Serializers
 				<li>{@link java.lang.String} - Converted to a {@link java.lang.Long}.
 				<li>Any POJO transformable to a {@link java.lang.Long} via the following methods:
 					<ul>
-						<li><code><jk>public</jk> Long toLong() {...}</code>
-						<li><code><jk>public</jk> Long toFoo() {...}</code> (any method name starting with "to")
+						<li><c><jk>public</jk> Long toLong() {...}</c>
+						<li><c><jk>public</jk> Long toFoo() {...}</c> (any method name starting with "to")
 					</ul>
 				<li>Any POJO transformable to a {@link java.lang.Long} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan='2'><code>number</code></td>
-		<td><code>float</code></td>
+		<td rowspan='2'><c>number</c></td>
+		<td><c>float</c></td>
 		<td>
 			<ul>
 				<li>{@link java.lang.Float} (default)
@@ -208,15 +208,15 @@ OpenAPI Serializers
 				<li>{@link java.lang.String} - Converted to a {@link java.lang.Float}.
 				<li>Any POJO transformable to a {@link java.lang.Float} via the following methods:
 					<ul>
-						<li><code><jk>public</jk> Float toFloat() {...}</code>
-						<li><code><jk>public</jk> Float toFoo() {...}</code> (any method name starting with "to")
+						<li><c><jk>public</jk> Float toFloat() {...}</c>
+						<li><c><jk>public</jk> Float toFoo() {...}</c> (any method name starting with "to")
 					</ul>
 				<li>Any POJO transformable to a {@link java.lang.Float} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td><code>double</code></td>
+		<td><c>double</c></td>
 		<td>
 			<ul>
 				<li>{@link java.lang.Double} (default)
@@ -224,30 +224,30 @@ OpenAPI Serializers
 				<li>{@link java.lang.String} - Converted to a {@link java.lang.Double}.
 				<li>Any POJO transformable to a {@link java.lang.Double} via the following methods:
 					<ul>
-						<li><code><jk>public</jk> Double toDouble() {...}</code>
-						<li><code><jk>public</jk> Double toFoo() {...}</code> (any method name starting with "to")
+						<li><c><jk>public</jk> Double toDouble() {...}</c>
+						<li><c><jk>public</jk> Double toFoo() {...}</c> (any method name starting with "to")
 					</ul>
 				<li>Any POJO transformable to a {@link java.lang.Double} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td rowspan='2'><code>array</code></td>
+		<td rowspan='2'><c>array</c></td>
 		<td>empty</td>
 		<td>
 			<ul>
 				<li>Arrays or Collections of any defaults on this list.
-				<li>Any POJO transformable to arrays of the default types (e.g. <code>Integer[]</code>, <code>Boolean[][]</code>, etc...).
+				<li>Any POJO transformable to arrays of the default types (e.g. <c>Integer[]</c>, <c>Boolean[][]</c>, etc...).
 					<br>For example:
 					<ul>
-						<li><code><jk>public</jk> Boolean[][] toFoo() {...}</code> (any method name starting with "to")
+						<li><c><jk>public</jk> Boolean[][] toFoo() {...}</c> (any method name starting with "to")
 					</ul>
 				<li>Any POJO transformable to arrays of the default types via a {@link oaj.transform.PojoSwap}
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td><code>uon</code></td>
+		<td><c>uon</c></td>
 		<td>
 			<ul>
 				<li>Any {@doc PojoCategories Serializable POJO} type.
@@ -255,18 +255,18 @@ OpenAPI Serializers
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan='2'><code>object</code></td>
+		<td rowspan='2'><c>object</c></td>
 		<td>empty</td>
 		<td>
 			<ul>
-				<li><code>Map&lt;String,Object&gt;</code> (default)
+				<li><c>Map&lt;String,Object&gt;</c> (default)
 				<li>Beans with properties of anything on this list.
 				<li>Any POJO transformable to a map via a {@link oaj.transform.PojoSwap}
 			</ul>
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td><code>uon</code></td>
+		<td><c>uon</c></td>
 		<td>
 			<ul>
 				<li>Any {@doc PojoCategories Serializable POJO} type.
@@ -303,7 +303,7 @@ OpenAPI Serializers
 	}
 </p>
 <p>
-	The <code>object</code> type is not officially part of the OpenAPI standard.  
+	The <c>object</c> type is not officially part of the OpenAPI standard.  
 	However, Juneau supports serializing Maps and beans to HTTP parts using UON notation.
 </p>
 <p>
@@ -445,6 +445,6 @@ OpenAPI Serializers
 		They can be skipped or partially defined.
 	<li>
 		We make our best attempt to convert the input to the matching type.  
-		However, you will get <code>SerializeExceptions</code> if you attempt an impossible conversion.
+		However, you will get <c>SerializeExceptions</c> if you attempt an impossible conversion.
 		(e.g. trying to serialize the string "foo" as a boolean). 
 </ul>

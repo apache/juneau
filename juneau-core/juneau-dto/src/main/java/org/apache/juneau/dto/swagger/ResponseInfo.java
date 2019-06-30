@@ -170,7 +170,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -237,7 +237,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link SchemaInfo}
-	 * 		<li><code>String</code> - JSON object representation of {@link SchemaInfo}
+	 * 		<li><c>String</c> - JSON object representation of {@link SchemaInfo}
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
@@ -310,8 +310,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Map&lt;String,{@link HeaderInfo}|String&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,{@link HeaderInfo}&gt;</code>
+	 * 		<li><c>Map&lt;String,{@link HeaderInfo}|String&gt;</c>
+	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link HeaderInfo}&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	headers(<js>"{headerName:{description:'description',...}}"</js>);
@@ -431,8 +431,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Map&lt;String,Object&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Object&gt;</code>
+	 * 		<li><c>Map&lt;String,Object&gt;</c>
+	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,Object&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	examples(<js>"{'text/json':{foo:'bar'}}"</js>);
@@ -503,7 +503,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
 	 * @param maxDepth
 	 * 	The maximum depth to resolve references.
-	 * 	<br>After that level is reached, <code>$ref</code> references will be left alone.
+	 * 	<br>After that level is reached, <c>$ref</c> references will be left alone.
 	 * 	<br>Useful if you have very complex models and you don't want your swagger page to be overly-complex.
 	 * @return
 	 * 	This object with references resolved.

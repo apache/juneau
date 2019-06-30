@@ -69,10 +69,10 @@ import org.apache.juneau.http.annotation.*;
 public final class ContentLocation extends HeaderUri {
 
 	/**
-	 * Returns a parsed <code>Content-Location</code> header.
+	 * Returns a parsed <c>Content-Location</c> header.
 	 *
-	 * @param value The <code>Content-Location</code> header string.
-	 * @return The parsed <code>Content-Location</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Content-Location</c> header string.
+	 * @return The parsed <c>Content-Location</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static ContentLocation forString(String value) {
 		if (value == null)

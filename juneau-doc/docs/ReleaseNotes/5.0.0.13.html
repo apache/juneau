@@ -28,19 +28,19 @@
 		</ul>
 	</li>
 	<li>
-		New <code>SerializerContext.SERIALIZER_uriContext</code> and <code>SerializerContext.SERIALIZER_uriAuthority</code> serializer properties for specifying values for relative URIs.
+		New <c>SerializerContext.SERIALIZER_uriContext</c> and <c>SerializerContext.SERIALIZER_uriAuthority</c> serializer properties for specifying values for relative URIs.
    		</li>
    		<li>
-		New {@link oaj.annotation.URI @URI} annotation that allows you to specify classes and bean properties as URLs that aren't <code>java.net.URI</code> or <code>java.net.URL</code>.
+		New {@link oaj.annotation.URI @URI} annotation that allows you to specify classes and bean properties as URLs that aren't <c>java.net.URI</c> or <c>java.net.URL</c>.
 	</li>
 	<li>
 		New {@link oaj.html.HtmlSerializer#HTML_uriAnchorText} HTML serializer property for tailoring how anchor text is rendered.
 	</li>
 	<li>
-		Renamed <code>BeanProperty#uri</code> annotation to <code>BeanProperty#beanUri</code> to make it clear that this property represents the URI of the bean itself instead of an arbitrary property containing a URI.
+		Renamed <c>BeanProperty#uri</c> annotation to <c>BeanProperty#beanUri</c> to make it clear that this property represents the URI of the bean itself instead of an arbitrary property containing a URI.
    		</li>
    		<li>
-		Removed <code>BeanProperty#id</code> annotation.
+		Removed <c>BeanProperty#id</c> annotation.
 	</li>
 </ul>
 <h5 class='topic w800'>REST server API changes</h5>
@@ -48,12 +48,12 @@
 	<li>
 		Improvements to {@link oajr.RestServlet} to automatically handle relative URIs in POJOs.
 		<ul>
-      			<li><code>SerializerContext.SERIALIZER_uriContext</code> property set by default to web app context root.</li>
-			<li><code>SerializerContext.SERIALIZER_uriAuthority</code> property set by default to the request scheme+hostname+port.</li>
+      			<li><c>SerializerContext.SERIALIZER_uriContext</c> property set by default to web app context root.</li>
+			<li><c>SerializerContext.SERIALIZER_uriAuthority</c> property set by default to the request scheme+hostname+port.</li>
        		</ul>
        	</li>
        	<li>
-		Fixed bug involving <code>Accept-Charset</code> header in Chrome that prevented HTML output from rendering correctly in that browser.<br>
-		<code>Accept-Charset</code> handling should now be fully W3C compliant.
+		Fixed bug involving <c>Accept-Charset</c> header in Chrome that prevented HTML output from rendering correctly in that browser.<br>
+		<c>Accept-Charset</c> handling should now be fully W3C compliant.
 	</li>
 </ul>

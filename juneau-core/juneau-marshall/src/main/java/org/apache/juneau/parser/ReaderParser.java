@@ -26,7 +26,7 @@ import org.apache.juneau.internal.*;
  * This class is typically the parent class of all character-based parsers.
  * It has 1 abstract method to implement...
  * <ul>
- * 	<li><code>parse(ParserSession, ClassMeta)</code>
+ * 	<li><c>parse(ParserSession, ClassMeta)</c>
  * </ul>
  */
 @ConfigurableContext
@@ -44,7 +44,7 @@ public abstract class ReaderParser extends Parser {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"ReaderParser.fileCharset.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"DEFAULT"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -55,7 +55,7 @@ public abstract class ReaderParser extends Parser {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * The character set to use for reading <code>Files</code> from the file system.
+	 * The character set to use for reading <c>Files</c> from the file system.
 	 *
 	 * <p>
 	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
@@ -89,7 +89,7 @@ public abstract class ReaderParser extends Parser {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"ReaderParser.streamCharset.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"UTF-8"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -100,7 +100,7 @@ public abstract class ReaderParser extends Parser {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 	 *
 	 * <p>
 	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
@@ -165,7 +165,7 @@ public abstract class ReaderParser extends Parser {
 	 *
 	 * @see #RPARSER_fileCharset
 	 * @return
-	 * 	The character set to use for reading <code>Files</code> from the file system.
+	 * 	The character set to use for reading <c>Files</c> from the file system.
 	 */
 	protected final Charset getFileCharset() {
 		return fileCharset;
@@ -176,7 +176,7 @@ public abstract class ReaderParser extends Parser {
 	 *
 	 * @see #RPARSER_streamCharset
 	 * @return
-	 * 	The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 * 	The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 	 */
 	protected final Charset getStreamCharset() {
 		return streamCharset;

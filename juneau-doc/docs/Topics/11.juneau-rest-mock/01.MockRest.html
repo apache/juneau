@@ -98,7 +98,7 @@
 	actually having to run in a servlet container.
 </p>
 <p>
-	The <code>create(Object)</code> method can take in either <code>Class</code> objects or pre-instantiated beans.
+	The <c>create(Object)</c> method can take in either <c>Class</c> objects or pre-instantiated beans.
 	The latter is particularly useful for testing Spring beans.
 </p>
 <hr>
@@ -127,8 +127,8 @@
 <ul class='doctree'>
 	<li class='jm'>{@link oajr.mock2.MockRest#build(Object,Marshall) build(Object,Marshall)} - Use media types defined on a marshall.
 	<li class='jm'>{@link oajr.mock2.MockRest#build(Object,Serializer,Parser) build(Object,Serializer,Parser)} - Use media types defined on a serializer and parser.
-	<li class='jm'>{@link oajr.mock2.MockRest.Builder#accept(String) accept(String)} - Explicitly set the <code>Accept</code> header.
-	<li class='jm'>{@link oajr.mock2.MockRest.Builder#contentType(String) contentType(String)} - Explicitly set the <code>Content-Type</code> header.
+	<li class='jm'>{@link oajr.mock2.MockRest.Builder#accept(String) accept(String)} - Explicitly set the <c>Accept</c> header.
+	<li class='jm'>{@link oajr.mock2.MockRest.Builder#contentType(String) contentType(String)} - Explicitly set the <c>Content-Type</c> header.
 </ul>
 <p>
 	Various other convenience methods for common media types are also provided.
@@ -169,19 +169,19 @@
 	</ul>
 </ul>
 <p>
-	For HTTP methods that pass a request body (i.e. <code>PUT</code>,<code>POST</code><code>PATCH</code>), the body object can be any of the following types:
+	For HTTP methods that pass a request body (i.e. <c>PUT</c>,<c>POST</c><c>PATCH</c>), the body object can be any of the following types:
 </p>
 <ul>
-	<li><code><jk>byte</jk>[]</code>
+	<li><c><jk>byte</jk>[]</c>
 	<li>{@link java.io.Reader}
 	<li>{@link java.io.InputStream}
 	<li>{@link java.lang.CharSequence}
 </ul>
 <p>
-	All other body object types are converted to strings using the <code>toString()</code> method.
+	All other body object types are converted to strings using the <c>toString()</c> method.
 </p>
 <p>
-	A common tactic is to override a bean's <code>toString()</code> method to return Simple JSON so that
+	A common tactic is to override a bean's <c>toString()</c> method to return Simple JSON so that
 	instances can be passed to the methods above.
 </p>
 <p class='bpcode w800'>
@@ -200,7 +200,7 @@
 	on the {@link javax.servlet.http.HttpServletRequest} in addition to many convenience methods.
 </p>
 <p>
-	The following fluent convenience methods are provided for setting common <code>Accept</code> and <code>Content-Type</code> headers.
+	The following fluent convenience methods are provided for setting common <c>Accept</c> and <c>Content-Type</c> headers.
 </p>
 <ul class='doctree'>
 	<li class='jc'>{@link oajr.mock2.MockServletRequest}

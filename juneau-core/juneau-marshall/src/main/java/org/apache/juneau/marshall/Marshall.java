@@ -84,12 +84,12 @@ public abstract class Marshall {
 	}
 
 	/**
-	 * Serializes a POJO directly to either a <code>String</code> or <code><jk>byte</jk>[]</code> depending on the serializer type.
+	 * Serializes a POJO directly to either a <c>String</c> or <code><jk>byte</jk>[]</code> depending on the serializer type.
 	 *
 	 * @param o The object to serialize.
 	 * @return
 	 * 	The serialized object.
-	 * 	<br>Character-based serializers will return a <code>String</code>
+	 * 	<br>Character-based serializers will return a <c>String</c>
 	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
@@ -101,7 +101,7 @@ public abstract class Marshall {
 	 * Serializes a POJO to the specified output stream or writer.
 	 *
 	 * <p>
-	 * Equivalent to calling <code>serializer.createSession().serialize(o, output);</code>
+	 * Equivalent to calling <c>serializer.createSession().serialize(o, output);</c>
 	 *
 	 * @param o The object to serialize.
 	 * @param output
@@ -145,7 +145,7 @@ public abstract class Marshall {
 
 
 	/**
-	 * Convenience method for calling <code>System.out.println(...)</code> on the specified object after calling {@link #toString(Object)}.
+	 * Convenience method for calling <c>System.out.println(...)</c> on the specified object after calling {@link #toString(Object)}.
 	 *
 	 * @param o The object to serialize and then send to the console.
 	 * @return This object (for method chaining).
@@ -252,10 +252,10 @@ public abstract class Marshall {
 	 * </p>
 	 *
 	 * <p>
-	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 * <c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
 	 *
 	 * <p>
-	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
 	 *
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.

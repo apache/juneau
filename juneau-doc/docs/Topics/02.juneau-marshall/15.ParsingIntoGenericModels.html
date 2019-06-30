@@ -18,20 +18,20 @@ Parsing into Generic Models
 <p>
 	The Juneau parsers are not limited to parsing back into the original bean classes.
 	If the bean classes are not available on the parsing side, the parser can also be used to 
-	parse into a generic model consisting of <code>Maps</code>, <code>Collections</code>, and primitive
+	parse into a generic model consisting of <c>Maps</c>, <c>Collections</c>, and primitive
 	objects.
 </p>
 <p>
-	You can parse into any <code>Map</code> type (e.g. <code>HashMap</code>, <code>TreeMap</code>), but
+	You can parse into any <c>Map</c> type (e.g. <c>HashMap</c>, <c>TreeMap</c>), but
 	using {@link oaj.ObjectMap} is recommended since it has many convenience methods
 	for converting values to various types.
-	The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
-	<code>LinkedList</code>) or array (e.g. <code>Object[]</code>, <code>String[]</code>, 
-	<code>String[][]</code>), but using {@link oaj.ObjectList} is recommended.
+	The same is true when parsing collections.  You can use any Collection (e.g. <c>HashSet</c>, 
+	<c>LinkedList</c>) or array (e.g. <c>Object[]</c>, <c>String[]</c>, 
+	<c>String[][]</c>), but using {@link oaj.ObjectList} is recommended.
 </p>
 <p>
-	When the map or list type is not specified, or is the abstract <code>Map</code>, <code>Collection</code>, 
-	or <code>List</code> types, the parser will use <code>ObjectMap</code> and <code>ObjectList</code> by 
+	When the map or list type is not specified, or is the abstract <c>Map</c>, <c>Collection</c>, 
+	or <c>List</c> types, the parser will use <c>ObjectMap</c> and <c>ObjectList</c> by 
 	default.
 </p>
 <p>
@@ -59,7 +59,7 @@ Parsing into Generic Models
 	}
 </p>
 <p>
-	We can parse this into a generic <code>ObjectMap</code>:
+	We can parse this into a generic <c>ObjectMap</c>:
 </p>
 <p class='bpcode w800'>	
 	<jc>// Parse JSON into a generic POJO model.</jc>
@@ -70,8 +70,8 @@ Parsing into Generic Models
 </p>
 <p>
 	What we end up with is the exact same output.
-	Even the numbers and booleans are preserved because they are parsed into <code>Number</code> and 
-	<code>Boolean</code> objects when parsing into generic models.
+	Even the numbers and booleans are preserved because they are parsed into <c>Number</c> and 
+	<c>Boolean</c> objects when parsing into generic models.
 </p>
 <p class='bpcode w800'>
 	{
@@ -95,8 +95,8 @@ Parsing into Generic Models
 	}
 </p>
 <p>
-	Once parsed into a generic model, various convenience methods are provided on the <code>ObjectMap</code>
-		and <code>ObjectList</code> classes to retrieve values:
+	Once parsed into a generic model, various convenience methods are provided on the <c>ObjectMap</c>
+		and <c>ObjectList</c> classes to retrieve values:
 </p>
 <p class='bpcode w800'>
 	<jc>// Parse JSON into a generic POJO model.</jc>

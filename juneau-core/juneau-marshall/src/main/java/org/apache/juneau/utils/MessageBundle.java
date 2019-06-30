@@ -43,7 +43,7 @@ import org.apache.juneau.*;
  * 		The {@link #getString(Locale, String, Object...)} method can be used to retrieve locale-specific messages.
  * 	<li>
  * 		Messages in the resource bundle can optionally be prefixed with the simple class name.
- * 		For example, if the class is <code>MyClass</code> and the properties file contains <js>"MyClass.myMessage"</js>,
+ * 		For example, if the class is <c>MyClass</c> and the properties file contains <js>"MyClass.myMessage"</js>,
  * 		the message can be retrieved using <code>getString(<js>"myMessage"</js>)</code>.
  * </ul>
  *
@@ -93,9 +93,9 @@ public class MessageBundle extends ResourceBundle {
 	 * When this method is used, the bundle path is determined by searching for the resource bundle
 	 * in the following locations:
 	 * <ul>
-	 * 	<li><code>[package].ForClass.properties</code>
-	 * 	<li><code>[package].nls.ForClass.properties</code>
-	 * 	<li><code>[package].i18n.ForClass.properties</code>
+	 * 	<li><c>[package].ForClass.properties</c>
+	 * 	<li><c>[package].nls.ForClass.properties</c>
+	 * 	<li><c>[package].i18n.ForClass.properties</c>
 	 * </ul>
 	 *
 	 * @param forClass The class
@@ -109,7 +109,7 @@ public class MessageBundle extends ResourceBundle {
 	 * Constructor.
 	 *
 	 * <p>
-	 * A shortcut for calling <code>new MessageBundle(forClass, bundlePath)</code>.
+	 * A shortcut for calling <c>new MessageBundle(forClass, bundlePath)</c>.
 	 *
 	 * @param forClass The class
 	 * @param bundlePath The location of the resource bundle.
@@ -355,7 +355,7 @@ public class MessageBundle extends ResourceBundle {
 	 *
 	 * <p>
 	 * Useful for debugging purposes.
-	 * Note that any class that implements a <code>swap()</code> method will automatically be serialized by
+	 * Note that any class that implements a <c>swap()</c> method will automatically be serialized by
 	 * calling this method and serializing the result.
 	 *
 	 * <p>

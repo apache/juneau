@@ -284,10 +284,10 @@ public @interface RestMethod {
 	Class<? extends RestConverter>[] converters() default {};
 
 	/**
-	 * Default <code>Accept</code> header.
+	 * Default <c>Accept</c> header.
 	 *
 	 * <p>
-	 * The default value for the <code>Accept</code> header if not specified on a request.
+	 * The default value for the <c>Accept</c> header if not specified on a request.
 	 *
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
@@ -315,10 +315,10 @@ public @interface RestMethod {
 	String defaultCharset() default "";
 
 	/**
-	 * Default <code>Content-Type</code> header.
+	 * Default <c>Content-Type</c> header.
 	 *
 	 * <p>
-	 * The default value for the <code>Content-Type</code> header if not specified on a request.
+	 * The default value for the <c>Content-Type</c> header if not specified on a request.
 	 *
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
@@ -426,7 +426,7 @@ public @interface RestMethod {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/description</code>.
+	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/description</c>.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -569,7 +569,7 @@ public @interface RestMethod {
 	 * 		<js>""</js>
 	 * 		- Auto-detect.
 	 * 		<br>The method name is determined based on the Java method name.
-	 * 		<br>For example, if the method is <code>doPost(...)</code>, then the method name is automatically detected
+	 * 		<br>For example, if the method is <c>doPost(...)</c>, then the method name is automatically detected
 	 * 		as <js>"POST"</js>.
 	 * 		<br>Otherwise, defaults to <js>"GET"</js>.
 	 * 	<li>
@@ -577,14 +577,14 @@ public @interface RestMethod {
 	 * 		- Remote-proxy interface.
 	 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the
 	 * 		{@link RemoteInterface @RemoteInterface} annotation) to be used as a remote proxy using
-	 * 		<code>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</code>.
+	 * 		<c>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</c>.
 	 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
-	 * 		<br>Conceptually, this is simply a fancy <code>POST</code> against the url <js>"/{path}/{javaMethodName}"</js>
+	 * 		<br>Conceptually, this is simply a fancy <c>POST</c> against the url <js>"/{path}/{javaMethodName}"</js>
 	 * 		where the arguments are marshalled from the client to the server as an HTTP body containing an array of
 	 * 		objects, passed to the method as arguments, and then the resulting object is marshalled back to the client.
 	 * 	<li>
 	 * 		Anything else
-	 * 		- Overloaded non-HTTP-standard names that are passed in through a <code>&amp;method=methodName</code> URL
+	 * 		- Overloaded non-HTTP-standard names that are passed in through a <c>&amp;method=methodName</c> URL
 	 * 		parameter.
 	 * </ul>
 	 */
@@ -724,7 +724,7 @@ public @interface RestMethod {
 	 * To force path patterns to be checked before other path patterns, use a higher priority number.
 	 *
 	 * <p>
-	 * By default, it's <code>0</code>, which means it will use an internal heuristic to determine a best match.
+	 * By default, it's <c>0</c>, which means it will use an internal heuristic to determine a best match.
 	 */
 	int priority() default 0;
 
@@ -732,7 +732,7 @@ public @interface RestMethod {
 	 * Same as {@link RestResource#properties() @RestResource(properties)}, except defines property values by default when this method is called.
 	 *
 	 * <p>
-	 * This is equivalent to simply calling <code>res.addProperties()</code> in the Java method, but is provided for
+	 * This is equivalent to simply calling <c>res.addProperties()</c> in the Java method, but is provided for
 	 * convenience.
 	 */
 	Property[] properties() default {};
@@ -876,7 +876,7 @@ public @interface RestMethod {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/summary</code>.
+	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).

@@ -59,7 +59,7 @@ import org.apache.juneau.rest.annotation.*;
  * Instances must provide one of the following public constructors:
  * <ul>
  * 	<li>No-args.
- * 	<li>The following args: <code>Object resource, Method javaMethod</code>.
+ * 	<li>The following args: <c>Object resource, Method javaMethod</c>.
  * 		<br>This gives access to the servlet/resource and Java method it's applied to.
  * </ul>
  *

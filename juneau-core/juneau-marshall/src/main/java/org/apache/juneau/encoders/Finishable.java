@@ -15,7 +15,7 @@ package org.apache.juneau.encoders;
 import java.io.*;
 
 /**
- * Interface that identifies an output stream has having a <code>finish()</code> method.
+ * Interface that identifies an output stream has having a <c>finish()</c> method.
  */
 public interface Finishable {
 

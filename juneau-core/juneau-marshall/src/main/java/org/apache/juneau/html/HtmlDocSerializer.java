@@ -25,9 +25,9 @@ import org.apache.juneau.svl.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Accept</code> types:  <code><b>text/html</b></code>
+ * Handles <c>Accept</c> types:  <bc>text/html</bc>
  * <p>
- * Produces <code>Content-Type</code> types:  <code><b>text/html</b></code>
+ * Produces <c>Content-Type</c> types:  <bc>text/html</bc>
  *
  * <h5 class='topic'>Description</h5>
  *
@@ -36,7 +36,7 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * Configurable properties are typically specified via <ja>@RestResource(properties)</ja> and <ja>@RestMethod(properties)</ja>
- * annotations, although they can also be set programmatically via the <code>RestResponse.setProperty()</code> method.
+ * annotations, although they can also be set programmatically via the <c>RestResponse.setProperty()</c> method.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -68,8 +68,8 @@ import org.apache.juneau.svl.*;
  * </p>
  *
  * <p>
- * The <code>$L{...}</code> variable represent localized strings pulled from the resource bundle identified by the
- * <code>messages</code> annotation.
+ * The <c>$L{...}</c> variable represent localized strings pulled from the resource bundle identified by the
+ * <c>messages</c> annotation.
  * <br>These variables are replaced at runtime based on the HTTP request locale.
  * <br>Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  */
@@ -88,7 +88,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.aside.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
@@ -125,7 +125,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.footer.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
@@ -156,7 +156,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.head.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
@@ -195,7 +195,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.header.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
@@ -224,7 +224,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nav.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
@@ -256,7 +256,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.navlinks.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
@@ -286,7 +286,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p>
-	 * The <code>AddressBookResource</code> sample class uses this property...
+	 * The <c>AddressBookResource</c> sample class uses this property...
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
@@ -324,7 +324,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.noResultsMessage.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"&lt;p&gt;no results&lt;/p&gt;"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * </ul>
@@ -353,7 +353,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nowrap.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * </ul>
@@ -370,7 +370,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.script.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
@@ -414,7 +414,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.style.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
@@ -459,7 +459,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.stylesheet.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
@@ -616,10 +616,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @param accept
 	 * 	The accept media types that the serializer can handle.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of
 	 * 	{@doc RFC2616.section14.1}
 	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:

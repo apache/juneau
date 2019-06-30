@@ -97,7 +97,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Converted to a String using <code>toString()</code>.
+	 * 	<br>Converted to a String using <c>toString()</c>.
 	 * 	<br>Ignored if value is <jk>null</jk> or blank.
 	 * @return This object (for method chaining).
 	 */
@@ -332,9 +332,9 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
 	 * 	<li>
-	 * 		<code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * 		<c>Maps</c> must be followed by zero or two parameters representing the key and value types.
 	 * 	<li>
 	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
 	 * </ul>
@@ -446,7 +446,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the <code>Accept</code> header on the request.
+	 * Returns the <c>Accept</c> header on the request.
 	 *
 	 * <p>
 	 * Content-Types that are acceptable for the response.
@@ -456,14 +456,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Accept: text/plain
 	 * </p>
 	 *
-	 * @return The parsed <code>Accept</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Accept</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Accept getAccept() {
 		return Accept.forString(getString("Accept"));
 	}
 
 	/**
-	 * Returns the <code>Accept-Charset</code> header on the request.
+	 * Returns the <c>Accept-Charset</c> header on the request.
 	 *
 	 * <p>
 	 * Character sets that are acceptable.
@@ -473,14 +473,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Accept-Charset: utf-8
 	 * </p>
 	 *
-	 * @return The parsed <code>Accept-Charset</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Accept-Charset</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public AcceptCharset getAcceptCharset() {
 		return AcceptCharset.forString(getString("Accept-Charset"));
 	}
 
 	/**
-	 * Returns the <code>Accept-Encoding</code> header on the request.
+	 * Returns the <c>Accept-Encoding</c> header on the request.
 	 *
 	 * <p>
 	 * List of acceptable encodings.
@@ -490,14 +490,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Accept-Encoding: gzip, deflate
 	 * </p>
 	 *
-	 * @return The parsed <code>Accept-Encoding</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Accept-Encoding</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public AcceptEncoding getAcceptEncoding() {
 		return AcceptEncoding.forString(getString("Accept-Encoding"));
 	}
 
 	/**
-	 * Returns the <code>Accept-Language</code> header on the request.
+	 * Returns the <c>Accept-Language</c> header on the request.
 	 *
 	 * <p>
 	 * List of acceptable human languages for response.
@@ -507,14 +507,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Accept-Language: en-US
 	 * </p>
 	 *
-	 * @return The parsed <code>Accept-Language</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Accept-Language</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public AcceptLanguage getAcceptLanguage() {
 		return AcceptLanguage.forString(getString("Accept-Language"));
 	}
 
 	/**
-	 * Returns the <code>Authorization</code> header on the request.
+	 * Returns the <c>Authorization</c> header on the request.
 	 *
 	 * <p>
 	 * Authentication credentials for HTTP authentication.
@@ -524,14 +524,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
 	 * </p>
 	 *
-	 * @return The parsed <code>Authorization</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Authorization</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Authorization getAuthorization() {
 		return Authorization.forString(getString("Authorization"));
 	}
 
 	/**
-	 * Returns the <code>Cache-Control</code> header on the request.
+	 * Returns the <c>Cache-Control</c> header on the request.
 	 *
 	 * <p>
 	 * Used to specify directives that must be obeyed by all caching mechanisms along the request-response chain.
@@ -541,14 +541,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Cache-Control: no-cache
 	 * </p>
 	 *
-	 * @return The parsed <code>Cache-Control</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Cache-Control</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public CacheControl getCacheControl() {
 		return CacheControl.forString(getString("Cache-Control"));
 	}
 
 	/**
-	 * Returns the <code>Connection</code> header on the request.
+	 * Returns the <c>Connection</c> header on the request.
 	 *
 	 * <p>
 	 * Control options for the current connection and list of hop-by-hop request fields.
@@ -566,7 +566,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the <code>Content-Length</code> header on the request.
+	 * Returns the <c>Content-Length</c> header on the request.
 	 *
 	 * <p>
 	 * The length of the request body in octets (8-bit bytes).
@@ -576,14 +576,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Content-Length: 348
 	 * </p>
 	 *
-	 * @return The parsed <code>Content-Length</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Content-Length</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public ContentLength getContentLength() {
 		return ContentLength.forString(getString("Content-Length"));
 	}
 
 	/**
-	 * Returns the <code>Content-Type</code> header on the request.
+	 * Returns the <c>Content-Type</c> header on the request.
 	 *
 	 * <p>
 	 * The MIME type of the body of the request (used with POST and PUT requests).
@@ -593,14 +593,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Content-Type: application/x-www-form-urlencoded
 	 * </p>
 	 *
-	 * @return The parsed <code>Content-Type</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Content-Type</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public ContentType getContentType() {
 		return ContentType.forString(getString("Content-Type"));
 	}
 
 	/**
-	 * Returns the <code>Date</code> header on the request.
+	 * Returns the <c>Date</c> header on the request.
 	 *
 	 * <p>
 	 * The date and time that the message was originated (in "HTTP-date" format as defined by RFC 7231 Date/Time Formats).
@@ -610,14 +610,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Date: Tue, 15 Nov 1994 08:12:31 GMT
 	 * </p>
 	 *
-	 * @return The parsed <code>Date</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Date</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Date getDate() {
 		return Date.forString(getString("Date"));
 	}
 
 	/**
-	 * Returns the <code>Expect</code> header on the request.
+	 * Returns the <c>Expect</c> header on the request.
 	 *
 	 * <p>
 	 * Indicates that particular server behaviors are required by the client.
@@ -627,14 +627,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Expect: 100-continue
 	 * </p>
 	 *
-	 * @return The parsed <code>Expect</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Expect</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Expect getExpect() {
 		return Expect.forString(getString("Expect"));
 	}
 
 	/**
-	 * Returns the <code>From</code> header on the request.
+	 * Returns the <c>From</c> header on the request.
 	 *
 	 * <p>
 	 * The email address of the user making the request.
@@ -644,14 +644,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	From: user@example.com
 	 * </p>
 	 *
-	 * @return The parsed <code>From</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>From</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public From getFrom() {
 		return From.forString(getString("From"));
 	}
 
 	/**
-	 * Returns the <code>Host</code> header on the request.
+	 * Returns the <c>Host</c> header on the request.
 	 *
 	 * <p>
 	 * The domain name of the server (for virtual hosting), and the TCP port number on which the server is listening.
@@ -663,14 +663,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Host: en.wikipedia.org
 	 * </p>
 	 *
-	 * @return The parsed <code>Host</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Host</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Host getHost() {
 		return Host.forString(getString("Host"));
 	}
 
 	/**
-	 * Returns the <code>If-Match</code> header on the request.
+	 * Returns the <c>If-Match</c> header on the request.
 	 *
 	 * <p>
 	 * Only perform the action if the client supplied entity matches the same entity on the server.
@@ -682,14 +682,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	If-Match: "737060cd8c284d8af7ad3082f209582d"
 	 * </p>
 	 *
-	 * @return The parsed <code>If-Match</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>If-Match</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public IfMatch getIfMatch() {
 		return IfMatch.forString(getString("If-Match"));
 	}
 
 	/**
-	 * Returns the <code>If-Modified-Since</code> header on the request.
+	 * Returns the <c>If-Modified-Since</c> header on the request.
 	 *
 	 * <p>
 	 * Allows a 304 Not Modified to be returned if content is unchanged.
@@ -699,14 +699,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
 	 * </p>
 	 *
-	 * @return The parsed <code>If-Modified-Since</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>If-Modified-Since</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public IfModifiedSince getIfModifiedSince() {
 		return IfModifiedSince.forString(getString("If-Modified-Since"));
 	}
 
 	/**
-	 * Returns the <code>If-None-Match</code> header on the request.
+	 * Returns the <c>If-None-Match</c> header on the request.
 	 *
 	 * <p>
 	 * Allows a 304 Not Modified to be returned if content is unchanged, see HTTP ETag.
@@ -716,14 +716,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	If-None-Match: "737060cd8c284d8af7ad3082f209582d"
 	 * </p>
 	 *
-	 * @return The parsed <code>If-None-Match</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>If-None-Match</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public IfNoneMatch getIfNoneMatch() {
 		return IfNoneMatch.forString(getString("If-None-Match"));
 	}
 
 	/**
-	 * Returns the <code>If-Range</code> header on the request.
+	 * Returns the <c>If-Range</c> header on the request.
 	 *
 	 * <p>
 	 * If the entity is unchanged, send me the part(s) that I am missing; otherwise, send me the entire new entity.
@@ -733,14 +733,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	If-Range: "737060cd8c284d8af7ad3082f209582d"
 	 * </p>
 	 *
-	 * @return The parsed <code>If-Range</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>If-Range</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public IfRange getIfRange() {
 		return IfRange.forString(getString("If-Range"));
 	}
 
 	/**
-	 * Returns the <code>If-Unmodified-Since</code> header on the request.
+	 * Returns the <c>If-Unmodified-Since</c> header on the request.
 	 *
 	 * <p>
 	 * Only send the response if the entity has not been modified since a specific time.
@@ -750,14 +750,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT
 	 * </p>
 	 *
-	 * @return The parsed <code>If-Unmodified-Since</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>If-Unmodified-Since</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public IfUnmodifiedSince getIfUnmodifiedSince() {
 		return IfUnmodifiedSince.forString(getString("If-Unmodified-Since"));
 	}
 
 	/**
-	 * Returns the <code>Max-Forwards</code> header on the request.
+	 * Returns the <c>Max-Forwards</c> header on the request.
 	 *
 	 * <p>
 	 * Limit the number of times the message can be forwarded through proxies or gateways.
@@ -767,14 +767,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Max-Forwards: 10
 	 * </p>
 	 *
-	 * @return The parsed <code>Max-Forwards</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Max-Forwards</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public MaxForwards getMaxForwards() {
 		return MaxForwards.forString(getString("Max-Forwards"));
 	}
 
 	/**
-	 * Returns the <code>Pragma</code> header on the request.
+	 * Returns the <c>Pragma</c> header on the request.
 	 *
 	 * <p>
 	 * Implementation-specific fields that may have various effects anywhere along the request-response chain.
@@ -784,14 +784,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Pragma: no-cache
 	 * </p>
 	 *
-	 * @return The parsed <code>Pragma</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Pragma</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Pragma getPragma() {
 		return Pragma.forString(getString("Pragma"));
 	}
 
 	/**
-	 * Returns the <code>Proxy-Authorization</code> header on the request.
+	 * Returns the <c>Proxy-Authorization</c> header on the request.
 	 *
 	 * <p>
 	 * Authorization credentials for connecting to a proxy.
@@ -801,14 +801,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
 	 * </p>
 	 *
-	 * @return The parsed <code>Proxy-Authorization</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Proxy-Authorization</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public ProxyAuthorization getProxyAuthorization() {
 		return ProxyAuthorization.forString(getString("Proxy-Authorization"));
 	}
 
 	/**
-	 * Returns the <code>Range</code> header on the request.
+	 * Returns the <c>Range</c> header on the request.
 	 *
 	 * <p>
 	 * Request only part of an entity. Bytes are numbered from 0.
@@ -818,14 +818,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Range: bytes=500-999
 	 * </p>
 	 *
-	 * @return The parsed <code>Range</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Range</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Range getRange() {
 		return Range.forString(getString("Range"));
 	}
 
 	/**
-	 * Returns the <code>Referer</code> header on the request.
+	 * Returns the <c>Referer</c> header on the request.
 	 *
 	 * <p>
 	 * This is the address of the previous web page from which a link to the currently requested page was followed.
@@ -835,14 +835,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Referer: http://en.wikipedia.org/wiki/Main_Page
 	 * </p>
 	 *
-	 * @return The parsed <code>Referer</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Referer</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Referer getReferer() {
 		return Referer.forString(getString("Referer"));
 	}
 
 	/**
-	 * Returns the <code>TE</code> header on the request.
+	 * Returns the <c>TE</c> header on the request.
 	 *
 	 * <p>
 	 * The transfer encodings the user agent is willing to accept: the same values as for the response header field
@@ -854,19 +854,19 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	TE: trailers, deflate
 	 * </p>
 	 *
-	 * @return The parsed <code>TE</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>TE</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public TE getTE() {
 		return TE.forString(getString("TE"));
 	}
 
 	/**
-	 * Returns the <code>Time-Zone</code> header value on the request if there is one.
+	 * Returns the <c>Time-Zone</c> header value on the request if there is one.
 	 *
 	 * <p>
 	 * Example: <js>"GMT"</js>.
 	 *
-	 * @return The <code>Time-Zone</code> header value on the request, or <jk>null</jk> if not present.
+	 * @return The <c>Time-Zone</c> header value on the request, or <jk>null</jk> if not present.
 	 */
 	public TimeZone getTimeZone() {
 		String tz = getString("Time-Zone");
@@ -876,7 +876,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the <code>User-Agent</code> header on the request.
+	 * Returns the <c>User-Agent</c> header on the request.
 	 *
 	 * <p>
 	 * The user agent string of the user agent.
@@ -886,14 +886,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
 	 * </p>
 	 *
-	 * @return The parsed <code>User-Agent</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>User-Agent</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public UserAgent getUserAgent() {
 		return UserAgent.forString(getString("User-Agent"));
 	}
 
 	/**
-	 * Returns the <code>Upgrade</code> header on the request.
+	 * Returns the <c>Upgrade</c> header on the request.
 	 *
 	 * <p>
 	 * Ask the server to upgrade to another protocol.
@@ -903,14 +903,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Upgrade: HTTP/2.0, HTTPS/1.3, IRC/6.9, RTA/x11, websocket
 	 * </p>
 	 *
-	 * @return The parsed <code>Upgrade</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Upgrade</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Upgrade getUpgrade() {
 		return Upgrade.forString(getString("Upgrade"));
 	}
 
 	/**
-	 * Returns the <code>Via</code> header on the request.
+	 * Returns the <c>Via</c> header on the request.
 	 *
 	 * <p>
 	 * Informs the server of proxies through which the request was sent.
@@ -920,14 +920,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Via: 1.0 fred, 1.1 example.com (Apache/1.1)
 	 * </p>
 	 *
-	 * @return The parsed <code>Via</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Via</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Via getVia() {
 		return Via.forString(getString("Via"));
 	}
 
 	/**
-	 * Returns the <code>Warning</code> header on the request.
+	 * Returns the <c>Warning</c> header on the request.
 	 *
 	 * <p>
 	 * A general warning about possible problems with the entity body.
@@ -937,7 +937,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	Warning: 199 Miscellaneous warning
 	 * </p>
 	 *
-	 * @return The parsed <code>Warning</code> header on the request, or <jk>null</jk> if not found.
+	 * @return The parsed <c>Warning</c> header on the request, or <jk>null</jk> if not found.
 	 */
 	public Warning getWarning() {
 		return Warning.forString(getString("Warning"));

@@ -140,7 +140,7 @@ public final class ClassUtils {
 	 *
 	 * @param paramTypes The parameters types specified on a method.
 	 * @param argTypes The class types of the arguments being passed to the method.
-	 * @return The number of matching arguments, or <code>-1</code> a parameter was found that isn't in the list of args.
+	 * @return The number of matching arguments, or <c>-1</c> a parameter was found that isn't in the list of args.
 	 */
 	public static int fuzzyArgsMatch(Class<?>[] paramTypes, Class<?>... argTypes) {
 		int matches = 0;
@@ -163,7 +163,7 @@ public final class ClassUtils {
 	 *
 	 * @param paramTypes The parameters types specified on a method.
 	 * @param argTypes The class types of the arguments being passed to the method.
-	 * @return The number of matching arguments, or <code>-1</code> a parameter was found that isn't in the list of args.
+	 * @return The number of matching arguments, or <c>-1</c> a parameter was found that isn't in the list of args.
 	 */
 	public static int fuzzyArgsMatch(List<ClassInfo> paramTypes, Class<?>... argTypes) {
 		int matches = 0;
@@ -354,10 +354,10 @@ public final class ClassUtils {
 	 * <p>
 	 * Class must be one of the following:
 	 * <ul>
-	 * 	<li>Have a public constructor that takes in a single <code>String</code> argument.
-	 * 	<li>Have a static <code>fromString(String)</code> (or related) method.
+	 * 	<li>Have a public constructor that takes in a single <c>String</c> argument.
+	 * 	<li>Have a static <c>fromString(String)</c> (or related) method.
 	 * 		<br>See {@link ClassInfo#getFromStringMethod()} for the list of possible static method names.
-	 * 	<li>Be an <code>enum</code>.
+	 * 	<li>Be an <c>enum</c>.
 	 * </ul>
 	 *
 	 * @param c The class.
@@ -373,7 +373,7 @@ public final class ClassUtils {
 	 * Converts an object to a string.
 	 *
 	 * <p>
-	 * Normally, this is just going to call <code>toString()</code> on the object.
+	 * Normally, this is just going to call <c>toString()</c> on the object.
 	 * However, the {@link Locale} and {@link TimeZone} objects are treated special so that the returned value
 	 * works with the {@link #fromString(Class, String)} method.
 	 *
@@ -437,14 +437,14 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns the specified type as a <code>Class</code>.
+	 * Returns the specified type as a <c>Class</c>.
 	 *
 	 * <p>
-	 * If it's already a <code>Class</code>, it just does a cast.
-	 * <br>If it's a <code>ParameterizedType</code>, it returns the raw type.
+	 * If it's already a <c>Class</c>, it just does a cast.
+	 * <br>If it's a <c>ParameterizedType</c>, it returns the raw type.
 	 *
 	 * @param t The type to convert.
-	 * @return The type converted to a <code>Class</code>, or <jk>null</jk> if it could not be converted.
+	 * @return The type converted to a <c>Class</c>, or <jk>null</jk> if it could not be converted.
 	 */
 	public static Class<?> toClass(Type t) {
 		if (t instanceof Class)

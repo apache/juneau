@@ -62,7 +62,7 @@ public @interface RdfConfig {
 	 * 				Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when
 	 * 				created.
 	 * 				Default is the pretty writer but can be overridden with system property
-	 * 				<code>org.apache.jena.n3.N3JenaWriter.writer</code>.
+	 * 				<c>org.apache.jena.n3.N3JenaWriter.writer</c>.
 	 * 			<li>
 	 * 				<js>"N3-PP"</js> - Name of the N3 pretty writer.
 	 * 				The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding
@@ -127,7 +127,7 @@ public @interface RdfConfig {
 	String juneauBpNs() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <code>iri_rules</code>.
+	 * Configuration property:  RDF/XML property: <c>iri_rules</c>.
 	 *
 	 * <p>
 	 * Set the engine for checking and resolving.
@@ -162,7 +162,7 @@ public @interface RdfConfig {
 	String arp_iriRules() default "";
 
 	/**
-	 * Configuration property:  RDF/XML ARP property: <code>error-mode</code>.
+	 * Configuration property:  RDF/XML ARP property: <c>error-mode</c>.
 	 *
 	 * <p>
 	 * This allows a coarse-grained approach to control of error handling.
@@ -202,7 +202,7 @@ public @interface RdfConfig {
 	String arp_errorMode() default "";
 
 	/**
-	 * Configuration property:  RDF/XML ARP property: <code>embedding</code>.
+	 * Configuration property:  RDF/XML ARP property: <c>embedding</c>.
 	 *
 	 * <p>
 	 * Sets ARP to look for RDF embedded within an enclosing XML document.
@@ -225,7 +225,7 @@ public @interface RdfConfig {
 	String arp_embedding() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <code>xmlbase</code>.
+	 * Configuration property:  RDF/XML property: <c>xmlbase</c>.
 	 *
 	 * <p>
 	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
@@ -246,7 +246,7 @@ public @interface RdfConfig {
 	String rdfxml_xmlBase() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <code>longId</code>.
+	 * Configuration property:  RDF/XML property: <c>longId</c>.
 	 *
 	 * <p>
 	 * Whether to use long ID's for anon resources.
@@ -268,7 +268,7 @@ public @interface RdfConfig {
 	String rdfxml_longId() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <code>allowBadURIs</code>.
+	 * Configuration property:  RDF/XML property: <c>allowBadURIs</c>.
 	 *
 	 * <p>
 	 * URIs in the graph are, by default, checked prior to serialization.
@@ -289,7 +289,7 @@ public @interface RdfConfig {
 	String rdfxml_allowBadUris() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <code>relativeURIs</code>.
+	 * Configuration property:  RDF/XML property: <c>relativeURIs</c>.
 	 *
 	 * <p>
 	 * What sort of relative URIs should be used.
@@ -332,7 +332,7 @@ public @interface RdfConfig {
 	String rdfxml_relativeUris() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <code>showXmlDeclaration</code>.
+	 * Configuration property:  RDF/XML property: <c>showXmlDeclaration</c>.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -344,8 +344,8 @@ public @interface RdfConfig {
 	 * 			<li>
 	 * 				<js>"false"</js> - Don't add XML Declaration to the output.
 	 * 			<li>
-	 * 				<js>"default"</js> - Only add an XML Declaration when asked to write to an <code>OutputStreamWriter</code>
-	 * 				that uses some encoding other than <code>UTF-8</code> or <code>UTF-16</code>.
+	 * 				<js>"default"</js> - Only add an XML Declaration when asked to write to an <c>OutputStreamWriter</c>
+	 * 				that uses some encoding other than <c>UTF-8</c> or <c>UTF-16</c>.
 	 * 				In this case the encoding is shown in the XML declaration.
 	 * 		</ul>
 	 * 	<li>
@@ -362,11 +362,11 @@ public @interface RdfConfig {
 	String rdfxml_showXmlDeclaration() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <code>showDoctypeDeclaration</code>.
+	 * Configuration property:  RDF/XML property: <c>showDoctypeDeclaration</c>.
 	 *
 	 * <p>
 	 * If true, an XML doctype declaration is included in the output.
-	 * <br>This declaration includes a <code>!ENTITY</code> declaration for each prefix mapping in the model, and any
+	 * <br>This declaration includes a <c>!ENTITY</c> declaration for each prefix mapping in the model, and any
 	 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
 	 * invocation.
 	 *
@@ -386,7 +386,7 @@ public @interface RdfConfig {
 	String rdfxml_showDoctypeDeclaration() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <code>tab</code>.
+	 * Configuration property:  RDF/XML property: <c>tab</c>.
 	 *
 	 * <p>
 	 * The number of spaces with which to indent XML child elements.
@@ -407,7 +407,7 @@ public @interface RdfConfig {
 	String rdfxml_tab() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <code>attributeQuoteChar</code>.
+	 * Configuration property:  RDF/XML property: <c>attributeQuoteChar</c>.
 	 *
 	 * <p>
 	 * The XML attribute quote character.
@@ -428,10 +428,10 @@ public @interface RdfConfig {
 	String rdfxml_attributeQuoteChar() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <code>blockRules</code>.
+	 * Configuration property:  RDF/XML property: <c>blockRules</c>.
 	 *
 	 * <p>
-	 * A list of <code>Resource</code> or a <code>String</code> being a comma separated list of fragment IDs from
+	 * A list of <c>Resource</c> or a <c>String</c> being a comma separated list of fragment IDs from
 	 * {@doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
 	 * rules that will not be used.
 	 *
@@ -451,7 +451,7 @@ public @interface RdfConfig {
 	String rdfxml_blockRules() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <code>minGap</code>.
+	 * Configuration property:  N3/Turtle property: <c>minGap</c>.
 	 *
 	 * <p>
 	 * Minimum gap between items on a line.
@@ -472,7 +472,7 @@ public @interface RdfConfig {
 	String n3_minGap() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <code>objectLists</code>.
+	 * Configuration property:  N3/Turtle property: <c>objectLists</c>.
 	 *
 	 * <p>
 	 * Print object lists as comma separated lists.
@@ -493,7 +493,7 @@ public @interface RdfConfig {
 	String n3_objectLists() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <code>subjectColumn</code>.
+	 * Configuration property:  N3/Turtle property: <c>subjectColumn</c>.
 	 *
 	 * <p>
 	 * If the subject is shorter than this value, the first property may go on the same line.
@@ -514,7 +514,7 @@ public @interface RdfConfig {
 	String n3_subjectColumn() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <code>propertyColumn</code>.
+	 * Configuration property:  N3/Turtle property: <c>propertyColumn</c>.
 	 *
 	 * <p>
 	 * Width of the property column.
@@ -535,7 +535,7 @@ public @interface RdfConfig {
 	String n3_propertyColumn() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <code>indentProperty</code>.
+	 * Configuration property:  N3/Turtle property: <c>indentProperty</c>.
 	 *
 	 * <p>
 	 * Width to indent properties.
@@ -556,11 +556,11 @@ public @interface RdfConfig {
 	String n3_indentProperty() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <code>widePropertyLen</code>.
+	 * Configuration property:  N3/Turtle property: <c>widePropertyLen</c>.
 	 *
 	 * <p>
 	 * Width of the property column.
-	 * <br>Must be longer than <code>propertyColumn</code>.
+	 * <br>Must be longer than <c>propertyColumn</c>.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -578,10 +578,10 @@ public @interface RdfConfig {
 	String n3_widePropertyLen() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <code>abbrevBaseURI</code>.
+	 * Configuration property:  N3/Turtle property: <c>abbrevBaseURI</c>.
 	 *
 	 * <p>
-	 * Control whether to use abbreviations <code>&lt;&gt;</code> or <code>&lt;#&gt;</code>.
+	 * Control whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -599,10 +599,10 @@ public @interface RdfConfig {
 	String n3_abbrevBaseUri() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <code>usePropertySymbols</code>.
+	 * Configuration property:  N3/Turtle property: <c>usePropertySymbols</c>.
 	 *
 	 * <p>
-	 * Control whether to use <code>a</code>, <code>=</code> and <code>=&gt;</code> in output
+	 * Control whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -620,10 +620,10 @@ public @interface RdfConfig {
 	String n3_usePropertySymbols() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <code>useTripleQuotedStrings</code>.
+	 * Configuration property:  N3/Turtle property: <c>useTripleQuotedStrings</c>.
 	 *
 	 * <p>
-	 * Allow the use of <code>"""</code> to delimit long strings.
+	 * Allow the use of <c>"""</c> to delimit long strings.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -641,10 +641,10 @@ public @interface RdfConfig {
 	String n3_useTripleQuotedStrings() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <code>useDoubles</code>.
+	 * Configuration property:  N3/Turtle property: <c>useDoubles</c>.
 	 *
 	 * <p>
-	 * Allow the use doubles as <code>123.456</code>.
+	 * Allow the use doubles as <c>123.456</c>.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -782,7 +782,7 @@ public @interface RdfConfig {
 	String addBeanTypes() default "";
 
 	/**
-	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
+	 * Configuration property:  Add XSI data types to non-<c>String</c> literals.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -803,7 +803,7 @@ public @interface RdfConfig {
 	 * Configuration property:  Add RDF root identifier property to root node.
 	 *
 	 * <p>
-	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
+	 * When enabled an RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
 	 * to identify the root node in the graph.
 	 * <br>This helps locate the root node during parsing.
 	 *

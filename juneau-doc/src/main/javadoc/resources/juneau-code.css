@@ -50,6 +50,9 @@
  * 	<cs> - Config file section
  * 	<ck> - Config file key
  * 	<cv> - Config file value
+ * 	<c> - Synonym for <code>
+ * 	<dc> - Synonym for <code><del>
+ * 	<bc> - <code><b>
  ***************************************************************************************************************************/
 
 /* Monospaced font size */
@@ -59,13 +62,24 @@
 jc,jd,jt,jk,js,jf,jsf,jsm,ja, 
 xt,xa,xc,xs,
 mc,mk,mv,
-cc,cs,ck,ce {
+cc,cs,ck,ce,
+c,dc,bc {
 	font-size: 9pt;
 	white-space: pre;
 	font-family: monospace;
 	tab-size: 3;
 	-moz-tab-size: 3;
 	-o-tab-size: 3;
+}
+
+/* Deleted code */
+dc {
+	text-decoration: line-through;
+}
+
+/* Bold code */
+bc {
+	font-weight: bold;
 }
 
 /*--- Bordered code ---*/

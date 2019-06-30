@@ -26,7 +26,7 @@
 	Unlike {@link oaj.http.annotation.HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
 	of URL-encoded form posts.
 	Therefore, this annotation can be used in conjunction with the {@link oaj.http.annotation.Body @Body} annotation or
-	{@link oajr.RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
+	{@link oajr.RestRequest#getBody()} method for <c>application/x-www-form-urlencoded POST</c> calls.
  </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -51,27 +51,27 @@
 </p>
 <table class='styled w400'>
 	<tr>
-		<th><code>Query content</code></th>
-		<th><code><ja>@HasQuery</ja>(<js>"a"</js>)</code></th>
-		<th><code><ja>@Query</ja>(<js>"a"</js>)</code></th>
+		<th><c>Query content</c></th>
+		<th><c><ja>@HasQuery</ja>(<js>"a"</js>)</c></th>
+		<th><c><ja>@Query</ja>(<js>"a"</js>)</c></th>
 	</tr>
 	<tr>
-		<td><code>?a=foo</code></td>
+		<td><c>?a=foo</c></td>
 		<td><jk>true</jk></td>
 		<td><js>"foo"</js></td>
 	</tr>
 	<tr>
-		<td><code>?a=</code></td>
+		<td><c>?a=</c></td>
 		<td><jk>true</jk></td>
 		<td><js>""</js></td>
 	</tr>
 	<tr>
-		<td><code>?a</code></td>
+		<td><c>?a</c></td>
 		<td><jk>true</jk></td>
 		<td><jk>null</jk></td>
 	</tr>
 	<tr>
-		<td><code>?b=foo</code></td>
+		<td><c>?b=foo</c></td>
 		<td><jk>false</jk></td>
 		<td><jk>null</jk></td>
 	</tr>

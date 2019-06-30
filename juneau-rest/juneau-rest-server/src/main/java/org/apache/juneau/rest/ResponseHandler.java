@@ -52,7 +52,7 @@ import org.apache.juneau.rest.reshandlers.*;
  * because it's simply easier to define response handlers for special cases.
  *
  * <p>
- * The following example shows how to create a response handler to handle special <code>Foo</code> objects outside the
+ * The following example shows how to create a response handler to handle special <c>Foo</c> objects outside the
  * normal Juneau architecture.
  * <p class='bcode w800'>
  * 	<ja>@RestResource</ja>(

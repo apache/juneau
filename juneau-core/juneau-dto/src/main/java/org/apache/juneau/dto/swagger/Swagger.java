@@ -200,7 +200,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -250,7 +250,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link Info}
-	 * 		<li><code>String</code> - JSON object representation of {@link Info}
+	 * 		<li><c>String</c> - JSON object representation of {@link Info}
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	info(<js>"{title:'title',description:'description',...}"</js>);
@@ -300,7 +300,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>This MUST be the host only and does not include the scheme nor sub-paths.
 	 * 	<br>It MAY include a port.
 	 * 	<br>If the host is not included, the host serving the documentation is to be used (including the port).
@@ -316,7 +316,7 @@ public class Swagger extends SwaggerElement {
 	 * Bean property getter:  <property>basePath</property>.
 	 *
 	 * <p>
-	 * The base path on which the API is served, which is relative to the <code>host</code>.
+	 * The base path on which the API is served, which is relative to the <c>host</c>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -328,13 +328,13 @@ public class Swagger extends SwaggerElement {
 	 * Bean property setter:  <property>basePath</property>.
 	 *
 	 * <p>
-	 * The base path on which the API is served, which is relative to the <code>host</code>.
+	 * The base path on which the API is served, which is relative to the <c>host</c>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>If it is not included, the API is served directly under the <code>host</code>.
+	 * 	<br>If it is not included, the API is served directly under the <c>host</c>.
 	 * 	<br>The value MUST start with a leading slash (/).
-	 * 	<br>The <code>basePath</code> does not support {@doc SwaggerPathTemplating path templating}.
+	 * 	<br>The <c>basePath</c> does not support {@doc SwaggerPathTemplating path templating}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -348,10 +348,10 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>If it is not included, the API is served directly under the <code>host</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
+	 * 	<br>If it is not included, the API is served directly under the <c>host</c>.
 	 * 	<br>The value MUST start with a leading slash (/).
-	 * 	<br>The <code>basePath</code> does not support {@doc SwaggerPathTemplating path templating}.
+	 * 	<br>The <c>basePath</c> does not support {@doc SwaggerPathTemplating path templating}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -366,7 +366,7 @@ public class Swagger extends SwaggerElement {
 	 * The transfer protocol of the API.
 	 *
 	 * <p>
-	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
+	 * If the <c>schemes</c> is not included, the default scheme to be used is the one used to access the Swagger
 	 * definition itself.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -382,7 +382,7 @@ public class Swagger extends SwaggerElement {
 	 * The transfer protocol of the API.
 	 *
 	 * <p>
-	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
+	 * If the <c>schemes</c> is not included, the default scheme to be used is the one used to access the Swagger
 	 * definition itself.
 	 *
 	 * @param value
@@ -410,7 +410,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * <p>
 	 * Values MUST be from the list:  <js>"http"</js>, <js>"https"</js>, <js>"ws"</js>, <js>"wss"</js>.
-	 * If the <code>schemes</code> is not included, the default scheme to be used is the one used to access the Swagger
+	 * If the <c>schemes</c> is not included, the default scheme to be used is the one used to access the Swagger
 	 * definition itself.
 	 *
 	 * @param values
@@ -437,13 +437,13 @@ public class Swagger extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Collection&lt;String&gt;</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;String&gt;</code>
+	 * 		<li><c>Collection&lt;String&gt;</c>
+	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;String&gt;</c>
 	 * 		<h5 class='figure'>Example:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	schemes(<js>"['scheme1','scheme2']"</js>);
 	 * 		</p>
-	 * 		<li><code>String</code> - Individual values
+	 * 		<li><c>String</c> - Individual values
 	 * 		<h5 class='figure'>Example:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	schemes(<js>"scheme1"</js>, <js>"scheme2"</js>);
@@ -496,7 +496,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * <p>
 	 * A list of MIME types the operation can consume.
-	 * This overrides the <code>consumes</code> definition at the Swagger Object.
+	 * This overrides the <c>consumes</c> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
 	 * Value MUST be as described under {@doc SwaggerMimeTypes}.
 	 *
@@ -519,13 +519,13 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link MediaType}
-	 * 		<li><code>Collection&lt;{@link MediaType}|String&gt;</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;{@link MediaType}&gt;</code>
+	 * 		<li><c>Collection&lt;{@link MediaType}|String&gt;</c>
+	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link MediaType}&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	consumes(<js>"['text/json']"</js>);
 	 * 			</p>
-	 * 		<li><code>String</code> - Individual values
+	 * 		<li><c>String</c> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	consumes(<js>"text/json"</js>);
@@ -602,13 +602,13 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link MediaType}
-	 * 		<li><code>Collection&lt;{@link MediaType}|String&gt;</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;{@link MediaType}&gt;</code>
+	 * 		<li><c>Collection&lt;{@link MediaType}|String&gt;</c>
+	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link MediaType}&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	consumes(<js>"['text/json']"</js>);
 	 * 			</p>
-	 * 		<li><code>String</code> - Individual values
+	 * 		<li><c>String</c> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	consumes(<js>"text/json"</js>);
@@ -635,7 +635,7 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
-	 * Shortcut for calling <code>getPaths().get(path);</code>
+	 * Shortcut for calling <c>getPaths().get(path);</c>
 	 *
 	 * @param path The path (e.g. <js>"/foo"</js>).
 	 * @return The operation map for the specified path, or <jk>null</jk> if it doesn't exist.
@@ -645,7 +645,7 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
-	 * Shortcut for calling <code>getPaths().get(path).get(operation);</code>
+	 * Shortcut for calling <c>getPaths().get(path).get(operation);</c>
 	 *
 	 * @param path The path (e.g. <js>"/foo"</js>).
 	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
@@ -659,7 +659,7 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
-	 * Shortcut for calling <code>getPaths().get(path).get(operation).getResponse(status);</code>
+	 * Shortcut for calling <c>getPaths().get(path).get(operation).getResponse(status);</c>
 	 *
 	 * @param path The path (e.g. <js>"/foo"</js>).
 	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
@@ -738,8 +738,8 @@ public class Swagger extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Map&lt;String,Map&lt;String,{@link Operation}&gt;|String&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Map&lt;String,{@link Operation}&gt;&gt;</code>
+	 * 		<li><c>Map&lt;String,Map&lt;String,{@link Operation}&gt;|String&gt;</c>
+	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,Map&lt;String,{@link Operation}&gt;&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	paths(<js>"{'foo':{'get':{operationId:'operationId',...}}}"</js>);
@@ -819,8 +819,8 @@ public class Swagger extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Map&lt;String,Map&lt;String,{@link SchemaInfo}&gt;|String&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Map&lt;String,{@link SchemaInfo}&gt;&gt;</code>
+	 * 		<li><c>Map&lt;String,Map&lt;String,{@link SchemaInfo}&gt;|String&gt;</c>
+	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,Map&lt;String,{@link SchemaInfo}&gt;&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	definitions(<js>"{'foo':{'bar':{format:'format',...}}}"</js>);
@@ -915,8 +915,8 @@ public class Swagger extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Map&lt;String,{@link ParameterInfo}|String&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,{@link ParameterInfo}&gt;</code>
+	 * 		<li><c>Map&lt;String,{@link ParameterInfo}|String&gt;</c>
+	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link ParameterInfo}&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	parameters(<js>"{'foo':{name:'name',...}}"</js>);
@@ -931,7 +931,7 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
-	 * Convenience method for calling <code>getPath(path).get(method).getParameter(in,name);</code>
+	 * Convenience method for calling <c>getPath(path).get(method).getParameter(in,name);</c>
 	 *
 	 * @param path The HTTP path.
 	 * @param method The HTTP method.
@@ -1022,8 +1022,8 @@ public class Swagger extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Map&lt;String,{@link ResponseInfo}|String&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,{@link ResponseInfo}&gt;</code>
+	 * 		<li><c>Map&lt;String,{@link ResponseInfo}|String&gt;</c>
+	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link ResponseInfo}&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	responses(<js>"{'foo':{description:'description',...}}"</js>);
@@ -1100,8 +1100,8 @@ public class Swagger extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Map&lt;String,{@link SecurityScheme}|String&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,{@link SecurityScheme}&gt;</code>
+	 * 		<li><c>Map&lt;String,{@link SecurityScheme}|String&gt;</c>
+	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link SecurityScheme}&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	securityDefinitions(<js>"{'foo':{name:'name',...}}"</js>);
@@ -1196,13 +1196,13 @@ public class Swagger extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt;</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt;</code>
+	 * 		<li><c>Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt;</c>
+	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	securities(<js>"[{...}]"</js>);
 	 * 			</p>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,List&lt;String&gt;&gt;</code>
+	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,List&lt;String&gt;&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	securities(<js>"{...}"</js>);
@@ -1278,14 +1278,14 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link Tag}
-	 * 		<li><code>Collection&lt;{@link Tag}|String&gt;</code>
-	 * 		<li><code>{@link Tag}[]</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;{@link Tag}&gt;</code>
+	 * 		<li><c>Collection&lt;{@link Tag}|String&gt;</c>
+	 * 		<li><c>{@link Tag}[]</c>
+	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link Tag}&gt;</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	tags(<js>"[{name:'name',description:'description',...}]"</js>);
 	 * 			</p>
-	 * 		<li><code>String</code> - JSON object representation of <code>{@link Tag}</code>
+	 * 		<li><c>String</c> - JSON object representation of <c>{@link Tag}</c>
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	tags(<js>"{name:'name',description:'description',...}"</js>);
@@ -1344,7 +1344,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link ExternalDocumentation}
-	 * 		<li><code>String</code> - JSON object representation of {@link ExternalDocumentation}
+	 * 		<li><c>String</c> - JSON object representation of {@link ExternalDocumentation}
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);

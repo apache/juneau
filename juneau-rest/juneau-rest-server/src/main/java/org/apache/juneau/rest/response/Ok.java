@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.Ok.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 200 OK</code> response.
+ * Represents an <c>HTTP 200 OK</c> response.
  *
  * <p>
  * Standard response for successful HTTP requests. The actual response will depend on the request method used.

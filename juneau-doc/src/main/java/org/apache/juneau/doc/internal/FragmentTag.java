@@ -20,7 +20,7 @@ import java.io.*;
 import java.util.Map;
 
 /**
- * Implements the <code>{@fragment name}</code> tag that resolves to a fragment file located in the resources/fragments folder.
+ * Implements the <c>{@fragment name}</c> tag that resolves to a fragment file located in the resources/fragments folder.
  */
 public class FragmentTag implements Taglet {
 

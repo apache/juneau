@@ -16,8 +16,8 @@ package org.apache.juneau.dto.jsonschema;
  * Represents possible JSON types in the JSON-Schema core specification.
  *
  * <p>
- * Implements custom <code>toString()</code> and <code>fromString(String)</code> methods that override the default
- * serialization/parsing behavior of <code>Enum</code> types so that they are represented in lowercase form (as per the
+ * Implements custom <c>toString()</c> and <c>fromString(String)</c> methods that override the default
+ * serialization/parsing behavior of <c>Enum</c> types so that they are represented in lowercase form (as per the
  * specification).
  *
  * <h5 class='section'>Example:</h5>
@@ -72,10 +72,10 @@ public enum JsonType {
 	}
 
 	/**
-	 * Converts the specified lowercase form of the enum back into an <code>Enum</code>.
+	 * Converts the specified lowercase form of the enum back into an <c>Enum</c>.
 	 *
 	 * @param value The lowercase form of the enum (e.g. <js>"array"</js>).
-	 * @return The matching <code>Enum</code>, or <jk>null</jk> if no match found.
+	 * @return The matching <c>Enum</c>, or <jk>null</jk> if no match found.
 	 */
 	public static JsonType fromString(String value) {
 		if (value == null || value.length() < 4)

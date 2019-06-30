@@ -39,7 +39,7 @@ import org.apache.juneau.utils.*;
 public enum HookEvent {
 
 	/**
-	 * Identifies a method that should be called immediately after the <code>HttpServlet.service(HttpServletRequest, HttpServletResponse)</code>
+	 * Identifies a method that should be called immediately after the <c>HttpServlet.service(HttpServletRequest, HttpServletResponse)</c>
 	 * method is called.
 	 *
 	 * <p>
@@ -332,7 +332,7 @@ public enum HookEvent {
 	 * The only valid parameter type for this method is {@link RestContextBuilder} which can be used to configure the servlet.
 	 *
 	 * <p>
-	 * An example of this is the <code>PetStoreResource</code> class that uses an init method to perform initialization
+	 * An example of this is the <c>PetStoreResource</c> class that uses an init method to perform initialization
 	 * of an internal data structure.
 	 *
 	 * <h5 class='figure'>Example:</h5>
@@ -477,7 +477,7 @@ public enum HookEvent {
 	 * 		<br>The order of DESTROY method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li>
 	 * 		In general, destroy methods should not throw any exceptions, although if any are thrown, the stack trace will be
-	 * 		printed to <code>System.err</code>.
+	 * 		printed to <c>System.err</c>.
 	 * 	<li>
 	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
 	 * 		<br>The method is still considered part of the parent class for ordering purposes even though it's

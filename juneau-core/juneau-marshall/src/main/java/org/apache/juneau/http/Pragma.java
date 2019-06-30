@@ -69,10 +69,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Pragma extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Pragma</code> header.
+	 * Returns a parsed <c>Pragma</c> header.
 	 *
-	 * @param value The <code>Pragma</code> header string.
-	 * @return The parsed <code>Pragma</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Pragma</c> header string.
+	 * @return The parsed <c>Pragma</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Pragma forString(String value) {
 		if (value == null)

@@ -62,9 +62,9 @@ public final class RemoteMethodArg {
 	}
 
 	/**
-	 * Returns whether the <code>skipIfEmpty</code> flag was found in the schema.
+	 * Returns whether the <c>skipIfEmpty</c> flag was found in the schema.
 	 *
-	 * @return <jk>true</jk> if the <code>skipIfEmpty</code> flag was found in the schema.
+	 * @return <jk>true</jk> if the <c>skipIfEmpty</c> flag was found in the schema.
 	 */
 	public boolean isSkipIfEmpty() {
 		return skipIfEmpty;

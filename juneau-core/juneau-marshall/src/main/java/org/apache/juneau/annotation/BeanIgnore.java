@@ -22,7 +22,7 @@ import java.lang.annotation.*;
  *
  * <p>
  * Applied to classes that may look like beans, but you want to be treated as non-beans.
- * For example, if you want to force a bean to be converted to a string using the <code>toString()</code> method, use
+ * For example, if you want to force a bean to be converted to a string using the <c>toString()</c> method, use
  * this annotation on the class.
  *
  * <p>

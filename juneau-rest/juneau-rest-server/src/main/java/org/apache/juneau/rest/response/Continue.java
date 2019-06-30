@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.Continue.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 100 Continue</code> response.
+ * Represents an <c>HTTP 100 Continue</c> response.
  *
  * <p>
  * The server has received the request headers and the client should proceed to send the request body (in the case of a request for which a body needs to be sent; for example, a POST request).

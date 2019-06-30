@@ -22,9 +22,9 @@ import org.apache.juneau.xml.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Accept</code> types:  <code><b>text/xml+soap</b></code>
+ * Handles <c>Accept</c> types:  <bc>text/xml+soap</bc>
  * <p>
- * Produces <code>Content-Type</code> types:  <code><b>text/xml+soap</b></code>
+ * Produces <c>Content-Type</c> types:  <bc>text/xml+soap</bc>
  *
  * <h5 class='topic'>Description</h5>
  *
@@ -40,12 +40,12 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	static final String PREFIX = "SoapXmlSerializer";
 
 	/**
-	 * Configuration property:  The <code>SOAPAction</code> HTTP header value to set on responses.
+	 * Configuration property:  The <c>SOAPAction</c> HTTP header value to set on responses.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"SoapXmlSerializer.SOAPAction.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"http://www.w3.org/2003/05/soap-envelope"</js>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>

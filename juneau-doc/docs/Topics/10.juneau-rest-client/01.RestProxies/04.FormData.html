@@ -88,7 +88,7 @@
 <ul class='spaced-list'>
 	<li>
 		Any serializable POJO - Converted to a string using the {@link oaj.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> ({@link oaj.oapi.OpenApiSerializer} by default) or associated via the {@link oaj.http.annotation.FormData#serializer() @FormData(serializer)} annotation.
+		<c>RestClient</c> ({@link oaj.oapi.OpenApiSerializer} by default) or associated via the {@link oaj.http.annotation.FormData#serializer() @FormData(serializer)} annotation.
 </ul>
 <p>
 	Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
@@ -99,15 +99,15 @@
 	<li>
 		{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	<li>
-		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
+		<c>NameValuePairs</c> - Converted to a URL-encoded FORM post.
 	<li>
-		<code>Map</code> - Converted to key-value pairs.
+		<c>Map</c> - Converted to key-value pairs.
 			<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.oapi.OpenApiSerializer} by default).
 	<li>
 		Bean - Converted to key-value pairs.
 			<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.oapi.OpenApiSerializer} by default).
 	<li>
-		<code>CharSequence</code> - Used directly as am <js>"application/x-www-form-urlencoded"</js> entity.
+		<c>CharSequence</c> - Used directly as am <js>"application/x-www-form-urlencoded"</js> entity.
 </ul>
 <p>
 	See the link below for information about supported data types in OpenAPI serialization.

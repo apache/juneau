@@ -24,7 +24,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * Convenience class for constructing instances of <code>List&lt;NameValuePair&gt;</code> for the
+ * Convenience class for constructing instances of <c>List&lt;NameValuePair&gt;</c> for the
  * {@link UrlEncodedFormEntity} class.
  *
  * <p>
@@ -58,7 +58,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 * Appends the specified name/value pair to the end of this list.
 	 *
 	 * <p>
-	 * The value is simply converted to a string using <code>toString()</code>, or <js>"null"</js> if <jk>null</jk>.
+	 * The value is simply converted to a string using <c>toString()</c>, or <js>"null"</js> if <jk>null</jk>.
 	 *
 	 * @param name The pair name.
 	 * @param value The pair value.

@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
  * This class is typically the parent class of all byte-based parsers.
  * It has 1 abstract method to implement...
  * <ul>
- * 	<li><code>parse(InputStream, ClassMeta, Parser)</code>
+ * 	<li><c>parse(InputStream, ClassMeta, Parser)</c>
  * </ul>
   */
 @ConfigurableContext

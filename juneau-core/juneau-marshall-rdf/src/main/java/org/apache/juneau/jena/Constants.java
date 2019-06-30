@@ -88,12 +88,12 @@ public final class Constants {
 	public static final String RDF_NIL = "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil";
 
 	/**
-	 * RDF resource that identifies a <code>Seq</code> value.
+	 * RDF resource that identifies a <c>Seq</c> value.
 	 */
 	public static final String RDF_SEQ = "http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq";
 
 	/**
-	 * RDF resource that identifies a <code>Bag</code> value.
+	 * RDF resource that identifies a <c>Bag</c> value.
 	 */
 	public static final String RDF_BAG = "http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag";
 }

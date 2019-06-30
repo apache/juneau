@@ -62,10 +62,10 @@ import org.apache.juneau.internal.*;
 public final class RetryAfter extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Retry-After</code> header.
+	 * Returns a parsed <c>Retry-After</c> header.
 	 *
-	 * @param value The <code>Retry-After</code> header string.
-	 * @return The parsed <code>Retry-After</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Retry-After</c> header string.
+	 * @return The parsed <c>Retry-After</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static RetryAfter forString(String value) {
 		if (value == null)
@@ -92,7 +92,7 @@ public final class RetryAfter extends HeaderString {
 	/**
 	 * Returns this header value as an integer.
 	 *
-	 * @return This header value as a integer, or <code>-1</code> if the value is not an integer.
+	 * @return This header value as a integer, or <c>-1</c> if the value is not an integer.
 	 */
 	public int asInt() {
 		char c0 = charAt(value, 0);

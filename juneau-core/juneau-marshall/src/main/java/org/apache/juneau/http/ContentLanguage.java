@@ -84,10 +84,10 @@ public final class ContentLanguage extends HeaderStringArray {
 	}
 
 	/**
-	 * Returns a parsed <code>Content-Language</code> header.
+	 * Returns a parsed <c>Content-Language</c> header.
 	 *
-	 * @param value The <code>Content-Language</code> header string.
-	 * @return The parsed <code>Content-Language</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Content-Language</c> header string.
+	 * @return The parsed <c>Content-Language</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static ContentLanguage forString(String value) {
 		if (value == null)

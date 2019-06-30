@@ -401,7 +401,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Whether to allow the value to be edited by the user.
 	 *
-	 * @param readonly If <jk>true</jk>, adds <code>readonly="readonly"</code>.
+	 * @param readonly If <jk>true</jk>, adds <c>readonly="readonly"</c>.
 	 * @return This object (for method chaining).
 	 */
 	public final Input readonly(boolean readonly) {

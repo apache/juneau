@@ -59,8 +59,8 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
-	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * <br>If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 * If <jk>false</jk>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
+	 * <br>If <jk>true</jk>, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

@@ -93,10 +93,10 @@ import org.apache.juneau.http.annotation.*;
 public final class IfMatch extends HeaderEntityValidatorArray {
 
 	/**
-	 * Returns a parsed <code>If-Match</code> header.
+	 * Returns a parsed <c>If-Match</c> header.
 	 *
-	 * @param value The <code>If-Match</code> header string.
-	 * @return The parsed <code>If-Match</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>If-Match</c> header string.
+	 * @return The parsed <c>If-Match</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static IfMatch forString(String value) {
 		if (value == null)

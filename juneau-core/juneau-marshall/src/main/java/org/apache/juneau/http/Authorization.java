@@ -74,10 +74,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Authorization extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Authorization</code> header.
+	 * Returns a parsed <c>Authorization</c> header.
 	 *
-	 * @param value The <code>Authorization</code> header string.
-	 * @return The parsed <code>Authorization</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Authorization</c> header string.
+	 * @return The parsed <c>Authorization</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Authorization forString(String value) {
 		if (value == null)

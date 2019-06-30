@@ -29,7 +29,7 @@ import org.apache.juneau.http.*;
  * Provides the following features:
  * <ul class='spaced-list'>
  * 	<li>
- * 		Finds serializers based on HTTP <code>Accept</code> header values.
+ * 		Finds serializers based on HTTP <c>Accept</c> header values.
  * 	<li>
  * 		Sets common properties on all serializers in a single method call.
  * 	<li>
@@ -38,7 +38,7 @@ import org.apache.juneau.http.*;
  *
  * <h5 class='topic'>Match ordering</h5>
  *
- * Serializers are matched against <code>Accept</code> strings in the order they exist in this group.
+ * Serializers are matched against <c>Accept</c> strings in the order they exist in this group.
  *
  * <p>
  * Adding new entries will cause the entries to be prepended to the group.
@@ -46,7 +46,7 @@ import org.apache.juneau.http.*;
  *
  * <p>
  * For example, calling <code>g.append(S1.<jk>class</jk>,S2.<jk>class</jk>).append(S3.<jk>class</jk>,S4.<jk>class</jk>)</code>
- * will result in the order <code>S3, S4, S1, S2</code>.
+ * will result in the order <c>S3, S4, S1, S2</c>.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -136,10 +136,10 @@ public final class SerializerGroup extends BeanTraverseContext {
 	}
 
 	/**
-	 * Searches the group for a serializer that can handle the specified <code>Accept</code> value.
+	 * Searches the group for a serializer that can handle the specified <c>Accept</c> value.
 	 *
 	 * <p>
-	 * The <code>accept</code> value complies with the syntax described in RFC2616, Section 14.1, as described below:
+	 * The <c>accept</c> value complies with the syntax described in RFC2616, Section 14.1, as described below:
 	 * <p class='bcode w800'>
 	 * 	Accept         = "Accept" ":"
 	 * 	                  #( media-range [ accept-params ] )

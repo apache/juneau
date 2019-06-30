@@ -165,7 +165,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -224,7 +224,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -236,7 +236,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>format</property>.
 	 *
 	 * <p>
-	 * The extending format for the previously mentioned <code>type</code>.
+	 * The extending format for the previously mentioned <c>type</c>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -253,7 +253,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property setter:  <property>format</property>.
 	 *
 	 * <p>
-	 * The extending format for the previously mentioned <code>type</code>.
+	 * The extending format for the previously mentioned <c>type</c>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
@@ -275,7 +275,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -303,7 +303,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
+	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -320,7 +320,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * 	<ul>
 	 * 		<li>{@link Items}
-	 * 		<li><code>String</code> - JSON object representation of {@link Items}
+	 * 		<li><c>String</c> - JSON object representation of {@link Items}
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
@@ -355,10 +355,10 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
 	 * 	<ul>
-	 * 		<li><js>"csv"</js> (default) - comma separated values <code>foo,bar</code>.
-	 * 		<li><js>"ssv"</js> - space separated values <code>foo bar</code>.
-	 * 		<li><js>"tsv"</js> - tab separated values <code>foo\tbar</code>.
-	 * 		<li><js>"pipes"</js> - pipe separated values <code>foo|bar</code>.
+	 * 		<li><js>"csv"</js> (default) - comma separated values <c>foo,bar</c>.
+	 * 		<li><js>"ssv"</js> - space separated values <c>foo bar</c>.
+	 * 		<li><js>"tsv"</js> - tab separated values <c>foo\tbar</c>.
+	 * 		<li><js>"pipes"</js> - pipe separated values <c>foo|bar</c>.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
@@ -377,7 +377,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -396,7 +396,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	<li>
 	 * 		<js>"default"</js> has no meaning for required items.
 	 * 	<li>
-	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the header.
+	 * 		Unlike JSON Schema this value MUST conform to the defined <c>type</c> for the header.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -421,7 +421,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	<li>
 	 * 		<js>"default"</js> has no meaning for required items.
 	 * 	<li>
-	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the header.
+	 * 		Unlike JSON Schema this value MUST conform to the defined <c>type</c> for the header.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -486,7 +486,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
+	 * 	<br>Non-Number values will be converted to Number using <c>toString()</c> then best number match.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -576,7 +576,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
+	 * 	<br>Non-Number values will be converted to Number using <c>toString()</c> then best number match.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -759,7 +759,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
+	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -954,14 +954,14 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	The values to add to this property.
 	 * 	<br>Valid types:
 	 * 	<ul>
-	 * 		<li><code>Object</code>
-	 * 		<li><code>Collection&lt;Object&gt;</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>.
+	 * 		<li><c>Object</c>
+	 * 		<li><c>Collection&lt;Object&gt;</c>
+	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;Object&gt;</c>.
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	_enum(<js>"['foo','bar']"</js>);
 	 * 			</p>
-	 * 		<li><code>String</code> - Individual values.
+	 * 		<li><c>String</c> - Individual values.
 	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
 	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
@@ -1012,7 +1012,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
+	 * 	<br>Non-Number values will be converted to Number using <c>toString()</c> then best number match.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -1196,7 +1196,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
 	 * @param maxDepth
 	 * 	The maximum depth to resolve references.
-	 * 	<br>After that level is reached, <code>$ref</code> references will be left alone.
+	 * 	<br>After that level is reached, <c>$ref</c> references will be left alone.
 	 * 	<br>Useful if you have very complex models and you don't want your swagger page to be overly-complex.
 	 * @return
 	 * 	This object with references resolved.

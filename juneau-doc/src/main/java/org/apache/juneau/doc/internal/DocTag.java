@@ -21,7 +21,7 @@ import java.io.*;
 import java.util.Map;
 
 /**
- * Implements the <code>{@doc link}</code> tag.
+ * Implements the <c>{@doc link}</c> tag.
  */
 public class DocTag implements Taglet {
 

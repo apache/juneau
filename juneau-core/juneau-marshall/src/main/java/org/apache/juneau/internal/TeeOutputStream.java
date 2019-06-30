@@ -68,7 +68,7 @@ public class TeeOutputStream extends OutputStream {
 	}
 
 	/**
-	 * Returns the output stream identified through the <code>id</code> parameter passed in through the
+	 * Returns the output stream identified through the <c>id</c> parameter passed in through the
 	 * {@link #add(String, OutputStream, boolean)} method.
 	 *
 	 * @param id The ID associated with the output stream.

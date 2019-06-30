@@ -30,11 +30,11 @@ import java.util.regex.*;
  * Uses three simple parameter for configuring log entry formats:
  * <ul class='spaced-list'>
  * 	<li>
- * 		<code>dateFormat</code> - A {@link SimpleDateFormat} string describing the format for dates.
+ * 		<c>dateFormat</c> - A {@link SimpleDateFormat} string describing the format for dates.
  * 	<li>
- * 		<code>format</code> - A string with <code>{...}</code> replacement variables representing predefined fields.
+ * 		<c>format</c> - A string with <c>{...}</c> replacement variables representing predefined fields.
  * 	<li>
- * 		<code>useStackTraceHashes</code> - A setting that causes duplicate stack traces to be replaced with 8-character
+ * 		<c>useStackTraceHashes</c> - A setting that causes duplicate stack traces to be replaced with 8-character
  * 		 hash strings.
  * </ul>
  *

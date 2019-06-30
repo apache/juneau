@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.*;
 public class IdGenerators {
 
 	/**
-	 * Creates an ID generator using {@link AtomicInteger} initialized to value <code>1</code>.
+	 * Creates an ID generator using {@link AtomicInteger} initialized to value <c>1</c>.
 	 *
 	 * @param initValue The initial value.
 	 * @return A new ID generator.
@@ -51,7 +51,7 @@ public class IdGenerators {
 	}
 
 	/**
-	 * Creates an ID generator using {@link AtomicLong} initialized to value <code>1</code>.
+	 * Creates an ID generator using {@link AtomicLong} initialized to value <c>1</c>.
 	 *
 	 * @param initValue The initial value.
 	 * @return A new ID generator.

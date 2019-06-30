@@ -73,42 +73,42 @@ import org.apache.juneau.transform.*;
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			<code>Collection</code> (e.g. <code>List</code>, <code>LinkedList</code>, <code>HashSet</code>, <code>ObjectList</code>)
+ * 			<c>Collection</c> (e.g. <c>List</c>, <c>LinkedList</c>, <c>HashSet</c>, <c>ObjectList</c>)
  * 		</td>
  * 		<td>
- * 			<code>Collection&lt;Object&gt;</code>
- * 			<br><code>Object[]</code>
+ * 			<c>Collection&lt;Object&gt;</c>
+ * 			<br><c>Object[]</c>
  * 		</td>
  * 		<td>
- * 			If <code>Collection</code> is not constructible, a <code>ObjectList</code> is created.
+ * 			If <c>Collection</c> is not constructible, a <c>ObjectList</c> is created.
  * 		</td>
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			<code>X[]</code> (array of any type X)
+ * 			<c>X[]</c> (array of any type X)
  * 		</td>
  * 		<td>
- * 			<code>List&lt;X&gt;</code>
+ * 			<c>List&lt;X&gt;</c>
  * 		</td>
  * 		<td>&nbsp;</td>
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			<code>X[][]</code> (multi-dimensional arrays)
+ * 			<c>X[][]</c> (multi-dimensional arrays)
  * 		</td>
  * 		<td>
- * 			<code>List&lt;List&lt;X&gt;&gt;</code>
- * 			<br><code>List&lt;X[]&gt;</code>
- * 			<br><code> List[]&lt;X&gt;</code>
+ * 			<c>List&lt;List&lt;X&gt;&gt;</c>
+ * 			<br><c>List&lt;X[]&gt;</c>
+ * 			<br><c> List[]&lt;X&gt;</c>
  * 		</td>
  * 		<td>&nbsp;</td>
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			<code>Enum</code>
+ * 			<c>Enum</c>
  * 		</td>
  * 		<td>
- * 			<code>String</code>
+ * 			<c>String</c>
  * 		</td>
  * 		<td>&nbsp;</td>
  * 	</tr>
@@ -117,13 +117,13 @@ import org.apache.juneau.transform.*;
  * 			Bean
  * 		</td>
  * 		<td>
- * 			<code>Map</code>
+ * 			<c>Map</c>
  * 		</td>
  * 		<td>&nbsp;</td>
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			<code>String</code>
+ * 			<c>String</c>
  * 		</td>
  * 		<td>
  * 			Anything
@@ -140,7 +140,7 @@ import org.apache.juneau.transform.*;
  * 			<br><code><jk>public</jk> T(String)</code>
  * 		</td>
  * 		<td>
- * 			<code>String</code>
+ * 			<c>String</c>
  * 		</td>
  * 		<td>
  * 			<br>
@@ -328,7 +328,7 @@ public final class ObjectUtils {
 	 * Returns the first non-zero value in the list of ints.
 	 *
 	 * @param ints The ints to check.
-	 * @return The first non-zero value, or <code>0</code> if they were all zero.
+	 * @return The first non-zero value, or <c>0</c> if they were all zero.
 	 */
 	public static int firstNonZero(int...ints) {
 		for (int i : ints)
@@ -360,8 +360,8 @@ public final class ObjectUtils {
 	 * @param o1 Object 1.
 	 * @param o2 Object 2.
 	 * @return
-	 * 	<code>-1</code>, <code>0</code>, or <code>1</code> if <code>o1</code> is less-than, equal, or greater-than <code>o2</code>.
-	 *	<br><code>0</code> if objects are not of the same type or do not implement the {@link Comparable} interface.
+	 * 	<c>-1</c>, <c>0</c>, or <c>1</c> if <c>o1</c> is less-than, equal, or greater-than <c>o2</c>.
+	 *	<br><c>0</c> if objects are not of the same type or do not implement the {@link Comparable} interface.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static int compare(Object o1, Object o2) {
@@ -385,8 +385,8 @@ public final class ObjectUtils {
 	 * @param i1 Integer #1
 	 * @param i2 Integer #2
 	 * @return
-	 * 	The value <code>0</code> if Integer #1 is equal to Integer #2; a value less than <code>0</code> if
-	 * 	Integer #1 numerically less than Integer #2; and a value greater than <code>0</code> if Integer #1 is
+	 * 	The value <c>0</c> if Integer #1 is equal to Integer #2; a value less than <c>0</c> if
+	 * 	Integer #1 numerically less than Integer #2; and a value greater than <c>0</c> if Integer #1 is
 	 * 	numerically greater than Integer #2 (signed comparison).
 	 */
 	public static final int compare(int i1, int i2) {

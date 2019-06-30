@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 301 Moved Permanently</code> response.
+ * Represents an <c>HTTP 301 Moved Permanently</c> response.
  *
  * <p>
  * This and all future requests should be directed to the given URI.
@@ -62,7 +62,7 @@ public class MovedPermanently extends HttpResponse {
 	/**
 	 * Constructor using custom message.
 	 * @param message Message to send as the response.
-	 * @param location <code>Location</code> header value.
+	 * @param location <c>Location</c> header value.
 	 */
 	public MovedPermanently(String message, URI location) {
 		super(message);
@@ -71,14 +71,14 @@ public class MovedPermanently extends HttpResponse {
 
 	/**
 	 * Constructor.
-	 * @param location <code>Location</code> header value.
+	 * @param location <c>Location</c> header value.
 	 */
 	public MovedPermanently(URI location) {
 		this(MESSAGE, location);
 	}
 
 	/**
-	 * @return <code>Location</code> header value.
+	 * @return <c>Location</c> header value.
 	 */
 	@ResponseHeader(name="Location", description="New location of resource.")
 	public URI getLocation() {

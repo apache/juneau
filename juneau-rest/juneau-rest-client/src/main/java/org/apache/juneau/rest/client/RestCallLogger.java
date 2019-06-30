@@ -37,7 +37,7 @@ public class RestCallLogger extends RestCallInterceptor {
 	/**
 	 * Default HTTP request logger.
 	 * <p>
-	 * Logs outgoing HTTP requests to the <code>org.apache.juneau.rest.client</code> logger at <jsf>WARNING</jsf> level.
+	 * Logs outgoing HTTP requests to the <c>org.apache.juneau.rest.client</c> logger at <jsf>WARNING</jsf> level.
 	 */
 	public static final RestCallLogger DEFAULT = new RestCallLogger(Level.WARNING, Logger.getLogger("org.apache.juneau.rest.client"));
 

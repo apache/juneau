@@ -13,7 +13,7 @@
 package org.apache.juneau.http;
 
 /**
- * Represents the possible values for a <code>Content-Encoding</code> header.
+ * Represents the possible values for a <c>Content-Encoding</c> header.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>

@@ -50,10 +50,10 @@ import org.apache.juneau.http.annotation.*;
 public final class WwwAuthenticate extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>WWW-Authenticate</code> header.
+	 * Returns a parsed <c>WWW-Authenticate</c> header.
 	 *
-	 * @param value The <code>WWW-Authenticate</code> header string.
-	 * @return The parsed <code>WWW-Authenticate</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>WWW-Authenticate</c> header string.
+	 * @return The parsed <c>WWW-Authenticate</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static WwwAuthenticate forString(String value) {
 		if (value == null)

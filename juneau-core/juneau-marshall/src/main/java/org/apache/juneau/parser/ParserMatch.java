@@ -15,7 +15,7 @@ package org.apache.juneau.parser;
 import org.apache.juneau.http.*;
 
 /**
- * Represents a parser and media type that matches an HTTP <code>Content-Type</code> header value.
+ * Represents a parser and media type that matches an HTTP <c>Content-Type</c> header value.
  */
 public final class ParserMatch {
 
@@ -34,7 +34,7 @@ public final class ParserMatch {
 	}
 
 	/**
-	 * Returns the media type of the parser that matched the HTTP <code>Content-Type</code> header value.
+	 * Returns the media type of the parser that matched the HTTP <c>Content-Type</c> header value.
 	 *
 	 * @return The media type of the match.
 	 */
@@ -43,7 +43,7 @@ public final class ParserMatch {
 	}
 
 	/**
-	 * Returns the parser that matched the HTTP <code>Content-Type</code> header value.
+	 * Returns the parser that matched the HTTP <c>Content-Type</c> header value.
 	 *
 	 * @return The parser of the match.
 	 */

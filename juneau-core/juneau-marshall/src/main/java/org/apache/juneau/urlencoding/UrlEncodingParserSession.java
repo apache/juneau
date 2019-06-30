@@ -360,8 +360,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 *
 	 * @see UrlEncodingParser#URLENC_expandedParams
 	 * @return
-	 * <jk>false</jk> if serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * <br><jk>true</jk> if serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 * <jk>false</jk> if serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
+	 * <br><jk>true</jk> if serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 	 */
 	protected final boolean isExpandedParams() {
 		return ctx.isExpandedParams();

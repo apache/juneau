@@ -99,7 +99,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default value is <code>5</code>.
+	 * 	<br>The default value is <c>5</c>.
 	 * @return This object (for method chaining).
 	 */
 	public ParserBuilder debugOutputLines(int value) {

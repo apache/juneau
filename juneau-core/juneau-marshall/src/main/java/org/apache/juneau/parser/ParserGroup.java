@@ -29,7 +29,7 @@ import org.apache.juneau.http.*;
  * Provides the following features:
  * <ul class='spaced-list'>
  * 	<li>
- * 		Finds parsers based on HTTP <code>Content-Type</code> header values.
+ * 		Finds parsers based on HTTP <c>Content-Type</c> header values.
  * 	<li>
  * 		Sets common properties on all parsers in a single method call.
  * 	<li>
@@ -40,7 +40,7 @@ import org.apache.juneau.http.*;
  *
  * <h5 class='topic'>Match ordering</h5>
  *
- * Parsers are matched against <code>Content-Type</code> strings in the order they exist in this group.
+ * Parsers are matched against <c>Content-Type</c> strings in the order they exist in this group.
  *
  * <p>
  * Adding new entries will cause the entries to be prepended to the group.
@@ -48,7 +48,7 @@ import org.apache.juneau.http.*;
  *
  * <p>
  * For example, calling <code>g.append(P1.<jk>class</jk>,P2.<jk>class</jk>).append(P3.<jk>class</jk>,P4.<jk>class</jk>)</code>
- * will result in the order <code>P3, P4, P1, P2</code>.
+ * will result in the order <c>P3, P4, P1, P2</c>.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>

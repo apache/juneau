@@ -48,7 +48,7 @@ import org.apache.juneau.oapi.*;
  * Unlike {@link FormData @FormData}, using this annotation does not result in the servlet reading the contents of
  * URL-encoded form posts.
  * Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation or
- * <code>RestRequest.getBody()</code> method for <code>application/x-www-form-urlencoded POST</code> calls.
+ * <c>RestRequest.getBody()</c> method for <c>application/x-www-form-urlencoded POST</c> calls.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -146,7 +146,7 @@ public @interface Query {
 	 * A blank value (the default) has the following behavior:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		If the data type is <code>NameValuePairs</code>, <code>Map</code>, or a bean,
+	 * 		If the data type is <c>NameValuePairs</c>, <c>Map</c>, or a bean,
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 	 *
 	 * 		<h5 class='figure'>Examples:</h5>
@@ -246,8 +246,8 @@ public @interface Query {
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -280,11 +280,11 @@ public @interface Query {
 	 * 	<li>
 	 * 		<js>"number"</js>
 	 * 		<br>Parameter must be a number primitive or number object.
-	 * 		<br>If parameter is <code>Object</code>, creates either a <code>Float</code> or <code>Double</code> depending on the size of the number.
+	 * 		<br>If parameter is <c>Object</c>, creates either a <c>Float</c> or <c>Double</c> depending on the size of the number.
 	 * 	<li>
 	 * 		<js>"integer"</js>
 	 * 		<br>Parameter must be a integer/long primitive or integer/long object.
-	 * 		<br>If parameter is <code>Object</code>, creates either a <code>Short</code>, <code>Integer</code>, or <code>Long</code> depending on the size of the number.
+	 * 		<br>If parameter is <c>Object</c>, creates either a <c>Short</c>, <c>Integer</c>, or <c>Long</c> depending on the size of the number.
 	 * 	<li>
 	 * 		<js>"boolean"</js>
 	 * 		<br>Parameter must be a boolean primitive or object.
@@ -292,11 +292,11 @@ public @interface Query {
 	 * 		<js>"array"</js>
 	 * 		<br>Parameter must be an array or collection.
 	 * 		<br>Elements must be strings or POJOs convertible from strings.
-	 * 		<br>If parameter is <code>Object</code>, creates an {@link ObjectList}.
+	 * 		<br>If parameter is <c>Object</c>, creates an {@link ObjectList}.
 	 * 	<li>
 	 * 		<js>"object"</js>
 	 * 		<br>Parameter must be a map or bean.
-	 * 		<br>If parameter is <code>Object</code>, creates an {@link ObjectMap}.
+	 * 		<br>If parameter is <c>Object</c>, creates an {@link ObjectMap}.
 	 * 		<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
 	 * 	<li>
 	 * 		<js>"file"</js>
@@ -416,8 +416,8 @@ public @interface Query {
 	 * Describes the type of items in the array.
 	 *
 	 * <p>
-	 * Required if <code>type</code> is <js>"array"</js>.
-	 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
+	 * Required if <c>type</c> is <js>"array"</js>.
+	 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -435,8 +435,8 @@ public @interface Query {
 	 * <mk>collectionFormat</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
-	 * Determines the format of the array if <code>type</code> <js>"array"</js> is used.
-	 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
+	 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
+	 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
 	 *
 	 * <br>Possible values are:
 	 * <ul class='spaced-list'>
@@ -518,8 +518,8 @@ public @interface Query {
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -544,12 +544,12 @@ public @interface Query {
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
-	 * <br>If <jk>true</jk>, must be accompanied with <code>maximum</code>.
+	 * <br>If <jk>true</jk>, must be accompanied with <c>maximum</c>.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -572,8 +572,8 @@ public @interface Query {
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -598,12 +598,12 @@ public @interface Query {
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
-	 * <br>If <jk>true</jk>, Must be accompanied with <code>minimum</code>.
+	 * <br>If <jk>true</jk>, Must be accompanied with <c>minimum</c>.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -623,12 +623,12 @@ public @interface Query {
 	 * <p>
 	 * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
 	 * <br>The length of a string instance is defined as the number of its characters as defined by <a href='https://tools.ietf.org/html/rfc4627'>RFC 4627</a>.
-	 * <br>The value <code>-1</code> is always ignored.
+	 * <br>The value <c>-1</c> is always ignored.
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
@@ -651,12 +651,12 @@ public @interface Query {
 	 * <p>
 	 * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
 	 * <br>The length of a string instance is defined as the number of its characters as defined by <a href='https://tools.ietf.org/html/rfc4627'>RFC 4627</a>.
-	 * <br>The value <code>-1</code> is always ignored.
+	 * <br>The value <c>-1</c> is always ignored.
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
@@ -681,8 +681,8 @@ public @interface Query {
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
@@ -707,8 +707,8 @@ public @interface Query {
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
@@ -733,8 +733,8 @@ public @interface Query {
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
@@ -759,8 +759,8 @@ public @interface Query {
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
 	 * If the parameter type is a subclass of {@link Set}, this validation is skipped (since a set can only contain unique items anyway).
@@ -789,8 +789,8 @@ public @interface Query {
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
 	 * The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array or comma-delimited list.
@@ -837,8 +837,8 @@ public @interface Query {
 	 *
 	 * <p>
 	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -863,7 +863,7 @@ public @interface Query {
 	 * A serialized example of the parameter.
 	 *
 	 * <p>
-	 * This attribute defines a representation of the value that is used by <code>BasicRestInfoProvider</code> to construct
+	 * This attribute defines a representation of the value that is used by <c>BasicRestInfoProvider</c> to construct
 	 * an example of parameter.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -988,7 +988,7 @@ public @interface Query {
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
 	 * 		<p class='bcode w800'>
 	 * 	<ja>@Query</ja>(api=<js>"{description: 'ID of order to fetch'}"</js>)

@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * REST methods on subclasses of {@link RestServlet} can throw this exception to trigger an HTTP status other than the
- * automatically-generated <code>404</code>, <code>405</code>, and <code>500</code> statuses.
+ * automatically-generated <c>404</c>, <c>405</c>, and <c>500</c> statuses.
  */
 public class RestException extends RuntimeException {
 
@@ -175,7 +175,7 @@ public class RestException extends RuntimeException {
 	 * Returns the number of times this exception occurred on this servlet.
 	 *
 	 * @return
-	 * 	The occurrence number if {@link RestResource#useStackTraceHashes() @RestResource(useStackTraceHashes)} is enabled, or <code>0</code> otherwise.
+	 * 	The occurrence number if {@link RestResource#useStackTraceHashes() @RestResource(useStackTraceHashes)} is enabled, or <c>0</c> otherwise.
 	 */
 	public int getOccurrence() {
 		return occurrence;

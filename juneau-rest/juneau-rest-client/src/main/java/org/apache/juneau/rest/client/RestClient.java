@@ -83,7 +83,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.debug.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -136,7 +136,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.executorServiceShutdownOnClose.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -156,7 +156,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.requestHeader.sms"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -202,7 +202,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.keepHttpClientOpen.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -285,7 +285,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.query.sms"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -305,8 +305,8 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.retries.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>1</code>
+	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Default:</b>  <c>1</c>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#retryable(int, int, RetryOn)}
@@ -315,7 +315,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * The number of retries to attempt when the connection cannot be made or a <code>&gt;400</code> response is received.
+	 * The number of retries to attempt when the connection cannot be made or a <c>&gt;400</c> response is received.
 	 */
 	public static final String RESTCLIENT_retries = PREFIX + "retries.i";
 
@@ -325,8 +325,8 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.retryInterval.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>-1</code>
+	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Default:</b>  <c>-1</c>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#retryable(int, int, RetryOn)}
@@ -336,7 +336,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The time in milliseconds between retry attempts.
-	 * <code>-1</code> means retry immediately.
+	 * <c>-1</c> means retry immediately.
 	 */
 	public static final String RESTCLIENT_retryInterval = PREFIX + "retryInterval.i";
 
@@ -346,7 +346,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.retryOn.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends {@link RetryOn}</code> or {@link RetryOn}
+	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends {@link RetryOn}</c> or {@link RetryOn}
 	 * 	<li><b>Default:</b>  {@link RetryOn#DEFAULT}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -366,7 +366,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.rootUri.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -544,7 +544,7 @@ public class RestClient extends BeanContext implements Closeable {
 	/**
 	 * Returns <jk>true</jk> if specified http method has content.
 	 * <p>
-	 * By default, anything not in this list can have content:  <code>GET, HEAD, DELETE, CONNECT, OPTIONS, TRACE</code>.
+	 * By default, anything not in this list can have content:  <c>GET, HEAD, DELETE, CONNECT, OPTIONS, TRACE</c>.
 	 *
 	 * @param httpMethod The HTTP method.  Must be upper-case.
 	 * @return <jk>true</jk> if specified http method has content.
@@ -602,7 +602,7 @@ public class RestClient extends BeanContext implements Closeable {
 	}
 
 	/**
-	 * Perform a <code>GET</code> request against the specified URL.
+	 * Perform a <c>GET</c> request against the specified URL.
 	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
@@ -617,7 +617,7 @@ public class RestClient extends BeanContext implements Closeable {
 	}
 
 	/**
-	 * Perform a <code>PUT</code> request against the specified URL.
+	 * Perform a <c>PUT</c> request against the specified URL.
 	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
@@ -665,11 +665,11 @@ public class RestClient extends BeanContext implements Closeable {
 	}
 
 	/**
-	 * Perform a <code>POST</code> request against the specified URL.
+	 * Perform a <c>POST</c> request against the specified URL.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Use {@link #doFormPost(Object, Object)} for <code>application/x-www-form-urlencoded</code> form posts.
+	 * 	<li>Use {@link #doFormPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
 	 * </ul>
 	 *
 	 * @param url
@@ -706,7 +706,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Use {@link #doFormPost(Object, Object)} for <code>application/x-www-form-urlencoded</code> form posts.
+	 * 	<li>Use {@link #doFormPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
 	 * </ul>
 	 *
 	 * @param url
@@ -722,7 +722,7 @@ public class RestClient extends BeanContext implements Closeable {
 	}
 
 	/**
-	 * Perform a <code>DELETE</code> request against the specified URL.
+	 * Perform a <c>DELETE</c> request against the specified URL.
 	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
@@ -737,7 +737,7 @@ public class RestClient extends BeanContext implements Closeable {
 	}
 
 	/**
-	 * Perform an <code>OPTIONS</code> request against the specified URL.
+	 * Perform an <c>OPTIONS</c> request against the specified URL.
 	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
@@ -752,7 +752,7 @@ public class RestClient extends BeanContext implements Closeable {
 	}
 
 	/**
-	 * Perform a <code>POST</code> request with a content type of <code>application/x-www-form-urlencoded</code>
+	 * Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
 	 * against the specified URL.
 	 *
 	 * @param url
@@ -772,7 +772,7 @@ public class RestClient extends BeanContext implements Closeable {
 	}
 
 	/**
-	 * Perform a <code>PATCH</code> request against the specified URL.
+	 * Perform a <c>PATCH</c> request against the specified URL.
 	 *
 	 * @param url
 	 * 	The URL of the remote REST resource.
@@ -808,7 +808,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Use {@link #doFormPost(Object, Object)} for <code>application/x-www-form-urlencoded</code> form posts.
+	 * 	<li>Use {@link #doFormPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
 	 * </ul>
 	 *
 	 * @param url
@@ -1000,17 +1000,17 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <p>
 	 * The URL to the REST interface is based on the following values:
 	 * <ul>
-	 * 	<li>The {@link RemoteResource#path() @RemoteResource(path)} annotation on the interface (<code>remote-path</code>).
-	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<code>root-url</code>).
-	 * 	<li>The fully-qualified class name of the interface (<code>class-name</code>).
+	 * 	<li>The {@link RemoteResource#path() @RemoteResource(path)} annotation on the interface (<c>remote-path</c>).
+	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<c>root-url</c>).
+	 * 	<li>The fully-qualified class name of the interface (<c>class-name</c>).
 	 * </ul>
 	 *
 	 * <p>
 	 * The URL calculation is as follows:
 	 * <ul>
-	 * 	<li><code>remote-path</code> - If remote path is absolute.
-	 * 	<li><code>root-url/remote-path</code> - If remote path is relative and root-url has been specified.
-	 * 	<li><code>root-url/class-name</code> - If remote path is not specified.
+	 * 	<li><c>remote-path</c> - If remote path is absolute.
+	 * 	<li><c>root-url/remote-path</c> - If remote path is relative and root-url has been specified.
+	 * 	<li><c>root-url/class-name</c> - If remote path is not specified.
 	 * </ul>
 	 *
 	 * <p>
@@ -1216,23 +1216,23 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Create a new Remote Interface against a {@link RemoteInterface @RemoteInterface}-annotated class.
 	 *
 	 * <p>
-	 * Remote interfaces are interfaces exposed on the server side using either the <code>RrpcServlet</code>
-	 * or <code>RRPC</code> REST methods.
+	 * Remote interfaces are interfaces exposed on the server side using either the <c>RrpcServlet</c>
+	 * or <c>RRPC</c> REST methods.
 	 *
 	 * <p>
 	 * The URL to the REST interface is based on the following values:
 	 * <ul>
-	 * 	<li>The {@link RemoteResource#path() @RemoteResource(path)} annotation on the interface (<code>remote-path</code>).
-	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<code>root-url</code>).
-	 * 	<li>The fully-qualified class name of the interface (<code>class-name</code>).
+	 * 	<li>The {@link RemoteResource#path() @RemoteResource(path)} annotation on the interface (<c>remote-path</c>).
+	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<c>root-url</c>).
+	 * 	<li>The fully-qualified class name of the interface (<c>class-name</c>).
 	 * </ul>
 	 *
 	 * <p>
 	 * The URL calculation is as follows:
 	 * <ul>
-	 * 	<li><code>remote-path</code> - If remote path is absolute.
-	 * 	<li><code>root-url/remote-path</code> - If remote path is relative and root-url has been specified.
-	 * 	<li><code>root-url/class-name</code> - If remote path is not specified.
+	 * 	<li><c>remote-path</c> - If remote path is absolute.
+	 * 	<li><c>root-url/remote-path</c> - If remote path is relative and root-url has been specified.
+	 * 	<li><c>root-url/class-name</c> - If remote path is not specified.
 	 * </ul>
 	 *
 	 * <p>

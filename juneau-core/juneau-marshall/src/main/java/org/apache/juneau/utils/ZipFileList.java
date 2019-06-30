@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * serialization time.
  *
  * <p>
- * Generally associated with <code>RestServlets</code> using the <code>responseHandlers</code> annotation so that
+ * Generally associated with <c>RestServlets</c> using the <c>responseHandlers</c> annotation so that
  * REST methods can easily create ZIP file responses by simply returning instances of this class.
  */
 @Response
@@ -45,9 +45,9 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> implements
 	}
 
 	/**
-	 * Returns the value for the <code>Content-Disposition</code> header.
+	 * Returns the value for the <c>Content-Disposition</c> header.
 	 *
-	 * @return The value for the <code>Content-Disposition</code> header.
+	 * @return The value for the <c>Content-Disposition</c> header.
 	 */
 	@Header("Content-Disposition")
 	public String getContentDisposition() {

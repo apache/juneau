@@ -22,7 +22,7 @@ import org.apache.juneau.xml.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Content-Type</code> types:  <code><b>text/html</b></code>
+ * Handles <c>Content-Type</c> types:  <bc>text/html</bc>
  *
  * <h5 class='topic'>Description</h5>
  *

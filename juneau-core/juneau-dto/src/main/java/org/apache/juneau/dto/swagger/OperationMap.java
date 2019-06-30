@@ -25,13 +25,13 @@ import org.apache.juneau.utils.*;
  * <p>
  * Forces entries to be sorted in the following order:
  * <ul>
- * 	<li><code>GET</code>
- * 	<li><code>PUT</code>
- * 	<li><code>POST</code>
- * 	<li><code>DELETE</code>
- * 	<li><code>OPTIONS</code>
- * 	<li><code>HEAD</code>
- * 	<li><code>PATCH</code>
+ * 	<li><c>GET</c>
+ * 	<li><c>PUT</c>
+ * 	<li><c>POST</c>
+ * 	<li><c>DELETE</c>
+ * 	<li><c>OPTIONS</c>
+ * 	<li><c>HEAD</c>
+ * 	<li><c>PATCH</c>
  * 	<li>Everything else.
  * </ul>
  */

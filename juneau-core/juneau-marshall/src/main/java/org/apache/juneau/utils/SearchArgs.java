@@ -233,7 +233,7 @@ public class SearchArgs {
 		 *
 		 * @param limit
 		 * 	The number of rows to return.
-		 * 	If <code>&lt;=0</code>, all rows should be returned.
+		 * 	If <c>&lt;=0</c>, all rows should be returned.
 		 * @return This object (for method chaining).
 		 */
 		public Builder limit(int limit) {
@@ -314,7 +314,7 @@ public class SearchArgs {
 	 *
 	 * @return
 	 * 	The zero-indexed row number of the first row to display.
-	 * 	Default is <code>0</code>
+	 * 	Default is <c>0</c>
 	 */
 	public int getPosition() {
 		return position;
@@ -325,7 +325,7 @@ public class SearchArgs {
 	 *
 	 * @return
 	 * 	The number of rows to return in the result.
-	 * 	Default is <code>0</code> which means return all rows.
+	 * 	Default is <c>0</c> which means return all rows.
 	 */
 	public int getLimit() {
 		return limit;

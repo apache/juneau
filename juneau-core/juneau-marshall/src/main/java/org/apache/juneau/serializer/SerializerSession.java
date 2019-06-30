@@ -144,13 +144,13 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	protected abstract void doSerialize(SerializerPipe pipe, Object o) throws Exception;
 
 	/**
-	 * Shortcut method for serializing objects directly to either a <code>String</code> or <code><jk>byte</jk>[]</code>
+	 * Shortcut method for serializing objects directly to either a <c>String</c> or <code><jk>byte</jk>[]</code>
 	 * depending on the serializer type.
 	 *
 	 * @param o The object to serialize.
 	 * @return
 	 * 	The serialized object.
-	 * 	<br>Character-based serializers will return a <code>String</code>.
+	 * 	<br>Character-based serializers will return a <c>String</c>.
 	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
@@ -162,7 +162,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * @param o The object to serialize.
 	 * @return
 	 * 	The serialized object.
-	 * 	<br>Character-based serializers will return a <code>String</code>
+	 * 	<br>Character-based serializers will return a <c>String</c>
 	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code> converted to a string based on the {@link OutputStreamSerializer#OSSERIALIZER_binaryFormat} setting.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
@@ -447,7 +447,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * Opposite of {@link #resolveUri(Object)}.
 	 *
 	 * <p>
-	 * Converts the URI to a value relative to the specified <code>relativeTo</code> parameter.
+	 * Converts the URI to a value relative to the specified <c>relativeTo</c> parameter.
 	 *
 	 * <p>
 	 * Both parameters can be any of the following:
@@ -482,16 +482,16 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Converts the specified object to a <code>String</code>.
+	 * Converts the specified object to a <c>String</c>.
 	 *
 	 * <p>
 	 * Also has the following effects:
 	 * <ul>
-	 * 	<li><code>Class</code> object is converted to a readable name.  See {@link ClassInfo#getFullName()}.
+	 * 	<li><c>Class</c> object is converted to a readable name.  See {@link ClassInfo#getFullName()}.
 	 * 	<li>Whitespace is trimmed if the trim-strings setting is enabled.
 	 * </ul>
 	 *
-	 * @param o The object to convert to a <code>String</code>.
+	 * @param o The object to convert to a <c>String</c>.
 	 * @return The object converted to a String, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public final String toString(Object o) {
@@ -591,7 +591,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * Optional method that specifies HTTP request headers for this serializer.
 	 *
 	 * <p>
-	 * For example, {@link SoapXmlSerializer} needs to set a <code>SOAPAction</code> header.
+	 * For example, {@link SoapXmlSerializer} needs to set a <c>SOAPAction</c> header.
 	 *
 	 * <p>
 	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server

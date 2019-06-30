@@ -19,18 +19,18 @@
 	Juno 5.1.0.5 is a moderate update.
 </p>
 <ul class='spaced-list'>
-	<li>New <code><del>Redirect</del></code> class that simplifies performing redirections in REST methods.
+	<li>New <dc>Redirect</dc> class that simplifies performing redirections in REST methods.
 	<li>New pluggable {@link oajr.ResponseHandler} class and {@link oajr.annotation.RestResource#responseHandlers() @RestResource(responseHandlers)} annotation
 		for defining customer response handlers for special kinds of POJOs.
-	<li>New method <code><del>UrlEncodingSerializer.serializeUrlPart(Object)</del></code> method.
-	<li>New method <code><del>RestRequest.getServletURIBuilder()</del></code> for construcing servlet-based URLs more efficiently.
+	<li>New method <dc>UrlEncodingSerializer.serializeUrlPart(Object)</dc> method.
+	<li>New method <dc>RestRequest.getServletURIBuilder()</dc> for construcing servlet-based URLs more efficiently.
 	<li>New method {@link oajr.RestResponse#getNegotiatedOutputStream()} that uses encoders if a match is found, 
 		and {@link oajr.RestResponse#getOutputStream()} that just return the underlying output stream without any modifications.
-	<li>Fixed bug where some properties were not being propagated correctly when using <code><del>CoreObject.setProperties(ObjectMap)</del></code>
+	<li>Fixed bug where some properties were not being propagated correctly when using <dc>CoreObject.setProperties(ObjectMap)</dc>
 		on serializer and parser subclasses.
 	<li>Fixed bug in {@link oaj.html.HtmlSerializer} where URL keys in Maps were not being serialized as hyperlinks.
 	<li>Fixed bug in {@link oaj.json.JsonSerializer} where <js>"_class"</js> and <js>"items"</js> attributes were not quoted in strict mode when using SERIALIZER_addClassAttrs feature.	
-	<li>Fixed bug where <code>Content-Encoding</code> and<code>Character-Encoding</code> headers were being set when calling {@link oajr.RestResponse#getOutputStream()}.
+	<li>Fixed bug where <c>Content-Encoding</c> and<c>Character-Encoding</c> headers were being set when calling {@link oajr.RestResponse#getOutputStream()}.
 		These should not be set if interacting with the output streams at a low level.
-	<li>Eliminated various convenience <code>RestResponse.sendRedirect(...)</code> methods due to the introduction of the <code><del>Redirect</del></code> class.
+	<li>Eliminated various convenience <c>RestResponse.sendRedirect(...)</c> methods due to the introduction of the <dc>Redirect</dc> class.
 </ul>

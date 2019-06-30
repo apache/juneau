@@ -73,7 +73,7 @@ public @interface Attr {
 	 * A blank value (the default) has the following behavior:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		If the data type is <code>NameValuePairs</code>, <code>Map</code>, or a bean,
+	 * 		If the data type is <c>NameValuePairs</c>, <c>Map</c>, or a bean,
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 	 *
 	 * 		<h5 class='figure'>Examples:</h5>

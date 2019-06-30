@@ -25,7 +25,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Content-Type</code> types:  <code><b>text/uon</b></code>
+ * Handles <c>Content-Type</c> types:  <bc>text/uon</bc>
  *
  * <h5 class='topic'>Description</h5>
  *
@@ -46,7 +46,7 @@ public class UonParser extends ReaderParser implements HttpPartParser {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonParser.decoding.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -87,7 +87,7 @@ public class UonParser extends ReaderParser implements HttpPartParser {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"UonParser.validateEnd.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>

@@ -21,7 +21,7 @@ import org.apache.juneau.parser.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Content-Type</code> types:  <code><b>application/json, text/json</b></code>
+ * Handles <c>Content-Type</c> types:  <bc>application/json, text/json</bc>
  *
  * <h5 class='topic'>Description</h5>
  *
@@ -52,7 +52,7 @@ import org.apache.juneau.parser.*;
  * 		JSON objects (<js>"{...}"</js>) are converted to {@link ObjectMap ObjectMaps}.
  * 		<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an
  * 		attempt is made to convert the object to an instance of the specified Java bean class.
- * 		See the <code>beanTypeName</code> setting on the {@link PropertyStore} for more information about parsing
+ * 		See the <c>beanTypeName</c> setting on the {@link PropertyStore} for more information about parsing
  * 		beans from JSON.
  * 	<li>
  * 		JSON arrays (<js>"[...]"</js>) are converted to {@link ObjectList ObjectLists}.
@@ -114,7 +114,7 @@ public class JsonParser extends ReaderParser {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"JsonParser.validateEnd.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>

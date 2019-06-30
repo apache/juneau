@@ -352,7 +352,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * Replaces the last character in the marking buffer with the specified character.
 	 *
 	 * <p>
-	 * <code>offset</code> must be at least <code>1</code> for normal characters, and <code>2</code> for extended
+	 * <c>offset</c> must be at least <c>1</c> for normal characters, and <c>2</c> for extended
 	 * unicode characters in order for the replacement to fit into the buffer.
 	 *
 	 * @param c The new character.

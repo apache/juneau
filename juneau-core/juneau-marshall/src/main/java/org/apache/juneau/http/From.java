@@ -69,10 +69,10 @@ import org.apache.juneau.http.annotation.*;
 public final class From extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>From</code> header.
+	 * Returns a parsed <c>From</c> header.
 	 *
-	 * @param value The <code>From</code> header string.
-	 * @return The parsed <code>From</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>From</c> header string.
+	 * @return The parsed <c>From</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static From forString(String value) {
 		if (value == null)

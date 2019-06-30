@@ -109,10 +109,10 @@ public final class AcceptLanguage extends HeaderRangeArray {
 	private static final Cache<String,AcceptLanguage> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <code>Accept-Language</code> header.
+	 * Returns a parsed <c>Accept-Language</c> header.
 	 *
-	 * @param value The <code>Accept-Language</code> header string.
-	 * @return The parsed <code>Accept-Language</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Accept-Language</c> header string.
+	 * @return The parsed <c>Accept-Language</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static AcceptLanguage forString(String value) {
 		if (value == null)

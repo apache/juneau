@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.transforms.*;
 
 /**
- * Represents an <code>atomEntry</code> construct in the RFC4287 specification.
+ * Represents an <c>atomEntry</c> construct in the RFC4287 specification.
  *
  * <h5 class='figure'>Schema</h5>
  * <p class='bcode w800'>

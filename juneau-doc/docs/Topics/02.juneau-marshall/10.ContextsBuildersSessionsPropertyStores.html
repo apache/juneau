@@ -24,29 +24,29 @@ Contexts, Builders, Sessions, and PropertyStores
 		<ul>
 			<li>Heavy to construct and designed to be cached and reused.
 			<li>Created by <l>ContextBuilder</l> classes.
-			<li>Examples:  <code>BeanContext</code>, <code>JsonSerializer</code>
+			<li>Examples:  <c>BeanContext</c>, <c>JsonSerializer</c>
 		</ul>
 	<li>
 		<l>Session</l> - A non-thread-safe single-use object with configuration combined from context and 
 		runtime args such as locale/timezone.
 		<ul>
 			<li>Lightweight objects that take a minimum amount of time to instantiate and are not typically reused.
-			<li>Created by <code>Context</code> objects.
-			<li>Examples:  <code>BeanSession</code>, <code>JsonSerializerSession</code>
+			<li>Created by <c>Context</c> objects.
+			<li>Examples:  <c>BeanSession</c>, <c>JsonSerializerSession</c>
 		</ul>
 	<li>
 		<l>PropertyStore</l> - A thread-safe read-only set of configuration properties.
 		<ul>
-			<li>Heavier to create than <code>Sessions</code> but lighter than <code>Contexts</code>.
-			<li>Each <code>Context</code> contains one <code>PropertyStore</code> that defines all the configuration about that object.
+			<li>Heavier to create than <c>Sessions</c> but lighter than <c>Contexts</c>.
+			<li>Each <c>Context</c> contains one <c>PropertyStore</c> that defines all the configuration about that object.
 			<li>Created by <l>PropertyStoreBuilder</l> classes.
 		</ul>
 </ul>	
 <p>
-	For example, the class hierarchy for <code>JsonSerializer</code> is:
+	For example, the class hierarchy for <c>JsonSerializer</c> is:
 </p>
 <ul class='doctree'>
-	<li class='jc'><code>Object</code>
+	<li class='jc'><c>Object</c>
 	<ul>
 		<li class='jac'>{@link oaj.Context}
 		<ul>
@@ -64,14 +64,14 @@ Contexts, Builders, Sessions, and PropertyStores
 	</ul>
 </ul>
 <p>
-	Each context object in the hierarchy define properties that can be stored in a <code>PropertyStore</code>
+	Each context object in the hierarchy define properties that can be stored in a <c>PropertyStore</c>
 	such as <jsf>WSERIALIZER_useWhitespace</jsf> or <jsf>JSON_simpleMode</jsf>.
 </p>
 <p>
-	The class hierarchy for <code>JsonSerializerBuilder</code> is:
+	The class hierarchy for <c>JsonSerializerBuilder</c> is:
 </p>
 <ul class='doctree'>
-	<li class='jc'><code>Object</code>
+	<li class='jc'><c>Object</c>
 	<ul>
 		<li class='jac'>{@link oaj.ContextBuilder}
 		<ul>
@@ -89,10 +89,10 @@ Contexts, Builders, Sessions, and PropertyStores
 	</ul>
 </ul>
 <p>
-	The class hierarchy for <code>JsonSerializerSession</code> is:
+	The class hierarchy for <c>JsonSerializerSession</c> is:
 </p>
 <ul class='doctree'>
-	<li class='jc'><code>Object</code>
+	<li class='jc'><c>Object</c>
 	<ul>
 		<li class='jac'>{@link oaj.Session}
 		<ul>
@@ -129,7 +129,7 @@ Contexts, Builders, Sessions, and PropertyStores
 </p>
 <p>
 	The {@link oaj.PropertyStoreBuilder} class is used to build up and instantiate immutable 
-	<code>PropertyStore</code> objects.
+	<c>PropertyStore</c> objects.
 </p>
 <p>
 	In the example above, the property store being built looks like the following:

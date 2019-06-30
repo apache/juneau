@@ -139,7 +139,7 @@
 </table>
 <p>
 	The {@link oaj.xml.annotation.XmlFormat#ATTRS} format can be applied to a single bean 
-	property of type <code>Map&lt;String,Object&gt;</code> to denote arbitrary XML attribute values on the 
+	property of type <c>Map&lt;String,Object&gt;</c> to denote arbitrary XML attribute values on the 
 	element.
 	These can be mixed with other {@link oaj.xml.annotation.XmlFormat#ATTR} annotated 
 	properties, but there must not be an overlap in bean property names and map keys. 
@@ -653,7 +653,7 @@
 	The {@link oaj.xml.annotation.XmlFormat#TEXT} format is similar to 
 	{@link oaj.xml.annotation.XmlFormat#MIXED} except it's meant for solitary objects that 
 	get serialized as simple child text nodes.
-	Any object that can be serialize to a <code>String</code> can be used.
+	Any object that can be serialize to a <c>String</c> can be used.
 	The {@link oaj.xml.annotation.XmlFormat#TEXT_PWS} is the same except whitespace is 
 	preserved in the output.
 </p>
@@ -690,7 +690,7 @@
 	The {@link oaj.xml.annotation.XmlFormat#XMLTEXT} format is similar to 
 	{@link oaj.xml.annotation.XmlFormat#TEXT} except it's meant for strings containing XML 
 	that should be serialized as-is to the document.
-	Any object that can be serialize to a <code>String</code> can be used.
+	Any object that can be serialize to a <c>String</c> can be used.
 	During parsing, the element content gets parsed with the rest of the document and then re-serialized to 
 	XML before being set as the property value.  
 	This process may not be perfect (e.g. double quotes may be replaced by single quotes, etc...).

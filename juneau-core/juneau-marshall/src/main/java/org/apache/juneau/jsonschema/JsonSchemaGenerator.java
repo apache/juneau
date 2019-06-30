@@ -39,7 +39,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.addDescriptionsTo.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  Empty string.
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -76,7 +76,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.addExamplesTo.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  Empty string.
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -119,7 +119,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.allowNestedDescriptions.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -140,7 +140,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.allowNestedExamples.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -187,7 +187,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.defaultSchema.smo"</js>
-	 * 	<li><b>Data type:</b>  <code>Map&lt;String,ObjectMap&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,ObjectMap&gt;</c>
 	 * 	<li><b>Default:</b>  Empty map.
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -210,7 +210,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.ignoreTypes.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> (comma-delimited)
+	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
 	 * 	<li><b>Default:</b>  <jk>null</jk>.
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * </ul>
@@ -238,7 +238,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.useBeanDefs.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>

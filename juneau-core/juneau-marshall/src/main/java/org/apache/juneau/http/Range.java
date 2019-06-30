@@ -144,10 +144,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Range extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Range</code> header.
+	 * Returns a parsed <c>Range</c> header.
 	 *
-	 * @param value The <code>Range</code> header string.
-	 * @return The parsed <code>Range</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Range</c> header string.
+	 * @return The parsed <c>Range</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Range forString(String value) {
 		if (value == null)

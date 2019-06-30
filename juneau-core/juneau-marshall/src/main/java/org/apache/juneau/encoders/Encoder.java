@@ -22,7 +22,7 @@ import java.io.*;
  * Used to wrap input and output streams within compression/decompression streams.
  *
  * <p>
- * Encoders are registered with <code>RestServlets</code> through the <ja>@RestResource(encoders)</ja> annotation.
+ * Encoders are registered with <c>RestServlets</c> through the <ja>@RestResource(encoders)</ja> annotation.
  */
 public abstract class Encoder {
 
@@ -45,7 +45,7 @@ public abstract class Encoder {
 	public abstract OutputStream getOutputStream(OutputStream os) throws IOException;
 
 	/**
-	 * Returns the codings in <code>Content-Encoding</code> and <code>Accept-Encoding</code> headers that this encoder
+	 * Returns the codings in <c>Content-Encoding</c> and <c>Accept-Encoding</c> headers that this encoder
 	 * handles (e.g. <js>"gzip"</js>).
 	 *
 	 * @return The codings that this encoder handles.

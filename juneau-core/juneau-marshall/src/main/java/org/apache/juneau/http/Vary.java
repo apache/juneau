@@ -74,10 +74,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Vary extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Vary</code> header.
+	 * Returns a parsed <c>Vary</c> header.
 	 *
-	 * @param value The <code>Vary</code> header string.
-	 * @return The parsed <code>Vary</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Vary</c> header string.
+	 * @return The parsed <c>Vary</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Vary forString(String value) {
 		if (value == null)

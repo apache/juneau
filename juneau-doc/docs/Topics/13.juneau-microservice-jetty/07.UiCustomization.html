@@ -16,7 +16,7 @@
 UI Customization
 
 <p>
-	The Microservice project contains a <code>files/htdocs</code> folder with predefined stylesheets and
+	The Microservice project contains a <c>files/htdocs</c> folder with predefined stylesheets and
 	images.
 </p>
 <img style='width:200px' src='doc-files/juneau-microservice-jetty.UiCustomization.1.png'>
@@ -100,12 +100,12 @@ UI Customization
 	<jk>public interface</jk> BasicRestConfig {}
 </p>
 <p>
-	Note that the <code>files/htdocs</code> directory is mapped to <js>"servlet:/htdocs"</js> using the <code>staticFiles</code>
+	Note that the <c>files/htdocs</c> directory is mapped to <js>"servlet:/htdocs"</js> using the <c>staticFiles</c>
 	setting.  This allows those files to be served up through the servlet through the URL <js>"/[servlet-path]/htdocs"</js>
 </p>
 <p>
 	The theme files are externally accessible and can be modified to produce any look-and-feel you desire.
-	The microservice still works without the files directory.  An embedded <code>devops.css</code> is included in the jar as a default spreadsheet.
+	The microservice still works without the files directory.  An embedded <c>devops.css</c> is included in the jar as a default spreadsheet.
 </p>
 <p>
 	If you're testing out changes in the theme stylesheets, you may want to set the following system property that prevents caching of those files so 

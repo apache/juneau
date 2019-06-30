@@ -29,7 +29,7 @@ import org.apache.juneau.internal.*;
  * it's a simple type (e.g. <js>"iso-8601"</js>).
  *
  * <p>
- * An example of a type range is a value in an <code>Accept-Encoding</code> header.
+ * An example of a type range is a value in an <c>Accept-Encoding</c> header.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
@@ -46,10 +46,10 @@ public final class StringRange implements Comparable<StringRange>  {
 	private final Map<String,Set<String>> extensions;
 
 	/**
-	 * Parses a header such as an <code>Accept-Encoding</code> header value into an array of type ranges.
+	 * Parses a header such as an <c>Accept-Encoding</c> header value into an array of type ranges.
 	 *
 	 * <p>
-	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in
+	 * The syntax expected to be found in the referenced <c>value</c> complies with the syntax described in
 	 * RFC2616, Section 14.1, as described below:
 	 * <p class='bcode w800'>
 	 * 	Accept-Encoding  = "Accept-Encoding" ":"
@@ -69,7 +69,7 @@ public final class StringRange implements Comparable<StringRange>  {
 	 *
 	 * @param value
 	 * 	The value to parse.
-	 * 	If <jk>null</jk> or empty, returns a single <code>TypeRange</code> is returned that represents all types.
+	 * 	If <jk>null</jk> or empty, returns a single <c>TypeRange</c> is returned that represents all types.
 	 * @return
 	 * 	The type ranges described by the string.
 	 * 	<br>The ranges are sorted such that the most acceptable type is available at ordinal position <js>'0'</js>, and
@@ -167,7 +167,7 @@ public final class StringRange implements Comparable<StringRange>  {
 	 * Returns the <js>'q'</js> (quality) value for this type, as described in Section 3.9 of RFC2616.
 	 *
 	 * <p>
-	 * The quality value is a float between <code>0.0</code> (unacceptable) and <code>1.0</code> (most acceptable).
+	 * The quality value is a float between <c>0.0</c> (unacceptable) and <c>1.0</c> (most acceptable).
 	 *
 	 * <p>
 	 * If 'q' value doesn't make sense for the context (e.g. this range was extracted from a <js>"content-*"</js>
@@ -192,12 +192,12 @@ public final class StringRange implements Comparable<StringRange>  {
 	}
 
 	/**
-	 * Provides a string representation of this media range, suitable for use as an <code>Accept</code> header value.
+	 * Provides a string representation of this media range, suitable for use as an <c>Accept</c> header value.
 	 *
 	 * <p>
 	 * The literal text generated will be all lowercase.
 	 *
-	 * @return A media range suitable for use as an Accept header value, never <code>null</code>.
+	 * @return A media range suitable for use as an Accept header value, never <c>null</c>.
 	 */
 	@Override /* Object */
 	public String toString() {
@@ -225,7 +225,7 @@ public final class StringRange implements Comparable<StringRange>  {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified object is also a <code>MediaType</code>, and has the same qValue, type,
+	 * Returns <jk>true</jk> if the specified object is also a <c>MediaType</c>, and has the same qValue, type,
 	 * parameters, and extensions.
 	 *
 	 * @return <jk>true</jk> if object is equivalent.
@@ -246,9 +246,9 @@ public final class StringRange implements Comparable<StringRange>  {
 	}
 
 	/**
-	 * Returns a hash based on this instance's <code>media-type</code>.
+	 * Returns a hash based on this instance's <c>media-type</c>.
 	 *
-	 * @return A hash based on this instance's <code>media-type</code>.
+	 * @return A hash based on this instance's <c>media-type</c>.
 	 */
 	@Override /* Object */
 	public int hashCode() {
@@ -259,10 +259,10 @@ public final class StringRange implements Comparable<StringRange>  {
 	 * Compares two MediaRanges for equality.
 	 *
 	 * <p>
-	 * The values are first compared according to <code>qValue</code> values.
-	 * Should those values be equal, the <code>type</code> is then lexicographically compared (case-insensitive) in
+	 * The values are first compared according to <c>qValue</c> values.
+	 * Should those values be equal, the <c>type</c> is then lexicographically compared (case-insensitive) in
 	 * ascending order, with the <js>"*"</js> type demoted last in that order.
-	 * <code>TypeRanges</code> with the same types but with extensions are promoted over those same types with no
+	 * <c>TypeRanges</c> with the same types but with extensions are promoted over those same types with no
 	 * extensions.
 	 *
 	 * @param o The range to compare to.  Never <jk>null</jk>.

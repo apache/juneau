@@ -97,10 +97,10 @@ public final class AcceptEncoding extends HeaderRangeArray {
 	private static final Cache<String,AcceptEncoding> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <code>Accept-Encoding</code> header.
+	 * Returns a parsed <c>Accept-Encoding</c> header.
 	 *
-	 * @param value The <code>Accept-Encoding</code> header string.
-	 * @return The parsed <code>Accept-Encoding</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Accept-Encoding</c> header string.
+	 * @return The parsed <c>Accept-Encoding</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static AcceptEncoding forString(String value) {
 		if (value == null)

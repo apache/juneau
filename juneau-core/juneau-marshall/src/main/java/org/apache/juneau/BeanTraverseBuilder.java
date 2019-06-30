@@ -146,7 +146,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <code>0</code>.
+	 * 	<br>The default is <c>0</c>.
 	 * @return This object (for method chaining).
 	 */
 	public BeanTraverseBuilder initialDepth(int value) {
@@ -168,7 +168,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <code>100</code>.
+	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */
 	public BeanTraverseBuilder maxDepth(int value) {

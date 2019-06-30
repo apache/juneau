@@ -486,7 +486,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
+	 * Configuration property:  Add XSI data types to non-<c>String</c> literals.
 	 *
 	 * @see RdfSerializer#RDF_addLiteralTypes
 	 * @return
@@ -501,7 +501,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	 *
 	 * @see RdfSerializer#RDF_addRootProperty
 	 * @return
-	 * 	<jk>true</jk> if RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
+	 * 	<jk>true</jk> if RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
 	 * 	to identify the root node in the graph.
 	 */
 	protected final boolean isAddRootProp() {

@@ -292,7 +292,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <code>getProperties().append(name, value);</code> fluently.
+	 * Shortcut for calling <c>getProperties().append(name, value);</c> fluently.
 	 *
 	 * @param name The property name.
 	 * @param value The property value.
@@ -374,7 +374,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the media types that are valid for <code>Accept</code> headers on the request.
+	 * Returns the media types that are valid for <c>Accept</c> headers on the request.
 	 *
 	 * @return The set of media types registered in the serializer group of this request.
 	 */
@@ -383,7 +383,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the media types that are valid for <code>Content-Type</code> headers on the request.
+	 * Returns the media types that are valid for <c>Content-Type</c> headers on the request.
 	 *
 	 * @return The set of media types registered in the parser group of this request.
 	 */
@@ -414,7 +414,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the charset specified on the <code>Content-Type</code> header, or <js>"UTF-8"</js> if not specified.
+	 * Returns the charset specified on the <c>Content-Type</c> header, or <js>"UTF-8"</js> if not specified.
 	 */
 	@Override /* ServletRequest */
 	public String getCharacterEncoding() throws UnsupportedMediaType {
@@ -602,7 +602,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <code>getQuery().getString(name)</code>.
+	 * Shortcut for calling <c>getQuery().getString(name)</c>.
 	 *
 	 * @param name The query parameter name.
 	 * @return The query parameter value, or <jk>null</jk> if not found.
@@ -685,7 +685,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <code>getFormData().getString(name)</code>.
+	 * Shortcut for calling <c>getFormData().getString(name)</c>.
 	 *
 	 * @param name The form data parameter name.
 	 * @return The form data parameter value, or <jk>null<jk> if not found.
@@ -748,7 +748,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <code>getPathMatch().get(name)</code>.
+	 * Shortcut for calling <c>getPathMatch().get(name)</c>.
 	 *
 	 * @param name The path variable name.
 	 * @return The path variable value, or <jk>null</jk> if not found.
@@ -758,7 +758,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <code>getPathMatch().getRemainder()</code>.
+	 * Shortcut for calling <c>getPathMatch().getRemainder()</c>.
 	 *
 	 * @return The path remainder value, or <jk>null</jk> if not found.
 	 */
@@ -1003,7 +1003,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the localized swagger associated with the resource.
 	 *
 	 * <p>
-	 * A shortcut for calling <code>getInfoProvider().getSwagger(request);</code>
+	 * A shortcut for calling <c>getInfoProvider().getSwagger(request);</c>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1214,8 +1214,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the method of this request.
 	 *
 	 * <p>
-	 * If <code>allowHeaderParams</code> init parameter is <jk>true</jk>, then first looks for
-	 * <code>&amp;method=xxx</code> in the URL query string.
+	 * If <c>allowHeaderParams</c> init parameter is <jk>true</jk>, then first looks for
+	 * <c>&amp;method=xxx</c> in the URL query string.
 	 */
 	@Override /* ServletRequest */
 	public String getMethod() {
@@ -1244,10 +1244,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if <code>&amp;plainText=true</code> was specified as a URL parameter.
+	 * Returns <jk>true</jk> if <c>&amp;plainText=true</c> was specified as a URL parameter.
 	 *
 	 * <p>
-	 * This indicates that the <code>Content-Type</code> of the output should always be set to <js>"text/plain"</js>
+	 * This indicates that the <c>Content-Type</c> of the output should always be set to <js>"text/plain"</js>
 	 * to make it easy to render in a browser.
 	 *
 	 * <p>
@@ -1334,7 +1334,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		point of execution.
 	 * </ul>
 	 *
-	 * @return The Java method handling the request, or <code>null</code> if the method has not yet been resolved.
+	 * @return The Java method handling the request, or <c>null</c> if the method has not yet been resolved.
 	 */
 	public Method getJavaMethod() {
 		return javaMethod;
@@ -1352,7 +1352,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns <jk>true</jk> if debug mode is enabled.
 	 *
-	 * Debug mode is enabled by simply adding <js>"?debug=true"</js> to the query string or adding a <code>Debug: true</code> header on the request.
+	 * Debug mode is enabled by simply adding <js>"?debug=true"</js> to the query string or adding a <c>Debug: true</c> header on the request.
 	 *
 	 * @return <jk>true</jk> if debug mode is enabled.
 	 */
@@ -1734,7 +1734,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Logger.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>getContext().getLogger()</code>.
+	 * Shortcut for calling <c>getContext().getLogger()</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

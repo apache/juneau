@@ -51,7 +51,7 @@ public class Column {
 	 *
 	 * @param name The column name.
 	 * @param type The column type (e.g. <js>"xs:String"</js>).
-	 * @param length The column length (e.g. <code>255</code>).
+	 * @param length The column length (e.g. <c>255</c>).
 	 */
 	public Column(String name, String type, Integer length) {
 		this.name = name;
@@ -66,7 +66,7 @@ public class Column {
 	 * Typically used to define columns that don't exist on the underlying beans being serialized.
 	 *
 	 * <p>
-	 * For example, the <code>AddressBookResource</code> sample defined the following POJO swap to define an additional
+	 * For example, the <c>AddressBookResource</c> sample defined the following POJO swap to define an additional
 	 * <js>"numAddresses"</js> column even though no such property exists on the serialized beans.
 	 * <p class='bcode w800'>
 	 * 	Column c = <jk>new</jk> Column(<js>"numAddresses"</js>, <js>"xs:int"</js>)

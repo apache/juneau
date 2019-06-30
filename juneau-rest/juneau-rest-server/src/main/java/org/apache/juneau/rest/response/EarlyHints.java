@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.EarlyHints.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 103 Early Hints</code> response.
+ * Represents an <c>HTTP 103 Early Hints</c> response.
  *
  * <p>
  * Used to return some response headers before final HTTP message.

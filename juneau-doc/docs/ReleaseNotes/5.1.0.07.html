@@ -20,19 +20,19 @@
 </p>
 <ul class='spaced-list'>
 	<li>Improved error handling.  
-	<li>New <code><del>ParserContext.PARSER_debug</del></code> and <code><del>SerializerContext.SERIALIZER_debug</del></code>.
+	<li>New <dc>ParserContext.PARSER_debug</dc> and <dc>SerializerContext.SERIALIZER_debug</dc>.
 		settings for logging additional information for debugging problems.
-	<li>New <code><del>SERIALIZER_ignoreRecursions</del></code> setting for explicitly ignoring recursions when 
+	<li>New <dc>SERIALIZER_ignoreRecursions</dc> setting for explicitly ignoring recursions when 
 		serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this, but now it simply looks for recursions 
 		and throws exceptions when they occur.
-	<li>Improved handling of <code>StackOverflowErrors</code>.  When <jsf>SERIALIZER_detectRecursions</jsf> is enabled, a useful error message
+	<li>Improved handling of <c>StackOverflowErrors</c>.  When <jsf>SERIALIZER_detectRecursions</jsf> is enabled, a useful error message
 		is displayed showing the exact chain of objects that resulted in the stack overflow.
 	<li>Bug fixes in {@link oaj.dto.ResultSetList} for Oracle and SQL Server.
-	<li>Serializers and parsers can now access HTTP request attributes, parameters, and headers through <code>SerializerContext.getProperties()</code> and
-		<code>ParserContext.getProperties()</code>.		
-	<li>Removed media-type and encoding attributes from <code><del>SerializerContext</del></code> and <code><del>ParserContext</del></code>	
+	<li>Serializers and parsers can now access HTTP request attributes, parameters, and headers through <c>SerializerContext.getProperties()</c> and
+		<c>ParserContext.getProperties()</c>.		
+	<li>Removed media-type and encoding attributes from <dc>SerializerContext</dc> and <dc>ParserContext</dc>	
 		since these are now available through context properties, and are typically not used.
-	<li>{@link oaj.xml.XmlParser} now accepts <code>application/xml</code>.		
+	<li>{@link oaj.xml.XmlParser} now accepts <c>application/xml</c>.		
 	<li>Improved handling of bean property serialization when multiple matching pojo filters for the bean property class exist.
 	<li>Improved concurrency on BeanContext class.
 	<li>Fixed bug in {@link oajr.converters.Traversable} that was causing it to be executed even if the servlet extra path info was empty.

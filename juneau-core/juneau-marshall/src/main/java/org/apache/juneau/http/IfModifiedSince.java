@@ -93,10 +93,10 @@ import org.apache.juneau.http.annotation.*;
 public final class IfModifiedSince extends HeaderDate {
 
 	/**
-	 * Returns a parsed <code>If-Modified-Since</code> header.
+	 * Returns a parsed <c>If-Modified-Since</c> header.
 	 *
-	 * @param value The <code>If-Modified-Since</code> header string.
-	 * @return The parsed <code>If-Modified-Since</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>If-Modified-Since</c> header string.
+	 * @return The parsed <c>If-Modified-Since</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static IfModifiedSince forString(String value) {
 		if (value == null)

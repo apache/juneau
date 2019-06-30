@@ -301,8 +301,8 @@ public @interface ResponseHeader {
 	 * <mk>collectionFormat</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <p>
-	 * Determines the format of the array if <code>type</code> <js>"array"</js> is used.
-	 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
+	 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
+	 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
 	 *
 	 * <br>Possible values are:
 	 * <ul class='spaced-list'>
@@ -515,7 +515,7 @@ public @interface ResponseHeader {
 	 * A serialized example of the parameter.
 	 *
 	 * <p>
-	 * This attribute defines a representation of the value that is used by <code>BasicRestInfoProvider</code> to construct
+	 * This attribute defines a representation of the value that is used by <c>BasicRestInfoProvider</c> to construct
 	 * an example of parameter.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -596,7 +596,7 @@ public @interface ResponseHeader {
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
 	 * 		<p class='bcode w800'>
 	 * 	<ja>@ResponseHeader</ja>(<js>"{description:'The new location of this resource'}"</js>)

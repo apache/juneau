@@ -19,16 +19,16 @@ Logic Variables
 	The default variable resolver also provides the following logic variables for performing simple logical operations:
 </p>
 <ul class='doctree'>
-		<li class='jc'>{@link oaj.svl.vars.IfVar} - <code>$IF{arg,then[,else]}</code>
-		<li class='jc'>{@link oaj.svl.vars.SwitchVar} - <code>$SW{arg,pattern1:then1[,pattern2:then2...]}</code>
-		<li class='jc'>{@link oaj.svl.vars.CoalesceVar} - <code>$CO{arg1[,arg2...]}</code>
-		<li class='jc'>{@link oaj.svl.vars.PatternMatchVar} - <code>$PM{arg,pattern}</code> 
-		<li class='jc'>{@link oaj.svl.vars.NotEmptyVar} - <code>$NE{arg}</code>
-		<li class='jc'>{@link oaj.svl.vars.UpperCaseVar} - <code>$UC{arg}</code>
-		<li class='jc'>{@link oaj.svl.vars.LowerCaseVar} - <code>$LC{arg}</code>
+		<li class='jc'>{@link oaj.svl.vars.IfVar} - <c>$IF{arg,then[,else]}</c>
+		<li class='jc'>{@link oaj.svl.vars.SwitchVar} - <c>$SW{arg,pattern1:then1[,pattern2:then2...]}</c>
+		<li class='jc'>{@link oaj.svl.vars.CoalesceVar} - <c>$CO{arg1[,arg2...]}</c>
+		<li class='jc'>{@link oaj.svl.vars.PatternMatchVar} - <c>$PM{arg,pattern}</c> 
+		<li class='jc'>{@link oaj.svl.vars.NotEmptyVar} - <c>$NE{arg}</c>
+		<li class='jc'>{@link oaj.svl.vars.UpperCaseVar} - <c>$UC{arg}</c>
+		<li class='jc'>{@link oaj.svl.vars.LowerCaseVar} - <c>$LC{arg}</c>
 </ul>
 <p>
-	The <code>$IF</code> variable can be used for simple if/else logic:
+	The <c>$IF</c> variable can be used for simple if/else logic:
 </p>
 <p class='bpcode w800'>
 	<cc># Value set to 'foo' if myBooleanProperty is true</cc>
@@ -55,7 +55,7 @@ Logic Variables
 		}</cv>		
 </p>
 <p>
-	The <code>$SW</code> variable can be used for switch blocks based on pattern matching:
+	The <c>$SW</c> variable can be used for switch blocks based on pattern matching:
 </p>
 <p class='bpcode w800'>
 	<cc># Shell command depends on the OS</cc>
@@ -68,7 +68,7 @@ Logic Variables
 		}</cv>		
 </p>
 <p>
-	The <code>$CO</code> variable can be used for coalescing of values (finding the first non-null/empty match):
+	The <c>$CO</c> variable can be used for coalescing of values (finding the first non-null/empty match):
 </p>
 <p class='bpcode w800'>
 	<cc># Debug flag can be enabled by system property or environment variable.</cc>
@@ -80,7 +80,7 @@ Logic Variables
 		}</cv>		
 </p>
 <p>
-	The <code>$PM</code> variable can be used for calculating boolean values:
+	The <c>$PM</c> variable can be used for calculating boolean values:
 </p>
 <p class='bpcode w800'>
 	<cc># Debug flag can be enabled by system property or environment variable.</cc>

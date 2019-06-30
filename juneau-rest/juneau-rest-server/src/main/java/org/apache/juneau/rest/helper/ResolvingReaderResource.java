@@ -53,10 +53,10 @@ public class ResolvingReaderResource extends ReaderResource {
 	 * 	<br>If multiple contents are specified, the results will be concatenated.
 	 * 	<br>Contents can be any of the following:
 	 * 	<ul>
-	 * 		<li><code>InputStream</code>
-	 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
-	 * 		<li><code>File</code>
-	 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
 	 * 	</ul>
 	 * @throws IOException
 	 */

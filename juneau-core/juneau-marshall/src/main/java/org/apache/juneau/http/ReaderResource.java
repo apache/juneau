@@ -72,10 +72,10 @@ public class ReaderResource implements Writable {
 	 * 	<br>If multiple contents are specified, the results will be concatenated.
 	 * 	<br>Contents can be any of the following:
 	 * 	<ul>
-	 * 		<li><code>InputStream</code>
-	 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
-	 * 		<li><code>File</code>
-	 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
 	 * 	</ul>
 	 * @throws IOException
 	 */
@@ -147,10 +147,10 @@ public class ReaderResource implements Writable {
 		 * 	<br>If multiple contents are specified, the results will be concatenated.
 		 * 	<br>Contents can be any of the following:
 		 * 	<ul>
-		 * 		<li><code>InputStream</code>
-		 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
-		 * 		<li><code>File</code>
-		 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
+		 * 		<li><c>InputStream</c>
+		 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+		 * 		<li><c>File</c>
+		 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
 		 * 	</ul>
 		 * @return This object (for method chaining).
 		 */
@@ -165,7 +165,7 @@ public class ReaderResource implements Writable {
 		 * @param name The HTTP header name.
 		 * @param value
 		 * 	The HTTP header value.
-		 * 	<br>Will be converted to a <code>String</code> using {@link Object#toString()}.
+		 * 	<br>Will be converted to a <c>String</c> using {@link Object#toString()}.
 		 * @return This object (for method chaining).
 		 */
 		public Builder header(String name, Object value) {
@@ -178,7 +178,7 @@ public class ReaderResource implements Writable {
 		 *
 		 * @param headers
 		 * 	The HTTP headers.
-		 * 	<br>Values will be converted to <code>Strings</code> using {@link Object#toString()}.
+		 * 	<br>Values will be converted to <c>Strings</c> using {@link Object#toString()}.
 		 * @return This object (for method chaining).
 		 */
 		public Builder headers(Map<String,Object> headers) {

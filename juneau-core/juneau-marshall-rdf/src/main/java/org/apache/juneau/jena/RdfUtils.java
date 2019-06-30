@@ -29,7 +29,7 @@ public class RdfUtils {
 	 * <p>
 	 * The annotations should be a child-to-parent ordering of annotations found on a class or method.
 	 *
-	 * @param rdfs The <code>@Rdf</code> annotations to search.
+	 * @param rdfs The <c>@Rdf</c> annotations to search.
 	 * @param schemas The list of known RDF schemas.
 	 * @return The resolved namespace, or <jk>null</jk> if the namespace could not be resolved.
 	 */

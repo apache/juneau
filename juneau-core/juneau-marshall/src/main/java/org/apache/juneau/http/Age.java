@@ -69,10 +69,10 @@ public final class Age extends HeaderInteger {
 	}
 
 	/**
-	 * Returns a parsed <code>Age</code> header.
+	 * Returns a parsed <c>Age</c> header.
 	 *
-	 * @param value The <code>Age</code> header string.
-	 * @return The parsed <code>Age</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Age</c> header string.
+	 * @return The parsed <c>Age</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Age forString(String value) {
 		if (value == null)

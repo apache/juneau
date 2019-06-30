@@ -35,7 +35,7 @@ public enum XmlFormat {
 	 * Only applicable for bean properties, not bean classes.
 	 *
 	 * <p>
-	 * Can only be applied to properties (methods/fields) of class types that can be convertible to <code>Strings</code>.
+	 * Can only be applied to properties (methods/fields) of class types that can be convertible to <c>Strings</c>.
 	 */
 	ATTR,
 
@@ -48,8 +48,8 @@ public enum XmlFormat {
 	 * <p>
 	 * On bean properties, implies that the bean property value itself should be serialized as attributes on the bean
 	 * element.
-	 * The bean property data type must be of class type <code>Map&lt;Object,Object&gt;</code> where both
-	 * objects are convertible to <code>Strings</code>.
+	 * The bean property data type must be of class type <c>Map&lt;Object,Object&gt;</c> where both
+	 * objects are convertible to <c>Strings</c>.
 	 */
 	ATTRS,
 

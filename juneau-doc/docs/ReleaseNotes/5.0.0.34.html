@@ -34,7 +34,7 @@
 		}
 	)
 		</p>
-		See <code>RestServlet.createRequestVarResolver(RestRequest)</code> for more information.
+		See <c>RestServlet.createRequestVarResolver(RestRequest)</c> for more information.
 	</li>
 	<li>
 		 Eliminated <ja>@Property.type</ja> annotation which was the old way of specifying NLS variables that got resolved at runtime.
@@ -42,42 +42,42 @@
 	<li>
 		New methods on {@link oajr.RestRequest}:
 		<ul>
-			<li><code><del>RestRequest.getVarResolver()</del></code></li>
-			<li><code><del>RestRequest.getServletURI()</del></code></li>
-			<li><code><del>RestRequest.getRequestParentURI()</del></code></li>
+			<li><dc>RestRequest.getVarResolver()</dc></li>
+			<li><dc>RestRequest.getServletURI()</dc></li>
+			<li><dc>RestRequest.getRequestParentURI()</dc></li>
 		</ul>
 	</li>
 	<li>
 		New methods on {@link oajr.RestResponse}:
 		<ul>
-			<li><code>RestResponse.sendRedirect(CharSequence)</code>
+			<li><c>RestResponse.sendRedirect(CharSequence)</c>
 		</ul>
 	</li>
 	<li>
 		New methods on {@link oajr.RestServlet} that allow easier customization by subclasses:
 		<ul>
-			<li><code><del>RestServlet.createConfigFactory()</del></code></li>
-			<li><code><del>RestServlet.createConverters()</del></code></li>
-			<li><code><del>RestServlet.createDefaultRequestHeaders()</del></code></li>
-			<li><code><del>RestServlet.createDefaultResponseHeaders()</del></code></li>
-			<li><code><del>RestServlet.createEncoders()</del></code></li>
-			<li><code><del>RestServlet.createFilters()</del></code></li>
-			<li><code><del>RestServlet.createGuards()</del></code></li>
-			<li><code><del>RestServlet.createMimetypesFileTypeMap()</del></code></li>
-			<li><code><del>RestServlet.createParsers()</del></code></li>
-			<li><code><del>RestServlet.createProperties()</del></code></li>
-			<li><code><del>RestServlet.createRequestProperties(ObjectMap,RestRequest)</del></code></li>
-			<li><code><del>RestServlet.createRequestVarResolver(RestRequest)</del></code></li>
-			<li><code><del>RestServlet.createSerializers()</del></code></li>
-			<li><code><del>RestServlet.createUrlEncodingParser()</del></code></li>
+			<li><dc>RestServlet.createConfigFactory()</dc></li>
+			<li><dc>RestServlet.createConverters()</dc></li>
+			<li><dc>RestServlet.createDefaultRequestHeaders()</dc></li>
+			<li><dc>RestServlet.createDefaultResponseHeaders()</dc></li>
+			<li><dc>RestServlet.createEncoders()</dc></li>
+			<li><dc>RestServlet.createFilters()</dc></li>
+			<li><dc>RestServlet.createGuards()</dc></li>
+			<li><dc>RestServlet.createMimetypesFileTypeMap()</dc></li>
+			<li><dc>RestServlet.createParsers()</dc></li>
+			<li><dc>RestServlet.createProperties()</dc></li>
+			<li><dc>RestServlet.createRequestProperties(ObjectMap,RestRequest)</dc></li>
+			<li><dc>RestServlet.createRequestVarResolver(RestRequest)</dc></li>
+			<li><dc>RestServlet.createSerializers()</dc></li>
+			<li><dc>RestServlet.createUrlEncodingParser()</dc></li>
 		</ul>
 	</li>
 	<li>
-		Changed <code>RestServletNls</code> to use <code>ResourceDescription/MethodDescription</code>
-			instead of <code>RestResource/RestMethod</code>
+		Changed <c>RestServletNls</c> to use <c>ResourceDescription/MethodDescription</c>
+			instead of <c>RestResource/RestMethod</c>
 	</li>
 	<li>
-		New property <code>RestServletProperties.REST_htDocsFolder</code>.<br>
+		New property <c>RestServletProperties.REST_htDocsFolder</c>.<br>
 		New support for serving up static documents from classpath through REST interface.
 	</li>
 	<li>
@@ -87,12 +87,12 @@
 		New {@link oaj.annotation.Bean#stopClass @Bean.stopClass} annotation for specifying stop classes for bean properties.
 	</li>
 	<li>
-		New <code><del>BeanFilter.setStopClass(Class)</del></code> which is the program equivalent to the annotation above.
+		New <dc>BeanFilter.setStopClass(Class)</dc> which is the program equivalent to the annotation above.
 	</li>
 	<li>
 		New methods on {@link oaj.dto.ResultSetList}:
 		<ul>
-			<li><code>ResultSetList.handleBlob(Blob)</code></li>
-			<li><code>ResultSetList.handleClob(Clob)</code></li>
+			<li><c>ResultSetList.handleBlob(Blob)</c></li>
+			<li><c>ResultSetList.handleClob(Clob)</c></li>
 		</ul>
 </ul>	

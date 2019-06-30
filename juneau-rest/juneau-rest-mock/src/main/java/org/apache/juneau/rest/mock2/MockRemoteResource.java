@@ -102,10 +102,10 @@ public class MockRemoteResource<T> {
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param s
 	 * 	The serializer to use for serializing request bodies.
-	 * 	<br>Can be <jk>null</jk> to force no serializer to be used and no <code>Content-Type</code> header.
+	 * 	<br>Can be <jk>null</jk> to force no serializer to be used and no <c>Content-Type</c> header.
 	 * @param p
 	 * 	The parser to use for parsing response bodies.
-	 * 	<br>Can be <jk>null</jk> to force no parser to be used and no <code>Accept</code> header.
+	 * 	<br>Can be <jk>null</jk> to force no parser to be used and no <c>Accept</c> header.
 	 * @return A new builder.
 	 */
 	public static <T> MockRemoteResource<T> create(Class<T> intf, Object impl, Serializer s, Parser p) {
@@ -164,7 +164,7 @@ public class MockRemoteResource<T> {
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param m
 	 * 	The marshall to use for serializing request bodies and parsing response bodies.
-	 * 	<br>Can be <jk>null</jk> to force no serializer or parser to be used and no <code>Accept</code> or <code>Content-Type</code> header.
+	 * 	<br>Can be <jk>null</jk> to force no serializer or parser to be used and no <c>Accept</c> or <c>Content-Type</c> header.
 	 * @return A new proxy interface.
 	 */
 	public static <T> T build(Class<T> intf, Object impl, Marshall m) {
@@ -190,10 +190,10 @@ public class MockRemoteResource<T> {
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param s
 	 * 	The serializer to use for serializing request bodies.
-	 * 	<br>Can be <jk>null</jk> to force no serializer to be used and no <code>Content-Type</code> header.
+	 * 	<br>Can be <jk>null</jk> to force no serializer to be used and no <c>Content-Type</c> header.
 	 * @param p
 	 * 	The parser to use for parsing response bodies.
-	 * 	<br>Can be <jk>null</jk> to force no parser to be used and no <code>Accept</code> header.
+	 * 	<br>Can be <jk>null</jk> to force no parser to be used and no <c>Accept</c> header.
 	 * @return A new proxy interface.
 	 */
 	public static <T> T build(Class<T> intf, Object impl, Serializer s, Parser p) {
@@ -242,7 +242,7 @@ public class MockRemoteResource<T> {
 	}
 
 	/**
-	 * Adds an <code>Accept</code> header to every request.
+	 * Adds an <c>Accept</c> header to every request.
 	 *
 	 * @param value The <code>Accept/code> header value.
 	 * @return This object (for method chaining).
@@ -254,9 +254,9 @@ public class MockRemoteResource<T> {
 	}
 
 	/**
-	 * Adds a <code>Content-Type</code> header to every request.
+	 * Adds a <c>Content-Type</c> header to every request.
 	 *
-	 * @param value The <code>Content-Type</code> header value.
+	 * @param value The <c>Content-Type</c> header value.
 	 * @return This object (for method chaining).
 	 */
 	public MockRemoteResource<T> contentType(String value) {
@@ -266,7 +266,7 @@ public class MockRemoteResource<T> {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/json"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/json"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -276,7 +276,7 @@ public class MockRemoteResource<T> {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/json+simple"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/json+simple"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -286,7 +286,7 @@ public class MockRemoteResource<T> {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/xml"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/xml"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -296,7 +296,7 @@ public class MockRemoteResource<T> {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/html"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/html"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -306,7 +306,7 @@ public class MockRemoteResource<T> {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/plain"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/plain"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -316,7 +316,7 @@ public class MockRemoteResource<T> {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"octal/msgpack"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"octal/msgpack"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -326,7 +326,7 @@ public class MockRemoteResource<T> {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/uon"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/uon"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -336,7 +336,7 @@ public class MockRemoteResource<T> {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/x-www-form-urlencoded"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/x-www-form-urlencoded"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -346,7 +346,7 @@ public class MockRemoteResource<T> {
 	}
 
 	/**
-	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"text/openapi"</js>.
+	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/openapi"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
@@ -359,7 +359,7 @@ public class MockRemoteResource<T> {
 	 * Associates the specified {@link Marshall} with this client.
 	 *
 	 * <p>
-	 * This is shorthand for calling <code>serializer(x)</code> and <code>parser(x)</code> using the inner
+	 * This is shorthand for calling <c>serializer(x)</c> and <c>parser(x)</c> using the inner
 	 * serializer and parser of the marshall object.
 	 *
 	 * @param value

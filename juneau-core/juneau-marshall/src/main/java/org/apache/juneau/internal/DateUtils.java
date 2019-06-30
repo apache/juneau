@@ -42,7 +42,7 @@ public final class DateUtils {
 	public static final String PATTERN_RFC1036 = "EEE, dd-MMM-yy HH:mm:ss zzz";
 
 	/**
-	 * Date format pattern used to parse HTTP date headers in ANSI C <code>asctime()</code> format.
+	 * Date format pattern used to parse HTTP date headers in ANSI C <c>asctime()</c> format.
 	 */
 	public static final String PATTERN_ASCTIME = "EEE MMM d HH:mm:ss yyyy";
 	private static final String[] DEFAULT_PATTERNS = new String[] { PATTERN_RFC1123, PATTERN_RFC1036, PATTERN_ASCTIME };
@@ -86,9 +86,9 @@ public final class DateUtils {
 	 * @param dateValue the date value to parse
 	 * @param dateFormats the date formats to use
 	 * @param startDate
-	 * 	During parsing, two digit years will be placed in the range <code>startDate</code> to
-	 * 	<code>startDate + 100 years</code>. This value may be <code>null</code>. When
-	 * 	<code>null</code> is given as a parameter, year <code>2000</code> will be used.
+	 * 	During parsing, two digit years will be placed in the range <c>startDate</c> to
+	 * 	<c>startDate + 100 years</c>. This value may be <c>null</c>. When
+	 * 	<c>null</c> is given as a parameter, year <c>2000</c> will be used.
 	 * @return the parsed date or null if input could not be parsed
 	 */
 	public static Date parseDate(final String dateValue, final String[] dateFormats, final Date startDate) {
@@ -192,8 +192,8 @@ public final class DateUtils {
 		 * Creates a {@link SimpleDateFormat} for the requested format string.
 		 *
 		 * @param pattern
-		 * 	A non-<code>null</code> format String according to {@link SimpleDateFormat}.
-		 * 	The format is not checked against <code>null</code> since all paths go through {@link DateUtils}.
+		 * 	A non-<c>null</c> format String according to {@link SimpleDateFormat}.
+		 * 	The format is not checked against <c>null</c> since all paths go through {@link DateUtils}.
 		 * @return
 		 * 	The requested format.
 		 * 	This simple date-format should not be used to {@link SimpleDateFormat#applyPattern(String) apply} to a

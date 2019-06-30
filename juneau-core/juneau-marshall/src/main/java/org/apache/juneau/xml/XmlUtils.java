@@ -33,7 +33,7 @@ public final class XmlUtils {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Encodes any invalid XML element name characters to <code>_x####_</code> sequences.
+	 * Encodes any invalid XML element name characters to <c>_x####_</c> sequences.
 	 *
 	 * @param w The writer to send the output to.
 	 * @param o The object being encoded.
@@ -55,7 +55,7 @@ public final class XmlUtils {
 	}
 
 	/**
-	 * Encodes any invalid XML element name characters to <code>_x####_</code> sequences.
+	 * Encodes any invalid XML element name characters to <c>_x####_</c> sequences.
 	 *
 	 * @param o The object being encoded.
 	 * @return The encoded element name string.
@@ -129,7 +129,7 @@ public final class XmlUtils {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Escapes invalid XML text characters to <code>_x####_</code> sequences.
+	 * Escapes invalid XML text characters to <c>_x####_</c> sequences.
 	 *
 	 * @param o The object being encoded.
 	 * @return The encoded string.
@@ -167,10 +167,10 @@ public final class XmlUtils {
 	 * Encodes the specified element text and sends the results to the specified writer.
 	 *
 	 * <p>
-	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response to the specified
+	 * Encodes any invalid XML text characters to <c>_x####_</c> sequences and sends the response to the specified
 	 * writer.
 	 * <br>Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, and <js>'&gt;'</js> as XML entities.
-	 * <br>Encodes invalid XML text characters to <code>_x####_</code> sequences.
+	 * <br>Encodes invalid XML text characters to <c>_x####_</c> sequences.
 	 *
 	 * @param w The writer to send the output to.
 	 * @param o The object being encoded.
@@ -303,10 +303,10 @@ public final class XmlUtils {
 	 * Encodes the specified attribute value and sends the results to the specified writer.
 	 *
 	 * <p>
-	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response to the specified
+	 * Encodes any invalid XML text characters to <c>_x####_</c> sequences and sends the response to the specified
 	 * writer.
 	 * <br>Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, <js>'&gt;'</js>, <js>'"'</js>, and <js>'\''</js> as XML entities.
-	 * <br>Encodes invalid XML text characters to <code>_x####_</code> sequences.
+	 * <br>Encodes invalid XML text characters to <c>_x####_</c> sequences.
 	 *
 	 * @param w The writer to send the output to.
 	 * @param o The object being encoded.

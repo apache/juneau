@@ -180,7 +180,7 @@ public class RequestPath extends TreeMap<String,String> {
 	 * Similar to {@link #get(String,Class)} but allows for complex collections of POJOs to be created.
 	 *
 	 * <p>
-	 * Use this method if you want to parse into a parameterized <code>Map</code>/<code>Collection</code> object.
+	 * Use this method if you want to parse into a parameterized <c>Map</c>/<c>Collection</c> object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -200,9 +200,9 @@ public class RequestPath extends TreeMap<String,String> {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
 	 * 	<li>
-	 * 		<code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * 		<c>Maps</c> must be followed by zero or two parameters representing the key and value types.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -297,31 +297,31 @@ public class RequestPath extends TreeMap<String,String> {
 	 * 		<th>Path Remainder</th>
 	 * 	</tr>
 	 * 	<tr>
-	 * 		<td><code>/foo</code></td>
+	 * 		<td><c>/foo</c></td>
 	 * 		<td><jk>null</jk></td>
 	 * 	</tr>
 	 * 	<tr>
-	 * 		<td><code>/foo/</code></td>
+	 * 		<td><c>/foo/</c></td>
 	 * 		<td><js>""</js></td>
 	 * 	</tr>
 	 * 	<tr>
-	 * 		<td><code>/foo//</code></td>
+	 * 		<td><c>/foo//</c></td>
 	 * 		<td><js>"/"</js></td>
 	 * 	</tr>
 	 * 	<tr>
-	 * 		<td><code>/foo///</code></td>
+	 * 		<td><c>/foo///</c></td>
 	 * 		<td><js>"//"</js></td>
 	 * 	</tr>
 	 * 	<tr>
-	 * 		<td><code>/foo/a/b</code></td>
+	 * 		<td><c>/foo/a/b</c></td>
 	 * 		<td><js>"a/b"</js></td>
 	 * 	</tr>
 	 * 	<tr>
-	 * 		<td><code>/foo//a/b/</code></td>
+	 * 		<td><c>/foo//a/b/</c></td>
 	 * 		<td><js>"/a/b/"</js></td>
 	 * 	</tr>
 	 * 	<tr>
-	 * 		<td><code>/foo/a%2Fb</code></td>
+	 * 		<td><c>/foo/a%2Fb</c></td>
 	 * 		<td><js>"a/b"</js></td>
 	 * 	</tr>
 	 * </table>

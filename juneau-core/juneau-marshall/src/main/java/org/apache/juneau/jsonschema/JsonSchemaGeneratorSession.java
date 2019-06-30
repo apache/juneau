@@ -64,7 +64,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 *
 	 * @param o
 	 * 	The object.
-	 * 	<br>Can either be a POJO or a <code>Class</code>/<code>Type</code>.
+	 * 	<br>Can either be a POJO or a <c>Class</c>/<c>Type</c>.
 	 * @return The schema for the type.
 	 * @throws Exception
 	 */

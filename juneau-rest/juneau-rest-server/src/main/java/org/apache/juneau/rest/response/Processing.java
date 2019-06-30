@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.Processing.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 102 Processing</code> response.
+ * Represents an <c>HTTP 102 Processing</c> response.
  *
  * <p>
  * A WebDAV request may contain many sub-requests involving file operations, requiring a long time to complete the request.

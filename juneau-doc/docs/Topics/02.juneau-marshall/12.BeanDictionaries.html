@@ -36,7 +36,7 @@ Bean Names and Dictionaries
 	On the parsing side, these type names are resolved to classes through the use of bean dictionaries.
 </p>
 <p>
-	For example, if a bean property is of type <code>Object</code>, then the serializer will add 
+	For example, if a bean property is of type <c>Object</c>, then the serializer will add 
 	<js>"_type"</js> attributes so that the class can be determined during parsing.
 </p>
 <p class='bpcode w800'>
@@ -68,7 +68,7 @@ Bean Names and Dictionaries
 <p>
 	Type names can be represented slightly differently in different languages.
 	For example, the dictionary name is used as element names when serialized to XML.
-	This allows the <code>typeName</code> annotation to be used as a shortcut for defining element names for 
+	This allows the <c>typeName</c> annotation to be used as a shortcut for defining element names for 
 	beans.
 </p>
 <p>
@@ -160,7 +160,7 @@ Bean Names and Dictionaries
 		However, they must be unique within a dictionary.
 	<li class='info'>
 		The following reserved words cannot be used as type names:  
-		<code>object, array, number, boolean, null</code>.
+		<c>object, array, number, boolean, null</c>.
 	<li class='info'>
 		Serialized type names are DISABLED by default.
 		They must be enabled on the serializer using the 

@@ -834,7 +834,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 *
 	 * @see HtmlSerializer#HTML_addKeyValueTableHeaders
 	 * @return
-	 * 	<jk>true</jk> if <code><b>key</b></code> and <code><b>value</b></code> column headers are added to tables.
+	 * 	<jk>true</jk> if <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 	 */
 	protected final boolean isAddKeyValueTableHeaders() {
 		return ctx.isAddKeyValueTableHeaders();

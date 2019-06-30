@@ -43,7 +43,7 @@ public abstract class CharMarshall extends Marshall {
 	}
 
 	/**
-	 * Serializes a POJO directly to a <code>String</code>.
+	 * Serializes a POJO directly to a <c>String</c>.
 	 *
 	 * @param o The object to serialize.
 	 * @return

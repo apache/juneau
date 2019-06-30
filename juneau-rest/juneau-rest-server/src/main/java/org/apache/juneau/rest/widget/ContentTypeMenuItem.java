@@ -30,7 +30,7 @@ import org.apache.juneau.utils.*;
  * The variable it resolves is <js>"$W{ContentTypeMenuItem}"</js>.
  *
  * <p>
- * An example of this widget can be found in the <code>PetStoreResource</code> in the examples that provides
+ * An example of this widget can be found in the <c>PetStoreResource</c> in the examples that provides
  * a drop-down menu item for rendering all other supported content types in plain text:
  * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(

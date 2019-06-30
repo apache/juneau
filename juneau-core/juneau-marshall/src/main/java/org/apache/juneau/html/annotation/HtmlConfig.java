@@ -74,15 +74,15 @@ public @interface HtmlConfig {
 	 * Configuration property:  Add key/value headers on bean/map tables.
 	 *
 	 * <p>
-	 * When enabled, <code><b>key</b></code> and <code><b>value</b></code> column headers are added to tables.
+	 * When enabled, <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 	 *
 	 * <p>
 	 * The following shows the difference between the two generated outputs:
 	 *
 	 * <table class='styled'>
 	 * 	<tr>
-	 * 		<th><code>withoutHeaders</code></th>
-	 * 		<th><code>withHeaders</code></th>
+	 * 		<th><c>withoutHeaders</c></th>
+	 * 		<th><c>withHeaders</c></th>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>
@@ -134,8 +134,8 @@ public @interface HtmlConfig {
 	 *
 	 * <table class='styled'>
 	 * 	<tr>
-	 * 		<th><code>withLinks</code></th>
-	 * 		<th><code>withoutLinks</code></th>
+	 * 		<th><c>withLinks</c></th>
+	 * 		<th><c>withoutLinks</c></th>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>
@@ -212,8 +212,8 @@ public @interface HtmlConfig {
 	 *
 	 * <table class='styled'>
 	 * 	<tr>
-	 * 		<th><code>withLabels</code></th>
-	 * 		<th><code>withoutLabels</code></th>
+	 * 		<th><c>withLabels</c></th>
+	 * 		<th><c>withoutLabels</c></th>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>

@@ -24,23 +24,23 @@
 	<li>
 		{@link oaj.utils.PojoQuery} improvements.
 	<li>
-		New <code><del>RemoteMethod.returns()</del></code> annotation.
+		New <dc>RemoteMethod.returns()</dc> annotation.
 		<br>Allows you to specify whether the remote method returns the HTTP body or status code.
 	<li>
 		Fixed bugs with {@link oaj.BeanContext#BEAN_includeProperties} and {@link oaj.BeanContext#BEAN_excludeProperties} settings.
 	<li>
-		New/modified settings in <code><del>HtmlDocSerializerContext</del></code>:
+		New/modified settings in <dc>HtmlDocSerializerContext</dc>:
 		<ul>
-			<li><code><del>HTMLDOC_script</del></code>
-			<li><code><del>HTMLDOC_style</del></code> - Was <jsf>HTMLDOC_css</jsf>.
-			<li><code><del>HTMLDOC_stylesheet</del></code> - Was <jsf>HTMLDOC_cssUrl</jsf>.  Now an array.
+			<li><dc>HTMLDOC_script</dc>
+			<li><dc>HTMLDOC_style</dc> - Was <jsf>HTMLDOC_css</jsf>.
+			<li><dc>HTMLDOC_stylesheet</dc> - Was <jsf>HTMLDOC_cssUrl</jsf>.  Now an array.
 		</ul>
 	<li>
-		New <code><del>ResourceFinder</del></code> utility class.
+		New <dc>ResourceFinder</dc> utility class.
 		Allows you to search for resources up the parent hierarchy chain.
 		Also allows you to search for localized resources.
 	<li>
-		Eliminated the following properties from <code><del>HtmlDocSerializerContext</del></code>:
+		Eliminated the following properties from <dc>HtmlDocSerializerContext</dc>:
 		<jsf>HTMLDOC_title</jsf>, <jsf>HTMLDOC_description</jsf>, <jsf>HTMLDOC_description</jsf>
 		<br>See below on changes to simplify HTML headers.
 	<li>
@@ -110,9 +110,9 @@
 			<li>
 				You can now add arbitrary CSS and Javascript along with your widgets through new methods:
 				<ul>
-					<li><code><del>Widget#getHtml(RestRequest)</del></code>
-					<li><code><del>Widget#getScript(RestRequest)</del></code>
-					<li><code><del>Widget#getStyle(RestRequest)</del></code>
+					<li><dc>Widget#getHtml(RestRequest)</dc>
+					<li><dc>Widget#getScript(RestRequest)</dc>
+					<li><dc>Widget#getStyle(RestRequest)</dc>
 				</ul>
 			</li>
 			<li>
@@ -124,8 +124,8 @@
 			<li>
 				Renamed widgets:
 				<ul>
-					<li><code>PoweredByApacheWidget</code> -&gt; <code>PoweredByApache</code>  
-					<li><code>PoweredByJuneauWidget</code> -&gt; <code>PoweredByJuneau</code>  
+					<li><c>PoweredByApacheWidget</c> -&gt; <c>PoweredByApache</c>  
+					<li><c>PoweredByJuneauWidget</c> -&gt; <c>PoweredByJuneau</c>  
 				</ul>
 			<li>
 				New {@link oajr.widget.MenuItemWidget} can be used as a starting point for creatint pull-down menu items.
@@ -146,8 +146,8 @@
 	<li>
 		New/modified annotations on {@link oajr.annotation.HtmlDoc @HtmlDoc}:
 		<ul>
-			<li>{@link oajr.annotation.HtmlDoc#style() style()} - Renamed from <code>css()</code>.
-			<li>{@link oajr.annotation.HtmlDoc#stylesheet() stylesheet()} - Renamed from <code>cssUrl()</code>.
+			<li>{@link oajr.annotation.HtmlDoc#style() style()} - Renamed from <c>css()</c>.
+			<li>{@link oajr.annotation.HtmlDoc#stylesheet() stylesheet()} - Renamed from <c>cssUrl()</c>.
 				<br>Can now be a comma-delimited list of URLs.
 			<li>{@link oajr.annotation.HtmlDoc#script() script()} - Add arbitrary Javascript to page header.
 		</ul>
@@ -171,14 +171,14 @@
 		</ul>
 	</li>
 	<li>
-		Eliminated the <code>@RestResource(stylesheet)</code> annotation.  
+		Eliminated the <c>@RestResource(stylesheet)</c> annotation.  
 		It's no longer needed now that you can easily specify styles via <ja>@Htmldoc</ja>.
 	<li>
 		Eliminated the following annotations since they are now redundant with {@link oajr.annotation.HtmlDoc#header() @HtmlDoc(header)}:
 		<ul>
-			<li><code>title()</code>
-			<li><code>description()</code>
-			<li><code>branding()</code>
+			<li><c>title()</c>
+			<li><c>description()</c>
+			<li><c>branding()</c>
 		</ul>
 		Instead, the {@link oajr.BasicRestServlet} class defines the following default header
 		that can be easily overridden: 
@@ -195,7 +195,7 @@
 	<li>
 		New {@link oajr.vars.FileVar $F} variable resolver for resolving the contents of 
 		files in the classpath.
-		<br>The <code>DockerRegistryResource</code> examples shows how it can be used to pull in a localized
+		<br>The <c>DockerRegistryResource</c> examples shows how it can be used to pull in a localized
 		file from the classpath to populate the aside section of a page.
 		<p class='bcode w800'>
 	htmldoc=<ja>@HtmlDoc</ja>(
@@ -204,16 +204,16 @@
 	)
 		</p>
 	<li>
-		New <code><del>ReaderResource.toCommentStrippedString()</del></code> method.
+		New <dc>ReaderResource.toCommentStrippedString()</dc> method.
 	<li>
-		The <code>bpIncludes()</code> and <code>bpExcludes()</code> annotations on <ja>@RestMethod</ja>
+		The <c>bpIncludes()</c> and <c>bpExcludes()</c> annotations on <ja>@RestMethod</ja>
 		has been replaced with the following:
 		<ul>
 			<li>{@link oajr.annotation.RestMethod#bpi() bpi()} - Now an array of simplified values instead of LAX JSON.
 			<li>{@link oajr.annotation.RestMethod#bpx() bpx()} - Now an array of simplified values instead of LAX JSON.
 		</ul>
 	<li>
-		Two new variables added to <code>$R</code> variable: <js>"$R{servletClass}"</js>, <js>"$R{servletClassSimple}"</js>
+		Two new variables added to <c>$R</c> variable: <js>"$R{servletClass}"</js>, <js>"$R{servletClassSimple}"</js>
 </ul>
 
 <h5 class='topic w800'>org.apache.juneau.rest.examples</h5>

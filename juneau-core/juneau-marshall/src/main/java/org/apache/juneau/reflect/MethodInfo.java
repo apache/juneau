@@ -417,7 +417,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 *
 	 * <p>
 	 * Note that this only works for methods that have distinguishable argument types.
-	 * <br>It's not going to work on methods with generic argument types like <code>Object</code>
+	 * <br>It's not going to work on methods with generic argument types like <c>Object</c>
 	 *
 	 * @param pojo
 	 * 	The POJO the method is being called on.

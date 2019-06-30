@@ -50,7 +50,7 @@ public class HashCode {
 	 * Hashes the hashcode into this object.
 	 *
 	 * <p>
-	 * The formula is simply <code>hashCode = 31*hashCode + i;</code>
+	 * The formula is simply <c>hashCode = 31*hashCode + i;</c>
 	 *
 	 * @param i The hashcode to hash into this object's hashcode.
 	 * @return This object (for method chaining).
@@ -74,7 +74,7 @@ public class HashCode {
 	 *
 	 * <p>
 	 * Subclasses can override this method to provide specialized handling (e.g. converting numbers to strings so that
-	 * <code>123</code> and <js>"123"</js> end up creating the same hashcode.)
+	 * <c>123</c> and <js>"123"</js> end up creating the same hashcode.)
 	 *
 	 * <p>
 	 * Default implementation does nothing.

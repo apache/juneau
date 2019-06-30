@@ -182,8 +182,8 @@ public class SerializerWriter extends Writer {
 	 * Appends the specified object as a URI.
 	 *
 	 * <p>
-	 * Object is converted to a <code>String</code> using <code>toString()</code>, so this will work on {@link URL} or
-	 * {@link URI} objects, or any other type that returns a URI via it's <code>toString()</code> method.
+	 * Object is converted to a <c>String</c> using <c>toString()</c>, so this will work on {@link URL} or
+	 * {@link URI} objects, or any other type that returns a URI via it's <c>toString()</c> method.
 	 *
 	 * <p>
 	 * The URI is resolved based on the {@link Serializer#SERIALIZER_uriRelativity} and

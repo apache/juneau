@@ -129,7 +129,7 @@ public final class StringUtils {
 	 * 		<li> BigInteger
 	 * 		<li> BigDecimal
 	 * 	</ul>
-	 * 	If <jk>null</jk> or <code>Number</code>, uses the best guess.
+	 * 	If <jk>null</jk> or <c>Number</c>, uses the best guess.
 	 * @return The parsed number, or <jk>null</jk> if the string was null.
 	 * @throws ParseException
 	 */
@@ -215,7 +215,7 @@ public final class StringUtils {
 	);
 
 	/**
-	 * Converts a <code>String</code> to a <code>Character</code>
+	 * Converts a <c>String</c> to a <c>Character</c>
 	 *
 	 * @param o The string to convert.
 	 * @return The first character of the string if the string is of length 0, or <jk>null</jk> if the string is <jk>null</jk> or empty.
@@ -336,7 +336,7 @@ public final class StringUtils {
 	 * Convenience method for getting a stack trace as a string.
 	 *
 	 * @param t The throwable to get the stack trace from.
-	 * @return The same content that would normally be rendered via <code>t.printStackTrace()</code>
+	 * @return The same content that would normally be rendered via <c>t.printStackTrace()</c>
 	 */
 	public static String getStackTrace(Throwable t) {
 		StringWriter sw = new StringWriter();
@@ -351,7 +351,7 @@ public final class StringUtils {
 	 *
 	 * @param tokens The tokens to join.
 	 * @param separator The delimiter.
-	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
 	 */
 	public static String join(Object[] tokens, String separator) {
 		if (tokens == null)
@@ -370,7 +370,7 @@ public final class StringUtils {
 	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
-	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
 	 */
 	public static String join(int[] tokens, String d) {
 		if (tokens == null)
@@ -389,7 +389,7 @@ public final class StringUtils {
 	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
-	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
 	 */
 	public static String join(Collection<?> tokens, String d) {
 		if (tokens == null)
@@ -403,7 +403,7 @@ public final class StringUtils {
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
 	 * @param sb The string builder to append the response to.
-	 * @return The same string builder passed in as <code>sb</code>.
+	 * @return The same string builder passed in as <c>sb</c>.
 	 */
 	public static StringBuilder join(Collection<?> tokens, String d, StringBuilder sb) {
 		if (tokens == null)
@@ -421,7 +421,7 @@ public final class StringUtils {
 	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
-	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
 	 */
 	public static String join(Object[] tokens, char d) {
 		if (tokens == null)
@@ -434,7 +434,7 @@ public final class StringUtils {
 	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
-	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
 	 */
 	public static String joine(Object[] tokens, char d) {
 		if (tokens == null)
@@ -458,7 +458,7 @@ public final class StringUtils {
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
 	 * @param sb The string builder to append the response to.
-	 * @return The same string builder passed in as <code>sb</code>.
+	 * @return The same string builder passed in as <c>sb</c>.
 	 */
 	public static StringBuilder join(Object[] tokens, char d, StringBuilder sb) {
 		if (tokens == null)
@@ -477,7 +477,7 @@ public final class StringUtils {
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
 	 * @param sb The string builder to append the response to.
-	 * @return The same string builder passed in as <code>sb</code>.
+	 * @return The same string builder passed in as <c>sb</c>.
 	 */
 	public static StringBuilder joine(Object[] tokens, char d, StringBuilder sb) {
 		if (tokens == null)
@@ -496,7 +496,7 @@ public final class StringUtils {
 	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
-	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
 	 */
 	public static String join(int[] tokens, char d) {
 		if (tokens == null)
@@ -515,7 +515,7 @@ public final class StringUtils {
 	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
-	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
 	 */
 	public static String join(Collection<?> tokens, char d) {
 		if (tokens == null)
@@ -534,7 +534,7 @@ public final class StringUtils {
 	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
-	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
 	 */
 	public static String joine(Collection<?> tokens, char d) {
 		if (tokens == null)
@@ -759,12 +759,12 @@ public final class StringUtils {
 	 * <p>
 	 * Examples:
 	 * <ul>
-	 * 	<li><js>"foo"</js> =&gt; <code>["foo"]</code>
-	 * 	<li><js>" foo "</js> =&gt; <code>["foo"]</code>
-	 * 	<li><js>"foo bar baz"</js> =&gt; <code>["foo","bar","baz"]</code>
-	 * 	<li><js>"foo 'bar baz'"</js> =&gt; <code>["foo","bar baz"]</code>
-	 * 	<li><js>"foo \"bar baz\""</js> =&gt; <code>["foo","bar baz"]</code>
-	 * 	<li><js>"foo 'bar\'baz'"</js> =&gt; <code>["foo","bar'baz"]</code>
+	 * 	<li><js>"foo"</js> =&gt; <c>["foo"]</c>
+	 * 	<li><js>" foo "</js> =&gt; <c>["foo"]</c>
+	 * 	<li><js>"foo bar baz"</js> =&gt; <c>["foo","bar","baz"]</c>
+	 * 	<li><js>"foo 'bar baz'"</js> =&gt; <c>["foo","bar baz"]</c>
+	 * 	<li><js>"foo \"bar baz\""</js> =&gt; <c>["foo","bar baz"]</c>
+	 * 	<li><js>"foo 'bar\'baz'"</js> =&gt; <c>["foo","bar'baz"]</c>
 	 * </ul>
 	 *
 	 * @param s The input string.
@@ -1205,7 +1205,7 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Shortcut for calling <code>base64Decode(String)</code> and converting the result to a UTF-8 encoded string.
+	 * Shortcut for calling <c>base64Decode(String)</c> and converting the result to a UTF-8 encoded string.
 	 *
 	 * @param in The BASE-64 encoded string to decode.
 	 * @return The decoded string.
@@ -1272,14 +1272,14 @@ public final class StringUtils {
 	 * This method conforms to the restrictions for hostnames as specified in {@doc https://tools.ietf.org/html/rfc952 RFC 952}
 	 * Since each character has 36 possible values, the square approximation formula for the number of generated IDs
 	 * that would produce a 50% chance of collision is:
-	 * <code>sqrt(36^N)</code>.
+	 * <c>sqrt(36^N)</c>.
 	 * Dividing this number by 10 gives you an approximation of the number of generated IDs needed to produce a
 	 * &lt;1% chance of collision.
 	 *
 	 * <p>
 	 * For example, given 5 characters, the number of generated IDs need to produce a &lt;1% chance of collision would
 	 * be:
-	 * <code>sqrt(36^5)/10=777</code>
+	 * <c>sqrt(36^5)/10=777</c>
 	 *
 	 * @param numchars The number of characters in the generated UUID.
 	 * @return A new random UUID.
@@ -1297,7 +1297,7 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Same as {@link String#trim()} but prevents <code>NullPointerExceptions</code>.
+	 * Same as {@link String#trim()} but prevents <c>NullPointerExceptions</c>.
 	 *
 	 * @param s The string to trim.
 	 * @return The trimmed string, or <jk>null</jk> if the string was <jk>null</jk>.
@@ -1325,7 +1325,7 @@ public final class StringUtils {
 	 *
 	 * <p>
 	 * Supports any of the following formats:
-	 * <br><code>yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS</code>
+	 * <br><c>yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS</c>
 	 *
 	 * @param date The date string.
 	 * @return The parsed date.
@@ -1342,7 +1342,7 @@ public final class StringUtils {
 	 *
 	 * <p>
 	 * Supports any of the following formats:
-	 * <br><code>yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS</code>
+	 * <br><c>yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS</c>
 	 *
 	 * @param date The date string.
 	 * @return The parsed calendar.
@@ -1886,7 +1886,7 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Decodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
+	 * Decodes a <c>application/x-www-form-urlencoded</c> string using <c>UTF-8</c> encoding scheme.
 	 *
 	 * @param s The string to decode.
 	 * @return The decoded string, or <jk>null</jk> if input is <jk>null</jk>.
@@ -1909,7 +1909,7 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Encodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
+	 * Encodes a <c>application/x-www-form-urlencoded</c> string using <c>UTF-8</c> encoding scheme.
 	 *
 	 * @param s The string to encode.
 	 * @return The encoded string, or <jk>null</jk> if input is <jk>null</jk>.
@@ -1988,7 +1988,7 @@ public final class StringUtils {
 	 *
 	 * @param s The string to check.
 	 * @return
-	 * 	The first non-whitespace character, or <code>0</code> if the string is <jk>null</jk>, empty, or composed
+	 * 	The first non-whitespace character, or <c>0</c> if the string is <jk>null</jk>, empty, or composed
 	 * 	of only whitespace.
 	 */
 	public static char firstNonWhitespaceChar(String s) {
@@ -2004,7 +2004,7 @@ public final class StringUtils {
 	 *
 	 * @param s The string to check.
 	 * @return
-	 * 	The last non-whitespace character, or <code>0</code> if the string is <jk>null</jk>, empty, or composed
+	 * 	The last non-whitespace character, or <c>0</c> if the string is <jk>null</jk>, empty, or composed
 	 * 	of only whitespace.
 	 */
 	public static char lastNonWhitespaceChar(String s) {
@@ -2021,7 +2021,7 @@ public final class StringUtils {
 	 * @param s The string.
 	 * @param i The index position.
 	 * @return
-	 * 	The character at the specified index, or <code>0</code> if the index is out-of-range or the string
+	 * 	The character at the specified index, or <c>0</c> if the index is out-of-range or the string
 	 * 	is <jk>null</jk>.
 	 */
 	public static char charAt(String s, int i) {
@@ -2085,7 +2085,7 @@ public final class StringUtils {
 	 * Efficiently determines whether a URL is of the pattern "xxx:/xxx".
 	 *
 	 * <p>
-	 * The pattern matched is: <code>[a-z]{2,}\:\/.*</code>
+	 * The pattern matched is: <c>[a-z]{2,}\:\/.*</c>
 	 *
 	 * <p>
 	 * Note that this excludes filesystem paths such as <js>"C:/temp"</js>.
@@ -2523,7 +2523,7 @@ public final class StringUtils {
 	 * Returns the first character in the specified string.
 	 *
 	 * @param s The string to check.
-	 * @return The first character in the string, or <code>0</code> if the string is <jk>null</jk> or empty.
+	 * @return The first character in the string, or <c>0</c> if the string is <jk>null</jk> or empty.
 	 */
 	public static char firstChar(String s) {
 		if (s == null || s.length() == 0)
@@ -2592,7 +2592,7 @@ public final class StringUtils {
 	 *
 	 * @param s The string to parse.
 	 * @return
-	 * 	The time in milliseconds, or <code>-1</code> if the string is empty or <jk>null</jk>.
+	 * 	The time in milliseconds, or <c>-1</c> if the string is empty or <jk>null</jk>.
 	 */
 	public static long getDuration(String s) {
 		s = trim(s);

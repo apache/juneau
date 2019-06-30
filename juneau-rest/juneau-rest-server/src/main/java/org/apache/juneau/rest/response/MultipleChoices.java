@@ -17,7 +17,7 @@ import static org.apache.juneau.rest.response.MultipleChoices.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents an <code>HTTP 300 Multiple Choices</code> response.
+ * Represents an <c>HTTP 300 Multiple Choices</c> response.
  *
  * <p>
  * Indicates multiple options for the resource from which the client may choose (via agent-driven content negotiation).

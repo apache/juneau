@@ -72,10 +72,10 @@ public final class ContentLength extends HeaderLong {
 	}
 
 	/**
-	 * Returns a parsed <code>Content-Length</code> header.
+	 * Returns a parsed <c>Content-Length</c> header.
 	 *
-	 * @param value The <code>Content-Length</code> header string.
-	 * @return The parsed <code>Content-Length</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Content-Length</c> header string.
+	 * @return The parsed <c>Content-Length</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static ContentLength forString(String value) {
 		if (value == null)

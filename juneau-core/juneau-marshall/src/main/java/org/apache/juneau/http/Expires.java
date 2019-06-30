@@ -82,10 +82,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Expires extends HeaderDate {
 
 	/**
-	 * Returns a parsed <code>Expires</code> header.
+	 * Returns a parsed <c>Expires</c> header.
 	 *
-	 * @param value The <code>Expires</code> header string.
-	 * @return The parsed <code>Expires</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Expires</c> header string.
+	 * @return The parsed <c>Expires</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Expires forString(String value) {
 		if (value == null)

@@ -71,7 +71,7 @@ public class BasicRestLogger implements RestLogger {
 	 *
 	 * <p>
 	 * Subclasses can provide their own logger.
-	 * The default implementation returns the logger created using <code>Logger.getLogger(getClass())</code>.
+	 * The default implementation returns the logger created using <c>Logger.getLogger(getClass())</c>.
 	 *
 	 * @return The logger used for logging.
 	 */
@@ -147,7 +147,7 @@ public class BasicRestLogger implements RestLogger {
 	 * Typically, subclasses will override this method and log errors themselves.
 	 *
 	 * <p>
-	 * The default implementation simply logs errors to the <code>RestServlet</code> logger.
+	 * The default implementation simply logs errors to the <c>RestServlet</c> logger.
 	 *
 	 * <p>
 	 * Here's a typical implementation showing how stack trace hashing can be used to reduce log file sizes...
@@ -201,7 +201,7 @@ public class BasicRestLogger implements RestLogger {
 	 *
 	 * <p>
 	 * The default implementation will return <jk>false</jk> if <js>"noTrace=true"</js> is passed in the query string
-	 * or <code>No-Trace: true</code> is specified in the header.
+	 * or <c>No-Trace: true</c> is specified in the header.
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
@@ -222,7 +222,7 @@ public class BasicRestLogger implements RestLogger {
 	 *
 	 * <p>
 	 * The default implementation will only log a stack trace if {@link RestException#getOccurrence()} returns
-	 * <code>1</code> and the exception is not one of the following:
+	 * <c>1</c> and the exception is not one of the following:
 	 * <ul>
 	 * 	<li>{@link HttpServletResponse#SC_UNAUTHORIZED}
 	 * 	<li>{@link HttpServletResponse#SC_FORBIDDEN}

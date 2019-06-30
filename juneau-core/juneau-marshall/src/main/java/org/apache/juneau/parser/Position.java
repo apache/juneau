@@ -65,7 +65,7 @@ public class Position {
 	/**
 	 * Returns the current line.
 	 *
-	 * @return The current line, or <code>-1</code> if not specified.
+	 * @return The current line, or <c>-1</c> if not specified.
 	 */
 	public int getLine() {
 		return line;
@@ -74,7 +74,7 @@ public class Position {
 	/**
 	 * Returns the current column.
 	 *
-	 * @return The current column, or <code>-1</code> if not specified.
+	 * @return The current column, or <c>-1</c> if not specified.
 	 */
 	public int getColumn() {
 		return column;
@@ -83,7 +83,7 @@ public class Position {
 	/**
 	 * Returns the current byte position.
 	 *
-	 * @return The current byte position, or <code>-1</code> if not specified.
+	 * @return The current byte position, or <c>-1</c> if not specified.
 	 */
 	public int getPosition() {
 		return position;

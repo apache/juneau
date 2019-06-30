@@ -184,7 +184,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default value is <code>5</code>.
+	 * 	<br>The default value is <c>5</c>.
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder debugOutputLines(int value) {
@@ -326,7 +326,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * Configuration property:  File charset.
 	 *
 	 * <p>
-	 * The character set to use for reading <code>Files</code> from the file system.
+	 * The character set to use for reading <c>Files</c> from the file system.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -346,7 +346,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * Configuration property:  Input stream charset.
 	 *
 	 * <p>
-	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

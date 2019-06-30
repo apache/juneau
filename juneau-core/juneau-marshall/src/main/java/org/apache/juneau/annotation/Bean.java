@@ -227,8 +227,8 @@ public @interface Bean {
 	 * Any properties in the stop class or in its base classes will be ignored during analysis.
 	 *
 	 * <p>
-	 * For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>,
-	 * but not <code>p1</code> or <code>p2</code>.
+	 * For example, in the following class hierarchy, instances of <c>C3</c> will include property <c>p3</c>,
+	 * but not <c>p1</c> or <c>p2</c>.
 	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> C1 {
 	 * 		<jk>public int</jk> getP1();
@@ -251,7 +251,7 @@ public @interface Bean {
 	 *
 	 * <p>
 	 * The name is used to identify the class type during parsing when it cannot be inferred through reflection.
-	 * <br>For example, if a bean property is of type <code>Object</code>, then the serializer will add the name to the
+	 * <br>For example, if a bean property is of type <c>Object</c>, then the serializer will add the name to the
 	 * output so that the class can be determined during parsing.
 	 *
 	 * <p>

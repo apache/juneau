@@ -44,7 +44,7 @@
 	</ul>
 </ul>
 <p>
-	The most typical scenario is to simply use the <code>value</code> field to define path parameter names:
+	The most typical scenario is to simply use the <c>value</c> field to define path parameter names:
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -75,7 +75,7 @@
 
 <p>
 	The special name <js>"*"</js> (or blank) can be used to represent all values.
-	When used, the data type must be a <code>Map</code> or bean.
+	When used, the data type must be a <c>Map</c> or bean.
 </p>
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
@@ -101,7 +101,7 @@
 </p>
 
 <p>
-	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <c>Longs</c>:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/testPath/{pathParam}"</js>)	
@@ -126,7 +126,7 @@
 </p>
 <p>
 	Input will be converted based on the types and formats defined in the schema definition.
-	Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+	Input validations such as <c>minLength/maxLength</c> that don't match the input will result in automatic <c>400 Bad Request</c> responses.
 </p>
 <p>
 	For more information about valid parameter types, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}

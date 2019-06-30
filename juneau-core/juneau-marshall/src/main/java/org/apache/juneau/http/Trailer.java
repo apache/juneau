@@ -61,10 +61,10 @@ import org.apache.juneau.http.annotation.*;
 public final class Trailer extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>Trailer</code> header.
+	 * Returns a parsed <c>Trailer</c> header.
 	 *
-	 * @param value The <code>Trailer</code> header string.
-	 * @return The parsed <code>Trailer</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Trailer</c> header string.
+	 * @return The parsed <c>Trailer</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Trailer forString(String value) {
 		if (value == null)

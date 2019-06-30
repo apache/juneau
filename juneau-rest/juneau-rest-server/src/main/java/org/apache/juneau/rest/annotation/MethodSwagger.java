@@ -25,7 +25,7 @@ import org.apache.juneau.jsonschema.annotation.*;
 public @interface MethodSwagger {
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/summary</code>.
+	 * Defines the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -44,7 +44,7 @@ public @interface MethodSwagger {
 	String[] summary() default {};
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/description</code>.
+	 * Defines the swagger field <c>/paths/{path}/{method}/description</c>.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -63,7 +63,7 @@ public @interface MethodSwagger {
 	String[] description() default {};
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/operationId</code>.
+	 * Defines the swagger field <c>/paths/{path}/{method}/operationId</c>.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -81,7 +81,7 @@ public @interface MethodSwagger {
 	String operationId() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/schemes</code>.
+	 * Defines the swagger field <c>/paths/{path}/{method}/schemes</c>.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -97,7 +97,7 @@ public @interface MethodSwagger {
 	String[] schemes() default {};
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/deprecated</code>.
+	 * Defines the swagger field <c>/paths/{path}/{method}/deprecated</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -124,10 +124,10 @@ public @interface MethodSwagger {
 	String deprecated() default "";
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/consumes</code>.
+	 * Defines the swagger field <c>/paths/{path}/{method}/consumes</c>.
 	 *
 	 * <p>
-	 * Use this value to override the supported <code>Content-Type</code> media types defined by the parsers defined via {@link RestMethod#parsers()}.
+	 * Use this value to override the supported <c>Content-Type</c> media types defined by the parsers defined via {@link RestMethod#parsers()}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -143,10 +143,10 @@ public @interface MethodSwagger {
 	String[] consumes() default {};
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/consumes</code>.
+	 * Defines the swagger field <c>/paths/{path}/{method}/consumes</c>.
 	 *
 	 * <p>
-	 * Use this value to override the supported <code>Accept</code> media types defined by the serializers defined via {@link RestMethod#serializers()}.
+	 * Use this value to override the supported <c>Accept</c> media types defined by the serializers defined via {@link RestMethod#serializers()}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -162,7 +162,7 @@ public @interface MethodSwagger {
 	String[] produces() default {};
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/externalDocs</code>.
+	 * Defines the swagger field <c>/paths/{path}/{method}/externalDocs</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -185,7 +185,7 @@ public @interface MethodSwagger {
 	ExternalDocs externalDocs() default @ExternalDocs;
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/parameters</code>.
+	 * Defines the swagger field <c>/paths/{path}/{method}/parameters</c>.
 	 *
 	 * <p>
 	 * This annotation is provided for documentation purposes and is used to populate the method <js>"parameters"</js>
@@ -221,7 +221,7 @@ public @interface MethodSwagger {
 	String[] parameters() default {};
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}/responses</code>.
+	 * Defines the swagger field <c>/paths/{path}/{method}/responses</c>.
 	 *
 	 * <p>
 	 * This annotation is provided for documentation purposes and is used to populate the method <js>"responses"</js>
@@ -277,13 +277,13 @@ public @interface MethodSwagger {
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/tags</code>.
+	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/tags</c>.
 	 * </ul>
 	 */
 	String[] tags() default {};
 
 	/**
-	 * Defines the swagger field <code>/paths/{path}/{method}</code>.
+	 * Defines the swagger field <c>/paths/{path}/{method}</c>.
 	 *
 	 * <p>
 	 * Used for free-form Swagger documentation of a REST Java method.
@@ -380,7 +380,7 @@ public @interface MethodSwagger {
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
+	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
 	 * 		<p class='bcode w800'>
 	 * 	<ja>@MethodSwagger</ja>(<js>"{summary: 'Add pet'}"</js>)

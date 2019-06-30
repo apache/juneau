@@ -72,10 +72,10 @@ import org.apache.juneau.http.annotation.*;
 public final class LastModified extends HeaderDate {
 
 	/**
-	 * Returns a parsed <code>Last-Modified</code> header.
+	 * Returns a parsed <c>Last-Modified</c> header.
 	 *
-	 * @param value The <code>Last-Modified</code> header string.
-	 * @return The parsed <code>Last-Modified</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>Last-Modified</c> header string.
+	 * @return The parsed <c>Last-Modified</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static LastModified forString(String value) {
 		if (value == null)

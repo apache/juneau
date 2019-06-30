@@ -15,7 +15,7 @@ package org.apache.juneau.serializer;
 import org.apache.juneau.http.*;
 
 /**
- * Represents a serializer and media type that matches an HTTP <code>Accept</code> header value.
+ * Represents a serializer and media type that matches an HTTP <c>Accept</c> header value.
  */
 public final class SerializerMatch {
 
@@ -28,7 +28,7 @@ public final class SerializerMatch {
 	}
 
 	/**
-	 * Returns the media type of the serializers that matched the HTTP <code>Accept</code> header value.
+	 * Returns the media type of the serializers that matched the HTTP <c>Accept</c> header value.
 	 *
 	 * @return The media type of the match.
 	 */
@@ -37,7 +37,7 @@ public final class SerializerMatch {
 	}
 
 	/**
-	 * Returns the serializer that matched the HTTP <code>Accept</code> header value.
+	 * Returns the serializer that matched the HTTP <c>Accept</c> header value.
 	 *
 	 * @return The serializer of the match.
 	 */

@@ -31,7 +31,7 @@ public class IdMap<K,V> extends ConcurrentHashMap<K,V> {
 
 
 	/**
-	 * Creates a new ID map with integer keys with generator initialized to <code>1</code>.
+	 * Creates a new ID map with integer keys with generator initialized to <c>1</c>.
 	 *
 	 * @param c The value type.
 	 * @return A new map.
@@ -52,7 +52,7 @@ public class IdMap<K,V> extends ConcurrentHashMap<K,V> {
 	}
 
 	/**
-	 * Creates a new ID map with long keys with generator initialized to <code>1</code>.
+	 * Creates a new ID map with long keys with generator initialized to <c>1</c>.
 	 *
 	 * @param c The value type.
 	 * @return A new map.

@@ -374,7 +374,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Convenience method for adding an entry to this map.
 	 *
 	 * <p>
-	 * A no-op if the value is <code>-1</code>.
+	 * A no-op if the value is <c>-1</c>.
 	 *
 	 * @param key The key.
 	 * @param value The value.
@@ -493,10 +493,10 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * </p>
 	 *
 	 * <p>
-	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 * <c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
 	 *
 	 * <p>
-	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
 	 *
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
@@ -674,7 +674,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Same as <code>put(String,Object)</code>, but the key is a slash-delimited path used to traverse entries in this
+	 * Same as <c>put(String,Object)</c>, but the key is a slash-delimited path used to traverse entries in this
 	 * POJO.
 	 *
 	 * <p>
@@ -1254,7 +1254,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Equivalent to calling <code>get(class,key,def)</code> followed by <code>remove(key);</code>
+	 * Equivalent to calling <c>get(class,key,def)</c> followed by <c>remove(key);</c>
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @param type The class type.
@@ -1421,7 +1421,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Returns a copy of this <code>ObjectMap</code> with only the specified keys.
+	 * Returns a copy of this <c>ObjectMap</c> with only the specified keys.
 	 *
 	 * @param keys The keys of the entries to copy.
 	 * @return A new map with just the keys and values from this map.
@@ -1436,7 +1436,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Returns a copy of this <code>ObjectMap</code> without the specified keys.
+	 * Returns a copy of this <c>ObjectMap</c> without the specified keys.
 	 *
 	 * @param keys The keys of the entries not to copy.
 	 * @return A new map without the keys and values from this map.
@@ -1499,13 +1499,13 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Converts this map into an object of the specified type.
 	 *
 	 * <p>
-	 * If this map contains a <js>"_type"</js> entry, it must be the same as or a subclass of the <code>type</code>.
+	 * If this map contains a <js>"_type"</js> entry, it must be the same as or a subclass of the <c>type</c>.
 	 *
 	 * @param <T> The class type to convert this map object to.
 	 * @param type The class type to convert this map object to.
 	 * @return The new object.
 	 * @throws ClassCastException
-	 * 	If the <js>"_type"</js> entry is present and not assignable from <code>type</code>
+	 * 	If the <js>"_type"</js> entry is present and not assignable from <c>type</c>
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T cast(Class<T> type) {
@@ -1526,7 +1526,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @param cm The class type to convert this map object to.
 	 * @return The new object.
 	 * @throws ClassCastException
-	 * 	If the <js>"_type"</js> entry is present and not assignable from <code>type</code>
+	 * 	If the <js>"_type"</js> entry is present and not assignable from <c>type</c>
 	 */
 	@SuppressWarnings({"unchecked"})
 	public <T> T cast(ClassMeta<T> cm) {
@@ -1665,7 +1665,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Convenience method for serializing this map to the specified <code>Writer</code> using the
+	 * Convenience method for serializing this map to the specified <c>Writer</c> using the
 	 * {@link JsonSerializer#DEFAULT} serializer.
 	 *
 	 * @param w The writer to serialize this object to.

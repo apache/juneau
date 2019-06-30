@@ -17,7 +17,7 @@ import java.io.*;
 import org.apache.juneau.encoders.*;
 
 /**
- * A wrapped {@link PrintWriter} with an added <code>finish()</code> method.
+ * A wrapped {@link PrintWriter} with an added <c>finish()</c> method.
  */
 public class FinishablePrintWriter extends PrintWriter implements Finishable {
 

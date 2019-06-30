@@ -66,9 +66,9 @@ public class EntityValidator {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the validator string value is <code>*</code>.
+	 * Returns <jk>true</jk> if the validator string value is <c>*</c>.
 	 *
-	 * @return <jk>true</jk> if the validator string value is <code>*</code>.
+	 * @return <jk>true</jk> if the validator string value is <c>*</c>.
 	 */
 	public boolean isAny() {
 		return "*".equals(value);

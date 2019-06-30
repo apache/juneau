@@ -202,7 +202,7 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Convenience method for calling <code>getContext().getLogger().log(level, msg, args);</code>
+	 * Convenience method for calling <c>getContext().getLogger().log(level, msg, args);</c>
 	 *
 	 * @param level The log level.
 	 * @param msg The message to log.
@@ -214,7 +214,7 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Convenience method for calling <code>getContext().getLogger().logObjects(level, msg, args);</code>
+	 * Convenience method for calling <c>getContext().getLogger().logObjects(level, msg, args);</c>
 	 *
 	 * @param level The log level.
 	 * @param msg The message to log.
@@ -226,7 +226,7 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Convenience method for calling <code>getContext().getLogger().log(level, cause, msg, args);</code>
+	 * Convenience method for calling <c>getContext().getLogger().log(level, cause, msg, args);</c>
 	 *
 	 * @param level The log level.
 	 * @param cause The cause.
@@ -274,7 +274,7 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Convenience method for calling <code>getContext().getProperties();</code>
+	 * Convenience method for calling <c>getContext().getProperties();</c>
 	 *
 	 * @return The resource properties as an {@link RestContextProperties}.
 	 * @see RestContext#getProperties()

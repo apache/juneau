@@ -56,7 +56,7 @@ public abstract class RetryOn {
 	/**
 	 * Subclasses should override this method to determine whether the HTTP response is retryable.
 	 *
-	 * @param httpResponseCode The HTTP response code.  <code>-1</code> if a connection could not be made.
+	 * @param httpResponseCode The HTTP response code.  <c>-1</c> if a connection could not be made.
 	 * @return <jk>true</jk> if the specified response code is retryable.
 	 */
 	protected boolean onCode(int httpResponseCode) {

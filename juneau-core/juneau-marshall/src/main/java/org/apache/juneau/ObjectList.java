@@ -362,10 +362,10 @@ public class ObjectList extends LinkedList<Object> {
 	 * </p>
 	 *
 	 * <p>
-	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 * <c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
 	 *
 	 * <p>
-	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
 	 *
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
@@ -632,7 +632,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * Attempts to convert the child objects to the correct type if they aren't already the correct type.
 	 *
 	 * <p>
-	 * The <code>next()</code> method on the returned iterator may throw a {@link InvalidDataConversionException} if
+	 * The <c>next()</c> method on the returned iterator may throw a {@link InvalidDataConversionException} if
 	 * the next element cannot be converted to the specified type.
 	 *
 	 * <p>
@@ -662,7 +662,7 @@ public class ObjectList extends LinkedList<Object> {
 	 *
 	 * @param <E> The child object type.
 	 * @param childType The child object type.
-	 * @return A new <code>Iterable</code> object over this list.
+	 * @return A new <c>Iterable</c> object over this list.
 	 */
 	public <E> Iterable<E> elements(final Class<E> childType) {
 		final Iterator<?> i = iterator();

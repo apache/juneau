@@ -182,7 +182,7 @@ public abstract class Widget implements HtmlWidget {
 	 * Same as {@link #getClasspathResourceAsString(String)} except also looks for localized-versions of the file.
 	 *
 	 * <p>
-	 * If the <code>locale</code> is specified, then we look for resources whose name matches that locale.
+	 * If the <c>locale</c> is specified, then we look for resources whose name matches that locale.
 	 * <br>For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will look for
 	 * files in the following order:
 	 * <ol>

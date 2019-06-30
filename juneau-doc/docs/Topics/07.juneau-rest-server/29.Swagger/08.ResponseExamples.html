@@ -16,12 +16,12 @@
 Response Examples
 
 <p>
-	The <code>model</code> select box in the responses can be expanded to show examples:
+	The <c>model</c> select box in the responses can be expanded to show examples:
 </p>
 <h5 class='figure'>PetStoreResource.getPet()</h5>
 <img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.1.png'> 
 <p>
-	Examples are provided for any supported <code>Accept</code> type based on the serializers defined on your
+	Examples are provided for any supported <c>Accept</c> type based on the serializers defined on your
 	servlet/method.
 </p>
 <h5 class='figure'>application/json+simple</h5>
@@ -29,7 +29,7 @@ Response Examples
 <h5 class='figure'>text/uon</h5>
 <img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.3.png'> 
 <p>
-	Examples are pulled from the <code>examples</code> attribute in the response object of the generated Swagger JSON:
+	Examples are pulled from the <c>examples</c> attribute in the response object of the generated Swagger JSON:
 </p>
 <p class='bpcode w800'>
 	<jok>"/pet/{petId}"</jok>: {
@@ -72,7 +72,7 @@ Response Examples
 	<li>
 		{@link oaj.http.annotation.Response#examples() @Response(examples)} annotation.
 	<li>
-		Defining an <js>"examples"</js> field in the inherited Swagger JSON response object (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
+		Defining an <js>"examples"</js> field in the inherited Swagger JSON response object (classpath file or <c><ja>@ResourceSwagger</ja>(value)</c>/<c><ja>@MethodSwagger</ja>(value)</c>).
 	<li>
 		Defining an <js>"examples"</js> field in the Swagger Schema Object for the response object (including referenced <js>"$ref"</js> schemas).
 	<li>
@@ -92,7 +92,7 @@ Response Examples
 <p>
 	This is a Simple JSON representation of the body that is converted to a POJO and then serialized to all the registered serializers on the REST method to produce examples for all
 	supported language types.
-	These values are then used to automatically populate the <code>examples</code> field.
+	These values are then used to automatically populate the <c>examples</c> field.
 </p>
 <p>
 	Direct per-media-type examples can also be defined using the {@link oaj.http.annotation.Response#examples @Response(examples)} annotation:

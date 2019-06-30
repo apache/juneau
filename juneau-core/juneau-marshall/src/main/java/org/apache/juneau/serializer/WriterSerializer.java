@@ -37,7 +37,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.fileCharset.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"DEFAULT"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -48,7 +48,7 @@ public abstract class WriterSerializer extends Serializer {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * The character set to use for writing <code>Files</code> to the file system.
+	 * The character set to use for writing <c>Files</c> to the file system.
 	 *
 	 * <p>
 	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
@@ -82,8 +82,8 @@ public abstract class WriterSerializer extends Serializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.maxIndent.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>100</code>
+	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Default:</b>  <c>100</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -121,7 +121,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.quoteChar.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"\""</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -161,7 +161,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.streamCharset.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"UTF-8"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
@@ -172,7 +172,7 @@ public abstract class WriterSerializer extends Serializer {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * The character set to use when writing to <code>OutputStreams</code>.
+	 * The character set to use when writing to <c>OutputStreams</c>.
 	 *
 	 * <p>
 	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
@@ -203,7 +203,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.useWhitespace.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b>
@@ -265,9 +265,9 @@ public abstract class WriterSerializer extends Serializer {
 	 * @param accept
 	 * 	The accept media types that the serializer can handle.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of {@doc RFC2616.section14.1}
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc RFC2616.section14.1}
 	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
@@ -313,7 +313,7 @@ public abstract class WriterSerializer extends Serializer {
 	}
 
 	/**
-	 * Convenience method for serializing an object to a <code>String</code>.
+	 * Convenience method for serializing an object to a <c>String</c>.
 	 *
 	 * @param o The object to serialize.
 	 * @return The output serialized to a string.
@@ -371,7 +371,7 @@ public abstract class WriterSerializer extends Serializer {
 	 *
 	 * @see #WSERIALIZER_fileCharset
 	 * @return
-	 * 	The character set to use when writing to <code>Files</code> on the file system.
+	 * 	The character set to use when writing to <c>Files</c> on the file system.
 	 */
 	protected final Charset getFileCharset() {
 		return fileCharset;
@@ -404,7 +404,7 @@ public abstract class WriterSerializer extends Serializer {
 	 *
 	 * @see #WSERIALIZER_streamCharset
 	 * @return
-	 * 	The character set to use when writing to <code>OutputStreams</code> and byte arrays.
+	 * 	The character set to use when writing to <c>OutputStreams</c> and byte arrays.
 	 */
 	protected final Charset getStreamCharset() {
 		return streamCharset;

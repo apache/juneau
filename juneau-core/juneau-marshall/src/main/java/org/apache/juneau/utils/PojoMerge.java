@@ -67,10 +67,10 @@ import java.lang.reflect.*;
  * 	<li>
  * 		Null POJOs are ignored.
  * 	<li>
- * 		Non-getter methods are either invoked on the first POJO or all POJOs depending on the <code>callAllNonGetters</code> flag
+ * 		Non-getter methods are either invoked on the first POJO or all POJOs depending on the <c>callAllNonGetters</c> flag
  * 		passed into the constructor.
  * 	<li>
- * 		For purposes of this interface, a getter is any method with zero arguments and a non-<code>void</code> return type.
+ * 		For purposes of this interface, a getter is any method with zero arguments and a non-<c>void</c> return type.
  * </ul>
  */
 public class PojoMerge {

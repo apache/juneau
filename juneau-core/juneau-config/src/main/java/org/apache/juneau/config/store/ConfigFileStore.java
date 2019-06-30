@@ -48,7 +48,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.directory.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code>
+	 * 	<li><b>Data type:</b>  <c>String</c>
 	 * 	<li><b>Default:</b>  <js>"."</js>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -90,7 +90,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.useWatcher.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -141,7 +141,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.updateOnWrite.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -165,7 +165,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.extensions.ls"</js>
-	 * 	<li><b>Data type:</b>  <code>String[]</code>
+	 * 	<li><b>Data type:</b>  <c>String[]</c>
 	 * 	<li><b>Default:</b>  <jk>"cfg"</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>

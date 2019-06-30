@@ -54,10 +54,10 @@ import org.apache.juneau.http.annotation.*;
 public final class UserAgent extends HeaderString {
 
 	/**
-	 * Returns a parsed <code>User-Agent</code> header.
+	 * Returns a parsed <c>User-Agent</c> header.
 	 *
-	 * @param value The <code>User-Agent</code> header string.
-	 * @return The parsed <code>User-Agent</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>User-Agent</c> header string.
+	 * @return The parsed <c>User-Agent</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static UserAgent forString(String value) {
 		if (value == null)

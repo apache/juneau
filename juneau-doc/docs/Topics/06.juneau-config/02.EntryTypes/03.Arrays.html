@@ -28,7 +28,7 @@ Arrays
 	</ul>
 </ul>
 <p>
-	The <code>getStringArray()</code> methods allow you to retrieve comma-delimited lists of values:
+	The <c>getStringArray()</c> methods allow you to retrieve comma-delimited lists of values:
 <p class='bpcode w800'>
 	<ck>key1</ck> = <cv>foo, bar, baz</cv>
 </p>
@@ -36,7 +36,7 @@ Arrays
 	String[] key1 = c.getStringArray(<js>"key1"</js>);
 </p>
 <p>
-	String arrays can also be represented in JSON when using the <code>getObject()</code> methods:
+	String arrays can also be represented in JSON when using the <c>getObject()</c> methods:
 </p>
 <p class='bpcode w800'>
 	<ck>key1</ck> = <cv>['foo','bar','baz']</cv>
@@ -45,7 +45,7 @@ Arrays
 	String[] key1 = c.getObject(<js>"key1"</js>, String[].<jk>class</jk>);
 </p>
 <p>
-	Primitive arrays can also be retrieved using the <code>getObject()</code> methods:
+	Primitive arrays can also be retrieved using the <c>getObject()</c> methods:
 </p>
 <p class='bpcode w800'>
 	<ck>key1</ck> = <cv>[1,2,3]</cv>
@@ -54,7 +54,7 @@ Arrays
 	<jk>int</jk>[] key1 = c.getObject(<js>"key1"</js>, <jk>int</jk>[].<jk>class</jk>);
 </p>
 <p>
-	Arrays of POJOs can also be retrieved using the <code>getObject()</code> methods:
+	Arrays of POJOs can also be retrieved using the <c>getObject()</c> methods:
 </p>
 <p class='bpcode w800'>
 	<ck>addresses</ck> = 

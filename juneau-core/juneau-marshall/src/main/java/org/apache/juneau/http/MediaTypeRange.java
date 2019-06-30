@@ -42,14 +42,14 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	private final Map<String,Set<String>> extensions;
 
 	/**
-	 * Parses an <code>Accept</code> header value into an array of media ranges.
+	 * Parses an <c>Accept</c> header value into an array of media ranges.
 	 *
 	 * <p>
 	 * The returned media ranges are sorted such that the most acceptable media is available at ordinal position
 	 * <js>'0'</js>, and the least acceptable at position n-1.
 	 *
 	 * <p>
-	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in
+	 * The syntax expected to be found in the referenced <c>value</c> complies with the syntax described in
 	 * RFC2616, Section 14.1, as described below:
 	 * <p class='bcode w800'>
 	 * 	Accept         = "Accept" ":"
@@ -65,7 +65,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	 *
 	 * @param value
 	 * 	The value to parse.
-	 * 	If <jk>null</jk> or empty, returns a single <code>MediaTypeRange</code> is returned that represents all types.
+	 * 	If <jk>null</jk> or empty, returns a single <c>MediaTypeRange</c> is returned that represents all types.
 	 * @return
 	 * 	The media ranges described by the string.
 	 * 	The ranges are sorted such that the most acceptable media is available at ordinal position <js>'0'</js>, and
@@ -168,7 +168,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	 * Returns the <js>'q'</js> (quality) value for this type, as described in Section 3.9 of RFC2616.
 	 *
 	 * <p>
-	 * The quality value is a float between <code>0.0</code> (unacceptable) and <code>1.0</code> (most acceptable).
+	 * The quality value is a float between <c>0.0</c> (unacceptable) and <c>1.0</c> (most acceptable).
 	 *
 	 * <p>
 	 * If 'q' value doesn't make sense for the context (e.g. this range was extracted from a <js>"content-*"</js>
@@ -193,12 +193,12 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	}
 
 	/**
-	 * Provides a string representation of this media range, suitable for use as an <code>Accept</code> header value.
+	 * Provides a string representation of this media range, suitable for use as an <c>Accept</c> header value.
 	 *
 	 * <p>
 	 * The literal text generated will be all lowercase.
 	 *
-	 * @return A media range suitable for use as an Accept header value, never <code>null</code>.
+	 * @return A media range suitable for use as an Accept header value, never <c>null</c>.
 	 */
 	@Override /* Object */
 	public String toString() {
@@ -226,7 +226,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified object is also a <code>MediaType</code>, and has the same qValue, type,
+	 * Returns <jk>true</jk> if the specified object is also a <c>MediaType</c>, and has the same qValue, type,
 	 * parameters, and extensions.
 	 *
 	 * @return <jk>true</jk> if object is equivalent.
@@ -247,9 +247,9 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	}
 
 	/**
-	 * Returns a hash based on this instance's <code>media-type</code>.
+	 * Returns a hash based on this instance's <c>media-type</c>.
 	 *
-	 * @return A hash based on this instance's <code>media-type</code>.
+	 * @return A hash based on this instance's <c>media-type</c>.
 	 */
 	@Override /* Object */
 	public int hashCode() {
@@ -260,12 +260,12 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	 * Compares two MediaRanges for equality.
 	 *
 	 * <p>
-	 * The values are first compared according to <code>qValue</code> values.
-	 * Should those values be equal, the <code>type</code> is then lexicographically compared (case-insensitive) in
+	 * The values are first compared according to <c>qValue</c> values.
+	 * Should those values be equal, the <c>type</c> is then lexicographically compared (case-insensitive) in
 	 * ascending order, with the <js>"*"</js> type demoted last in that order.
-	 * <code>MediaRanges</code> with the same type but different sub-types are compared - a more specific subtype is
+	 * <c>MediaRanges</c> with the same type but different sub-types are compared - a more specific subtype is
 	 * promoted over the 'wildcard' subtype.
-	 * <code>MediaRanges</code> with the same types but with extensions are promoted over those same types with no
+	 * <c>MediaRanges</c> with the same types but with extensions are promoted over those same types with no
 	 * extensions.
 	 *
 	 * @param o The range to compare to.  Never <jk>null</jk>.

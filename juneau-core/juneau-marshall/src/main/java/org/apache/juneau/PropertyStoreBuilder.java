@@ -158,7 +158,7 @@ public class PropertyStoreBuilder {
 	 * 	<li class ='ja'>{@link UonConfig}
 	 * 	<li class ='ja'>{@link UrlEncodingConfig}
 	 * 	<li class ='ja'>{@link XmlConfig}
-	 * 	<li class ='ja'><code>RdfConfig</code>
+	 * 	<li class ='ja'><c>RdfConfig</c>
 	 * </ul>
 	 *
 	 * <p>
@@ -200,7 +200,7 @@ public class PropertyStoreBuilder {
 	 * 	<li class ='ja'>{@link UonConfig}
 	 * 	<li class ='ja'>{@link UrlEncodingConfig}
 	 * 	<li class ='ja'>{@link XmlConfig}
-	 * 	<li class ='ja'><code>RdfConfig</code>
+	 * 	<li class ='ja'><c>RdfConfig</c>
 	 * </ul>
 	 *
 	 * <p>
@@ -548,7 +548,7 @@ public class PropertyStoreBuilder {
 		}
 
 		/**
-		 * Used by the <code>toString()</code> method for debugging.
+		 * Used by the <c>toString()</c> method for debugging.
 		 *
 		 * @param bs The bean session.
 		 * @return This object converted to a map.

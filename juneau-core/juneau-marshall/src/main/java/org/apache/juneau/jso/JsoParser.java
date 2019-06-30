@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Consumes <code>Content-Type</code> types:  <code><b>application/x-java-serialized-object</b></code>
+ * Consumes <c>Content-Type</c> types:  <bc>application/x-java-serialized-object</bc>
  */
 @ConfigurableContext
 public final class JsoParser extends InputStreamParser {

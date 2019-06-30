@@ -149,14 +149,14 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	 * The comparator is designed to order URL pattern from most-specific to least-specific.
 	 * For example, the following patterns would be ordered as follows:
 	 * <ol>
-	 * 	<li><code>/foo/bar</code>
-	 * 	<li><code>/foo/bar/*</code>
-	 * 	<li><code>/foo/{id}/bar</code>
-	 * 	<li><code>/foo/{id}/bar/*</code>
-	 * 	<li><code>/foo/{id}</code>
-	 * 	<li><code>/foo/{id}/*</code>
-	 * 	<li><code>/foo</code>
-	 * 	<li><code>/foo/*</code>
+	 * 	<li><c>/foo/bar</c>
+	 * 	<li><c>/foo/bar/*</c>
+	 * 	<li><c>/foo/{id}/bar</c>
+	 * 	<li><c>/foo/{id}/bar/*</c>
+	 * 	<li><c>/foo/{id}</c>
+	 * 	<li><c>/foo/{id}/*</c>
+	 * 	<li><c>/foo</c>
+	 * 	<li><c>/foo/*</c>
 	 * </ol>
 	 */
 	@Override /* Comparable */

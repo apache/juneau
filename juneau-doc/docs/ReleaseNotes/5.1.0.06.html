@@ -20,15 +20,15 @@
 </p>
 <ul class='spaced-list'>
 	<li>Simplified API for {@link oaj.transform.PojoSwap}.  
-		Since it's rarely used, the <code>beanContext</code> parameter was replaced with a <code><del>PojoSwap#getBeanContext()</del></code> method on
+		Since it's rarely used, the <c>beanContext</c> parameter was replaced with a <dc>PojoSwap#getBeanContext()</dc> method on
 		the class.
 	<li>New simplified way of defining POJO filters without needing to extend {@link oaj.transform.PojoSwap}.
 		See {@link oaj.transform.SurrogateSwap} for details.
 	<li>New {@link oaj.html.annotation.Html @Html} annotation.
 		Will allow the definition of standard XHTML DTOs in future releases.  
-		For now, <code><del>Img</del></code> is an example of defining an XHTML element using Juno DTOs.
-	<li>{@link oaj.json.JsonParser} now ignores trailing <code>';'</code> characters in input so that it can 
+		For now, <dc>Img</dc> is an example of defining an XHTML element using Juno DTOs.
+	<li>{@link oaj.json.JsonParser} now ignores trailing <c>';'</c> characters in input so that it can 
 		parse strings of the form <js>"var x = {'foo':'bar'};"</js>.
-	<li>New <code>TumblrParserResource</code> in the samples war file showing how to combine the REST client and server APIs into a single
+	<li>New <c>TumblrParserResource</c> in the samples war file showing how to combine the REST client and server APIs into a single
 		resource in order to download Tumblr blogs and convert the response into any supported response content type.
 </ul>

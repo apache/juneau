@@ -96,7 +96,7 @@ public class XmlWriter extends SerializerWriter {
 	}
 
 	/**
-	 * Shortcut for <code>i(indent).oTag(ns, name, needsEncoding);</code>
+	 * Shortcut for <c>i(indent).oTag(ns, name, needsEncoding);</c>
 	 *
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
@@ -218,7 +218,7 @@ public class XmlWriter extends SerializerWriter {
 	}
 
 	/**
-	 * Shortcut for <code>i(indent).tag(ns, name, needsEncoding);</code>
+	 * Shortcut for <c>i(indent).tag(ns, name, needsEncoding);</c>
 	 *
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
@@ -282,7 +282,7 @@ public class XmlWriter extends SerializerWriter {
 	}
 
 	/**
-	 * Shortcut for <code>i(indent).sTag(ns, name, needsEncoding);</code>
+	 * Shortcut for <c>i(indent).sTag(ns, name, needsEncoding);</c>
 	 *
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
@@ -365,7 +365,7 @@ public class XmlWriter extends SerializerWriter {
 	}
 
 	/**
-	 * Shortcut for <code>i(indent).eTag(ns, name, needsEncoding);</code>
+	 * Shortcut for <c>i(indent).eTag(ns, name, needsEncoding);</c>
 	 *
 	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
@@ -502,7 +502,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
-	 * @param value The attribute value, convertible to a URI via <code>toString()</code>
+	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred.
 	 */
@@ -515,7 +515,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
-	 * @param value The attribute value, convertible to a URI via <code>toString()</code>
+	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred.
 	 */
@@ -527,7 +527,7 @@ public class XmlWriter extends SerializerWriter {
 	 * Append an attribute with a URI value.
 	 *
 	 * @param name The attribute name.
-	 * @param value The attribute value.  Can be any object whose <code>toString()</code> method returns a URI.
+	 * @param value The attribute value.  Can be any object whose <c>toString()</c> method returns a URI.
 	 * @return This object (for method chaining);
 	 * @throws IOException If a problem occurred.
 	 */

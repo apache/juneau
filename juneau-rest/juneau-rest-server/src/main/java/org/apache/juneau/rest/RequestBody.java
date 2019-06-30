@@ -97,7 +97,7 @@ public class RequestBody {
 	 * Reads the input from the HTTP request parsed into a POJO.
 	 *
 	 * <p>
-	 * The parser used is determined by the matching <code>Content-Type</code> header on the request.
+	 * The parser used is determined by the matching <c>Content-Type</c> header on the request.
 	 *
 	 * <p>
 	 * If type is <jk>null</jk> or <code>Object.<jk>class</jk></code>, then the actual type will be determined
@@ -124,7 +124,7 @@ public class RequestBody {
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>number</td>
-	 * 		<td><code>123</code></td>
+	 * 		<td><c>123</c></td>
 	 * 		<td><code><xt>&lt;number&gt;</xt>123<xt>&lt;/number&gt;</xt></code><br><code><xt>&lt;x</xt> <xa>type</xa>=<xs>'number'</xs><xt>&gt;</xt>...<xt>&lt;/x&gt;</xt></code></td>
 	 * 		<td>{@link Number}</td>
 	 * 	</tr>
@@ -204,9 +204,9 @@ public class RequestBody {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<code>Collections</code> must be followed by zero or one parameter representing the value type.
+	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
 	 * 	<li>
-	 * 		<code>Maps</code> must be followed by zero or two parameters representing the key and value types.
+	 * 		<c>Maps</c> must be followed by zero or two parameters representing the key and value types.
 	 * 	<li>
 	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
@@ -335,10 +335,10 @@ public class RequestBody {
 	}
 
 	/**
-	 * Returns the parser and media type matching the request <code>Content-Type</code> header.
+	 * Returns the parser and media type matching the request <c>Content-Type</c> header.
 	 *
 	 * @return
-	 * 	The parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching parser was
+	 * 	The parser matching the request <c>Content-Type</c> header, or <jk>null</jk> if no matching parser was
 	 * 	found.
 	 * 	Includes the matching media type.
 	 */
@@ -359,10 +359,10 @@ public class RequestBody {
 	}
 
 	/**
-	 * Returns the parser matching the request <code>Content-Type</code> header.
+	 * Returns the parser matching the request <c>Content-Type</c> header.
 	 *
 	 * @return
-	 * 	The parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching parser was
+	 * 	The parser matching the request <c>Content-Type</c> header, or <jk>null</jk> if no matching parser was
 	 * 	found.
 	 */
 	public Parser getParser() {
@@ -371,10 +371,10 @@ public class RequestBody {
 	}
 
 	/**
-	 * Returns the reader parser matching the request <code>Content-Type</code> header.
+	 * Returns the reader parser matching the request <c>Content-Type</c> header.
 	 *
 	 * @return
-	 * 	The reader parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching
+	 * 	The reader parser matching the request <c>Content-Type</c> header, or <jk>null</jk> if no matching
 	 * 	reader parser was found, or the matching parser was an input stream parser.
 	 */
 	public ReaderParser getReaderParser() {
@@ -385,10 +385,10 @@ public class RequestBody {
 	}
 
 	/**
-	 * Returns the input stream parser matching the request <code>Content-Type</code> header.
+	 * Returns the input stream parser matching the request <c>Content-Type</c> header.
 	 *
 	 * @return
-	 * 	The input stream parser matching the request <code>Content-Type</code> header, or <jk>null</jk> if no matching
+	 * 	The input stream parser matching the request <c>Content-Type</c> header, or <jk>null</jk> if no matching
 	 * 	reader parser was found, or the matching parser was a reader parser.
 	 */
 	public InputStreamParser getInputStreamParser() {

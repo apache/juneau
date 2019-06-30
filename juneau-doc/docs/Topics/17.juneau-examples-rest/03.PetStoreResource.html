@@ -16,7 +16,7 @@
 PetStore
 
 <p>
-	The <code>PetStore</code> application is an functional application meant to demonstrate the following:
+	The <c>PetStore</c> application is an functional application meant to demonstrate the following:
 </p>
 <ul class='spaced-list'>
 	<li>
@@ -129,20 +129,20 @@ PetStore
 	The application itself is defined in 3 packages:
 </p>
 <ul class='doctree'>
-	<li class='jp'><code>org.apache.juneau.rest.examples.rest.petstore</code>
+	<li class='jp'><c>org.apache.juneau.rest.examples.rest.petstore</c>
 		<br>Defines the service for storing and retrieving Petstore data.
 		<br><img class='bordered' style='width:250px' src='doc-files/juneau-examples-rest.PetStoreResource.2a.png'>
-	<li class='jp'><code>org.apache.juneau.rest.examples.rest.petstore.dto</code>
+	<li class='jp'><c>org.apache.juneau.rest.examples.rest.petstore.dto</c>
 		<br>Data transfer objects.
 		<br>These are JPA beans that are used both to store data in our database and are serialized
 		directly by our REST interface.
 		<br><img class='bordered' style='width:250px' src='doc-files/juneau-examples-rest.PetStoreResource.2b.png'>
-	<li class='jp'><code>org.apache.juneau.rest.examples.rest.petstore.rest</code>
+	<li class='jp'><c>org.apache.juneau.rest.examples.rest.petstore.rest</c>
 		<br>The classes used for our REST interface.
 		<br><img class='bordered' style='width:250px' src='doc-files/juneau-examples-rest.PetStoreResource.2c.png'>
 </ul>
 <p>
-	We also define some static files in the <code>org.apache.juneau.rest.examples.rest.petstore</code> package:
+	We also define some static files in the <c>org.apache.juneau.rest.examples.rest.petstore</c> package:
 </p>
 <img class='bordered' style='width:250px' src='doc-files/juneau-examples-rest.PetStoreResource.2d.png'>
 <hr>
@@ -570,7 +570,7 @@ PetStore
 <img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.4b.png'>
 <p>
 	You'll notice the details page shows <l>tags</l> and <l>photo</l> fields not shown on the summary page.
-	This was accomplished with the <code>bpx=<js>"Pet: tags,photo"</js></code> annotation on the <l>getPets()</l>
+	This was accomplished with the <c>bpx=<js>"Pet: tags,photo"</js></c> annotation on the <l>getPets()</l>
 	method which excludes those two properties from the view. 
 	This is a common way of defining summary and details views for POJOs.
 </p>
@@ -660,7 +660,7 @@ PetStore
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.5b.png'>
 <p>
-	Note that we're using the convenience feature for specifying an <code>Accept</code> header via a query parameter.
+	Note that we're using the convenience feature for specifying an <c>Accept</c> header via a query parameter.
 </p>
 <p>
 	The <l>THEME</l> menu items allows you to quickly change the stylesheet used on the page:

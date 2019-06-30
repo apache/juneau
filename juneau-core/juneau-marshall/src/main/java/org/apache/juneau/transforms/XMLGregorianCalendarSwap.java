@@ -44,7 +44,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 	}
 
 	/**
-	 * Converts the specified <code>XMLGregorianCalendar</code> to a {@link String}.
+	 * Converts the specified <c>XMLGregorianCalendar</c> to a {@link String}.
 	 */
 	@Override /* PojoSwap */
 	public String swap(BeanSession session, XMLGregorianCalendar b) throws Exception {
@@ -52,7 +52,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 	}
 
 	/**
-	 * Converts the specified {@link String} to an <code>XMLGregorianCalendar</code>.
+	 * Converts the specified {@link String} to an <c>XMLGregorianCalendar</c>.
 	 */
 	@Override /* PojoSwap */
 	public XMLGregorianCalendar unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {

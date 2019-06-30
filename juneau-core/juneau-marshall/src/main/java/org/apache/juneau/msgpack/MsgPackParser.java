@@ -21,7 +21,7 @@ import org.apache.juneau.parser.*;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <code>Content-Type</code> types:  <code><b>octal/msgpack</b></code>
+ * Handles <c>Content-Type</c> types:  <bc>octal/msgpack</bc>
  */
 @ConfigurableContext
 public class MsgPackParser extends InputStreamParser {

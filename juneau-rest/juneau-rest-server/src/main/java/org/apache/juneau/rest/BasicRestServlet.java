@@ -28,7 +28,7 @@ import org.apache.juneau.xml.*;
  * Subclass of {@link RestServlet} with default serializers and parsers defined.
  *
  * <p>
- * Supports the following request <code>Accept</code> header values with the resulting response <code>Content-Type</code>:
+ * Supports the following request <c>Accept</c> header values with the resulting response <c>Content-Type</c>:
  * <table class='styled'>
  * 	<tr>
  * 		<th>Accept</th>
@@ -92,7 +92,7 @@ import org.apache.juneau.xml.*;
  * 	</tr>
  * </table>
  * <p>
- * Supports the following request <code>Content-Type</code> header values:
+ * Supports the following request <c>Content-Type</c> header values:
  * </p>
  * <table class='styled'>
  * 	<tr>
@@ -150,8 +150,8 @@ import org.apache.juneau.xml.*;
  * 	<li>
  * 		Provides a default classpath entry "htdocs" by setting
  * 		{@link RestResource#staticFiles() @RestResource(staticFiles)} to <code>{<js>"htdocs:htdocs"</js>,<js>"styles:styles"</js>}</code>.
- * 		This allows files inside the <code>[servletPackage].htdocs</code> package to be served up under the URL
- * 		<code>/servletPath/htdocs</code>.
+ * 		This allows files inside the <c>[servletPackage].htdocs</c> package to be served up under the URL
+ * 		<c>/servletPath/htdocs</c>.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>

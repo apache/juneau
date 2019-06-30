@@ -65,10 +65,10 @@ import org.apache.juneau.http.annotation.*;
 public final class IfUnmodifiedSince extends HeaderDate {
 
 	/**
-	 * Returns a parsed <code>If-Unmodified-Since</code> header.
+	 * Returns a parsed <c>If-Unmodified-Since</c> header.
 	 *
-	 * @param value The <code>If-Unmodified-Since</code> header string.
-	 * @return The parsed <code>If-Unmodified-Since</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <c>If-Unmodified-Since</c> header string.
+	 * @return The parsed <c>If-Unmodified-Since</c> header, or <jk>null</jk> if the string was null.
 	 */
 	public static IfUnmodifiedSince forString(String value) {
 		if (value == null)
