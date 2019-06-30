@@ -171,15 +171,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			}
 
 			Set<String> s = context.getAllowedHeaderParams();
-			if (! s.isEmpty()) {
-				if (s.contains("*"))
-					headers.queryParams(queryParams);
-				else for (String q : s) {
-					Object o = queryParams.getString(q);
-					if (o != null)
-						headers.put(q, o);
-				}
-			}
+			if (! s.isEmpty())
+				headers.queryParams(queryParams, s);
 
 			debug = "true".equals(getQuery().getString("debug", "false")) || "true".equals(getHeaders().getString("Debug", "false"));
 

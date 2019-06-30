@@ -125,6 +125,18 @@ public abstract class Context {
 	}
 
 	/**
+	 * Same as {@link #getStringProperty(String, String)} but returns a blank instead of the default value if it resolves to <js>"NONE"</js>.
+	 *
+	 * @param key The property name.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	public final String getStringPropertyWithNone(String key, String def) {
+		String s = getProperty(key, String.class, def);
+		return "NONE".equalsIgnoreCase(s) ? "" : s;
+	}
+
+	/**
 	 * Returns the class property with the specified name.
 	 *
 	 * @param key The property name.

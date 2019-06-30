@@ -592,6 +592,17 @@ public class MockRest implements MockHttpConnection {
 	}
 
 	/**
+	 * Perform a HEAD request.
+	 *
+	 * @param path The URI path.
+	 * @return A new servlet request.
+	 * @throws Exception
+	 */
+	public MockServletRequest head(String path) throws Exception {
+		return request("HEAD", path, null, null);
+	}
+
+	/**
 	 * Perform an OPTIONS request.
 	 *
 	 * @param path The URI path.
@@ -621,6 +632,28 @@ public class MockRest implements MockHttpConnection {
 	 */
 	public MockServletRequest patch(String path, Object body) throws Exception {
 		return request("PATCH", path, null, body);
+	}
+
+	/**
+	 * Perform a CONNECT request.
+	 *
+	 * @param path The URI path.
+	 * @return A new servlet request.
+	 * @throws Exception
+	 */
+	public MockServletRequest connect(String path) throws Exception {
+		return request("CONNECT", path, null, null);
+	}
+
+	/**
+	 * Perform a TRACE request.
+	 *
+	 * @param path The URI path.
+	 * @return A new servlet request.
+	 * @throws Exception
+	 */
+	public MockServletRequest trace(String path) throws Exception {
+		return request("TRACE", path, null, null);
 	}
 
 	/**

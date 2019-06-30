@@ -110,6 +110,22 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
+	 * Same as {@link #get(Object)} but allows you to find the query parameter using a case-insensitive match.
+	 *
+	 * @param name The query parameter name.
+	 * @param caseInsensitive If <jk>true</jk> use case-insensitive matching on the query parameter name.
+	 * @return The resolved entry, or <jk>null</jk> if not found.
+	 */
+	public String[] get(String name, boolean caseInsensitive) {
+		if (! caseInsensitive)
+			return get(name);
+		for (Map.Entry<String,String[]> e : entrySet())
+			if (e.getKey().equalsIgnoreCase(name))
+				return e.getValue();
+		return null;
+	}
+
+	/**
 	 * Sets a request query parameter value.
 	 *
 	 * <p>
@@ -138,7 +154,22 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * 	The parameter value, or <jk>null</jk> if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>).
 	 */
 	public String getString(String name) {
-		String[] v = get(name);
+		return getString(name, false);
+	}
+
+	/**
+	 * Same as {@link #getString(String)} but allows you to search for the query parameter using case-insensitive matching.
+	 *
+	 * <p>
+	 * If multiple query parameters have the same name, this returns only the first instance.
+	 *
+	 * @param name The URL parameter name.
+	 * @param caseInsensitive If <jk>true</jk> use case insensitive matching on the query parameter name.
+	 * @return
+	 * 	The parameter value, or <jk>null</jk> if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>).
+	 */
+	public String getString(String name, boolean caseInsensitive) {
+		String[] v = get(name, caseInsensitive);
 		if (v == null || v.length == 0)
 			return null;
 

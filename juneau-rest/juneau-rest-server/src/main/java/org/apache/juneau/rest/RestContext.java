@@ -3515,9 +3515,9 @@ public final class RestContext extends BeanContext {
 			uriRelativity = getProperty(REST_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
 
 			allowBodyParam = getBooleanProperty(REST_allowBodyParam, true);
-			allowedHeaderParams = newUnmodifiableSortedCaseInsensitiveSet(getStringProperty(REST_allowedHeaderParams, "Accept,Content-Type"));
-			allowedMethodParams = newUnmodifiableSortedCaseInsensitiveSet(getStringProperty(REST_allowedMethodParams, "HEAD,OPTIONS"));
-			allowedMethodHeaders = newUnmodifiableSortedCaseInsensitiveSet(getStringProperty(REST_allowedMethodHeaders, ""));
+			allowedHeaderParams = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedHeaderParams, "Accept,Content-Type"));
+			allowedMethodParams = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodParams, "HEAD,OPTIONS"));
+			allowedMethodHeaders = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodHeaders, ""));
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces, false);
 			useStackTraceHashes = getBooleanProperty(REST_useStackTraceHashes, true);
 			debug = getBooleanProperty(REST_debug, super.isDebug());

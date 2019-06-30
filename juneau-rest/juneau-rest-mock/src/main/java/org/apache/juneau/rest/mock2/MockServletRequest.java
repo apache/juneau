@@ -41,7 +41,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	private String method = "GET";
 	private Map<String,String[]> queryData;
 	private Map<String,String[]> formDataMap;
-	private Map<String,String[]> headerMap = new LinkedHashMap<>();
+	private Map<String,String[]> headerMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 	private Map<String,Object> attributeMap = new LinkedHashMap<>();
 	private String characterEncoding = "UTF-8";
 	private byte[] body = new byte[0];

@@ -45,6 +45,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	private final RestRequest req;
 	private HttpPartParser parser;
 	private RequestQuery queryParams;
+	private Set<String> allowedQueryParams;
 
 	RequestHeaders(RestRequest req) {
 		super(String.CASE_INSENSITIVE_ORDER);
@@ -56,8 +57,9 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 		return this;
 	}
 
-	RequestHeaders queryParams(RequestQuery queryParams) {
+	RequestHeaders queryParams(RequestQuery queryParams, Set<String> allowedQueryParams) {
 		this.queryParams = queryParams;
+		this.allowedQueryParams = allowedQueryParams;
 		return this;
 	}
 
@@ -137,7 +139,8 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	public String getString(String name) {
 		String[] v = null;
 		if (queryParams != null)
-			v = queryParams.get(name);
+			if (allowedQueryParams.contains("*") || allowedQueryParams.contains(name))
+				v = queryParams.get(name, true);
 		if (v == null || v.length == 0)
 			v = get(name);
 		if (v == null || v.length == 0)
@@ -425,7 +428,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return A new headers object.
 	 */
 	public RequestHeaders subset(String...headers) {
-		RequestHeaders rh2 = new RequestHeaders(req).parser(parser).queryParams(queryParams);
+		RequestHeaders rh2 = new RequestHeaders(req).parser(parser).queryParams(queryParams, allowedQueryParams);
 		for (String h : headers)
 			if (containsKey(h))
 				rh2.put(h, get(h));
