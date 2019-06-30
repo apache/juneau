@@ -75,7 +75,7 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testSimpleCreateAndDeleteWithMultipleSpecialExtension() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).extensions("foo1","foo2").build();
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).extensions("foo1,foo2").build();
 		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 		assertFileExists("X.foo1");

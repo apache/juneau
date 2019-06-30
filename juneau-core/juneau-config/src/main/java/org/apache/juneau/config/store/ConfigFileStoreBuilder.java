@@ -218,7 +218,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 * 	<br>The default is <js>"cfg"</js>.
 	 * @return This object (for method chaining).
 	 */
-	public ConfigFileStoreBuilder extensions(String...value) {
+	public ConfigFileStoreBuilder extensions(String value) {
 		super.set(FILESTORE_extensions, value);
 		return this;
 	}

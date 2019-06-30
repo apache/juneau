@@ -164,12 +164,12 @@ public class ConfigFileStore extends ConfigStore {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.extensions.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>String[]</c>
+	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.extensions.s"</js>
+	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited list)
 	 * 	<li><b>Default:</b>  <jk>"cfg"</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#extensions(String...)}
+	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#extensions(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -177,7 +177,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * <p>
 	 * Defines what file extensions to search for when the config name does not have an extension.
 	 */
-	public static final String FILESTORE_extensions = PREFIX + ".extensions.ls";
+	public static final String FILESTORE_extensions = PREFIX + ".extensions.s";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -225,7 +225,7 @@ public class ConfigFileStore extends ConfigStore {
 			dir.mkdirs();
 			charset = getProperty(FILESTORE_charset, Charset.class, Charset.defaultCharset());
 			updateOnWrite = getBooleanProperty(FILESTORE_updateOnWrite, false);
-			extensions = getArrayProperty(FILESTORE_extensions, String.class, new String[]{"cfg"});
+			extensions = getCdlProperty(FILESTORE_extensions, "cfg");
 			WatcherSensitivity ws = getProperty(FILESTORE_watcherSensitivity, WatcherSensitivity.class, WatcherSensitivity.MEDIUM);
 			watcher = getBooleanProperty(FILESTORE_useWatcher, false) ? new WatcherThread(dir, ws) : null;
 			if (watcher != null)

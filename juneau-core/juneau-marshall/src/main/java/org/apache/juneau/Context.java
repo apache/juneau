@@ -125,6 +125,17 @@ public abstract class Context {
 	}
 
 	/**
+	 * Returns a property as a parsed comma-delimited list of strings.
+	 *
+	 * @param key The property name.
+	 * @param def The default value.
+	 * @return The property value, or the default value if it doesn't exist.
+	 */
+	public final String[] getCdlProperty(String key, String def) {
+		return StringUtils.split(StringUtils.emptyIfNull(getProperty(key, String.class, def)));
+	}
+
+	/**
 	 * Same as {@link #getStringProperty(String, String)} but returns a blank instead of the default value if it resolves to <js>"NONE"</js>.
 	 *
 	 * @param key The property name.
