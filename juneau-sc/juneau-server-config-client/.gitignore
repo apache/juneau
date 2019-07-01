@@ -2,4 +2,5 @@
 **/.DS_Store
 .classpath
 /.settings/
+/bin/
 derby.log
