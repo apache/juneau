@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.springboot.template;
 
+import org.apache.juneau.html.annotation.HtmlDocConfig;
 import org.apache.juneau.microservice.resources.ConfigResource;
 import org.apache.juneau.microservice.resources.LogsResource;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.HtmlDoc;
 import org.apache.juneau.rest.annotation.RestResource;
 import org.apache.juneau.rest.widget.ContentTypeMenuItem;
 import org.apache.juneau.rest.widget.ThemeMenuItem;
@@ -27,19 +27,19 @@ import org.apache.juneau.rest.widget.ThemeMenuItem;
 	path="/*",
 	title="My Microservice",
 	description="Top-level resources page",
-	htmldoc=@HtmlDoc(
-		widgets={
-			ContentTypeMenuItem.class,
-			ThemeMenuItem.class
-		},
-		navlinks={
-			"options: servlet:/?method=OPTIONS"
-		}
-	),
 	children={
 		HelloWorldResource.class,
 		ConfigResource.class,
 		LogsResource.class
+	}
+)
+@HtmlDocConfig(
+	widgets={
+		ContentTypeMenuItem.class,
+		ThemeMenuItem.class
+	},
+	navlinks={
+		"options: servlet:/?method=OPTIONS"
 	}
 )
 public class RootResources extends BasicRestServletGroup {

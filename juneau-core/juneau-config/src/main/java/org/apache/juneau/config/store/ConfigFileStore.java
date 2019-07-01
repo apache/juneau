@@ -417,6 +417,7 @@ public class ConfigFileStore extends ConfigStore {
 			dir.toPath().register(watchService, kinds, modifier);
 		}
 
+		@SuppressWarnings("restriction")
 		private WatchEvent.Modifier lookupModifier(WatcherSensitivity s) {
 			try {
 				switch(s) {

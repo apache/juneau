@@ -45,7 +45,16 @@
 			<directory>${basedir}/build-overlay</directory>
 			<outputDirectory>/</outputDirectory>
 			<filtered>true</filtered>
+			<excludes><exclude>pom2.xml</exclude></excludes>
 		</fileSet>
 	</fileSets>
+	<files>
+		<file>
+			<source>${basedir}/build-overlay/pom2.xml</source>
+			<outputDirectory>/</outputDirectory>
+			<filtered>true</filtered>
+			<destName>pom.xml</destName>
+		</file>
+	</files>
 	
 </assembly>
