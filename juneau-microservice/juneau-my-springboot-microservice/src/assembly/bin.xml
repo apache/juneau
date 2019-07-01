@@ -45,12 +45,30 @@
 			<directory>${basedir}/build-overlay</directory>
 			<outputDirectory>/</outputDirectory>
 			<filtered>true</filtered>
-			<excludes><exclude>pom2.xml</exclude></excludes>
+			<excludes><exclude>**/*.2</exclude></excludes>
 		</fileSet>
 	</fileSets>
 	<files>
 		<file>
-			<source>${basedir}/build-overlay/pom2.xml</source>
+			<source>${basedir}/build-overlay/.classpath.2</source>
+			<outputDirectory>/</outputDirectory>
+			<filtered>true</filtered>
+			<destName>.classpath</destName>
+		</file>
+		<file>
+			<source>${basedir}/build-overlay/.project.2</source>
+			<outputDirectory>/</outputDirectory>
+			<filtered>true</filtered>
+			<destName>.project</destName>
+		</file>
+		<file>
+			<source>${basedir}/build-overlay/my-springboot-microservice.launch.2</source>
+			<outputDirectory>/</outputDirectory>
+			<filtered>true</filtered>
+			<destName>my-springboot-microservice.launch</destName>
+		</file>
+		<file>
+			<source>${basedir}/build-overlay/pom.xml.2</source>
 			<outputDirectory>/</outputDirectory>
 			<filtered>true</filtered>
 			<destName>pom.xml</destName>
