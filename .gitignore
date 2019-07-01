@@ -1,5 +1,5 @@
 /target/
 **/.DS_Store
+.classpath
+/.settings/
 derby.log
-.idea/
-*.iml
