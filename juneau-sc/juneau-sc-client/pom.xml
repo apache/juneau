@@ -13,24 +13,47 @@
  * specific language governing permissions and limitations under the License.                                              *
  ***************************************************************************************************************************
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
+	<artifactId>juneau-sc-client</artifactId>
+	<name>Apache Juneau Configuration Server - Client API</name>
+	<description>Apache Juneau Server Config - Client</description>
+
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau</artifactId>
+		<artifactId>juneau-sc</artifactId>
 		<version>8.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-sc</artifactId>
-	<packaging>pom</packaging>
-	<name>Apache Juneau - Configuration Server</name>
-	<description>Apache Juneau Configuration Server</description>
+	<properties>
+		<encoding>UTF-8</encoding>
+		<maven.javadoc.skip>true</maven.javadoc.skip>
+	</properties>
 
-	<modules>
-		<module>juneau-sc-server</module>
-		<module>juneau-sc-client</module>
-	</modules>
 
+	<dependencies>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
+
