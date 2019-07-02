@@ -116,12 +116,12 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 
 		@Override /* Map */
 		public Set<Map.Entry<String,Object>> entrySet() {
-			return Collections.EMPTY_MAP.entrySet();
+			return Collections.<String,Object>emptyMap().entrySet();
 		}
 
 		@Override /* Map */
 		public Set<String> keySet() {
-			return Collections.EMPTY_MAP.keySet();
+			return Collections.<String,Object>emptyMap().keySet();
 		}
 
 		@Override /* Map */
@@ -581,7 +581,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 			if (o == null)
 				return null;
 			PojoSwap swap = pojoSwap;
-			return (T)swap.unswap(bs(), o, null);
+			return (T) swap.unswap(bs(), o, null);
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {

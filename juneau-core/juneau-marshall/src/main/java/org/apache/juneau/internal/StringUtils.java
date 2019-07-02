@@ -676,7 +676,7 @@ public final class StringUtils {
 		if (s == null)
 			return null;
 		if (isEmpty(s))
-			return Collections.EMPTY_MAP;
+			return Collections.emptyMap();
 
 		Map<String,String> m = new LinkedHashMap<>();
 

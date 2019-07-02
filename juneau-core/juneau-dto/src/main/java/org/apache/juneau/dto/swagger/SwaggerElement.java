@@ -142,7 +142,7 @@ public abstract class SwaggerElement {
 	 */
 	@BeanProperty("*")
 	public Set<String> extraKeys() {
-		return extra == null ? Collections.EMPTY_SET : extra.keySet();
+		return extra == null ? Collections.emptySet() : extra.keySet();
 	}
 
 	/**

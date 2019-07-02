@@ -473,7 +473,7 @@ public class PropertyStoreBuilder {
 		final Map<String,MutableProperty> properties = new ConcurrentSkipListMap<>();
 
 		PropertyGroupBuilder() {
-			this(EMPTY_MAP);
+			this(emptyMap());
 		}
 
 		synchronized void apply(PropertyGroup copyFrom) {
@@ -844,6 +844,7 @@ public class PropertyStoreBuilder {
 				add(e.getKey(), e.getValue());
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override /* MutableProperty */
 		synchronized void add(String arg, Object o) {
 			if (arg != null) {

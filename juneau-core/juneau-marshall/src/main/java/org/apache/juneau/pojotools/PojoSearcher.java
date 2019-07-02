@@ -96,6 +96,7 @@ public final class PojoSearcher implements PojoTool<SearchArgs> {
 		Map<String,ColumnMatcher> entryMatchers = new HashMap<>();
 		BeanSession bs;
 
+		@SuppressWarnings("unchecked")
 		RowMatcher(BeanSession bs, Map query) {
 			this.bs = bs;
 			for (Map.Entry e : (Set<Map.Entry>)query.entrySet())

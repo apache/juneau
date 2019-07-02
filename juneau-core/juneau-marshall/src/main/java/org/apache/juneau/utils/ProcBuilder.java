@@ -247,7 +247,7 @@ public class ProcBuilder {
 	 * @param env The new set of environment variables.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings({"rawtypes"})
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public ProcBuilder env(Map env) {
 		if (env != null)
 			for (Map.Entry e : (Set<Map.Entry>)env.entrySet())

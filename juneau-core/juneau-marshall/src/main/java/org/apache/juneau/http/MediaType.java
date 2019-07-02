@@ -145,7 +145,7 @@ public class MediaType implements Comparable<MediaType> {
 
 			i = mt.indexOf(';');
 			if (i == -1) {
-				this.parameters = Collections.EMPTY_MAP;
+				this.parameters = Collections.emptyMap();
 			} else {
 				this.parameters = new TreeMap<>();
 				String[] tokens = mt.substring(i+1).split(";");

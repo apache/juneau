@@ -1245,7 +1245,7 @@ public class HttpPartSchema {
 	}
 
 	private static <T> Set<T> copy(Set<T> in) {
-		return in == null ? Collections.EMPTY_SET : unmodifiableSet(new LinkedHashSet<>(in));
+		return in == null ? Collections.emptySet() : unmodifiableSet(new LinkedHashSet<>(in));
 	}
 
 	private static Map<String,HttpPartSchema> build(Map<String,HttpPartSchemaBuilder> in, boolean noValidate) {
