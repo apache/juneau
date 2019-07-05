@@ -27,7 +27,7 @@ public class App {
 	 * Entry point method.
 	 *
 	 * @param args Command line arguments.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public static void main(String[] args) throws Exception {
 		JettyMicroservice

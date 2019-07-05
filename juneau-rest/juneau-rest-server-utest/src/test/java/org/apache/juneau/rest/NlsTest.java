@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import java.io.IOException;
+
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.annotation.*;
@@ -58,7 +60,7 @@ public class NlsTest {
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
 			return new WriterSerializerSession(args) {
 				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 					out.getWriter().write(getProperty("TestProperty", String.class));
 				}
 			};

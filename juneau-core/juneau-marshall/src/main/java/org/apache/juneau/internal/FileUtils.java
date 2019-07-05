@@ -132,7 +132,7 @@ public class FileUtils {
 	 *
 	 * @param name The file name
 	 * @return A newly-created temporary file.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static File createTempFile(String name) throws IOException {
 		String[] parts = name.split("\\.");

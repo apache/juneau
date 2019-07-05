@@ -44,7 +44,7 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 	}
 
 	@Override /* SerializerSession */
-	protected final void doSerialize(SerializerPipe pipe, Object o) throws Exception {
+	protected final void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		try (Writer w = pipe.getWriter()) {
 			ClassMeta<?> cm = getClassMetaForObject(o);
 			Collection<?> l = null;

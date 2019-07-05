@@ -1030,8 +1030,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return
 	 * 	The swagger associated with the resource.
 	 * 	<br>Never <jk>null</jk>.
-	 * @throws RestException
-	 * @throws InternalServerError
 	 */
 	public Swagger getSwagger() {
 		try {
@@ -1067,8 +1065,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Equivalent to calling {@link RestInfoProvider#getSiteName(RestRequest)} with this object.
 	 *
 	 * @return The localized site name.
-	 * @throws RestException
-	 * @throws InternalServerError
 	 */
 	public String getSiteName() {
 		try {
@@ -1087,8 +1083,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Equivalent to calling {@link RestInfoProvider#getTitle(RestRequest)} with this object.
 	 *
 	 * @return The localized resource title.
-	 * @throws RestException
-	 * @throws InternalServerError
 	 */
 	public String getResourceTitle() {
 		try {
@@ -1107,8 +1101,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Equivalent to calling {@link RestInfoProvider#getDescription(RestRequest)} with this object.
 	 *
 	 * @return The localized resource description.
-	 * @throws RestException
-	 * @throws InternalServerError
 	 */
 	public String getResourceDescription() {
 		try {
@@ -1127,8 +1119,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Equivalent to calling {@link RestInfoProvider#getMethodSummary(Method, RestRequest)} with this object.
 	 *
 	 * @return The localized method description.
-	 * @throws RestException
-	 * @throws InternalServerError
 	 */
 	public String getMethodSummary() {
 		try {
@@ -1147,10 +1137,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Equivalent to calling {@link RestInfoProvider#getMethodDescription(Method, RestRequest)} with this object.
 	 *
 	 * @return The localized method description.
-	 * @throws RestException
-	 * @throws InternalServerError
 	 */
-	public String getMethodDescription() throws RestException, InternalServerError {
+	public String getMethodDescription() {
 		try {
 			return context.getInfoProvider().getMethodDescription(javaMethod, this);
 		} catch (RestException e) {
@@ -1433,7 +1421,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @param mediaType The value to set as the <js>"Content-Type"</js> header for this object.
 	 * @param cached If <jk>true</jk>, the resource will be read into a byte array for fast serialization.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public ReaderResource getClasspathReaderResource(String name, boolean resolveVars, MediaType mediaType, boolean cached) throws IOException {
 		String s = context.getClasspathResourceAsString(name, getLocale());
@@ -1457,7 +1445,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	resolved by the variable resolver returned by {@link #getVarResolverSession()}.
 	 * 	<br>See {@link RestContext#getVarResolver()} for the list of supported variables.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public ReaderResource getClasspathReaderResource(String name, boolean resolveVars) throws IOException {
 		return getClasspathReaderResource(name, resolveVars, MediaType.forString(context.getMediaTypeForName(name)), false);
@@ -1468,7 +1456,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public ReaderResource getClasspathReaderResource(String name) throws IOException {
 		return getClasspathReaderResource(name, false, MediaType.forString(context.getMediaTypeForName(name)), false);
@@ -1488,7 +1476,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @param mediaType The value to set as the <js>"Content-Type"</js> header for this object.
 	 * @param cached If <jk>true</jk>, the resource will be read into a byte array for fast serialization.
 	 * @return A new stream resource, or <jk>null</jk> if resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	@SuppressWarnings("resource")
 	public StreamResource getClasspathStreamResource(String name, MediaType mediaType, boolean cached) throws IOException {
@@ -1507,7 +1495,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @return A new stream resource, or <jk>null</jk> if resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public StreamResource getClasspathStreamResource(String name) throws IOException {
 		return getClasspathStreamResource(name, MediaType.forString(context.getMediaTypeForName(name)), false);
@@ -1569,7 +1557,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	The widgets used for resolving <js>"$W{...}"</js> string variables.
 	 * 	Never <jk>null</jk>.
 	 *
-	 * @deprecated
+	 * @deprecated No replacement.
 	 */
 	@Deprecated
 	public Map<String,Widget> getWidgets() {

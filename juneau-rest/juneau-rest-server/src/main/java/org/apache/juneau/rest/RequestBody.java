@@ -292,7 +292,7 @@ public class RequestBody {
 	 * </ul>
 	 *
 	 * @return The body contents as a reader.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public BufferedReader getReader() throws IOException {
 		Reader r = getUnbufferedReader();
@@ -307,7 +307,7 @@ public class RequestBody {
 	 * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};
 	 *
 	 * @return An unbuffered reader.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected Reader getUnbufferedReader() throws IOException {
 		if (body != null)

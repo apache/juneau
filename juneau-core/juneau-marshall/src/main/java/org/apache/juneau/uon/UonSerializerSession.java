@@ -55,9 +55,9 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 *
 	 * @param out The output target object.
 	 * @return The output target object wrapped in an {@link UonWriter}.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected final UonWriter getUonWriter(SerializerPipe out) throws Exception {
+	protected final UonWriter getUonWriter(SerializerPipe out) throws IOException {
 		Object output = out.getRawOutput();
 		if (output instanceof UonWriter)
 			return (UonWriter)output;
@@ -71,7 +71,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		serializeAnything(getUonWriter(out), o, getExpectedRootType(o), "root", null);
 	}
 
@@ -89,10 +89,11 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * 	<jk>null</jk> if this isn't a bean property being serialized.
 	 * @param pMeta The bean property metadata.
 	 * @return The same writer passed in.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws SerializeException Generic serialization error occurred.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected SerializerWriter serializeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws Exception {
+	@SuppressWarnings({ "rawtypes" })
+	protected SerializerWriter serializeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws IOException, SerializeException {
 
 		if (o == null) {
 			out.appendObject(null, false);
@@ -105,7 +106,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
-		aType = push(attrName, o, eType);
+		aType = push2(attrName, o, eType);
 		boolean isRecursion = aType == null;
 
 		// Handle recursion
@@ -120,7 +121,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap(this);
 		if (swap != null) {
-			o = swap.swap(this, o);
+			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);
 
 			// If the getSwapClass() method returns Object, we need to figure out
@@ -165,7 +166,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws Exception {
+	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws IOException, SerializeException {
 
 		m = sort(m);
 
@@ -195,7 +196,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return out;
 	}
 
-	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws Exception {
+	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws IOException, SerializeException {
 
 		if (! plainTextParams)
 			out.append('(');
@@ -236,7 +237,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws Exception {
+	private SerializerWriter serializeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws IOException, SerializeException {
 
 		ClassMeta<?> elementType = type.getElementType();
 

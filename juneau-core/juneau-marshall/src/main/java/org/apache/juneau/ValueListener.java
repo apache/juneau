@@ -14,7 +14,8 @@ package org.apache.juneau;
 
 /**
  * Simple listener for the {@link Value} class.
- * @param <T>
+ *
+ * @param <T> Value type.
  */
 public interface ValueListener<T> {
 

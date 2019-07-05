@@ -35,6 +35,7 @@ import org.apache.juneau.config.vars.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.microservice.resources.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.ManifestFileVar;
 import org.apache.juneau.utils.*;
@@ -125,7 +126,7 @@ public class Microservice implements ConfigEventListener {
 	private final Scanner consoleReader;
 	private final PrintWriter consoleWriter;
 	private final Thread consoleThread;
-	protected final File workingDir;
+	final File workingDir;
 	private final String configName;
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -146,10 +147,11 @@ public class Microservice implements ConfigEventListener {
 	 * Constructor.
 	 *
 	 * @param builder The builder containing the settings for this microservice.
-	 * @throws Exception
+	 * @throws IOException Problem occurred reading file.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	@SuppressWarnings("resource")
-	protected Microservice(MicroserviceBuilder builder) throws Exception {
+	protected Microservice(MicroserviceBuilder builder) throws IOException, ParseException {
 		setInstance(this);
 		this.builder = builder.copy();
 		this.workingDir = builder.workingDir;
@@ -302,6 +304,9 @@ public class Microservice implements ConfigEventListener {
 	 *
 	 * <p>
 	 * If the working directory has been explicitly specified, relative paths are resolved relative to that.
+	 *
+	 * @param path The path to resolve.
+	 * @return The resolved path.
 	 */
 	protected File resolveFile(String path) {
 		if (Paths.get(path).isAbsolute())
@@ -325,9 +330,10 @@ public class Microservice implements ConfigEventListener {
 	 * It will initialize (or reinitialize) the console commands, system properties, and logger.
 	 *
 	 * @return This object (for method chaining).
-	 * @throws Exception
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Couldn't read a file.
 	 */
-	public synchronized Microservice init() throws Exception {
+	public synchronized Microservice init() throws IOException, ParseException {
 
 		// --------------------------------------------------------------------------------
 		// Set system properties.
@@ -395,7 +401,7 @@ public class Microservice implements ConfigEventListener {
 	 * Overridden methods MUST call this method FIRST so that the {@link MicroserviceListener#onStart(Microservice)} method is called.
 	 *
 	 * @return This object (for method chaining).
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public synchronized Microservice start() throws Exception {
 
@@ -427,7 +433,7 @@ public class Microservice implements ConfigEventListener {
 	 * Starts the console thread for this microservice.
 	 *
 	 * @return This object (for method chaining).
-	 * @throws Exception
+	 * @throws Exception Error occurred
 	 */
 	public synchronized Microservice startConsole() throws Exception {
 		if (consoleThread != null && ! consoleThread.isAlive())
@@ -439,7 +445,7 @@ public class Microservice implements ConfigEventListener {
 	 * Stops the console thread for this microservice.
 	 *
 	 * @return This object (for method chaining).
-	 * @throws Exception
+	 * @throws Exception Error occurred
 	 */
 	public synchronized Microservice stopConsole() throws Exception {
 		if (consoleThread != null && consoleThread.isAlive())
@@ -667,7 +673,7 @@ public class Microservice implements ConfigEventListener {
 	 * Default implementation is a no-op.
 	 *
 	 * @return This object (for method chaining).
-	 * @throws Exception
+	 * @throws Exception Error occurred
 	 */
 	public Microservice join() throws Exception {
 		return this;
@@ -680,7 +686,7 @@ public class Microservice implements ConfigEventListener {
 	 * Overridden methods MUST call this method LAST so that the {@link MicroserviceListener#onStop(Microservice)} method is called.
 	 *
 	 * @return This object (for method chaining).
-	 * @throws Exception
+	 * @throws Exception Error occurred
 	 */
 	public Microservice stop() throws Exception {
 		listener.onStop(this);
@@ -690,7 +696,7 @@ public class Microservice implements ConfigEventListener {
 	/**
 	 * Stops the console (if it's started) and calls {@link System#exit(int)}.
 	 *
-	 * @throws Exception
+	 * @throws Exception Error occurred
 	 */
 	public void exit() throws Exception {
 		try {
@@ -784,7 +790,7 @@ public class Microservice implements ConfigEventListener {
 	/**
 	 * Logs a message to the log file.
 	 *
-	 * @param level
+	 * @param level The log level.
 	 * @param message The message text.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */

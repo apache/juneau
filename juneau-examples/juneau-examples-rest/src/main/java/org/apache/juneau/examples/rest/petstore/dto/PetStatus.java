@@ -25,9 +25,13 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 @Html(render=PetStatus.PetStatusRender.class)
+@SuppressWarnings("javadoc")
 public enum PetStatus {
 	AVAILABLE, PENDING, SOLD, UNKNOWN;
 
+	/**
+	 * Used to control how this enum is rendered in HTML view.
+	 */
 	public static class PetStatusRender extends HtmlRender<PetStatus> {
 		@Override /* HtmlRender */
 		public String getStyle(SerializerSession session, PetStatus value) {

@@ -26,10 +26,14 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 @Html(render=Species.SpeciesRender.class)
+@SuppressWarnings("javadoc")
 public enum Species {
 
 	BIRD, CAT, DOG, FISH, MOUSE, RABBIT, SNAKE;
 
+	/**
+	 * Used to control how this enum is rendered in HTML view.
+	 */
 	public static class SpeciesRender extends HtmlRender<Species> {
 		@Override
 		public Object getContent(SerializerSession session, Species value) {

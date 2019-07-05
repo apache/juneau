@@ -30,12 +30,17 @@ public class AbstractPersistenceService {
 
 	private final EntityManagerFactory entityManagerFactory;
 
+	/**
+	 * Constructor.
+	 */
 	public AbstractPersistenceService() {
 		entityManagerFactory = Persistence.createEntityManagerFactory("test");
 	}
 
 	/**
 	 * Retrieves an entity manager session.
+	 *
+	 * @return The entity manager session.
 	 */
 	protected EntityManager getEntityManager() {
 		return entityManagerFactory.createEntityManager();
@@ -161,9 +166,12 @@ public class AbstractPersistenceService {
 	/**
 	 * Runs a JPA query and returns the results.
 	 *
+	 * @param <T> The bean type.
 	 * @param em The entity manager to use to retrieve the beans.
 	 * @param query The JPA query.
 	 * @param t The bean type.
+	 * @param searchArgs Optional search arguments.
+	 * @return The results.
 	 */
 	protected <T> List<T> query(EntityManager em, String query, Class<T> t, SearchArgs searchArgs) {
 		TypedQuery<T> q = em.createQuery(query, t);
@@ -177,8 +185,11 @@ public class AbstractPersistenceService {
 	/**
 	 * Same as {@link #query(EntityManager,String,Class,SearchArgs)} but uses a new entity manager.
 	 *
+	 * @param <T> The bean type.
 	 * @param query The JPA query.
 	 * @param t The bean type.
+	 * @param searchArgs Optional search arguments.
+	 * @return The results.
 	 */
 	protected <T> List<T> query(String query, Class<T> t, SearchArgs searchArgs) {
 		return query(getEntityManager(), query, t, searchArgs);
@@ -191,6 +202,7 @@ public class AbstractPersistenceService {
 	 * @param query The JPA query.
 	 * @param t The bean type.
 	 * @param params The query parameter values.
+	 * @return The results.
 	 */
 	protected <T> List<T> query(EntityManager em, String query, Class<T> t, Map<String,Object> params) {
 		TypedQuery<T> tq = em.createQuery(query, t);
@@ -206,6 +218,7 @@ public class AbstractPersistenceService {
 	 * @param query The JPA query.
 	 * @param t The bean type.
 	 * @param params The query parameter values.
+	 * @return The results.
 	 */
 	protected <T> List<T> query(String query, Class<T> t, Map<String,Object> params) {
 		return query(getEntityManager(), query, t, params);

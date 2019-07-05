@@ -63,7 +63,7 @@ public final class MaxForwards extends HeaderInteger {
 	/**
 	 * Constructor.
 	 *
-	 * @param value
+	 * @param value The value for this header.
 	 */
 	public MaxForwards(Integer value) {
 		super(value);

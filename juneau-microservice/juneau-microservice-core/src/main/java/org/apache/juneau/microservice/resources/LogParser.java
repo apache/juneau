@@ -43,7 +43,7 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 	 * @param thread Only return log entries with this thread name.
 	 * @param loggers Only return log entries produced by these loggers (simple class names).
 	 * @param severity Only return log entries with the specified severity.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public LogParser(LogEntryFormatter formatter, File f, Date start, Date end, String thread, String[] loggers, String[] severity) throws IOException {
 		br = new BufferedReader(new InputStreamReader(new FileInputStream(f), Charset.defaultCharset()));
@@ -113,7 +113,7 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 	 * Serializes the contents of the parsed log file to the specified writer and then closes the underlying reader.
 	 *
 	 * @param w The writer to write the log file to.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public void writeTo(Writer w) throws IOException {
 		try {

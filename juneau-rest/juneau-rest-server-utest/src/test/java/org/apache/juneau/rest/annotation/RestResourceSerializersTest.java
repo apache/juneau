@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import java.io.IOException;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock2.*;
@@ -38,7 +40,7 @@ public class RestResourceSerializersTest {
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
 			return new WriterSerializerSession(args) {
 				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 					out.getWriter().write("text/a - " + o);
 				}
 			};
@@ -53,7 +55,7 @@ public class RestResourceSerializersTest {
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
 			return new WriterSerializerSession(args) {
 				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 					out.getWriter().write("text/b - " + o);
 				}
 			};
@@ -68,7 +70,7 @@ public class RestResourceSerializersTest {
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
 			return new WriterSerializerSession(args) {
 				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 					out.getWriter().write("text/c - " + o);
 				}
 			};
@@ -84,7 +86,7 @@ public class RestResourceSerializersTest {
 			return new WriterSerializerSession(args) {
 
 				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 					out.getWriter().write("text/d - " + o);
 				}
 			};

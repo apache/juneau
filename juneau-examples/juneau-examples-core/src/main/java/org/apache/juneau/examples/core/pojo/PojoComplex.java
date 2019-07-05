@@ -30,13 +30,12 @@ public class PojoComplex {
 	private final Pojo innerPojo;
 	private final HashMap<String, List<Pojo>> values;
 
-
 	/**
-	 * TODO
+	 * Constructor.
 	 *
-	 * @param id
-	 * @param innerPojo
-	 * @param values
+	 * @param id The <bc>id</bc> property value.
+	 * @param innerPojo The <bc>innerPojo</bc> property value.
+	 * @param values The <bc>values</bc> property value.
 	 */
 	@BeanConstructor
 	public PojoComplex(@Name("id") String id, @Name("innerPojo") Pojo innerPojo, @Name("values") HashMap<String, List<Pojo>> values) {
@@ -44,7 +43,6 @@ public class PojoComplex {
 		this.innerPojo = innerPojo;
 		this.values = values;
 	}
-
 
 	/**
 	 * Bean property getter:  <property>id</property>.
@@ -55,7 +53,6 @@ public class PojoComplex {
 		return id;
 	}
 
-
 	/**
 	 * Bean property getter:  <property>innerPojo</property>.
 	 *
@@ -65,7 +62,6 @@ public class PojoComplex {
 		return innerPojo;
 	}
 
-
 	/**
 	 * Bean property getter:  <property>values</property>.
 	 *
@@ -74,6 +70,4 @@ public class PojoComplex {
 	public HashMap<String,List<Pojo>> getValues() {
 		return values;
 	}
-
-
 }

@@ -18,6 +18,7 @@ import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.xml.XmlSerializerSession.JsonType.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -116,9 +117,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 *
 	 * @param out The output target object.
 	 * @return The output target object wrapped in an {@link XmlWriter}.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public final XmlWriter getXmlWriter(SerializerPipe out) throws Exception {
+	public final XmlWriter getXmlWriter(SerializerPipe out) throws IOException {
 		Object output = out.getRawOutput();
 		if (output instanceof XmlWriter)
 			return (XmlWriter)output;
@@ -128,7 +129,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		if (isEnableNamespaces() && isAutoDetectNamespaces())
 			findNsfMappings(o);
 		serializeAnything(getXmlWriter(out), o, getExpectedRootType(o), null, null, isEnableNamespaces() && isAddNamespaceUrisToRoot(), XmlFormat.DEFAULT, false, false, null);
@@ -138,7 +139,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * Recursively searches for the XML namespaces on the specified POJO and adds them to the serializer context object.
 	 *
 	 * @param o The POJO to check.
-	 * @throws SerializeException
+	 * @throws SerializeException Thrown if bean recursion occurred.
 	 */
 	protected final void findNsfMappings(Object o) throws SerializeException {
 		ClassMeta<?> aType = null;						// The actual type
@@ -238,7 +239,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * 	<jk>true</jk> if we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
 	 * @param pMeta The bean property metadata if this is a bean property being serialized.
 	 * @return The same writer passed in so that calls to the writer can be chained.
-	 * @throws Exception If a problem occurred trying to convert the output.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws SerializeException General serialization error occurred.
 	 */
 	protected ContentResult serializeAnything(
 			XmlWriter out,
@@ -250,7 +252,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			XmlFormat format,
 			boolean isMixed,
 			boolean preserveWhitespace,
-			BeanPropertyMeta pMeta) throws Exception {
+			BeanPropertyMeta pMeta) throws IOException, SerializeException {
 
 		JsonType type = null;              // The type string (e.g. <type> or <x x='type'>
 		int i = isMixed ? 0 : indent;       // Current indentation
@@ -258,7 +260,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		ClassMeta<?> wType = null;     // The wrapped type (delegate)
 		ClassMeta<?> sType = object(); // The serialized type
 
-		aType = push(elementName, o, eType);
+		aType = push2(elementName, o, eType);
 
 		if (eType == null)
 			eType = object();
@@ -281,7 +283,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			// Swap if necessary
 			PojoSwap swap = aType.getPojoSwap(this);
 			if (swap != null) {
-				o = swap.swap(this, o);
+				o = swap(swap, o);
 				sType = swap.getSwapClassMeta(this);
 
 				// If the getSwapClass() method returns Object, we need to figure out
@@ -486,7 +488,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	private ContentResult serializeMap(XmlWriter out, Map m, ClassMeta<?> sType,
-			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws Exception {
+			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws IOException, SerializeException {
 
 		m = sort(m);
 
@@ -518,7 +520,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	private ContentResult serializeBeanMap(XmlWriter out, BeanMap<?> m,
-			Namespace elementNs, boolean isCollapsed, boolean isMixed) throws Exception {
+			Namespace elementNs, boolean isCollapsed, boolean isMixed) throws IOException, SerializeException {
 		boolean hasChildren = false;
 		BeanMeta<?> bm = m.getMeta();
 
@@ -662,7 +664,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	private XmlWriter serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType,
-			ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws Exception {
+			ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws IOException, SerializeException {
 
 		ClassMeta<?> eeType = eType.getElementType();
 

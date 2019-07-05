@@ -26,6 +26,7 @@ import java.util.concurrent.*;
 import java.util.regex.*;
 
 import org.apache.http.*;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.*;
 import org.apache.http.entity.*;
@@ -559,7 +560,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <p>
 	 * It's good practice to call this method after the client is no longer used.
 	 *
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	@Override
 	public void close() throws IOException {
@@ -595,9 +596,10 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * @param req The HTTP request.
 	 * @return The HTTP response.
-	 * @throws Exception
+	 * @throws IOException Stream exception occurred.
+	 * @throws ClientProtocolException ignals an error in the HTTP protocol.
 	 */
-	protected HttpResponse execute(HttpUriRequest req) throws Exception {
+	protected HttpResponse execute(HttpUriRequest req) throws ClientProtocolException, IOException {
 		return httpClient.execute(req);
 	}
 
@@ -658,7 +660,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @return
 	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
 	 * 	as a parsed object.
-	 * @throws RestCallException
+	 * @throws RestCallException REST call failed.
 	 */
 	public RestCall doPut(Object url) throws RestCallException {
 		return doCall("PUT", url, true);
@@ -715,7 +717,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @return
 	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
 	 * 	as a parsed object.
-	 * @throws RestCallException
+	 * @throws RestCallException REST call failed.
 	 */
 	public RestCall doPost(Object url) throws RestCallException {
 		return doCall("POST", url, true);
@@ -817,7 +819,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @return
 	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
 	 * 	as a parsed object.
-	 * @throws RestCallException
+	 * @throws RestCallException REST call failed.
 	 */
 	public RestCall doPatch(Object url) throws RestCallException {
 		return doCall("PATCH", url, true);
@@ -848,7 +850,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @return
 	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
 	 * 	as a parsed object.
-	 * @throws RestCallException
+	 * @throws RestCallException REST call failed.
 	 */
 	public RestCall doCallback(String callString) throws RestCallException {
 		String s = callString;

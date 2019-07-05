@@ -25,9 +25,13 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 @Html(render=UserStatus.UserStatusRender.class)
+@SuppressWarnings("javadoc")
 public enum UserStatus {
 	ACTIVE, INACTIVE;
 
+	/**
+	 * Used to control how this enum is rendered in HTML view.
+	 */
 	public static class UserStatusRender extends HtmlRender<UserStatus> {
 		@Override /* HtmlRender */
 		public String getStyle(SerializerSession session, UserStatus value) {

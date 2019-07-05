@@ -86,8 +86,8 @@ public final class PojoIntrospector {
 	 * 			The constructor pertains to an enum type.
 	 * 	</ul>
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
-	 * @throws ParseException If the input contains a syntax error or is malformed.
-	 * @throws IOException
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public Object invokeMethod(Method method, Reader args) throws InvocationTargetException, IllegalArgumentException,
 			IllegalAccessException, ParseException, IOException {
@@ -124,8 +124,8 @@ public final class PojoIntrospector {
 	 * 			The constructor pertains to an enum type.
 	 * 	</ul>
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
-	 * @throws ParseException If the input contains a syntax error or is malformed.
-	 * @throws IOException
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public Object invokeMethod(String method, String args) throws NoSuchMethodException, IllegalArgumentException,
 			InvocationTargetException, IllegalAccessException, ParseException, IOException {

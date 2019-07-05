@@ -2107,33 +2107,33 @@ public class ClassInfoTest {
 			aTypeInfo.newInstance();
 			fail();
 		}
-		catch (InstantiationException e) { /* OK */ }
+		catch (ExecutableException e) { /* OK */ }
 		catch (Exception e) { fail(e.getMessage()); }
 
 		try {
 			pTypeInfo.newInstance();
 			fail();
 		}
-		catch (InstantiationException e) { /* OK */ }
+		catch (ExecutableException e) { /* OK */ }
 		catch (Exception e) { fail(e.getMessage()); }
 		try {
 			pTypeDimensionalInfo.newInstance();
 			fail();
 		}
-		catch (InstantiationException e) { /* OK */ }
+		catch (ExecutableException e) { /* OK */ }
 		catch (Exception e) { fail(e.getMessage()); }
 
 		try {
 			pTypeGenericInfo.newInstance();
 			fail();
 		}
-		catch (InstantiationException e) { /* OK */ }
+		catch (ExecutableException e) { /* OK */ }
 		catch (Exception e) { /* OK */ }
 		try {
 			pTypeGenericArgInfo.newInstance();
 			fail();
 		}
-		catch (InstantiationException e) { /* OK */ }
+		catch (ExecutableException e) { /* OK */ }
 		catch (Exception e) { fail(e.getMessage()); }
 	}
 

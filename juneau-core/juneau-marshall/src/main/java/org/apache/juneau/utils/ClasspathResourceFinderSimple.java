@@ -62,7 +62,7 @@ public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {
 	 * 	The resource locale.
 	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return The resource stream, or <jk>null</jk> if it couldn't be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected InputStream findClasspathResource(Class<?> baseClass, String name, Locale locale) throws IOException {
 		

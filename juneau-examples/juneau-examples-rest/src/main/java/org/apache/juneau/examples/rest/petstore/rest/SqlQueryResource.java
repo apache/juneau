@@ -89,10 +89,9 @@ public class SqlQueryResource extends BasicRestServlet {
 	 * Initializes the registry URL and rest client.
 	 *
 	 * @param builder The resource config.
-	 * @throws Exception
 	 */
 	@RestHook(INIT)
-	public void initConnection(RestContextBuilder builder) throws Exception {
+	public void initConnection(RestContextBuilder builder) {
 		Config cf = builder.getConfig();
 
 		driver = cf.getString("SqlQueryResource/driver");
@@ -109,6 +108,12 @@ public class SqlQueryResource extends BasicRestServlet {
 		}
 	}
 
+	/**
+	 * Displays the query entry page.
+	 *
+	 * @param sql Text to prepopulate the SQL query field with.
+	 * @return The HTML div tag to serialize.
+	 */
 	@RestMethod(
 		summary="Display the query entry page"
 	)
@@ -161,6 +166,17 @@ public class SqlQueryResource extends BasicRestServlet {
 		);
 	}
 
+	/**
+	 * Execute one or more queries.
+	 *
+	 * @param in
+	 * 	Query input
+	 * @return
+	 * 	Query results.
+	 * 	<br>Each entry in the array is a result of one query.
+	 * 	<b>Each result can be a result set (for queries) or update count (for updates).
+	 * @throws BadRequest Invalid SQL detected.
+	 */
 	@RestMethod(
 		summary="Execute one or more queries"
 	)
@@ -226,6 +242,7 @@ public class SqlQueryResource extends BasicRestServlet {
 	}
 
 	/** The parsed form post */
+	@SuppressWarnings("javadoc")
 	public static class PostInput {
 		public String sql = "";
 		public int pos = 1, limit = 100;

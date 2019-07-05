@@ -84,7 +84,7 @@ public abstract class MenuItemWidget extends Widget {
 	 * @param req The HTTP request object.
 	 * @param res The HTTP response object.
 	 * @return Javascript code to execute, or <jk>null</jk> if there isn't any.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public String getBeforeShowScript(RestRequest req, RestResponse res) throws Exception {
 		return null;
@@ -99,7 +99,7 @@ public abstract class MenuItemWidget extends Widget {
 	 * @param req The HTTP request object.
 	 * @param res The HTTP response object.
 	 * @return Javascript code to execute, or <jk>null</jk> if there isn't any.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public String getAfterShowScript(RestRequest req, RestResponse res) throws Exception {
 		return null;
@@ -188,7 +188,7 @@ public abstract class MenuItemWidget extends Widget {
 	 * @param req The HTTP request object.
 	 * @param res The HTTP response object.
 	 * @return The menu item label.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public abstract String getLabel(RestRequest req, RestResponse res) throws Exception;
 
@@ -206,7 +206,7 @@ public abstract class MenuItemWidget extends Widget {
 	 * 		<li>Other - Serialized as HTML using {@link HtmlSerializer#DEFAULT}.
 	 * 			<br>Note that this includes any of the {@link org.apache.juneau.dto.html5} beans.
 	 * 	</ul>
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public abstract Object getContent(RestRequest req, RestResponse res) throws Exception;
 }

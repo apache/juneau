@@ -56,7 +56,7 @@ public class RoleBasedRestGuard extends RestGuard {
 	 * @param roleExpression
 	 * 	The role expression.
 	 * 	<br>If <jk>null</jk> or empty/blanks, the this guard will never pass.
-	 * @throws ParseException
+	 * @throws ParseException Invalid role expression syntax.
 	 */
 	public RoleBasedRestGuard(Set<String> declaredRoles, String roleExpression) throws ParseException {
 		roleMatcher = new RoleMatcher(roleExpression);

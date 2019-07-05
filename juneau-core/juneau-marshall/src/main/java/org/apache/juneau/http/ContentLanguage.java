@@ -77,7 +77,7 @@ public final class ContentLanguage extends HeaderStringArray {
 	/**
 	 * Constructor.
 	 *
-	 * @param value
+	 * @param value The value for this header.
 	 */
 	public ContentLanguage(String[] value) {
 		super(value);

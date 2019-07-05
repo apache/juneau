@@ -80,7 +80,12 @@ import org.apache.juneau.transforms.*;
 )
 public class RequestEchoResource extends BasicRest {
 
-	/** GET request handler */
+	/**
+	 * GET request handler.
+	 *
+	 * @param req The HTTP servlet request.
+	 * @return The same request to serialize as the response.
+	 */
 	@RestMethod(name="*", path="/*", converters={Traversable.class,Queryable.class}, summary="Serializes the incoming HttpServletRequest object.")
 	public HttpServletRequest doGet(RestRequest req) {
 		// Just echo the request back as the response.

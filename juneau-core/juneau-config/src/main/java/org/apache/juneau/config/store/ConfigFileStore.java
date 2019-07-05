@@ -468,7 +468,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * Gets called when the watcher service on this store is triggered with a file system change.
 	 *
 	 * @param e The file system event.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected synchronized void onFileEvent(WatchEvent<Path> e) throws IOException {
 		String fn = e.context().getFileName().toString();

@@ -42,7 +42,11 @@ import org.apache.juneau.rest.annotation.*;
 )
 public class HelloWorldResource implements BasicRestConfig {
 
-	/** GET request handler */
+	/**
+	 * GET request handler.
+	 *
+	 * @return A simple Hello-World message.
+	 */
 	@RestMethod(name=GET, path="/*", summary="Responds with \"Hello world!\"")
 	public String sayHello() {
 		return "Hello world!";

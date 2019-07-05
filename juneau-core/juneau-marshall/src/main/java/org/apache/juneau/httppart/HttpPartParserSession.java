@@ -37,7 +37,7 @@ public interface HttpPartParserSession {
 	 * @param in The input being parsed.
 	 * @param toType The POJO type to transform the input into.
 	 * @return The parsed value.
-	 * @throws ParseException If a problem occurred while trying to parse the input.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException;
@@ -53,7 +53,7 @@ public interface HttpPartParserSession {
 	 * @param in The input being parsed.
 	 * @param toType The POJO type to transform the input into.
 	 * @return The parsed value.
-	 * @throws ParseException If a problem occurred while trying to parse the input.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException;
@@ -70,7 +70,7 @@ public interface HttpPartParserSession {
 	 * @param toType The POJO type to transform the input into.
 	 * @param toTypeArgs The POJO type arguments for Collection and Map types.
 	 * @return The parsed value.
-	 * @throws ParseException If a problem occurred while trying to parse the input.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException;
@@ -85,7 +85,7 @@ public interface HttpPartParserSession {
 	 * @param in The input being parsed.
 	 * @param toType The POJO type to transform the input into.
 	 * @return The parsed value.
-	 * @throws ParseException If a problem occurred while trying to parse the input.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException;
@@ -100,7 +100,7 @@ public interface HttpPartParserSession {
 	 * @param in The input being parsed.
 	 * @param toType The POJO type to transform the input into.
 	 * @return The parsed value.
-	 * @throws ParseException If a problem occurred while trying to parse the input.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException;
@@ -116,7 +116,7 @@ public interface HttpPartParserSession {
 	 * @param toType The POJO type to transform the input into.
 	 * @param toTypeArgs The POJO type arguments for Collection and Map types.
 	 * @return The parsed value.
-	 * @throws ParseException If a problem occurred while trying to parse the input.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
 	public <T> T parse(HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException;

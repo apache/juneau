@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation2;
 
+import java.io.IOException;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -46,7 +47,7 @@ public class RestMethodInheritTest {
 		public ReaderParserSession createSession(ParserSessionArgs args) {
 			return new ReaderParserSession(args) {
 				@Override /* ParserSession */
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 					return null;
 				}
 			};
@@ -61,7 +62,7 @@ public class RestMethodInheritTest {
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
 			return new WriterSerializerSession(args) {
 				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 					out.getWriter().write(o.toString());
 				}
 			};

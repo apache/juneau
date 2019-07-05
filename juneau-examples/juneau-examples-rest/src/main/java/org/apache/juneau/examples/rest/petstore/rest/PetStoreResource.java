@@ -142,11 +142,21 @@ public class PetStoreResource extends BasicRestJena implements PetStore {
 
 	private PetStoreService store;
 
+	/**
+	 * Initializes our pet store service during servlet initialization.
+	 *
+	 * @param builder Optional access to rest context builder.
+	 */
 	@RestHook(INIT)
-	public void startup(RestContextBuilder builder) throws Exception {
+	public void startup(RestContextBuilder builder) {
 		store = new PetStoreService();
 	}
 
+	/**
+	 * Navigation page
+	 *
+	 * @return Navigation page contents.
+	 */
 	@RestMethod(
 		name=GET,
 		path="/",
@@ -177,6 +187,11 @@ public class PetStoreResource extends BasicRestJena implements PetStore {
 	// Initialization
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Initialize database form entry page.
+	 *
+	 * @return Initialize database form entry page contents.
+	 */
 	@RestMethod(
 		summary="Initialize database form entry page"
 	)
@@ -201,6 +216,13 @@ public class PetStoreResource extends BasicRestJena implements PetStore {
 		);
 	}
 
+	/**
+	 * Initialize database.
+	 *
+	 * @param initMethod The method used to initialize the database.
+	 * @param res HTTP request.
+	 * @throws Exception Error occurred.
+	 */
 	@RestMethod(
 		summary="Initialize database"
 	)
@@ -354,6 +376,14 @@ public class PetStoreResource extends BasicRestJena implements PetStore {
 	// Pets - extra methods
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Displays the pet edit page.
+	 *
+	 * @param petId ID of pet to edit
+	 * @return Edit page contents.
+	 * @throws NotAcceptable Unsupported <bc>Accept</bc> header value specified.
+	 * @throws UnsupportedMediaType Unsupported <bc>Content-Type</bc> header value specified.
+	 */
 	@RestMethod(
 		name=GET,
 		path="/pet/{petId}/edit",
@@ -368,11 +398,11 @@ public class PetStoreResource extends BasicRestJena implements PetStore {
 	public Div editPetPage(
 			@Path(
 				name="petId",
-				description="ID of pet to return",
+				description="ID of pet to edit",
 				example="123"
 			)
 			long petId
-		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
+		) throws NotAcceptable, UnsupportedMediaType {
 
 		Pet pet = getPet(petId);
 
@@ -433,6 +463,11 @@ public class PetStoreResource extends BasicRestJena implements PetStore {
 	// Orders
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Store navigation page.
+	 *
+	 * @return Store navigation page contents.
+	 */
 	@RestMethod(
 		summary="Store navigation page",
 		swagger=@MethodSwagger(

@@ -87,7 +87,7 @@ public interface RestConverter {
 	 * @param res The response object set by the REST method through the {@link RestResponse#setOutput(Object)} method.
 	 * @return The converted object.
 	 * @throws RestException Thrown if any errors occur during conversion.
-	 * @throws SerializeException
+	 * @throws SerializeException Generic serialization error occurred.
 	 */
 	public Object convert(RestRequest req, Object res) throws RestException, SerializeException;
 }

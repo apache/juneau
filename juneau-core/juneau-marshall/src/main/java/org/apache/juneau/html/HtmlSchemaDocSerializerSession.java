@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import java.io.IOException;
+
+import org.apache.juneau.BeanRecursionException;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
@@ -40,7 +43,11 @@ public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
 	}
 
 	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		super.doSerialize(out, genSession.getSchema(o));
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+		try {
+			super.doSerialize(out, genSession.getSchema(o));
+		} catch (BeanRecursionException e) {
+			throw new SerializeException(e);
+		}
 	}
 }

@@ -826,13 +826,10 @@ public class BeanMeta<T> {
 	 *
 	 * @param outer The outer object if bean class is a non-static inner member class.
 	 * @return A new instance of this bean if possible, or <jk>null</jk> if not.
-	 * @throws IllegalArgumentException Thrown by constructor.
-	 * @throws InstantiationException Thrown by constructor.
-	 * @throws IllegalAccessException Thrown by constructor.
-	 * @throws InvocationTargetException Thrown by constructor.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings("unchecked")
-	protected T newBean(Object outer) throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
+	protected T newBean(Object outer) throws ExecutableException {
 		if (classMeta.isMemberClass()) {
 			if (constructor != null)
 				return constructor.<T>invoke(outer);

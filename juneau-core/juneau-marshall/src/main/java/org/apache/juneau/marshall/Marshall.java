@@ -297,8 +297,7 @@ public abstract class Marshall {
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T read(Object input, Type type, Type...args) throws ParseException {
@@ -337,8 +336,7 @@ public abstract class Marshall {
 	 * 	See {@link #read(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T read(Object input, Class<T> type) throws ParseException {
 		return p.createSession().parse(input, type);

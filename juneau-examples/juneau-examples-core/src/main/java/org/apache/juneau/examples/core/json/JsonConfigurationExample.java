@@ -35,8 +35,9 @@ public class JsonConfigurationExample {
 	/**
 	 * Examples on Json Serializers configured using properties
 	 * defined in JsonSerializer class
-	 * @param args
-	 * @throws Exception
+	 *
+	 * @param args Unused.
+	 * @throws Exception Unused.
 	 */
 	public static void main(String[] args) throws Exception {
 		Pojo aPojo = new Pojo("a","</pojo>");
@@ -68,12 +69,12 @@ public class JsonConfigurationExample {
 		 * }
 		 */
 		String configurableJson =JsonSerializer
-				.create()  // Create a JsonSerializerBuilder
-				.simple()  // Simple mode
-				.ws()  // Use whitespace
-				.sq()  // Use single quotes
-				.build()
-				.serialize(aPojo);  // Create a JsonSerializer
+			.create()  // Create a JsonSerializerBuilder
+			.simple()  // Simple mode
+			.ws()  // Use whitespace
+			.sq()  // Use single quotes
+			.build()
+			.serialize(aPojo);  // Create a JsonSerializer
 
 		System.out.println(configurableJson);
 

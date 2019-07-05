@@ -72,7 +72,7 @@ enum HtmlTag {
 		cache.put(id, this);
 	}
 
-	static HtmlTag forEvent(ParserSession session, XMLStreamReader r) throws Exception {
+	static HtmlTag forEvent(ParserSession session, XMLStreamReader r) throws ParseException {
 		int et = r.getEventType();
 		if (et == START_ELEMENT)
 			return forString(r.getLocalName(), false);
@@ -81,7 +81,7 @@ enum HtmlTag {
 		throw new ParseException(session, "Invalid call to HtmlTag.forEvent on event of type ''{0}''", XmlUtils.toReadableEvent(r));
 	}
 
-	static HtmlTag forString(String tag, boolean end) throws Exception {
+	static HtmlTag forString(String tag, boolean end) {
 		char c = tag.charAt(0);
 		HtmlTag t = null;
 		if (c == 'u')

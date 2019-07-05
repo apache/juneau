@@ -82,7 +82,7 @@ public class AcceptCharsetTest {
 				return new InputStreamParserSession(args) {
 					@Override /* ParserSession */
 					@SuppressWarnings("unchecked")
-					protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+					protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 						return (T)args.getProperty(ReaderParser.RPARSER_streamCharset).toString();
 					}
 				};
@@ -97,7 +97,7 @@ public class AcceptCharsetTest {
 			public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
 				return new OutputStreamSerializerSession(args) {
 					@Override /* SerializerSession */
-					protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 						try (Writer w = new OutputStreamWriter(out.getOutputStream())) {
 							Object sc = args.getProperty(WriterSerializer.WSERIALIZER_streamCharset);
 							w.append(o.toString()).append('/').append(sc == null ? null : sc.toString());

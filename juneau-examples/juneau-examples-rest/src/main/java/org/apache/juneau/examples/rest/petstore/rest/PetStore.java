@@ -41,9 +41,23 @@ public interface PetStore {
 	// Pets
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Returns all pets in the database.
+	 *
+	 * @return All pets in the database.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=GET, path="/pet")
 	public Collection<Pet> getPets() throws NotAcceptable;
 
+	/**
+	 * Returns a pet from the database.
+	 *
+	 * @param petId The ID of the pet to retrieve.
+	 * @return The pet.
+	 * @throws IdNotFound Pet was not found.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(path="/pet/{petId}") /* method inferred from method name */
 	public Pet getPet(
 		@Path(
@@ -54,6 +68,15 @@ public interface PetStore {
 		long petId
 	) throws IdNotFound, NotAcceptable;
 
+	/**
+	 * Adds a pet to the database.
+	 *
+	 * @param pet The pet data to add to the database.
+	 * @return {@link Ok} if successful.
+	 * @throws IdConflict ID already in use.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 * @throws UnsupportedMediaType Unsupported <c>Content-Type</c> header specified.
+	 */
 	@RemoteMethod /* method and path inferred from method name */
 	public long postPet(
 		@Body(
@@ -61,6 +84,15 @@ public interface PetStore {
 		) CreatePet pet
 	) throws IdConflict, NotAcceptable, UnsupportedMediaType;
 
+	/**
+	 * Updates a pet in the database.
+	 *
+	 * @param pet The pet data to add to the database.
+	 * @return {@link Ok} if successful.
+	 * @throws IdNotFound ID not found.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 * @throws UnsupportedMediaType Unsupported <c>Content-Type</c> header specified.
+	 */
 	@RemoteMethod(method=PUT, path="/pet/{petId}")
 	public Ok updatePet(
 		@Body(
@@ -68,6 +100,13 @@ public interface PetStore {
 		) UpdatePet pet
 	) throws IdNotFound, NotAcceptable, UnsupportedMediaType;
 
+	/**
+	 * Find all pets with the matching statuses.
+	 *
+	 * @param status The statuses to match against.
+	 * @return The pets that match the specified statuses.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=GET, path="/pet/findByStatus")
 	public Collection<Pet> findPetsByStatus(
 		@Query(
@@ -86,6 +125,14 @@ public interface PetStore {
 		PetStatus[] status
 	) throws NotAcceptable;
 
+	/**
+	 * Find all pets with the specified tags.
+	 *
+	 * @param tags The tags to match against.
+	 * @return The pets that match the specified tags.
+	 * @throws InvalidTag Invalid tag was specified.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=GET, path="/pet/findByTags")
 	@Deprecated
 	public Collection<Pet> findPetsByTags(
@@ -98,6 +145,15 @@ public interface PetStore {
 		String[] tags
 	) throws InvalidTag, NotAcceptable;
 
+	/**
+	 * Deletes the specified pet.
+	 *
+	 * @param apiKey Security key.
+	 * @param petId ID of pet to delete.
+	 * @return {@link Ok} if successful.
+	 * @throws IdNotFound Pet not found.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=DELETE, path="/pet/{petId}")
 	public Ok deletePet(
 		@Header(
@@ -119,9 +175,24 @@ public interface PetStore {
 	// Orders
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Returns all orders in the database.
+	 *
+	 * @return All orders in the database.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=GET, path="/store/order")
 	public Collection<Order> getOrders() throws NotAcceptable;
 
+	/**
+	 * Returns an order from the database.
+	 *
+	 * @param orderId The ID of the order to retreieve.
+	 * @return The retrieved order.
+	 * @throws InvalidId ID was invalid.
+	 * @throws IdNotFound Order was not found.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=GET, path="/store/order/{orderId}")
 	public Order getOrder(
 		@Path(
@@ -134,6 +205,16 @@ public interface PetStore {
 		long orderId
 	) throws InvalidId, IdNotFound, NotAcceptable;
 
+	/**
+	 * Adds an order to the database.
+	 *
+	 * @param petId Id of pet to order.
+	 * @param username The username of the user placing the order.
+	 * @return The ID of the order.
+	 * @throws IdConflict ID was already in use.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 * @throws UnsupportedMediaType Unsupported <c>Content-Type</c> header specified.
+	 */
 	@RemoteMethod(method=POST, path="/store/order")
 	public long placeOrder(
 		@FormData(
@@ -148,6 +229,15 @@ public interface PetStore {
 		String username
 	) throws IdConflict, NotAcceptable, UnsupportedMediaType;
 
+	/**
+	 * Deletes an order from the database.
+	 *
+	 * @param orderId The order ID.
+	 * @return {@link Ok} if successful.
+	 * @throws InvalidId ID not valid.
+	 * @throws IdNotFound Order not found.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=DELETE, path="/store/order/{orderId}")
 	public Ok deleteOrder(
 		@Path(
@@ -159,6 +249,12 @@ public interface PetStore {
 		long orderId
 	) throws InvalidId, IdNotFound, NotAcceptable;
 
+	/**
+	 * Returns an inventory of pet statuses and counts.
+	 *
+	 * @return An inventory of pet statuses and counts.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=GET, path="/store/inventory")
 	public Map<PetStatus,Integer> getStoreInventory() throws NotAcceptable;
 
@@ -166,9 +262,24 @@ public interface PetStore {
 	// Users
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Returns all users in the database.
+	 *
+	 * @return All users in the database.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=GET, path="/user")
 	public Collection<User> getUsers() throws NotAcceptable;
 
+	/**
+	 * Returns a user from the database.
+	 *
+	 * @param username The username.
+	 * @return The user.
+	 * @throws InvalidUsername Invalid username.
+	 * @throws IdNotFound username not found.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=GET, path="/user/{username}")
 	public User getUser(
 		@Path(
@@ -178,6 +289,16 @@ public interface PetStore {
 		String username
 	) throws InvalidUsername, IdNotFound, NotAcceptable;
 
+	/**
+	 * Adds a new user to the database.
+	 *
+	 * @param user The user to add to the database.
+	 * @return {@link Ok} if successful.
+	 * @throws InvalidUsername Username was invalid.
+	 * @throws IdConflict Username already in use.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 * @throws UnsupportedMediaType Unsupported <c>Content-Type</c> header specified.
+	 */
 	@RemoteMethod
 	public Ok postUser(
 		@Body(
@@ -186,6 +307,16 @@ public interface PetStore {
 		User user
 	) throws InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType;
 
+	/**
+	 * Bulk creates users.
+	 *
+	 * @param users The users to add to the database.
+	 * @return {@link Ok} if successful.
+	 * @throws InvalidUsername Username was invalid.
+	 * @throws IdConflict Username already in use.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 * @throws UnsupportedMediaType Unsupported <c>Content-Type</c> header specified.
+	 */
 	@RemoteMethod(method=POST, path="/user/createWithArray")
 	public Ok createUsers(
 		@Body(
@@ -194,6 +325,17 @@ public interface PetStore {
 		User[] users
 	) throws InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType;
 
+	/**
+	 * Updates a user in the database.
+	 *
+	 * @param username The username.
+	 * @param user The updated information.
+	 * @return {@link Ok} if successful.
+	 * @throws InvalidUsername Username was invalid.
+	 * @throws IdNotFound User was not found.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 * @throws UnsupportedMediaType Unsupported <c>Content-Type</c> header specified.
+	 */
 	@RemoteMethod(method=PUT, path="/user/{username}")
 	public Ok updateUser(
 		@Path(
@@ -207,6 +349,15 @@ public interface PetStore {
 		User user
 	) throws InvalidUsername, IdNotFound, NotAcceptable, UnsupportedMediaType;
 
+	/**
+	 * Deletes a user from the database.
+	 *
+	 * @param username The username.
+	 * @return {@link Ok} if successful.
+	 * @throws InvalidUsername Username was not valid.
+	 * @throws IdNotFound User was not found.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=DELETE, path="/user/{username}")
 	public Ok deleteUser(
 		@Path(
@@ -216,18 +367,31 @@ public interface PetStore {
 		String username
 	) throws InvalidUsername, IdNotFound, NotAcceptable;
 
+	/**
+	 * User login.
+	 *
+	 * @param username The username for login.
+	 * @param password The password for login in clear text.
+	 * @param rateLimit Calls per hour allowed by the user.
+	 * @param expiresAfter The <bc>Expires-After</bc> response header.
+	 * @param req The servlet request.
+	 * @param res The servlet response.
+	 * @return {@link Ok} if successful.
+	 * @throws InvalidLogin Login was unsuccessful.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=GET, path="/user/login")
 	public Ok login(
 		@Query(
 			name="username",
-			description="The username for login",
+			description="The username for login.",
 			required=true,
 			example="myuser"
 		)
 		String username,
 		@Query(
 			name="password",
-			description="The password for login in clear text",
+			description="The password for login in clear text.",
 			required=true,
 			example="abc123"
 		)
@@ -245,6 +409,12 @@ public interface PetStore {
 		RestResponse res
 	) throws InvalidLogin, NotAcceptable;
 
+	/**
+	 * User logout.
+	 *
+	 * @return {@link Ok} if successful.
+	 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+	 */
 	@RemoteMethod(method=GET, path="/user/logout")
 	public Ok logout() throws NotAcceptable;
 }

@@ -1792,24 +1792,22 @@ public final class ClassMeta<T> implements Type {
 	 * 	The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
 	 * @param arg The input argument value.
 	 * @return A new instance of the object, or <jk>null</jk> if there is no string constructor on the object.
-	 * @throws IllegalAccessException
-	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
-	 * 	inaccessible.
-	 * @throws IllegalArgumentException If the parameter type on the method was invalid.
-	 * @throws InstantiationException
-	 * 	If the class that declares the underlying constructor represents an abstract class, or does not have one of
-	 * 	the methods described above.
-	 * @throws InvocationTargetException If the underlying constructor throws an exception.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public T newInstanceFromString(Object outer, String arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
+	public T newInstanceFromString(Object outer, String arg) throws ExecutableException {
 
 		if (isEnum() && beanContext.isUseEnumNames())
 			return (T)Enum.valueOf((Class<? extends Enum>)this.innerClass, arg);
 
 		Method m = fromStringMethod;
-		if (m != null)
-			return (T)m.invoke(null, arg);
+		if (m != null) {
+			try {
+				return (T)m.invoke(null, arg);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				throw new ExecutableException(e);
+			}
+		}
 		ConstructorInfo c = stringConstructor;
 		if (c != null) {
 			if (isMemberClass)
@@ -1834,16 +1832,9 @@ public final class ClassMeta<T> implements Type {
 	 * 	Can be <jk>null</jk> for non-member or static classes.
 	 * @param arg The input argument value.
 	 * @return A new instance of the object, or <jk>null</jk> if there is no numeric constructor on the object.
-	 * @throws IllegalAccessException
-	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
-	 * 	inaccessible.
-	 * @throws IllegalArgumentException If the parameter type on the method was invalid.
-	 * @throws InstantiationException
-	 * 	If the class that declares the underlying constructor represents an abstract class, or does not have one of
-	 * 	the methods described above.
-	 * @throws InvocationTargetException If the underlying constructor throws an exception.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public T newInstanceFromNumber(BeanSession session, Object outer, Number arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
+	public T newInstanceFromNumber(BeanSession session, Object outer, Number arg) throws ExecutableException {
 		ConstructorInfo c = numberConstructor;
 		if (c != null) {
 			Object arg2 = session.convertToType(arg, numberConstructor.getRawParamType(0));
@@ -1858,27 +1849,10 @@ public final class ClassMeta<T> implements Type {
 	 * Create a new instance of the main class of this declared type.
 	 *
 	 * @return A new instance of the object, or <jk>null</jk> if there is no no-arg constructor on the object.
-	 * @throws IllegalAccessException
-	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
-	 * 	inaccessible.
-	 * @throws IllegalArgumentException
-	 * 	If one of the following occurs:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>
-	 * 			The number of actual and formal parameters differ.
-	 * 		<li>
-	 * 			An unwrapping conversion for primitive arguments fails.
-	 * 		<li>
-	 * 			A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
-	 * 			conversion.
-	 * 		<li>
-	 * 			The constructor pertains to an enum type.
-	 * 	</ul>
-	 * @throws InstantiationException If the class that declares the underlying constructor represents an abstract class.
-	 * @throws InvocationTargetException If the underlying constructor throws an exception.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings("unchecked")
-	public T newInstance() throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
+	public T newInstance() throws ExecutableException {
 		if (isArray())
 			return (T)Array.newInstance(getInnerClass().getComponentType(), 0);
 		ConstructorInfo c = getConstructor();
@@ -1899,26 +1873,9 @@ public final class ClassMeta<T> implements Type {
 	 * 	The instance of the owning object of the member class instance.
 	 * 	Can be <jk>null</jk> if instantiating a non-member or static class.
 	 * @return A new instance of the object, or <jk>null</jk> if there is no no-arg constructor on the object.
-	 * @throws IllegalAccessException
-	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
-	 * 	inaccessible.
-	 * @throws IllegalArgumentException
-	 * 	If one of the following occurs:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>
-	 * 			The number of actual and formal parameters differ.
-	 * 		<li>
-	 * 			An unwrapping conversion for primitive arguments fails.
-	 * 		<li>
-	 * 			A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
-	 * 			conversion.
-	 * 		<li>
-	 * 			The constructor pertains to an enum type.
-	 * 	</ul>
-	 * @throws InstantiationException If the class that declares the underlying constructor represents an abstract class.
-	 * @throws InvocationTargetException If the underlying constructor throws an exception.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public T newInstance(Object outer) throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
+	public T newInstance(Object outer) throws ExecutableException {
 		if (isMemberClass)
 			return noArgConstructor.<T>invoke(outer);
 		return newInstance();

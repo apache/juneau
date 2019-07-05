@@ -462,10 +462,9 @@ public class MockRest implements MockHttpConnection {
 	 * 	</ul>
 	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
 	@Override /* MockHttpConnection */
-	public MockServletRequest request(String method, String path, Map<String,Object> headers, Object body) throws Exception {
+	public MockServletRequest request(String method, String path, Map<String,Object> headers, Object body) {
 		String p = RestUtils.trimContextPath(ctx.getPath(), path);
 		return MockServletRequest.create(method, p).contextPath(emptyIfNull(contextPath)).servletPath(emptyIfNull(servletPath)).body(body).headers(this.headers).headers(headers).debug(debug).restContext(ctx);
 	}
@@ -476,9 +475,8 @@ public class MockRest implements MockHttpConnection {
 	 * @param method The HTTP method
 	 * @param path The URI path.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest request(String method, String path) throws Exception {
+	public MockServletRequest request(String method, String path) {
 		return request(method, path, null, null);
 	}
 
@@ -498,9 +496,8 @@ public class MockRest implements MockHttpConnection {
 	 * 	</ul>
 	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest request(String method, String path, Object body) throws Exception {
+	public MockServletRequest request(String method, String path, Object body) {
 		return request(method, path, null, body);
 	}
 
@@ -511,9 +508,8 @@ public class MockRest implements MockHttpConnection {
 	 * @param headers Optional headers to include in the request.
 	 * @param path The URI path.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest request(String method, Map<String,Object> headers, String path) throws Exception {
+	public MockServletRequest request(String method, Map<String,Object> headers, String path) {
 		return request(method, path, headers, null);
 	}
 
@@ -522,9 +518,8 @@ public class MockRest implements MockHttpConnection {
 	 *
 	 * @param path The URI path.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest get(String path) throws Exception {
+	public MockServletRequest get(String path) {
 		return request("GET", path, null, null);
 	}
 
@@ -532,9 +527,8 @@ public class MockRest implements MockHttpConnection {
 	 * Shortcut for <code>get(<js>""</js>)</code>
 	 *
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest get() throws Exception {
+	public MockServletRequest get() {
 		return get("");
 	}
 
@@ -553,9 +547,8 @@ public class MockRest implements MockHttpConnection {
 	 * 	</ul>
 	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest put(String path, Object body) throws Exception {
+	public MockServletRequest put(String path, Object body)  {
 		return request("PUT", path, null, body);
 	}
 
@@ -574,9 +567,8 @@ public class MockRest implements MockHttpConnection {
 	 * 	</ul>
 	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest post(String path, Object body) throws Exception {
+	public MockServletRequest post(String path, Object body) {
 		return request("POST", path, null, body);
 	}
 
@@ -585,9 +577,8 @@ public class MockRest implements MockHttpConnection {
 	 *
 	 * @param path The URI path.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest delete(String path) throws Exception {
+	public MockServletRequest delete(String path) {
 		return request("DELETE", path, null, null);
 	}
 
@@ -596,9 +587,8 @@ public class MockRest implements MockHttpConnection {
 	 *
 	 * @param path The URI path.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest head(String path) throws Exception {
+	public MockServletRequest head(String path) {
 		return request("HEAD", path, null, null);
 	}
 
@@ -607,9 +597,8 @@ public class MockRest implements MockHttpConnection {
 	 *
 	 * @param path The URI path.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest options(String path) throws Exception {
+	public MockServletRequest options(String path) {
 		return request("OPTIONS", path, null, null);
 	}
 
@@ -628,9 +617,8 @@ public class MockRest implements MockHttpConnection {
 	 * 	</ul>
 	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest patch(String path, Object body) throws Exception {
+	public MockServletRequest patch(String path, Object body) {
 		return request("PATCH", path, null, body);
 	}
 
@@ -639,9 +627,8 @@ public class MockRest implements MockHttpConnection {
 	 *
 	 * @param path The URI path.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest connect(String path) throws Exception {
+	public MockServletRequest connect(String path) {
 		return request("CONNECT", path, null, null);
 	}
 
@@ -650,9 +637,8 @@ public class MockRest implements MockHttpConnection {
 	 *
 	 * @param path The URI path.
 	 * @return A new servlet request.
-	 * @throws Exception
 	 */
-	public MockServletRequest trace(String path) throws Exception {
+	public MockServletRequest trace(String path) {
 		return request("TRACE", path, null, null);
 	}
 

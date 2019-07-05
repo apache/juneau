@@ -116,18 +116,29 @@ public class AtomFeedResource extends BasicRestServletJena {
 		}
 	}
 
+	/**
+	 * Get the sample ATOM feed
+	 *
+	 * @return The sample ATOM feed.
+	 */
 	@RestMethod(
 		summary="Get the sample ATOM feed"
 	)
-	public Feed get() throws Exception {
+	public Feed get() {
 		return feed;
 	}
 
+	/**
+	 * Overwrite the sample ATOM feed
+	 *
+	 * @param feed The new ATOM feed.
+	 * @return The updated ATOM feed.
+	 */
 	@RestMethod(
 		summary="Overwrite the sample ATOM feed",
 		description="Replaces the feed with the specified content, and then mirrors it as the response."
 	)
-	public Feed put(@Body Feed feed) throws Exception {
+	public Feed put(@Body Feed feed) {
 		this.feed = feed;
 		return feed;
 	}

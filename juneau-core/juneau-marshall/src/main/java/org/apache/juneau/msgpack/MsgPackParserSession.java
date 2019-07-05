@@ -14,6 +14,7 @@ package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.msgpack.DataType.*;
 
+import java.io.IOException;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -44,7 +45,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 	}
 
 	@Override /* ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (MsgPackInputStream is = new MsgPackInputStream(pipe)) {
 			return parseAnything(type, is, getOuter(), null);
 		}
@@ -53,7 +54,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 	/*
 	 * Workhorse method.
 	 */
-	private <T> T parseAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws Exception {
+	private <T> T parseAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();
@@ -194,7 +195,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 		}
 
 		if (swap != null && o != null)
-			o = swap.unswap(this, o, eType);
+			o = unswap(swap, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);

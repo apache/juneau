@@ -27,6 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.ClassInfo;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
@@ -76,7 +77,7 @@ public class JettyMicroservice extends Microservice {
 	 * Entry-point method.
 	 *
 	 * @param args Command line arguments.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public static void main(String[] args) throws Exception {
 		JettyMicroservice
@@ -115,9 +116,10 @@ public class JettyMicroservice extends Microservice {
 	 * Constructor.
 	 *
 	 * @param builder The constructor arguments.
-	 * @throws Exception
+	 * @throws IOException Problem occurred reading file.
+	 * @throws ParseException Malformed content found in config file.
 	 */
-	protected JettyMicroservice(JettyMicroserviceBuilder builder) throws Exception {
+	protected JettyMicroservice(JettyMicroserviceBuilder builder) throws ParseException, IOException {
 		super(builder);
 		setInstance(this);
 		this.builder = builder.copy();
@@ -130,7 +132,7 @@ public class JettyMicroservice extends Microservice {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Microservice */
-	public JettyMicroservice init() throws Exception {
+	public JettyMicroservice init() throws ParseException, IOException {
 		super.init();
 		return this;
 	}
@@ -308,9 +310,11 @@ public class JettyMicroservice extends Microservice {
 	 * </p>
 	 *
 	 * @return The newly-created server.
-	 * @throws Exception
+	 * @throws ParseException Configuration file contains malformed input.
+	 * @throws IOException File could not be read.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public Server createServer() throws Exception {
+	public Server createServer() throws ParseException, IOException, ExecutableException {
 		listener.onCreateServer(this);
 
 		Config cf = getConfig();
@@ -335,25 +339,37 @@ public class JettyMicroservice extends Microservice {
 
 		getLogger().info(jettyXml);
 
-		server = factory.create(jettyXml);
+		try {
+			server = factory.create(jettyXml);
+		} catch (Exception e2) {
+			throw new ExecutableException(e2);
+		}
 
 		for (String s : cf.getStringArray("Jetty/servlets", new String[0])) {
-			ClassInfo c = getClassInfo(Class.forName(s));
-			if (c.isChildOf(RestServlet.class)) {
-				RestServlet rs = (RestServlet)c.newInstance();
-				addServlet(rs, rs.getPath());
-			} else {
-				throw new FormattedRuntimeException("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet.", s);
+			try {
+				ClassInfo c = getClassInfo(Class.forName(s));
+				if (c.isChildOf(RestServlet.class)) {
+					RestServlet rs = (RestServlet)c.newInstance();
+					addServlet(rs, rs.getPath());
+				} else {
+					throw new FormattedRuntimeException("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet.", s);
+				}
+			} catch (ClassNotFoundException e1) {
+				throw new ExecutableException(e1);
 			}
 		}
 
 		for (Map.Entry<String,Object> e : cf.getObjectMap("Jetty/servletMap", ObjectMap.EMPTY_MAP).entrySet()) {
-			ClassInfo c = getClassInfo(Class.forName(e.getValue().toString()));
-			if (c.isChildOf(Servlet.class)) {
-				Servlet rs = (Servlet)c.newInstance();
-				addServlet(rs, e.getKey());
-			} else {
-				throw new FormattedRuntimeException("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet.", e.getValue());
+			try {
+				ClassInfo c = getClassInfo(Class.forName(e.getValue().toString()));
+				if (c.isChildOf(Servlet.class)) {
+					Servlet rs = (Servlet)c.newInstance();
+					addServlet(rs, e.getKey());
+				} else {
+					throw new FormattedRuntimeException("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet.", e.getValue());
+				}
+			} catch (ClassNotFoundException e1) {
+				throw new ExecutableException(e1);
 			}
 		}
 
@@ -374,7 +390,7 @@ public class JettyMicroservice extends Microservice {
 	/**
 	 * Calls {@link Server#destroy()} on the underlying Jetty server if it exists.
 	 *
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public void destroyServer() throws Exception {
 		if (server != null)
@@ -444,7 +460,7 @@ public class JettyMicroservice extends Microservice {
 	 * Subclasses can override this method to customize server startup.
 	 *
 	 * @return The port that this server started on.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	protected int startServer() throws Exception {
 		listener.onStartServer(this);

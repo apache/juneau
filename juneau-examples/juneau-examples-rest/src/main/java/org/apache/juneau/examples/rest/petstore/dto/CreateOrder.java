@@ -30,6 +30,9 @@ public class CreateOrder {
 
 	/**
 	 * Optional constructor.
+	 *
+	 * @param petId The <bc>petId</bc> property value.
+	 * @param username The <bc>username</bc> property value.
 	 */
 	@BeanConstructor(properties="petId,username")
 	public CreateOrder(long petId, String username) {
@@ -46,19 +49,33 @@ public class CreateOrder {
 	// Bean properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * @return The <bc>petId</bc> property value.
+	 */
 	public long getPetId() {
 		return petId;
 	}
 
+	/**
+	 * @param value The <bc>petId</bc> property value.
+	 * @return This object (for method chaining).
+	 */
 	public CreateOrder petId(long value) {
 		this.petId = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>username</bc> property value.
+	 */
 	public String getUsername() {
 		return username;
 	}
 
+	/**
+	 * @param value The <bc>username</bc> property value.
+	 * @return This object (for method chaining).
+	 */
 	public CreateOrder username(String value) {
 		this.username = value;
 		return this;
@@ -71,6 +88,8 @@ public class CreateOrder {
 	/**
 	 * Used to populate Swagger examples.
 	 * Example is inferred from the method name.
+	 *
+	 * @return An example POJO.
 	 */
 	public static CreateOrder example() {
 		return new CreateOrder(123, "sampleuser");

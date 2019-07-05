@@ -122,7 +122,7 @@ public final class Via extends HeaderStringArray {
 	/**
 	 * Constructor.
 	 *
-	 * @param value
+	 * @param value The value for this header.
 	 */
 	public Via(String[] value) {
 		super(value);

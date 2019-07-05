@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
+import java.io.IOException;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -48,14 +49,14 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	}
 
 	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		serializeAnything(getMsgPackOutputStream(out), o, getExpectedRootType(o), "root", null);
 	}
 
 	/*
 	 * Converts the specified output target object to an {@link MsgPackOutputStream}.
 	 */
-	private static final MsgPackOutputStream getMsgPackOutputStream(SerializerPipe out) throws Exception {
+	private static final MsgPackOutputStream getMsgPackOutputStream(SerializerPipe out) throws IOException {
 		Object output = out.getRawOutput();
 		if (output instanceof MsgPackOutputStream)
 			return (MsgPackOutputStream)output;
@@ -68,8 +69,8 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	 * Workhorse method.
 	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private MsgPackOutputStream serializeAnything(MsgPackOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws Exception {
+	@SuppressWarnings({ "rawtypes" })
+	private MsgPackOutputStream serializeAnything(MsgPackOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws IOException, SerializeException {
 
 		if (o == null)
 			return out.appendNull();
@@ -80,7 +81,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
-		aType = push(attrName, o, eType);
+		aType = push2(attrName, o, eType);
 		boolean isRecursion = aType == null;
 
 		// Handle recursion
@@ -95,7 +96,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap(this);
 		if (swap != null) {
-			o = swap.swap(this, o);
+			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);
 
 			// If the getSwapClass() method returns Object, we need to figure out
@@ -139,7 +140,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeMap(MsgPackOutputStream out, Map m, ClassMeta<?> type) throws Exception {
+	private void serializeMap(MsgPackOutputStream out, Map m, ClassMeta<?> type) throws IOException, SerializeException {
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
@@ -162,7 +163,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 		}
 	}
 
-	private void serializeBeanMap(MsgPackOutputStream out, final BeanMap<?> m, String typeName) throws Exception {
+	private void serializeBeanMap(MsgPackOutputStream out, final BeanMap<?> m, String typeName) throws IOException, SerializeException {
 
 		List<BeanPropertyValue> values = m.getValues(isTrimNullProperties(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null);
 
@@ -200,7 +201,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void serializeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws Exception {
+	private void serializeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws IOException, SerializeException {
 
 		ClassMeta<?> elementType = type.getElementType();
 		List<Object> l = new ArrayList<>(c.size());

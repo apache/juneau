@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xmlschema;
 
+import java.io.IOException;
+
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
@@ -41,7 +43,7 @@ public class XmlSchemaDocSerializerSession extends XmlSchemaSerializerSession {
 	}
 
 	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try (XmlWriter w = getXmlWriter(out)) {
 			w.append("<?xml")
 				.attr("version", "1.0")

@@ -81,7 +81,7 @@ public class ComboInput<T> {
 	/**
 	 * Returns the input object.
 	 * Override this method if you want it dynamically created each time.
-	 * @throws Exception
+	 * @throws Exception Subclasses can throw any exception.
 	 */
 	public T getInput() throws Exception {
 		return in;

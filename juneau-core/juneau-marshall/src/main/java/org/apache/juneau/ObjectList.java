@@ -139,7 +139,7 @@ public class ObjectList extends LinkedList<Object> {
 	 *
 	 * @param s The string being parsed.
 	 * @param p The parser to use to parse the input.
-	 * @throws ParseException If the input contains a syntax error or is malformed.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public ObjectList(CharSequence s, Parser p) throws ParseException {
 		this(p == null ? null : p.createBeanSession());
@@ -153,7 +153,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * Shortcut for <code><jk>new</jk> ObjectList(String,JsonParser.<jsf>DEFAULT</jsf>);</code>
 	 *
 	 * @param s The string being parsed.
-	 * @throws ParseException If the input contains a syntax error or is malformed.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public ObjectList(CharSequence s) throws ParseException {
 		this(s, null);
@@ -166,7 +166,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * 	The reader to read from.
 	 * 	Will automatically be wrapped in a {@link BufferedReader} if it isn't already a BufferedReader.
 	 * @param p The parser to use to parse the input.
-	 * @throws ParseException If the input contains a syntax error or is malformed.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public ObjectList(Reader r, Parser p) throws ParseException, IOException {
@@ -180,7 +180,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @param r
 	 * 	The reader to read from.
 	 * 	The reader will be wrapped in a {@link BufferedReader} if it isn't already.
-	 * @throws ParseException If the input contains a syntax error or is malformed.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public ObjectList(Reader r) throws ParseException, IOException {

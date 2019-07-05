@@ -249,7 +249,7 @@ public final class ObjectUtils {
 	/**
 	 * Returns the first non-null value in the specified array
 	 *
-	 * @param t
+	 * @param t The values to check.
 	 * @return The first non-null value, or <jk>null</jk> if the array is null or empty or contains only <jk>null</jk> values.
 	 */
 	@SafeVarargs

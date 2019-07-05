@@ -14,6 +14,7 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
 
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -82,20 +83,20 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	}
 
 	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		serializeAnything(getUonWriter(out), o);
 	}
 
 	/*
 	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
-	private SerializerWriter serializeAnything(UonWriter out, Object o) throws Exception {
+	private SerializerWriter serializeAnything(UonWriter out, Object o) throws IOException, SerializeException {
 
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
 		ClassMeta<?> eType = getExpectedRootType(o);
-		aType = push("root", o, eType);
+		aType = push2("root", o, eType);
 		indent--;
 		if (aType == null)
 			aType = object();
@@ -106,7 +107,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap(this);
 		if (swap != null) {
-			o = swap.swap(this, o);
+			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);
 
 			// If the getSwapClass() method returns Object, we need to figure out
@@ -160,7 +161,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return m;
 	}
 
-	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws Exception {
+	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws IOException, SerializeException {
 
 		m = sort(m);
 
@@ -193,7 +194,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	private SerializerWriter serializeCollectionMap(UonWriter out, Map m, ClassMeta<?> type) throws Exception {
+	private SerializerWriter serializeCollectionMap(UonWriter out, Map m, ClassMeta<?> type) throws IOException, SerializeException {
 
 		ClassMeta<?> valueType = type.getValueType();
 
@@ -210,7 +211,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws Exception {
+	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws IOException, SerializeException {
 		boolean addAmp = false;
 
 		for (BeanPropertyValue p : m.getValues(isTrimNullProperties(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null)) {

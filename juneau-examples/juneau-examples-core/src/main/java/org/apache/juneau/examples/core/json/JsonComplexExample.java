@@ -29,49 +29,51 @@ import java.util.List;
  * </ul>
  */
 public class JsonComplexExample {
-    /**
-     * Serializing PojoComplex bean into Json type
-     * and Deserialize back to PojoComplex instance type.
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception{
-        // Juneau provides static constants with the most commonly used configurations
-        // Get a reference to a serializer - converting POJO to flat format
-        /**
-         * Produces
-         * {"innerPojo":{"name":"name0","id":"1.0"},
-         * "values":{"setOne":[{"name":"name1","id":"1.1"},{"name":"name2","id":"1.1"}],
-         * "setTwo":[{"name":"name1","id":"1.2"},{"name":"name2","id":"1.2"}]},"id":"pojo"}
-         */
-        JsonSerializer jsonSerializer = JsonSerializer.DEFAULT;
-        // Get a reference to a parser - converts that flat format back into the POJO
-        JsonParser jsonParser = JsonParser.DEFAULT;
 
-        // Fill some data to a PojoComplex bean
-        HashMap<String, List<Pojo>> values = new HashMap<>();
-        ArrayList<Pojo> setOne = new ArrayList<>();
-        setOne.add(new Pojo("1.1", "name1"));
-        setOne.add(new Pojo("1.1", "name2"));
-        ArrayList<Pojo> setTwo = new ArrayList<>();
-        setTwo.add(new Pojo("1.2", "name1"));
-        setTwo.add(new Pojo("1.2", "name2"));
-        values.put("setOne", setOne);
-        values.put("setTwo", setTwo);
-        PojoComplex pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
+	/**
+	 * Serializing PojoComplex bean into Json type
+	 * and Deserialize back to PojoComplex instance type.
+	 *
+	 * @param args Unused.
+	 * @throws Exception Unused.
+	 */
+	public static void main(String[] args) throws Exception{
+		// Juneau provides static constants with the most commonly used configurations
+		// Get a reference to a serializer - converting POJO to flat format
+		/**
+		 * Produces
+		 * {"innerPojo":{"name":"name0","id":"1.0"},
+		 * "values":{"setOne":[{"name":"name1","id":"1.1"},{"name":"name2","id":"1.1"}],
+		 * "setTwo":[{"name":"name1","id":"1.2"},{"name":"name2","id":"1.2"}]},"id":"pojo"}
+		 */
+		JsonSerializer jsonSerializer = JsonSerializer.DEFAULT;
+		// Get a reference to a parser - converts that flat format back into the POJO
+		JsonParser jsonParser = JsonParser.DEFAULT;
 
-        String flat = jsonSerializer.serialize(pojoc);
+		// Fill some data to a PojoComplex bean
+		HashMap<String, List<Pojo>> values = new HashMap<>();
+		ArrayList<Pojo> setOne = new ArrayList<>();
+		setOne.add(new Pojo("1.1", "name1"));
+		setOne.add(new Pojo("1.1", "name2"));
+		ArrayList<Pojo> setTwo = new ArrayList<>();
+		setTwo.add(new Pojo("1.2", "name1"));
+		setTwo.add(new Pojo("1.2", "name2"));
+		values.put("setOne", setOne);
+		values.put("setTwo", setTwo);
+		PojoComplex pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
 
-        // Print out the created POJO in JSON format.
-        System.out.println(flat);
+		String flat = jsonSerializer.serialize(pojoc);
 
-        PojoComplex parse = jsonParser.parse(flat, PojoComplex.class);
+		// Print out the created POJO in JSON format.
+		System.out.println(flat);
 
-        assert parse.getId().equals(pojoc.getId());
-        assert parse.getInnerPojo().getName().equals(pojoc.getInnerPojo().getName());
-        assert parse.getInnerPojo().getId().equals(pojoc.getInnerPojo().getId());
+		PojoComplex parse = jsonParser.parse(flat, PojoComplex.class);
 
-        // The object above can be parsed thanks to the @BeanConstructor(properties = id,name) annotation on Pojo
-        // Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
-    }
+		assert parse.getId().equals(pojoc.getId());
+		assert parse.getInnerPojo().getName().equals(pojoc.getInnerPojo().getName());
+		assert parse.getInnerPojo().getId().equals(pojoc.getInnerPojo().getId());
+
+		// The object above can be parsed thanks to the @BeanConstructor(properties = id,name) annotation on Pojo
+		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
+	}
 }

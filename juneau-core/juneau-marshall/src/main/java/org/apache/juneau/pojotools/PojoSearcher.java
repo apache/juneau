@@ -36,17 +36,16 @@ public final class PojoSearcher implements PojoTool<SearchArgs> {
 	final MatcherFactory[] factories;
 
 	/**
-	 * TODO
+	 * Constructor.
 	 *
-	 * @param factories
+	 * @param factories The matcher factories to use.
 	 */
 	public PojoSearcher(MatcherFactory...factories) {
 		this.factories = factories;
 	}
 
 	/**
-	 * TODO
-	 *
+	 * Constructor.
 	 */
 	public PojoSearcher() {
 		this(NumberMatcherFactory.DEFAULT, TimeMatcherFactory.DEFAULT, StringMatcherFactory.DEFAULT);

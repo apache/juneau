@@ -25,7 +25,7 @@ public interface Finishable {
 	 * <p>
 	 * Use this method when applying multiple filters in succession to the same output stream.
 	 *
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	void finish() throws IOException;
 }

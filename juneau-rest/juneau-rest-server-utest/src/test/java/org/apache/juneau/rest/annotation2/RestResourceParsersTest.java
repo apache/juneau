@@ -15,6 +15,8 @@ package org.apache.juneau.rest.annotation2;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
+import java.io.IOException;
+
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.parser.*;
@@ -44,7 +46,7 @@ public class RestResourceParsersTest {
 			return new ReaderParserSession(args) {
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 					return (T)("text/a - " + read(pipe.getReader()).trim());
 				}
 			};
@@ -60,7 +62,7 @@ public class RestResourceParsersTest {
 			return new ReaderParserSession(args) {
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 					return (T)("text/b - " + read(pipe.getReader()).trim());
 				}
 			};
@@ -76,7 +78,7 @@ public class RestResourceParsersTest {
 			return new ReaderParserSession(args) {
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 					return (T)("text/c - " + read(pipe.getReader()).trim());
 				}
 			};
@@ -92,7 +94,7 @@ public class RestResourceParsersTest {
 			return new ReaderParserSession(args) {
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 					return (T)("text/d - " + read(pipe.getReader()).trim());
 				}
 			};

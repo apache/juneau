@@ -40,9 +40,10 @@ public final class XmlReader implements XMLStreamReader, Positionable {
 	 * @param reporter The value for the {@link XMLInputFactory#REPORTER} setting.
 	 * @param resolver The value for the {@link XMLInputFactory#RESOLVER} setting.
 	 * @param eventAllocator The value for the {@link XMLInputFactory#ALLOCATOR} setting.
-	 * @throws Exception
+	 * @throws IOException Thrown by underling
+	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 */
-	protected XmlReader(ParserPipe pipe, boolean validating, XMLReporter reporter, XMLResolver resolver, XMLEventAllocator eventAllocator) throws Exception {
+	protected XmlReader(ParserPipe pipe, boolean validating, XMLReporter reporter, XMLResolver resolver, XMLEventAllocator eventAllocator) throws IOException, XMLStreamException {
 		this.pipe = pipe;
 		try {
 			@SuppressWarnings("resource")
@@ -62,9 +63,7 @@ public final class XmlReader implements XMLStreamReader, Positionable {
 			sr.nextTag();
 			pipe.setPositionable(this);
 		} catch (Error e) {
-			throw new ParseException(e.getLocalizedMessage());
-		} catch (XMLStreamException e) {
-			throw new ParseException(e);
+			throw new IOException(e.getLocalizedMessage());
 		}
 	}
 

@@ -98,8 +98,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 *
 	 * @param r1 The incoming HTTP servlet request object.
 	 * @param r2 The incoming HTTP servlet response object.
-	 * @throws ServletException
-	 * @throws IOException
+	 * @throws ServletException General servlet exception.
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	@Override /* RestCallHandler */
 	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
@@ -249,8 +249,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
-	 * @throws IOException
-	 * @throws RestException
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws RestException Non-200 response.
 	 */
 	@Override /* RestCallHandler */
 	public void handleResponse(RestRequest req, RestResponse res) throws IOException, RestException, NotImplemented {

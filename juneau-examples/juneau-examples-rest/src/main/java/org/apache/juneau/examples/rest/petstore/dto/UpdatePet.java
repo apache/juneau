@@ -34,6 +34,14 @@ public class UpdatePet extends CreatePet {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param id The <bc>id</bc> property value.
+	 * @param name The <bc>name</bc> property value.
+	 * @param price The <bc>price</bc> property value.
+	 * @param species The <bc>species</bc> property value.
+	 * @param tags The <bc>tags</bc> property value.
+	 * @param status The <bc>status</bc> property value.
+	 * @param photo The <bc>photo</bc> property value.
 	 */
 	public UpdatePet(long id, String name, float price, Species species, String[] tags, PetStatus status, String photo) {
 		super(name, price, species, tags, photo);
@@ -50,19 +58,33 @@ public class UpdatePet extends CreatePet {
 	// Bean properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * @return The <bc>id</jc> property value.
+	 */
 	public long getId() {
 		return id;
 	}
 
+	/**
+	 * @param value The <bc>id</jc> property value.
+	 * @return This object (for method chaining).
+	 */
 	public UpdatePet id(long value) {
 		this.id = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>status</jc> property value.
+	 */
 	public PetStatus getStatus() {
 		return status;
 	}
 
+	/**
+	 * @param value The <bc>status</jc> property value.
+	 * @return This object (for method chaining).
+	 */
 	public UpdatePet status(PetStatus value) {
 		this.status = value;
 		return this;

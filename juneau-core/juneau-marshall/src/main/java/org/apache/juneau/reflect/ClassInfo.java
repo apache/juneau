@@ -1860,13 +1860,16 @@ public final class ClassInfo {
 	 * Shortcut for calling {@link Class#newInstance()} on the underlying class.
 	 *
 	 * @return A new instance of the underlying class
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public Object newInstance() throws InstantiationException, IllegalAccessException {
+	public Object newInstance() throws ExecutableException {
 		if (c == null)
-			throw new InstantiationException("Type '"+ getFullName() + "' cannot be instantiated");
-		return c.newInstance();
+			throw new ExecutableException("Type ''{0}'' cannot be instantiated", getFullName());
+		try {
+			return c.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new ExecutableException(e);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

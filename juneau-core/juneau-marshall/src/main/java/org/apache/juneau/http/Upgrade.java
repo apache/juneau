@@ -86,7 +86,7 @@ public final class Upgrade extends HeaderStringArray {
 	/**
 	 * Constructor.
 	 *
-	 * @param value
+	 * @param value The value for this header.
 	 */
 	public Upgrade(String[] value) {
 		super(value);

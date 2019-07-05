@@ -55,7 +55,7 @@ public final class IOUtils {
 	 *
 	 * @param in The object to read.
 	 * @return The object serialized to a string, or <jk>null</jk> if it wasn't a supported type.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static String read(Object in) throws IOException {
 		if (in == null)
@@ -78,7 +78,7 @@ public final class IOUtils {
 	 *
 	 * @param in The objects to read.
 	 * @return The objects serialized to a string, never <jk>null</jk>.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static String readAll(Object...in) throws IOException {
 		if (in.length == 1)
@@ -303,7 +303,7 @@ public final class IOUtils {
 	 *
 	 * @param in The objects to read.
 	 * @return The objects serialized to a byte array, never <jk>null</jk>.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static byte[] readBytes(Object...in) throws IOException {
 		if (in.length == 1)
@@ -325,7 +325,7 @@ public final class IOUtils {
 	 * @param out The file to write the output to.
 	 * @param in The reader to pipe from.
 	 * @return The number of characters written to the file.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static int write(File out, Reader in) throws IOException {
 		assertFieldNotNull(out, "out");
@@ -341,7 +341,7 @@ public final class IOUtils {
 	 * @param out The file to write the output to.
 	 * @param in The input stream to pipe from.
 	 * @return The number of characters written to the file.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static int write(File out, InputStream in) throws IOException {
 		assertFieldNotNull(out, "out");
@@ -362,7 +362,7 @@ public final class IOUtils {
 	 * 	Can be any of the types defined by {@link #toReader(Object)}.
 	 * @param out
 	 * 	The writer to pipe to.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static void pipe(Object in, Writer out) throws IOException {
 		IOPipe.create(in, out).run();
@@ -379,7 +379,7 @@ public final class IOUtils {
 	 * 	Can be any of the types defined by {@link #toInputStream(Object)}.
 	 * @param out
 	 * 	The writer to pipe to.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static void pipe(Object in, OutputStream out) throws IOException {
 		IOPipe.create(in, out).run();
@@ -404,7 +404,7 @@ public final class IOUtils {
 	 *
 	 * @param is The input stream to read from.
 	 * @return The number of bytes read.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static long count(InputStream is) throws IOException {
 		assertFieldNotNull(is, "is");
@@ -424,7 +424,7 @@ public final class IOUtils {
 	 *
 	 * @param r The reader to read from.
 	 * @return The number of characters read.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static long count(Reader r) throws IOException {
 		assertFieldNotNull(r, "r");
@@ -548,7 +548,7 @@ public final class IOUtils {
 	 * @param o
 	 * 	The objects to flush.
 	 * 	<jk>null</jk> entries are ignored.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static void flush(Object...o) throws IOException {
 		IOException ex = null;
@@ -572,7 +572,7 @@ public final class IOUtils {
 	 * @param o
 	 * 	The list of all objects to close.
 	 * 	<jk>null</jk> entries are ignored.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static void close(Object...o) throws IOException {
 		IOException ex = null;
@@ -667,7 +667,7 @@ public final class IOUtils {
 	 *
 	 * @param path The file path.
 	 * @param contents The new file contents.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static void write(String path, String contents) throws IOException {
 		write(new File(path), new StringReader(contents));
@@ -679,7 +679,7 @@ public final class IOUtils {
 	 * @param name The file name.
 	 * @param paths The paths to search.
 	 * @return The file contents, or <jk>null</jk> if not found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static String loadSystemResourceAsString(String name, String...paths) throws IOException {
 		for (String path : paths) {

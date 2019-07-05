@@ -4038,7 +4038,7 @@ public final class RestContext extends BeanContext {
 	 * @param pathInfo The unencoded path info.
 	 * @return The wrapped resource, never <jk>null</jk>.
 	 * @throws NotFound Invalid path.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected StaticFile resolveStaticFile(String pathInfo) throws NotFound, IOException {
 		if (! staticFilesCache.containsKey(pathInfo)) {
@@ -4079,16 +4079,16 @@ public final class RestContext extends BeanContext {
 	/**
 	 * A cached static file instance.
 	 */
-	protected class StaticFile {
+	class StaticFile {
 		StreamResource resource;
 		ResponseBeanMeta meta;
 
 		/**
 		 * Constructor.
 		 *
-		 * @param resource
+		 * @param resource The inner resource.
 		 */
-		protected StaticFile(StreamResource resource) {
+		StaticFile(StreamResource resource) {
 			this.resource = resource;
 			this.meta = resource == null ? null : ResponseBeanMeta.create(resource.getClass(), getPropertyStore());
 		}
@@ -4131,7 +4131,7 @@ public final class RestContext extends BeanContext {
 	 * 	Optional locale.
 	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return An input stream of the resource, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public InputStream getClasspathResource(String name, Locale locale) throws IOException {
 		return staticResourceManager.getStream(name, locale);
@@ -4164,7 +4164,7 @@ public final class RestContext extends BeanContext {
 	 * 	Optional locale.
 	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return An input stream of the resource, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public InputStream getClasspathResource(Class<?> baseClass, String name, Locale locale) throws IOException {
 		return staticResourceManager.getStream(baseClass, name, locale);
@@ -4261,7 +4261,7 @@ public final class RestContext extends BeanContext {
 	 * 	Optional locale.
 	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return The parsed resource, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 * @throws ServletException If the media type was unknown or the input could not be parsed into a POJO.
 	 */
 	public <T> T getClasspathResource(Class<T> c, MediaType mediaType, String name, Locale locale) throws IOException, ServletException {
@@ -4297,7 +4297,7 @@ public final class RestContext extends BeanContext {
 	 * 	Optional locale.
 	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return The parsed resource, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 * @throws ServletException If the media type was unknown or the input could not be parsed into a POJO.
 	 */
 	public <T> T getClasspathResource(Class<?> baseClass, Class<T> c, MediaType mediaType, String name, Locale locale) throws IOException, ServletException {
@@ -4981,7 +4981,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @param mi The Java method being called.
 	 * @param isPreOrPost Whether this is a {@link HookEvent#PRE_CALL} or {@link HookEvent#POST_CALL}.
-	 * @param pathPattern
+	 * @param pathPattern The path pattern to match against.
 	 * @return The array of resolvers.
 	 * @throws ServletException If an annotation usage error was detected.
 	 */
@@ -5118,7 +5118,7 @@ public final class RestContext extends BeanContext {
 	 * Calls all @RestHook(POST_INIT) methods in parent-to-child order.
 	 *
 	 * @return This object (for method chaining).
-	 * @throws ServletException
+	 * @throws ServletException Error occurred.
 	 */
 	public RestContext postInit() throws ServletException {
 		for (int i = 0; i < postInitMethods.length; i++)
@@ -5132,7 +5132,7 @@ public final class RestContext extends BeanContext {
 	 * Calls all @RestHook(POST_INIT_CHILD_FIRST) methods in child-to-parent order.
 	 *
 	 * @return This object (for method chaining).
-	 * @throws ServletException
+	 * @throws ServletException Error occurred.
 	 */
 	public RestContext postInitChildFirst() throws ServletException {
 		for (RestContext childContext : this.childResources.values())

@@ -62,7 +62,7 @@ public final class Age extends HeaderInteger {
 	/**
 	 * Constructor.
 	 *
-	 * @param value
+	 * @param value The value for this header.
 	 */
 	public Age(Integer value) {
 		super(value);

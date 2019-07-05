@@ -15,8 +15,6 @@ package org.apache.juneau.examples.core.xml;
 import java.util.*;
 
 import org.apache.juneau.examples.core.pojo.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -28,14 +26,15 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 public class XmlComplexExample {
+
 	/**
 	 * Serializing PojoComplex bean into human readable XML
 	 * and Deserialize back to PojoComplex instance type.
-	 * @param args
-	 * @throws SerializeException
-	 * @throws ParseException
+	 *
+	 * @param args Unused.
+	 * @throws Exception Unused.
 	 */
-	public static void main(String[] args) throws SerializeException, ParseException {
+	public static void main(String[] args) throws Exception {
 
 		// Fill some data to a PojoComplex bean
 		HashMap<String, List<Pojo>> values = new HashMap<>();

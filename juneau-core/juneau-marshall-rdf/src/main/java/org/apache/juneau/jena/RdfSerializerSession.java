@@ -15,6 +15,7 @@ package org.apache.juneau.jena;
 import static org.apache.juneau.jena.Constants.*;
 import static org.apache.juneau.jena.RdfSerializer.*;
 
+import java.io.IOException;
 import java.util.*;
 
 import org.apache.jena.rdf.model.*;
@@ -113,7 +114,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 
 		Resource r = null;
 
@@ -139,14 +140,14 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	private RDFNode serializeAnything(Object o, boolean isURI, ClassMeta<?> eType,
-			String attrName, BeanPropertyMeta bpm, Resource parentResource) throws Exception {
+			String attrName, BeanPropertyMeta bpm, Resource parentResource) throws IOException, SerializeException {
 		Model m = model;
 
 		ClassMeta<?> aType = null;       // The actual type
 		ClassMeta<?> wType = null;       // The wrapped type
 		ClassMeta<?> sType = object();   // The serialized type
 
-		aType = push(attrName, o, eType);
+		aType = push2(attrName, o, eType);
 
 		if (eType == null)
 			eType = object();
@@ -169,7 +170,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			// Swap if necessary
 			PojoSwap swap = aType.getPojoSwap(this);
 			if (swap != null) {
-				o = swap.swap(this, o);
+				o = swap(swap, o);
 				sType = swap.getSwapClassMeta(this);
 
 				// If the getSwapClass() method returns Object, we need to figure out
@@ -279,7 +280,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		return getUriResolver().resolve(s);
 	}
 
-	private void serializeMap(Map m, Resource r, ClassMeta<?> type) throws Exception {
+	private void serializeMap(Map m, Resource r, ClassMeta<?> type) throws IOException, SerializeException {
 
 		m = sort(m);
 
@@ -300,7 +301,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		}
 	}
 
-	private void serializeBeanMap(BeanMap<?> m, Resource r, String typeName) throws Exception {
+	private void serializeBeanMap(BeanMap<?> m, Resource r, String typeName) throws IOException, SerializeException {
 		List<BeanPropertyValue> l = m.getValues(isTrimNullProperties(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null);
 		Collections.reverse(l);
 		for (BeanPropertyValue bpv : l) {
@@ -338,7 +339,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 
-	private Container serializeToContainer(Collection c, ClassMeta<?> type, Container list) throws Exception {
+	private Container serializeToContainer(Collection c, ClassMeta<?> type, Container list) throws IOException, SerializeException {
 
 		ClassMeta<?> elementType = type.getElementType();
 		for (Object e : c) {
@@ -348,7 +349,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		return list;
 	}
 
-	private RDFList serializeToList(Collection c, ClassMeta<?> type) throws Exception {
+	private RDFList serializeToList(Collection c, ClassMeta<?> type) throws IOException, SerializeException {
 		ClassMeta<?> elementType = type.getElementType();
 		List<RDFNode> l = new ArrayList<>(c.size());
 		for (Object e : c) {
@@ -358,7 +359,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	private void serializeToMultiProperties(Collection c, ClassMeta<?> sType,
-			BeanPropertyMeta bpm, String attrName, Resource parentResource) throws Exception {
+			BeanPropertyMeta bpm, String attrName, Resource parentResource) throws IOException, SerializeException {
 
 		ClassMeta<?> elementType = sType.getElementType();
 		RdfBeanPropertyMeta bpRdf = bpRdf(bpm);

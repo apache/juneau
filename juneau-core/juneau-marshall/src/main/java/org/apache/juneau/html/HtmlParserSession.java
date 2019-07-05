@@ -16,6 +16,7 @@ import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.html.HtmlTag.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -57,8 +58,12 @@ public final class HtmlParserSession extends XmlParserSession {
 	}
 
 	@Override /* ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-		return parseAnything(type, getXmlReader(pipe), getOuter(), true, null);
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		try {
+			return parseAnything(type, getXmlReader(pipe), getOuter(), true, null);
+		} catch (XMLStreamException e) {
+			throw new ParseException(e);
+		}
 	}
 
 	@Override /* ReaderParserSession */
@@ -80,7 +85,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at outer START_ELEMENT.
 	 * Postcondition:  Pointing at outer END_ELEMENT.
 	 */
-	private <T> T parseAnything(ClassMeta<T> eType, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws Exception {
+	private <T> T parseAnything(ClassMeta<T> eType, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -268,7 +273,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			throw new ParseException(this, "Unexpected tag ''{0}'' for type ''{1}''", tag, eType);
 
 		if (swap != null && o != null)
-			o = swap.unswap(this, o, eType);
+			o = unswap(swap, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);
@@ -280,7 +285,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	/*
 	 * For parsing output from HtmlDocSerializer, this skips over the head, title, and links.
 	 */
-	private HtmlTag skipToData(XmlReader r) throws Exception {
+	private HtmlTag skipToData(XmlReader r) throws IOException, ParseException, XMLStreamException {
 		while (true) {
 			int event = r.next();
 			if (event == START_ELEMENT && "div".equals(r.getLocalName()) && "data".equals(r.getAttributeValue(null, "id"))) {
@@ -308,7 +313,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * Reads an anchor tag and converts it into a bean.
 	 */
 	private <T> T parseAnchor(XmlReader r, ClassMeta<T> beanType)
-			throws Exception {
+			throws IOException, ParseException, XMLStreamException {
 		String href = r.getAttributeValue(null, "href");
 		String name = getElementText(r);
 		Class<T> beanClass = beanType.getInnerClass();
@@ -335,7 +340,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
 	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType,
-			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
+			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		while (true) {
 			HtmlTag tag = nextTag(r, TR, xTABLE);
 			if (tag == xTABLE)
@@ -365,7 +370,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
 	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l,
-			ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
+			ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int argIndex = 0;
 		while (true) {
 			HtmlTag tag = nextTag(r, LI, xUL);
@@ -383,7 +388,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
 	private <E> Collection<E> parseTableIntoCollection(XmlReader r, Collection<E> l,
-			ClassMeta<E> type, BeanPropertyMeta pMeta) throws Exception {
+			ClassMeta<E> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		HtmlTag tag = nextTag(r, TR);
 		List<String> keys = new ArrayList<>();
@@ -483,7 +488,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing at event following <table> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m) throws Exception {
+	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		while (true) {
 			HtmlTag tag = nextTag(r, TR, xTABLE);
 			if (tag == xTABLE)
@@ -519,7 +524,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing before the event we want to parse.
 	 * Postcondition:  Pointing at the tag just parsed.
 	 */
-	private HtmlTag nextTag(XmlReader r, HtmlTag...expected) throws Exception {
+	private HtmlTag nextTag(XmlReader r, HtmlTag...expected) throws IOException, ParseException, XMLStreamException {
 		int et = r.next();
 
 		while (et != START_ELEMENT && et != END_ELEMENT && et != END_DOCUMENT)
@@ -547,7 +552,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * @param r The stream being read from.
 	 * @throws XMLStreamException
 	 */
-	private void skipTag(XmlReader r) throws Exception {
+	private void skipTag(XmlReader r) throws IOException, ParseException, XMLStreamException {
 		int et = r.getEventType();
 
 		if (et != START_ELEMENT)
@@ -575,7 +580,7 @@ public final class HtmlParserSession extends XmlParserSession {
 		}
 	}
 
-	private void skipTag(XmlReader r, HtmlTag...expected) throws Exception {
+	private void skipTag(XmlReader r, HtmlTag...expected) throws IOException, ParseException, XMLStreamException {
 		HtmlTag tag = HtmlTag.forEvent(this, r);
 		if (tag.isOneOf(expected))
 			r.next();
@@ -601,10 +606,10 @@ public final class HtmlParserSession extends XmlParserSession {
 	 *
 	 * @param r The stream being read from.
 	 * @return The parsed string.
-	 * @throws XMLStreamException
+	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 */
 	@Override /* XmlParserSession */
-	protected final String parseText(XmlReader r) throws Exception {
+	protected final String parseText(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
 		StringBuilder sb = getStringBuilder();
 
@@ -692,10 +697,11 @@ public final class HtmlParserSession extends XmlParserSession {
 	 *
 	 * @param r The stream being read from.
 	 * @return The parsed string.
-	 * @throws XMLStreamException
+	 * @throws XMLStreamException Thrown by underlying XML stream.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	@Override /* XmlParserSession */
-	protected final String getElementText(XmlReader r) throws Exception {
+	protected final String getElementText(XmlReader r) throws IOException, XMLStreamException, ParseException {
 		r.next();
 		return parseText(r);
 	}
@@ -707,7 +713,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	}
 
 	@Override /* XmlParserSession */
-	protected final String parseWhitespaceElement(XmlReader r) throws Exception {
+	protected final String parseWhitespaceElement(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
 		HtmlTag tag = HtmlTag.forEvent(this, r);
 		int et = r.next();

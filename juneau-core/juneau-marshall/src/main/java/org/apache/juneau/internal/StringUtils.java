@@ -82,11 +82,11 @@ public final class StringUtils {
 	 * 		<li> BigDecimal
 	 * 	</ul>
 	 * 	If <jk>null</jk>, uses the best guess.
-	 * @throws IOException If a problem occurred trying to read from the reader.
 	 * @return The parsed number.
-	 * @throws Exception
+	 * @throws IOException If a problem occurred trying to read from the reader.
+	 * @throws ParseException Malformed input encountered.
 	 */
-	public static Number parseNumber(ParserReader r, Class<? extends Number> type) throws Exception {
+	public static Number parseNumber(ParserReader r, Class<? extends Number> type) throws ParseException, IOException {
 		return parseNumber(parseNumberString(r), type);
 	}
 
@@ -95,9 +95,9 @@ public final class StringUtils {
 	 *
 	 * @param r The reader to read form.
 	 * @return The parsed number string.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static String parseNumberString(ParserReader r) throws Exception {
+	public static String parseNumberString(ParserReader r) throws IOException {
 		r.mark();
 		int c = 0;
 		while (true) {
@@ -131,7 +131,7 @@ public final class StringUtils {
 	 * 	</ul>
 	 * 	If <jk>null</jk> or <c>Number</c>, uses the best guess.
 	 * @return The parsed number, or <jk>null</jk> if the string was null.
-	 * @throws ParseException
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public static Number parseNumber(String s, Class<? extends Number> type) throws ParseException {
 		if (s == null)
@@ -1329,7 +1329,7 @@ public final class StringUtils {
 	 *
 	 * @param date The date string.
 	 * @return The parsed date.
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Value was not a valid date.
 	 */
 	public static Date parseIsoDate(String date) throws IllegalArgumentException {
 		if (isEmpty(date))
@@ -1346,7 +1346,7 @@ public final class StringUtils {
 	 *
 	 * @param date The date string.
 	 * @return The parsed calendar.
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Value was not a valid date.
 	 */
 	public static Calendar parseIsoCalendar(String date) throws IllegalArgumentException {
 		if (isEmpty(date))
@@ -2373,7 +2373,7 @@ public final class StringUtils {
 	 *
 	 * @param s The string to parse.
 	 * @return The parsed string.
-	 * @throws ParseException
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public static ObjectList parseListOrCdl(String s) throws ParseException {
 		if (isEmpty(s))

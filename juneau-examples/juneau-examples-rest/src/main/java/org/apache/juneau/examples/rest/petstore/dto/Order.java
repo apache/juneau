@@ -62,12 +62,24 @@ public class Order {
 	@Swap(DateSwap.ISO8601D.class)
 	private Date shipDate;
 
+	/**
+	 * Applies the specified create data to this order.
+	 *
+	 * @param o The create data to apply.
+	 * @return This object.
+	 */
 	public Order apply(CreateOrder o) {
 		this.petId = o.getPetId();
 		this.username = o.getUsername();
 		return this;
 	}
 
+	/**
+	 * Applies the specified order this order.
+	 *
+	 * @param o The order to apply.
+	 * @return This object.
+	 */
 	public Order apply(Order o) {
 		this.id = o.getId();
 		this.petId = o.getPetId();
@@ -81,46 +93,81 @@ public class Order {
 	// Bean properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * @return The <bc>id</bc> property value.
+	 */
 	public long getId() {
 		return id;
 	}
 
-	public Order id(long id) {
-		this.id = id;
+	/**
+	 * @param value The <bc>id</bc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public Order id(long value) {
+		this.id = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>shipDate</bc> property value.
+	 */
 	public Date getShipDate() {
 		return shipDate;
 	}
 
+	/**
+	 * @param value The <bc>shipDate</bc> property value.
+	 * @return This object (for method chaining).
+	 */
 	public Order shipDate(Date value) {
 		this.shipDate = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>status</bc> property value.
+	 */
 	public OrderStatus getStatus() {
 		return status;
 	}
 
+	/**
+	 * @param value The <bc>status</bc> property value.
+	 * @return This object (for method chaining).
+	 */
 	public Order status(OrderStatus value) {
 		this.status = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>petId</bc> property value.
+	 */
 	public long getPetId() {
 		return petId;
 	}
 
+	/**
+	 * @param value The <bc>petId</bc> property value.
+	 * @return This object (for method chaining).
+	 */
 	public Order petId(long value) {
 		this.petId = value;;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>username</bc> property value.
+	 */
 	public String getUsername() {
 		return username;
 	}
 
+	/**
+	 * @param value The <bc>username</bc> property value.
+	 * @return This object (for method chaining).
+	 */
 	public Order username(String value) {
 		this.username = value;
 		return this;
@@ -132,6 +179,8 @@ public class Order {
 
 	/**
 	 * This shows an example generated from a static method.
+	 *
+	 * @return The example POJO.
 	 */
 	@Example
 	public static Order example() {

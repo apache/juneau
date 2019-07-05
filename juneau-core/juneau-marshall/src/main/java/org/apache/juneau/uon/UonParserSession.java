@@ -80,7 +80,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	}
 
 	@Override /* ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (UonReader r = getUonReader(pipe, decoding)) {
 			T o = parseAnything(type, r, getOuter(), true, null);
 			validateEnd(r);
@@ -159,6 +159,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Workhorse method.
 	 *
+	 * @param <T> The class type being parsed, or <jk>null</jk> if unknown.
 	 * @param eType The class type being parsed, or <jk>null</jk> if unknown.
 	 * @param r The reader being parsed.
 	 * @param outer The outer object (for constructing nested inner classes).
@@ -167,9 +168,11 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * 	default case.
 	 * @param pMeta The current bean property being parsed.
 	 * @return The parsed object.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public <T> T parseAnything(ClassMeta<?> eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
+	public <T> T parseAnything(ClassMeta<?> eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();
@@ -311,7 +314,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		if (o == null && sType.isPrimitive())
 			o = sType.getPrimitiveDefault();
 		if (swap != null && o != null)
-			o = swap.unswap(this, o, eType);
+			o = unswap(swap, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);
@@ -320,7 +323,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	}
 
 	private <K,V> Map<K,V> parseIntoMap(UonReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType,
-			BeanPropertyMeta pMeta) throws Exception {
+			BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
 			keyType = (ClassMeta<K>)string();
@@ -406,7 +409,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return null; // Unreachable.
 	}
 
-	private <E> Collection<E> parseIntoCollection(UonReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
+	private <E> Collection<E> parseIntoCollection(UonReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		int c = r.readSkipWs();
 		if (c == -1 || c == AMP)
@@ -495,7 +498,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return null;  // Unreachable.
 	}
 
-	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws Exception {
+	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		int c = r.readSkipWs();
 		if (c == -1 || c == AMP)
@@ -603,7 +606,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return null; // Unreachable.
 	}
 
-	private Object parseNull(UonReader r) throws Exception {
+	private Object parseNull(UonReader r) throws IOException, ParseException {
 		String s = parseString(r, false);
 		if ("ull".equals(s))
 			return null;
@@ -613,12 +616,13 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Convenience method for parsing an attribute from the specified parser.
 	 *
-	 * @param r
-	 * @param encoded
+	 * @param r The reader.
+	 * @param encoded Whether the attribute is encoded.
 	 * @return The parsed object
-	 * @throws Exception
+	 * @throws IOException Exception thrown by underlying stream.
+	 * @throws ParseException Attribute was malformed.
 	 */
-	protected final Object parseAttr(UonReader r, boolean encoded) throws Exception {
+	protected final Object parseAttr(UonReader r, boolean encoded) throws IOException, ParseException {
 		Object attr;
 		attr = parseAttrName(r, encoded);
 		return attr;
@@ -627,12 +631,13 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Parses an attribute name from the specified reader.
 	 *
-	 * @param r
-	 * @param encoded
+	 * @param r The reader.
+	 * @param encoded Whether the attribute is encoded.
 	 * @return The parsed attribute name.
-	 * @throws Exception
+	 * @throws IOException Exception thrown by underlying stream.
+	 * @throws ParseException Attribute name was malformed.
 	 */
-	protected final String parseAttrName(UonReader r, boolean encoded) throws Exception {
+	protected final String parseAttrName(UonReader r, boolean encoded) throws IOException, ParseException {
 
 		// If string is of form 'xxx', we're looking for ' at the end.
 		// Otherwise, we're looking for '&' or '=' or WS or -1 denoting the end of this string.
@@ -683,7 +688,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/*
 	 * Returns true if the next character in the stream is preceded by an escape '~' character.
 	 */
-	private static final boolean isInEscape(int c, ParserReader r, boolean prevIsInEscape) throws Exception {
+	private static final boolean isInEscape(int c, ParserReader r, boolean prevIsInEscape) throws IOException {
 		if (c == '~' && ! prevIsInEscape) {
 			c = r.peek();
 			if (escapedChars.contains(c)) {
@@ -697,12 +702,13 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Parses a string value from the specified reader.
 	 *
-	 * @param r
-	 * @param isUrlParamValue
+	 * @param r The input reader.
+	 * @param isUrlParamValue Whether this is a URL parameter.
 	 * @return The parsed string.
-	 * @throws Exception
+	 * @throws IOException Exception thrown by underlying stream.
+	 * @throws ParseException Malformed input found.
 	 */
-	protected final String parseString(UonReader r, boolean isUrlParamValue) throws Exception {
+	protected final String parseString(UonReader r, boolean isUrlParamValue) throws IOException, ParseException {
 
 		// If string is of form 'xxx', we're looking for ' at the end.
 		// Otherwise, we're looking for ',' or ')' or -1 denoting the end of this string.
@@ -750,7 +756,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * Parses a string of the form "'foo'"
 	 * All whitespace within parenthesis are preserved.
 	 */
-	private String parsePString(UonReader r) throws Exception {
+	private String parsePString(UonReader r) throws IOException, ParseException {
 
 		r.read(); // Skip first quote.
 		r.mark();
@@ -770,7 +776,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		throw new ParseException(this, "Unmatched parenthesis");
 	}
 
-	private Boolean parseBoolean(UonReader r) throws Exception {
+	private Boolean parseBoolean(UonReader r) throws IOException, ParseException {
 		String s = parseString(r, false);
 		if (s == null || s.equals("null"))
 			return null;
@@ -781,7 +787,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);
 	}
 
-	private Number parseNumber(UonReader r, Class<? extends Number> c) throws Exception {
+	private Number parseNumber(UonReader r, Class<? extends Number> c) throws IOException, ParseException {
 		String s = parseString(r, false);
 		if (s == null)
 			return null;
@@ -792,7 +798,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * Call this method after you've finished a parsing a string to make sure that if there's any
 	 * remainder in the input, that it consists only of whitespace and comments.
 	 */
-	private void validateEnd(UonReader r) throws Exception {
+	private void validateEnd(UonReader r) throws IOException, ParseException {
 		if (! isValidateEnd())
 			return;
 		while (true) {
@@ -804,7 +810,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		}
 	}
 
-	private static void skipSpace(ParserReader r) throws Exception {
+	private static void skipSpace(ParserReader r) throws IOException {
 		int c = 0;
 		while ((c = r.read()) != -1) {
 			if (c <= 2 || ! Character.isWhitespace(c)) {
@@ -820,9 +826,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @param pipe The parser input.
 	 * @param decodeChars Whether the reader should automatically decode URL-encoded characters.
 	 * @return A new {@link UonReader} object.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public final UonReader getUonReader(ParserPipe pipe, boolean decodeChars) throws Exception {
+	public final UonReader getUonReader(ParserPipe pipe, boolean decodeChars) throws IOException {
 		Reader r = pipe.getReader();
 		if (r instanceof UonReader)
 			return (UonReader)r;

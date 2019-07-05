@@ -63,8 +63,8 @@ public interface RestCallHandler {
 	 *
 	 * @param r1 The incoming HTTP servlet request object.
 	 * @param r2 The incoming HTTP servlet response object.
-	 * @throws ServletException
-	 * @throws IOException
+	 * @throws ServletException Error occurred.
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException;
 
@@ -74,10 +74,9 @@ public interface RestCallHandler {
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
-	 * @throws IOException
-	 * @throws RestException
+	 * @throws Exception Can be thrown if error occurred while handling response.
 	 */
-	public void handleResponse(RestRequest req, RestResponse res) throws IOException, RestException ;
+	public void handleResponse(RestRequest req, RestResponse res) throws Exception;
 
 	/**
 	 * Handle the case where a matching method was not found.
@@ -85,7 +84,7 @@ public interface RestCallHandler {
 	 * @param rc The HTTP response code.
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
-	 * @throws Exception
+	 * @throws Exception Can be thrown if error occurred while handling response.
 	 */
 	public void handleNotFound(int rc, RestRequest req, RestResponse res) throws Exception;
 
@@ -95,9 +94,9 @@ public interface RestCallHandler {
 	 * @param req The servlet request.
 	 * @param res The servlet response.
 	 * @param e The exception that occurred.
-	 * @throws IOException Can be thrown if a problem occurred trying to write to the output stream.
+	 * @throws Exception Can be thrown if error occurred while handling response.
 	 */
-	public void handleError(HttpServletRequest req, HttpServletResponse res, Throwable e) throws IOException;
+	public void handleError(HttpServletRequest req, HttpServletResponse res, Throwable e) throws Exception;
 
 	/**
 	 * Method for converting thrown exceptions into other types before they are handled.

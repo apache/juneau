@@ -20,6 +20,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.ExecutableException;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -398,12 +399,14 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param obj the object the underlying method is invoked from.
 	 * @param args the arguments used for the method call
 	 * @return The object returned from the method.
-	 * @throws InvocationTargetException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public Object invoke(Object obj, Object...args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		return m.invoke(obj, args);
+	public Object invoke(Object obj, Object...args) throws ExecutableException {
+		try {
+			return m.invoke(obj, args);
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			throw new ExecutableException(e);
+		}
 	}
 
 	/**
@@ -426,10 +429,14 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	The arguments to pass to the method.
 	 * @return
 	 * 	The results of the method invocation.
-	 * @throws Exception
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public Object invokeFuzzy(Object pojo, Object...args) throws Exception {
-		return m.invoke(pojo, ClassUtils.getMatchingArgs(m.getParameterTypes(), args));
+	public Object invokeFuzzy(Object pojo, Object...args) throws ExecutableException {
+		try {
+			return m.invoke(pojo, ClassUtils.getMatchingArgs(m.getParameterTypes(), args));
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			throw new ExecutableException(e);
+		}
 	}
 
 	/**

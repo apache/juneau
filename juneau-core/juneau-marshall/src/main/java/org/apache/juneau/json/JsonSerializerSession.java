@@ -49,7 +49,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	}
 
 	@Override /* SerializerSesssion */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		serializeAnything(getJsonWriter(out), o, getExpectedRootType(o), "root", null);
 	}
 
@@ -61,7 +61,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 *
 	 * @param o The object to serialize.
 	 * @return The serialized object.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	protected String serializeJson(Object o) throws Exception {
 		StringWriter sw = new StringWriter();
@@ -79,10 +79,11 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * @param attrName The attribute name.
 	 * @param pMeta The bean property currently being parsed.
 	 * @return The same writer passed in.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws SerializeException General serialization error occurred.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected JsonWriter serializeAnything(JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws Exception {
+	@SuppressWarnings({ "rawtypes" })
+	protected JsonWriter serializeAnything(JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws IOException, SerializeException {
 
 		if (o == null) {
 			out.append("null");
@@ -95,7 +96,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
-		aType = push(attrName, o, eType);
+		aType = push2(attrName, o, eType);
 		boolean isRecursion = aType == null;
 
 		// Handle recursion
@@ -110,7 +111,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap(this);
 		if (swap != null) {
-			o = swap.swap(this, o);
+			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);
 
 			// If the getSwapClass() method returns Object, we need to figure out
@@ -160,7 +161,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws Exception {
+	private SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws IOException, SerializeException {
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
@@ -190,7 +191,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		return out;
 	}
 
-	private SerializerWriter serializeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws Exception {
+	private SerializerWriter serializeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws IOException, SerializeException {
 		int i = indent;
 		out.append('{');
 
@@ -223,7 +224,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private SerializerWriter serializeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws Exception {
+	private SerializerWriter serializeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws IOException, SerializeException {
 
 		ClassMeta<?> elementType = type.getElementType();
 
@@ -247,9 +248,9 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 *
 	 * @param out The output target object.
 	 * @return The output target object wrapped in an {@link JsonWriter}.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected final JsonWriter getJsonWriter(SerializerPipe out) throws Exception {
+	protected final JsonWriter getJsonWriter(SerializerPipe out) throws IOException {
 		Object output = out.getRawOutput();
 		if (output instanceof JsonWriter)
 			return (JsonWriter)output;

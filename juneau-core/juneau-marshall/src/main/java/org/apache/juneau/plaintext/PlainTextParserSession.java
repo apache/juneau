@@ -14,6 +14,8 @@ package org.apache.juneau.plaintext;
 
 import static org.apache.juneau.internal.IOUtils.*;
 
+import java.io.IOException;
+
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 
@@ -40,7 +42,7 @@ public class PlainTextParserSession extends ReaderParserSession {
 	}
 
 	@Override /* ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		return convertToType(read(pipe.getReader()), type);
 	}
 

@@ -111,6 +111,10 @@ public class PhotosResource extends BasicRestServlet {
 			this.image = image;
 		}
 
+		/**
+		 * @return The URI of this photo.
+		 * @throws URISyntaxException ID could not be converted to a URI.
+		 */
 		public URI getURI() throws URISyntaxException {
 			return new URI("servlet:/" + id);
 		}
@@ -120,6 +124,12 @@ public class PhotosResource extends BasicRestServlet {
 	// REST methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Show the list of all currently loaded photos
+	 *
+	 * @return The list of all currently loaded photos.
+	 * @throws Exception Error occurred.
+	 */
 	@RestMethod(
 		name=GET,
 		path="/",
@@ -129,6 +139,13 @@ public class PhotosResource extends BasicRestServlet {
 		return photos.values();
 	}
 
+	/**
+	 * Shows how to use a custom serializer to serialize a BufferedImage object to a stream.
+	 *
+	 * @param id The photo ID.
+	 * @return The image.
+	 * @throws NotFound Image was not found.
+	 */
 	@RestMethod(
 		name=GET,
 		path="/{id}",
@@ -146,6 +163,14 @@ public class PhotosResource extends BasicRestServlet {
 		return p.image;
 	}
 
+	/**
+	 * Shows how to use a custom parser to parse a stream into a BufferedImage object.
+	 *
+	 * @param id The photo ID.
+	 * @param image Binary contents of image.
+	 * @return <js>"OK"</jk> if successful.
+	 * @throws Exception Error occurred.
+	 */
 	@RestMethod(
 		name=PUT,
 		path="/{id}",
@@ -165,6 +190,13 @@ public class PhotosResource extends BasicRestServlet {
 		return "OK";
 	}
 
+	/**
+	 * Shows how to use a custom parser to parse a stream into a BufferedImage object.
+	 *
+	 * @param image Binary contents of image.
+	 * @return The Photo bean.
+	 * @throws Exception Error occurred.
+	 */
 	@RestMethod(
 		name=POST,
 		path="/",
@@ -184,6 +216,13 @@ public class PhotosResource extends BasicRestServlet {
 		return p;
 	}
 
+	/**
+	 * Upload a photo from a multipart form post.
+	 *
+	 * @param req HTTP request.
+	 * @return Redirect to servlet root.
+	 * @throws Exception Error occurred.
+	 */
 	@RestMethod(
 		name=POST,
 		path="/upload",
@@ -215,6 +254,13 @@ public class PhotosResource extends BasicRestServlet {
        return new SeeOtherRoot(); // Redirect to the servlet root.
     }
 
+	/**
+	 * Removes a photo from the database.
+	 *
+	 * @param id ID of photo to remove.
+	 * @return <js>"OK"</jk> if successful.
+	 * @throws NotFound Photo was not found.
+	 */
 	@RestMethod(
 		name=DELETE,
 		path="/{id}",
@@ -247,7 +293,7 @@ public class PhotosResource extends BasicRestServlet {
 			return new OutputStreamSerializerSession(args) {
 
 				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 					RenderedImage image = (RenderedImage)o;
 					String mediaType = getProperty("mediaType", String.class, (String)null);
 					ImageIO.write(image, mediaType.substring(mediaType.indexOf('/')+1), out.getOutputStream());
@@ -273,7 +319,7 @@ public class PhotosResource extends BasicRestServlet {
 
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 					return (T)ImageIO.read(pipe.getInputStream());
 				}
 			};

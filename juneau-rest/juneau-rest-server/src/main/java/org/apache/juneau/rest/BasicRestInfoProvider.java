@@ -90,7 +90,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * @return
 	 * 	A new Swagger instance.
 	 * 	<br>Never <jk>null</jk>.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	@Override /* RestInfoProvider */
 	public Swagger getSwagger(RestRequest req) throws Exception {
@@ -160,7 +160,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
 	 * @param req The current request.
 	 * @return The localized summary of the method, or <jk>null</jk> if none was found.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	@Override /* RestInfoProvider */
 	public String getMethodSummary(Method method, RestRequest req) throws Exception {
@@ -216,7 +216,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
 	 * @param req The current request.
 	 * @return The localized description of the method, or <jk>null</jk> if none was found.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	@Override /* RestInfoProvider */
 	public String getMethodDescription(Method method, RestRequest req) throws Exception {
@@ -271,7 +271,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 *
 	 * @param req The current request.
 	 * @return The localized site name of this REST resource, or <jk>null</jk> if none was found.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	@Override /* RestInfoProvider */
 	public String getSiteName(RestRequest req) throws Exception {
@@ -324,7 +324,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 *
 	 * @param req The current request.
 	 * @return The localized title of this REST resource, or <jk>null</jk> if none was found.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	@Override /* RestInfoProvider */
 	public String getTitle(RestRequest req) throws Exception {
@@ -377,7 +377,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 *
 	 * @param req The current request.
 	 * @return The localized description of this REST resource, or <jk>null</jk> if none was was found.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	@Override /* RestInfoProvider */
 	public String getDescription(RestRequest req) throws Exception {

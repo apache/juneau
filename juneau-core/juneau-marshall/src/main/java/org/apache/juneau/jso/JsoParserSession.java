@@ -38,9 +38,13 @@ public class JsoParserSession extends InputStreamParserSession {
 	}
 
 	@Override /* ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		ObjectInputStream ois = new ObjectInputStream(pipe.getInputStream());
-		return (T)ois.readObject();
+		try {
+			return (T)ois.readObject();
+		} catch (ClassNotFoundException e) {
+			throw new ParseException(e);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

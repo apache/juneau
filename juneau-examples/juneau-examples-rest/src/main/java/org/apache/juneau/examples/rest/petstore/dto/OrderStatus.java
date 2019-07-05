@@ -25,9 +25,13 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 @Html(render=OrderStatus.OrderStatusRender.class)
+@SuppressWarnings("javadoc")
 public enum OrderStatus {
 	PLACED, APPROVED, DELIVERED;
 
+	/**
+	 * Used to control how this enum is rendered in HTML view.
+	 */
 	public static class OrderStatusRender extends HtmlRender<OrderStatus> {
 		@Override /* HtmlRender */
 		public String getStyle(SerializerSession session, OrderStatus value) {

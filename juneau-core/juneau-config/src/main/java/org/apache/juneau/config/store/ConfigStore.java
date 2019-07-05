@@ -63,7 +63,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * 	The contents of the configuration file.
 	 * 	<br>A blank string if the config does not exist.
 	 * 	<br>Never <jk>null</jk>.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public abstract String read(String name) throws IOException;
 
@@ -76,7 +76,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * @return
 	 * 	If <jk>null</jk>, then we successfully stored the contents of the file.
 	 * 	<br>Otherwise the contents of the file have changed and we return the new contents of the file.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public abstract String write(String name, String expectedContents, String newContents) throws IOException;
 
@@ -128,7 +128,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * @return
 	 * 	The parsed configuration.
 	 * 	<br>Never <jk>null</jk>.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public synchronized ConfigMap getMap(String name) throws IOException {
 		name = resolveName(name);

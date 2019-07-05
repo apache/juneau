@@ -34,6 +34,10 @@ import org.springframework.web.filter.*;
 @Controller
 public class App {
 
+	/**
+	 * Entry point method.
+	 * @param args Command-line arguments.
+	 */
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(App.class)
 			.initializers(new JuneauRestInitializer(App.class))
@@ -43,7 +47,7 @@ public class App {
 	}
 
 	/**
-	 * Our root resource.
+	 * @return Our root resource.
 	 */
 	@Bean @JuneauRestRoot
 	public RootResources getRootResources() {
@@ -53,6 +57,9 @@ public class App {
 	/**
 	 * We want to be able to consume url-encoded-form-post bodies, but HiddenHttpMethodFilter triggers the HTTP
 	 * body to be consumed.  So disable it.
+	 *
+	 * @param filter The filter.
+	 * @return Filter registration bean.
 	 */
 	@Bean
 	public FilterRegistrationBean<HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter filter) {

@@ -47,7 +47,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * Constructor.
 	 *
 	 * @param pipe The parser input.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public ParserReader(ParserPipe pipe) throws IOException {
 		this.unbuffered = pipe.unbuffered;
@@ -95,7 +95,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * Same as {@link #read()} but skips over any whitespace characters.
 	 *
 	 * @return The first non-whitespace character, or -1 if the end of stream reached.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public final int readSkipWs() throws IOException {
 		while (true) {
@@ -358,7 +358,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * @param c The new character.
 	 * @param offset The offset.
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public final ParserReader replace(int c, int offset) throws IOException {
 		if (c < 0x10000) {
@@ -385,7 +385,7 @@ public class ParserReader extends Reader implements Positionable {
 	 *
 	 * @param c The new character.
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public final ParserReader replace(char c) throws IOException {
 		return replace(c, 1);

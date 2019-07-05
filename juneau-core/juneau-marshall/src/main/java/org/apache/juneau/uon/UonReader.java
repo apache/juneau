@@ -43,9 +43,9 @@ public final class UonReader extends ParserReader {
 	 *
 	 * @param pipe The parser input.
 	 * @param decodeChars Whether the input is URL-encoded.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public UonReader(ParserPipe pipe, boolean decodeChars) throws Exception {
+	public UonReader(ParserPipe pipe, boolean decodeChars) throws IOException {
 		super(pipe);
 		this.decodeChars = decodeChars;
 		if (pipe.isString()) {

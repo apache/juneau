@@ -422,7 +422,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public Config(PropertyStore ps) throws IOException {
 		super(ps, true);
@@ -1132,8 +1132,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param key The key.
 	 * @param type The object type to create.
 	 * @return The parsed object.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public <T> T getObject(String key, Class<T> type) throws ParseException {
@@ -1150,8 +1149,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	If <jk>null</jk>, then uses the predefined parser on the config file.
 	 * @param type The object type to create.
 	 * @return The parsed object.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public <T> T getObject(String key, Parser parser, Class<T> type) throws ParseException {
@@ -1246,7 +1244,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 * @throws ParseException
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public ObjectMap getObjectMap(String key) throws ParseException {
 		return getObject(key, ObjectMap.class);
@@ -1258,7 +1256,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param key The key.
 	 * @param def The default value.
 	 * @return The value, or the default value if the section or key does not exist.
-	 * @throws ParseException
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public ObjectMap getObjectMap(String key, ObjectMap def) throws ParseException {
 		return getObjectWithDefault(key, def, ObjectMap.class);
@@ -1269,7 +1267,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 * @throws ParseException
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public ObjectList getObjectList(String key) throws ParseException {
 		return getObject(key, ObjectList.class);
@@ -1281,7 +1279,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param key The key.
 	 * @param def The default value.
 	 * @return The value, or the default value if the section or key does not exist.
-	 * @throws ParseException
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public ObjectList getObjectList(String key, ObjectList def) throws ParseException {
 		return getObjectWithDefault(key, def, ObjectList.class);
@@ -1314,12 +1312,9 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	correspond to a setter method.
 	 * @return An object map of the changes made to the bean.
 	 * @throws ParseException If parser was not set on this config file or invalid properties were found in the section.
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
-	public Config writeProperties(String section, Object bean, boolean ignoreUnknownProperties) throws ParseException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+	public Config writeProperties(String section, Object bean, boolean ignoreUnknownProperties) throws ParseException {
 		checkWrite();
 		assertFieldNotNull(bean, "bean");
 		section = section(section);
@@ -1351,9 +1346,9 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param c The bean class to create.
 	 * @return A new bean instance.
-	 * @throws ParseException
+	 * @throws ParseException Malformed input encountered.
 	 */
-	public <T> T getSectionAsBean(String section, Class<T>c) throws ParseException {
+	public <T> T getSectionAsBean(String section, Class<T> c) throws ParseException {
 		return getSectionAsBean(section, c, false);
 	}
 
@@ -1397,7 +1392,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	If <jk>false</jk>, throws a {@link ParseException} if the section contains an entry that isn't a bean property
 	 * 	name.
 	 * @return A new bean instance, or <jk>null</jk> if the section doesn't exist.
-	 * @throws ParseException
+	 * @throws ParseException Unknown property was encountered in section.
 	 */
 	public <T> T getSectionAsBean(String section, Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
 		assertFieldNotNull(c, "c");
@@ -1430,7 +1425,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return A new {@link ObjectMap}, or <jk>null</jk> if the section doesn't exist.
-	 * @throws ParseException
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public ObjectMap getSectionAsMap(String section) throws ParseException {
 		section = section(section);
@@ -1594,7 +1589,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	Values to set in the new section.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return The appended or existing section.
-	 * @throws SerializeException
+	 * @throws SerializeException Contents could not be serialized.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config setSection(String name, List<String> preLines, Map<String,Object> contents) throws SerializeException {
@@ -1667,7 +1662,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * @param m The maps to load.
 	 * @return This object (for method chaining).
-	 * @throws SerializeException
+	 * @throws SerializeException Value could not be serialized.
 	 */
 	public Config load(Map<String,Map<String,Object>> m) throws SerializeException {
 		if (m != null)
@@ -1681,7 +1676,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Commit the changes in this config to the store.
 	 *
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config commit() throws IOException {
@@ -1733,7 +1728,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	/**
 	 * Closes this configuration object by unregistering it from the underlying config map.
 	 *
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public void close() throws IOException {
 		configMap.unregister(this);
@@ -1745,8 +1740,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param contents The new contents of the config file.
 	 * @param synchronous Wait until the change has been persisted before returning this map.
 	 * @return This object (for method chaining).
-	 * @throws IOException
-	 * @throws InterruptedException
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws InterruptedException Thread was interrupted.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config load(Reader contents, boolean synchronous) throws IOException, InterruptedException {
@@ -1761,8 +1756,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param contents The new contents of the config file.
 	 * @param synchronous Wait until the change has been persisted before returning this map.
 	 * @return This object (for method chaining).
-	 * @throws IOException
-	 * @throws InterruptedException
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws InterruptedException Thread was interrupted.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config load(String contents, boolean synchronous) throws IOException, InterruptedException {

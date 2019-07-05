@@ -25,9 +25,9 @@ import org.apache.juneau.svl.*;
 public class SvlExample {
 
 	/**
-	 * TODO
+	 * Main method.
 	 *
-	 * @param args
+	 * @param args Unused.
 	 */
 	public static void main(String[] args) {
 

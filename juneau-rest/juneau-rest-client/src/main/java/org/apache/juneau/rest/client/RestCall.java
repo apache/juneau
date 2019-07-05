@@ -154,7 +154,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The URI to use for this call.
 	 * 	This overrides the URI passed in from the client.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid URI syntax detected.
 	 */
 	public RestCall uri(Object uri) throws RestCallException {
 		try {
@@ -219,7 +219,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Error occurred.
 	 */
 	public RestCall query(String name, Object value, boolean skipIfEmpty, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
 		if (serializer == null)
@@ -276,7 +276,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @param name The parameter name.
 	 * @param value The parameter value converted to a string using UON notation.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall query(String name, Object value) throws RestCallException {
 		return query(name, value, false, null, null);
@@ -287,7 +287,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param params The parameters.  Values are converted to a string using UON notation.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall query(Map<String,Object> params) throws RestCallException {
 		return query(null, params);
@@ -302,7 +302,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @param name The parameter name.
 	 * @param value The parameter value converted to a string using UON notation.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall queryIfNE(String name, Object value) throws RestCallException {
 		return query(name, value, true, null, null);
@@ -316,7 +316,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param params The parameters.  Values are converted to a string using UON notation.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall queryIfNE(Map<String,Object> params) throws RestCallException {
 		return query(null, params, true, null, null);
@@ -352,7 +352,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall formData(String name, Object value, boolean skipIfEmpty, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
 		if (formData == null)
@@ -418,7 +418,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param nameValuePairs The name-value pairs of the request.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall formData(NameValuePairs nameValuePairs) throws RestCallException {
 		return formData(null, nameValuePairs);
@@ -444,7 +444,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @param name The parameter name.
 	 * @param value The parameter value converted to a string using UON notation.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall formDataIfNE(String name, Object value) throws RestCallException {
 		return formData(name, value, true, null, null);
@@ -458,7 +458,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param params The parameters.  Values are converted to a string using UON notation.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall formDataIfNE(Map<String,Object> params) throws RestCallException {
 		return formData(null, params, true, null, null);
@@ -670,7 +670,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall header(String name, Object value, boolean skipIfEmpty, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
 		if (serializer == null)
@@ -720,7 +720,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The name can be null/empty if the value is a {@link Map}.
 	 * @param value The header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall header(String name, Object value) throws RestCallException {
 		return header(name, value, false, null, null);
@@ -731,7 +731,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param values The header values.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall headers(Map<String,Object> values) throws RestCallException {
 		return header(null, values, false, null, null);
@@ -748,7 +748,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The name can be null/empty if the value is a {@link Map}.
 	 * @param value The header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall headerIfNE(String name, Object value) throws RestCallException {
 		return header(name, value, true, null, null);
@@ -762,7 +762,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param values The header values.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall headersIfNE(Map<String,Object> values) throws RestCallException {
 		return header(null, values, true, null, null);
@@ -777,7 +777,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall accept(Object value) throws RestCallException {
 		return header("Accept", value);
@@ -791,7 +791,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall acceptCharset(Object value) throws RestCallException {
 		return header("Accept-Charset", value);
@@ -805,7 +805,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall acceptEncoding(Object value) throws RestCallException {
 		return header("Accept-Encoding", value);
@@ -819,7 +819,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall acceptLanguage(Object value) throws RestCallException {
 		return header("Accept-Language", value);
@@ -833,7 +833,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall authorization(Object value) throws RestCallException {
 		return header("Authorization", value);
@@ -847,7 +847,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall cacheControl(Object value) throws RestCallException {
 		return header("Cache-Control", value);
@@ -861,7 +861,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall connection(Object value) throws RestCallException {
 		return header("Connection", value);
@@ -875,7 +875,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall contentLength(Object value) throws RestCallException {
 		return header("Content-Length", value);
@@ -890,7 +890,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall contentType(Object value) throws RestCallException {
 		return header("Content-Type", value);
@@ -904,7 +904,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall date(Object value) throws RestCallException {
 		return header("Date", value);
@@ -918,7 +918,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall expect(Object value) throws RestCallException {
 		return header("Expect", value);
@@ -932,7 +932,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall forwarded(Object value) throws RestCallException {
 		return header("Forwarded", value);
@@ -946,7 +946,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall from(Object value) throws RestCallException {
 		return header("From", value);
@@ -960,7 +960,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall host(Object value) throws RestCallException {
 		return header("Host", value);
@@ -974,7 +974,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall ifMatch(Object value) throws RestCallException {
 		return header("If-Match", value);
@@ -988,7 +988,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall ifModifiedSince(Object value) throws RestCallException {
 		return header("If-Modified-Since", value);
@@ -1002,7 +1002,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall ifNoneMatch(Object value) throws RestCallException {
 		return header("If-None-Match", value);
@@ -1016,7 +1016,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall ifRange(Object value) throws RestCallException {
 		return header("If-Range", value);
@@ -1030,7 +1030,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall ifUnmodifiedSince(Object value) throws RestCallException {
 		return header("If-Unmodified-Since", value);
@@ -1044,7 +1044,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall maxForwards(Object value) throws RestCallException {
 		return header("Max-Forwards", value);
@@ -1058,7 +1058,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall origin(Object value) throws RestCallException {
 		return header("Origin", value);
@@ -1072,7 +1072,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall pragma(Object value) throws RestCallException {
 		return header("Pragma", value);
@@ -1086,7 +1086,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall proxyAuthorization(Object value) throws RestCallException {
 		return header("Proxy-Authorization", value);
@@ -1100,7 +1100,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall range(Object value) throws RestCallException {
 		return header("Range", value);
@@ -1114,7 +1114,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall referer(Object value) throws RestCallException {
 		return header("Referer", value);
@@ -1128,7 +1128,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall te(Object value) throws RestCallException {
 		return header("TE", value);
@@ -1142,7 +1142,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall userAgent(Object value) throws RestCallException {
 		return header("User-Agent", value);
@@ -1156,7 +1156,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall upgrade(Object value) throws RestCallException {
 		return header("Upgrade", value);
@@ -1170,7 +1170,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall via(Object value) throws RestCallException {
 		return header("Via", value);
@@ -1184,7 +1184,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall warning(Object value) throws RestCallException {
 		return header("Warning", value);
@@ -1195,7 +1195,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 *
 	 * @param version The version string (e.g. <js>"1.2.3"</js>)
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall clientVersion(String version) throws RestCallException {
 		return header("X-Client-Version", version);
@@ -1809,7 +1809,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * Returns the value of the <c>Content-Length</c> header.
 	 *
 	 * @return The value of the <c>Content-Length</c> header, or <c>-1</c> if header is not present.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public int getContentLength() throws IOException {
 		connect();
@@ -1937,8 +1937,8 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @param schema The part schema.  Can be <jk>null</jk>.
 	 * @param c The type to convert the part into.
 	 * @return The parsed part.
-	 * @throws IOException
-	 * @throws ParseException
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Header value could not be parsed into the specified type.
 	 */
 	public <T> T getResponseHeader(HttpPartParser partParser, HttpPartSchema schema, String name, Class<T> c) throws IOException, ParseException {
 		return getResponseHeader(partParser, schema, name, (Type)c);
@@ -1953,8 +1953,8 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @param type The type to convert the part into.
 	 * @param args The type arguments to convert the part into.
 	 * @return The parsed part.
-	 * @throws IOException
-	 * @throws ParseException
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Header value could not be parsed into the specified type.
 	 */
 	public <T> T getResponseHeader(HttpPartParser partParser, HttpPartSchema schema, String name, Type type, Type...args) throws IOException, ParseException {
 		try {
@@ -2290,7 +2290,7 @@ public final class RestCall extends BeanSession implements Closeable {
 						if (c != null) {
 							try {
 								return c.<T>invoke();
-							} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							} catch (ExecutableException e) {
 								throw new ParseException(e);
 							}
 						}
@@ -2391,7 +2391,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * Returns <jk>null</jk> if {@link #connect()} has not yet been called.
 	 *
 	 * @return The HTTP response object.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public HttpResponse getResponse() throws IOException {
 		connect();
@@ -2446,7 +2446,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * Sets <c>Debug: value</c> header on this request.
 	 *
 	 * @return This object (for method chaining).
-	 * @throws RestCallException
+	 * @throws RestCallException Invalid input.
 	 */
 	public RestCall debug() throws RestCallException {
 		header("Debug", true);

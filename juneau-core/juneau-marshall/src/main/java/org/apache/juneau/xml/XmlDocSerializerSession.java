@@ -41,7 +41,7 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 	}
 
 	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws java.io.IOException, SerializeException {
 		try (XmlWriter w = getXmlWriter(out)) {
 			w.append("<?xml")
 				.attr("version", "1.0")

@@ -708,7 +708,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
 	 * </ul>
 	 *
-	 * @param <T>
+	 * @param <T> The POJO class type.
 	 * @param pojoClass The POJO class.
 	 * @param json The simple JSON representation of the example.
 	 * @return This object (for method chaining).

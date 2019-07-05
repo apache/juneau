@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -65,7 +66,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	}
 
 	@Override /* ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (UonReader r = getUonReader(pipe, true)) {
 			return parseAnything(type, r, getOuter());
 		}
@@ -81,7 +82,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		}
 	}
 
-	private <T> T parseAnything(ClassMeta<T> eType, UonReader r, Object outer) throws Exception {
+	private <T> T parseAnything(ClassMeta<T> eType, UonReader r, Object outer) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -147,7 +148,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		}
 
 		if (swap != null && o != null)
-			o = swap.unswap(this, o, eType);
+			o = unswap(swap, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);
@@ -155,7 +156,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return (T)o;
 	}
 
-	private <K,V> Map<K,V> parseIntoMap2(UonReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws Exception {
+	private <K,V> Map<K,V> parseIntoMap2(UonReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws IOException, ParseException, ExecutableException {
 
 		ClassMeta<K> keyType = (ClassMeta<K>)(type.isArgs() || type.isCollectionOrArray() ? getClassMeta(Integer.class) : type.getKeyType());
 
@@ -241,7 +242,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return null; // Unreachable.
 	}
 
-	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws Exception {
+	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		int c = r.peekSkipWs();
 		if (c == -1)

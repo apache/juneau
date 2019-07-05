@@ -31,24 +31,41 @@ public class PetTag {
 	private long id;
 	private String name;
 
+	/**
+	 * @return The <bc>id</jc> property value.
+	 */
 	public long getId() {
 		return id;
 	}
 
-	public PetTag id(long id) {
-		this.id = id;
+	/**
+	 * @param value The <bc>id</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public PetTag id(long value) {
+		this.id = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>name</jc> property value.
+	 */
 	public String getName() {
 		return name;
 	}
 
-	public PetTag name(String name) {
-		this.name = name;
+	/**
+	 * @param value The <bc>name</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public PetTag name(String value) {
+		this.name = value;
 		return this;
 	}
 
+	/**
+	 * @return POJO example.
+	 */
 	@Example
 	public static PetTag example() {
 		return new PetTag()
@@ -56,6 +73,10 @@ public class PetTag {
 			.name("MyTag");
 	}
 
+	/**
+	 * @param tags Tags to convert to a simple string.
+	 * @return The specified tags as a simple comma-delimited list.
+	 */
 	public static String asString(List<PetTag> tags) {
 		if (tags == null)
 			return "";

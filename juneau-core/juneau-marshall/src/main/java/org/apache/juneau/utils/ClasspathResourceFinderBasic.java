@@ -49,7 +49,7 @@ public class ClasspathResourceFinderBasic extends ClasspathResourceFinderSimple 
 	 * 	The resource locale.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return The resource stream, or <jk>null</jk> if it couldn't be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected InputStream findFileSystemResource(String name, Locale locale) throws IOException {
 		if (name.indexOf("..") == -1) {

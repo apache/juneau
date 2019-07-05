@@ -22,6 +22,7 @@ import java.util.regex.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -66,9 +67,10 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * 	The object.
 	 * 	<br>Can either be a POJO or a <c>Class</c>/<c>Type</c>.
 	 * @return The schema for the type.
-	 * @throws Exception
+	 * @throws BeanRecursionException Bean recursion occurred.
+	 * @throws SerializeException Error occurred.
 	 */
-	public ObjectMap getSchema(Object o) throws Exception {
+	public ObjectMap getSchema(Object o) throws BeanRecursionException, SerializeException {
 		return getSchema(toClassMeta(o), "root", null, false, false, null);
 	}
 
@@ -77,9 +79,10 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 *
 	 * @param type The object type.
 	 * @return The schema for the type.
-	 * @throws Exception
+	 * @throws BeanRecursionException Bean recursion occurred.
+	 * @throws SerializeException Error occurred.
 	 */
-	public ObjectMap getSchema(Type type) throws Exception {
+	public ObjectMap getSchema(Type type) throws BeanRecursionException, SerializeException {
 		return getSchema(getClassMeta(type), "root", null, false, false, null);
 	}
 
@@ -88,14 +91,15 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 *
 	 * @param cm The object type.
 	 * @return The schema for the type.
-	 * @throws Exception
+	 * @throws BeanRecursionException Bean recursion occurred.
+	 * @throws SerializeException Error occurred.
 	 */
-	public ObjectMap getSchema(ClassMeta<?> cm) throws Exception {
+	public ObjectMap getSchema(ClassMeta<?> cm) throws BeanRecursionException, SerializeException {
 		return getSchema(cm, "root", null, false, false, null);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private ObjectMap getSchema(ClassMeta<?> eType, String attrName, String[] pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm) throws Exception {
+	private ObjectMap getSchema(ClassMeta<?> eType, String attrName, String[] pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm) throws BeanRecursionException, SerializeException {
 
 		if (ctx.isIgnoredType(eType))
 			return null;
@@ -268,12 +272,17 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		return l;
 	}
 
-	private Object getExample(ClassMeta<?> sType, TypeCategory t, boolean exampleAdded) throws Exception {
+	private Object getExample(ClassMeta<?> sType, TypeCategory t, boolean exampleAdded) throws SerializeException {
 		boolean canAdd = isAllowNestedExamples() || ! exampleAdded;
 		if (canAdd && (getAddExamplesTo().contains(t) || getAddExamplesTo().contains(ANY))) {
 			Object example = sType.getExample(this);
-			if (example != null)
-				return JsonParser.DEFAULT.parse(toJson(example), Object.class);
+			if (example != null) {
+				try {
+					return JsonParser.DEFAULT.parse(toJson(example), Object.class);
+				} catch (ParseException e) {
+					throw new SerializeException(e);
+				}
+			}
 		}
 		return null;
 	}

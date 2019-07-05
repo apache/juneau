@@ -104,7 +104,7 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 	 * @param resolveVars
 	 * 	If <jk>true</jk>, SVL variables in the file will automatically be resolved.
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public JettyMicroserviceBuilder jettyXml(Object jettyXml, boolean resolveVars) throws IOException {
 		if (jettyXml instanceof String)
@@ -158,11 +158,15 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 	 *
 	 * @param c The servlet to add to the servlet container.
 	 * @return This object (for method chaining).
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public JettyMicroserviceBuilder servlet(Class<? extends RestServlet> c) throws InstantiationException, IllegalAccessException {
-		RestServlet rs = c.newInstance();
+	public JettyMicroserviceBuilder servlet(Class<? extends RestServlet> c) throws ExecutableException {
+		RestServlet rs;
+		try {
+			rs = c.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new ExecutableException(e);
+		}
 		return servlet(rs, '/' + rs.getPath());
 	}
 
@@ -175,11 +179,14 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 	 * @param c The servlet to add to the servlet container.
 	 * @param path The servlet path spec.
 	 * @return This object (for method chaining).
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public JettyMicroserviceBuilder servlet(Class<? extends Servlet> c, String path) throws InstantiationException, IllegalAccessException {
-		return servlet(c.newInstance(), path);
+	public JettyMicroserviceBuilder servlet(Class<? extends Servlet> c, String path) throws ExecutableException {
+		try {
+			return servlet(c.newInstance(), path);
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new ExecutableException(e);
+		}
 	}
 
 	/**
@@ -238,7 +245,7 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 	 * <p>
 	 * If not specified, uses {@link BasicJettyServerFactory}.
 	 *
-	 * @param value
+	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	public JettyMicroserviceBuilder jettyServerFactory(JettyServerFactory value) {

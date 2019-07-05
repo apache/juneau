@@ -26,7 +26,6 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.util.*;
-import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -89,10 +88,9 @@ public final class RestCallException extends IOException {
 	 *
 	 * @param msg The exception message.
 	 * @param response The HTTP response object.
-	 * @throws ParseException
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public RestCallException(String msg, HttpResponse response) throws ParseException, IOException {
+	public RestCallException(String msg, HttpResponse response) throws IOException {
 		super(format("{0}\n{1}\nstatus=''{2}''\nResponse: \n{3}", msg, response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity(), UTF8)));
 	}
 

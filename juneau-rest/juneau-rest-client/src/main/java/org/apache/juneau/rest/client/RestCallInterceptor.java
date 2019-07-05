@@ -55,7 +55,7 @@ public abstract class RestCallInterceptor {
 	 * Called when {@link RestCall#close()} is called.
 	 *
 	 * @param restCall The restCall object invoking this method.
-	 * @throws RestCallException
+	 * @throws RestCallException Error occurred during call.
 	 */
 	public void onClose(RestCall restCall) throws RestCallException {}
 }

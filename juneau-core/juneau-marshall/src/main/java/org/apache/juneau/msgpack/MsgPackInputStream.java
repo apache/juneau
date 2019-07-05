@@ -60,9 +60,9 @@ public final class MsgPackInputStream extends ParserInputStream {
 	 * Constructor.
 	 *
 	 * @param pipe The parser input.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected MsgPackInputStream(ParserPipe pipe) throws Exception {
+	protected MsgPackInputStream(ParserPipe pipe) throws IOException {
 		super(pipe);
 	}
 

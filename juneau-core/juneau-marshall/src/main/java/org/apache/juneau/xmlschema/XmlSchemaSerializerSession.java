@@ -56,7 +56,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 	}
 
 	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		if (isEnableNamespaces() && isAutoDetectNamespaces())
 			findNsfMappings(o);
 

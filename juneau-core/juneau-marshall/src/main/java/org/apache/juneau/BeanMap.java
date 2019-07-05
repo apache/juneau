@@ -339,7 +339,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * @param input The text that will get parsed into a map and then added to this map.
 	 * @return This object (for method chaining).
-	 * @throws ParseException If the input contains a syntax error or is malformed.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public BeanMap<T> load(String input) throws ParseException {
 		putAll(new ObjectMap(input));
@@ -352,7 +352,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param r The text that will get parsed into a map and then added to this map.
 	 * @param p The parser to use to parse the text.
 	 * @return This object (for method chaining).
-	 * @throws ParseException If the input contains a syntax error or is malformed.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by <c>Reader</c>.
 	 */
 	public BeanMap<T> load(Reader r, ReaderParser p) throws ParseException, IOException {

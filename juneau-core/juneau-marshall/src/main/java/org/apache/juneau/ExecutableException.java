@@ -10,43 +10,44 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.jetty;
+package org.apache.juneau;
 
-import org.apache.juneau.examples.rest.RootResources;
-import org.apache.juneau.microservice.jetty.*;
+import java.text.MessageFormat;
 
 /**
- * An example of an extended REST microservice.
- *
- * <p>
- * Subclasses can extend from {@link JettyMicroservice} to implement their own custom behavior.
- * However, this is optional and the {@link JettyMicroservice} class can be invoked directly.
- *
- * <p>
- * The {@link JettyMicroservice} class will locate the <c>examples.cfg</c> file in the home directory and initialize
- * the resources and commands defined in that file.
- *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='extlink'>{@source}
- * </ul>
+ * General exception that occurs when trying to execute a constructor, method, or field using reflection.
  */
-public class App {
+public class ExecutableException extends FormattedException {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Entry point method.
+	 * Constructor.
 	 *
-	 * @param args Command line arguments.
-	 * @throws Exception General exception occurred.
+	 * @param causedBy The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public static void main(String[] args) throws Exception {
-		JettyMicroservice
-			.create()
-			.args(args)
-			.servlet(RootResources.class)
-			.build()
-			.start()
-			.startConsole()
-			.join();
+	public ExecutableException(Throwable causedBy, String message, Object...args) {
+		super(causedBy, message, args);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param causedBy The cause of this exception.
+	 */
+	public ExecutableException(Throwable causedBy) {
+		super(causedBy);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ExecutableException(String message, Object...args) {
+		super(message, args);
 	}
 }

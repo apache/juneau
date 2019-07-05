@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
+import java.io.IOException;
+
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 
@@ -41,7 +43,7 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 	}
 
 	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		out.getWriter().write(o == null ? "null" : convertToType(o, String.class));
 	}
 

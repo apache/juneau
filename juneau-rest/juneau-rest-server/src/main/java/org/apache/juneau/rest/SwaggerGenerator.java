@@ -75,7 +75,7 @@ final class SwaggerGenerator {
 
 	/**
 	 * Constructor.
-	 * @param req
+	 * @param req The HTTP request.
 	 */
 	public SwaggerGenerator(RestRequest req) {
 		this.req = req;
@@ -97,7 +97,7 @@ final class SwaggerGenerator {
 	 * @return
 	 * 	A new Swagger instance.
 	 * 	<br>Never <jk>null</jk>.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public Swagger getSwagger() throws Exception {
 

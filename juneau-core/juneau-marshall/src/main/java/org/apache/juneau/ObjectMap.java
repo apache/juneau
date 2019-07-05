@@ -145,7 +145,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param s The string being parsed.
 	 * @param p The parser to use to parse the input.
-	 * @throws ParseException If the input contains a syntax error or is malformed.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public ObjectMap(CharSequence s, Parser p) throws ParseException {
 		this(p == null ? null : p.createBeanSession());
@@ -159,7 +159,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Shortcut for <code><jk>new</jk> ObjectMap(string,JsonParser.<jsf>DEFAULT</jsf>);</code>
 	 *
 	 * @param s The JSON text to parse.
-	 * @throws ParseException If the input contains a syntax error or is malformed.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public ObjectMap(CharSequence s) throws ParseException {
 		this(s, null);
@@ -182,7 +182,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Shortcut for <code><jk>new</jk> ObjectMap(reader, JsonParser.<jsf>DEFAULT</jsf>)</code>.
 	 *
 	 * @param r The reader to read from.  The reader will be wrapped in a {@link BufferedReader} if it isn't already.
-	 * @throws ParseException If the input contains a syntax error or is malformed.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public ObjectMap(Reader r) throws ParseException, IOException {
@@ -572,7 +572,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @param pojoSwap The swap class used to convert the raw type to a transformed type.
 	 * @param <T> The transformed class type.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
-	 * @throws ParseException Thrown by the POJO swap if a problem occurred trying to parse the value.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public <T> T getSwapped(String key, PojoSwap<T,?> pojoSwap) throws ParseException {
@@ -767,7 +767,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param key The key.
 	 * @param json The JSON text that will be parsed into an Object and then inserted into this map.
-	 * @throws ParseException If the input contains a syntax error or is malformed.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public void putJson(String key, String json) throws ParseException {
 		this.put(key, JsonParser.DEFAULT.parse(json, Object.class));

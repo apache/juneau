@@ -92,7 +92,7 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> implements
 		 * Write this entry to the specified output stream.
 		 *
 		 * @param zos The output stream to write to.
-		 * @throws IOException
+		 * @throws IOException Thrown by underlying stream.
 		 */
 		void write(ZipOutputStream zos) throws IOException;
 	}
@@ -149,7 +149,7 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> implements
 		 *
 		 * @param zos The output stream.
 		 * @param f The file to add.
-		 * @throws IOException
+		 * @throws IOException Thrown by underlying stream.
 		 */
 		protected void addFile(ZipOutputStream zos, File f) throws IOException {
 			if (doAdd(f)) {

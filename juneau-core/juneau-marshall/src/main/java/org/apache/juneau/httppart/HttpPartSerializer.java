@@ -82,7 +82,7 @@ public interface HttpPartSerializer {
 	 * @throws SerializeException If a problem occurred while trying to parse the input.
 	 * @throws SchemaValidationException If the output fails schema validation.
 	 */
-	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException ;
+	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException;
 
 	/**
 	 * Convenience method for creating a no-arg session and serializing a part with no specified part type.
@@ -96,5 +96,5 @@ public interface HttpPartSerializer {
 	 * @throws SerializeException If a problem occurred while trying to parse the input.
 	 * @throws SchemaValidationException If the output fails schema validation.
 	 */
-	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException ;
+	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException;
 }

@@ -28,46 +28,46 @@ import static org.apache.juneau.dto.atom.AtomBuilder.person;
  */
 public class AtomFeed {
 
-    public static Feed GetAtomFeed(){
+	/**
+	 * @return A sample Atom feed.
+	 */
+	public static Feed getAtomFeed(){
 
-        Feed feed =
-                feed("tag:juneau.apache.org", "Juneau ATOM specification", "2016-01-02T03:04:05Z")
-                        .subtitle(text("html").text("Describes <em>stuff</em> about Juneau"))
-                        .links(
-                                link("alternate", "text/html", "http://juneau.apache.org").hreflang("en"),
-                                link("self", "application/atom+xml", "http://juneau.apache.org/feed.atom")
-                        )
-                        .generator(
-                                generator("Juneau").uri("http://juneau.apache.org").version("1.0")
-                        )
-                        .entries(
-                                entry("tag:juneau.sample.com,2013:1.2345", "Juneau ATOM specification snapshot",
-                                        "2016-01-02T03:04:05Z")
-                                        .links(
-                                                link("alternate", "text/html",
-                                                        "http://juneau.apache.org/juneau.atom"),
-                                                link("enclosure", "audio/mpeg",
-                                                        "http://juneau.apache.org/audio/juneau_podcast.mp3").
-                                                        length(1337)
-                                        )
-                                        .published("2016-01-02T03:04:05Z")
-                                        .authors(
-                                                person("Jane Smith").
-                                                        uri("http://juneau.apache.org").
-                                                        email("janesmith@apache.org")
-                                        )
-                                        .contributors(
-                                                person("John Smith")
-                                        )
-                                        .content(
-                                                content("xhtml")
-                                                        .lang("en")
-                                                        .base("http://www.apache.org/")
-                                                        .text("<div><p><i>[Update: Juneau supports ATOM.]</i></p></div>")
-                                        )
-                        );
+		Feed feed =
+			feed("tag:juneau.apache.org", "Juneau ATOM specification", "2016-01-02T03:04:05Z")
+			.subtitle(text("html").text("Describes <em>stuff</em> about Juneau"))
+			.links(
+				link("alternate", "text/html", "http://juneau.apache.org").hreflang("en"),
+				link("self", "application/atom+xml", "http://juneau.apache.org/feed.atom")
+			)
+			.generator(
+				generator("Juneau").uri("http://juneau.apache.org").version("1.0")
+			)
+			.entries(
+				entry("tag:juneau.sample.com,2013:1.2345", "Juneau ATOM specification snapshot", "2016-01-02T03:04:05Z")
+				.links(
+					link("alternate", "text/html", "http://juneau.apache.org/juneau.atom"),
+					link("enclosure", "audio/mpeg", "http://juneau.apache.org/audio/juneau_podcast.mp3").
+					length(1337)
+				)
+				.published("2016-01-02T03:04:05Z")
+				.authors(
+					person("Jane Smith").
+					uri("http://juneau.apache.org").
+					email("janesmith@apache.org")
+				)
+				.contributors(
+					person("John Smith")
+				)
+				.content(
+					content("xhtml")
+					.lang("en")
+					.base("http://www.apache.org/")
+					.text("<div><p><i>[Update: Juneau supports ATOM.]</i></p></div>")
+				)
+			);
 
-        return feed;
+		return feed;
 
-    }
+	}
 }

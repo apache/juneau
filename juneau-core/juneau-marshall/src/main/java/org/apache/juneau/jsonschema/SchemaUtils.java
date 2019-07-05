@@ -33,7 +33,7 @@ public class SchemaUtils {
 	 *
 	 * @param a The annotation instance.  Can be <jk>null</jk>.
 	 * @return The schema converted to a map, or and empty map if the annotation was null.
-	 * @throws ParseException
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public static ObjectMap asMap(Schema a) throws ParseException {
 		if (a == null)

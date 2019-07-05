@@ -15,6 +15,7 @@ package org.apache.juneau.rest.util;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.*;
 
@@ -268,9 +269,8 @@ public final class RestUtils {
 	 *
 	 * @param qs A reader or string containing the query string to parse.
 	 * @return A new map containing the parsed query.
-	 * @throws Exception
 	 */
-	public static Map<String,String[]> parseQuery(Object qs) throws Exception {
+	public static Map<String,String[]> parseQuery(Object qs) {
 		return parseQuery(qs, null);
 	}
 
@@ -280,74 +280,77 @@ public final class RestUtils {
 	 * @param qs A reader containing the query string to parse.
 	 * @param map The map to pass the values into.
 	 * @return The same map passed in, or a new map if it was <jk>null</jk>.
-	 * @throws Exception
 	 */
-	public static Map<String,String[]> parseQuery(Object qs, Map<String,String[]> map) throws Exception {
+	public static Map<String,String[]> parseQuery(Object qs, Map<String,String[]> map) {
 
-		Map<String,String[]> m = map;
-		if (m == null)
-			m = new TreeMap<>();
+		try {
+			Map<String,String[]> m = map;
+			if (m == null)
+				m = new TreeMap<>();
 
-		if (qs == null || ((qs instanceof CharSequence) && isEmpty(qs)))
-			return m;
+			if (qs == null || ((qs instanceof CharSequence) && isEmpty(qs)))
+				return m;
 
-		try (ParserPipe p = new ParserPipe(qs)) {
+			try (ParserPipe p = new ParserPipe(qs)) {
 
-			final int S1=1; // Looking for attrName start.
-			final int S2=2; // Found attrName start, looking for = or & or end.
-			final int S3=3; // Found =, looking for valStart or &.
-			final int S4=4; // Found valStart, looking for & or end.
+				final int S1=1; // Looking for attrName start.
+				final int S2=2; // Found attrName start, looking for = or & or end.
+				final int S3=3; // Found =, looking for valStart or &.
+				final int S4=4; // Found valStart, looking for & or end.
 
-			try (UonReader r = new UonReader(p, true)) {
-				int c = r.peekSkipWs();
-				if (c == '?')
-					r.read();
+				try (UonReader r = new UonReader(p, true)) {
+					int c = r.peekSkipWs();
+					if (c == '?')
+						r.read();
 
-				int state = S1;
-				String currAttr = null;
-				while (c != -1) {
-					c = r.read();
-					if (state == S1) {
-						if (c != -1) {
-							r.unread();
-							r.mark();
-							state = S2;
-						}
-					} else if (state == S2) {
-						if (c == -1) {
-							add(m, r.getMarked(), null);
-						} else if (c == '\u0001') {
-							m.put(r.getMarked(0,-1), null);
-							state = S1;
-						} else if (c == '\u0002') {
-							currAttr = r.getMarked(0,-1);
-							state = S3;
-						}
-					} else if (state == S3) {
-						if (c == -1 || c == '\u0001') {
-							add(m, currAttr, "");
-							state = S1;
-						} else {
-							if (c == '\u0002')
+					int state = S1;
+					String currAttr = null;
+					while (c != -1) {
+						c = r.read();
+						if (state == S1) {
+							if (c != -1) {
+								r.unread();
+								r.mark();
+								state = S2;
+							}
+						} else if (state == S2) {
+							if (c == -1) {
+								add(m, r.getMarked(), null);
+							} else if (c == '\u0001') {
+								m.put(r.getMarked(0,-1), null);
+								state = S1;
+							} else if (c == '\u0002') {
+								currAttr = r.getMarked(0,-1);
+								state = S3;
+							}
+						} else if (state == S3) {
+							if (c == -1 || c == '\u0001') {
+								add(m, currAttr, "");
+								state = S1;
+							} else {
+								if (c == '\u0002')
+									r.replace('=');
+								r.unread();
+								r.mark();
+								state = S4;
+							}
+						} else if (state == S4) {
+							if (c == -1) {
+								add(m, currAttr, r.getMarked());
+							} else if (c == '\u0001') {
+								add(m, currAttr, r.getMarked(0,-1));
+								state = S1;
+							} else if (c == '\u0002') {
 								r.replace('=');
-							r.unread();
-							r.mark();
-							state = S4;
-						}
-					} else if (state == S4) {
-						if (c == -1) {
-							add(m, currAttr, r.getMarked());
-						} else if (c == '\u0001') {
-							add(m, currAttr, r.getMarked(0,-1));
-							state = S1;
-						} else if (c == '\u0002') {
-							r.replace('=');
+							}
 						}
 					}
 				}
-			}
 
-			return m;
+				return m;
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e); // Should never happen.
 		}
 	}
 
@@ -368,7 +371,7 @@ public final class RestUtils {
 	 *
 	 * @param s The string to parse.
 	 * @return The parsed value, or <jk>null</jk> if the input is null.
-	 * @throws ParseException
+	 * @throws ParseException Invalid JSON in string.
 	 */
 	public static Object parseAnything(String s) throws ParseException {
 		if (isJson(s))
@@ -449,7 +452,7 @@ public final class RestUtils {
 	/**
 	 * Normalizes the {@link RestMethod#path()} value.
 	 *
-	 * @param path
+	 * @param path The path to normalize.
 	 * @return The normalized path.
 	 */
 	public static String fixMethodPath(String path) {

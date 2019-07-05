@@ -58,21 +58,36 @@ import org.apache.juneau.rest.widget.*;
 public class PredefinedLabelsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Returns the list of child resource descriptions.
+	 *
+	 * @return The list of child resource descriptions.
+	 */
 	@RestMethod
-	public ResourceDescriptions get() throws Exception {
+	public ResourceDescriptions get() {
 		return new ResourceDescriptions()
 			.append("beanDescription", "BeanDescription")
 			.append("htmlLinks", "HtmlLink")
 		;
 	}
 
+	/**
+	 * Returns the bean description of the {@link Pet} class.
+	 *
+	 * @return The bean description of the {@link Pet} class.
+	 */
 	@RestMethod
-	public BeanDescription getBeanDescription() throws Exception {
+	public BeanDescription getBeanDescription() {
 		return new BeanDescription(Pet.class);
 	}
 
+	/**
+	 * Returns a list of hyperlinked strings.
+	 *
+	 * @return A list of hyperlinked strings.
+	 */
 	@RestMethod
-	public LinkString[] getHtmlLinks() throws Exception {
+	public LinkString[] getHtmlLinks() {
 		return new LinkString[] {
 			new LinkString("apache", "http://apache.org"),
 			new LinkString("juneau", "http://juneau.apache.org")

@@ -253,10 +253,11 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * Executes this request and returns the response object.
 	 *
 	 * @return The response object.
-	 * @throws Exception
+	 * @throws IOException Stream exception occurred.
+	 * @throws ServletException Servlet exception occurred.
 	 */
 	@Override /* MockHttpRequest */
-	public MockServletResponse execute() throws Exception {
+	public MockServletResponse execute() throws ServletException, IOException {
 		MockServletResponse res = MockServletResponse.create();
 		restContext.getCallHandler().service(this, res);
 

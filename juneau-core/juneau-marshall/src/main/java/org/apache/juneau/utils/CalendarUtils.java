@@ -421,9 +421,8 @@ public class CalendarUtils {
 	 * @param locale The locale to use.  If <jk>null</jk>, uses {@link Locale#getDefault()}.
 	 * @param timeZone The time zone to use.  If <jk>null</jk>, uses {@link TimeZone#getDefault()}.
 	 * @return The serialized date, or <jk>null</jk> if the calendar was <jk>null</jk>.
-	 * @throws Exception
 	 */
-	public static final String serialize(Calendar c, CalendarUtils.Format format, Locale locale, TimeZone timeZone) throws Exception {
+	public static final String serialize(Calendar c, CalendarUtils.Format format, Locale locale, TimeZone timeZone) {
 		if (c == null)
 			return null;
 		if (timeZone == null)
@@ -486,9 +485,8 @@ public class CalendarUtils {
 	 * @param locale The locale to use.  If <jk>null</jk>, uses {@link Locale#getDefault()}.
 	 * @param timeZone The time zone to use.  If <jk>null</jk>, uses {@link TimeZone#getDefault()}.
 	 * @return The serialized date, or <jk>null</jk> if the calendar was <jk>null</jk>.
-	 * @throws Exception
 	 */
-	public static final String serialize(Date d, CalendarUtils.Format format, Locale locale, TimeZone timeZone) throws Exception {
+	public static final String serialize(Date d, CalendarUtils.Format format, Locale locale, TimeZone timeZone) {
 		if (d == null)
 			return null;
 		if (timeZone == null)
@@ -556,9 +554,9 @@ public class CalendarUtils {
 	 * 	The timezone to assume if input string doesn't contain timezone info.
 	 * 	If <jk>null</jk>, uses {@link TimeZone#getDefault()}.
 	 * @return The date as a {@link Calendar}, or <jk>null</jk> if the input was <jk>null</jk> or empty.
-	 * @throws Exception
+	 * @throws java.text.ParseException Malformed input encountered.
 	 */
-	public static final Calendar parseCalendar(String in, CalendarUtils.Format format, Locale locale, TimeZone timeZone) throws Exception {
+	public static final Calendar parseCalendar(String in, CalendarUtils.Format format, Locale locale, TimeZone timeZone) throws java.text.ParseException {
 		if (isEmpty(in))
 			return null;
 		if (timeZone == null)
@@ -628,9 +626,9 @@ public class CalendarUtils {
 	 * 	The timezone to assume if input string doesn't contain timezone info.
 	 * 	If <jk>null</jk>, uses {@link TimeZone#getDefault()}.
 	 * @return The date as a {@link Date}, or <jk>null</jk> if the input was <jk>null</jk> or empty.
-	 * @throws Exception
+	 * @throws java.text.ParseException Malformed input encountered.
 	 */
-	public static final Date parseDate(String in, CalendarUtils.Format format, Locale locale, TimeZone timeZone) throws Exception {
+	public static final Date parseDate(String in, CalendarUtils.Format format, Locale locale, TimeZone timeZone) throws java.text.ParseException {
 		if (isEmpty(in))
 			return null;
 		if (timeZone == null)

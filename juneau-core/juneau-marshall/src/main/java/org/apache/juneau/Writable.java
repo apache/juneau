@@ -29,7 +29,7 @@ public interface Writable {
 	 *
 	 * @param w The writer to write to.
 	 * @return The same writer passed in.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	Writer writeTo(Writer w) throws IOException;
 

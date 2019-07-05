@@ -14,6 +14,8 @@ package org.apache.juneau.rest.headers;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
+import java.io.IOException;
+
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.rest.*;
@@ -44,7 +46,7 @@ public class AcceptTest {
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
 			return new WriterSerializerSession(args) {
 				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 					out.getWriter().write(name);
 				}
 			};

@@ -91,18 +91,29 @@ public class JsonSchemaResource extends BasicRestServletJena {
 		}
 	}
 
+	/**
+	 * Get the JSON-Schema document.
+	 *
+	 * @return The JSON-Schema document.
+	 */
 	@RestMethod(
 		summary="Get the JSON-Schema document"
 	)
-	public JsonSchema get() throws Exception {
+	public JsonSchema get() {
 		return schema;
 	}
 
+	/**
+	 * Overwrite the JSON-Schema document
+	 *
+	 * @param schema The new schema document.
+	 * @return The updated schema document.
+	 */
 	@RestMethod(
 		summary="Overwrite the JSON-Schema document",
 		description="Replaces the schema document with the specified content, and then mirrors it as the response."
 	)
-	public JsonSchema put(@Body JsonSchema schema) throws Exception {
+	public JsonSchema put(@Body JsonSchema schema) {
 		this.schema = schema;
 		return schema;
 	}

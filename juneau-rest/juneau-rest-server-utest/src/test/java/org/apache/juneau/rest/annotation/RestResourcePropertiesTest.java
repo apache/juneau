@@ -15,6 +15,8 @@ package org.apache.juneau.rest.annotation;
 import static java.lang.String.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
+import java.io.IOException;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock2.*;
@@ -70,7 +72,7 @@ public class RestResourcePropertiesTest {
 			public WriterSerializerSession createSession(SerializerSessionArgs args) {
 				return new WriterSerializerSession(args) {
 					@Override /* SerializerSession */
-					protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+					protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 						out.getWriter().write(format("A1=%s,A2=%s,B1=%s,B2=%s,C=%s,R1a=%s,R1b=%s,R2=%s,R3=%s,R4=%s,R5=%s,R6=%s",
 							getProperty("A1"), getProperty("A2"), getProperty("B1"), getProperty("B2"), getProperty("C"),
 							getProperty("R1a"), getProperty("R1b"), getProperty("R2"), getProperty("R3"), getProperty("R4"), getProperty("R5"), getProperty("R6")));

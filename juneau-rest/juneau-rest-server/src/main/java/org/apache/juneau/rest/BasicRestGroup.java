@@ -35,10 +35,9 @@ public abstract class BasicRestGroup extends BasicRest {
 	 *
 	 * @param req The HTTP request.
 	 * @return The bean containing links to the child resources.
-	 * @throws Exception
 	 */
 	@RestMethod(name=GET, path="/", summary="Navigation page")
-	public ChildResourceDescriptions getChildren(RestRequest req) throws Exception {
+	public ChildResourceDescriptions getChildren(RestRequest req) {
 		return new ChildResourceDescriptions(req);
 	}
 }

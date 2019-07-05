@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -40,7 +41,7 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 	}
 
 	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try (HtmlWriter w = getHtmlWriter(out)) {
 			if (o == null
 				|| (o instanceof Collection && ((Collection<?>)o).size() == 0)

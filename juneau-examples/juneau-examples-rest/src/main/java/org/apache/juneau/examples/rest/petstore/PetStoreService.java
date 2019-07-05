@@ -22,6 +22,7 @@ import javax.persistence.*;
 import org.apache.juneau.examples.rest.petstore.dto.*;
 import org.apache.juneau.examples.rest.petstore.rest.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.utils.*;
 
@@ -47,9 +48,9 @@ public class PetStoreService extends AbstractPersistenceService {
 	 *
 	 * @param w Console output.
 	 * @return This object (for method chaining).
-	 * @throws Exception
+	 * @throws ParseException Malformed input encountered.
 	 */
-	public PetStoreService initDirect(PrintWriter w) throws Exception {
+	public PetStoreService initDirect(PrintWriter w) throws ParseException {
 
 		EntityManager em = getEntityManager();
 		EntityTransaction et = em.getTransaction();
@@ -96,9 +97,10 @@ public class PetStoreService extends AbstractPersistenceService {
 	 *
 	 * @param w Console output.
 	 * @return This object (for method chaining).
-	 * @throws Exception
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by client stream.
 	 */
-	public PetStoreService initViaRest(PrintWriter w) throws Exception {
+	public PetStoreService initViaRest(PrintWriter w) throws ParseException, IOException {
 		JsonParser parser = JsonParser.create().ignoreUnknownBeanProperties().build();
 
 		String port = System.getProperty("juneau.serverPort", "8000");
@@ -139,74 +141,175 @@ public class PetStoreService extends AbstractPersistenceService {
 	// Service methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Returns the pet with the specified ID.
+	 *
+	 * @param id The pet ID.
+	 * @return The pet with the specified ID.  Never <jk>null</jk>.
+	 * @throws IdNotFound If pet was not found.
+	 */
 	public Pet getPet(long id) throws IdNotFound {
 		return find(Pet.class, id);
 	}
 
+	/**
+	 * Returns the order with the specified ID.
+	 *
+	 * @param id The order ID.
+	 * @return The order with the specified ID.  Never <jk>null</jk>.
+	 * @throws IdNotFound If order was not found.
+	 */
 	public Order getOrder(long id) throws IdNotFound {
 		return find(Order.class, id);
 	}
 
+	/**
+	 * Returns the user with the specified username.
+	 *
+	 * @param username The username.
+	 * @return The user with the specified username.  Never <jk>null</jk>.
+	 * @throws InvalidUsername Username was not valid.
+	 * @throws IdNotFound If order was not found.
+	 */
 	public User getUser(String username) throws InvalidUsername, IdNotFound  {
 		assertValidUsername(username);
 		return find(User.class, username);
 	}
 
+	/**
+	 * Returns all pets in the database.
+	 *
+	 * @return All pets in the database.
+	 */
 	public List<Pet> getPets() {
 		return query("select X from PetstorePet X", Pet.class, (SearchArgs)null);
 	}
 
+	/**
+	 * Returns all orders in the database.
+	 *
+	 * @return All orders in the database.
+	 */
 	public List<Order> getOrders() {
 		return query("select X from PetstoreOrder X", Order.class, (SearchArgs)null);
 	}
 
+	/**
+	 * Returns all users in the database.
+	 *
+	 * @return All users in the database.
+	 */
 	public List<User> getUsers() {
 		return query("select X from PetstoreUser X", User.class, (SearchArgs)null);
 	}
 
+	/**
+	 * Creates a new pet in the database.
+	 *
+	 * @param c The pet input data.
+	 * @return a new {@link Pet} object.
+	 */
 	public Pet create(CreatePet c) {
 		return merge(new Pet().status(PetStatus.AVAILABLE).apply(c));
 	}
 
+	/**
+	 * Creates a new order in the database.
+	 *
+	 * @param c The order input data.
+	 * @return a new {@link Order} object.
+	 */
 	public Order create(CreateOrder c) {
 		return merge(new Order().status(OrderStatus.PLACED).apply(c));
 	}
 
+	/**
+	 * Creates a new user in the database.
+	 *
+	 * @param c The user input data.
+	 * @return a new {@link User} object.
+	 */
 	public User create(User c) {
 		return merge(new User().apply(c));
 	}
 
+	/**
+	 * Updates a pet in the database.
+	 *
+	 * @param u The update information.
+	 * @return The updated {@link Pet} object.
+	 * @throws IdNotFound Pet was not found.
+	 */
 	public Pet update(UpdatePet u) throws IdNotFound {
 		EntityManager em = getEntityManager();
 		return merge(em, find(em, Pet.class, u.getId()).apply(u));
 	}
 
+	/**
+	 * Updates an order in the database.
+	 *
+	 * @param o The update information.
+	 * @return The updated {@link Order} object.
+	 * @throws IdNotFound Order was not found.
+	 */
 	public Order update(Order o) throws IdNotFound {
 		EntityManager em = getEntityManager();
 		return merge(em, find(em, Order.class, o.getId()).apply(o));
 	}
 
+	/**
+	 * Updates a user in the database.
+	 *
+	 * @param u The update information.
+	 * @return The updated {@link User} object.
+	 * @throws IdNotFound User was not found.
+	 * @throws InvalidUsername The username was not valid.
+	 */
 	public User update(User u) throws IdNotFound, InvalidUsername {
 		assertValidUsername(u.getUsername());
 		EntityManager em = getEntityManager();
 		return merge(em, find(em, User.class, u.getUsername()).apply(u));
 	}
 
+	/**
+	 * Removes a pet from the database.
+	 *
+	 * @param id The pet ID.
+	 * @throws IdNotFound Pet was not found.
+	 */
 	public void removePet(long id) throws IdNotFound {
 		EntityManager em = getEntityManager();
 		remove(em, find(em, Pet.class, id));
 	}
 
+	/**
+	 * Removes an order from the database.
+	 *
+	 * @param id The order ID.
+	 * @throws IdNotFound Order was not found.
+	 */
 	public void removeOrder(long id) throws IdNotFound {
 		EntityManager em = getEntityManager();
 		remove(em, find(em, Order.class, id));
 	}
 
+	/**
+	 * Removes a user from the database.
+	 *
+	 * @param username The username.
+	 * @throws IdNotFound User was not found.
+	 */
 	public void removeUser(String username) throws IdNotFound {
 		EntityManager em = getEntityManager();
 		remove(em, find(em, User.class, username));
 	}
 
+	/**
+	 * Returns all pets with the specified statuses.
+	 *
+	 * @param status Pet statuses.
+	 * @return Pets with the specified statuses.
+	 */
 	public Collection<Pet> getPetsByStatus(PetStatus[] status) {
 		return getEntityManager()
 			.createQuery("select X from PetstorePet X where X.status in :status", Pet.class)
@@ -214,6 +317,13 @@ public class PetStoreService extends AbstractPersistenceService {
 			.getResultList();
 	}
 
+	/**
+	 * Returns all pets with the specified tags.
+	 *
+	 * @param tags Pet tags.
+	 * @return Pets with the specified tags.
+	 * @throws InvalidTag Tag name was invalid.
+	 */
 	public Collection<Pet> getPetsByTags(String[] tags) throws InvalidTag {
 		return getEntityManager()
 			.createQuery("select X from PetstorePet X where X.tags in :tags", Pet.class)
@@ -221,6 +331,11 @@ public class PetStoreService extends AbstractPersistenceService {
 			.getResultList();
 	}
 
+	/**
+	 * Returns a summary of pet statuses and counts.
+	 *
+	 * @return A summary of pet statuses and counts.
+	 */
 	public Map<PetStatus,Integer> getInventory() {
 		Map<PetStatus,Integer> m = new LinkedHashMap<>();
 		for (Pet p : getPets()) {
@@ -233,6 +348,13 @@ public class PetStoreService extends AbstractPersistenceService {
 		return m;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if the specified username and password is valid.
+	 *
+	 * @param username The username.
+	 * @param password The password.
+	 * @return <jk>true</jk> if the specified username and password is valid.
+	 */
 	public boolean isValid(String username, String password) {
 		return getUser(username).getPassword().equals(password);
 	}

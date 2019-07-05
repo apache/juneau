@@ -246,7 +246,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * {@link #createHttpClientBuilder()}.
 	 *
 	 * @return The HTTP client to use.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	protected CloseableHttpClient createHttpClient() throws Exception {
 		// Don't call createConnectionManager() if RestClient.setConnectionManager() was called.
@@ -288,8 +288,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * The default implementation returns an instance of a {@link PoolingHttpClientConnectionManager}.
 	 *
 	 * @return The HTTP client builder to use to create the HTTP client.
-	 * @throws NoSuchAlgorithmException
-	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException Unknown cryptographic algorithm.
+	 * @throws KeyManagementException General key management exception.
 	 */
 	@SuppressWarnings("resource")
 	protected HttpClientConnectionManager createConnectionManager() throws KeyManagementException, NoSuchAlgorithmException {
@@ -333,10 +333,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
-	 * @throws KeyStoreException
-	 * @throws NoSuchAlgorithmException
 	 */
-	public RestClientBuilder enableSSL() throws KeyStoreException, NoSuchAlgorithmException {
+	public RestClientBuilder enableSSL() {
 		this.enableSsl = true;
 		return this;
 	}
@@ -354,8 +352,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
-	 * @throws KeyStoreException
-	 * @throws NoSuchAlgorithmException
+	 * @throws KeyStoreException Generic keystore exception.
+	 * @throws NoSuchAlgorithmException Unknown cryptographic algorithm.
 	 */
 	public RestClientBuilder enableLaxSSL() throws KeyStoreException, NoSuchAlgorithmException {
 		this.enableSsl = true;
@@ -2713,7 +2711,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//------------------------------------------------------------------------------------------------
 
 	/**
-	 * @param redirectStrategy
+	 * @param redirectStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRedirectStrategy(RedirectStrategy)
 	 */
@@ -2723,7 +2721,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param cookieSpecRegistry
+	 * @param cookieSpecRegistry New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)
 	 */
@@ -2733,7 +2731,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param requestExec
+	 * @param requestExec New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRequestExecutor(HttpRequestExecutor)
 	 */
@@ -2743,7 +2741,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param hostnameVerifier
+	 * @param hostnameVerifier New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
 	 */
@@ -2753,7 +2751,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param publicSuffixMatcher
+	 * @param publicSuffixMatcher New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
 	 */
@@ -2763,7 +2761,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param sslContext
+	 * @param sslContext New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLContext(SSLContext)
 	 */
@@ -2773,7 +2771,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param sslSocketFactory
+	 * @param sslSocketFactory New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
 	 */
@@ -2783,7 +2781,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param maxConnTotal
+	 * @param maxConnTotal New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setMaxConnTotal(int)
 	 */
@@ -2793,7 +2791,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param maxConnPerRoute
+	 * @param maxConnPerRoute New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setMaxConnPerRoute(int)
 	 */
@@ -2803,7 +2801,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param config
+	 * @param config New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
 	 */
@@ -2813,7 +2811,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param config
+	 * @param config New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
 	 */
@@ -2823,8 +2821,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param connTimeToLive
-	 * @param connTimeToLiveTimeUnit
+	 * @param connTimeToLive New property value.
+	 * @param connTimeToLiveTimeUnit New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
 	 */
@@ -2834,7 +2832,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param connManager
+	 * @param connManager New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
 	 */
@@ -2845,7 +2843,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param shared
+	 * @param shared New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionManagerShared(boolean)
 	 */
@@ -2855,7 +2853,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param reuseStrategy
+	 * @param reuseStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionReuseStrategy(ConnectionReuseStrategy)
 	 */
@@ -2865,7 +2863,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param keepAliveStrategy
+	 * @param keepAliveStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setKeepAliveStrategy(ConnectionKeepAliveStrategy)
 	 */
@@ -2875,7 +2873,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param targetAuthStrategy
+	 * @param targetAuthStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setTargetAuthenticationStrategy(AuthenticationStrategy)
 	 */
@@ -2885,7 +2883,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param proxyAuthStrategy
+	 * @param proxyAuthStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setProxyAuthenticationStrategy(AuthenticationStrategy)
 	 */
@@ -2895,7 +2893,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param userTokenHandler
+	 * @param userTokenHandler New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setUserTokenHandler(UserTokenHandler)
 	 */
@@ -2914,7 +2912,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param schemePortResolver
+	 * @param schemePortResolver New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSchemePortResolver(SchemePortResolver)
 	 */
@@ -2924,7 +2922,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param userAgent
+	 * @param userAgent New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setUserAgent(String)
 	 */
@@ -2934,7 +2932,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param defaultHeaders
+	 * @param defaultHeaders New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultHeaders(Collection)
 	 */
@@ -2944,7 +2942,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param itcp
+	 * @param itcp New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
 	 */
@@ -2954,7 +2952,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param itcp
+	 * @param itcp New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
 	 */
@@ -2964,7 +2962,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param itcp
+	 * @param itcp New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
 	 */
@@ -2974,7 +2972,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param itcp
+	 * @param itcp New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
 	 */
@@ -3011,7 +3009,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param httpprocessor
+	 * @param httpprocessor New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setHttpProcessor(HttpProcessor)
 	 */
@@ -3021,7 +3019,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param retryHandler
+	 * @param retryHandler New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)
 	 */
@@ -3040,7 +3038,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param proxy
+	 * @param proxy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setProxy(HttpHost)
 	 */
@@ -3050,7 +3048,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param routePlanner
+	 * @param routePlanner New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRoutePlanner(HttpRoutePlanner)
 	 */
@@ -3069,7 +3067,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param connectionBackoffStrategy
+	 * @param connectionBackoffStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionBackoffStrategy(ConnectionBackoffStrategy)
 	 */
@@ -3079,7 +3077,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param backoffManager
+	 * @param backoffManager New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setBackoffManager(BackoffManager)
 	 */
@@ -3089,7 +3087,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param serviceUnavailStrategy
+	 * @param serviceUnavailStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)
 	 */
@@ -3099,7 +3097,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param cookieStore
+	 * @param cookieStore New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCookieStore(CookieStore)
 	 */
@@ -3109,7 +3107,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param credentialsProvider
+	 * @param credentialsProvider New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCredentialsProvider(CredentialsProvider)
 	 */
@@ -3119,7 +3117,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param authSchemeRegistry
+	 * @param authSchemeRegistry New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)
 	 */
@@ -3129,7 +3127,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param contentDecoderMap
+	 * @param contentDecoderMap New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setContentDecoderRegistry(Map)
 	 */
@@ -3139,7 +3137,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param config
+	 * @param config New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultRequestConfig(RequestConfig)
 	 */
@@ -3167,8 +3165,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @param maxIdleTime
-	 * @param maxIdleTimeUnit
+	 * @param maxIdleTime New property value.
+	 * @param maxIdleTimeUnit New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#evictIdleConnections(long,TimeUnit)
 	 */

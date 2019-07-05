@@ -84,14 +84,15 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 *
 	 * @param args the arguments used for the method call
 	 * @return The object returned from the constructor.
-	 * @throws InvocationTargetException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T invoke(Object...args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
-		return (T)c.newInstance(args);
+	public <T> T invoke(Object...args) throws ExecutableException {
+		try {
+			return (T)c.newInstance(args);
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			throw new ExecutableException(e);
+		}
 	}
 
 	/**

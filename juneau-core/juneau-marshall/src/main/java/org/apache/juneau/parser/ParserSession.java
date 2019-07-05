@@ -92,9 +92,11 @@ public abstract class ParserSession extends BeanSession {
 	 * 	<c>ObjectMap</c>, etc...
 	 * @param <T> The class type of the object to create.
 	 * @return The parsed object.
-	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	protected abstract <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception;
+	protected abstract <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException;
 
 	/**
 	 * Returns <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
@@ -386,8 +388,7 @@ public abstract class ParserSession extends BeanSession {
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	@SuppressWarnings("unchecked")
@@ -429,8 +430,7 @@ public abstract class ParserSession extends BeanSession {
 	 * 	See {@link #parse(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T parse(Object input, Class<T> type) throws ParseException {
 		try (ParserPipe pipe = createPipe(input)) {
@@ -451,8 +451,7 @@ public abstract class ParserSession extends BeanSession {
 	 * 	See {@link #parse(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException {
 		try (ParserPipe pipe = createPipe(input)) {
@@ -471,8 +470,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @param type The class type of the object to create.
 	 * @param <T> The class type of the object to create.
 	 * @return The parsed object.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	private <T> T parseInner(ParserPipe pipe, ClassMeta<T> type) throws ParseException {
 		if (type.isVoid())
@@ -515,7 +513,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.
 	 * @param valueType The class type of the values, or <jk>null</jk> to default to whatever is being parsed.
 	 * @return The same map that was passed in to allow this method to be chained.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
@@ -563,8 +561,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @param c The collection being loaded.
 	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
 	 * @return The same collection that was passed in to allow this method to be chained.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
@@ -619,8 +616,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @param input The input.  Subclasses can support different input types.
 	 * @param argTypes Specifies the type of objects to create for each entry in the array.
 	 * @return An array of parsed objects.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
 		try (ParserPipe pipe = createPipe(input)) {
@@ -649,11 +645,13 @@ public abstract class ParserSession extends BeanSession {
 	 * @param s The string to convert.
 	 * @param type The class type to convert the string to.
 	 * @return The string converted as an object of the specified type.
-	 * @throws Exception If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * @param <T> The class type to convert the string to.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected final <T> T convertAttrToType(Object outer, String s, ClassMeta<T> type) throws Exception {
+	protected final <T> T convertAttrToType(Object outer, String s, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		if (s == null)
 			return null;
 
@@ -680,7 +678,7 @@ public abstract class ParserSession extends BeanSession {
 		}
 
 		if (swap != null)
-			o = swap.unswap(this, o, type);
+			o = unswap(swap, o, type);
 
 		return (T)o;
 	}
@@ -692,9 +690,9 @@ public abstract class ParserSession extends BeanSession {
 	 * @param cm The class type of the object.
 	 * @param o The object.
 	 * @param parent The parent to set.
-	 * @throws Exception
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	protected static final void setParent(ClassMeta<?> cm, Object o, Object parent) throws Exception {
+	protected static final void setParent(ClassMeta<?> cm, Object o, Object parent) throws ExecutableException {
 		Setter m = cm.getParentProperty();
 		if (m != null)
 			m.set(o, parent);
@@ -706,9 +704,9 @@ public abstract class ParserSession extends BeanSession {
 	 * @param cm The class type of the object.
 	 * @param o The object.
 	 * @param name The name to set.
-	 * @throws Exception
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	protected static final void setName(ClassMeta<?> cm, Object o, Object name) throws Exception {
+	protected static final void setName(ClassMeta<?> cm, Object o, Object name) throws ExecutableException {
 		if (cm != null) {
 			Setter m = cm.getNameProperty();
 			if (m != null)
@@ -786,6 +784,24 @@ public abstract class ParserSession extends BeanSession {
 	 */
 	public String getInputAsString() {
 		return pipe == null ? null : pipe.getInputAsString();
+	}
+
+	/**
+	 * Invokes the specified swap on the specified object.
+	 *
+	 * @param swap The swap to invoke.
+	 * @param o The input object.
+	 * @param eType The expected type.
+	 * @return The swapped object.
+	 * @throws ParseException If swap method threw an exception.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected Object unswap(PojoSwap swap, Object o, ClassMeta<?> eType) throws ParseException {
+		try {
+			return swap.unswap(this, o, eType);
+		} catch (Exception e) {
+			throw new ParseException(e);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

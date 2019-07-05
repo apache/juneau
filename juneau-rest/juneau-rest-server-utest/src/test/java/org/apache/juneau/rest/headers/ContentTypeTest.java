@@ -14,6 +14,8 @@ package org.apache.juneau.rest.headers;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
+import java.io.IOException;
+
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.parser.*;
@@ -46,7 +48,7 @@ public class ContentTypeTest {
 			return new ReaderParserSession(args) {
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 					return (T)name;
 				}
 			};

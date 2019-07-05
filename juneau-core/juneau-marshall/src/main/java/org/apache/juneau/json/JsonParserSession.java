@@ -83,7 +83,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	}
 
 	@Override /* ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (ParserReader r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
@@ -94,7 +94,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	}
 
 	@Override /* ReaderParserSession */
-	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws IOException, ParseException, ExecutableException {
 		try (ParserReader r = pipe.getParserReader()) {
 			m = parseIntoMap2(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
 			validateEnd(r);
@@ -103,7 +103,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	}
 
 	@Override /* ReaderParserSession */
-	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
+	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws IOException, ParseException, ExecutableException {
 		try (ParserReader r = pipe.getParserReader()) {
 			c = parseIntoCollection2(r, c, getClassMeta(elementType), null);
 			validateEnd(r);
@@ -111,7 +111,7 @@ public final class JsonParserSession extends ReaderParserSession {
 		}
 	}
 
-	private <T> T parseAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
+	private <T> T parseAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();
@@ -222,7 +222,7 @@ public final class JsonParserSession extends ReaderParserSession {
 			skipWrapperAttrEnd(r);
 
 		if (swap != null && o != null)
-			o = swap.unswap(this, o, eType);
+			o = unswap(swap, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);
@@ -230,14 +230,14 @@ public final class JsonParserSession extends ReaderParserSession {
 		return (T)o;
 	}
 
-	private Number parseNumber(ParserReader r, Class<? extends Number> type) throws Exception {
+	private Number parseNumber(ParserReader r, Class<? extends Number> type) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
 			return parseNumber(r, parseString(r), type);
 		return parseNumber(r, parseNumberString(r), type);
 	}
 
-	private Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws Exception {
+	private Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws IOException, ParseException {
 
 		// JSON has slightly different number rules from Java.
 		// Strict mode enforces these different rules, lax does not.
@@ -277,7 +277,7 @@ public final class JsonParserSession extends ReaderParserSession {
 		return StringUtils.parseNumber(s, type);
 	}
 
-	private Boolean parseBoolean(ParserReader r) throws Exception {
+	private Boolean parseBoolean(ParserReader r) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
 			return Boolean.valueOf(parseString(r));
@@ -293,7 +293,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	}
 
 	private <K,V> Map<K,V> parseIntoMap2(ParserReader r, Map<K,V> m, ClassMeta<K> keyType,
-			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
+			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
 			keyType = (ClassMeta<K>)string();
@@ -379,7 +379,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * Parse a JSON attribute from the character array at the specified position, then
 	 * set the position marker to the last character in the field name.
 	 */
-	private String parseFieldName(ParserReader r) throws Exception {
+	private String parseFieldName(ParserReader r) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
 			return parseString(r);
@@ -403,7 +403,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	private static final AsciiSet VALID_BARE_CHARS = AsciiSet.create().range('A','Z').range('a','z').range('0','9').chars("$_-.").build();
 
 	private <E> Collection<E> parseIntoCollection2(ParserReader r, Collection<E> l,
-			ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
+			ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		int S0=0; // Looking for outermost [
 		int S1=1; // Looking for starting [ or { or " or ' or LITERAL or ]
@@ -465,7 +465,7 @@ public final class JsonParserSession extends ReaderParserSession {
 		return null;  // Unreachable.
 	}
 
-	private <T> BeanMap<T> parseIntoBeanMap2(ParserReader r, BeanMap<T> m) throws Exception {
+	private <T> BeanMap<T> parseIntoBeanMap2(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
 		int S0=0; // Looking for outer {
 		int S1=1; // Looking for attrName start.
@@ -557,7 +557,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * If the string consists of a concatenation of strings (e.g. 'AAA' + "BBB"), this method
 	 * will automatically concatenate the strings and return the result.
 	 */
-	private String parseString(ParserReader r) throws Exception  {
+	private String parseString(ParserReader r) throws IOException, ParseException {
 		r.mark();
 		int qc = r.read();		// The quote character being used (" or ')
 		if (qc != '"' && isStrict()) {
@@ -641,7 +641,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * Looks for the keywords true, false, or null.
 	 * Throws an exception if any of these keywords are not found at the specified position.
 	 */
-	private void parseKeyword(String keyword, ParserReader r) throws Exception {
+	private void parseKeyword(String keyword, ParserReader r) throws IOException, ParseException {
 		try {
 			String s = r.read(keyword.length());
 			if (s.equals(keyword))
@@ -658,7 +658,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * the comments and whitespace.  Otherwise, the cursor will be set to the last position of
 	 * the comments and whitespace.
 	 */
-	private void skipCommentsAndSpace(ParserReader r) throws Exception {
+	private void skipCommentsAndSpace(ParserReader r) throws IOException, ParseException {
 		int c = 0;
 		while ((c = r.read()) != -1) {
 			if (! isWhitespace(c)) {
@@ -678,7 +678,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * Doesn't actually parse anything, but moves the position beyond the construct "{wrapperAttr:" when
 	 * the @Json(wrapperAttr) annotation is used on a class.
 	 */
-	private void skipWrapperAttrStart(ParserReader r, String wrapperAttr) throws Exception {
+	private void skipWrapperAttrStart(ParserReader r, String wrapperAttr) throws IOException, ParseException {
 
 		int S0=0; // Looking for outer {
 		int S1=1; // Looking for attrName start.
@@ -773,7 +773,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * Call this method after you've finished a parsing a string to make sure that if there's any
 	 * remainder in the input, that it consists only of whitespace and comments.
 	 */
-	private void validateEnd(ParserReader r) throws Exception {
+	private void validateEnd(ParserReader r) throws IOException, ParseException {
 		if (! isValidateEnd())
 			return;
 		skipCommentsAndSpace(r);

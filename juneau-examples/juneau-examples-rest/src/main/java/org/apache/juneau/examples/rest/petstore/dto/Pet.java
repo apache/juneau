@@ -67,6 +67,12 @@ public class Pet {
 	@URI
 	private String photo;
 
+	/**
+	 * Applies the specified data to this object.
+	 *
+	 * @param x The data to apply.
+	 * @return This object.
+	 */
 	public Pet apply(CreatePet x) {
 		this.name = x.getName();
 		this.price = x.getPrice();
@@ -76,6 +82,12 @@ public class Pet {
 		return this;
 	}
 
+	/**
+	 * Applies the specified data to this object.
+	 *
+	 * @param x The data to apply.
+	 * @return This object.
+	 */
 	public Pet apply(UpdatePet x) {
 		this.id = x.getId();
 		this.name = x.getName();
@@ -91,74 +103,131 @@ public class Pet {
 	// Bean properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * @return The <bc>id</jc> property value.
+	 */
 	public long getId() {
 		return id;
 	}
 
-	public Pet id(long id) {
-		this.id = id;
+	/**
+	 * @param value The <bc>id</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public Pet id(long value) {
+		this.id = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>name</jc> property value.
+	 */
 	public String getName() {
 		return name;
 	}
 
-	public Pet name(String name) {
-		this.name = name;
+	/**
+	 * @param value The <bc>name</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public Pet name(String value) {
+		this.name = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>price</jc> property value.
+	 */
 	public float getPrice() {
 		return price;
 	}
 
-	public Pet price(float price) {
-		this.price = price;
+	/**
+	 * @param value The <bc>price</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public Pet price(float value) {
+		this.price = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>species</jc> property value.
+	 */
 	public Species getSpecies() {
 		return species;
 	}
 
-	public Pet species(Species species) {
-		this.species = species;
+	/**
+	 * @param value The <bc>species</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public Pet species(Species value) {
+		this.species = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>tags</jc> property value.
+	 */
 	public List<String> getTags() {
 		return tags;
 	}
 
-	public Pet tags(List<String> tags) {
-		this.tags = tags;
+	/**
+	 * @param value The <bc>tags</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public Pet tags(List<String> value) {
+		this.tags = value;
 		return this;
 	}
 
-	public Pet tags(String...tags) {
-		this.tags = Arrays.asList(tags);
+	/**
+	 * @param value The <bc>tags</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public Pet tags(String...value) {
+		this.tags = Arrays.asList(value);
 		return this;
 	}
 
+	/**
+	 * @return The <bc>status</jc> property value.
+	 */
 	public PetStatus getStatus() {
 		return status;
 	}
 
-	public Pet status(PetStatus status) {
-		this.status = status;
+	/**
+	 * @param value The <bc>status</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public Pet status(PetStatus value) {
+		this.status = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>photo</jc> property value.
+	 */
 	public String getPhoto() {
 		return photo;
 	}
 
-	public Pet photo(String photo) {
-		this.photo = photo;
+	/**
+	 * @param value The <bc>photo</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public Pet photo(String value) {
+		this.photo = value;
 		return this;
 	}
 
+	/**
+	 * @param statuses The statuses to match against.
+	 * @return <jk>true</jk> if this pet matches at least one of the specified statuses.
+	 */
 	public boolean hasStatus(PetStatus...statuses) {
 		for (PetStatus status : statuses)
 			if (this.status == status)
@@ -166,6 +235,10 @@ public class Pet {
 		return false;
 	}
 
+	/**
+	 * @param tags The tags to match against.
+	 * @return <jk>true</jk> if this pet matches at least one of the specified tags.
+	 */
 	public boolean hasTag(String...tags) {
 		for (String tag : tags)
 			for (String t : this.tags)
@@ -174,6 +247,9 @@ public class Pet {
 		return false;
 	}
 
+	/**
+	 * @return Edit page link.
+	 */
 	public java.net.URI getEdit() {
 		return java.net.URI.create("servlet:/pet/edit/{id}");
 	}
@@ -184,6 +260,8 @@ public class Pet {
 
 	/**
 	 * This shows an example generated from a static method.
+	 *
+	 * @return POJO example.
 	 */
 	@Example
 	public static Pet example() {
@@ -195,7 +273,9 @@ public class Pet {
 			.status(PetStatus.AVAILABLE);
 	}
 
-
+	/**
+	 * Used to control format of prices in HTML view.
+	 */
 	public static final class PriceRender extends HtmlRender<Float> {
 		@Override
 		public Object getContent(SerializerSession session, Float value) {

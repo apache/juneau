@@ -102,12 +102,16 @@ public class BuilderSwap<T,B> {
 	 * @param session The current bean session.
 	 * @param hint A hint about the class type.
 	 * @return A new POJO.
-	 * @throws Exception
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public B create(BeanSession session, ClassMeta<?> hint) throws Exception {
+	public B create(BeanSession session, ClassMeta<?> hint) throws ExecutableException {
 		if (createBuilderMethod != null)
 			return (B)createBuilderMethod.invoke(null);
-		return builderConstructor.newInstance();
+		try {
+			return builderConstructor.newInstance();
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			throw new ExecutableException(e);
+		}
 	}
 
 	/**
@@ -117,12 +121,16 @@ public class BuilderSwap<T,B> {
 	 * @param builder The POJO builder.
 	 * @param hint A hint about the class type.
 	 * @return A new POJO.
-	 * @throws Exception
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public T build(BeanSession session, B builder, ClassMeta<?> hint) throws Exception {
+	public T build(BeanSession session, B builder, ClassMeta<?> hint) throws ExecutableException {
 		if (createPojoMethod != null)
 			return (T)createPojoMethod.invoke(builder);
-		return pojoConstructor.newInstance(builder);
+		try {
+			return pojoConstructor.newInstance(builder);
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			throw new ExecutableException(e);
+		}
 	}
 
 	/**

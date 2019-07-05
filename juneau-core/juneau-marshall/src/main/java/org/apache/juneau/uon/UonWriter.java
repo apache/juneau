@@ -130,7 +130,7 @@ public final class UonWriter extends SerializerWriter {
 	 *
 	 * @param o The boolean value to append to the output.
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected UonWriter appendBoolean(Object o) throws IOException {
 		append(o.toString());
@@ -142,7 +142,7 @@ public final class UonWriter extends SerializerWriter {
 	 *
 	 * @param o The numeric value to append to the output.
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected UonWriter appendNumber(Object o) throws IOException {
 		append(o.toString());
@@ -164,7 +164,7 @@ public final class UonWriter extends SerializerWriter {
 	 *
 	 * @param uri The URI to append to the output.
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	@Override
 	public SerializerWriter appendUri(Object uri) throws IOException {

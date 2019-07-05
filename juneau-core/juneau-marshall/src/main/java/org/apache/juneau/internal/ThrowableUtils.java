@@ -27,7 +27,7 @@ public class ThrowableUtils {
 	 * @param o The object to check.
 	 * @param msg The message of the IllegalArgumentException.
 	 * @param args Optional {@link MessageFormat}-style arguments.
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Constructed exception.
 	 */
 	public static void assertNotNull(Object o, String msg, Object...args) throws IllegalArgumentException {
 		if (o == null)
@@ -39,7 +39,7 @@ public class ThrowableUtils {
 	 *
 	 * @param fieldValue The object to check.
 	 * @param fieldName The name of the field.
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Constructed exception.
 	 */
 	public static void assertFieldNotNull(Object fieldValue, String fieldName) throws IllegalArgumentException {
 		if (fieldValue == null)
@@ -51,7 +51,7 @@ public class ThrowableUtils {
 	 *
 	 * @param fieldValue The object to check.
 	 * @param fieldName The name of the field.
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Constructed exception.
 	 */
 	public static void assertFieldPositive(int fieldValue, String fieldName) throws IllegalArgumentException {
 		if (fieldValue <= 0)
@@ -63,7 +63,7 @@ public class ThrowableUtils {
 	 *
 	 * @param msg The message of the IllegalArgumentException.
 	 * @param args Optional {@link MessageFormat}-style arguments.
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Constructed exception.
 	 */
 	public static void illegalArg(String msg, Object...args) throws IllegalArgumentException {
 		throw new FormattedIllegalArgumentException(msg, args);
@@ -75,7 +75,7 @@ public class ThrowableUtils {
 	 * @param threadId The ID of the thread to compare against.
 	 * @param msg The message of the IllegalStateException.
 	 * @param args Optional {@link MessageFormat}-style arguments.
-	 * @throws IllegalStateException
+	 * @throws IllegalStateException Constructed exception.
 	 */
 	public static void assertSameThread(long threadId, String msg, Object...args) throws IllegalStateException {
 		if (Thread.currentThread().getId() != threadId)

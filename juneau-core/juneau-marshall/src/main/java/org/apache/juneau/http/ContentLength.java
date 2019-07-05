@@ -65,7 +65,7 @@ public final class ContentLength extends HeaderLong {
 	/**
 	 * Constructor.
 	 *
-	 * @param value
+	 * @param value The value for this header.
 	 */
 	public ContentLength(Long value) {
 		super(value);

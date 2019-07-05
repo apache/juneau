@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
+import java.io.IOException;
+
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 
@@ -38,7 +40,7 @@ public final class CsvParserSession extends ReaderParserSession {
 	}
 
 	@Override /* ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		try (ParserReader r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
@@ -47,8 +49,8 @@ public final class CsvParserSession extends ReaderParserSession {
 	}
 
 	@SuppressWarnings({})
-	private <T> T parseAnything(ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
-		throw new NoSuchMethodException("Not implemented.");
+	private <T> T parseAnything(ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException {
+		throw new ParseException("Not implemented.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

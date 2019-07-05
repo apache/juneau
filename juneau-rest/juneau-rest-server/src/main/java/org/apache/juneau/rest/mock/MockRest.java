@@ -110,7 +110,7 @@ public class MockRest implements MockHttpConnection {
 	 * @param path The URI path.
 	 * @param body The body of the request.
 	 * @return A new servlet request.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	@Override /* MockHttpConnection */
 	public MockServletRequest request(String method, String path, Object body) throws Exception {
@@ -123,7 +123,7 @@ public class MockRest implements MockHttpConnection {
 	 * @param method The HTTP method
 	 * @param path The URI path.
 	 * @return A new servlet request.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public MockServletRequest request(String method, String path) throws Exception {
 		return request(method, path, null);
@@ -134,7 +134,7 @@ public class MockRest implements MockHttpConnection {
 	 *
 	 * @param path The URI path.
 	 * @return A new servlet request.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public MockServletRequest get(String path) throws Exception {
 		return request("GET", path, null);
@@ -146,7 +146,7 @@ public class MockRest implements MockHttpConnection {
 	 * @param path The URI path.
 	 * @param body The body of the request.
 	 * @return A new servlet request.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public MockServletRequest put(String path, Object body) throws Exception {
 		return request("PUT", path, body);
@@ -158,7 +158,7 @@ public class MockRest implements MockHttpConnection {
 	 * @param path The URI path.
 	 * @param body The body of the request.
 	 * @return A new servlet request.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public MockServletRequest post(String path, Object body) throws Exception {
 		return request("POST", path, body);
@@ -169,7 +169,7 @@ public class MockRest implements MockHttpConnection {
 	 *
 	 * @param path The URI path.
 	 * @return A new servlet request.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public MockServletRequest delete(String path) throws Exception {
 		return request("DELETE", path, null);
@@ -180,7 +180,7 @@ public class MockRest implements MockHttpConnection {
 	 *
 	 * @param path The URI path.
 	 * @return A new servlet request.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public MockServletRequest options(String path) throws Exception {
 		return request("OPTIONS", path, null);

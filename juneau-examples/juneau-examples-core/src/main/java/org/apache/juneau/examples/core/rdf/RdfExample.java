@@ -33,8 +33,9 @@ public class RdfExample {
 
 	/**
 	 * Serializing Pojo bean into RDF XML format.
-	 * @param args
-	 * @throws Exception
+	 *
+	 * @param args Unused.
+	 * @throws Exception Unused.
 	 */
 	public static void main(String[] args) throws Exception {
 		Pojo pojo = new Pojo("rdf","This is RDF format.");

@@ -33,7 +33,7 @@ public class ResolvingReaderResource extends ReaderResource {
 	 * Constructor.
 	 *
 	 * @param b Builder containing values to initialize this object with.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected ResolvingReaderResource(Builder b) throws IOException {
 		this(b.mediaType, b.headers, b.cached, b.varResolver, b.contents.toArray());
@@ -58,7 +58,7 @@ public class ResolvingReaderResource extends ReaderResource {
 	 * 		<li><c>File</c>
 	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
 	 * 	</ul>
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public ResolvingReaderResource(MediaType mediaType, Map<String,Object> headers, boolean cached, VarResolverSession varSession, Object...contents) throws IOException {
 		super(mediaType, headers, cached, contents);
@@ -140,7 +140,7 @@ public class ResolvingReaderResource extends ReaderResource {
 		 * Create a new {@link ResolvingReaderResource} using values in this builder.
 		 *
 		 * @return A new immutable {@link ResolvingReaderResource} object.
-		 * @throws IOException
+		 * @throws IOException Thrown by underlying stream.
 		 */
 		@Override
 		public ResolvingReaderResource build() throws IOException {

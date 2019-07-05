@@ -32,9 +32,9 @@ public class ParserInputStream extends InputStream implements Positionable {
 	 * Constructor.
 	 *
 	 * @param pipe The parser input.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected ParserInputStream(ParserPipe pipe) throws Exception {
+	protected ParserInputStream(ParserPipe pipe) throws IOException {
 		this.is = pipe.getInputStream();
 		pipe.setPositionable(this);
 	}

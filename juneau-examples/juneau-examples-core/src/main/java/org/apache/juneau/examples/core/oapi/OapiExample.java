@@ -31,55 +31,56 @@ import org.apache.juneau.oapi.OpenApiSerializer;
 public class OapiExample {
 
 
-    /**
-     * Get a reference to a parser and usage of oapiserializer.
-     * @param args
-     * @throws Exception
-     */
-    @SuppressWarnings("unused")
+	/**
+	 * Get a reference to a parser and usage of oapiserializer.
+	 *
+	 * @param args Unused.
+	 * @throws Exception Unused.
+	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception{
 
-        OpenApiSerializer oapiSerializer = OpenApiSerializer.DEFAULT;
+		OpenApiSerializer oapiSerializer = OpenApiSerializer.DEFAULT;
 
-        OpenApiParser oapiParser = OpenApiParser.DEFAULT;
+		OpenApiParser oapiParser = OpenApiParser.DEFAULT;
 
-        Pojo pojo = new Pojo("id","name");
+		Pojo pojo = new Pojo("id","name");
 
-        String flat = oapiSerializer.serialize(pojo);
-        // Print out the created POJO in OpenAPI format.
+		String flat = oapiSerializer.serialize(pojo);
+		// Print out the created POJO in OpenAPI format.
 
-        Pojo parse = oapiParser.parse(flat, Pojo.class);
+		Pojo parse = oapiParser.parse(flat, Pojo.class);
 
-        assert parse.getId().equals(pojo.getId());
-        assert parse.getName().equals(pojo.getName());
+		assert parse.getId().equals(pojo.getId());
+		assert parse.getName().equals(pojo.getName());
 
-        //Http part schmea
-        HttpPartSchema schema = HttpPartSchema
-                .create("array")
-                .collectionFormat("pipes")
-                .items(
-                        HttpPartSchema
-                                .create("array")
-                                .collectionFormat("csv")
-                                .items(
-                                        HttpPartSchema.create("integer","int64")
-                                )
-                )
-                .build();
-        Object value = new long[][]{{1,2,3},{4,5,6},{7,8,9}};
-        String output = OpenApiSerializer.DEFAULT.serialize(HttpPartType.HEADER, schema, value);
+		//Http part schmea
+		HttpPartSchema schema = HttpPartSchema
+			.create("array")
+			.collectionFormat("pipes")
+			.items(
+				HttpPartSchema
+				.create("array")
+				.collectionFormat("csv")
+				.items(
+					HttpPartSchema.create("integer","int64")
+				)
+			)
+			.build();
+		Object value = new long[][]{{1,2,3},{4,5,6},{7,8,9}};
+		String output = OpenApiSerializer.DEFAULT.serialize(HttpPartType.HEADER, schema, value);
 
-        HttpPartSchema schemab = HttpPartSchema.create().type("string").build();
-        // Convert POJO to BASE64-encoded string.
-        HttpPartSerializer s = OpenApiSerializer.DEFAULT;
-        String httpPart = s.serialize(schemab, pojo);
-        System.out.println(httpPart);
+		HttpPartSchema schemab = HttpPartSchema.create().type("string").build();
+		// Convert POJO to BASE64-encoded string.
+		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
+		String httpPart = s.serialize(schemab, pojo);
+		System.out.println(httpPart);
 
-        // Convert BASE64-encoded string back into a POJO.
-        HttpPartParser p = OpenApiParser.DEFAULT;
-        pojo = p.parse(schemab, httpPart, Pojo.class);
+		// Convert BASE64-encoded string back into a POJO.
+		HttpPartParser p = OpenApiParser.DEFAULT;
+		pojo = p.parse(schemab, httpPart, Pojo.class);
 
-        // The object above can be parsed thanks to the @BeanConstructor(properties = id,name) annotation on Pojo
-        // Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
-    }
+		// The object above can be parsed thanks to the @BeanConstructor(properties = id,name) annotation on Pojo
+		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
+	}
 }

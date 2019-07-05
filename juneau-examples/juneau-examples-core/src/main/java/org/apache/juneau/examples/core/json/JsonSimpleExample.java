@@ -37,10 +37,10 @@ import java.util.Map;
 public class JsonSimpleExample {
 
 	/**
-	 * Serializing Pojo bean into Json format
-     * and Deserialize back to Pojo instance type.
-	 * @param args
-	 * @throws Exception
+	 * Serializing Pojo bean into Json format and Deserialize back to Pojo instance type.
+	 *
+	 * @param args Unused.
+	 * @throws Exception Unused.
 	 */
 	@SuppressWarnings({ "unused", "rawtypes" })
 	public static void main(String[] args) throws Exception{

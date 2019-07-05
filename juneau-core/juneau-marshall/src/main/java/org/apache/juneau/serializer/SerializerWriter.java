@@ -204,7 +204,7 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @param characters The characters to append to this writer.
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public SerializerWriter append(char[] characters) throws IOException {
 		for (char c : characters)

@@ -44,6 +44,12 @@ public class CreatePet {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param name The <bc>name</bc> property value.
+	 * @param price The <bc>price</bc> property value.
+	 * @param species The <bc>species</bc> property value.
+	 * @param tags The <bc>tags</bc> property value.
+	 * @param photo The <bc>photo</bc> property value.
 	 */
 	public CreatePet(String name, float price, Species species, String[] tags, String photo) {
 		this.name = name;
@@ -62,48 +68,83 @@ public class CreatePet {
 	// Bean properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * @return The <bc>name</bc> property value.
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * @param value The <bc>name</bc> property value.
+	 * @return This object (for method chaining).
+	 */
 	public CreatePet name(String value) {
 		this.name = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>price</bc> property value.
+	 */
 	public float getPrice() {
 		return price;
 	}
 
+	/**
+	 * @param value The <bc>price</bc> property value.
+	 * @return This object (for method chaining).
+	 */
 	public CreatePet price(float value) {
 		this.price = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>species</bc> property value.
+	 */
 	public Species getSpecies() {
 		return species;
 	}
 
+	/**
+	 * @param value The <bc>species</bc> property value.
+	 * @return This object (for method chaining).
+	 */
 	public CreatePet species(Species value) {
 		this.species = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>tags</bc> property value.
+	 */
 	public String[] getTags() {
 		return tags;
 	}
 
+	/**
+	 * @param value The <bc>tags</bc> property value.
+	 * @return This object (for method chaining).
+	 */
 	public CreatePet tags(String...value) {
 		this.tags = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>photo</bc> property value.
+	 */
 	public String getPhoto() {
 		return photo;
 	}
 
-	public CreatePet photo(String photo) {
-		this.photo = photo;
+	/**
+	 * @param value The <bc>photo</bc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public CreatePet photo(String value) {
+		this.photo = value;
 		return this;
 	}
 
@@ -111,6 +152,9 @@ public class CreatePet {
 	// Other
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * @return An example POJO.
+	 */
 	public static CreatePet example() {
 		return new CreatePet("Doggie", 9.99f, Species.DOG, new String[]{"smart","friendly"}, null);
 	}

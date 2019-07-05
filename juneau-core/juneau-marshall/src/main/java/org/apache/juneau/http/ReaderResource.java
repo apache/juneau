@@ -53,7 +53,7 @@ public class ReaderResource implements Writable {
 	 * Constructor.
 	 *
 	 * @param b Builder containing values to initialize this object with.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected ReaderResource(Builder b) throws IOException {
 		this(b.mediaType, b.headers, b.cached, b.contents.toArray());
@@ -77,7 +77,7 @@ public class ReaderResource implements Writable {
 	 * 		<li><c>File</c>
 	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
 	 * 	</ul>
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public ReaderResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object...contents) throws IOException {
 		this.mediaType = mediaType;
@@ -203,7 +203,7 @@ public class ReaderResource implements Writable {
 		 * Create a new {@link ReaderResource} using values in this builder.
 		 *
 		 * @return A new immutable {@link ReaderResource} object.
-		 * @throws IOException
+		 * @throws IOException Thrown by underlying stream.
 		 */
 		public ReaderResource build() throws IOException {
 			return new ReaderResource(this);

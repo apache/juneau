@@ -15,6 +15,7 @@ package org.apache.juneau.rest.annotation2;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 
+import java.io.IOException;
 import java.util.*;
 
 import javax.servlet.*;
@@ -93,7 +94,7 @@ public class RestHookTest {
 			return new ReaderParserSession(args) {
 				@Override /* ParserSession */
 				@SuppressWarnings("unchecked")
-				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
+				protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 					return (T)("p1="+getProperty("p1", String.class)+",p2="+getProperty("p2", String.class)+",p3="+getProperty("p3", String.class)+",p4="+getProperty("p4", String.class)+",p5="+getProperty("p5", String.class));
 				}
 			};
@@ -172,7 +173,7 @@ public class RestHookTest {
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
 			return new WriterSerializerSession(args) {
 				@Override /* SerializerSession */
-				protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+				protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 					out.getWriter().write("p1="+getProperty("p1", String.class)+",p2="+getProperty("p2", String.class)+",p3="+getProperty("p3", String.class)+",p4="+getProperty("p4", String.class)+",p5="+getProperty("p5", String.class));
 				}
 				@Override /* SerializerSession */

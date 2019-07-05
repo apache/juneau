@@ -52,7 +52,7 @@ public class HtmlDocBuilder {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder
+	 * @param builder The builder object.
 	 */
 	public HtmlDocBuilder(PropertyStoreBuilder builder) {
 		this.builder = builder;
@@ -61,7 +61,7 @@ public class HtmlDocBuilder {
 	/**
 	 * Processes the contents of an {@link HtmlDoc} tag.
 	 *
-	 * @param hd
+	 * @param hd The annotation to process.
 	 */
 	public void process(HtmlDoc hd) {
 		if (hd.header().length > 0)

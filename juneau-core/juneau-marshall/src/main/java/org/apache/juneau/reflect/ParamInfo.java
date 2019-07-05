@@ -102,6 +102,7 @@ public final class ParamInfo {
 	 * @param a
 	 * 	The annotation to search for.
 	 * @param <T>
+	 * 	The annotation type.
 	 * @return The specified parameter annotation declared on this parameter, or <jk>null</jk> if not found.
 	 */
 	@SuppressWarnings("unchecked")

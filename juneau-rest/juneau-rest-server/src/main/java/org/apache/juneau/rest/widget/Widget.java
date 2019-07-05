@@ -96,7 +96,7 @@ public abstract class Widget implements HtmlWidget {
 	 * @param req The HTTP request object.
 	 * @param res The current HTTP response.
 	 * @return The HTML content of this widget.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public String getHtml(RestRequest req, RestResponse res) throws Exception {
 		return null;
@@ -120,7 +120,7 @@ public abstract class Widget implements HtmlWidget {
 	 * @param req The HTTP request object.
 	 * @param res The current HTTP response.
 	 * @return The Javascript needed by this widget.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public String getScript(RestRequest req, RestResponse res) throws Exception {
 		return null;
@@ -144,7 +144,7 @@ public abstract class Widget implements HtmlWidget {
 	 * @param req The HTTP request object.
 	 * @param res The current HTTP response.
 	 * @return The CSS styles needed by this widget.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public String getStyle(RestRequest req, RestResponse res) throws Exception {
 		return null;
@@ -172,7 +172,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected String getClasspathResourceAsString(String name) throws IOException {
 		return rm.getString(name);
@@ -194,7 +194,7 @@ public abstract class Widget implements HtmlWidget {
 	 * @param name Name of the desired resource.
 	 * @param locale The locale.  Can be <jk>null</jk>.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected String getClasspathResourceAsString(String name, Locale locale) throws IOException {
 		return rm.getString(name, locale);
@@ -209,7 +209,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected String loadScript(String name) throws IOException {
 		String s = getClasspathResourceAsString(name);
@@ -231,7 +231,7 @@ public abstract class Widget implements HtmlWidget {
 	 * @param res The current HTTP response.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected String loadScriptWithVars(RestRequest req, RestResponse res, String name) throws IOException {
 		return req.getVarResolverSession().resolve(loadScript(name));
@@ -246,7 +246,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected String loadStyle(String name) throws IOException {
 		String s = getClasspathResourceAsString(name);
@@ -268,7 +268,7 @@ public abstract class Widget implements HtmlWidget {
 	 * @param res The current HTTP response.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected String loadStyleWithVars(RestRequest req, RestResponse res, String name) throws IOException {
 		return req.getVarResolverSession().resolve(loadStyle(name));
@@ -283,7 +283,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected String loadHtml(String name) throws IOException {
 		String s = getClasspathResourceAsString(name);
@@ -305,7 +305,7 @@ public abstract class Widget implements HtmlWidget {
 	 * @param res The current HTTP response.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected String loadHtmlWithVars(RestRequest req, RestResponse res, String name) throws IOException {
 		return req.getVarResolverSession().resolve(loadHtml(name));

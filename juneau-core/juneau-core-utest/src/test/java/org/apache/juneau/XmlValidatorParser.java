@@ -38,8 +38,12 @@ public class XmlValidatorParser extends XmlParser {
 		return new XmlParserSession(null, args) {
 
 			@Override
-			protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-				return (T)validate(pipe.getReader());
+			protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+				try {
+					return (T)validate(pipe.getReader());
+				} catch (Exception e) {
+					throw new ParseException(e);
+				}
 			}
 
 			@Override /* ReaderParser */

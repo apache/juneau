@@ -95,7 +95,7 @@ public final class ParserPipe implements Closeable {
 		this.unbuffered = unbuffered;
 		Charset cs = isFile ? fileCharset : streamCharset;
 		if (cs == null)
-			cs = (isFile ? Charset.defaultCharset() : UTF8); 
+			cs = (isFile ? Charset.defaultCharset() : UTF8);
 		this.charset = cs;
 		if (input instanceof CharSequence)
 			this.inputString = input.toString();
@@ -272,9 +272,9 @@ public final class ParserPipe implements Closeable {
 	 * If the reader passed into this pipe is already a buffered reader, that reader will be returned.
 	 *
 	 * @return The contents of this pipe as a buffered reader.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public Reader getBufferedReader() throws Exception {
+	public Reader getBufferedReader() throws IOException {
 		return IOUtils.getBufferedReader(getReader());
 	}
 
@@ -294,9 +294,9 @@ public final class ParserPipe implements Closeable {
 	 * Converts this pipe into a {@link ParserReader}.
 	 *
 	 * @return The converted pipe.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public ParserReader getParserReader() throws Exception {
+	public ParserReader getParserReader() throws IOException {
 		if (input == null)
 			return null;
 		if (input instanceof ParserReader)

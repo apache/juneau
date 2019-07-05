@@ -70,7 +70,7 @@ public class StreamResource implements Streamable {
 	 * 		<li><c>File</c>
 	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
 	 * 	</ul>
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public StreamResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object...contents) throws IOException {
 		this.mediaType = mediaType;
@@ -195,7 +195,7 @@ public class StreamResource implements Streamable {
 		 * Create a new {@link StreamResource} using values in this builder.
 		 *
 		 * @return A new immutable {@link StreamResource} object.
-		 * @throws IOException
+		 * @throws IOException Thrown by underlying stream.
 		 */
 		public StreamResource build() throws IOException {
 			return new StreamResource(this);
@@ -233,7 +233,7 @@ public class StreamResource implements Streamable {
 	 * Returns the contents of this stream resource.
 	 *
 	 * @return The contents of this stream resource.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public InputStream getContents() throws IOException {
 		if (contents.length == 1) {

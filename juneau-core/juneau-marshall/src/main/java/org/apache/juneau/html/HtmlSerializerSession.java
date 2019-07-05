@@ -65,9 +65,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 *
 	 * @param out The output target object.
 	 * @return The output target object wrapped in an {@link HtmlWriter}.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected final HtmlWriter getHtmlWriter(SerializerPipe out) throws Exception {
+	protected final HtmlWriter getHtmlWriter(SerializerPipe out) throws IOException {
 		Object output = out.getRawOutput();
 		if (output instanceof HtmlWriter)
 			return (HtmlWriter)output;
@@ -150,7 +150,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		doSerialize(o, getHtmlWriter(out));
 	}
 
@@ -163,12 +163,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return The same writer passed in.
 	 * @throws IOException If a problem occurred trying to send output to the writer.
 	 */
-	private XmlWriter doSerialize(Object o, XmlWriter w) throws Exception {
+	private XmlWriter doSerialize(Object o, XmlWriter w) throws IOException, SerializeException {
 		serializeAnything(w, o, getExpectedRootType(o), null, null, getInitialDepth()-1, true);
 		return w;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override /* XmlSerializerSession */
 	protected ContentResult serializeAnything(
 			XmlWriter out,
@@ -180,10 +180,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			XmlFormat format,
 			boolean isMixed,
 			boolean preserveWhitespace,
-			BeanPropertyMeta pMeta) throws Exception {
+			BeanPropertyMeta pMeta) throws IOException, SerializeException {
 
 		// If this is a bean, then we want to serialize it as HTML unless it's @Html(format=XML).
-		ClassMeta<?> type = push(elementName, o, eType);
+		ClassMeta<?> type = push2(elementName, o, eType);
 		pop();
 
 		if (type == null)
@@ -192,7 +192,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			type = ((Delegate)o).getClassMeta();
 		PojoSwap swap = type.getPojoSwap(this);
 		if (swap != null) {
-			o = swap.swap(this, o);
+			o = swap(swap, o);
 			type = swap.getSwapClassMeta(this);
 			if (type.isObject())
 				type = getClassMetaForObject(o);
@@ -218,11 +218,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @param xIndent The current indentation value.
 	 * @param isRoot <jk>true</jk> if this is the root element of the document.
 	 * @return The type of content encountered.  Either simple (no whitespace) or normal (elements with whitespace).
-	 * @throws Exception If a problem occurred trying to convert the output.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws SerializeException Generic serialization error occurred.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected ContentResult serializeAnything(XmlWriter out, Object o,
-			ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot) throws Exception {
+			ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot) throws IOException, SerializeException {
 
 		ClassMeta<?> aType = null;       // The actual type
 		ClassMeta<?> wType = null;     // The wrapped type (delegate)
@@ -231,7 +232,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (eType == null)
 			eType = object();
 
-		aType = push(name, o, eType);
+		aType = push2(name, o, eType);
 
 		// Handle recursion
 		if (aType == null) {
@@ -264,7 +265,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			// Swap if necessary
 			PojoSwap swap = aType.getPojoSwap(this);
 			if (swap != null) {
-				o = swap.swap(this, o);
+				o = swap(swap, o);
 				sType = swap.getSwapClassMeta(this);
 
 				// If the getSwapClass() method returns Object, we need to figure out
@@ -372,7 +373,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeMap(XmlWriter out, Map m, ClassMeta<?> sType,
-			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws Exception {
+			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws IOException, SerializeException {
 
 		ClassMeta<?> keyType = eKeyType == null ? string() : eKeyType;
 		ClassMeta<?> valueType = eValueType == null ? object() : eValueType;
@@ -432,7 +433,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag("table").nl(i);
 	}
 
-	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws Exception {
+	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws IOException, SerializeException {
 
 		HtmlClassMeta cHtml = cHtml(m.getClassMeta());
 		HtmlBeanPropertyMeta bpHtml = bpHtml(ppMeta);
@@ -506,7 +507,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws Exception {
+	private void serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws IOException, SerializeException {
 
 		HtmlClassMeta cHtml = cHtml(sType);
 		HtmlBeanPropertyMeta bpHtml = bpHtml(ppMeta);
@@ -555,7 +556,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 				if (cm != null && cm.getPojoSwap(this) != null) {
 					PojoSwap swap = cm.getPojoSwap(this);
-					o = swap.swap(this, o);
+					o = swap(swap, o);
 					cm = swap.getSwapClassMeta(this);
 				}
 
@@ -695,7 +696,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 2-dimensional tables are used for collections of objects that all have the same set of property names.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Object[] getTableHeaders(Collection c, HtmlBeanPropertyMeta bpHtml) throws Exception {
+	private Object[] getTableHeaders(Collection c, HtmlBeanPropertyMeta bpHtml) throws SerializeException  {
 		if (c.size() == 0)
 			return null;
 		c = sort(c);
@@ -713,7 +714,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		PojoSwap swap = cm.getPojoSwap(this);
 		if (swap != null) {
-			o1 = swap.swap(this, o1);
+			o1 = swap(swap, o1);
 			cm = swap.getSwapClassMeta(this);
 		}
 
@@ -779,7 +780,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			PojoSwap ps = cm == null ? null : cm.getPojoSwap(this);
 			if (ps != null) {
-				o = ps.swap(this, o);
+				o = swap(ps, o);
 				cm = ps.getSwapClassMeta(this);
 			}
 			if (prevC.contains(cm))

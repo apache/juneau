@@ -16,6 +16,7 @@ import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -61,9 +62,10 @@ public class XmlParserSession extends ReaderParserSession {
 	 *
 	 * @param pipe The parser input.
 	 * @return The new STAX reader.
-	 * @throws Exception If problem occurred trying to create reader.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws XMLStreamException Unexpected XML processing error.
 	 */
-	protected final XmlReader getXmlReader(ParserPipe pipe) throws Exception {
+	protected final XmlReader getXmlReader(ParserPipe pipe) throws IOException, XMLStreamException {
 		return new XmlReader(pipe, isValidating(), getReporter(), getResolver(), getEventAllocator());
 	}
 
@@ -121,9 +123,11 @@ public class XmlParserSession extends ReaderParserSession {
 	 *
 	 * @param r The reader to read the element text from.
 	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
-	 * @throws Exception
+	 * @throws XMLStreamException Thrown by underlying reader.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
 	 */
-	protected String getElementText(XmlReader r) throws Exception {
+	protected String getElementText(XmlReader r) throws XMLStreamException, IOException, ParseException {
 		return decodeString(r.getElementText().trim());
 	}
 
@@ -168,11 +172,13 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Parses the current element as text.
 	 *
-	 * @param r
+	 * @param r The input reader.
 	 * @return The parsed text.
-	 * @throws Exception
+	 * @throws XMLStreamException Thrown by underlying reader.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
 	 */
-	protected String parseText(XmlReader r) throws Exception {
+	protected String parseText(XmlReader r) throws IOException, XMLStreamException, ParseException {
 		// Note that this is different than {@link #getText(XmlReader)} since it assumes that we're pointing to a
 		// whitespace element.
 
@@ -222,16 +228,21 @@ public class XmlParserSession extends ReaderParserSession {
 	 *
 	 * @param r The XML stream reader to read the current event from.
 	 * @return The whitespace character or characters.
-	 * @throws XMLStreamException
-	 * @throws Exception
+	 * @throws XMLStreamException Thrown by underlying reader.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
 	 */
-	protected String parseWhitespaceElement(XmlReader r) throws Exception {
+	protected String parseWhitespaceElement(XmlReader r) throws IOException, XMLStreamException, ParseException {
 		return null;
 	}
 
 	@Override /* ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-		return parseAnything(type, null, getXmlReader(pipe), getOuter(), true, null);
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		try {
+			return parseAnything(type, null, getXmlReader(pipe), getOuter(), true, null);
+		} catch (XMLStreamException e) {
+			throw new ParseException(e);
+		}
 	}
 
 	@Override /* ReaderParserSession */
@@ -249,6 +260,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Workhorse method.
 	 *
+	 * @param <T> The expected type of object.
 	 * @param eType The expected type of object.
 	 * @param currAttr The current bean property name.
 	 * @param r The reader.
@@ -256,10 +268,13 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @param isRoot If <jk>true</jk>, then we're serializing a root element in the document.
 	 * @param pMeta The bean property metadata.
 	 * @return The parsed object.
-	 * @throws Exception
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 * @throws XMLStreamException Malformed XML encountered.
 	 */
 	protected <T> T parseAnything(ClassMeta<T> eType, String currAttr, XmlReader r,
-			Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws Exception {
+			Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -365,7 +380,7 @@ public class XmlParserSession extends ReaderParserSession {
 		}
 
 		if (swap != null && o != null)
-			o = swap.unswap(this, o, eType);
+			o = unswap(swap, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);
@@ -374,7 +389,7 @@ public class XmlParserSession extends ReaderParserSession {
 	}
 
 	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType,
-			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
+			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int depth = 0;
 		for (int i = 0; i < r.getAttributeCount(); i++) {
 			String a = r.getAttributeLocalName(i);
@@ -413,7 +428,7 @@ public class XmlParserSession extends ReaderParserSession {
 	}
 
 	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l,
-			ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
+			ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int depth = 0;
 		int argIndex = 0;
 		do {
@@ -452,7 +467,7 @@ public class XmlParserSession extends ReaderParserSession {
 		return UNKNOWN;
 	}
 
-	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m) throws Exception {
+	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		BeanMeta<?> bMeta = m.getMeta();
 		XmlBeanMeta xmlMeta = bMeta.getExtendedMeta(XmlBeanMeta.class);
 
@@ -603,7 +618,7 @@ public class XmlParserSession extends ReaderParserSession {
 		} while (depth > 0);
 	}
 
-	private Object getUnknown(XmlReader r) throws Exception {
+	private Object getUnknown(XmlReader r) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		if (r.getEventType() != START_ELEMENT) {
 			throw new ParseException(this, "Parser must be on START_ELEMENT to read next text.");
 		}

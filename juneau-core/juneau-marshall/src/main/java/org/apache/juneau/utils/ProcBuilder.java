@@ -297,8 +297,8 @@ public class ProcBuilder {
 	 * Run this command and pipes the output to the specified writer or output stream.
 	 *
 	 * @return The exit code from the process.
-	 * @throws IOException
-	 * @throws InterruptedException
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws InterruptedException Thread was interrupted.
 	 */
 	public int run() throws IOException, InterruptedException {
 		if (pb.command().size() == 0)
@@ -322,8 +322,8 @@ public class ProcBuilder {
 	 * Run this command and returns the output as a simple string.
 	 *
 	 * @return The output from the command.
-	 * @throws IOException
-	 * @throws InterruptedException
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws InterruptedException Thread was interrupted.
 	 */
 	public String getOutput() throws IOException, InterruptedException {
 		StringWriter sw = new StringWriter();
@@ -335,8 +335,8 @@ public class ProcBuilder {
 	 * Returns the output from this process as a {@link Scanner}.
 	 *
 	 * @return The output from the process as a Scanner object.
-	 * @throws IOException
-	 * @throws InterruptedException
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws InterruptedException Thread was interrupted.
 	 */
 	public Scanner getScanner() throws IOException, InterruptedException {
 		StringWriter sw = new StringWriter();

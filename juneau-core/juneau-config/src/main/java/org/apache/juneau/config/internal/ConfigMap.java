@@ -59,7 +59,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 *
 	 * @param store The config store.
 	 * @param name The config name.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public ConfigMap(ConfigStore store, String name) throws IOException {
 		this.store = store;
@@ -380,16 +380,22 @@ public class ConfigMap implements ConfigStoreListener {
 
 
 	/**
-	 * TODO
+	 * Not implemented.
 	 *
 	 * @param section
+	 * 	The section name where to place the import statement.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use blank for the default section.
 	 * @param importName
+	 * 	The import name.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param preLines
+	 * 	Optional comment and blank lines to add immediately before the import statement.
+	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
 	 * @return This object (for method chaining).
 	 */
 	public ConfigMap setImport(String section, String importName, List<String> preLines) {
-		// TODO Auto-generated method stub
-		return this;
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -428,15 +434,19 @@ public class ConfigMap implements ConfigStoreListener {
 	}
 
 	/**
-	 * TODO
+	 * Not implemented.
 	 *
 	 * @param section
+	 * 	The section name where to place the import statement.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use blank for the default section.
 	 * @param importName
+	 * 	The import name.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public ConfigMap removeImport(String section, String importName) {
-		// TODO Auto-generated method stub
-		return this;
+		throw new UnsupportedOperationException();
 	}
 
 	private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {
@@ -489,8 +499,8 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param contents The new contents of the config file.
 	 * @param synchronous Wait until the change has been persisted before returning this map.
 	 * @return This object (for method chaining).
-	 * @throws IOException
-	 * @throws InterruptedException
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws InterruptedException Thread was interrupted.
 	 */
 	public ConfigMap load(String contents, boolean synchronous) throws IOException, InterruptedException {
 
@@ -531,7 +541,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * <br>If the file keeps changing on the file system, we throw an exception.
 	 *
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public ConfigMap commit() throws IOException {
 		writeLock();
@@ -664,7 +674,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 *
 	 * @param w The writer to serialize to.
 	 * @return The same writer passed in.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public Writer writeTo(Writer w) throws IOException {
 		readLock();

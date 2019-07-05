@@ -28,7 +28,7 @@ public interface Streamable {
 	 * Serialize this object to the specified output stream.
 	 *
 	 * @param os The output stream to stream to.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	void streamTo(OutputStream os) throws IOException;
 

@@ -26,43 +26,43 @@ import org.apache.juneau.html.HtmlSerializer;
  * </ul>
  */
 public class HtmlSimpleExample {
-    /**
-     * Serializing Pojo bean into Html format
-     * and Deserialize back to Pojo instance type.
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception{
-        // Juneau provides static constants with the most commonly used configurations
-        // Get a reference to a serializer - converting POJO to flat format
-        // Produces
-        // <table><tr><td>name</td><td>name</td></tr><tr><td>id</td><td>id</td></tr></table>
-        HtmlSerializer htmlSerializer = HtmlSerializer.DEFAULT;
-        // Get a reference to a parser - converts that flat format back into the POJO
-        HtmlParser htmlParser = HtmlParser.DEFAULT;
+	/**
+	 * Serializing Pojo bean into Html format and Deserialize back to Pojo instance type.
+	 *
+	 * @param args Unused.
+	 * @throws Exception Unused.
+	 */
+	public static void main(String[] args) throws Exception{
+		// Juneau provides static constants with the most commonly used configurations
+		// Get a reference to a serializer - converting POJO to flat format
+		// Produces
+		// <table><tr><td>name</td><td>name</td></tr><tr><td>id</td><td>id</td></tr></table>
+		HtmlSerializer htmlSerializer = HtmlSerializer.DEFAULT;
+		// Get a reference to a parser - converts that flat format back into the POJO
+		HtmlParser htmlParser = HtmlParser.DEFAULT;
 
-        Pojo pojo = new Pojo("id","name");
+		Pojo pojo = new Pojo("id","name");
 
-        String flat = htmlSerializer.serialize(pojo);
+		String flat = htmlSerializer.serialize(pojo);
 
-        // Print out the created POJO in JSON format.
-        System.out.println(flat);
+		// Print out the created POJO in JSON format.
+		System.out.println(flat);
 
-        Pojo parse = htmlParser.parse(flat, Pojo.class);
+		Pojo parse = htmlParser.parse(flat, Pojo.class);
 
-        assert parse.getId().equals(pojo.getId());
-        assert parse.getName().equals(pojo.getName());
+		assert parse.getId().equals(pojo.getId());
+		assert parse.getName().equals(pojo.getName());
 
-        /**
-         *  Produces
-         *  <html><head><style></style><script></script></head><body><section><article><div class="outerdata">
-         *  <div class="data" id="data"><table><tr><td>name</td><td>name</td></tr><tr><td>id</td><td>id</td></tr>
-         *  </table></div></div></article></section></body></html>
-         */
-        String docSerialized = HtmlDocSerializer.DEFAULT.serialize(pojo);
-        System.out.println(docSerialized);
+		/**
+		 *  Produces
+		 *  <html><head><style></style><script></script></head><body><section><article><div class="outerdata">
+		 *  <div class="data" id="data"><table><tr><td>name</td><td>name</td></tr><tr><td>id</td><td>id</td></tr>
+		 *  </table></div></div></article></section></body></html>
+		 */
+		String docSerialized = HtmlDocSerializer.DEFAULT.serialize(pojo);
+		System.out.println(docSerialized);
 
-        // The object above can be parsed thanks to the @BeanConstructor(properties = id,name) annotation on Pojo
-        // Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
-    }
+		// The object above can be parsed thanks to the @BeanConstructor(properties = id,name) annotation on Pojo
+		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
+	}
 }

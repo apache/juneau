@@ -24,9 +24,9 @@ public interface Setter {
 	 *
 	 * @param object The object to call the setter on
 	 * @param value The value to set.
-	 * @throws Exception
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	void set(Object object, Object value) throws Exception;
+	void set(Object object, Object value) throws ExecutableException;
 
 	/**
 	 * Field setter
@@ -40,8 +40,12 @@ public interface Setter {
 		}
 
 		@Override /* Setter */
-		public void set(Object object, Object value) throws Exception {
-			f.set(object, value);
+		public void set(Object object, Object value) throws ExecutableException {
+			try {
+				f.set(object, value);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new ExecutableException(e);
+			}
 		}
 	}
 
@@ -57,8 +61,12 @@ public interface Setter {
 		}
 
 		@Override /* Setter */
-		public void set(Object object, Object value) throws Exception {
-			m.invoke(object, value);
+		public void set(Object object, Object value) throws ExecutableException {
+			try {
+				m.invoke(object, value);
+			} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+				throw new ExecutableException(e);
+			}
 		}
 	}
 }

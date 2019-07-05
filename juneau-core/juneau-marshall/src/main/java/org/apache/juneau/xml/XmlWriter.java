@@ -141,7 +141,7 @@ public class XmlWriter extends SerializerWriter {
 	 * Shortcut for <code>append(<js>'>'</js>);</code>
 	 *
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public XmlWriter cTag() throws IOException {
 		append('>');
@@ -155,7 +155,7 @@ public class XmlWriter extends SerializerWriter {
 	 * Shortcut for <code>append(<js>'/'</js>).append(<js>'>'</js>);</code>
 	 *
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public XmlWriter ceTag() throws IOException {
 		append('/').append('>');
@@ -554,7 +554,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param preserveWhitespace
 	 * 	If <jk>true</jk>, then we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS} content.
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public XmlWriter text(Object o, boolean preserveWhitespace) throws IOException {
 		XmlUtils.encodeText(this, o, trimStrings, preserveWhitespace);
@@ -566,7 +566,7 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param o The object being serialized.
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public XmlWriter textUri(Object o) throws IOException {
 		text(uriResolver.resolve(o), false);

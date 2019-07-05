@@ -156,7 +156,7 @@ public class IOPipe {
 	 * Performs the piping of the input to the output.
 	 *
 	 * @return The number of bytes (if streams) or characters (if readers/writers) piped.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public int run() throws IOException {
 

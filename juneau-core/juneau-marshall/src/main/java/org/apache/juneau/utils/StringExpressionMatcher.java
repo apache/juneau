@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import java.text.*;
+import java.text.ParseException;
 import java.util.*;
 import java.util.regex.*;
 
@@ -55,7 +55,7 @@ public class StringExpressionMatcher {
 	 * Constructor.
 	 *
 	 * @param expression The string expression.
-	 * @throws ParseException If the expression is malformed.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public StringExpressionMatcher(String expression) throws ParseException {
 		this.exp = parse(expression);

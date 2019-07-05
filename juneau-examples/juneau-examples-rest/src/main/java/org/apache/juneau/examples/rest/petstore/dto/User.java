@@ -62,6 +62,12 @@ public class User {
 	@Enumerated(STRING)
 	private UserStatus userStatus;
 
+	/**
+	 * Applies the specified data to this object.
+	 *
+	 * @param c The data to apply.
+	 * @return This object.
+	 */
 	public User apply(User c) {
 		this.username = c.getUsername();
 		this.firstName = c.getFirstName();
@@ -77,66 +83,115 @@ public class User {
 	// Bean properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * @return The <bc>username</jc> property value.
+	 */
 	public String getUsername() {
 		return username;
 	}
 
-	public User username(String username) {
-		this.username = username;
+	/**
+	 * @param value The <bc>username</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public User username(String value) {
+		this.username = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>firstName</jc> property value.
+	 */
 	public String getFirstName() {
 		return firstName;
 	}
 
-	public User firstName(String firstName) {
-		this.firstName = firstName;
+	/**
+	 * @param value The <bc>firstName</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public User firstName(String value) {
+		this.firstName = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>lastName</jc> property value.
+	 */
 	public String getLastName() {
 		return lastName;
 	}
 
-	public User lastName(String lastName) {
-		this.lastName = lastName;
+	/**
+	 * @param value The <bc>lastName</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public User lastName(String value) {
+		this.lastName = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>email</jc> property value.
+	 */
 	public String getEmail() {
 		return email;
 	}
 
-	public User email(String email) {
-		this.email = email;
+	/**
+	 * @param value The <bc>email</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public User email(String value) {
+		this.email = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>password</jc> property value.
+	 */
 	public String getPassword() {
 		return password;
 	}
 
-	public User password(String password) {
-		this.password = password;
+	/**
+	 * @param value The <bc>password</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public User password(String value) {
+		this.password = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>phone</jc> property value.
+	 */
 	public String getPhone() {
 		return phone;
 	}
 
-	public User phone(String phone) {
-		this.phone = phone;
+	/**
+	 * @param value The <bc>phone</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public User phone(String value) {
+		this.phone = value;
 		return this;
 	}
 
+	/**
+	 * @return The <bc>userStatus</jc> property value.
+	 */
 	public UserStatus getUserStatus() {
 		return userStatus;
 	}
 
-	public User userStatus(UserStatus userStatus) {
-		this.userStatus = userStatus;
+	/**
+	 * @param value The <bc>userStatus</jc> property value.
+	 * @return This object (for method chaining).
+	 */
+	public User userStatus(UserStatus value) {
+		this.userStatus = value;
 		return this;
 	}
 

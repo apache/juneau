@@ -210,7 +210,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * Executes this request and returns the response object.
 	 *
 	 * @return The response object.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	@Override /* MockHttpRequest */
 	public MockServletResponse execute() throws Exception {

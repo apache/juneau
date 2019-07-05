@@ -31,7 +31,7 @@ public class DelegateMap<T extends Map> extends ObjectMap implements Delegate<T>
 	 * Constructor.
 	 *
 	 * @param m The metadata object that created this delegate object.
-	 * @param session
+	 * @param session The current bean session.
 	 */
 	@SuppressWarnings("unchecked")
 	public DelegateMap(T m, BeanSession session) {

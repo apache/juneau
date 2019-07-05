@@ -263,7 +263,7 @@ public class VarResolverSession {
 	 * @param s The string to resolve variables in.
 	 * @param out The writer to write to.
 	 * @return The same writer.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public Writer resolveTo(String s, Writer out) throws IOException {
 

@@ -51,6 +51,9 @@ public class App {
 	/**
 	 * If you want to parse URL-encoded form posts directly into beans, this call will disable the HiddenHttpMethodFilter
 	 * which triggers form posts to be consumed.
+	 *
+	 * @param filter The filter to alter.
+	 * @return The registration bean.
 	 */
 	@Bean
 	public FilterRegistrationBean<HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter filter) {

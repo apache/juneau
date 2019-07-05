@@ -40,7 +40,7 @@ public class InvalidAnnotationException extends FormattedRuntimeException {
 	 *
 	 * @param m The method to check.
 	 * @param a The annotations to check for.
-	 * @throws InvalidAnnotationException
+	 * @throws InvalidAnnotationException Annotation was used in an invalid location.
 	 */
 	@SafeVarargs
 	public static void assertNoInvalidAnnotations(MethodInfo m, Class<? extends Annotation>...a) throws InvalidAnnotationException {

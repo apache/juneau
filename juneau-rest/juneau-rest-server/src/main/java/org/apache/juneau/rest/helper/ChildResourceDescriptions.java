@@ -35,9 +35,8 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 * Constructor.
 	 *
 	 * @param req The HTTP servlet request.
-	 * @throws Exception
 	 */
-	public ChildResourceDescriptions(RestRequest req) throws Exception {
+	public ChildResourceDescriptions(RestRequest req) {
 		this(req.getContext(), req, false);
 	}
 
@@ -46,9 +45,8 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 *
 	 * @param context The servlet context that this bean describes.
 	 * @param req The HTTP servlet request.
-	 * @throws Exception
 	 */
-	public ChildResourceDescriptions(RestContext context, RestRequest req) throws Exception {
+	public ChildResourceDescriptions(RestContext context, RestRequest req) {
 		this(context, req, false);
 	}
 
@@ -60,11 +58,17 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 * @param sort
 	 * 	If <jk>true</jk>, list will be ordered by name alphabetically.
 	 * 	Default is to maintain the order as specified in the annotation.
-	 * @throws Exception
 	 */
-	public ChildResourceDescriptions(RestContext context, RestRequest req, boolean sort) throws Exception {
-		for (Map.Entry<String,RestContext> e : context.getChildResources().entrySet())
-			add(new ResourceDescription(e.getKey(), e.getValue().getInfoProvider().getTitle(req)));
+	public ChildResourceDescriptions(RestContext context, RestRequest req, boolean sort) {
+		for (Map.Entry<String,RestContext> e : context.getChildResources().entrySet()) {
+			String title = null;
+			try {
+				title = e.getValue().getInfoProvider().getTitle(req);
+			} catch (Exception e1) {
+				title = e1.getLocalizedMessage();
+			}
+			add(new ResourceDescription(e.getKey(), title));
+		}
 		if (sort)
 			Collections.sort(this);
 	}

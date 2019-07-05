@@ -19,8 +19,6 @@
 package org.apache.juneau.examples.core.uon;
 
 import org.apache.juneau.examples.core.pojo.Pojo;
-import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.serializer.SerializeException;
 import org.apache.juneau.uon.UonParser;
 import org.apache.juneau.uon.UonSerializer;
 
@@ -31,35 +29,36 @@ import org.apache.juneau.uon.UonSerializer;
  * <ul class='doctree'>
  * 	<li class='extlink'>{@source}
  * </ul>
-*/
+ */
 public class UONExample {
-    /**
-     * Serializing SimplePojo bean into UON type
-     * and Deserialize back to Pojo instance type.
-     * @param args
-     * @throws SerializeException
-     * @throws ParseException
-     */
-    public static void main(String[] args) throws SerializeException, ParseException {
 
-        // Fill some data to a Pojo bean
-        Pojo pojo = new Pojo("id","name");
+	/**
+	 * Serializing SimplePojo bean into UON type
+	 * and Deserialize back to Pojo instance type.
+	 *
+	 * @param args Unused.
+	 * @throws Exception Unused.
+	 */
+	public static void main(String[] args) throws Exception {
 
-        /**
-         * Produces
-         * (name=name,id=id)
-         */
-        String serial = UonSerializer.DEFAULT.serialize(pojo);
-        System.out.println(serial);
+		// Fill some data to a Pojo bean
+		Pojo pojo = new Pojo("id","name");
 
-        // Deserialize back to Pojo instance
-        Pojo obj = UonParser.DEFAULT.parse(serial, Pojo.class);
+		/**
+		 * Produces
+		 * (name=name,id=id)
+		 */
+		String serial = UonSerializer.DEFAULT.serialize(pojo);
+		System.out.println(serial);
 
-        assert obj.getId().equals(pojo.getId());
-        assert obj.getName().equals(pojo.getName());
+		// Deserialize back to Pojo instance
+		Pojo obj = UonParser.DEFAULT.parse(serial, Pojo.class);
 
-        // The object above can be parsed thanks to the @BeanConstructor annotation on PojoComplex
-        // Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
+		assert obj.getId().equals(pojo.getId());
+		assert obj.getName().equals(pojo.getName());
 
-    }
+		// The object above can be parsed thanks to the @BeanConstructor annotation on PojoComplex
+		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
+
+	}
 }

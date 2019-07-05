@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
+import java.io.IOException;
+
 import org.apache.juneau.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
@@ -45,8 +47,12 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	}
 
 	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		super.doSerialize(out, genSession.getSchema(o));
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+		try {
+			super.doSerialize(out, genSession.getSchema(o));
+		} catch (BeanRecursionException e) {
+			throw new SerializeException(e);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -15,8 +15,17 @@ package org.apache.juneau.server.config;
 import org.apache.juneau.microservice.jetty.JettyMicroservice;
 import org.apache.juneau.server.config.rest.LoadConfigResource;
 
+/**
+ * Entry-point class.
+ */
 public class App {
 
+    /**
+     * Entry-point method.
+     *
+     * @param args Command-line arguments.
+     * @throws Exception Error occurred.
+     */
     public static void main(String[] args) throws Exception {
         JettyMicroservice
                 .create()

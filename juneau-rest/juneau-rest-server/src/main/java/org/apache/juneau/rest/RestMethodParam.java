@@ -200,7 +200,7 @@ public abstract class RestMethodParam {
 	 * @param req The rest request.
 	 * @param res The rest response.
 	 * @return The resolved object.
-	 * @throws Exception
+	 * @throws Exception Generic error occurred.
 	 */
 	public abstract Object resolve(RestRequest req, RestResponse res) throws Exception;
 

@@ -72,7 +72,7 @@ public final class Allow extends HeaderStringArray {
 	/**
 	 * Constructor.
 	 *
-	 * @param value
+	 * @param value The value for this header.
 	 */
 	public Allow(String[] value) {
 		super(value);

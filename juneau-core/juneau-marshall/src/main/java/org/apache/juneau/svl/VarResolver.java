@@ -174,7 +174,7 @@ public class VarResolver {
 	 *
 	 * @param s The input string.
 	 * @param w The writer to send the result to.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public void resolveTo(String s, Writer w) throws IOException {
 		createSession(null).resolveTo(s, w);

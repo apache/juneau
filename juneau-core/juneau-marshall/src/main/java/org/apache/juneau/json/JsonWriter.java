@@ -174,7 +174,7 @@ public final class JsonWriter extends SerializerWriter {
 	 *
 	 * @param uri The URI to append to the output.
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public SerializerWriter uriValue(Object uri) throws IOException {
 		return stringValue(uriResolver.resolve(uri));
@@ -201,7 +201,7 @@ public final class JsonWriter extends SerializerWriter {
 	 *
 	 * @param depth The current indentation depth.
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public JsonWriter smi(int depth) throws IOException {
 		if (depth > maxIndent)
@@ -242,9 +242,9 @@ public final class JsonWriter extends SerializerWriter {
 	/**
 	 * Adds a space only if the current indentation level is below maxIndent.
 	 *
-	 * @param indent
+	 * @param indent The number of spaces to indent.
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public JsonWriter s(int indent) throws IOException {
 		if (indent <= maxIndent)

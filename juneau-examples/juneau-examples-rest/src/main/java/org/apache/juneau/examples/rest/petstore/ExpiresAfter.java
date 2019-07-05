@@ -33,10 +33,21 @@ import org.apache.juneau.http.annotation.*;
 )
 public class ExpiresAfter {
 	private final Calendar c;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param d The header value.
+	 */
 	public ExpiresAfter(Date d) {
 		this.c = new GregorianCalendar();
 		c.setTime(d);
 	}
+
+	/**
+	 * The header value.
+	 * @return The header value.
+	 */
 	public Calendar toCalendar() {
 		return c;
 	}

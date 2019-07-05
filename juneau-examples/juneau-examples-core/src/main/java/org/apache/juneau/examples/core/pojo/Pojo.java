@@ -33,16 +33,26 @@ public class Pojo {
 	private final String id;
 	private final String name;
 
+	/**
+	 * @param id The <bc>id</bc> property value.
+	 * @param name The <bc>name</bc> property value.
+	 */
 	@BeanConstructor
 	public Pojo(@Name("id") String id, @Name("name") String name) {
 		this.id = id;
 		this.name = name;
 	}
 
+	/**
+	 * @return The <bc>id</bc> property value.
+	 */
 	public String getId() {
 		return id;
 	}
 
+	/**
+	 * @return The <bc>name</bc> property value.
+	 */
 	public String getName() {
 		return name;
 	}

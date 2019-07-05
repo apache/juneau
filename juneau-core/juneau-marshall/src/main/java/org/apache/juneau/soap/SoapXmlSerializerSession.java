@@ -14,6 +14,7 @@ package org.apache.juneau.soap;
 
 import static org.apache.juneau.soap.SoapXmlSerializer.*;
 
+import java.io.IOException;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -55,7 +56,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try (XmlWriter w = getXmlWriter(out)) {
 			w.append("<?xml")
 				.attr("version", "1.0")

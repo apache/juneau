@@ -95,8 +95,8 @@ public class HttpPart {
 	 * Returns the value of the part converted to a string.
 	 *
 	 * @return The value of the part converted to a string.
-	 * @throws SchemaValidationException
-	 * @throws SerializeException
+	 * @throws SchemaValidationException HTTP part failed schema validation.
+	 * @throws SerializeException HTTP part could not be serialized.
 	 */
 	public String asString() throws SchemaValidationException, SerializeException {
 		if (spart != null)
@@ -107,10 +107,10 @@ public class HttpPart {
 	/**
 	 * Returns the value of the part converted to a string.
 	 *
-	 * @param c
+	 * @param c The type to convert to.
 	 * @return The value of the part converted to a string.
-	 * @throws SchemaValidationException
-	 * @throws ParseException
+	 * @throws SchemaValidationException HTTP part failed schema validation.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public <T> T asType(Class<T> c) throws SchemaValidationException, ParseException {
 		return parser.createPartSession(pargs).parse(partType, schema, spart, c);

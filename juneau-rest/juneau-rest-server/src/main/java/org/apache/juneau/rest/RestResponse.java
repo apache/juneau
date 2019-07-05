@@ -156,9 +156,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * the request.
 	 *
 	 * @return The set of media types registered in the parser group of this request.
-	 * @throws RestServletException
 	 */
-	public List<String> getSupportedEncodings() throws RestServletException {
+	public List<String> getSupportedEncodings() {
 		return restJavaMethod == null ? Collections.<String>emptyList() : restJavaMethod.encoders.getSupportedEncodings();
 	}
 
@@ -388,7 +387,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return A negotiated output stream.
 	 * @throws NotAcceptable If unsupported Accept-Encoding value specified.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
@@ -462,7 +461,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @param contentType The value to set as the <c>Content-Type</c> on the response.
 	 * @return The raw writer.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public PrintWriter getDirectWriter(String contentType) throws IOException {
 		setContentType(contentType);
@@ -478,7 +477,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return The negotiated writer.
 	 * @throws NotAcceptable If unsupported charset in request header Accept-Charset.
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public FinishablePrintWriter getNegotiatedWriter() throws NotAcceptable, IOException {
 		return getWriter(false, false);
@@ -552,8 +551,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * Same as {@link #setHeader(String, String)} but header is defined as a response part
 	 *
 	 * @param h Header to set.
-	 * @throws SchemaValidationException
-	 * @throws SerializeException
+	 * @throws SchemaValidationException Header part did not pass validation.
+	 * @throws SerializeException Header part could not be serialized.
 	 */
 	public void setHeader(HttpPart h) throws SchemaValidationException, SerializeException {
 		setHeader(h.getName(), h.asString());

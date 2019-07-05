@@ -17,6 +17,7 @@ import static org.apache.juneau.httppart.HttpPartSchema.Format.*;
 import static org.apache.juneau.httppart.HttpPartSchema.Type.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -77,8 +78,12 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		out.getWriter().write(serialize(HttpPartType.BODY, getSchema(), o));
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+		try {
+			out.getWriter().write(serialize(HttpPartType.BODY, getSchema(), o));
+		} catch (SchemaValidationException e) {
+			throw new SerializeException(e);
+		}
 	}
 
 	@Override /* PartSerializer */

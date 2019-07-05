@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 
+import java.io.IOException;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -86,10 +87,14 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 
 		try (HtmlWriter w = getHtmlWriter(out)) {
-			getTemplate().writeTo(this, w, o);
+			try {
+				getTemplate().writeTo(this, w, o);
+			} catch (Exception e) {
+				throw new SerializeException(e);
+			}
 		}
 	}
 
@@ -99,7 +104,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @param out
 	 * 	Where to send the output from the serializer.
 	 * @param o The object being serialized.
-	 * @throws Exception
+	 * @throws Exception Error occurred during serialization.
 	 */
 	public void parentSerialize(Object out, Object o) throws Exception {
 		try (SerializerPipe pipe = createPipe(out)) {

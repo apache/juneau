@@ -18,6 +18,7 @@ import java.util.*;
 import java.util.jar.*;
 import java.util.logging.*;
 
+import org.apache.juneau.ExecutableException;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.vars.*;
@@ -86,7 +87,7 @@ public class MicroserviceBuilder {
 	 * Instantiate a new microservice using the settings defined on this builder.
 	 *
 	 * @return A new microservice.
-	 * @throws Exception
+	 * @throws Exception Error occurred.
 	 */
 	public Microservice build() throws Exception {
 		return new Microservice(this);
@@ -153,7 +154,7 @@ public class MicroserviceBuilder {
 	 * 		<li>{@link Class} - Finds and loads the manifest file of the jar file that the specified class is contained within.
 	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws IOException
+	 * @throws IOException Thrown by underlying stream.
 	 */
 	public MicroserviceBuilder manifest(Object value) throws IOException {
 		if (value == null)
@@ -300,13 +301,16 @@ public class MicroserviceBuilder {
 	 *
 	 * @param consoleCommands The list of console commands to append to the list of available commands.
 	 * @return This object (for method chaining).
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings("unchecked")
-	public MicroserviceBuilder consoleCommands(Class<? extends ConsoleCommand>...consoleCommands) throws InstantiationException, IllegalAccessException {
-		for (Class<? extends ConsoleCommand> cc : consoleCommands)
-			this.consoleCommands.add(cc.newInstance());
+	public MicroserviceBuilder consoleCommands(Class<? extends ConsoleCommand>...consoleCommands) throws ExecutableException {
+		try {
+			for (Class<? extends ConsoleCommand> cc : consoleCommands)
+				this.consoleCommands.add(cc.newInstance());
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new ExecutableException(e);
+		}
 		return this;
 	}
 
@@ -414,9 +418,12 @@ public class MicroserviceBuilder {
 
 	/**
 	 * Resolves the specified path.
-	 * 
+	 *
 	 * <p>
 	 * If the working directory has been explicitly specified, relative paths are resolved relative to that.
+	 *
+	 * @param path The path to resolve.
+	 * @return The resolved file.
 	 */
 	protected File resolveFile(String path) {
 		if (Paths.get(path).isAbsolute())

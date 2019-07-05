@@ -600,30 +600,16 @@ public final class PojoRest {
 	 * 	These will automatically be converted to the appropriate object type if possible.
 	 * 	This must be an array, like a JSON array.
 	 * @return The returned object from the method call.
-	 * @throws IllegalAccessException
-	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
-	 * 	inaccessible.
-	 * @throws IllegalArgumentException
-	 * 	If one of the following occurs:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>
-	 * 			The number of actual and formal parameters differ.
-	 * 		<li>
-	 * 			An unwrapping conversion for primitive arguments fails.
-	 * 		<li>
-	 * 			A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
-	 * 			conversion.
-	 * 		<li>
-	 * 			The constructor pertains to an enum type.
-	 * 	</ul>
-	 * @throws InvocationTargetException If the underlying constructor throws an exception.
-	 * @throws ParseException If the input contains a syntax error or is malformed.
-	 * @throws NoSuchMethodException
-	 * @throws IOException
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public Object invokeMethod(String url, String method, String args) throws InvocationTargetException,
-			IllegalArgumentException, IllegalAccessException, ParseException, NoSuchMethodException, IOException {
-		return new PojoIntrospector(get(url), parser).invokeMethod(method, args);
+	public Object invokeMethod(String url, String method, String args) throws ExecutableException, ParseException, IOException {
+		try {
+			return new PojoIntrospector(get(url), parser).invokeMethod(method, args);
+		} catch (NoSuchMethodException | IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
+			throw new ExecutableException(e);
+		}
 	}
 
 	/**

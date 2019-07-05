@@ -254,7 +254,7 @@ public abstract class ContextBuilder {
 	 * @param c The type to convert to.
 	 * @param key The property name.
 	 * @return This object (for method chaining).
-	 * @param <T>
+	 * @param <T> The type to convert to.
 	 */
 	public <T> T peek(Class<T> c, String key) {
 		return psb.peek(c, key);

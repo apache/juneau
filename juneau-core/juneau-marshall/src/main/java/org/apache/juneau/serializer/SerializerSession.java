@@ -139,9 +139,10 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 *
 	 * @param pipe Where to send the output from the serializer.
 	 * @param o The object to serialize.
-	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws SerializeException Problem occurred trying to serialize object.
 	 */
-	protected abstract void doSerialize(SerializerPipe pipe, Object o) throws Exception;
+	protected abstract void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException;
 
 	/**
 	 * Shortcut method for serializing objects directly to either a <c>String</c> or <code><jk>byte</jk>[]</code>
@@ -624,6 +625,42 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 */
 	public String resolve(String string) {
 		return getVarResolver().resolve(string);
+	}
+
+	/**
+	 * Same as {@link #push(String, Object, ClassMeta)} but wraps {@link BeanRecursionException} inside {@link SerializeException}.
+	 *
+	 * @param attrName The attribute name.
+	 * @param o The current object being traversed.
+	 * @param eType The expected class type.
+	 * @return
+	 * 	The {@link ClassMeta} of the object so that <c>instanceof</c> operations only need to be performed
+	 * 	once (since they can be expensive).
+	 * @throws SerializeException If recursion occurred.
+	 */
+	protected final ClassMeta<?> push2(String attrName, Object o, ClassMeta<?> eType) throws SerializeException {
+		try {
+			return super.push(attrName, o, eType);
+		} catch (BeanRecursionException e) {
+			throw new SerializeException(e);
+		}
+	}
+
+	/**
+	 * Invokes the specified swap on the specified object.
+	 *
+	 * @param swap The swap to invoke.
+	 * @param o The input object.
+	 * @return The swapped object.
+	 * @throws SerializeException If swap method threw an exception.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected Object swap(PojoSwap swap, Object o) throws SerializeException {
+		try {
+			return swap.swap(this, o);
+		} catch (Exception e) {
+			throw new SerializeException(e);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

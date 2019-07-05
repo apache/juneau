@@ -26,93 +26,99 @@ import org.apache.juneau.json.SimpleJsonSerializer;
  */
 public class AtomJsonExample {
 
-    @SuppressWarnings("unused")
+	/**
+	 * JSON Atom feed example.
+	 *
+	 * @param args Unused.
+	 * @throws Exception Unused.
+	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception {
 
-        Feed feed = AtomFeed.GetAtomFeed();
+		Feed feed = AtomFeed.getAtomFeed();
 
-        // Get JSON serializer with readable output.
-        JsonSerializer s = SimpleJsonSerializer.DEFAULT_READABLE;
+		// Get JSON serializer with readable output.
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT_READABLE;
 
-        // Serialize to ATOM/JSON
-        //Produces
-        /**
-         * {
-         *  id: {
-         *      text: 'tag:juneau.apache.org'
-         *  },
-         *  links: [
-         *      {
-         *          href: 'http://juneau.apache.org/',
-         *          rel: 'alternate',
-         *          type: 'text/html',
-         *          hreflang: 'en'
-         *      },
-         *      {
-         *          href: 'http://juneau.apache.org/juneau.atom',
-         *          rel: 'self',
-         *          type: 'application/atom+xml'
-         *      }
-         *  ],
-         *  title: {
-         *      type: 'text',
-         *      text: 'Juneau ATOM specification'
-         *  },
-         *  updated: '2016-01-02T03:04:05Z',
-         *  generator: {
-         *      uri: 'http://juneau.apache.org/',
-         *      version: '1.0',
-         *      text: 'Juneau'
-         *  },
-         *  subtitle: {
-         *      type: 'html',
-         *      text: 'Describes <em>stuff</em> about Juneau'
-         *  },
-         *  entries: [
-         *      {
-         *          authors: [
-         *              {
-         *                  name: 'James Bognar',
-         *                  uri: 'http://juneau.apache.org/',
-         *                  email: 'jamesbognar@apache.org'
-         *              }
-         *          ],
-         *  contributors: [
-         *      {
-         *          name: 'Barry M. Caceres'
-         *      }
-         *  ],
-         *  id: {
-         *      text: 'tag:juneau.apache.org'
-         *  },
-         *  links: [
-         *      {
-         *          href: 'http://juneau.apache.org/juneau.atom',
-         *          rel: 'alternate',
-         *          type: 'text/html'
-         *      },
-         *      {
-         *          href: 'http://juneau.apache.org/audio/juneau_podcast.mp3',
-         *          rel: 'enclosure',
-         *          type: 'audio/mpeg',
-         *          length: 12345
-         *      }
-         *  ],
-         *  title: {
-         *      text: 'Juneau ATOM specification snapshot'
-         *  },
-         *  updated: '2016-01-02T03:04:05Z',
-         *  content: {
-         *      base: 'http://www.apache.org/',
-         *      lang: 'en',
-         *      type: 'xhtml',
-         *      text: '<div xmlns="http://www.w3.org/1999/xhtml"><p><i>[Update: Juneau supports ATOM.]</i></p></div>'
-         *  },
-         *  published: '2016-01-02T03:04:05Z'
-         *  }
-         *  ]
-         *  }
-         */
-        String atomJson = s.serialize(feed);
-    }
+		// Serialize to ATOM/JSON
+		//Produces
+		/**
+		 * {
+		 *  id: {
+		 *      text: 'tag:juneau.apache.org'
+		 *  },
+		 *  links: [
+		 *      {
+		 *          href: 'http://juneau.apache.org/',
+		 *          rel: 'alternate',
+		 *          type: 'text/html',
+		 *          hreflang: 'en'
+		 *      },
+		 *      {
+		 *          href: 'http://juneau.apache.org/juneau.atom',
+		 *          rel: 'self',
+		 *          type: 'application/atom+xml'
+		 *      }
+		 *  ],
+		 *  title: {
+		 *      type: 'text',
+		 *      text: 'Juneau ATOM specification'
+		 *  },
+		 *  updated: '2016-01-02T03:04:05Z',
+		 *  generator: {
+		 *      uri: 'http://juneau.apache.org/',
+		 *      version: '1.0',
+		 *      text: 'Juneau'
+		 *  },
+		 *  subtitle: {
+		 *      type: 'html',
+		 *      text: 'Describes <em>stuff</em> about Juneau'
+		 *  },
+		 *  entries: [
+		 *      {
+		 *          authors: [
+		 *              {
+		 *                  name: 'James Bognar',
+		 *                  uri: 'http://juneau.apache.org/',
+		 *                  email: 'jamesbognar@apache.org'
+		 *              }
+		 *          ],
+		 *  contributors: [
+		 *      {
+		 *          name: 'Barry M. Caceres'
+		 *      }
+		 *  ],
+		 *  id: {
+		 *      text: 'tag:juneau.apache.org'
+		 *  },
+		 *  links: [
+		 *      {
+		 *          href: 'http://juneau.apache.org/juneau.atom',
+		 *          rel: 'alternate',
+		 *          type: 'text/html'
+		 *      },
+		 *      {
+		 *          href: 'http://juneau.apache.org/audio/juneau_podcast.mp3',
+		 *          rel: 'enclosure',
+		 *          type: 'audio/mpeg',
+		 *          length: 12345
+		 *      }
+		 *  ],
+		 *  title: {
+		 *      text: 'Juneau ATOM specification snapshot'
+		 *  },
+		 *  updated: '2016-01-02T03:04:05Z',
+		 *  content: {
+		 *      base: 'http://www.apache.org/',
+		 *      lang: 'en',
+		 *      type: 'xhtml',
+		 *      text: '<div xmlns="http://www.w3.org/1999/xhtml"><p><i>[Update: Juneau supports ATOM.]</i></p></div>'
+		 *  },
+		 *  published: '2016-01-02T03:04:05Z'
+		 *  }
+		 *  ]
+		 *  }
+		 */
+		String atomJson = s.serialize(feed);
+	}
 }

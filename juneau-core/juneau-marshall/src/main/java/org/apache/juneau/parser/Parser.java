@@ -626,8 +626,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException {
@@ -666,8 +665,7 @@ public abstract class Parser extends BeanContext {
 	 * 	See {@link #parse(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T parse(Object input, Class<T> type) throws ParseException {
 		return createSession().parse(input, type);
@@ -686,8 +684,7 @@ public abstract class Parser extends BeanContext {
 	 * 	See {@link #parse(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException {
 		return createSession().parse(input, type);
@@ -728,7 +725,7 @@ public abstract class Parser extends BeanContext {
 	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.
 	 * @param valueType The class type of the values, or <jk>null</jk> to default to whatever is being parsed.
 	 * @return The same map that was passed in to allow this method to be chained.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
@@ -751,8 +748,7 @@ public abstract class Parser extends BeanContext {
 	 * @param c The collection being loaded.
 	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
 	 * @return The same collection that was passed in to allow this method to be chained.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
@@ -777,8 +773,7 @@ public abstract class Parser extends BeanContext {
 	 * @param input The input.  Subclasses can support different input types.
 	 * @param argTypes Specifies the type of objects to create for each entry in the array.
 	 * @return An array of parsed objects.
-	 * @throws ParseException
-	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @throws ParseException Malformed input encountered.
 	 */
 	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
 		if (argTypes == null || argTypes.length == 0)
@@ -898,7 +893,7 @@ public abstract class Parser extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@Override /* Context */
 	public ObjectMap toMap() {
 		return super.toMap()

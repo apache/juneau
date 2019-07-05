@@ -32,10 +32,9 @@ public class ShutdownResource extends BasicRestServlet {
 	 * [GET /] - Shutdown this resource.
 	 *
 	 * @return The string <js>"OK"</js>.
-	 * @throws Exception
 	 */
 	@RestMethod(name=GET, path="/", description="Show contents of config file.")
-	public String shutdown() throws Exception {
+	public String shutdown() {
 		new Thread(
 			new Runnable() {
 				@Override /* Runnable */
