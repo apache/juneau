@@ -928,11 +928,73 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Enables the following:
-	 * <ul>
-	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, Throwable)} is called.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		Request/response messages are automatically logged.
 	 * </ul>
 	 */
 	public static final String REST_debug = PREFIX + ".debug.b";
+
+	/**
+	 * Configuration property:  Debug mode HTTP header name.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.debugHeader.s"</js>
+	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>Default:</b>  empty string
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestResource#debugHeader()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#debugHeader(String)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Conditionally enables debug mode on requests when the specified HTTP header is present with a value of <js>"true"</js>.
+	 * <br>If not specified, debug mode is enabled on all requests.
+	 * <p>
+	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
+	 * expensive (since the request/response bodies have to be cached in memory).
+	 */
+	public static final String REST_debugHeader = PREFIX + ".debugHeader.s";
+
+	/**
+	 * Configuration property:  Debug mode URL parameter name.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.debugParam.s"</js>
+	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>Default:</b>  empty string
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestResource#debugParam()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#debugParam(String)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Conditionally enables debug mode on requests when the specified URL parameter is present with a value of <js>"true"</js>.
+	 * <br>If not specified, debug mode is enabled on all requests.
+	 * <p>
+	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
+	 * expensive (since the request/response bodies have to be cached in memory).
+	 */
+	public static final String REST_debugParam = PREFIX + ".debugParam.s";
 
 	/**
 	 * Configuration property:  Default character encoding.

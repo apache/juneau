@@ -17,8 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import javax.servlet.http.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.*;
@@ -1337,8 +1335,11 @@ public @interface RestResource {
 	 *
 	 * <p>
 	 * Enables the following:
-	 * <ul>
-	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, Throwable)} is called.
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		Request/response messages are automatically logged.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -1354,4 +1355,52 @@ public @interface RestResource {
 	 * </ul>
 	 */
 	String debug() default "";
+
+	/**
+	 * Debug mode HTTP header name.
+	 *
+	 * <p>
+	 * Conditionally enables debug mode on requests when the specified HTTP header is present with a value of <js>"true"</js>.
+	 * <br>If not specified, debug mode is enabled on all requests.
+	 * <p>
+	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
+	 * expensive (since the request/response bodies have to be cached in memory).
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_debugHeader}
+	 * </ul>
+	 */
+	String debugHeader() default "";
+
+	/**
+	 * Debug mode URL parameter name.
+	 *
+	 * <p>
+	 * Conditionally enables debug mode on requests when the specified URL parameter is present with a value of <js>"true"</js>.
+	 * <br>If not specified, debug mode is enabled on all requests.
+	 * <p>
+	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
+	 * expensive (since the request/response bodies have to be cached in memory).
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_debugParam}
+	 * </ul>
+	 */
+	String debugParam() default "";
 }

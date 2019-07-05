@@ -734,6 +734,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  Debug mode.
 	 *
+	 * Enables the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		Request/response messages are automatically logged.
+	 * </ul>
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_debug}
@@ -747,6 +755,50 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public RestContextBuilder debug(boolean value) {
 		super.debug(value);
 		return set(REST_debug, value);
+	}
+
+	/**
+	 * Configuration property:  Debug mode HTTP header name.
+	 *
+	 * <p>
+	 * Conditionally enables debug mode on requests when the specified HTTP header is present with a value of <js>"true"</js>.
+	 * <br>If not specified, debug mode is enabled on all requests.
+	 * <p>
+	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
+	 * expensive (since the request/response bodies have to be cached in memory).
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_debugHeader}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder debugHeader(String value) {
+		return set(REST_debugHeader, value);
+	}
+
+	/**
+	 * Configuration property:  Debug mode URL parameter name.
+	 *
+	 * <p>
+	 * Conditionally enables debug mode on requests when the specified URL parameter is present with a value of <js>"true"</js>.
+	 * <br>If not specified, debug mode is enabled on all requests.
+	 * <p>
+	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
+	 * expensive (since the request/response bodies have to be cached in memory).
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_debugParam}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder debugParam(String value) {
+		return set(REST_debugParam, value);
 	}
 
 	/**
