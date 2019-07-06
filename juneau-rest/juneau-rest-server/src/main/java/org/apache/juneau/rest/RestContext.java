@@ -3431,7 +3431,9 @@ public final class RestContext extends BeanContext {
 	private final String
 		clientVersionHeader,
 		uriAuthority,
-		uriContext;
+		uriContext,
+		debugHeader,
+		debugParam;
 	final String fullPath;
 	final UrlPathPattern pathPattern;
 
@@ -3583,6 +3585,8 @@ public final class RestContext extends BeanContext {
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces, false);
 			useStackTraceHashes = getBooleanProperty(REST_useStackTraceHashes, true);
 			debug = getBooleanProperty(REST_debug, super.isDebug());
+			debugHeader = getStringProperty(REST_debugHeader, null);
+			debugParam = getStringProperty(REST_debugParam, null);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
 
 			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], resourceResolver, this);
@@ -4647,6 +4651,34 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
+	 * Returns the debug mode HTTP header name.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_debugHeader}
+	 * </ul>
+	 *
+	 * @return The header name if specified or <jk>null</jk> if not.
+	 */
+	public String getDebugHeader() {
+		return debugHeader;
+	}
+
+	/**
+	 * Returns the debug mode URL parameter name.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_debugParam}
+	 * </ul>
+	 *
+	 * @return The parameter name if specified or <jk>null</jk> if not.
+	 */
+	public String getDebugParam() {
+		return debugParam;
+	}
+
+	/**
 	 * Returns the name of the client version header name used by this resource.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -4662,22 +4694,6 @@ public final class RestContext extends BeanContext {
 		return clientVersionHeader;
 	}
 
-//	/**
-//	 * Returns <jk>true</jk> if the specified <c>Method</c> GET parameter value can be used to override
-//	 * the method name in the HTTP header.
-//	 *
-//	 * <h5 class='section'>See Also:</h5>
-//	 * <ul>
-//	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
-//	 * </ul>
-//	 *
-//	 * @param m The method name, upper-cased.
-//	 * @return <jk>true</jk> if this resource allows the specified method to be overridden.
-//	 */
-//	public boolean allowMethodParam(String m) {
-//		return (isNotEmpty(m) && (allowedMethodParams.contains(m) || allowedMethodParams.contains("*")));
-//	}
-//
 	/**
 	 * Returns the HTTP-part parser associated with this resource.
 	 *

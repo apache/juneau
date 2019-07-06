@@ -65,7 +65,7 @@ public class AcceptCharsetTest {
 	// Validate various Accept-Charset variations.
 	//=================================================================================================================
 
-	@RestResource(defaultCharset="utf-8", debug="true")
+	@RestResource(defaultCharset="utf-8")
 	public static class B {
 
 		@RestMethod(name=PUT, parsers=TestParser.class, serializers=TestSerializer.class)

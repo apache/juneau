@@ -14,9 +14,6 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
-import org.apache.juneau.rest.util.FinishablePrintWriter;
-import org.apache.juneau.rest.util.FinishableServletOutputStream;
-
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -32,6 +29,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -60,6 +58,7 @@ import org.apache.juneau.serializer.*;
  */
 public final class RestResponse extends HttpServletResponseWrapper {
 
+	private HttpServletResponse inner;
 	private final RestRequest request;
 	private RestMethodContext restJavaMethod;
 	private Object output;                       // The POJO being sent to the output.
@@ -79,6 +78,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 */
 	RestResponse(RestContext context, RestRequest req, HttpServletResponse res) throws BadRequest {
 		super(res);
+		this.inner = res;
 		this.request = req;
 
 		for (Map.Entry<String,Object> e : context.getDefaultResponseHeaders().entrySet())
@@ -100,9 +100,12 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestMethodContext rjm, @SuppressWarnings("deprecation") RequestProperties properties) throws NotAcceptable {
+	final void init(RestMethodContext rjm, @SuppressWarnings("deprecation") RequestProperties properties) throws NotAcceptable, IOException {
 		this.restJavaMethod = rjm;
 		this.properties = properties;
+
+		if (request.isDebug())
+			inner = CachingHttpServletResponse.wrap(inner);
 
 		// Find acceptable charset
 		String h = request.getHeader("accept-charset");
@@ -424,7 +427,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	@Override /* ServletResponse */
 	public ServletOutputStream getOutputStream() throws IOException {
 		if (sos == null)
-			sos = super.getOutputStream();
+			sos = inner.getOutputStream();
 		return sos;
 	}
 
@@ -599,6 +602,15 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	@SuppressWarnings("unchecked")
 	public <T> T getOutput(Class<T> c) {
 		return (T)output;
+	}
+
+	/**
+	 * Returns the wrapped servlet request.
+	 *
+	 * @return The wrapped servlet request.
+	 */
+	protected HttpServletResponse getInner() {
+		return inner;
 	}
 
 	@Override /* ServletResponse */

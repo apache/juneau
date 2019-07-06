@@ -185,6 +185,84 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	public static final String RESTMETHOD_clientVersion = PREFIX + ".clientVersion.s";
 
 	/**
+	 * Configuration property:  Debug mode.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.debug.b"</js>
+	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#debug()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Enables the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		Request/response messages are automatically logged.
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_debug = PREFIX + ".debug.b";
+
+	/**
+	 * Configuration property:  Debug mode HTTP header name.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.debugHeader.s"</js>
+	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>Default:</b>  empty string
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#debugHeader()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Conditionally enables debug mode on requests when the specified HTTP header is present with a value of <js>"true"</js>.
+	 * <br>If not specified, debug mode is enabled on all requests.
+	 * <p>
+	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
+	 * expensive (since the request/response bodies have to be cached in memory).
+	 */
+	public static final String RESTMETHOD_debugHeader = PREFIX + ".debugHeader.s";
+
+	/**
+	 * Configuration property:  Debug mode URL parameter name.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.debugParam.s"</js>
+	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>Default:</b>  empty string
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#debugParam()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Conditionally enables debug mode on requests when the specified URL parameter is present with a value of <js>"true"</js>.
+	 * <br>If not specified, debug mode is enabled on all requests.
+	 * <p>
+	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
+	 * expensive (since the request/response bodies have to be cached in memory).
+	 */
+	public static final String RESTMETHOD_debugParam = PREFIX + ".debugParam.s";
+
+	/**
 	 * Configuration property:  Default form data.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -488,6 +566,11 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final Map<Class<?>,ResponsePartMeta> bodyPartMetas = new ConcurrentHashMap<>();
 	final ResponseBeanMeta responseMeta;
 
+	final boolean debug;
+	final String
+		debugHeader,
+		debugParam;
+
 	@SuppressWarnings("deprecation")
 	RestMethodContext(RestMethodContextBuilder b) throws ServletException {
 		super(b.getPropertyStore());
@@ -639,6 +722,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
 		this.supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
+
+		this.debug = getBooleanProperty(RESTMETHOD_debug, false);
+		this.debugHeader = getStringProperty(RESTMETHOD_debugHeader, null);
+		this.debugParam = getStringProperty(RESTMETHOD_debugParam, null);
 	}
 
 	ResponseBeanMeta getResponseBeanMeta(Object o) {
@@ -914,6 +1001,30 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	public JsonSchemaGenerator getJsonSchemaGenerator() {
 		return jsonSchemaGenerator;
+	}
+
+	/**
+	 * Returns whether debug is enabled on this method.
+	 *
+	 * @return <jk>true</jk> if debug is enabled on this method.
+	 */
+	@Override
+	protected boolean isDebug() {
+		return debug;
+	}
+
+	/**
+	 * @return The debug HTTP header name.
+	 */
+	protected String getDebugHeader() {
+		return debugHeader;
+	}
+
+	/**
+	 * @return The debug URL parameter name.
+	 */
+	protected String getDebugParam() {
+		return debugParam;
 	}
 
 	@Override /* Object */

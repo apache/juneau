@@ -121,4 +121,12 @@ public interface RestLogger {
 	 * @param e Exception indicating what error occurred.
 	 */
 	public void onError(HttpServletRequest req, HttpServletResponse res, RestException e);
+
+	/**
+	 * Called at the end of a servlet request to log the request.
+	 *
+	 * @param req The servlet request.
+	 * @param res The servlet response.
+	 */
+	public void log(HttpServletRequest req, HttpServletResponse res);
 }

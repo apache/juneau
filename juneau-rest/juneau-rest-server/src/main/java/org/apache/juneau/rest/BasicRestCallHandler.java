@@ -107,6 +107,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 		logger.log(FINE, "HTTP: {0} {1}", r1.getMethod(), r1.getRequestURI());
 		long startTime = System.currentTimeMillis();
 		RestRequest req = null;
+		RestResponse res = null;
 
 		try {
 			context.checkForInitException();
@@ -130,6 +131,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 					pathInfo = RestUtils.getPathInfoUndecoded(r1);  // Can't use r1.getPathInfo() because we don't want '%2F' resolved.
 					upi = new UrlPathInfo(pathInfo);
 				} else {
+					if (isDebug(req))
+						r1 = CachingHttpServletRequest.wrap(req);
 					r2.setStatus(SC_NOT_FOUND);
 					return;
 				}
@@ -148,6 +151,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 								.servletPath(r1.getServletPath() + uppm.getPrefix());
 							rc.getCallHandler().service(childRequest, r2);
 						} else {
+							if (isDebug(req))
+								r1 = CachingHttpServletRequest.wrap(req);
 							r2.setStatus(SC_NOT_FOUND);
 						}
 						return;
@@ -155,10 +160,16 @@ public class BasicRestCallHandler implements RestCallHandler {
 				}
 			}
 
+			if (isDebug(req)) {
+				r1 = CachingHttpServletRequest.wrap(r1);
+				r2 = CachingHttpServletResponse.wrap(r2);
+				r1.setAttribute("Debug", true);
+			}
+
 			context.startCall(r1, r2);
 
 			req = createRequest(r1);
-			RestResponse res = createResponse(req, r2);
+			res = createResponse(req, r2);
 			req.setResponse(res);
 			context.setRequest(req);
 			context.setResponse(res);
@@ -218,12 +229,18 @@ public class BasicRestCallHandler implements RestCallHandler {
 			res.flushBuffer();
 			req.close();
 
+			r1 = req.getInner();
+			r2 = res.getInner();
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
+			logger.log(r1, r2);
 
 		} catch (Throwable e) {
 			e = convertThrowable(e);
+			r1 = req.getInner();
+			r2 = res.getInner();
 			r1.setAttribute("Exception", e);
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
+			logger.log(r1, r2);
 			handleError(r1, r2, e);
 		} finally {
 			context.clearState();
@@ -232,6 +249,19 @@ public class BasicRestCallHandler implements RestCallHandler {
 		context.finishCall(r1, r2);
 
 		logger.log(FINE, "HTTP: [{0} {1}] finished in {2}ms", r1.getMethod(), r1.getRequestURI(), System.currentTimeMillis()-startTime);
+	}
+
+	private boolean isDebug(HttpServletRequest req) {
+		if (! context.isDebug())
+			return false;
+		String debugHeader = context.getDebugHeader(), debugParam = context.getDebugParam();
+		if (debugHeader == null && debugParam == null)
+			return true;
+		if (debugHeader != null && "true".equalsIgnoreCase(req.getHeader(debugHeader)))
+			return true;
+		if (debugParam != null && "true".equalsIgnoreCase(req.getParameter(debugParam)))
+			return true;
+		return false;
 	}
 
 	/**

@@ -228,6 +228,12 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 			psb.set(BEAN_debug, bool(a.debug()));
 		}
 
+		if (! a.debugHeader().isEmpty())
+			psb.set(REST_debugHeader, a.debugHeader());
+
+		if (! a.debugParam().isEmpty())
+			psb.set(REST_debugParam, a.debugParam());
+
 		psb.addTo(REST_mimeTypes, strings(a.mimeTypes()));
 
 		if (! a.rolesDeclared().isEmpty())

@@ -56,7 +56,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -91,6 +90,7 @@ import org.apache.juneau.utils.*;
 @SuppressWarnings({ "unchecked", "unused" })
 public final class RestRequest extends HttpServletRequestWrapper {
 
+	private HttpServletRequest inner;
 	private final RestContext context;
 	private RestMethodContext restJavaMethod;
 
@@ -99,7 +99,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private Method javaMethod;
 	@SuppressWarnings("deprecation")
 	private RequestProperties properties;
-	private final boolean debug;
 	private BeanSession beanSession;
 	private VarResolverSession varSession;
 	private final RequestQuery queryParams;
@@ -115,12 +114,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private SerializerSessionArgs serializerSessionArgs;
 	private ParserSessionArgs parserSessionArgs;
 	private RestResponse res;
+	private boolean debug;
 
 	/**
 	 * Constructor.
 	 */
 	RestRequest(RestContext context, HttpServletRequest req) throws ServletException {
 		super(req);
+		this.inner = req;
 		this.context = context;
 
 		try {
@@ -174,8 +175,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			if (! s.isEmpty())
 				headers.queryParams(queryParams, s);
 
-			debug = "true".equals(getQuery().getString("debug", "false")) || "true".equals(getHeaders().getString("Debug", "false"));
-
 			this.pathParams = new RequestPath(this);
 
 		} catch (RestException e) {
@@ -188,7 +187,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestMethodContext rjm, @SuppressWarnings("deprecation") RequestProperties properties) {
+	final void init(RestMethodContext rjm, @SuppressWarnings("deprecation") RequestProperties properties) throws IOException {
 		this.restJavaMethod = rjm;
 		this.javaMethod = rjm.method;
 		this.properties = properties;
@@ -209,6 +208,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.headers(headers)
 			.maxInput(rjm.maxInput);
 
+		if (isDebug(rjm)) {
+			inner = CachingHttpServletRequest.wrap(inner);
+			setAttribute("Debug", true);
+		}
+
+		debug = "true".equalsIgnoreCase((String)getAttribute("Debug"));
+
 		String stylesheet = getQuery().getString("stylesheet");
 		if (stylesheet != null)
 			getSession().setAttribute("stylesheet", stylesheet.replace(' ', '$'));  // Prevent SVL insertion.
@@ -216,13 +222,19 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (stylesheet != null)
 			properties.put(HTMLDOC_stylesheet, new String[]{stylesheet});
 
-		if (debug) {
-			String msg = ""
-				+ "\n=== HTTP Request (incoming) ===================================================="
-				+ toString()
-				+ "\n=== END ========================================================================";
-			context.getLogger().log(Level.WARNING, msg);
-		}
+	}
+
+	private boolean isDebug(RestMethodContext context) {
+		if (! context.isDebug())
+			return false;
+		String debugHeader = context.getDebugHeader(), debugParam = context.getDebugParam();
+		if (debugHeader == null && debugParam == null)
+			return true;
+		if (debugHeader != null && "true".equalsIgnoreCase(getHeader(debugHeader)))
+			return true;
+		if (debugParam != null && "true".equalsIgnoreCase(getParameter(debugParam)))
+			return true;
+		return false;
 	}
 
 	RestRequest setResponse(RestResponse res) {
@@ -838,7 +850,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	ServletInputStream getRawInputStream() throws IOException {
-		return super.getInputStream();
+		return inner.getInputStream();
 	}
 
 
@@ -1805,6 +1817,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return restJavaMethod == null ? context.getJsonSchemaGenerator() : restJavaMethod.getJsonSchemaGenerator();
 	}
 
+	/**
+	 * Returns the wrapped servlet request.
+	 *
+	 * @return The wrapped servlet request.
+	 */
+	protected HttpServletRequest getInner() {
+		return inner;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods

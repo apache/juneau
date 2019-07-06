@@ -204,6 +204,15 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		if (a.priority() != 0)
 			psb.set(RESTMETHOD_priority, a.priority());
 
+		if (! a.debug().isEmpty())
+			psb.set(RESTMETHOD_debug, a.debug());
+
+		if (! a.debugHeader().isEmpty())
+			psb.set(RESTMETHOD_debugHeader, a.debugHeader());
+
+		if (! a.debugParam().isEmpty())
+			psb.set(RESTMETHOD_debugParam, a.debugParam());
+
 		HtmlDoc hd = a.htmldoc();
 		new HtmlDocBuilder(psb).process(hd);
 		for (Class<? extends Widget> wc : hd.widgets()) {
