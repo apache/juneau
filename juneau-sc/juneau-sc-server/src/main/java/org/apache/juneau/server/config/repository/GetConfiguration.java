@@ -27,7 +27,7 @@ public class GetConfiguration implements Command, GetValue<Map<String, ConfigIte
 	private static final String EXT = ".cfg";
 	private static final String BAR = "/";
 
-	private Map<String, ConfigItem> configs = new HashMap<String, ConfigItem>();
+	private Map<String, ConfigItem> configs = new HashMap<>();
 
 	private String project;
 	private String branch;

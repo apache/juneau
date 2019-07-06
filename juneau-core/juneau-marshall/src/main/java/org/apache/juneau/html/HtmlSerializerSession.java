@@ -371,7 +371,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		return cr;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	private void serializeMap(XmlWriter out, Map m, ClassMeta<?> sType,
 			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws IOException, SerializeException {
 

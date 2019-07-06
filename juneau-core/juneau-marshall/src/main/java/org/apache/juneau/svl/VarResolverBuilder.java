@@ -36,7 +36,6 @@ public class VarResolverBuilder {
 	 *
 	 * @return A new var resolver.
 	 */
-	@SuppressWarnings("unchecked")
 	public VarResolver build() {
 		return new VarResolver(vars.toArray(new Class[vars.size()]), contextObjects);
 	}

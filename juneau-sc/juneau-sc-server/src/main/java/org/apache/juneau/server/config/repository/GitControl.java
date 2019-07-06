@@ -40,7 +40,7 @@ import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
-@SuppressWarnings("javadoc")
+@SuppressWarnings({"javadoc","unused"})
 public class GitControl {
 
 	private String localPath, remotePath;

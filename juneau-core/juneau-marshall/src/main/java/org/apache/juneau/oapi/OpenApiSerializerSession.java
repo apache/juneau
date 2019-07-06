@@ -219,7 +219,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	private Map toMap(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;

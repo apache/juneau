@@ -44,8 +44,8 @@ public class JsonParserEdgeCasesTest {
 			{ 8, "ix_string_invalid_surrogate", "5B 22 5C 75 64 38 30 30 61 62 63 22 5D"/*["bud800abc"]*/, null },
 			{ 9, "ix_string_inverted_surrogates_U+1D11E", "5B 22 5C 75 44 64 31 65 5C 75 44 38 33 34 22 5D"/*["buDd1ebuD834"]*/, null },
 			{ 10, "ix_string_lone_second_surrogate", "5B 22 5C 75 44 46 41 41 22 5D"/*["buDFAA"]*/, null },
-			{ 11, "ix_string_not_in_unicode_range", "5B 22 F4 BF BF BF 22 5D"/*["[fffd][fffd][fffd][fffd]"]*/, "I/O exception occurred.  exception=MalformedInputException" },
-			{ 12, "ix_string_truncated-utf-8", "5B 22 E0 FF 22 5D"/*["[fffd][fffd]"]*/, "I/O exception occurred.  exception=MalformedInputException" },
+			{ 11, "ix_string_not_in_unicode_range", "5B 22 F4 BF BF BF 22 5D"/*["[fffd][fffd][fffd][fffd]"]*/, null},
+			{ 12, "ix_string_truncated-utf-8", "5B 22 E0 FF 22 5D"/*["[fffd][fffd]"]*/, null },
 			{ 13, "ix_string_unicode_U+10FFFE_nonchar", "5B 22 5C 75 44 42 46 46 5C 75 44 46 46 45 22 5D"/*["buDBFFbuDFFE"]*/, null },
 			{ 14, "ix_string_unicode_U+1FFFE_nonchar", "5B 22 5C 75 44 38 33 46 5C 75 44 46 46 45 22 5D"/*["buD83FbuDFFE"]*/, null },
 			{ 15, "ix_string_unicode_U+FDD0_nonchar", "5B 22 5C 75 46 44 44 30 22 5D"/*["buFDD0"]*/, null },
@@ -222,15 +222,15 @@ public class JsonParserEdgeCasesTest {
 			{ 186, "nx_string_invalid-utf-8-in-escape", "5B 22 5C 75 E5 22 5D"/*["bu[fffd]"]*/, null },
 			{ 187, "nx_string_invalid_backslash_esc", "5B 22 5C 61 22 5D"/*["\a"]*/, "Invalid escape sequence" },
 			{ 188, "nx_string_invalid_unicode_escape", "5B 22 5C 75 71 71 71 71 22 5D"/*["buqqqq"]*/, "Invalid Unicode escape sequence in string" },
-			{ 189, "nx_string_invalid_utf-8", "5B 22 FF 22 5D"/*["[fffd]"]*/, "MalformedInputException" },
+			{ 189, "nx_string_invalid_utf-8", "5B 22 FF 22 5D"/*["[fffd]"]*/, null },
 			{ 190, "nx_string_invalid_utf8_after_escape", "5B 22 5C E5225D"/*["\[fffd]"]*/, null },
-			{ 191, "nx_string_iso_latin_1", "5B 22 E9 22 5D"/*["[fffd]"]*/, "MalformedInputException" },
+			{ 191, "nx_string_iso_latin_1", "5B 22 E9 22 5D"/*["[fffd]"]*/, null },
 			{ 192, "nx_string_leading_uescaped_thinspace", "5B 5C 75 30 30 32 30 22 61 73 64 22 5D"/*[bu0020"asd"]*/, "Unrecognized syntax" },
-			{ 193, "nx_string_lone_utf8_continuation_byte", "5B 22 81 22 5D"/*["[fffd]"]*/, "MalformedInputException" },
+			{ 193, "nx_string_lone_utf8_continuation_byte", "5B 22 81 22 5D"/*["[fffd]"]*/, null },
 			{ 194, "nx_string_no_quotes_with_bad_escape", "5B 5C 6E 5D"/*[\n]*/, "Unrecognized syntax" },
-			{ 195, "nx_string_overlong_sequence_2_bytes", "5B 22 C0 AF 22 5D"/*["[fffd][fffd]"]*/, "MalformedInputException" },
-			{ 196, "nx_string_overlong_sequence_6_bytes", "5B 22 FC 83 BF BF BF BF 22 5D"/*["[fffd][fffd][fffd][fffd][fffd][fffd]"]*/, "MalformedInputException" },
-			{ 197, "nx_string_overlong_sequence_6_bytes_null", "5B 22 FC 80 80 80 80 80 22 5D"/*["[fffd][fffd][fffd][fffd][fffd][fffd]"]*/, "MalformedInputException" },
+			{ 195, "nx_string_overlong_sequence_2_bytes", "5B 22 C0 AF 22 5D"/*["[fffd][fffd]"]*/, null },
+			{ 196, "nx_string_overlong_sequence_6_bytes", "5B 22 FC 83 BF BF BF BF 22 5D"/*["[fffd][fffd][fffd][fffd][fffd][fffd]"]*/, null },
+			{ 197, "nx_string_overlong_sequence_6_bytes_null", "5B 22 FC 80 80 80 80 80 22 5D"/*["[fffd][fffd][fffd][fffd][fffd][fffd]"]*/, null },
 			{ 198, "nx_string_start_escape_unclosed", "5B 22 5C"/*["\*/, null },
 			{ 199, "nx_string_unescaped_crtl_char", "5B 22 61 00 61 22 5D"/*["a[0]a"]*/, null },
 			{ 200, "nx_string_unescaped_newline", "5B 22 6E 65 77 0A 6C 69 6E 65 22 5D"/*["new[a]line"]*/, null },
@@ -387,6 +387,9 @@ public class JsonParserEdgeCasesTest {
 			} catch (ParseException e) {
 				if (errorText != null)
 					assertTrue("Got ParseException but didn't contain expected text '"+errorText+"'.  Test="+name+", Input=" + jsonReadable + ", Message=" + e.getRootCause().getMessage(), e.getRootCause().getMessage().contains(errorText));
+			} catch (IOException e) {
+				if (errorText != null)
+					assertTrue("Got ParseException but didn't contain expected text '"+errorText+"'.  Test="+name+", Input=" + jsonReadable + ", Message=" + e.getMessage(), e.getMessage().contains(errorText));
 			} catch (AssertionError e) {
 				throw e;
 			} catch (Throwable t) {
@@ -400,6 +403,9 @@ public class JsonParserEdgeCasesTest {
 			} catch (ParseException e) {
 				if (errorText != null)
 					assertTrue("Got ParseException but didn't contain expected text '"+errorText+"'.  Test="+name+", Input=" + jsonReadable + ", Message=" + e.getRootCause().getMessage(), e.getRootCause().getMessage().contains(errorText));
+			} catch (IOException e) {
+				if (errorText != null)
+					assertTrue("Got ParseException but didn't contain expected text '"+errorText+"'.  Test="+name+", Input=" + jsonReadable + ", Message=" + e.getMessage(), e.getMessage().contains(errorText));
 			} catch (Throwable t) {
 				fail("Expected ParseException.  Test="+name+", Input=" + jsonReadable + ", Exception=" + t.getClass().getName() + "," +t.getLocalizedMessage());
 			}

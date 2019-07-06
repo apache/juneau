@@ -14,7 +14,6 @@
 
 projects=( 
 "juneau-core/juneau-config"
-"juneau-core/juneau-core-utest"
 "juneau-core/juneau-dto"
 "juneau-core/juneau-marshall"
 "juneau-core/juneau-marshall-rdf"
@@ -23,22 +22,17 @@ projects=(
 "juneau-examples/juneau-examples-core"
 "juneau-examples/juneau-examples-rest"
 "juneau-examples/juneau-examples-rest-jetty"
-"juneau-examples/juneau-examples-rest-jetty-ftest"
 "juneau-examples/juneau-examples-rest-springboot"
 "juneau-microservice/juneau-microservice-core"
-"juneau-microservice/juneau-microservice-ftest"
 "juneau-microservice/juneau-microservice-jetty"
 "juneau-microservice/juneau-my-jetty-microservice"
 "juneau-microservice/juneau-my-springboot-microservice"
 "juneau-rest/juneau-rest-client"
-"juneau-rest/juneau-rest-client-utest"
 "juneau-rest/juneau-rest-mock"
-"juneau-rest/juneau-rest-mock-utest"
 "juneau-rest/juneau-rest-server"
 "juneau-rest/juneau-rest-server-jaxrs"
 "juneau-rest/juneau-rest-server-rdf"
 "juneau-rest/juneau-rest-server-springboot"
-"juneau-rest/juneau-rest-server-utest"
 "juneau-sc/juneau-sc-client"
 "juneau-sc/juneau-sc-server"
 )
@@ -46,8 +40,23 @@ projects=(
 for i in "${projects[@]}"
 do
 	echo Preferences applied to $i
-	cp eclipse-preferences/org.eclipse.jdt.core.prefs $i/.settings
-	cp eclipse-preferences/org.eclipse.jdt.ui.prefs $i/.settings
+	cp eclipse-preferences/source-prefs/org.eclipse.jdt.core.prefs $i/.settings
+	cp eclipse-preferences/source-prefs/org.eclipse.jdt.ui.prefs $i/.settings
 done
 
+projects=( 
+"juneau-core/juneau-core-utest"
+"juneau-examples/juneau-examples-rest-jetty-ftest"
+"juneau-microservice/juneau-microservice-ftest"
+"juneau-rest/juneau-rest-client-utest"
+"juneau-rest/juneau-rest-mock-utest"
+"juneau-rest/juneau-rest-server-utest"
+)
+
+for i in "${projects[@]}"
+do
+	echo Preferences applied to $i
+	cp eclipse-preferences/test-prefs/org.eclipse.jdt.core.prefs $i/.settings
+	cp eclipse-preferences/test-prefs/org.eclipse.jdt.ui.prefs $i/.settings
+done
 

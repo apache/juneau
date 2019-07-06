@@ -91,7 +91,11 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	@Override /* SerializerSession */
 	public final String serialize(Object o) throws SerializeException {
 		StringWriter w = new StringWriter();
-		serialize(o, w);
+		try {
+			serialize(o, w);
+		} catch (IOException e) {
+			throw new SerializeException(e); // Shouldn't happen.
+		}
 		return w.toString();
 	}
 

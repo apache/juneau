@@ -793,8 +793,9 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		<li>{@link File}
 	 * 	</ul>
 	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final void serialize(Object o, Object output) throws SerializeException {
+	public final void serialize(Object o, Object output) throws SerializeException, IOException {
 		createSession().serialize(o, output);
 	}
 

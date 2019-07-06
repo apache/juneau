@@ -169,6 +169,7 @@
 						<exclude>**/.project</exclude>
 						<exclude>**/.classpath</exclude>
 						<exclude>**/*.launch</exclude>
+						<exclude>**/*.prefs</exclude>
 
 						<!-- Overlay files -->
 						<exclude>**/*.2</exclude>

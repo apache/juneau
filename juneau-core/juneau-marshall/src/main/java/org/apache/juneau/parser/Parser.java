@@ -627,9 +627,31 @@ public abstract class Parser extends BeanContext {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public final <T> T parse(Object input, Type type, Type...args) throws ParseException {
+	public final <T> T parse(Object input, Type type, Type...args) throws ParseException, IOException {
+		return createSession().parse(input, type, args);
+	}
+
+	/**
+	 * Same as {@link #parse(Object, Type, Type...)} but since it's a {@link String} input doesn't throw an {@link IOException}.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public final <T> T parse(String input, Type type, Type...args) throws ParseException {
 		return createSession().parse(input, type, args);
 	}
 
@@ -666,8 +688,24 @@ public abstract class Parser extends BeanContext {
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final <T> T parse(Object input, Class<T> type) throws ParseException {
+	public final <T> T parse(Object input, Class<T> type) throws ParseException, IOException {
+		return createSession().parse(input, type);
+	}
+
+	/**
+	 * Same as {@link #parse(Object, Class)} but since it's a {@link String} input doesn't throw an {@link IOException}.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public final <T> T parse(String input, Class<T> type) throws ParseException {
 		return createSession().parse(input, type);
 	}
 
@@ -685,8 +723,24 @@ public abstract class Parser extends BeanContext {
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException {
+	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException, IOException {
+		return createSession().parse(input, type);
+	}
+
+	/**
+	 * Same as {@link #parse(Object, ClassMeta)} but since it's a {@link String} input doesn't throw an {@link IOException}.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public final <T> T parse(String input, ClassMeta<T> type) throws ParseException {
 		return createSession().parse(input, type);
 	}
 

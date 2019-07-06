@@ -285,7 +285,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	/*
 	 * For parsing output from HtmlDocSerializer, this skips over the head, title, and links.
 	 */
-	private HtmlTag skipToData(XmlReader r) throws IOException, ParseException, XMLStreamException {
+	private HtmlTag skipToData(XmlReader r) throws ParseException, XMLStreamException {
 		while (true) {
 			int event = r.next();
 			if (event == START_ELEMENT && "div".equals(r.getLocalName()) && "data".equals(r.getAttributeValue(null, "id"))) {
@@ -524,7 +524,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * Precondition:  Must be pointing before the event we want to parse.
 	 * Postcondition:  Pointing at the tag just parsed.
 	 */
-	private HtmlTag nextTag(XmlReader r, HtmlTag...expected) throws IOException, ParseException, XMLStreamException {
+	private HtmlTag nextTag(XmlReader r, HtmlTag...expected) throws ParseException, XMLStreamException {
 		int et = r.next();
 
 		while (et != START_ELEMENT && et != END_ELEMENT && et != END_DOCUMENT)
@@ -552,7 +552,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * @param r The stream being read from.
 	 * @throws XMLStreamException
 	 */
-	private void skipTag(XmlReader r) throws IOException, ParseException, XMLStreamException {
+	private void skipTag(XmlReader r) throws ParseException, XMLStreamException {
 		int et = r.getEventType();
 
 		if (et != START_ELEMENT)
@@ -580,7 +580,7 @@ public final class HtmlParserSession extends XmlParserSession {
 		}
 	}
 
-	private void skipTag(XmlReader r, HtmlTag...expected) throws IOException, ParseException, XMLStreamException {
+	private void skipTag(XmlReader r, HtmlTag...expected) throws ParseException, XMLStreamException {
 		HtmlTag tag = HtmlTag.forEvent(this, r);
 		if (tag.isOneOf(expected))
 			r.next();

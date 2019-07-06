@@ -119,8 +119,9 @@ public abstract class Marshall {
 	 * 		<li>{@link File}
 	 * 	</ul>
 	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public final void write(Object o, Object output) throws SerializeException {
+	public final void write(Object o, Object output) throws SerializeException, IOException {
 		s.createSession().serialize(o, output);
 	}
 
@@ -298,9 +299,51 @@ public abstract class Marshall {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public final <T> T read(Object input, Type type, Type...args) throws ParseException {
+	public final <T> T read(Object input, Type type, Type...args) throws ParseException, IOException {
+		return p.createSession().parse(input, type, args);
+	}
+
+	/**
+	 * Same as {@link #read(Object,Type,Type...)} but reads from a string and thus doesn't throw an <c>IOException</c>.
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param input
+	 * 	The input.
+	 * 	<br>Character-based parsers can handle the following input class types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link CharSequence}
+	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
+	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
+	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 		<li>{@link File} containing system encoded text (or charset defined by
+	 * 			{@link ReaderParser#RPARSER_fileCharset} property value).
+	 * 	</ul>
+	 * 	<br>Stream-based parsers can handle the following input class types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link InputStream}
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link File}
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser#ISPARSER_binaryFormat} setting.
+	 * 	</ul>
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 */
+	public final <T> T read(String input, Type type, Type...args) throws ParseException {
 		return p.createSession().parse(input, type, args);
 	}
 
@@ -337,8 +380,47 @@ public abstract class Marshall {
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public final <T> T read(Object input, Class<T> type) throws ParseException {
+	public final <T> T read(Object input, Class<T> type) throws ParseException, IOException {
+		return p.createSession().parse(input, type);
+	}
+
+	/**
+	 * Same as {@link #read(Object,Class)} but reads from a string and thus doesn't throw an <c>IOException</c>.
+	 *
+	 * <p>
+	 * This is the preferred parse method for simple types since you don't need to cast the results.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	Marshall m = Json.<jsf>DEFAULT</jsf>;
+	 *
+	 * 	<jc>// Parse into a string.</jc>
+	 * 	String s = m.read(json, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean.</jc>
+	 * 	MyBean b = m.read(json, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean array.</jc>
+	 * 	MyBean[] ba = m.read(json, MyBean[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of objects.</jc>
+	 * 	List l = m.read(json, LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of object keys/values.</jc>
+	 * 	Map m = m.read(json, TreeMap.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	See {@link #read(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public final <T> T read(String input, Class<T> type) throws ParseException {
 		return p.createSession().parse(input, type);
 	}
 }

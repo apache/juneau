@@ -209,11 +209,12 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * @param out Where to send the output from the serializer.
 	 * @param o The object to serialize.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final void serialize(Object o, Object out) throws SerializeException {
+	public final void serialize(Object o, Object out) throws SerializeException, IOException {
 		try (SerializerPipe pipe = createPipe(out)) {
 			doSerialize(pipe, o);
-		} catch (SerializeException e) {
+		} catch (SerializeException | IOException e) {
 			throw e;
 		} catch (StackOverflowError e) {
 			throw new SerializeException(this,

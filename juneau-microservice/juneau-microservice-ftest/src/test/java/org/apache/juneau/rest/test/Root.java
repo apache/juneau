@@ -33,7 +33,6 @@ import org.apache.juneau.rest.test.client.*;
 		ShutdownResource.class,
 	}
 )
-@SuppressWarnings("javadoc")
 public class Root extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 

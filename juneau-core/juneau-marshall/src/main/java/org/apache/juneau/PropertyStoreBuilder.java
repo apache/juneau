@@ -844,7 +844,6 @@ public class PropertyStoreBuilder {
 				add(e.getKey(), e.getValue());
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override /* MutableProperty */
 		synchronized void add(String arg, Object o) {
 			if (arg != null) {

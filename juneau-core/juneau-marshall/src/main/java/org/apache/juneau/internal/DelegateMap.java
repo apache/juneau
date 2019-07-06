@@ -33,7 +33,6 @@ public class DelegateMap<T extends Map> extends ObjectMap implements Delegate<T>
 	 * @param m The metadata object that created this delegate object.
 	 * @param session The current bean session.
 	 */
-	@SuppressWarnings("unchecked")
 	public DelegateMap(T m, BeanSession session) {
 		this.classMeta = session.getClassMetaForObject(m);
 		for (Map.Entry e : (Set<Map.Entry>)m.entrySet())

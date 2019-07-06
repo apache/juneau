@@ -25,7 +25,6 @@ import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 import org.junit.runners.*;
 
-@SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ClientFuturesTest {
 

@@ -54,6 +54,9 @@
 				<li class='jm'>{@link oaj.marshall.Marshall#err(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDERR.
 			</ul>
 		</ul>
+	<li>
+		Serializer and parser APIs now throw <c>IOExceptions</c> in addition to <c>SerializeException</c> and <c>ParseException</c> to make it
+		easier to determine if problems are stream based or syntax based.
 </ul>
 
 <h5 class='topic w800'>juneau-config</h5>

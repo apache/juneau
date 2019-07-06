@@ -35,7 +35,6 @@ import org.junit.runners.Suite.*;
 	RestClientTest.class,
 	ThirdPartyProxyTest.class,
 })
-@SuppressWarnings("javadoc")
 public class _TestSuite {
 
 	@BeforeClass

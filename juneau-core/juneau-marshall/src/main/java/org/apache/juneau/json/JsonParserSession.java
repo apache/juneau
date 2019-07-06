@@ -237,7 +237,7 @@ public final class JsonParserSession extends ReaderParserSession {
 		return parseNumber(r, parseNumberString(r), type);
 	}
 
-	private Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws IOException, ParseException {
+	private Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
 
 		// JSON has slightly different number rules from Java.
 		// Strict mode enforces these different rules, lax does not.

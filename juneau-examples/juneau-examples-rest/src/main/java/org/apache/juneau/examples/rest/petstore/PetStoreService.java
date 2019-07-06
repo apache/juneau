@@ -49,8 +49,9 @@ public class PetStoreService extends AbstractPersistenceService {
 	 * @param w Console output.
 	 * @return This object (for method chaining).
 	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException File could not be read from file system.
 	 */
-	public PetStoreService initDirect(PrintWriter w) throws ParseException {
+	public PetStoreService initDirect(PrintWriter w) throws ParseException, IOException {
 
 		EntityManager em = getEntityManager();
 		EntityTransaction et = em.getTransaction();

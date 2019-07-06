@@ -390,11 +390,57 @@ public abstract class ParserSession extends BeanSession {
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 * @throws IOException Thrown by the underlying stream.
 	 */
 	@SuppressWarnings("unchecked")
-	public final <T> T parse(Object input, Type type, Type...args) throws ParseException {
+	public final <T> T parse(Object input, Type type, Type...args) throws ParseException, IOException {
 		try (ParserPipe pipe = createPipe(input)) {
 			return (T)parseInner(pipe, getClassMeta(type, args));
+		}
+	}
+
+	/**
+	 * Same as {@link #parse(Object,Type,Type...)} but parses from a string and doesn't throw an {@link IOException}.
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param input
+	 * 	The input.
+	 * 	<br>Character-based parsers can handle the following input class types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link CharSequence}
+	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
+	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
+	 * 			{@link ReaderParser#RPARSER_streamCharset} property value).
+	 * 		<li>{@link File} containing system encoded text (or charset defined by
+	 * 			{@link ReaderParser#RPARSER_fileCharset} property value).
+	 * 	</ul>
+	 * 	<br>Stream-based parsers can handle the following input class types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link InputStream}
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link File}
+	 * 	</ul>
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 */
+	@SuppressWarnings("unchecked")
+	public final <T> T parse(String input, Type type, Type...args) throws ParseException {
+		try (ParserPipe pipe = createPipe(input)) {
+			return (T)parseInner(pipe, getClassMeta(type, args));
+		} catch (IOException e) {
+			throw new ParseException(e); // Shouldn't happen.
 		}
 	}
 
@@ -431,10 +477,53 @@ public abstract class ParserSession extends BeanSession {
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final <T> T parse(Object input, Class<T> type) throws ParseException {
+	public final <T> T parse(Object input, Class<T> type) throws ParseException, IOException {
 		try (ParserPipe pipe = createPipe(input)) {
 			return parseInner(pipe, getClassMeta(type));
+		}
+	}
+
+	/**
+	 * Same as {@link #parse(Object, Class)} but parses from a string and doesn't throw an {@link IOException}.
+	 *
+	 * <p>
+	 * This is the preferred parse method for simple types since you don't need to cast the results.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
+	 *
+	 * 	<jc>// Parse into a string.</jc>
+	 * 	String s = p.parse(json, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean.</jc>
+	 * 	MyBean b = p.parse(json, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean array.</jc>
+	 * 	MyBean[] ba = p.parse(json, MyBean[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of objects.</jc>
+	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of object keys/values.</jc>
+	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public final <T> T parse(String input, Class<T> type) throws ParseException {
+		try (ParserPipe pipe = createPipe(input)) {
+			return parseInner(pipe, getClassMeta(type));
+		} catch (IOException e) {
+			throw new ParseException(e); // Shouldn't happen.
 		}
 	}
 
@@ -452,10 +541,33 @@ public abstract class ParserSession extends BeanSession {
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException {
+	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException, IOException {
 		try (ParserPipe pipe = createPipe(input)) {
 			return parseInner(pipe, type);
+		}
+	}
+
+	/**
+	 * Same as {@link #parse(Object, ClassMeta)} except parses from a string and doesn't throw an {@link IOException}.
+	 *
+	 * <p>
+	 * This is mostly an internal method used by the framework.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public final <T> T parse(String input, ClassMeta<T> type) throws ParseException {
+		try (ParserPipe pipe = createPipe(input)) {
+			return parseInner(pipe, type);
+		} catch (IOException e) {
+			throw new ParseException(e); // Shouldn't happen.
 		}
 	}
 
@@ -471,19 +583,17 @@ public abstract class ParserSession extends BeanSession {
 	 * @param <T> The class type of the object to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by the underlying stream.
 	 */
-	private <T> T parseInner(ParserPipe pipe, ClassMeta<T> type) throws ParseException {
+	private <T> T parseInner(ParserPipe pipe, ClassMeta<T> type) throws ParseException, IOException {
 		if (type.isVoid())
 			return null;
 		try {
 			return doParse(pipe, type);
-		} catch (ParseException e) {
+		} catch (ParseException | IOException e) {
 			throw e;
 		} catch (StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
-		} catch (IOException e) {
-			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage());
 		} catch (Exception e) {
 			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.",
 				e.getClass().getSimpleName(), e.getLocalizedMessage());
