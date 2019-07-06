@@ -22,6 +22,7 @@ import org.apache.juneau.rest.annotation.RestResource;
 import org.apache.juneau.server.config.repository.GetConfiguration;
 
 @RestResource(path = "/configs/*")
+@SuppressWarnings("javadoc")
 public class LoadConfigResource extends RestServlet {
 
 	private static final long serialVersionUID = 8247663789227304097L;

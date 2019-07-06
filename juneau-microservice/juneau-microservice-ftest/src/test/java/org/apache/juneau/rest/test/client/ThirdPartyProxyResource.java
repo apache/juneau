@@ -41,7 +41,7 @@ import org.apache.juneau.utils.*;
 	path="/testThirdPartyProxy"
 )
 @SerializerConfig(addRootType="true",addBeanTypes="true")
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial","javadoc"})
 public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	public static FileWriter logFile;

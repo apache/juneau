@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.server.config.repository;
 
+@SuppressWarnings("javadoc")
 public interface GetValue<T> {
 	T get();
 }

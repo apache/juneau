@@ -22,6 +22,7 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * JUnit automated testcase resource.
  */
+@SuppressWarnings("javadoc")
 @RestResource(
 	path="/testRestClient"
 )

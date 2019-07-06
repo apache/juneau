@@ -30,6 +30,7 @@ import org.junit.*;
 /**
  * Tests client-side form posts.
  */
+@SuppressWarnings("javadoc")
 public class FormDataTest extends RestTestcase {
 
 	//=================================================================================================================

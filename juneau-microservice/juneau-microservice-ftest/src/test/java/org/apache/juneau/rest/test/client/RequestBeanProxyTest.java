@@ -39,6 +39,7 @@ import org.junit.*;
 import org.junit.runners.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@SuppressWarnings("javadoc")
 public class RequestBeanProxyTest {
 
 	//=================================================================================================================

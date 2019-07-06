@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.apache.juneau.config.Config;
 
+@SuppressWarnings("javadoc")
 public class GetConfiguration implements Command, GetValue<Map<String, ConfigItem>> {
 
 	private static final String APPLICATION = "APPLICATION";
