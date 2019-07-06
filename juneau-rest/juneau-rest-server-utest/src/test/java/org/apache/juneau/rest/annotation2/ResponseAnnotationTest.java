@@ -790,7 +790,6 @@ public class ResponseAnnotationTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@RestResource
-	@SuppressWarnings({"unused"})
 	public static class UA {
 
 		@Response(
@@ -901,7 +900,6 @@ public class ResponseAnnotationTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@RestResource
-	@SuppressWarnings({"unused"})
 	public static class UB {
 
 		@Response(schema=@Schema(" type:'number' "))
@@ -923,7 +921,6 @@ public class ResponseAnnotationTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@RestResource
-	@SuppressWarnings({"unused"})
 	public static class UC {
 
 		@Response(example={" {f1:'b'} "})

@@ -23,7 +23,7 @@ import org.junit.*;
 import org.junit.runners.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings({"javadoc","unused"})
+@SuppressWarnings({"javadoc"})
 public class RoleMatcherTest {
 
 	private void shouldMatch(RoleMatcher m, String...input) {

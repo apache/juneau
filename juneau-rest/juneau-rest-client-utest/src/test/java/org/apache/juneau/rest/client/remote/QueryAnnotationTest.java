@@ -36,7 +36,7 @@ import org.junit.runners.*;
 /**
  * Tests the @Query annotation.
  */
-@SuppressWarnings({"javadoc","resource"})
+@SuppressWarnings({"resource"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class QueryAnnotationTest {
 

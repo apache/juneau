@@ -36,7 +36,6 @@ import org.junit.runners.*;
 /**
  * Tests the @FormData annotation.
  */
-@SuppressWarnings({"javadoc","resource"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FormDataAnnotationTest {
 

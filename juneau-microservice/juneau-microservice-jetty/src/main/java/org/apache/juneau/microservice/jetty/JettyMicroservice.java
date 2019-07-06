@@ -132,19 +132,19 @@ public class JettyMicroservice extends Microservice {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Microservice */
-	public JettyMicroservice init() throws ParseException, IOException {
+	public synchronized JettyMicroservice init() throws ParseException, IOException {
 		super.init();
 		return this;
 	}
 
 	@Override /* Microservice */
-	public JettyMicroservice startConsole() throws Exception {
+	public synchronized JettyMicroservice startConsole() throws Exception {
 		super.startConsole();
 		return this;
 	}
 
 	@Override /* Microservice */
-	public JettyMicroservice stopConsole() throws Exception {
+	public synchronized JettyMicroservice stopConsole() throws Exception {
 		super.stopConsole();
 		return this;
 	}

@@ -35,7 +35,6 @@ import org.junit.runners.*;
 /**
  * Tests the @Body annotation.
  */
-@SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BodyAnnotationTest {
 
