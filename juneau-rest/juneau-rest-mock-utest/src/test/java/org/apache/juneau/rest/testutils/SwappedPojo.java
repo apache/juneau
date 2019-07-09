@@ -15,7 +15,6 @@ package org.apache.juneau.rest.testutils;
 import org.apache.juneau.annotation.*;
 
 @Swap(SwappedPojoSwap.class)
-@SuppressWarnings("javadoc")
 public class SwappedPojo {
 	public boolean wasUnswapped;
 }

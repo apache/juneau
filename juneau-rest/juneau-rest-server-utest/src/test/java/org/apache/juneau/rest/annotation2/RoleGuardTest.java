@@ -20,7 +20,7 @@ import org.junit.runners.*;
 /**
  * Tests the @RestResource(roleGuard) and @RestMethod(roleGuard) annotations.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RoleGuardTest {
 

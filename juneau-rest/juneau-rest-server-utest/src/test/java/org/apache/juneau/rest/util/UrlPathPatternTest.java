@@ -24,7 +24,7 @@ import org.junit.runners.*;
 /**
  * Validates the functionality of the UrlPathPattern class.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UrlPathPatternTest {
 

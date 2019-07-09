@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.testutils;
 
-@SuppressWarnings("javadoc")
 public class ABean {
 	public int a;
 	public String b;

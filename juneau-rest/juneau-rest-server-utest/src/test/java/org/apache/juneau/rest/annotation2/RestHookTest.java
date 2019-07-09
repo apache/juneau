@@ -36,7 +36,7 @@ import org.junit.runners.*;
 /**
  * Tests aspects of @RestHook.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestHookTest {
 

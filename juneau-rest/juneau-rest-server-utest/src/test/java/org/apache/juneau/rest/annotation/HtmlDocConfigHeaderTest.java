@@ -22,7 +22,7 @@ import org.junit.runners.*;
  * Tests related to @HtmlDoc(header) annotation.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings({"javadoc","serial"})
+@SuppressWarnings({"serial"})
 public class HtmlDocConfigHeaderTest {
 
 	//=================================================================================================================

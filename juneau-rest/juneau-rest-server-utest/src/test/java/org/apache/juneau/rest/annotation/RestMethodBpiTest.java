@@ -22,7 +22,6 @@ import org.junit.runners.*;
  * Tests that validate the behavior of @RestMethod(bpi/bpx).
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings("javadoc")
 public class RestMethodBpiTest {
 
 	//=================================================================================================================

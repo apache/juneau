@@ -29,7 +29,7 @@ import org.junit.runners.*;
 /**
  * Validates the handling of the Accept-Charset header.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AcceptCharsetTest {
 

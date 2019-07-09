@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.testutils;
 
 @org.apache.juneau.annotation.Bean(typeName="TypedBeanImpl", sort=true)
-@SuppressWarnings("javadoc")
 public class TypedBeanImpl implements TypedBean {
 	public int a;
 	public String b;

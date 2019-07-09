@@ -19,7 +19,6 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
-@SuppressWarnings("javadoc")
 public class SwappedPojoSwap extends PojoSwap<SwappedPojo,String> {
 	@Override
 	public String swap(BeanSession session, SwappedPojo c) throws SerializeException {

@@ -27,7 +27,7 @@ import org.junit.runners.*;
 /**
  * Test behavior involving Accept-Encoding header.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AcceptEncodingTest {
 

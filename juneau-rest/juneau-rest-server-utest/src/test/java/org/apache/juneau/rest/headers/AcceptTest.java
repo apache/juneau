@@ -28,7 +28,7 @@ import org.junit.runners.*;
 /**
  * Tests behavior related to the Accept header.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AcceptTest {
 

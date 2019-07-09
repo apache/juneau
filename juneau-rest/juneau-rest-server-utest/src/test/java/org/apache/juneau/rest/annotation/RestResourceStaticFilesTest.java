@@ -19,7 +19,7 @@ import org.junit.runners.*;
 /**
  * Tests that validate the behavior of @RestResource(staticFiles).
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestResourceStaticFilesTest {
 

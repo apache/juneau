@@ -29,7 +29,7 @@ import org.junit.runners.*;
 /**
  * Tests related bean context properties in REST resources.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BeanContextPropertiesTest  {
 

@@ -34,7 +34,7 @@ import org.junit.runners.*;
 /**
  * Tests the @Response annotation.
  */
-@SuppressWarnings({"javadoc","serial"})
+@SuppressWarnings({"serial"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ResponseAnnotationTest {
 

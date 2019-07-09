@@ -24,7 +24,7 @@ import org.junit.runners.*;
  * TODO - Remove in 9.0.  Replaced by HtmlDocConfigNavlinksTest.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings({"javadoc","serial","deprecation"})
+@SuppressWarnings({"serial","deprecation"})
 public class HtmlDocNavlinksTest {
 
 	//=================================================================================================================

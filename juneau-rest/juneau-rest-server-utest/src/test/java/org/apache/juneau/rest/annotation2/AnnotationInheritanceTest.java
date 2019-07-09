@@ -27,7 +27,6 @@ import org.junit.runners.*;
  * Tests inheritance of annotations from interfaces.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings("javadoc")
 public class AnnotationInheritanceTest {
 
 	//=================================================================================================================

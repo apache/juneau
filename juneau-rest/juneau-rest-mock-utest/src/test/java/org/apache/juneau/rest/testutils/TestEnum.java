@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.testutils;
 
-@SuppressWarnings("javadoc")
 public enum TestEnum {
 	ONE,TWO,THREE
 }

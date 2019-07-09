@@ -26,7 +26,7 @@ import org.junit.runners.*;
 /**
  * Tests the @Header annotation.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HeaderAnnotationTest {
 

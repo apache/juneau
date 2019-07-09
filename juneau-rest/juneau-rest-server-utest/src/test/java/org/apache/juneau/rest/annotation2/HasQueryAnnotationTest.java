@@ -25,7 +25,6 @@ import org.junit.runners.*;
  * Tests related to @HasQuery annotation.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings("javadoc")
 public class HasQueryAnnotationTest {
 
 	//=================================================================================================================

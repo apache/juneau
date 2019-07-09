@@ -24,7 +24,7 @@ import org.junit.runners.*;
 /**
  * Tests various aspects of URL path parts.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PathsTest {
 

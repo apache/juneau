@@ -17,7 +17,6 @@ import static org.apache.juneau.rest.testutils.Constants.*;
 import org.apache.juneau.annotation.*;
 
 @BeanIgnore
-@SuppressWarnings("javadoc")
 public class ImplicitSwappedPojo {
 	public boolean wasUnswapped;
 

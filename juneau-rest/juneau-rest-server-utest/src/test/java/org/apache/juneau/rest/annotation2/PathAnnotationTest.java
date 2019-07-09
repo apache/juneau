@@ -31,7 +31,7 @@ import org.junit.runners.*;
 /**
  * Tests related to @Path annotation.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PathAnnotationTest {
 

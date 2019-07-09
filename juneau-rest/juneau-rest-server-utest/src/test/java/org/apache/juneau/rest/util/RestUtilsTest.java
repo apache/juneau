@@ -26,7 +26,7 @@ import org.junit.runners.*;
 /**
  * Tests for the RestUtils class.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestUtilsTest {
 

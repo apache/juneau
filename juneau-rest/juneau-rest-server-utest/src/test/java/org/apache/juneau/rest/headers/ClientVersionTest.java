@@ -22,7 +22,7 @@ import org.junit.runners.*;
 /**
  * Tests the @RestResource(clientVersion) attribute.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ClientVersionTest {
 

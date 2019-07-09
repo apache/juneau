@@ -29,7 +29,7 @@ import org.junit.runners.*;
 /**
  * Tests that validate the behavior of @RestMethod(parsers).
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestResourceParsersTest {
 

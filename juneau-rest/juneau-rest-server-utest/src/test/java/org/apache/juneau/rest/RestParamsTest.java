@@ -34,7 +34,7 @@ import org.junit.runners.*;
 /**
  * Tests various aspects of parameters passed to methods annotated with @RestMethod.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestParamsTest {
 

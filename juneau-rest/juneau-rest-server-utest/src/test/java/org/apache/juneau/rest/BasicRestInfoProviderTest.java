@@ -43,7 +43,6 @@ import org.junit.runners.*;
 /**
  * Tests the {@link BasicRestInfoProvider} class.
  */
-@SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicRestInfoProviderTest {
 

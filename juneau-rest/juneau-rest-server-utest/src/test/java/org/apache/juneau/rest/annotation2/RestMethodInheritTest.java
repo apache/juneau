@@ -31,7 +31,7 @@ import org.junit.runners.*;
 /**
  * Tests that validate the behavior of @RestMethod(inherit).
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestMethodInheritTest {
 

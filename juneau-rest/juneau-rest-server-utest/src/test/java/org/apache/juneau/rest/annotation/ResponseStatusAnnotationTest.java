@@ -22,7 +22,6 @@ import org.junit.runners.*;
  * Tests related to @ResponseStatus annotation.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings("javadoc")
 public class ResponseStatusAnnotationTest {
 
 	//=================================================================================================================

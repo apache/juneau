@@ -29,7 +29,7 @@ import org.junit.runners.*;
 /**
  * Validates that the correct status codes are returned on REST requests.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StatusCodesTest {
 

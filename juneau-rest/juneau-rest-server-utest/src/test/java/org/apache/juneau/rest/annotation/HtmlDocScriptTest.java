@@ -23,7 +23,7 @@ import org.junit.runners.*;
  * TODO - Remove in 9.0.  Replaced by HtmlDocConfigScriptTest.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings({"javadoc","serial","deprecation"})
+@SuppressWarnings({"serial","deprecation"})
 public class HtmlDocScriptTest {
 
 	//=================================================================================================================

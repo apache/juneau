@@ -21,7 +21,7 @@ import org.junit.runners.*;
 /**
  * Tests the {@link MockServletRequest} class.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MockServletRequestTest {
 

@@ -22,7 +22,7 @@ import org.junit.runners.*;
  * Tests related to @HtmlDoc(nav) annotation.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings({"javadoc","serial"})
+@SuppressWarnings({"serial"})
 public class HtmlDocConfigNavTest {
 
 	//=================================================================================================================

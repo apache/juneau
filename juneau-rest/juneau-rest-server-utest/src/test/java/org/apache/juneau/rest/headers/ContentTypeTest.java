@@ -29,7 +29,7 @@ import org.junit.runners.*;
 /**
  * Tests behavior related to the Content-Type header
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ContentTypeTest {
 

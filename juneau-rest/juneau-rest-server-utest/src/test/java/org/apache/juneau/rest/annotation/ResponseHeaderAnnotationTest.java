@@ -26,7 +26,6 @@ import org.junit.runners.*;
  * Tests related to @ResponseHeader annotation.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings("javadoc")
 public class ResponseHeaderAnnotationTest {
 
 	//=================================================================================================================

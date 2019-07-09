@@ -23,7 +23,7 @@ import org.junit.runners.*;
 /**
  * Tests related to @PathREmainder annotation.
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PathRemainderAnnotationTest {
 

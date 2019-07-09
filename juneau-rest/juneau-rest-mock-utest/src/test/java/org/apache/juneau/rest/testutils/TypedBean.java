@@ -13,6 +13,5 @@
 package org.apache.juneau.rest.testutils;
 
 @org.apache.juneau.annotation.Bean(beanDictionary={TypedBeanImpl.class})
-@SuppressWarnings("javadoc")
 public interface TypedBean {
 }

@@ -24,7 +24,7 @@ import org.junit.runners.*;
 /**
  * Tests that validate the behavior of @RestMethod(serializers).
  */
-@SuppressWarnings({"javadoc"})
+@SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestResourceSerializersTest {
 
