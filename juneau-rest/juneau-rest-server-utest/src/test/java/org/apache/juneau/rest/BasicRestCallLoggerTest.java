@@ -345,6 +345,23 @@ public class BasicRestCallLoggerTest {
 	}
 
 	@Test
+	public void d01c_requestLength_none() {
+		RestCallLoggerConfig lc =
+			config()
+			.rules(
+				rule().codes("*").req(LONG).build()
+			)
+			.build();
+		TestLogger tc = new TestLogger();
+		BasicRestCallLogger cl = logger(tc).resetStackTraces();
+		MockServletRequest req = req();
+		MockServletResponse res = res(200);
+
+		cl.log(lc, req, res);
+		tc.check(INFO, "!*\tRequest length: 3 bytes\n*", false);
+	}
+
+	@Test
 	public void d02a_responseCode_on() {
 		RestCallLoggerConfig lc =
 			config()
@@ -413,6 +430,23 @@ public class BasicRestCallLoggerTest {
 	}
 
 	@Test
+	public void d03c_responseLength_nonef() {
+		RestCallLoggerConfig lc =
+			config()
+			.rules(
+				rule().codes("*").res(MEDIUM).build()
+			)
+			.build();
+		TestLogger tc = new TestLogger();
+		BasicRestCallLogger cl = logger(tc).resetStackTraces();
+		MockServletRequest req = req();
+		MockServletResponse res = res(200);
+
+		cl.log(lc, req, res);
+		tc.check(INFO, "!*\tResponse length: 3 bytes\n*", false);
+	}
+
+	@Test
 	public void d04a_execTime_on() {
 		RestCallLoggerConfig lc =
 			config()
@@ -440,6 +474,23 @@ public class BasicRestCallLoggerTest {
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().attribute("ExecTime", 123l);
+		MockServletResponse res = res(200);
+
+		cl.log(lc, req, res);
+		tc.check(INFO, "!*\tExec time: 123ms\n*", false);
+	}
+
+	@Test
+	public void d04c_execTime_none() {
+		RestCallLoggerConfig lc =
+			config()
+			.rules(
+				rule().codes("*").res(MEDIUM).build()
+			)
+			.build();
+		TestLogger tc = new TestLogger();
+		BasicRestCallLogger cl = logger(tc).resetStackTraces();
+		MockServletRequest req = req();
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
@@ -555,6 +606,24 @@ public class BasicRestCallLoggerTest {
 	}
 
 	@Test
+	public void d07c_requestBody_none() {
+		RestCallLoggerConfig lc =
+			config()
+			.rules(
+				rule().codes("*").req(LONG).build()
+			)
+			.build();
+		TestLogger tc = new TestLogger();
+		BasicRestCallLogger cl = logger(tc).resetStackTraces();
+		MockServletRequest req = req();
+		MockServletResponse res = res(200);
+
+		cl.log(lc, req, res);
+		tc.check(INFO, "!*---Request Body UTF-8---\nfoo\n*", false);
+		tc.check(INFO, "!*---Request Body Hex---\n66 6F 6F\n*", false);
+	}
+
+	@Test
 	public void d08a_responseBody_on() {
 		RestCallLoggerConfig lc =
 			config()
@@ -583,6 +652,24 @@ public class BasicRestCallLoggerTest {
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().attribute("ResponseBody", "foo".getBytes());
+		MockServletResponse res = res(200);
+
+		cl.log(lc, req, res);
+		tc.check(INFO, "!*---Response Body UTF-8---\nfoo\n*", false);
+		tc.check(INFO, "!*---Response Body Hex---\n66 6F 6F\n*", false);
+	}
+
+	@Test
+	public void d08c_responseBody_none() {
+		RestCallLoggerConfig lc =
+			config()
+			.rules(
+				rule().codes("*").res(LONG).build()
+			)
+			.build();
+		TestLogger tc = new TestLogger();
+		BasicRestCallLogger cl = logger(tc).resetStackTraces();
+		MockServletRequest req = req();
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
