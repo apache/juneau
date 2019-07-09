@@ -60,7 +60,6 @@ public class WidgetVar extends SimpleVar {
 		super(NAME);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) throws Exception {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
