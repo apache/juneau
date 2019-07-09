@@ -236,8 +236,10 @@ public class BasicRestCallHandler implements RestCallHandler {
 
 		} catch (Throwable e) {
 			e = convertThrowable(e);
-			r1 = req.getInner();
-			r2 = res.getInner();
+			if (req != null)
+				r1 = req.getInner();
+			if (res != null)
+				r2 = res.getInner();
 			r1.setAttribute("Exception", e);
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 			logger.log(r1, r2);

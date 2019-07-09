@@ -14,6 +14,9 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
+
+import java.util.*;
+
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
@@ -242,6 +245,9 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 		if (! a.roleGuard().isEmpty())
 			psb.addTo(REST_roleGuard, string(a.roleGuard()));
 
+		if (a.logRules().length != 0)
+			psb.set(REST_logRules, parseRules(a.logRules()));
+
 		HtmlDoc hd = a.htmldoc();
 		new HtmlDocBuilder(psb).process(hd);
 		for (Class<? extends Widget> wc : hd.widgets()) {
@@ -256,5 +262,21 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 		if (startsWith(value, '/'))
 			return value.substring(1);
 		return value;
+	}
+
+	private List<ObjectMap> parseRules(LogRule[] rules) {
+		List<ObjectMap> l = new ArrayList<>(rules.length);
+		for (LogRule r : rules) {
+			l.add(
+				new DefaultFilteringObjectMap()
+					.append("codes", string(r.codes()))
+					.append("exceptions", string(r.exceptions()))
+					.append("debugOnly", bool(r.debugOnly()))
+					.append("logLevel", string(r.logLevel()))
+					.append("req", string(r.req()))
+					.append("res", string(r.res()))
+			);
+		}
+		return l;
 	}
 }

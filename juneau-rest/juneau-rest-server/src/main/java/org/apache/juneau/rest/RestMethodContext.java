@@ -434,6 +434,32 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	public static final String RESTMETHOD_httpMethod = PREFIX + ".httpMethod.s";
 
 	/**
+	 * Configuration property:  Logging rules.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.logRules.lo"</js>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link RestCallLoggerRule}&gt;</c>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#logRules()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies rules on how to handle logging of HTTP requests/responses.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_logRules = PREFIX + ".logRules.lo";
+
+	/**
 	 * Configuration property:  Method-level matchers.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -560,6 +586,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final List<MediaType>
 		supportedAcceptTypes,
 		supportedContentTypes;
+	final RestCallLoggerConfig loggingConfig;
 
 	final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
 	final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();
@@ -726,6 +753,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.debug = getBooleanProperty(RESTMETHOD_debug, false);
 		this.debugHeader = getStringProperty(RESTMETHOD_debugHeader, null);
 		this.debugParam = getStringProperty(RESTMETHOD_debugParam, null);
+		this.loggingConfig = RestCallLoggerConfig.create().rules(getInstanceArrayProperty(REST_logRules, method, RestCallLoggerRule.class, new RestCallLoggerRule[0], rr, r, this)).parent(context.getLoggingConfig()).build();
 	}
 
 	ResponseBeanMeta getResponseBeanMeta(Object o) {

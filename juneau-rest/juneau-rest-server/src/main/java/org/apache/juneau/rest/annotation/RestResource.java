@@ -1403,4 +1403,51 @@ public @interface RestResource {
 	 * </ul>
 	 */
 	String debugParam() default "";
+
+	/**
+	 * Configuration property:  Logging rules.
+	 *
+	 * <p>
+	 * Specifies rules on how to handle logging of HTTP requests/responses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(
+	 * 		logRules={
+	 * 			<ja>@LogRule</ja>(codes=<js>"400-499"</js>, level=<js>"WARNING"</js>, req=<js>"SHORT"</js>, res=<js>"MEDIUM"</js>),
+	 * 			<ja>@LogRule</ja>(codes=<js>">=500"</js>, level=<js>"SEVERE"</js>, req=<js>"LONG"</js>, res=<js>"LONG"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.logRules(
+	 * 				LoggingRule.<jsm>create</jsm>().codes(<js>"400-499"</js>).level(<jsf>WARNING</jsf>).req(<jsf>SHORT</jsf>).res(<jsf>MEDIUM</jsf>).build(),
+	 * 				LoggingRule.<jsm>create</jsm>().codes(<js>">=500"</js>).level(<jsf>SEVERE</jsf>).req(<jsf>LONG</jsf>).res(<jsf>LONG</jsf>).build()
+	 * 			);
+	 *
+	 * 			<jc>// Same, but using property with JSON value.</jc>
+	 * 			builder.set(<jsf>REST_logRules</jsf>, <js>"[{codes:'400-499',level:'WARNING',...},...]"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_logRules}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * </ul>
+	 */
+	LogRule[] logRules() default {};
 }

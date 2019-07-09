@@ -39,7 +39,7 @@ import org.apache.juneau.utils.*;
 public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 
 	private String method = "GET";
-	private Map<String,String[]> queryData;
+	private Map<String,String[]> queryDataMap = new LinkedHashMap<>();
 	private Map<String,String[]> formDataMap;
 	private Map<String,String[]> headerMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 	private Map<String,Object> attributeMap = new LinkedHashMap<>();
@@ -223,7 +223,16 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 */
 	@Override /* MockHttpRequest */
 	public MockServletRequest uri(String uri) {
-		this.uri = emptyIfNull(uri);
+		uri = emptyIfNull(uri);
+		this.uri = uri;
+
+		if (uri.indexOf('?') != -1) {
+			String qs = uri.substring(uri.indexOf('?') + 1);
+			if (qs.indexOf('#') != -1)
+				qs = qs.substring(0, qs.indexOf('#'));
+			queryDataMap.putAll(RestUtils.parseQuery(qs));
+		}
+
 		return this;
 	}
 
@@ -675,21 +684,17 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 
 	@Override /* HttpServletRequest */
 	public Map<String,String[]> getParameterMap() {
-		if (queryData == null) {
-			try {
-				if ("POST".equalsIgnoreCase(method)) {
-					if (formDataMap != null)
-						queryData = formDataMap;
-					else
-						queryData = RestUtils.parseQuery(IOUtils.read(body));
-				} else {
-					queryData = RestUtils.parseQuery(getQueryString());
+		if ("POST".equalsIgnoreCase(method)) {
+			if (formDataMap == null) {
+				try {
+					formDataMap = RestUtils.parseQuery(IOUtils.read(body));
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				throw new RuntimeException(e);
 			}
+			return formDataMap;
 		}
-		return queryData;
+		return queryDataMap;
 	}
 
 	@Override /* HttpServletRequest */
@@ -897,11 +902,16 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	@Override /* HttpServletRequest */
 	public String getQueryString() {
 		if (queryString == null) {
-			queryString = "";
-			if (uri.indexOf('?') != -1) {
-				queryString = uri.substring(uri.indexOf('?') + 1);
-			if (queryString.indexOf('#') != -1)
-				queryString = queryString.substring(0, queryString.indexOf('#'));
+			if (queryDataMap.isEmpty())
+				queryString = "";
+			else {
+				StringBuilder sb = new StringBuilder();
+				for (Map.Entry<String,String[]> e : queryDataMap.entrySet())
+					if (e.getValue() == null)
+						sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(e.getKey()));
+					else for (String v : e.getValue())
+						sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(e.getKey())).append('=').append(urlEncode(v));
+				queryString = sb.toString();
 			}
 		}
 		return isEmpty(queryString) ? null : queryString;
@@ -1120,15 +1130,14 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest query(String key, Object value) {
-		if (queryData == null)
-			queryData = new LinkedHashMap<>();
 		String s = stringify(value);
-		String[] existing = queryData.get(key);
+		String[] existing = queryDataMap.get(key);
 		if (existing == null)
 			existing = new String[]{s};
 		else
 			existing = new AList<>().appendAll(Arrays.asList(existing)).append(s).toArray(new String[0]);
-		queryData.put(key, existing);
+		queryDataMap.put(key, existing);
+		queryString = null;
 		return this;
 	}
 
@@ -1435,8 +1444,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest debug() {
-		this.debug = true;
-		return this;
+		return debug(true);
 	}
 
 	/**
@@ -1450,6 +1458,33 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 */
 	public MockServletRequest debug(boolean value) {
 		this.debug = value;
+		header("X-Debug", value ? true : null);
+		return this;
+	}
+
+	/**
+	 * Enabled no-trace on this request.
+	 *
+	 * <p>
+	 * Prevents errors from being logged on the server side if no-trace per-request is enabled.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest noTrace() {
+		return noTrace(true);
+	}
+
+	/**
+	 * Enabled debug mode on this request.
+	 *
+	 * <p>
+	 * Prevents errors from being logged on the server side if no-trace per-request is enabled.
+	 *
+	 * @param value The enable flag value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest noTrace(boolean value) {
+		header("X-NoTrace", true);
 		return this;
 	}
 }

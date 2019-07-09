@@ -1156,6 +1156,30 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Configuration property:  Logging rules.
+	 *
+	 * <p>
+	 * Specifies rules on how to handle logging of HTTP requests/responses.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_logRules}
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder logRules(RestCallLoggerRule...value) {
+		return set(REST_logRules, value);
+	}
+
+	/**
 	 * Configuration property:  The maximum allowed input size (in bytes) on HTTP requests.
 	 *
 	 * <p>

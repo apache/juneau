@@ -213,6 +213,9 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		if (! a.debugParam().isEmpty())
 			psb.set(RESTMETHOD_debugParam, a.debugParam());
 
+		if (a.logRules().length != 0)
+			psb.set(RESTMETHOD_logRules, parseRules(a.logRules()));
+
 		HtmlDoc hd = a.htmldoc();
 		new HtmlDocBuilder(psb).process(hd);
 		for (Class<? extends Widget> wc : hd.widgets()) {
@@ -221,5 +224,21 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			psb.addTo(HTMLDOC_script, "$W{"+w.getName()+".script}");
 			psb.addTo(HTMLDOC_script, "$W{"+w.getName()+".style}");
 		}
+	}
+
+	private List<ObjectMap> parseRules(LogRule[] rules) {
+		List<ObjectMap> l = new ArrayList<>(rules.length);
+		for (LogRule r : rules) {
+			l.add(
+				new DefaultFilteringObjectMap()
+					.append("codes", string(r.codes()))
+					.append("exceptions", string(r.exceptions()))
+					.append("debugOnly", bool(r.debugOnly()))
+					.append("logLevel", string(r.logLevel()))
+					.append("req", string(r.req()))
+					.append("res", string(r.res()))
+			);
+		}
+		return l;
 	}
 }

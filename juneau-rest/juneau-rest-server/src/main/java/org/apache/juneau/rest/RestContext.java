@@ -26,7 +26,6 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
-import java.util.logging.*;
 
 import javax.activation.*;
 import javax.servlet.*;
@@ -1576,6 +1575,62 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_logger = PREFIX + ".logger.o";
+
+	/**
+	 * Configuration property:  Logging rules.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.logRules.lo"</js>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link RestCallLoggerRule}&gt;</c>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestResource#logRules()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#logRules(RestCallLoggerRule...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies rules on how to handle logging of HTTP requests/responses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(
+	 * 		logRules={
+	 * 			<ja>@LogRule</ja>(codes=<js>"400-499"</js>, level=<js>"WARNING"</js>, req=<js>"SHORT"</js>, res=<js>"MEDIUM"</js>),
+	 * 			<ja>@LogRule</ja>(codes=<js>">=500"</js>, level=<js>"SEVERE"</js>, req=<js>"LONG"</js>, res=<js>"LONG"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.logRules(
+	 * 				LoggingRule.<jsm>create</jsm>().codes(<js>"400-499"</js>).level(<jsf>WARNING</jsf>).req(<jsf>SHORT</jsf>).res(<jsf>MEDIUM</jsf>).build(),
+	 * 				LoggingRule.<jsm>create</jsm>().codes(<js>">=500"</js>).level(<jsf>SEVERE</jsf>).req(<jsf>LONG</jsf>).res(<jsf>LONG</jsf>).build()
+	 * 			);
+	 *
+	 * 			<jc>// Same, but using property with JSON value.</jc>
+	 * 			builder.set(<jsf>REST_logRules</jsf>, <js>"[{codes:'400-499',level:'WARNING',...},...]"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * </ul>
+	 */
+	public static final String REST_logRules = PREFIX + ".logRules.lo";
 
 	/**
 	 * Configuration property:  The maximum allowed input size (in bytes) on HTTP requests.
@@ -3465,6 +3520,7 @@ public final class RestContext extends BeanContext {
 	private final Map<String,RestMethodContext> callMethods;
 	private final Map<String,RestContext> childResources;
 	private final RestLogger logger;
+	private final RestCallLoggerConfig loggingConfig;
 	private final RestCallHandler callHandler;
 	private final RestInfoProvider infoProvider;
 	private final RestException initException;
@@ -3605,8 +3661,8 @@ public final class RestContext extends BeanContext {
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);
 
 			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, NoOpRestLogger.class, resourceResolver, this);
-			if (debug)
-				logger.setLevel(Level.FINE);
+
+			loggingConfig = RestCallLoggerConfig.create().rules(getInstanceArrayProperty(REST_logRules, resource, RestCallLoggerRule.class, new RestCallLoggerRule[0], resourceResolver, resource, this)).build();
 
 			properties = builder.properties;
 			serializers =
@@ -4371,6 +4427,22 @@ public final class RestContext extends BeanContext {
 	 */
 	public RestLogger getLogger() {
 		return logger;
+	}
+
+	/**
+	 * Returns the logger to use for this resource.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link #REST_logger}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The logger to use for this resource.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	RestCallLoggerConfig getLoggingConfig() {
+		return loggingConfig;
 	}
 
 	/**

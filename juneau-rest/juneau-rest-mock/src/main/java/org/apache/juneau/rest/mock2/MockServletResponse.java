@@ -97,9 +97,31 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 		this.characterEncoding = charset;
 	}
 
+	/**
+	 * Fluent setter for {@link #setCharacterEncoding(String)}.
+	 *
+	 * @param value The new property value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletResponse characterEncoding(String value) {
+		setCharacterEncoding(value);
+		return this;
+	}
+
 	@Override /* HttpServletResponse */
 	public void setContentLength(int len) {
 		this.contentLength = len;
+	}
+
+	/**
+	 * Fluent setter for {@link #setContentLength(int)}.
+	 *
+	 * @param value The new property value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletResponse contentLength(int value) {
+		setContentLength(value);
+		return this;
 	}
 
 	@Override /* HttpServletResponse */
@@ -112,9 +134,31 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 		setHeader("Content-Type", type);
 	}
 
+	/**
+	 * Fluent setter for {@link #setContentType(String)}.
+	 *
+	 * @param value The new property value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletResponse contentType(String value) {
+		setContentType(value);
+		return this;
+	}
+
 	@Override /* HttpServletResponse */
 	public void setBufferSize(int size) {
 		this.bufferSize = size;
+	}
+
+	/**
+	 * Fluent setter for {@link #bufferSize(int)}.
+	 *
+	 * @param value The new property value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletResponse bufferSize(int value) {
+		setBufferSize(value);
+		return this;
 	}
 
 	@Override /* HttpServletResponse */
@@ -142,6 +186,17 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	@Override /* HttpServletResponse */
 	public void setLocale(Locale loc) {
 		this.locale = loc;
+	}
+
+	/**
+	 * Fluent setter for {@link #setLocale(Locale)}.
+	 *
+	 * @param value The new property value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletResponse locale(Locale value) {
+		setLocale(value);
+		return this;
 	}
 
 	@Override /* HttpServletResponse */
@@ -215,6 +270,18 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 		headerMap.put(name, new String[] {value});
 	}
 
+	/**
+	 * Fluent setter for {@link #setHeader(String,String)}.
+	 *
+	 * @param name The header name.
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletResponse header(String name, String value) {
+		setHeader(name, value);
+		return this;
+	}
+
 	@Override /* HttpServletResponse */
 	public void setIntHeader(String name, int value) {
 		headerMap.put(name, new String[] {String.valueOf(value)});
@@ -228,6 +295,17 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	@Override /* HttpServletResponse */
 	public void setStatus(int sc) {
 		this.sc = sc;
+	}
+
+	/**
+	 * Fluent setter for {@link #setStatus(int)}.
+	 *
+	 * @param value The new property value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletResponse status(int value) {
+		setStatus(value);
+		return this;
 	}
 
 	@Override /* HttpServletResponse */

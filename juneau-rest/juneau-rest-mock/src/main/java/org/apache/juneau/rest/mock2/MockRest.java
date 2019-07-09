@@ -219,6 +219,17 @@ public class MockRest implements MockHttpConnection {
 		 */
 		public Builder debug() {
 			this.debug = true;
+			header("X-Debug", true);
+			return this;
+		}
+
+		/**
+		 * Enable no-trace mode.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder noTrace() {
+			header("X-NoTrace", true);
 			return this;
 		}
 

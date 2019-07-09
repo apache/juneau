@@ -1049,4 +1049,26 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	MethodSwagger swagger() default @MethodSwagger;
+
+	/**
+	 * Configuration property:  Logging rules.
+	 *
+	 * <p>
+	 * Specifies rules on how to handle logging of HTTP requests/responses.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_logRules}
+	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_logRules}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * </ul>
+	 */
+	LogRule[] logRules() default {};
 }
