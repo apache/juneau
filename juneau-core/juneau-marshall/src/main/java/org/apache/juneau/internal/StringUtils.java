@@ -2538,6 +2538,17 @@ public final class StringUtils {
 	 * @return A regular expression pattern.
 	 */
 	public static Pattern getMatchPattern(String s) {
+		return getMatchPattern(s, 0);
+	}
+
+	/**
+	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
+	 *
+	 * @param s The string to create a pattern from.
+	 * @param flags Regular expression flags.
+	 * @return A regular expression pattern.
+	 */
+	public static Pattern getMatchPattern(String s, int flags) {
 		if (s == null)
 			return null;
 		StringBuilder sb = new StringBuilder();
@@ -2546,11 +2557,13 @@ public final class StringUtils {
 			char c = s.charAt(i);
 			if (c == '*')
 				sb.append("\\E").append(".*").append("\\Q");
+			else if (c == '?')
+				sb.append("\\E").append(".").append("\\Q");
 			else
 				sb.append(c);
 		}
 		sb.append("\\E");
-		return Pattern.compile(sb.toString());
+		return Pattern.compile(sb.toString(), flags);
 	}
 
 	/**

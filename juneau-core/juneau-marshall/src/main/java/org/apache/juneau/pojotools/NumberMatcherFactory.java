@@ -45,6 +45,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 	 */
 	private static class NumberMatcher extends Matcher {
 		NumberRange[] numberRanges;
+		String pattern;
 		private static final AsciiSet
 			SNUM = AsciiSet.create("-0123456789."),
 			NUM = AsciiSet.create("0123456789."),
@@ -53,6 +54,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 		public NumberMatcher(String s) {
 
 			s = s.trim();
+			pattern = s;
 
 			List<NumberRange> l = new LinkedList<>();
 
@@ -240,6 +242,11 @@ public class NumberMatcherFactory extends MatcherFactory {
 				if (numberRanges[i].matches(n))
 					return true;
 			return false;
+		}
+
+		@Override /* Object */
+		public String toString() {
+			return pattern;
 		}
 	}
 

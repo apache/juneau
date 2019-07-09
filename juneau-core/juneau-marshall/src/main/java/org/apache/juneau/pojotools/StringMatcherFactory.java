@@ -45,6 +45,7 @@ public class StringMatcherFactory extends MatcherFactory {
 	 * A construct representing a single search pattern.
 	 */
 	private static class StringMatcher extends Matcher {
+		private String pattern;
 		private static final AsciiSet
 			META_CHARS = AsciiSet.create("*?'\""),
 			SQ_CHAR = AsciiSet.create("'"),
@@ -55,11 +56,12 @@ public class StringMatcherFactory extends MatcherFactory {
 
 		public StringMatcher(String searchPattern) {
 
+			this.pattern = searchPattern.trim();
 			List<Pattern> ors = new LinkedList<>();
 			List<Pattern> ands = new LinkedList<>();
 			List<Pattern> nots = new LinkedList<>();
 
-			for (String s : splitQuoted(searchPattern, true)) {
+			for (String s : splitQuoted(pattern, true)) {
 				char c0 = s.charAt(0), c9 = s.charAt(s.length()-1);
 
 				if (c0 == '/' && c9 == '/' && s.length() > 1) {
@@ -140,6 +142,11 @@ public class StringMatcherFactory extends MatcherFactory {
 				if (orPatterns[i].matcher(s).matches())
 					return true;
 			return orPatterns.length == 0;
+		}
+
+		@Override
+		public String toString() {
+			return pattern;
 		}
 	}
 }
