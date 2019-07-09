@@ -24,8 +24,8 @@ import javax.servlet.http.*;
  */
 public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 
-	private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	private final ServletOutputStream os;
+	final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	final ServletOutputStream os;
 
 	/**
 	 * Wraps the specified response inside a {@link CachingHttpServletResponse} if it isn't already.
