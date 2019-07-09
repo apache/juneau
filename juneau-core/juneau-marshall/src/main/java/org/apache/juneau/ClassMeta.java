@@ -35,6 +35,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.transforms.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -634,6 +635,10 @@ public final class ClassMeta<T> implements Type {
 				);
 			}
 
+			if (Enumeration.class.isAssignableFrom(c))
+				this.pojoSwaps.add(new EnumerationSwap());
+			else if (Iterator.class.isAssignableFrom(c))
+				this.pojoSwaps.add(new IteratorSwap());
 			if (pojoSwaps != null)
 				this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
 
