@@ -217,8 +217,9 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	public ObjectMap(Map<?,?> m) {
 		this();
-		for (Map.Entry<?,?> e : m.entrySet())
-			put(e.getKey().toString(), e.getValue());
+		if (m != null)
+			for (Map.Entry<?,?> e : m.entrySet())
+				put(e.getKey().toString(), e.getValue());
 	}
 
 	/**

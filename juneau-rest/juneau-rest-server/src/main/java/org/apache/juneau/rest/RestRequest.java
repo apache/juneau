@@ -18,6 +18,7 @@ import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
+import static org.apache.juneau.rest.Enablement.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -114,7 +115,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private SerializerSessionArgs serializerSessionArgs;
 	private ParserSessionArgs parserSessionArgs;
 	private RestResponse res;
-	private boolean debug;
 
 	/**
 	 * Constructor.
@@ -208,12 +208,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.headers(headers)
 			.maxInput(rjm.maxInput);
 
-		if (isDebug(rjm)) {
+		if (isDebug()) {
 			inner = CachingHttpServletRequest.wrap(inner);
 			setAttribute("Debug", true);
 		}
-
-		debug = "true".equalsIgnoreCase((String)getAttribute("Debug"));
 
 		String stylesheet = getQuery().getString("stylesheet");
 		if (stylesheet != null)
@@ -222,19 +220,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (stylesheet != null)
 			properties.put(HTMLDOC_stylesheet, new String[]{stylesheet});
 
-	}
-
-	private boolean isDebug(RestMethodContext context) {
-		if (! context.isDebug())
-			return false;
-		String debugHeader = context.getDebugHeader(), debugParam = context.getDebugParam();
-		if (debugHeader == null && debugParam == null)
-			return true;
-		if (debugHeader != null && "true".equalsIgnoreCase(getHeader(debugHeader)))
-			return true;
-		if (debugParam != null && "true".equalsIgnoreCase(getParameter(debugParam)))
-			return true;
-		return false;
 	}
 
 	RestRequest setResponse(RestResponse res) {
@@ -1357,7 +1342,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return <jk>true</jk> if debug mode is enabled.
 	 */
 	public boolean isDebug() {
-		return debug;
+		Boolean b = ObjectUtils.castOrNull(getAttribute("Debug"), Boolean.class);
+		if (b != null)
+			return b;
+		Enablement e = context.getDebug();
+		if (e == ALWAYS)
+			return true;
+		if (e == NEVER)
+			return false;
+		return "true".equalsIgnoreCase(getHeader("X-Debug"));
 	}
 
 	/**
@@ -1686,7 +1679,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				sb.append(body.asSpacedHex()).append("\n");
 			} catch (Exception e1) {
 				sb.append(e1.getLocalizedMessage());
-				context.getLogger().log(WARNING, e1, "Error occurred while trying to read debug input.");
 			}
 		}
 		return sb.toString();
@@ -1763,9 +1755,23 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return
 	 * 	The logger associated with the resource context.
 	 * 	<br>Never <jk>null</jk>.
+	 *
+	 * @deprecated Use standard logging APIs.
 	 */
-	public RestLogger getLogger() {
-		return context.getLogger();
+	@Deprecated
+	public RestCallLogger getLogger() {
+		return null;
+	}
+
+	/**
+	 * Returns the logging configuration defined on the Java method that this request is executing against.
+	 *
+	 * @return The logging configuration defined on the Java method that this request is executing against.
+	 */
+	public RestCallLoggerConfig getCallLoggerConfig() {
+		if (restJavaMethod != null)
+			return restJavaMethod.getCallLoggerConfig();
+		return RestCallLoggerConfig.DEFAULT;
 	}
 
 	void close() {

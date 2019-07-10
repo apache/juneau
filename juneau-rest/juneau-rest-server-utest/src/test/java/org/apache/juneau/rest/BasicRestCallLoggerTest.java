@@ -20,7 +20,6 @@ import java.util.logging.*;
 import java.util.regex.*;
 
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -71,6 +70,10 @@ public class BasicRestCallLoggerTest {
 		return RestCallLoggerConfig.create();
 	}
 
+	private RestCallLoggerConfig wrapped(RestCallLoggerConfig config) {
+		return RestCallLoggerConfig.create().parent(config).build();
+	}
+
 	private BasicRestCallLogger logger(Logger l) {
 		return new BasicRestCallLogger(null, l);
 	}
@@ -91,23 +94,26 @@ public class BasicRestCallLoggerTest {
 		return MockServletResponse.create().status(status);
 	}
 
-	private String[] strings(String...s) {
-		return s;
-	}
-
 	//------------------------------------------------------------------------------------------------------------------
 	// No logging
 	//------------------------------------------------------------------------------------------------------------------
 
+
 	@Test
-	public void a01_noRules() {
+	public void a01a_noRules() {
 		RestCallLoggerConfig lc = config().build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc);
+
 		MockServletRequest req = req();
 		MockServletResponse res = res();
 
 		cl.log(lc, req, res);
+		tc.check(null, null, false);
+
+		cl.log(lcw, req, res);
 		tc.check(null, null, false);
 	}
 
@@ -119,12 +125,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").level(OFF).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc);
 		MockServletRequest req = req();
 		MockServletResponse res = res();
 
 		cl.log(lc, req, res);
+		tc.check(null, null, false);
+
+		cl.log(lcw, req, res);
 		tc.check(null, null, false);
 	}
 
@@ -140,12 +151,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").req(SHORT).res(SHORT).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc);
 		MockServletRequest req = req().uri("/foo").query("bar", "baz");
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "[200] HTTP GET /foo", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "[200] HTTP GET /foo", false);
 	}
 
@@ -157,12 +173,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc);
 		MockServletRequest req = req().uri("/foo").query("bar", "baz");
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "[200] HTTP GET /foo", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "[200] HTTP GET /foo", false);
 	}
 
@@ -177,8 +198,10 @@ public class BasicRestCallLoggerTest {
 			.rules(
 				rule().codes("*").req(SHORT).res(SHORT).build()
 			)
-			.stackTraceHashing()
+			.useStackTraceHashing()
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
@@ -187,58 +210,76 @@ public class BasicRestCallLoggerTest {
 
 		cl.log(lc, req, res);
 		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
-
 		cl.log(lc, req, res);
+		tc.check(INFO, "[200,*.2] HTTP GET /foo", false);
+
+		cl.resetStackTraces();
+
+		cl.log(lcw, req, res);
+		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
+		cl.log(lcw, req, res);
 		tc.check(INFO, "[200,*.2] HTTP GET /foo", false);
 	}
 
 	@Test
-	public void c02_stackTraceHashing_on_explicit() {
+	public void c02_stackTraceHashing_true() {
 
-		for (String s : strings("true", "TRUE")) {
-			RestCallLoggerConfig lc =
-				config()
-				.rules(
-					rule().codes("*").req(SHORT).res(SHORT).build()
-				)
-				.stackTraceHashing(s)
-				.build();
-			TestLogger tc = new TestLogger();
-			BasicRestCallLogger cl = logger(tc).resetStackTraces();
-			Exception e = new StringIndexOutOfBoundsException();
-			MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
-			MockServletResponse res = res(200);
+		RestCallLoggerConfig lc =
+			config()
+			.rules(
+				rule().codes("*").req(SHORT).res(SHORT).build()
+			)
+			.useStackTraceHashing(true)
+			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
 
-			cl.log(lc, req, res);
-			tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
+		TestLogger tc = new TestLogger();
+		BasicRestCallLogger cl = logger(tc).resetStackTraces();
+		Exception e = new StringIndexOutOfBoundsException();
+		MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
+		MockServletResponse res = res(200);
 
-			cl.log(lc, req, res);
-			tc.check(INFO, "[200,*.2] HTTP GET /foo", false);
-		}
+		cl.log(lc, req, res);
+		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
+		cl.log(lc, req, res);
+		tc.check(INFO, "[200,*.2] HTTP GET /foo", false);
+
+		cl.resetStackTraces();
+
+		cl.log(lcw, req, res);
+		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
+		cl.log(lcw, req, res);
+		tc.check(INFO, "[200,*.2] HTTP GET /foo", false);
 	}
 
 	@Test
-	public void c03_stackTraceHashing_off() {
-		for (String s : strings("false", "FALSE", "foo", null)) {
-			RestCallLoggerConfig lc =
-				config()
-				.rules(
-					rule().codes("*").req(SHORT).res(SHORT).build()
-				)
-				.stackTraceHashing(s)
-				.build();
-			TestLogger tc = new TestLogger();
-			BasicRestCallLogger cl = logger(tc).resetStackTraces();
-			Exception e = new StringIndexOutOfBoundsException();
-			MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
-			MockServletResponse res = res(200);
+	public void c03_stackTraceHashing_false() {
+		RestCallLoggerConfig lc =
+			config()
+			.rules(
+				rule().codes("*").req(SHORT).res(SHORT).build()
+			)
+			.useStackTraceHashing(false)
+			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
 
-			cl.log(lc, req, res);
-			tc.check(INFO, "[200] HTTP GET /foo", true);
+		TestLogger tc = new TestLogger();
+		BasicRestCallLogger cl = logger(tc).resetStackTraces();
+		Exception e = new StringIndexOutOfBoundsException();
+		MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
+		MockServletResponse res = res(200);
 
-			cl.log(lc, req, res);
-			tc.check(INFO, "[200] HTTP GET /foo", true);
-		}
+		cl.log(lc, req, res);
+		tc.check(INFO, "[200] HTTP GET /foo", true);
+		cl.log(lc, req, res);
+		tc.check(INFO, "[200] HTTP GET /foo", true);
+
+		cl.resetStackTraces();
+
+		cl.log(lcw, req, res);
+		tc.check(INFO, "[200] HTTP GET /foo", true);
+		cl.log(lcw, req, res);
+		tc.check(INFO, "[200] HTTP GET /foo", true);
 	}
 
 	@Test
@@ -249,6 +290,8 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").req(SHORT).res(SHORT).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
@@ -257,20 +300,59 @@ public class BasicRestCallLoggerTest {
 
 		cl.log(lc, req, res);
 		tc.check(INFO, "[200] HTTP GET /foo", true);
-
 		cl.log(lc, req, res);
+		tc.check(INFO, "[200] HTTP GET /foo", true);
+
+		cl.resetStackTraces();
+
+		cl.log(lcw, req, res);
+		tc.check(INFO, "[200] HTTP GET /foo", true);
+		cl.log(lcw, req, res);
 		tc.check(INFO, "[200] HTTP GET /foo", true);
 	}
 
 	@Test
-	public void c05_stackTraceHashing_timeout_on() {
+	public void c05_stackTraceHashing_null() {
 		RestCallLoggerConfig lc =
 			config()
 			.rules(
 				rule().codes("*").req(SHORT).res(SHORT).build()
 			)
-			.stackTraceHashing("100000")
+			.useStackTraceHashing(null)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
+		TestLogger tc = new TestLogger();
+		BasicRestCallLogger cl = logger(tc).resetStackTraces();
+		Exception e = new StringIndexOutOfBoundsException();
+		MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
+		MockServletResponse res = res(200);
+
+		cl.log(lc, req, res);
+		tc.check(INFO, "[200] HTTP GET /foo", true);
+		cl.log(lc, req, res);
+		tc.check(INFO, "[200] HTTP GET /foo", true);
+
+		cl.resetStackTraces();
+
+		cl.log(lcw, req, res);
+		tc.check(INFO, "[200] HTTP GET /foo", true);
+		cl.log(lcw, req, res);
+		tc.check(INFO, "[200] HTTP GET /foo", true);
+	}
+
+	@Test
+	public void c06_stackTraceHashing_timeout_on() {
+		RestCallLoggerConfig lc =
+			config()
+			.rules(
+				rule().codes("*").req(SHORT).res(SHORT).build()
+			)
+			.useStackTraceHashing()
+			.stackTraceHashingTimeout(100000)
+			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
@@ -279,20 +361,29 @@ public class BasicRestCallLoggerTest {
 
 		cl.log(lc, req, res);
 		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
-
 		cl.log(lc, req, res);
+		tc.check(INFO, "[200,*.2] HTTP GET /foo", false);
+
+		cl.resetStackTraces();
+
+		cl.log(lcw, req, res);
+		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
+		cl.log(lcw, req, res);
 		tc.check(INFO, "[200,*.2] HTTP GET /foo", false);
 	}
 
 	@Test
-	public void c06_stackTraceHashing_timeout_off() {
+	public void c07_stackTraceHashing_timeout_off() {
 		RestCallLoggerConfig lc =
 			config()
 			.rules(
 				rule().codes("*").req(SHORT).res(SHORT).build()
 			)
-			.stackTraceHashing("-1")
+			.useStackTraceHashing()
+			.stackTraceHashingTimeout(-1)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
@@ -301,8 +392,14 @@ public class BasicRestCallLoggerTest {
 
 		cl.log(lc, req, res);
 		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
-
 		cl.log(lc, req, res);
+		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
+
+		cl.resetStackTraces();
+
+		cl.log(lcw, req, res);
+		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
+		cl.log(lcw, req, res);
 		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
 	}
 
@@ -318,12 +415,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").req(MEDIUM).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().attribute("RequestBody", "foo".getBytes());
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "*\tRequest length: 3 bytes\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "*\tRequest length: 3 bytes\n*", false);
 	}
 
@@ -335,12 +437,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").req(SHORT).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().attribute("RequestBody", "foo".getBytes());
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*\tRequest length: 3 bytes\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*\tRequest length: 3 bytes\n*", false);
 	}
 
@@ -352,12 +459,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").req(LONG).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req();
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*\tRequest length: 3 bytes\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*\tRequest length: 3 bytes\n*", false);
 	}
 
@@ -369,12 +481,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(MEDIUM).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req();
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "*\tResponse code: 200\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "*\tResponse code: 200\n*", false);
 	}
 
@@ -386,12 +503,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(SHORT).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req();
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*\tResponse code: 200\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*\tResponse code: 200\n*", false);
 	}
 
@@ -403,12 +525,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(MEDIUM).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().attribute("ResponseBody", "foo".getBytes());
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "*\tResponse length: 3 bytes\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "*\tResponse length: 3 bytes\n*", false);
 	}
 
@@ -420,12 +547,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(SHORT).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().attribute("ResponseBody", "foo".getBytes());
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*\tResponse length: 3 bytes\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*\tResponse length: 3 bytes\n*", false);
 	}
 
@@ -437,12 +569,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(MEDIUM).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req();
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*\tResponse length: 3 bytes\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*\tResponse length: 3 bytes\n*", false);
 	}
 
@@ -454,12 +591,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(MEDIUM).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().attribute("ExecTime", 123l);
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "*\tExec time: 123ms\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "*\tExec time: 123ms\n*", false);
 	}
 
@@ -471,12 +613,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(SHORT).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().attribute("ExecTime", 123l);
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*\tExec time: 123ms\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*\tExec time: 123ms\n*", false);
 	}
 
@@ -488,12 +635,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(MEDIUM).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req();
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*\tExec time: 123ms\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*\tExec time: 123ms\n*", false);
 	}
 
@@ -505,14 +657,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").req(MEDIUM).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().header("Foo", "bar");
 		MockServletResponse res = res(200);
 
-		SimpleJsonSerializer.DEFAULT.println(req.getHeaderNames());
-
 		cl.log(lc, req, res);
+		tc.check(INFO, "*---Request Headers---\n\tFoo: bar\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "*---Request Headers---\n\tFoo: bar\n*", false);
 	}
 
@@ -524,14 +679,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").req(SHORT).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().header("Foo", "bar");
 		MockServletResponse res = res(200);
 
-		SimpleJsonSerializer.DEFAULT.println(req.getHeaderNames());
-
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*---Request Headers---*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*---Request Headers---*", false);
 	}
 
@@ -543,12 +701,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(MEDIUM).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req();
 		MockServletResponse res = res(200).header("Foo", "bar");;
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "*---Response Headers---\n\tFoo: bar\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "*---Response Headers---\n\tFoo: bar\n*", false);
 	}
 
@@ -560,12 +723,17 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(SHORT).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req();
 		MockServletResponse res = res(200).header("Foo", "bar");;
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*---Response Headers---*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*---Response Headers---*", false);
 	}
 
@@ -577,12 +745,18 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").req(LONG).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().attribute("RequestBody", "foo".getBytes());
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "*---Request Body UTF-8---\nfoo\n*", false);
+		tc.check(INFO, "*---Request Body Hex---\n66 6F 6F\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "*---Request Body UTF-8---\nfoo\n*", false);
 		tc.check(INFO, "*---Request Body Hex---\n66 6F 6F\n*", false);
 	}
@@ -595,12 +769,18 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").req(MEDIUM).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().attribute("RequestBody", "foo".getBytes());
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*---Request Body UTF-8---\nfoo\n*", false);
+		tc.check(INFO, "!*---Request Body Hex---\n66 6F 6F\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*---Request Body UTF-8---\nfoo\n*", false);
 		tc.check(INFO, "!*---Request Body Hex---\n66 6F 6F\n*", false);
 	}
@@ -613,12 +793,18 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").req(LONG).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req();
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*---Request Body UTF-8---\nfoo\n*", false);
+		tc.check(INFO, "!*---Request Body Hex---\n66 6F 6F\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*---Request Body UTF-8---\nfoo\n*", false);
 		tc.check(INFO, "!*---Request Body Hex---\n66 6F 6F\n*", false);
 	}
@@ -631,12 +817,18 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(LONG).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().attribute("ResponseBody", "foo".getBytes());
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "*---Response Body UTF-8---\nfoo\n*", false);
+		tc.check(INFO, "*---Response Body Hex---\n66 6F 6F\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "*---Response Body UTF-8---\nfoo\n*", false);
 		tc.check(INFO, "*---Response Body Hex---\n66 6F 6F\n*", false);
 	}
@@ -649,12 +841,18 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(MEDIUM).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req().attribute("ResponseBody", "foo".getBytes());
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*---Response Body UTF-8---\nfoo\n*", false);
+		tc.check(INFO, "!*---Response Body Hex---\n66 6F 6F\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*---Response Body UTF-8---\nfoo\n*", false);
 		tc.check(INFO, "!*---Response Body Hex---\n66 6F 6F\n*", false);
 	}
@@ -667,12 +865,18 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").res(LONG).build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		MockServletRequest req = req();
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
+		tc.check(INFO, "!*---Response Body UTF-8---\nfoo\n*", false);
+		tc.check(INFO, "!*---Response Body Hex---\n66 6F 6F\n*", false);
+
+		cl.log(lcw, req, res);
 		tc.check(INFO, "!*---Response Body UTF-8---\nfoo\n*", false);
 		tc.check(INFO, "!*---Response Body Hex---\n66 6F 6F\n*", false);
 	}

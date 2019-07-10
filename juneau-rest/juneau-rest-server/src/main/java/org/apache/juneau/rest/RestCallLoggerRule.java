@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.RestCallLoggingDetail.*;
 
 import java.util.logging.*;
 
@@ -44,8 +45,8 @@ public class RestCallLoggerRule {
 		boolean v = b.verbose == null ? false : b.verbose;
 		this.debugOnly = b.debugOnly == null ? false : b.debugOnly;
 		this.level = b.level;
-		this.req = v ? RestCallLoggingDetail.LONG : b.req != null ? b.req : RestCallLoggingDetail.SHORT;
-		this.res = v ? RestCallLoggingDetail.LONG : b.res != null ? b.res : RestCallLoggingDetail.SHORT;
+		this.req = v ? LONG : b.req != null ? b.req : SHORT;
+		this.res = v ? LONG : b.res != null ? b.res : SHORT;
 	}
 
 	/**
@@ -253,17 +254,19 @@ public class RestCallLoggerRule {
 		return level;
 	}
 
+	private ObjectMap toMap() {
+		return new DefaultFilteringObjectMap()
+			.append("codes", codeMatcher)
+			.append("exceptions", exceptionMatcher)
+			.append("debugOnly", debugOnly)
+			.append("matchAll", matchAll)
+			.append("level", level)
+			.append("req", req == SHORT ? null : req)
+			.append("res", res == SHORT ? null : res);
+	}
+
 	@Override /* Object */
 	public String toString() {
-		return SimpleJsonSerializer.DEFAULT.toString(
-			new DefaultFilteringObjectMap()
-				.append("codes", codeMatcher)
-				.append("exceptions", exceptionMatcher)
-				.append("debugOnly", debugOnly)
-				.append("matchAll", matchAll)
-				.append("level", level)
-				.append("req", req)
-				.append("res", res)
-		);
+		return SimpleJsonSerializer.DEFAULT.toString(toMap());
 	}
 }

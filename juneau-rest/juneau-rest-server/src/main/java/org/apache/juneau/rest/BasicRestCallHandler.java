@@ -12,14 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.Enablement.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -44,7 +43,6 @@ import org.apache.juneau.rest.util.*;
 public class BasicRestCallHandler implements RestCallHandler {
 
 	private final RestContext context;
-	private final RestLogger logger;
 	private final Map<String,RestCallRouter> restCallRouters;
 
 	/**
@@ -54,7 +52,6 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 */
 	public BasicRestCallHandler(RestContext context) {
 		this.context = context;
-		this.logger = context.getLogger();
 		this.restCallRouters = context.getCallRouters();
 	}
 
@@ -104,10 +101,11 @@ public class BasicRestCallHandler implements RestCallHandler {
 	@Override /* RestCallHandler */
 	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
 
-		logger.log(FINE, "HTTP: {0} {1}", r1.getMethod(), r1.getRequestURI());
 		long startTime = System.currentTimeMillis();
 		RestRequest req = null;
 		RestResponse res = null;
+		RestCallLogger logger = context.getCallLogger();
+		RestCallLoggerConfig loggerConfig = context.getCallLoggerConfig();
 
 		try {
 			context.checkForInitException();
@@ -131,8 +129,10 @@ public class BasicRestCallHandler implements RestCallHandler {
 					pathInfo = RestUtils.getPathInfoUndecoded(r1);  // Can't use r1.getPathInfo() because we don't want '%2F' resolved.
 					upi = new UrlPathInfo(pathInfo);
 				} else {
-					if (isDebug(req))
+					if (isDebug(req)) {
 						r1 = CachingHttpServletRequest.wrap(req);
+						r1.setAttribute("Debug", true);
+					}
 					r2.setStatus(SC_NOT_FOUND);
 					return;
 				}
@@ -151,8 +151,10 @@ public class BasicRestCallHandler implements RestCallHandler {
 								.servletPath(r1.getServletPath() + uppm.getPrefix());
 							rc.getCallHandler().service(childRequest, r2);
 						} else {
-							if (isDebug(req))
+							if (isDebug(req)) {
 								r1 = CachingHttpServletRequest.wrap(req);
+								r1.setAttribute("Debug", true);
+							}
 							r2.setStatus(SC_NOT_FOUND);
 						}
 						return;
@@ -231,39 +233,36 @@ public class BasicRestCallHandler implements RestCallHandler {
 
 			r1 = req.getInner();
 			r2 = res.getInner();
+			loggerConfig = req.getCallLoggerConfig();
+
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
-			logger.log(r1, r2);
 
 		} catch (Throwable e) {
 			e = convertThrowable(e);
-			if (req != null)
+			if (req != null) {
 				r1 = req.getInner();
+				loggerConfig = req.getCallLoggerConfig();
+			}
 			if (res != null)
 				r2 = res.getInner();
 			r1.setAttribute("Exception", e);
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
-			logger.log(r1, r2);
 			handleError(r1, r2, e);
 		} finally {
 			context.clearState();
 		}
 
+		logger.log(loggerConfig, r1, r2);
 		context.finishCall(r1, r2);
-
-		logger.log(FINE, "HTTP: [{0} {1}] finished in {2}ms", r1.getMethod(), r1.getRequestURI(), System.currentTimeMillis()-startTime);
 	}
 
 	private boolean isDebug(HttpServletRequest req) {
-		if (! context.isDebug())
+		Enablement e = context.getDebug();
+		if (e == ALWAYS)
+			return true;
+		if (e == NEVER)
 			return false;
-		String debugHeader = context.getDebugHeader(), debugParam = context.getDebugParam();
-		if (debugHeader == null && debugParam == null)
-			return true;
-		if (debugHeader != null && "true".equalsIgnoreCase(req.getHeader(debugHeader)))
-			return true;
-		if (debugParam != null && "true".equalsIgnoreCase(req.getParameter(debugParam)))
-			return true;
-		return false;
+		return "true".equalsIgnoreCase(req.getHeader("X-Debug"));
 	}
 
 	/**
@@ -358,6 +357,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 * @throws IOException Can be thrown if a problem occurred trying to write to the output stream.
 	 */
 	@Override /* RestCallHandler */
+	@SuppressWarnings("deprecation")
 	public synchronized void handleError(HttpServletRequest req, HttpServletResponse res, Throwable e) throws IOException {
 
 		int occurrence = context == null ? 0 : context.getStackTraceOccurrence(e);
@@ -392,18 +392,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 			}
 
 		} catch (Exception e1) {
-			logger.onError(req, res, new RestException(e1, 0));
+			req.setAttribute("Exception", e1);
 		}
-
-		if (context.isDebug()) {
-			String qs = req.getQueryString();
-			String msg = '[' + Integer.toHexString(e.hashCode()) + '.' + e2.getStatus() + '.' + e2.getOccurrence() + "] HTTP " + req.getMethod() + " " + e2.getStatus() + " " + req.getRequestURI() + (qs == null ? "" : "?" + qs);
-			System.err.println(msg);  // NOT DEBUG
-			e.printStackTrace(System.err);
-			logger.log(Level.SEVERE, e, e.getLocalizedMessage());
-		}
-
-		logger.onError(req, res, e2);
 	}
 
 	/**

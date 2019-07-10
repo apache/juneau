@@ -189,9 +189,9 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestMethodContext.debug.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.debug.s"</js>
+	 * 	<li><b>Data type:</b>  {@link Enablement}
+	 * 	<li><b>Default:</b>  {@link Enablement#NEVER}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -205,62 +205,9 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * 	<li>
-	 * 		Request/response messages are automatically logged.
 	 * </ul>
 	 */
-	public static final String RESTMETHOD_debug = PREFIX + ".debug.b";
-
-	/**
-	 * Configuration property:  Debug mode HTTP header name.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestMethodContext.debugHeader.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>Default:</b>  empty string
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link RestMethod#debugHeader()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Conditionally enables debug mode on requests when the specified HTTP header is present with a value of <js>"true"</js>.
-	 * <br>If not specified, debug mode is enabled on all requests.
-	 * <p>
-	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
-	 * expensive (since the request/response bodies have to be cached in memory).
-	 */
-	public static final String RESTMETHOD_debugHeader = PREFIX + ".debugHeader.s";
-
-	/**
-	 * Configuration property:  Debug mode URL parameter name.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestMethodContext.debugParam.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>Default:</b>  empty string
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link RestMethod#debugParam()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Conditionally enables debug mode on requests when the specified URL parameter is present with a value of <js>"true"</js>.
-	 * <br>If not specified, debug mode is enabled on all requests.
-	 * <p>
-	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
-	 * expensive (since the request/response bodies have to be cached in memory).
-	 */
-	public static final String RESTMETHOD_debugParam = PREFIX + ".debugParam.s";
+	public static final String RESTMETHOD_debug = PREFIX + ".debug.s";
 
 	/**
 	 * Configuration property:  Default form data.
@@ -439,12 +386,12 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.logRules.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link RestCallLoggerRule}&gt;</c>
+	 * 	<li><b>Data type:</b>  <c>{@link RestCallLoggerConfig}</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestMethod#logRules()}
+	 * 			<li class='ja'>{@link RestMethod#logging()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -457,7 +404,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
 	 * </ul>
 	 */
-	public static final String RESTMETHOD_logRules = PREFIX + ".logRules.lo";
+	public static final String RESTMETHOD_callLoggerConfig = PREFIX + ".callLoggerConfig.o";
 
 	/**
 	 * Configuration property:  Method-level matchers.
@@ -586,17 +533,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final List<MediaType>
 		supportedAcceptTypes,
 		supportedContentTypes;
-	final RestCallLoggerConfig loggingConfig;
+	final RestCallLoggerConfig callLoggerConfig;
 
 	final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
 	final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();
 	final Map<Class<?>,ResponsePartMeta> bodyPartMetas = new ConcurrentHashMap<>();
 	final ResponseBeanMeta responseMeta;
 
-	final boolean debug;
-	final String
-		debugHeader,
-		debugParam;
+	final Enablement debug;
 
 	@SuppressWarnings("deprecation")
 	RestMethodContext(RestMethodContextBuilder b) throws ServletException {
@@ -750,10 +694,15 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
 		this.supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 
-		this.debug = getBooleanProperty(RESTMETHOD_debug, false);
-		this.debugHeader = getStringProperty(RESTMETHOD_debugHeader, null);
-		this.debugParam = getStringProperty(RESTMETHOD_debugParam, null);
-		this.loggingConfig = RestCallLoggerConfig.create().rules(getInstanceArrayProperty(REST_logRules, method, RestCallLoggerRule.class, new RestCallLoggerRule[0], rr, r, this)).parent(context.getLoggingConfig()).build();
+		this.debug = getInstanceProperty(RESTMETHOD_debug, Enablement.class, context.getDebug());
+
+		Object clc = getProperty(RESTMETHOD_callLoggerConfig);
+		if (clc instanceof RestCallLoggerConfig)
+			this.callLoggerConfig = (RestCallLoggerConfig)clc;
+		else if (clc instanceof ObjectMap)
+			this.callLoggerConfig = RestCallLoggerConfig.create().parent(context.getCallLoggerConfig()).apply((ObjectMap)clc).build();
+		else
+			this.callLoggerConfig = context.getCallLoggerConfig();
 	}
 
 	ResponseBeanMeta getResponseBeanMeta(Object o) {
@@ -1036,23 +985,15 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * @return <jk>true</jk> if debug is enabled on this method.
 	 */
-	@Override
-	protected boolean isDebug() {
+	protected Enablement getDebug() {
 		return debug;
 	}
 
 	/**
-	 * @return The debug HTTP header name.
+	 * @return The REST call logger config for this method.
 	 */
-	protected String getDebugHeader() {
-		return debugHeader;
-	}
-
-	/**
-	 * @return The debug URL parameter name.
-	 */
-	protected String getDebugParam() {
-		return debugParam;
+	protected RestCallLoggerConfig getCallLoggerConfig() {
+		return callLoggerConfig;
 	}
 
 	@Override /* Object */

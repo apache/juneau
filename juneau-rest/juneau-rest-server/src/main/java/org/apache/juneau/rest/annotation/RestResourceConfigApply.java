@@ -15,7 +15,7 @@ package org.apache.juneau.rest.annotation;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
-import java.util.*;
+import java.util.logging.*;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
@@ -29,6 +29,8 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.AnnotationUtils;
+import org.apache.juneau.rest.annotation.Logging;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
@@ -193,6 +195,59 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 		if (a.logger() != RestLogger.Null.class)
 			psb.set(REST_logger, a.logger());
 
+		if (a.callLogger() != RestCallLogger.Null.class)
+			psb.set(REST_callLogger, a.callLogger());
+
+		if (! AnnotationUtils.empty(a.logging())) {
+			Logging al = a.logging();
+			ObjectMap m = new ObjectMap(psb.peek(ObjectMap.class, REST_callLoggerConfig));
+
+			if (! al.useStackTraceHashing().isEmpty())
+				m.append("useStackTraceHashing", bool(al.useStackTraceHashing()));
+
+			if (! al.stackTraceHashingTimeout().isEmpty())
+				m.append("stackTraceHashingTimeout", integer(al.stackTraceHashingTimeout(), "@Logging(stackTraceHashingTimeout)"));
+
+			if (! al.noTrace().isEmpty())
+				m.append("noTrace", enablement(al.noTrace()));
+
+			if (! al.level().isEmpty())
+				m.append("level", level(al.level(), "@Logging(level)"));
+
+			if (al.rules().length > 0) {
+				ObjectList ol = new ObjectList();
+				for (LoggingRule a2 : al.rules()) {
+					ObjectMap m2 = new ObjectMap();
+
+					if (! a2.codes().isEmpty())
+						m2.append("codes", string(a2.codes()));
+
+					if (! a2.exceptions().isEmpty())
+						m2.append("exceptions", string(a2.exceptions()));
+
+					if (! a2.debugOnly().isEmpty())
+						 m2.append("debugOnly", bool(a2.debugOnly()));
+
+					if (! a2.level().isEmpty())
+						m2.append("level", level(a2.level(), "@LoggingRule(level)"));
+
+					if (! a2.req().isEmpty())
+						m2.append("req", string(a2.req()));
+
+					if (! a2.res().isEmpty())
+						m2.append("res", string(a2.res()));
+
+					if (! a2.verbose().isEmpty())
+						m2.append("verbose", bool(a2.verbose()));
+
+					ol.add(m2);
+				}
+				m.put("rules", ol.appendAll(m.getObjectList("rules")));
+			}
+
+			psb.set(REST_callLoggerConfig, m);
+		}
+
 		if (a.callHandler() != RestCallHandler.Null.class)
 			psb.set(REST_callHandler, a.callHandler());
 
@@ -227,15 +282,8 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 			psb.set(REST_maxInput, string(a.maxInput()));
 
 		if (! a.debug().isEmpty()) {
-			psb.set(REST_debug, bool(a.debug()));
-			psb.set(BEAN_debug, bool(a.debug()));
+			psb.set(REST_debug, a.debug());
 		}
-
-		if (! a.debugHeader().isEmpty())
-			psb.set(REST_debugHeader, a.debugHeader());
-
-		if (! a.debugParam().isEmpty())
-			psb.set(REST_debugParam, a.debugParam());
 
 		psb.addTo(REST_mimeTypes, strings(a.mimeTypes()));
 
@@ -244,9 +292,6 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 
 		if (! a.roleGuard().isEmpty())
 			psb.addTo(REST_roleGuard, string(a.roleGuard()));
-
-		if (a.logRules().length != 0)
-			psb.set(REST_logRules, parseRules(a.logRules()));
 
 		HtmlDoc hd = a.htmldoc();
 		new HtmlDocBuilder(psb).process(hd);
@@ -264,19 +309,15 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 		return value;
 	}
 
-	private List<ObjectMap> parseRules(LogRule[] rules) {
-		List<ObjectMap> l = new ArrayList<>(rules.length);
-		for (LogRule r : rules) {
-			l.add(
-				new DefaultFilteringObjectMap()
-					.append("codes", string(r.codes()))
-					.append("exceptions", string(r.exceptions()))
-					.append("debugOnly", bool(r.debugOnly()))
-					.append("logLevel", string(r.logLevel()))
-					.append("req", string(r.req()))
-					.append("res", string(r.res()))
-			);
+	private Enablement enablement(String in) {
+		return Enablement.fromString(string(in));
+	}
+
+	private Level level(String in, String loc) {
+		try {
+			return Level.parse(string(in));
+		} catch (Exception e) {
+			throw new ConfigException("Invalid syntax for level on annotation @RestResource({1}): {2}", loc, in);
 		}
-		return l;
 	}
 }

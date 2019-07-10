@@ -22,6 +22,25 @@ public class DefaultFilteringObjectMap extends ObjectMap {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param m
+	 * 	The object map to copy from.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public DefaultFilteringObjectMap(ObjectMap m) {
+		super();
+		appendAll(m);
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public DefaultFilteringObjectMap() {
+		super();
+	}
+
 	@Override /* ObjectMap */
 	public ObjectMap append(String key, Object value) {
 		if (! shouldSkip(value))

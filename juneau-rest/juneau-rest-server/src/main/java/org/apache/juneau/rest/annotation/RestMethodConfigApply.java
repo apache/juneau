@@ -21,11 +21,13 @@ import static org.apache.juneau.rest.RestMethodContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import java.util.*;
+import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.AnnotationUtils;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.svl.*;
@@ -207,14 +209,55 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		if (! a.debug().isEmpty())
 			psb.set(RESTMETHOD_debug, a.debug());
 
-		if (! a.debugHeader().isEmpty())
-			psb.set(RESTMETHOD_debugHeader, a.debugHeader());
+		if (! AnnotationUtils.empty(a.logging())) {
+			Logging al = a.logging();
+			ObjectMap m = new ObjectMap(psb.peek(ObjectMap.class, RESTMETHOD_callLoggerConfig));
 
-		if (! a.debugParam().isEmpty())
-			psb.set(RESTMETHOD_debugParam, a.debugParam());
+			if (! al.useStackTraceHashing().isEmpty())
+				m.append("useStackTraceHashing", bool(al.useStackTraceHashing()));
 
-		if (a.logRules().length != 0)
-			psb.set(RESTMETHOD_logRules, parseRules(a.logRules()));
+			if (! al.stackTraceHashingTimeout().isEmpty())
+				m.append("stackTraceHashingTimeout", integer(al.stackTraceHashingTimeout(), "@Logging(stackTraceHashingTimeout)"));
+
+			if (! al.noTrace().isEmpty())
+				m.append("noTrace", enablement(al.noTrace()));
+
+			if (! al.level().isEmpty())
+				m.append("level", level(al.level(), "@Logging(level)"));
+
+			if (al.rules().length > 0) {
+				ObjectList ol = new ObjectList();
+				for (LoggingRule a2 : al.rules()) {
+					ObjectMap m2 = new ObjectMap();
+
+					if (! a2.codes().isEmpty())
+						m2.append("codes", string(a2.codes()));
+
+					if (! a2.exceptions().isEmpty())
+						m2.append("exceptions", string(a2.exceptions()));
+
+					if (! a2.debugOnly().isEmpty())
+						 m2.append("debugOnly", bool(a2.debugOnly()));
+
+					if (! a2.level().isEmpty())
+						m2.append("level", level(a2.level(), "@LoggingRule(level)"));
+
+					if (! a2.req().isEmpty())
+						m2.append("req", string(a2.req()));
+
+					if (! a2.res().isEmpty())
+						m2.append("res", string(a2.res()));
+
+					if (! a2.verbose().isEmpty())
+						m2.append("verbose", bool(a2.verbose()));
+
+					ol.add(m2);
+				}
+				m.put("rules", ol.appendAll(m.getObjectList("rules")));
+			}
+
+			psb.set(RESTMETHOD_callLoggerConfig, m);
+		}
 
 		HtmlDoc hd = a.htmldoc();
 		new HtmlDocBuilder(psb).process(hd);
@@ -226,19 +269,15 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		}
 	}
 
-	private List<ObjectMap> parseRules(LogRule[] rules) {
-		List<ObjectMap> l = new ArrayList<>(rules.length);
-		for (LogRule r : rules) {
-			l.add(
-				new DefaultFilteringObjectMap()
-					.append("codes", string(r.codes()))
-					.append("exceptions", string(r.exceptions()))
-					.append("debugOnly", bool(r.debugOnly()))
-					.append("logLevel", string(r.logLevel()))
-					.append("req", string(r.req()))
-					.append("res", string(r.res()))
-			);
+	private Enablement enablement(String in) {
+		return Enablement.fromString(string(in));
+	}
+
+	private Level level(String in, String loc) {
+		try {
+			return Level.parse(string(in));
+		} catch (Exception e) {
+			throw new ConfigException("Invalid syntax for level on annotation @RestMethod({1}): {2}", loc, in);
 		}
-		return l;
 	}
 }

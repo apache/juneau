@@ -105,6 +105,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Config config;
 	VarResolverBuilder varResolverBuilder;
 
+	@SuppressWarnings("deprecation")
 	RestContextBuilder(ServletConfig servletConfig, Class<?> resourceClass, RestContext parentContext) throws ServletException {
 		this.inner = servletConfig;
 		this.resourceClass = resourceClass;
@@ -570,6 +571,69 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Configuration property:  REST call logger.
+	 *
+	 * <p>
+	 * Specifies the logger to use for logging of HTTP requests and responses.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link BasicRestCallLogger}.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder callLogger(Class<? extends RestCallLogger> value) {
+		return set(REST_callLogger, value);
+	}
+
+	/**
+	 * Configuration property:  REST call logger.
+	 *
+	 * <p>
+	 * Specifies the logger to use for logging of HTTP requests and responses.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link BasicRestCallLogger}.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder callLogger(RestCallLogger value) {
+		return set(REST_callLogger, value);
+	}
+
+	/**
+	 * Configuration property:  REST call logging rules.
+	 *
+	 * <p>
+	 * Specifies rules on how to handle logging of HTTP requests/responses.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='jf'>{@link RestContext#REST_callLoggerConfig}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link RestCallLoggerConfig#DEFAULT}.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder callLoggerConfig(RestCallLoggerConfig value) {
+		return set(REST_callLoggerConfig, value);
+	}
+
+	/**
 	 * Configuration property:  Children.
 	 *
 	 * <p>
@@ -754,51 +818,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override
 	public RestContextBuilder debug(boolean value) {
 		super.debug(value);
+		return debug(Enablement.ALWAYS);
+	}
+
+	/**
+	 * Configuration property:  Debug mode.
+	 *
+	 * <p>
+	 * Enables the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder debug(Enablement value) {
 		return set(REST_debug, value);
-	}
-
-	/**
-	 * Configuration property:  Debug mode HTTP header name.
-	 *
-	 * <p>
-	 * Conditionally enables debug mode on requests when the specified HTTP header is present with a value of <js>"true"</js>.
-	 * <br>If not specified, debug mode is enabled on all requests.
-	 * <p>
-	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
-	 * expensive (since the request/response bodies have to be cached in memory).
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_debugHeader}
-	 * </ul>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder debugHeader(String value) {
-		return set(REST_debugHeader, value);
-	}
-
-	/**
-	 * Configuration property:  Debug mode URL parameter name.
-	 *
-	 * <p>
-	 * Conditionally enables debug mode on requests when the specified URL parameter is present with a value of <js>"true"</js>.
-	 * <br>If not specified, debug mode is enabled on all requests.
-	 * <p>
-	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
-	 * expensive (since the request/response bodies have to be cached in memory).
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_debugParam}
-	 * </ul>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder debugParam(String value) {
-		return set(REST_debugParam, value);
 	}
 
 	/**
@@ -1126,10 +1163,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestLogger}.
+	 * 	<br>The default is {@link BasicRestCallLogger}.
 	 * 	<br>Can be <jk>null</jk> to disable logging.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #callLogger(Class)}
 	 */
+	@Deprecated
 	public RestContextBuilder logger(Class<? extends RestLogger> value) {
 		return set(REST_logger, value);
 	}
@@ -1150,33 +1189,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<br>The default is {@link BasicRestLogger}.
 	 * 	<br>Can be <jk>null</jk> to disable logging.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #callLogger(RestCallLogger)}
 	 */
+	@Deprecated
 	public RestContextBuilder logger(RestLogger value) {
 		return set(REST_logger, value);
-	}
-
-	/**
-	 * Configuration property:  Logging rules.
-	 *
-	 * <p>
-	 * Specifies rules on how to handle logging of HTTP requests/responses.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_logRules}
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder logRules(RestCallLoggerRule...value) {
-		return set(REST_logRules, value);
 	}
 
 	/**
@@ -2323,7 +2340,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	The new value for this setting.
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #callLoggerConfig(RestCallLoggerConfig)}
 	 */
+	@Deprecated
 	public RestContextBuilder useStackTraceHashes(boolean value) {
 		return set(REST_useStackTraceHashes, value);
 	}
@@ -2573,6 +2592,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	@Override /* BeanContextBuilder */
 	public RestContextBuilder debug() {
+		debug(Enablement.ALWAYS);
 		super.debug();
 		return this;
 	}

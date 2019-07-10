@@ -24,6 +24,7 @@ import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
@@ -45,6 +46,7 @@ public abstract class RestServlet extends HttpServlet {
 	private volatile Exception initException;
 	private boolean isInitialized = false;  // Should not be volatile.
 	private volatile RestResourceResolver resourceResolver;
+	private JuneauLogger logger = JuneauLogger.getLogger(getClass());
 
 
 	@Override /* Servlet */
@@ -191,14 +193,12 @@ public abstract class RestServlet extends HttpServlet {
 
 	@Override /* GenericServlet */
 	public void log(String msg) {
-		if (context != null)
-			context.getLogger().log(INFO, msg);
+		logger.info(msg);
 	}
 
 	@Override /* GenericServlet */
 	public void log(String msg, Throwable cause) {
-		if (context != null)
-			context.getLogger().log(INFO, cause, msg);
+		logger.info(cause, msg);
 	}
 
 	/**
@@ -209,8 +209,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void log(Level level, String msg, Object...args) {
-		if (context != null)
-			context.getLogger().log(level, msg, args);
+		logger.log(level, msg, args);
 	}
 
 	/**
@@ -221,8 +220,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void logObjects(Level level, String msg, Object...args) {
-		if (context != null)
-			context.getLogger().logObjects(level, msg, args);
+		logger.logObjects(level, msg, args);
 	}
 
 	/**
@@ -234,14 +232,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void log(Level level, Throwable cause, String msg, Object...args) {
-		if (context != null)
-			context.getLogger().log(level, cause, msg, args);
-		else {
-			// If context failed to initialize, log to the console.
-			System.err.println(format(msg, args));
-			if (cause != null)
-				cause.printStackTrace();
-		}
+		logger.log(level, cause, msg, args);
 	}
 
 	/**

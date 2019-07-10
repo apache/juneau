@@ -520,6 +520,147 @@ public final class RestContext extends BeanContext {
 	public static final String REST_callHandler = PREFIX + ".callHandler.o";
 
 	/**
+	 * Configuration property:  REST call logger.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.callLogger.o"</js>
+	 * 	<li><b>Data type:</b>  <code>{@link RestCallLogger} | Class&lt;? <jk>extends</jk> {@link RestCallLogger}&gt;</code>
+	 * 	<li><b>Default:</b>  {@link BasicRestCallLogger}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestResource#callLogger()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#callLogger(Class)}
+	 * 			<li class='jm'>{@link RestContextBuilder#callLogger(RestCallLogger)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies the logger to use for logging of HTTP requests and responses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our customized logger.</jc>
+	 * 	<jk>public class</jk> MyLogger <jk>extends</jk> BasicRestCallLogger {
+	 *
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public void</jk> log(RestCallLoggerConfig config, HttpServletRequest req, HttpServletResponse res) {
+	 * 			<jc>// Handle logging ourselves.</jc>
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@RestResource</ja>(callLogger=MyLogger.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.callLogger(MyLogger.<jk>class</jk>);
+	 *
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.set(<jsf>REST_callLogger</jsf>, MyLogger.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.callLogger(MyLogger.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * </ul>
+	 */
+	public static final String REST_callLogger = PREFIX + ".callLogger.o";
+
+	/**
+	 * Configuration property:  REST call logging rules.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.callLoggerConfig.o"</js>
+	 * 	<li><b>Data type:</b>  <c>RestCallLoggerConfig</c>
+	 * 	<li><b>Default:</b>  {@link RestCallLoggerConfig#DEFAULT}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestResource#logging()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#callLoggerConfig(RestCallLoggerConfig)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies rules on how to handle logging of HTTP requests/responses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Registered via annotation.</jc>
+	 * 	<ja>@RestResource</ja>(
+	 * 		logging=<ja>@Logging</ja>(
+	 * 			level=<js>"INFO"</js>,
+	 * 			rules={
+	 * 				<ja>@LoggingRule</ja>(codes=<js>"400-499"</js>, level=<js>"WARNING"</js>, req=<js>"SHORT"</js>, res=<js>"MEDIUM"</js>),
+	 * 				<ja>@LoggingRule</ja>(codes=<js>">=500"</js>, level=<js>"SEVERE"</js>, req=<js>"LONG"</js>, res=<js>"LONG"</js>)
+	 * 			}
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder.callLoggerConfig(
+	 * 				RestCallLoggerConfig
+	 * 					.<jsm>create</jsm>()
+	 * 					.level(Level.<jsf>INFO</jsf>)
+	 * 					.rules(
+	 * 						RestCallLoggingRule
+	 * 							.<jsm>create</jsm>()
+	 * 							.codes(<js>"400-499"</js>)
+	 * 							.level(<jsf>WARNING</jsf>)
+	 * 							.req(<jsf>SHORT</jsf>)
+	 * 							.res(<jsf>MEDIUM</jsf>)
+	 * 							.build(),
+	 * 						RestCallLoggingRule
+	 * 							.<jsm>create</jsm>()
+	 * 							.codes(<js>">=500"</js>)
+	 * 							.level(<jsf>SEVERE</jsf>)
+	 * 							.req(<jsf>LONG</jsf>)
+	 * 							.res(<jsf>LONG</jsf>)
+	 * 							.build()
+	 * 					)
+	 * 					.build()
+	 * 			);
+	 *
+	 * 			<jc>// Same, but using property with JSON value.</jc>
+	 * 			builder.set(<jsf>REST_callLoggerConfig</jsf>, <js>"{level:'INFO',rules:[{codes:'400-499',level:'WARNING',...},...]}"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * </ul>
+	 */
+	public static final String REST_callLoggerConfig = PREFIX + ".callLoggerConfig.o";
+
+	/**
 	 * Configuration property:  Children.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -910,9 +1051,9 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.debug.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Name:</b>  <js>"RestContext.debug.s"</js>
+	 * 	<li><b>Data type:</b>  {@link Enablement}
+	 * 	<li><b>Default:</b>  {@link Enablement#NEVER}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -930,70 +1071,9 @@ public final class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * 	<li>
-	 * 		Request/response messages are automatically logged.
 	 * </ul>
 	 */
-	public static final String REST_debug = PREFIX + ".debug.b";
-
-	/**
-	 * Configuration property:  Debug mode HTTP header name.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.debugHeader.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>Default:</b>  empty string
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#debugHeader()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#debugHeader(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Conditionally enables debug mode on requests when the specified HTTP header is present with a value of <js>"true"</js>.
-	 * <br>If not specified, debug mode is enabled on all requests.
-	 * <p>
-	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
-	 * expensive (since the request/response bodies have to be cached in memory).
-	 */
-	public static final String REST_debugHeader = PREFIX + ".debugHeader.s";
-
-	/**
-	 * Configuration property:  Debug mode URL parameter name.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.debugParam.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>Default:</b>  empty string
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#debugParam()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#debugParam(String)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Conditionally enables debug mode on requests when the specified URL parameter is present with a value of <js>"true"</js>.
-	 * <br>If not specified, debug mode is enabled on all requests.
-	 * <p>
-	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
-	 * expensive (since the request/response bodies have to be cached in memory).
-	 */
-	public static final String REST_debugParam = PREFIX + ".debugParam.s";
+	public static final String REST_debug = PREFIX + ".debug.s";
 
 	/**
 	 * Configuration property:  Default character encoding.
@@ -1573,64 +1653,10 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
 	 * </ul>
+	 * @deprecated Use {@link #REST_callLogger}
 	 */
+	@Deprecated
 	public static final String REST_logger = PREFIX + ".logger.o";
-
-	/**
-	 * Configuration property:  Logging rules.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.logRules.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link RestCallLoggerRule}&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#logRules()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#logRules(RestCallLoggerRule...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies rules on how to handle logging of HTTP requests/responses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(
-	 * 		logRules={
-	 * 			<ja>@LogRule</ja>(codes=<js>"400-499"</js>, level=<js>"WARNING"</js>, req=<js>"SHORT"</js>, res=<js>"MEDIUM"</js>),
-	 * 			<ja>@LogRule</ja>(codes=<js>">=500"</js>, level=<js>"SEVERE"</js>, req=<js>"LONG"</js>, res=<js>"LONG"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.logRules(
-	 * 				LoggingRule.<jsm>create</jsm>().codes(<js>"400-499"</js>).level(<jsf>WARNING</jsf>).req(<jsf>SHORT</jsf>).res(<jsf>MEDIUM</jsf>).build(),
-	 * 				LoggingRule.<jsm>create</jsm>().codes(<js>">=500"</js>).level(<jsf>SEVERE</jsf>).req(<jsf>LONG</jsf>).res(<jsf>LONG</jsf>).build()
-	 * 			);
-	 *
-	 * 			<jc>// Same, but using property with JSON value.</jc>
-	 * 			builder.set(<jsf>REST_logRules</jsf>, <js>"[{codes:'400-499',level:'WARNING',...},...]"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
-	 * </ul>
-	 */
-	public static final String REST_logRules = PREFIX + ".logRules.lo";
 
 	/**
 	 * Configuration property:  The maximum allowed input size (in bytes) on HTTP requests.
@@ -3138,7 +3164,10 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 * </p>
+	 *
+	 * @deprecated Use {@link Logging#useStackTraceHashing}
 	 */
+	@Deprecated
 	public static final String REST_useStackTraceHashes = PREFIX + ".useStackTraceHashes.b";
 
 	/**
@@ -3480,15 +3509,14 @@ public final class RestContext extends BeanContext {
 	private final boolean
 		allowBodyParam,
 		renderResponseStackTraces,
-		useStackTraceHashes,
-		useClasspathResourceCaching,
-		debug;
+		useClasspathResourceCaching;
+	private final Enablement debug;
+	@Deprecated private final boolean
+		useStackTraceHashes;
 	private final String
 		clientVersionHeader,
 		uriAuthority,
-		uriContext,
-		debugHeader,
-		debugParam;
+		uriContext;
 	final String fullPath;
 	final UrlPathPattern pathPattern;
 
@@ -3519,8 +3547,9 @@ public final class RestContext extends BeanContext {
 	private final Map<String,RestCallRouter> callRouters;
 	private final Map<String,RestMethodContext> callMethods;
 	private final Map<String,RestContext> childResources;
-	private final RestLogger logger;
-	private final RestCallLoggerConfig loggingConfig;
+	@SuppressWarnings("deprecation") private final RestLogger logger;
+	private final RestCallLogger callLogger;
+	private final RestCallLoggerConfig callLoggerConfig;
 	private final RestCallHandler callHandler;
 	private final RestInfoProvider infoProvider;
 	private final RestException initException;
@@ -3552,7 +3581,7 @@ public final class RestContext extends BeanContext {
 	private final Map<String,StaticFile> staticFilesCache = new ConcurrentHashMap<>();
 
 	private final ClasspathResourceManager staticResourceManager;
-	private final ConcurrentHashMap<Integer,AtomicInteger> stackTraceHashes = new ConcurrentHashMap<>();
+	@Deprecated private final ConcurrentHashMap<Integer,AtomicInteger> stackTraceHashes = new ConcurrentHashMap<>();
 
 	private final ThreadLocal<RestRequest> req = new ThreadLocal<>();
 	private final ThreadLocal<RestResponse> res = new ThreadLocal<>();
@@ -3640,9 +3669,7 @@ public final class RestContext extends BeanContext {
 			allowedMethodHeaders = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodHeaders, ""));
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces, false);
 			useStackTraceHashes = getBooleanProperty(REST_useStackTraceHashes, true);
-			debug = getBooleanProperty(REST_debug, super.isDebug());
-			debugHeader = getStringProperty(REST_debugHeader, null);
-			debugParam = getStringProperty(REST_debugParam, null);
+			debug = getInstanceProperty(REST_debug, Enablement.class, Enablement.NEVER);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
 
 			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], resourceResolver, this);
@@ -3661,8 +3688,15 @@ public final class RestContext extends BeanContext {
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);
 
 			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, NoOpRestLogger.class, resourceResolver, this);
+			callLogger = getInstanceProperty(REST_callLogger, resource, RestCallLogger.class, BasicRestCallLogger.class, resourceResolver, this);
 
-			loggingConfig = RestCallLoggerConfig.create().rules(getInstanceArrayProperty(REST_logRules, resource, RestCallLoggerRule.class, new RestCallLoggerRule[0], resourceResolver, resource, this)).build();
+			Object clc = getProperty(REST_callLoggerConfig);
+			if (clc instanceof RestCallLoggerConfig)
+				this.callLoggerConfig = (RestCallLoggerConfig)clc;
+			else if (clc instanceof ObjectMap)
+				this.callLoggerConfig = RestCallLoggerConfig.create().apply((ObjectMap)clc).build();
+			else
+				this.callLoggerConfig = RestCallLoggerConfig.DEFAULT;
 
 			properties = builder.properties;
 			serializers =
@@ -4424,25 +4458,43 @@ public final class RestContext extends BeanContext {
 	 * @return
 	 * 	The logger to use for this resource.
 	 * 	<br>Never <jk>null</jk>.
+	 * @deprecated Use {@link #getCallLogger()}
 	 */
+	@Deprecated
 	public RestLogger getLogger() {
 		return logger;
 	}
 
 	/**
-	 * Returns the logger to use for this resource.
+	 * Returns the call logger to use for this resource.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link #REST_logger}
+	 * 	<li class='jf'>{@link #REST_callLogger}
 	 * </ul>
 	 *
 	 * @return
-	 * 	The logger to use for this resource.
+	 * 	The call logger to use for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	RestCallLoggerConfig getLoggingConfig() {
-		return loggingConfig;
+	public RestCallLogger getCallLogger() {
+		return callLogger;
+	}
+
+	/**
+	 * Returns the call logger config to use for this resource.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link #REST_callLoggerConfig}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The call logger config to use for this resource.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public RestCallLoggerConfig getCallLoggerConfig() {
+		return callLoggerConfig;
 	}
 
 	/**
@@ -4608,7 +4660,9 @@ public final class RestContext extends BeanContext {
 	 * @return
 	 * 	The number of times this exception was thrown, or <c>0</c> if {@link #REST_useStackTraceHashes}
 	 * 	setting is not enabled.
+	 * @deprecated Not used by new logging API.
 	 */
+	@Deprecated
 	public int getStackTraceOccurrence(Throwable e) {
 		if (! useStackTraceHashes)
 			return 0;
@@ -4630,20 +4684,6 @@ public final class RestContext extends BeanContext {
 	public boolean isRenderResponseStackTraces() {
 		return renderResponseStackTraces;
 	}
-
-//	/**
-//	 * Returns whether it's safe to pass header values in as GET parameters.
-//	 *
-//	 * <h5 class='section'>See Also:</h5>
-//	 * <ul>
-//	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
-//	 * </ul>
-//	 *
-//	 * @return <jk>true</jk> if setting is enabled.
-//	 */
-//	public boolean isAllowHeaderParams() {
-//		return allowHeaderParams;
-//	}
 
 	/**
 	 * Returns whether it's safe to pass the HTTP body as a <js>"body"</js> GET parameter.
@@ -4716,38 +4756,21 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
+	 * @deprecated Use {@link #getDebug()}.
 	 */
+	@Deprecated
 	@Override
 	public boolean isDebug() {
+		return debug == Enablement.ALWAYS;
+	}
+
+	/**
+	 * Returns the debug setting on this context.
+	 *
+	 * @return The debug setting on this context.
+	 */
+	public Enablement getDebug() {
 		return debug;
-	}
-
-	/**
-	 * Returns the debug mode HTTP header name.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_debugHeader}
-	 * </ul>
-	 *
-	 * @return The header name if specified or <jk>null</jk> if not.
-	 */
-	public String getDebugHeader() {
-		return debugHeader;
-	}
-
-	/**
-	 * Returns the debug mode URL parameter name.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_debugParam}
-	 * </ul>
-	 *
-	 * @return The parameter name if specified or <jk>null</jk> if not.
-	 */
-	public String getDebugParam() {
-		return debugParam;
 	}
 
 	/**
@@ -5326,7 +5349,6 @@ public final class RestContext extends BeanContext {
 				.append("callHandler", callHandler)
 				.append("clientVersionHeader", clientVersionHeader)
 				.append("consumes", consumes)
-				.append("debug", debug)
 				.append("defaultRequestHeaders", defaultRequestHeaders)
 				.append("defaultResponseHeaders", defaultResponseHeaders)
 				.append("infoProvider", infoProvider)
@@ -5348,7 +5370,6 @@ public final class RestContext extends BeanContext {
 				.append("uriRelativity", uriRelativity)
 				.append("uriResolution", uriResolution)
 				.append("useClasspathResourceCaching", useClasspathResourceCaching)
-				.append("useStackTraceHashes", useStackTraceHashes)
 			);
 	}
 }

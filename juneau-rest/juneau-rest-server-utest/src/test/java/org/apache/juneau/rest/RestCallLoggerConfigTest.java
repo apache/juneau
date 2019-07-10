@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.rest.Enablement.*;
 import static org.junit.Assert.*;
 
 import java.util.logging.*;
@@ -24,10 +25,6 @@ import org.junit.runners.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestCallLoggerConfigTest {
-
-	private String[] strings(String...s) {
-		return s;
-	}
 
 	private MockServletRequest req() {
 		return MockServletRequest.create();
@@ -45,6 +42,11 @@ public class RestCallLoggerConfigTest {
 		return RestCallLoggerConfig.create();
 	}
 
+	private RestCallLoggerConfig wrapped(RestCallLoggerConfig parent) {
+		return RestCallLoggerConfig.create().parent(parent).build();
+	}
+
+
 	private RestCallLoggerRule.Builder rule() {
 		return RestCallLoggerRule.create();
 	}
@@ -55,19 +57,18 @@ public class RestCallLoggerConfigTest {
 
 	@Test
 	public void a01_basicMatching_noRules() {
+		RestCallLoggerConfig lc = config().build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		HttpServletRequest req = req();
 		HttpServletResponse res = res();
 
-		RestCallLoggerConfig lc = config().build();
-
 		assertNull(lc.getRule(req, res));
+		assertNull(lcw.getRule(req, res));
 	}
 
 	@Test
 	public void a02_basicMatching_codeMatchingRule() {
-		MockServletRequest req = req();
-		MockServletResponse res = res(200);
-
 		RestCallLoggerConfig lc =
 			config()
 			.rules(
@@ -76,18 +77,20 @@ public class RestCallLoggerConfigTest {
 				.build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
+		MockServletRequest req = req();
+		MockServletResponse res = res(200);
 
 		assertNotNull(lc.getRule(req, res));
-
+		assertNotNull(lcw.getRule(req, res));
 		res.status(201);
 		assertNull(lc.getRule(req, res));
+		assertNull(lcw.getRule(req, res));
 	}
 
 	@Test
 	public void a03_basicMatching_exceptionMatchingRule() {
-		MockServletRequest req = req();
-		MockServletResponse res = res();
-
 		RestCallLoggerConfig lc =
 			config()
 			.rule(
@@ -96,21 +99,22 @@ public class RestCallLoggerConfigTest {
 				.build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
+		MockServletRequest req = req();
+		MockServletResponse res = res();
 
 		assertNull(lc.getRule(req, res));
-
+		assertNull(lcw.getRule(req, res));
 		req.attribute("Exception", new IndexOutOfBoundsException());
 		assertNotNull(lc.getRule(req, res));
+		assertNotNull(lcw.getRule(req, res));
 	}
 
 	@Test
 	public void a04_basicMatching_debugMatching() {
-		MockServletRequest req = req();
-		MockServletResponse res = res();
-
 		RestCallLoggerConfig lc =
 			config()
-			.debug("per-request")
 			.rule(
 				rule()
 				.exceptions("IndexOutOfBounds*")
@@ -118,48 +122,19 @@ public class RestCallLoggerConfigTest {
 				.build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
 
-		assertNull(lc.getRule(req, res));
-
-		req.attribute("Exception", new IndexOutOfBoundsException());
-		assertNull(lc.getRule(req, res));
-
-		req.attribute("Debug", true);
-		assertNotNull(lc.getRule(req, res));
-
-		req.attribute("Debug", null);
-		req.header("X-Debug", true);
-		assertNotNull(lc.getRule(req, res));
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Parent matching
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void b01_parentMatching() {
 		MockServletRequest req = req();
 		MockServletResponse res = res();
 
-		RestCallLoggerConfig lc =
-			config()
-			.debug("per-request")
-			.rule(
-				rule()
-				.exceptions("IndexOutOfBounds*")
-				.debugOnly()
-				.build()
-			)
-			.build();
-		lc = RestCallLoggerConfig.create().parent(lc).build();
-
 		assertNull(lc.getRule(req, res));
-
+		assertNull(lcw.getRule(req, res));
 		req.attribute("Exception", new IndexOutOfBoundsException());
 		assertNull(lc.getRule(req, res));
-
+		assertNull(lcw.getRule(req, res));
 		req.attribute("Debug", true);
 		assertNotNull(lc.getRule(req, res));
+		assertNotNull(lcw.getRule(req, res));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -167,10 +142,7 @@ public class RestCallLoggerConfigTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void c01_disabled() {
-		MockServletRequest req = req();
-		MockServletResponse res = res(200);
-
+	public void b01_disabled() {
 		RestCallLoggerConfig lc =
 			config()
 			.disabled()
@@ -180,134 +152,73 @@ public class RestCallLoggerConfigTest {
 				.build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
+		MockServletRequest req = req();
+		MockServletResponse res = res(200);
 
 		assertNull(lc.getRule(req, res));
+		assertNull(lcw.getRule(req, res));
 	}
 
 	@Test
-	public void c02_disabled_trueValues() {
+	public void b02_disabled_true() {
+		RestCallLoggerConfig lc =
+			config()
+			.disabled(true)
+			.rule(
+				rule()
+				.codes("*")
+				.build()
+			)
+			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		MockServletRequest req = req();
 		MockServletResponse res = res(200);
 
-		for (String s : strings("true", "TRUE")) {
-			RestCallLoggerConfig lc =
-				config()
-				.disabled(s)
-				.rule(
-					rule()
-					.codes("*")
-					.build()
-				)
-				.build();
-
-			assertNull(lc.getRule(req, res));
-		}
+		assertNull(lc.getRule(req, res));
+		assertNull(lcw.getRule(req, res));
 	}
 
 	@Test
-	public void c03_disabled_falseValues() {
+	public void b03_disabled_false() {
+		RestCallLoggerConfig lc =
+			config()
+			.disabled(false)
+			.rule(
+				rule()
+				.codes("*")
+				.build()
+			)
+			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
 		MockServletRequest req = req();
 		MockServletResponse res = res(200);
 
-		for (String s : strings("false", "FALSE", "foo", null)) {
-			RestCallLoggerConfig lc =
-				config()
-				.disabled(s)
-				.rule(
-					rule()
-					.codes("*")
-					.build()
-				)
-				.build();
-
-			assertNotNull(lc.getRule(req, res));
-		}
+		assertNotNull(lc.getRule(req, res));
+		assertNotNull(lcw.getRule(req, res));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Debug
-	//------------------------------------------------------------------------------------------------------------------
-
 	@Test
-	public void d01_debugAlways() {
-		MockServletRequest req = req();
-
+	public void b04_disabled_null() {
 		RestCallLoggerConfig lc =
 			config()
-			.debugAlways()
+			.disabled(null)
+			.rule(
+				rule()
+				.codes("*")
+				.build()
+			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
 
-		assertTrue(lc.isDebug(req));
-	}
-
-	@Test
-	public void d02_debug_trueValues() {
 		MockServletRequest req = req();
+		MockServletResponse res = res(200);
 
-		for (String s : strings("always", "ALWAYS")) {
-			RestCallLoggerConfig lc =
-				config()
-				.debug(s)
-				.build();
-
-			assertTrue(lc.isDebug(req));
-		}
-	}
-
-	@Test
-	public void d03_debug_falseValues() {
-		MockServletRequest req = req();
-
-		for (String s : strings("never", "NEVER", "foo", null)) {
-			RestCallLoggerConfig lc =
-				config()
-				.debug(s)
-				.build();
-
-			assertFalse(lc.isDebug(req));
-		}
-	}
-
-	@Test
-	public void d04_debug_perRequest() {
-		MockServletRequest req = req();
-		MockServletRequest reqDebug = req().debug();
-		MockServletRequest reqDebugAttrTrue = req().attribute("Debug", true);
-		MockServletRequest reqDebugAttrFalse = req().attribute("Debug", false);
-		MockServletRequest reqDebugAttrOther = req().attribute("Debug", "foo");
-
-		for (String s : strings("per-request", "PER-REQUEST")) {
-			RestCallLoggerConfig lc =
-				config()
-				.debug(s)
-				.build();
-
-			assertFalse(lc.isDebug(req));
-			assertTrue(lc.isDebug(reqDebug));
-			assertTrue(lc.isDebug(reqDebugAttrTrue));
-			assertFalse(lc.isDebug(reqDebugAttrFalse));
-			assertFalse(lc.isDebug(reqDebugAttrOther));
-		}
-	}
-
-	@Test
-	public void d05_debugPerRequest() {
-		MockServletRequest req = req();
-		MockServletRequest reqDebug = req().debug();
-		MockServletRequest reqDebugAttrTrue = req().attribute("Debug", true);
-		MockServletRequest reqDebugAttrFalse = req().attribute("Debug", false);
-		MockServletRequest reqDebugAttrOther = req().attribute("Debug", "foo");
-
-		RestCallLoggerConfig lc =
-			config()
-			.debugPerRequest()
-			.build();
-
-		assertFalse(lc.isDebug(req));
-		assertTrue(lc.isDebug(reqDebug));
-		assertTrue(lc.isDebug(reqDebugAttrTrue));
-		assertFalse(lc.isDebug(reqDebugAttrFalse));
-		assertFalse(lc.isDebug(reqDebugAttrOther));
+		assertNotNull(lc.getRule(req, res));
+		assertNotNull(lcw.getRule(req, res));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -315,115 +226,96 @@ public class RestCallLoggerConfigTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void e01_noTraceAlways() {
-		MockServletRequest req = req();
-		MockServletResponse res = res();
-
+	public void c01_noTraceAlways() {
 		RestCallLoggerConfig lc =
 			config()
-			.noTraceAlways()
+			.noTrace(ALWAYS)
 			.rule(
 				rule()
 				.codes("*")
 				.build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
+		MockServletRequest req = req();
+		MockServletResponse res = res();
 
 		assertNull(lc.getRule(req, res));
+		assertNull(lcw.getRule(req, res));
 	}
 
 	@Test
-	public void e02_noTrace_trueValues() {
-		MockServletRequest req = req();
-		MockServletResponse res = res();
-
-		for (String s : strings("always", "ALWAYS")) {
-			RestCallLoggerConfig lc =
-				config()
-				.noTrace(s)
-				.rule(
-					rule()
-					.codes("*")
-					.build()
-				)
-				.build();
-
-			assertNull(lc.getRule(req, res));
-		}
-	}
-
-	@Test
-	public void e03_noTrace_falseValues() {
-		MockServletRequest req = req();
-		MockServletResponse res = res();
-
-		for (String s : strings("never", "NEVER", "foo", null)) {
-			RestCallLoggerConfig lc =
-				config()
-				.noTrace(s)
-				.rule(
-					rule()
-					.codes("*")
-					.build()
-				)
-				.build();
-
-			assertNotNull(lc.getRule(req, res));
-		}
-	}
-
-	@Test
-	public void e04_noTrace_perRequest() {
-		MockServletRequest req = req();
-		MockServletRequest reqNoTrace = req().noTrace();
-		MockServletRequest reqNoTraceAttrTrue = req().attribute("NoTrace", true);
-		MockServletRequest reqNoTraceAttrFalse = req().attribute("NoTrace", false);
-		MockServletRequest reqNoTraceAttrOther = req().attribute("NoTrace", "foo");
-		MockServletResponse res = res();
-
-		for (String s : strings("per-request", "PER-REQUEST")) {
-			RestCallLoggerConfig lc =
-				config()
-				.noTrace(s)
-				.rule(
-					rule()
-					.codes("*")
-					.build()
-				)
-				.build();
-
-			assertNotNull(lc.getRule(req, res));
-			assertNull(lc.getRule(reqNoTrace, res));
-			assertNull(lc.getRule(reqNoTraceAttrTrue, res));
-			assertNotNull(lc.getRule(reqNoTraceAttrFalse, res));
-			assertNotNull(lc.getRule(reqNoTraceAttrOther, res));
-		}
-	}
-
-	@Test
-	public void e05_noTracePerRequest() {
-		MockServletRequest req = req();
-		MockServletRequest reqNoTrace = req().noTrace();
-		MockServletRequest reqNoTraceAttrTrue = req().attribute("NoTrace", true);
-		MockServletRequest reqNoTraceAttrFalse = req().attribute("NoTrace", false);
-		MockServletRequest reqNoTraceAttrOther = req().attribute("NoTrace", "foo");
-		MockServletResponse res = res();
-
+	public void c02_noTrace_never() {
 		RestCallLoggerConfig lc =
 			config()
-			.noTracePerRequest()
+			.noTrace(NEVER)
 			.rule(
 				rule()
 				.codes("*")
 				.build()
 			)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
+		MockServletRequest req = req();
+		MockServletResponse res = res();
+
+		assertNotNull(lc.getRule(req, res));
+		assertNotNull(lcw.getRule(req, res));
+	}
+
+	@Test
+	public void c03_noTrace_null() {
+		RestCallLoggerConfig lc =
+			config()
+			.noTrace(null)
+			.rule(
+				rule()
+				.codes("*")
+				.build()
+			)
+			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
+		MockServletRequest req = req();
+		MockServletResponse res = res();
+
+		assertNotNull(lc.getRule(req, res));
+		assertNotNull(lcw.getRule(req, res));
+	}
+
+	@Test
+	public void c04_noTrace_perRequest() {
+		RestCallLoggerConfig lc =
+			config()
+			.noTrace(PER_REQUEST)
+			.rule(
+				rule()
+				.codes("*")
+				.build()
+			)
+			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
+		MockServletRequest req = req();
+		MockServletRequest reqNoTrace = req().noTrace();
+		MockServletRequest reqNoTraceAttrTrue = req().attribute("NoTrace", true);
+		MockServletRequest reqNoTraceAttrFalse = req().attribute("NoTrace", false);
+		MockServletRequest reqNoTraceAttrOther = req().attribute("NoTrace", "foo");
+		MockServletResponse res = res();
 
 		assertNotNull(lc.getRule(req, res));
 		assertNull(lc.getRule(reqNoTrace, res));
 		assertNull(lc.getRule(reqNoTraceAttrTrue, res));
 		assertNotNull(lc.getRule(reqNoTraceAttrFalse, res));
 		assertNotNull(lc.getRule(reqNoTraceAttrOther, res));
+
+		assertNotNull(lcw.getRule(req, res));
+		assertNull(lcw.getRule(reqNoTrace, res));
+		assertNull(lcw.getRule(reqNoTraceAttrTrue, res));
+		assertNotNull(lcw.getRule(reqNoTraceAttrFalse, res));
+		assertNotNull(lcw.getRule(reqNoTraceAttrOther, res));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -431,61 +323,79 @@ public class RestCallLoggerConfigTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void f01_stackTraceHashing() {
+	public void d01_stackTraceHashing() {
 		RestCallLoggerConfig lc =
 			config()
-			.stackTraceHashing()
+			.useStackTraceHashing()
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
 
-		assertTrue(lc.useStackTraceHashing());
-		assertEquals(Integer.MAX_VALUE, lc.getStackTraceHashingTimeout());
+		assertTrue(lc.isUseStackTraceHashing());
+		assertTrue(lcw.isUseStackTraceHashing());
 	}
 
 	@Test
-	public void f02_stackTraceHashing_trueValues() {
-		for (String s : strings("true", "TRUE")) {
-			RestCallLoggerConfig lc =
-				config()
-				.stackTraceHashing(s)
-				.build();
-
-			assertTrue(lc.useStackTraceHashing());
-			assertEquals(Integer.MAX_VALUE, lc.getStackTraceHashingTimeout());
-		}
-	}
-
-	@Test
-	public void f03_stackTraceHashing_falseValues() {
-		for (String s : strings("false", "FALSE", "foo", null)) {
-			RestCallLoggerConfig lc =
-				config()
-				.stackTraceHashing(s)
-				.build();
-
-			assertFalse(lc.useStackTraceHashing());
-		}
-	}
-
-	@Test
-	public void f04_stackTraceHashing_numericValues() {
+	public void d02_stackTraceHashing_true() {
 		RestCallLoggerConfig lc =
 			config()
-			.stackTraceHashing("1")
+			.useStackTraceHashing(true)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
 
-		assertTrue(lc.useStackTraceHashing());
-		assertEquals(1, lc.getStackTraceHashingTimeout());
+		assertTrue(lc.isUseStackTraceHashing());
+		assertTrue(lcw.isUseStackTraceHashing());
 	}
 
 	@Test
-	public void f05_stackTraceHashingTimeout() {
+	public void d03_stackTraceHashing_false() {
+		RestCallLoggerConfig lc =
+			config()
+			.useStackTraceHashing(false)
+			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
+		assertFalse(lc.isUseStackTraceHashing());
+		assertFalse(lcw.isUseStackTraceHashing());
+	}
+
+	@Test
+	public void d04_stackTraceHashing_null() {
+		RestCallLoggerConfig lc =
+			config()
+			.useStackTraceHashing(null)
+			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
+		assertFalse(lc.isUseStackTraceHashing());
+		assertFalse(lcw.isUseStackTraceHashing());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Stack trace hashing timeout
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test
+	public void e01_getStackTraceHashingTimeout() {
 		RestCallLoggerConfig lc =
 			config()
 			.stackTraceHashingTimeout(1)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
 
-		assertTrue(lc.useStackTraceHashing());
 		assertEquals(1, lc.getStackTraceHashingTimeout());
+		assertEquals(1, lcw.getStackTraceHashingTimeout());
+	}
+
+	@Test
+	public void e02_getStackTraceHashingTimeout_null() {
+		RestCallLoggerConfig lc =
+			config()
+			.stackTraceHashingTimeout(null)
+			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
+
+		assertEquals(Integer.MAX_VALUE, lc.getStackTraceHashingTimeout());
+		assertEquals(Integer.MAX_VALUE, lcw.getStackTraceHashingTimeout());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -493,51 +403,37 @@ public class RestCallLoggerConfigTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void g01_level_default() {
+	public void f01_level_default() {
 		RestCallLoggerConfig lc =
 			config()
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
 
 		assertEquals(Level.INFO, lc.getLevel());
+		assertEquals(Level.INFO, lcw.getLevel());
 	}
 
 	@Test
-	public void g02_level_warningLevel() {
+	public void f02_level_warningLevel() {
 		RestCallLoggerConfig lc =
 			config()
 			.level(Level.WARNING)
 			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
 
 		assertEquals(Level.WARNING, lc.getLevel());
+		assertEquals(Level.WARNING, lcw.getLevel());
 	}
 
 	@Test
-	public void g03_level_warningString() {
+	public void f03_level_nullLevel() {
 		RestCallLoggerConfig lc =
 			config()
-			.level("WARNING")
+			.level(null)
 			.build();
-
-		assertEquals(Level.WARNING, lc.getLevel());
-	}
-
-	@Test
-	public void g04_level_nullLevel() {
-		RestCallLoggerConfig lc =
-			config()
-			.level((Level)null)
-			.build();
+		RestCallLoggerConfig lcw = wrapped(lc);
 
 		assertEquals(Level.INFO, lc.getLevel());
-	}
-
-	@Test
-	public void g05_level_nullString() {
-		RestCallLoggerConfig lc =
-			config()
-			.level((String)null)
-			.build();
-
-		assertEquals(Level.INFO, lc.getLevel());
+		assertEquals(Level.INFO, lcw.getLevel());
 	}
 }

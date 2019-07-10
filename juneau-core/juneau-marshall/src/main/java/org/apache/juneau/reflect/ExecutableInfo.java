@@ -507,7 +507,7 @@ public abstract class ExecutableInfo {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this method has this arguments.
+	 * Returns <jk>true</jk> if this method has the specified arguments.
 	 *
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
@@ -517,6 +517,23 @@ public abstract class ExecutableInfo {
 		if (pt.length == args.length) {
 			for (int i = 0; i < pt.length; i++)
 				if (! pt[i].equals(args[i]))
+					return false;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has the specified argument parent classes.
+	 *
+	 * @param args The arguments to test for.
+	 * @return <jk>true</jk> if this method has this arguments in the exact order.
+	 */
+	public final boolean hasArgParents(Class<?>...args) {
+		Class<?>[] pt = rawParamTypes();
+		if (pt.length == args.length) {
+			for (int i = 0; i < pt.length; i++)
+				if (! args[i].isAssignableFrom(pt[i]))
 					return false;
 			return true;
 		}

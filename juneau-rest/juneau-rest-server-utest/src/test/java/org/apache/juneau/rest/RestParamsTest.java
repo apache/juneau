@@ -92,6 +92,7 @@ public class RestParamsTest {
 		public String a12(HttpMethod t) {
 			return t.toString();
 		}
+		@SuppressWarnings("deprecation")
 		@RestMethod
 		public boolean a13(RestLogger t) {
 			return t != null;

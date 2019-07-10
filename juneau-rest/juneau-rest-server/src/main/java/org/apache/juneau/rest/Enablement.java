@@ -12,44 +12,41 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-
-import java.text.*;
-import java.util.logging.*;
+import org.apache.juneau.internal.*;
 
 /**
- * Logging utility class.
- *
- * <p>
- * Disables logging entirely.
- *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
- * </ul>
- * @deprecated Use {@link RestCallLogger}
+ * Represents the enablement settings of a feature.
  */
-@Deprecated
-public class NoOpRestLogger extends BasicRestLogger {
+public enum Enablement {
 
 	/**
-	 * Constructor.
+	 * Feature is always enabled.
 	 */
-	public NoOpRestLogger() {
-		super(null);
+	ALWAYS,
+
+	/**
+	 * Feature is enabled per HTTP request.
+	 */
+	PER_REQUEST,
+
+	/**
+	 * Feature is disabled.
+	 */
+	NEVER;
+
+	/**
+	 * Retrieves this enum using case-insensitive matching.
+	 *
+	 * @param s The enum name to resolve.
+	 * @return The resolved value.
+	 */
+	public static Enablement fromString(String s) {
+		if (! StringUtils.isEmpty(s)) {
+			try {
+				return valueOf(s.replace('-', '_').toUpperCase());
+			} catch (IllegalArgumentException  e) {}
+		}
+		return null;
 	}
-
-	/**
-	 * Log a message to the logger.
-	 *
-	 * <p>
-	 * Subclasses can override this method if they wish to log messages using a library other than Java Logging
-	 * (e.g. Apache Commons Logging).
-	 *
-	 * @param level The log level.
-	 * @param cause The cause.
-	 * @param msg The message to log.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	@Override /* RestLogger */
-	public void log(Level level, Throwable cause, String msg, Object...args) {}
 }
+

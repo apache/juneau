@@ -96,7 +96,6 @@ import org.apache.juneau.utils.*;
  * 		<li class='jc'>{@link RequestQuery}
  * 		<li class='jc'>{@link ResourceBundle}
  * 		<li class='jc'>{@link RestContext}
- * 		<li class='jc'>{@link RestLogger}
  * 		<li class='jc'>{@link ServletInputStream}
  * 		<li class='jc'>{@link ServletOutputStream}
  * 		<li class='jc'>{@link Swagger}

@@ -19,7 +19,7 @@ import javax.servlet.http.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jf'>{@link RestContext#REST_logger}
+ * 	<li class='jf'>{@link RestContext#REST_callLogger}
  * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
  * </ul>
  */
@@ -30,7 +30,7 @@ public interface RestCallLogger {
 	 *
 	 * <p>
 	 * Used on annotation to indicate that the value should be inherited from the parent class, and
-	 * ultimately {@link BasicRestLogger} if not specified at any level.
+	 * ultimately {@link BasicRestCallLogger} if not specified at any level.
 	 */
 	public interface Null extends RestCallLogger {}
 

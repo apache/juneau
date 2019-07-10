@@ -711,6 +711,7 @@ class RestParamDefaults {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	static final class RestLoggerObject extends RestMethodParam {
 
 		protected RestLoggerObject() {

@@ -12,18 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
-import java.util.*;
 import java.util.logging.*;
 
 import javax.servlet.http.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.util.*;
 
 /**
  * Logging utility class.
@@ -36,7 +33,10 @@ import org.apache.juneau.rest.util.*;
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
  * </ul>
+ *
+ * @deprecated Use {@link BasicRestCallLogger}
  */
+@Deprecated
 public class BasicRestLogger implements RestLogger {
 
 	private final JuneauLogger logger;
@@ -181,18 +181,7 @@ public class BasicRestLogger implements RestLogger {
 	 */
 	@Override /* RestLogger */
 	public void onError(HttpServletRequest req, HttpServletResponse res, RestException e) {
-		if (shouldLog(req, res, e)) {
-			String qs = req.getQueryString();
-			String msg = "HTTP " + req.getMethod() + " " + e.getStatus() + " " + req.getRequestURI() + (qs == null ? "" : "?" + qs);
-			int c = e.getOccurrence();
-			if (shouldLogStackTrace(req, res, e)) {
-				msg = '[' + Integer.toHexString(e.hashCode()) + '.' + e.getStatus() + '.' + c + "] " + msg;
-				log(Level.WARNING, e, msg);
-			} else {
-				msg = '[' + Integer.toHexString(e.hashCode()) + '.' + e.getStatus() + '.' + c + "] " + msg + ", " + e.getLocalizedMessage();
-				log(Level.WARNING, msg);
-			}
-		}
+		// No-op
 	}
 
 	/**
@@ -211,9 +200,7 @@ public class BasicRestLogger implements RestLogger {
 	 * @return <jk>true</jk> if exception should be logged.
 	 */
 	protected boolean shouldLog(HttpServletRequest req, HttpServletResponse res, RestException e) {
-		if (isNoTrace(req) && ! isDebug(req))
-			return false;
-		return true;
+		return false;
 	}
 
 	/**
@@ -237,92 +224,6 @@ public class BasicRestLogger implements RestLogger {
 	 * @return <jk>true</jk> if stack trace should be logged.
 	 */
 	protected boolean shouldLogStackTrace(HttpServletRequest req, HttpServletResponse res, RestException e) {
-		if (e.getOccurrence() == 1) {
-			switch (e.getStatus()) {
-				case SC_UNAUTHORIZED:
-				case SC_FORBIDDEN:
-				case SC_NOT_FOUND:  return false;
-				default:            return true;
-			}
-		}
 		return false;
-	}
-
-	private static boolean isNoTrace(HttpServletRequest req) {
-		return contains(req.getHeader("No-Trace"), "true") || contains(req.getQueryString(), "noTrace=true");
-	}
-
-	@Override /* RestLogger */
-	public void log(HttpServletRequest req, HttpServletResponse res) {
-		if (isDebug(req)) {
-
-			String qs = req.getQueryString();
-			String method = req.getMethod();
-			byte[] reqBody = req instanceof CachingHttpServletRequest ? ((CachingHttpServletRequest)req).getBody() : null;
-			byte[] resBody = res instanceof CachingHttpServletResponse ? ((CachingHttpServletResponse)res).getBody() : null;
-			Throwable e = (Throwable)req.getAttribute("Exception");
-			Long execTime = (Long)req.getAttribute("ExecTime");
-
-			StringBuilder sb = new StringBuilder();
-
-			sb.append("\n=== HTTP Request (incoming) ====================================================");
-			sb.append("\n").append(method).append(" ").append(req.getRequestURI()).append((qs == null ? "" : "?" + qs));
-			sb.append("\n\tResponse code: ").append(res.getStatus());
-			if (execTime != null)
-				sb.append("\n\tExec time: ").append(res.getStatus()).append("ms");
-			if (reqBody != null)
-				sb.append("\n\tReq body: ").append(reqBody.length).append(" bytes");
-			if (resBody != null)
-				sb.append("\n\tRes body: ").append(resBody.length).append(" bytes");
-			sb.append("\n---Request Headers---");
-			for (Enumeration<String> hh = req.getHeaderNames(); hh.hasMoreElements();) {
-				String h = hh.nextElement();
-				sb.append("\n\t").append(h).append(": ").append(req.getHeader(h));
-			}
-			if (context != null && ! context.getDefaultRequestHeaders().isEmpty()) {
-				sb.append("\n---Default Servlet Headers---");
-				for (Map.Entry<String,Object> h : context.getDefaultRequestHeaders().entrySet()) {
-					sb.append("\n\t").append(h.getKey()).append(": ").append(h.getValue());
-				}
-			}
-			if (reqBody != null && reqBody.length > 0) {
-				try {
-					sb.append("\n---Request Body UTF-8---");
-					sb.append("\n").append(new String(reqBody, IOUtils.UTF8));
-					sb.append("\n---Request Body Hex---");
-					sb.append("\n").append(toSpacedHex(reqBody));
-				} catch (Exception e1) {
-					sb.append("\n").append(e1.getLocalizedMessage());
-				}
-			}
-			sb.append("\n---Response Headers---");
-			for (String h : res.getHeaderNames()) {
-				sb.append("\n\t").append(h).append(": ").append(res.getHeader(h));
-			}
-			if (resBody != null && resBody.length > 0) {
-				try {
-					sb.append("\n---Response Body UTF-8---");
-					sb.append("\n").append(new String(resBody, IOUtils.UTF8));
-					sb.append("\n---Response Body Hex---");
-					sb.append("\n").append(toSpacedHex(resBody));
-				} catch (Exception e1) {
-					sb.append(e1.getLocalizedMessage());
-				}
-			}
-			if (e != null) {
-				sb.append("\n---Exception---");
-				sb.append("\n").append(getStackTrace(e));
-			}
-			sb.append("\n=== END ========================================================================");
-
-			logger.log(Level.WARNING, sb.toString());
-		}
-	}
-
-	private boolean isDebug(HttpServletRequest req) {
-		Object debug = req.getAttribute("Debug");
-		if (debug == null || ! "true".equals(debug.toString()))
-			return false;
-		return true;
 	}
 }

@@ -10,46 +10,15 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.annotation;
 
+class AnnotationUtils extends org.apache.juneau.http.annotation.AnnotationUtils {
 
-import java.text.*;
-import java.util.logging.*;
-
-/**
- * Logging utility class.
- *
- * <p>
- * Disables logging entirely.
- *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
- * </ul>
- * @deprecated Use {@link RestCallLogger}
- */
-@Deprecated
-public class NoOpRestLogger extends BasicRestLogger {
-
-	/**
-	 * Constructor.
-	 */
-	public NoOpRestLogger() {
-		super(null);
+	static boolean empty(Logging a) {
+		if (a == null)
+			return true;
+		return
+			allEmpty(a.useStackTraceHashing(), a.stackTraceHashingTimeout(), a.noTrace(), a.level())
+			&& a.rules().length == 0;
 	}
-
-	/**
-	 * Log a message to the logger.
-	 *
-	 * <p>
-	 * Subclasses can override this method if they wish to log messages using a library other than Java Logging
-	 * (e.g. Apache Commons Logging).
-	 *
-	 * @param level The log level.
-	 * @param cause The cause.
-	 * @param msg The message to log.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	@Override /* RestLogger */
-	public void log(Level level, Throwable cause, String msg, Object...args) {}
 }

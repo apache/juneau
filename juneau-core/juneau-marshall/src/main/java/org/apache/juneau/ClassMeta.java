@@ -1802,7 +1802,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public T newInstanceFromString(Object outer, String arg) throws ExecutableException {
 
-		if (isEnum() && beanContext.isUseEnumNames())
+		if (isEnum() && beanContext.isUseEnumNames() && fromStringMethod != null)
 			return (T)Enum.valueOf((Class<? extends Enum>)this.innerClass, arg);
 
 		Method m = fromStringMethod;

@@ -249,6 +249,19 @@ public class JuneauLogger extends java.util.logging.Logger {
 		innerLogger.log(record);
 	}
 
+	/**
+	 * Logs a message with the specified {@link MessageFormat}-style arguments at the specified level.
+	 *
+	 * @param level The log level.
+	 * @param cause The Throwable object associated with the event that needs to be logged.
+	 * @param msg The message to log.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public void log(Level level, Throwable cause, String msg, Object...args) {
+		if (isLoggable(level))
+			log(level, getMessage(msg, args), cause);
+	}
+
 	@Override /* Logger */
 	public boolean isLoggable(Level level) {
 		return innerLogger.isLoggable(level);

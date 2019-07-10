@@ -23,7 +23,6 @@ import org.apache.juneau.rest.*;
  * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_logRules}
  * </ul>
  */
-@SuppressWarnings("javadoc")
 public @interface Logging {
 
 	/**
@@ -39,14 +38,14 @@ public @interface Logging {
 	 * <p>
 	 * Use {@link None} to suppress inheriting bean filters defined on the class.
 	 */
-	public String stHashing() default "";  // false,true,time(ms)
+	public String useStackTraceHashing() default "";  // false,true,time(ms)
 
-	public String debug() default "";  // false,true,header
+	public String stackTraceHashingTimeout() default "";
 
-	public String noTrace() default "";  // false,true,header
+	public String noTrace() default "";
 
 	public String level() default "";
 
-	public LogRule[] rules() default {};
+	public LoggingRule[] rules() default {};
 
 }

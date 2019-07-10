@@ -31,7 +31,7 @@ public class RestException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	private int status;
-	private int occurrence;
+	@Deprecated private int occurrence;
 
 	/**
 	 * Constructor.
@@ -154,7 +154,9 @@ public class RestException extends RuntimeException {
 	 *
 	 * @param occurrence The number of times this exception has occurred.
 	 * @return This object (for method chaining).
+	 * @deprecated Not used by new logging API.
 	 */
+	@Deprecated
 	protected RestException setOccurrence(int occurrence) {
 		this.occurrence = occurrence;
 		return this;
@@ -176,7 +178,9 @@ public class RestException extends RuntimeException {
 	 *
 	 * @return
 	 * 	The occurrence number if {@link RestResource#useStackTraceHashes() @RestResource(useStackTraceHashes)} is enabled, or <c>0</c> otherwise.
+	 * @deprecated Not used by new logging API.
 	 */
+	@Deprecated
 	public int getOccurrence() {
 		return occurrence;
 	}

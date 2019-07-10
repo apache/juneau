@@ -23,8 +23,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_logRules}
  * </ul>
  */
-@SuppressWarnings("javadoc")
-public @interface LogRule {
+public @interface LoggingRule {
 
 	/**
 	 * Sets the bean filters for the serializers and parsers defined on this method.
@@ -39,10 +38,10 @@ public @interface LogRule {
 	 * <p>
 	 * Use {@link None} to suppress inheriting bean filters defined on the class.
 	 */
-	public String codes() default "";
+	public String codes() default "*";
 	public String exceptions() default "";
 	public String debugOnly() default "false";
-	public String logLevel() default "INFO";
+	public String level() default "";
 
 	public String req() default "SHORT";
 	public String res() default "SHORT";

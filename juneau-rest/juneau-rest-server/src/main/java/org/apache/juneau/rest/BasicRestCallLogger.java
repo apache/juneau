@@ -39,7 +39,7 @@ import org.apache.juneau.utils.*;
  */
 public class BasicRestCallLogger implements RestCallLogger {
 
-	private static final StackTraceDatabase STACK_TRACE_DB = new StackTraceDatabase();
+	private final StackTraceDatabase stackTraceDb = new StackTraceDatabase();
 
 	private final Logger logger;
 	private final RestContext context;
@@ -99,7 +99,7 @@ public class BasicRestCallLogger implements RestCallLogger {
 	 * @return This object (for method chaining).
 	 */
 	public BasicRestCallLogger resetStackTraces() {
-		STACK_TRACE_DB.reset();
+		stackTraceDb.reset();
 		return this;
 	}
 
@@ -238,8 +238,8 @@ public class BasicRestCallLogger implements RestCallLogger {
 	}
 
 	private StackTraceInfo getStackTraceInfo(RestCallLoggerConfig config, Throwable e) {
-		if (e == null || ! config.useStackTraceHashing())
+		if (e == null || ! config.isUseStackTraceHashing())
 			return null;
-		return STACK_TRACE_DB.getStackTraceInfo(e, config.getStackTraceHashingTimeout());
+		return stackTraceDb.getStackTraceInfo(e, config.getStackTraceHashingTimeout());
 	}
 }

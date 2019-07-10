@@ -266,6 +266,20 @@ public class ObjectList extends LinkedList<Object> {
 	}
 
 	/**
+	 * Convenience method for appending another list to this list.
+	 *
+	 * @param l
+	 * 	The list containing the elements to append to this list.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public ObjectList appendAll(ObjectList l) {
+		if (l != null)
+			addAll(l);
+		return this;
+	}
+
+	/**
 	 * Convenience method for adding multiple objects to this list.
 	 *
 	 * <p>

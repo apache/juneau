@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import org.apache.juneau.internal.*;
+
 /**
  * Represents the amount of detail to include in a log entry for HTTP requests and responses.
  */
@@ -37,5 +39,20 @@ public enum RestCallLoggingDetail {
 			if (v == this)
 				return true;
 		return false;
+	}
+
+	/**
+	 * Retrieves this enum using case-insensitive matching.
+	 *
+	 * @param s The enum name to resolve.
+	 * @return The resolved value.
+	 */
+	public static RestCallLoggingDetail fromString(String s) {
+		if (! StringUtils.isEmpty(s)) {
+			try {
+				return valueOf(s.toUpperCase());
+			} catch (IllegalArgumentException  e) {}
+		}
+		return null;
 	}
 }

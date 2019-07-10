@@ -556,8 +556,32 @@ public @interface RestResource {
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_logger}
 	 * </ul>
+	 * @deprecated Use {@link #callLogger()}
 	 */
+	@SuppressWarnings("dep-ann")
 	Class<? extends RestLogger> logger() default RestLogger.Null.class;
+
+	/**
+	 * Specifies the logger to use for logging of HTTP requests and responses.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * </ul>
+	 */
+	Class<? extends RestCallLogger> callLogger() default RestCallLogger.Null.class;
+
+	/**
+	 * Specifies rules on how to handle logging of HTTP requests/responses.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_callLoggerConfig}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * </ul>
+	 */
+	Logging logging() default @Logging;
 
 	/**
 	 * The maximum allowed input size (in bytes) on HTTP requests.
@@ -1327,7 +1351,10 @@ public @interface RestResource {
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
 	 * </ul>
+	 *
+	 * @deprecated Use {@link Logging#useStackTraceHashing()}
 	 */
+	@Deprecated
 	String useStackTraceHashes() default "";
 
 	/**
@@ -1355,99 +1382,4 @@ public @interface RestResource {
 	 * </ul>
 	 */
 	String debug() default "";
-
-	/**
-	 * Debug mode HTTP header name.
-	 *
-	 * <p>
-	 * Conditionally enables debug mode on requests when the specified HTTP header is present with a value of <js>"true"</js>.
-	 * <br>If not specified, debug mode is enabled on all requests.
-	 * <p>
-	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
-	 * expensive (since the request/response bodies have to be cached in memory).
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_debugHeader}
-	 * </ul>
-	 */
-	String debugHeader() default "";
-
-	/**
-	 * Debug mode URL parameter name.
-	 *
-	 * <p>
-	 * Conditionally enables debug mode on requests when the specified URL parameter is present with a value of <js>"true"</js>.
-	 * <br>If not specified, debug mode is enabled on all requests.
-	 * <p>
-	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
-	 * expensive (since the request/response bodies have to be cached in memory).
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_debugParam}
-	 * </ul>
-	 */
-	String debugParam() default "";
-
-	/**
-	 * Configuration property:  Logging rules.
-	 *
-	 * <p>
-	 * Specifies rules on how to handle logging of HTTP requests/responses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(
-	 * 		logRules={
-	 * 			<ja>@LogRule</ja>(codes=<js>"400-499"</js>, level=<js>"WARNING"</js>, req=<js>"SHORT"</js>, res=<js>"MEDIUM"</js>),
-	 * 			<ja>@LogRule</ja>(codes=<js>">=500"</js>, level=<js>"SEVERE"</js>, req=<js>"LONG"</js>, res=<js>"LONG"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.logRules(
-	 * 				LoggingRule.<jsm>create</jsm>().codes(<js>"400-499"</js>).level(<jsf>WARNING</jsf>).req(<jsf>SHORT</jsf>).res(<jsf>MEDIUM</jsf>).build(),
-	 * 				LoggingRule.<jsm>create</jsm>().codes(<js>">=500"</js>).level(<jsf>SEVERE</jsf>).req(<jsf>LONG</jsf>).res(<jsf>LONG</jsf>).build()
-	 * 			);
-	 *
-	 * 			<jc>// Same, but using property with JSON value.</jc>
-	 * 			builder.set(<jsf>REST_logRules</jsf>, <js>"[{codes:'400-499',level:'WARNING',...},...]"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_logRules}
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
-	 * </ul>
-	 */
-	LogRule[] logRules() default {};
 }

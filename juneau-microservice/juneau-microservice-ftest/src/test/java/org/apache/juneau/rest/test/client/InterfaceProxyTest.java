@@ -229,9 +229,7 @@ public class InterfaceProxyTest {
 		}
 	}
 
-	@RestResource(
-		logger=NoOpRestLogger.class
-	)
+	@RestResource
 	@SerializerConfig(addRootType="true",addBeanTypes="true")
 	public static class InterfaceProxyResource extends BasicRestServletJena {
 		private static final long serialVersionUID = 1L;

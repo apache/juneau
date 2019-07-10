@@ -496,3 +496,5 @@ navlinks
 fav
 transactional
 rollback
+enablement
+stacktraces

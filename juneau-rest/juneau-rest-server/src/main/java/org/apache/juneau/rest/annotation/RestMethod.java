@@ -310,54 +310,6 @@ public @interface RestMethod {
 	String debug() default "";
 
 	/**
-	 * Debug mode HTTP header name.
-	 *
-	 * <p>
-	 * Conditionally enables debug mode on requests when the specified HTTP header is present with a value of <js>"true"</js>.
-	 * <br>If not specified, debug mode is enabled on all requests.
-	 * <p>
-	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
-	 * expensive (since the request/response bodies have to be cached in memory).
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_debugHeader}
-	 * </ul>
-	 */
-	String debugHeader() default "";
-
-	/**
-	 * Debug mode URL parameter name.
-	 *
-	 * <p>
-	 * Conditionally enables debug mode on requests when the specified URL parameter is present with a value of <js>"true"</js>.
-	 * <br>If not specified, debug mode is enabled on all requests.
-	 * <p>
-	 * The purpose of this property is to allow debug mode on a per-request basis since debug mode can be somewhat
-	 * expensive (since the request/response bodies have to be cached in memory).
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_debugParam}
-	 * </ul>
-	 */
-	String debugParam() default "";
-
-	/**
 	 * Default <c>Accept</c> header.
 	 *
 	 * <p>
@@ -572,6 +524,16 @@ public @interface RestMethod {
 	 */
 	@Deprecated
 	HtmlDoc htmldoc() default @HtmlDoc;
+
+	/**
+	 * Specifies rules on how to handle logging of HTTP requests/responses.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * </ul>
+	 */
+	Logging logging() default @Logging;
 
 	/**
 	 * Method matchers.
@@ -1049,26 +1011,4 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	MethodSwagger swagger() default @MethodSwagger;
-
-	/**
-	 * Configuration property:  Logging rules.
-	 *
-	 * <p>
-	 * Specifies rules on how to handle logging of HTTP requests/responses.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_logRules}
-	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_logRules}
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
-	 * </ul>
-	 */
-	LogRule[] logRules() default {};
 }

@@ -87,7 +87,12 @@ public class MockRest implements MockHttpConnection {
 			Map<Class<?>,RestContext> contexts = debug ? CONTEXTS_DEBUG : CONTEXTS_NORMAL;
 			if (! contexts.containsKey(c)) {
 				Object o = b.impl instanceof Class ? ((Class<?>)b.impl).newInstance() : b.impl;
-				RestContext rc = RestContext.create(o).logger(b.debug ? BasicRestLogger.class : NoOpRestLogger.class).build();
+				RestContextBuilder rcb = RestContext.create(o);
+				if (debug) {
+					rcb.debug(Enablement.ALWAYS);
+					rcb.callLoggerConfig(RestCallLoggerConfig.DEFAULT_DEBUG);
+				}
+				RestContext rc = rcb.build();
 				if (o instanceof RestServlet) {
 					((RestServlet)o).setContext(rc);
 				} else {

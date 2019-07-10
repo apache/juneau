@@ -12,82 +12,63 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.Enablement.*;
 
 import java.util.*;
 import java.util.logging.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.*;
+import org.apache.juneau.json.*;
 
 /**
  * Represents a set of logging rules for how to handle logging of HTTP requests/responses.
  */
 public class RestCallLoggerConfig {
 
+	/**
+	 * Default empty logging config.
+	 */
+	public static final RestCallLoggerConfig DEFAULT = RestCallLoggerConfig.create().build();
+
+	/**
+	 * Default debug logging config.
+	 */
+	public static final RestCallLoggerConfig DEFAULT_DEBUG =
+		RestCallLoggerConfig
+			.create()
+			.useStackTraceHashing(false)
+			.level(Level.WARNING)
+			.rules(
+				RestCallLoggerRule
+					.create()
+					.codes("*")
+					.verbose()
+					.build()
+			)
+			.build();
+
 	private final RestCallLoggerRule[] rules;
-	private final boolean disabled, debugAlways, debugPerRequest, noTraceAlways, noTracePerRequest, useStackTraceHashing;
+	private final boolean disabled, useStackTraceHashing;
+	private final Enablement noTrace;
 	private final int stackTraceHashingTimeout;
 	private final Level level;
 
 	RestCallLoggerConfig(Builder b) {
 		RestCallLoggerConfig p = b.parent;
 
-		this.disabled = bool(b.disabled, p == null ? false : p.disabled);
-		this.debugAlways = always(b.debug, p == null ? false : p.debugAlways);
-		this.debugPerRequest = perRequest(b.debug, p == null ? false : p.debugPerRequest);
-		this.noTraceAlways = always(b.noTrace, p == null ? false : p.noTraceAlways);
-		this.noTracePerRequest = perRequest(b.noTrace, p == null ? false : p.noTracePerRequest);
-		this.useStackTraceHashing = boolOrNum(b.stackTraceHashing, p == null ? false : p.useStackTraceHashing);
-		this.stackTraceHashingTimeout = number(b.stackTraceHashing, p == null ? Integer.MAX_VALUE : p.stackTraceHashingTimeout);
-		this.level = level(b.level, p == null ? Level.INFO : p.level);
+		this.disabled = b.disabled != null ? b.disabled : p != null ? p.disabled : false;
+		this.noTrace = b.noTrace != null ? b.noTrace : p != null ? p.noTrace : NEVER;
+		this.useStackTraceHashing = b.useStackTraceHashing != null ? b.useStackTraceHashing : p != null ? p.useStackTraceHashing : false;
+		this.stackTraceHashingTimeout = b.stackTraceHashingTimeout != null ? b.stackTraceHashingTimeout : p != null ? p.stackTraceHashingTimeout : Integer.MAX_VALUE;
+		this.level = b.level != null ? b.level : p != null ? p.level : Level.INFO;
 
 		ArrayList<RestCallLoggerRule> rules = new ArrayList<>();
+		rules.addAll(b.rules);
 		if (p != null)
 			rules.addAll(Arrays.asList(p.rules));
-		rules.addAll(b.rules);
 		this.rules = rules.toArray(new RestCallLoggerRule[rules.size()]);
-	}
-
-	private boolean always(String s, boolean def) {
-		if (s == null)
-			return def;
-		return "always".equalsIgnoreCase(s);
-	}
-
-	private boolean perRequest(String s, boolean def) {
-		if (s == null)
-			return def;
-		return "per-request".equalsIgnoreCase(s);
-	}
-
-	private boolean bool(String s, boolean def) {
-		if (s == null)
-			return def;
-		return "true".equalsIgnoreCase(s);
-	}
-
-	private boolean boolOrNum(String s, boolean def) {
-		if (s == null)
-			return def;
-		return "true".equalsIgnoreCase(s) || isNumeric(s);
-	}
-
-	private int number(String s, int def) {
-		if (StringUtils.isNumeric(s)) {
-			try {
-				return (Integer)parseNumber(s, Integer.class);
-			} catch (ParseException e) { /* Should never happen */ }
-		}
-		return def;
-	}
-
-	private Level level(String s, Level def) {
-		if (s == null)
-			return def;
-		return Level.parse(s);
 	}
 
 	/**
@@ -105,12 +86,17 @@ public class RestCallLoggerConfig {
 	public static class Builder {
 		List<RestCallLoggerRule> rules = new ArrayList<>();
 		RestCallLoggerConfig parent;
-		String stackTraceHashing, debug, noTrace, disabled, level;
+		Level level;
+		Boolean disabled, useStackTraceHashing;
+		Enablement noTrace;
+		Integer stackTraceHashingTimeout;
 
 		/**
 		 * Sets the parent logging config.
 		 *
-		 * @param parent The parent logging config.
+		 * @param parent
+		 * 	The parent logging config.
+		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
 		public Builder parent(RestCallLoggerConfig parent) {
@@ -120,6 +106,10 @@ public class RestCallLoggerConfig {
 
 		/**
 		 * Adds a new logging rule to this config.
+		 *
+		 * <p>
+		 * 	The rule will be added to the END of list of current rules and thus checked last in the current list but
+		 * 	before any parent rules.
 		 *
 		 * @param rule The logging rule to add to this config.
 		 * @return This object (for method chaining).
@@ -132,54 +122,16 @@ public class RestCallLoggerConfig {
 		/**
 		 * Adds new logging rules to this config.
 		 *
+		 * <p>
+		 * 	The rules will be added in order to the END of list of current rules and thus checked last in the current list but
+		 * 	before any parent rules.
+		 *
 		 * @param rules The logging rules to add to this config.
 		 * @return This object (for method chaining).
 		 */
 		public Builder rules(RestCallLoggerRule...rules) {
 			for (RestCallLoggerRule rule : rules)
 				this.rules.add(rule);
-			return this;
-		}
-
-		/**
-		 * Enables debug mode on this config.
-		 *
-		 * <p>
-		 * Debug mode causes the HTTP bodies to be cached in memory so that they can be logged.
-		 *
-		 * <p>
-		 * Possible values (case-insensitive):
-		 * <ul>
-		 * 	<li><js>"always"</js> - Debug mode enabled for all requests.
-		 * 	<li><js>"never"</js> - Debug mode disabled for all requests.
-		 * 	<li><js>"per-request"</js> - Debug mode enabled for requests that have a <js>"X-Debug: true"</js> header.
-		 * </ul>
-		 *
-		 * @param value The value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder debug(String value) {
-			this.debug = value;
-			return this;
-		}
-
-		/**
-		 * Shortcut for calling <c>debug(<js>"always"</js>);</c>.
-		 *
-		 * @return This object (for method chaining).
-		 */
-		public Builder debugAlways() {
-			this.debug = "always";
-			return this;
-		}
-
-		/**
-		 * Shortcut for calling <c>debug(<js>"per-request"</js>);</c>.
-		 *
-		 * @return This object (for method chaining).
-		 */
-		public Builder debugPerRequest() {
-			this.debug = "per-request";
 			return this;
 		}
 
@@ -192,36 +144,18 @@ public class RestCallLoggerConfig {
 		 * <p>
 		 * Possible values (case-insensitive):
 		 * <ul>
-		 * 	<li><js>"always"</js> - No-trace mode enabled for all requests.
-		 * 	<li><js>"never"</js> - No-trace mode disabled for all requests.
-		 * 	<li><js>"per-request"</js> - No-trace mode enabled for requests that have a <js>"X-NoTrace: true"</js> header.
+		 * 	<li><{@link Enablement#ALWAYS ALWAYS} - No-trace mode enabled for all requests.
+		 * 	<li><{@link Enablement#NEVER NEVER} - No-trace mode disabled for all requests.
+		 * 	<li><{@link Enablement#PER_REQUEST PER_REQUEST} - No-trace mode enabled for requests that have a <js>"X-NoTrace: true"</js> header.
 		 * </ul>
 		 *
-		 * @param value The value for this property.
+		 * @param value
+		 * 	The value for this property.
+		 * 	<br>Can be <jk>null</jk> (inherit from parent or default to {@link Enablement#NEVER NEVER}).
 		 * @return This object (for method chaining).
 		 */
-		public Builder noTrace(String value) {
+		public Builder noTrace(Enablement value) {
 			this.noTrace = value;
-			return this;
-		}
-
-		/**
-		 * Shortcut for calling <c>noTrace(<js>"always"</js>);</c>.
-		 *
-		 * @return This object (for method chaining).
-		 */
-		public Builder noTraceAlways() {
-			this.noTrace = "always";
-			return this;
-		}
-
-		/**
-		 * Shortcut for calling <c>noTrace(<js>"per-request"</js>);</c>.
-		 *
-		 * @return This object (for method chaining).
-		 */
-		public Builder noTracePerRequest() {
-			this.noTrace = "per-request";
 			return this;
 		}
 
@@ -231,43 +165,36 @@ public class RestCallLoggerConfig {
 		 * <p>
 		 * When enabled, stacktraces will be replaced with hashes in the log file.
 		 *
-		 * <p>
-		 * Possible values (case-insensitive):
-		 * <ul>
-		 * 	<li><js>"true"</js> - Stacktrace-hash mode enabled for all requests.
-		 * 	<li><js>"false"</js> - Stacktrace-hash mode disabled for all requests.
-		 * 	<li>Numeric value - Same as <js>"true"</js> but identifies a time in milliseconds during which stack traces
-		 * 		should be hashed before starting over.
-		 * 		<br>Useful if you cycle your log files and want to make sure stack traces are logged at least one per day
-		 * 		(for example).
-		 * </ul>
-		 *
-		 * @param value The value for this property.
+		 * @param value
+		 * 	The value for this property.
+		 * 	<br>Can be <jk>null</jk> (inherit from parent or default to <jk>false</jk>).
 		 * @return This object (for method chaining).
 		 */
-		public Builder stackTraceHashing(String value) {
-			this.stackTraceHashing = value;
+		public Builder useStackTraceHashing(Boolean value) {
+			this.useStackTraceHashing = value;
 			return this;
 		}
 
 		/**
-		 * Shortcut for calling <c>stackTraceHashing(<js>"true"</js>);</c>.
+		 * Shortcut for calling <c>useStackTraceHashing(<jk>true</jk>);</c>.
 		 *
 		 * @return This object (for method chaining).
 		 */
-		public Builder stackTraceHashing() {
-			this.stackTraceHashing = "true";
+		public Builder useStackTraceHashing() {
+			this.useStackTraceHashing = true;
 			return this;
 		}
 
 		/**
-		 * Shortcut for calling <c>stackTraceHashing(String.<jsm>valueOf</jsm>(timeout));</c>.
+		 * Enables a timeout after which stack traces hashes are flushed.
 		 *
-		 * @param timeout Time in milliseconds to hash stack traces for.
+		 * @param timeout
+		 * 	Time in milliseconds to hash stack traces for.
+		 * 	<br>Can be <jk>null</jk> (inherit from parent or default to {@link Integer#MAX_VALUE MAX_VALUE}).
 		 * @return This object (for method chaining).
 		 */
-		public Builder stackTraceHashingTimeout(int timeout) {
-			this.stackTraceHashing = String.valueOf(timeout);
+		public Builder stackTraceHashingTimeout(Integer timeout) {
+			this.stackTraceHashingTimeout = timeout;
 			return this;
 		}
 
@@ -275,34 +202,25 @@ public class RestCallLoggerConfig {
 		 * Disable all logging.
 		 *
 		 * <p>
-		 * This is equivalent to <c>noTrace(<js>"always"</js>)</c> and provided for convenience.
+		 * This is equivalent to <c>noTrace(<jsf>ALWAYS</jsf>)</c> and provided for convenience.
 		 *
-		 * <p>
-		 * Possible values (case-insensitive):
-		 * <ul>
-		 * 	<li><js>"true"</js> - Stacktrace-hash mode enabled for all requests.
-		 * 	<li><js>"false"</js> - Stacktrace-hash mode disabled for all requests.
-		 * 	<li>Numeric value - Same as <js>"true"</js> but identifies a time in milliseconds during which stack traces
-		 * 		should be hashed before starting over.
-		 * 		<br>Useful if you cycle your log files and want to make sure stack traces are logged at least one per day
-		 * 		(for example).
-		 * </ul>
-		 *
-		 * @param value The value for this property.
+		 * @param value
+		 * 	The value for this property.
+		 * 	<br>Can be <jk>null</jk> (inherit from parent or default to <jk>false</jk>).
 		 * @return This object (for method chaining).
 		 */
-		public Builder disabled(String value) {
+		public Builder disabled(Boolean value) {
 			this.disabled = value;
 			return this;
 		}
 
 		/**
-		 * Shortcut for calling <c>disabled(<js>"true"</js>);</c>.
+		 * Shortcut for calling <c>disabled(<jk>true</jk>);</c>.
 		 *
 		 * @return This object (for method chaining).
 		 */
 		public Builder disabled() {
-			this.disabled = "true";
+			this.disabled = true;
 			return this;
 		}
 
@@ -312,37 +230,35 @@ public class RestCallLoggerConfig {
 		 * <p>
 		 * This defines the logging level for messages if they're not already defined on the matched rule.
 		 *
-		 * <p>
-		 * If not specified, <js>"INFO"</js> is used.
-		 *
-		 * <p>
-		 * See {@link Level} for possible values.
-		 *
-		 * @param value The value for this property.
+		 * @param value
+		 * 	The value for this property.
+		 * 	<br>Can be <jk>null</jk> (inherit from parent or default to {@link Level#INFO INFO}).
 		 * @return This object (for method chaining).
 		 */
-		public Builder level(String value) {
+		public Builder level(Level value) {
 			this.level = value;
 			return this;
 		}
 
 		/**
-		 * The default logging level.
+		 * Applies the properties in the specified object map to this builder.
 		 *
-		 * <p>
-		 * This defines the logging level for messages if they're not already defined on the matched rule.
-		 *
-		 * <p>
-		 * If not specified, <js>"INFO"</js> is used.
-		 *
-		 * <p>
-		 * See {@link Level} for possible values.
-		 *
-		 * @param value The value for this property.
+		 * @param m The map containing properties to apply.
 		 * @return This object (for method chaining).
 		 */
-		public Builder level(Level value) {
-			this.level = value == null ? null : value.getName();
+		public Builder apply(ObjectMap m) {
+			for (String key : m.keySet()) {
+				if ("useStackTraceHashing".equals(key))
+					useStackTraceHashing(m.getBoolean("useStackTraceHashing"));
+				else if ("stackTraceHashingTimeout".equals(key))
+					stackTraceHashingTimeout(m.getInt("stackTraceHashingTimeout"));
+				else if ("noTrace".equals(key))
+					noTrace(m.get("noTrace", Enablement.class));
+				else if ("rules".equals(key))
+					rules(m.get("rules", RestCallLoggerRule[].class));
+				else if ("level".equals(key))
+					level(m.get("level", Level.class));
+			}
 			return this;
 		}
 
@@ -364,7 +280,7 @@ public class RestCallLoggerConfig {
 	 * @return The applicable logging rule, or <jk>null<jk> if a match could not be found.
 	 */
 	public RestCallLoggerRule getRule(HttpServletRequest req, HttpServletResponse res) {
-		if (isNoTrace(req))
+		if (disabled || isNoTrace(req))
 			return null;
 
 		int status = res.getStatus();
@@ -378,36 +294,20 @@ public class RestCallLoggerConfig {
 		return null;
 	}
 
-	/**
-	 * Returns <jk>true</jk> if the current request has debug enabled.
-	 *
-	 * @param req The request to check.
-	 * @return <jk>true</jk> if the current request has debug enabled.
-	 */
-	public boolean isDebug(HttpServletRequest req) {
-		if (debugAlways)
-			return true;
-		if (debugPerRequest) {
-			if ("true".equalsIgnoreCase(req.getHeader("X-Debug")))
-				return true;
-			Boolean b = boolAttr(req, "Debug");
-			if (b != null && b == true)
-				return true;
-		}
-		return false;
+	private boolean isDebug(HttpServletRequest req) {
+		Boolean b = boolAttr(req, "Debug");
+		return (b != null && b == true);
 	}
 
 	private boolean isNoTrace(HttpServletRequest req) {
-		if (disabled || noTraceAlways)
+		Boolean b = boolAttr(req, "NoTrace");
+		if (b != null && b == true)
 			return true;
-		if (noTracePerRequest) {
-			if ("true".equalsIgnoreCase(req.getHeader("X-NoTrace")))
-				return true;
-			Boolean b = boolAttr(req, "NoTrace");
-			if (b != null && b == true)
-				return true;
-		}
-		return false;
+		if (noTrace == ALWAYS)
+			return true;
+		if (noTrace == NEVER)
+			return false;
+		return "true".equalsIgnoreCase(req.getHeader("X-NoTrace"));
 	}
 
 	/**
@@ -424,7 +324,7 @@ public class RestCallLoggerConfig {
 	 *
 	 * @return <jk>true</jk> if stack traces should be hashed.
 	 */
-	public boolean useStackTraceHashing() {
+	public boolean isUseStackTraceHashing() {
 		return useStackTraceHashing;
 	}
 
@@ -437,10 +337,44 @@ public class RestCallLoggerConfig {
 		return stackTraceHashingTimeout;
 	}
 
+	/**
+	 * Returns the rules defined in this config.
+	 *
+	 * @return Thew rules defined in this config.
+	 */
+	public List<RestCallLoggerRule> getRules() {
+		return Collections.unmodifiableList(Arrays.asList(rules));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private Boolean boolAttr(HttpServletRequest req, String name) {
 		Object o = req.getAttribute(name);
 		if (o == null || ! (o instanceof Boolean))
 			return null;
 		return (Boolean)o;
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());
+	}
+
+	/**
+	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
+	 *
+	 * @return A new map containing the properties defined on this context.
+	 */
+	public ObjectMap toMap() {
+		return new DefaultFilteringObjectMap()
+			.append("disabled", disabled)
+			.append("useStackTraceHashing", useStackTraceHashing)
+			.append("noTrace", noTrace == NEVER ? null : noTrace)
+			.append("stackTraceHashingTimeout", stackTraceHashingTimeout == Integer.MAX_VALUE ? null : stackTraceHashingTimeout)
+			.append("level", level == Level.INFO ? null : level)
+			.append("rules", rules.length == 0 ? null : rules)
+		;
 	}
 }

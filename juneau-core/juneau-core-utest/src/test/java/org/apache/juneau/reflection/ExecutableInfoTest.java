@@ -378,6 +378,7 @@ public class ExecutableInfoTest {
 		@Deprecated public void deprecated() {}
 		public void notDeprecated() {}
 		public void hasParams(int foo) {}
+		public void hasStringParam(String foo) {}
 		public void hasNoParams() {}
 		public void isPublic() {}
 		protected void isNotPublic() {}
@@ -391,6 +392,7 @@ public class ExecutableInfoTest {
 		e_deprecated = e.getPublicMethod("deprecated"),
 		e_notDeprecated = e.getPublicMethod("notDeprecated"),
 		e_hasParams = e.getPublicMethod("hasParams", int.class),
+		e_hasStringParam = e.getPublicMethod("hasStringParam", String.class),
 		e_hasNoParams = e.getPublicMethod("hasNoParams"),
 		e_isPublic = e.getPublicMethod("isPublic"),
 		e_isNotPublic = e.getMethod("isNotPublic"),
@@ -475,6 +477,16 @@ public class ExecutableInfoTest {
 		assertFalse(e_hasParams.hasArgs(long.class));
 		assertTrue(e_hasNoParams.hasArgs());
 		assertFalse(e_hasNoParams.hasArgs(long.class));
+	}
+
+	@Test
+	public void hasArgParents() {
+		assertTrue(e_hasStringParam.hasArgParents(String.class));
+		assertTrue(e_hasStringParam.hasArgParents(CharSequence.class));
+		assertFalse(e_hasStringParam.hasArgParents(StringBuilder.class));
+		assertFalse(e_hasStringParam.hasArgParents());
+		assertFalse(e_hasStringParam.hasArgParents(String.class, String.class));
+		assertFalse(e_hasStringParam.hasArgParents(long.class));
 	}
 
 	@Test
