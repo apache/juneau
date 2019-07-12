@@ -24,7 +24,7 @@ import java.util.logging.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+ * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
  * </ul>
  * @deprecated Use {@link RestCallLogger}
  */

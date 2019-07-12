@@ -308,7 +308,7 @@ public class RestCallLoggerRuleTest {
 	@Test
 	public void g01_beanInstantiation_defaultValues() throws ParseException {
 		RestCallLoggerRule r = JsonParser.DEFAULT.parse("{}", RestCallLoggerRule.class);
-		assertEquals("{matchAll:true}", r.toString());
+		assertEquals("{}", r.toString());
 	}
 
 	@Test

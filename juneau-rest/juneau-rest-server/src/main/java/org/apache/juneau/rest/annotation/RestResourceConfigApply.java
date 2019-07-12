@@ -208,8 +208,8 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 			if (! al.stackTraceHashingTimeout().isEmpty())
 				m.append("stackTraceHashingTimeout", integer(al.stackTraceHashingTimeout(), "@Logging(stackTraceHashingTimeout)"));
 
-			if (! al.noTrace().isEmpty())
-				m.append("noTrace", enablement(al.noTrace()));
+			if (! al.disabled().isEmpty())
+				m.append("disabled", enablement(al.disabled()));
 
 			if (! al.level().isEmpty())
 				m.append("level", level(al.level(), "@Logging(level)"));
@@ -239,6 +239,9 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 
 					if (! a2.verbose().isEmpty())
 						m2.append("verbose", bool(a2.verbose()));
+
+					if (! a2.disabled().isEmpty())
+						m2.append("disabled", bool(a2.disabled()));
 
 					ol.add(m2);
 				}
@@ -315,9 +318,9 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 
 	private Level level(String in, String loc) {
 		try {
-			return Level.parse(string(in));
+			return Level.parse(string(in).toUpperCase());
 		} catch (Exception e) {
-			throw new ConfigException("Invalid syntax for level on annotation @RestResource({1}): {2}", loc, in);
+			throw new ConfigException("Invalid syntax for level on annotation @RestResource({0}): {1}", loc, in);
 		}
 	}
 }

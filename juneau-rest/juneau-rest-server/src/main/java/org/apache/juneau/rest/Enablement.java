@@ -22,7 +22,7 @@ public enum Enablement {
 	/**
 	 * Feature is always enabled.
 	 */
-	ALWAYS,
+	TRUE,
 
 	/**
 	 * Feature is enabled per HTTP request.
@@ -32,7 +32,7 @@ public enum Enablement {
 	/**
 	 * Feature is disabled.
 	 */
-	NEVER;
+	FALSE;
 
 	/**
 	 * Retrieves this enum using case-insensitive matching.

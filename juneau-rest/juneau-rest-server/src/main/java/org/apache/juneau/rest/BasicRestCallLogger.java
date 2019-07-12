@@ -34,12 +34,12 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+ * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
  * </ul>
  */
 public class BasicRestCallLogger implements RestCallLogger {
 
-	private final StackTraceDatabase stackTraceDb = new StackTraceDatabase();
+	private final StackTraceDatabase stackTraceDb = new StackTraceDatabase(RestMethodContext.class);
 
 	private final Logger logger;
 	private final RestContext context;
@@ -152,7 +152,8 @@ public class BasicRestCallLogger implements RestCallLogger {
 
 			if (reqd.isOneOf(MEDIUM, LONG)) {
 				String qs = req.getQueryString();
-				sb.append('?').append(qs);
+				if (qs != null)
+					sb.append('?').append(qs);
 			}
 
 			if (reqBody != null && reqd.isOneOf(MEDIUM ,LONG))

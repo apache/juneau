@@ -29,8 +29,9 @@ public class RestCallLoggerRule {
 
 	private final Matcher codeMatcher;
 	private final Matcher exceptionMatcher;
-	private final boolean debugOnly, matchAll;
+	private final boolean debugOnly;
 	private final Level level;
+	private final Enablement disabled;
 	private final RestCallLoggingDetail req, res;
 
 	/**
@@ -41,12 +42,12 @@ public class RestCallLoggerRule {
 	RestCallLoggerRule(Builder b) {
 		this.codeMatcher = isEmpty(b.codes) || "*".equals(b.codes) ? null : NumberMatcherFactory.DEFAULT.create(b.codes);
 		this.exceptionMatcher = isEmpty(b.exceptions) ? null : StringMatcherFactory.DEFAULT.create(b.exceptions);
-		this.matchAll = "*".equals(b.codes) || (codeMatcher == null && exceptionMatcher == null);
-		boolean v = b.verbose == null ? false : b.verbose;
+		boolean verbose = b.verbose == null ? false : b.verbose;
+		this.disabled = b.disabled;
 		this.debugOnly = b.debugOnly == null ? false : b.debugOnly;
 		this.level = b.level;
-		this.req = v ? LONG : b.req != null ? b.req : SHORT;
-		this.res = v ? LONG : b.res != null ? b.res : SHORT;
+		this.req = verbose ? LONG : b.req != null ? b.req : SHORT;
+		this.res = verbose ? LONG : b.res != null ? b.res : SHORT;
 	}
 
 	/**
@@ -65,6 +66,7 @@ public class RestCallLoggerRule {
 	public static class Builder {
 		String codes, exceptions;
 		Boolean verbose, debugOnly;
+		Enablement disabled;
 		Level level;
 		RestCallLoggingDetail req, res;
 
@@ -84,6 +86,11 @@ public class RestCallLoggerRule {
 		 */
 		public Builder codes(String value) {
 			this.codes = value;
+			String c = emptyIfNull(trim(codes));
+			if (c.endsWith("-"))
+				codes += "999";
+			else if (c.startsWith("-"))
+				codes = "0" + codes;
 			return this;
 		}
 
@@ -126,6 +133,28 @@ public class RestCallLoggerRule {
 		 */
 		public Builder verbose() {
 			return this.verbose(true);
+		}
+
+		/**
+		 * Shortcut for specifying {@link Level#OFF} for {@link #level(Level)}.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object (for method chaining).
+		 */
+		public Builder disabled(Enablement value) {
+			this.disabled = value;
+			return this;
+		}
+
+		/**
+		 * Shortcut for calling <c>disabled(<jk>true</jk>);</c>
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder disabled() {
+			return this.disabled(Enablement.TRUE);
 		}
 
 		/**
@@ -217,13 +246,15 @@ public class RestCallLoggerRule {
 	public boolean matches(int statusCode, boolean debug, Throwable e) {
 		if (debugOnly && ! debug)
 			return false;
-		if (matchAll)
+		if (exceptionMatcher != null) {
+			if (e == null)
+				return false;
+			Class<?> c = e.getClass();
+			if (! (exceptionMatcher.matches(null, c.getName()) || exceptionMatcher.matches(null, c.getSimpleName())))
+				return false;
+		}
+		if (codeMatcher == null || codeMatcher.matches(null, statusCode))
 			return true;
-		if (codeMatcher != null && codeMatcher.matches(null, statusCode))
-			return true;
-		if (exceptionMatcher != null && e != null)
-			if (exceptionMatcher.matches(null, e.getClass().getName()) || exceptionMatcher.matches(null, e.getClass().getSimpleName()))
-				return true;
 		return false;
 	}
 
@@ -254,12 +285,20 @@ public class RestCallLoggerRule {
 		return level;
 	}
 
+	/**
+	 * Returns the disabled flag.
+	 *
+	 * @return the disabled flag.
+	 */
+	public Enablement getDisabled() {
+		return disabled;
+	}
+
 	private ObjectMap toMap() {
 		return new DefaultFilteringObjectMap()
 			.append("codes", codeMatcher)
 			.append("exceptions", exceptionMatcher)
 			.append("debugOnly", debugOnly)
-			.append("matchAll", matchAll)
 			.append("level", level)
 			.append("req", req == SHORT ? null : req)
 			.append("res", res == SHORT ? null : res);

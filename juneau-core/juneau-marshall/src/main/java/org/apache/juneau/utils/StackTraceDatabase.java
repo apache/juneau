@@ -22,7 +22,24 @@ import java.util.concurrent.*;
  */
 public class StackTraceDatabase {
 
-	private final ConcurrentHashMap<Integer,StackTraceInfo> DB = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Integer,StackTraceInfo> db = new ConcurrentHashMap<>();
+	private final String stopClass;
+
+	/**
+	 * Constructor.
+	 */
+	public StackTraceDatabase() {
+		this.stopClass = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param stopClass When this class is encountered in a stack trace, stop calculating the hash.
+	 */
+	public StackTraceDatabase(Class<?> stopClass) {
+		this.stopClass = stopClass == null ? "" : stopClass.getName();
+	}
 
 	/**
 	 * Retrieves the stack trace information for the specified exception.
@@ -33,23 +50,26 @@ public class StackTraceDatabase {
 	 */
 	public StackTraceInfo getStackTraceInfo(Throwable e, int timeout) {
 		int hash = hash(e);
-		StackTraceInfo stc = DB.get(hash);
+		StackTraceInfo stc = db.get(hash);
 		if (stc != null && stc.timeout > System.currentTimeMillis()) {
 			stc.incrementAndClone();
 			return stc.clone();
 		}
-		synchronized (DB) {
+		synchronized (db) {
 			stc = new StackTraceInfo(timeout, hash);
-			DB.put(hash, stc);
+			db.put(hash, stc);
 			return stc.clone();
 		}
 	}
 
-	private static int hash(Throwable t) {
+	private int hash(Throwable t) {
 		int i = 0;
 		while (t != null) {
-			for (StackTraceElement e : t.getStackTrace())
+			for (StackTraceElement e : t.getStackTrace()) {
+				if (e.getClassName().equals(stopClass))
+					break;
 				i ^= e.hashCode();
+			}
 			t = t.getCause();
 		}
 		return i;
@@ -59,6 +79,6 @@ public class StackTraceDatabase {
 	 * Clears out the stack trace cache.
 	 */
 	public void reset() {
-		DB.clear();
+		db.clear();
 	}
 }

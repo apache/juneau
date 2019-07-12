@@ -50,16 +50,15 @@ public class RestCallLoggerConfig {
 			.build();
 
 	private final RestCallLoggerRule[] rules;
-	private final boolean disabled, useStackTraceHashing;
-	private final Enablement noTrace;
+	private final boolean useStackTraceHashing;
+	private final Enablement disabled;
 	private final int stackTraceHashingTimeout;
 	private final Level level;
 
 	RestCallLoggerConfig(Builder b) {
 		RestCallLoggerConfig p = b.parent;
 
-		this.disabled = b.disabled != null ? b.disabled : p != null ? p.disabled : false;
-		this.noTrace = b.noTrace != null ? b.noTrace : p != null ? p.noTrace : NEVER;
+		this.disabled = b.disabled != null ? b.disabled : p != null ? p.disabled : FALSE;
 		this.useStackTraceHashing = b.useStackTraceHashing != null ? b.useStackTraceHashing : p != null ? p.useStackTraceHashing : false;
 		this.stackTraceHashingTimeout = b.stackTraceHashingTimeout != null ? b.stackTraceHashingTimeout : p != null ? p.stackTraceHashingTimeout : Integer.MAX_VALUE;
 		this.level = b.level != null ? b.level : p != null ? p.level : Level.INFO;
@@ -87,8 +86,8 @@ public class RestCallLoggerConfig {
 		List<RestCallLoggerRule> rules = new ArrayList<>();
 		RestCallLoggerConfig parent;
 		Level level;
-		Boolean disabled, useStackTraceHashing;
-		Enablement noTrace;
+		Boolean useStackTraceHashing;
+		Enablement disabled;
 		Integer stackTraceHashingTimeout;
 
 		/**
@@ -144,19 +143,28 @@ public class RestCallLoggerConfig {
 		 * <p>
 		 * Possible values (case-insensitive):
 		 * <ul>
-		 * 	<li><{@link Enablement#ALWAYS ALWAYS} - No-trace mode enabled for all requests.
-		 * 	<li><{@link Enablement#NEVER NEVER} - No-trace mode disabled for all requests.
+		 * 	<li><{@link Enablement#TRUE TRUE} - No-trace mode enabled for all requests.
+		 * 	<li><{@link Enablement#FALSE FALSE} - No-trace mode disabled for all requests.
 		 * 	<li><{@link Enablement#PER_REQUEST PER_REQUEST} - No-trace mode enabled for requests that have a <js>"X-NoTrace: true"</js> header.
 		 * </ul>
 		 *
 		 * @param value
 		 * 	The value for this property.
-		 * 	<br>Can be <jk>null</jk> (inherit from parent or default to {@link Enablement#NEVER NEVER}).
+		 * 	<br>Can be <jk>null</jk> (inherit from parent or default to {@link Enablement#FALSE NEVER}).
 		 * @return This object (for method chaining).
 		 */
-		public Builder noTrace(Enablement value) {
-			this.noTrace = value;
+		public Builder disabled(Enablement value) {
+			this.disabled = value;
 			return this;
+		}
+
+		/**
+		 * Shortcut for calling <c>disabled(<jsf>TRUE</jsf>)</c>.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder disabled() {
+			return disabled(TRUE);
 		}
 
 		/**
@@ -199,32 +207,6 @@ public class RestCallLoggerConfig {
 		}
 
 		/**
-		 * Disable all logging.
-		 *
-		 * <p>
-		 * This is equivalent to <c>noTrace(<jsf>ALWAYS</jsf>)</c> and provided for convenience.
-		 *
-		 * @param value
-		 * 	The value for this property.
-		 * 	<br>Can be <jk>null</jk> (inherit from parent or default to <jk>false</jk>).
-		 * @return This object (for method chaining).
-		 */
-		public Builder disabled(Boolean value) {
-			this.disabled = value;
-			return this;
-		}
-
-		/**
-		 * Shortcut for calling <c>disabled(<jk>true</jk>);</c>.
-		 *
-		 * @return This object (for method chaining).
-		 */
-		public Builder disabled() {
-			this.disabled = true;
-			return this;
-		}
-
-		/**
 		 * The default logging level.
 		 *
 		 * <p>
@@ -252,8 +234,8 @@ public class RestCallLoggerConfig {
 					useStackTraceHashing(m.getBoolean("useStackTraceHashing"));
 				else if ("stackTraceHashingTimeout".equals(key))
 					stackTraceHashingTimeout(m.getInt("stackTraceHashingTimeout"));
-				else if ("noTrace".equals(key))
-					noTrace(m.get("noTrace", Enablement.class));
+				else if ("disabled".equals(key))
+					disabled(m.get("disabled", Enablement.class));
 				else if ("rules".equals(key))
 					rules(m.get("rules", RestCallLoggerRule[].class));
 				else if ("level".equals(key))
@@ -280,16 +262,27 @@ public class RestCallLoggerConfig {
 	 * @return The applicable logging rule, or <jk>null<jk> if a match could not be found.
 	 */
 	public RestCallLoggerRule getRule(HttpServletRequest req, HttpServletResponse res) {
-		if (disabled || isNoTrace(req))
-			return null;
 
 		int status = res.getStatus();
 		Throwable e = (Throwable)req.getAttribute("Exception");
 		boolean debug = isDebug(req);
 
-		for (RestCallLoggerRule r : rules)
-			if (r.matches(status, debug, e))
+		for (RestCallLoggerRule r : rules) {
+			if (r.matches(status, debug, e)) {
+				Enablement disabled = r.getDisabled();
+				if (disabled == null)
+					disabled = this.disabled;
+				if (disabled == TRUE)
+					return null;
+				if (isNoTraceAttr(req))
+					return null;
+				if (disabled == FALSE)
+					return r;
+				if (isNoTraceHeader(req))
+					return null;
 				return r;
+			}
+		}
 
 		return null;
 	}
@@ -299,14 +292,12 @@ public class RestCallLoggerConfig {
 		return (b != null && b == true);
 	}
 
-	private boolean isNoTrace(HttpServletRequest req) {
+	private boolean isNoTraceAttr(HttpServletRequest req) {
 		Boolean b = boolAttr(req, "NoTrace");
-		if (b != null && b == true)
-			return true;
-		if (noTrace == ALWAYS)
-			return true;
-		if (noTrace == NEVER)
-			return false;
+		return (b != null && b == true);
+	}
+
+	private boolean isNoTraceHeader(HttpServletRequest req) {
 		return "true".equalsIgnoreCase(req.getHeader("X-NoTrace"));
 	}
 
@@ -369,9 +360,8 @@ public class RestCallLoggerConfig {
 	 */
 	public ObjectMap toMap() {
 		return new DefaultFilteringObjectMap()
-			.append("disabled", disabled)
 			.append("useStackTraceHashing", useStackTraceHashing)
-			.append("noTrace", noTrace == NEVER ? null : noTrace)
+			.append("disabled", disabled == FALSE ? null : disabled)
 			.append("stackTraceHashingTimeout", stackTraceHashingTimeout == Integer.MAX_VALUE ? null : stackTraceHashingTimeout)
 			.append("level", level == Level.INFO ? null : level)
 			.append("rules", rules.length == 0 ? null : rules)

@@ -165,7 +165,7 @@ public class RestCallLoggerConfigTest {
 	public void b02_disabled_true() {
 		RestCallLoggerConfig lc =
 			config()
-			.disabled(true)
+			.disabled(TRUE)
 			.rule(
 				rule()
 				.codes("*")
@@ -185,7 +185,7 @@ public class RestCallLoggerConfigTest {
 	public void b03_disabled_false() {
 		RestCallLoggerConfig lc =
 			config()
-			.disabled(false)
+			.disabled(FALSE)
 			.rule(
 				rule()
 				.codes("*")
@@ -229,7 +229,7 @@ public class RestCallLoggerConfigTest {
 	public void c01_noTraceAlways() {
 		RestCallLoggerConfig lc =
 			config()
-			.noTrace(ALWAYS)
+			.disabled(TRUE)
 			.rule(
 				rule()
 				.codes("*")
@@ -249,7 +249,7 @@ public class RestCallLoggerConfigTest {
 	public void c02_noTrace_never() {
 		RestCallLoggerConfig lc =
 			config()
-			.noTrace(NEVER)
+			.disabled(FALSE)
 			.rule(
 				rule()
 				.codes("*")
@@ -269,7 +269,7 @@ public class RestCallLoggerConfigTest {
 	public void c03_noTrace_null() {
 		RestCallLoggerConfig lc =
 			config()
-			.noTrace(null)
+			.disabled(null)
 			.rule(
 				rule()
 				.codes("*")
@@ -289,7 +289,7 @@ public class RestCallLoggerConfigTest {
 	public void c04_noTrace_perRequest() {
 		RestCallLoggerConfig lc =
 			config()
-			.noTrace(PER_REQUEST)
+			.disabled(PER_REQUEST)
 			.rule(
 				rule()
 				.codes("*")

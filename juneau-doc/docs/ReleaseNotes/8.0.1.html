@@ -254,7 +254,36 @@
 				<li class='jm'>{@link oajr.BasicRestCallHandler#convertThrowable(Throwable) convertThrowable(Throwable)}
 			</ul>
 		</ul>
-		
+	<li>
+		Support for fine-tuned logging of HTTP requests and responses. 
+		<p class='bpcode'>
+<p class='bpcode'>
+	<ja>@RestResource</ja>(
+		debug=<js>"per-request"</js>,
+		logging=<ja>@Logging</ja>(
+			level=<js>"info"</js>,
+			rules={
+				<ja>@LoggingRule</ja>(codes<js>"400-499"</js>, level=<js>"warning"</js>, req=<js>"short"</js>, res=<js>"short"</js>)
+				<ja>@LoggingRule</ja>(codes<js>"500-"</js>, level=<js>"severe"</js>, req=<js>"long"</js>, res=<js>"long"</js>)
+			}
+		)
+	)
+	<jk>public class</jk> MyRest {
+
+		<ja>@RestMethod</ja>(
+			method=<js>"POST"</js>, 
+			path=<js>"foo"</js>
+			logging=<ja>@Logging</ja>(
+				level=<js>"info"</js>,
+				rules={
+					<ja>@LoggingRule</ja>(exceptions<js>"NotFound*"</js>, level=<js>"info"</js>)
+					<ja>@LoggingRule</ja>(codes<js>"200"</js>, disabled=<js>"true"</js>)
+				}
+			)
+		)
+		<jk>public</jk> String myMethod() <jk>throws</jk> Exception {...}
+		</p>		
+		See {@doc juneau-rest-server.LoggingAndDebugging} for details.
 	<li>
 		Fixed a bug where the HTTP response was returning 405 (method not found) but should really be 404 (not found)
 		when no path patterns match on any of the Java methods.

@@ -139,7 +139,8 @@ public class TransformCache {
 		} else if (ic == String.class) {
 			final Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
 			ClassInfo oc2i = getClassInfo(oc2);
-			if (oc2.isEnum()) {
+			final MethodInfo fromStringMethod = oc2i.getFromStringMethod();
+			if (oc2.isEnum() && fromStringMethod == null) {
 				t = new Transform<String,O>() {
 					@Override
 					public O transform(Object outer, String in) {
@@ -147,7 +148,6 @@ public class TransformCache {
 					}
 				};
 			} else {
-				final MethodInfo fromStringMethod = oc2i.getFromStringMethod();
 				if (fromStringMethod != null) {
 					t = new Transform<String,O>() {
 						@Override

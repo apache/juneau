@@ -305,11 +305,11 @@ h2.title {
 	text-decoration: none;
 }
 
-code.snippet {
+.snippet {
 	border: 1px solid #cccccc;
 	margin: 2px;
-	padding: 0px 5px;
-	border-radius: 5px;
+	padding: 2px 5px;
+	border-radius: 4px;
 	background-color: #f8f8f8;
 }
 
@@ -327,6 +327,12 @@ l {
 .doctree li { 
 	max-width: 800px;
 	margin-top: 0px; 
+}
+.doctree>li { 
+    margin-bottom: 10px;
+}
+.doctree li { 
+    margin-top: 5px;
 }
 li.normal {
     list-style-image:none; 

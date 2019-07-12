@@ -219,8 +219,8 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			if (! al.stackTraceHashingTimeout().isEmpty())
 				m.append("stackTraceHashingTimeout", integer(al.stackTraceHashingTimeout(), "@Logging(stackTraceHashingTimeout)"));
 
-			if (! al.noTrace().isEmpty())
-				m.append("noTrace", enablement(al.noTrace()));
+			if (! al.disabled().isEmpty())
+				m.append("disabled", enablement(al.disabled()));
 
 			if (! al.level().isEmpty())
 				m.append("level", level(al.level(), "@Logging(level)"));
@@ -250,6 +250,9 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 
 					if (! a2.verbose().isEmpty())
 						m2.append("verbose", bool(a2.verbose()));
+
+					if (! a2.disabled().isEmpty())
+						m2.append("disabled", bool(a2.disabled()));
 
 					ol.add(m2);
 				}

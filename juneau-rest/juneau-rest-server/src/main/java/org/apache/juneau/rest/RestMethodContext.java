@@ -191,7 +191,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.debug.s"</js>
 	 * 	<li><b>Data type:</b>  {@link Enablement}
-	 * 	<li><b>Default:</b>  {@link Enablement#NEVER}
+	 * 	<li><b>Default:</b>  {@link Enablement#FALSE}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -401,7 +401,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
 	public static final String RESTMETHOD_callLoggerConfig = PREFIX + ".callLoggerConfig.o";
@@ -437,7 +437,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'>{@doc juneau-rest-server.Matchers}
+	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RestMethodMatchers}
 	 * </ul>
 	 */
 	public static final String RESTMETHOD_matchers = PREFIX + ".matchers.lo";

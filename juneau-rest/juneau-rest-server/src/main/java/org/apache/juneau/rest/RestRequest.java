@@ -209,8 +209,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.maxInput(rjm.maxInput);
 
 		if (isDebug()) {
-			inner = CachingHttpServletRequest.wrap(inner);
-			setAttribute("Debug", true);
+			setDebug();
 		}
 
 		String stylesheet = getQuery().getString("stylesheet");
@@ -1346,11 +1345,75 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (b != null)
 			return b;
 		Enablement e = context.getDebug();
-		if (e == ALWAYS)
+		if (e == TRUE)
 			return true;
-		if (e == NEVER)
+		if (e == FALSE)
 			return false;
 		return "true".equalsIgnoreCase(getHeader("X-Debug"));
+	}
+
+	/**
+	 * Sets the <js>"Exception"</js> attribute to the specified throwable.
+	 *
+	 * <p>
+	 * This exception is used by {@link BasicRestCallLogger} for logging purposes.
+	 *
+	 * @param t The attribute value.
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest setException(Throwable t) {
+		setAttribute("Exception", t);
+		return this;
+	}
+
+	/**
+	 * Sets the <js>"NoTrace"</js> attribute to the specified boolean.
+	 *
+	 * <p>
+	 * This flag is used by {@link BasicRestCallLogger} and tells it not to log the current request.
+	 *
+	 * @param b The attribute value.
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest setNoTrace(Boolean b) {
+		setAttribute("NoTrace", b);
+		return this;
+	}
+
+	/**
+	 * Shortcut for calling <c>setNoTrace(<jk>true</jk>)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest setNoTrace() {
+		return setNoTrace(true);
+	}
+
+	/**
+	 * Sets the <js>"Debug"</js> attribute to the specified boolean.
+	 *
+	 * <p>
+	 * This flag is used by {@link BasicRestCallLogger} to help determine how a request should be logged.
+	 *
+	 * @param b The attribute value.
+	 * @return This object (for method chaining).
+	 * @throws IOException If body could not be cached.
+	 */
+	public RestRequest setDebug(Boolean b) throws IOException {
+		setAttribute("Debug", b);
+		if (b)
+			inner = CachingHttpServletRequest.wrap(inner);
+		return this;
+	}
+
+	/**
+	 * Shortcut for calling <c>setDebug(<jk>true</jk>)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 * @throws IOException If body could not be cached.
+	 */
+	public RestRequest setDebug() throws IOException {
+		return setDebug(true);
 	}
 
 	/**
@@ -1749,7 +1812,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jac'>{@link org.apache.juneau.rest.RestLogger}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level, String, Object...)}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#logObjects(Level, String, Object...)}
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 *
 	 * @return

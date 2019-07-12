@@ -18,7 +18,7 @@ class AnnotationUtils extends org.apache.juneau.http.annotation.AnnotationUtils 
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.useStackTraceHashing(), a.stackTraceHashingTimeout(), a.noTrace(), a.level())
+			allEmpty(a.useStackTraceHashing(), a.stackTraceHashingTimeout(), a.disabled(), a.level())
 			&& a.rules().length == 0;
 	}
 }

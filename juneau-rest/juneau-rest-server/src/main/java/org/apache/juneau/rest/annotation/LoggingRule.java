@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import java.util.logging.*;
+
 import org.apache.juneau.rest.*;
 
 /**
@@ -19,83 +21,220 @@ import org.apache.juneau.rest.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jf'>{@link RestContext#REST_logRules}
- * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_logRules}
+ * 	<li class='jf'>{@link RestContext#REST_callLoggerConfig}
+ * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_callLoggerConfig}
  * </ul>
  */
 public @interface LoggingRule {
 
 	/**
-	 * Sets the bean filters for the serializers and parsers defined on this method.
+	 * Defines the status codes that match this rule.
 	 *
 	 * <p>
-	 * If no value is specified, the bean filters are inherited from the class.
-	 * <br>Otherwise, this value overrides the bean filters defined on the class.
+	 * Possible values:
+	 * <ul>
+	 * 	<li>A single value (e.g. <js>"404"</js>).
+	 * 	<li>A closed range of values (e.g. <js>"400-499"</js>).
+	 * 	<li>An open range of values (e.g. <js>"400-"</js>, <js>"-299"</js>, <js>">=500"</js>).
+	 * 	<li>The value <js>"*"</js> to match any code.  This is the default value.
+	 * </ul>
 	 *
-	 * <p>
-	 * Use {@link Inherit} to inherit bean filters defined on the class.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
 	 *
-	 * <p>
-	 * Use {@link None} to suppress inheriting bean filters defined on the class.
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * </ul>
 	 */
 	public String codes() default "*";
-	public String exceptions() default "";
+
+	/**
+	 * Specifies whether only debug requests match against this rule.
+	 *
+	 * <p>
+	 * Allows you to tailor logging on debug requests.
+	 *
+	 * <p>
+	 * See the {@link RestResource#debug() @RestResource(debug)} annotation on details of how to enable debugging.
+	 *
+	 * <p>
+	 * The possible values are (case-insensitive):
+	 * <ul>
+	 * 	<li><js>"true</jk> - Match debug requests only.
+	 * 	<li><js>"false"</jk> - Match any requests.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * </ul>
+	 */
 	public String debugOnly() default "false";
+
+	/**
+	 * Disables logging entirely for this rule.
+	 *
+	 * <p>
+	 * The possible values are (case-insensitive):
+	 * <ul>
+	 * 	<li><js>"true</jk> - Disable logging.
+	 * 	<li><js>"false"</jk> (default) - Don't disable logging.
+	 * 	<li><js>"per-request"</jk> - Disable logging if No-Trace is set on the request.
+	 * </ul>
+	 *
+	 * <p>
+	 * The No-Trace setting on a request can be set by adding <c class='snippet'>X-NoTrace: true</c> to the request header.
+	 * It can also be set programmatically by calling either the {@link RestRequest#setNoTrace(Boolean)} or
+	 * {@link RestResponse#setNoTrace(Boolean)} methods.
+	 *
+	 * <p>
+	 * Setting this value to <js>"true"</js> is equivalent to setting the level to <js>"off"</js>.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * </ul>
+	 */
+	public String disabled() default "false";
+
+	/**
+	 * Defines Java exceptions that match this rule.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li>A fully-qualified class name (e.g. <js>"java.lang.StringIndexOutOfBoundsException"</js>).
+	 * 	<li>A simple class name (e.g. <js>"StringIndexOutOfBoundsException"</js>).
+	 * 	<li>A pattern with metacharacters (e.g. <js>"String*Exception"</js>).
+	 * 	<li>Multiple patterns separated by spaces or commas (e.g. <js>"String*Exception, IO*Exception"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * </ul>
+	 */
+	public String exceptions() default "";
+
+	/**
+	 * Identifies the logging level at which to log REST calls.
+	 *
+	 * <p>
+	 * See the {@link Level} class for possible values.
+	 *
+	 * <p>
+	 * Values are case-insensitive.
+	 *
+	 * <p>
+	 * If not specified, uses the value specified by the {@link Logging#level() @Logging(level)} annotation value.
+	 *
+	 * <p>
+	 * {@link Level#OFF} can be used to turn off logging.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * </ul>
+	 */
 	public String level() default "";
 
-	public String req() default "SHORT";
-	public String res() default "SHORT";
-	public String verbose() default "false";
-//
-//
-//	sb.append("\n=== HTTP Request (incoming) ====================================================");
-//	sb.append("\n").append(method).append(" ").append(req.getRequestURI()).append((qs == null ? "" : "?" + qs));
-//	sb.append("\n\tResponse code: ").append(res.getStatus());
-//	if (execTime != null)
-//		sb.append("\n\tExec time: ").append(res.getStatus()).append("ms");
-//	if (reqBody != null)
-//		sb.append("\n\tReq body: ").append(reqBody.length).append(" bytes");
-//	if (resBody != null)
-//		sb.append("\n\tRes body: ").append(resBody.length).append(" bytes");
-//	sb.append("\n---Request Headers---");
-//	for (Enumeration<String> hh = req.getHeaderNames(); hh.hasMoreElements();) {
-//		String h = hh.nextElement();
-//		sb.append("\n\t").append(h).append(": ").append(req.getHeader(h));
-//	}
-//	if (context != null && ! context.getDefaultRequestHeaders().isEmpty()) {
-//		sb.append("\n---Default Servlet Headers---");
-//		for (Map.Entry<String,Object> h : context.getDefaultRequestHeaders().entrySet()) {
-//			sb.append("\n\t").append(h.getKey()).append(": ").append(h.getValue());
-//		}
-//	}
-//	if (reqBody != null && reqBody.length > 0) {
-//		try {
-//			sb.append("\n---Request Body UTF-8---");
-//			sb.append("\n").append(new String(reqBody, IOUtils.UTF8));
-//			sb.append("\n---Request Body Hex---");
-//			sb.append("\n").append(toSpacedHex(reqBody));
-//		} catch (Exception e1) {
-//			sb.append("\n").append(e1.getLocalizedMessage());
-//		}
-//	}
-//	sb.append("\n---Response Headers---");
-//	for (String h : res.getHeaderNames()) {
-//		sb.append("\n\t").append(h).append(": ").append(res.getHeader(h));
-//	}
-//	if (resBody != null && resBody.length > 0) {
-//		try {
-//			sb.append("\n---Response Body UTF-8---");
-//			sb.append("\n").append(new String(resBody, IOUtils.UTF8));
-//			sb.append("\n---Response Body Hex---");
-//			sb.append("\n").append(toSpacedHex(resBody));
-//		} catch (Exception e1) {
-//			sb.append(e1.getLocalizedMessage());
-//		}
-//	}
-//	if (e != null) {
-//		sb.append("\n---Exception---");
-//		sb.append("\n").append(getStackTrace(e));
-//	}
-//	sb.append("\n=== END ========================================================================");
+	/**
+	 * Identifies the level of detail to log on HTTP requests.
+	 *
+	 * <p>
+	 * The possible values are (case-insensitive):
+	 * <ul>
+	 * 	<li><js>"short</jk> (default) - Just the HTTP method and URL.
+	 * 	<li><js>"medium"</jk> (default) - Also the URL parameters, body size, and request headers.
+	 * 	<li><js>"long"</jk> - Also the request body as UTF-8 and spaced-hex text (debug must be enabled).
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * </ul>
+	 */
+	public String req() default "short";
 
+	/**
+	 * Identifies the level of detail to log on HTTP responses.
+	 *
+	 * <p>
+	 * The possible values are (case-insensitive):
+	 * <ul>
+	 * 	<li><js>"short</jk> (default) - Just the response code.
+	 * 	<li><js>"medium"</jk> (default) - Also the body size, response headers, and execution time.
+	 * 	<li><js>"long"</jk> - Also the response body as UTF-8 and spaced-hex text (debug must be enabled).
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * </ul>
+	 */
+	public String res() default "short";
+
+	/**
+	 * Shortcut for specifying <js>"long"</js> for {@link #req() @LoggingRule(req)} and {@link #res() @LoggingRule(res)}.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * </ul>
+	 */
+	public String verbose() default "false";
 }

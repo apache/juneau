@@ -89,7 +89,7 @@ public class MockRest implements MockHttpConnection {
 				Object o = b.impl instanceof Class ? ((Class<?>)b.impl).newInstance() : b.impl;
 				RestContextBuilder rcb = RestContext.create(o);
 				if (debug) {
-					rcb.debug(Enablement.ALWAYS);
+					rcb.debug(Enablement.TRUE);
 					rcb.callLoggerConfig(RestCallLoggerConfig.DEFAULT_DEBUG);
 				}
 				RestContext rc = rcb.build();

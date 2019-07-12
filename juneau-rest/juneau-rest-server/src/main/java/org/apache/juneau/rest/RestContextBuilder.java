@@ -578,7 +578,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
 	 * </ul>
 	 *
@@ -599,7 +599,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
 	 * </ul>
 	 *
@@ -620,7 +620,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * 	<li class='jf'>{@link RestContext#REST_callLoggerConfig}
 	 * </ul>
 	 *
@@ -818,7 +818,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override
 	public RestContextBuilder debug(boolean value) {
 		super.debug(value);
-		return debug(Enablement.ALWAYS);
+		return debug(Enablement.TRUE);
 	}
 
 	/**
@@ -2592,7 +2592,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	@Override /* BeanContextBuilder */
 	public RestContextBuilder debug() {
-		debug(Enablement.ALWAYS);
+		debug(Enablement.TRUE);
 		super.debug();
 		return this;
 	}

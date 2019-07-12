@@ -578,7 +578,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
 	public static final String REST_callLogger = PREFIX + ".callLogger.o";
@@ -655,7 +655,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
 	public static final String REST_callLoggerConfig = PREFIX + ".callLoggerConfig.o";
@@ -1053,7 +1053,7 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestContext.debug.s"</js>
 	 * 	<li><b>Data type:</b>  {@link Enablement}
-	 * 	<li><b>Default:</b>  {@link Enablement#NEVER}
+	 * 	<li><b>Default:</b>  {@link Enablement#FALSE}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -1651,7 +1651,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 * @deprecated Use {@link #REST_callLogger}
 	 */
@@ -3669,7 +3669,7 @@ public final class RestContext extends BeanContext {
 			allowedMethodHeaders = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodHeaders, ""));
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces, false);
 			useStackTraceHashes = getBooleanProperty(REST_useStackTraceHashes, true);
-			debug = getInstanceProperty(REST_debug, Enablement.class, Enablement.NEVER);
+			debug = getInstanceProperty(REST_debug, Enablement.class, Enablement.FALSE);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
 
 			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], resourceResolver, this);
@@ -4761,7 +4761,7 @@ public final class RestContext extends BeanContext {
 	@Deprecated
 	@Override
 	public boolean isDebug() {
-		return debug == Enablement.ALWAYS;
+		return debug == Enablement.TRUE;
 	}
 
 	/**

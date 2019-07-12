@@ -567,7 +567,7 @@ public @interface RestResource {
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
 	Class<? extends RestCallLogger> callLogger() default RestCallLogger.Null.class;
@@ -578,7 +578,7 @@ public @interface RestResource {
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_callLoggerConfig}
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
+	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
 	Logging logging() default @Logging;
@@ -1365,8 +1365,14 @@ public @interface RestResource {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * 	<li>
-	 * 		Request/response messages are automatically logged.
+	 * </ul>
+	 *
+	 * <p>
+	 * Possible values (case insensitive):
+	 * <ul>
+	 * 	<li><js>"true"</js> - Debug is enabled for all requests.
+	 * 	<li><js>"false"</js> - Debug is disabled for all requests.
+	 * 	<li><js>"per-request"</js> - Debug is enabled only for requests that have a <c class='snippet'>X-Debug: true</c> header.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>

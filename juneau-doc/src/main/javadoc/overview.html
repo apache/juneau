@@ -353,10 +353,7 @@
 			<li><p class='updated'><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation.Stylesheets'>Stylesheets</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.DefaultHeaders'>Default Headers</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-rest-server.LoggingAndErrorHandling'>Logging and Error Handling</a></p>
-		<ol>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-server.LoggingAndErrorHandling.LOG4J'>Using LOG4J for logging</a></p>
-		</ol>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-server.LoggingAndDebugging'>Logging / Debugging</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HttpStatusCodes'>HTTP Status Codes</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.OverloadingHttpMethods'>Overloading HTTP Methods</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.BuiltInParameters'>Built-in Parameters</a></p>
@@ -20993,90 +20990,332 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.LoggingAndErrorHandling' id='juneau-rest-server.LoggingAndErrorHandling'>7.32 - Logging and Error Handling</a></h3>
-<div class='topic'><!-- START: 7.32 - juneau-rest-server.LoggingAndErrorHandling -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.LoggingAndDebugging' id='juneau-rest-server.LoggingAndDebugging'>7.32 - Logging / Debugging</a></h3>
+<div class='topic'><!-- START: 7.32 - juneau-rest-server.LoggingAndDebugging -->
 <p>
-	The {@link org.apache.juneau.rest.RestContext#REST_logger} property allows you to configure 
-	logging for your resource.
-	The interface is shown below:
+	The REST APIs provides support for fine-tuned control of logging for HTTP requests and responses.
+</p>
+<p>
+	The APIs involved are:
 </p>
 <ul class='doctree'>
-	<li class='jac'>
-		{@link org.apache.juneau.rest.RestLogger}
+	<li class='ja'>
+		{@link org.apache.juneau.rest.annotation.RestResource}
 		<ul>
-			<li class='jm'>
-				{@link org.apache.juneau.rest.RestLogger#log(Level,String,Object[]) log(Level,String,Object[])}
-			<li class='jm'>
-				{@link org.apache.juneau.rest.RestLogger#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
-			<li class='jm'>
-				{@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObjects(Level,String,Object[])}
-			<li class='jm'>
-				{@link org.apache.juneau.rest.RestLogger#onError(HttpServletRequest,HttpServletResponse,RestException) onError(HttpServletRequest,HttpServletResponse,RestException)}
-				<br>Gets called when an error occurs on a request call.
-				<br>Default implementation logs the error.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.RestResource#logging() logging()} - Class-level logging configuration and rules.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.RestResource#debug() debug()} - Enable debug mode.
+		</ul>
+	</li>
+	<li class='ja'>
+		{@link org.apache.juneau.rest.annotation.RestMethod}
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.RestMethod#logging() logging()} - Class-level logging configuration.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.RestMethod#debug() debug()} - Enable debug mode.
+		</ul>
+	</li>
+	<li class='jc'>
+		{@link org.apache.juneau.rest.RestContext}
+		<ul>
+			<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_callLoggerConfig REST_callLoggerConfig} - Underlying configuration property for {@link org.apache.juneau.rest.annotation.RestResource#logging() @RestResource(logging)}.
+			<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_debug REST_debug} - Underlying configuration property for {@link org.apache.juneau.rest.annotation.RestResource#debug() @RestResource(debug)}.
+		</ul>
+	</li>
+	<li class='ja'>
+		{@link org.apache.juneau.rest.annotation.Logging} - Annotation for {@link org.apache.juneau.rest.annotation.RestResource#logging() @RestResource(logging)} and {@link org.apache.juneau.rest.annotation.RestMethod#logging() @RestMethod(logging)}
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.Logging#level() level()} - The logging level.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.Logging#rules() rules()} - The logging rules.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.Logging#useStackTraceHashing() useStackTraceHashing()} - Enables de-duplication of logged stack traces and replacement with hash IDs. 
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.Logging#stackTraceHashingTimeout() stackTraceHashingTimeout()} - Controls how frequently hashed stack traces are re-logged.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.Logging#disabled() disabled()} - Disables logging completely or per-request.
+		</ul>
+	</li>
+	<li class='ja'>
+		{@link org.apache.juneau.rest.annotation.LoggingRule} - Annotation for {@link org.apache.juneau.rest.annotation.Logging#rules() @Logging(rules)}
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.LoggingRule#level() level()} - The logging level.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.LoggingRule#codes() codes()} - Status code patterns and ranges to match against.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.LoggingRule#exceptions() exceptions()} - Exception class names and patterns to match against.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.LoggingRule#debugOnly() debugOnly()} - Match only if debug is set on the request.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.LoggingRule#req() req()} - The level of request detail.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.LoggingRule#res() res()} - The level of response detail.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.LoggingRule#verbose() verbose()} - Shortcut for <jsf>LONG</jsf> request and response detail.
+			<li class='jm'>{@link org.apache.juneau.rest.annotation.LoggingRule#disabled() disabled()} - Disables logging completely or per-request.
 		</ul>
 	</li>
 </ul>
-<p>
-	The {@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObjects()} method is particularly useful because it allows you to pass in POJOs as arguments
-	that serialized using {@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT_READABLE}, but only
-	if the message is actually logged.
-</p>
 
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	logger.logObjects(<jsf>DEBUG</jsf>, <js>"Pojo contents:\n{0}"</js>, myPojo);
-</p>
+<h5 class='topic'>Request/response details</h5>
 <p>
-	By default, the Juneau framework uses the built-in Java Logging API for logging.
-	But you can define your own implementation to use any framework you wish.
-</p>
-<p>
-	The {@link org.apache.juneau.rest.RestLogger} instance is accessible via the following:
+	The amount of detail on requests and responses is controlled via the {@link org.apache.juneau.rest.annotation.LoggingRule#req() @LoggingRule(req)} 
+	and {@link org.apache.juneau.rest.annotation.LoggingRule#res() @LoggingRule(res)} annotations:
 </p>
 <ul>
-	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getLogger()}
-	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getLogger()}
+	<li><js>"short"</js> - Results in simple one-line log lines containing the HTTP method + url + response code.
+	<li><js>"medium"</js> - Also includes headers and body length information (if debug enabled).
+	<li><js>"large"</js> - Dumps the entire request/response bodies (if debug enabled).
 </ul>
 <p>
-	In addition, the logger can be accessed by passing it as a parameter to your REST java method:
+	The following code shows the output produced using the <js>"short"</js> setting:
 </p>
-<p class='bpcode w800'>
-	<ja>@RestMethod()</ja>
-	<jk>public</jk> Object doSomething(RestLogger logger) {...}
+<p class='bpcode'>
+	<ja>@RestResource</ja>(
+		logging=<ja>@Logging</ja>(
+			level=<js>"info"</js>,
+			rules={
+				<ja>@LoggingRule</ja>(codes<js>"500-"</js>, level=<js>"warning"</js>, req=<js>"short"</js>, res=<js>"short"</js>)
+			}
+		)
+	)
+	<jk>public static class</jk> MyRestClass {
+
+		<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"foo"</js>)
+		<jk>public</jk> String myRestMethod(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+			res.setStatus(500);
+			res.setHeader(<js>"Foo"</js>, <js>"bar"</js>);
+			res.setException(<jk>new</jk> StringIndexOutOfBoundsException());  <jc>// Could also throw.</jc>
+			<jk>return</jk> req.getBody().asString();
+		}
+	}
+
+	<jk>static</jk> MockRest <jsf>MY_REST</jsf> = MockRest.<jsm>build</jsm>(MyRestClass.<jk>class</jk>, <jk>null</jk>);
+
+	<ja>@Test</ja>
+	<jk>public void</jk> test() <jk>throws</jk> Exception {
+		<jsf>MY_REST</jsf>.<jsm>post</jsm>(<js>"/foo?foo=bar"</js>, <js>"Foo"</js>).header(<js>"Foo"</js>, <js>"bar"</js>).execute().assertStatus(500);
+	}
 </p>
 <p>
-	If your resource extends from {@link org.apache.juneau.rest.RestServlet}, you can also
-	use and override the following methods:
+	The log output produced from the code above looks like this:
+</p>
+<p class='bpcode'>
+	WARNING: [500] HTTP POST /foo
+	java.lang.StringIndexOutOfBoundsException
+		at org.apache.juneau.rest.annotation.RestResourceLoggingTest$MyRestClass.myRestMethod(RestResourceLoggingTest.java:672)
+		at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+		at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+		at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+		at java.lang.reflect.Method.invoke(Method.java:498)
+		...
+</p>
+<p>
+	In comparison, using <js>"long"</js> formatting adds information about headers and body.  
+</p>
+<p class='bpcode'>
+	<ja>@RestResource</ja>(
+		debug=<js>"true"</js>,  <jc>// Needed to capture request/response bodies for logging.</jc>
+		logging=<ja>@Logging</ja>(
+			level=<js>"info"</js>,
+			rules={
+				<ja>@LoggingRule</ja>(codes<js>"500-"</js>, level=<js>"warning"</js>, req=<js>"long"</js>, res=<js>"long"</js>)
+			}
+		)
+	)
+</p>
+<p>
+	Request/response bodies are only cached for logging if debugging is enabled via the <c class='snippet'>debug=<js>"true"</js></c> flag.
+</p>
+<p>
+	The log file now contains the following with shows the contents of the request and response bodies in both UTF-8
+	and spaced-hex:
+<p>
+<p class='bpcode'>
+	WARNING: 
+	=== HTTP Request (incoming) ===================================================
+	[500] HTTP POST /foo?foo=bar
+		Request length: 3 bytes
+		Response code: 500
+		Response length: 3 bytes
+		Exec time: 20ms
+	---Request Headers---
+		Foo: bar
+	---Response Headers---
+		Foo: bar
+		Content-Type: text/plain
+	---Request Body UTF-8---
+	Foo
+	---Request Body Hex---
+	46 6F 6F
+	---Response Body UTF-8---
+	Foo
+	---Response Body Hex---
+	46 6F 6F
+	=== END ===================================================================
+	java.lang.StringIndexOutOfBoundsException
+		at org.apache.juneau.rest.annotation.RestResourceLoggingTest$MyRestClass.myRestMethod(RestResourceLoggingTest.java:672)
+		at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+		at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+		at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+		at java.lang.reflect.Method.invoke(Method.java:498)
+		...
+</p>
+
+<h5 class='topic'>Rule matching</h5>
+<p>
+	Logging rules can match against status codes, exception class names, and the debug flag.
+	<br>The following shows various examples of logging rule matches.
+</p>
+
+<p class='bpcode'>
+	<ja>@RestResource</ja>(
+		logging=<ja>@Logging</ja>(
+			rules={
+				<jc>// Individual status codes.</jc>
+				<ja>@LoggingRule</ja>(codes=<js>"300"</js>, ...)
+
+				<jc>// Ranges of status codes.</jc>
+				<ja>@LoggingRule</ja>(codes=<js>"400-499"</js>, ...)
+				<ja>@LoggingRule</ja>(codes=<js>">=500"</js>, ...)
+
+				<jc>// All codes.</jc>
+				<ja>@LoggingRule</ja>(codes=<js>"*"</js>, ...)
+
+				<jc>// Full class names of exceptions.</jc>
+				<ja>@LoggingRule</ja>(exceptions=<js>"java.lang.StringIndexOutOfBoundsException"</js>, ...)
+
+				<jc>// Exception class name patterns.</jc>
+				<ja>@LoggingRule</ja>(exceptions=<js>"String*Exception *Foo*Exception"</js>, ...)
+
+				<jc>// Match when debug enabled only.</jc>
+				<ja>@LoggingRule</ja>(codes=<js>"*"</js>, debugOnly=<js>"true"</js>, ...)
+			}
+		)
+	)
+</p>
+<p>
+	Rules are matched in the order listed on the annotation.  
+	Rules on methods are matched before rules on classes.
+	Rules on child methods/classes are matched before rules on parent classes.
+</p>
+
+<h5 class='topic'>Debug mode</h5>
+<p>
+	The debug mode setting allows HTTP request/response bodies to be cached in memory for logging purposes:
+</p>
+<p class='bpcode'>
+	<ja>@RestResource</ja>(
+		debug=<js>"true"</js>
+	)
+</p>
+
+<p>
+	The possible values for the debug setting are (case-insensitive):
 </p>
 <ul>
-	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level,String,Object...)}
-	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level,Throwable,String,Object...)}
+	<li><js>"true"</js> - Debug mode enabled.
+	<li><js>"false"</js> (default) - Debug mode disabled.
+	<li><js>"per-request"</js> - Debug mode is enabled only on requests containing an <c class='snippet'>X-Debug: true</c> header.
 </ul>
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.LoggingAndErrorHandling.LOG4J' id='juneau-rest-server.LoggingAndErrorHandling.LOG4J'>7.32.1 - Using LOG4J for logging</a></h4>
-<div class='topic'><!-- START: 7.32.1 - juneau-rest-server.LoggingAndErrorHandling.LOG4J -->
 <p>
-	The REST API uses Java logging by default.  If you wish to use LOG4J logging, you simple need to add the following
-	to your JVM arguments and maven dependencies:
+	Note that caching HTTP bodies in memory can produce significant performance penalties, so use the setting wisely.
+	<br>In particular, do not leave this setting enabled on production instances since it can easily lead to 
+	denial-of-service attacks.
+</p>
+<p>
+	Servlet code can check the debug setting via the {@link org.apache.juneau.rest.RestRequest#isDebug()} method allowing it to be used
+	for custom purposes.
+</p>
+<p>
+	Debug mode can also be enabled on a request by calling the {@link org.apache.juneau.rest.RestRequest#setDebug(Boolean)} or 
+	{@link org.apache.juneau.rest.RestResponse#setDebug(Boolean)} methods.  Note however that you must be sure not to have already consumed
+	the request or started writing the response before calling this method.
 </p>
 
-<h5 class='figure'>Command-line argument</h5>
+<h5 class='topic'>No-trace (disabled) mode</h5>
+<p>
+	The {@link org.apache.juneau.rest.annotation.Logging#disabled() @Logging(disabled)} and {@link org.apache.juneau.rest.annotation.LoggingRule#disabled() @LoggingRule(disabled)} annotations
+	can be used to disable logging entirely or on a per-request basis:
+</p>
 <p class='bpcode'>
-	-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager
+	<ja>@RestResource</ja>(
+		logging=<ja>@Logging</ja>(
+			disabled=<js>"true"</js>
+			rules={
+				<ja>@LoggingRule</ja>(
+					codes<js>"500-"</js>, 
+					disabled=<js>"false"</js>
+				)
+			}
+		)
+	)
+</p>
+<p>
+	The possible values for the disabled setting are (case-insensitive):
+</p>
+<ul>
+	<li><js>"true"</js> - Logging disabled.
+	<li><js>"false"</js> (default) - Logging not disabled.
+	<li><js>"per-request"</js> - Logging is disabled only on requests containing a <c class='snippet'>X-NoTrace: true</c> header.
+</ul>
+<p>
+	Disabled logging is particularly useful when running testcases that are expected to throw exceptions or cause
+	other errors and you don't want these errors logged.
+</p>
+<p>
+	Disabled logging can also be set on a request by calling the {@link org.apache.juneau.rest.RestRequest#setNoTrace(Boolean)} or 
+	{@link org.apache.juneau.rest.RestResponse#setNoTrace(Boolean)} methods.
 </p>
 
-<h5 class='figure'>Maven dependency</h5>
-<p class='bpcode'>
-	<xt>&lt;dependency&gt;</xt>
-	    <xt>&lt;groupId&gt;</xt>org.apache.logging.log4j<xt>&lt;/groupId&gt;</xt>
-	    <xt>&lt;artifactId&gt;</xt>log4j-jul<xt>&lt;/artifactId&gt;</xt>
-	<xt>&lt;/dependency&gt;</xt>
+<h5 class='topic'>Stacktrace hashing</h5>
+<p>
+	The {@link org.apache.juneau.rest.annotation.Logging#useStackTraceHashing() @Logging(useStackTraceHashing)} setting can be used to eliminate duplicate stacktraces
+	in your log file by logging them once and then logging identifying hash IDs.
 </p>
-</div><!-- END: 7.32.1 - juneau-rest-server.LoggingAndErrorHandling.LOG4J -->
-</div><!-- END: 7.32 - juneau-rest-server.LoggingAndErrorHandling -->
+<p>
+	In the example below, we're causing two exceptions but only logging the first one:
+</p>
+<p class='bpcode'>
+	<ja>@RestResource</ja>(
+		logging=<ja>@Logging</ja>(
+			useStackTraceHashing=<js>"true"</js>,
+			rules={
+				<ja>@LoggingRule</ja>(codes<js>">=500"</js>, level=<js>"warning"</js>, req=<js>"short"</js>, res=<js>"short"</js>)
+			}
+		)
+	)
+	<jk>public static class</jk> MyRestClass {
+
+		<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"foo"</js>)
+		<jk>public</jk> String myRestMethod(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+			res.setHeader(<js>"Foo"</js>, <js>"bar"</js>);
+		
+			// Equivalent to throwing an exception. 
+			res.setStatus(500);
+			res.setException(<jk>new</jk> StringIndexOutOfBoundsException());
+			
+			<jk>return</jk> req.getBody().asString();
+		}
+	}
+
+	<jk>static</jk> MockRest <jsf>MY_REST</jsf> = MockRest.<jsm>build</jsm>(MyRestClass.<jk>class</jk>, <jk>null</jk>);
+
+	<ja>@Test</ja>
+	<jk>public void</jk> test() <jk>throws</jk> Exception {
+		<jsf>MY_REST</jsf>.<jsm>post</jsm>(<js>"/foo?foo=bar"</js>, <js>"Foo"</js>).header(<js>"Foo"</js>, <js>"bar"</js>).execute().assertStatus(500);
+		<jsf>MY_REST</jsf>.<jsm>post</jsm>(<js>"/foo?foo=bar"</js>, <js>"Foo"</js>).header(<js>"Foo"</js>, <js>"bar"</js>).execute().assertStatus(500);
+	}
+</p>
+<p>
+	The log file will show a 4 byte hash ID <js>"9b85cc96"</js> and count <js>".1"</js> as shown below:
+</p>
+<p class='bpcode'>
+	Jul 11, 2019 3:38:48 PM org.apache.juneau.rest.BasicRestCallLogger log
+	WARNING: [500,9b85cc96.1] HTTP POST /foo
+	java.lang.StringIndexOutOfBoundsException
+		at org.apache.juneau.rest.annotation.RestResourceLoggingTest$MyRestClass.myRestMethod(RestResourceLoggingTest.java:671)
+		at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+		at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+		at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+		at java.lang.reflect.Method.invoke(Method.java:498)
+		...
+	
+	WARNING: [500,9b85cc96.2] HTTP POST /foo
+</p>
+<p>
+	The {@link org.apache.juneau.rest.annotation.Logging#stackTraceHashingTimeout() @Logging(stackTraceHashingTimeout)} setting can be used to periodically log the stacktrace
+	to the log file again.
+</p>
+</div><!-- END: 7.32 - juneau-rest-server.LoggingAndDebugging -->
 
 <!-- ==================================================================================================== -->
 
@@ -35655,6 +35894,9 @@
 				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#err(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDERR.
 			</ul>
 		</ul>
+	<li>
+		Serializer and parser APIs now throw <c>IOExceptions</c> in addition to <c>SerializeException</c> and <c>ParseException</c> to make it
+		easier to determine if problems are stream based or syntax based.
 </ul>
 
 <h5 class='topic w800'>juneau-config</h5>
@@ -35852,7 +36094,36 @@
 				<li class='jm'>{@link org.apache.juneau.rest.BasicRestCallHandler#convertThrowable(Throwable) convertThrowable(Throwable)}
 			</ul>
 		</ul>
-		
+	<li>
+		Support for fine-tuned logging of HTTP requests and responses. 
+		<p class='bpcode'>
+<p class='bpcode'>
+	<ja>@RestResource</ja>(
+		debug=<js>"per-request"</js>,
+		logging=<ja>@Logging</ja>(
+			level=<js>"info"</js>,
+			rules={
+				<ja>@LoggingRule</ja>(codes<js>"400-499"</js>, level=<js>"warning"</js>, req=<js>"short"</js>, res=<js>"short"</js>)
+				<ja>@LoggingRule</ja>(codes<js>"500-"</js>, level=<js>"severe"</js>, req=<js>"long"</js>, res=<js>"long"</js>)
+			}
+		)
+	)
+	<jk>public class</jk> MyRest {
+
+		<ja>@RestMethod</ja>(
+			method=<js>"POST"</js>, 
+			path=<js>"foo"</js>
+			logging=<ja>@Logging</ja>(
+				level=<js>"info"</js>,
+				rules={
+					<ja>@LoggingRule</ja>(exceptions<js>"NotFound*"</js>, level=<js>"info"</js>)
+					<ja>@LoggingRule</ja>(codes<js>"200"</js>, disabled=<js>"true"</js>)
+				}
+			)
+		)
+		<jk>public</jk> String myMethod() <jk>throws</jk> Exception {...}
+		</p>		
+		See {@doc juneau-rest-server.LoggingAndDebugging} for details.
 	<li>
 		Fixed a bug where the HTTP response was returning 405 (method not found) but should really be 404 (not found)
 		when no path patterns match on any of the Java methods.

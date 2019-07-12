@@ -369,17 +369,17 @@ public class RestResourceLoggingTest {
 	// noTrace
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(logging=@Logging(noTrace="always"))
+	@RestResource(logging=@Logging(disabled="true"))
 	public static class E1 {
 		@RestMethod(path="e01")
 		public String e01(RestRequest req) {
 			return string(req.getCallLoggerConfig());
 		}
-		@RestMethod(path="e02", logging=@Logging(noTrace="per-request"))
+		@RestMethod(path="e02", logging=@Logging(disabled="per-request"))
 		public String e02(RestRequest req) {
 			return string(req.getCallLoggerConfig());
 		}
-		@RestMethod(path="e08", logging=@Logging(noTrace="per-request"))
+		@RestMethod(path="e08", logging=@Logging(disabled="per-request"))
 		public String e08(RestRequest req) {
 			return string(req.getCallLoggerConfig());
 		}
@@ -391,11 +391,11 @@ public class RestResourceLoggingTest {
 		public String e03(RestRequest req) {
 			return string(req.getCallLoggerConfig());
 		}
-		@RestMethod(path="e04", logging=@Logging(noTrace="always"))
+		@RestMethod(path="e04", logging=@Logging(disabled="true"))
 		public String e04(RestRequest req) {
 			return string(req.getCallLoggerConfig());
 		}
-		@RestMethod(path="e05", logging=@Logging(noTrace="foo"))
+		@RestMethod(path="e05", logging=@Logging(disabled="foo"))
 		public String e05(RestRequest req) {
 			return string(req.getCallLoggerConfig());
 		}
@@ -411,7 +411,7 @@ public class RestResourceLoggingTest {
 			return string(req.getCallLoggerConfig());
 		}
 		@Override
-		@RestMethod(logging=@Logging(noTrace="never"))
+		@RestMethod(logging=@Logging(disabled="false"))
 		public String e08(RestRequest req) {
 			return string(req.getCallLoggerConfig());
 		}
@@ -419,12 +419,12 @@ public class RestResourceLoggingTest {
 		public String e09(RestRequest req) {
 			return string(req.getCallLoggerConfig());
 		}
-		@RestMethod(path="e10", logging=@Logging(noTrace="per-request"))
+		@RestMethod(path="e10", logging=@Logging(disabled="per-request"))
 		public String e10(RestRequest req) {
 			return string(req.getCallLoggerConfig());
 		}
 	}
-	@RestResource(logging=@Logging(noTrace="foo"))
+	@RestResource(logging=@Logging(disabled="foo"))
 	public static class E4 {
 		@RestMethod(path="e11")
 		public String e11(RestRequest req) {
@@ -439,11 +439,11 @@ public class RestResourceLoggingTest {
 
 	@Test
 	public void e01_noTrace() throws Exception {
-		e1.get("/e01").execute().assertBody("{noTrace:'ALWAYS'}");
+		e1.get("/e01").execute().assertBody("{disabled:'TRUE'}");
 	}
 	@Test
 	public void e02_noTrace() throws Exception {
-		e1.get("/e02").execute().assertBody("{noTrace:'PER_REQUEST'}");
+		e1.get("/e02").execute().assertBody("{disabled:'PER_REQUEST'}");
 	}
 	@Test
 	public void e03_noTrace() throws Exception {
@@ -451,7 +451,7 @@ public class RestResourceLoggingTest {
 	}
 	@Test
 	public void e04_noTrace() throws Exception {
-		e2.get("/e04").execute().assertBody("{noTrace:'ALWAYS'}");
+		e2.get("/e04").execute().assertBody("{disabled:'TRUE'}");
 	}
 	@Test
 	public void e05_noTrace() throws Exception {
@@ -459,11 +459,11 @@ public class RestResourceLoggingTest {
 	}
 	@Test
 	public void e06_noTrace() throws Exception {
-		e3.get("/e01").execute().assertBody("{noTrace:'ALWAYS'}");
+		e3.get("/e01").execute().assertBody("{disabled:'TRUE'}");
 	}
 	@Test
 	public void e07_noTrace() throws Exception {
-		e3.get("/e02").execute().assertBody("{noTrace:'PER_REQUEST'}");
+		e3.get("/e02").execute().assertBody("{disabled:'PER_REQUEST'}");
 	}
 	@Test
 	public void e08_noTrace() throws Exception {
@@ -471,11 +471,11 @@ public class RestResourceLoggingTest {
 	}
 	@Test
 	public void e09_noTrace() throws Exception {
-		e3.get("/e09").execute().assertBody("{noTrace:'ALWAYS'}");
+		e3.get("/e09").execute().assertBody("{disabled:'TRUE'}");
 	}
 	@Test
 	public void e10_noTrace() throws Exception {
-		e3.get("/e10").execute().assertBody("{noTrace:'PER_REQUEST'}");
+		e3.get("/e10").execute().assertBody("{disabled:'PER_REQUEST'}");
 	}
 	@Test
 	public void e11_noTrace() throws Exception {
@@ -637,14 +637,46 @@ public class RestResourceLoggingTest {
 
 	@Test
 	public void g01_rules() throws Exception {
-		g1.get("/g01").execute().assertBody("{exceptions:'1',debugOnly:true,matchAll:true,level:'WARNING',req:'MEDIUM'}");
+		g1.get("/g01").execute().assertBody("{exceptions:'1',debugOnly:true,level:'WARNING',req:'MEDIUM'}");
 	}
 	@Test
 	public void g02_rules() throws Exception {
-		g1.get("/g02").execute().assertBody("{exceptions:'2',debugOnly:true,matchAll:true,level:'WARNING',req:'MEDIUM'},{exceptions:'1',debugOnly:true,matchAll:true,level:'WARNING',req:'MEDIUM'}");
+		g1.get("/g02").execute().assertBody("{exceptions:'2',debugOnly:true,level:'WARNING',req:'MEDIUM'},{exceptions:'1',debugOnly:true,level:'WARNING',req:'MEDIUM'}");
 	}
 	@Test
 	public void g03_rules() throws Exception {
-		g2.get("/g03").execute().assertBody("{exceptions:'3',debugOnly:true,matchAll:true,level:'WARNING',req:'MEDIUM'}");
+		g2.get("/g03").execute().assertBody("{exceptions:'3',debugOnly:true,level:'WARNING',req:'MEDIUM'}");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Examples
+	//------------------------------------------------------------------------------------------------------------------
+
+	@RestResource(
+		debug="always",
+		logging=@Logging(
+			useStackTraceHashing="true",
+			rules={
+				@LoggingRule(codes=">=500", level="warning", req="short", res="short")
+			}
+		)
+	)
+	public static class MyRestClass {
+
+		@RestMethod(method="POST", path="foo")
+		public String myRestMethod(RestRequest req, RestResponse res) throws Exception {
+			res.setStatus(500);
+			res.setHeader("Foo", "bar");
+			res.setException(new StringIndexOutOfBoundsException());
+			return req.getBody().asString();
+		}
+	}
+
+	static MockRest MY_REST = MockRest.build(MyRestClass.class, null);
+
+	@Test
+	public void test() throws Exception {
+		MY_REST.post("/foo?foo=bar", "Foo").header("Foo", "bar").execute().assertStatus(500);
+		MY_REST.post("/foo?foo=bar", "Foo").header("Foo", "bar").execute().assertStatus(500);
 	}
 }

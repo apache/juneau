@@ -105,7 +105,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		this.properties = properties;
 
 		if (request.isDebug())
-			inner = CachingHttpServletResponse.wrap(inner);
+			setDebug();
 
 		// Find acceptable charset
 		String h = request.getHeader("accept-charset");
@@ -559,6 +559,70 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 */
 	public void setHeader(HttpPart h) throws SchemaValidationException, SerializeException {
 		setHeader(h.getName(), h.asString());
+	}
+
+	/**
+	 * Sets the <js>"Exception"</js> attribute to the specified throwable.
+	 *
+	 * <p>
+	 * This exception is used by {@link BasicRestCallLogger} for logging purposes.
+	 *
+	 * @param t The attribute value.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setException(Throwable t) {
+		request.setException(t);
+		return this;
+	}
+
+	/**
+	 * Sets the <js>"NoTrace"</js> attribute to the specified boolean.
+	 *
+	 * <p>
+	 * This flag is used by {@link BasicRestCallLogger} and tells it not to log the current request.
+	 *
+	 * @param b The attribute value.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setNoTrace(Boolean b) {
+		request.setNoTrace(b);
+		return this;
+	}
+
+	/**
+	 * Shortcut for calling <c>setNoTrace(<jk>true</jk>)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setNoTrace() {
+		return setNoTrace(true);
+	}
+
+	/**
+	 * Sets the <js>"Debug"</js> attribute to the specified boolean.
+	 *
+	 * <p>
+	 * This flag is used by {@link BasicRestCallLogger} to help determine how a request should be logged.
+	 *
+	 * @param b The attribute value.
+	 * @return This object (for method chaining).
+	 * @throws IOException If bodies could not be cached.
+	 */
+	public RestResponse setDebug(Boolean b) throws IOException {
+		request.setDebug(b);
+		if (b)
+			inner = CachingHttpServletResponse.wrap(inner);
+		return this;
+	}
+
+	/**
+	 * Shortcut for calling <c>setDebug(<jk>true</jk>)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 * @throws IOException If bodies could not be cached.
+	 */
+	public RestResponse setDebug() throws IOException {
+		return setDebug(true);
 	}
 
 	/**

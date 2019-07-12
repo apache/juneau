@@ -129,8 +129,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 					pathInfo = RestUtils.getPathInfoUndecoded(r1);  // Can't use r1.getPathInfo() because we don't want '%2F' resolved.
 					upi = new UrlPathInfo(pathInfo);
 				} else {
-					if (isDebug(req)) {
-						r1 = CachingHttpServletRequest.wrap(req);
+					if (isDebug(r1)) {
+						r1 = CachingHttpServletRequest.wrap(r1);
 						r1.setAttribute("Debug", true);
 					}
 					r2.setStatus(SC_NOT_FOUND);
@@ -151,8 +151,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 								.servletPath(r1.getServletPath() + uppm.getPrefix());
 							rc.getCallHandler().service(childRequest, r2);
 						} else {
-							if (isDebug(req)) {
-								r1 = CachingHttpServletRequest.wrap(req);
+							if (isDebug(r1)) {
+								r1 = CachingHttpServletRequest.wrap(r1);
 								r1.setAttribute("Debug", true);
 							}
 							r2.setStatus(SC_NOT_FOUND);
@@ -162,7 +162,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 				}
 			}
 
-			if (isDebug(req)) {
+			if (isDebug(r1)) {
 				r1 = CachingHttpServletRequest.wrap(r1);
 				r2 = CachingHttpServletResponse.wrap(r2);
 				r1.setAttribute("Debug", true);
@@ -258,9 +258,9 @@ public class BasicRestCallHandler implements RestCallHandler {
 
 	private boolean isDebug(HttpServletRequest req) {
 		Enablement e = context.getDebug();
-		if (e == ALWAYS)
+		if (e == TRUE)
 			return true;
-		if (e == NEVER)
+		if (e == FALSE)
 			return false;
 		return "true".equalsIgnoreCase(req.getHeader("X-Debug"));
 	}
