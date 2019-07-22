@@ -32,7 +32,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	@Test
 	public void testJson() throws Exception {
-		JsonSerializer s = JsonSerializer.create().ssq().pojoSwaps(ReaderSwap.Json.class).build();
+		JsonSerializer s = JsonSerializer.create().ssq().pojoSwaps(ParsedReaderSwap.Json.class).build();
 
 		Reader r;
 		Map<String,Object> m;
@@ -48,7 +48,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	@Test
 	public void testXml() throws Exception {
-		XmlSerializer s = XmlSerializer.create().sq().pojoSwaps(ReaderSwap.Xml.class).build();
+		XmlSerializer s = XmlSerializer.create().sq().pojoSwaps(ParsedReaderSwap.Xml.class).build();
 
 		Reader r;
 		Map<String,Object> m;
@@ -64,7 +64,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	@Test
 	public void testHtml() throws Exception {
-		HtmlSerializer s = HtmlSerializer.create().sq().pojoSwaps(ReaderSwap.Html.class).build();
+		HtmlSerializer s = HtmlSerializer.create().sq().pojoSwaps(ParsedReaderSwap.Html.class).build();
 
 		Reader r;
 		Map<String,Object> m;
@@ -80,7 +80,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	@Test
 	public void testPlainText() throws Exception {
-		PlainTextSerializer s = PlainTextSerializer.create().pojoSwaps(ReaderSwap.PlainText.class).build();
+		PlainTextSerializer s = PlainTextSerializer.create().pojoSwaps(ParsedReaderSwap.PlainText.class).build();
 
 		Reader r;
 		Map<String,Object> m;
@@ -96,7 +96,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	@Test
 	public void testUon() throws Exception {
-		UonSerializer s = UonSerializer.create().pojoSwaps(ReaderSwap.Uon.class).build();
+		UonSerializer s = UonSerializer.create().pojoSwaps(ParsedReaderSwap.Uon.class).build();
 
 		Reader r;
 		Map<String,Object> m;
@@ -112,7 +112,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	@Test
 	public void testUrlEncoding() throws Exception {
-		UrlEncodingSerializer s = UrlEncodingSerializer.create().pojoSwaps(ReaderSwap.PlainText.class).build();
+		UrlEncodingSerializer s = UrlEncodingSerializer.create().pojoSwaps(ParsedReaderSwap.PlainText.class).build();
 
 		Reader r;
 		Map<String,Object> m;

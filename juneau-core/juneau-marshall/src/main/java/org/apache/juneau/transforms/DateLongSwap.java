@@ -20,7 +20,10 @@ import org.apache.juneau.transform.*;
 
 /**
  * Transforms {@link Date Dates} to {@link Long Longs}.
+ *
+ * @deprecated Use {@link TemporalDateSwap}
  */
+@Deprecated
 public class DateLongSwap extends PojoSwap<Date,Long> {
 
 	/**

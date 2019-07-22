@@ -433,12 +433,12 @@ public class TestUtils {
 	 *
 	 * @param name
 	 */
-	public static final void setTimeZone(String name) {
+	public synchronized static final void setTimeZone(String name) {
 		systemTimeZone.set(TimeZone.getDefault());
 		TimeZone.setDefault(TimeZone.getTimeZone(name));
 	}
 
-	public static final void unsetTimeZone() {
+	public synchronized static final void unsetTimeZone() {
 		TimeZone.setDefault(systemTimeZone.get());
 	}
 

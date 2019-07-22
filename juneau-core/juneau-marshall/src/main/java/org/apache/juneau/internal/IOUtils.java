@@ -219,7 +219,7 @@ public final class IOUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static byte[] readBytes(InputStream in) throws IOException {
-		return readBytes(in, 1024);
+		return in == null ? null : readBytes(in, 1024);
 	}
 
 	/**

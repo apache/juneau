@@ -20,7 +20,10 @@ import org.apache.juneau.transform.*;
 
 /**
  * Transforms {@link Date Dates} to {@link Map Maps} of the format <tt>{value:long}</tt>.
+ *
+ * @deprecated Use {@link TemporalDateSwap}
  */
+@Deprecated
 @SuppressWarnings("rawtypes")
 public class DateMapSwap extends PojoSwap<Date,Map> {
 

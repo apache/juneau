@@ -57,6 +57,13 @@
 	<li>
 		Serializer and parser APIs now throw <c>IOExceptions</c> in addition to <c>SerializeException</c> and <c>ParseException</c> to make it
 		easier to determine if problems are stream based or syntax based.
+	<li>
+		New Java 8 date-time transforms:
+		<ul class='doctree'>
+			<li class='jc'>{@link oaj.transforms.TemporalSwap} - For all Java 8 temporal types (e.g. {@link java.time.ZonedDateTime})
+			<li class='jc'>{@link oaj.transforms.TemporalDateSwap} - For {@link java.util.Date}
+			<li class='jc'>{@link oaj.transforms.TemporalCalendarSwap} - For {@link java.util.Calendar}
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-config</h5>

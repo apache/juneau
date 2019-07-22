@@ -53,7 +53,10 @@ import org.apache.juneau.utils.*;
  * 	<li>{@link DateTimeMedium} - To {@link DateFormat#MEDIUM} date-time strings.
  * 	<li>{@link DateTimeShort} - To {@link DateFormat#SHORT} date-time strings.
  * </ul>
+ *
+ * @deprecated Use {@link TemporalDateSwap}
  */
+@Deprecated
 public class DateSwap extends StringSwap<Date> {
 
 	/**

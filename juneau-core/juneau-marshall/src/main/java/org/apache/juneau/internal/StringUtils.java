@@ -1182,6 +1182,8 @@ public final class StringUtils {
 	 * @return The byte array converted to a BASE-64 encoded string.
 	 */
 	public static String base64Encode(byte[] in) {
+		if (in == null)
+			return null;
 		int outLength = (in.length * 4 + 2) / 3;   // Output length without padding
 		char[] out = new char[((in.length + 2) / 3) * 4];  // Length includes padding.
 		int iIn = 0;

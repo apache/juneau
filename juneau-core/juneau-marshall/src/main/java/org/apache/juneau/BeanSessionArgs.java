@@ -36,6 +36,15 @@ public class BeanSessionArgs extends SessionArgs {
 	 */
 	public BeanSessionArgs() {}
 
+	/**
+	 * Static creator method.
+	 *
+	 * @return A new {@link BeanSessionArgs} object.
+	 */
+	public static BeanSessionArgs create() {
+		return new BeanSessionArgs();
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties.
 	//-----------------------------------------------------------------------------------------------------------------

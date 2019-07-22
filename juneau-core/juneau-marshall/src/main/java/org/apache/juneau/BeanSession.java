@@ -18,6 +18,7 @@ import static org.apache.juneau.BeanContext.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.time.*;
 import java.util.*;
 import java.util.Date;
 import java.util.concurrent.atomic.*;
@@ -1500,6 +1501,24 @@ public class BeanSession extends Session {
 	 */
 	public final TimeZone getTimeZone() {
 		return timeZone;
+	}
+
+	/**
+	 * Configuration property:  Time zone.
+	 *
+	 * <p>
+	 * The timezone is determined in the following order:
+	 * <ol>
+	 * 	<li><c>timeZone</c> parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_timeZone} setting on bean context.
+	 * </ol>
+	 *
+	 * @see BeanContext#BEAN_timeZone
+	 * @return The session timezone, or the system timezone if not specified.  Never <jk>null</jk>.
+	 */
+	public final ZoneId getTimeZoneId() {
+		return timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId();
 	}
 
 	/**

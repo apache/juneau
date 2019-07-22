@@ -12,47 +12,24 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import java.util.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Transforms {@link Calendar Calendars} to {@link Map Maps} of the format <c>{time:long,timeZone:string}</c>.
- *
- * @deprecated Use {@link TemporalCalendarSwap}
+ * Transforms <code>InputStreams</code> to BASE-64 encoded {@link String Strings}.
  */
-@Deprecated
-@SuppressWarnings("rawtypes")
-public class CalendarMapSwap extends PojoSwap<Calendar,Map> {
+public class InputStreamBase64Swap extends StringSwap<InputStream> {
 
 	/**
-	 * Converts the specified {@link Calendar} to a {@link Map}.
+	 * Converts the specified {@link InputStream} to a {@link String}.
 	 */
 	@Override /* PojoSwap */
-	public Map swap(BeanSession session, Calendar o) {
-		ObjectMap m = new ObjectMap();
-		m.put("time", o.getTime().getTime());
-		m.put("timeZone", o.getTimeZone().getID());
-		return m;
-	}
-
-	/**
-	 * Converts the specified {@link Map} to a {@link Calendar}.
-	 */
-	@Override /* PojoSwap */
-	@SuppressWarnings("unchecked")
-	public Calendar unswap(BeanSession session, Map o, ClassMeta<?> hint) throws Exception {
-		ClassMeta<? extends Calendar> tt;
-		if (hint == null || ! hint.canCreateNewInstance())
-			hint = session.getClassMeta(GregorianCalendar.class);
-		tt = (ClassMeta<? extends Calendar>)hint;
-		long time = Long.parseLong(o.get("time").toString());
-		String timeZone = o.get("timeZone").toString();
-		Date d = new Date(time);
-		Calendar c = tt.newInstance();
-		c.setTime(d);
-		c.setTimeZone(TimeZone.getTimeZone(timeZone));
-		return c;
+	public String swap(BeanSession session, InputStream is) throws Exception {
+		return base64Encode(IOUtils.readBytes(is));
 	}
 }

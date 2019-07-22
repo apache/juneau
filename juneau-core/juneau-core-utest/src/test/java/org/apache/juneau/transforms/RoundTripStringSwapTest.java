@@ -12,47 +12,62 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import java.util.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.transform.*;
+import org.junit.*;
 
 /**
- * Transforms {@link Calendar Calendars} to {@link Map Maps} of the format <c>{time:long,timeZone:string}</c>.
- *
- * @deprecated Use {@link TemporalCalendarSwap}
+ * Tests designed to serialize and parse objects to make sure we end up
+ * with the same objects for all serializers and parsers.
  */
-@Deprecated
-@SuppressWarnings("rawtypes")
-public class CalendarMapSwap extends PojoSwap<Calendar,Map> {
+public abstract class RoundTripStringSwapTest<T> {
 
-	/**
-	 * Converts the specified {@link Calendar} to a {@link Map}.
-	 */
-	@Override /* PojoSwap */
-	public Map swap(BeanSession session, Calendar o) {
-		ObjectMap m = new ObjectMap();
-		m.put("time", o.getTime().getTime());
-		m.put("timeZone", o.getTimeZone().getID());
-		return m;
+	private final String label;
+	private final T o;
+	private final StringSwap<T> ss;
+	private final String expected;
+	private final BeanSession bs;
+
+	public RoundTripStringSwapTest(String label, T o, StringSwap<T> ss, String expected, BeanSession bs) throws Exception {
+		this.label = label;
+		this.o = o;
+		this.ss = ss;
+		this.expected = expected;
+		this.bs = bs;
 	}
 
-	/**
-	 * Converts the specified {@link Map} to a {@link Calendar}.
-	 */
-	@Override /* PojoSwap */
-	@SuppressWarnings("unchecked")
-	public Calendar unswap(BeanSession session, Map o, ClassMeta<?> hint) throws Exception {
-		ClassMeta<? extends Calendar> tt;
-		if (hint == null || ! hint.canCreateNewInstance())
-			hint = session.getClassMeta(GregorianCalendar.class);
-		tt = (ClassMeta<? extends Calendar>)hint;
-		long time = Long.parseLong(o.get("time").toString());
-		String timeZone = o.get("timeZone").toString();
-		Date d = new Date(time);
-		Calendar c = tt.newInstance();
-		c.setTime(d);
-		c.setTimeZone(TimeZone.getTimeZone(timeZone));
-		return c;
+	@Test
+	public void testSwap() throws Exception {
+		String s = (String)ss.swap(bs, o);
+		if (! isEquals(expected, s)) {
+			if (expected.isEmpty()) {
+				if (! label.startsWith("[]"))
+					System.err.println(label.substring(0, label.indexOf(']')+1) + " "+s);
+				Assert.fail();
+			} else {
+				fail("Test [{0} swap] failed.  Expected=[{1}], Actual=[{2}]", label, expected, s);
+			}
+		}
+	}
+
+	@Test
+	public void testUnswap() throws Exception {
+		String s = (String)ss.swap(bs, o);
+		T o2 = ss.unswap(bs, s, bs.getClassMetaForObject(o));
+		String s2 = (String)ss.swap(bs, o2);
+		if (! isEquals(s, s2)) {
+			if (expected.isEmpty())
+				Assert.fail();
+			System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");
+			fail("Test [{0} unswap] failed.  Expected=[{1}], Actual=[{2}]", label, s, s2);
+		}
+	}
+
+	private void fail(String msg, Object...args) {
+		String s = format(msg, args);
+		System.err.println(s);
+		Assert.fail(s);
 	}
 }

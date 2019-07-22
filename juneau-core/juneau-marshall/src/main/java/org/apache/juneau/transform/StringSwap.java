@@ -42,6 +42,22 @@ import org.apache.juneau.*;
  */
 public abstract class StringSwap<T> extends PojoSwap<T,String> {
 
+	/**
+	 * Constructor.
+	 */
+	protected StringSwap() {
+		super();
+	}
+
+	/**
+	 * Constructor for when the normal and transformed classes are already known.
+	 *
+	 * @param normalClass The normal class (cannot be serialized).
+	 */
+	protected StringSwap(Class<T> normalClass) {
+		super(normalClass, String.class);
+	}
+
 	@Override /* PojoSwap */
 	public String swap(BeanSession session, T o) throws Exception {
 		return super.swap(session, o);

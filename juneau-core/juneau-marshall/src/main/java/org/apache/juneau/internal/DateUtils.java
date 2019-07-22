@@ -16,9 +16,15 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.ref.*;
 import java.text.*;
+import java.time.*;
+import java.time.chrono.*;
+import java.time.format.*;
+import java.time.temporal.*;
 import java.util.*;
 
 import javax.xml.bind.*;
+
+import org.apache.juneau.reflect.*;
 
 /**
  * A utility class for parsing and formatting HTTP dates as used in cookies and other headers.
@@ -284,5 +290,470 @@ public final class DateUtils {
 			case S5: return in + ":00";
 			default: return in;
 		}
+	}
+
+
+	/**
+	 * Returns a {@link DateTimeFormatter} using either a pattern or predefined pattern name.
+	 *
+	 * @param pattern The pattern (e.g. <js>"yyyy-MM-dd"</js>) or pattern name (e.g. <js>"ISO_INSTANT"</js>).
+	 * @return The formatter.
+	 */
+	public static DateTimeFormatter getFormatter(String pattern) {
+		if (isEmpty(pattern))
+			return DateTimeFormatter.ISO_INSTANT;
+		try {
+			FieldInfo fi = ClassInfo.of(DateTimeFormatter.class).getStaticPublicField(pattern);
+			if (fi != null)
+				return (DateTimeFormatter)fi.inner().get(null);
+			return DateTimeFormatter.ofPattern(pattern);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Returns the specified {@link Temporal} object to an {@link Instant} object.
+	 *
+	 * @param t The temporal object to convert.
+	 * @param zoneId The time zone if not already included in temporal.
+	 * @return The timestamp.
+	 */
+	public static Instant toInstant(Temporal t, ZoneId zoneId) {
+		return toTemporal(t, Instant.class, zoneId);
+	}
+
+	/**
+	 * Returns the specified {@link Temporal} object to a {@link ZonedDateTime} object.
+	 *
+	 * @param t The temporal object to convert.
+	 * @param zoneId The time zone if not already included in temporal.
+	 * @return The timestamp.
+	 */
+	public static ZonedDateTime toZonedDateTime(Temporal t, ZoneId zoneId) {
+		return toTemporal(t, ZonedDateTime.class, zoneId);
+	}
+
+	/**
+	 * Returns the specified {@link Temporal} object to a {@link Date} object.
+	 *
+	 * @param t The temporal object to convert.
+	 * @param zoneId The time zone if not already included in temporal.
+	 * @return The date.
+	 */
+	public static Date toDate(Temporal t, ZoneId zoneId) {
+		return Date.from(toInstant(t, zoneId));
+	}
+
+	/**
+	 * Returns the specified {@link Temporal} object to a {@link Calendar} object.
+	 *
+	 * @param t The temporal object to convert.
+	 * @param zoneId The time zone if not already included in temporal.
+	 * @return The date.
+	 */
+	public static Calendar toCalendar(Temporal t, ZoneId zoneId) {
+		return GregorianCalendar.from(toZonedDateTime(t, zoneId));
+	}
+
+	private static final LocalDate ZERO_DATE = LocalDate.ofEpochDay(0);
+	private static final MonthDay ZERO_MONTHDAY = MonthDay.of(1, 1);
+	private static final LocalTime ZERO_TIME = LocalTime.MIDNIGHT;
+
+	/**
+	 * Converts an arbitrary {@link Temporal} to another arbitrary {@link Temporal}
+	 *
+	 * @param o The temporal to convert.
+	 * @param tc The target temporal class.
+	 * @param zoneId The time zone if not already included in temporal.
+	 * @return The converted temporal.
+	 * @param <T> The target temporal class.
+	 */
+	public static <T> T toTemporal(Temporal o, Class<T> tc, ZoneId zoneId) {
+		if (o == null)
+			return null;
+		T t = toTemporal2(o, tc, zoneId);
+		if (t.getClass() != tc)
+			throw new RuntimeException("Temporal=["+o.getClass().getName()+"], wanted=["+tc.getName()+"], actual=["+t.getClass().getName()+"]");
+		return t;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> T toTemporal2(Temporal o, Class<T> tc, ZoneId zoneId) {
+
+		if (o == null)
+			return null;
+
+		Class<? extends Temporal> oc = o.getClass();
+
+		if (oc == tc)
+			return (T)o;
+
+		if (zoneId == null)
+			zoneId = ZoneId.systemDefault();
+
+		if (oc == Instant.class) {
+			Instant t = (Instant)o;
+			if (tc == LocalDate.class) {
+				return (T)t.atZone(zoneId).toLocalDate();
+			} else if (tc == LocalDateTime.class) {
+				return (T)t.atZone(zoneId).toLocalDateTime();
+			} else if (tc == LocalTime.class) {
+				return (T)t.atZone(zoneId).toLocalTime();
+			} else if (tc == OffsetDateTime.class) {
+				return (T)t.atZone(zoneId).toOffsetDateTime();
+			} else if (tc == OffsetTime.class) {
+				return (T)t.atZone(zoneId).toOffsetDateTime().toOffsetTime();
+			} else if (tc == Year.class) {
+				return (T)Year.from(t.atZone(zoneId));
+			} else if (tc == YearMonth.class) {
+				return (T)YearMonth.from(t.atZone(zoneId));
+			} else if (tc == ZonedDateTime.class) {
+				return (T)t.atZone(zoneId);
+			} else if (tc == HijrahDate.class) {
+				return (T)HijrahDate.from(t.atZone(zoneId));
+			} else if (tc == JapaneseDate.class) {
+				return (T)JapaneseDate.from(t.atZone(zoneId));
+			} else if (tc == MinguoDate.class) {
+				return (T)MinguoDate.from(t.atZone(zoneId));
+			} else if (tc == ThaiBuddhistDate.class) {
+				return (T)ThaiBuddhistDate.from(t.atZone(zoneId));
+			}
+		} else if (oc == LocalDate.class) {
+			LocalDate t = (LocalDate)o;
+			if (tc == Instant.class) {
+				return (T)t.atStartOfDay(zoneId).toInstant();
+			} else if (tc == LocalDateTime.class) {
+				return (T)t.atStartOfDay(zoneId).toLocalDateTime();
+			} else if (tc == LocalTime.class) {
+				return (T)t.atStartOfDay(zoneId).toLocalTime();
+			} else if (tc == OffsetDateTime.class) {
+				return (T)t.atStartOfDay(zoneId).toOffsetDateTime();
+			} else if (tc == OffsetTime.class) {
+				return (T)t.atStartOfDay(zoneId).toOffsetDateTime().toOffsetTime();
+			} else if (tc == Year.class) {
+				return (T)Year.from(t.atStartOfDay(zoneId));
+			} else if (tc == YearMonth.class) {
+				return (T)YearMonth.from(t.atStartOfDay(zoneId));
+			} else if (tc == ZonedDateTime.class) {
+				return (T)t.atStartOfDay(zoneId);
+			} else if (tc == HijrahDate.class) {
+				return (T)HijrahDate.from(t.atStartOfDay(zoneId));
+			} else if (tc == JapaneseDate.class) {
+				return (T)JapaneseDate.from(t.atStartOfDay(zoneId));
+			} else if (tc == MinguoDate.class) {
+				return (T)MinguoDate.from(t.atStartOfDay(zoneId));
+			} else if (tc == ThaiBuddhistDate.class) {
+				return (T)ThaiBuddhistDate.from(t.atStartOfDay(zoneId));
+			}
+		} else if (oc == LocalDateTime.class) {
+			LocalDateTime t = (LocalDateTime)o;
+			if (tc == Instant.class) {
+				return (T)t.atZone(zoneId).toInstant();
+			} else if (tc == LocalDate.class) {
+				return (T)t.toLocalDate();
+			} else if (tc == LocalTime.class) {
+				return (T)t.toLocalTime();
+			} else if (tc == OffsetDateTime.class) {
+				return (T)t.atZone(zoneId).toOffsetDateTime();
+			} else if (tc == OffsetTime.class) {
+				return (T)t.atZone(zoneId).toOffsetDateTime().toOffsetTime();
+			} else if (tc == Year.class) {
+				return (T)Year.from(t.atZone(zoneId));
+			} else if (tc == YearMonth.class) {
+				return (T)YearMonth.from(t.atZone(zoneId));
+			} else if (tc == ZonedDateTime.class) {
+				return (T)t.atZone(zoneId);
+			} else if (tc == HijrahDate.class) {
+				return (T)HijrahDate.from(t.atZone(zoneId));
+			} else if (tc == JapaneseDate.class) {
+				return (T)JapaneseDate.from(t.atZone(zoneId));
+			} else if (tc == MinguoDate.class) {
+				return (T)MinguoDate.from(t.atZone(zoneId));
+			} else if (tc == ThaiBuddhistDate.class) {
+				return (T)ThaiBuddhistDate.from(t.atZone(zoneId));
+			}
+		} else if (oc == LocalTime.class) {
+			LocalTime t = (LocalTime)o;
+			if (tc == Instant.class) {
+				return (T)t.atDate(ZERO_DATE).atZone(zoneId).toInstant();
+			} else if (tc == LocalDate.class) {
+				return (T)LocalDate.ofEpochDay(0);
+			} else if (tc == LocalDateTime.class) {
+				return (T)t.atDate(ZERO_DATE);
+			} else if (tc == OffsetDateTime.class) {
+				return (T)t.atDate(ZERO_DATE).atZone(zoneId).toOffsetDateTime();
+			} else if (tc == OffsetTime.class) {
+				return (T)t.atDate(ZERO_DATE).atZone(zoneId).toOffsetDateTime().toOffsetTime();
+			} else if (tc == Year.class) {
+				return (T)Year.of(1970);
+			} else if (tc == YearMonth.class) {
+				return (T)YearMonth.of(1970, 1);
+			} else if (tc == ZonedDateTime.class) {
+				return (T)t.atDate(ZERO_DATE).atZone(zoneId);
+			} else if (tc == HijrahDate.class) {
+				return (T)HijrahDate.from(ZERO_DATE.atStartOfDay(zoneId));
+			} else if (tc == JapaneseDate.class) {
+				return (T)JapaneseDate.from(ZERO_DATE.atStartOfDay(zoneId));
+			} else if (tc == MinguoDate.class) {
+				return (T)MinguoDate.from(ZERO_DATE.atStartOfDay(zoneId));
+			} else if (tc == ThaiBuddhistDate.class) {
+				return (T)ThaiBuddhistDate.from(ZERO_DATE.atStartOfDay(zoneId));
+			}
+		} else if (oc == OffsetDateTime.class) {
+			OffsetDateTime t = (OffsetDateTime)o;
+			if (tc == Instant.class) {
+				return (T)t.toInstant();
+			} else if (tc == LocalDate.class) {
+				return (T)t.toLocalDate();
+			} else if (tc == LocalDateTime.class) {
+				return (T)t.toLocalDateTime();
+			} else if (tc == LocalTime.class) {
+				return (T)t.toLocalTime();
+			} else if (tc == OffsetTime.class) {
+				return (T)t.toOffsetTime();
+			} else if (tc == Year.class) {
+				return (T)Year.from(t);
+			} else if (tc == YearMonth.class) {
+				return (T)YearMonth.from(t);
+			} else if (tc == ZonedDateTime.class) {
+				return (T)t.toZonedDateTime();
+			} else if (tc == HijrahDate.class) {
+				return (T)HijrahDate.from(t);
+			} else if (tc == JapaneseDate.class) {
+				return (T)JapaneseDate.from(t);
+			} else if (tc == MinguoDate.class) {
+				return (T)MinguoDate.from(t);
+			} else if (tc == ThaiBuddhistDate.class) {
+				return (T)ThaiBuddhistDate.from(t);
+			}
+		} else if (oc == OffsetTime.class) {
+			OffsetTime t = (OffsetTime)o;
+			if (tc == Instant.class) {
+				return (T)t.atDate(ZERO_DATE).toInstant();
+			} else if (tc == LocalDate.class) {
+				return (T)LocalDate.ofEpochDay(0);
+			} else if (tc == LocalDateTime.class) {
+				return (T)t.atDate(ZERO_DATE).toLocalDateTime();
+			} else if (tc == LocalTime.class) {
+				return (T)t.atDate(ZERO_DATE).toLocalTime();
+			} else if (tc == OffsetDateTime.class) {
+				return (T)t.atDate(ZERO_DATE);
+			} else if (tc == Year.class) {
+				return (T)Year.from(t.atDate(ZERO_DATE));
+			} else if (tc == YearMonth.class) {
+				return (T)YearMonth.from(t.atDate(ZERO_DATE));
+			} else if (tc == ZonedDateTime.class) {
+				return (T)t.atDate(ZERO_DATE).toZonedDateTime();
+			} else if (tc == HijrahDate.class) {
+				return (T)HijrahDate.from(t.atDate(ZERO_DATE));
+			} else if (tc == JapaneseDate.class) {
+				return (T)JapaneseDate.from(t.atDate(ZERO_DATE));
+			} else if (tc == MinguoDate.class) {
+				return (T)MinguoDate.from(t.atDate(ZERO_DATE));
+			} else if (tc == ThaiBuddhistDate.class) {
+				return (T)ThaiBuddhistDate.from(t.atDate(ZERO_DATE));
+			}
+		} else if (oc == Year.class) {
+			Year t = (Year)o;
+			if (tc == Instant.class) {
+				return (T)t.atMonthDay(ZERO_MONTHDAY).atStartOfDay(zoneId).toInstant();
+			} else if (tc == LocalDate.class) {
+				return (T)t.atMonthDay(ZERO_MONTHDAY);
+			} else if (tc == LocalDateTime.class) {
+				return (T)t.atMonthDay(ZERO_MONTHDAY).atStartOfDay(zoneId).toLocalDateTime();
+			} else if (tc == LocalTime.class) {
+				return (T)ZERO_TIME;
+			} else if (tc == OffsetDateTime.class) {
+				return (T)t.atMonthDay(ZERO_MONTHDAY).atStartOfDay(zoneId).toOffsetDateTime();
+			} else if (tc == OffsetTime.class) {
+				return (T)t.atMonthDay(ZERO_MONTHDAY).atStartOfDay(zoneId).toOffsetDateTime().toOffsetTime();
+			} else if (tc == YearMonth.class) {
+				return (T)t.atMonth(1);
+			} else if (tc == ZonedDateTime.class) {
+				return (T)t.atMonthDay(ZERO_MONTHDAY).atStartOfDay(zoneId);
+			} else if (tc == HijrahDate.class) {
+				return (T)HijrahDate.from(t.atMonthDay(ZERO_MONTHDAY).atStartOfDay(zoneId));
+			} else if (tc == JapaneseDate.class) {
+				return (T)JapaneseDate.from(t.atMonthDay(ZERO_MONTHDAY).atStartOfDay(zoneId));
+			} else if (tc == MinguoDate.class) {
+				return (T)MinguoDate.from(t.atMonthDay(ZERO_MONTHDAY).atStartOfDay(zoneId));
+			} else if (tc == ThaiBuddhistDate.class) {
+				return (T)ThaiBuddhistDate.from(t.atMonthDay(ZERO_MONTHDAY).atStartOfDay(zoneId));
+			}
+		} else if (oc == YearMonth.class) {
+			YearMonth t = (YearMonth)o;
+			if (tc == Instant.class) {
+				return (T)t.atDay(1).atStartOfDay(zoneId).toInstant();
+			} else if (tc == LocalDate.class) {
+				return (T)t.atDay(1).atStartOfDay(zoneId).toLocalDate();
+			} else if (tc == LocalDateTime.class) {
+				return (T)t.atDay(1).atStartOfDay(zoneId).toLocalDateTime();
+			} else if (tc == LocalTime.class) {
+				return (T)t.atDay(1).atStartOfDay(zoneId).toLocalTime();
+			} else if (tc == OffsetDateTime.class) {
+				return (T)t.atDay(1).atStartOfDay(zoneId).toOffsetDateTime();
+			} else if (tc == OffsetTime.class) {
+				return (T)t.atDay(1).atStartOfDay(zoneId).toOffsetDateTime().toOffsetTime();
+			} else if (tc == Year.class) {
+				return (T)Year.from(t);
+			} else if (tc == ZonedDateTime.class) {
+				return (T)t.atDay(1).atStartOfDay(zoneId);
+			} else if (tc == HijrahDate.class) {
+				return (T)HijrahDate.from(t.atDay(1).atStartOfDay(zoneId));
+			} else if (tc == JapaneseDate.class) {
+				return (T)JapaneseDate.from(t.atDay(1).atStartOfDay(zoneId));
+			} else if (tc == MinguoDate.class) {
+				return (T)MinguoDate.from(t.atDay(1).atStartOfDay(zoneId));
+			} else if (tc == ThaiBuddhistDate.class) {
+				return (T)ThaiBuddhistDate.from(t.atDay(1).atStartOfDay(zoneId));
+			}
+		} else if (oc == ZonedDateTime.class) {
+			ZonedDateTime t = (ZonedDateTime)o;
+			if (tc == Instant.class) {
+				return (T)t.toInstant();
+			} else if (tc == LocalDate.class) {
+				return (T)t.toLocalDate();
+			} else if (tc == LocalDateTime.class) {
+				return (T)t.toLocalDateTime();
+			} else if (tc == LocalTime.class) {
+				return (T)t.toLocalTime();
+			} else if (tc == OffsetDateTime.class) {
+				return (T)t.toOffsetDateTime();
+			} else if (tc == OffsetTime.class) {
+				return (T)t.toOffsetDateTime().toOffsetTime();
+			} else if (tc == Year.class) {
+				return (T)Year.from(t);
+			} else if (tc == YearMonth.class) {
+				return (T)YearMonth.from(t);
+			} else if (tc == HijrahDate.class) {
+				return (T)HijrahDate.from(t);
+			} else if (tc == JapaneseDate.class) {
+				return (T)JapaneseDate.from(t);
+			} else if (tc == MinguoDate.class) {
+				return (T)MinguoDate.from(t);
+			} else if (tc == ThaiBuddhistDate.class) {
+				return (T)ThaiBuddhistDate.from(t);
+			}
+		} else if (oc == HijrahDate.class) {
+			HijrahDate t = (HijrahDate)o;
+			if (tc == Instant.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant();
+			} else if (tc == LocalDate.class) {
+				return (T)LocalDate.ofEpochDay(t.toEpochDay());
+			} else if (tc == LocalDateTime.class) {
+				return (T)LocalDate.ofEpochDay(t.toEpochDay()).atTime(ZERO_TIME);
+			} else if (tc == LocalTime.class) {
+				return (T)ZERO_TIME;
+			} else if (tc == OffsetDateTime.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId).toOffsetDateTime();
+			} else if (tc == OffsetTime.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId).toOffsetDateTime().toOffsetTime();
+			} else if (tc == Year.class) {
+				return (T)Year.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == YearMonth.class) {
+				return (T)YearMonth.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == ZonedDateTime.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId);
+			} else if (tc == JapaneseDate.class) {
+				return (T)JapaneseDate.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == MinguoDate.class) {
+				return (T)MinguoDate.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == ThaiBuddhistDate.class) {
+				return (T)ThaiBuddhistDate.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			}
+		} else if (oc == JapaneseDate.class) {
+			JapaneseDate t = (JapaneseDate)o;
+			if (tc == Instant.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant();
+			} else if (tc == LocalDate.class) {
+				return (T)LocalDate.ofEpochDay(t.toEpochDay());
+			} else if (tc == LocalDateTime.class) {
+				return (T)LocalDate.ofEpochDay(t.toEpochDay()).atTime(ZERO_TIME);
+			} else if (tc == LocalTime.class) {
+				return (T)ZERO_TIME;
+			} else if (tc == OffsetDateTime.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId).toOffsetDateTime();
+			} else if (tc == OffsetTime.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId).toOffsetDateTime().toOffsetTime();
+			} else if (tc == Year.class) {
+				return (T)Year.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == YearMonth.class) {
+				return (T)YearMonth.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == ZonedDateTime.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId);
+			} else if (tc == HijrahDate.class) {
+				return (T)HijrahDate.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == MinguoDate.class) {
+				return (T)MinguoDate.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == ThaiBuddhistDate.class) {
+				return (T)ThaiBuddhistDate.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			}
+		} else if (oc == MinguoDate.class) {
+			MinguoDate t = (MinguoDate)o;
+			if (tc == Instant.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant();
+			} else if (tc == LocalDate.class) {
+				return (T)LocalDate.ofEpochDay(t.toEpochDay());
+			} else if (tc == LocalDateTime.class) {
+				return (T)LocalDate.ofEpochDay(t.toEpochDay()).atTime(ZERO_TIME);
+			} else if (tc == LocalTime.class) {
+				return (T)ZERO_TIME;
+			} else if (tc == OffsetDateTime.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId).toOffsetDateTime();
+			} else if (tc == OffsetTime.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId).toOffsetDateTime().toOffsetTime();
+			} else if (tc == Year.class) {
+				return (T)Year.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == YearMonth.class) {
+				return (T)YearMonth.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == ZonedDateTime.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId);
+			} else if (tc == HijrahDate.class) {
+				return (T)HijrahDate.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == JapaneseDate.class) {
+				return (T)JapaneseDate.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == ThaiBuddhistDate.class) {
+				return (T)ThaiBuddhistDate.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			}
+		} else if (oc == ThaiBuddhistDate.class) {
+			ThaiBuddhistDate t = (ThaiBuddhistDate)o;
+			if (tc == Instant.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant();
+			} else if (tc == LocalDate.class) {
+				return (T)LocalDate.ofEpochDay(t.toEpochDay());
+			} else if (tc == LocalDateTime.class) {
+				return (T)LocalDate.ofEpochDay(t.toEpochDay()).atTime(ZERO_TIME);
+			} else if (tc == LocalTime.class) {
+				return (T)ZERO_TIME;
+			} else if (tc == OffsetDateTime.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId).toOffsetDateTime();
+			} else if (tc == OffsetTime.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId).toOffsetDateTime().toOffsetTime();
+			} else if (tc == Year.class) {
+				return (T)Year.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == YearMonth.class) {
+				return (T)YearMonth.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == ZonedDateTime.class) {
+				return (T)t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId);
+			} else if (tc == HijrahDate.class) {
+				return (T)HijrahDate.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == JapaneseDate.class) {
+				return (T)JapaneseDate.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			} else if (tc == MinguoDate.class) {
+				return (T)MinguoDate.from(t.atTime(ZERO_TIME).atZone(zoneId).toInstant().atZone(zoneId));
+			}
+		}
+
+		// Last chance...try to use a static from(TemporalAccessor) method if present.
+		ClassInfo ci = ClassInfo.of(tc);
+		MethodInfo mi = ci.getStaticPublicMethod("from", tc, TemporalAccessor.class);
+		if (mi != null) {
+			try {
+				return (T)mi.inner().invoke(null, o);
+			} catch (Exception e) {}
+		}
+
+		throw new RuntimeException("Temporal type '"+o.getClass().getName()+"' cannot be converted to type '"+tc.getName()+"'.");
 	}
 }

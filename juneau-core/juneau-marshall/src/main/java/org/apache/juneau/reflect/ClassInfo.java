@@ -463,6 +463,35 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Find the public static method with the specified name and args.
+	 *
+	 * @param name The method name.
+	 * @param rt The method return type.
+	 * @param args The method arguments
+	 * @return The method, or <jk>null</jk> if it couldn't be found.
+	 */
+	public MethodInfo getStaticPublicMethod(String name, Class<?> rt, Class<?>...args) {
+		if (c != null)
+			for (MethodInfo m : getPublicMethods())
+				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && name.equals(m.getSimpleName()) && m.hasReturnType(rt) && m.hasArgs(args))
+					return m;
+		return null;
+	}
+
+	/**
+	 * Find the public static method with the specified name and args.
+	 *
+	 * @param name The method name.
+	 * @param rt The method return type.
+	 * @param args The method arguments
+	 * @return The method, or <jk>null</jk> if it couldn't be found.
+	 */
+	public Method getStaticPublicMethodInner(String name, Class<?> rt, Class<?>...args) {
+		MethodInfo mi = getStaticPublicMethod(name, rt, args);
+		return mi == null ? null : mi.inner();
+	}
+
+	/**
 	 * Returns the <c>public static Builder create()</c> method on this class.
 	 *
 	 * @return The <c>public static Builder create()</c> method on this class, or <jk>null</jk> if it doesn't exist.
@@ -750,7 +779,6 @@ public final class ClassInfo {
 		return m;
 	}
 
-
 	/**
 	 * Returns the public field with the specified name.
 	 *
@@ -774,6 +802,32 @@ public final class ClassInfo {
 		for (FieldInfo f : getDeclaredFields())
 			if (f.getName().equals(name))
 				return f;
+		return null;
+	}
+
+	/**
+	 * Returns the static public field with the specified name.
+	 *
+	 * @param name The field name.
+	 * @return The public field, or <jk>null</jk> if not found.
+	 */
+	public FieldInfo getStaticPublicField(String name) {
+		for (FieldInfo f : getPublicFields())
+			if (f.isStatic() && f.getName().equals(name))
+				return f;
+		return null;
+	}
+
+	/**
+	 * Returns the static public field with the specified name.
+	 *
+	 * @param name The field name.
+	 * @return The public field, or <jk>null</jk> if not found.
+	 */
+	public Field getStaticPublicFieldInner(String name) {
+		for (FieldInfo f : getPublicFields())
+			if (f.isStatic() && f.getName().equals(name))
+				return f.inner();
 		return null;
 	}
 
