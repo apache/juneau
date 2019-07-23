@@ -46,7 +46,7 @@ public class TemporalCalendarSwapTest extends RoundTripStringSwapTest<Calendar> 
 
 	private static GregorianCalendar T_Calendar = GregorianCalendar.from(ZonedDateTime.from(DateTimeFormatter.ISO_ZONED_DATE_TIME.parse("2012-12-21T12:34:56Z")));
 	static {
-		T_Calendar.setTimeZone(TimeZone.getDefault());
+		T_Calendar.setTimeZone(TimeZone.getTimeZone("GMT-5"));
 	}
 
 	public TemporalCalendarSwapTest(String label, Calendar o, StringSwap<Calendar> s, String r, BeanSession bs) throws Exception {
@@ -104,14 +104,14 @@ public class TemporalCalendarSwapTest extends RoundTripStringSwapTest<Calendar> 
 				"[4] IsoDateTime, Default timezone",
 				T_Calendar,
 				new TemporalCalendarSwap.IsoDateTime(),
-				"2012-12-21T07:34:56-05:00[America/New_York]",
+				"2012-12-21T07:34:56-05:00[GMT-05:00]",
 				BS_DEFAULT
 			},
 			{
 				"[5] IsoDateTime, Pacific timezone",
 				T_Calendar,
 				new TemporalCalendarSwap.IsoDateTime(),
-				"2012-12-21T07:34:56-05:00[America/New_York]",
+				"2012-12-21T07:34:56-05:00[GMT-05:00]",
 				BS_PST
 			},
 
@@ -302,14 +302,14 @@ public class TemporalCalendarSwapTest extends RoundTripStringSwapTest<Calendar> 
 				"[26] IsoZonedDateTime, Default timezone",
 				T_Calendar,
 				new TemporalCalendarSwap.IsoZonedDateTime(),
-				"2012-12-21T07:34:56-05:00[America/New_York]",
+				"2012-12-21T07:34:56-05:00[GMT-05:00]",
 				BS_DEFAULT
 			},
 			{
 				"[27] IsoZonedDateTime, Pacific timezone",
 				T_Calendar,
 				new TemporalCalendarSwap.IsoZonedDateTime(),
-				"2012-12-21T07:34:56-05:00[America/New_York]",
+				"2012-12-21T07:34:56-05:00[GMT-05:00]",
 				BS_PST
 			},
 
