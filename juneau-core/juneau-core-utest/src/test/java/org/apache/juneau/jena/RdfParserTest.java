@@ -116,7 +116,7 @@ public class RdfParserTest {
 		public String f2;
 		@Rdf(beanUri=true) public URI f3;
 		public URI f4a, f4b;
-		@Swap(CalendarSwap.ISO8601DTZ.class) public Calendar f5;
+		@Swap(TemporalCalendarSwap.IsoInstant.class) public Calendar f5;
 		public LinkedList<A1> f6 = new LinkedList<>();
 
 		public A init() throws Exception {
@@ -141,7 +141,7 @@ public class RdfParserTest {
 		public String f2;
 		@Rdf(beanUri=true) public URI f3;
 		public URI f4a, f4b;
-		@Swap(CalendarSwap.ISO8601DTZ.class) public Calendar f5;
+		@Swap(TemporalCalendarSwap.IsoInstant.class) public Calendar f5;
 
 		public A1 init() throws Exception {
 			f1 = 1;

@@ -95,7 +95,7 @@ import org.apache.juneau.xml.*;
  * bean context can also be passed in.
  *
  * <p>
- * For example, if the {@link CalendarSwap} transform is used to generalize {@code Calendar} objects to {@code String}
+ * For example, if the {@link TemporalCalendarSwap} transform is used to generalize {@code Calendar} objects to {@code String}
  * objects.
  * When registered with this parser, you can construct {@code Calendar} objects from {@code Strings} using the
  * following syntax...

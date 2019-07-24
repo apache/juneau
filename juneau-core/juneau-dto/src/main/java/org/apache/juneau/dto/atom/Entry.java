@@ -113,7 +113,7 @@ public class Entry extends CommonEntry {
 	 *
 	 * @return The publish timestamp of this entry.
 	 */
-	@Swap(CalendarSwap.ISO8601DT.class)
+	@Swap(TemporalCalendarSwap.IsoInstant.class)
 	public Calendar getPublished() {
 		return published;
 	}

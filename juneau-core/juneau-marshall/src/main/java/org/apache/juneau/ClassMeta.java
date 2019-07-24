@@ -122,8 +122,6 @@ public final class ClassMeta<T> implements Type {
 	private final Object example;                          // Example object.
 	private final Map<Class<?>,Transform<?,T>> fromTransforms = new ConcurrentHashMap<>();
 	private final Map<Class<?>,Transform<T,?>> toTransforms = new ConcurrentHashMap<>();
-	private final Transform<Reader,T> readerTransform;
-	private final Transform<InputStream,T> inputStreamTransform;
 	private final Transform<String,T> stringTransform;
 
 	private ReadWriteLock lock = new ReentrantReadWriteLock(false);
@@ -205,8 +203,6 @@ public final class ClassMeta<T> implements Type {
 			this.exampleField = builder.exampleField;
 			this.example = builder.example;
 			this.args = null;
-			this.readerTransform = builder.readerTransform;
-			this.inputStreamTransform = builder.inputStreamTransform;
 			this.stringTransform = builder.stringTransform;
 		} catch (ClassMetaRuntimeException e) {
 			notABeanReason = e.getMessage();
@@ -274,8 +270,6 @@ public final class ClassMeta<T> implements Type {
 		this.exampleField = mainType.exampleField;
 		this.example = mainType.example;
 		this.args = null;
-		this.readerTransform = mainType.readerTransform;
-		this.inputStreamTransform = mainType.inputStreamTransform;
 		this.stringTransform = mainType.stringTransform;
 	}
 
@@ -326,8 +320,6 @@ public final class ClassMeta<T> implements Type {
 		this.exampleMethod = null;
 		this.exampleField = null;
 		this.example = null;
-		this.readerTransform = null;
-		this.inputStreamTransform = null;
 		this.stringTransform = null;
 	}
 
@@ -382,8 +374,6 @@ public final class ClassMeta<T> implements Type {
 		Method exampleMethod;
 		Field exampleField;
 		Object example;
-		Transform<Reader,T> readerTransform;
-		Transform<InputStream,T> inputStreamTransform;
 		Transform<String,T> stringTransform;
 
 		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
@@ -775,8 +765,6 @@ public final class ClassMeta<T> implements Type {
 
 			this.example = example;
 
-			this.readerTransform = TransformCache.get(Reader.class, c);
-			this.inputStreamTransform = TransformCache.get(InputStream.class, c);
 			this.stringTransform = TransformCache.get(String.class, c);
 		}
 

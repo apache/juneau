@@ -29,7 +29,7 @@ import org.junit.runners.*;
  * Exhaustive serialization tests for the DateSwap class.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({})
+@SuppressWarnings("deprecation")
 public class DateSwapComboTest extends ComboRoundTripTest {
 
 	private static Date singleDate = CalendarSwapTest.testDate.getTime();

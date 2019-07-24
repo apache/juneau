@@ -25,7 +25,7 @@ public class AtomTest {
 
 	public Feed createFeed() throws Exception {
 		return
-			feed("tag:foo.org", "Title", "2016-12-31T01:02:03-04:00")
+			feed("tag:foo.org", "Title", "2016-12-31T05:02:03Z")
 			.subtitle(text("html").text("Subtitle"))
 			.links(
 				link("alternate", "text/html", "http://foo.org/").hreflang("en"),
@@ -35,12 +35,12 @@ public class AtomTest {
 				generator("Example Toolkit").uri("http://www.foo.org/").version("1.0")
 			)
 			.entries(
-				entry("tag:foo.org", "Title", "2016-12-31T01:02:03-04:00")
+				entry("tag:foo.org", "Title", "2016-12-31T05:02:03Z")
 				.links(
 					link("alternate", "text/html", "http://foo.org/2005/04/02/atom"),
 					link("enclosure", "audio/mpeg", "http://foo.org/audio/foobar.mp3").length(1337)
 				)
-				.published("2016-12-31T01:02:03-04:00")
+				.published("2016-12-31T05:02:03Z")
 				.authors(
 					person("John Smith").uri(new URI("http://foo.org/")).email("foo@foo.org")
 				)
@@ -82,9 +82,9 @@ public class AtomTest {
 			+"		<id>tag:foo.org</id>\n"
 			+"		<link href='http://foo.org/2005/04/02/atom' rel='alternate' type='text/html'/>\n"
 			+"		<link href='http://foo.org/audio/foobar.mp3' length='1337' rel='enclosure' type='audio/mpeg'/>\n"
-			+"		<published>2016-12-31T01:02:03-04:00</published>\n"
+			+"		<published>2016-12-31T05:02:03Z</published>\n"
 			+"		<title>Title</title>\n"
-			+"		<updated>2016-12-31T01:02:03-04:00</updated>\n"
+			+"		<updated>2016-12-31T05:02:03Z</updated>\n"
 			+"	</entry>\n"
 			+"	<generator uri='http://www.foo.org/' version='1.0'>Example Toolkit</generator>\n"
 			+"	<id>tag:foo.org</id>\n"
@@ -92,7 +92,7 @@ public class AtomTest {
 			+"	<link href='http://foo.org/feed.atom' rel='self' type='application/atom+xml'/>\n"
 			+"	<subtitle type='html'>Subtitle</subtitle>\n"
 			+"	<title>Title</title>\n"
-			+"	<updated>2016-12-31T01:02:03-04:00</updated>\n"
+			+"	<updated>2016-12-31T05:02:03Z</updated>\n"
 			+"</feed>\n";
 
 		s = XmlSerializer.create().sq().ws().enableNamespaces(false).sortProperties().build();
@@ -127,9 +127,9 @@ public class AtomTest {
 			+"		<atom:id>tag:foo.org</atom:id>\n"
 			+"		<atom:link href='http://foo.org/2005/04/02/atom' rel='alternate' type='text/html'/>\n"
 			+"		<atom:link href='http://foo.org/audio/foobar.mp3' length='1337' rel='enclosure' type='audio/mpeg'/>\n"
-			+"		<atom:published>2016-12-31T01:02:03-04:00</atom:published>\n"
+			+"		<atom:published>2016-12-31T05:02:03Z</atom:published>\n"
 			+"		<atom:title>Title</atom:title>\n"
-			+"		<atom:updated>2016-12-31T01:02:03-04:00</atom:updated>\n"
+			+"		<atom:updated>2016-12-31T05:02:03Z</atom:updated>\n"
 			+"	</atom:entry>\n"
 			+"	<atom:generator uri='http://www.foo.org/' version='1.0'>Example Toolkit</atom:generator>\n"
 			+"	<atom:id>tag:foo.org</atom:id>\n"
@@ -137,7 +137,7 @@ public class AtomTest {
 			+"	<atom:link href='http://foo.org/feed.atom' rel='self' type='application/atom+xml'/>\n"
 			+"	<atom:subtitle type='html'>Subtitle</atom:subtitle>\n"
 			+"	<atom:title>Title</atom:title>\n"
-			+"	<atom:updated>2016-12-31T01:02:03-04:00</atom:updated>\n"
+			+"	<atom:updated>2016-12-31T05:02:03Z</atom:updated>\n"
 			+"</atom:feed>\n";
 
 		s = XmlSerializer.create().sq().ws().enableNamespaces(true).addNamespaceUrisToRoot().sortProperties().build();
@@ -172,9 +172,9 @@ public class AtomTest {
 			+"		<id>tag:foo.org</id>\n"
 			+"		<link href='http://foo.org/2005/04/02/atom' rel='alternate' type='text/html'/>\n"
 			+"		<link href='http://foo.org/audio/foobar.mp3' length='1337' rel='enclosure' type='audio/mpeg'/>\n"
-			+"		<published>2016-12-31T01:02:03-04:00</published>\n"
+			+"		<published>2016-12-31T05:02:03Z</published>\n"
 			+"		<title>Title</title>\n"
-			+"		<updated>2016-12-31T01:02:03-04:00</updated>\n"
+			+"		<updated>2016-12-31T05:02:03Z</updated>\n"
 			+"	</entry>\n"
 			+"	<generator uri='http://www.foo.org/' version='1.0'>Example Toolkit</generator>\n"
 			+"	<id>tag:foo.org</id>\n"
@@ -182,7 +182,7 @@ public class AtomTest {
 			+"	<link href='http://foo.org/feed.atom' rel='self' type='application/atom+xml'/>\n"
 			+"	<subtitle type='html'>Subtitle</subtitle>\n"
 			+"	<title>Title</title>\n"
-			+"	<updated>2016-12-31T01:02:03-04:00</updated>\n"
+			+"	<updated>2016-12-31T05:02:03Z</updated>\n"
 			+"</feed>\n";
 
 		s = XmlSerializer.create().sq().ws().defaultNamespace("atom").enableNamespaces(true).addNamespaceUrisToRoot().sortProperties().build();

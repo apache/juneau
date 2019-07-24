@@ -29,7 +29,7 @@ import org.junit.runners.*;
  * Exhaustive serialization tests for the CalendarSwap class.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({})
+@SuppressWarnings("deprecation")
 public class CalendarSwapComboTest extends ComboRoundTripTest {
 
 	private static Calendar singleDate = new GregorianCalendar(TimeZone.getTimeZone("PST"));

@@ -144,13 +144,13 @@ public class DataConversionTest {
 	//====================================================================================================
 	@Test
 	public void testObjectSwaps() throws Exception {
-		String s = "Jan 12, 2001";
-		BeanSession session = BeanContext.create().pojoSwaps(CalendarSwap.DateMedium.class).build().createSession();
+		String s = "2001-12-21T12:34:56Z";
+		BeanSession session = BeanContext.create().pojoSwaps(TemporalCalendarSwap.IsoInstant.class).build().createSession();
 		Calendar c = session.convertToType(s, GregorianCalendar.class);
 		assertEquals(2001, c.get(Calendar.YEAR));
 		c = session.convertToType(s, Calendar.class);
 		assertEquals(2001, c.get(Calendar.YEAR));
 		s = session.convertToType(c, String.class);
-		assertEquals("Jan 12, 2001", s);
+		assertEquals("2001-12-21T12:34:56Z", s);
 	}
 }

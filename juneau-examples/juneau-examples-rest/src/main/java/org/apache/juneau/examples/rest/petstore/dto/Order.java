@@ -59,7 +59,7 @@ public class Order {
 
 	@Column @Temporal(TIMESTAMP)
 	@Schema(description="The ship date for this order.", format="date-time")
-	@Swap(DateSwap.ISO8601D.class)
+	@Swap(TemporalDateSwap.IsoLocalDate.class)
 	private Date shipDate;
 
 	/**

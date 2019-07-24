@@ -51,7 +51,7 @@ import org.apache.juneau.transforms.*;
 	allowedMethodParams="*",
 	pojoSwaps={
 		IteratorSwap.class,       // Allows Iterators and Iterables to be serialized.
-		DateSwap.ISO8601DT.class  // Serialize Date objects as ISO8601 strings.
+		TemporalDateSwap.IsoInstant.class  // Serialize Date objects as ISO8601 strings.
 	}
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
@@ -297,7 +297,7 @@ public class LogsResource extends BasicRestServlet {
 			return f.isDirectory() ? f.listFiles().length : f.length();
 		}
 
-		@Swap(DateSwap.ISO8601DTP.class)
+		@Swap(TemporalDateSwap.IsoInstant.class)
 		public Date getLastModified() {
 			return new Date(f.lastModified());
 		}

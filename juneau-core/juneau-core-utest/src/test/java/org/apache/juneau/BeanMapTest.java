@@ -35,7 +35,7 @@ public class BeanMapTest {
 
 	BeanContext bc = BeanContext.create()
 			.beanDictionary(MyBeanDictionaryMap.class)
-			.pojoSwaps(CalendarSwap.ISO8601DTZ.class)
+			.pojoSwaps(TemporalCalendarSwap.IsoInstant.class)
 			.build();
 	BeanSession session = bc.createSession();
 

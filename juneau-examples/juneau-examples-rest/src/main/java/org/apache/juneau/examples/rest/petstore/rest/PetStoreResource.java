@@ -530,7 +530,7 @@ public class PetStoreResource extends BasicRestJena implements PetStore {
 			tags="store"
 		),
 		pojoSwaps={
-			DateSwap.ISO8601D.class
+			TemporalDateSwap.IsoLocalDate.class
 		}
 	)
 	public long placeOrder(long petId, String username) throws IdConflict, NotAcceptable, UnsupportedMediaType {

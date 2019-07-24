@@ -31,8 +31,8 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	private static final WriterSerializer serializer = JsonSerializer.create()
 		.pojoSwaps(
-			CalendarSwap.ISO8601DTZ.class,
-			DateSwap.ISO8601DTZ.class,
+			TemporalCalendarSwap.IsoInstant.class,
+			TemporalDateSwap.IsoInstant.class,
 			EnumerationSwap.class,
 			IteratorSwap.class
 		)

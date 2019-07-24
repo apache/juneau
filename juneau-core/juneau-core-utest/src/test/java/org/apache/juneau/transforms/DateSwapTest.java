@@ -19,7 +19,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
 
-@SuppressWarnings({})
+@SuppressWarnings("deprecation")
 public class DateSwapTest {
 
 	@BeforeClass

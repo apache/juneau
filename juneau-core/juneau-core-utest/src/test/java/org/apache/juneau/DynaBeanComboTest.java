@@ -397,7 +397,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 	@Bean(sort=true)
 	public static class BeanWithDynaFieldSwapped {
 		@BeanProperty(name="*")
-		@Swap(CalendarSwap.ISO8601DTZ.class)
+		@Swap(TemporalCalendarSwap.IsoInstant.class)
 		public Map<String,Calendar> f1 = new LinkedHashMap<>();
 
 		public BeanWithDynaFieldSwapped init() {

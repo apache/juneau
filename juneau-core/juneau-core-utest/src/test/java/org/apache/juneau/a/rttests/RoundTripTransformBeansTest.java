@@ -50,8 +50,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	public void testSwapBeans1() throws Exception {
 		Class<?>[] f = {
 			ByteArrayBase64Swap.class,
-			CalendarSwap.ISO8601DTZ.class,
-			DateSwap.ISO8601DTZ.class
+			TemporalCalendarSwap.IsoInstant.class,
+			TemporalDateSwap.IsoInstant.class
 		};
 		pojoSwaps(f);
 		A t = new A().init();
@@ -168,8 +168,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	public void testSwapBeans2() throws Exception {
 		Class<?>[] f = {
 			ByteArrayBase64Swap.class,
-			CalendarSwap.DateMedium.class,
-			DateSwap.RFC2822DT.class,
+			TemporalCalendarSwap.IsoInstant.class,
+			TemporalDateSwap.IsoInstant.class,
 		};
 		pojoSwaps(f);
 		A t = new A().init();
@@ -423,7 +423,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	public static class F1 {
 
-		@Swap(CalendarSwap.ISO8601DTL.class)
+		@Swap(TemporalCalendarSwap.IsoLocalDateTime.class)
 		private Calendar c;
 
 		public void setC(Calendar c) {
@@ -460,7 +460,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	public static class F2a {
 
-		@Swap(CalendarSwap.ISO8601DTL.class)
+		@Swap(TemporalCalendarSwap.IsoLocalDateTime.class)
 		protected Calendar c;
 
 	}

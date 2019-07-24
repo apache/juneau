@@ -75,7 +75,7 @@ public class PojoQueryTest {
 	@Test
 	public void testFilterCollectionDateSearchOneLevel() throws Exception {
 		BeanSession session = BeanContext.DEFAULT.createSession();
-		WriterSerializer s = JsonSerializer.create().ssq().pojoSwaps(CalendarSwap.DateTimeSimple.class).build();
+		WriterSerializer s = JsonSerializer.create().ssq().pojoSwaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
 		B[] in;
 		PojoQuery q;
 		SearchArgs sa;
@@ -91,15 +91,15 @@ public class PojoQueryTest {
 
 		sa = SearchArgs.builder().search("f=2011").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2011/01/01 00:00:00'},{f:'2011/01/31 00:00:00'}]", s.serialize(results));
+		assertEquals("[{f:'2011-01-01T00:00:00'},{f:'2011-01-31T00:00:00'}]", s.serialize(results));
 
 		sa = SearchArgs.builder().search("f=2011.01").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2011/01/01 00:00:00'},{f:'2011/01/31 00:00:00'}]", s.serialize(results));
+		assertEquals("[{f:'2011-01-01T00:00:00'},{f:'2011-01-31T00:00:00'}]", s.serialize(results));
 
 		sa = SearchArgs.builder().search("f=2011.01.01").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2011/01/01 00:00:00'}]", s.serialize(results));
+		assertEquals("[{f:'2011-01-01T00:00:00'}]", s.serialize(results));
 
 		in = new B[] {
 			new B(2011, 00, 01, 11, 59, 59),
@@ -111,7 +111,7 @@ public class PojoQueryTest {
 
 		sa = SearchArgs.builder().search("f=2011.01.01.12").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2011/01/01 12:00:00'},{f:'2011/01/01 12:59:59'}]", s.serialize(results));
+		assertEquals("[{f:'2011-01-01T12:00:00'},{f:'2011-01-01T12:59:59'}]", s.serialize(results));
 
 		in = new B[] {
 			new B(2011, 00, 01, 12, 29, 59),
@@ -122,7 +122,7 @@ public class PojoQueryTest {
 		q = new PojoQuery(in, session);
 		sa = SearchArgs.builder().search("f=2011.01.01.12.30").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2011/01/01 12:30:00'},{f:'2011/01/01 12:30:59'}]", s.serialize(results));
+		assertEquals("[{f:'2011-01-01T12:30:00'},{f:'2011-01-01T12:30:59'}]", s.serialize(results));
 
 		in = new B[] {
 			new B(2011, 00, 01, 12, 30, 29),
@@ -132,7 +132,7 @@ public class PojoQueryTest {
 		q = new PojoQuery(in, session);
 		sa = SearchArgs.builder().search("f=2011.01.01.12.30.30").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2011/01/01 12:30:30'}]", s.serialize(results));
+		assertEquals("[{f:'2011-01-01T12:30:30'}]", s.serialize(results));
 
 		// Open-ended ranges
 
@@ -144,19 +144,19 @@ public class PojoQueryTest {
 
 		sa = SearchArgs.builder().search("f>2000").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2001/01/01 00:00:00'}]", s.serialize(results));
+		assertEquals("[{f:'2001-01-01T00:00:00'}]", s.serialize(results));
 
 		sa = SearchArgs.builder().search("f>=2001").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2001/01/01 00:00:00'}]", s.serialize(results));
+		assertEquals("[{f:'2001-01-01T00:00:00'}]", s.serialize(results));
 
 		sa = SearchArgs.builder().search("f<2001").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2000/12/31 00:00:00'}]", s.serialize(results));
+		assertEquals("[{f:'2000-12-31T00:00:00'}]", s.serialize(results));
 
 		sa = SearchArgs.builder().search("f<=2000").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2000/12/31 00:00:00'}]", s.serialize(results));
+		assertEquals("[{f:'2000-12-31T00:00:00'}]", s.serialize(results));
 
 		in = new B[] {
 			new B(2011, 00, 01, 12, 29, 59),
@@ -166,11 +166,11 @@ public class PojoQueryTest {
 
 		sa = SearchArgs.builder().search("f>=2011.01.01.12.30").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2011/01/01 12:30:00'}]", s.serialize(results));
+		assertEquals("[{f:'2011-01-01T12:30:00'}]", s.serialize(results));
 
 		sa = SearchArgs.builder().search("f<2011.01.01.12.30").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2011/01/01 12:29:59'}]", s.serialize(results));
+		assertEquals("[{f:'2011-01-01T12:29:59'}]", s.serialize(results));
 
 		in = new B[] {
 			new B(2011, 00, 01, 12, 30, 59),
@@ -180,11 +180,11 @@ public class PojoQueryTest {
 
 		sa = SearchArgs.builder().search("f>2011.01.01.12.30").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2011/01/01 12:31:00'}]", s.serialize(results));
+		assertEquals("[{f:'2011-01-01T12:31:00'}]", s.serialize(results));
 
 		sa = SearchArgs.builder().search("f<=2011.01.01.12.30").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2011/01/01 12:30:59'}]", s.serialize(results));
+		assertEquals("[{f:'2011-01-01T12:30:59'}]", s.serialize(results));
 
 		// Closed range
 
@@ -198,7 +198,7 @@ public class PojoQueryTest {
 
 		sa = SearchArgs.builder().search("f=2001 - 2003.06.30").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2001/01/01 00:00:00'},{f:'2003/06/30 23:59:59'}]", s.serialize(results));
+		assertEquals("[{f:'2001-01-01T00:00:00'},{f:'2003-06-30T23:59:59'}]", s.serialize(results));
 
 		// ORed timestamps
 
@@ -212,7 +212,7 @@ public class PojoQueryTest {
 
 		sa = SearchArgs.builder().search("f=2001 2003 2005").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2001/01/01 00:00:00'},{f:'2001/12/31 00:00:00'}]", s.serialize(results));
+		assertEquals("[{f:'2001-01-01T00:00:00'},{f:'2001-12-31T00:00:00'}]", s.serialize(results));
 
 		in = new B[] {
 			new B(2002, 11, 31),
@@ -224,7 +224,7 @@ public class PojoQueryTest {
 
 		sa = SearchArgs.builder().search("f=2001 2003 2005").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2003/01/01 00:00:00'},{f:'2003/12/31 00:00:00'}]", s.serialize(results));
+		assertEquals("[{f:'2003-01-01T00:00:00'},{f:'2003-12-31T00:00:00'}]", s.serialize(results));
 
 		in = new B[] {
 			new B(2004, 11, 31),
@@ -236,7 +236,7 @@ public class PojoQueryTest {
 
 		sa = SearchArgs.builder().search("f=2001 2003 2005").build();
 		results = q.filter(sa);
-		assertEquals("[{f:'2005/01/01 00:00:00'},{f:'2005/12/31 00:00:00'}]", s.serialize(results));
+		assertEquals("[{f:'2005-01-01T00:00:00'},{f:'2005-12-31T00:00:00'}]", s.serialize(results));
 	}
 
 	public class B {
@@ -360,7 +360,7 @@ public class PojoQueryTest {
 	@Test
 	public void testSorting() throws Exception {
 		BeanSession session = BeanContext.DEFAULT.createSession();
-		WriterSerializer s = JsonSerializer.create().ssq().pojoSwaps(CalendarSwap.DateTimeSimple.class).build();
+		WriterSerializer s = JsonSerializer.create().ssq().pojoSwaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
 		SearchArgs sa;
 		List results;
 

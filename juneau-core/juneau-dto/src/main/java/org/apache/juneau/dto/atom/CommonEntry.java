@@ -261,7 +261,7 @@ public class CommonEntry extends Common {
 	 *
 	 * @return The update timestamp of this object.
 	 */
-	@Swap(CalendarSwap.ISO8601DT.class)
+	@Swap(TemporalCalendarSwap.IsoInstant.class)
 	public Calendar getUpdated() {
 		return updated;
 	}
