@@ -25,7 +25,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testFilteredEntry() throws Exception {
-		BeanSession session = BeanContext.create().pojoSwaps(ByteArrayBase64Swap.class).build().createSession();
+		BeanSession session = BeanContext.create().pojoSwaps(ByteArraySwap.Base64.class).build().createSession();
 		BeanMap<A> m = session.toBeanMap(new A());
 
 		assertEquals("AQID", m.get("f1"));

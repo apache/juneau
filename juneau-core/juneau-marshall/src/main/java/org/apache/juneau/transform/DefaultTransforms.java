@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
+import java.time.*;
+import java.time.temporal.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -27,15 +29,23 @@ public class DefaultTransforms {
 
 	private static final Map<Class<?>,PojoSwap<?,?>> POJO_SWAPS = new ConcurrentHashMap<>();
 	static {
-//		POJO_SWAPS.put(byte[].class, new ByteArrayBase64Swap());
 		POJO_SWAPS.put(Enumeration.class, new EnumerationSwap());
-//		POJO_SWAPS.put(InputStream.class, new InputStreamBase64Swap());
 		POJO_SWAPS.put(Iterator.class, new IteratorSwap());
 		POJO_SWAPS.put(Locale.class, new LocaleSwap());
-//		POJO_SWAPS.put(Reader.class, new ReaderSwap());
-//		POJO_SWAPS.put(Calendar.class, new TemporalCalendarSwap.IsoInstant());
-//		POJO_SWAPS.put(Date.class, new TemporalCalendarSwap.IsoInstant());
-//		POJO_SWAPS.put(Temporal.class, new TemporalCalendarSwap.IsoInstant());
+		POJO_SWAPS.put(Calendar.class, new TemporalCalendarSwap.IsoInstant());
+		POJO_SWAPS.put(Date.class, new TemporalCalendarSwap.IsoLocalDateTime());
+		POJO_SWAPS.put(Instant.class, new TemporalSwap.IsoInstant());
+		POJO_SWAPS.put(ZonedDateTime.class, new TemporalSwap.IsoDateTime());
+		POJO_SWAPS.put(LocalDate.class, new TemporalSwap.IsoLocalDate());
+		POJO_SWAPS.put(LocalDateTime.class, new TemporalSwap.IsoLocalDateTime());
+		POJO_SWAPS.put(LocalTime.class, new TemporalSwap.IsoLocalTime());
+		POJO_SWAPS.put(OffsetDateTime.class, new TemporalSwap.IsoOffsetDateTime());
+		POJO_SWAPS.put(OffsetTime.class, new TemporalSwap.IsoOffsetTime());
+		POJO_SWAPS.put(LocalDateTime.class, new TemporalSwap.IsoLocalDateTime());
+		POJO_SWAPS.put(LocalTime.class, new TemporalSwap.IsoLocalTime());
+		POJO_SWAPS.put(Year.class, new TemporalSwap.IsoYear());
+		POJO_SWAPS.put(YearMonth.class, new TemporalSwap.IsoYearMonth());
+		POJO_SWAPS.put(Temporal.class, new TemporalSwap.IsoInstant());
 		POJO_SWAPS.put(TimeZone.class, new TimeZoneSwap());
 		POJO_SWAPS.put(XMLGregorianCalendar.class, new XMLGregorianCalendarSwap());
 	}

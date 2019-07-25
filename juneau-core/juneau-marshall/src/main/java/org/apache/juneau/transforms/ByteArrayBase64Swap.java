@@ -19,7 +19,9 @@ import org.apache.juneau.transform.*;
 
 /**
  * Transforms <code><jk>byte</jk>[]</code> arrays to BASE-64 encoded {@link String Strings}.
+ * @deprecated Use {@link ByteArraySwap}
  */
+@Deprecated
 public class ByteArrayBase64Swap extends StringSwap<byte[]> {
 
 	/**

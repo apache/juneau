@@ -616,10 +616,6 @@ public final class ClassMeta<T> implements Type {
 				);
 			}
 
-			PojoSwap defaultSwap = DefaultTransforms.findDefaultSwap(c);
-			if (defaultSwap != null)
-				this.pojoSwaps.add(defaultSwap);
-
 			if (pojoSwaps != null)
 				this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
 
@@ -778,6 +774,9 @@ public final class ClassMeta<T> implements Type {
 			if (swaps != null)
 				for (Swap s : swaps.value())
 					l.add(createPojoSwap(s));
+			PojoSwap defaultSwap = DefaultTransforms.findDefaultSwap(innerClass);
+			if (defaultSwap != null)
+				l.add(defaultSwap);
 		}
 
 		private PojoSwap<T,?> createPojoSwap(Swap s) {

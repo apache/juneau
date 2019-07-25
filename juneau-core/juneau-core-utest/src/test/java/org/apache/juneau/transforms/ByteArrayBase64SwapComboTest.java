@@ -428,12 +428,12 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 
 	@Override
 	protected Serializer applySettings(Serializer s) throws Exception {
-		return s.builder().pojoSwaps(ByteArrayBase64Swap.class).trimNullProperties(false).build();
+		return s.builder().pojoSwaps(ByteArraySwap.Base64.class).trimNullProperties(false).build();
 	}
 
 	@Override
 	protected Parser applySettings(Parser p) throws Exception {
-		return p.builder().pojoSwaps(ByteArrayBase64Swap.class).build();
+		return p.builder().pojoSwaps(ByteArraySwap.Base64.class).build();
 	}
 
 	public static class BeanWithByteArrayField {
