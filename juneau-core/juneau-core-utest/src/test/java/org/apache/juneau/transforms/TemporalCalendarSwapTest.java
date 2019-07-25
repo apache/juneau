@@ -68,14 +68,14 @@ public class TemporalCalendarSwapTest extends RoundTripStringSwapTest<Calendar> 
 				"[0] BasicIsoDate, Default timezone",
 				T_Calendar,
 				new TemporalCalendarSwap.BasicIsoDate(),
-				"20121221",
+				"20121221-0500",
 				BS_DEFAULT
 			},
 			{
 				"[1] BasicIsoDate, Pacific timezone",
 				T_Calendar,
 				new TemporalCalendarSwap.BasicIsoDate(),
-				"20121221",
+				"20121221-0500",
 				BS_PST
 			},
 
@@ -337,14 +337,14 @@ public class TemporalCalendarSwapTest extends RoundTripStringSwapTest<Calendar> 
 			{
 				"[30] YEAR, Default timezone",
 				T_Calendar,
-				new TemporalCalendarSwap("uuuu", Year.class, false, false),
+				new TemporalCalendarSwap("uuuu"),
 				"2012",
 				BS_DEFAULT
 			},
 			{
 				"[31] YEAR, Pacific timezone",
 				T_Calendar,
-				new TemporalCalendarSwap("uuuu", Year.class, false, false),
+				new TemporalCalendarSwap("uuuu"),
 				"2012",
 				BS_DEFAULT
 			},

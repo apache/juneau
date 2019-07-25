@@ -81,14 +81,14 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[0] BasicIsoDate, DT_ZonedDateTime, Default timezone",
 				DT_ZonedDateTime,
 				new TemporalSwap.BasicIsoDate(),
-				"20121221",
+				"20121221Z",
 				BS_DEFAULT
 			},
 			{
 				"[1] BasicIsoDate, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.BasicIsoDate(),
-				"20121221",
+				"20121221Z",
 				BS_DEFAULT
 			},
 			{
@@ -116,14 +116,14 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[5] BasicIsoDate, DT_OffsetDateTime, Default timezone",
 				DT_OffsetDateTime,
 				new TemporalSwap.BasicIsoDate(),
-				"20121221",
+				"20121221-0500",
 				BS_DEFAULT
 			},
 			{
 				"[6] BasicIsoDate, DT_OffsetTime, Default timezone",
 				DT_OffsetTime,
 				new TemporalSwap.BasicIsoDate(),
-				"19700101",
+				"19700101-0500",
 				BS_DEFAULT
 			},
 			{
@@ -177,14 +177,14 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[13] BasicIsoDate, DT_ZonedDateTime, PST timezone",
 				DT_ZonedDateTime,
 				new TemporalSwap.BasicIsoDate(),
-				"20121221",
+				"20121221Z",
 				BS_PST
 			},
 			{
 				"[14] BasicIsoDate, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.BasicIsoDate(),
-				"20121221",
+				"20121221Z",
 				BS_PST
 			},
 			{
@@ -212,14 +212,14 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[18] BasicIsoDate, DT_OffsetDateTime, PST timezone",
 				DT_OffsetDateTime,
 				new TemporalSwap.BasicIsoDate(),
-				"20121221",
+				"20121221-0500",
 				BS_PST
 			},
 			{
 				"[19] BasicIsoDate, DT_OffsetTime, PST timezone",
 				DT_OffsetTime,
 				new TemporalSwap.BasicIsoDate(),
-				"19700101",
+				"19700101-0500",
 				BS_PST
 			},
 			{
@@ -279,7 +279,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[27] IsoDate, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.IsoDate(),
-				"2012-12-21",
+				"2012-12-21Z",
 				BS_DEFAULT
 			},
 			{
@@ -314,7 +314,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[32] IsoDate, DT_OffsetTime, Default timezone",
 				DT_OffsetTime,
 				new TemporalSwap.IsoDate(),
-				"1970-01-01",
+				"1970-01-01-05:00",
 				BS_DEFAULT
 			},
 			{
@@ -374,7 +374,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[40] IsoDate, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.IsoDate(),
-				"2012-12-21",
+				"2012-12-21Z",
 				BS_PST
 			},
 			{
@@ -409,7 +409,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[45] IsoDate, DT_OffsetTime, PST timezone",
 				DT_OffsetTime,
 				new TemporalSwap.IsoDate(),
-				"1970-01-01",
+				"1970-01-01-05:00",
 				BS_PST
 			},
 			{
@@ -469,28 +469,28 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[53] IsoDateTime, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T07:34:56-05:00[GMT-05:00]",
+				"2012-12-21T12:34:56Z",
 				BS_DEFAULT
 			},
 			{
 				"[54] IsoDateTime, DT_LocalDate, Default timezone",
 				DT_LocalDate,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T00:00:00-05:00[GMT-05:00]",
+				"2012-12-21T00:00:00",
 				BS_DEFAULT
 			},
 			{
 				"[55] IsoDateTime, DT_LocalDateTime, Default timezone",
 				DT_LocalDateTime,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T12:34:56-05:00[GMT-05:00]",
+				"2012-12-21T12:34:56",
 				BS_DEFAULT
 			},
 			{
 				"[56] IsoDateTime, DT_LocalTime, Default timezone",
 				DT_LocalTime,
 				new TemporalSwap.IsoDateTime(),
-				"1970-01-01T12:34:56-05:00[GMT-05:00]",
+				"1970-01-01T12:34:56",
 				BS_DEFAULT
 			},
 			{
@@ -511,42 +511,42 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[59] IsoDateTime, DT_Year, Default timezone",
 				DT_Year,
 				new TemporalSwap.IsoDateTime(),
-				"2012-01-01T00:00:00-05:00[GMT-05:00]",
+				"2012-01-01T00:00:00",
 				BS_DEFAULT
 			},
 			{
 				"[60] IsoDateTime, DT_YearMonth, Default timezone",
 				DT_YearMonth,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-01T00:00:00-05:00[GMT-05:00]",
+				"2012-12-01T00:00:00",
 				BS_DEFAULT
 			},
 			{
 				"[61] IsoDateTime, DT_HijrahDate, Default timezone",
 				DT_HijrahDate,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T00:00:00-05:00[GMT-05:00]",
+				"2012-12-21T00:00:00",
 				BS_DEFAULT
 			},
 			{
 				"[62] IsoDateTime, DT_JapaneseDate, Default timezone",
 				DT_JapaneseDate,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T00:00:00-05:00[GMT-05:00]",
+				"2012-12-21T00:00:00",
 				BS_DEFAULT
 			},
 			{
 				"[63] IsoDateTime, DT_MinguoDate, Default timezone",
 				DT_MinguoDate,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T00:00:00-05:00[GMT-05:00]",
+				"2012-12-21T00:00:00",
 				BS_DEFAULT
 			},
 			{
 				"[64] IsoDateTime, DT_ThaiBuddhistDate, Default timezone",
 				DT_ThaiBuddhistDate,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T00:00:00-05:00[GMT-05:00]",
+				"2012-12-21T00:00:00",
 				BS_DEFAULT
 			},
 
@@ -564,28 +564,28 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[66] IsoDateTime, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T04:34:56-08:00[America/Los_Angeles]",
+				"2012-12-21T12:34:56Z",
 				BS_PST
 			},
 			{
 				"[67] IsoDateTime, DT_LocalDate, PST timezone",
 				DT_LocalDate,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T00:00:00-08:00[America/Los_Angeles]",
+				"2012-12-21T00:00:00",
 				BS_PST
 			},
 			{
 				"[68] IsoDateTime, DT_LocalDateTime, PST timezone",
 				DT_LocalDateTime,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T12:34:56-08:00[America/Los_Angeles]",
+				"2012-12-21T12:34:56",
 				BS_PST
 			},
 			{
 				"[69] IsoDateTime, DT_LocalTime, PST timezone",
 				DT_LocalTime,
 				new TemporalSwap.IsoDateTime(),
-				"1970-01-01T12:34:56-08:00[America/Los_Angeles]",
+				"1970-01-01T12:34:56",
 				BS_PST
 			},
 			{
@@ -606,42 +606,42 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[72] IsoDateTime, DT_Year, PST timezone",
 				DT_Year,
 				new TemporalSwap.IsoDateTime(),
-				"2012-01-01T00:00:00-08:00[America/Los_Angeles]",
+				"2012-01-01T00:00:00",
 				BS_PST
 			},
 			{
 				"[73] IsoDateTime, DT_YearMonth, PST timezone",
 				DT_YearMonth,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-01T00:00:00-08:00[America/Los_Angeles]",
+				"2012-12-01T00:00:00",
 				BS_PST
 			},
 			{
 				"[74] IsoDateTime, DT_HijrahDate, PST timezone",
 				DT_HijrahDate,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T00:00:00-08:00[America/Los_Angeles]",
+				"2012-12-21T00:00:00",
 				BS_PST
 			},
 			{
 				"[75] IsoDateTime, DT_JapaneseDate, PST timezone",
 				DT_JapaneseDate,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T00:00:00-08:00[America/Los_Angeles]",
+				"2012-12-21T00:00:00",
 				BS_PST
 			},
 			{
 				"[76] IsoDateTime, DT_MinguoDate, PST timezone",
 				DT_MinguoDate,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T00:00:00-08:00[America/Los_Angeles]",
+				"2012-12-21T00:00:00",
 				BS_PST
 			},
 			{
 				"[77] IsoDateTime, DT_ThaiBuddhistDate, PST timezone",
 				DT_ThaiBuddhistDate,
 				new TemporalSwap.IsoDateTime(),
-				"2012-12-21T00:00:00-08:00[America/Los_Angeles]",
+				"2012-12-21T00:00:00",
 				BS_PST
 			},
 
@@ -1039,7 +1039,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[131] IsoLocalDateTime, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.IsoLocalDateTime(),
-				"2012-12-21T07:34:56",
+				"2012-12-21T12:34:56",
 				BS_DEFAULT
 			},
 			{
@@ -1134,7 +1134,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[144] IsoLocalDateTime, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.IsoLocalDateTime(),
-				"2012-12-21T04:34:56",
+				"2012-12-21T12:34:56",
 				BS_PST
 			},
 			{
@@ -1229,7 +1229,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[157] IsoLocalTime, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.IsoLocalTime(),
-				"07:34:56",
+				"12:34:56",
 				BS_DEFAULT
 			},
 			{
@@ -1324,7 +1324,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[170] IsoLocalTime, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.IsoLocalTime(),
-				"04:34:56",
+				"12:34:56",
 				BS_PST
 			},
 			{
@@ -1419,7 +1419,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[183] IsoOffsetDate, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.IsoOffsetDate(),
-				"2012-12-21-05:00",
+				"2012-12-21Z",
 				BS_DEFAULT
 			},
 			{
@@ -1514,7 +1514,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[196] IsoOffsetDate, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.IsoOffsetDate(),
-				"2012-12-21-08:00",
+				"2012-12-21Z",
 				BS_PST
 			},
 			{
@@ -1609,7 +1609,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[209] IsoOffsetDateTime, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.IsoOffsetDateTime(),
-				"2012-12-21T07:34:56-05:00",
+				"2012-12-21T12:34:56Z",
 				BS_DEFAULT
 			},
 			{
@@ -1704,7 +1704,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[222] IsoOffsetDateTime, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.IsoOffsetDateTime(),
-				"2012-12-21T04:34:56-08:00",
+				"2012-12-21T12:34:56Z",
 				BS_PST
 			},
 			{
@@ -1799,7 +1799,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[235] IsoOffsetTime, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.IsoOffsetTime(),
-				"07:34:56-05:00",
+				"12:34:56Z",
 				BS_DEFAULT
 			},
 			{
@@ -1894,7 +1894,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[248] IsoOffsetTime, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.IsoOffsetTime(),
-				"04:34:56-08:00",
+				"12:34:56Z",
 				BS_PST
 			},
 			{
@@ -1989,7 +1989,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[261] IsoOrdinalDate, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.IsoOrdinalDate(),
-				"2012-356",
+				"2012-356Z",
 				BS_DEFAULT
 			},
 			{
@@ -2024,7 +2024,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[266] IsoOrdinalDate, DT_OffsetTime, Default timezone",
 				DT_OffsetTime,
 				new TemporalSwap.IsoOrdinalDate(),
-				"1970-001",
+				"1970-001-05:00",
 				BS_DEFAULT
 			},
 			{
@@ -2084,7 +2084,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[274] IsoOrdinalDate, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.IsoOrdinalDate(),
-				"2012-356",
+				"2012-356Z",
 				BS_PST
 			},
 			{
@@ -2119,7 +2119,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[279] IsoOrdinalDate, DT_OffsetTime, PST timezone",
 				DT_OffsetTime,
 				new TemporalSwap.IsoOrdinalDate(),
-				"1970-001",
+				"1970-001-05:00",
 				BS_PST
 			},
 			{
@@ -2179,21 +2179,21 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[287] IsoTime, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.IsoTime(),
-				"07:34:56-05:00",
+				"12:34:56Z",
 				BS_DEFAULT
 			},
 			{
 				"[288] IsoTime, DT_LocalDate, Default timezone",
 				DT_LocalDate,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-05:00",
+				"00:00:00",
 				BS_DEFAULT
 			},
 			{
 				"[289] IsoTime, DT_LocalDateTime, Default timezone",
 				DT_LocalDateTime,
 				new TemporalSwap.IsoTime(),
-				"12:34:56-05:00",
+				"12:34:56",
 				BS_DEFAULT
 			},
 			{
@@ -2221,42 +2221,42 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[293] IsoTime, DT_Year, Default timezone",
 				DT_Year,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-05:00",
+				"00:00:00",
 				BS_DEFAULT
 			},
 			{
 				"[294] IsoTime, DT_YearMonth, Default timezone",
 				DT_YearMonth,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-05:00",
+				"00:00:00",
 				BS_DEFAULT
 			},
 			{
 				"[295] IsoTime, DT_HijrahDate, Default timezone",
 				DT_HijrahDate,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-05:00",
+				"00:00:00",
 				BS_DEFAULT
 			},
 			{
 				"[296] IsoTime, DT_JapaneseDate, Default timezone",
 				DT_JapaneseDate,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-05:00",
+				"00:00:00",
 				BS_DEFAULT
 			},
 			{
 				"[297] IsoTime, DT_MinguoDate, Default timezone",
 				DT_MinguoDate,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-05:00",
+				"00:00:00",
 				BS_DEFAULT
 			},
 			{
 				"[298] IsoTime, DT_ThaiBuddhistDate, Default timezone",
 				DT_ThaiBuddhistDate,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-05:00",
+				"00:00:00",
 				BS_DEFAULT
 			},
 
@@ -2274,21 +2274,21 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[300] IsoTime, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.IsoTime(),
-				"04:34:56-08:00",
+				"12:34:56Z",
 				BS_PST
 			},
 			{
 				"[301] IsoTime, DT_LocalDate, PST timezone",
 				DT_LocalDate,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-08:00",
+				"00:00:00",
 				BS_PST
 			},
 			{
 				"[302] IsoTime, DT_LocalDateTime, PST timezone",
 				DT_LocalDateTime,
 				new TemporalSwap.IsoTime(),
-				"12:34:56-08:00",
+				"12:34:56",
 				BS_PST
 			},
 			{
@@ -2316,42 +2316,42 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[306] IsoTime, DT_Year, PST timezone",
 				DT_Year,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-08:00",
+				"00:00:00",
 				BS_PST
 			},
 			{
 				"[307] IsoTime, DT_YearMonth, PST timezone",
 				DT_YearMonth,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-08:00",
+				"00:00:00",
 				BS_PST
 			},
 			{
 				"[308] IsoTime, DT_HijrahDate, PST timezone",
 				DT_HijrahDate,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-08:00",
+				"00:00:00",
 				BS_PST
 			},
 			{
 				"[309] IsoTime, DT_JapaneseDate, PST timezone",
 				DT_JapaneseDate,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-08:00",
+				"00:00:00",
 				BS_PST
 			},
 			{
 				"[310] IsoTime, DT_MinguoDate, PST timezone",
 				DT_MinguoDate,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-08:00",
+				"00:00:00",
 				BS_PST
 			},
 			{
 				"[311] IsoTime, DT_ThaiBuddhistDate, PST timezone",
 				DT_ThaiBuddhistDate,
 				new TemporalSwap.IsoTime(),
-				"00:00:00-08:00",
+				"00:00:00",
 				BS_PST
 			},
 
@@ -2369,7 +2369,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[313] IsoWeekDate, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.IsoWeekDate(),
-				"2012-W51-5",
+				"2012-W51-5Z",
 				BS_DEFAULT
 			},
 			{
@@ -2404,7 +2404,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[318] IsoWeekDate, DT_OffsetTime, Default timezone",
 				DT_OffsetTime,
 				new TemporalSwap.IsoWeekDate(),
-				"1970-W01-4",
+				"1970-W01-4-05:00",
 				BS_DEFAULT
 			},
 			{
@@ -2464,7 +2464,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[326] IsoWeekDate, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.IsoWeekDate(),
-				"2012-W51-5",
+				"2012-W51-5Z",
 				BS_PST
 			},
 			{
@@ -2499,7 +2499,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[331] IsoWeekDate, DT_OffsetTime, PST timezone",
 				DT_OffsetTime,
 				new TemporalSwap.IsoWeekDate(),
-				"1970-W01-4",
+				"1970-W01-4-05:00",
 				BS_PST
 			},
 			{
@@ -2939,7 +2939,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[391] IsoZonedDateTime, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.IsoZonedDateTime(),
-				"2012-12-21T07:34:56-05:00[GMT-05:00]",
+				"2012-12-21T12:34:56Z",
 				BS_DEFAULT
 			},
 			{
@@ -3034,7 +3034,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[404] IsoZonedDateTime, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.IsoZonedDateTime(),
-				"2012-12-21T04:34:56-08:00[America/Los_Angeles]",
+				"2012-12-21T12:34:56Z",
 				BS_PST
 			},
 			{
@@ -3129,7 +3129,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[417] Rfc1123DateTime, DT_Instant, Default timezone",
 				DT_Instant,
 				new TemporalSwap.Rfc1123DateTime(),
-				"Fri, 21 Dec 2012 07:34:56 -0500",
+				"Fri, 21 Dec 2012 12:34:56 GMT",
 				BS_DEFAULT
 			},
 			{
@@ -3224,7 +3224,7 @@ public class TemporalSwapTest extends RoundTripStringSwapTest<Temporal> {
 				"[430] Rfc1123DateTime, DT_Instant, PST timezone",
 				DT_Instant,
 				new TemporalSwap.Rfc1123DateTime(),
-				"Fri, 21 Dec 2012 04:34:56 -0800",
+				"Fri, 21 Dec 2012 12:34:56 GMT",
 				BS_PST
 			},
 			{

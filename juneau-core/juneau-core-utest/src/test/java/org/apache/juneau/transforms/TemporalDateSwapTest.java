@@ -65,14 +65,14 @@ public class TemporalDateSwapTest extends RoundTripStringSwapTest<Date> {
 				"[0] BasicIsoDate, Default timezone",
 				T_Date,
 				new TemporalDateSwap.BasicIsoDate(),
-				"20121221",
+				"20121221-0500",
 				BS_DEFAULT
 			},
 			{
 				"[1] BasicIsoDate, Pacific timezone",
 				T_Date,
 				new TemporalDateSwap.BasicIsoDate(),
-				"20121221",
+				"20121221-0800",
 				BS_PST
 			},
 
@@ -334,14 +334,14 @@ public class TemporalDateSwapTest extends RoundTripStringSwapTest<Date> {
 			{
 				"[30] YEAR, Default timezone",
 				T_Date,
-				new TemporalDateSwap("uuuu", Year.class, false),
+				new TemporalDateSwap("uuuu"),
 				"2012",
 				BS_DEFAULT
 			},
 			{
 				"[31] YEAR, Pacific timezone",
 				T_Date,
-				new TemporalDateSwap("uuuu", Year.class, false),
+				new TemporalDateSwap("uuuu"),
 				"2012",
 				BS_DEFAULT
 			},

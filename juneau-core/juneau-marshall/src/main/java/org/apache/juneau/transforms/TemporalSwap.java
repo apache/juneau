@@ -12,16 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import java.lang.reflect.*;
 import java.time.*;
 import java.time.chrono.*;
 import java.time.format.*;
 import java.time.temporal.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Swap that converts {@link Temporal} objects to strings.
@@ -57,14 +59,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class BasicIsoDate extends TemporalSwap {
 		/** Constructor.*/
 		public BasicIsoDate() {
-			super(
-				"BASIC_ISO_DATE",
-				LocalDate.class,
-				ASet.create(LocalDate.class, LocalDateTime.class),
-				LocalDate.class,
-				ASet.create(LocalDate.class, Year.class, YearMonth.class),
-				false
-			);
+			super("BASIC_ISO_DATE", true);
 		}
 	}
 
@@ -76,14 +71,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoDate extends TemporalSwap {
 		/** Constructor.*/
 		public IsoDate() {
-			super(
-				"ISO_DATE",
-				LocalDate.class,
-				ASet.create(LocalDate.class, LocalDateTime.class, OffsetDateTime.class, ZonedDateTime.class),
-				LocalDate.class,
-				ASet.create(LocalDate.class),
-				true
-			);
+			super("ISO_DATE", true);
 		}
 	}
 
@@ -95,14 +83,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoDateTime extends TemporalSwap {
 		/** Constructor.*/
 		public IsoDateTime() {
-			super(
-				"ISO_DATE_TIME",
-				ZonedDateTime.class,
-				ASet.create(OffsetDateTime.class, ZonedDateTime.class),
-				ZonedDateTime.class,
-				ASet.create(Instant.class, LocalDate.class, LocalDateTime.class, LocalTime.class, OffsetDateTime.class, OffsetTime.class, Year.class, YearMonth.class, ZonedDateTime.class),
-				false
-			);
+			super("ISO_DATE_TIME", true);
 		}
 	}
 
@@ -114,14 +95,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoInstant extends TemporalSwap {
 		/** Constructor.*/
 		public IsoInstant() {
-			super(
-				"ISO_INSTANT",
-				Instant.class,
-				ASet.create(Instant.class, OffsetDateTime.class, ZonedDateTime.class),
-				Instant.class,
-				ASet.create(Instant.class),
-				false
-			);
+			super("ISO_INSTANT", false);
 		}
 	}
 
@@ -133,14 +107,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoLocalDate extends TemporalSwap {
 		/** Constructor.*/
 		public IsoLocalDate() {
-			super(
-				"ISO_LOCAL_DATE",
-				LocalDate.class,
-				ASet.create(LocalDate.class, LocalDateTime.class, OffsetDateTime.class, ZonedDateTime.class),
-				LocalDate.class,
-				ASet.create(LocalDate.class, Year.class, YearMonth.class),
-				false
-			);
+			super("ISO_LOCAL_DATE", false);
 		}
 	}
 
@@ -152,14 +119,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoLocalDateTime extends TemporalSwap {
 		/** Constructor.*/
 		public IsoLocalDateTime() {
-			super(
-				"ISO_LOCAL_DATE_TIME",
-				LocalDateTime.class,
-				ASet.create(LocalDateTime.class, OffsetDateTime.class, ZonedDateTime.class),
-				LocalDateTime.class,
-				ASet.create(LocalDate.class, LocalDateTime.class, LocalTime.class, Year.class, YearMonth.class),
-				false
-			);
+			super("ISO_LOCAL_DATE_TIME", true);
 		}
 	}
 
@@ -171,14 +131,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoLocalTime extends TemporalSwap {
 		/** Constructor.*/
 		public IsoLocalTime() {
-			super(
-				"ISO_LOCAL_TIME",
-				LocalTime.class,
-				ASet.create(LocalDateTime.class, LocalTime.class, OffsetDateTime.class, OffsetTime.class, ZonedDateTime.class),
-				LocalTime.class,
-				ASet.create(LocalTime.class),
-				false
-			);
+			super("ISO_LOCAL_TIME", true);
 		}
 	}
 
@@ -190,14 +143,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoOffsetDate extends TemporalSwap {
 		/** Constructor.*/
 		public IsoOffsetDate() {
-			super(
-				"ISO_OFFSET_DATE",
-				ZonedDateTime.class,
-				ASet.create(OffsetDateTime.class, ZonedDateTime.class),
-				LocalDate.class,
-				ASet.create(LocalDate.class, Year.class, YearMonth.class),
-				true
-			);
+			super("ISO_OFFSET_DATE", false);
 		}
 	}
 
@@ -209,14 +155,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoOffsetDateTime extends TemporalSwap {
 		/** Constructor.*/
 		public IsoOffsetDateTime() {
-			super(
-				"ISO_OFFSET_DATE_TIME",
-				OffsetDateTime.class,
-				ASet.create(OffsetDateTime.class, ZonedDateTime.class),
-				OffsetDateTime.class,
-				ASet.create(Instant.class, LocalDate.class, LocalDateTime.class, LocalTime.class, OffsetDateTime.class, OffsetTime.class, Year.class, YearMonth.class, ZonedDateTime.class),
-				false
-			);
+			super("ISO_OFFSET_DATE_TIME", false);
 		}
 	}
 
@@ -228,14 +167,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoOffsetTime extends TemporalSwap {
 		/** Constructor.*/
 		public IsoOffsetTime() {
-			super(
-				"ISO_OFFSET_TIME",
-				OffsetTime.class,
-				ASet.create(OffsetDateTime.class, OffsetTime.class, ZonedDateTime.class),
-				OffsetTime.class,
-				ASet.create(LocalTime.class, OffsetTime.class),
-				false
-			);
+			super("ISO_OFFSET_TIME", false);
 		}
 	}
 
@@ -247,14 +179,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoOrdinalDate extends TemporalSwap {
 		/** Constructor.*/
 		public IsoOrdinalDate() {
-			super(
-				"ISO_ORDINAL_DATE",
-				LocalDate.class,
-				ASet.create(LocalDate.class, LocalDateTime.class, OffsetDateTime.class, ZonedDateTime.class),
-				LocalDate.class,
-				ASet.create(LocalDate.class, Year.class, YearMonth.class),
-				true
-			);
+			super("ISO_ORDINAL_DATE", true);
 		}
 	}
 
@@ -266,14 +191,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoTime extends TemporalSwap {
 		/** Constructor.*/
 		public IsoTime() {
-			super(
-				"ISO_TIME",
-				OffsetTime.class,
-				ASet.create(LocalTime.class, OffsetDateTime.class, OffsetTime.class, ZonedDateTime.class),
-				OffsetTime.class,
-				ASet.create(LocalTime.class, OffsetTime.class),
-				false
-			);
+			super("ISO_TIME", true);
 		}
 	}
 
@@ -285,14 +203,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoWeekDate extends TemporalSwap {
 		/** Constructor.*/
 		public IsoWeekDate() {
-			super(
-				"ISO_WEEK_DATE",
-				LocalDate.class,
-				ASet.create(LocalDate.class, LocalDateTime.class, OffsetDateTime.class, ZonedDateTime.class),
-				LocalDate.class,
-				ASet.create(LocalDate.class, Year.class, YearMonth.class),
-				true
-			);
+			super("ISO_WEEK_DATE", true);
 		}
 	}
 
@@ -304,14 +215,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoYear extends TemporalSwap {
 		/** Constructor.*/
 		public IsoYear() {
-			super(
-				"uuuu",
-				Year.class,
-				ASet.create(LocalDate.class, LocalDateTime.class, OffsetDateTime.class, Year.class, YearMonth.class, ZonedDateTime.class),
-				Year.class,
-				ASet.create(Year.class),
-				false
-			);
+			super("uuuu", true);
 		}
 	}
 
@@ -323,14 +227,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoYearMonth extends TemporalSwap {
 		/** Constructor.*/
 		public IsoYearMonth() {
-			super(
-				"uuuu-MM",
-				YearMonth.class,
-				ASet.create(LocalDate.class, LocalDateTime.class, OffsetDateTime.class, YearMonth.class, ZonedDateTime.class),
-				YearMonth.class,
-				ASet.create(Year.class, YearMonth.class),
-				false
-			);
+			super("uuuu-MM", true);
 		}
 	}
 
@@ -342,14 +239,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class IsoZonedDateTime extends TemporalSwap {
 		/** Constructor.*/
 		public IsoZonedDateTime() {
-			super(
-				"ISO_ZONED_DATE_TIME",
-				ZonedDateTime.class,
-				ASet.create(LocalDate.class, OffsetDateTime.class, ZonedDateTime.class),
-				ZonedDateTime.class,
-				ASet.create(Instant.class, LocalDate.class, LocalDateTime.class, LocalTime.class, OffsetDateTime.class, OffsetTime.class, Year.class, YearMonth.class, ZonedDateTime.class),
-				false
-			);
+			super("ISO_ZONED_DATE_TIME", false);
 		}
 	}
 
@@ -361,52 +251,90 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public static class Rfc1123DateTime extends TemporalSwap {
 		/** Constructor.*/
 		public Rfc1123DateTime() {
-			super(
-				"RFC_1123_DATE_TIME",
-				ZonedDateTime.class,
-				ASet.create(OffsetDateTime.class, ZonedDateTime.class),
-				ZonedDateTime.class,
-				ASet.create(Instant.class, LocalDate.class, LocalDateTime.class, LocalTime.class, OffsetDateTime.class, OffsetTime.class, Year.class, YearMonth.class, ZonedDateTime.class),
-				false
-			);
+			super("RFC_1123_DATE_TIME", false);
 		}
 	}
 
+	private static final ZoneId Z = ZoneId.of("Z");
+	private static final Map<Class<? extends Temporal>,Method> FROM_METHODS = new ConcurrentHashMap<>();
 
-	private final TemporalParser<? extends Temporal> intermediateParser;
-	private final Class<? extends Temporal> intermediateSerializeType;
+	private static Method findParseMethod(Class<? extends Temporal> c) throws ExecutableException {
+		Method m = FROM_METHODS.get(c);
+		if (m == null) {
+			m = ClassInfo.of(c).getStaticPublicMethodInner("from", c, TemporalAccessor.class);
+			if (m == null)
+				throw new ExecutableException("Parse method not found on temporal class ''{0}''", c.getSimpleName());
+			FROM_METHODS.put(c, m);
+		}
+		return m;
+	}
+
 	private final DateTimeFormatter formatter;
-	private final Set<Class<? extends Temporal>> directSerializeClasses, directParseClasses;
-	private final boolean parseTimezoneSeparately;
+	private final boolean zoneOptional;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param pattern The timestamp format or name of predefined {@link DateTimeFormatter}.
-	 * @param intermediateSerializeType The intermediate Java 8 data type to convert to before serializing.
-	 * @param directSerializeClasses Classes that can be serialized directly into without having to go through the intermediate type.
-	 * @param intermediateParseType The intermediate Java 8 data type to parse into before converting to a Date object.
-	 * @param directParseClasses Classes that can be parsed directly into without having to go through the intermediate type.
-	 * @param parseTimezoneSeparately <jk>true</jk> if the time zone should be persisted on parsing when {@link LocalDate} is the intermediate type.
+	 * @param zoneOptional <jk>true</jk> if the time zone on the pattern is optional.
 	 */
-	public TemporalSwap(String pattern, Class<? extends Temporal> intermediateSerializeType, Set<Class<? extends Temporal>> directSerializeClasses, Class<? extends Temporal> intermediateParseType, Set<Class<? extends Temporal>> directParseClasses, boolean parseTimezoneSeparately) {
+	public TemporalSwap(String pattern, boolean zoneOptional) {
 		super(Temporal.class);
-		this.intermediateParser = TemporalParserCache.getTemporalParser(intermediateParseType);
 		this.formatter = DateUtils.getFormatter(pattern);
-		this.directSerializeClasses = directSerializeClasses == null ? Collections.emptySet() : directSerializeClasses;
-		this.directParseClasses = directParseClasses == null ? Collections.emptySet() : directParseClasses;
-		this.intermediateSerializeType = intermediateSerializeType;
-		this.parseTimezoneSeparately = parseTimezoneSeparately;
+		this.zoneOptional = zoneOptional;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the time zone on the pattern is optional.
+	 *
+	 * <p>
+	 * If it's not optional, then local dates/times must be converted into zoned times using the session time zone.
+	 * Otherwise, local date/times are fine.
+	 *
+	 * @return <jk>true</jk> if the time zone on the pattern is optional.
+	 */
+	protected boolean zoneOptional() {
+		return zoneOptional;
 	}
 
 	@Override /* PojoSwap */
 	public String swap(BeanSession session, Temporal o) throws Exception {
 		if (o == null)
 			return null;
-		if (directSerializeClasses.contains(o.getClass()))
-			return formatter.format(o);
-		Temporal o2 = DateUtils.toTemporal(o, intermediateSerializeType, session.getTimeZoneId());
-		return formatter.format(o2);
+		o = convertToSerializable(session, o);
+		return formatter.format(o);
+	}
+
+	/**
+	 * Converts the specified temporal object to a form suitable to be serialized using any pattern.
+	 *
+	 * @param session The current bean session.
+	 * @param t The temporal object to convert.
+	 * @return The converted temporal object.
+	 */
+	protected Temporal convertToSerializable(BeanSession session, Temporal t) {
+
+		ZoneId zoneId = session.getTimeZoneId();
+		Class<? extends Temporal> tc = t.getClass();
+
+		// Instant is always serialized in GMT.
+		if (tc == Instant.class)
+			return ZonedDateTime.from(defaulting(t, Z));
+
+		// These can handle any pattern.
+		if (tc == ZonedDateTime.class || tc == OffsetDateTime.class)
+			return t;
+
+		// Pattern optionally includes a time zone, so zoned and local date-times are good.
+		if (zoneOptional()) {
+			if (tc == LocalDateTime.class)
+				return t;
+			if (tc == OffsetTime.class)
+				return ZonedDateTime.from(defaulting(t, zoneId));
+			return LocalDateTime.from(defaulting(t, zoneId));
+		}
+
+		return ZonedDateTime.from(defaulting(t, zoneId));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -414,22 +342,20 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	public Temporal unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
 		if (hint == null)
 			hint = session.getClassMeta(Instant.class);
-
 		Class<? extends Temporal> tc = (Class<? extends Temporal>)hint.getInnerClass();
 
-		if (directParseClasses.contains(tc))
-			return TemporalParserCache.getTemporalParser(tc).parse(f, formatter);
+		ZoneId offset = session.getTimeZoneId();
 
-		Temporal t = intermediateParser.parse(f, formatter);
+		if (tc == Instant.class)
+			offset = Z;
 
-		if (parseTimezoneSeparately) {
-			TemporalAccessor ta = formatter.parse(f);
-			if (ta.query(TemporalQueries.zone()) != null) {
-				ZoneId offset = ZoneId.from(ta);
-				t = ((LocalDate)t).atStartOfDay(offset);
-			}
- 		}
+		Method parseMethod = findParseMethod(tc);
 
-		return DateUtils.toTemporal(t, tc, session.getTimeZoneId());
+		TemporalAccessor ta = defaulting(formatter.parse(f), offset);
+		return (Temporal)parseMethod.invoke(null, ta);
+	}
+
+	private final TemporalAccessor defaulting(TemporalAccessor t, ZoneId zoneId) {
+		return new DefaultingTemporalAccessor(t, zoneId);
 	}
 }
