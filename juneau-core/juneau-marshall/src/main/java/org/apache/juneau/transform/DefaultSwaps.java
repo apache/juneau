@@ -25,7 +25,7 @@ import org.apache.juneau.transforms.*;
 /**
  * Maintain the list of default PojoSwaps used by all serializers and parsers.
  */
-public class DefaultTransforms {
+public class DefaultSwaps {
 
 	private static final Map<Class<?>,PojoSwap<?,?>> POJO_SWAPS = new ConcurrentHashMap<>();
 	static {
@@ -53,11 +53,10 @@ public class DefaultTransforms {
 	/**
 	 * Find the default PojoSwap for the specified class.
 	 *
-	 * @param c The class to find the swap for.
+	 * @param ci The class to find the swap for.
 	 * @return The matched swap, or <jk>null</jk> if it couldn't be found.
 	 */
-	public static PojoSwap<?,?> findDefaultSwap(Class<?> c) {
-		ClassInfo ci = ClassInfo.of(c);
+	public static PojoSwap<?,?> find(ClassInfo ci) {
 		for (ClassInfo ci2 : ci.getAllParents()) {
 			PojoSwap<?,?> ps = POJO_SWAPS.get(ci2.inner());
 			if (ps != null)

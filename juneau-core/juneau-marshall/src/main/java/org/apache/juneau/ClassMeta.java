@@ -31,9 +31,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
@@ -75,14 +73,9 @@ public final class ClassMeta<T> implements Type {
 		noArgConstructor,                                    // The no-arg constructor for this class (if it has one).
 		stringConstructor,                                   // The X(String) constructor (if it has one).
 		numberConstructor;                                   // The X(Number) constructor (if it has one).
-	private final Constructor<T>
-		swapConstructor;                                     // The X(Swappable) constructor (if it has one).
 	private final Class<?>
-		swapMethodType,                                      // The class type of the object in the number constructor.
 		numberConstructorType;
 	private final Method
-		swapMethod,                                          // The swap() method (if it has one).
-		unswapMethod,                                        // The unswap() method (if it has one).
 		exampleMethod;                                       // The example() or @Example-annotated method (if it has one).
 	private final Field
 		exampleField;                                        // The @Example-annotated field (if it has one).
@@ -167,14 +160,10 @@ public final class ClassMeta<T> implements Type {
 			this.cc = builder.cc;
 			this.isDelegate = builder.isDelegate;
 			this.fromStringMethod = builder.fromStringMethod;
-			this.swapMethod = builder.swapMethod;
-			this.unswapMethod = builder.unswapMethod;
-			this.swapMethodType = builder.swapMethodType;
 			this.parentPropertyMethod = builder.parentPropertyMethod;
 			this.namePropertyMethod = builder.namePropertyMethod;
 			this.noArgConstructor = builder.noArgConstructor;
 			this.stringConstructor = builder.stringConstructor;
-			this.swapConstructor = builder.swapConstructor;
 			this.numberConstructor = builder.numberConstructor;
 			this.numberConstructorType = builder.numberConstructorType;
 			this.primitiveDefault = builder.primitiveDefault;
@@ -238,11 +227,7 @@ public final class ClassMeta<T> implements Type {
 		this.noArgConstructor = mainType.noArgConstructor;
 		this.stringConstructor = mainType.stringConstructor;
 		this.numberConstructor = mainType.numberConstructor;
-		this.swapConstructor = mainType.swapConstructor;
-		this.swapMethodType = mainType.swapMethodType;
 		this.numberConstructorType = mainType.numberConstructorType;
-		this.swapMethod = mainType.swapMethod;
-		this.unswapMethod = mainType.unswapMethod;
 		this.namePropertyMethod = mainType.namePropertyMethod;
 		this.parentPropertyMethod = mainType.parentPropertyMethod;
 		this.isDelegate = mainType.isDelegate;
@@ -290,11 +275,7 @@ public final class ClassMeta<T> implements Type {
 		this.noArgConstructor = null;
 		this.stringConstructor = null;
 		this.numberConstructor = null;
-		this.swapConstructor = null;
-		this.swapMethodType = null;
 		this.numberConstructorType = null;
-		this.swapMethod = null;
-		this.unswapMethod = null;
 		this.namePropertyMethod = null;
 		this.parentPropertyMethod = null;
 		this.isDelegate = false;
@@ -334,9 +315,7 @@ public final class ClassMeta<T> implements Type {
 			isMemberClass = false,
 			isAbstract = false;
 		Method
-			fromStringMethod = null,
-			swapMethod = null,
-			unswapMethod = null;
+			fromStringMethod = null;
 		Setter
 			parentPropertyMethod = null,
 			namePropertyMethod = null;
@@ -344,10 +323,7 @@ public final class ClassMeta<T> implements Type {
 			noArgConstructor = null,
 			stringConstructor = null,
 			numberConstructor = null;
-		Constructor<T>
-			swapConstructor = null;
 		Class<?>
-			swapMethodType = null,
 			numberConstructorType = null;
 		Object primitiveDefault = null;
 		Map<String,Method>
@@ -472,25 +448,6 @@ public final class ClassMeta<T> implements Type {
 					}
 				}
 			}
-			// TODO - should use transforms for above code.
-
-			// Find swap() method if present.
-			for (MethodInfo m : ci.getPublicMethods()) {
-				if (m.isAll(PUBLIC, NOT_DEPRECATED, NOT_STATIC) && (m.hasName("swap") || m.hasName("toMap")) && m.hasFuzzyArgs(BeanSession.class)) {
-					swapMethod = m.inner();
-					swapMethodType = m.getReturnType().inner();
-					break;
-				}
-			}
-			// Find unswap() method if present.
-			if (swapMethod != null) {
-				for (MethodInfo m : ci.getPublicMethods()) {
-					if (m.isAll(PUBLIC, NOT_DEPRECATED, STATIC) && (m.hasName("unswap") || m.hasName("fromMap")) && m.hasFuzzyArgs(BeanSession.class, swapMethodType)) {
-						unswapMethod = m.inner();
-						break;
-					}
-				}
-			}
 
 			// Find example() method if present.
 			for (MethodInfo m : ci.getPublicMethods()) {
@@ -562,8 +519,6 @@ public final class ClassMeta<T> implements Type {
 						ClassInfo arg = pt.get(isMemberClass ? 1 : 0);
 						if (arg.is(String.class))
 							stringConstructor = cs;
-						else if (swapMethodType != null && arg.isChildOf(swapMethodType))
-							swapConstructor = (Constructor<T>)cs.inner();
 						else if (cc != NUMBER && (arg.isChildOf(Number.class) || (arg.isPrimitive() && (arg.isAny(int.class, short.class, long.class, float.class, double.class))))) {
 							numberConstructor = cs;
 							numberConstructorType = arg.getWrapperIfPrimitive();
@@ -585,36 +540,6 @@ public final class ClassMeta<T> implements Type {
 
 			if (beanFilter == null)
 				beanFilter = findBeanFilter();
-
-			if (swapMethod != null) {
-				final Method fSwapMethod = swapMethod;
-				final Method fUnswapMethod = unswapMethod;
-				final Constructor<T> fSwapConstructor = swapConstructor;
-				this.pojoSwaps.add(
-					new PojoSwap<T,Object>(c, swapMethod.getReturnType()) {
-						@Override
-						public Object swap(BeanSession session, Object o) throws SerializeException {
-							try {
-								return fSwapMethod.invoke(o, getMatchingArgs(fSwapMethod.getParameterTypes(), session));
-							} catch (Exception e) {
-								throw new SerializeException(e);
-							}
-						}
-						@Override
-						public T unswap(BeanSession session, Object f, ClassMeta<?> hint) throws ParseException {
-							try {
-								if (fUnswapMethod != null)
-									return (T)fUnswapMethod.invoke(null, getMatchingArgs(fSwapMethod.getParameterTypes(), session, f));
-								if (fSwapConstructor != null)
-									return fSwapConstructor.newInstance(f);
-								return super.unswap(session, f, hint);
-							} catch (Exception e) {
-								throw new ParseException(e);
-							}
-						}
-					}
-				);
-			}
 
 			if (pojoSwaps != null)
 				this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
@@ -774,7 +699,10 @@ public final class ClassMeta<T> implements Type {
 			if (swaps != null)
 				for (Swap s : swaps.value())
 					l.add(createPojoSwap(s));
-			PojoSwap defaultSwap = DefaultTransforms.findDefaultSwap(innerClass);
+
+			PojoSwap defaultSwap = DefaultSwaps.find(ci);
+			if (defaultSwap == null)
+				defaultSwap = DynamicSwaps.find(ci);
 			if (defaultSwap != null)
 				l.add(defaultSwap);
 		}

@@ -674,7 +674,10 @@ public final class PropertyStore {
 	// PropertyGroup
 	//-------------------------------------------------------------------------------------------------------------------
 
-	static class PropertyGroup {
+	/**
+	 * A group of properties with the same prefixes.
+	 */
+	public static class PropertyGroup {
 		final SortedMap<String,Property> properties;
 		private final int hashCode;
 
@@ -710,7 +713,12 @@ public final class PropertyStore {
 			return properties.keySet();
 		}
 
-		public Map<String,Property> swap(BeanSession beanSession) {
+		/**
+		 * Converts this object to serializable form.
+		 *
+		 * @return The serializable form of this object.
+		 */
+		public Map<String,Property> swap() {
 			return properties;
 		}
 	}
@@ -719,7 +727,10 @@ public final class PropertyStore {
 	// Property
 	//-------------------------------------------------------------------------------------------------------------------
 
-	static class Property {
+	/**
+	 * A property in a property store group.
+	 */
+	public static class Property {
 		private final String name;
 		final Object value;
 		private final int hashCode;
@@ -758,6 +769,14 @@ public final class PropertyStore {
 			throw new ConfigException("Invalid type specified: ''{0}''", type);
 		}
 
+		/**
+		 * Converts this property to the specified type.
+		 *
+		 * @param <T> The type to convert the property to.
+		 * @param c The type to convert the property to.
+		 * @return The converted type.
+		 * @throws ConfigException If value could not be converted.
+		 */
 		public <T> T as(Class<T> c) {
 			Class<?> c2 = getClassInfo(c).getPrimitiveWrapper();
 			if (c2 != null)
@@ -774,6 +793,14 @@ public final class PropertyStore {
 			throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}'' on property ''{2}''", type, c, name);
 		}
 
+		/**
+		 * Converts this property to the specified array type.
+		 *
+		 * @param <T> The element type to convert the property to.
+		 * @param eType The element type to convert the property to.
+		 * @return The converted type.
+		 * @throws ConfigException If value could not be converted.
+		 */
 		public <T> T[] asArray(Class<T> eType) {
 			if (value instanceof Collection) {
 				Collection<?> l = (Collection<?>)value;
@@ -797,6 +824,14 @@ public final class PropertyStore {
 			throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''", type, eType, name);
 		}
 
+		/**
+		 * Converts this property to the specified set type.
+		 *
+		 * @param <T> The element type to convert the property to.
+		 * @param eType The element type to convert the property to.
+		 * @return The converted type.
+		 * @throws ConfigException If value could not be converted.
+		 */
 		public <T> Set<T> asSet(Class<T> eType) {
 			if (type == SET_STRING && eType == String.class || type == SET_INTEGER && eType == Integer.class || type == SET_CLASS && eType == Class.class) {
 				return (Set<T>)value;
@@ -814,6 +849,14 @@ public final class PropertyStore {
 			}
 		}
 
+		/**
+		 * Converts this property to the specified list type.
+		 *
+		 * @param <T> The element type to convert the property to.
+		 * @param eType The element type to convert the property to.
+		 * @return The converted type.
+		 * @throws ConfigException If value could not be converted.
+		 */
 		public <T> List<T> asList(Class<T> eType) {
 			if (type == LIST_STRING && eType == String.class || type == LIST_INTEGER && eType == Integer.class || type == LIST_CLASS && eType == Class.class || type == LIST_OBJECT) {
 				return (List<T>)value;
@@ -831,6 +874,14 @@ public final class PropertyStore {
 			}
 		}
 
+		/**
+		 * Converts this property to the specified map type.
+		 *
+		 * @param <T> The element type to convert the property to.
+		 * @param eType The element type to convert the property to.
+		 * @return The converted type.
+		 * @throws ConfigException If value could not be converted.
+		 */
 		public <T> Map<String,T> asMap(Class<T> eType) {
 			if (
 				eType == String.class && (type == SORTED_MAP_STRING || type == ORDERED_MAP_STRING)
@@ -852,6 +903,17 @@ public final class PropertyStore {
 			}
 		}
 
+		/**
+		 * Converts this property to the specified instance type.
+		 *
+		 * @param outer The outer class if this is a member type.
+		 * @param iType The type to instantiate.
+		 * @param resolver The resource resolver.
+		 * @param args The arguments to pass to the constructor.
+		 * @param <T> The type to instantiate.
+		 * @return The instantiated object.
+		 * @throws ConfigException If value could not be instantiated.
+		 */
 		public <T> T asInstance(Object outer, Class<T> iType, ResourceResolver resolver, Object...args) {
 			if (value == null)
 				return null;
@@ -865,6 +927,17 @@ public final class PropertyStore {
 			throw new ConfigException("Invalid property instantiation ''{0}'' to ''{1}'' on property ''{2}''", type, iType, name);
 		}
 
+		/**
+		 * Converts this property to an array of specified instance type.
+		 *
+		 * @param outer The outer class if this is a member type.
+		 * @param eType The entry type to instantiate.
+		 * @param resolver The resource resolver.
+		 * @param args The arguments to pass to the constructor.
+		 * @param <T> The type to instantiate.
+		 * @return The instantiated object.
+		 * @throws ConfigException If value could not be instantiated.
+		 */
 		public <T> T[] asInstanceArray(Object outer, Class<T> eType, ResourceResolver resolver, Object...args) {
 			if (value instanceof Collection) {
 				Collection<?> l = (Collection<?>)value;
@@ -899,7 +972,12 @@ public final class PropertyStore {
 			return false;
 		}
 
-		public Object swap(BeanSession beanSession) {
+		/**
+		 * Converts this object to serializable form.
+		 *
+		 * @return The serializable form of this object.
+		 */
+		public Object swap() {
 			return value;
 		}
 	}
