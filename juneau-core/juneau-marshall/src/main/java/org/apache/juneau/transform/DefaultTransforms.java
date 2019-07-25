@@ -15,7 +15,10 @@ package org.apache.juneau.transform;
 import java.util.*;
 import java.util.concurrent.*;
 
+import javax.xml.datatype.*;
+
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.transforms.*;
 
 /**
  * Maintain the list of default PojoSwaps used by all serializers and parsers.
@@ -25,16 +28,16 @@ public class DefaultTransforms {
 	private static final Map<Class<?>,PojoSwap<?,?>> POJO_SWAPS = new ConcurrentHashMap<>();
 	static {
 //		POJO_SWAPS.put(byte[].class, new ByteArrayBase64Swap());
-//		POJO_SWAPS.put(Enumeration.class, new EnumerationSwap());
+		POJO_SWAPS.put(Enumeration.class, new EnumerationSwap());
 //		POJO_SWAPS.put(InputStream.class, new InputStreamBase64Swap());
-//		POJO_SWAPS.put(Iterator.class, new IteratorSwap());
-//		POJO_SWAPS.put(Locale.class, new LocaleSwap());
+		POJO_SWAPS.put(Iterator.class, new IteratorSwap());
+		POJO_SWAPS.put(Locale.class, new LocaleSwap());
 //		POJO_SWAPS.put(Reader.class, new ReaderSwap());
 //		POJO_SWAPS.put(Calendar.class, new TemporalCalendarSwap.IsoInstant());
 //		POJO_SWAPS.put(Date.class, new TemporalCalendarSwap.IsoInstant());
 //		POJO_SWAPS.put(Temporal.class, new TemporalCalendarSwap.IsoInstant());
-//		POJO_SWAPS.put(TimeZone.class, new TimeZoneSwap());
-//		POJO_SWAPS.put(XMLGregorianCalendar.class, new XMLGregorianCalendarSwap());
+		POJO_SWAPS.put(TimeZone.class, new TimeZoneSwap());
+		POJO_SWAPS.put(XMLGregorianCalendar.class, new XMLGregorianCalendarSwap());
 	}
 
 	/**

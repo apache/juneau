@@ -35,7 +35,6 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.transforms.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -475,14 +474,6 @@ public final class ClassMeta<T> implements Type {
 			}
 			// TODO - should use transforms for above code.
 
-			// Special cases
-			try {
-				if (c == TimeZone.class)
-					fromStringMethod = c.getMethod("getTimeZone", String.class);
-				else if (c == Locale.class)
-					fromStringMethod = LocaleAsString.class.getMethod("fromString", String.class);
-			} catch (NoSuchMethodException e1) {}
-
 			// Find swap() method if present.
 			for (MethodInfo m : ci.getPublicMethods()) {
 				if (m.isAll(PUBLIC, NOT_DEPRECATED, NOT_STATIC) && (m.hasName("swap") || m.hasName("toMap")) && m.hasFuzzyArgs(BeanSession.class)) {
@@ -625,10 +616,10 @@ public final class ClassMeta<T> implements Type {
 				);
 			}
 
-			if (Enumeration.class.isAssignableFrom(c))
-				this.pojoSwaps.add(new EnumerationSwap());
-			else if (Iterator.class.isAssignableFrom(c))
-				this.pojoSwaps.add(new IteratorSwap());
+			PojoSwap defaultSwap = DefaultTransforms.findDefaultSwap(c);
+			if (defaultSwap != null)
+				this.pojoSwaps.add(defaultSwap);
+
 			if (pojoSwaps != null)
 				this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
 
@@ -1980,36 +1971,6 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public String getSimpleName() {
 		return innerClass.getSimpleName();
-	}
-
-	private static class LocaleAsString {
-		private static Method forLanguageTagMethod;
-		static {
-			try {
-				forLanguageTagMethod = Locale.class.getMethod("forLanguageTag", String.class);
-			} catch (NoSuchMethodException e) {}
-		}
-
-		@SuppressWarnings("unused")
-		public static final Locale fromString(String localeString) {
-			if (forLanguageTagMethod != null) {
-				if (localeString.indexOf('_') != -1)
-					localeString = localeString.replace('_', '-');
-				try {
-					return (Locale)forLanguageTagMethod.invoke(null, localeString);
-				} catch (Exception e) {
-					throw new BeanRuntimeException(e);
-				}
-			}
-			String[] v = localeString.toString().split("[\\-\\_]");
-			if (v.length == 1)
-				return new Locale(v[0]);
-			else if (v.length == 2)
-				return new Locale(v[0], v[1]);
-			else if (v.length == 3)
-				return new Locale(v[0], v[1], v[2]);
-			throw new BeanRuntimeException("Could not convert string ''{0}'' to a Locale.", localeString);
-		}
 	}
 
 	@Override /* Object */
