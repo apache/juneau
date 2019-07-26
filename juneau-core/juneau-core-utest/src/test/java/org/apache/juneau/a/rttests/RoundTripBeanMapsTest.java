@@ -26,7 +26,6 @@ import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.transforms.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
@@ -216,14 +215,14 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypesUsingAnnotation() throws Exception {
-		JsonSerializer js = JsonSerializer.create().ssq().pojoSwaps(XMLGregorianCalendarSwap.class).addBeanTypes().addRootType().build();
+		JsonSerializer js = JsonSerializer.create().ssq().addBeanTypes().addRootType().build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().pojoSwaps(XMLGregorianCalendarSwap.class).build();
-		Parser p = getParser().builder().pojoSwaps(XMLGregorianCalendarSwap.class).build();
+		Serializer s = getSerializer();
+		Parser p = getParser();
 
 		B1 b1 = B1.create();
 		Object r = s.serialize(b1);
@@ -289,14 +288,14 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypesUsingBeanFilter() throws Exception {
-		JsonSerializer js = JsonSerializer.create().ssq().pojoSwaps(XMLGregorianCalendarSwap.class).build();
+		JsonSerializer js = JsonSerializer.create().ssq().build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().beanFilters(CFilter.class).pojoSwaps(XMLGregorianCalendarSwap.class).build();
-		Parser p = getParser().builder().beanFilters(CFilter.class).pojoSwaps(XMLGregorianCalendarSwap.class).build();
+		Serializer s = getSerializer().builder().beanFilters(CFilter.class).build();
+		Parser p = getParser().builder().beanFilters(CFilter.class).build();
 
 		C1 c1 = C1.create();
 		Object r = s.serialize(c1);

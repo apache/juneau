@@ -253,8 +253,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		GregorianCalendar gc = new GregorianCalendar();
 		XMLGregorianCalendar c = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
 
-		Serializer s = getSerializer().builder().pojoSwaps(XMLGregorianCalendarSwap.class).build();
-		Parser p = getParser().builder().pojoSwaps(XMLGregorianCalendarSwap.class).build();
+		Serializer s = getSerializer();
+		Parser p = getParser();
 
 		Object r = s.serialize(c);
 		XMLGregorianCalendar c2 = p.parse(r, XMLGregorianCalendar.class);

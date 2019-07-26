@@ -68,7 +68,7 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Option #1 - Pass in through constructor.</jc>
  * 	<jk>public</jk> MyResource(RestContextBuilder builder) {
  * 			builder
- * 				.pojoSwaps(CalendarSwap.<jsf>RFC2822DTZ</jsf>.<jk>class</jk>)
+ * 				.pojoSwaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
  * 				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
  * 	}
  *
@@ -76,7 +76,7 @@ import org.apache.juneau.utils.*;
  * 	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
  * 	<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
  * 			builder
- * 				.pojoSwaps(CalendarSwap.<jsf>RFC2822DTZ</jsf>.<jk>class</jk>)
+ * 				.pojoSwaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
  * 				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
  * 	}
  * </p>

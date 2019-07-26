@@ -17,7 +17,6 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.testutils.*;
-import org.apache.juneau.transforms.*;
 import org.junit.*;
 
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -145,7 +144,7 @@ public class DataConversionTest {
 	@Test
 	public void testObjectSwaps() throws Exception {
 		String s = "2001-12-21T12:34:56Z";
-		BeanSession session = BeanContext.create().pojoSwaps(TemporalCalendarSwap.IsoInstant.class).build().createSession();
+		BeanSession session = BeanContext.create().build().createSession();
 		Calendar c = session.convertToType(s, GregorianCalendar.class);
 		assertEquals(2001, c.get(Calendar.YEAR));
 		c = session.convertToType(s, Calendar.class);

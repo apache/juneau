@@ -18,7 +18,6 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.transforms.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -261,7 +260,6 @@ public class CommonEntry extends Common {
 	 *
 	 * @return The update timestamp of this object.
 	 */
-	@Swap(TemporalCalendarSwap.IsoInstant.class)
 	public Calendar getUpdated() {
 		return updated;
 	}

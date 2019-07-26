@@ -24,9 +24,6 @@ import org.apache.juneau.utils.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
-/**
- * Exhaustive serialization tests for the CalendarSwap class.
- */
 @RunWith(Parameterized.class)
 @SuppressWarnings({})
 public class BeanDictionaryComboTest extends ComboRoundTripTest {

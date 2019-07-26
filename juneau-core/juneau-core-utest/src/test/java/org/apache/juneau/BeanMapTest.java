@@ -21,7 +21,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.transforms.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
@@ -35,7 +34,6 @@ public class BeanMapTest {
 
 	BeanContext bc = BeanContext.create()
 			.beanDictionary(MyBeanDictionaryMap.class)
-			.pojoSwaps(TemporalCalendarSwap.IsoInstant.class)
 			.build();
 	BeanSession session = bc.createSession();
 

@@ -131,7 +131,7 @@ public @interface BeanProperty {
 	 * 	<jc>// A swapped value.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaFieldWithSwappedValues {
 	 *
-	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>, swap=CalendarSwap.<jsf>ISO8601DTZ</jsf>.<jk>class</jk>)
+	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>, swap=TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
 	 * 		<jk>public</jk> Map&lt;String,Calendar&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}

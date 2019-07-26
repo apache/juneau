@@ -17,15 +17,14 @@ import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.net.URI;
-import java.text.*;
+import java.time.*;
+import java.time.format.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.*;
-import org.apache.juneau.transforms.*;
 import org.junit.*;
 
 public class RdfParserTest {
@@ -116,7 +115,7 @@ public class RdfParserTest {
 		public String f2;
 		@Rdf(beanUri=true) public URI f3;
 		public URI f4a, f4b;
-		@Swap(TemporalCalendarSwap.IsoInstant.class) public Calendar f5;
+		public Calendar f5;
 		public LinkedList<A1> f6 = new LinkedList<>();
 
 		public A init() throws Exception {
@@ -125,10 +124,7 @@ public class RdfParserTest {
 			f3 = new URI("http://test/a"); // Bean URI.
 			f4a = new URI("http://test/a"); // Points to itself.
 			f4b = new URI("http://test/external");
-			f5 = new GregorianCalendar();
-			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
-			df.setTimeZone(TimeZone.getTimeZone("GMT"));
-			f5.setTime(df.parse("Jan 1, 1999"));
+			f5 = GregorianCalendar.from(ZonedDateTime.from(DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse("1999-01-01T00:00:00Z")));
 			f6 = new LinkedList<>();
 			f6.add(new A1().init());
 			return this;
@@ -141,7 +137,7 @@ public class RdfParserTest {
 		public String f2;
 		@Rdf(beanUri=true) public URI f3;
 		public URI f4a, f4b;
-		@Swap(TemporalCalendarSwap.IsoInstant.class) public Calendar f5;
+		public Calendar f5;
 
 		public A1 init() throws Exception {
 			f1 = 1;
@@ -149,10 +145,7 @@ public class RdfParserTest {
 			f3 = new URI("http://test/a/a1");
 			f4a = new URI("http://test/a");
 			f4b = new URI("http://test/external");
-			f5 = new GregorianCalendar();
-			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
-			df.setTimeZone(TimeZone.getTimeZone("GMT"));
-			f5.setTime(df.parse("Jan 1, 1999"));
+			f5 = GregorianCalendar.from(ZonedDateTime.from(DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse("1999-01-01T00:00:00Z")));
 			return this;
 		}
 	}

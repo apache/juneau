@@ -17,7 +17,6 @@ import static org.apache.juneau.dto.atom.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.transforms.*;
 
 /**
  * Represents an <c>atomEntry</c> construct in the RFC4287 specification.
@@ -113,7 +112,6 @@ public class Entry extends CommonEntry {
 	 *
 	 * @return The publish timestamp of this entry.
 	 */
-	@Swap(TemporalCalendarSwap.IsoInstant.class)
 	public Calendar getPublished() {
 		return published;
 	}

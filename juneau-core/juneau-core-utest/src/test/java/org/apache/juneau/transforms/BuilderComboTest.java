@@ -24,9 +24,6 @@ import org.apache.juneau.serializer.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
-/**
- * Exhaustive serialization tests for the CalendarSwap class.
- */
 @RunWith(Parameterized.class)
 @SuppressWarnings({})
 public class BuilderComboTest extends ComboRoundTripTest {
