@@ -254,7 +254,6 @@ public class DirectoryResource extends BasicRestServlet {
 			return f.isDirectory() ? f.listFiles().length : f.length();
 		}
 
-		@Swap(TemporalDateSwap.IsoInstant.class)
 		public Date getLastModified() {
 			return new Date(f.lastModified());
 		}

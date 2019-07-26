@@ -49,9 +49,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	@Test
 	public void testSwapBeans1() throws Exception {
 		Class<?>[] f = {
-			ByteArraySwap.Base64.class,
-			TemporalCalendarSwap.IsoInstant.class,
-			TemporalDateSwap.IsoInstant.class
+			ByteArraySwap.Base64.class
 		};
 		pojoSwaps(f);
 		A t = new A().init();
@@ -167,9 +165,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	@Test
 	public void testSwapBeans2() throws Exception {
 		Class<?>[] f = {
-			ByteArraySwap.Base64.class,
-			TemporalCalendarSwap.IsoInstant.class,
-			TemporalDateSwap.IsoInstant.class,
+			ByteArraySwap.Base64.class
 		};
 		pojoSwaps(f);
 		A t = new A().init();

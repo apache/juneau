@@ -48,11 +48,7 @@ import org.apache.juneau.transforms.*;
 		@Property(name=LogsResource.LOGS_RESOURCE_dateFormat, value="$C{Logging/dateFormat}"),
 		@Property(name=LogsResource.LOGS_RESOURCE_useStackTraceHashes, value="$C{Logging/useStackTraceHashes}")
 	},
-	allowedMethodParams="*",
-	pojoSwaps={
-		IteratorSwap.class,       // Allows Iterators and Iterables to be serialized.
-		TemporalDateSwap.IsoInstant.class  // Serialize Date objects as ISO8601 strings.
-	}
+	allowedMethodParams="*"
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
 @SuppressWarnings("javadoc")
@@ -297,7 +293,6 @@ public class LogsResource extends BasicRestServlet {
 			return f.isDirectory() ? f.listFiles().length : f.length();
 		}
 
-		@Swap(TemporalDateSwap.IsoInstant.class)
 		public Date getLastModified() {
 			return new Date(f.lastModified());
 		}

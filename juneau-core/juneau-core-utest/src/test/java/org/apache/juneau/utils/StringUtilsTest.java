@@ -26,7 +26,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
-import org.apache.juneau.transforms.*;
 import org.junit.*;
 
 public class StringUtilsTest {
@@ -670,7 +669,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testParseISO8601Date() throws Exception {
-		WriterSerializer s = JsonSerializer.create().ssq().pojoSwaps(TemporalDateSwap.IsoInstant.class).timeZone(TimeZone.getTimeZone("GMT")).build();
+		WriterSerializer s = JsonSerializer.create().ssq().build();
 
 		assertNull(parseIsoDate(null));
 		assertNull(parseIsoDate(""));
@@ -678,18 +677,18 @@ public class StringUtilsTest {
 		TestUtils.setTimeZone("GMT");
 		try {
 
-			assertEquals("'2000-01-01T00:00:00Z'", s.serialize(parseIsoDate("2000")));
-			assertEquals("'2000-02-01T00:00:00Z'", s.serialize(parseIsoDate("2000-02")));
-			assertEquals("'2000-02-03T00:00:00Z'", s.serialize(parseIsoDate("2000-02-03")));
-			assertEquals("'2000-02-03T04:00:00Z'", s.serialize(parseIsoDate("2000-02-03T04")));
-			assertEquals("'2000-02-03T04:05:00Z'", s.serialize(parseIsoDate("2000-02-03T04:05")));
-			assertEquals("'2000-02-03T04:05:06Z'", s.serialize(parseIsoDate("2000-02-03T04:05:06")));
-			assertEquals("'2000-02-03T04:00:00Z'", s.serialize(parseIsoDate("2000-02-03 04")));
-			assertEquals("'2000-02-03T04:05:00Z'", s.serialize(parseIsoDate("2000-02-03 04:05")));
-			assertEquals("'2000-02-03T04:05:06Z'", s.serialize(parseIsoDate("2000-02-03 04:05:06")));
+			assertEquals("'2000-01-01T00:00:00'", s.serialize(parseIsoDate("2000")));
+			assertEquals("'2000-02-01T00:00:00'", s.serialize(parseIsoDate("2000-02")));
+			assertEquals("'2000-02-03T00:00:00'", s.serialize(parseIsoDate("2000-02-03")));
+			assertEquals("'2000-02-03T04:00:00'", s.serialize(parseIsoDate("2000-02-03T04")));
+			assertEquals("'2000-02-03T04:05:00'", s.serialize(parseIsoDate("2000-02-03T04:05")));
+			assertEquals("'2000-02-03T04:05:06'", s.serialize(parseIsoDate("2000-02-03T04:05:06")));
+			assertEquals("'2000-02-03T04:00:00'", s.serialize(parseIsoDate("2000-02-03 04")));
+			assertEquals("'2000-02-03T04:05:00'", s.serialize(parseIsoDate("2000-02-03 04:05")));
+			assertEquals("'2000-02-03T04:05:06'", s.serialize(parseIsoDate("2000-02-03 04:05:06")));
 
 			// ISO8601 doesn't support milliseconds, so it gets trimmed.
-			assertEquals("'2000-02-03T04:05:06Z'", s.serialize(parseIsoDate("2000-02-03 04:05:06,789")));
+			assertEquals("'2000-02-03T04:05:06'", s.serialize(parseIsoDate("2000-02-03 04:05:06,789")));
 		} finally {
 			TestUtils.unsetTimeZone();
 		}

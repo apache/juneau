@@ -17,6 +17,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Query;
@@ -37,7 +38,8 @@ public class BeanContextPropertiesTest  {
 	// Validate that transforms defined on class transform to underlying bean context.
 	//=================================================================================================================
 
-	@RestResource(pojoSwaps=TemporalDateSwap.IsoInstant.class)
+	@RestResource
+	@BeanConfig(pojoSwaps=TemporalDateSwap.IsoInstant.class)
 	public static class A {
 		@RestMethod(name=GET, path="/{d1}")
 		public String testClassTransforms(@Path(name="d1") Date d1, @Query(name="d2") Date d2, @Header(name="X-D3") Date d3) throws Exception {

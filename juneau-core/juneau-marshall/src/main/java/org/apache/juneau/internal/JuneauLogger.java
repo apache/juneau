@@ -22,22 +22,13 @@ import java.util.logging.*;
 
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transforms.*;
 
 /**
  * Wraps and extends the {@link java.util.logging.Logger} class to provide some additional convenience methods.
  */
 public class JuneauLogger extends java.util.logging.Logger {
 
-	private static final WriterSerializer serializer = JsonSerializer.create()
-		.pojoSwaps(
-			TemporalCalendarSwap.IsoInstant.class,
-			TemporalDateSwap.IsoInstant.class,
-			EnumerationSwap.class,
-			IteratorSwap.class
-		)
-		.ssq()
-		.build();
+	private static final WriterSerializer serializer = JsonSerializer.create().ssq().build();
 
 	private static final ConcurrentHashMap<Class<?>,String> rbMap = new ConcurrentHashMap<>();
 

@@ -30,7 +30,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transforms.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
@@ -46,7 +45,6 @@ public class TestUtils {
 		.ssq()
 		.trimNullProperties(false)
 		.addBeanTypes().addRootType()
-		.pojoSwaps(TemporalCalendarSwap.IsoInstant.class, TemporalDateSwap.IsoInstant.class)
 		.build();
 
 	private static JsonSerializer jsSorted = JsonSerializer.create()
@@ -55,23 +53,18 @@ public class TestUtils {
 		.sortMaps()
 		.trimNullProperties(false)
 		.addBeanTypes().addRootType()
-		.pojoSwaps(TemporalCalendarSwap.IsoInstant.class, TemporalDateSwap.IsoInstant.class)
 		.build();
 
 
 	private static JsonSerializer js2 = JsonSerializer.create()
 		.ssq()
-		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
 		.addBeanTypes().addRootType()
-		.pojoSwaps(TemporalCalendarSwap.IsoInstant.class, TemporalDateSwap.IsoInstant.class)
 		.build();
 
 	private static JsonSerializer js3 = JsonSerializer.create()
 		.ssq()
-		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
 		.sortProperties()
 		.addBeanTypes().addRootType()
-		.pojoSwaps(TemporalCalendarSwap.IsoInstant.class, TemporalDateSwap.IsoInstant.class)
 		.build();
 
 	private static final BeanSession beanSession = BeanContext.DEFAULT.createSession();

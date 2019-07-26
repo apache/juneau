@@ -14,6 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.junit.Assert.*;
 
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.html.*;
@@ -41,8 +42,6 @@ public class RoundTripMapsTest extends RoundTripTest {
 	public Class<?>[] getPojoSwaps() {
 		return new Class<?>[]{
 			ByteArraySwap.Base64.class,
-			DateSwap.ISO8601DTZ.class,
-			CalendarLongSwap.class,
 		};
 	}
 
@@ -162,10 +161,8 @@ public class RoundTripMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testMapCalendarString() throws Exception {
-		Calendar td1 = new GregorianCalendar();
-		td1.setTime(new Date(1,2,3,4,5,6));
-		Calendar td2 = new GregorianCalendar();
-		td2.setTime(new Date(2,3,4,5,6,7));
+		Calendar td1 = GregorianCalendar.from(ZonedDateTime.parse("2012-12-21T12:34:56Z"));
+		Calendar td2 = GregorianCalendar.from(ZonedDateTime.parse("2012-12-21T12:34:57Z"));
 
 		Map<Calendar,String> t = new TreeMap<>();
 		t.put(td1, "a");
@@ -179,6 +176,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		t.put(td2, null);
 		t.put(null, "b");
 		t = roundTrip(t, HashMap.class, GregorianCalendar.class, String.class);
+
 		assertEquals("a", t.get(td1));
 		assertNull(t.get(td2));
 		assertEquals("b", t.get(null));

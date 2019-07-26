@@ -2273,7 +2273,7 @@ public class BeanContext extends Context {
 
 		// If this is an array, then we want it wrapped in an uncached ClassMeta object.
 		// Note that if it has a pojo swap, we still want to cache it so that
-		// we can cache something like byte[] with ByteArrayBase64Swap.
+		// we can cache something like byte[] with ByteArraySwap.Base64.
 		if (type.isArray() && findPojoSwaps(type) == null)
 			return new ClassMeta(type, this, findImplClass(type), findBeanFilter(type), findPojoSwaps(type), findChildPojoSwaps(type), findExample(type));
 
