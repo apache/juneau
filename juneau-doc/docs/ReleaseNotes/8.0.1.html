@@ -64,6 +64,28 @@
 			<li class='jc'>{@link oaj.transforms.TemporalDateSwap} - For {@link java.util.Date}
 			<li class='jc'>{@link oaj.transforms.TemporalCalendarSwap} - For {@link java.util.Calendar}
 		</ul>
+	<li>
+		All serializers and parsers now have built-in default swaps for common class types:
+		<ul class='doctree'>
+			<li class='jc'>{@link java.util.Enumeration}
+			<li class='jc'>{@link java.util.Iterator}
+			<li class='jc'>{@link java.util.Locale}
+			<li class='jc'>{@link java.util.Calendar} - ISO offset date-time.
+			<li class='jc'>{@link java.util.Date} - Local date-time
+			<li class='jc'>{@link java.time.Instant} - ISO instant.
+			<li class='jc'>{@link java.time.ZonedDateTime} - ISO offset date-time.
+			<li class='jc'>{@link java.time.LocalDate} - ISO local date.
+			<li class='jc'>{@link java.time.LocalDateTime} - ISO local date-time.
+			<li class='jc'>{@link java.time.LocalTime} - ISO local time.
+			<li class='jc'>{@link java.time.OffsetDateTime} - ISO offset date-time.
+			<li class='jc'>{@link java.time.OffsetTime} - ISO offset time.
+			<li class='jc'>{@link java.time.Year} - ISO year.
+			<li class='jc'>{@link java.time.YearMonth} - ISO year-month.
+			<li class='jc'>{@link java.time.Temporal} - ISO instant.
+			<li class='jc'>{@link java.util.TimeZone}
+			<li class='jc'>{@link javax.xml.datatype.XMLGregorianCalendar}
+			<li class='jc'>{@link java.time.ZoneId}
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-config</h5>

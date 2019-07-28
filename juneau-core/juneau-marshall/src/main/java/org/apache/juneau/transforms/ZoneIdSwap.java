@@ -12,23 +12,23 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import java.util.*;
+import java.time.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Transforms {@link TimeZone} objects to and from {@link String Strings}.
+ * Transforms {@link ZoneId} objects to and from {@link String Strings}.
  */
-public class TimeZoneSwap extends StringSwap<TimeZone> {
+public class ZoneIdSwap extends StringSwap<ZoneId> {
 
 	@Override /* PojoSwap */
-	public String swap(BeanSession session, TimeZone o) throws Exception {
-		return o.getID();
+	public String swap(BeanSession session, ZoneId o) throws Exception {
+		return o.getId();
 	}
 
 	@Override /* PojoSwap */
-	public TimeZone unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
-		return TimeZone.getTimeZone(o);
+	public ZoneId unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+		return ZoneId.of(o);
 	}
 }

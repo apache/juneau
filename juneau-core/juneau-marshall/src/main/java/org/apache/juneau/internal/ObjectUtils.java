@@ -183,22 +183,6 @@ public final class ObjectUtils {
 	}
 
 	/**
-	 * Converts the specified object to the specified type.
-	 *
-	 * @param <T> The class type to convert the value to.
-	 * @param outer
-	 * 	If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
-	 * @param value The value to convert.
-	 * @param type The class type to convert the value to.
-	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
-	 * @return The converted value.
-	 */
-	public static <T> T toMemberType(Object outer, Object value, Class<T> type) {
-		return session.convertToMemberType(outer, value, type);
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified objects are equal.
 	 *
 	 * <p>

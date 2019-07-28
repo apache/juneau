@@ -206,8 +206,11 @@ public final class ClassInfo {
 		if (interfaces == null) {
 			Set<ClassInfo> s = new LinkedHashSet<>();
 			for (ClassInfo ci : getParents())
-				for (ClassInfo ci2 : ci.getDeclaredInterfaces())
+				for (ClassInfo ci2 : ci.getDeclaredInterfaces()) {
 					s.add(ci2);
+					for (ClassInfo ci3 : ci2.getInterfaces())
+						s.add(ci3);
+				}
 			interfaces = unmodifiableList(new ArrayList<>(s));
 		}
 		return interfaces;
@@ -2030,5 +2033,15 @@ public final class ClassInfo {
 	@Override
 	public String toString() {
 		return t.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return t.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return o == null ? false : ((ClassInfo)o).t.equals(t);
 	}
 }
