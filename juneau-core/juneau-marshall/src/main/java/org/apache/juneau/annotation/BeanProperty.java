@@ -138,14 +138,14 @@ public @interface BeanProperty {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		Note that if you're not interested in these additional properties, you can also use the
-	 * 		{@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting to ignore values that don't fit into existing
-	 * 		properties.
-	 * 	<li class='info'>
+	 * <div class='info'>
+	 * 	Note that if you're not interested in these additional properties, you can also use the
+	 * 	{@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting to ignore values that don't fit into existing
+	 * 	properties.
+	 * </div>
+	 * <div class='info'>
 	 * 		Note that the {@link Name @Name} annotation can also be used for identifying a property name.
-	 * </ul>
+	 * </div>
 	 */
 	String name() default "";
 

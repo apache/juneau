@@ -267,15 +267,14 @@ POJO Categories
 		<td style='background-color:salmon;text-align:center'><b>no</b></td>
 	</tr>			
 </table>
-<ul class='doctree'>
-	<li class='info'>
-		Serializers are designed to work on tree-shaped POJO models.  
-		These are models where there are no referential loops (e.g. leaves with references to nodes, or nodes 
-		in one branch referencing nodes in another branch).  
-		There is a serializer setting {@code detectRecursions} to look for and handle these kinds of loops 
-		(by setting these references to <jk>null</jk>), but it is not enabled by default since it introduces 
-		a moderate performance penalty. 
-</ul>
+<div class='info'>
+	Serializers are designed to work on tree-shaped POJO models.  
+	These are models where there are no referential loops (e.g. leaves with references to nodes, or nodes 
+	in one branch referencing nodes in another branch).  
+	There is a serializer setting {@code detectRecursions} to look for and handle these kinds of loops 
+	(by setting these references to <jk>null</jk>), but it is not enabled by default since it introduces 
+	a moderate performance penalty. 
+</div>
 
 <h5 class='topic' id='PojosConveribleToStrings'>POJOs convertible to/from Strings</h5>
 <p>

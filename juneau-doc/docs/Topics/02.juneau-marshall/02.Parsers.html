@@ -80,15 +80,14 @@ Parsers
 	parser.parseIntoMap(json, m3, String.<jk>class</jk>, Person.<jk>class</jk>);
 </p>
 <br>
-<ul class='doctree'>
-	<li class='info'>
-		In the example above, we're parsing "lax" JSON (single quotes, unquoted attributes).
-		The JSON parser can handle any valid JSON syntax (such as quoted or unquoted attributes, single or double 
-		quotes).
-		It can also handle JSON fragments and embedded Javascript comments. 
-		Many of the JSON examples provided will use lax syntax which is easier to read since we don't have to deal 
-		with escapes.  
-</ul>
+<div class='info'>
+	In the example above, we're parsing "lax" JSON (single quotes, unquoted attributes).
+	The JSON parser can handle any valid JSON syntax (such as quoted or unquoted attributes, single or double 
+	quotes).
+	It can also handle JSON fragments and embedded Javascript comments. 
+	Many of the JSON examples provided will use lax syntax which is easier to read since we don't have to deal 
+	with escapes.  
+</div>
 
 <p>
 	The class hierarchy for the parsers (excluding specialized subclasses) are:

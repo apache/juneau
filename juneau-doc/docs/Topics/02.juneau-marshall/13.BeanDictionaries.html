@@ -154,16 +154,17 @@ Bean Names and Dictionaries
 	<jc>// Produces "[{mytype:'C1',...},{mytype:'C2',...}]"</jc>
 	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(x);
 </p>
-<ul class='doctree'>
-	<li class='info'>
-		Type names do not need to be universally unique.  
-		However, they must be unique within a dictionary.
-	<li class='info'>
-		The following reserved words cannot be used as type names:  
-		<c>object, array, number, boolean, null</c>.
-	<li class='info'>
-		Serialized type names are DISABLED by default.
-		They must be enabled on the serializer using the 
-		{@link oaj.serializer.Serializer#SERIALIZER_addBeanTypes} 
-		configuration property.
-</ul>
+<div class='info'>
+	Type names do not need to be universally unique.  
+	However, they must be unique within a dictionary.
+</div>
+<div class='info'>
+	The following reserved words cannot be used as type names:  
+	<c>object, array, number, boolean, null</c>.
+</div>
+<div class='info'>
+	Serialized type names are DISABLED by default.
+	They must be enabled on the serializer using the 
+	{@link oaj.serializer.Serializer#SERIALIZER_addBeanTypes} 
+	configuration property.
+</div>

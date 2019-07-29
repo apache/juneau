@@ -118,11 +118,10 @@ public class HtmlDocBuilder {
 	 * 	The HTML header section contents.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
 	 * 	<p>
-	 * 	<ul class='doctree'>
-	 * 		<li class='info'>
-	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 				waste string concatenation cycles on non-HTML views.
-	 * 	</ul>
+	 * 	<div class='info'>
+	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 		waste string concatenation cycles on non-HTML views.
+	 * 	</div>
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder header(Object...value) {
@@ -156,11 +155,10 @@ public class HtmlDocBuilder {
 	 * @param value
 	 * 	The HTML nav section links links.
 	 * 	<p>
-	 * 	<ul class='doctree'>
-	 * 		<li class='info'>
-	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 				waste string concatenation cycles on non-HTML views.
-	 * 	</ul>
+	 * 	<div class='info'>
+	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 			waste string concatenation cycles on non-HTML views.
+	 * 	</div>
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder navlinks(Object...value) {
@@ -195,11 +193,10 @@ public class HtmlDocBuilder {
 	 * 	The HTML nav section contents.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
 	 * 	<p>
-	 * 	<ul class='doctree'>
-	 * 		<li class='info'>
-	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 				waste string concatenation cycles on non-HTML views.
-	 * 	</ul>
+	 * 	<div class='info'>
+	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 			waste string concatenation cycles on non-HTML views.
+	 * 	</div>
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder nav(Object...value) {
@@ -231,11 +228,10 @@ public class HtmlDocBuilder {
 	 * 	The HTML aside section contents.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
 	 * 	<p>
-	 * 	<ul class='doctree'>
-	 * 		<li class='info'>
-	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to waste
-	 * 				string concatenation cycles on non-HTML views.
-	 * 	</ul>
+	 * 	<div class='info'>
+	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to waste
+	 * 			string concatenation cycles on non-HTML views.
+	 * 	</div>
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder aside(Object...value) {
@@ -267,11 +263,10 @@ public class HtmlDocBuilder {
 	 * 	The HTML footer section contents.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
 	 * 	<p>
-	 * 	<ul class='doctree'>
-	 * 		<li class='info'>
-	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 				waste string concatenation cycles on non-HTML views.
-	 * 	</ul>
+	 * 	<div class='info'>
+	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 			waste string concatenation cycles on non-HTML views.
+	 * 	</div>
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder footer(Object...value) {
@@ -300,11 +295,10 @@ public class HtmlDocBuilder {
 	 * 	The HTML CSS style section contents.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
 	 * 	<p>
-	 * 	<ul class='doctree'>
-	 * 		<li class='info'>
-	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 				waste string concatenation cycles on non-HTML views.
-	 * 	</ul>
+	 * 	<div class='info'>
+	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 			waste string concatenation cycles on non-HTML views.
+	 * 	</div>
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder style(Object...value) {
@@ -332,11 +326,10 @@ public class HtmlDocBuilder {
 	 * 	The CSS URL in the HTML CSS style section.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
 	 * 	<p>
-	 * 	<ul class='doctree'>
-	 * 		<li class='info'>
-	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 				waste string concatenation cycles on non-HTML views.
-	 * 	</ul>
+	 * 	<div class='info'>
+	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 			waste string concatenation cycles on non-HTML views.
+	 * 	</div>
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder stylesheet(Object...value) {
@@ -365,11 +358,10 @@ public class HtmlDocBuilder {
 	 * 	The HTML script section contents.
 	 * 	Object will be converted to a string using {@link Object#toString()}.
 	 * 	<p>
-	 * 	<ul class='doctree'>
-	 * 		<li class='info'>
-	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 				waste string concatenation cycles on non-HTML views.
-	 * 	</ul>
+	 * 	<div class='info'>
+	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 			waste string concatenation cycles on non-HTML views.
+	 * 	</div>
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder script(Object...value) {
@@ -397,11 +389,10 @@ public class HtmlDocBuilder {
 	 * @param value
 	 * 	The HTML head section contents.
 	 * 	<p>
-	 * 	<ul class='doctree'>
-	 * 		<li class='info'>
-	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
-	 * 				waste string concatenation cycles on non-HTML views.
-	 * 	</ul>
+	 * 	<div class='info'>
+	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 			waste string concatenation cycles on non-HTML views.
+	 * 	</div>
 	 * @return This object (for method chaining).
 	 */
 	public HtmlDocBuilder head(Object...value) {
