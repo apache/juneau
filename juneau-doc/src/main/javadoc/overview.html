@@ -14761,8 +14761,8 @@
 <div class='topic'><!-- START: 7.6.6 - juneau-rest-server.RestMethod.RequestAttributes -->
 <p>
 	The {@link org.apache.juneau.rest.RequestAttributes} object is the API for accessing the standard servlet attributes on an HTTP request 
-	(i.e. {@link javax.servlet.http.ServletRequest#getAttribute(String)}.
-	It wraps the request attributes in a {@link Map} interface and provides several convenience methods.
+	(i.e. {@link javax.servlet.ServletRequest#getAttribute(String)}.
+	It wraps the request attributes in a {@link java.util.Map} interface and provides several convenience methods.
 </p>
 <p>
 	The <c>RequestAttributes</c> object extends from {@link org.apache.juneau.ObjectMap} so all the convenience methods defined on
@@ -30080,7 +30080,7 @@
 <li><p><a class='doclink' href='#7.2.1'>7.2.1 (Oct 23, 2018)</a></p>
 <li><p><a class='doclink' href='#7.2.2'>7.2.2 (Nov 7, 2018)</a></p>
 <li><p><a class='doclink' href='#8.0.0'>8.0.0 (Jan 01, 2019)</a></p>
-<li><p><a class='doclink' href='#8.0.1'>8.0.1 (TBD)</a></p>
+<li><p><a class='doclink' href='#8.1.0'>8.1.0 (TBD)</a></p>
 </ul>
 
 	
@@ -36218,23 +36218,52 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#8.0.1' id='8.0.1'>8.0.1 (TBD)</a></h3>
-<div class='topic'><!-- START: 8.0.1 -->
+<h3 class='topic' onclick='toggle(this)'><a href='#8.1.0' id='8.1.0'>8.1.0 (TBD)</a></h3>
+<div class='topic'><!-- START: 8.1.0 -->
 <p>
-	TBD
+	8.1.0 introduces some significant new features including:
 </p>
+<ul class='spaced-list'>
+	<li>
+		<a href='#juneau-marshall.ConfigurableAnnotations'>Configurable Annotations</a>
+	<li>
+		<a href='#juneau-marshall.Transforms.DefaultPojoSwaps'>Default PojoSwaps</a>
+	<li>
+		<a href='#juneau-config.Imports'>Config Imports</a>
+	<li>
+		<a href='#juneau-rest-server.Instantiation.BasicRest'>BasicRest</a>, <a href='#juneau-rest-server.Instantiation.BasicRestGroup'>BasicRestGroup</a> classes
+	<li>
+		<a href='#juneau-rest-server.RestResource.RestResourcePath'>Path variables on resource paths</a>
+	<li>
+		<a href='#juneau-rest-server.RestMethod.RequestAttributes'>Request Attributes API</a>
+	<li>
+		<a href='#juneau-rest-server.RoleGuards'>Role Guards</a>
+	<li>
+		<a href='#juneau-rest-server.LoggingAndDebugging'>Improved REST logging/debugging</a>
+	<li>
+		<a href='#juneau-rest-mock'>New MockRest API</a>
+</ul>
 
 <h5 class='topic w800'>juneau-marshall</h5>
 <ul class='spaced-list'>
 	<li>
-		New utility class for diffing beans: {@link org.apache.juneau.utils.BeanDiff}
+		New utility class for diffing beans: 
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.utils.BeanDiff}
+		</ul>
 	<li>
-		New annotation for defining bean property names: {@link org.apache.juneau.annotation.Name}
+		New annotation for defining bean property names: 
+		<ul>
+			<li class='ja'>{@link org.apache.juneau.annotation.Name}
+		</ul>
 	<li>
 		New serializer properties:
 		<ul>
-			<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_fileCharset}
-			<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_streamCharset}
+			<li class='jc'>{@link org.apache.juneau.serializer.WriterSerializer}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_fileCharset WSERIALIZER_fileCharset}
+				<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_streamCharset WSERIALIZER_streamCharset}
+			</ul>
 		</ul>
 	<li>
 		The following POJO methods can be used to convert a POJO to/from a Map before serialization and after parsing.
@@ -36254,9 +36283,9 @@
 		<ul>
 			<li class='jc'>{@link org.apache.juneau.marshall.Marshall}
 			<ul>
-				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#format(String,Object...)} - <c>MessageFormat</c>-style formatter.
-				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#out(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDOUT.
-				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#err(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDERR.
+				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#format(String,Object...) format(String,Object...)} - <c>MessageFormat</c>-style formatter.
+				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#out(String,Object...) out(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDOUT.
+				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#err(String,Object...) err(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDERR.
 			</ul>
 		</ul>
 	<li>
@@ -36344,7 +36373,8 @@
 	<jk>public class</jk> AtomFeedResource <jk>extends</jk> BasicRestServletJena {
 		...
 	}
-		
+		</p>
+		<p class='bcode w800'>
 	<jc>// New way using specific annotations.</jc>
 	<ja>@RestResource</ja>(
 		path=<js>"/atom"</js>,
@@ -36491,7 +36521,6 @@
 	<li>
 		Support for fine-tuned logging of HTTP requests and responses. 
 		<p class='bpcode'>
-<p class='bpcode'>
 	<ja>@RestResource</ja>(
 		debug=<js>"per-request"</js>,
 		logging=<ja>@Logging</ja>(
@@ -36528,7 +36557,7 @@
 	<li>
 		PATCH support added.
 </ul>
-</div><!-- END: 8.0.1 -->
+</div><!-- END: 8.1.0 -->
 
 </div>
 </body>								
