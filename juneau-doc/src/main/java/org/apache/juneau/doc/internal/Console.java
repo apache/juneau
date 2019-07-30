@@ -26,7 +26,7 @@ public class Console {
 	 * @param args Message arguments.
 	 */
 	public static void info(String msg, Object...args) {
-		System.out.println("[INFO] " + MessageFormat.format(msg, args));
+		System.out.println("[INFO] " + format(msg, args));
 		System.out.flush();
 	}
 
@@ -37,7 +37,7 @@ public class Console {
 	 * @param args Message arguments.
 	 */
 	public static void warning(String msg, Object...args) {
-		System.err.println("[WARNING] " + MessageFormat.format(msg, args));
+		System.err.println("[WARNING] " + format(msg, args));
 		System.err.flush();
 	}
 
@@ -48,7 +48,13 @@ public class Console {
 	 * @param args Message arguments.
 	 */
 	public static void error(String msg, Object...args) {
-		System.err.println("[ERROR] " + MessageFormat.format(msg, args));
+		System.err.println("[ERROR] " + format(msg, args));
 		System.err.flush();
+	}
+
+	private static String format(String msg, Object...args) {
+		if (args.length == 0)
+			return msg;
+		return MessageFormat.format(msg, args);
 	}
 }

@@ -13,8 +13,34 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} RequestAttributes
+{new} RequestAttributes
 
 <p>
-	TODO
+	The {@link oajr.RequestAttributes} object is the API for accessing the standard servlet attributes on an HTTP request 
+	(i.e. {@link javax.servlet.http.ServletRequest#getAttribute(String)}.
+	It wraps the request attributes in a {@link Map} interface and provides several convenience methods.
+</p>
+<p>
+	The <c>RequestAttributes</c> object extends from {@link oaj.ObjectMap} so all the convenience methods defined on
+	that API are also available when working with request attributes: 
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestAttributes attributes) {...}			
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestAttributes attributes) {
+
+		<jc>// Add a default value.</jc>
+		attributes.putIfNotExists(<js>"Foo"</js>, 123);
+	
+		<jc>// Get an attribute value as a POJO.</jc>
+		UUID etag = attributes.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+	}			
+</p>
+<p>
+	Modifications made to request attributes through the <c>RequestAttributes</c> bean are automatically reflected in
+	the underlying servlet request attributes making it possible to mix the usage of both APIs.
 </p>

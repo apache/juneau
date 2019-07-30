@@ -271,7 +271,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.RestResource'>@RestResource</a></p>
 		<ol>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestResource.AnnotationInheritance'>Annotation Inheritance</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RestResource.RestResourcePath'>@RestResource(path)</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.RestResource.RestResourcePath'>@RestResource(path)</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.RestContext'>RestContext</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod'>@RestMethod</a></p>
@@ -281,7 +281,7 @@
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.RestResponse'>RestResponse</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.RequestBody'>RequestBody</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.RequestHeaders'>RequestHeaders</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RestMethod.RequestAttributes'>RequestAttributes</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.RestMethod.RequestAttributes'>RequestAttributes</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.RequestQuery'>RequestQuery</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.RequestFormData'>RequestFormData</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.RestMethodPath'>@RestMethod(path)</a></p>
@@ -486,46 +486,94 @@
 <p>
 	Apache Juneau&trade; is a single cohesive Java ecosystem consisting of the following parts:
 </p>
-<ul class='spaced-list'>
-	<li><b>juneau-marshall</b> 
-		<p>
+<table class='styled w800'>
+	<tr>
+		<th>Group</th><th>Component</th><th>Description</th>
+	</tr>
+	<tr class='dark bb'>
+		<td rowspan="5" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-core</td>
+		<td class='code'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></td>
+		<td>
 			A universal toolkit for marshalling POJOs to a wide variety of content types using a common framework with no external library dependencies.
-		</p>
-	<li><b>juneau-dto</b>
-		<p>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></td>
+		<td>
+			Extended marshalling support for RDF languages.				
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#juneau-dto'>juneau-dto</a></td>
+		<td>
 			A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM.
-		</p>
-	<li><b>juneau-svl</b>
-		<p>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#juneau-svl'>juneau-svl</a></td>
+		<td>
 			A simple yet powerful variable replacement language API.
-		</p>
-	<li><b>juneau-config</b> 
-		<p>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#juneau-config'>juneau-config</a></td>
+		<td>
 			A sophisticated configuration file API.
-		</p>
-	<li><b>juneau-rest-server</b>
-		<p>
+		</td>
+	</tr>
+	<tr class='light bb'>
+		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
+		<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></td>
+		<td>
 			A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as 
 			one or more top-level servlets in any Servlet 3.1.0+ container.
-		</p>
-	<li><b>juneau-rest-client</b>
-		<p>
+		</td>
+	</tr>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a></td>
+		<td>
+			Spring Boot integration support
+		</td>
+	</tr>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-rest-server-jaxrs'>juneau-rest-server-jaxrs</a></td>
+		<td>
+			JAX/RS integration support.
+		</td>
+	</tr>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></td>
+		<td>
 			A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
-		</p>
-	<li><b>juneau-microservice</b>
-		<p>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-microservice</td>
+		<td class='code'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a></td>
+		<td>
+			A base framework for defining microservices.
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#juneau-microservice-jetty'>juneau-microservice-jetty</a></td>
+		<td>
 			A REST microservice API that combines all the features above with a simple configurable Jetty server for 
 			creating lightweight standalone REST interfaces that start up in milliseconds.
-		</p>
-	<li><b>my-jetty-microservice.zip</b>
-		<p>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#my-jetty-microservice'>my-jetty-microservice</a></td>
+		<td>
 			Starter project template for Jetty-based microservices.
-		</p>
-	<li><b>my-springboot-microservice.zip</b> 
-		<p>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#my-springboot-microservice'>my-springboot-microservice</a></td>
+		<td>
 			Starter project template for Spring-boot-based microservices.
-		</p>
-</ul>
+		</td>
+	</tr>
+</table>
 <p>
 	Questions via email to <a class='doclink' href='mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question'>dev@juneau.apache.org</a> are always welcome.
 </p>
@@ -538,8 +586,8 @@
 <h5 class='topic'>History</h5>
 <p>
 	Juneau started off as a popular internal IBM toolkit called Juno.
-	Originally used for serializing POJOs to and from JSON, it later expanded in scope to include a variety of 
-	content types, and then later REST servlet, client, and microservice APIs.
+	Originally used for serializing POJOs to and from JSON (at a time when the concept was new), it later expanded in 
+	scope to include a variety of content types, and then later REST servlet, client, and microservice APIs.
 	It's use grew to more than 50 projects and was one of the most popular community source projects within IBM.
 </p>
 <p>
@@ -14161,9 +14209,130 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestResource.RestResourcePath' id='juneau-rest-server.RestResource.RestResourcePath'>7.4.2 - @RestResource(path)</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.RestResource.RestResourcePath' id='juneau-rest-server.RestResource.RestResourcePath'>7.4.2 - @RestResource(path)</a></h4>
 <div class='topic'><!-- START: 7.4.2 - juneau-rest-server.RestResource.RestResourcePath -->
 <p>
+	The {@link org.apache.juneau.rest.annotation.RestResource#path() @RestResource(path)} annotation is used in the following situations:
+<p>
+<ul class='spaced-list'>
+	<li>
+		On child resources (resource classes attached to parents via the {@link org.apache.juneau.rest.annotation.RestResource#children() @RestResource(children)} annotation) to identify
+		the subpath used to access the child resource relative to the parent.
+	<li>
+		On top-level {@link org.apache.juneau.rest.RestServlet} classes deployed as Spring beans when {@link org.apache.juneau.rest.springboot.JuneauRestInitializer} is being used.
+</ul>
+
+<h5 class='topic'>On child resources</h5>
+<p>
+	The typical usage is to define a path to a child resource relative to the parent resource.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		children={
+			ChildResource.<jk>class</jk>
+		}
+	)
+	<jk>public class</jk> TopLevelResource <jk>extends</jk> BasicRestServlet {...}
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/child"</js>,
+		children={
+			GrandchildResource.<jk>class</jk>
+		}
+	)
+	<jk>public class</jk> ChildResource {...}
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/grandchild"</js>
+	)
+	<jk>public class</jk> GrandchildResource {
+		<ja>@RestMethod</ja>(
+			path=<js>"/"</js>
+		)
+		<jk>public</jk> String sayHello() {
+			<jk>return</jk> <js>"Hello!"</js>;
+		}
+	}
+</p>
+<p>
+	In the example above, assuming the <c>TopLevelResource</c> servlet is deployed to path <c>/myContext/myServlet</c>,
+	then the <c>sayHello</c> method is accessible through the URI <c>/myContext/myServlet/child/grandchild</c>.
+</p>
+<p>
+	Note that in this scenario, the <c>path</c> attribute is not defined on the top-level resource.
+	Specifying the path on the top-level resource has no effect, but can be used for readability purposes.
+</p>
+
+<h5 class='topic'>On top-level resources deployed as Spring beans</h5>
+<p>
+	The path can also be used on top-level resources deployed as Spring beans when used with the {@link org.apache.juneau.rest.springboot.JuneauRestInitializer}
+	Spring Boot initializer class:
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@SpringBootApplication</ja>
+	<ja>@Controller</ja>
+	<jk>public class</jk> App {
+
+		<jc>// Our entry-point method.</jc>
+		<jk>public static void</jk> main(String[] args) {
+			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
+				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
+				.run(args);
+		}
+
+		<jc>// Our top-level servlet.</jc>
+		<ja>@Bean</ja>
+		<ja>@JuneauRestRoot</ja>
+		<jk>public</jk> MyResource getMyResource() {
+			<jk>return new</jk> MyResource();
+		}
+	}
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/myResource"</js>
+	)
+	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
+</p>
+
+<p>
+	In this case, the servlet will get registered using the path defined on the resource class.
+</p>
+
+<h5 class='topic'>Path variables</h5>
+<p>
+	The path can contain variables that get resolved to {@link org.apache.juneau.http.annotation.Path @Path} parameters
+	or access through the {@link org.apache.juneau.rest.RestRequest#getPathMatch()} method.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode'>
+	<ja>@RestResource</ja>(
+		path=<js>"/myResource/{foo}/{bar}"</js>
+	)
+	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+
+		<ja>@RestMethod</ja>(
+			path=<js>"/{baz}"</js>
+		)
+		<jk>public void</jk> String doX(<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> MyPojo baz) {
+			...
+		}
+	}
+</p>
+<p>
+	Variables can be used on either top-level or child resources and can be defined on multiple levels.
+</p>
+<div class='info'>
+	All variables in the path must be specified or else the target will not resolve and a <c>404</c> will result.
+</div>
+<p>
+	When variables are used on a path of a top-level resource deployed as a Spring bean in a Spring Boot application,
+	the first part of the URL must be a literal which will be used as the servlet path of the registered servlet.
+</p>
 </div><!-- END: 7.4.2 - juneau-rest-server.RestResource.RestResourcePath -->
 </div><!-- END: 7.4 - juneau-rest-server.RestResource -->
 
@@ -14561,7 +14730,7 @@
 	
 		<jc>// Get a standard header.</jc>
 		CacheControl = headers.getCacheControl();
-	 }			
+	}			
 </p>
 <p>
 	Some important methods on this class are:
@@ -14586,10 +14755,36 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.RequestAttributes' id='juneau-rest-server.RestMethod.RequestAttributes'>7.6.6 - RequestAttributes</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.RequestAttributes' id='juneau-rest-server.RestMethod.RequestAttributes'>7.6.6 - RequestAttributes</a></h4>
 <div class='topic'><!-- START: 7.6.6 - juneau-rest-server.RestMethod.RequestAttributes -->
 <p>
-	TODO
+	The {@link org.apache.juneau.rest.RequestAttributes} object is the API for accessing the standard servlet attributes on an HTTP request 
+	(i.e. {@link javax.servlet.http.ServletRequest#getAttribute(String)}.
+	It wraps the request attributes in a {@link Map} interface and provides several convenience methods.
+</p>
+<p>
+	The <c>RequestAttributes</c> object extends from {@link org.apache.juneau.ObjectMap} so all the convenience methods defined on
+	that API are also available when working with request attributes: 
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestAttributes attributes) {...}			
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestAttributes attributes) {
+
+		<jc>// Add a default value.</jc>
+		attributes.putIfNotExists(<js>"Foo"</js>, 123);
+	
+		<jc>// Get an attribute value as a POJO.</jc>
+		UUID etag = attributes.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+	}			
+</p>
+<p>
+	Modifications made to request attributes through the <c>RequestAttributes</c> bean are automatically reflected in
+	the underlying servlet request attributes making it possible to mix the usage of both APIs.
 </p>
 </div><!-- END: 7.6.6 - juneau-rest-server.RestMethod.RequestAttributes -->
 

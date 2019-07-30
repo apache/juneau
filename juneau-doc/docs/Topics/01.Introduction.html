@@ -18,46 +18,94 @@ Introduction
 <p>
 	Apache Juneau&trade; is a single cohesive Java ecosystem consisting of the following parts:
 </p>
-<ul class='spaced-list'>
-	<li><b>juneau-marshall</b> 
-		<p>
+<table class='styled w800'>
+	<tr>
+		<th>Group</th><th>Component</th><th>Description</th>
+	</tr>
+	<tr class='dark bb'>
+		<td rowspan="5" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-core</td>
+		<td class='code'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></td>
+		<td>
 			A universal toolkit for marshalling POJOs to a wide variety of content types using a common framework with no external library dependencies.
-		</p>
-	<li><b>juneau-dto</b>
-		<p>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></td>
+		<td>
+			Extended marshalling support for RDF languages.				
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#juneau-dto'>juneau-dto</a></td>
+		<td>
 			A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM.
-		</p>
-	<li><b>juneau-svl</b>
-		<p>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#juneau-svl'>juneau-svl</a></td>
+		<td>
 			A simple yet powerful variable replacement language API.
-		</p>
-	<li><b>juneau-config</b> 
-		<p>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#juneau-config'>juneau-config</a></td>
+		<td>
 			A sophisticated configuration file API.
-		</p>
-	<li><b>juneau-rest-server</b>
-		<p>
+		</td>
+	</tr>
+	<tr class='light bb'>
+		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
+		<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></td>
+		<td>
 			A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as 
 			one or more top-level servlets in any Servlet 3.1.0+ container.
-		</p>
-	<li><b>juneau-rest-client</b>
-		<p>
+		</td>
+	</tr>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a></td>
+		<td>
+			Spring Boot integration support
+		</td>
+	</tr>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-rest-server-jaxrs'>juneau-rest-server-jaxrs</a></td>
+		<td>
+			JAX/RS integration support.
+		</td>
+	</tr>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></td>
+		<td>
 			A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
-		</p>
-	<li><b>juneau-microservice</b>
-		<p>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-microservice</td>
+		<td class='code'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a></td>
+		<td>
+			A base framework for defining microservices.
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#juneau-microservice-jetty'>juneau-microservice-jetty</a></td>
+		<td>
 			A REST microservice API that combines all the features above with a simple configurable Jetty server for 
 			creating lightweight standalone REST interfaces that start up in milliseconds.
-		</p>
-	<li><b>my-jetty-microservice.zip</b>
-		<p>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#my-jetty-microservice'>my-jetty-microservice</a></td>
+		<td>
 			Starter project template for Jetty-based microservices.
-		</p>
-	<li><b>my-springboot-microservice.zip</b> 
-		<p>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#my-springboot-microservice'>my-springboot-microservice</a></td>
+		<td>
 			Starter project template for Spring-boot-based microservices.
-		</p>
-</ul>
+		</td>
+	</tr>
+</table>
 <p>
 	Questions via email to <a class='doclink' href='mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question'>dev@juneau.apache.org</a> are always welcome.
 </p>
@@ -70,8 +118,8 @@ Introduction
 <h5 class='topic'>History</h5>
 <p>
 	Juneau started off as a popular internal IBM toolkit called Juno.
-	Originally used for serializing POJOs to and from JSON, it later expanded in scope to include a variety of 
-	content types, and then later REST servlet, client, and microservice APIs.
+	Originally used for serializing POJOs to and from JSON (at a time when the concept was new), it later expanded in 
+	scope to include a variety of content types, and then later REST servlet, client, and microservice APIs.
 	It's use grew to more than 50 projects and was one of the most popular community source projects within IBM.
 </p>
 <p>
