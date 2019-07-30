@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} Configurable Properties
+{updated} Configurable Properties
 
 <p>
 	As shown in previous sections, Juneau serializers and parsers are highly-configurable through properties.
@@ -89,40 +89,10 @@
 		...
 	}
 </p>
-<p>
-	Using the {@link oajr.RequestProperties} object:
-</p>
-<p class='bpcode w800'>
-	<jc>// Access it from RestRequest.</jc>
-	<jk>public</jk> Object doGet(RestRequest req) {
-		RequestProperties properties = req.getProperties();
-		properties.put(<jsf>JSON_escapeSolidus</jsf>, <jk>true</jk>);
-	}
-
-	<jc>// Or just pass in a RequestProperties object.</jc>
-	<jk>public</jk> Object doGet(RequestProperties properties) {
-		properties.put(<jsf>JSON_escapeSolidus</jsf>, <jk>true</jk>);
-	}
-</p>
-<p>
-	Properties set via {@link oajr.RequestProperties} are session-override
-	properties that are passed in through {@link oaj.serializer.SerializerSessionArgs}
-	and {@link oaj.parser.ParserSessionArgs} and can only be used on configuration settings
-	marked as <c>Session property: <jk>true</jk></c>.
-</p>			
-<p>
-	Properties are open-ended and can be used for other purposes.
-	They're made available through the following methods:
-</p>
-<ul>
-	<li class='jm'>{@link oajr.RestContext#getProperties()}
-	<li class='jm'>{@link oajr.RestRequest#getProperties()}
-</ul>
 <h5 class='section'>See Also:</h5>
 <ul>
 	<li class='ja'>{@link oajr.annotation.RestResource#flags() RestResource(flags)} - Shorthand for boolean properties.
 	<li class='ja'>{@link oajr.annotation.RestMethod#flags() RestMethod(flags)} - Shorthand for boolean properties.
 	<li class='jc'>{@link oajr.RestContextProperties} 
 	<li class='jc'>{@link oajr.RestMethodProperties} 
-	<li class='jc'>{@link oajr.RequestProperties} 
 </ul>

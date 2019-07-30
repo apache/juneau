@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} Transforms
+{updated} Transforms
 
 <p>
 	The Juneau serializers and parsers can be configured on how to handle POJOs through the use of Transforms.
@@ -23,26 +23,28 @@
 	Transforms are associated serializers and parsers registered on a REST resource via the following:
 </p>
 <ul>
-	<li class='ja'>{@link oajr.annotation.RestResource#beanFilters() RestResource(beanFilters)} 
-	<li class='ja'>{@link oajr.annotation.RestResource#pojoSwaps() RestResource(pojoSwaps)} 
-	<li class='ja'>{@link oajr.annotation.RestMethod#beanFilters() RestMethod(beanFilters)} 
-	<li class='ja'>{@link oajr.annotation.RestMethod#pojoSwaps() RestMethod(pojoSwaps)}
+	<li class='ja'>{@link oaj.annotation.BeanConfig#beanFilters() BeanConfig(beanFilters)} - On class or methods. 
+	<li class='ja'>{@link oaj.annotation.BeanConfig#pojoSwaps() BeanConfig(pojoSwaps)} - On class or methods. 
 	<li class='jm'>{@link oajr.RestContextBuilder#beanFilters(Object...)} 
 	<li class='jm'>{@link oajr.RestContextBuilder#pojoSwaps(Object...)} 
 </ul>
 <p class='bpcode w800'>
 	<jc>// Servlet with transforms applied</jc>
 	<ja>@RestResource</ja>(
+		...
+	)
+	<ja>@BeanConfig</ja>(
 		pojoSwaps={
 			<jc>// Calendars should be serialized/parsed as ISO8601 date-time strings</jc>
-			CalendarSwap.<jsf>DEFAULT_ISO8601DT</jsf>.<jk>class</jk>,
+			TemporalCalendarSwap.IsoInstant.<jk>class</jk>,
 
 			<jc>// Byte arrays should be serialized/parsed as BASE64-encoded strings</jc>
-			ByteArrayBase64Swap.<jk>class</jk>
+			ByteArraySwap.Base64.<jk>class</jk>
 		},
 		beanFilters={
 			<jc>// Subclasses of MyInterface will be treated as MyInterface objects.</jc>
 			<jc>// Bean properties not defined on that interface will be ignored.</jc>
+			MyInterface.<jk>class</jk>
 		}
 	)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {...}
@@ -59,8 +61,8 @@
 			
 			builder
 				.pojoSwaps(
-					CalendarSwap.<jsf>DEFAULT_ISO8601DT</jsf>.<jk>class</jk>,
-					ByteArrayBase64Swap.<jk>class</jk>
+					TemporalCalendarSwap.IsoInstant.<jk>class</jk>,
+					ByteArraySwap.Base64.<jk>class</jk>
 				) 
 				.beanFilters(MyInterface.<jk>class</jk>);
 		}

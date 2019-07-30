@@ -315,13 +315,13 @@
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HandlingMultiPartFormPosts'>Handling Multi-Part Form Posts</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Serializers'>Serializers</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Parsers'>Parsers</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-rest-server.ConfigurableProperties'>Configurable Properties</a></p>
+		<li><p class='updated'><a class='doclink' href='#juneau-rest-server.ConfigurableProperties'>Configurable Properties</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.ConfigurableAnnotations'>Configurable Annotations</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-rest-server.Transforms'>Transforms</a></p>
+		<li><p class='updated'><a class='doclink' href='#juneau-rest-server.Transforms'>Transforms</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.URIs'>URIs</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Guards'>Guards</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-server.RoleGuards'>Role guards</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Converters'>Converters</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RoleGuards'>Role guards</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Messages'>Messages</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Encoders'>Encoders</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.SvlVariables'>SVL Variables</a></p>
@@ -601,7 +601,9 @@
 <div class='topic'><!-- START: 1.1 - Introduction.Features -->
 <ul class='spaced-list'>
 	<li>
-		Safe parsing.  Parsers are not susceptible to deserialization attacks.
+		Fast memory-efficient serialization.
+	<li>
+		Fast, safe, memory-efficient parsing.  Parsers are not susceptible to deserialization attacks.
 	<li>
 		KISS is our mantra!  No auto-wiring.  No code generation.  No dependency injection.  Just add it to your classpath and use it.  Extremely simple unit testing!
 	<li>
@@ -18108,7 +18110,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.ConfigurableProperties' id='juneau-rest-server.ConfigurableProperties'>7.15 - Configurable Properties</a></h3>
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-rest-server.ConfigurableProperties' id='juneau-rest-server.ConfigurableProperties'>7.15 - Configurable Properties</a></h3>
 <div class='topic'><!-- START: 7.15 - juneau-rest-server.ConfigurableProperties -->
 <p>
 	As shown in previous sections, Juneau serializers and parsers are highly-configurable through properties.
@@ -18184,42 +18186,12 @@
 		...
 	}
 </p>
-<p>
-	Using the {@link org.apache.juneau.rest.RequestProperties} object:
-</p>
-<p class='bpcode w800'>
-	<jc>// Access it from RestRequest.</jc>
-	<jk>public</jk> Object doGet(RestRequest req) {
-		RequestProperties properties = req.getProperties();
-		properties.put(<jsf>JSON_escapeSolidus</jsf>, <jk>true</jk>);
-	}
-
-	<jc>// Or just pass in a RequestProperties object.</jc>
-	<jk>public</jk> Object doGet(RequestProperties properties) {
-		properties.put(<jsf>JSON_escapeSolidus</jsf>, <jk>true</jk>);
-	}
-</p>
-<p>
-	Properties set via {@link org.apache.juneau.rest.RequestProperties} are session-override
-	properties that are passed in through {@link org.apache.juneau.serializer.SerializerSessionArgs}
-	and {@link org.apache.juneau.parser.ParserSessionArgs} and can only be used on configuration settings
-	marked as <c>Session property: <jk>true</jk></c>.
-</p>			
-<p>
-	Properties are open-ended and can be used for other purposes.
-	They're made available through the following methods:
-</p>
-<ul>
-	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getProperties()}
-	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getProperties()}
-</ul>
 <h5 class='section'>See Also:</h5>
 <ul>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#flags() RestResource(flags)} - Shorthand for boolean properties.
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#flags() RestMethod(flags)} - Shorthand for boolean properties.
 	<li class='jc'>{@link org.apache.juneau.rest.RestContextProperties} 
 	<li class='jc'>{@link org.apache.juneau.rest.RestMethodProperties} 
-	<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} 
 </ul>
 </div><!-- END: 7.15 - juneau-rest-server.ConfigurableProperties -->
 
@@ -18288,7 +18260,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.Transforms' id='juneau-rest-server.Transforms'>7.17 - Transforms</a></h3>
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-rest-server.Transforms' id='juneau-rest-server.Transforms'>7.17 - Transforms</a></h3>
 <div class='topic'><!-- START: 7.17 - juneau-rest-server.Transforms -->
 <p>
 	The Juneau serializers and parsers can be configured on how to handle POJOs through the use of Transforms.
@@ -18298,26 +18270,28 @@
 	Transforms are associated serializers and parsers registered on a REST resource via the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#beanFilters() RestResource(beanFilters)} 
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps() RestResource(pojoSwaps)} 
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#beanFilters() RestMethod(beanFilters)} 
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps() RestMethod(pojoSwaps)}
+	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFilters() BeanConfig(beanFilters)} - On class or methods. 
+	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#pojoSwaps() BeanConfig(pojoSwaps)} - On class or methods. 
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#beanFilters(Object...)} 
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#pojoSwaps(Object...)} 
 </ul>
 <p class='bpcode w800'>
 	<jc>// Servlet with transforms applied</jc>
 	<ja>@RestResource</ja>(
+		...
+	)
+	<ja>@BeanConfig</ja>(
 		pojoSwaps={
 			<jc>// Calendars should be serialized/parsed as ISO8601 date-time strings</jc>
-			CalendarSwap.<jsf>DEFAULT_ISO8601DT</jsf>.<jk>class</jk>,
+			TemporalCalendarSwap.IsoInstant.<jk>class</jk>,
 
 			<jc>// Byte arrays should be serialized/parsed as BASE64-encoded strings</jc>
-			ByteArrayBase64Swap.<jk>class</jk>
+			ByteArraySwap.Base64.<jk>class</jk>
 		},
 		beanFilters={
 			<jc>// Subclasses of MyInterface will be treated as MyInterface objects.</jc>
 			<jc>// Bean properties not defined on that interface will be ignored.</jc>
+			MyInterface.<jk>class</jk>
 		}
 	)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {...}
@@ -18334,8 +18308,8 @@
 			
 			builder
 				.pojoSwaps(
-					CalendarSwap.<jsf>DEFAULT_ISO8601DT</jsf>.<jk>class</jk>,
-					ByteArrayBase64Swap.<jk>class</jk>
+					TemporalCalendarSwap.IsoInstant.<jk>class</jk>,
+					ByteArraySwap.Base64.<jk>class</jk>
 				) 
 				.beanFilters(MyInterface.<jk>class</jk>);
 		}
@@ -18509,8 +18483,76 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Converters' id='juneau-rest-server.Converters'>7.20 - Converters</a></h3>
-<div class='topic'><!-- START: 7.20 - juneau-rest-server.Converters -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.RoleGuards' id='juneau-rest-server.RoleGuards'>7.20 - Role guards</a></h3>
+<div class='topic'><!-- START: 7.20 - juneau-rest-server.RoleGuards -->
+<p>
+	Specialized guards are provided for controlling access to servlet classes and methods based on user roles.
+	These are controlled via annotations on the REST class and methods:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.rest.annotation.RestResource#roleGuard() roleGuard()}
+		<li class='jf'>{@link org.apache.juneau.rest.annotation.RestResource#rolesDeclared() rolesDeclared()}
+	</ul>
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.rest.annotation.RestMethod#roleGuard() roleGuard()}
+		<li class='jf'>{@link org.apache.juneau.rest.annotation.RestMethod#rolesDeclared() rolesDeclared()}
+	</ul>
+</ul>
+<p>
+	The <c>roleGuard()</c> annotation is an expression that defines whether a user with specified roles are allowed
+	to access methods.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Only admin users or users with both read/write and special access 
+	// can run any methods on this class.</jc>
+	<ja>@RestResource</ja>(
+		path=<js>"/foo"</js>,
+		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE && ROLE_SPECIAL)"</js>
+	)
+	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+		...
+	}
+</p>
+<p>
+	The syntax allows for any of the following:
+</p>
+<ul>
+	<li><js>"foo"</js> - Single arguments.
+	<li><js>"foo,bar,baz"</js> - Multiple OR'ed arguments.
+	<li><js>"foo | bar | baz"</js> - Multiple OR'ed arguments, pipe syntax.
+	<li><js>"foo || bar || baz"</js> - Multiple OR'ed arguments, Java-OR syntax.
+	<li><js>"fo*"</js> - Patterns including <js>'*'</js> and <js>'?'</js>.
+	<li><js>"fo* & *oo"</js> - Multiple AND'ed arguments, ampersand syntax.
+	<li><js>"fo* && *oo"</js> - Multiple AND'ed arguments, Java-AND syntax.
+	<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
+</ul>
+
+<p>
+ 	If patterns are used, you must specify the list of declared roles using the <c>rolesDeclared()</c> annotations.
+ 	This declares the list of all possible user roles and is needed because the servlet API does not provide this
+ 	capability.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
+		roleGuard=<js>"ROLE_ADMIN || (*WRITE* && *SPECIAL*)"</js>
+	)
+	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+		...
+	}
+</p>
+</div><!-- END: 7.20 - juneau-rest-server.RoleGuards -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Converters' id='juneau-rest-server.Converters'>7.21 - Converters</a></h3>
+<div class='topic'><!-- START: 7.21 - juneau-rest-server.Converters -->
 <p>
 	Converters can be thought of as "post-processors" for POJOs before they get passed to the serializers.
 </p>
@@ -18610,16 +18652,7 @@
 <ul>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_converters} 
 </ul>
-</div><!-- END: 7.20 - juneau-rest-server.Converters -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RoleGuards' id='juneau-rest-server.RoleGuards'>7.21 - Role guards</a></h3>
-<div class='topic'><!-- START: 7.21 - juneau-rest-server.RoleGuards -->
-<p>
-	TODO
-</p>
-</div><!-- END: 7.21 - juneau-rest-server.RoleGuards -->
+</div><!-- END: 7.21 - juneau-rest-server.Converters -->
 
 <!-- ==================================================================================================== -->
 
