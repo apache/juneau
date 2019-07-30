@@ -1,0 +1,110 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{updated} PojoSwaps
+
+<p>
+	{@link oaj.transform.PojoSwap PojoSwaps} are a critical component of Juneau.
+	They allow the serializers and parsers to handle Java objects that wouldn't normally be serializable.
+</p>
+<p>
+	Swaps are, simply put, 'object swappers' that swap in serializable objects for 
+	non-serializable ones during serialization, and vis-versa during parsing.
+</p>
+<p>
+	Some examples of non-serializable POJOs are <c>File</c>, <c>Reader</c>, 
+	<c>Iterable</c>, etc...
+	These are classes that aren't beans and cannot be represented as simple maps, collections, or primitives.
+</p>
+<p>
+	In the following example, we introduce a <c>PojoSwap</c> that will swap in a bean of a particular type
+	with a map containing customized key-value pairs:
+</p>
+<p class='bpcode w800'>
+	<jc>// Sample swap for converting a bean to a specialized map of key-value pairs.</jc>
+	<jk>public class</jk> MyBeanSwap <jk>extends</jk> PojoSwap&lt;MyBean,ObjectMap&gt; {
+		
+		<jc>// Converts a bean to a generic map.</jc>
+		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+		<jk>public</jk> ObjectMap swap(BeanSession session, MyBean o) {
+			<jk>return new</jk> ObjectMap().append(<js>"foo"</js>, o.getBar());
+		}
+		
+		<jc>// Converts the generic map back into a bean.</jc>
+		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+		<jk>public</jk> MyBean unswap(BeanSession session, ObjectMap o, ClassMeta hint) <jk>throws</jk> Exception {
+			MyBean b = <jk>new</jk> MyBean();
+			b.setBar(o.getString(<js>"foo"</js>));
+			<jk>return</jk> b;
+		}
+	}
+</p>
+<p>
+	The swap can then be associated with serializers and parsers like so:
+</p>
+<p class='bpcode w800'>
+	<jc>// Create a new JSON serializer with our swap.</jc>
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(MyBeanSwap.<jk>class</jk>).build();
+	String json = s.serialize(<jk>new</jk> MyBean());
+	
+	<jc>// Create a JSON parser with our swap.</jc>
+	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(MyBeanSwap.<jk>class</jk>).build();
+	MyBean bean = p.parse(json, MyBean.<jk>class</jk>);
+</p>
+<p>
+	Another example of a <c>PojoSwap</c> is one that converts <c><jk>byte</jk>[]</c> arrays to
+	BASE64-encoded strings:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> StringSwap&lt;<jk>byte</jk>[]&gt; {
+	
+		<ja>@Override</ja> <jc>/* StringSwap */</jc>
+		<jk>public</jk> String swap(<jk>byte</jk>[] b) <jk>throws</jk> Exception {
+			ByteArrayOutputStream baos = <jk>new</jk> ByteArrayOutputStream();
+			OutputStream b64os = MimeUtility.encode(baos, <js>"base64"</js>);
+			b64os.write(b);
+			b64os.close();
+			<jk>return new</jk> String(baos.toByteArray());
+		}
+		
+		<ja>@Override</ja> <jc>/* StringSwap */</jc>
+		<jk>public byte</jk>[] unswap(String s, ClassMeta&lt;?&gt; hint) <jk>throws</jk> Exception {
+			<jk>byte</jk>[] b = s.getBytes();
+			ByteArrayInputStream bais = <jk>new</jk> ByteArrayInputStream(b);
+			InputStream b64is = MimeUtility.decode(bais, <js>"base64"</js>);
+			<jk>byte</jk>[] tmp = <jk>new byte</jk>[b.length];
+			<jk>int</jk> n = b64is.read(tmp);
+			<jk>byte</jk>[] res = <jk>new byte</jk>[n];
+			System.<jsm>arraycopy</jsm>(tmp, 0, res, 0, n);
+			<jk>return</jk> res;
+		}
+	}
+</p>
+<p>
+	The following example shows the BASE64 swap in use:
+</p>
+<p class='bpcode w800'>
+	<jc>// Create a JSON serializer and register the BASE64 encoding swap with it.</jc>
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+	
+	<jk>byte</jk>[] bytes = {1,2,3};
+	String json = s.serialize(bytes);		<jc>// Produces "'AQID'"</jc>
+	bytes = p.parse(json, <jk>byte</jk>[].<jk>class</jk>);		<jc>// Reproduces {1,2,3}</jc>
+	
+	<jk>byte</jk>[][] bytes2d = {{1,2,3},{4,5,6},<jk>null</jk>};
+	json = s.serialize(bytes2d);		<jc>// Produces "['AQID','BAUG',null]"</jc>
+	bytes2d = p.parse(json, <jk>byte</jk>[][].<jk>class</jk>);		<jc>// Reproduces {{1,2,3},{4,5,6},null}</jc>
+</p>

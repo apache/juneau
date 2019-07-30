@@ -29,25 +29,25 @@ Simple Variable Language
 	The {@link oaj.svl.VarResolver#DEFAULT} resolver is a reusable instance of this class 
 	configured with the following basic variables:
 </p>
-<ul class='doctree'>
+<ul>
 	<li class='jc'>{@link oaj.svl.vars.SystemPropertiesVar} - <c>$S{key[,default]}</c>
-		<li class='jc'>{@link oaj.svl.vars.EnvVariablesVar} - <c>$E{key[,default]}</c>
+	<li class='jc'>{@link oaj.svl.vars.EnvVariablesVar} - <c>$E{key[,default]}</c>
 </ul>
 <p>
 	The following logic variables are also provided:
 </p>
-<ul class='doctree'>
-		<li class='jc'>{@link oaj.svl.vars.IfVar} - <c>$IF{arg,then[,else]}</c>
-		<li class='jc'>{@link oaj.svl.vars.SwitchVar} - <c>$SW{arg,pattern1:then1[,pattern2:then2...]}</c>
-		<li class='jc'>{@link oaj.svl.vars.CoalesceVar} - <c>$CO{arg1[,arg2...]}</c>
-		<li class='jc'>{@link oaj.svl.vars.PatternMatchVar} - <c>$PM{arg,pattern}</c> 
-		<li class='jc'>{@link oaj.svl.vars.PatternReplaceVar} - <c>$PR{arg,pattern,replace}</c> 
-		<li class='jc'>{@link oaj.svl.vars.PatternExtractVar} - <c>$PE{arg,pattern,groupIndex}</c> 
-		<li class='jc'>{@link oaj.svl.vars.NotEmptyVar} - <c>$NE{arg}</c>
-		<li class='jc'>{@link oaj.svl.vars.UpperCaseVar} - <c>$UC{arg}</c>
-		<li class='jc'>{@link oaj.svl.vars.LowerCaseVar} - <c>$LC{arg}</c>
-		<li class='jc'>{@link oaj.svl.vars.LenVar} - <c>$LN{arg[,delimiter]}</c>
-		<li class='jc'>{@link oaj.svl.vars.SubstringVar} - <c>$ST{arg,start[,end]}</c>
+<ul>
+	<li class='jc'>{@link oaj.svl.vars.IfVar} - <c>$IF{arg,then[,else]}</c>
+	<li class='jc'>{@link oaj.svl.vars.SwitchVar} - <c>$SW{arg,pattern1:then1[,pattern2:then2...]}</c>
+	<li class='jc'>{@link oaj.svl.vars.CoalesceVar} - <c>$CO{arg1[,arg2...]}</c>
+	<li class='jc'>{@link oaj.svl.vars.PatternMatchVar} - <c>$PM{arg,pattern}</c> 
+	<li class='jc'>{@link oaj.svl.vars.PatternReplaceVar} - <c>$PR{arg,pattern,replace}</c> 
+	<li class='jc'>{@link oaj.svl.vars.PatternExtractVar} - <c>$PE{arg,pattern,groupIndex}</c> 
+	<li class='jc'>{@link oaj.svl.vars.NotEmptyVar} - <c>$NE{arg}</c>
+	<li class='jc'>{@link oaj.svl.vars.UpperCaseVar} - <c>$UC{arg}</c>
+	<li class='jc'>{@link oaj.svl.vars.LowerCaseVar} - <c>$LC{arg}</c>
+	<li class='jc'>{@link oaj.svl.vars.LenVar} - <c>$LN{arg[,delimiter]}</c>
+	<li class='jc'>{@link oaj.svl.vars.SubstringVar} - <c>$ST{arg,start[,end]}</c>
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>

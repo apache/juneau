@@ -110,7 +110,7 @@ Parsing into Generic Models
 	URI uri = m.get(URI.<jk>class</jk>, <js>"uri"</js>);
 
 	<jc>// Get a value using a swap.</jc>
-	CalendarSwap swap = <jk>new</jk> CalendarSwap.ISO8601DTZ();
+	TemporalCalendarSwap swap = <jk>new</jk> TemporalCalendarSwap.IsoInstant();
 	Calendar birthDate = m.get(swap, <js>"birthDate"</js>);
 
 	<jc>// Get the addresses.</jc>

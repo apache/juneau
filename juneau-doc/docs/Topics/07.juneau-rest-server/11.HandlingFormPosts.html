@@ -36,7 +36,7 @@ Handling Form Posts
 		<jk>public static class</jk> FormInputBean {
 			<jk>public</jk> String <jf>aString</jf>;
 			<jk>public int</jk> <jf>aNumber</jf>;
-			<ja>@BeanProperty</ja>(pojoSwaps=CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>)
+			<ja>@Swap</ja>(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
 			<jk>public</jk> Calendar <jf>aDate</jf>;
 		}
 	}		

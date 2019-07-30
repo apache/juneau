@@ -1,0 +1,92 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{new} Configurable Annotations
+
+<p>
+	All configurable properties described in the previous section have annotation equivalents that can be applied on
+	classes or methods.
+</p>
+<p>
+	In the section on the REST server API, we describe how to configure serializers and parsers using <ja>@Property</ja>
+	annotations such as shown below:
+</p>
+<p class='bpcode w800'>
+	<jc>// Configuring serializers/parsers using @Property annotations.</jc>
+	<ja>@RestResource</ja>(
+		path=<js>"/atom"</js>,
+		title=<js>"Sample ATOM feed resource"</js>,
+		properties={
+			<ja>@Property</ja>(name=<jsf>WSERIALIZER_quoteChar</jsf>, value=<js>"'"</js>),
+			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>),
+			<ja>@Property</ja>(name<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>),
+			<ja>@Property</ja>(name=<jsf>BEAN_examples</jsf>, value=<js>"{'org.apache.juneau.dto.atom.Feed': $F{AtomFeedResource_example.json}}"</js>)
+		}
+		...
+	)
+	<jk>public class</jk> AtomFeedResource <jk>extends</jk> BasicRestServletJena {
+		...
+	}
+</p>
+<p>
+	However, an even easier way to configure serializers and parsers are to used provided specialized <ja>@XConfig</ja>
+	annotations like those shown below:
+</p>
+<p class='bpcode w800'>
+	<jc>// Same as above but using specialized annotations.</jc>
+	<ja>@RestResource</ja>(
+		path=<js>"/atom"</js>,
+		title=<js>"Sample ATOM feed resource"</js>
+		...
+	)
+	<ja>@SerializerConfig</ja>(quoteChar=<js>"'"</js>)
+	<ja>@RdfConfig</ja>(rdfxml_tab=<js>"5"</js>, addRootProperty=<js>"true"</js>)
+	<ja>@BeanConfig</ja>(examples=<js>"Feed: $F{AtomFeedResource_example.json}"</js>)
+	<jk>public class</jk> AtomFeedResource <jk>extends</jk> BasicRestServletJena {
+		...
+	}
+</p>
+<p>
+	Config annotations are provided for all serializers and parsers:
+</p>
+<ul>
+	<li class='ja'>{@link oaj.annotation.BeanConfig BeanConfig}
+	<li class='ja'>{@link oaj.csv.annotation.CsvConfig CsvConfig}
+	<li class='ja'>{@link oaj.html.annotation.HtmlConfig HtmlConfig}
+	<li class='ja'>{@link oaj.html.annotation.HtmlDocConfig HtmlDocConfig}
+	<li class='ja'>{@link oaj.jso.annotation.JsoConfig JsoConfig}
+	<li class='ja'>{@link oaj.json.annotation.JsonConfig JsonConfig}
+	<li class='ja'>{@link oaj.jsonschema.annotation.JsonSchemaConfig JsonSchemaConfig}
+	<li class='ja'>{@link oaj.msgpack.annotation.MsgPackConfig MsgPackConfig}
+	<li class='ja'>{@link oaj.oapi.annotation.OpenApiConfig OpenApiConfig}
+	<li class='ja'>{@link oaj.parser.annotation.ParserConfig ParserConfig}
+	<li class='ja'>{@link oaj.plaintext.annotation.PlainTextConfig PlainTextConfig}
+	<li class='ja'>{@link oaj.jena.annotation.RdfConfig RdfConfig}
+	<li class='ja'>{@link oaj.serializer.annotation.SerializerConfig SerializerConfig}
+	<li class='ja'>{@link oaj.soap.annotation.SoapXmlConfig SoapXmlConfig}
+	<li class='ja'>{@link oaj.uon.annotation.UonConfig UonConfig}
+	<li class='ja'>{@link oaj.urlencoding.annotation.UrlEncodingConfig UrlEncodingConfig}
+	<li class='ja'>{@link oaj.xml.annotation.XmlConfig XmlConfig}
+</ul>
+<p>
+	Config annotations defined on classes and methods can be applied to serializers and parsers using the following methods:	
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link oaj.BeanContextBuilder}
+	<ul>
+		<li class='jm'>{@link oaj.BeanContextBuilder#applyAnnotations(Class) applyAnnotations(Class)} - Apply annotations from class and all parent classes.
+		<li class='jm'>{@link oaj.BeanContextBuilder#applyAnnotations(Method) applyAnnotations(Method)} - Apply annotations from method and parent methods.
+	</ul>
+</ul>

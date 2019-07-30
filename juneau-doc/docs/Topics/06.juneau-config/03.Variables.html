@@ -52,20 +52,20 @@ Variables
 	By default, <c>Configs</c> use the {@link oaj.svl.VarResolver#DEFAULT} variable resolver
 	which provides support for the following variables and constructs:
 </p>
-<ul class='doctree'>
+<ul>
 	<li class='jc'>{@link oaj.svl.vars.SystemPropertiesVar} - <c>$S{key[,default]}</c>
-		<li class='jc'>{@link oaj.svl.vars.EnvVariablesVar} - <c>$E{key[,default]}</c>
-		<li class='jc'>{@link oaj.config.vars.ConfigVar} - <c>$C{key[,default]}</c>
+	<li class='jc'>{@link oaj.svl.vars.EnvVariablesVar} - <c>$E{key[,default]}</c>
+	<li class='jc'>{@link oaj.config.vars.ConfigVar} - <c>$C{key[,default]}</c>
 </ul>
 <p>
 	The variable resolver is controlled via the following setting:
 </p>
-<ul class='doctree'>
+<ul>
 	<li class='jf'>{@link oaj.config.Config#CONFIG_varResolver}
 </ul>
 <p>
 	Additionally, the following method can be used to retrieve a <c>Config</c> with a different variable resolver:
 </p>
-<ul class='doctree'>
+<ul>
 	<li class='jm'>{@link oaj.config.Config#resolving(VarResolverSession)}
 </ul>

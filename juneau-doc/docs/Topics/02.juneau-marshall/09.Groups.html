@@ -26,7 +26,7 @@ SerializerGroups and ParserGroups
 	SerializerGroup sg = SerializerGroup.<jsm>create</jsm>()
 		.append(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
 		.ws   <jc>// or .useWhitespace(true)</jc>
-		.pojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>)
+		.pojoSwaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
 		.build();
 
 	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the specified writer.</jc>
@@ -36,7 +36,7 @@ SerializerGroups and ParserGroups
 	<jc>// Construct a new parser group with configuration parameters that get applied to all parsers.</jc>
 	ParserGroup pg = ParserGroup.<jsm>create</jsm>()
 		.append(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
- 		.pojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>)
+ 		.pojoSwaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>)
  		.build();
 
 	Person p = pg.getParser(<js>"text/json"</js>).parse(myReader, Person.<jk>class</jk>);

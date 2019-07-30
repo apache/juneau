@@ -26,7 +26,7 @@ Namespaces
 		
 		<jc>// Bean properties</jc>
 		<jk>public</jk> String <jf>name</jf>;
-		<ja>@Swap</ja>(CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		<ja>@Swap</ja>(TemporalCalendarSwap.IsoInstant.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
 		<jk>public</jk> List&lt;Address&gt; <jf>addresses</jf>; 
 	
 		<jc>// Getters/setters omitted</jc>

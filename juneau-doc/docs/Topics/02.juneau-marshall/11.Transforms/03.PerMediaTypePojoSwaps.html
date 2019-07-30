@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-Per-media-type PojoSwaps
+{updated} Per-media-type PojoSwaps
 
 <p>
 	Swaps can also be defined per-media-type.		
@@ -34,7 +34,7 @@ Per-media-type PojoSwaps
 
 		<jk>public static class</jk> MyPojo {}
 
-		<jk>public static class</jk> MyJsonSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
+		<jk>public static class</jk> MyJsonSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
 			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 			<jk>public</jk> MediaType[] forMediaTypes() {
 				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
@@ -45,7 +45,7 @@ Per-media-type PojoSwaps
 			}
 		}
 
-		<jk>public static class</jk> MyXmlSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
+		<jk>public static class</jk> MyXmlSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
 			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 			<jk>public</jk> MediaType[] forMediaTypes() {
 				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/xml"</js>);
@@ -56,7 +56,7 @@ Per-media-type PojoSwaps
 			}
 		}
 
-		<jk>public static class</jk> MyOtherSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
+		<jk>public static class</jk> MyOtherSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
 			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 			<jk>public</jk> MediaType[] forMediaTypes() {
 				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/*"</js>);
