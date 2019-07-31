@@ -38,7 +38,10 @@ import org.apache.juneau.utils.*;
  * JUnit automated testcase resource.
  */
 @RestResource(
-	path="/testThirdPartyProxy"
+	path="/testThirdPartyProxy",
+	logging=@Logging(
+		disabled="true"
+	)
 )
 @SerializerConfig(addRootType="true",addBeanTypes="true")
 @SuppressWarnings({"serial"})

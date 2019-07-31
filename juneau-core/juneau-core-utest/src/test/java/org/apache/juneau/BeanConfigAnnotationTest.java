@@ -160,8 +160,6 @@ public class BeanConfigAnnotationTest {
 		AnnotationList al = a.getAnnotationList(null);
 		BeanTraverseSession bc = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 
-		System.err.println(bc.getImplClasses().values().iterator().next().getClass().getSimpleName());
-
 		check("PRIVATE", bc.getBeanClassVisibility());
 		check("PRIVATE", bc.getBeanConstructorVisibility());
 		check("A1,A3", bc.getBeanDictionaryClasses());

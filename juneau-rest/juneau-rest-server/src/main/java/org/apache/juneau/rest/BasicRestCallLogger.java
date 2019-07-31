@@ -106,6 +106,9 @@ public class BasicRestCallLogger implements RestCallLogger {
 	@Override /* RestCallLogger */
 	public void log(RestCallLoggerConfig config, HttpServletRequest req, HttpServletResponse res) {
 
+		if (config.isDisabled(req))
+			return;
+
 		RestCallLoggerRule rule = config.getRule(req, res);
 		if (rule == null)
 			return;

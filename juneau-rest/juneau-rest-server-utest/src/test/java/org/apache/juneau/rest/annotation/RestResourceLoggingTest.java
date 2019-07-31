@@ -657,7 +657,7 @@ public class RestResourceLoggingTest {
 		logging=@Logging(
 			useStackTraceHashing="true",
 			rules={
-				@LoggingRule(codes=">=500", level="warning", req="short", res="short")
+				@LoggingRule(codes=">=500", level="off", req="short", res="short")
 			}
 		)
 	)

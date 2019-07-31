@@ -287,6 +287,20 @@ public class RestCallLoggerConfig {
 		return null;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if logging is disabled for this request.
+	 *
+	 * @param req The HTTP request.
+	 * @return <jk>true</jk> if logging is disabled for this request.
+	 */
+	public boolean isDisabled(HttpServletRequest req) {
+		if (disabled == TRUE)
+			return true;
+		if (disabled == FALSE)
+			return false;
+		return isNoTraceAttr(req);
+	}
+
 	private boolean isDebug(HttpServletRequest req) {
 		Boolean b = boolAttr(req, "Debug");
 		return (b != null && b == true);

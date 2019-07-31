@@ -22,7 +22,6 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.junit.*;
@@ -114,7 +113,6 @@ public class RdfConfigAnnotationTest {
 		check("true", x.isUseXmlNamespaces());
 
 		Map<String,Object> jp = x.getJenaProperties();
-		SimpleJson.DEFAULT.println(jp);
 		check("true", jp.get(RDF_arp_embedding.substring(15)));
 		check("strict", jp.get(RDF_arp_errorMode.substring(15)));
 		check("strict", jp.get(RDF_arp_iriRules.substring(15)));
