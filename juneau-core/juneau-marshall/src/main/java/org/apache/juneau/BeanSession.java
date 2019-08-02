@@ -299,6 +299,10 @@ public class BeanSession extends Session {
 				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
 				if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
 					return (T)swap.unswap(this, value, to);
+				if (value instanceof Number && fc.isNumeric()) {
+					value = convertToMemberType(null, value, fc.inner());
+					return (T)swap.unswap(this, value, to);
+				}
 			}
 
 			ClassMeta<?> from = getClassMetaForObject(value);
@@ -672,9 +676,6 @@ public class BeanSession extends Session {
 
 			if (to.isBean())
 				return newBeanMap(to.getInnerClass()).load(value.toString()).getBean();
-
-			if (to.canCreateNewInstanceFromNumber(outer) && value instanceof Number)
-				return to.newInstanceFromNumber(this, outer, (Number)value);
 
 			if (to.canCreateNewInstanceFromString(outer))
 				return to.newInstanceFromString(outer, value.toString());

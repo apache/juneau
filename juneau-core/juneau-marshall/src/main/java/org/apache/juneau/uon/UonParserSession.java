@@ -275,8 +275,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			String s = parseString(r, isUrlParamValue);
 			if (s != null)
 				o = sType.newInstanceFromString(outer, s);
-		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
-			o = sType.newInstanceFromNumber(this, outer, parseNumber(r, sType.getNewInstanceFromNumberClass()));
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '(') {
 				ObjectMap m = new ObjectMap(this);

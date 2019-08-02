@@ -1516,6 +1516,24 @@ public final class ClassInfo {
 		return c != null && ! c.isInterface();
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this class is a numeric type.
+	 *
+	 * <p>
+	 * The class either extends from {@link Number} or is a primitive numeric type (any primitive other than <jk>char</jk>).
+	 *
+	 * @return <jk>true</jk> if this class is a numeric type.
+	 */
+	public boolean isNumeric() {
+		if (c == null)
+			return false;
+		if (Number.class.isAssignableFrom(c))
+			return true;
+		if (c.isPrimitive())
+			return c == short.class || c == int.class || c == long.class || c == double.class || c == float.class || c == byte.class;
+		return false;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Primitive wrappers
 	//-----------------------------------------------------------------------------------------------------------------

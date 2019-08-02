@@ -322,8 +322,6 @@ public class RdfParserSession extends ReaderParserSession {
 			o = sType.newInstanceFromString(outer, decodeString(n.asResource().getURI()));
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, decodeString(getValue(n, outer)));
-		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
-			o = sType.newInstanceFromNumber(this, outer, parseNumber(getValue(n, outer).toString(), sType.getNewInstanceFromNumberClass()));
 		} else if (n.isResource()) {
 			Resource r = n.asResource();
 			Map m = new ObjectMap(this);

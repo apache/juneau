@@ -147,8 +147,6 @@ public final class HtmlParserSession extends XmlParserSession {
 				o = parseNumber(text, (Class<? extends Number>)eType.getInnerClass());
 			else if (sType.canCreateNewInstanceFromString(outer))
 				o = sType.newInstanceFromString(outer, text);
-			else if (sType.canCreateNewInstanceFromNumber(outer))
-				o = sType.newInstanceFromNumber(this, outer, parseNumber(text, sType.getNewInstanceFromNumberClass()));
 			else
 				isValid = false;
 
@@ -161,8 +159,6 @@ public final class HtmlParserSession extends XmlParserSession {
 				o = parseCharacter(text);
 			else if (sType.canCreateNewInstanceFromString(outer))
 				o = sType.newInstanceFromString(outer, text);
-			else if (sType.canCreateNewInstanceFromNumber(outer))
-				o = sType.newInstanceFromNumber(this, outer, parseNumber(text, sType.getNewInstanceFromNumberClass()));
 			else
 				isValid = false;
 			skipTag(r, tag == STRING ? xSTRING : xA);
@@ -173,8 +169,6 @@ public final class HtmlParserSession extends XmlParserSession {
 				o = parseNumber(text, Number.class);
 			else if (sType.isNumber())
 				o = parseNumber(text, (Class<? extends Number>)sType.getInnerClass());
-			else if (sType.canCreateNewInstanceFromNumber(outer))
-				o = sType.newInstanceFromNumber(this, outer, parseNumber(text, sType.getNewInstanceFromNumberClass()));
 			else
 				isValid = false;
 			skipTag(r, xNUMBER);

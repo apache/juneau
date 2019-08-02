@@ -71,10 +71,7 @@ public final class ClassMeta<T> implements Type {
 	private final Method fromStringMethod;                  // The static valueOf(String) or fromString(String) or forString(String) method (if it has one).
 	private final ConstructorInfo
 		noArgConstructor,                                    // The no-arg constructor for this class (if it has one).
-		stringConstructor,                                   // The X(String) constructor (if it has one).
-		numberConstructor;                                   // The X(Number) constructor (if it has one).
-	private final Class<?>
-		numberConstructorType;
+		stringConstructor;                                   // The X(String) constructor (if it has one).
 	private final Method
 		exampleMethod;                                       // The example() or @Example-annotated method (if it has one).
 	private final Field
@@ -164,8 +161,6 @@ public final class ClassMeta<T> implements Type {
 			this.namePropertyMethod = builder.namePropertyMethod;
 			this.noArgConstructor = builder.noArgConstructor;
 			this.stringConstructor = builder.stringConstructor;
-			this.numberConstructor = builder.numberConstructor;
-			this.numberConstructorType = builder.numberConstructorType;
 			this.primitiveDefault = builder.primitiveDefault;
 			this.publicMethods = builder.publicMethods;
 			this.beanFilter = beanFilter;
@@ -226,8 +221,6 @@ public final class ClassMeta<T> implements Type {
 		this.fromStringMethod = mainType.fromStringMethod;
 		this.noArgConstructor = mainType.noArgConstructor;
 		this.stringConstructor = mainType.stringConstructor;
-		this.numberConstructor = mainType.numberConstructor;
-		this.numberConstructorType = mainType.numberConstructorType;
 		this.namePropertyMethod = mainType.namePropertyMethod;
 		this.parentPropertyMethod = mainType.parentPropertyMethod;
 		this.isDelegate = mainType.isDelegate;
@@ -274,8 +267,6 @@ public final class ClassMeta<T> implements Type {
 		this.fromStringMethod = null;
 		this.noArgConstructor = null;
 		this.stringConstructor = null;
-		this.numberConstructor = null;
-		this.numberConstructorType = null;
 		this.namePropertyMethod = null;
 		this.parentPropertyMethod = null;
 		this.isDelegate = false;
@@ -321,10 +312,7 @@ public final class ClassMeta<T> implements Type {
 			namePropertyMethod = null;
 		ConstructorInfo
 			noArgConstructor = null,
-			stringConstructor = null,
-			numberConstructor = null;
-		Class<?>
-			numberConstructorType = null;
+			stringConstructor = null;
 		Object primitiveDefault = null;
 		Map<String,Method>
 			publicMethods = new LinkedHashMap<>();
@@ -519,10 +507,6 @@ public final class ClassMeta<T> implements Type {
 						ClassInfo arg = pt.get(isMemberClass ? 1 : 0);
 						if (arg.is(String.class))
 							stringConstructor = cs;
-						else if (cc != NUMBER && (arg.isChildOf(Number.class) || (arg.isPrimitive() && (arg.isAny(int.class, short.class, long.class, float.class, double.class))))) {
-							numberConstructor = cs;
-							numberConstructorType = arg.getWrapperIfPrimitive();
-						}
 					}
 				}
 			}
@@ -1598,33 +1582,6 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class can call the {@link #newInstanceFromString(Object, String)} method.
-	 *
-	 * @param outer
-	 * 	The outer class object for non-static member classes.
-	 * 	Can be <jk>null</jk> for non-member or static classes.
-	 * @return <jk>true</jk> if this class has a no-arg constructor or invocation handler.
-	 */
-	public boolean canCreateNewInstanceFromNumber(Object outer) {
-		if (numberConstructor != null) {
-			if (isMemberClass)
-				return outer != null && numberConstructor.hasParamTypes(outer.getClass());
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Returns the class type of the parameter of the numeric constructor.
-	 *
-	 * @return The class type of the numeric constructor, or <jk>null</jk> if no such constructor exists.
-	 */
-	@SuppressWarnings("unchecked")
-	public Class<? extends Number> getNewInstanceFromNumberClass() {
-		return (Class<? extends Number>) numberConstructorType;
-	}
-
-	/**
 	 * Returns the method or field annotated with {@link NameProperty @NameProperty}.
 	 *
 	 * @return
@@ -1735,34 +1692,6 @@ public final class ClassMeta<T> implements Type {
 			return c.<T>invoke(arg);
 		}
 		throw new InstantiationError("No string constructor or valueOf(String) method found for class '"+getInnerClass().getName()+"'");
-	}
-
-	/**
-	 * Create a new instance of the main class of this declared type from a <c>Number</c> input.
-	 *
-	 * <p>
-	 * In order to use this method, the class must have one of the following methods:
-	 * <ul>
-	 * 	<li><code><jk>public</jk> T(Number in);</code>
-	 * </ul>
-	 *
-	 * @param session The current bean session.
-	 * @param outer
-	 * 	The outer class object for non-static member classes.
-	 * 	Can be <jk>null</jk> for non-member or static classes.
-	 * @param arg The input argument value.
-	 * @return A new instance of the object, or <jk>null</jk> if there is no numeric constructor on the object.
-	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
-	 */
-	public T newInstanceFromNumber(BeanSession session, Object outer, Number arg) throws ExecutableException {
-		ConstructorInfo c = numberConstructor;
-		if (c != null) {
-			Object arg2 = session.convertToType(arg, numberConstructor.getRawParamType(0));
-			if (isMemberClass)
-				return c.<T>invoke(outer, arg2);
-			return c.<T>invoke(arg2);
-		}
-		throw new InstantiationError("No string constructor or valueOf(Number) method found for class '"+getInnerClass().getName()+"'");
 	}
 
 	/**

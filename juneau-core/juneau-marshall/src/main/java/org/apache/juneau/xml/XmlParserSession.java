@@ -371,8 +371,6 @@ public class XmlParserSession extends ReaderParserSession {
 			o = toArray(sType, l);
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, getElementText(r));
-		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
-			o = sType.newInstanceFromNumber(this, outer, parseNumber(getElementText(r), sType.getNewInstanceFromNumberClass()));
 		} else {
 			throw new ParseException(this,
 				"Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''",

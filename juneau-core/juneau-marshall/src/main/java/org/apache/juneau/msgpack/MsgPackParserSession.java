@@ -142,8 +142,6 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 				}
 			} else if (sType.canCreateNewInstanceFromString(outer) && dt == STRING) {
 				o = sType.newInstanceFromString(outer, o == null ? "" : o.toString());
-			} else if (sType.canCreateNewInstanceFromNumber(outer) && dt.isOneOf(INT, LONG, FLOAT, DOUBLE)) {
-				o = sType.newInstanceFromNumber(this, outer, (Number)o);
 			} else if (sType.isCollection()) {
 				if (dt == MAP) {
 					ObjectMap m = new ObjectMap(this);

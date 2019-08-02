@@ -690,12 +690,11 @@ public class OpenApiPartParserTest {
 	}
 
 	public static class F3 {
-		private String f;
+		private Long f;
 		public F3(Long in) {
-			this.f = "F3-" + in.toString();
+			this.f = in;
 		}
-		@Override
-		public String toString() {
+		public Long toLong() {
 			return f;
 		}
 	}
@@ -792,7 +791,7 @@ public class OpenApiPartParserTest {
 		Object o = p.parse(s, "1", Object.class);
 		assertObjectEquals("1", o);
 		assertClass(Long.class, o);
-		assertObjectEquals("'F3-1'", p.parse(s,  "1", F3.class));
+		assertObjectEquals("1", p.parse(s,  "1", F3.class));
 	}
 
 	@Test
@@ -811,8 +810,8 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("['1','2']", p.parse(s, "1,2", List.class, String.class));
 		assertObjectEquals("[1,2]", p.parse(s, "1,2", Object[].class));
 		assertObjectEquals("[1,2]", p.parse(s, "1,2", List.class, Object.class));
-		assertObjectEquals("['F3-1','F3-2']", p.parse(s,  "1,2", F3[].class));
-		assertObjectEquals("['F3-1','F3-2']", p.parse(s,  "1,2", List.class, F3.class));
+		assertObjectEquals("[1,2]", p.parse(s,  "1,2", F3[].class));
+		assertObjectEquals("[1,2]", p.parse(s,  "1,2", List.class, F3.class));
 		assertObjectEquals("'F4-[1,2]'", p.parse(s,  "1,2", F4.class));
 	}
 
@@ -840,9 +839,9 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("[[1,2],[3]]", p.parse(s, "1,2|3", Object[][].class));
 		assertObjectEquals("[[1,2],[3]]", p.parse(s, "1,2|3", List.class, Object[].class));
 		assertObjectEquals("[[1,2],[3]]", p.parse(s, "1,2|3", List.class, List.class, Object.class));
-		assertObjectEquals("[['F3-1','F3-2'],['F3-3']]", p.parse(s,  "1,2|3", F3[][].class));
-		assertObjectEquals("[['F3-1','F3-2'],['F3-3']]", p.parse(s,  "1,2|3", List.class, F3[].class));
-		assertObjectEquals("[['F3-1','F3-2'],['F3-3']]", p.parse(s,  "1,2|3", List.class, List.class, F3.class));
+		assertObjectEquals("[[1,2],[3]]", p.parse(s,  "1,2|3", F3[][].class));
+		assertObjectEquals("[[1,2],[3]]", p.parse(s,  "1,2|3", List.class, F3[].class));
+		assertObjectEquals("[[1,2],[3]]", p.parse(s,  "1,2|3", List.class, List.class, F3.class));
 		assertObjectEquals("['F4-[1,2]','F4-[3]']", p.parse(s, "1,2|3", F4[].class));
 		assertObjectEquals("['F4-[1,2]','F4-[3]']", p.parse(s, "1,2|3", List.class, F4.class));
 	}
@@ -853,12 +852,11 @@ public class OpenApiPartParserTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static class G1 {
-		private String f;
-		public G1(Float in) {
-			this.f = "G1-" + in.toString();
+		private float f;
+		public G1(float in) {
+			this.f = in;
 		}
-		@Override
-		public String toString() {
+		public float toFloat() {
 			return f;
 		}
 	}
@@ -875,12 +873,11 @@ public class OpenApiPartParserTest {
 	}
 
 	public static class G3 {
-		private String f;
-		public G3(Double in) {
-			this.f = "G3-" + in.toString();
+		private Double f;
+		public G3(double in) {
+			this.f = in;
 		}
-		@Override
-		public String toString() {
+		public double toDouble() {
 			return f;
 		}
 	}
@@ -907,7 +904,7 @@ public class OpenApiPartParserTest {
 		Object o =  p.parse(s, "1", Object.class);
 		assertObjectEquals("1.0",o);
 		assertClass(Float.class, o);
-		assertObjectEquals("'G1-1.0'", p.parse(s,  "1", G1.class));
+		assertObjectEquals("1.0", p.parse(s,  "1", G1.class));
 	}
 
 	@Test
@@ -923,8 +920,8 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("['1','2']", p.parse(s, "1,2", List.class, String.class));
 		assertObjectEquals("[1.0,2.0]", p.parse(s, "1,2", Object[].class));
 		assertObjectEquals("[1.0,2.0]", p.parse(s, "1,2", List.class, Object.class));
-		assertObjectEquals("['G1-1.0','G1-2.0']", p.parse(s,  "1,2", G1[].class));
-		assertObjectEquals("['G1-1.0','G1-2.0']", p.parse(s,  "1,2", List.class, G1.class));
+		assertObjectEquals("[1.0,2.0]", p.parse(s,  "1,2", G1[].class));
+		assertObjectEquals("[1.0,2.0]", p.parse(s,  "1,2", List.class, G1.class));
 		assertObjectEquals("'G2-[1.0,2.0]'", p.parse(s,  "1,2", G2.class));
 	}
 
@@ -947,9 +944,9 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("[[1.0,2.0],[3.0]]", p.parse(s, "1,2|3", Object[][].class));
 		assertObjectEquals("[[1.0,2.0],[3.0]]", p.parse(s, "1,2|3", List.class, Object[].class));
 		assertObjectEquals("[[1.0,2.0],[3.0]]", p.parse(s, "1,2|3", List.class, List.class, Object.class));
-		assertObjectEquals("[['G1-1.0','G1-2.0'],['G1-3.0']]", p.parse(s,  "1,2|3", G1[][].class));
-		assertObjectEquals("[['G1-1.0','G1-2.0'],['G1-3.0']]", p.parse(s,  "1,2|3", List.class, G1[].class));
-		assertObjectEquals("[['G1-1.0','G1-2.0'],['G1-3.0']]", p.parse(s,  "1,2|3", List.class, List.class, G1.class));
+		assertObjectEquals("[[1.0,2.0],[3.0]]", p.parse(s,  "1,2|3", G1[][].class));
+		assertObjectEquals("[[1.0,2.0],[3.0]]", p.parse(s,  "1,2|3", List.class, G1[].class));
+		assertObjectEquals("[[1.0,2.0],[3.0]]", p.parse(s,  "1,2|3", List.class, List.class, G1.class));
 		assertObjectEquals("['G2-[1.0,2.0]','G2-[3.0]']", p.parse(s, "1,2|3", G2[].class));
 		assertObjectEquals("['G2-[1.0,2.0]','G2-[3.0]']", p.parse(s, "1,2|3", List.class, G2.class));
 	}
@@ -965,7 +962,7 @@ public class OpenApiPartParserTest {
 		Object o = p.parse(s, "1", Object.class);
 		assertObjectEquals("1.0", o);
 		assertClass(Double.class, o);
-		assertObjectEquals("'G3-1.0'", p.parse(s,  "1", G3.class));
+		assertObjectEquals("1.0", p.parse(s,  "1", G3.class));
 	}
 
 	@Test
@@ -981,8 +978,8 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("['1','2']", p.parse(s, "1,2", List.class, String.class));
 		assertObjectEquals("[1.0,2.0]", p.parse(s, "1,2", Object[].class));
 		assertObjectEquals("[1.0,2.0]", p.parse(s, "1,2", List.class, Object.class));
-		assertObjectEquals("['G3-1.0','G3-2.0']", p.parse(s,  "1,2", G3[].class));
-		assertObjectEquals("['G3-1.0','G3-2.0']", p.parse(s,  "1,2", List.class, G3.class));
+		assertObjectEquals("[1.0,2.0]", p.parse(s,  "1,2", G3[].class));
+		assertObjectEquals("[1.0,2.0]", p.parse(s,  "1,2", List.class, G3.class));
 		assertObjectEquals("'G4-[1.0,2.0]'", p.parse(s,  "1,2", G4.class));
 	}
 
@@ -1005,9 +1002,9 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("[[1.0,2.0],[3.0]]", p.parse(s, "1,2|3", Object[][].class));
 		assertObjectEquals("[[1.0,2.0],[3.0]]", p.parse(s, "1,2|3", List.class, Object[].class));
 		assertObjectEquals("[[1.0,2.0],[3.0]]", p.parse(s, "1,2|3", List.class, List.class, Object.class));
-		assertObjectEquals("[['G3-1.0','G3-2.0'],['G3-3.0']]", p.parse(s,  "1,2|3", G3[][].class));
-		assertObjectEquals("[['G3-1.0','G3-2.0'],['G3-3.0']]", p.parse(s,  "1,2|3", List.class, G3[].class));
-		assertObjectEquals("[['G3-1.0','G3-2.0'],['G3-3.0']]", p.parse(s,  "1,2|3", List.class, List.class, G3.class));
+		assertObjectEquals("[[1.0,2.0],[3.0]]", p.parse(s,  "1,2|3", G3[][].class));
+		assertObjectEquals("[[1.0,2.0],[3.0]]", p.parse(s,  "1,2|3", List.class, G3[].class));
+		assertObjectEquals("[[1.0,2.0],[3.0]]", p.parse(s,  "1,2|3", List.class, List.class, G3.class));
 		assertObjectEquals("['G4-[1.0,2.0]','G4-[3.0]']", p.parse(s, "1,2|3", G4[].class));
 		assertObjectEquals("['G4-[1.0,2.0]','G4-[3.0]']", p.parse(s, "1,2|3", List.class, G4.class));
 	}

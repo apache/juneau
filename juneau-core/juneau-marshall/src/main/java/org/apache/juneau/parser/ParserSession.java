@@ -774,10 +774,7 @@ public abstract class ParserSession extends BeanSession {
 		if (sType.isChar())
 			o = parseCharacter(s);
 		else if (sType.isNumber())
-			if (type.canCreateNewInstanceFromNumber(outer))
-				o = type.newInstanceFromNumber(this, outer, parseNumber(s, type.getNewInstanceFromNumberClass()));
-			else
-				o = parseNumber(s, (Class<? extends Number>)sType.getInnerClass());
+			o = parseNumber(s, (Class<? extends Number>)sType.getInnerClass());
 		else if (sType.isBoolean())
 			o = Boolean.parseBoolean(s);
 		else if (! (sType.isCharSequence() || sType.isObject())) {

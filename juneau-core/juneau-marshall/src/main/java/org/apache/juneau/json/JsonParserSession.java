@@ -192,8 +192,6 @@ public final class JsonParserSession extends ReaderParserSession {
 			o = parseIntoBeanMap2(r, m).getBean();
 		} else if (sType.canCreateNewInstanceFromString(outer) && (c == '\'' || c == '"')) {
 			o = sType.newInstanceFromString(outer, parseString(r));
-		} else if (sType.canCreateNewInstanceFromNumber(outer) && isFirstNumberChar((char)c)) {
-			o = sType.newInstanceFromNumber(this, outer, parseNumber(r, sType.getNewInstanceFromNumberClass()));
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '{') {
 				ObjectMap m = new ObjectMap(this);
