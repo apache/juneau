@@ -299,7 +299,8 @@ public class BeanSession extends Session {
 				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
 				if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
 					return (T)swap.unswap(this, value, to);
-				if (value instanceof Number && fc.isNumeric()) {
+				ClassMeta fcm = getClassMeta(fc.inner());
+				if (fcm.isNumber() && value instanceof Number) {
 					value = convertToMemberType(null, value, fc.inner());
 					return (T)swap.unswap(this, value, to);
 				}
