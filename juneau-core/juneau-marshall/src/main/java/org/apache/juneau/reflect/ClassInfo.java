@@ -325,7 +325,7 @@ public final class ClassInfo {
 	 */
 	public MethodInfo getPublicMethod(String name, Class<?>...args) {
 		for (MethodInfo mi : getPublicMethods())
-			if (mi.hasName(name) && mi.hasArgs(args))
+			if (mi.hasName(name) && mi.hasParamTypes(args))
 				return mi;
 		return null;
 	}
@@ -340,7 +340,7 @@ public final class ClassInfo {
 	 */
 	public MethodInfo getMethod(String name, Class<?>...args) {
 		for (MethodInfo mi : getAllMethods())
-			if (mi.hasName(name) && mi.hasArgs(args))
+			if (mi.hasName(name) && mi.hasParamTypes(args))
 				return mi;
 		return null;
 	}
@@ -431,7 +431,7 @@ public final class ClassInfo {
 			for (MethodInfo m : getPublicMethods())
 				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED)
 						&& m.hasReturnType(c)
-						&& m.hasArgs(String.class)
+						&& m.hasParamTypes(String.class)
 						&& isOneOf(m.getSimpleName(), "create","fromString","fromValue","valueOf","parse","parseString","forName","forString"))
 					return m;
 		return null;
@@ -454,7 +454,7 @@ public final class ClassInfo {
 	public MethodInfo getStaticCreateMethod(Class<?> ic) {
 		if (c != null) {
 			for (MethodInfo m : getPublicMethods()) {
-				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.hasArgs(ic)) {
+				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.hasParamTypes(ic)) {
 					String n = m.getSimpleName();
 					if (isOneOf(n, "create","from") || (n.startsWith("from") && n.substring(4).equals(ic.getSimpleName()))) {
 						return m;
@@ -476,7 +476,7 @@ public final class ClassInfo {
 	public MethodInfo getStaticPublicMethod(String name, Class<?> rt, Class<?>...args) {
 		if (c != null)
 			for (MethodInfo m : getPublicMethods())
-				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && name.equals(m.getSimpleName()) && m.hasReturnType(rt) && m.hasArgs(args))
+				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && name.equals(m.getSimpleName()) && m.hasReturnType(rt) && m.hasParamTypes(args))
 					return m;
 		return null;
 	}
@@ -548,7 +548,7 @@ public final class ClassInfo {
 	 */
 	public ConstructorInfo getPublicConstructor(Class<?>...args) {
 		for (ConstructorInfo ci : getPublicConstructors())
-			if (ci.hasArgs(args))
+			if (ci.hasParamTypes(args))
 				return ci;
 		return null;
 	}
@@ -562,7 +562,7 @@ public final class ClassInfo {
 	 */
 	public ConstructorInfo getDeclaredConstructor(Class<?>...args) {
 		for (ConstructorInfo ci : getDeclaredConstructors())
-			if (ci.hasArgs(args))
+			if (ci.hasParamTypes(args))
 				return ci;
 		return null;
 	}
@@ -1444,6 +1444,15 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Returns <jk>false</jk> if this class is a member class and not static.
+	 *
+	 * @return <jk>false</jk> if this class is a member class and not static.
+	 */
+	public boolean isNotNonStaticMemberClass() {
+		return ! isNonStaticMemberClass();
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this class is a local class.
 	 *
 	 * @return <jk>true</jk> if this class is a local class.
@@ -1820,6 +1829,16 @@ public final class ClassInfo {
 		if (parent instanceof Class)
 			return isChildOf((Class<?>)parent);
 		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a child or the same as <c>parent</c>.
+	 *
+	 * @param parent The parent class.
+	 * @return <jk>true</jk> if this class is a parent or the same as <c>parent</c>.
+	 */
+	public boolean isChildOf(ClassInfo parent) {
+		return isChildOf(parent.inner());
 	}
 
 	/**

@@ -1898,7 +1898,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void isChildOf_null() {
-		assertFalse(ka.isChildOf(null));
+		assertFalse(ka.isChildOf((Class<?>)null));
 	}
 
 	@Test

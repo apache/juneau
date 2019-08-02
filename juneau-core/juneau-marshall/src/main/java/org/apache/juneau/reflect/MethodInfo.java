@@ -20,7 +20,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.ExecutableException;
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -380,6 +380,16 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this method has this return type.
+	 *
+	 * @param ci The return type to test for.
+	 * @return <jk>true</jk> if this method has this return type.
+	 */
+	public boolean hasReturnType(ClassInfo ci) {
+		return hasReturnType(ci.inner());
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this method has this parent return type.
 	 *
 	 * @param c The return type to test for.
@@ -387,6 +397,16 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 */
 	public boolean hasReturnTypeParent(Class<?> c) {
 		return ClassInfo.of(c).isParentOf(m.getReturnType());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has this parent return type.
+	 *
+	 * @param ci The return type to test for.
+	 * @return <jk>true</jk> if this method has this parent return type.
+	 */
+	public boolean hasReturnTypeParent(ClassInfo ci) {
+		return hasReturnTypeParent(ci.inner());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

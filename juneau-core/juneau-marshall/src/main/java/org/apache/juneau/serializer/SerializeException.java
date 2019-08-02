@@ -14,6 +14,7 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 
@@ -26,6 +27,25 @@ import org.apache.juneau.json.*;
 public class SerializeException extends FormattedException {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Creator method.
+	 *
+	 * <p>
+	 * If the throwable is already a {@link SerializeException}, we simply return that exception as-is.
+	 * If the throwable is an {@link InvocationTargetException}, we unwrap the thrown exception.
+	 * Otherwise we create a new {@link SerializeException}.
+	 *
+	 * @param e The exception being wrapped or unwrapped.
+	 * @return A new {@link SerializeException}.
+	 */
+	public static SerializeException create(Throwable e) {
+		if (e instanceof InvocationTargetException)
+			e = ((InvocationTargetException)e).getCause();
+		if (e instanceof SerializeException)
+			return (SerializeException)e;
+		return new SerializeException(e);
+	}
 
 	/**
 	 * Constructor.
@@ -63,7 +83,7 @@ public class SerializeException extends FormattedException {
 	 *
 	 * @param causedBy The inner exception.
 	 */
-	public SerializeException(Exception causedBy) {
+	public SerializeException(Throwable causedBy) {
 		super(causedBy, getMessage(null, causedBy.getMessage()));
 	}
 

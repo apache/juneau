@@ -472,30 +472,30 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void hasArgs() {
-		assertTrue(e_hasParams.hasArgs(int.class));
-		assertFalse(e_hasParams.hasArgs());
-		assertFalse(e_hasParams.hasArgs(long.class));
-		assertTrue(e_hasNoParams.hasArgs());
-		assertFalse(e_hasNoParams.hasArgs(long.class));
+		assertTrue(e_hasParams.hasParamTypes(int.class));
+		assertFalse(e_hasParams.hasParamTypes(new Class[0]));
+		assertFalse(e_hasParams.hasParamTypes(long.class));
+		assertTrue(e_hasNoParams.hasParamTypes(new Class[0]));
+		assertFalse(e_hasNoParams.hasParamTypes(long.class));
 	}
 
 	@Test
 	public void hasArgParents() {
-		assertTrue(e_hasStringParam.hasArgParents(String.class));
-		assertTrue(e_hasStringParam.hasArgParents(CharSequence.class));
-		assertFalse(e_hasStringParam.hasArgParents(StringBuilder.class));
-		assertFalse(e_hasStringParam.hasArgParents());
-		assertFalse(e_hasStringParam.hasArgParents(String.class, String.class));
-		assertFalse(e_hasStringParam.hasArgParents(long.class));
+		assertTrue(e_hasStringParam.hasParamTypeParents(String.class));
+		assertTrue(e_hasStringParam.hasParamTypeParents(CharSequence.class));
+		assertFalse(e_hasStringParam.hasParamTypeParents(StringBuilder.class));
+		assertFalse(e_hasStringParam.hasParamTypeParents(new Class[0]));
+		assertFalse(e_hasStringParam.hasParamTypeParents(String.class, String.class));
+		assertFalse(e_hasStringParam.hasParamTypeParents(long.class));
 	}
 
 	@Test
 	public void hasFuzzyArgs() {
-		assertTrue(e_hasParams.hasFuzzyArgs(int.class));
-		assertTrue(e_hasParams.hasFuzzyArgs(int.class, long.class));
-		assertFalse(e_hasParams.hasFuzzyArgs(long.class));
-		assertTrue(e_hasNoParams.hasFuzzyArgs());
-		assertTrue(e_hasNoParams.hasFuzzyArgs(long.class));
+		assertTrue(e_hasParams.hasFuzzyParamTypes(int.class));
+		assertTrue(e_hasParams.hasFuzzyParamTypes(int.class, long.class));
+		assertFalse(e_hasParams.hasFuzzyParamTypes(long.class));
+		assertTrue(e_hasNoParams.hasFuzzyParamTypes(new Class[0]));
+		assertTrue(e_hasNoParams.hasFuzzyParamTypes(long.class));
 	}
 
 	@Test

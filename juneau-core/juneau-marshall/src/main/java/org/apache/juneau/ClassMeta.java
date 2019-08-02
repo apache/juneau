@@ -441,7 +441,7 @@ public final class ClassMeta<T> implements Type {
 			for (String methodName : new String[]{"fromString","fromValue","valueOf","parse","parseString","forName","forString"}) {
 				if (fromStringMethod == null) {
 					for (MethodInfo m : ci.getPublicMethods()) {
-						if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(methodName) && m.hasReturnType(c) && m.hasArgs(String.class)) {
+						if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(methodName) && m.hasReturnType(c) && m.hasParamTypes(String.class)) {
 							fromStringMethod = m.inner();
 							break;
 						}
@@ -451,7 +451,7 @@ public final class ClassMeta<T> implements Type {
 
 			// Find example() method if present.
 			for (MethodInfo m : ci.getPublicMethods()) {
-				if (m.isAll(PUBLIC, NOT_DEPRECATED, STATIC) && m.hasName("example") && m.hasFuzzyArgs(BeanSession.class)) {
+				if (m.isAll(PUBLIC, NOT_DEPRECATED, STATIC) && m.hasName("example") && m.hasFuzzyParamTypes(BeanSession.class)) {
 					exampleMethod = m.inner();
 					break;
 				}
@@ -499,7 +499,7 @@ public final class ClassMeta<T> implements Type {
 
 			for (MethodInfo m : ci.getDeclaredMethods()) {
 				if (m.hasAnnotation(Example.class)) {
-					if (! (m.isStatic() && m.hasFuzzyArgs(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
+					if (! (m.isStatic() && m.hasFuzzyParamTypes(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m);
 					m.setAccessible();
 					exampleMethod = m.inner();
@@ -702,7 +702,16 @@ public final class ClassMeta<T> implements Type {
 
 			PojoSwap defaultSwap = DefaultSwaps.find(ci);
 			if (defaultSwap == null)
-				defaultSwap = DynamicSwaps.find(ci);
+				defaultSwap = AutoObjectSwap.find(ci);
+			if (defaultSwap == null)
+				defaultSwap = AutoNumberSwap.find(ci);
+			if (defaultSwap == null)
+				defaultSwap = AutoMapSwap.find(ci);
+			if (defaultSwap == null)
+				defaultSwap = AutoListSwap.find(ci);
+			// TODO
+			//if (defaultSwap == null)
+			//	defaultSwap = AutoStringSwap.find(ci);
 			if (defaultSwap != null)
 				l.add(defaultSwap);
 		}
@@ -1545,7 +1554,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean canCreateNewInstance(Object outer) {
 		if (isMemberClass)
-			return outer != null && noArgConstructor != null && noArgConstructor.hasArgs(outer.getClass());
+			return outer != null && noArgConstructor != null && noArgConstructor.hasParamTypes(outer.getClass());
 		return canCreateNewInstance();
 	}
 
@@ -1565,7 +1574,7 @@ public final class ClassMeta<T> implements Type {
 		if (beanMeta.constructor == null)
 			return false;
 		if (isMemberClass)
-			return outer != null && beanMeta.constructor.hasArgs(outer.getClass());
+			return outer != null && beanMeta.constructor.hasParamTypes(outer.getClass());
 		return true;
 	}
 
@@ -1582,7 +1591,7 @@ public final class ClassMeta<T> implements Type {
 			return true;
 		if (stringConstructor != null) {
 			if (isMemberClass)
-				return outer != null && stringConstructor.hasArgs(outer.getClass(), String.class);
+				return outer != null && stringConstructor.hasParamTypes(outer.getClass(), String.class);
 			return true;
 		}
 		return false;
@@ -1599,7 +1608,7 @@ public final class ClassMeta<T> implements Type {
 	public boolean canCreateNewInstanceFromNumber(Object outer) {
 		if (numberConstructor != null) {
 			if (isMemberClass)
-				return outer != null && numberConstructor.hasArgs(outer.getClass());
+				return outer != null && numberConstructor.hasParamTypes(outer.getClass());
 			return true;
 		}
 		return false;

@@ -56,8 +56,8 @@ public final class ClassUtils {
 
 	/**
 	 * Shortcut for calling {@link MethodInfo#of(ClassInfo, Method)}.
-	 * 
-	 * @param c 
+	 *
+	 * @param c
 	 * 	The class containing the method.
 	 * 	<br>Note that this isn't necessarily the declaring class, but could be a subclass
 	 * 	of the declaring class.
@@ -148,6 +148,29 @@ public final class ClassUtils {
 			ClassInfo pi = getClassInfo(p).getWrapperInfoIfPrimitive();
 			for (Class<?> a : argTypes) {
 				ClassInfo ai = getClassInfo(a).getWrapperInfoIfPrimitive();
+				if (pi.isParentOf(ai.inner())) {
+					matches++;
+					continue outer;
+				}
+			}
+			return -1;
+		}
+		return matches;
+	}
+
+	/**
+	 * Returns a number representing the number of arguments that match the specified parameters.
+	 *
+	 * @param paramTypes The parameters types specified on a method.
+	 * @param argTypes The class types of the arguments being passed to the method.
+	 * @return The number of matching arguments, or <c>-1</c> a parameter was found that isn't in the list of args.
+	 */
+	public static int fuzzyArgsMatch(Class<?>[] paramTypes, ClassInfo... argTypes) {
+		int matches = 0;
+		outer: for (Class<?> p : paramTypes) {
+			ClassInfo pi = getClassInfo(p).getWrapperInfoIfPrimitive();
+			for (ClassInfo a : argTypes) {
+				ClassInfo ai = a.getWrapperInfoIfPrimitive();
 				if (pi.isParentOf(ai.inner())) {
 					matches++;
 					continue outer;
@@ -313,7 +336,7 @@ public final class ClassUtils {
 		for (int i = 0; i < paramTypes.length; i++) {
 			ClassInfo pt = getClassInfo(paramTypes[i]).getWrapperInfoIfPrimitive();
 			for (int j = 0; j < args.length; j++) {
-				if (pt.isParentOf(args[j].getClass())) {
+				if (args[j] != null && pt.isParentOf(args[j].getClass())) {
 					params[i] = args[j];
 					break;
 				}

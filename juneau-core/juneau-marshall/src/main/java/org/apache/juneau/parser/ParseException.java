@@ -14,11 +14,13 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Exception that indicates invalid syntax encountered during parsing.
@@ -26,6 +28,25 @@ import org.apache.juneau.internal.*;
 public class ParseException extends FormattedException {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Creator method.
+	 *
+	 * <p>
+	 * If the throwable is already a {@link ParseException}, we simply return that exception as-is.
+	 * If the throwable is an {@link InvocationTargetException}, we unwrap the thrown exception.
+	 * Otherwise we create a new {@link ParseException}.
+	 *
+	 * @param e The exception being wrapped or unwrapped.
+	 * @return A new {@link SerializeException}.
+	 */
+	public static ParseException create(Throwable e) {
+		if (e instanceof InvocationTargetException)
+			e = ((InvocationTargetException)e).getCause();
+		if (e instanceof ParseException)
+			return (ParseException)e;
+		return new ParseException(e);
+	}
 
 	/**
 	 * Constructor.

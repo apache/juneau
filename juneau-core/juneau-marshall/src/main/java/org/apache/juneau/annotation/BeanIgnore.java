@@ -37,7 +37,7 @@ import java.lang.annotation.*;
  * </ul>
  */
 @Documented
-@Target({FIELD,METHOD,TYPE})
+@Target({FIELD,METHOD,TYPE,CONSTRUCTOR})
 @Retention(RUNTIME)
 @Inherited
 public @interface BeanIgnore {}

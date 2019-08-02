@@ -512,11 +512,28 @@ public abstract class ExecutableInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
-	public final boolean hasArgs(Class<?>...args) {
+	public final boolean hasParamTypes(Class<?>...args) {
 		Class<?>[] pt = rawParamTypes();
 		if (pt.length == args.length) {
 			for (int i = 0; i < pt.length; i++)
 				if (! pt[i].equals(args[i]))
+					return false;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has the specified arguments.
+	 *
+	 * @param args The arguments to test for.
+	 * @return <jk>true</jk> if this method has this arguments in the exact order.
+	 */
+	public final boolean hasParamTypes(ClassInfo...args) {
+		Class<?>[] pt = rawParamTypes();
+		if (pt.length == args.length) {
+			for (int i = 0; i < pt.length; i++)
+				if (! pt[i].equals(args[i].inner()))
 					return false;
 			return true;
 		}
@@ -529,11 +546,28 @@ public abstract class ExecutableInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
-	public final boolean hasArgParents(Class<?>...args) {
+	public final boolean hasParamTypeParents(Class<?>...args) {
 		Class<?>[] pt = rawParamTypes();
 		if (pt.length == args.length) {
 			for (int i = 0; i < pt.length; i++)
 				if (! args[i].isAssignableFrom(pt[i]))
+					return false;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has the specified argument parent classes.
+	 *
+	 * @param args The arguments to test for.
+	 * @return <jk>true</jk> if this method has this arguments in the exact order.
+	 */
+	public final boolean hasParamTypeParents(ClassInfo...args) {
+		Class<?>[] pt = rawParamTypes();
+		if (pt.length == args.length) {
+			for (int i = 0; i < pt.length; i++)
+				if (! args[i].inner().isAssignableFrom(pt[i]))
 					return false;
 			return true;
 		}
@@ -546,7 +580,17 @@ public abstract class ExecutableInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has at most only this arguments in any order.
 	 */
-	public final boolean hasFuzzyArgs(Class<?>...args) {
+	public final boolean hasFuzzyParamTypes(Class<?>...args) {
+		return ClassUtils.fuzzyArgsMatch(rawParamTypes(), args) != -1;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has at most only this arguments in any order.
+	 *
+	 * @param args The arguments to test for.
+	 * @return <jk>true</jk> if this method has at most only this arguments in any order.
+	 */
+	public boolean hasFuzzyParamTypes(ClassInfo...args) {
 		return ClassUtils.fuzzyArgsMatch(rawParamTypes(), args) != -1;
 	}
 
@@ -665,6 +709,29 @@ public abstract class ExecutableInfo {
 	 */
 	public final boolean hasName(String name) {
 		return getSimpleName().equals(name);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has a name in the specified list.
+	 *
+	 * @param names The names to test for.
+	 * @return <jk>true</jk> if this method has one of the names.
+	 */
+	public final boolean hasName(String...names) {
+		for (String n : names)
+			if (getSimpleName().equals(n))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has a name in the specified set.
+	 *
+	 * @param names The names to test for.
+	 * @return <jk>true</jk> if this method has one of the names.
+	 */
+	public final boolean hasName(Set<String> names) {
+		return names.contains(getSimpleName());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
