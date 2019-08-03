@@ -149,7 +149,7 @@ public class OpenApiParserSession extends UonParserSession {
 				Object[] o = new Object[ss.length];
 				for (int i = 0; i < ss.length; i++)
 					o[i] = parse(partType, items, ss[i], eType);
-				if (type.hasTransformFrom(schema.getParsedType()) || schema.getParsedType().hasTransformTo(type))
+				if (type.hasMutaterFrom(schema.getParsedType()) || schema.getParsedType().hasMutaterTo(type))
 					return toType(toType(o, schema.getParsedType()), type);
 				return toType(o, type);
 

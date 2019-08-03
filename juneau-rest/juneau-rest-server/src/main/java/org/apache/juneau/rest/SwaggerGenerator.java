@@ -785,8 +785,8 @@ final class SwaggerGenerator {
 			example = jp.parse(sex, type);
 		} else {
 			ClassMeta<?> cm = js.getClassMeta(type);
-			if (cm.hasStringTransform()) {
-				example = cm.getStringTransform().transform(sex);
+			if (cm.hasStringMutater()) {
+				example = cm.getStringMutater().mutate(sex);
 			}
 		}
 

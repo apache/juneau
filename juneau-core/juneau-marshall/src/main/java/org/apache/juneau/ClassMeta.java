@@ -109,9 +109,9 @@ public final class ClassMeta<T> implements Type {
 	private final BeanRegistry beanRegistry;                // The bean registry of this class meta (if it has one).
 	private final ClassMeta<?>[] args;                      // Arg types if this is an array of args.
 	private final Object example;                          // Example object.
-	private final Map<Class<?>,Transform<?,T>> fromTransforms = new ConcurrentHashMap<>();
-	private final Map<Class<?>,Transform<T,?>> toTransforms = new ConcurrentHashMap<>();
-	private final Transform<String,T> stringTransform;
+	private final Map<Class<?>,Mutater<?,T>> fromMutaters = new ConcurrentHashMap<>();
+	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
+	private final Mutater<String,T> stringMutater;
 
 	private ReadWriteLock lock = new ReentrantReadWriteLock(false);
 	private Lock rLock = lock.readLock(), wLock = lock.writeLock();
@@ -186,7 +186,7 @@ public final class ClassMeta<T> implements Type {
 			this.exampleField = builder.exampleField;
 			this.example = builder.example;
 			this.args = null;
-			this.stringTransform = builder.stringTransform;
+			this.stringMutater = builder.stringMutater;
 		} catch (ClassMetaRuntimeException e) {
 			notABeanReason = e.getMessage();
 			throw e;
@@ -247,7 +247,7 @@ public final class ClassMeta<T> implements Type {
 		this.exampleField = mainType.exampleField;
 		this.example = mainType.example;
 		this.args = null;
-		this.stringTransform = mainType.stringTransform;
+		this.stringMutater = mainType.stringMutater;
 	}
 
 	/**
@@ -291,7 +291,7 @@ public final class ClassMeta<T> implements Type {
 		this.exampleMethod = null;
 		this.exampleField = null;
 		this.example = null;
-		this.stringTransform = null;
+		this.stringMutater = null;
 	}
 
 	@SuppressWarnings({"unchecked","rawtypes","hiding"})
@@ -337,7 +337,7 @@ public final class ClassMeta<T> implements Type {
 		Method exampleMethod;
 		Field exampleField;
 		Object example;
-		Transform<String,T> stringTransform;
+		Mutater<String,T> stringMutater;
 
 		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 			this.innerClass = innerClass;
@@ -661,7 +661,7 @@ public final class ClassMeta<T> implements Type {
 
 			this.example = example;
 
-			this.stringTransform = TransformCache.get(String.class, c);
+			this.stringMutater = Mutaters.get(String.class, c);
 		}
 
 		private BeanFilter findBeanFilter() {
@@ -1848,8 +1848,8 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from a Reader.
 	 */
-	public boolean hasReaderTransform() {
-		return hasTransformFrom(Reader.class);
+	public boolean hasReaderMutater() {
+		return hasMutaterFrom(Reader.class);
 	}
 
 	/**
@@ -1857,8 +1857,8 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
-	public Transform<Reader,T> getReaderTransform() {
-		return getFromTransform(Reader.class);
+	public Mutater<Reader,T> getReaderMutater() {
+		return getFromMutater(Reader.class);
 	}
 
 	/**
@@ -1866,8 +1866,8 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from an InputStream.
 	 */
-	public boolean hasInputStreamTransform() {
-		return hasTransformFrom(InputStream.class);
+	public boolean hasInputStreamMutater() {
+		return hasMutaterFrom(InputStream.class);
 	}
 
 	/**
@@ -1875,8 +1875,8 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
-	public Transform<InputStream,T> getInputStreamTransform() {
-		return getFromTransform(InputStream.class);
+	public Mutater<InputStream,T> getInputStreamMutater() {
+		return getFromMutater(InputStream.class);
 	}
 
 	/**
@@ -1884,8 +1884,8 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from a String.
 	 */
-	public boolean hasStringTransform() {
-		return stringTransform != null;
+	public boolean hasStringMutater() {
+		return stringMutater != null;
 	}
 
 	/**
@@ -1893,8 +1893,8 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
-	public Transform<String,T> getStringTransform() {
-		return stringTransform;
+	public Mutater<String,T> getStringMutater() {
+		return stringMutater;
 	}
 
 	/**
@@ -1903,8 +1903,8 @@ public final class ClassMeta<T> implements Type {
 	 * @param c The class type to convert from.
 	 * @return <jk>true</jk> if this class can be instantiated from the specified type.
 	 */
-	public boolean hasTransformFrom(Class<?> c) {
-		return getFromTransform(c) != null;
+	public boolean hasMutaterFrom(Class<?> c) {
+		return getFromMutater(c) != null;
 	}
 
 	/**
@@ -1913,8 +1913,8 @@ public final class ClassMeta<T> implements Type {
 	 * @param c The class type to convert from.
 	 * @return <jk>true</jk> if this class can be instantiated from the specified type.
 	 */
-	public boolean hasTransformFrom(ClassMeta<?> c) {
-		return getFromTransform(c.getInnerClass()) != null;
+	public boolean hasMutaterFrom(ClassMeta<?> c) {
+		return getFromMutater(c.getInnerClass()) != null;
 	}
 
 	/**
@@ -1923,8 +1923,8 @@ public final class ClassMeta<T> implements Type {
 	 * @param c The class type to convert from.
 	 * @return <jk>true</jk> if this class can be transformed to the specified type.
 	 */
-	public boolean hasTransformTo(Class<?> c) {
-		return getToTransform(c) != null;
+	public boolean hasMutaterTo(Class<?> c) {
+		return getToMutater(c) != null;
 	}
 
 	/**
@@ -1933,8 +1933,8 @@ public final class ClassMeta<T> implements Type {
 	 * @param c The class type to convert from.
 	 * @return <jk>true</jk> if this class can be transformed to the specified type.
 	 */
-	public boolean hasTransformTo(ClassMeta<?> c) {
-		return getToTransform(c.getInnerClass()) != null;
+	public boolean hasMutaterTo(ClassMeta<?> c) {
+		return getToMutater(c.getInnerClass()) != null;
 	}
 
 	/**
@@ -1944,9 +1944,9 @@ public final class ClassMeta<T> implements Type {
 	 * @return The transformed object.
 	 */
 	@SuppressWarnings({"unchecked","rawtypes"})
-	public T transformFrom(Object o) {
-		Transform t = getFromTransform(o.getClass());
-		return (T)(t == null ? null : t.transform(o));
+	public T mutateFrom(Object o) {
+		Mutater t = getFromMutater(o.getClass());
+		return (T)(t == null ? null : t.mutate(o));
 	}
 
 	/**
@@ -1957,9 +1957,9 @@ public final class ClassMeta<T> implements Type {
 	 * @return The transformed object.
 	 */
 	@SuppressWarnings({"unchecked","rawtypes"})
-	public <O> O transformTo(Object o, Class<O> c) {
-		Transform t = getToTransform(c);
-		return (O)(t == null ? null : t.transform(o));
+	public <O> O mutateTo(Object o, Class<O> c) {
+		Mutater t = getToMutater(c);
+		return (O)(t == null ? null : t.mutate(o));
 	}
 
 	/**
@@ -1969,8 +1969,8 @@ public final class ClassMeta<T> implements Type {
 	 * @param c The class
 	 * @return The transformed object.
 	 */
-	public <O> O transformTo(Object o, ClassMeta<O> c) {
-		return transformTo(o, c.getInnerClass());
+	public <O> O mutateTo(Object o, ClassMeta<O> c) {
+		return mutateTo(o, c.getInnerClass());
 	}
 
 	/**
@@ -1980,17 +1980,17 @@ public final class ClassMeta<T> implements Type {
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <I> Transform<I,T> getFromTransform(Class<I> c) {
-		Transform t = fromTransforms.get(c);
-		if (t == TransformCache.NULL)
+	public <I> Mutater<I,T> getFromMutater(Class<I> c) {
+		Mutater t = fromMutaters.get(c);
+		if (t == Mutaters.NULL)
 			return null;
 		if (t == null) {
-			t = TransformCache.get(c, innerClass);
+			t = Mutaters.get(c, innerClass);
 			if (t == null)
-				t = TransformCache.NULL;
-			fromTransforms.put(c, t);
+				t = Mutaters.NULL;
+			fromMutaters.put(c, t);
 		}
-		return t == TransformCache.NULL ? null : t;
+		return t == Mutaters.NULL ? null : t;
 	}
 
 	/**
@@ -2000,17 +2000,17 @@ public final class ClassMeta<T> implements Type {
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <O> Transform<T,O> getToTransform(Class<O> c) {
-		Transform t = toTransforms.get(c);
-		if (t == TransformCache.NULL)
+	public <O> Mutater<T,O> getToMutater(Class<O> c) {
+		Mutater t = toMutaters.get(c);
+		if (t == Mutaters.NULL)
 			return null;
 		if (t == null) {
-			t = TransformCache.get(innerClass, c);
+			t = Mutaters.get(innerClass, c);
 			if (t == null)
-				t = TransformCache.NULL;
-			toTransforms.put(c, t);
+				t = Mutaters.NULL;
+			toMutaters.put(c, t);
 		}
-		return t == TransformCache.NULL ? null : t;
+		return t == Mutaters.NULL ? null : t;
 	}
 
 	/**

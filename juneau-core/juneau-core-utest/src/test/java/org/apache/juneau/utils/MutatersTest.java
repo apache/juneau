@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.internal.TransformCache.*;
+import static org.apache.juneau.reflect.Mutaters.*;
 import static org.junit.Assert.*;
 
 import org.junit.*;
 
-public class TransformCacheTest {
+public class MutatersTest {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors.
@@ -37,15 +37,15 @@ public class TransformCacheTest {
 	}
 	@Test
 	public void stringConstructor() {
-		assertEquals("foo", get(String.class, A.class).transform("foo").f);
+		assertEquals("foo", get(String.class, A.class).mutate("foo").f);
 	}
 	@Test
 	public void intConstructor() {
-		assertEquals("1", get(int.class, A.class).transform(1).f);
+		assertEquals("1", get(int.class, A.class).mutate(1).f);
 	}
 	@Test
 	public void integerConstructor() {
-		assertEquals("2", get(Integer.class, A.class).transform(2).f);
+		assertEquals("2", get(Integer.class, A.class).mutate(2).f);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ public class TransformCacheTest {
 	}
 	@Test
 	public void fromString_create() {
-		assertEquals("foo", get(String.class, D1.class).transform("foo").f);
+		assertEquals("foo", get(String.class, D1.class).mutate("foo").f);
 	}
 
 	public static class D2 {
@@ -71,7 +71,7 @@ public class TransformCacheTest {
 	}
 	@Test
 	public void fromString_fromString() {
-		assertEquals("foo", get(String.class, D2.class).transform("foo").f);
+		assertEquals("foo", get(String.class, D2.class).mutate("foo").f);
 	}
 
 	public static class D3 {
@@ -82,7 +82,7 @@ public class TransformCacheTest {
 	}
 	@Test
 	public void fromString_fromValue() {
-		assertEquals("foo", get(String.class, D3.class).transform("foo").f);
+		assertEquals("foo", get(String.class, D3.class).mutate("foo").f);
 	}
 
 	public static class D4 {
@@ -93,7 +93,7 @@ public class TransformCacheTest {
 	}
 	@Test
 	public void fromString_valueOf() {
-		assertEquals("foo", get(String.class, D4.class).transform("foo").f);
+		assertEquals("foo", get(String.class, D4.class).mutate("foo").f);
 	}
 
 	public static class D5 {
@@ -104,7 +104,7 @@ public class TransformCacheTest {
 	}
 	@Test
 	public void fromString_parse() {
-		assertEquals("foo", get(String.class, D5.class).transform("foo").f);
+		assertEquals("foo", get(String.class, D5.class).mutate("foo").f);
 	}
 
 	public static class D6 {
@@ -115,7 +115,7 @@ public class TransformCacheTest {
 	}
 	@Test
 	public void fromString_parseString() {
-		assertEquals("foo", get(String.class, D6.class).transform("foo").f);
+		assertEquals("foo", get(String.class, D6.class).mutate("foo").f);
 	}
 
 	public static class D7 {
@@ -126,7 +126,7 @@ public class TransformCacheTest {
 	}
 	@Test
 	public void fromString_forName() {
-		assertEquals("foo", get(String.class, D7.class).transform("foo").f);
+		assertEquals("foo", get(String.class, D7.class).mutate("foo").f);
 	}
 
 	public static class D8 {
@@ -137,7 +137,7 @@ public class TransformCacheTest {
 	}
 	@Test
 	public void fromString_forString() {
-		assertEquals("foo", get(String.class, D8.class).transform("foo").f);
+		assertEquals("foo", get(String.class, D8.class).mutate("foo").f);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -154,7 +154,7 @@ public class TransformCacheTest {
 	}
 	@Test
 	public void fromX_create() {
-		assertEquals("ok", get(X.class, E1.class).transform(new X()).f);
+		assertEquals("ok", get(X.class, E1.class).mutate(new X()).f);
 	}
 
 	public static class E2 {
@@ -165,6 +165,6 @@ public class TransformCacheTest {
 	}
 	@Test
 	public void fromX_fromX() {
-		assertEquals("ok", get(X.class, E2.class).transform(new X()).f);
+		assertEquals("ok", get(X.class, E2.class).mutate(new X()).f);
 	}
 }

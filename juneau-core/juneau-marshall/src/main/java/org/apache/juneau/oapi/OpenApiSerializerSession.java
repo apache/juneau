@@ -106,7 +106,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 		schema.validateOutput(value, ctx);
 
-		if (type.hasTransformTo(schema.getParsedType()) || schema.getParsedType().hasTransformFrom(type)) {
+		if (type.hasMutaterTo(schema.getParsedType()) || schema.getParsedType().hasMutaterFrom(type)) {
 			value = toType(value, schema.getParsedType());
 			type = schema.getParsedType();
 		}
@@ -151,7 +151,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 					} else if (type.isCollection()) {
 						for (Object o : (Collection<?>)value)
 							l.add(serialize(partType, items, o));
-					} else if (vt.hasTransformTo(String[].class)) {
+					} else if (vt.hasMutaterTo(String[].class)) {
 						String[] ss = toType(value, CM_StringArray);
 						for (int i = 0; i < ss.length; i++)
 							l.add(serialize(partType, items, ss[i]));

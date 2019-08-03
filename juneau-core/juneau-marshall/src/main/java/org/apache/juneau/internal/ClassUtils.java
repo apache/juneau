@@ -379,7 +379,6 @@ public final class ClassUtils {
 	 * <ul>
 	 * 	<li>Have a public constructor that takes in a single <c>String</c> argument.
 	 * 	<li>Have a static <c>fromString(String)</c> (or related) method.
-	 * 		<br>See {@link ClassInfo#getFromStringMethod()} for the list of possible static method names.
 	 * 	<li>Be an <c>enum</c>.
 	 * </ul>
 	 *
@@ -388,8 +387,8 @@ public final class ClassUtils {
 	 * @return A new object instance, or <jk>null</jk> if a method for converting the string to an object could not be found.
 	 */
 	public static <T> T fromString(Class<T> c, String s) {
-		Transform<String,T> t = TransformCache.get(String.class, c);
-		return t == null ? null : t.transform(s);
+		Mutater<String,T> t = Mutaters.get(String.class, c);
+		return t == null ? null : t.mutate(s);
 	}
 
 	/**
@@ -407,8 +406,8 @@ public final class ClassUtils {
 	public static String toString(Object o) {
 		if (o == null)
 			return null;
-		Transform<Object,String> t = (Transform<Object,String>)TransformCache.get(o.getClass(), String.class);
-		return t == null ? o.toString() : t.transform(o);
+		Mutater<Object,String> t = (Mutater<Object,String>)Mutaters.get(o.getClass(), String.class);
+		return t == null ? o.toString() : t.mutate(o);
 	}
 
 	/**

@@ -453,16 +453,16 @@ public class RequestBody {
 			}
 		}
 
-		if (cm.hasReaderTransform())
-			return cm.getReaderTransform().transform(getReader());
+		if (cm.hasReaderMutater())
+			return cm.getReaderMutater().mutate(getReader());
 
-		if (cm.hasInputStreamTransform())
-			return cm.getInputStreamTransform().transform(getInputStream());
+		if (cm.hasInputStreamMutater())
+			return cm.getInputStreamMutater().mutate(getInputStream());
 
 		MediaType mt = getMediaType();
 
-		if ((isEmpty(mt) || mt.toString().startsWith("text/plain")) && cm.hasStringTransform())
-			return cm.getStringTransform().transform(asString());
+		if ((isEmpty(mt) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
+			return cm.getStringMutater().mutate(asString());
 
 		throw new UnsupportedMediaType(
 			"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",

@@ -428,7 +428,7 @@ public class BeanSession extends Session {
 						return (T)new AtomicLong(b ? 1 : 0);
 				} else if (isNullOrEmpty(value)) {
 					return null;
-				} else if (! hasTransform(from, to)) {
+				} else if (! hasMutater(from, to)) {
 					String s = value.toString();
 
 					int multiplier = (tc == Integer.class || tc == Short.class || tc == Long.class) ? getMultiplier(s) : 1;
@@ -487,10 +487,10 @@ public class BeanSession extends Session {
 					return (T)toArray(to, Arrays.asList((Object[])value));
 				else if (startsWith(value.toString(), '['))
 					return (T)toArray(to, new ObjectList(value.toString()).setBeanSession(this));
-				else if (to.hasTransformFrom(from))
-					return to.transformFrom(value);
-				else if (from.hasTransformTo(to))
-					return from.transformTo(value, to);
+				else if (to.hasMutaterFrom(from))
+					return to.mutateFrom(value);
+				else if (from.hasMutaterTo(to))
+					return from.mutateTo(value, to);
 				else
 					return (T)toArray(to, new ObjectList((Object[])StringUtils.split(value.toString())).setBeanSession(this));
 			}
@@ -603,7 +603,7 @@ public class BeanSession extends Session {
 					return (T)(Boolean.valueOf(((Number)value).intValue() != 0));
 				if (isNullOrEmpty(value))
 					return null;
-				if (! hasTransform(from, to))
+				if (! hasMutater(from, to))
 					return (T)Boolean.valueOf(value.toString());
 			}
 
@@ -669,11 +669,11 @@ public class BeanSession extends Session {
 					return (T)((Calendar)value).getTime();
 			}
 
-			if (to.hasTransformFrom(from))
-				return to.transformFrom(value);
+			if (to.hasMutaterFrom(from))
+				return to.mutateFrom(value);
 
-			if (from.hasTransformTo(to))
-				return from.transformTo(value, to);
+			if (from.hasMutaterTo(to))
+				return from.mutateTo(value, to);
 
 			if (to.isBean())
 				return newBeanMap(to.getInnerClass()).load(value.toString()).getBean();
@@ -688,8 +688,8 @@ public class BeanSession extends Session {
 		throw new InvalidDataConversionException(value, to, null);
 	}
 
-	private static boolean hasTransform(ClassMeta<?> from, ClassMeta<?> to) {
-		return to.hasTransformFrom(from) || from.hasTransformTo(to);
+	private static boolean hasMutater(ClassMeta<?> from, ClassMeta<?> to) {
+		return to.hasMutaterFrom(from) || from.hasMutaterTo(to);
 	}
 
 	private static final boolean isNullOrEmpty(Object o) {

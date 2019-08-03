@@ -450,20 +450,20 @@ public class ClassInfoTest {
 
 	@Test
 	public void getFromStringMethod() throws Exception {
-		check("DA1.create(String)", da1.getFromStringMethod());
-		check(null, da2.getFromStringMethod());
-		check(null, da3.getFromStringMethod());
-		check(null, da4.getFromStringMethod());
-		check(null, da5.getFromStringMethod());
-		check(null, da6.getFromStringMethod());
-		check(null, da7.getFromStringMethod());
-		check(null, da8.getFromStringMethod());
+		check("DA1.create(String)", da1.getStaticCreateMethod(String.class));
+		check(null, da2.getStaticCreateMethod(String.class));
+		check(null, da3.getStaticCreateMethod(String.class));
+		check(null, da4.getStaticCreateMethod(String.class));
+		check(null, da5.getStaticCreateMethod(String.class));
+		check(null, da6.getStaticCreateMethod(String.class));
+		check(null, da7.getStaticCreateMethod(String.class));
+		check(null, da8.getStaticCreateMethod(String.class));
 	}
 
 	@Test
 	public void getFromStringMethod_onType() throws Exception {
-		check(null, aTypeInfo.getFromStringMethod());
-		check(null, pTypeGenericArgInfo.getFromStringMethod());
+		check(null, aTypeInfo.getStaticCreateMethod(String.class));
+		check(null, pTypeGenericArgInfo.getStaticCreateMethod(String.class));
 	}
 
 	static class DBx {}

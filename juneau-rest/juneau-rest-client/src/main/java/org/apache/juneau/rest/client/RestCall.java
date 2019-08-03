@@ -2275,8 +2275,8 @@ public final class RestCall extends BeanSession implements Closeable {
 			MediaType mt = MediaType.forString(ct);
 
 			if (parser == null || (mt.toString().equals("text/plain") && ! parser.canHandle(ct))) {
-				if (type.hasStringTransform())
-					return type.getStringTransform().transform(getResponseAsString());
+				if (type.hasStringMutater())
+					return type.getStringMutater().mutate(getResponseAsString());
 			}
 
 			if (parser != null) {
@@ -2307,11 +2307,11 @@ public final class RestCall extends BeanSession implements Closeable {
 				}
 			}
 
-			if (type.hasReaderTransform())
-				return type.getReaderTransform().transform(getReader());
+			if (type.hasReaderMutater())
+				return type.getReaderMutater().mutate(getReader());
 
-			if (type.hasInputStreamTransform())
-				return type.getInputStreamTransform().transform(getInputStream());
+			if (type.hasInputStreamMutater())
+				return type.getInputStreamMutater().mutate(getInputStream());
 
 			throw new ParseException(
 				"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",

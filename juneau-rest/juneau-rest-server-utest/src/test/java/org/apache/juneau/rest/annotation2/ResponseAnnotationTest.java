@@ -202,14 +202,14 @@ public class ResponseAnnotationTest {
 
 	@Response(schema=@Schema(format="byte"))
 	public static class D06 {
-		public byte[] toBytes() {
+		public byte[] toByteArray() {
 			return "foo".getBytes();
 		}
 	}
 
 	@Response(schema=@Schema(format="byte"))
 	public static class D07 extends Exception {
-		public byte[] toBytes() {
+		public byte[] toByteArray() {
 			return "foo".getBytes();
 		}
 	}

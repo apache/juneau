@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.internal;
+package org.apache.juneau.reflect;
 
 /**
  * An interface for creating objects from other objects such as a <c>String</c> or <c>Reader</c>.
@@ -18,7 +18,7 @@ package org.apache.juneau.internal;
  * @param <I> Input type.
  * @param <O> Output type.
  */
-public abstract class Transform<I,O> {
+public abstract class Mutater<I,O> {
 
 	/**
 	 * Method for instantiating an object from another object.
@@ -26,8 +26,8 @@ public abstract class Transform<I,O> {
 	 * @param in The input object.
 	 * @return The output object.
 	 */
-	public O transform(I in) {
-		return transform(null, in);
+	public O mutate(I in) {
+		return mutate(null, in);
 	}
 
 	/**
@@ -37,5 +37,5 @@ public abstract class Transform<I,O> {
 	 * @param in The input object.
 	 * @return The output object.
 	 */
-	public abstract O transform(Object outer, I in);
+	public abstract O mutate(Object outer, I in);
 }

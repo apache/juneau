@@ -410,34 +410,6 @@ public final class ClassInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Finds the public static "fromString" method on this class.
-	 *
-	 * <p>
-	 * Looks for the following method names:
-	 * <ul>
-	 * 	<li><c>fromString</c>
-	 * 	<li><c>fromValue</c>
-	 * 	<li><c>valueOf</c>
-	 * 	<li><c>parse</c>
-	 * 	<li><c>parseString</c>
-	 * 	<li><c>forName</c>
-	 * 	<li><c>forString</c>
-	 * </ul>
-	 *
-	 * @return The static method, or <jk>null</jk> if it couldn't be found.
-	 */
-	public MethodInfo getFromStringMethod() {
-		if (c != null)
-			for (MethodInfo m : getPublicMethods())
-				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED)
-						&& m.hasReturnType(c)
-						&& m.hasParamTypes(String.class)
-						&& isOneOf(m.getSimpleName(), "create","fromString","fromValue","valueOf","parse","parseString","forName","forString"))
-					return m;
-		return null;
-	}
-
-	/**
 	 * Find the public static creator method on this class.
 	 *
 	 * <p>
@@ -445,7 +417,12 @@ public final class ClassInfo {
 	 * <ul>
 	 * 	<li><c>create</c>
 	 * 	<li><c>from</c>
-	 * 	<li><c>fromIC</c>
+	 * 	<li><c>fromValue</c>
+	 * 	<li><c>parse</c>
+	 * 	<li><c>valueOf</c>
+	 * 	<li><c>fromX</c>
+	 * 	<li><c>forX</c>
+	 * 	<li><c>parseX</c>
 	 * </ul>
 	 *
 	 * @param ic The argument type.
@@ -458,7 +435,7 @@ public final class ClassInfo {
 				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.hasParamTypes(ic)) {
 					String n = m.getSimpleName(), cn = ic.getSimpleName();
 					if (
-						isOneOf(n, "create","from","parse","valueOf")
+						isOneOf(n, "create","from","fromValue","parse","valueOf")
 						|| isOneOf(n, additionalNames)
 						|| (n.startsWith("from") && n.substring(4).equals(cn))
 						|| (n.startsWith("for") && n.substring(3).equals(cn))
@@ -1765,6 +1742,25 @@ public final class ClassInfo {
 	 */
 	public String getName() {
 		return c != null ? c.getName() : t.getTypeName();
+	}
+
+	/**
+	 * Same as {@link #getSimpleName()} but uses <js>"Array"</j> instead of <js>"[]"</js>.
+	 *
+	 * @return The readable name for this class.
+	 */
+	public String getReadableName() {
+		if (c == null)
+			return t.getTypeName();
+		if (! c.isArray())
+			return c.getSimpleName();
+		Class<?> c = this.c;
+		StringBuilder sb = new StringBuilder();
+		while (c.isArray()) {
+			sb.append("Array");
+			c = c.getComponentType();
+		}
+		return c.getSimpleName() + sb;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
