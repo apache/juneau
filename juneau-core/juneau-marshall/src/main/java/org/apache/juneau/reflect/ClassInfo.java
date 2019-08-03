@@ -449,14 +449,21 @@ public final class ClassInfo {
 	 * </ul>
 	 *
 	 * @param ic The argument type.
+	 * @param additionalNames Additional method names to check for.
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
 	 */
-	public MethodInfo getStaticCreateMethod(Class<?> ic) {
+	public MethodInfo getStaticCreateMethod(Class<?> ic, String...additionalNames) {
 		if (c != null) {
 			for (MethodInfo m : getPublicMethods()) {
 				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.hasParamTypes(ic)) {
-					String n = m.getSimpleName();
-					if (isOneOf(n, "create","from") || (n.startsWith("from") && n.substring(4).equals(ic.getSimpleName()))) {
+					String n = m.getSimpleName(), cn = ic.getSimpleName();
+					if (
+						isOneOf(n, "create","from","parse","valueOf")
+						|| isOneOf(n, additionalNames)
+						|| (n.startsWith("from") && n.substring(4).equals(cn))
+						|| (n.startsWith("for") && n.substring(3).equals(cn))
+						|| (n.startsWith("parse") && n.substring(5).equals(cn))
+						) {
 						return m;
 					}
 				}
@@ -1926,6 +1933,15 @@ public final class ClassInfo {
 				getDimensions();
 		}
 		return componentType;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is an enum.
+	 *
+	 * @return <jk>true</jk> if this class is an enum.
+	 */
+	public boolean isEnum() {
+		return c != null && c.isEnum();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

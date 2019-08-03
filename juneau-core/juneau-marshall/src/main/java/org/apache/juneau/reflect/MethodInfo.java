@@ -421,9 +421,10 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return The object returned from the method.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public Object invoke(Object obj, Object...args) throws ExecutableException {
+	@SuppressWarnings("unchecked")
+	public <T> T invoke(Object obj, Object...args) throws ExecutableException {
 		try {
-			return m.invoke(obj, args);
+			return (T)m.invoke(obj, args);
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			throw new ExecutableException(e);
 		}
