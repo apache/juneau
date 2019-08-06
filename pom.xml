@@ -364,6 +364,8 @@
 		<url>https://www.apache.org/</url>
 	</organization>
 	     -->
+        <inceptionYear>2016</inceptionYear>
+
 	<scm>
 		<connection>scm:git:https://gitbox.apache.org/repos/asf/juneau.git</connection>
 		<developerConnection>scm:git:https://gitbox.apache.org/repos/asf/juneau.git</developerConnection>
