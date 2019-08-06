@@ -35,16 +35,21 @@ public class LocalizedDatesTest {
 	}
 
 	private static TimeZone prevTimeZone;
+	private static Locale prevLocale;
 
 	@BeforeClass
 	public static void before() {
 		prevTimeZone = TimeZone.getDefault();
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+		prevLocale = Locale.getDefault();
+		Locale.setDefault(Locale.ROOT);
+
 	}
 
 	@AfterClass
 	public static void after() {
 		TimeZone.setDefault(prevTimeZone);
+		Locale.setDefault(prevLocale);
 	}
 
 
