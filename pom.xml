@@ -230,8 +230,8 @@
 						<excludePackageNames>*proto*:*test*:org.apache.juneau.doc.internal</excludePackageNames>
 						<linksource>true</linksource>
 						<links>
-							<link>http://docs.oracle.com/javase/8/docs/api/</link>
-							<link>http://docs.oracle.com/javaee/5/api/</link>
+							<link>https://docs.oracle.com/javase/8/docs/api/</link>
+							<link>https://docs.oracle.com/javaee/5/api/</link>
 						</links>
 						<docfilessubdirs>true</docfilessubdirs>
 						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>
@@ -357,11 +357,13 @@
 		</plugins>
 	</reporting>
 
-	<url>http://juneau.apache.org</url>
+	<url>https://juneau.apache.org/</url>
+	<!-- Inherited from parent pom 
 	<organization>
-		<name>Apache</name>
-		<url>http://www.apache.org/</url>
+		<name>The Apache Software Foundation</name>
+		<url>https://www.apache.org/</url>
 	</organization>
+	     -->
 	<scm>
 		<connection>scm:git:https://gitbox.apache.org/repos/asf/juneau.git</connection>
 		<developerConnection>scm:git:https://gitbox.apache.org/repos/asf/juneau.git</developerConnection>
