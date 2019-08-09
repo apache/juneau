@@ -32,6 +32,7 @@ public class DefaultSwaps {
 		POJO_SWAPS.put(Enumeration.class, new EnumerationSwap());
 		POJO_SWAPS.put(Iterator.class, new IteratorSwap());
 		POJO_SWAPS.put(Locale.class, new LocaleSwap());
+		POJO_SWAPS.put(Class.class, new ClassSwap());
 		POJO_SWAPS.put(Calendar.class, new TemporalCalendarSwap.IsoOffsetDateTime());
 		POJO_SWAPS.put(Date.class, new TemporalDateSwap.IsoLocalDateTime());
 		POJO_SWAPS.put(Instant.class, new TemporalSwap.IsoInstant());

@@ -693,9 +693,6 @@ public final class ClassMeta<T> implements Type {
 				defaultSwap = AutoMapSwap.find(ci);
 			if (defaultSwap == null)
 				defaultSwap = AutoListSwap.find(ci);
-			// TODO
-			//if (defaultSwap == null)
-			//	defaultSwap = AutoStringSwap.find(ci);
 			if (defaultSwap != null)
 				l.add(defaultSwap);
 		}
