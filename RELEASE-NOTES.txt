@@ -11,6 +11,42 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+
+Release Notes - Juneau - Version 8.1.0
+
+** Bug
+    * [JUNEAU-29] - Replace @BeanConstructor with @BeanParameter annotations.
+    * [JUNEAU-94] - Fix build warnings on Java 11
+    * [JUNEAU-105] - UrlPathPattern should use a state machine.
+    * [JUNEAU-107] - IllegalArgumentException in DefaultHandler.handle()
+    * [JUNEAU-124] - Serializers and parsers should throw specific exceptions.
+    * [JUNEAU-129] - LocalizedDatesTest failures during build
+
+** New Feature
+    * [JUNEAU-96] - Add Automatic-Module-Name metadata
+    * [JUNEAU-98] - Add @RestMethod(allowMethodParam/allowMethodHead) annotations
+    * [JUNEAU-99] - @RestMethod(roleGuard="xxx") annotation.
+    * [JUNEAU-100] - REST_allowedMethodHeaders / @RestResource(allowedMethodHeaders) / @RestMethod(allowedMethodHeaders)
+    * [JUNEAU-101] - Update handling of dates to use new Java 8 libraries.
+    * [JUNEAU-102] - Expanded REST annotations
+    * [JUNEAU-103] - Add POJO diff tool
+    * [JUNEAU-104] - Support for using named method parameters.
+
+** Improvement
+    * [JUNEAU-50] - Publish a contributors guide
+    * [JUNEAU-56] - Build microservices with Maven
+    * [JUNEAU-93] - Use constructor argument names as bean property names.
+    * [JUNEAU-97] - Path Parameter in Parent RestResource
+    * [JUNEAU-106] - Improved REST debugging.
+    * [JUNEAU-108] - AccessDeniedException should cause HTTP 401 response.
+    * [JUNEAU-109] - BasicRestLogger should take in servlet class so that logging can be based on that class.
+
+** Task
+    * [JUNEAU-126] - Serializers should serialize Iterators and Enumerations by default.
+    * [JUNEAU-127] - Clean up usage of PojoSwaps in ClassMeta
+    * [JUNEAU-128] - Code improvements around DynamicSwaps
+    
+
 Release Notes - Juneau - Version 8.0.0
 
 ** Improvement
