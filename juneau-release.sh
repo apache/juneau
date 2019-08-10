@@ -29,7 +29,7 @@ function success {
 	echo '***** SUCCESS *****************************************************************'
 	echo '*******************************************************************************'
 	echo ' '
-	exit 1; 
+	exit 0; 
 }
 
 function message {
@@ -40,11 +40,20 @@ function message {
 	echo '-------------------------------------------------------------------------------'
 }
 
+function fail_with_message {
+	X_DATE=$(date +'%H:%M:%S') 
+	echo ' '
+	echo "-------------------------------------------------------------------------------"
+	echo "[$X_DATE] $1"
+	echo '-------------------------------------------------------------------------------'
+	fail; 
+}
+
 function yprompt {
 	echo ' '
 	echo -n "$1 (Y/n): "
 	read prompt
-	if [ "$prompt" != "Y" ] && [ "$prompt" != "" ] 
+	if [ "$prompt" != "Y" ] && [ "$prompt" != "y" ] && [ "$prompt" != "" ] 
 	then 
 		fail;
 	fi
@@ -57,6 +66,9 @@ function st {
 function et {
 	echo "Execution time: ${SECONDS}s" 
 }
+
+command -v wget || fail_with_message "wget not found"
+command -v gpg || fail_with_message "gpg not found"
 
 message "Checking Java version"
 java -version
@@ -137,7 +149,7 @@ et
 
 echo "On Apache's Nexus instance, locate the staging repository for the code you just released.  It should be called something like orgapachejuneau-1000." 
 echo "Check the Updated time stamp and click to verify its Content."
-echo "Important - When all artifacts to be deployed are in the staging repository, tick the box next to it and click Close."
+echo "IMPORTANT - When all artifacts to be deployed are in the staging repository, tick the box next to it and click Close."
 echo "DO NOT CLICK RELEASE YET - the release candidate must pass [VOTE] emails on dev@juneau before we release."
 echo "Once closing has finished (check with Refresh), browse to the URL of the staging repository which should be something like https://repository.apache.org/content/repositories/orgapachejuneau-1000."
 echo " "
