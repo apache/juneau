@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.Properties}
+ * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
  * </ul>
  */
 @Documented

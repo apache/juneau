@@ -287,7 +287,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link #prop(String, Object)}
-	 * 	<li class='link'>{@doc juneau-rest-server.Properties}
+	 * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
 	 * </ul>
 	 *
 	 * @return The properties active for this request.

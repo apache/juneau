@@ -95,12 +95,12 @@
 		<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms'>Transforms</a></p>
 		<ol>
 			<li><p class='updated'><a class='doclink' href='#juneau-marshall.Transforms.PojoSwaps'>PojoSwaps</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-marshall.Transforms.DefaultPojoSwaps'>Default PojoSwaps</a></p>
+			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.DefaultPojoSwaps'>Default PojoSwaps</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-marshall.Transforms.AutoPojoSwaps'>Auto-detected POJO swaps</a></p>
 			<li><p class='updated'><a class='doclink' href='#juneau-marshall.Transforms.PerMediaTypePojoSwaps'>Per-media-type PojoSwaps</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.OneWayPojoSwaps'>One-way PojoSwaps</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.SwapAnnotation'>@Swap Annotation</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.TemplatedSwaps'>Templated Swaps</a></p>
-			<li><p class='updated'><a class='doclink' href='#juneau-marshall.Transforms.SwapMethods'>Swap Methods</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.SurrogateClasses'>Surrogate Classes</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.BeanAnnotation'>@Bean Annotation</a></p>
 			<li><p class='updated'><a class='doclink' href='#juneau-marshall.Transforms.BeanPropertyAnnotation'>@BeanProperty Annotation</a></p>
@@ -2074,7 +2074,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.DefaultPojoSwaps' id='juneau-marshall.Transforms.DefaultPojoSwaps'>2.11.2 - Default PojoSwaps</a></h4>
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.DefaultPojoSwaps' id='juneau-marshall.Transforms.DefaultPojoSwaps'>2.11.2 - Default PojoSwaps</a></h4>
 <div class='topic'><!-- START: 2.11.2 - juneau-marshall.Transforms.DefaultPojoSwaps -->
 <p>
 	By default, all serializers and parsers have built in <c>PojoSwaps</c> defined for the following common data types:
@@ -2083,6 +2083,7 @@
 	<li class='jc'>{@link java.util.Enumeration}
 	<li class='jc'>{@link java.util.Iterator}
 	<li class='jc'>{@link java.util.Locale}
+	<li class='jc'>{@link java.util.Class}
 	<li class='jc'>{@link java.util.Calendar} - ISO offset date-time.
 	<li class='jc'>{@link java.util.Date} - Local date-time
 	<li class='jc'>{@link java.time.Instant} - ISO instant.
@@ -2181,292 +2182,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic updated' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PerMediaTypePojoSwaps' id='juneau-marshall.Transforms.PerMediaTypePojoSwaps'>2.11.3 - Per-media-type PojoSwaps</a></h4>
-<div class='topic'><!-- START: 2.11.3 - juneau-marshall.Transforms.PerMediaTypePojoSwaps -->
-<p>
-	Swaps can also be defined per-media-type.		
-</p>
-<p>	
-	The {@link org.apache.juneau.transform.PojoSwap#forMediaTypes()} method can be overridden to 
-	provide a set of media types that the swap is invoked on.
-	It's also possible to define multiple swaps against the same POJO as long as they're differentiated 
-	by media type.
-	When multiple swaps are defined, the best-match media type is used.
-</p>
-<p>
-	In the following example, we define 3 swaps against the same POJO.  
-	One for JSON, one for XML, and one for all other types.
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> PojoSwapTest {
-
-		<jk>public static class</jk> MyPojo {}
-
-		<jk>public static class</jk> MyJsonSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
-			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-			<jk>public</jk> MediaType[] forMediaTypes() {
-				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
-			}
-			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
-				<jk>return</jk> <js>"It's JSON!"</js>;
-			}
-		}
-
-		<jk>public static class</jk> MyXmlSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
-			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-			<jk>public</jk> MediaType[] forMediaTypes() {
-				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/xml"</js>);
-			}
-			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
-				<jk>return</jk> <js>"It's XML!"</js>;
-			}
-		}
-
-		<jk>public static class</jk> MyOtherSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
-			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-			<jk>public</jk> MediaType[] forMediaTypes() {
-				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/*"</js>);
-			}
-			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
-				<jk>return</jk> <js>"It's something else!"</js>;
-			}
-		}
-
-		<ja>@Test</ja>
-		<jk>public void</jk> doTest() <jk>throws</jk> Exception {
-
-			SerializerGroup g = SerializerGroup.<jsm>create</jsm>()
-				.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>)
-				.sq()
-				.pojoSwaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>)
-				.build();
-
-			MyPojo myPojo = <jk>new</jk> MyPojo();
-
-			String json = g.getWriterSerializer(<js>"text/json"</js>).serialize(myPojo);
-			<jsm>assertEquals</jsm>(<js>"'It\\'s JSON!'"</js>, json);
-
-			String xml = g.getWriterSerializer(<js>"text/xml"</js>).serialize(myPojo);
-			<jsm>assertEquals</jsm>(<js>"&lt;string&gt;It's XML!&lt;/string&gt;"</js>, xml);
-
-			String html = g.getWriterSerializer(<js>"text/html"</js>).serialize(myPojo);
-			<jsm>assertEquals</jsm>(<js>"&lt;string&gt;It's something else!&lt;/string&gt;"</js>, html);
-		}
-	}
-</p>
-<p>
-	When multiple swaps match the same media type, a best-match algorithm is applied to find the correct
-	swap to use.
-</p>
-<p>
-	In later sections we describe how annotations can be used to shorten this syntax:
-</p>
-<p class='bpcode w800'>
-	<ja>@Swaps</ja>({MyJsonSwap.<jk>class</jk>,MyXmlSwap.<jk>class</jk>,MyOtherSwap.<jk>class</jk>})
-	<jk>public static class</jk> MyPojo {}
-
-	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/json"</js>)
-	<jk>public static class</jk> MyJsonSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {...}
-
-	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/xml"</js>)
-	<jk>public static class</jk> MyXmlSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {...}
-
-	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/*"</js>)
-	<jk>public static class</jk> MyOtherSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {...}
-</p>
-</div><!-- END: 2.11.3 - juneau-marshall.Transforms.PerMediaTypePojoSwaps -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.OneWayPojoSwaps' id='juneau-marshall.Transforms.OneWayPojoSwaps'>2.11.4 - One-way PojoSwaps</a></h4>
-<div class='topic'><!-- START: 2.11.4 - juneau-marshall.Transforms.OneWayPojoSwaps -->
-<p>
-	In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be 
-	reconstructing during parsing. 
-	However, there are certain kinds of POJOs that we may want to support for serializing, but that are not 
-	possible to reconstruct during parsing.  
-	For these, we can use one-way object swaps.
-</p>
-<p>
-	A one-way POJO swap is simply an object transform that only implements the {@code swap()} method.  
-	The {@code unswap()} method is simply left unimplemented.
-</p>
-<p>
-	An example of a one-way swaps would be one that allows {@code Iterators} to be serialized as JSON arrays.  
-	It can make sense to be able to render {@code Iterators} as arrays, but in general it's not possible to 
-	reconstruct an {@code Iterator} during parsing. 
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> IteratorSwap <jk>extends</jk> PojoSwap&lt;Iterator,List&gt; {
-		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-		<jk>public</jk> List swap(Iterator o) {
-			List l = <jk>new</jk> LinkedList();
-			<jk>while</jk> (o.hasNext())
-				l.add(o.next());
-			<jk>return</jk> l;
-		}
-	}
-</p>
-<p>
-	Here is an example of our one-way swap being used.  
-	Note that trying to parse the original object will cause a {@link org.apache.juneau.parser.ParseException} 
-	to be thrown.
-</p>
-<p class='bpcode w800'>
-	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
-	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
-	
-	<jc>// Construct an iterator we want to serialize.</jc>
-	Iterator i = <jk>new</jk> ObjectList(1,2,3).iterator();
-	
-	<jc>// Serialize our Iterator</jc>
-	String json = s.serialize(i);		<jc>// Produces "[1,2,3]"</jc>
-	
-	<jc>// Try to parse it.</jc>
-	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
-	i = p.parse(s, Iterator.<jk>class</jk>);		<jc>// Throws ParseException!!!</jc>
-</p>
-</div><!-- END: 2.11.4 - juneau-marshall.Transforms.OneWayPojoSwaps -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.SwapAnnotation' id='juneau-marshall.Transforms.SwapAnnotation'>2.11.5 - @Swap Annotation</a></h4>
-<div class='topic'><!-- START: 2.11.5 - juneau-marshall.Transforms.SwapAnnotation -->
-<p>
-	{@link org.apache.juneau.annotation.Swap @Swap} can be used to associate a swap class using an 
-	annotation.
-	This is often cleaner than using the builder <c>pojoSwaps()</c> method since you can keep
-	your swap class near your POJO class. 
-</p>
-<p class='bpcode w800'>
-	<ja>@Swap</ja>(MyPojoSwap.<jk>class</jk>)
-	<jk>public class</jk> MyPojo {
-		...
-	}
-	
-	<jc>// Sample swap for converting MyPojo classes to a simple string.</jc>
-	<jk>public class</jk> MyPojoSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
-		
-		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-		<jk>public</jk> String swap(BeanSession session, MyPojo o) {
-			<jk>return</jk> o.toSomeSerializableForm();
-		}
-	}
-</p>
-<p>
-	Multiple swaps can be associated with a POJO by using the {@link org.apache.juneau.annotation.Swaps @Swaps} annotation:
-</p>
-<p class='bpcode w800'>
-	<ja>@Swaps</ja>(
-		{
-			<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>),
-			<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>),
-			<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
-		}
-	)
-	<jk>public class</jk> MyPojo {}
-</p>
-<p>
-	<c>Readers</c> get serialized directly to the output of a serializer.
-	Therefore it's possible to implement a swap that provides fully-customized output.
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> MyJsonSwap <jk>extends</jk> PojoSwap&lt;MyPojo,Reader&gt; {
-
-		<jk>public</jk> MediaType[] forMediaTypes() {
-			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
-		}
-
-		<jk>public</jk> Reader swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
-			<jk>return new</jk> StringReader(<js>"{message:'Custom JSON!'}"</js>);
-		}
-	}
-</p>
-<p>
-	The <ja>@Swap</ja> annotation can also be used on getters and setters as well to apply a swap
-	to individual property values:
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> MyBean {
-		<jk>private</jk> MyPojo <jf>myPojo</jf>;
-	
-		<jc>// Swap applied to bean property.	
-		<ja>@BeanProperty</ja>(swap=MyPojoSwap.<jk>class</jk>)
-		<jk>public</jk> MyPojo getMyPojo() {
-			<jk>return</jk> <jf>myPojo</jf>;
-		}
-	}
-</p>
-<p>
-	When applied to bean properties, the swap annotation need only be applied to either the getter, setter, or field.
-</p>
-<p>
-	The swap annotation can also be applied to the private field of a bean property, like so:
-</p>
-<p class='bpcode w800'>
-	<jk>public class</jk> MyBean {
-
-		<ja>@BeanProperty</ja>(swap=MyPojoSwap.<jk>class</jk>)
-		<jk>private</jk> MyPojo <jf>myPojo</jf>;
-	
-		<jk>public</jk> MyPojo getMyPojo() {
-			<jk>return</jk> <jf>myPojo</jf>;
-		}
-		
-		<jk>public</jk> MyBean setMyPojo(MyPojo myPojo) {
-			<jk>this</jk>.<jf>myPojo</jf> = myPojo;
-			<jk>return this</jk>;
-		}
-	}
-</p>
-</div><!-- END: 2.11.5 - juneau-marshall.Transforms.SwapAnnotation -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.TemplatedSwaps' id='juneau-marshall.Transforms.TemplatedSwaps'>2.11.6 - Templated Swaps</a></h4>
-<div class='topic'><!-- START: 2.11.6 - juneau-marshall.Transforms.TemplatedSwaps -->
-<p>
-	The {@link org.apache.juneau.annotation.Swap#template() @Swap(template)} annotation allows you to associate
-	arbitrary contextual strings with swaps.
-	The primary purpose is for providing template names, such as for Apache FreeMarker, therefore
-	the name 'template'.
-	However, the usage of the string is open-ended.
-</p>
-<p>
-	For example, you could pair a template string like so:
-</p>
-<p class='bpcode w800'>
-	<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
-	<jk>public class</jk> MyPojo {}
-</p>
-<p>
-	The implementation of the FreeMarker swap would look something like this:
-</p>
-<p class='bpcode w800'>
-	<jc>// Our templated swap class.</jc>
-	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
-
-		<jk>public</jk> MediaType[] forMediaTypes() {
-			<jc>// Make sure this only applies to the HTML serializer.</jc>
-			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/html"</js>);
-		}
-
-		<jk>public</jk> Reader swap(BeanSession session, Object o, String template) <jk>throws</jk> Exception {
-			<jc>// Call some method that uses FreeMarker to convert 'o' to raw HTML using </jc>
-			<jc>// the 'MyPojo.div.ftl' template.</jc>
-			<jk>return</jk> getFreeMarkerReader(template, o);  
-		}
-	}
-</p>
-</div><!-- END: 2.11.6 - juneau-marshall.Transforms.TemplatedSwaps -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic updated' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.SwapMethods' id='juneau-marshall.Transforms.SwapMethods'>2.11.7 - Swap Methods</a></h4>
-<div class='topic'><!-- START: 2.11.7 - juneau-marshall.Transforms.SwapMethods -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.AutoPojoSwaps' id='juneau-marshall.Transforms.AutoPojoSwaps'>2.11.3 - Auto-detected POJO swaps</a></h4>
+<div class='topic'><!-- START: 2.11.3 - juneau-marshall.Transforms.AutoPojoSwaps -->
 <p>
 	Various methods can be defined on a class directly to affect how it gets serialized.
 	This can often be simpler than using <c>PojoSwaps</c>.
@@ -2620,7 +2337,291 @@
 		}
 	}
 </p>
-</div><!-- END: 2.11.7 - juneau-marshall.Transforms.SwapMethods -->
+</div><!-- END: 2.11.3 - juneau-marshall.Transforms.AutoPojoSwaps -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic updated' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PerMediaTypePojoSwaps' id='juneau-marshall.Transforms.PerMediaTypePojoSwaps'>2.11.4 - Per-media-type PojoSwaps</a></h4>
+<div class='topic'><!-- START: 2.11.4 - juneau-marshall.Transforms.PerMediaTypePojoSwaps -->
+<p>
+	Swaps can also be defined per-media-type.		
+</p>
+<p>	
+	The {@link org.apache.juneau.transform.PojoSwap#forMediaTypes()} method can be overridden to 
+	provide a set of media types that the swap is invoked on.
+	It's also possible to define multiple swaps against the same POJO as long as they're differentiated 
+	by media type.
+	When multiple swaps are defined, the best-match media type is used.
+</p>
+<p>
+	In the following example, we define 3 swaps against the same POJO.  
+	One for JSON, one for XML, and one for all other types.
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> PojoSwapTest {
+
+		<jk>public static class</jk> MyPojo {}
+
+		<jk>public static class</jk> MyJsonSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<jk>public</jk> MediaType[] forMediaTypes() {
+				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
+			}
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
+				<jk>return</jk> <js>"It's JSON!"</js>;
+			}
+		}
+
+		<jk>public static class</jk> MyXmlSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<jk>public</jk> MediaType[] forMediaTypes() {
+				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/xml"</js>);
+			}
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
+				<jk>return</jk> <js>"It's XML!"</js>;
+			}
+		}
+
+		<jk>public static class</jk> MyOtherSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<jk>public</jk> MediaType[] forMediaTypes() {
+				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/*"</js>);
+			}
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<jk>public</jk> String swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
+				<jk>return</jk> <js>"It's something else!"</js>;
+			}
+		}
+
+		<ja>@Test</ja>
+		<jk>public void</jk> doTest() <jk>throws</jk> Exception {
+
+			SerializerGroup g = SerializerGroup.<jsm>create</jsm>()
+				.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>)
+				.sq()
+				.pojoSwaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>)
+				.build();
+
+			MyPojo myPojo = <jk>new</jk> MyPojo();
+
+			String json = g.getWriterSerializer(<js>"text/json"</js>).serialize(myPojo);
+			<jsm>assertEquals</jsm>(<js>"'It\\'s JSON!'"</js>, json);
+
+			String xml = g.getWriterSerializer(<js>"text/xml"</js>).serialize(myPojo);
+			<jsm>assertEquals</jsm>(<js>"&lt;string&gt;It's XML!&lt;/string&gt;"</js>, xml);
+
+			String html = g.getWriterSerializer(<js>"text/html"</js>).serialize(myPojo);
+			<jsm>assertEquals</jsm>(<js>"&lt;string&gt;It's something else!&lt;/string&gt;"</js>, html);
+		}
+	}
+</p>
+<p>
+	When multiple swaps match the same media type, a best-match algorithm is applied to find the correct
+	swap to use.
+</p>
+<p>
+	In later sections we describe how annotations can be used to shorten this syntax:
+</p>
+<p class='bpcode w800'>
+	<ja>@Swaps</ja>({MyJsonSwap.<jk>class</jk>,MyXmlSwap.<jk>class</jk>,MyOtherSwap.<jk>class</jk>})
+	<jk>public static class</jk> MyPojo {}
+
+	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/json"</js>)
+	<jk>public static class</jk> MyJsonSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {...}
+
+	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/xml"</js>)
+	<jk>public static class</jk> MyXmlSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {...}
+
+	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/*"</js>)
+	<jk>public static class</jk> MyOtherSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {...}
+</p>
+</div><!-- END: 2.11.4 - juneau-marshall.Transforms.PerMediaTypePojoSwaps -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.OneWayPojoSwaps' id='juneau-marshall.Transforms.OneWayPojoSwaps'>2.11.5 - One-way PojoSwaps</a></h4>
+<div class='topic'><!-- START: 2.11.5 - juneau-marshall.Transforms.OneWayPojoSwaps -->
+<p>
+	In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be 
+	reconstructing during parsing. 
+	However, there are certain kinds of POJOs that we may want to support for serializing, but that are not 
+	possible to reconstruct during parsing.  
+	For these, we can use one-way object swaps.
+</p>
+<p>
+	A one-way POJO swap is simply an object transform that only implements the {@code swap()} method.  
+	The {@code unswap()} method is simply left unimplemented.
+</p>
+<p>
+	An example of a one-way swaps would be one that allows {@code Iterators} to be serialized as JSON arrays.  
+	It can make sense to be able to render {@code Iterators} as arrays, but in general it's not possible to 
+	reconstruct an {@code Iterator} during parsing. 
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> IteratorSwap <jk>extends</jk> PojoSwap&lt;Iterator,List&gt; {
+		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+		<jk>public</jk> List swap(Iterator o) {
+			List l = <jk>new</jk> LinkedList();
+			<jk>while</jk> (o.hasNext())
+				l.add(o.next());
+			<jk>return</jk> l;
+		}
+	}
+</p>
+<p>
+	Here is an example of our one-way swap being used.  
+	Note that trying to parse the original object will cause a {@link org.apache.juneau.parser.ParseException} 
+	to be thrown.
+</p>
+<p class='bpcode w800'>
+	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
+	
+	<jc>// Construct an iterator we want to serialize.</jc>
+	Iterator i = <jk>new</jk> ObjectList(1,2,3).iterator();
+	
+	<jc>// Serialize our Iterator</jc>
+	String json = s.serialize(i);		<jc>// Produces "[1,2,3]"</jc>
+	
+	<jc>// Try to parse it.</jc>
+	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
+	i = p.parse(s, Iterator.<jk>class</jk>);		<jc>// Throws ParseException!!!</jc>
+</p>
+</div><!-- END: 2.11.5 - juneau-marshall.Transforms.OneWayPojoSwaps -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.SwapAnnotation' id='juneau-marshall.Transforms.SwapAnnotation'>2.11.6 - @Swap Annotation</a></h4>
+<div class='topic'><!-- START: 2.11.6 - juneau-marshall.Transforms.SwapAnnotation -->
+<p>
+	{@link org.apache.juneau.annotation.Swap @Swap} can be used to associate a swap class using an 
+	annotation.
+	This is often cleaner than using the builder <c>pojoSwaps()</c> method since you can keep
+	your swap class near your POJO class. 
+</p>
+<p class='bpcode w800'>
+	<ja>@Swap</ja>(MyPojoSwap.<jk>class</jk>)
+	<jk>public class</jk> MyPojo {
+		...
+	}
+	
+	<jc>// Sample swap for converting MyPojo classes to a simple string.</jc>
+	<jk>public class</jk> MyPojoSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {
+		
+		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+		<jk>public</jk> String swap(BeanSession session, MyPojo o) {
+			<jk>return</jk> o.toSomeSerializableForm();
+		}
+	}
+</p>
+<p>
+	Multiple swaps can be associated with a POJO by using the {@link org.apache.juneau.annotation.Swaps @Swaps} annotation:
+</p>
+<p class='bpcode w800'>
+	<ja>@Swaps</ja>(
+		{
+			<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>),
+			<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>),
+			<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
+		}
+	)
+	<jk>public class</jk> MyPojo {}
+</p>
+<p>
+	<c>Readers</c> get serialized directly to the output of a serializer.
+	Therefore it's possible to implement a swap that provides fully-customized output.
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyJsonSwap <jk>extends</jk> PojoSwap&lt;MyPojo,Reader&gt; {
+
+		<jk>public</jk> MediaType[] forMediaTypes() {
+			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
+		}
+
+		<jk>public</jk> Reader swap(BeanSession session, MyPojo o) <jk>throws</jk> Exception {
+			<jk>return new</jk> StringReader(<js>"{message:'Custom JSON!'}"</js>);
+		}
+	}
+</p>
+<p>
+	The <ja>@Swap</ja> annotation can also be used on getters and setters as well to apply a swap
+	to individual property values:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyBean {
+		<jk>private</jk> MyPojo <jf>myPojo</jf>;
+	
+		<jc>// Swap applied to bean property.	
+		<ja>@BeanProperty</ja>(swap=MyPojoSwap.<jk>class</jk>)
+		<jk>public</jk> MyPojo getMyPojo() {
+			<jk>return</jk> <jf>myPojo</jf>;
+		}
+	}
+</p>
+<p>
+	When applied to bean properties, the swap annotation need only be applied to either the getter, setter, or field.
+</p>
+<p>
+	The swap annotation can also be applied to the private field of a bean property, like so:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyBean {
+
+		<ja>@BeanProperty</ja>(swap=MyPojoSwap.<jk>class</jk>)
+		<jk>private</jk> MyPojo <jf>myPojo</jf>;
+	
+		<jk>public</jk> MyPojo getMyPojo() {
+			<jk>return</jk> <jf>myPojo</jf>;
+		}
+		
+		<jk>public</jk> MyBean setMyPojo(MyPojo myPojo) {
+			<jk>this</jk>.<jf>myPojo</jf> = myPojo;
+			<jk>return this</jk>;
+		}
+	}
+</p>
+</div><!-- END: 2.11.6 - juneau-marshall.Transforms.SwapAnnotation -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.TemplatedSwaps' id='juneau-marshall.Transforms.TemplatedSwaps'>2.11.7 - Templated Swaps</a></h4>
+<div class='topic'><!-- START: 2.11.7 - juneau-marshall.Transforms.TemplatedSwaps -->
+<p>
+	The {@link org.apache.juneau.annotation.Swap#template() @Swap(template)} annotation allows you to associate
+	arbitrary contextual strings with swaps.
+	The primary purpose is for providing template names, such as for Apache FreeMarker, therefore
+	the name 'template'.
+	However, the usage of the string is open-ended.
+</p>
+<p>
+	For example, you could pair a template string like so:
+</p>
+<p class='bpcode w800'>
+	<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
+	<jk>public class</jk> MyPojo {}
+</p>
+<p>
+	The implementation of the FreeMarker swap would look something like this:
+</p>
+<p class='bpcode w800'>
+	<jc>// Our templated swap class.</jc>
+	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
+
+		<jk>public</jk> MediaType[] forMediaTypes() {
+			<jc>// Make sure this only applies to the HTML serializer.</jc>
+			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/html"</js>);
+		}
+
+		<jk>public</jk> Reader swap(BeanSession session, Object o, String template) <jk>throws</jk> Exception {
+			<jc>// Call some method that uses FreeMarker to convert 'o' to raw HTML using </jc>
+			<jc>// the 'MyPojo.div.ftl' template.</jc>
+			<jk>return</jk> getFreeMarkerReader(template, o);  
+		}
+	}
+</p>
+</div><!-- END: 2.11.7 - juneau-marshall.Transforms.TemplatedSwaps -->
 
 <!-- ==================================================================================================== -->
 
