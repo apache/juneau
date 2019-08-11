@@ -564,14 +564,12 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Widgets are inherited from super classes, but can be overridden by reusing the widget name.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
 	 * </ul>
 	 */

@@ -62,8 +62,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * See section 8.2.3 for the use of the 100 (continue) status.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

@@ -37,8 +37,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='jm'>{@link RestResponse#getHtmlDocBuilder()} - Set values programmatically during a REST request.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
  * </ul>
  *
@@ -97,8 +96,7 @@ public class HtmlDocBuilder {
 	 * The page header normally contains the title and description, but this value can be used to override the contents
 	 * to be whatever you want.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
@@ -134,8 +132,7 @@ public class HtmlDocBuilder {
 	 * <p>
 	 * The page links are positioned immediately under the title and text.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is a lax-JSON map of key/value pairs where the keys are the link text and the values are
 	 * 		relative (to the servlet) or absolute URLs.
@@ -171,9 +168,7 @@ public class HtmlDocBuilder {
 	 * <p>
 	 * The nav section of the page contains the links.
 	 *
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
@@ -209,8 +204,7 @@ public class HtmlDocBuilder {
 	 * <p>
 	 * The aside section typically floats on the right side of the page.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
@@ -244,8 +238,7 @@ public class HtmlDocBuilder {
 	 * <p>
 	 * The footer section typically floats on the bottom of the page.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
@@ -276,8 +269,7 @@ public class HtmlDocBuilder {
 	/**
 	 * Sets the HTML CSS style section contents.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is CSS.
 	 * 	<li>
@@ -311,8 +303,7 @@ public class HtmlDocBuilder {
 	 * <p>
 	 * Specifies the URL to the stylesheet to add as a link in the style tag in the header.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is a comma-delimited list of URLs.
 	 * 	<li>
@@ -339,8 +330,7 @@ public class HtmlDocBuilder {
 	/**
 	 * Sets the HTML script section contents.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is Javascript.
 	 * 	<li>
@@ -371,8 +361,7 @@ public class HtmlDocBuilder {
 	/**
 	 * Sets the HTML head section contents.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
@@ -402,8 +391,7 @@ public class HtmlDocBuilder {
 	/**
 	 * Shorthand method for forcing the rendered HTML content to be no-wrap.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -421,8 +409,7 @@ public class HtmlDocBuilder {
 	/**
 	 * Specifies the text to display when serializing an empty array or collection.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -444,8 +431,7 @@ public class HtmlDocBuilder {
 	 * By default, uses {@link BasicHtmlDocTemplate} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -467,8 +453,7 @@ public class HtmlDocBuilder {
 	 * By default, uses {@link BasicHtmlDocTemplate} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).

@@ -66,8 +66,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * Content-Language MAY be applied to any media type -- it is not limited to textual documents.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

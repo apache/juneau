@@ -27,8 +27,7 @@ import java.lang.annotation.*;
  * Property values types that are not <c>Strings</c> will automatically be converted to the correct type
  * (e.g. <c>Boolean</c>, etc...).
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
  * </ul>
  */

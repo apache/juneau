@@ -28,8 +28,7 @@ import org.apache.juneau.transforms.*;
 /**
  * Sample REST resource for echoing HttpServletRequests back to the browser.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */

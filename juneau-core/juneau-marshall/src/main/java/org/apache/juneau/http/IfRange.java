@@ -57,8 +57,7 @@ import org.apache.juneau.internal.*;
  * provide the specified sub-range of the entity using a 206 (Partial content) response.
  * If the entity tag does not match, then the server SHOULD return the entire entity using a 200 (OK) response.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

@@ -32,8 +32,7 @@ import org.apache.juneau.utils.*;
  * Subclasses can override these methods to tailor logging of HTTP requests.
  * <br>Subclasses MUST implement a no-arg public constructor or constructor that takes in a {@link RestContext} arg.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
  * </ul>
  */

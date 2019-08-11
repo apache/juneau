@@ -25,7 +25,7 @@ import java.io.*;
  *
  * <p>
  * Subclasses must implement one of the following two methods:
- * <ul>
+ * <ul class='javatree'>
  * 	<li class='jm'>{@link #resolve(VarResolverSession,String)} - For simple vars.
  * 	<li class='jm'>{@link #resolveTo(VarResolverSession,Writer,String)} - For streamed vars.
  * </ul>
@@ -37,13 +37,12 @@ import java.io.*;
  *
  * <p>
  * Two direct abstract subclasses are provided to differentiated between simple and streamed vars:
- * <ul>
+ * <ul class='javatree'>
  * 	<li class='jac'>{@link SimpleVar}
  * 	<li class='jac'>{@link StreamedVar}
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-svl.SvlVariables}
  * </ul>
  */

@@ -45,8 +45,7 @@ public @interface SerializerConfig {
 	 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
 	 * when converting the resulting byte array to a string.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -60,8 +59,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"OutputStreamSerializer.binaryFormat.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
 	 * </ul>
 	 */
@@ -90,8 +88,7 @@ public @interface SerializerConfig {
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -104,8 +101,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"Serializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
 	 * </ul>
 	 */
@@ -129,8 +125,7 @@ public @interface SerializerConfig {
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -143,8 +138,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"Serializer.addRootType.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
 	 * </ul>
 	 */
@@ -156,8 +150,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
 	 * </ul>
 	 */
@@ -172,8 +165,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -186,8 +178,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"Serializer.sortCollections.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
 	 * </ul>
 	 */
@@ -202,8 +193,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -216,8 +206,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"Serializer.sortMaps.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
 	 * </ul>
 	 */
@@ -238,8 +227,7 @@ public @interface SerializerConfig {
 	 * 		Bean properties with empty list values will not be set.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -252,8 +240,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"Serializer.trimEmptyCollections.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
 	 * </ul>
 	 */
@@ -272,8 +259,7 @@ public @interface SerializerConfig {
 	 * 		Bean properties with empty map values will not be set.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -286,8 +272,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"Serializer.trimEmptyMaps.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
 	 * </ul>
 	 */
@@ -306,8 +291,7 @@ public @interface SerializerConfig {
 	 * 		Map entries with <jk>null</jk> values will be lost.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -320,8 +304,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"Serializer.trimNullProperties.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
 	 * </ul>
 	 */
@@ -333,8 +316,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * If <js>"true"</js>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -347,8 +329,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"Serializer.trimStrings.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
 	 * </ul>
 	 */
@@ -361,8 +342,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: JSON object representing a {@link UriContext}
 	 * 	<li>
@@ -371,8 +351,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"Serializer.uriContext.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
 	 * </ul>
 	 */
@@ -389,8 +368,7 @@ public @interface SerializerConfig {
 	 * 	<li>Properties and classes annotated with {@link org.apache.juneau.annotation.URI @URI}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -403,8 +381,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"Serializer.uriRelativity.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
 	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
@@ -422,8 +399,7 @@ public @interface SerializerConfig {
 	 * 	<li>Properties and classes annotated with {@link org.apache.juneau.annotation.URI @URI}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -437,8 +413,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"Serializer.uriResolution.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
 	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
@@ -458,8 +433,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: string
 	 * 	<li>
@@ -474,8 +448,7 @@ public @interface SerializerConfig {
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_fileCharset}
 	 * </ul>
 	 */
@@ -487,8 +460,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: integer
 	 * 	<li>
@@ -501,8 +473,7 @@ public @interface SerializerConfig {
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
 	 * </ul>
 	 */
@@ -514,8 +485,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * This is the character used for quoting attributes and values.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Default: "
 	 * 	<li>
@@ -526,8 +496,7 @@ public @interface SerializerConfig {
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
 	 * </ul>
 	 */
@@ -542,8 +511,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: string
 	 * 	<li>
@@ -556,8 +524,7 @@ public @interface SerializerConfig {
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_streamCharset}
 	 * </ul>
 	 */
@@ -569,8 +536,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * If <js>"true"</js>, whitespace is added to the output to improve readability.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -583,8 +549,7 @@ public @interface SerializerConfig {
 	 * 		A default global value can be set via the system property <js>"Serializer.useWhitespace.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 */

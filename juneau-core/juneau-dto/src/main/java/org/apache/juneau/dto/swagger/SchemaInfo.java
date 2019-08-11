@@ -55,8 +55,7 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-dto.Swagger}
  * </ul>
  */
@@ -166,8 +165,7 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>format</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 *
@@ -180,8 +178,7 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>format</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 *
@@ -875,8 +872,7 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>enum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -943,8 +939,7 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>type</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 *

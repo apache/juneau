@@ -121,7 +121,7 @@ public abstract class ContextBuilder {
 	 *
 	 * <p>
 	 * Applies any of the following annotations:
-	 * <ul class='doctree'>
+	 * <ul class='javatree'>
 	 * 	<li class ='ja'>{@link BeanConfig}
 	 * 	<li class ='ja'>{@link CsvConfig}
 	 * 	<li class ='ja'>{@link HtmlConfig}
@@ -163,7 +163,7 @@ public abstract class ContextBuilder {
 	 *
 	 * <p>
 	 * Applies any of the following annotations:
-	 * <ul class='doctree'>
+	 * <ul class='javatree'>
 	 * 	<li class ='ja'>{@link BeanConfig}
 	 * 	<li class ='ja'>{@link CsvConfig}
 	 * 	<li class ='ja'>{@link HtmlConfig}

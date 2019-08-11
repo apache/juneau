@@ -20,8 +20,7 @@ import org.apache.juneau.html.HtmlSerializer;
 /**
  * Sample class which shows the simple usage of HtmlSerializer and HtmlParser.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */

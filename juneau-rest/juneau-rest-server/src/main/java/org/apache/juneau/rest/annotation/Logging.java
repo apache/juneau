@@ -53,8 +53,7 @@ import org.apache.juneau.rest.*;
  * the annotation values are combined.
  * <br>Rules defined on child classes are matched before rules defined on parent classes.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
  * 	<li class='jf'>{@link RestContext#REST_callLoggerConfig}
  * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_callLoggerConfig}
@@ -81,15 +80,13 @@ public @interface Logging {
 	 * <p>
 	 * Setting this value to <js>"true"</js> is equivalent to setting the level to <js>"off"</js>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -110,15 +107,13 @@ public @interface Logging {
 	 * <p>
 	 * {@link Level#OFF} can be used to turn off logging.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -130,8 +125,7 @@ public @interface Logging {
 	 * <p>
 	 * No defines rules results in no logged messages.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -144,15 +138,13 @@ public @interface Logging {
 	 * This setting can be used to periodically log stack traces (e.g. every 24 hours) so that stack traces don't get
 	 * lost from rolling-over log files.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -172,15 +164,13 @@ public @interface Logging {
 	 * 	<li><js>"false"</jk> (default) - Don't use stack trace hashing.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */

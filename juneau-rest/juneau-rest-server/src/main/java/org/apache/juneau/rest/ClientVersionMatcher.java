@@ -21,8 +21,7 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Specialized matcher for matching client versions.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.ClientVersioning}
  * </ul>
  */

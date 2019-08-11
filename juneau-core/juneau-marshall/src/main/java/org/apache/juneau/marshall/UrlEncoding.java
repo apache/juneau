@@ -33,8 +33,7 @@ import org.apache.juneau.urlencoding.*;
  * 	String string = UrlEncoding.<jsf>DEFAULT</jsf>.write(myPojo);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Marshalls}
  * </ul>
  */

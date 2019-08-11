@@ -25,8 +25,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Creates a mocked interface against a REST resource class to use for creating test remote resource interfaces.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock.MockRemoteResource}
  * </ul>
  *

@@ -39,8 +39,7 @@ import org.apache.juneau.svl.*;
 /**
  * Main configuration API class.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-config}
  * 	<li class='extlink'>{@source}
  * </ul>
@@ -1059,8 +1058,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Use the {@link #getObject(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
@@ -1502,8 +1500,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	cf.save();
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>Calls to setters when the configuration is read-only will cause {@link UnsupportedOperationException} to be thrown.
 	 * </ul>
 	 *

@@ -63,8 +63,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * HTTP/1.1 servers SHOULD send Last-Modified whenever feasible.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

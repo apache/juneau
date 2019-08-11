@@ -52,8 +52,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * Contains the default set of parameter resolvers for REST resource methods (i.e methods annotated with {@link RestResource @RestResource}).
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodParameters}
  * </ul>
  */

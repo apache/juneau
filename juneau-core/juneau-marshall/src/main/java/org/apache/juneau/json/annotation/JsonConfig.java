@@ -45,8 +45,7 @@ public @interface JsonConfig {
 	 * If <js>"true"</js>, after parsing a POJO from the input, verifies that the remaining input in
 	 * the stream consists of only comments or whitespace.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -59,8 +58,7 @@ public @interface JsonConfig {
 	 * 		A default global value can be set via the system property <js>"JsonParser.validateEnd.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonParser#JSON_validateEnd}
 	 * </ul>
 	 */
@@ -81,8 +79,7 @@ public @interface JsonConfig {
 	 * When present, this value overrides the {@link Serializer#SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -95,8 +92,7 @@ public @interface JsonConfig {
 	 * 		A default global value can be set via the system property <js>"JsonSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_addBeanTypes}
 	 * </ul>
 	 */
@@ -111,8 +107,7 @@ public @interface JsonConfig {
 	 * <br>However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
 	 * <xt>&lt;\/script&gt;</xt>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -125,8 +120,7 @@ public @interface JsonConfig {
 	 * 		A default global value can be set via the system property <js>"JsonSerializer.escapeSolidus.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
 	 * </ul>
 	 */
@@ -154,8 +148,7 @@ public @interface JsonConfig {
 	 * 		</p>
 	 * </ol>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -168,8 +161,7 @@ public @interface JsonConfig {
 	 * 		A default global value can be set via the system property <js>"JsonSerializer.simpleMode.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
 	 * </ul>
 	 */

@@ -62,8 +62,7 @@ import org.apache.juneau.utils.*;
  * 		<br>Default is {@code 0} (meaning return all rows).
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='jc'>{@link PojoQuery} - Additional information on filtering POJO models.
  * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
  * 	<li class='link'>{@doc juneau-rest-server.Converters}

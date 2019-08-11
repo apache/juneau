@@ -51,8 +51,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 * <p>
 	 * Identifies the path of the directory containing the configuration files.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_directory}
 	 * </ul>
 	 *
@@ -72,8 +71,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 * <p>
 	 * Identifies the path of the directory containing the configuration files.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_directory}
 	 * </ul>
 	 *
@@ -93,8 +91,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 * <p>
 	 * Identifies the charset of external files.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_charset}
 	 * </ul>
 	 *
@@ -114,8 +111,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 * <p>
 	 * Identifies the charset of external files.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_charset}
 	 * </ul>
 	 *
@@ -135,8 +131,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 * <p>
 	 * Shortcut for calling <code>useWatcher(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_useWatcher}
 	 * </ul>
 	 *
@@ -153,8 +148,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 * <p>
 	 * Determines how frequently the file system is polled for updates.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_watcherSensitivity}
 	 * </ul>
 	 *
@@ -174,8 +168,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 * <p>
 	 * Shortcut for calling <code>useWatcher(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_updateOnWrite}
 	 * </ul>
 	 *
@@ -192,8 +185,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 * <p>
 	 * Determines how frequently the file system is polled for updates.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_watcherSensitivity}
 	 * </ul>
 	 *

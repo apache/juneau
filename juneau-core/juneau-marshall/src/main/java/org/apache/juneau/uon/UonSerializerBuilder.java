@@ -60,8 +60,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}
 	 * </ul>
 	 *
@@ -80,8 +79,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>encoding(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}
 	 * </ul>
 	 *
@@ -97,8 +95,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>
 	 *
@@ -117,8 +114,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>
 	 *
@@ -137,8 +133,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>paramFormat(<jsf>PLAINTEXT</jsf>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>
 	 *

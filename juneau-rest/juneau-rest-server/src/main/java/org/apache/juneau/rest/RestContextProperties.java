@@ -22,14 +22,13 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * These are properties specified on a REST resource class through the following:
- * <ul>
+ * <ul class='javatree'>
  * 	<li class='ja'>{@link RestResource#properties()}
  * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
  * 	<li class='jm'>{@link RestContextBuilder#set(Map)}
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
  * </ul>
  */

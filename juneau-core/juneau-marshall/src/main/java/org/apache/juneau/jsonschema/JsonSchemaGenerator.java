@@ -56,7 +56,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <p>
 	 * The format is a comma-delimited list of any of the following values:
 	 *
-	 * <ul class='doctree'>
+	 * <ul class='javatree'>
 	 * 	<li class='jf'>{@link TypeCategory#BEAN BEAN}
 	 * 	<li class='jf'>{@link TypeCategory#COLLECTION COLLECTION}
 	 * 	<li class='jf'>{@link TypeCategory#ARRAY ARRAY}
@@ -91,7 +91,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <p>
 	 * The examples come from calling {@link ClassMeta#getExample(BeanSession)} which in turn gets examples
 	 * from the following:
-	 * <ul class='doctree'>
+	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Example}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
 	 * </ul>
@@ -99,7 +99,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <p>
 	 * The format is a comma-delimited list of any of the following values:
 	 *
-	 * <ul class='doctree'>
+	 * <ul class='javatree'>
 	 * 	<li class='jf'>{@link TypeCategory#BEAN BEAN}
 	 * 	<li class='jf'>{@link TypeCategory#COLLECTION COLLECTION}
 	 * 	<li class='jf'>{@link TypeCategory#ARRAY ARRAY}
@@ -450,7 +450,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 				return true;
 		return false;
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------

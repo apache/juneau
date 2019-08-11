@@ -22,8 +22,7 @@ import org.apache.juneau.html.*;
 /**
  * Annotation that can be applied to classes, fields, and methods to tweak how they are handled by {@link HtmlSerializer}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.HtmlDetails.HtmlAnnotation}
  * </ul>
  */
@@ -88,8 +87,7 @@ public @interface Html {
 	/**
 	 * When <jk>true</jk>, don't add headers to tables.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addKeyValueTableHeaders}
 	 * </ul>
 	 */

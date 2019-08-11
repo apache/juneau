@@ -33,20 +33,20 @@ import org.apache.juneau.transform.*;
  *
  * <p>
  * Supports any of the following temporal objects:
- * <ul>
- * 	<li>{@link HijrahDate}
- * 	<li>{@link Instant}
- * 	<li>{@link JapaneseDate}
- * 	<li>{@link LocalDate}
- * 	<li>{@link LocalDateTime}
- * 	<li>{@link LocalTime}
- * 	<li>{@link MinguoDate}
- * 	<li>{@link OffsetDateTime}
- * 	<li>{@link OffsetTime}
- * 	<li>{@link ThaiBuddhistDate}
- * 	<li>{@link Year}
- * 	<li>{@link YearMonth}
- * 	<li>{@link ZonedDateTime}
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HijrahDate}
+ * 	<li class='jc'>{@link Instant}
+ * 	<li class='jc'>{@link JapaneseDate}
+ * 	<li class='jc'>{@link LocalDate}
+ * 	<li class='jc'>{@link LocalDateTime}
+ * 	<li class='jc'>{@link LocalTime}
+ * 	<li class='jc'>{@link MinguoDate}
+ * 	<li class='jc'>{@link OffsetDateTime}
+ * 	<li class='jc'>{@link OffsetTime}
+ * 	<li class='jc'>{@link ThaiBuddhistDate}
+ * 	<li class='jc'>{@link Year}
+ * 	<li class='jc'>{@link YearMonth}
+ * 	<li class='jc'>{@link ZonedDateTime}
  * </ul>
  */
 public class TemporalSwap extends StringSwap<Temporal> {

@@ -29,8 +29,7 @@ import org.apache.juneau.json.*;
  * Subclasses can override these methods to tailor logging of HTTP requests.
  * <br>Subclasses MUST implement a no-arg public constructor.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
  * </ul>
  *

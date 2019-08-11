@@ -19,8 +19,7 @@ import org.apache.juneau.rest.*;
 /**
  * Represents a single logging rule for how to handle logging of HTTP requests/responses.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_callLoggerConfig}
  * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_callLoggerConfig}
  * </ul>
@@ -39,15 +38,13 @@ public @interface LoggingRule {
 	 * 	<li>The value <js>"*"</js> to match any code.  This is the default value.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -69,15 +66,13 @@ public @interface LoggingRule {
 	 * 	<li><js>"false"</jk> - Match any requests.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -102,15 +97,13 @@ public @interface LoggingRule {
 	 * <p>
 	 * Setting this value to <js>"true"</js> is equivalent to setting the level to <js>"off"</js>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -128,15 +121,13 @@ public @interface LoggingRule {
 	 * 	<li>Multiple patterns separated by spaces or commas (e.g. <js>"String*Exception, IO*Exception"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -157,15 +148,13 @@ public @interface LoggingRule {
 	 * <p>
 	 * {@link Level#OFF} can be used to turn off logging.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -182,15 +171,13 @@ public @interface LoggingRule {
 	 * 	<li><js>"long"</jk> - Also the request body as UTF-8 and spaced-hex text (debug must be enabled).
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -207,15 +194,13 @@ public @interface LoggingRule {
 	 * 	<li><js>"long"</jk> - Also the response body as UTF-8 and spaced-hex text (debug must be enabled).
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -224,15 +209,13 @@ public @interface LoggingRule {
 	/**
 	 * Shortcut for specifying <js>"long"</js> for {@link #req() @LoggingRule(req)} and {@link #res() @LoggingRule(res)}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */

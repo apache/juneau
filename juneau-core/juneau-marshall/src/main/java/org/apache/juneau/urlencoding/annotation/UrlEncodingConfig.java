@@ -47,8 +47,7 @@ public @interface UrlEncodingConfig {
 	 * If <js>"false"</js>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
 	 * <br>If <js>"true"</js>, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -67,8 +66,7 @@ public @interface UrlEncodingConfig {
 	 * 		A default global value can be set via the system property <js>"UrlEncodingSerializer.expandedParams.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UrlEncodingSerializer#URLENC_expandedParams}
 	 * </ul>
 	 */

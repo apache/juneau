@@ -27,8 +27,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * Sets the <c>Content-Type</c> response header to whatever was set via {@link RestResponse#setContentType(String)}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodReturnTypes}
  * </ul>
  */

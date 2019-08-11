@@ -52,8 +52,7 @@ import org.apache.juneau.http.annotation.*;
  * to attacks against software that is known to contain security holes.
  * Server implementors are encouraged to make this field a configurable option.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

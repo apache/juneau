@@ -119,8 +119,7 @@ import org.apache.juneau.http.annotation.*;
  * (This prevents bad consequences of naive caching of Warning header fields.)
  * If all of the warning-values are deleted for this reason, the Warning header MUST be deleted as well.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

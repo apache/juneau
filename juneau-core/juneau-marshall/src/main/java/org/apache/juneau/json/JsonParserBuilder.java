@@ -60,8 +60,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in
 	 * the stream consists of only comments or whitespace.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonParser#JSON_validateEnd}
 	 * </ul>
 	 *
@@ -80,8 +79,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Shortcut for calling <code>validateEnd(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonParser#JSON_validateEnd}
 	 * </ul>
 	 *

@@ -36,8 +36,7 @@ import static org.apache.juneau.internal.StateMachineState.*;
  * 	<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5>
- * <ul>
+ * <ul class='notes'>
  * 	<li>AND operations take precedence over OR operations (as expected).
  * 	<li>Whitespace is ignored.
  * 	<li><jk>null</jk> or empty expressions always match as <jk>false</jk>.

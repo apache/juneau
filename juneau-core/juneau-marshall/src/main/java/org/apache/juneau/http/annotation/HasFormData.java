@@ -28,8 +28,7 @@ import java.lang.annotation.*;
  * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.HasFormData}
  * </ul>
  */
@@ -44,8 +43,7 @@ public @interface HasFormData {
 	 *
 	 * Required. The name of the parameter. Parameter names are case sensitive.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain-text.
 	 * </ul>

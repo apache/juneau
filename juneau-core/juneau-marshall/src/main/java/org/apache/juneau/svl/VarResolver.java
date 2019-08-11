@@ -52,8 +52,7 @@ import org.apache.juneau.svl.vars.*;
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"java.home is set to $S{java.home}"</js>));
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-svl.VarResolvers}
  * </ul>
  */

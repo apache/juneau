@@ -18,8 +18,7 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Extended annotation for {@link RestResource#swagger() @RestResource(swagger)}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * </ul>
  */
@@ -38,8 +37,7 @@ public @interface ResourceSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain-text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -74,8 +72,7 @@ public @interface ResourceSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -139,8 +136,7 @@ public @interface ResourceSwagger {
 	)
 	swagger=@ResourceSwagger("$F{PetStoreResource.json}"),
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -202,8 +198,7 @@ public @interface ResourceSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -252,8 +247,7 @@ public @interface ResourceSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -277,8 +271,7 @@ public @interface ResourceSwagger {
 	 * The default value pulls the description from the <c>termsOfService</c> entry in the servlet resource bundle.
 	 * (e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -303,8 +296,7 @@ public @interface ResourceSwagger {
 	 * The default value pulls the description from the <c>version</c> entry in the servlet resource bundle.
 	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 	<li>
@@ -405,8 +397,7 @@ public @interface ResourceSwagger {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>

@@ -17,8 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 /**
  * Various useful static methods for creating HTML elements.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-dto.HTML5}
  * </ul>
  */

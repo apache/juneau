@@ -442,8 +442,7 @@ public abstract class Parser extends BeanContext {
 	 * 	MyBean myBean2 = s.parse(json, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This only allows for multi-input streams for the following parsers:
 	 * 		<ul>
@@ -589,8 +588,7 @@ public abstract class Parser extends BeanContext {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>

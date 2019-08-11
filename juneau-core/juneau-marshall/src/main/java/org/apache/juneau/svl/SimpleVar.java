@@ -24,12 +24,11 @@ import java.io.*;
  *
  * <p>
  * Subclasses must implement the following method:
- * <ul>
+ * <ul class='javatree'>
  * 	<li class='jm'>{@link #resolve(VarResolverSession, String)}
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-svl.SvlVariables}
  * </ul>
  */

@@ -18,8 +18,7 @@ import org.apache.juneau.serializer.*;
 /**
  * A subclass of {@link Marshall} for character-based serializers and parsers.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Marshalls}
  * </ul>
  */

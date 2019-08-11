@@ -35,8 +35,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * Instances of this class can be built using {@link Builder}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.ReaderResource}
  * </ul>
  */
@@ -101,8 +100,7 @@ public class ReaderResource implements Writable {
 	/**
 	 * Builder class for constructing {@link ReaderResource} objects.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.ReaderResource}
 	 * </ul>
 	 */

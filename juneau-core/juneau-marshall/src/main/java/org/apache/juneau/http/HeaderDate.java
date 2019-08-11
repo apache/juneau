@@ -23,8 +23,7 @@ import org.apache.juneau.internal.*;
  * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

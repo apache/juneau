@@ -31,8 +31,7 @@ import org.apache.juneau.utils.*;
  * Identifies servlet and REST call lifecycle events which cause {@link RestHook @RestHook}-annotated Java methods
  * to be called.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.LifecycleHooks}
  * </ul>
  */
@@ -68,8 +67,7 @@ public enum HookEvent {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
 	 * 	<li>
@@ -185,8 +183,7 @@ public enum HookEvent {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
 	 * 	<li>
@@ -235,8 +232,7 @@ public enum HookEvent {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
 	 * 	<li>
@@ -298,8 +294,7 @@ public enum HookEvent {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
 	 * 	<li>
@@ -351,8 +346,7 @@ public enum HookEvent {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
 	 * 	<li>
@@ -384,8 +378,7 @@ public enum HookEvent {
 	 * The only valid parameter type for this method is {@link RestContext} which can be used to retrieve information
 	 * about the servlet.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
 	 * 	<li>
@@ -420,8 +413,7 @@ public enum HookEvent {
 	 * The only valid parameter type for this method is {@link RestContext} which can be used to retrieve information
 	 * about the servlet.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
 	 * 	<li>
@@ -463,8 +455,7 @@ public enum HookEvent {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
 	 * 	<li>

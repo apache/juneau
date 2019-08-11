@@ -23,8 +23,7 @@ import java.lang.annotation.*;
  * <p>
  * This annotation allows you to identify other classes that return URIs via <c>toString()</c> as URI objects.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.URIs}
  * </ul>
  */

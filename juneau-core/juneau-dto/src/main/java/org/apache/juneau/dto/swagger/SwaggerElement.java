@@ -24,8 +24,7 @@ import org.apache.juneau.utils.*;
 /**
  * Root class for all Swagger beans.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-dto.Swagger}
  * </ul>
  */

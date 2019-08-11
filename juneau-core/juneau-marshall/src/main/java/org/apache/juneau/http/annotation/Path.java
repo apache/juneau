@@ -59,8 +59,7 @@ import org.apache.juneau.oapi.*;
  * <p>
  * The special name <js>"/*"</js> is used to retrieve the path remainder after the path match (i.e. the part that matches <js>"/*"</js>).
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Path}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='extlink'>{@doc SwaggerParameterObject}
@@ -70,15 +69,13 @@ import org.apache.juneau.oapi.*;
  *
  * Annotation applied to Java method arguments of interface proxies to denote that they are path variables on the request.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Path}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Request}
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Request}
  * </ul>
@@ -169,8 +166,7 @@ public @interface Path {
 	 * The name field MUST correspond to the associated {@doc SwaggerPathsPath path} segment from the path field in the {@doc SwaggerPathsObject Paths Object}.
 	 * See {@doc SwaggerPathTemplating Path Templating} for further information.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain-text.
 	 * </ul>
@@ -214,8 +210,7 @@ public @interface Path {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -281,8 +276,7 @@ public @interface Path {
 	 * 		Client-side schema-based serializing.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 */
@@ -345,8 +339,7 @@ public @interface Path {
 	 * 		Client-side schema-based serializing.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 */
@@ -815,8 +808,7 @@ public @interface Path {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Example}
 	 * 	<li class='jc'>{@link BeanContext}
 	 * 	<ul>
@@ -829,8 +821,7 @@ public @interface Path {
 	 * 	</ul>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -896,8 +887,7 @@ public @interface Path {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>

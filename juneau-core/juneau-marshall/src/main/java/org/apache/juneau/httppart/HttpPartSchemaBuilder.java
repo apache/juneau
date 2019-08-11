@@ -564,8 +564,7 @@ public class HttpPartSchemaBuilder {
 	 * 	<li>{@doc SwaggerSecuritySchemeObject SecurityScheme}
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 *
@@ -641,8 +640,7 @@ public class HttpPartSchemaBuilder {
 	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 *

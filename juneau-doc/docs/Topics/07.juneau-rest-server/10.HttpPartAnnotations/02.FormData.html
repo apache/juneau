@@ -18,7 +18,7 @@
 <p>
 	The {@link oaj.http.annotation.FormData @FormData} annotation is used to retrieve request form post entries.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link oaj.http.annotation.FormData}
 	<ul>
 		<li class='jf'>{@link oaj.http.annotation.FormData#_default() _default} - Default value if not present.
@@ -169,7 +169,6 @@
 	)
 </p>
 
-<h5 class='section'>Notes:</h5>
 <div class='warn'>
 	This annotation should not be combined with the {@link oaj.http.annotation.Body @Body} annotation or {@link oajr.RestRequest#getBody()} method
 	for <c>application/x-www-form-urlencoded POST</c> posts, since it will trigger the underlying servlet
@@ -177,8 +176,7 @@
 	<br>The {@link oaj.http.annotation.Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
 	servlet to drain the body content.
 </div>
-<h5 class='section'>See Also:</h5>
-<ul>
+<ul class='seealso'>
 	<li class='jc'>{@link oajr.RequestFormData}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>

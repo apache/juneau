@@ -72,8 +72,7 @@ import org.apache.juneau.oapi.*;
  * 	)
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='extlink'>{@doc SwaggerItemsObject}
  * </ul>
@@ -85,8 +84,7 @@ public @interface Items {
 	/**
 	 * <mk>type</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -99,8 +97,7 @@ public @interface Items {
 	/**
 	 * <mk>format</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -113,8 +110,7 @@ public @interface Items {
 	/**
 	 * <mk>collectionFormat</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -127,8 +123,7 @@ public @interface Items {
 	/**
 	 * <mk>pattern</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -141,8 +136,7 @@ public @interface Items {
 	/**
 	 * <mk>maximum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -155,8 +149,7 @@ public @interface Items {
 	/**
 	 * <mk>minimum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -169,8 +162,7 @@ public @interface Items {
 	/**
 	 * <mk>multipleOf</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -183,8 +175,7 @@ public @interface Items {
 	/**
 	 * <mk>maxLength</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -197,8 +188,7 @@ public @interface Items {
 	/**
 	 * <mk>minLength</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -211,8 +201,7 @@ public @interface Items {
 	/**
 	 * <mk>maxItems</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -225,8 +214,7 @@ public @interface Items {
 	/**
 	 * <mk>minItems</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -239,8 +227,7 @@ public @interface Items {
 	/**
 	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -253,8 +240,7 @@ public @interface Items {
 	/**
 	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -267,8 +253,7 @@ public @interface Items {
 	/**
 	 * <mk>uniqueItems</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -281,8 +266,7 @@ public @interface Items {
 	/**
 	 * <mk>default</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -295,8 +279,7 @@ public @interface Items {
 	/**
 	 * <mk>enum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -309,8 +292,7 @@ public @interface Items {
 	/**
 	 * <mk>$ref</mk> field of the {@doc SwaggerItemsObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -394,8 +376,7 @@ public @interface Items {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>

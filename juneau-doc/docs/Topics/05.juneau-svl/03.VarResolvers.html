@@ -19,7 +19,7 @@ VarResolvers and VarResolverSessions
 	The main class for performing variable resolution is {@link oaj.svl.VarResolver}.
 	Two methods are provided for resolving variables:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link oaj.svl.VarResolver}
 	<ul>
 		<li class='jm'>{@link oaj.svl.VarResolver#resolve(String) resolve(String)} 
@@ -40,14 +40,14 @@ VarResolvers and VarResolverSessions
 <p>
 	The following two classes are identical in behavior except for which objects they can access:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link oaj.svl.VarResolver} - Has access to context objects only.
 	<li class='jc'>{@link oaj.svl.VarResolverSession} - Has access to context and session objects.
 </ul>
 <p>
 	Context and session objects are set through the following methods:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'>{@link oaj.svl.VarResolverBuilder#contextObject(String,Object)} - Context objects.
 	<li class='jm'>{@link oaj.svl.VarResolverSession#sessionObject(String,Object)} - Session objects.
 	<li class='jm'>{@link oaj.svl.VarResolver#createSession(Map)} - Session objects.
@@ -55,7 +55,7 @@ VarResolvers and VarResolverSessions
 <p>
 	Both kinds of objects are accessible through the following method:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'>{@link oaj.svl.VarResolverSession#getSessionObject(Class, String, boolean)}
 </ul>
 <p>

@@ -21,8 +21,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$CO{arg1[,arg2...]}"</js>.
  *
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-svl.SvlVariables}
  * </ul>
  */

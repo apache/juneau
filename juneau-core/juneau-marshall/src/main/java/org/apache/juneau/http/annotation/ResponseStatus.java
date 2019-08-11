@@ -84,16 +84,14 @@ import org.apache.juneau.*;
  * The method being annotated must be public and return a numeric value.
  *
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.ResponseStatus}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Response}
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Response}
  * </ul>

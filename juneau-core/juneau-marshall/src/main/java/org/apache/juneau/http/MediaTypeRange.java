@@ -25,8 +25,7 @@ import org.apache.juneau.internal.*;
  * Describes a single type used in content negotiation between an HTTP client and server, as described in
  * Section 14.1 and 14.7 of RFC2616 (the HTTP/1.1 specification).
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

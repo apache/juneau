@@ -51,8 +51,7 @@ import org.apache.juneau.serializer.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RestResponse}
  * </ul>
  */
@@ -134,8 +133,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Gets the serializer group for the response.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.Serializers}
 	 * </ul>
 	 *
@@ -182,8 +180,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Calling this method with a <jk>null</jk> value is NOT the same as not calling this method at all.
 	 * 		<br>A <jk>null</jk> output value means we want to serialize <jk>null</jk> as a response (e.g. as a JSON <c>null</c>).
@@ -191,8 +188,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 		<br>This distinction affects the {@link #hasOutput()} method behavior.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
 	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodReturnTypes}
 	 * </ul>
@@ -234,8 +230,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link RestMethod#htmldoc()}
 	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
 	 * </ul>
@@ -256,7 +251,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * <p>
 	 * This contains all resource and method level properties from the following:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link RestResource#properties()}
 	 * 	<li class='ja'>{@link RestMethod#properties()}
 	 * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
@@ -284,8 +279,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link #prop(String, Object)}
 	 * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
 	 * </ul>

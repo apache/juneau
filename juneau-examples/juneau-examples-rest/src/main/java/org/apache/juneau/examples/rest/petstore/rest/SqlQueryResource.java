@@ -37,8 +37,7 @@ import org.apache.juneau.rest.widget.*;
 /**
  * Sample resource that shows how Juneau can serialize ResultSets.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */

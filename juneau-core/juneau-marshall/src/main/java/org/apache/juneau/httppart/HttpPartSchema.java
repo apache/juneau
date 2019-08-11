@@ -44,8 +44,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * This class is thread safe and reusable.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.OpenApiDetails}
  * </ul>
  */

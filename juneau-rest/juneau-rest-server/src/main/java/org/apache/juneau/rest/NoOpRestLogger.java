@@ -22,8 +22,7 @@ import java.util.logging.*;
  * <p>
  * Disables logging entirely.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
  * </ul>
  * @deprecated Use {@link RestCallLogger}

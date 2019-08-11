@@ -111,8 +111,7 @@ import org.apache.juneau.http.annotation.*;
  * hosts have already been replaced by pseudonyms.
  * Applications MUST NOT combine entries which have different received-protocol values.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

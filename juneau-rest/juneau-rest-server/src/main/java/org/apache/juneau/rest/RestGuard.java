@@ -65,8 +65,7 @@ import org.apache.juneau.rest.exception.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Guards}
  * </ul>
  */

@@ -48,8 +48,7 @@ import org.apache.juneau.rest.exception.*;
  * 	<li class='ja'>{@link FormData}
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestFormData}
  * </ul>
  */
@@ -123,8 +122,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * <p>
 	 * Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This method returns the raw unparsed value, and differs from calling
 	 * 		<code>get(name, String.<jk>class</js>)</code> which will convert the value from UON
@@ -231,8 +229,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	Map myparam = formData.get(<js>"myparam"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 *
@@ -369,16 +366,14 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; myparam = formData.get(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
 	 * 	<li>
 	 * 		<c>Maps</c> must be followed by zero or two parameters representing the key and value types.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 *

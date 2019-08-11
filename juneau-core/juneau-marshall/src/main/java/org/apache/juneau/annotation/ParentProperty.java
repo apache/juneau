@@ -23,14 +23,12 @@ import java.lang.annotation.*;
  * <p>
  * Used by the parsers to add references to parent objects in child objects.
  *
- * <h5 class='section'>Notes:</h5>
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li>
  * 		The annotated field or method does not need to be public.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.NamePropertyAnnotation}
  * </ul>
  */

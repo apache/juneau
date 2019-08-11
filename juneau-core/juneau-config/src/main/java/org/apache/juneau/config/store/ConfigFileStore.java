@@ -102,8 +102,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * <p>
 	 * Use a file system watcher for file system changes.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>Calling {@link #close()} on this object closes the watcher.
 	 * </ul>
 	 */
@@ -128,8 +127,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * <p>
 	 * Determines how frequently the file system is polled for updates.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>This relies on internal Sun packages and may not work on all JVMs.
 	 * </ul>
 	 */

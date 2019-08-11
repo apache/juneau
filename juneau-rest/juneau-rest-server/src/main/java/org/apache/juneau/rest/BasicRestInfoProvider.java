@@ -32,8 +32,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * Subclasses can override these methods to tailor how HTTP REST resources are documented.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_infoProvider}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * </ul>

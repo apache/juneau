@@ -28,8 +28,7 @@ import org.apache.juneau.annotation.*;
  * Bean filters are created by {@link BeanFilterBuilder} which is the programmatic equivalent to the {@link Bean @Bean}
  * annotation.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanFilters}
  * </ul>
  */

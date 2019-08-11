@@ -64,8 +64,7 @@ import org.apache.juneau.ExecutableException;
  * 	<jsm>assertEquals</jsm>(<jk>null</jk>, m.getX());
  * </p>
  *
- * <h5 class='section'>Notes:</h5>
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li>
  * 		Null POJOs are ignored.
  * 	<li>

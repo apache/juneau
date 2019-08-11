@@ -488,7 +488,7 @@ public class Microservice implements ConfigEventListener {
 	 *
 	 * <p>
 	 * Subclasses can set their own config file by using the following methods:
-	 * <ul class='doctree'>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link MicroserviceBuilder#configStore(ConfigStore)}
 	 * 	<li class='jm'>{@link MicroserviceBuilder#configName(String)}
 	 * </ul>
@@ -598,7 +598,7 @@ public class Microservice implements ConfigEventListener {
 	 *
 	 * <p>
 	 * Variables can be controlled by the following methods:
-	 * <ul class='doctree'>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link MicroserviceBuilder#vars(Class...)}
 	 * 	<li class='jm'>{@link MicroserviceBuilder#varContext(String, Object)}
 	 * </ul>

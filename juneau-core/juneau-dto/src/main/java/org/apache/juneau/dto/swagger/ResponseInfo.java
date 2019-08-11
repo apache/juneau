@@ -57,8 +57,7 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-dto.Swagger}
  * </ul>
  */
@@ -184,8 +183,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * <p>
 	 * A definition of the response structure.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If this field does not exist, it means no content is returned as part of the response.
 	 * 	<li>
@@ -207,8 +205,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * <p>
 	 * A definition of the response structure.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If this field does not exist, it means no content is returned as part of the response.
 	 * 	<li>

@@ -53,8 +53,7 @@ import org.apache.juneau.utils.*;
  * 	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets}
  * </ul>
  */

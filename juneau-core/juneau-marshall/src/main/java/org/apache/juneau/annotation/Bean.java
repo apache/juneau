@@ -27,8 +27,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * This annotation can be applied to classes and interfaces.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanAnnotation}
  * </ul>
  */
@@ -44,8 +43,7 @@ public @interface Bean {
 	 * <p>
 	 * The list of classes that make up the bean dictionary for all properties in this class and all subclasses.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 */
@@ -61,8 +59,7 @@ public @interface Bean {
 	 * 	<jk>public class</jk> Address {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
 	 */
@@ -95,8 +92,7 @@ public @interface Bean {
 	 * 	<li>Return the bean itself.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
 	 * </ul>
 	 */
@@ -129,8 +125,7 @@ public @interface Bean {
 	 * Note that this annotation can be used on the parent class so that it filters to all child classes,
 	 * or can be set individually on the child classes.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
 	 */
@@ -158,8 +153,7 @@ public @interface Bean {
 	 * 	<jk>public class</jk> Address {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
 	 */
@@ -171,8 +165,7 @@ public @interface Bean {
 	 * <p>
 	 * Property filters can be used to intercept calls to getters and setters and alter their values in transit.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jc'>{@link PropertyFilter}
 	 * </ul>
 	 */
@@ -191,8 +184,7 @@ public @interface Bean {
 	 * 	<jk>public class</jk> MyBean {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
 	 * </ul>
 	 */
@@ -212,8 +204,7 @@ public @interface Bean {
 	 * 	<jk>public class</jk> MyBean {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
 	 * </ul>
 	 */
@@ -264,8 +255,7 @@ public @interface Bean {
 	 * 	<jk>public class</jk> MyBean {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 */
@@ -287,8 +277,7 @@ public @interface Bean {
 	 * 	<jk>public class</jk> MyBean {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanTypePropertyName}
 	 * </ul>
 	 */

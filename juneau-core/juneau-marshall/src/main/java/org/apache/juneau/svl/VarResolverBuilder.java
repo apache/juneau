@@ -21,8 +21,7 @@ import org.apache.juneau.svl.vars.*;
 /**
  * Builder class for building instances of {@link VarResolver}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-svl.VarResolvers}
  * </ul>
  */

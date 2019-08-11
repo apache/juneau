@@ -27,8 +27,7 @@ import org.apache.juneau.json.*;
  * Describes a single media type used in content negotiation between an HTTP client and server, as described in
  * Section 14.1 and 14.7 of RFC2616 (the HTTP/1.1 specification).
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
@@ -72,8 +71,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * The same media type strings always return the same objects so that these objects
 	 * can be compared for equality using '=='.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Spaces are replaced with <js>'+'</js> characters.
 	 * 		This gets around the issue where passing media type strings with <js>'+'</js> as HTTP GET parameters

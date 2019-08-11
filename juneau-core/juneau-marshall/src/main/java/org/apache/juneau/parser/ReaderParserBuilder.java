@@ -54,8 +54,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * <p>
 	 * The character set to use for reading <c>Files</c> from the file system.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
 	 * </ul>
 	 *
@@ -74,8 +73,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * <p>
 	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_streamCharset}
 	 * </ul>
 	 *

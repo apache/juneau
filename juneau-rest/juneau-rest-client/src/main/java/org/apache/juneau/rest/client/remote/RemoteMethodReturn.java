@@ -22,8 +22,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Represents the metadata about the returned object of a method on a remote proxy interface.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
  */

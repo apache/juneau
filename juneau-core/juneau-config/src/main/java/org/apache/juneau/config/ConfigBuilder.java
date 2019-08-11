@@ -33,8 +33,7 @@ import org.apache.juneau.svl.*;
  * 	String setting = cf.getString(<js>"MySection/mysetting"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-config}
  * </ul>
  */

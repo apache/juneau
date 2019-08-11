@@ -1020,7 +1020,7 @@
 <p>
 	The class hierarchy for the serializers (excluding specialized subclasses) are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>{@link org.apache.juneau.serializer.Serializer}
 	<ul>
 		<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializer}
@@ -1155,7 +1155,7 @@
 <p>
 	The class hierarchy for the parsers (excluding specialized subclasses) are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>{@link org.apache.juneau.parser.Parser}
 	<ul>
 		<li class='jac'>{@link org.apache.juneau.parser.ReaderParser}
@@ -1196,7 +1196,7 @@
 	{@link org.apache.juneau.marshall.Marshall Marshalls} are simple pairings of a {@link org.apache.juneau.serializer.Serializer}
 	and {@link org.apache.juneau.parser.Parser} with convenience methods for serializing and parsing POJOs.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>{@link org.apache.juneau.marshall.Marshall}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.marshall.Marshall#read(Object,Class) read(Object,Class)}
@@ -1228,7 +1228,7 @@
 <p>
 	Marshalls exist for all supported languages:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>{@link org.apache.juneau.marshall.Marshall}
 	<ul>
 		<li class='jac'>{@link org.apache.juneau.marshall.CharMarshall}
@@ -1288,7 +1288,7 @@
 	The class hierarchy for the part serializers are:
 </p>
 
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jic'>{@link org.apache.juneau.httppart.HttpPartSerializer}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer} - Serializes directly to strings.
@@ -1333,7 +1333,7 @@
 	The class hierarchy for the part serializers are:
 </p>
 
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jic'>{@link org.apache.juneau.httppart.HttpPartParser}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser} - Parses directly from strings.
@@ -1378,7 +1378,7 @@
 	However, each of the serializers and parsers already contain reusable instances with common configurations.
 	For example, JSON has the following predefined reusable serializers and parsers:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
 		<ul>
 			<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT DEFAULT}
@@ -1426,7 +1426,7 @@
 	All serializers and parsers extend from the {@link org.apache.juneau.BeanContext} class.
 	Therefore, the following properties are common to all serializers and parsers:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.BeanContext}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanClassVisibility BEAN_beanClassVisibility}
@@ -1474,7 +1474,7 @@
 <p>
 	In addition to the common properties above, the following properties are common to all serializers:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.BeanTraverseContext}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions BEANTRAVERSE_detectRecursions}
@@ -1519,7 +1519,7 @@
 <p>
 	In addition to the common properties above, the following properties are common to all parsers:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.parser.Parser}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams PARSER_autoCloseStreams}
@@ -1592,7 +1592,7 @@
 <p>
 	Config annotations are provided for all serializers and parsers:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig BeanConfig}
 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvConfig CsvConfig}
 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig HtmlConfig}
@@ -1614,7 +1614,7 @@
 <p>
 	Config annotations defined on classes and methods can be applied to serializers and parsers using the following methods:	
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.BeanContextBuilder}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#applyAnnotations(Class) applyAnnotations(Class)} - Apply annotations from class and all parent classes.
@@ -1638,7 +1638,7 @@
 <p>
 	These classes extend directly from the following JCF classes:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'> 
 		{@link java.util.LinkedHashMap java.util.LinkedHashMap}
 		<ul>
@@ -1806,7 +1806,7 @@
 <p>
 	For example, the class hierarchy for <c>JsonSerializer</c> is:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'><c>Object</c>
 	<ul>
 		<li class='jac'>{@link org.apache.juneau.Context}
@@ -1831,7 +1831,7 @@
 <p>
 	The class hierarchy for <c>JsonSerializerBuilder</c> is:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'><c>Object</c>
 	<ul>
 		<li class='jac'>{@link org.apache.juneau.ContextBuilder}
@@ -1852,7 +1852,7 @@
 <p>
 	The class hierarchy for <c>JsonSerializerSession</c> is:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'><c>Object</c>
 	<ul>
 		<li class='jac'>{@link org.apache.juneau.Session}
@@ -1921,7 +1921,7 @@
 	However, two special classes are provided tailor how certain Java objects are handled by the framework.
 	These classes are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.transform.BeanFilter} - Transforms that alter the way beans are handled.
 	<li class='jac'>{@link org.apache.juneau.transform.PojoSwap} - Transforms that swap non-serializable POJOs with 
 		serializable POJOs during serialization (and optionally vis-versa during parsing).
@@ -1936,7 +1936,7 @@
 <p>
 	Transforms are added to serializers and parsers (and REST clients) using the following configuration properties:
 </p> 
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.BeanContext}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFilters BEAN_beanFilters}
@@ -1946,7 +1946,7 @@
 <p>
 	Annotations are also provided for specifying transforms directly on classes and methods (all described in later sections):
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>
 		{@link org.apache.juneau.annotation.Swap} 
 		- Used to tailor how non-bean POJOs get interpreted by the framework.
@@ -2079,7 +2079,7 @@
 <p>
 	By default, all serializers and parsers have built in <c>PojoSwaps</c> defined for the following common data types:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link java.util.Enumeration}
 	<li class='jc'>{@link java.util.Iterator}
 	<li class='jc'>{@link java.util.Locale}
@@ -2103,7 +2103,7 @@
 <p>
 	Various other swaps are provided in the <c>org.apache.juneau.transforms</c> package:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'><jk>org.apache.juneau.transforms</jk>
 		<ul>
 			<li class='jac'>{@link org.apache.juneau.transforms.ByteArraySwap}
@@ -2687,8 +2687,7 @@
 	instead.
 </p>
 
-<h5 class='section'>See Also:</h5>
-<ul>
+<ul class='seealso'>
 	<li class='jic'>{@link org.apache.juneau.transform.Surrogate}
 </ul>
 </div><!-- END: 2.11.8 - juneau-marshall.Transforms.SurrogateClasses -->
@@ -3296,7 +3295,7 @@
 		</p>
 </ul>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.annotation.Builder}
 	<li class='jic'>{@link org.apache.juneau.transform.Builder}
 </ul>
@@ -3341,7 +3340,7 @@
 <p>
 	Bean filters are added to serializers and parsers using the following:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFilters}
 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFilters(Object...)}
 </ul>
@@ -3402,7 +3401,7 @@
 <p>
 	Interface filters are defined through the following:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFilters}
 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#interfaceClass() Bean(interfaceClass)}
 	<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#interfaceClass(Class)}
@@ -3506,7 +3505,7 @@
 <p>
 	Stop classes are defined through the following:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#stopClass() Bean(stopClass)}
 	<li class='jf'>{@link org.apache.juneau.transform.BeanFilterBuilder#stopClass(Class)}
 </ul>
@@ -3664,7 +3663,7 @@
 <p>
 	Bean dictionaries are registered through the following:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.annotation.BeanProperty#beanDictionary() BeanProperty(beanDictionary)} 
 		- On individual bean properties through the annotation.
 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#beanDictionary() Bean(beanDictionary)} 
@@ -3706,7 +3705,7 @@
 <p>
 	The <js>"_type"</js> property name can be overridden through the following:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName() Bean(typePropertyName)} 
 		- On individual beans through the annotation.
 	<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName} 
@@ -4053,7 +4052,7 @@
 <p>
 	The following parsers can be configured to read continuous streams of objects from the same input stream:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.json.JsonParser}
 	<li class='jc'>{@link org.apache.juneau.uon.UonParser}
 	<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackParser}
@@ -4087,7 +4086,7 @@
 <p>
 	For obvious reasons, do not use the following properties when reading continuous streams:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jf'>{@link org.apache.juneau.json.JsonParser#JSON_validateEnd}
 	<li class='jf'>{@link org.apache.juneau.uon.UonParser#UON_validateEnd}
 	<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams}
@@ -4108,7 +4107,7 @@
 <p>
 	The classes and settings that control the behavior are:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.UriResolver} 
 	<li class='jc'>{@link org.apache.juneau.UriContext}
 	<li class='jc'>{@link org.apache.juneau.UriRelativity}
@@ -4182,7 +4181,7 @@
 <p>
 	URI resolution is controlled by the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext}
 		<br>Setting that defines the URI contextual information used to resolve relative URIs.
 	<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity}
@@ -4856,7 +4855,7 @@
 <p>
 	The JSON serializer provides the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonSerializer Common Serializer Properties}
 	<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
@@ -4869,7 +4868,7 @@
 <p>
 	The following pre-configured serializers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT DEFAULT}
@@ -4940,7 +4939,7 @@
 </p>			
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#JSON_simpleMode}
 </ul>
 </div><!-- END: 2.20.3 - juneau-marshall.JsonDetails.SimplifiedJson -->
@@ -4955,7 +4954,7 @@
 <p>
 	The JSON parser provides the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonParser Common Parser Properties}
 	<li class='jc'>{@link org.apache.juneau.json.JsonParser}
@@ -4966,7 +4965,7 @@
 <p>
 	The following pre-configured parsers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.json.JsonParser}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.json.JsonParser#DEFAULT DEFAULT}
@@ -5001,7 +5000,7 @@
 <p>
 	The annotation can be applied to beans as well as other objects serialized to other types (e.g. strings).
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.json.annotation.Json}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.json.annotation.Json#wrapperAttr() wrapperAttr}
@@ -5640,7 +5639,7 @@
 <p>
 	The XML serializers provide the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonSerializer Common Serializer Properties}
 	<li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}
@@ -5657,7 +5656,7 @@
 <p>
 	The following pre-configured serializers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.xml.XmlSerializer#DEFAULT DEFAULT}
@@ -5682,7 +5681,7 @@
 <p>
 	The XML parser provides the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonParser Common Parser Properties}
 	<li class='jc'>{@link org.apache.juneau.xml.XmlParser}
@@ -5697,7 +5696,7 @@
 <p>
 	The following pre-configured parsers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.xml.XmlParser}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.xml.XmlParser#DEFAULT DEFAULT}
@@ -7960,7 +7959,7 @@
 <p>
 	The HTML serializers provides the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonSerializer Common Serializer Properties}
 	<li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}
@@ -7991,7 +7990,7 @@
 <p>
 	The following pre-configured serializers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#DEFAULT }
@@ -8016,14 +8015,14 @@
 <p>
 	The HTML parser provides the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonParser Common Parser}
 </ul>
 <p>
 	The following pre-configured parsers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.html.HtmlParser}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.html.HtmlParser#DEFAULT DEFAULT}
@@ -8038,7 +8037,7 @@
 <p>
 	The {@link org.apache.juneau.html.annotation.Html @Html} annotation can be used to customize how POJOs are serialized to HTML on a per-class/field/method basis.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.html.annotation.Html}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.html.annotation.Html#anchorText() anchorText}
@@ -8207,7 +8206,7 @@
 	{@link org.apache.juneau.html.HtmlDocSerializer} is an extension of {@link org.apache.juneau.html.HtmlSerializer}
 	that wraps serialized POJOs in a complete HTML document. 
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_aside HTMLDOC_aside}
@@ -8304,7 +8303,7 @@
 	interface and associating it with your {@link org.apache.juneau.html.HtmlDocSerializer} using the {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}
 	setting.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.html.HtmlDocTemplate}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.html.HtmlDocTemplate#writeTo(HtmlDocSerializerSession,HtmlWriter,Object) writeTo(HtmlDocSerializerSession,HtmlWriter,Object)}
@@ -8646,7 +8645,7 @@
 <p>
 	The UON serializers provides the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonSerializer Common Serializer Properties}
 	<li class='jc'>{@link org.apache.juneau.uon.UonSerializer}
@@ -8659,7 +8658,7 @@
 <p>
 	The following pre-configured serializers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.uon.UonSerializer}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.uon.UonSerializer#DEFAULT DEFAULT}
@@ -8679,7 +8678,7 @@
 <p>
 	The UON parser provides the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonParser Common Parser Properties}
 	<li class='jc'>{@link org.apache.juneau.uon.UonParser}
@@ -8691,7 +8690,7 @@
 <p>
 	The following pre-configured parsers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.uon.UonParser}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.uon.UonParser#DEFAULT DEFAULT}
@@ -8845,7 +8844,7 @@
 <p>
 	The URL-Encoding serializers provides the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonSerializer Common Serializer Properties}
 	<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}
@@ -8856,7 +8855,7 @@
 <p>
 	The following pre-configured serializers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT DEFAULT}
@@ -8878,7 +8877,7 @@
 <p>
 	The URL-Encoding parser provides the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonParser Common Parser Properties}
 	<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingParser}
@@ -8889,7 +8888,7 @@
 <p>
 	The following pre-configured parsers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingParser}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT DEFAULT}
@@ -8905,7 +8904,7 @@
 	The {@link org.apache.juneau.urlencoding.annotation.UrlEncoding @UrlEncoding} annotation
 	is used to override the behavior of {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} on individual bean classes or properties.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncoding}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams() expandedParams}
@@ -8943,7 +8942,7 @@
 <p>
 	The MessagePack serializer provides the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonSerializer Common Serializer Properties}
 	<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackSerializer}
@@ -8954,7 +8953,7 @@
 <p>
 	The following pre-configured serializers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackSerializer}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.msgpack.MsgPackSerializer#DEFAULT DEFAULT}
@@ -8973,14 +8972,14 @@
 <p>
 	The MessagePack parser provides the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonParser Common Parser Properties}
 </ul>
 <p>
 	The following pre-configured parsers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackParser}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.msgpack.MsgPackParser#DEFAULT DEFAULT}
@@ -8999,7 +8998,7 @@
 <p>
 	The relevant classes for using OpenAPI-based serialization are:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.oapi.OpenApiSerializer} - Converts POJOs to strings.
 	<li class='jc'>{@link org.apache.juneau.oapi.OpenApiParser} - Converts strings to POJOs.
 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartSchema} - Defines the schema for your POJO.
@@ -9014,7 +9013,7 @@
 	Later in the rest-server and rest-client sections, we also describe how the following annotations
 	can be applied to method parameters and class types to define the schema for various HTTP parts:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
@@ -10069,7 +10068,7 @@
 	The {@link org.apache.juneau.jena.RdfSerializer} class is the top-level class for all Jena-based serializers.
 	Language-specific serializers are defined as inner subclasses of the <c>RdfSerializer</c> class:
 </p>	
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.jena.RdfXmlSerializer}
@@ -10080,7 +10079,7 @@
 	</ul>
 </ul>
 
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonSerializer Common Serializer Properties}
 	<li class='jic'>{@link org.apache.juneau.jena.RdfCommon}
@@ -10129,7 +10128,7 @@
 <p>
 	The following pre-configured serializers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.jena.RdfXmlSerializer}
@@ -10168,7 +10167,7 @@
 	The {@link org.apache.juneau.jena.RdfParser} class is the top-level class for all Jena-based parsers.
 	Language-specific parsers are defined as inner subclasses of the <c>RdfParser</c> class:
 </p>	
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.jena.RdfParser}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.jena.RdfXmlParser}
@@ -10183,7 +10182,7 @@
 <p>
 	The RDF parser provides the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonParser Common Parser Properties}
 	<li class='jic'>{@link org.apache.juneau.jena.RdfCommon}
@@ -10227,7 +10226,7 @@
 <p>
 	The following pre-configured parsers are provided for convenience:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.jena.RdfParser}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.jena.RdfXmlParser}
@@ -10258,7 +10257,7 @@
 	The {@link org.apache.juneau.jena.annotation.Rdf @Rdf} annotation
 	is used to override the behavior of the RDF serializers and parsers on individual bean classes or properties.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.jena.annotation.Rdf}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.jena.annotation.Rdf#beanUri() beanUri}
@@ -11154,14 +11153,14 @@
 	The {@link org.apache.juneau.svl.VarResolver#DEFAULT} resolver is a reusable instance of this class 
 	configured with the following basic variables:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.svl.vars.SystemPropertiesVar} - <c>$S{key[,default]}</c>
 	<li class='jc'>{@link org.apache.juneau.svl.vars.EnvVariablesVar} - <c>$E{key[,default]}</c>
 </ul>
 <p>
 	The following logic variables are also provided:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.svl.vars.IfVar} - <c>$IF{arg,then[,else]}</c>
 	<li class='jc'>{@link org.apache.juneau.svl.vars.SwitchVar} - <c>$SW{arg,pattern1:then1[,pattern2:then2...]}</c>
 	<li class='jc'>{@link org.apache.juneau.svl.vars.CoalesceVar} - <c>$CO{arg1[,arg2...]}</c>
@@ -11231,7 +11230,7 @@
 <p>
 	The following shows the class hierarchy of the {@link org.apache.juneau.svl.Var} class:
 </p>  
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>{@link org.apache.juneau.svl.Var} - Superclass of all vars.
 	<ul>
 		<li class='jac'>{@link org.apache.juneau.svl.SimpleVar} - Superclass of all vars that return strings.
@@ -11394,7 +11393,7 @@
 	The main class for performing variable resolution is {@link org.apache.juneau.svl.VarResolver}.
 	Two methods are provided for resolving variables:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.svl.VarResolver}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.svl.VarResolver#resolve(String) resolve(String)} 
@@ -11415,14 +11414,14 @@
 <p>
 	The following two classes are identical in behavior except for which objects they can access:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.svl.VarResolver} - Has access to context objects only.
 	<li class='jc'>{@link org.apache.juneau.svl.VarResolverSession} - Has access to context and session objects.
 </ul>
 <p>
 	Context and session objects are set through the following methods:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'>{@link org.apache.juneau.svl.VarResolverBuilder#contextObject(String,Object)} - Context objects.
 	<li class='jm'>{@link org.apache.juneau.svl.VarResolverSession#sessionObject(String,Object)} - Session objects.
 	<li class='jm'>{@link org.apache.juneau.svl.VarResolver#createSession(Map)} - Session objects.
@@ -11430,7 +11429,7 @@
 <p>
 	Both kinds of objects are accessible through the following method:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'>{@link org.apache.juneau.svl.VarResolverSession#getSessionObject(Class, String, boolean)}
 </ul>
 <p>
@@ -11724,7 +11723,7 @@
 <p>
 	The following methods are provided for accessing primitive values:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.Config}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.Config#getString(String) getString(String)}
@@ -11780,7 +11779,7 @@
 <p>
 	The following methods are provided for accessing POJO values:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.Config}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Class) getObject(String,Class)}
@@ -11838,7 +11837,7 @@
 	The format for beans depends on the serializer and parser registered on the Config which 
 	is defined in the builder via the following methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.ConfigBuilder}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#serializer(Class) serializer(Class)}
@@ -11850,7 +11849,7 @@
 <p>
 	The default parser can also be overridden on the following getters:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.Config}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Parser,Class) getObject(String,Parser,Class)}
@@ -11866,7 +11865,7 @@
 <p>
 	The following methods are provided for accessing arrays:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.Config}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.Config#getStringArray(String) getStringArray(String)}
@@ -11933,7 +11932,7 @@
 <p>
 	The following methods are provided for accessing maps and collections:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.Config}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Type,Type...) getObject(String,Type,Type...)}
@@ -12005,7 +12004,7 @@
 <p>
 	The following methods are provided for accessing binary data:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.Config}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.Config#getBytes(String) getBytes(String)}
@@ -12026,7 +12025,7 @@
 <p>
 	The binary data format is controlled via the following setting:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_binaryFormat}
 </ul>
 <p>
@@ -12049,7 +12048,7 @@
 <p>
 	Binary data line wrapping can be controlled via the following setting:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_binaryLineLength}
 </ul>
 </div><!-- END: 6.2.5 - juneau-config.EntryTypes.BinaryData -->
@@ -12096,7 +12095,7 @@
 	By default, <c>Configs</c> use the {@link org.apache.juneau.svl.VarResolver#DEFAULT} variable resolver
 	which provides support for the following variables and constructs:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.svl.vars.SystemPropertiesVar} - <c>$S{key[,default]}</c>
 	<li class='jc'>{@link org.apache.juneau.svl.vars.EnvVariablesVar} - <c>$E{key[,default]}</c>
 	<li class='jc'>{@link org.apache.juneau.config.vars.ConfigVar} - <c>$C{key[,default]}</c>
@@ -12104,13 +12103,13 @@
 <p>
 	The variable resolver is controlled via the following setting:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_varResolver}
 </ul>
 <p>
 	Additionally, the following method can be used to retrieve a <c>Config</c> with a different variable resolver:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'>{@link org.apache.juneau.config.Config#resolving(VarResolverSession)}
 </ul>
 
@@ -12121,7 +12120,7 @@
 <p>
 	The default variable resolver also provides the following logic variables for performing simple logical operations:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.svl.vars.IfVar} - <c>$IF{arg,then[,else]}</c>
 	<li class='jc'>{@link org.apache.juneau.svl.vars.SwitchVar} - <c>$SW{arg,pattern1:then1[,pattern2:then2...]}</c>
 	<li class='jc'>{@link org.apache.juneau.svl.vars.CoalesceVar} - <c>$CO{arg1[,arg2...]}</c>
@@ -12221,7 +12220,7 @@
 <p>
 	Custom encoders can be used to provide your own encoding support by implementing the {@link org.apache.juneau.config.encode.ConfigEncoder} interface.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jic'>{@link org.apache.juneau.config.encode.ConfigEncoder}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.encode.ConfigEncoder#encode(String,String) encode(String,String)}
@@ -12232,7 +12231,7 @@
 <p>
 	Encoders are controlled via the following setting:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_encoder}
 </ul>
 <p>
@@ -12381,7 +12380,7 @@
 <p>
 	The following methods allow you to add, remove, and modify entries and sections in a config file:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.Config}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object) set(String,Object)}
@@ -12522,7 +12521,7 @@
 <p>
 	The following methods can be used to bulk-load configuration values:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.Config}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.Config#setSection(String,List,Map) setSection(String,List,Map)}
@@ -12544,7 +12543,7 @@
 <p>
 	Configuration change events can be listened for using the following methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.Config}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.Config#addListener(ConfigEventListener) addListener(ConfigEventListener)}
@@ -12554,7 +12553,7 @@
 <p>
 	The {@link org.apache.juneau.config.event.ConfigEventListener} interface consists of the following method:
 </p>		
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jic'>{@link org.apache.juneau.config.event.ConfigEventListener}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEventListener#onConfigChange(ConfigEvents) onConfigChange(ConfigEvents)}
@@ -12563,7 +12562,7 @@
 <p>
 	The {@link org.apache.juneau.config.event.ConfigEvent} class provides access to all the information about the updated entry:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.event.ConfigEvent}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getType() getType()}
@@ -12622,7 +12621,7 @@
 <p>
 	The following methods are used for serializing <c>Config</c> objects back into INI files:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.Config}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.Config#writeTo(Writer) writeTo(Writer)}
@@ -12772,7 +12771,7 @@
 <p>
 	The methods that need to be implemented on a store are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>{@link org.apache.juneau.config.store.ConfigStore}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#read(String) read(String)} - Read a config file.
@@ -12814,14 +12813,14 @@
 <p>
 	Two configuration stores are provided by default:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.store.ConfigFileStore} - File-system storage.
 	<li class='jc'>{@link org.apache.juneau.config.store.ConfigMemoryStore} - In-memory storage.
 </ul>
 <p>
 	The store is defined on the <c>Config</c> object via the following setting:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_store}
 </ul>
 
@@ -12896,7 +12895,7 @@
 	The {@link org.apache.juneau.config.store.ConfigFileStore} is the typical store used for configuration files.
 	It provides the following configurable settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.store.ConfigFileStore}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_charset FILESTORE_charset}
@@ -13088,7 +13087,7 @@
 <p>
 	The <c>ConfigStore</c> class has the following listener methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>{@link org.apache.juneau.config.store.ConfigStore}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#register(String,ConfigStoreListener) register(String,ConfigStoreListener)} - Register a listener on the specified config name.
@@ -13099,7 +13098,7 @@
 	Note that this is a different listener than {@link org.apache.juneau.config.event.ConfigEventListener}.
 	In this case, we're just listening for changed files:
 </p>		
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jic'>{@link org.apache.juneau.config.store.ConfigStoreListener}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.store.ConfigStoreListener#onChange(String)} - Called when file changes.  New contents are passed in.
@@ -13119,9 +13118,10 @@
 <p>
 	The following settings can be used to create read-only <c>Config</c> objects:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_readOnly}
 </ul>
+
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a read-only config</jc>
@@ -13160,7 +13160,7 @@
 	Each JVM has a system default config.  This is a configuration file that serves as the default
 	configuration for the system.  It's accessed using the following static methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.config.Config}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.config.Config#getSystemDefault() getSystemDefault()}
@@ -13415,7 +13415,7 @@
 <p>
 	The class hierarchy for the REST servlet class is shown below:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>
 		{@link javax.servlet.http.HttpServlet javax.servlet.http.HttpServlet} 
 		<ul>
@@ -13443,7 +13443,7 @@
 	For child resources, you can either extend from one of the classes above, or extend from one of the following
 	that provides identical support but does not extent from <c>HttpServlet</c>:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jic'>
 		{@link org.apache.juneau.rest.BasicRestConfig} 
 		<ul>
@@ -13472,7 +13472,7 @@
 <p>
 	Everything is configured through the following classes which you will see a lot:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.rest.RestContext} - Each resource class instance has one copy that holds all of its configuration.
 	<li class='jc'>{@link org.apache.juneau.rest.RestContextBuilder} - Builder for the class above.
 </ul>
@@ -13497,7 +13497,7 @@
 	not necessary.</b>
 	The only requirement is that the class be annotated with <ja>@RestResource</ja> and have one of the following constructors:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'><c><jk>public</jk> T()</c>
 	<li class='jm'><c><jk>public</jk> T(RestContextBuilder)</c>
 </ul>
@@ -13551,7 +13551,7 @@
 	not very useful on it's own.
 	However, the class does provide a couple of convenience methods to be aware of:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'><c>{@link org.apache.juneau.rest.RestServlet} <jk>extends</jk> HttpServlet</c>
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.RestServlet#init(ServletConfig) init(ServletConfig)} - Can override to provide custom initialization.
@@ -13868,7 +13868,7 @@
 	Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
 </p>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_children}
 </ul>
 </div><!-- END: 7.3.4 - juneau-rest-server.Instantiation.Children -->
@@ -13964,7 +13964,7 @@
 	By default, you can add the {@link org.apache.juneau.rest.annotation.RestResource @RestResource}
 	to any class as long as it has one of the following constructors:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'><c><jk>public</jk> T()</c>
 	<li class='jm'><c><jk>public</jk> T(RestContextBuilder)</c>
 </ul>
@@ -13975,7 +13975,7 @@
 <p>
 	Resource object resolution is controlled through the following API:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jic'>{@link org.apache.juneau.rest.RestResourceResolver}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.rest.BasicRestResourceResolver}
@@ -13986,7 +13986,7 @@
 	Later topics discuss how to use this API to instantiate resources using Spring.
 </p>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_resourceResolver}
 </ul>
 </div><!-- END: 7.3.7 - juneau-rest-server.Instantiation.ResourceResolvers -->
@@ -14049,7 +14049,7 @@
 </ul>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestHook}
 </ul>
 </div><!-- END: 7.3.8 - juneau-rest-server.Instantiation.LifecycleHooks -->
@@ -14353,7 +14353,7 @@
 	The object itself is read-only and unchangeable.
 	It is populated through the following:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource} - Settings copied from the annotation during servlet initialization.
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder} - Builder used during servlet initialization.
 </ul>
@@ -14594,11 +14594,11 @@
 	}
 </p>
 <h5 class='section'>Notes:</h5>
-<ul>
+<ul class='spaced-list'>
 	<li>All annotations have programmatic equivalents on the {@link org.apache.juneau.rest.RestRequest} class.
 </ul>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_paramResolvers} - For configuring custom parameter types.
 </ul>
 </div><!-- END: 7.6.1 - juneau-rest-server.RestMethod.MethodParameters -->
@@ -14619,7 +14619,7 @@
 <p>
 	There are many useful methods on this object, but the main ones are shown below:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'><c>{@link org.apache.juneau.rest.RestRequest} <jk>extends</jk> HttpServletRequest</c>
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getHeaders() getHeaders()} - HTTP request headers.
@@ -14655,7 +14655,7 @@
 <p>
 	Some important methods on this class are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'><c>{@link org.apache.juneau.rest.RestResponse} <jk>extends</jk> HttpServletResponse</c>
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.RestResponse#setOutput(Object) setOutput(Object)} - Set response output programmatically.
@@ -14689,7 +14689,7 @@
 <p>
 	Some important methods on this class are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.rest.RequestBody} 
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#getReader() getReader()} - Get body as a Reader.
@@ -14703,7 +14703,7 @@
 </ul>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 </ul>
 </div><!-- END: 7.6.4 - juneau-rest-server.RestMethod.RequestBody -->
@@ -14738,7 +14738,7 @@
 <p>
 	Some important methods on this class are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'><c>{@link org.apache.juneau.rest.RequestHeaders} <jk>extends</jk> TreeMap&lt;String,String[]&gt;</c>
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#get(String,Class) get(String,Class)} - Get header value converted to a POJO.
@@ -14751,7 +14751,7 @@
 </ul>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 </ul>
 </div><!-- END: 7.6.5 - juneau-rest-server.RestMethod.RequestHeaders -->
@@ -14824,7 +14824,7 @@
 <p>
 	Some important methods on this class are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'><c>{@link org.apache.juneau.rest.RequestQuery} <jk>extends</jk> LinkedHashMap&lt;String,String[]&gt;</c>
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#get(String,Class) get(String,Class)} - Get query parameter value converted to a POJO.
@@ -14838,7 +14838,7 @@
 </ul>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
 </ul>
@@ -14873,7 +14873,7 @@
 <p>
 	Some important methods on this class are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'><c>{@link org.apache.juneau.rest.RequestFormData} <jk>extends</jk> LinkedHashMap&lt;String,String[]&gt;</c>
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#get(String,Class) get(String,Class)} - Get form-data parameter values converted to a POJO.
@@ -14886,7 +14886,7 @@
 </ul>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 </ul>
@@ -14995,7 +14995,7 @@
 	}
 </p>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_path}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestPath}
@@ -15029,7 +15029,7 @@
 <p>
 	Some important methods on this class are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'><c>{@link org.apache.juneau.rest.RequestPath} <jk>extends</jk> TreeMap&lt;String,String&gt;</c>
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.RequestPath#get(String,Class) get(String,Class)} - Get path match variable converted to a POJO.
@@ -15042,7 +15042,7 @@
 </ul>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 </ul>
 </div><!-- END: 7.6.10 - juneau-rest-server.RestMethod.RequestPathMatch -->
@@ -15087,7 +15087,7 @@
 <p>
 	This is controlled through the following extensible API:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jic'>{@link org.apache.juneau.rest.ResponseHandler}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.DefaultHandler}
@@ -15137,7 +15137,7 @@
 	}
 </p>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_responseHandlers} - For configuring custom response handlers.
 </ul>
 </div><!-- END: 7.6.11 - juneau-rest-server.RestMethod.MethodReturnTypes -->
@@ -15254,7 +15254,7 @@
 </ul>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#matchers RestMethod(matchers)}
 	<li class='jc'>{@link org.apache.juneau.rest.matchers.MultipartFormDataMatcher}
 	<li class='jc'>{@link org.apache.juneau.rest.matchers.UrlEncodedFormMatcher}
@@ -15288,7 +15288,7 @@
 		<jk>return new</jk> SeeOther(<js>"servlet:/pets"</js>);  
 	}
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'>{@link org.apache.juneau.rest.response}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.rest.response.Accepted}
@@ -15402,7 +15402,7 @@
 		<jk>return</jk> Ok.<jsf>OK</jsf>;
 	}
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'>{@link org.apache.juneau.rest.exception}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.rest.exception.BadRequest}
@@ -15456,7 +15456,7 @@
 	The {@link org.apache.juneau.rest.helper} package contains several predefined beans to help when constructing
 	REST interfaces.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'>{@link org.apache.juneau.rest.helper}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.rest.helper.BeanDescription}
@@ -15721,7 +15721,7 @@
 <p>
 	Remote Interface proxies are instantiated on the client side using one of the following methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.rest.client.RestClient}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRrpcInterface(Class) getRrpcInterface(Class)}
@@ -15996,7 +15996,7 @@
 	Parameters annotated with any of the following are parsed using the registered {@link org.apache.juneau.oapi.OpenApiParser} and
 	therefore support OpenAPI syntax and validation:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
@@ -16111,7 +16111,7 @@
 	Parameters annotated with any of the following are serialized using the registered {@link org.apache.juneau.oapi.OpenApiSerializer} and
 	therefore support OpenAPI syntax and validation:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Response} (<c>Accept</c> must match <js>"text/openapi"</js>)
 </ul>
@@ -16182,7 +16182,7 @@
 <p>
 	The annotations used for defining the schema for request HTTP parts are:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
@@ -16195,7 +16195,7 @@
 <p>
 	The annotations used for defining the schema for response HTTP parts are:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}
@@ -16204,7 +16204,7 @@
 <p>
 	The sub-annotations used in the annotation above are:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.Schema}
 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.Items}
 </ul>
@@ -16226,7 +16226,7 @@
 <p>
 	The {@link org.apache.juneau.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#api() api} - Free-form Swagger JSON.
@@ -16397,7 +16397,7 @@
 </ul>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
@@ -16410,7 +16410,7 @@
 <p>
 	The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation is used to retrieve request form post entries.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_default() _default} - Default value if not present.
@@ -16570,7 +16570,7 @@
 	servlet to drain the body content.
 </div>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jc'>{@link org.apache.juneau.rest.RequestFormData}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
@@ -16583,7 +16583,7 @@
 <p>
 	This annotation can be used to detect the existence of a parameter when it's not set to a particular value.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 </ul>
 
@@ -16656,7 +16656,7 @@
 	The {@link org.apache.juneau.http.annotation.Query @Query} annotation is used to retrieve request URL query parameters.
 	It's identical to {@link org.apache.juneau.http.annotation.FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form posts.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_default() _default} - Default value if not present.
@@ -16816,7 +16816,7 @@
 
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jc'>{@link org.apache.juneau.rest.RequestQuery}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
@@ -16830,7 +16830,7 @@
 	Identical to {@link org.apache.juneau.http.annotation.HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
 	URL-encoded form posts.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
 </ul>
 <p>
@@ -16896,7 +16896,7 @@
 <p>
 	The {@link org.apache.juneau.http.annotation.Header @Header} annotation is used to retrieve request headers.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_default() _default} - Default value if not present.
@@ -17042,7 +17042,7 @@
 </p>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
@@ -17055,7 +17055,7 @@
 <p>
 	The {@link org.apache.juneau.http.annotation.Path @Path} annotation is used to retrieve request path parameters.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#_enum() _enum} - Input validation.  Must match one of the values.
@@ -17206,7 +17206,7 @@
 </p>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jc'>{@link org.apache.juneau.rest.RequestPath}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
@@ -17220,7 +17220,7 @@
 	The {@link org.apache.juneau.http.annotation.Request @Request} annotation can be applied to a parameter interface type of a <ja>@RestMethod</ja>-annotated method 
 	to identify it as an interface for retrieving HTTP parts through a bean-like interface.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Request}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Request#partParser() partParser} - Override the part parser.
@@ -17308,7 +17308,7 @@
 <p>
 	The {@link org.apache.juneau.http.annotation.Response @Response} annotation is used to identify schema information about an HTTP response.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#api() api} - Free-form Swagger JSON.
@@ -17336,7 +17336,7 @@
 	When the <ja>@Response</ja> annotation is applied to classes, the following annotations can be used on 
 	public non-static methods of the class to identify parts of a response:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus} 
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader} 
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody} 
@@ -17691,7 +17691,7 @@
 </p>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartSerializing}
 </ul>
 </div><!-- END: 7.10.9 - juneau-rest-server.HttpPartAnnotations.Response -->
@@ -17703,7 +17703,7 @@
 <p>
 	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation can be applied to <ja>@RestMethod</ja>-annotated parameters to denote them as an HTTP response headers.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_default() _default} - Default value if not present.
@@ -17819,7 +17819,7 @@
 <p>
 	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation annotation can be applied to <ja>@RestMethod</ja>-annotated parameters to denote them as an HTTP response status codes.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}
 </ul>
 <p>
@@ -17990,7 +17990,7 @@
 <p>
 	Serializers can be associated with REST servlets in the following ways:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>
 		{@link org.apache.juneau.rest.annotation.RestResource#serializers() RestResource(serializers)} 
 		- Annotation on resource Java class.
@@ -18058,7 +18058,7 @@
 <p>
 	Parsers can be associated with REST servlets in the following ways:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>
 		{@link org.apache.juneau.rest.annotation.RestResource#parsers() RestResource(parsers)} 
 		- Annotation on resource Java class.
@@ -18120,7 +18120,7 @@
 <p>
 	These properties can be defined for serializers and parsers registered on a REST resource via the following:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#properties() RestResource(properties)} 
 	<li class='jc'>{@link org.apache.juneau.rest.RestContextBuilder} - Various methods on the context builder.
 </ul>
@@ -18165,7 +18165,7 @@
 <p>
 	Properties can also be overridden at the Java method level:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#properties() RestMethod(properties)} 
 	<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} 
 </ul>
@@ -18188,7 +18188,7 @@
 	}
 </p>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#flags() RestResource(flags)} - Shorthand for boolean properties.
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#flags() RestMethod(flags)} - Shorthand for boolean properties.
 	<li class='jc'>{@link org.apache.juneau.rest.RestContextProperties} 
@@ -18235,7 +18235,7 @@
 <p>
 	Config annotations are defined for all serializers and parsers:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig BeanConfig}
 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvConfig CsvConfig}
 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig HtmlConfig}
@@ -18270,7 +18270,7 @@
 <p>
 	Transforms are associated serializers and parsers registered on a REST resource via the following:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFilters() BeanConfig(beanFilters)} - On class or methods. 
 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#pojoSwaps() BeanConfig(pojoSwaps)} - On class or methods. 
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#beanFilters(Object...)} 
@@ -18388,7 +18388,7 @@
 <p>
 	URI resolution is controlled by the following settings:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.rest.RestContext}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriAuthority REST_uriAuthority}
@@ -18413,7 +18413,7 @@
 <p>
 	Guards are associated with resource classes and methods via the following:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#guards() RestResource(guards)} 
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#guards() RestMethod(guards)} 
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#guards(Class...)} 
@@ -18477,7 +18477,7 @@
 	If multiple guards are present, ALL guards must pass.
 </p>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_guards}
 </ul>
 </div><!-- END: 7.19 - juneau-rest-server.Guards -->
@@ -18490,7 +18490,7 @@
 	Specialized guards are provided for controlling access to servlet classes and methods based on user roles.
 	These are controlled via annotations on the REST class and methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.rest.annotation.RestResource#roleGuard() roleGuard()}
@@ -18560,7 +18560,7 @@
 <p>
 	Converters are associated with resource classes and methods via the following:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#converters() RestResource(converters)} 
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#converters() RestMethod(converters)} 
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#converters(Class...)} 
@@ -18630,7 +18630,7 @@
 <p>
 	Juneau defines the following converters out-of-the-box:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jic'>
 	{@link org.apache.juneau.rest.RestConverter}
 	<ul>
@@ -18650,7 +18650,7 @@
 </ul>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_converters} 
 </ul>
 </div><!-- END: 7.21 - juneau-rest-server.Converters -->
@@ -18700,7 +18700,7 @@
 	<ck>MyRestServlet.greeting</ck> = Hello!
 </p>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_messages}
 </ul>
 </div><!-- END: 7.22 - juneau-rest-server.Messages -->
@@ -18727,7 +18727,7 @@
 <p>
 	Juneau defines the following encoders out-of-the-box:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>
 	{@link org.apache.juneau.encoders.Encoder}
 	<ul>
@@ -18738,7 +18738,7 @@
 	</ul>
 </ul>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_encoders}
 </ul>
 </div><!-- END: 7.23 - juneau-rest-server.Encoders -->
@@ -18774,7 +18774,7 @@
 <p>
 	Variables are configured on resources via the following API:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#vars(Class[])}
 </ul>
 <h5 class='figure'>Example:</h5>
@@ -18805,7 +18805,7 @@
 <p>
 	The methods involved with variables are:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession()}
 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean)}
@@ -19051,7 +19051,7 @@
 <p>
 	Configuration files are associated with REST resources through the following:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#config() RestResource(config)}
 </ul>
 
@@ -19234,7 +19234,7 @@
 		{@link org.apache.juneau.rest.RestContext#getMediaTypeForName(String)} method.
 </ul>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_staticFiles}
 </ul>
 </div><!-- END: 7.26 - juneau-rest-server.StaticFiles -->
@@ -19250,7 +19250,7 @@
 <p>
 	The APIs involved with defining client version headers are:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#clientVersionHeader() RestResource(clientVersionHeader)}
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#clientVersionHeader(String)}
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#clientVersion() RestMethod(clientVersion)}
@@ -19281,7 +19281,7 @@
 		}
 </p>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_clientVersionHeader}
 </ul>
 </div><!-- END: 7.27 - juneau-rest-server.ClientVersioning -->
@@ -19298,7 +19298,7 @@
 <p>
 	The methods on this interface are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jic'>{@link org.apache.juneau.rest.RestInfoProvider}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getSwagger(RestRequest) getSwagger(RestRequest)}
@@ -19312,7 +19312,7 @@
 <p>
 	The info provider in turn supplies the information returned by the following methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSwagger() getSwagger()}
@@ -19326,7 +19326,7 @@
 <p>
 	Info providers are registered through the following property:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
 </ul>
 <p>
@@ -20120,7 +20120,7 @@
 	)
 </p>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.annotation.Example}
 	<li class='jc'>{@link org.apache.juneau.BeanContext}
 	<ul>
@@ -20171,8 +20171,9 @@
 	<li>{@link org.apache.juneau.http.annotation.Response @Response} annotated classes, methods, and parameters.
 	<li>{@link org.apache.juneau.rest.annotation.RestResource#swagger() @RestResource(swagger)} / {@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod(swagger)} annotations.
 </ul>
+
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Response}
 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.ResponseHeader}
 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.ResponseStatus}
@@ -20685,9 +20686,9 @@
 <p>
 	The {@link org.apache.juneau.rest.widget.Widget} class allows you to add arbitrary HTML, CSS, and Javascript
 	to HTML pages.
-<br>They are registered in the following locations:
+	<br>They are registered in the following locations:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.HtmlDoc#widgets() HtmlDoc(widgets)}
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#widgets(Class...)}
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#widgets(Widget...)}
@@ -20712,7 +20713,7 @@
 <p>
 	The <l>Widget</l> class is composed of the following methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>{@link org.apache.juneau.rest.widget.Widget}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getHtml(RestRequest,RestResponse) getHtml(RestRequest,RestResponse)}
@@ -20768,7 +20769,7 @@
 	The <l>Widget</l> class also defines the following two convenience methods for loading Javascript and CSS
 	files from the classpath or file system.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>{@link org.apache.juneau.rest.widget.Widget}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getClasspathResourceAsString(String) getClasspathResourceAsString(String)}
@@ -20793,7 +20794,7 @@
 	}
 </p>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_widgets}
 </ul>
 </div><!-- END: 7.30.2 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
@@ -20805,7 +20806,7 @@
 <p>
 	The {@link org.apache.juneau.rest.widget} package contains predefined reusable widgets.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'>{@link org.apache.juneau.rest.widget}
 	<ul>
 		<li class='jac'>{@link org.apache.juneau.rest.widget.Widget}
@@ -20834,7 +20835,7 @@
 <p>
 	Subclasses implement the following two methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>{@link org.apache.juneau.rest.widget.MenuItemWidget}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getLabel(RestRequest,RestResponse) getLabel(RestRequest,RestResponse)} - The menu item label.
@@ -21186,7 +21187,7 @@
 	external config files.
 </p>
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='link'>{@doc juneau-microservice-jetty.UiCustomization}
 </ul>
 </div><!-- END: 7.30.4 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
@@ -21314,7 +21315,7 @@
 <p>
 	The following annotations are provided for specifying default header values for requests and responses:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>
 		{@link org.apache.juneau.rest.annotation.RestResource#defaultRequestHeaders() RestResource(defaultRequestHeaders)} 
 		<br>Defines default headers on request when the client doesn't specify them.
@@ -21341,7 +21342,7 @@
 <p>
 	Default headers can also be specified programmatically by overriding the following methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>
 		{@link org.apache.juneau.rest.RestContextBuilder}
 		<ul>
@@ -21364,7 +21365,7 @@
 <p>
 	The APIs involved are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>
 		{@link org.apache.juneau.rest.annotation.RestResource}
 		<ul>
@@ -22252,7 +22253,7 @@
 <p>
 	The Juneau JAX-RS provider API consists of the following classes:
 </p>
-<ul class='spaced-list'>
+<ul class='javatree'>
 	<li class='jc'>
 		{@link org.apache.juneau.rest.jaxrs.BaseProvider} - The base provider class that implements the JAX-RS 
 		<c>MessageBodyReader</c> and <c>MessageBodyWriter</c> interfaces.
@@ -22306,7 +22307,7 @@
 <p>
 	The Juneau integration component for Spring Boot consists of the following classes:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.rest.springboot.annotation.JuneauRestRoot}
 	<li class='jc'>{@link org.apache.juneau.rest.springboot.JuneauRestInitializer}
 	<li class='jc'>{@link org.apache.juneau.rest.springboot.SpringRestResourceResolver}
@@ -22638,7 +22639,7 @@
 <p>
 	Remote resources are instantiated using one of the following methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.rest.client.RestClient}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class) getRemoteResource(Class)}
@@ -22650,7 +22651,7 @@
 	Annotations are used on the interface and interface methods to specify how to convert input and output to HTTP headers, query parameters, form 
 	post parameters, or request/response bodies.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'>{@link org.apache.juneau.rest.client.remote}
 	<ul>
 		<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteResource}
@@ -22712,7 +22713,7 @@
 	The {@link org.apache.juneau.rest.client.remote.RemoteResource @RemoteResource} annotation is used on your interface class
 	to identify it as a REST proxy interface.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteResource}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.rest.client.remote.RemoteResource#path path}
@@ -22772,7 +22773,7 @@
 	The {@link org.apache.juneau.rest.client.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
 	of <ja>@RemoteResource</ja>-annotated interfaces to identify REST endpoints.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteMethod}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.rest.client.remote.RemoteMethod#method method}
@@ -22927,7 +22928,7 @@
 	The {@link org.apache.juneau.http.annotation.Body @Body} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are the HTTP body of the request.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required} - Input validation.  Body must be present.
@@ -23022,7 +23023,7 @@
 	The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are form-data parameters on the request.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_default() _default} - Default value if not present.
@@ -23117,7 +23118,7 @@
 </p>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
 </div><!-- END: 10.1.4 - juneau-rest-client.RestProxies.FormData -->
@@ -23130,7 +23131,7 @@
 	The {@link org.apache.juneau.http.annotation.Query @Query} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are query parameters on the request.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_default() _default} - Default value if not present.
@@ -23228,7 +23229,7 @@
 </p>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
 </div><!-- END: 10.1.5 - juneau-rest-client.RestProxies.Query -->
@@ -23241,7 +23242,7 @@
 	The {@link org.apache.juneau.http.annotation.Header @Header} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are header parameters on the request.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_default() _default} - Default value if not present.
@@ -23325,7 +23326,7 @@
 </p>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
 </div><!-- END: 10.1.6 - juneau-rest-client.RestProxies.Header -->
@@ -23338,7 +23339,7 @@
 	The {@link org.apache.juneau.http.annotation.Path @Path} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are path parameters on the request.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#_enum() _enum} - Input validation.  Must match one of the values.
@@ -23415,7 +23416,7 @@
 </p>
 
 <h5 class='section'>See Also:</h5>
-<ul>
+<ul class='doctree'>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
 </div><!-- END: 10.1.7 - juneau-rest-client.RestProxies.Path -->
@@ -23429,7 +23430,7 @@
 	to identify it as a bean for setting HTTP parts through a bean-like interface.
 </p>
 
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Request}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Request#partSerializer() partSerializer} - Override the part serializer.
@@ -23487,7 +23488,7 @@
 <p>
 	Any of the following annotations can be used on the methods:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
@@ -23546,7 +23547,7 @@
 <p>
 	The {@link org.apache.juneau.http.annotation.Response @Response} annotation can be applied to types returned by <ja>@RemoteMethod</ja>-annotated methods.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#partParser() partParser} - Override the part parser.
@@ -23592,7 +23593,7 @@
 <p>
 	Any of the following annotations can be used on the methods:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}
@@ -23730,7 +23731,7 @@
 <p>
 	The following convenience methods are provided in the builder class for specifying SSL parameters:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
@@ -24386,7 +24387,7 @@
 <p>
 	The API consists of the following classes:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'>{@link org.apache.juneau.rest.mock2}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.rest.mock2.MockRest} - API for unit testing {@link org.apache.juneau.rest.annotation.RestResource @RestResource}-annotated classes.
@@ -24405,7 +24406,7 @@
 <p>
 	The API consists of the following classes:
 </p>	
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'>{@link org.apache.juneau.rest.mock2}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.rest.mock2.MockRest}
@@ -24507,7 +24508,7 @@
 <p>
 	Other media types headers can be specified via any of the following methods:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#build(Object,Marshall) build(Object,Marshall)} - Use media types defined on a marshall.
 	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#build(Object,Serializer,Parser) build(Object,Serializer,Parser)} - Use media types defined on a serializer and parser.
 	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest.Builder#accept(String) accept(String)} - Explicitly set the <c>Accept</c> header.
@@ -24538,7 +24539,7 @@
 <p>
 	The {@link org.apache.juneau.rest.mock2.MockRest} class provides the following methods for creating requests:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.rest.mock2.MockRest}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#request(String,String) request(String,String)} 
@@ -24585,7 +24586,7 @@
 <p>
 	The following fluent convenience methods are provided for setting common <c>Accept</c> and <c>Content-Type</c> headers.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.rest.mock2.MockServletRequest}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#json() json()}
@@ -24601,7 +24602,7 @@
 <p>
 	The following fluent convenience methods are provided for building up your request.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.rest.mock2.MockServletRequest}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#header(String,Object) header(String,Object)}
@@ -24614,7 +24615,7 @@
 <p>
 	Fluent setters are provided for all common request headers:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.rest.mock2.MockServletRequest}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#accept(Object) accept(Object)}
@@ -24628,7 +24629,7 @@
 	The {@link org.apache.juneau.rest.mock2.MockServletResponse} class provides default implementations for all the methods defined
 	on the {@link javax.servlet.http.HttpServletResponse} in addition to many convenience methods.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.rest.mock2.MockServletResponse}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletResponse#getBody() getBody()}
@@ -24713,7 +24714,7 @@
 	By default, the {@link org.apache.juneau.rest.mock2.MockRemoteResource} class uses JSON marshalling.
 	This can be overridden via any of the following methods: 
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemoteResource#build(Class,Object,Marshall)}
 	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemoteResource#build(Class,Object,Serializer,Parser)}
 	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemoteResource#create(Class,Object,Marshall)}
@@ -24800,7 +24801,7 @@
 <p>
 	The Microservice API consists of the following packages and classes:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'>{@link org.apache.juneau.microservice}
 		<ul>
 			<li class='jc'>{@link org.apache.juneau.microservice.Microservice} - The base microservice class.
@@ -24842,7 +24843,7 @@
 <p>
 	The lifecycle methods of the {@link org.apache.juneau.microservice.Microservice} class consists of the following:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.microservice.Microservice}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#start() start()} 
@@ -25069,7 +25070,7 @@
 <p>
 	The following methods can be used to define the configuration for your microservice using the powerful Config API:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#config(Config) config(Config)} 
@@ -25233,7 +25234,7 @@
 <p>
 	The variable resolver can be augmented through the following methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#vars(Class...) vars(Class...)} 
@@ -25306,7 +25307,7 @@
 <p>
 	The builder methods for controlling the console are as follows:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#consoleEnabled(boolean) consoleEnabled(boolean)} 
@@ -25343,7 +25344,7 @@
 <p>
 	The API for defining console commands is shown below: 
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>{@link org.apache.juneau.microservice.console.ConsoleCommand}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.microservice.console.ConsoleCommand#execute(Scanner,PrintWriter,Args) execute(Scanner,PrintWriter,Args)} 
@@ -25370,7 +25371,7 @@
 <p>
 	The method for configuring logging is as follows:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#logConfig(LogConfig) logConfig(LogConfig)} 
@@ -25450,7 +25451,7 @@
 <p>
 	The logging configuration can also be defined programmatically through the following API:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.microservice.LogConfig}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#create() create()} 
@@ -25496,7 +25497,7 @@
 	provided on the {@link org.apache.juneau.microservice.Microservice} class for logging.
 </p>
 
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.microservice.Microservice}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getLogger() getLogger()} 
@@ -25517,7 +25518,7 @@
 <p>
 	In addition to this support, an interface for defining event listeners for your microservice:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#listener(MicroserviceListener) listener(MicroserviceListener)} 
@@ -25607,7 +25608,7 @@
 <p>
 	The <c>juneau-microservice-jetty</c> library consists of the following classes:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'>{@link org.apache.juneau.microservice.jetty}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.microservice.jetty.JettyMicroservice} - The Jetty microservice class.
@@ -25649,7 +25650,7 @@
 <p>
 	To review, the {@link org.apache.juneau.microservice.Microservice} class contains the following lifecycle methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.microservice.Microservice}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#start() start()} 
@@ -25665,7 +25666,7 @@
 	The {@link org.apache.juneau.microservice.jetty.JettyMicroservice} class which extends from {@link org.apache.juneau.microservice.Microservice} 
 	provides the following additional lifecycle methods:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.microservice.jetty.JettyMicroservice}
 	<ul>
 		<li class='jm'>{@link org.apache.juneau.microservice.jetty.JettyMicroservice#createServer() createServer()} 
@@ -25886,7 +25887,7 @@
 <p>
 	The following predefined resource classes are also provided for easy inclusion into your microservice:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.microservice.resources.ConfigResource}
 		- View and modify the external INI config file.
 	<li class='jc'>{@link org.apache.juneau.microservice.resources.DirectoryResource}
@@ -25990,7 +25991,7 @@
 	Configuration files can also be accessed programmatically.
 	There are 3 primary ways of getting access to the config file:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getConfig()} 
 		<p>Any {@doc DefaultRestSvlVariables initialization-time variables} can be used.</p>
 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getConfig()} 
@@ -27028,7 +27029,7 @@
 <p>
 	The following shows the core examples provided:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'>{@link org.apache.juneau.examples.core.json}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.examples.core.json.JsonSimpleExample} - JsonSerializer and JsonParser usage on serialize and deserialize simple Pojo bean.
@@ -27115,7 +27116,7 @@
 <p>
 	The class hierarchy for this class is:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jac'>
 		{@link org.apache.juneau.rest.RestServlet} - Contains all the REST servlet logic.
 		<ul>
@@ -27434,7 +27435,7 @@
 <p>
 	The application itself is defined in 3 packages:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'><c>org.apache.juneau.rest.examples.rest.petstore</c>
 		<br>Defines the service for storing and retrieving Petstore data.
 		<br><img class='bordered' style='width:250px' src='doc-files/juneau-examples-rest.PetStoreResource.2a.png'>
@@ -36123,7 +36124,7 @@
 <ul class='spaced-list'>
 	<li>
 		New SVL variables:
-		<ul class='doctree'>
+		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.svl.vars.SubstringVar}
 			<li class='jc'>{@link org.apache.juneau.svl.vars.PatternExtractVar}
 			<li class='jc'>{@link org.apache.juneau.svl.vars.PatternReplaceVar}
@@ -36135,7 +36136,7 @@
 <ul class='spaced-list'>
 	<li>
 		New methods for setting a system default configuration:
-		<ul class='doctree'>
+		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.config.Config}
 			<ul>
 				<li class='jm'>{@link org.apache.juneau.config.Config#getSystemDefault() getSystemDefault()}
@@ -36144,12 +36145,12 @@
 		</ul>
 	<li>
 		New classpath store.
-		<ul class='doctree'>
+		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.config.store.ConfigClasspathStore}
 		</ul>
 	<li>
 		New API method:
-		<ul class='doctree'>
+		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.config.store.ConfigStore}
 			<ul>
 				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#exists(String) exists(String)}
@@ -36161,7 +36162,7 @@
 <ul class='spaced-list'>
 	<li>
 		New methods on {@link org.apache.juneau.rest.RestServlet}:
-		<ul class='doctree'>
+		<ul class='javatree'>
 			<li class='jm'>{@link org.apache.juneau.rest.RestServlet#setRestResourceResolver(RestResourceResolver) setRestResourceResolver(RestResourceResolver)}
 			<li class='jm'>{@link org.apache.juneau.rest.RestServlet#getPath() getPath()}
 		</ul>
@@ -36249,17 +36250,17 @@
 <ul class='spaced-list'>
 	<li>
 		New utility class for diffing beans: 
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.utils.BeanDiff}
 		</ul>
 	<li>
 		New annotation for defining bean property names: 
-		<ul>
+		<ul class='javatree'>
 			<li class='ja'>{@link org.apache.juneau.annotation.Name}
 		</ul>
 	<li>
 		New serializer properties:
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.serializer.WriterSerializer}
 			<ul>
 				<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_fileCharset WSERIALIZER_fileCharset}
@@ -36269,7 +36270,7 @@
 	<li>
 		The following POJO methods can be used to convert a POJO to/from a Map before serialization and after parsing.
 		<br>It's a convenient way of defining a POJO transform.
-		<ul>
+		<ul class='javatree'>
 			<li class='jm'><c><jk>public</jk> Map toMap()</c> -  Can be any type of map with string keys and object vals. 
 			<li class='jm'><c><jk>public</jk> ObjectMap toMap()</c>
 			<li class='jm'><c><jk>public</jk> Map toMap(BeanSession bs)</c> -  Can be any type of map with string keys and object vals. 
@@ -36281,7 +36282,7 @@
 		</ul>
 	<li>
 		New convenience debugging methods on Marshall API:
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.marshall.Marshall}
 			<ul>
 				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#format(String,Object...) format(String,Object...)} - <c>MessageFormat</c>-style formatter.
@@ -36294,14 +36295,14 @@
 		easier to determine if problems are stream based or syntax based.
 	<li>
 		New Java 8 date-time transforms:
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.transforms.TemporalSwap} - For all Java 8 temporal types (e.g. {@link java.time.ZonedDateTime})
 			<li class='jc'>{@link org.apache.juneau.transforms.TemporalDateSwap} - For {@link java.util.Date}
 			<li class='jc'>{@link org.apache.juneau.transforms.TemporalCalendarSwap} - For {@link java.util.Calendar}
 		</ul>
 	<li>
 		All serializers and parsers now have built-in default swaps for common class types:
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link java.util.Enumeration}
 			<li class='jc'>{@link java.util.Iterator}
 			<li class='jc'>{@link java.util.Locale}
@@ -36337,7 +36338,7 @@
 	<li>
 		The {@link org.apache.juneau.config.store.ConfigFileStore} now automatically resolves file extensions.
 		<br>New configuration property for specifying search paths for file extensions:
-		<ul class='doctree'>
+		<ul class='javatree'>
 			<li class='jf'>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_extensions}
 		</ul>
 	<li>
@@ -36392,7 +36393,7 @@
 		<p>
 			Config annotations are provided for all serializers and parsers:
 		</p>
-		<ul>
+		<ul class='javatree'>
 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig BeanConfig}
 			<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvConfig CsvConfig}
 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig HtmlConfig}
@@ -36413,7 +36414,7 @@
 		</ul>
 	<li>
 		New support for using Servlet request attributes.  
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.rest.RequestAttributes}
 			<li class='jc'>{@link org.apache.juneau.rest.RestContext}
 			<ul>
@@ -36442,7 +36443,7 @@
 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#attrs()}
 		</ul>
 		<br>This deprecates the following APIs:
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.rest.RequestProperties}
 			<li class='jc'>{@link org.apache.juneau.rest.RestMethodProperties}
 			<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
@@ -36455,7 +36456,7 @@
 		Added the following classes that provide the same support as the servlet classes but doesn't extend from <c>HttpServlet</c>.
 		<br>This fixes an issue where instances of {@link org.apache.juneau.rest.BasicRestServlet} are registered as top-level servlets even though
 		you don't want them to be.  
-		<ul>
+		<ul class='javatree'>
 			<li class='jac'>{@link org.apache.juneau.rest.BasicRest} - Non-servlet equivalent to {@link org.apache.juneau.rest.BasicRestServlet}
 			<li class='jac'>{@link org.apache.juneau.rest.BasicRestGroup} - Non-servlet equivalent to {@link org.apache.juneau.rest.BasicRestServletGroup}
 			<li class='jac'>{@link org.apache.juneau.rest.BasicRestJena} - Non-servlet equivalent to {@link org.apache.juneau.rest.BasicRestServletJena}
@@ -36465,7 +36466,7 @@
 		HTML widgets now have access to the <c>RestResponse</c> object if they need access to the output bean.
 	<li>
 		New annotations for simplified role-based guards on classes and methods:
-		<ul>
+		<ul class='javatree'>
 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource} 
 			<ul>
 				<li class='jm'>{@link org.apache.juneau.rest.annotation.RestResource#roleGuard roleGuard()}
@@ -36479,7 +36480,7 @@
 		</ul>
 	<li>
 		New annotations for fine-tuned handling of http-methods/http-headers as query parameters and others:
-		<ul>
+		<ul class='javatree'>
 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource} 
 			<ul>
 				<li class='jm'>{@link org.apache.juneau.rest.annotation.RestResource#allowedHeaderParams() allowedHeaderParams()}
@@ -36497,7 +36498,7 @@
 		</p>		
 	<li>
 		New methods:
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
 			<ul>
 				<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getCharset() getCharset()}
@@ -36509,7 +36510,7 @@
 		</ul>
 	<li>
 		New interface method for catching arbitrary thrown objects and converting them to other throwables.
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.rest.RestCallHandler}
 			<ul>
 				<li class='jm'>{@link org.apache.juneau.rest.RestCallHandler#convertThrowable(Throwable) convertThrowable(Throwable)}

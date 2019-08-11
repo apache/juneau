@@ -425,8 +425,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
 	 * generate arbitrary replacement text.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
 	 * </ul>
 	 *
@@ -444,8 +443,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * <p>
 	 * Same as {@link #widgets(Class...)} but replaces any previous values.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
 	 * </ul>
 	 *
@@ -463,8 +461,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * <p>
 	 * Same as {@link #widgets(Class...)} except input is pre-constructed instances.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
 	 * </ul>
 	 *
@@ -481,8 +478,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * <p>
 	 * Same as {@link #widgets(HtmlWidget...)} except allows you to overwrite the previous value.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
 	 * </ul>
 	 *

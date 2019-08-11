@@ -29,8 +29,7 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 /**
  * JAX-RS provider for the same serialize/parse support provided by the {@link BasicRestServlet} class.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server-jaxrs}
  * </ul>
  */

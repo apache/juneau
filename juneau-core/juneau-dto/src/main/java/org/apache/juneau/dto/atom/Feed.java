@@ -47,8 +47,7 @@ import org.apache.juneau.xml.annotation.*;
  * 		}
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-dto.Atom}
  * 	<li class='jp'>{@doc package-summary.html#TOC}
  * </ul>

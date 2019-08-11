@@ -49,8 +49,7 @@ public @interface XmlConfig {
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_eventAllocator}
 	 * </ul>
 	 */
@@ -63,8 +62,7 @@ public @interface XmlConfig {
 	 * If <js>"true"</js>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key
 	 * is the root element name.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -77,8 +75,7 @@ public @interface XmlConfig {
 	 * 		A default global value can be set via the system property <js>"XmlParser.preserveRootElement.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
 	 * </ul>
 	 */
@@ -90,14 +87,12 @@ public @interface XmlConfig {
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Reporters are not copied to new parsers during a clone.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_reporter}
 	 * </ul>
 	 */
@@ -109,8 +104,7 @@ public @interface XmlConfig {
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_resolver}
 	 * </ul>
 	 */
@@ -125,8 +119,7 @@ public @interface XmlConfig {
 	 * <p>
 	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -139,8 +132,7 @@ public @interface XmlConfig {
 	 * 		A default global value can be set via the system property <js>"XmlParser.validating.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_validating}
 	 * </ul>
 	 */
@@ -161,8 +153,7 @@ public @interface XmlConfig {
 	 * When present, this value overrides the {@link Serializer#SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -175,8 +166,7 @@ public @interface XmlConfig {
 	 * 		A default global value can be set via the system property <js>"XmlSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_addBeanTypes}
 	 * </ul>
 	 */
@@ -188,8 +178,7 @@ public @interface XmlConfig {
 	 * <p>
 	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -204,8 +193,7 @@ public @interface XmlConfig {
 	 * 		A default global value can be set via the system property <js>"XmlSerializer.addNamespaceUrisToRoot.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_addNamespaceUrisToRoot}
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>
@@ -229,8 +217,7 @@ public @interface XmlConfig {
 	 * <p>
 	 * This setting is ignored if {@link XmlSerializer#XML_enableNamespaces} is not enabled.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Auto-detection of namespaces can be costly performance-wise.
 	 * 		<br>In high-performance environments, it's recommended that namespace detection be
@@ -247,8 +234,7 @@ public @interface XmlConfig {
 	 * 		A default global value can be set via the system property <js>"XmlSerializer.autoDetectNamespaces.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_autoDetectNamespaces}
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>
@@ -261,16 +247,14 @@ public @interface XmlConfig {
 	 * <p>
 	 * Specifies the default namespace URI for this document.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"XmlSerializer.defaultNamespace.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_defaultNamespace}
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>
@@ -283,8 +267,7 @@ public @interface XmlConfig {
 	 * <p>
 	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 *		<ul>
@@ -297,8 +280,7 @@ public @interface XmlConfig {
 	 * 		A default global value can be set via the system property <js>"XmlSerializer.enableNamespaces.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>
@@ -311,16 +293,14 @@ public @interface XmlConfig {
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"XmlSerializer.namespaces.ls"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_namespaces}
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>
@@ -334,16 +314,14 @@ public @interface XmlConfig {
 	 * Specifies the namespace for the <c>XMLSchema</c> namespace, used by the schema generated by the
 	 * {@link XmlSchemaSerializer} class.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"XmlSerializer.xsNamespace.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_xsNamespace}
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>

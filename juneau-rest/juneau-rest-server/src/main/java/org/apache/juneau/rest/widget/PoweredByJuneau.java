@@ -21,8 +21,7 @@ import org.apache.juneau.rest.*;
  * <p>
  * The variable it resolves is <js>"$W{PoweredByJuneau}"</js>.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets}
  * </ul>
  */

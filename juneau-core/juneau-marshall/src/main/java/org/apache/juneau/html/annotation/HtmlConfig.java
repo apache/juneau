@@ -49,8 +49,7 @@ public @interface HtmlConfig {
 	 * When present, this value overrides the {@link Serializer#SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -63,8 +62,7 @@ public @interface HtmlConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addBeanTypes}
 	 * </ul>
 	 */
@@ -101,8 +99,7 @@ public @interface HtmlConfig {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -115,8 +112,7 @@ public @interface HtmlConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addKeyValueTableHeaders}
 	 * </ul>
 	 */
@@ -153,8 +149,7 @@ public @interface HtmlConfig {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -167,8 +162,7 @@ public @interface HtmlConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlSerializer.detectLinksInStrings.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLinksInStrings}
 	 * </ul>
 	 */
@@ -180,8 +174,7 @@ public @interface HtmlConfig {
 	 * <p>
 	 * The parameter name to look for when resolving link labels via {@link HtmlSerializer#HTML_detectLabelParameters}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Default value: <js>"label"</js>
 	 * 	<li>
@@ -190,8 +183,7 @@ public @interface HtmlConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlSerializer.labelParameter.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class=''>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_labelParameter}
 	 * </ul>
 	 */
@@ -231,8 +223,7 @@ public @interface HtmlConfig {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -245,8 +236,7 @@ public @interface HtmlConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlSerializer.detectLabelParameters.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLabelParameters}
 	 * </ul>
 	 */
@@ -259,8 +249,7 @@ public @interface HtmlConfig {
 	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
 	 * <xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -279,8 +268,7 @@ public @interface HtmlConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlSerializer.uriAnchorText.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_uriAnchorText}
 	 * </ul>
 	 */

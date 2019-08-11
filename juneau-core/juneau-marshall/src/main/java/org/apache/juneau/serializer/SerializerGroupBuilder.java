@@ -141,8 +141,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
 	 * </ul>
 	 *
@@ -161,8 +160,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>addBeanTypes(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
 	 * </ul>
 	 *
@@ -179,8 +177,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
 	 * type information that might normally be included to determine the data type will not be serialized.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
 	 * </ul>
 	 *
@@ -199,8 +196,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>addRootType(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
 	 * </ul>
 	 *
@@ -216,8 +212,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
 	 * </ul>
 	 *
@@ -232,8 +227,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
 	 * </ul>
 	 *
@@ -252,8 +246,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>sortCollections(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
 	 * </ul>
 	 *
@@ -266,8 +259,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Sort maps alphabetically.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
 	 * </ul>
 	 *
@@ -286,8 +278,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>sortMaps(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
 	 * </ul>
 	 *
@@ -303,8 +294,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * If <jk>true</jk>, empty list values will not be serialized to the output.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
 	 * </ul>
 	 *
@@ -323,8 +313,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>trimEmptyCollections(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
 	 * </ul>
 	 *
@@ -340,8 +329,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * If <jk>true</jk>, empty map values will not be serialized to the output.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
 	 * </ul>
 	 *
@@ -360,8 +348,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>trimEmptyMaps(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
 	 * </ul>
 	 *
@@ -377,8 +364,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * If <jk>true</jk>, null bean values will not be serialized to the output.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
 	 * </ul>
 	 *
@@ -397,8 +383,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
 	 * </ul>
 	 *
@@ -417,8 +402,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
 	 * </ul>
 	 *
@@ -434,8 +418,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
 	 * </ul>
 	 *
@@ -452,8 +435,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing URI/URL objects.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
 	 * </ul>
 	 *
@@ -472,8 +454,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Defines the resolution level for URIs when serializing URI/URL objects.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
 	 * </ul>
 	 *
@@ -495,7 +476,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * When using the {@link Serializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
 	 * when converting the resulting byte array to a string.
 	 *
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
 	 * </ul>
 	 *
@@ -519,8 +500,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_fileCharset}
 	 * </ul>
 	 *
@@ -539,8 +519,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
 	 * </ul>
 	 *
@@ -559,8 +538,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * This is the character used for quoting attributes and values.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
 	 * </ul>
 	 *
@@ -579,8 +557,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
 	 * </ul>
 	 *
@@ -599,8 +576,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_streamCharset}
 	 * </ul>
 	 *
@@ -619,8 +595,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 *
@@ -639,8 +614,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 * @return This object (for method chaining).
@@ -655,8 +629,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 *

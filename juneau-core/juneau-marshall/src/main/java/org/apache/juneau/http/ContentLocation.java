@@ -60,8 +60,7 @@ import org.apache.juneau.http.annotation.*;
  * The meaning of the Content-Location header in PUT or POST requests is undefined; servers are free to ignore it in
  * those cases.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

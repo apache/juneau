@@ -34,8 +34,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Base class for defining JAX-RS providers based on Juneau serializers and parsers.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server-jaxrs}
  * </ul>
  */

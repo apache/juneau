@@ -23,8 +23,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Provides localized Swagger documentation and other related information about a REST resource.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_infoProvider}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * </ul>
@@ -45,7 +44,7 @@ public interface RestInfoProvider {
 	 *
 	 * <p>
 	 * This object is made available through the following:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestRequest#getSwagger()}
 	 * </ul>
 	 *

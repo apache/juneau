@@ -23,8 +23,7 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Annotation applied to Java methods on REST proxy.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
  */

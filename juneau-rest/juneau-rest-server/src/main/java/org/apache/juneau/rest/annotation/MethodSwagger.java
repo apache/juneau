@@ -17,8 +17,7 @@ import org.apache.juneau.jsonschema.annotation.*;
 /**
  * Extended annotation for {@link RestMethod#swagger() RestMethod.swagger()}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * </ul>
  */
@@ -27,8 +26,7 @@ public @interface MethodSwagger {
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -46,8 +44,7 @@ public @interface MethodSwagger {
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/description</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -65,8 +62,7 @@ public @interface MethodSwagger {
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/operationId</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 	<li>
@@ -83,8 +79,7 @@ public @interface MethodSwagger {
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/schemes</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is either a comma-delimited list of simple strings or a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array.
 	 * 	<li>
@@ -108,8 +103,7 @@ public @interface MethodSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is boolean.
 	 * 	<li>
@@ -129,8 +123,7 @@ public @interface MethodSwagger {
 	 * <p>
 	 * Use this value to override the supported <c>Content-Type</c> media types defined by the parsers defined via {@link RestMethod#parsers()}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is either a comma-delimited list of simple strings or a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array.
 	 * 	<li>
@@ -148,8 +141,7 @@ public @interface MethodSwagger {
 	 * <p>
 	 * Use this value to override the supported <c>Accept</c> media types defined by the serializers defined via {@link RestMethod#serializers()}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is either a comma-delimited list of simple strings or a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array.
 	 * 	<li>
@@ -173,8 +165,7 @@ public @interface MethodSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -207,8 +198,7 @@ public @interface MethodSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array consisting of the concatenated individual strings.
 	 * 		<br>The leading and trailing <js>'['</js> and <js>']'</js> characters are optional.
@@ -240,8 +230,7 @@ public @interface MethodSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} objc consisting of the concatenated individual strings.
 	 * 		<br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
@@ -271,8 +260,7 @@ public @interface MethodSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -298,8 +286,7 @@ public @interface MethodSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@link SimpleJsonSerializer#DEFAULT Simple-JSON} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -375,8 +362,7 @@ public @interface MethodSwagger {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>

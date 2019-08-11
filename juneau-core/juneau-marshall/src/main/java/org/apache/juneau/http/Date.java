@@ -72,8 +72,7 @@ import org.apache.juneau.http.annotation.*;
  * In practice, the date can be generated at any time during the message origination without affecting its semantic
  * value.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

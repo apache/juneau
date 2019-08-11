@@ -25,8 +25,7 @@ import org.apache.juneau.uon.UonSerializer;
 /**
  *	Sample class which shows the simple usage of UONSerializer.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */

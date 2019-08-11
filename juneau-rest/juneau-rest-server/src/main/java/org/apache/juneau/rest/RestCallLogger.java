@@ -17,8 +17,7 @@ import javax.servlet.http.*;
 /**
  * Interface class used for logging HTTP requests to the log file.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_callLogger}
  * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
  * </ul>

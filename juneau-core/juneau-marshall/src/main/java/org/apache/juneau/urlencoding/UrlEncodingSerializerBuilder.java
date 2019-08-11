@@ -62,8 +62,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 * If <jk>false</jk>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
 	 * <br>If <jk>true</jk>, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UrlEncodingSerializer#URLENC_expandedParams}
 	 * </ul>
 	 *
@@ -82,8 +81,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>expandedParams(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UrlEncodingSerializer#URLENC_expandedParams}
 	 * </ul>
 	 *

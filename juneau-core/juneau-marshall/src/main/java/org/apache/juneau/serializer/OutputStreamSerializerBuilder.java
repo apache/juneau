@@ -54,7 +54,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 * When using the {@link Serializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
 	 * when converting the resulting byte array to a string.
 	 *
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
 	 * </ul>
 	 *
@@ -74,7 +74,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 * When using the {@link Serializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
 	 * when converting the resulting byte array to a string.
 	 *
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
 	 * </ul>
 	 *

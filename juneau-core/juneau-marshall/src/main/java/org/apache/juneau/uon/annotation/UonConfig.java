@@ -46,8 +46,7 @@ public @interface UonConfig {
 	 * Specify <js>"true"</js> if URI encoded characters should be decoded, <js>"false"</js> if they've already been decoded
 	 * before being passed to this parser.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -62,8 +61,7 @@ public @interface UonConfig {
 	 * 		A default global value can be set via the system property <js>"UonParser.decoding.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonParser#UON_decoding}
 	 * </ul>
 	 */
@@ -76,8 +74,7 @@ public @interface UonConfig {
 	 * If <js>"true"</js>, after parsing a POJO from the input, verifies that the remaining input in
 	 * the stream consists of only comments or whitespace.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -90,8 +87,7 @@ public @interface UonConfig {
 	 * 		A default global value can be set via the system property <js>"UonParser.validateEnd.b"</js>.
 	 * </ul>
 
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonParser#UON_validateEnd}
 	 * </ul>
 	 */
@@ -112,8 +108,7 @@ public @interface UonConfig {
 	 * When present, this value overrides the {@link Serializer#SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -126,8 +121,7 @@ public @interface UonConfig {
 	 * 		A default global value can be set via the system property <js>"UonSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_addBeanTypes}
 	 * </ul>
 	 */
@@ -151,8 +145,7 @@ public @interface UonConfig {
 	 * 	<li><js>"false"</js>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -167,8 +160,7 @@ public @interface UonConfig {
 	 * 		A default global value can be set via the system property <js>"UonSerializer.encoding.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}
 	 * </ul>
 	 */
@@ -180,8 +172,7 @@ public @interface UonConfig {
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -194,8 +185,7 @@ public @interface UonConfig {
 	 * 		A default global value can be set via the system property <js>"UonSerializer.paramFormat.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>
 	 */

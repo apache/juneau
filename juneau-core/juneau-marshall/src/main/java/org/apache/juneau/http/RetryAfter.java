@@ -53,8 +53,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * In the latter example, the delay is 2 minutes.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

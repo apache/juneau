@@ -100,8 +100,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>foo?</tt> - <tt>?</tt> matches exactly one character
  * </ul>
  *
- * <h5 class='section'>Notes:</h5>
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li>
  * 		Whitespace is ignored around search patterns.
  * 	<li>
@@ -126,8 +125,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>!123</tt> - Not 123
  * </ul>
  *
- * <h5 class='section'>Notes:</h5>
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li>
  * 		Whitespace is ignored in search patterns.
  * 	<li>
@@ -161,8 +159,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>2001 2003 2005</tt>	- Multiple date patterns are ORed.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5>
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li>
  * 		Whitespace is ignored in search patterns.
  * </ul>

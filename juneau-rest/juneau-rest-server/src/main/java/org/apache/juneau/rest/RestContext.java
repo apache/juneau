@@ -78,8 +78,7 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 /**
  * Contains all the configuration on a REST resource and the entry points for handling REST calls.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestContext}
  * </ul>
  */
@@ -145,8 +144,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		<js>'body'</js> parameter name is case-insensitive.
 	 * 	<li>
@@ -208,8 +206,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Useful for debugging REST interface using only a browser so that you can quickly simulate header values
 	 * 		in the URL bar.
@@ -276,8 +273,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Method names are case-insensitive.
 	 * 	<li>
@@ -350,8 +346,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
 	 * 	<li>
@@ -417,8 +412,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Header names are case-insensitive.
 	 * 	<li>
@@ -505,8 +499,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
@@ -576,8 +569,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -653,8 +645,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -754,8 +745,7 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		When defined as classes, instances are resolved using the registered {@link #REST_resourceResolver} which
 	 * 		by default is {@link BasicRestResourceResolver} which requires the class have one of the following
@@ -766,8 +756,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.Instantiation.Children}
 	 * </ul>
 	 */
@@ -799,7 +788,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * Used by the following methods:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jc'>{@link RestContext}
 	 * 	<ul>
 	 * 		<li class='jm'>{@link #getClasspathResource(String,Locale) getClasspathResource(String,Locale)}
@@ -855,8 +844,7 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The default value is {@link ClasspathResourceFinderBasic} which provides basic support for finding localized
 	 * 		resources on the classpath and JVM working directory.
@@ -1020,20 +1008,14 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jc'>{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
 	 * 	<li class='jc'>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
 	 * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
 	 * 	<li class='link'>{@doc juneau-rest-server.Converters}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
@@ -1155,8 +1137,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Specifies default values for request attributes if they're not already set on the request.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Strings are in the format <js>"Name: value"</js>.
 	 * 	<li>
@@ -1224,8 +1205,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Specifies default values for request headers if they're not passed in through the request.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Strings are in the format <js>"Header-Name: header-value"</js>.
 	 * 	<li>
@@ -1291,8 +1271,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Specifies default values for response headers if they're not set after the Java REST method is called.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Strings are in the format <js>"Header-Name: header-value"</js>.
 	 * 	<li>
@@ -1385,8 +1364,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
@@ -1397,8 +1375,7 @@ public final class RestContext extends BeanContext {
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.Encoders}
 	 * </ul>
 	 */
@@ -1470,8 +1447,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
@@ -1482,8 +1458,7 @@ public final class RestContext extends BeanContext {
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.Guards}
 	 * </ul>
 	 */
@@ -1564,8 +1539,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
@@ -1604,14 +1578,14 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * Two implementations are provided by default:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jc'>{@link BasicRestLogger} - Default logging.
 	 * 	<li class='jc'>{@link NoOpRestLogger} - Logging disabled.
 	 * </ul>
 	 *
 	 * <p>
 	 * Loggers are accessible through the following:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestContext#getLogger() RestContext.getLogger()}
 	 * 	<li class='jm'>{@link RestRequest#getLogger() RestRequest.getLogger()}
 	 * </ul>
@@ -1649,8 +1623,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 * @deprecated Use {@link #REST_callLogger}
@@ -1711,8 +1684,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		String value that gets resolved to a <jk>long</jk>.
 	 * 	<li>
@@ -1751,14 +1723,14 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * This annotation is used to provide localized messages for the following methods:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestRequest#getMessage(String, Object...)}
 	 * 	<li class='jm'>{@link RestContext#getMessages() RestContext.getMessages()}
 	 * </ul>
 	 *
 	 * <p>
 	 * Messages are also available by passing either of the following parameter types into your Java method:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jc'>{@link ResourceBundle} - Basic Java resource bundle.
 	 * 	<li class='jc'>{@link MessageBundle} - Extended resource bundle with several convenience methods.
 	 * </ul>
@@ -1797,15 +1769,13 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li
 	 * 		>Mappings are cumulative from super classes.
 	 * 		<br>Therefore, you can find and retrieve messages up the class-hierarchy chain.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.Messages}
 	 * </ul>
 	 */
@@ -1836,7 +1806,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * Used for specifying the content type on file resources retrieved through the following methods:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestContext#resolveStaticFile(String) RestContext.resolveStaticFile(String)}
 	 * 	<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType,boolean)}
 	 * 	<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean)}
@@ -1870,8 +1840,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Values are .mime.types formatted entry string.
 	 * 		<br>Example: <js>"image/svg+xml svg"</js>
@@ -1953,8 +1922,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
@@ -2000,7 +1968,7 @@ public final class RestContext extends BeanContext {
 	 * <br>Any of the Juneau framework parsers can be used in this setting.
 	 * <br>The parser selected is based on the request <c>Content-Type</c> header matched against the values returned by the following method
 	 * using a best-match algorithm:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link Parser#getMediaTypes()}
 	 * </ul>
 	 *
@@ -2037,8 +2005,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		When defined as a class, properties/transforms defined on the resource/method are inherited.
 	 * 	<li>
@@ -2057,8 +2024,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.Parsers}
 	 * </ul>
 	 */
@@ -2122,8 +2088,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		When defined as a class, properties/transforms defined on the resource/method are inherited.
 	 * 	<li>
@@ -2195,8 +2160,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		When defined as a class, properties/transforms defined on the resource/method are inherited.
 	 * 	<li>
@@ -2256,8 +2220,7 @@ public final class RestContext extends BeanContext {
 	 * </p>
 	 *
 	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This annotation is ignored on top-level servlets (i.e. servlets defined in <c>web.xml</c> files).
 	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
@@ -2325,8 +2288,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Useful for debugging, although allowing stack traces to be rendered may cause security concerns so use
 	 * 		caution when enabling.
@@ -2406,8 +2368,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Unless overridden, resource resolvers are inherited from ascendant resources.
 	 * 	<li>
@@ -2420,8 +2381,7 @@ public final class RestContext extends BeanContext {
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.Instantiation.ResourceResolvers}
 	 * 	<li class='link'>{@doc juneau-rest-server.Injection}
 	 * </ul>
@@ -2506,8 +2466,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Response handlers resolvers are always inherited from ascendant resources.
 	 * 	<li>
@@ -2560,8 +2519,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
 	 * </ul>
 	 */
@@ -2602,8 +2560,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports any of the following expression constructs:
 	 * 		<ul>
@@ -2631,8 +2588,7 @@ public final class RestContext extends BeanContext {
 	 * 		Role guards defined at both the class and method level must both pass.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_roleGuard}
 	 * </ul>
 	 */
@@ -2670,7 +2626,7 @@ public final class RestContext extends BeanContext {
 	 * <br>Any of the Juneau framework serializers can be used in this setting.
 	 * <br>The serializer selected is based on the request <c>Accept</c> header matched against the values returned by the following method
 	 * using a best-match algorithm:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link Serializer#getMediaTypeRanges()}
 	 * </ul>
 	 *
@@ -2708,8 +2664,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		When defined as a class, properties/transforms defined on the resource/method are inherited.
 	 * 	<li>
@@ -2734,8 +2689,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.Serializers}
 	 * </ul>
 	 * <p>
@@ -2801,8 +2755,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_staticFiles} for information about statically-served files.
 	 * </ul>
 	 */
@@ -2862,8 +2815,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><c>[working-dir]/docs</c> directory.
 	 * </ol>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_classpathResourceFinder} for configuring how classpath resources are located and retrieved.
 	 * 	<li class='jf'>{@link #REST_mimeTypes} for configuring the media types based on file extension.
 	 * 	<li class='jf'>{@link #REST_staticFileResponseHeaders} for configuring response headers on statically served files.
@@ -2871,8 +2823,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='jm'>{@link RestContext#getClasspathResource(String,Locale)} for retrieving static files.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Mappings are cumulative from super classes.
 	 * 	<li>
@@ -2936,7 +2887,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * This affects the returned values from the following:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestContext#getProduces() RestContext.getProduces()}
 	 * 	<li class='jm'>{@link RestRequest#getProduces()}
 	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)} - Affects produces field.
@@ -2977,15 +2928,13 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Property values will be converted to the appropriate type.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link RestContextBuilder#set(String,Object)}
 	 * 	<li class='jm'>{@link RestContextBuilder#set(java.util.Map)}
 	 * </ul>
@@ -3047,7 +2996,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * This affects the returned values from the following:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestContext#getConsumes() RestContext.getConsumes()}
 	 * 	<li class='jm'>{@link RestRequest#getConsumes()}
 	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)} - Affects consumes field.
@@ -3103,8 +3052,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_staticFiles} for information about static files.
 	 * </ul>
 	 */
@@ -3135,7 +3083,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * Affects the following methods:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestContext#getStackTraceOccurrence(Throwable) RestContext.getStackTraceOccurrance(Throwable)}
 	 * 	<li class='jm'>{@link RestCallHandler#handleError(HttpServletRequest, HttpServletResponse, Throwable)}
 	 * 	<li class='jm'>{@link RestException#getOccurrence()} - Returns the number of times this exception occurred.
@@ -3195,7 +3143,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * Affects the following methods:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestRequest#getAuthorityPath()}
 	 * </ul>
 	 *
@@ -3269,7 +3217,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * Affects the following methods:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestRequest#getContextPath()} - Returns the overridden context path for the resource.
 	 * 	<li class='jm'>{@link RestRequest#getServletPath()} - Includes the overridden context path for the resource.
 	 * </ul>
@@ -3331,7 +3279,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * Affects the following methods:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestRequest#getUriResolver()}
 	 * </ul>
 	 *
@@ -3392,7 +3340,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * Affects the following methods:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestRequest#getUriResolver()}
 	 * </ul>
 	 *
@@ -3483,14 +3431,12 @@ public final class RestContext extends BeanContext {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Widgets are inherited from super classes, but can be overridden by reusing the widget name.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
 	 * </ul>
 	 *
@@ -4032,8 +3978,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * The resource resolver is used for instantiating child resource classes.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_resourceResolver}
 	 * </ul>
 	 *
@@ -4089,8 +4034,7 @@ public final class RestContext extends BeanContext {
 	 * 	<jk>public</jk> LoggerEntry getLogger(RestRequest req, <ja>@Path</ja> String name) <jk>throws</jk> Exception {
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} - For adding custom vars.
 	 * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
 	 * 	<li class='link'>{@doc DefaultRestSvlVariables}
@@ -4107,7 +4051,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * The config file is identified via one of the following:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link RestResource#config()}
 	 * 	<li class='jm'>{@link RestContextBuilder#config(Config)}
 	 * </ul>
@@ -4125,7 +4069,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * The location of static resources are defined via:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jf'>{@link RestContext#REST_staticFiles RestContext.REST_staticFiles}
 	 * </ul>
 	 *
@@ -4215,8 +4159,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_classpathResourceFinder}
 	 * </ul>
 	 *
@@ -4245,8 +4188,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_classpathResourceFinder}
 	 * </ul>
 	 *
@@ -4277,8 +4219,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_classpathResourceFinder}
 	 * </ul>
 	 *
@@ -4307,8 +4248,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_classpathResourceFinder}
 	 * </ul>
 	 *
@@ -4343,8 +4283,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_classpathResourceFinder}
 	 * </ul>
 	 *
@@ -4366,8 +4305,7 @@ public final class RestContext extends BeanContext {
 	 * Same as {@link #getClasspathResource(Class, MediaType, String, Locale)}, except overrides the class used
 	 * for retrieving the classpath resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_classpathResourceFinder}
 	 * </ul>
 	 *
@@ -4436,8 +4374,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * If path is not specified, returns <js>""</js>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_path}
 	 * </ul>
 	 *
@@ -4450,8 +4387,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the logger to use for this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_logger}
 	 * </ul>
 	 *
@@ -4468,8 +4404,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the call logger to use for this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_callLogger}
 	 * </ul>
 	 *
@@ -4484,8 +4419,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the call logger config to use for this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_callLoggerConfig}
 	 * </ul>
 	 *
@@ -4500,8 +4434,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the resource bundle used by this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_messages}
 	 * </ul>
 	 *
@@ -4516,8 +4449,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the REST information provider used by this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
 	 * </ul>
 	 *
@@ -4532,8 +4464,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the REST call handler used by this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
 	 * </ul>
 	 *
@@ -4608,14 +4539,13 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * Properties at the class level are defined via the following:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link RestResource#properties()}
 	 * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
 	 * 	<li class='jm'>{@link RestContextBuilder#set(Map)}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The returned {@code Map} is mutable.
 	 * 		<br>Therefore, subclasses are free to override or set additional initialization parameters in their {@code init()} method.
@@ -4651,8 +4581,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the number of times this exception was thrown based on a hash of its stacktrace.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
 	 * </ul>
 	 *
@@ -4674,8 +4603,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns whether it's safe to render stack traces in HTTP responses.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
 	 * </ul>
 	 *
@@ -4688,8 +4616,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns whether it's safe to pass the HTTP body as a <js>"body"</js> GET parameter.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_allowBodyParam}
 	 * </ul>
 	 *
@@ -4702,8 +4629,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Allowed header URL parameters.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_allowedHeaderParams}
 	 * </ul>
 	 *
@@ -4718,8 +4644,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Allowed method headers.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodHeaders}
 	 * </ul>
 	 *
@@ -4734,8 +4659,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Allowed method URL parameters.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
 	 * </ul>
 	 *
@@ -4750,8 +4674,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns <jk>true</jk> if debug mode is enabled on this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_debug}
 	 * </ul>
 	 *
@@ -4776,8 +4699,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the name of the client version header name used by this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
 	 * </ul>
 	 *
@@ -4792,8 +4714,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the HTTP-part parser associated with this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 *
@@ -4808,8 +4729,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the HTTP-part serializer associated with this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
 	 * </ul>
 	 *
@@ -4835,8 +4755,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the explicit list of supported accept types for this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_serializers}
 	 * 	<li class='jf'>{@link RestContext#REST_produces}
 	 * </ul>
@@ -4852,8 +4771,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the explicit list of supported content types for this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_parsers}
 	 * 	<li class='jf'>{@link RestContext#REST_consumes}
 	 * </ul>
@@ -4869,8 +4787,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the default request headers for this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
 	 * </ul>
 	 *
@@ -4885,8 +4802,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the default request headers for this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
 	 * </ul>
 	 *
@@ -4901,8 +4817,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the default response headers for this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
 	 * </ul>
 	 *
@@ -4917,8 +4832,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the response handlers associated with this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
 	 * </ul>
 	 *
@@ -4933,8 +4847,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns <jk>true</jk> if this resource has any child resources associated with it.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_children}
 	 * </ul>
 	 *
@@ -4947,8 +4860,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the context of the child resource associated with the specified path.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_children}
 	 * </ul>
 	 *
@@ -4962,8 +4874,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the authority path of the resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_uriAuthority}
 	 * </ul>
 	 *
@@ -4982,8 +4893,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the context path of the resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_uriContext}
 	 * </ul>
 	 *
@@ -5002,8 +4912,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the setting on how relative URIs should be interpreted as relative to.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_uriRelativity}
 	 * </ul>
 	 *
@@ -5018,8 +4927,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the setting on how relative URIs should be resolved.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_uriResolution}
 	 * </ul>
 	 *
@@ -5044,8 +4952,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the media type for the specified file name.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_mimeTypes}
 	 * </ul>
 	 *
@@ -5062,8 +4969,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Static files are files pulled from the classpath and served up directly to the browser.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
 	 * </ul>
 	 *

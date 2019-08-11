@@ -505,8 +505,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * <p>
 	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Use the {@link #get(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>

@@ -45,7 +45,7 @@ package org.apache.juneau.transform;
  *
  * <p>
  * Property filters are registered in the following ways:
- * <ul>
+ * <ul class='javatree'>
  * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#propertyFilter() @Bean(propertyFilter)}
  * 	<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#propertyFilter(Class)}
  * </ul>

@@ -141,7 +141,7 @@ public class PropertyStoreBuilder {
 	 *
 	 * <p>
 	 * Applies any of the following annotations:
-	 * <ul class='doctree'>
+	 * <ul class='javatree'>
 	 * 	<li class ='ja'>{@link BeanConfig}
 	 * 	<li class ='ja'>{@link CsvConfig}
 	 * 	<li class ='ja'>{@link HtmlConfig}
@@ -183,7 +183,7 @@ public class PropertyStoreBuilder {
 	 *
 	 * <p>
 	 * Applies any of the following annotations:
-	 * <ul class='doctree'>
+	 * <ul class='javatree'>
 	 * 	<li class ='ja'>{@link BeanConfig}
 	 * 	<li class ='ja'>{@link CsvConfig}
 	 * 	<li class ='ja'>{@link HtmlConfig}

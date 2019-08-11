@@ -49,8 +49,7 @@ public @interface MsgPackConfig {
 	 * When present, this value overrides the {@link Serializer#SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -63,8 +62,7 @@ public @interface MsgPackConfig {
 	 * 		A default global value can be set via the system property <js>"MsgPackSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link MsgPackSerializer#MSGPACK_addBeanTypes}
 	 * </ul>
 	 */

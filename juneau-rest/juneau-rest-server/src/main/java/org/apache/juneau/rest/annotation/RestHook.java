@@ -70,8 +70,7 @@ import java.lang.annotation.*;
  * 		</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.LifecycleHooks}
  * </ul>
  */

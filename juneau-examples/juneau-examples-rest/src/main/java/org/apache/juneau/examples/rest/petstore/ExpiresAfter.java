@@ -19,8 +19,7 @@ import org.apache.juneau.http.annotation.*;
 /**
  * X-Expires-After custom HTTP header.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */

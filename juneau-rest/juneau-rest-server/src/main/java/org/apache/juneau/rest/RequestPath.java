@@ -31,8 +31,7 @@ import org.apache.juneau.rest.exception.*;
  * <p>
  * Provides access to the matched path variables and path match remainder.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestPathMatch}
  * </ul>
  */
@@ -135,8 +134,7 @@ public class RequestPath extends TreeMap<String,String> {
 	 * 	Map myparam = path.get(<js>"myparam"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 *
@@ -197,16 +195,14 @@ public class RequestPath extends TreeMap<String,String> {
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; myparam = req.getPathParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
 	 * 	<li>
 	 * 		<c>Maps</c> must be followed by zero or two parameters representing the key and value types.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 *

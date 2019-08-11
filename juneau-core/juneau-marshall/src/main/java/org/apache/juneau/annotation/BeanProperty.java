@@ -25,8 +25,7 @@ import org.apache.juneau.*;
  * <p>
  * This annotation is applied to public fields and public getter/setter methods of beans.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanPropertyAnnotation}
  * </ul>
  */
@@ -289,8 +288,7 @@ public @interface BeanProperty {
 	 * <p>
 	 * The list of classes that make up the bean dictionary this bean property.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 *

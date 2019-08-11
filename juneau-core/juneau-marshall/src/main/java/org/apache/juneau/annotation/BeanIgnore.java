@@ -31,8 +31,7 @@ import java.lang.annotation.*;
  * <p>
  * Applies to getters or setters that should not be interpreted as bean property getters or setters.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanIgnoreAnnotation}
  * </ul>
  */

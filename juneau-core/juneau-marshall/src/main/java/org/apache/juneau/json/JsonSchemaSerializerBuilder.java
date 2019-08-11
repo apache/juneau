@@ -64,8 +64,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * <p>
 	 * The description is the result of calling {@link ClassMeta#getFullName()}.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo}
 	 * </ul>
 	 *
@@ -86,13 +85,12 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * <p>
 	 * The examples come from calling {@link ClassMeta#getExample(BeanSession)} which in turn gets examples
 	 * from the following:
-	 * <ul class='doctree'>
+	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Example}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo}
 	 * </ul>
 	 *
@@ -111,8 +109,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * <p>
 	 * Identifies whether nested descriptions are allowed in schema definitions.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
 	 * </ul>
 	 *
@@ -128,8 +125,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * <p>
 	 * Identifies whether nested examples are allowed in schema definitions.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples}
 	 * </ul>
 	 *
@@ -149,8 +145,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * <p>
 	 * This setting is ignored if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} is not enabled.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_beanDefMapper}
 	 * </ul>
 	 *
@@ -173,8 +168,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * <p>
 	 * This setting is ignored if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} is not enabled.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_beanDefMapper}
 	 * </ul>
 	 *
@@ -195,8 +189,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * <p>
 	 * Keys are full class names.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_defaultSchemas}
 	 * </ul>
 	 *

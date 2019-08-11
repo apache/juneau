@@ -45,8 +45,7 @@ import org.apache.juneau.http.annotation.*;
  * A proxy MAY relay the credentials from the client request to the next proxy if that is the mechanism by which the
  * proxies cooperatively authenticate a given request.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

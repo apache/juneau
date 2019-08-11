@@ -77,8 +77,7 @@ import org.apache.juneau.xml.*;
  * 	<li>{@link RestClient#builder()} - Copy settings from an existing client.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
@@ -323,7 +322,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <p>
 	 * Used in conjunction with the following methods for setting up SSL parameters:
-	 * <ul class='doctree'>
+	 * <ul class='javatree'>
 	 * 	<li class='jf'>{@link #sslProtocols(String...)}
 	 * 	<li class='jf'>{@link #cipherSuites(String...)}
 	 * 	<li class='jf'>{@link #hostnameVerifier(HostnameVerifier)}
@@ -575,8 +574,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Sets a mock connection used to construct a connection manager for working against mocked REST interfaces.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-client.UnitTesting}
 	 * </ul>
 	 *
@@ -1035,8 +1033,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
 	 * and a queue size of 10.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_executorService}
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_executorServiceShutdownOnClose}
 	 * </ul>
@@ -1054,8 +1051,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Configuration property:  Request headers.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_headers}
 	 * </ul>
 	 *
@@ -1073,8 +1069,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Don't close this client when the {@link RestClient#close()} method is called.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_keepHttpClientOpen}
 	 * </ul>
 	 *
@@ -1093,8 +1088,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Adds an interceptor that gets called immediately after a connection is made.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
 	 * </ul>
 	 *
@@ -1129,8 +1123,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The parser to use for parsing POJOs in response bodies.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parser}
 	 * </ul>
 	 *
@@ -1149,8 +1142,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Same as {@link #parser(Parser)} except takes in a parser instance.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parser}
 	 * </ul>
 	 *
@@ -1169,8 +1161,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partParser}
 	 * </ul>
 	 *
@@ -1189,8 +1180,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Same as {@link #partParser(Class)} but takes in a parser instance.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partParser}
 	 * </ul>
 	 *
@@ -1209,8 +1199,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
 	 * </ul>
 	 *
@@ -1229,8 +1218,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Same as {@link #partSerializer(Class)} but takes in a parser instance.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
 	 * </ul>
 	 *
@@ -1246,8 +1234,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Make HTTP calls retryable if an error response (>=400) is received.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_retries}
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_retryInterval}
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_retryOn}
@@ -1275,8 +1262,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * will be prefixed with the specified root.
 	 * <br>This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_rootUri}
 	 * </ul>
 	 *
@@ -1293,8 +1279,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Configuration property:  Request query parameters.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_query}
 	 * </ul>
 	 *
@@ -1312,8 +1297,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The serializer to use for serializing POJOs in request bodies.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializer}
 	 * </ul>
 	 *
@@ -1332,8 +1316,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Same as {@link #serializer(Class)} but takes in a serializer instance.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializer}
 	 * </ul>
 	 *
@@ -1353,8 +1336,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
 	 * </ul>
 	 *
@@ -1373,8 +1355,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>addBeanTypes(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
 	 * </ul>
 	 *
@@ -1391,8 +1372,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
 	 * type information that might normally be included to determine the data type will not be serialized.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
 	 * </ul>
 	 *
@@ -1411,8 +1391,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>addRootType(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
 	 * </ul>
 	 *
@@ -1428,14 +1407,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Specifies that recursions should be checked for during serialization.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
 	 * </ul>
 	 *
@@ -1454,8 +1431,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>detectRecursions(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
 	 * </ul>
 	 *
@@ -1472,14 +1448,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
 	 * Otherwise, an exception is thrown.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
 	 * </ul>
 	 *
@@ -1498,8 +1472,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>ignoreRecursions(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
 	 * </ul>
 	 *
@@ -1515,8 +1488,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The initial indentation level at the root.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_initialDepth}
 	 * </ul>
 	 *
@@ -1535,8 +1507,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
 	 * </ul>
 	 *
@@ -1556,8 +1527,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <br>If this depth is exceeded, an exception is thrown.
 	 * <br>This prevents stack overflows from occurring when trying to serialize models with recursive references.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_maxDepth}
 	 * </ul>
 	 *
@@ -1576,8 +1546,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Copies and sorts the contents of arrays and collections before serializing them.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
 	 * </ul>
 	 *
@@ -1596,8 +1565,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>sortCollections(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
 	 * </ul>
 	 *
@@ -1613,8 +1581,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Copies and sorts the contents of maps before serializing them.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
 	 * </ul>
 	 *
@@ -1631,8 +1598,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>sortMaps(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
 	 * </ul>
 	 *
@@ -1648,8 +1614,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, empty list values will not be serialized to the output.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
 	 * </ul>
 	 *
@@ -1668,8 +1633,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>trimEmptyCollections(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
 	 * </ul>
 	 *
@@ -1685,8 +1649,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, empty map values will not be serialized to the output.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
 	 * </ul>
 	 *
@@ -1705,8 +1668,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>trimEmptyMaps(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
 	 * </ul>
 	 *
@@ -1722,8 +1684,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, null bean values will not be serialized to the output.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
 	 * </ul>
 	 *
@@ -1742,8 +1703,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
 	 * </ul>
 	 *
@@ -1762,8 +1722,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
 	 * </ul>
 	 *
@@ -1779,8 +1738,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
 	 * </ul>
 	 *
@@ -1797,8 +1755,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing URI/URL objects.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
 	 * </ul>
 	 *
@@ -1817,8 +1774,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Defines the resolution level for URIs when serializing URI/URL objects.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
 	 * </ul>
 	 *
@@ -1837,8 +1793,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
 	 * </ul>
 	 *
@@ -1857,8 +1812,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * This is the character used for quoting attributes and values.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
 	 * </ul>
 	 *
@@ -1877,8 +1831,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
 	 * </ul>
 	 *
@@ -1894,8 +1847,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 *
@@ -1914,8 +1866,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 * @return This object (for method chaining).
@@ -1930,8 +1881,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 *
@@ -1948,7 +1898,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * When using the {@link Serializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
 	 * when converting the resulting byte array to a string.
 	 *
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
 	 * </ul>
 	 *
@@ -1967,8 +1917,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * If <jk>true</jk>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * after parsing is complete.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
 	 * </ul>
 	 *
@@ -1987,8 +1936,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>autoCloseStreams(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
 	 * </ul>
 	 *
@@ -2004,8 +1952,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * When parse errors occur, this specifies the number of lines of input before and after the
 	 * error location to be printed as part of the exception message.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_debugOutputLines}
 	 * </ul>
 	 *
@@ -2025,8 +1972,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
 	 * </ul>
 	 *
@@ -2043,8 +1989,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parser is enabled.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
 	 * </ul>
 	 *
@@ -2063,8 +2008,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
 	 * </ul>
 	 *
@@ -2081,8 +2025,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
 	 *
@@ -2101,8 +2044,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
 	 *
@@ -2117,8 +2059,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * If <jk>true</jk>, don't use internal buffering during parsing.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
 	 * </ul>
 	 *
@@ -2137,8 +2078,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>unbuffered(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
 	 * </ul>
 	 *
@@ -2154,8 +2094,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The character set to use for reading <c>Files</c> from the file system.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
 	 * </ul>
 	 *
@@ -2174,8 +2113,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_streamCharset}
 	 * </ul>
 	 *
@@ -2195,8 +2133,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
 	 * when converting the string into a byte array.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
 	 * </ul>
 	 *
@@ -2212,8 +2149,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Configuration property:  Parameter format.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>
 	 *
@@ -2227,8 +2163,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Configuration property:  Parameter format.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>
 	 *

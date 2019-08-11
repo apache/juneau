@@ -63,8 +63,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
@@ -669,8 +668,7 @@ public class RestClient extends BeanContext implements Closeable {
 	/**
 	 * Perform a <c>POST</c> request against the specified URL.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>Use {@link #doFormPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
 	 * </ul>
 	 *
@@ -706,8 +704,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * You must call either {@link RestCall#body(Object)} or {@link RestCall#formData(String, Object)} to set the
 	 * contents on the result object.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>Use {@link #doFormPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
 	 * </ul>
 	 *
@@ -808,8 +805,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * You must call either {@link RestCall#body(Object)} or {@link RestCall#formData(String, Object)} to set the
 	 * contents on the result object.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>Use {@link #doFormPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
 	 * </ul>
 	 *
@@ -1052,8 +1048,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * 		.getRemoteResource(MyInterface3.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
 	 * 		pooling client connection manager.
@@ -1240,8 +1235,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <p>
 	 * If the information is not available to resolve to an absolute URL, a {@link RemoteMetadataException} is thrown.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
 	 * 		pooling client connection manager.

@@ -54,8 +54,7 @@ import org.apache.juneau.http.annotation.*;
  * In HTTP, it SHOULD be sent whenever the message's length can be determined prior to being transferred, unless this is
  * prohibited by the rules in section 4.4.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

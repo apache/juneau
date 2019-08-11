@@ -71,8 +71,7 @@ import org.apache.juneau.utils.*;
  * The actual connection and request/response transaction occurs when calling one of the <c>getResponseXXX()</c>
  * methods.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
@@ -2035,8 +2034,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	Map m = restClient.doGet(url).getResponse(TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		You can also specify any of the following types:
 	 * 		<ul>
@@ -2119,8 +2117,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Use the {@link #getResponse(Class)} method instead if you don't need a parameterized map/collection.
 	 * 	<li>

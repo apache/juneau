@@ -105,8 +105,7 @@ import org.apache.juneau.utils.*;
  *  	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodParameters}
  * </ul>

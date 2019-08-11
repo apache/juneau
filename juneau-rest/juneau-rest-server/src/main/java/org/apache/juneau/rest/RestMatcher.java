@@ -63,8 +63,7 @@ import org.apache.juneau.rest.annotation.*;
  * 		<br>This gives access to the servlet/resource and Java method it's applied to.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RestMethodMatchers}
  * </ul>
  */

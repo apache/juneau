@@ -59,8 +59,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
 	 * </ul>
 	 *
@@ -79,8 +78,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>escapeSolidus(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
 	 * </ul>
 	 *
@@ -97,8 +95,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
 	 * <br>Otherwise, they are always quoted.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
 	 * </ul>
 	 *
@@ -117,8 +114,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>simple(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
 	 * </ul>
 	 *
@@ -134,8 +130,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <c>simple().sq()</c>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
 	 * 	<li class='jf'>{@link JsonSerializer#WSERIALIZER_quoteChar}
 	 * </ul>

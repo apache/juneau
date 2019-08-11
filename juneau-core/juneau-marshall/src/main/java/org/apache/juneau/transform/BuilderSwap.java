@@ -23,8 +23,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Specialized transform for builder classes.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.PojoBuilders}
  * </ul>
  *

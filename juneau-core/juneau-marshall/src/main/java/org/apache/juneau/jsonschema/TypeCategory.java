@@ -19,7 +19,7 @@ import org.apache.juneau.internal.*;
 /**
  * Represents possible values for JSONSCHEMA_addExamplesTo and JSONSCHEMA_addDescriptionsTo.
  *
- * <ul class='doctree'>
+ * <ul class='javatree'>
  * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo}
  * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo}
  * </ul>

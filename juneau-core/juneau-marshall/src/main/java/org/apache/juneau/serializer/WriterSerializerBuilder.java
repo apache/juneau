@@ -57,8 +57,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_fileCharset}
 	 * </ul>
 	 *
@@ -77,8 +76,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
 	 * </ul>
 	 *
@@ -97,8 +95,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * This is the character used for quoting attributes and values.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
 	 * </ul>
 	 *
@@ -117,8 +114,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
 	 * </ul>
 	 *
@@ -137,8 +133,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_streamCharset}
 	 * </ul>
 	 *
@@ -157,8 +152,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 *
@@ -177,8 +171,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 * @return This object (for method chaining).
@@ -193,8 +186,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
 	 * </ul>
 	 *

@@ -35,8 +35,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * Instances of this class can be built using {@link Builder}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.StreamResource}
  * </ul>
  */
@@ -94,8 +93,7 @@ public class StreamResource implements Streamable {
 	/**
 	 * Builder class for constructing {@link StreamResource} objects.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.StreamResource}
 	 * </ul>
 	 */

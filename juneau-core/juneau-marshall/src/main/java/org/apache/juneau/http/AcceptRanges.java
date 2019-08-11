@@ -56,8 +56,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * ...to advise the client not to attempt a range request.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

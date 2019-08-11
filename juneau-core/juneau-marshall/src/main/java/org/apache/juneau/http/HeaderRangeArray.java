@@ -27,8 +27,7 @@ import org.apache.juneau.internal.*;
  * 	Accept-Encoding: compress;q=0.5, gzip;q=1.0
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

@@ -472,8 +472,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
 	 * 		lost.
@@ -504,8 +503,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Configuration property:  Add XSI data types to non-<c>String</c> literals.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addLiteralTypes}
 	 * </ul>
 	 *
@@ -542,8 +540,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to
 	 * identify root notes, which can introduce a considerable performance degradation.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
 	 * </ul>
 	 *
@@ -562,8 +559,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>addRootProperty(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
 	 * </ul>
 	 *
@@ -579,8 +575,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Detect namespace usage before serialization.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_autoDetectNamespaces}
 	 * </ul>
 	 *
@@ -598,15 +593,13 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * <p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
 	 * 		lost.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_collectionFormat}
 	 * </ul>
 	 *
@@ -629,8 +622,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Configuration property:  Default XML namespace for bean properties.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_juneauBpNs}
 	 * </ul>
 	 *
@@ -646,8 +638,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Configuration property:  XML namespace for Juneau properties.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_juneauNs}
 	 * </ul>
 	 *
@@ -693,8 +684,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 		http://www.dajobe.org/2004/01/turtle/
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
 	 *
@@ -713,8 +703,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
 	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_looseCollections}
 	 * </ul>
 	 *
@@ -733,8 +722,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for <code>looseCollections(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_looseCollections}
 	 * </ul>
 	 *
@@ -750,8 +738,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
 	 *
@@ -767,8 +754,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_namespaces}
 	 * </ul>
 	 *
@@ -785,8 +771,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
 	 *
@@ -802,8 +787,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
 	 *
@@ -821,8 +805,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * inherited by the RDF serializers.
 	 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_useXmlNamespaces}
 	 * </ul>
 	 *
@@ -841,8 +824,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
 	 *
@@ -858,8 +840,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_language}
 	 * </ul>
 	 *

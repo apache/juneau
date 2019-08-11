@@ -31,8 +31,7 @@ import org.apache.juneau.utils.*;
  * 	<li><js>"info/contact/name"</js>
  * </ul>
  *
- * <h5 class='section'>Notes:</h5>
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li>
  * 		This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver
  * 		or a session object on the resolver session.
@@ -40,8 +39,7 @@ import org.apache.juneau.utils.*;
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
  * </ul>
  */

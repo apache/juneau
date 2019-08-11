@@ -75,7 +75,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <p>
 	 * Note the differences between the following settings:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jf'>{@link #SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
 	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
@@ -134,7 +134,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <p>
 	 * Note the differences between the following settings:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jf'>{@link #SERIALIZER_addRootType} - Affects whether <js>'_type'</js> is added to root node.
 	 * 	<li class='jf'>{@link #SERIALIZER_addBeanTypes} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
@@ -570,7 +570,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <p>
 	 * Possible values are:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jf'>{@link UriRelativity#RESOURCE}
 	 * 		- Relative URIs should be considered relative to the servlet URI.
 	 * 	<li class='jf'>{@link UriRelativity#PATH_INFO}
@@ -588,8 +588,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
 	 */
@@ -642,8 +641,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
 	 */

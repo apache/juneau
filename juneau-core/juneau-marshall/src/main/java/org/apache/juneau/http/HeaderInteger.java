@@ -23,8 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * 	Age: 300
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

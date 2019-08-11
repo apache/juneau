@@ -47,8 +47,7 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * The description is the result of calling {@link ClassMeta#getFullName()}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a comma-delimited list of any of the following values:
 	 * 		<ul class='doctree'>
@@ -68,8 +67,7 @@ public @interface JsonSchemaConfig {
 	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.addDescriptionsTo.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo}
 	 * </ul>
 	 */
@@ -83,13 +81,12 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * The examples come from calling {@link ClassMeta#getExample(BeanSession)} which in turn gets examples
 	 * from the following:
-	 * <ul class='doctree'>
+	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Example}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a comma-delimited list of any of the following values:
 	 * 		<ul class='doctree'>
@@ -109,8 +106,7 @@ public @interface JsonSchemaConfig {
 	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.addDescriptionsTo.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo}
 	 * </ul>
 	 */
@@ -122,8 +118,7 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Identifies whether nested descriptions are allowed in schema definitions.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -136,8 +131,7 @@ public @interface JsonSchemaConfig {
 	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.allowNestedDescriptions.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
 	 * </ul>
 	 */
@@ -149,8 +143,7 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Identifies whether nested examples are allowed in schema definitions.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -163,8 +156,7 @@ public @interface JsonSchemaConfig {
 	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.allowNestedExamples.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples}
 	 * </ul>
 	 */
@@ -179,14 +171,12 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Used primarily for defining common definition sections for beans in Swagger JSON.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This setting is ignored if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} is not enabled.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_beanDefMapper}
 	 * </ul>
 	 */
@@ -198,8 +188,7 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Allows you to override or provide custom schema information for particular class types.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Keys are the class.
 	 * 		<br>Values are Simple-JSON objects.
@@ -209,8 +198,7 @@ public @interface JsonSchemaConfig {
 	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.defaultSchema.smo"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_defaultSchemas}
 	 * </ul>
 	 */
@@ -223,8 +211,7 @@ public @interface JsonSchemaConfig {
 	 * Defines class name patterns that should be ignored when generating schema definitions in the generated
 	 * Swagger documentation.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 		Format: Comma-delimited list of patterns
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
@@ -232,8 +219,7 @@ public @interface JsonSchemaConfig {
 	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.ignoreTypes.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_ignoreTypes}
 	 * </ul>
 	 */
@@ -257,8 +243,7 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, ObjectMap)}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -271,8 +256,7 @@ public @interface JsonSchemaConfig {
 	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.useBeanDefs.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs}
 	 * </ul>
 	 */

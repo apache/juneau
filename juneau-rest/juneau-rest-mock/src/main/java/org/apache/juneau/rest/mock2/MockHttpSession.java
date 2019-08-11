@@ -20,8 +20,7 @@ import javax.servlet.http.*;
 /**
  * An implementation of {@link HttpSession} for mocking purposes.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}
  * </ul>
  */

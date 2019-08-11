@@ -32,8 +32,7 @@ import org.apache.juneau.rest.exception.*;
 /**
  * Servlet implementation of a REST resource.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.RestServlet}
  * </ul>
  */

@@ -20,8 +20,7 @@ import java.util.*;
 /**
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-svl.SvlVariables}
  * </ul>
  */

@@ -20,7 +20,7 @@ Transforms
 	However, two special classes are provided tailor how certain Java objects are handled by the framework.
 	These classes are:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link oaj.transform.BeanFilter} - Transforms that alter the way beans are handled.
 	<li class='jac'>{@link oaj.transform.PojoSwap} - Transforms that swap non-serializable POJOs with 
 		serializable POJOs during serialization (and optionally vis-versa during parsing).
@@ -35,7 +35,7 @@ Transforms
 <p>
 	Transforms are added to serializers and parsers (and REST clients) using the following configuration properties:
 </p> 
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link oaj.BeanContext}
 	<ul>
 		<li class='jf'>{@link oaj.BeanContext#BEAN_beanFilters BEAN_beanFilters}
@@ -45,7 +45,7 @@ Transforms
 <p>
 	Annotations are also provided for specifying transforms directly on classes and methods (all described in later sections):
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>
 		{@link oaj.annotation.Swap} 
 		- Used to tailor how non-bean POJOs get interpreted by the framework.

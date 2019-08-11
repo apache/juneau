@@ -37,8 +37,7 @@ import org.apache.juneau.utils.*;
  * URL-Encoded FORM posts.
  * <br>This can be useful in cases where you're using GET parameters on FORM POSTs, and you don't want the body of the request to be read.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestQuery}
  * </ul>
  */
@@ -265,8 +264,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * 	Map myparam = query.get(<js>"myparam"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 *
@@ -362,16 +360,14 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; myparam = query.get(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
 	 * 	<li>
 	 * 		<c>Maps</c> must be followed by zero or two parameters representing the key and value types.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 *
@@ -581,8 +577,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * 		<br>Example: <js>"&amp;i=true"</js>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Whitespace is trimmed in the parameters.
 	 * </ul>

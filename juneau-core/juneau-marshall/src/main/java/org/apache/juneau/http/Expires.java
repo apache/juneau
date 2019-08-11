@@ -73,8 +73,7 @@ import org.apache.juneau.http.annotation.*;
  * would by default be non-cacheable indicates that the response is cacheable, unless indicated otherwise by a
  * Cache-Control header field (section 14.9).
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

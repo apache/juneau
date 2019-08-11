@@ -42,8 +42,7 @@ import org.apache.juneau.oapi.*;
  * 	<li>Return type interfaces of client-side <ja>@RemoteMethod</ja>-annotated methods.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Response}
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Response}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
@@ -107,8 +106,7 @@ public @interface Response {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -235,8 +233,7 @@ public @interface Response {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Example}
 	 * 	<li class='jc'>{@link BeanContext}
 	 * 	<ul>
@@ -249,8 +246,7 @@ public @interface Response {
 	 * 	</ul>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is any {@doc juneau-marshall.JsonDetails.SimplifiedJson} if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
 	 * 		has a schema associated with it meancan be converted from a String.
@@ -290,8 +286,7 @@ public @interface Response {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object with string keys (media type) and string values (example for that media type) .
 	 * 	<li>
@@ -370,8 +365,7 @@ public @interface Response {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"code"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>

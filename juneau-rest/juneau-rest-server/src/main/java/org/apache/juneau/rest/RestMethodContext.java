@@ -92,15 +92,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_attrs}
 	 * </ul>
 	 */
@@ -177,8 +175,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
 	 * </ul>
 	 */
@@ -304,15 +301,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
 	 * </ul>
 	 */
@@ -399,8 +394,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <p>
 	 * Specifies rules on how to handle logging of HTTP requests/responses.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -429,14 +423,12 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * If multiple matchers are specified, <b>ONE</b> matcher must pass.
 	 * <br>Note that this is different than guards where <b>ALL</b> guards needs to pass.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RestMethodMatchers}
 	 * </ul>
 	 */
@@ -462,8 +454,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Identifies the URL subpath relative to the servlet class.
 	 *
 	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This method is only applicable for Java methods.
 	 * 	<li>

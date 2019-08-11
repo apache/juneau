@@ -61,8 +61,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been
 	 * decoded before being passed to this parser.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonParser#UON_decoding}
 	 * </ul>
 	 *
@@ -81,8 +80,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Shortcut for calling <code>decodeChars(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonParser#UON_decoding}
 	 * </ul>
 	 *
@@ -99,8 +97,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in
 	 * the stream consists of only whitespace.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonParser#UON_validateEnd}
 	 * </ul>
 	 *
@@ -119,8 +116,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Shortcut for calling <code>validateEnd(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonParser#UON_validateEnd}
 	 * </ul>
 	 *

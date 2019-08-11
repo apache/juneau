@@ -86,8 +86,7 @@ import org.apache.juneau.internal.*;
  * Note: Most HTTP/1.0 applications do not recognize or obey qvalues associated with content-codings.
  * This means that qvalues will not work and are not permitted with x-gzip or x-compress.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

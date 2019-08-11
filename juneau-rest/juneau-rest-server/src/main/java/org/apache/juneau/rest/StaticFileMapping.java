@@ -52,16 +52,14 @@ import org.apache.juneau.utils.*;
  * 	<li><l>[working-dir]/docs</l> directory.
  * </ol>
  *
- * <h5 class='section'>Notes:</h5>
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li>
  * 		Mappings are cumulative from parent to child.  Child resources can override mappings made on parent resources.
  * 	<li>
  * 		The media type on the response is determined by the {@link org.apache.juneau.rest.RestContext#getMediaTypeForName(String)} method.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.StaticFiles}
  * </ul>
  */

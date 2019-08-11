@@ -20,14 +20,12 @@ import java.lang.annotation.*;
 /**
  * Identifies a setter as a method for setting the name of a POJO as it's known by its parent object.
  *
- * <h5 class='section'>Notes:</h5>
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li>
  * 		The annotated field or method does not need to be public.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.NamePropertyAnnotation}
  * </ul>
  */

@@ -221,7 +221,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 *
 	 * <p>
 	 * Possible values:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='jf'>{@link ParamFormat#UON} - Use UON notation for parameters.
 	 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
 	 * </ul>

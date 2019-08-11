@@ -68,8 +68,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	{A:{B:{C:<jk>null</jk>}}}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * </ul>

@@ -24,7 +24,7 @@ import java.lang.reflect.*;
  *
  * <p>
  * Used in conjunction with the following bean context properties:
- * <ul>
+ * <ul class='javatree'>
  * 	<li class='jf'>{@link BeanContext#BEAN_beanConstructorVisibility}
  * 	<li class='jf'>{@link BeanContext#BEAN_beanClassVisibility}
  * 	<li class='jf'>{@link BeanContext#BEAN_beanFieldVisibility}

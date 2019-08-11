@@ -52,8 +52,7 @@ import java.lang.annotation.*;
  * 	)
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='extlink'>{@doc SwaggerContactObject}
  * </ul>
@@ -68,8 +67,7 @@ public @interface Contact {
 	 * <p>
 	 * The identifying name of the contact person/organization.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -85,8 +83,7 @@ public @interface Contact {
 	 * <p>
 	 * The URL pointing to the contact information. MUST be in the format of a URL.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a URL string.
 	 * 	<li>
@@ -102,8 +99,7 @@ public @interface Contact {
 	 * <p>
 	 * The email address of the contact person/organization. MUST be in the format of an email address.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is an email string.
 	 * 	<li>
@@ -164,8 +160,7 @@ public @interface Contact {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>

@@ -28,8 +28,7 @@ import org.apache.juneau.jsonschema.annotation.Schema;
  * 	<jk>new</jk> ResourceLink(<js>"httpTool"</js>, <js>"HTTP request test client"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.PredefinedHelperBeans}
  * </ul>
  */

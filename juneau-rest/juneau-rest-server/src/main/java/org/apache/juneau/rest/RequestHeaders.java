@@ -34,8 +34,7 @@ import org.apache.juneau.rest.exception.*;
  * <p>
  * Entries are stored in a case-insensitive map.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestHeaders}
  * </ul>
  */
@@ -127,8 +126,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	/**
 	 * Returns the specified header value as a string.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
 	 * </ul>
@@ -151,8 +149,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	/**
 	 * Returns the specified header value as a string.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
 	 * </ul>
@@ -235,14 +232,12 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	UUID myheader = req.getHeader(<js>"My-Header"</js>, UUID.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 *
@@ -329,8 +324,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 	List&lt;String&gt; myheader = req.getHeader(<js>"My-Header"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
 	 * 	<li>
@@ -339,8 +333,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 *

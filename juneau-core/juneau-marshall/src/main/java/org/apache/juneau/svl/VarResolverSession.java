@@ -36,8 +36,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * Instances of this class are NOT guaranteed to be thread safe.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-svl.VarResolvers}
  * </ul>
  */

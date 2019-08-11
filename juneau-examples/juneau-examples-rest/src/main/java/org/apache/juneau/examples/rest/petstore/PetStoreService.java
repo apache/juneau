@@ -32,8 +32,7 @@ import org.apache.juneau.utils.*;
  * Uses JPA persistence to store and retrieve PetStore DTOs.
  * JPA beans are defined in <c>META-INF/persistence.xml</c>.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */

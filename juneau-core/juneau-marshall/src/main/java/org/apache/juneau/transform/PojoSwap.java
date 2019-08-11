@@ -42,7 +42,7 @@ import org.apache.juneau.serializer.*;
  *
  * <p>
  * <c>PojoSwaps</c> are associated with serializers and parsers through the following:
- * <ul>
+ * <ul class='javatree'>
  * 	<li class='ja'>{@link Swap @Swap}
  * 	<li class='ja'>{@link Swaps @Swaps}
  * 	<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Object...)}
@@ -95,8 +95,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The normal object representation of an object.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.PojoSwaps}
  * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
  * </ul>
@@ -160,8 +159,7 @@ public abstract class PojoSwap<T,S> {
 	 * <p>
 	 * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap(mediaTypes)} annotation.
 	 *
-	 * <h5 class='topic'>Documentation</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
 	 * </ul>
 	 * @return The media types that this swap is applicable to, or <jk>null</jk> if it's applicable for all media types.
@@ -182,8 +180,7 @@ public abstract class PojoSwap<T,S> {
 	 * <p>
 	 * This method is the programmatic equivalent to the {@link Swap#template() @Swap(template)} annotation.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.TemplatedSwaps}
 	 * </ul>
 	 *
@@ -196,8 +193,7 @@ public abstract class PojoSwap<T,S> {
 	/**
 	 * Sets the media types that this swap is associated with.
 	 *
-	 * <h5 class='topic'>Documentation</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
 	 * </ul>
 	 *
@@ -212,8 +208,7 @@ public abstract class PojoSwap<T,S> {
 	/**
 	 * Sets the template string on this swap.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.TemplatedSwaps}
 	 * </ul>
 	 *

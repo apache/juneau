@@ -24,8 +24,7 @@ import org.apache.juneau.jena.*;
 /**
  *	Sample class which shows the simple usage of RdfXmlSerializer.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */

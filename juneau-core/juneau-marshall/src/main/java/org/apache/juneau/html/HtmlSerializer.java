@@ -317,8 +317,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * <p>
 	 * The parameter name to look for when resolving link labels via {@link #HTML_detectLabelParameters}.
 	 *
-	 * <h5 class=''>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #HTML_detectLabelParameters}
 	 * </ul>
 	 */

@@ -49,8 +49,7 @@ import java.lang.annotation.*;
  * 	)
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='extlink'>{@doc SwaggerLicenseObject}
  * </ul>
@@ -62,8 +61,7 @@ public @interface License {
 	/**
 	 * <mk>name</mk> field of the {@doc SwaggerLicenseObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -76,8 +74,7 @@ public @interface License {
 	/**
 	 * <mk>url</mk> field of the {@doc SwaggerLicenseObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
@@ -135,8 +132,7 @@ public @interface License {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>

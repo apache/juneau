@@ -26,8 +26,7 @@ import org.apache.juneau.reflect.*;
  * <p>
  * Used to associate {@link Var Vars} and context objects with {@link VarResolver VarResolvers}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-svl.VarResolvers}
  * </ul>
  */

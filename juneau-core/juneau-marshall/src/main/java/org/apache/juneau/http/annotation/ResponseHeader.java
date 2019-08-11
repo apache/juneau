@@ -112,8 +112,7 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.ResponseHeader}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='extlink'>{@doc SwaggerHeaderObject}
@@ -121,8 +120,7 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Response}
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Response}
  * </ul>
@@ -136,8 +134,7 @@ public @interface ResponseHeader {
 	/**
 	 * The HTTP status (or statuses) of the response.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The is a comma-delimited list of HTTP status codes that this header applies to.
 	 * 	<li>
@@ -149,8 +146,7 @@ public @interface ResponseHeader {
 	/**
 	 * The HTTP header name.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain-text.
 	 * </ul>
@@ -191,8 +187,7 @@ public @interface ResponseHeader {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -237,8 +232,7 @@ public @interface ResponseHeader {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 */
@@ -290,8 +284,7 @@ public @interface ResponseHeader {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 */
@@ -589,8 +582,7 @@ public @interface ResponseHeader {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>

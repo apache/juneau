@@ -80,8 +80,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Response}
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Response}
  * </ul>

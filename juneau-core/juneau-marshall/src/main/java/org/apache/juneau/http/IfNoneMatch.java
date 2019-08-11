@@ -87,8 +87,7 @@ import org.apache.juneau.http.annotation.*;
  * The result of a request having both an If-None-Match header field and either an If-Match or an If-Unmodified-Since
  * header fields is undefined by this specification.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

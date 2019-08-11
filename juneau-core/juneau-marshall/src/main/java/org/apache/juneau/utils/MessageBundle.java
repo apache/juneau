@@ -47,8 +47,7 @@ import org.apache.juneau.*;
  * 		the message can be retrieved using <code>getString(<js>"myMessage"</js>)</code>.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5>
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li>
  * 		This class is thread-safe.
  * </ul>

@@ -54,8 +54,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
 	 * </ul>
 	 *
@@ -74,8 +73,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>addBeanTypes(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
 	 * </ul>
 	 *
@@ -92,8 +90,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
 	 * type information that might normally be included to determine the data type will not be serialized.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
 	 * </ul>
 	 *
@@ -112,8 +109,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>addRootType(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
 	 * </ul>
 	 *
@@ -129,8 +125,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
 	 * </ul>
 	 *
@@ -148,8 +143,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Copies and sorts the contents of arrays and collections before serializing them.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
 	 * </ul>
 	 *
@@ -168,8 +162,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>sortCollections(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
 	 * </ul>
 	 *
@@ -185,8 +178,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Copies and sorts the contents of maps before serializing them.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
 	 * </ul>
 	 *
@@ -205,8 +197,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>sortMaps(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
 	 * </ul>
 	 *
@@ -222,8 +213,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * If <jk>true</jk>, empty list values will not be serialized to the output.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
 	 * </ul>
 	 *
@@ -242,8 +232,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>trimEmptyCollections(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
 	 * </ul>
 	 *
@@ -259,8 +248,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * If <jk>true</jk>, empty map values will not be serialized to the output.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
 	 * </ul>
 	 *
@@ -279,8 +267,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>trimEmptyMaps(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
 	 * </ul>
 	 *
@@ -296,8 +283,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * If <jk>true</jk>, null bean values will not be serialized to the output.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
 	 * </ul>
 	 *
@@ -316,8 +302,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
 	 * </ul>
 	 *
@@ -336,8 +321,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
 	 * </ul>
 	 *
@@ -353,8 +337,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
 	 * </ul>
 	 *
@@ -379,8 +362,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
 	 * </ul>
 	 *
@@ -397,8 +379,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing URI/URL objects.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
 	 * </ul>
 	 *
@@ -425,8 +406,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
 	 * </ul>
 	 *
@@ -445,8 +425,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Defines the resolution level for URIs when serializing URI/URL objects.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
 	 * </ul>
 	 *
@@ -473,8 +452,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
 	 * </ul>
 	 *

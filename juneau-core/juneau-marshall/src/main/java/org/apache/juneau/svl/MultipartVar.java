@@ -22,8 +22,7 @@ import static org.apache.juneau.internal.StringUtils.*;
  * 	<js>"$X{foo, bar, baz}"</js>
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-svl.SvlVariables}
  * </ul>
  */

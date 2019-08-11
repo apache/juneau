@@ -51,8 +51,7 @@ import org.apache.juneau.http.annotation.*;
  * If the field value is a relative URI, it SHOULD be interpreted relative to the Request-URI.
  * The URI MUST NOT include a fragment. See section 15.1.3 for security considerations.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

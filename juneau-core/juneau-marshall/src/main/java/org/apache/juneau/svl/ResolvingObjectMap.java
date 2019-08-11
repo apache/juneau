@@ -29,8 +29,7 @@ import org.apache.juneau.*;
  * <p>
  * All other data types are left as-is.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-svl.SvlVariables}
  * </ul>
  */

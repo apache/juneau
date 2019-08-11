@@ -324,31 +324,31 @@ l {
 	font-size: 1.2em;
 }
 
-.spaced-list>li { padding:5px; max-width: 800px;}
-.footer .spaced-list ul { margin:0; max-width: 800px; }
+.spaced-list>li, .notes>li { 
+	padding:5px; max-width: 800px;
+}
+.footer .spaced-list ul, .notes>li { 
+	margin:0; max-width: 800px; 
+}
 
 /* Documentation Tree */
-.doctree li { 
+.doctree li, .javatree li, .seealso li, .notes li { 
 	max-width: 800px;
 	margin-top: 0px;
 }
-.doctree>li { 
+.doctree>li, .seealso>li { 
     margin-bottom: 10px;
 }
-.doctree li { 
+.doctree li, .seealso li { 
     margin-top: 5px;
 }
-.doctree ul { 
+.doctree ul, .seealso ul { 
 	padding: 0px 0px 0px 15px; 
 	margin-top: -2px;
 	margin-bottom: -2px;
 }
 
 /* Java Tree */
-.javatree li { 
-	max-width: 800px;
-	margin-top: 0px;
-}
 .javatree>li { 
     margin-bottom: 1px;
 }
@@ -359,6 +359,24 @@ l {
 	padding: 0px 0px 0px 20px; 
 	margin-top: 0px;
 	margin-bottom: 0px;
+}
+
+ul.seealso:before {
+	content: 'See Also:\a\a';
+}
+ul.notes:before {
+	content: 'Notes:\a\a';
+}
+ul.seealso:before, ui.notes:before {
+	content: 'See Also:\a\a';
+	white-space: pre;
+	font-size: 110%;
+	color: #4e4e4e;
+	margin-left: -40px;
+	padding-bottom: 20px;
+}
+ul.seealso, ui.notes {
+	margin-top:20px;
 }
 
 li.normal {

@@ -18,8 +18,7 @@ import org.apache.juneau.annotation.*;
  * DTO for an HTML {@doc HTML5.sections#the-h1,-h2,-h3,-h4,-h5,-and-h6-elements <h4>}
  * element.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-dto.HTML5}
  * </ul>
  */

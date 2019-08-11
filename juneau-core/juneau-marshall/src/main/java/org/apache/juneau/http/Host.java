@@ -62,8 +62,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * See sections 5.2 and 19.6.1.1 for other requirements relating to Host.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

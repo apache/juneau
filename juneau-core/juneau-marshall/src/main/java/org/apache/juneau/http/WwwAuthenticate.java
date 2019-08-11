@@ -41,8 +41,7 @@ import org.apache.juneau.http.annotation.*;
  * than one challenge, or if more than one WWW-Authenticate header field is provided, the contents of a challenge
  * itself can contain a comma-separated list of authentication parameters.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

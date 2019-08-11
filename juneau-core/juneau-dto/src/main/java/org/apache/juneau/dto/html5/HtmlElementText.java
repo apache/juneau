@@ -18,8 +18,7 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * A subclass of HTML elements that contain text only.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-dto.HTML5}
  * </ul>
  */

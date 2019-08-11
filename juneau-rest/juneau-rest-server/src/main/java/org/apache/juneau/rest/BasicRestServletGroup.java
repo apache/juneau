@@ -27,8 +27,7 @@ import org.apache.juneau.rest.helper.*;
  * <p>
  * Child resources are specified using the {@link RestResource#children() @RestResource(children)} annotation.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRestServletGroup}
  * </ul>
  */

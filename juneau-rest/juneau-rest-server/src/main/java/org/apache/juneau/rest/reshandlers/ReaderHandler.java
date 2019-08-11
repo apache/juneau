@@ -24,8 +24,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * Simply pipes the contents of the {@link Reader} to {@link RestResponse#getNegotiatedWriter()}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodReturnTypes}
  * </ul>
  */

@@ -37,8 +37,7 @@ import org.apache.juneau.utils.*;
  * Usually used on a subclass of {@link RestServlet}, but can be used to annotate any class that you want to expose as
  * a REST resource.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestResource}
  * </ul>
  */
@@ -61,15 +60,13 @@ public @interface RestResource {
 	 *  ?body=(name='John%20Smith',age=45)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_allowBodyParam}
 	 * </ul>
 	 */
@@ -87,8 +84,7 @@ public @interface RestResource {
 	 *  ?Accept=text/json&amp;Content-Type=text/json
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -98,8 +94,7 @@ public @interface RestResource {
 	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_allowedHeaderParams}
 	 * </ul>
 	 */
@@ -117,8 +112,7 @@ public @interface RestResource {
 	 * <c>PATCH</c> is not part of the original HTTP spec), you can add a <c>X-Method: PATCH</c> header on a normal
 	 * <c>HTTP POST /foo</c> request call which will make the HTTP call look like a <c>PATCH</c> request in any of the REST APIs.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -144,8 +138,7 @@ public @interface RestResource {
 	 *  ?method=OPTIONS
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -155,8 +148,7 @@ public @interface RestResource {
 	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_allowedMethodParams}
 	 * </ul>
 	 */
@@ -174,15 +166,13 @@ public @interface RestResource {
 	 *  ?Accept=text/json&amp;Content-Type=text/json
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
 	 * </ul>
 	 * @deprecated Use {@link #allowedHeaderParams()}
@@ -196,15 +186,13 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies default values for request attributes if they're not already set on the request.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_attrs}
 	 * </ul>
 	 */
@@ -216,8 +204,7 @@ public @interface RestResource {
 	 * <p>
 	 * Shortcut to add bean filters to the bean contexts of all serializers and parsers on all methods in the class.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
 	 *
@@ -232,8 +219,7 @@ public @interface RestResource {
 	 * <p>
 	 * This class handles the basic lifecycle of an HTTP REST call.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
 	 * </ul>
 	 */
@@ -245,8 +231,7 @@ public @interface RestResource {
 	 * <p>
 	 * Defines children of this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_children}
 	 * </ul>
 	 */
@@ -258,8 +243,7 @@ public @interface RestResource {
 	 * <p>
 	 * Used to retrieve localized files from the classpath.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
 	 * </ul>
 	 */
@@ -271,15 +255,13 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the name of the header used to denote the client version on HTTP requests.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
 	 * </ul>
 	 */
@@ -291,8 +273,7 @@ public @interface RestResource {
 	 * <p>
 	 * The configuration file .
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -301,8 +282,7 @@ public @interface RestResource {
 	 * 		returned by the {@link Config#getSystemDefault()}.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link RestContextBuilder#config(Config)}
 	 * </ul>
 	 */
@@ -314,8 +294,7 @@ public @interface RestResource {
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_converters}
 	 * </ul>
 	 */
@@ -330,8 +309,7 @@ public @interface RestResource {
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -345,15 +323,13 @@ public @interface RestResource {
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
 	 * </ul>
 	 */
@@ -368,8 +344,7 @@ public @interface RestResource {
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -383,15 +358,13 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies default values for request headers if they're not passed in through the request.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
 	 * </ul>
 	 */
@@ -403,15 +376,13 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies default values for response headers if they're not set after the Java REST method is called.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
 	 * </ul>
 	 */
@@ -424,8 +395,7 @@ public @interface RestResource {
 	 * It is used to populate the Swagger description field.
 	 * <br>This value can be retrieved programmatically through the {@link RestRequest#getResourceDescription()} method.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -434,8 +404,7 @@ public @interface RestResource {
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link RestInfoProvider#getDescription(RestRequest)}
 	 * </ul>
 	 */
@@ -447,8 +416,7 @@ public @interface RestResource {
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_encoders}
 	 * </ul>
 	 */
@@ -457,8 +425,7 @@ public @interface RestResource {
 	/**
 	 * Shortcut for setting {@link #properties()} of simple boolean types.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -474,8 +441,7 @@ public @interface RestResource {
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_guards}
 	 * </ul>
 	 */
@@ -523,8 +489,7 @@ public @interface RestResource {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
 	 * </ul>
 	 *
@@ -539,8 +504,7 @@ public @interface RestResource {
 	 * <p>
 	 * Class used to retrieve title/description/swagger information about a resource.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
 	 * </ul>
 	 */
@@ -552,8 +516,7 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the logger to use for logging.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_logger}
 	 * </ul>
 	 * @deprecated Use {@link #callLogger()}
@@ -564,8 +527,7 @@ public @interface RestResource {
 	/**
 	 * Specifies the logger to use for logging of HTTP requests and responses.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
@@ -575,8 +537,7 @@ public @interface RestResource {
 	/**
 	 * Specifies rules on how to handle logging of HTTP requests/responses.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_callLoggerConfig}
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
@@ -590,15 +551,13 @@ public @interface RestResource {
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
 	 * </ul>
 	 */
@@ -609,15 +568,13 @@ public @interface RestResource {
 	 *
 	 * Identifies the location of the resource bundle for this class.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_messages}
 	 * </ul>
 	 */
@@ -629,15 +586,13 @@ public @interface RestResource {
 	 * <p>
 	 * Defines MIME-type file type mappings.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_mimeTypes}
 	 * </ul>
 	 */
@@ -651,8 +606,7 @@ public @interface RestResource {
 	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
 	 * <br>This setting allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
 	 * </ul>
 	 */
@@ -664,8 +618,7 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
 	 * </ul>
 	 *
@@ -687,8 +640,7 @@ public @interface RestResource {
 	 * <p>
 	 * Use {@link None} to suppress inheriting parsers defined on the parent class.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_parsers}
 	 * </ul>
 	 */
@@ -700,8 +652,7 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 */
@@ -713,8 +664,7 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
 	 * </ul>
 	 */
@@ -836,8 +786,7 @@ public @interface RestResource {
 	 * When variables are used on a path of a top-level resource deployed as a Spring bean in a Spring Boot application,
 	 * the first part of the URL must be a literal which will be used as the servlet path of the registered servlet.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The leading slash is optional.  <js>"/myResource"</js> and <js>"myResource"</js> is equivalent.
 	 * 	<li>
@@ -846,8 +795,7 @@ public @interface RestResource {
 	 * 		Paths must not end with <js>"/"</js> (per the servlet spec).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_path}
 	 * </ul>
 	 */
@@ -859,8 +807,7 @@ public @interface RestResource {
 	 * <p>
 	 * Shortcut to add POJO swaps to the bean contexts of all serializers and parsers on all methods in the class.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
 	 *
@@ -881,15 +828,13 @@ public @interface RestResource {
 	 * <p>
 	 * Property values will be converted to the appropriate type.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link RestContextBuilder#set(String,Object)}
 	 * 	<li class='jm'>{@link RestContextBuilder#set(java.util.Map)}
 	 * </ul>
@@ -902,15 +847,13 @@ public @interface RestResource {
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_renderResponseStackTraces}
 	 * </ul>
 	 */
@@ -922,8 +865,7 @@ public @interface RestResource {
 	 * <p>
 	 * The resolver used for resolving child resources.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
 	 * </ul>
 	 */
@@ -936,8 +878,7 @@ public @interface RestResource {
 	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
 	 * </ul>
 	 */
@@ -963,8 +904,7 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
 	 * </ul>
 	 */
@@ -987,8 +927,7 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports any of the following expression constructs:
 	 * 		<ul>
@@ -1014,8 +953,7 @@ public @interface RestResource {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_roleGuard}
 	 * </ul>
 	 */
@@ -1027,8 +965,7 @@ public @interface RestResource {
 	 * <p>
 	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
 	 * </ul>
 	 *
@@ -1050,8 +987,7 @@ public @interface RestResource {
 	 * <p>
 	 * Use {@link None} to suppress inheriting serializers defined on the parent class.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_serializers}
 	 * </ul>
 	 */
@@ -1078,15 +1014,13 @@ public @interface RestResource {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link RestInfoProvider#getSiteName(RestRequest)}
 	 * </ul>
 	 */
@@ -1098,15 +1032,13 @@ public @interface RestResource {
 	 * <p>
 	 * Used to customize the headers on responses returned for statically-served files.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
 	 * </ul>
 	 */
@@ -1118,15 +1050,13 @@ public @interface RestResource {
 	 * <p>
 	 * Used to define paths and locations of statically-served files such as images or HTML documents.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_staticFiles}
 	 * </ul>
 	 */
@@ -1138,15 +1068,13 @@ public @interface RestResource {
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_produces}
 	 * </ul>
 	 */
@@ -1158,15 +1086,13 @@ public @interface RestResource {
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_consumes}
 	 * </ul>
 	 */
@@ -1195,8 +1121,7 @@ public @interface RestResource {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link ResourceSwagger}
 	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)}
 	 * </ul>
@@ -1210,8 +1135,7 @@ public @interface RestResource {
 	 * It is used to populate the Swagger title field.
 	 * <br>This value can be retrieved programmatically through the {@link RestRequest#getResourceTitle()} method.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -1219,8 +1143,7 @@ public @interface RestResource {
 	 * 		Corresponds to the swagger field <c>/info/title</c>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link RestInfoProvider#getTitle(RestRequest)}
 	 * </ul>
 	 */
@@ -1232,15 +1155,13 @@ public @interface RestResource {
 	 * <p>
 	 * Overrides the authority path value for this resource and any child resources.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_uriAuthority}
 	 * </ul>
 	 */
@@ -1252,15 +1173,13 @@ public @interface RestResource {
 	 * <p>
 	 * Overrides the context path value for this resource and any child resources.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_uriContext}
 	 * </ul>
 	 */
@@ -1275,15 +1194,13 @@ public @interface RestResource {
 	 * <p>
 	 * See {@link UriResolution} for possible values.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_uriRelativity}
 	 * </ul>
 	 */
@@ -1298,15 +1215,13 @@ public @interface RestResource {
 	 * <p>
 	 * See {@link UriResolution} for possible values.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_uriResolution}
 	 * </ul>
 	 */
@@ -1319,15 +1234,13 @@ public @interface RestResource {
 	 * When enabled, resources retrieved via {@link RestRequest#getClasspathReaderResource(String, boolean)} (and related
 	 * methods) will be cached in memory to speed subsequent lookups.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_useClasspathResourceCaching}
 	 * </ul>
 	 */
@@ -1340,15 +1253,13 @@ public @interface RestResource {
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
 	 * made available through the {@link RestException#getOccurrence()} method.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
 	 * </ul>
 	 *
@@ -1375,15 +1286,13 @@ public @interface RestResource {
 	 * 	<li><js>"per-request"</js> - Debug is enabled only for requests that have a <c class='snippet'>X-Debug: true</c> header.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_debug}
 	 * </ul>
 	 */

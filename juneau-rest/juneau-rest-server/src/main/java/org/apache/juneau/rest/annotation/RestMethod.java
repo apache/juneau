@@ -26,8 +26,7 @@ import org.apache.juneau.html.annotation.*;
 /**
  * Identifies a REST Java method on a {@link RestServlet} implementation class.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod}
  * </ul>
  */
@@ -51,15 +50,13 @@ public @interface RestMethod {
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_attrs}
 	 * </ul>
 	 */
@@ -78,8 +75,7 @@ public @interface RestMethod {
 	 * <p>
 	 * Use {@link None} to suppress inheriting bean filters defined on the class.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
 	 *
@@ -119,8 +115,7 @@ public @interface RestMethod {
 	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id) {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
 	 * 	<li>
@@ -138,8 +133,7 @@ public @interface RestMethod {
 	 * 		</p>
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
 	 *
@@ -178,8 +172,7 @@ public @interface RestMethod {
 	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id) {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
 	 * 	<li>
@@ -197,8 +190,7 @@ public @interface RestMethod {
 	 * 		</p>
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
 	 *
@@ -263,8 +255,7 @@ public @interface RestMethod {
 	 * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_clientVersionHeader}
 	 * </ul>
 	 */
@@ -276,8 +267,7 @@ public @interface RestMethod {
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with this method.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_converters}
 	 * </ul>
 	 */
@@ -295,15 +285,13 @@ public @interface RestMethod {
 	 * 		Request/response messages are automatically logged.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_debug}
 	 * </ul>
 	 */
@@ -326,15 +314,13 @@ public @interface RestMethod {
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultCharset}
 	 * </ul>
 	 */
@@ -367,8 +353,7 @@ public @interface RestMethod {
 	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
 	 * 	<li>
@@ -395,8 +380,7 @@ public @interface RestMethod {
 	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
 	 * 	<li>
@@ -421,15 +405,13 @@ public @interface RestMethod {
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
 	 * </ul>
 	 */
@@ -449,8 +431,7 @@ public @interface RestMethod {
 	 * 		The description of the method in the Swagger page.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/description</c>.
 	 * 	<li>
@@ -458,8 +439,7 @@ public @interface RestMethod {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link RestInfoProvider#getDescription(RestRequest)}
 	 * </ul>
 	 */
@@ -475,14 +455,12 @@ public @interface RestMethod {
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Use <code>inherit={<js>"ENCODERS"</js>}</code> to inherit encoders from the resource class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_encoders}
 	 * </ul>
 	 */
@@ -502,8 +480,7 @@ public @interface RestMethod {
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with this method.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_guards}
 	 * </ul>
 	 */
@@ -515,8 +492,7 @@ public @interface RestMethod {
 	 * <p>
 	 * Information provided here overrides information provided in the servlet-level annotation.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
 	 * </ul>
 	 *
@@ -528,8 +504,7 @@ public @interface RestMethod {
 	/**
 	 * Specifies rules on how to handle logging of HTTP requests/responses.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 */
@@ -545,8 +520,7 @@ public @interface RestMethod {
 	 * Matchers are used to allow multiple Java methods to handle requests assigned to the same URL path pattern, but
 	 * differing based on some request attribute, such as a specific header value.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jac'>{@link RestMatcher}
 	 * </ul>
 	 */
@@ -566,15 +540,13 @@ public @interface RestMethod {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_maxInput}
 	 * </ul>
 	 */
@@ -660,8 +632,7 @@ public @interface RestMethod {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_parsers}
 	 * </ul>
 	 */
@@ -723,8 +694,7 @@ public @interface RestMethod {
 	 * </p>
 	 *
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	 * </ul>
 	 */
@@ -743,8 +713,7 @@ public @interface RestMethod {
 	 * <p>
 	 * Use {@link None} to suppress inheriting POJO swaps defined on the class.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
 	 *
@@ -797,8 +766,7 @@ public @interface RestMethod {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
 	 * </ul>
 	 */
@@ -824,8 +792,7 @@ public @interface RestMethod {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports any of the following expression constructs:
 	 * 		<ul>
@@ -853,8 +820,7 @@ public @interface RestMethod {
 	 * 		When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_roleGuard}
 	 * </ul>
 	 */
@@ -888,8 +854,7 @@ public @interface RestMethod {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_serializers}
 	 * </ul>
 	 */
@@ -909,8 +874,7 @@ public @interface RestMethod {
 	 * 		The summary of the method in the Swagger page.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 * 	<li>
@@ -926,15 +890,13 @@ public @interface RestMethod {
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_produces}
 	 * </ul>
 	 */
@@ -946,15 +908,13 @@ public @interface RestMethod {
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_consumes}
 	 * </ul>
 	 */
@@ -990,8 +950,7 @@ public @interface RestMethod {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is {@doc juneau-marshall.JsonDetails.SimplifiedJson}.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -1004,8 +963,7 @@ public @interface RestMethod {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link MethodSwagger}
 	 * 	<li class='jm'>{@link RestInfoProvider#getSwagger(RestRequest)}
 	 * </ul>

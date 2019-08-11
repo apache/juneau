@@ -25,7 +25,7 @@ import org.apache.juneau.serializer.*;
  *
  * <p>
  * Converters are associated with REST methods through the following:
- * <ul>
+ * <ul class='javatree'>
  * 	<li class='ja'>{@link RestResource#converters()}
  * 	<li class='ja'>{@link RestMethod#converters()}
  * 	<li class='jf'>{@link RestContext#REST_converters}
@@ -66,14 +66,13 @@ import org.apache.juneau.serializer.*;
  * Subclasses can also be defined as inner classes of the resource class.
  *
  * <h5 class='topic'>Predefined converters</h5>
- * <ul>
+ * <ul class='javatree'>
  * 	<li class='jc'>{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
  * 	<li class='jc'>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
  * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
  * 	<li class='link'>{@doc juneau-rest-server.Converters}
  * </ul>

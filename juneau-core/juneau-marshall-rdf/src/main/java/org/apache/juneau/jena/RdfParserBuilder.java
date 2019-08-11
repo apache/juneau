@@ -470,8 +470,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
 	 * 		lost.
@@ -503,8 +502,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_collectionFormat}
 	 * </ul>
 	 *
@@ -518,8 +516,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Configuration property:  Default XML namespace for bean properties.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_juneauBpNs}
 	 * </ul>
 	 *
@@ -535,8 +532,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Configuration property:  XML namespace for Juneau properties.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_juneauNs}
 	 * </ul>
 	 *
@@ -582,8 +578,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 		http://www.dajobe.org/2004/01/turtle/
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
 	 *
@@ -601,8 +596,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
 	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_looseCollections}
 	 * </ul>
 	 *
@@ -621,8 +615,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Shortcut for calling <code>looseCollection(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_looseCollections}
 	 * </ul>
 	 *
@@ -638,8 +631,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
 	 *
@@ -655,8 +647,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
 	 *
@@ -672,8 +663,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_trimWhitespace}
 	 * </ul>
 	 *
@@ -692,8 +682,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Shortcut for calling <code>trimWhitespace(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_trimWhitespace}
 	 * </ul>
 	 *
@@ -706,8 +695,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
 	 *
@@ -720,8 +708,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
 	 *
@@ -734,8 +721,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_language}
 	 * </ul>
 	 *

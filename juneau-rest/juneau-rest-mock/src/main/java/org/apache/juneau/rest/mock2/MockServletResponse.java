@@ -28,8 +28,7 @@ import org.apache.juneau.rest.util.*;
 /**
  * An implementation of {@link HttpServletResponse} for mocking purposes.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
  * </ul>
 */

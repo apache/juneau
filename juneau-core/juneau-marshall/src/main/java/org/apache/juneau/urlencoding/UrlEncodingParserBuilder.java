@@ -60,8 +60,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 * <p>
 	 * This is the parser-side equivalent of the {@link UrlEncodingParser#URLENC_expandedParams} setting.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UrlEncodingParser#URLENC_expandedParams}
 	 * </ul>
 	 *
@@ -80,8 +79,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 * <p>
 	 * Shortcut for calling <code>expandedParams(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UrlEncodingParser#URLENC_expandedParams}
 	 * </ul>
 	 *

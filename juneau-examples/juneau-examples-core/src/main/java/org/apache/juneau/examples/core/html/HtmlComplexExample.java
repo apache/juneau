@@ -24,8 +24,7 @@ import java.util.List;
 /**
  * Sample class which shows the complex usage of HtmlSerializer and HtmlParser.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */

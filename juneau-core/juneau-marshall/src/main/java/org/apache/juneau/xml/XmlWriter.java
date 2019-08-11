@@ -22,8 +22,7 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Specialized writer for serializing XML.
  *
- * <h5 class='section'>Notes:</h5>
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li>
  * 		This class is not intended for external use.
  * </ul>

@@ -62,8 +62,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_eventAllocator}
 	 * </ul>
 	 *
@@ -80,8 +79,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_eventAllocator}
 	 * </ul>
 	 *
@@ -99,8 +97,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key is
 	 * the root element name.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
 	 * </ul>
 	 *
@@ -119,8 +116,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Shortcut for calling <code>preserveRootElement(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_preserveRootElement}
 	 * </ul>
 	 *
@@ -136,8 +132,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_reporter}
 	 * </ul>
 	 *
@@ -154,8 +149,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_reporter}
 	 * </ul>
 	 *
@@ -172,8 +166,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_resolver}
 	 * </ul>
 	 *
@@ -190,8 +183,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_resolver}
 	 * </ul>
 	 *
@@ -208,8 +200,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * If <jk>true</jk>, XML document will be validated.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_validating}
 	 * </ul>
 	 *
@@ -228,8 +219,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * <p>
 	 * Shortcut for calling <code>validating(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlParser#XML_validating}
 	 * </ul>
 	 *

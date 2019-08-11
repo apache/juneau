@@ -31,8 +31,7 @@ import org.apache.juneau.*;
  * 	<li>Single quotes.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.JsonDetails.SimplifiedJson}
  * </ul>
  */

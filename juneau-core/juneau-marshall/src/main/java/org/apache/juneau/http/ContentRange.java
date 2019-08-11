@@ -122,8 +122,7 @@ import org.apache.juneau.http.annotation.*;
  * response for
  * an unsatisfiable Range request-header, since not all servers implement this request-header.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

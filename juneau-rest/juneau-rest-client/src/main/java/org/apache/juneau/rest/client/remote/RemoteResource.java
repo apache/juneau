@@ -20,8 +20,7 @@ import java.lang.annotation.*;
 /**
  * Identifies a proxy against a REST interface.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
  */

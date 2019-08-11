@@ -17,14 +17,10 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.xml.*;
 
 /**
  * Annotations applicable to subclasses of {@link BaseProvider}.
@@ -33,8 +29,7 @@ import org.apache.juneau.xml.*;
  *
  * Used to associate serializers, parsers, filters, and properties with instances of {@link BaseProvider}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server-jaxrs}
  * </ul>
  */
@@ -71,18 +66,6 @@ public @interface JuneauProvider {
 
 	/**
 	 * Provider-level properties.
-	 *
-	 * <p>
-	 * Any of the following property names can be specified:
-	 * <ul>
-	 * 	<li>{@link RestContext}
-	 * 	<li>{@link BeanContext}
-	 * 	<li>{@link Serializer}
-	 * 	<li>{@link Parser}
-	 * 	<li>{@link JsonSerializer}
-	 * 	<li>{@link XmlSerializer}
-	 * 	<li>{@link XmlParser}
-	 * </ul>
 	 *
 	 * <p>
 	 * Property values will be converted to the appropriate type.

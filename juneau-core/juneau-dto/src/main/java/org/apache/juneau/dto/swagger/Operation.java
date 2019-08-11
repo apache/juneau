@@ -124,8 +124,7 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-dto.Swagger}
  * </ul>
  */
@@ -641,8 +640,7 @@ public class Operation extends SwaggerElement {
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If a parameter is already defined at the {@doc SwaggerPathItemObject Path Item},
 	 * 		the new definition will override it, but can never remove it.
@@ -685,8 +683,7 @@ public class Operation extends SwaggerElement {
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If a parameter is already defined at the {@doc SwaggerPathItemObject Path Item},
 	 * 		the new definition will override it, but can never remove it.
@@ -717,8 +714,7 @@ public class Operation extends SwaggerElement {
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If a parameter is already defined at the {@doc SwaggerPathItemObject Path Item},
 	 * 		the new definition will override it, but can never remove it.

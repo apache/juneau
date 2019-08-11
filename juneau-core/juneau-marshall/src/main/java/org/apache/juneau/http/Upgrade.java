@@ -75,8 +75,7 @@ import org.apache.juneau.http.annotation.*;
  * Any token can be used as a protocol name; however, it will only be useful if both the client and server associate
  * the name with the same protocol.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

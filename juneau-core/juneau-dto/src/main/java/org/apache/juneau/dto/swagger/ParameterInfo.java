@@ -87,8 +87,7 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-dto.Swagger}
  * </ul>
  */
@@ -258,8 +257,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * <p>
 	 * The name of the parameter.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Parameter names are case sensitive.
 	 * 	<li>
@@ -269,8 +267,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerPathTemplating Path Templating}
 	 * </ul>
 	 *
@@ -286,8 +283,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * <p>
 	 * The name of the parameter.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Parameter names are case sensitive.
 	 * 	<li>
@@ -297,8 +293,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerPathTemplating Path Templating}
 	 * </ul>
 	 *
@@ -549,8 +544,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * <p>
 	 * The type of the parameter.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 *
@@ -610,8 +604,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * <p>
 	 * The extending format for the previously mentioned type.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 *
@@ -627,8 +620,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * <p>
 	 * The extending format for the previously mentioned type.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 *
@@ -831,8 +823,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * (Note: <js>"default"</js> has no meaning for required parameters.)
 	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -851,8 +842,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * (Note: <js>"default"</js> has no meaning for required parameters.)
 	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -877,8 +867,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>maximum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -891,8 +880,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maximum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -920,8 +908,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -934,8 +921,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -963,8 +949,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>minimum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -977,8 +962,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minimum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1006,8 +990,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1020,8 +1003,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1049,8 +1031,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1063,8 +1044,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1092,8 +1072,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>minLength</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1106,8 +1085,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minLength</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1135,8 +1113,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>pattern</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1152,8 +1129,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * <p>
 	 * This string SHOULD be a valid regular expression.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1181,8 +1157,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1195,8 +1170,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1224,8 +1198,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>minItems</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1238,8 +1211,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>minItems</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1267,8 +1239,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1281,8 +1252,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1310,8 +1280,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1324,8 +1293,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>enum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1383,8 +1351,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
@@ -1397,8 +1364,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *

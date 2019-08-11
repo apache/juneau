@@ -25,8 +25,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * Wraps the request attributes in a {@link Map} interface and provides several convenience methods.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestAttributes}
  * </ul>
  */

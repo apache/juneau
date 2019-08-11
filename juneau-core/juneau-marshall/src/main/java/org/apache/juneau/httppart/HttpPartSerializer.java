@@ -22,7 +22,7 @@ import org.apache.juneau.serializer.*;
  *
  * <p>
  * The following default implementations are provided:
- * <ul class='doctree'>
+ * <ul class='javatree'>
  * 	<li class='jc'>{@link org.apache.juneau.oapi.OpenApiSerializer} - Parts encoded based on OpenAPI schema.
  * 	<li class='jc'>{@link org.apache.juneau.uon.UonSerializer} - Parts encoded in UON notation.
  * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer} - Parts encoded in plain text.
@@ -30,7 +30,7 @@ import org.apache.juneau.serializer.*;
  *
  * <p>
  * This class is used in the following locations:
- * <ul>
+ * <ul class='javatree'>
  * 	<li class='ja'>{@link FormData#serializer()}
  * 	<li class='ja'>{@link Query#serializer()}
  * 	<li class='ja'>{@link Header#serializer()}

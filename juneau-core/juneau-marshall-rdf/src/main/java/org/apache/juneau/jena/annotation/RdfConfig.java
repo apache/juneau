@@ -46,8 +46,7 @@ public @interface RdfConfig {
 	 * <p>
 	 * 	The RDF language to use.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul class='spaced-list'>
@@ -83,8 +82,7 @@ public @interface RdfConfig {
 	 * 		A default global value can be set via the system property <js>"Rdf.language.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_language}
 	 * </ul>
 	 */
@@ -93,16 +91,14 @@ public @interface RdfConfig {
 	/**
 	 * Configuration property:  XML namespace for Juneau properties.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.juneauNs.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_juneauNs}
 	 * </ul>
 	 */
@@ -111,16 +107,14 @@ public @interface RdfConfig {
 	/**
 	 * Configuration property:  Default XML namespace for bean properties.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.juneauBpNs.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_juneauBpNs}
 	 * </ul>
 	 */
@@ -132,8 +126,7 @@ public @interface RdfConfig {
 	 * <p>
 	 * Set the engine for checking and resolving.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul class='spaced-list'>
@@ -154,8 +147,7 @@ public @interface RdfConfig {
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.iri-rules.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_arp_iriRules}
 	 * </ul>
 	 */
@@ -167,8 +159,7 @@ public @interface RdfConfig {
 	 * <p>
 	 * This allows a coarse-grained approach to control of error handling.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -186,8 +177,7 @@ public @interface RdfConfig {
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.error-mode.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_arp_errorMode}
 	 * 	<li>
 	 * 		{@doc ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
@@ -207,16 +197,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * Sets ARP to look for RDF embedded within an enclosing XML document.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.embedding.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_arp_embedding}
 	 * 	<li>
 	 * 		{@doc ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
@@ -230,16 +218,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.xmlbase.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_xmlBase}
 	 * </ul>
 	 */
@@ -252,16 +238,14 @@ public @interface RdfConfig {
 	 * Whether to use long ID's for anon resources.
 	 * <br>Short ID's are easier to read, but can run out of memory on very large models.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.longId.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_longId}
 	 * </ul>
 	 */
@@ -273,16 +257,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * URIs in the graph are, by default, checked prior to serialization.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.allowBadURIs.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_allowBadUris}
 	 * </ul>
 	 */
@@ -316,16 +298,14 @@ public @interface RdfConfig {
 	 * To switch off relative URIs use the value <js>""</js>.
 	 * Relative URIs of any of these types are output where possible if and only if the option has been specified.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.relativeURIs.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_relativeUris}
 	 * </ul>
 	 */
@@ -334,8 +314,7 @@ public @interface RdfConfig {
 	/**
 	 * Configuration property:  RDF/XML property: <c>showXmlDeclaration</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul class='spaced-list'>
@@ -354,8 +333,7 @@ public @interface RdfConfig {
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.showXmlDeclaration.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_showXmlDeclaration}
 	 * </ul>
 	 */
@@ -370,16 +348,14 @@ public @interface RdfConfig {
 	 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
 	 * invocation.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.showDoctypeDeclaration"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_showDoctypeDeclaration}
 	 * </ul>
 	 */
@@ -391,16 +367,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * The number of spaces with which to indent XML child elements.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.tab.i"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_tab}
 	 * </ul>
 	 */
@@ -412,16 +386,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * The XML attribute quote character.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.attributeQuoteChar.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_attributeQuoteChar}
 	 * </ul>
 	 */
@@ -435,16 +407,14 @@ public @interface RdfConfig {
 	 * {@doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
 	 * rules that will not be used.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.blockRules.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_blockRules}
 	 * </ul>
 	 */
@@ -456,16 +426,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * Minimum gap between items on a line.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.minGap.i"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_minGap}
 	 * </ul>
 	 */
@@ -477,16 +445,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * Print object lists as comma separated lists.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.objectLists.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_objectLists}
 	 * </ul>
 	 */
@@ -498,16 +464,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * If the subject is shorter than this value, the first property may go on the same line.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.subjectColumn.i"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_subjectColumn}
 	 * </ul>
 	 */
@@ -519,16 +483,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * Width of the property column.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.propertyColumn.i"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_propertyColumn}
 	 * </ul>
 	 */
@@ -540,16 +502,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * Width to indent properties.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.indentProperty.i"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_indentProperty}
 	 * </ul>
 	 */
@@ -562,16 +522,14 @@ public @interface RdfConfig {
 	 * Width of the property column.
 	 * <br>Must be longer than <c>propertyColumn</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.widePropertyLen.i"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_widePropertyLen}
 	 * </ul>
 	 */
@@ -583,16 +541,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * Control whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.abbrevBaseURI.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_abbrevBaseUri}
 	 * </ul>
 	 */
@@ -604,16 +560,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * Control whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.usePropertySymbols.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_usePropertySymbols}
 	 * </ul>
 	 */
@@ -625,16 +579,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * Allow the use of <c>"""</c> to delimit long strings.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.useTripleQuotedStrings.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_useTripleQuotedStrings}
 	 * </ul>
 	 */
@@ -646,16 +598,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * Allow the use doubles as <c>123.456</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.useDoubles.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_useDoubles}
 	 * </ul>
 	 */
@@ -664,8 +614,7 @@ public @interface RdfConfig {
 	/**
 	 * Configuration property:  RDF format for representing collections and arrays.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul class='spaced-list'>
@@ -689,8 +638,7 @@ public @interface RdfConfig {
 	 * 		A default global value can be set via the system property <js>"Rdf.collectionFormat.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_collectionFormat}
 	 * </ul>
 	 */
@@ -712,16 +660,14 @@ public @interface RdfConfig {
 	 * This setting is typically only useful if the beans being parsed into do not have a bean property
 	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"Rdf.looseCollections.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfCommon#RDF_looseCollections}
 	 * </ul>
 	 */
@@ -737,16 +683,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * If <js>"true"</js>, whitespace in text elements will be automatically trimmed.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"RdfParser.trimWhitespace.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_trimWhitespace}
 	 * </ul>
 	 */
@@ -766,16 +710,14 @@ public @interface RdfConfig {
 	 * When present, this value overrides the {@link Serializer#SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"RdfSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addBeanTypes}
 	 * </ul>
 	 */
@@ -784,16 +726,14 @@ public @interface RdfConfig {
 	/**
 	 * Configuration property:  Add XSI data types to non-<c>String</c> literals.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"RdfSerializer.addLiteralTypes.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addLiteralTypes}
 	 * </ul>
 	 */
@@ -811,16 +751,14 @@ public @interface RdfConfig {
 	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to
 	 * identify root notes, which can introduce a considerable performance degradation.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"RdfSerializer.addRootProperty.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_addRootProperty}
 	 * </ul>
 	 */
@@ -836,16 +774,14 @@ public @interface RdfConfig {
 	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
 	 * the root element is serialized.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"RdfSerializer.autoDetectNamespaces.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_autoDetectNamespaces}
 	 * </ul>
 	 */
@@ -857,16 +793,14 @@ public @interface RdfConfig {
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		A default global value can be set via the system property <js>"RdfSerializer.namespaces.ls"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_namespaces}
 	 * </ul>
 	 */
@@ -879,8 +813,7 @@ public @interface RdfConfig {
 	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
 	 * <br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -893,8 +826,7 @@ public @interface RdfConfig {
 	 * 		A default global value can be set via the system property <js>"Rdf.useXmlNamespaces.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfSerializer#RDF_useXmlNamespaces}
 	 * </ul>
 	 */

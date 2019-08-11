@@ -32,8 +32,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * Child classes can also be defined as inner-classes of the parent resource class.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.ResourceResolvers}
  * </ul>
  */

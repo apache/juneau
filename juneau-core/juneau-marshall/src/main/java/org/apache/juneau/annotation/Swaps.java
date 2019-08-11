@@ -31,8 +31,7 @@ import java.lang.annotation.*;
  * 	<jk>public class</jk> MyPojo {}
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
  * </ul>
  */

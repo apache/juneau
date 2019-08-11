@@ -52,14 +52,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Specifies that recursions should be checked for during traversal.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
 	 * </ul>
 	 *
@@ -78,8 +76,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>detectRecursions(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
 	 * </ul>
 	 *
@@ -96,14 +93,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * If <jk>true</jk>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 * Otherwise, an exception is thrown.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
 	 * </ul>
 	 *
@@ -122,8 +117,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>ignoreRecursions(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
 	 * </ul>
 	 *
@@ -139,8 +133,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The initial indentation level at the root.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_initialDepth}
 	 * </ul>
 	 *
@@ -161,8 +154,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * <br>If this depth is exceeded, an exception is thrown.
 	 * <br>This prevents stack overflows from occurring when trying to traverse models with recursive references.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_maxDepth}
 	 * </ul>
 	 *

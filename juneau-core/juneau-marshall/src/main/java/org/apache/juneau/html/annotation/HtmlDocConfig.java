@@ -60,8 +60,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: HTML
 	 * 	<li>
@@ -82,8 +81,7 @@ public @interface HtmlDocConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.aside.ls"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_aside}
 	 * </ul>
 	 */
@@ -104,8 +102,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: HTML
 	 * 	<li>
@@ -126,8 +123,7 @@ public @interface HtmlDocConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.footer.ls"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_footer}
 	 * </ul>
 	 */
@@ -148,8 +144,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: HTML
 	 * 	<li>
@@ -168,8 +163,7 @@ public @interface HtmlDocConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.head.ls"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_head}
 	 * </ul>
 	 */
@@ -191,8 +185,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: HTML
 	 * 	<li>
@@ -213,8 +206,7 @@ public @interface HtmlDocConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.header.ls"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_header}
 	 * </ul>
 	 */
@@ -236,8 +228,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: HTML
 	 * 	<li>
@@ -260,8 +251,7 @@ public @interface HtmlDocConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.nav.ls"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_nav}
 	 * </ul>
 	 */
@@ -303,8 +293,7 @@ public @interface HtmlDocConfig {
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -325,8 +314,7 @@ public @interface HtmlDocConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.navlinks.ls"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_navlinks}
 	 * </ul>
 	 */
@@ -345,8 +333,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: HTML
 	 * 	<li>
@@ -358,8 +345,7 @@ public @interface HtmlDocConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.noResultsMessage.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_noResultsMessage}
 	 * </ul>
 	 */
@@ -371,8 +357,7 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -386,8 +371,7 @@ public @interface HtmlDocConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.nowrap.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_nowrap}
 	 * </ul>
 	 */
@@ -407,8 +391,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: Javascript
 	 * 	<li>
@@ -429,8 +412,7 @@ public @interface HtmlDocConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.script.ls"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_script}
 	 * </ul>
 	 */
@@ -451,8 +433,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: CSS
 	 * 	<li>
@@ -473,8 +454,7 @@ public @interface HtmlDocConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.style.ls"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_style}
 	 * </ul>
 	 */
@@ -489,8 +469,7 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: URL
 	 * 	<li>
@@ -505,8 +484,7 @@ public @interface HtmlDocConfig {
 	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.stylesheet.ls"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_stylesheet}
 	 * </ul>
 	 */
@@ -529,8 +507,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -538,8 +515,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_template}
 	 * </ul>
 	 */
@@ -578,16 +554,14 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
 	 * 	<li>
 	 * 		Values are appended to the existing list.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
 	 * </ul>
 	 */

@@ -19,8 +19,7 @@ import org.apache.juneau.*;
 /**
  * Various useful static methods for creating Swagger elements.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-dto.Swagger}
  * </ul>
  */

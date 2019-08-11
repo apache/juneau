@@ -41,8 +41,7 @@ import org.apache.juneau.utils.*;
  * 		<c>&amp;invokeArgs</c> - The arguments as an array.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='jc'>{@link PojoIntrospector} - Additional information on introspection of POJO methods.
  * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
  * 	<li class='link'>{@doc juneau-rest-server.Converters}

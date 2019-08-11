@@ -33,8 +33,7 @@ import org.apache.juneau.rest.util.*;
 /**
  * Contains the body of the HTTP request.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestBody}
  * </ul>
  */
@@ -163,8 +162,7 @@ public class RequestBody {
 	 * 	Map body = req.getBody().asType(TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
@@ -201,8 +199,7 @@ public class RequestBody {
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; body = req.getBody().asType(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
 	 * 	<li>
@@ -231,8 +228,7 @@ public class RequestBody {
 	/**
 	 * Returns the HTTP body content as a plain string.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
@@ -283,8 +279,7 @@ public class RequestBody {
 	/**
 	 * Returns the HTTP body content as a {@link Reader}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * 	<li>

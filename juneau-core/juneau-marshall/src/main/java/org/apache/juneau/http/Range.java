@@ -135,8 +135,7 @@ import org.apache.juneau.http.annotation.*;
  * entire entity in reply, it SHOULD only return the requested range to its client.
  * It SHOULD store the entire received response in its cache if that is consistent with its cache allocation policies.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

@@ -23,8 +23,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Represents the metadata about an annotated argument of a method on a REST proxy class.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
  */

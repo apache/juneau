@@ -27,8 +27,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='jm'>{@link RestResponse#prop(String, Object)}
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
  * </ul>
  * @deprecated Use {@link RequestAttributes}

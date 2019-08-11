@@ -99,8 +99,7 @@ import org.apache.juneau.jsonschema.*;
  * 	<li>Default classpath resource file <js>"[simple-class-name].json"</js>.
  * </ol>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Body}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='extlink'>{@doc SwaggerParameterObject}
@@ -108,15 +107,13 @@ import org.apache.juneau.jsonschema.*;
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Body}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Request}
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Request}
  * </ul>
@@ -160,8 +157,7 @@ public @interface Body {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -210,8 +206,7 @@ public @interface Body {
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -243,8 +238,7 @@ public @interface Body {
 	 * 		Client-side schema-based serializing and serializing validation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -350,8 +344,7 @@ public @interface Body {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Example}
 	 * 	<li class='jc'>{@link BeanContext}
 	 * 	<ul>
@@ -364,8 +357,7 @@ public @interface Body {
 	 * 	</ul>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is any {@doc juneau-marshall.JsonDetails.SimplifiedJson} if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
 	 * 		has a schema associated with it meancan be converted from a String.
@@ -405,8 +397,7 @@ public @interface Body {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object with string keys (media type) and string values (example for that media type) .
 	 * 	<li>
@@ -478,8 +469,7 @@ public @interface Body {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>
@@ -532,8 +522,7 @@ public @interface Body {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If you specify both {@link #value()} and {@link #api()}, {@link #value()} will be ignored.
 	 * </ul>

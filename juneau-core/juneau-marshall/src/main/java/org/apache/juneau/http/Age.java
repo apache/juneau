@@ -51,8 +51,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * Caches SHOULD use an arithmetic type of at least 31 bits of range.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

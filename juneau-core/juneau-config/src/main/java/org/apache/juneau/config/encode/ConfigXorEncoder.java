@@ -22,8 +22,7 @@ import static org.apache.juneau.internal.IOUtils.*;
  * <p>
  * This is not intended to be used as strong encryption.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-config.EncodedEntries}
  * </ul>
  */

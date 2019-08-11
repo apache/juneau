@@ -20,8 +20,7 @@ import org.apache.juneau.annotation.*;
  * DTO for an HTML {@doc HTML5.forms#the-input-element <input>}
  * element.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-dto.HTML5}
  * </ul>
  */

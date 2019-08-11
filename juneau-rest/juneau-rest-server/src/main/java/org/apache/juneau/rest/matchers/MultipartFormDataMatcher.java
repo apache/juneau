@@ -17,8 +17,7 @@ import org.apache.juneau.rest.*;
 /**
  * Predefined matcher for matching requests with content type <js>"multipart/form-data"</js>.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RestMethodMatchers}
  * </ul>
  */

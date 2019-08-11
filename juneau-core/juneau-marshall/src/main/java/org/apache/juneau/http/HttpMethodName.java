@@ -15,8 +15,7 @@ package org.apache.juneau.http;
 /**
  * Represents valid HTTP 1.1 method name static strings per the RFC 2616 spec.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

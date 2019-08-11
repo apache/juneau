@@ -20,8 +20,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Enum of all possible animal types.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */

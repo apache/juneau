@@ -45,8 +45,7 @@ import org.apache.juneau.http.annotation.*;
  * 	User-Agent: CERN-LineMode/2.15 libwww/2.17b3
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

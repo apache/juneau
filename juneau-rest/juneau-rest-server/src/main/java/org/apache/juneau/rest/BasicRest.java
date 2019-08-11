@@ -21,8 +21,7 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Identical to {@link BasicRestServlet} but doesn't extend from {@link HttpServlet}
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRest}
  * </ul>
  */

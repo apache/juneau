@@ -54,8 +54,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
 	 * when converting the string into a byte array.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
 	 * </ul>
 	 *
@@ -75,8 +74,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
 	 * when converting the string into a byte array.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
 	 * </ul>
 	 *

@@ -72,8 +72,7 @@ import org.apache.juneau.oapi.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Query}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='extlink'>{@doc SwaggerParameterObject}
@@ -81,15 +80,13 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Query}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Request}
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Request}
  * </ul>
@@ -189,8 +186,7 @@ public @interface Query {
 	 * 		</p>
 	 * 	</li>
 	 * </ul>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain-text.
 	 * </ul>
@@ -226,8 +222,7 @@ public @interface Query {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -316,8 +311,7 @@ public @interface Query {
 	 * 		Client-side schema-based serializing.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 */
@@ -380,8 +374,7 @@ public @interface Query {
 	 * 		Client-side schema-based serializing.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 */
@@ -888,8 +881,7 @@ public @interface Query {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Example}
 	 * 	<li class='jc'>{@link BeanContext}
 	 * 	<ul>
@@ -902,8 +894,7 @@ public @interface Query {
 	 * 	</ul>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -979,8 +970,7 @@ public @interface Query {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>

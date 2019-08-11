@@ -49,8 +49,7 @@ public @interface ParserConfig {
 	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
 	 * when converting the string into a byte array.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -64,8 +63,7 @@ public @interface ParserConfig {
 	 * 		A default global value can be set via the system property <js>"InputStreamParser.binaryFormat.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
 	 * </ul>
 	 */
@@ -82,8 +80,7 @@ public @interface ParserConfig {
 	 * If <js>"true"</js>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * after parsing is complete.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -96,8 +93,7 @@ public @interface ParserConfig {
 	 * 		A default global value can be set via the system property <js>"Parser.autoCloseStreams.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
 	 * </ul>
 	 */
@@ -110,8 +106,7 @@ public @interface ParserConfig {
 	 * When parse errors occur, this specifies the number of lines of input before and after the
 	 * error location to be printed as part of the exception message.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Format: integer
 	 * 	<li>
@@ -122,8 +117,7 @@ public @interface ParserConfig {
 	 * 		A default global value can be set via the system property <js>"Parser.debugOutputLines.i"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_debugOutputLines}
 	 * </ul>
 	 */
@@ -135,8 +129,7 @@ public @interface ParserConfig {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
 	 * </ul>
 	 */
@@ -176,8 +169,7 @@ public @interface ParserConfig {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -190,8 +182,7 @@ public @interface ParserConfig {
 	 * 		A default global value can be set via the system property <js>"Parser.strict.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
 	 * </ul>
 	 */
@@ -204,8 +195,7 @@ public @interface ParserConfig {
 	 * If <js>"true"</js>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
@@ -218,8 +208,7 @@ public @interface ParserConfig {
 	 * 		A default global value can be set via the system property <js>"Parser.trimStrings.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
 	 */
@@ -236,8 +225,7 @@ public @interface ParserConfig {
 	 * because it may contain multiple independent POJOs to parse.
 	 * <br>Buffering would cause the parser to read past the current POJO in the stream.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This only allows for multi-input streams for the following parsers:
 	 * 		<ul>
@@ -262,8 +250,7 @@ public @interface ParserConfig {
 	 * 		A default global value can be set via the system property <js>"Parser.unbuffered.b"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
 	 * </ul>
 	 */
@@ -282,8 +269,7 @@ public @interface ParserConfig {
 	 * <p>
 	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
 	 * 	<li>
@@ -292,8 +278,7 @@ public @interface ParserConfig {
 	 * 		A default global value can be set via the system property <js>"ReaderParser.fileCharset.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
 	 * </ul>
 	 */
@@ -308,8 +293,7 @@ public @interface ParserConfig {
 	 * <p>
 	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
 	 * 	<li>
@@ -318,8 +302,7 @@ public @interface ParserConfig {
 	 * 		A default global value can be set via the system property <js>"ReaderParser.inputStreamCharset.s"</js>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_streamCharset}
 	 * </ul>
 	 */

@@ -25,7 +25,7 @@ import org.apache.juneau.config.internal.*;
  *
  * <p>
  * Content stores require two methods to be implemented:
- * <ul>
+ * <ul class='javatree'>
  * 	<li class='jm'>{@link #read(String)} - Retrieve a config file.
  * 	<li class='jm'>{@link #write(String,String,String)} - ConfigStore a config file.
  * </ul>

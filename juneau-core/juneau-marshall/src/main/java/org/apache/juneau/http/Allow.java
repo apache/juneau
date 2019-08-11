@@ -61,8 +61,7 @@ import org.apache.juneau.http.annotation.*;
  * user agent might
  * have other means of communicating with the origin server.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

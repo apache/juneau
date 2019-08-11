@@ -19,7 +19,7 @@ Resource Resolvers
 	By default, you can add the {@link oajr.annotation.RestResource @RestResource}
 	to any class as long as it has one of the following constructors:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'><c><jk>public</jk> T()</c>
 	<li class='jm'><c><jk>public</jk> T(RestContextBuilder)</c>
 </ul>
@@ -30,7 +30,7 @@ Resource Resolvers
 <p>
 	Resource object resolution is controlled through the following API:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jic'>{@link oajr.RestResourceResolver}
 	<ul>
 		<li class='jc'>{@link oajr.BasicRestResourceResolver}
@@ -40,7 +40,6 @@ Resource Resolvers
 	This API can be extended to provide your own custom resource resolution.
 	Later topics discuss how to use this API to instantiate resources using Spring.
 </p>
-<h5 class='section'>See Also:</h5>
-<ul>
+<ul class='seealso'>
 	<li class='jf'>{@link oajr.RestContext#REST_resourceResolver}
 </ul>

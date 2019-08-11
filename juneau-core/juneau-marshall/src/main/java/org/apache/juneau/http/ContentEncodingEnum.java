@@ -15,8 +15,7 @@ package org.apache.juneau.http;
 /**
  * Represents the possible values for a <c>Content-Encoding</c> header.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

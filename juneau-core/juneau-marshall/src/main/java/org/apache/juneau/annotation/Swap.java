@@ -30,8 +30,7 @@ import org.apache.juneau.transform.*;
  * 	<li>Inside the {@link Swaps @Swaps} annotation.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
  * </ul>
  */
@@ -66,8 +65,7 @@ public @interface Swap {
 	 * 		}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
 	 * </ul>
 	 */
@@ -103,8 +101,7 @@ public @interface Swap {
 	 * 	<jk>public class</jk> MyPojo {}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.TemplatedSwaps}
 	 * </ul>
 	 */

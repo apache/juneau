@@ -17,8 +17,7 @@ import java.util.*;
 /**
  * Represents valid HTTP 1.1 method names per the RFC 2616 spec.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

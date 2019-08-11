@@ -24,8 +24,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * Captures the information in {@link RemoteInterface @RemoteInterface} annotations for caching and reuse.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.restRPC}
  * </ul>
  */

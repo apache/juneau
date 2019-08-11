@@ -191,9 +191,7 @@ public interface RdfCommon {
 	 * 	<li><js>"strict-fatal"</js>
 	 * </ul>
 	 *
-	 * <p>
-	 * See also:
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li>
 	 * 		{@doc ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
 	 * 	<li>
@@ -220,9 +218,7 @@ public interface RdfCommon {
 	 * <p>
 	 * Sets ARP to look for RDF embedded within an enclosing XML document.
 	 *
-	 * <p>
-	 * See also:
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li>
 	 * 		{@doc ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 	 * </ul>
@@ -251,9 +247,7 @@ public interface RdfCommon {
 	 * 	<li><js>"EM_FATAL"</js>
 	 * </ul>
 	 *
-	 * <p>
-	 * See also:
-	 * <ul class='spaced-list'>
+	 * <ul class='seealso'>
 	 * 	<li>
 	 * 		{@doc ARP/ARPErrorNumbers.html ARPErrorNumbers}
 	 * 	<li>
@@ -666,8 +660,7 @@ public interface RdfCommon {
 	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
 	 * 		lost.

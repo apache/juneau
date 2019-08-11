@@ -83,8 +83,7 @@ import org.apache.juneau.utils.*;
  * 	<tr><td>{@code getServletPath()}</td><td>{@code /servletPath}</td></tr>
  * </table>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RestRequest}
  * </ul>
  */
@@ -245,7 +244,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <p>
 	 * This contains all resource and method level properties from the following:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link RestResource#properties()}
 	 * 	<li class='ja'>{@link RestMethod#properties()}
 	 * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
@@ -273,8 +272,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link #prop(String, Object)}
 	 * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
 	 * </ul>
@@ -331,8 +329,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This object is modifiable.
 	 * 	<li>
@@ -343,8 +340,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		The {@link Header @Header} annotation can be used to access individual header values.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestHeaders}
 	 * </ul>
 	 *
@@ -493,8 +489,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This object is modifiable.
 	 * 	<li>
@@ -505,8 +500,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		The {@link Attr @Attr} annotation can be used to access individual attribute values.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestAttributes}
 	 * </ul>
 	 *
@@ -570,8 +564,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This object is modifiable.
 	 * 	<li>
@@ -584,8 +577,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		The {@link Query @Query} annotation can be used to access individual query parameter values.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestQuery}
 	 * </ul>
 	 *
@@ -636,8 +628,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This object is modifiable.
 	 * 	<li>
@@ -648,8 +639,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		The {@link FormData @FormDAta} annotation can be used to access individual form data parameter values.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestFormData}
 	 * </ul>
 	 *
@@ -718,8 +708,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This object is modifiable.
 	 * 	<li>
@@ -730,8 +719,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		The {@link Path @Path} annotation can be used to access individual values.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestPathMatch}
 	 * </ul>
 	 *
@@ -783,16 +771,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The {@link RequestBody} object can also be passed as a parameter on the method.
 	 * 	<li>
 	 * 		The {@link Body @Body} annotation can be used to access the body as well.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestBody}
 	 * </ul>
 	 *
@@ -969,14 +955,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The {@link RestInfoProvider} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
 	 * 	<li class='jic'>{@link org.apache.juneau.rest.RestInfoProvider}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSiteName()}
@@ -1009,14 +993,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The {@link Swagger} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
 	 * 	<li class='jic'>{@link org.apache.juneau.rest.RestInfoProvider}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getInfoProvider()}
@@ -1151,8 +1133,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the serializers associated with this request.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.Serializers}
 	 * </ul>
 	 *
@@ -1165,8 +1146,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the parsers associated with this request.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.Parsers}
 	 * </ul>
 	 *
@@ -1259,14 +1239,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The {@link MessageBundle} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_messages}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessage(String,Object...)}
 	 * 	<li class='link'>{@doc juneau-rest-server.Messages}
@@ -1311,8 +1289,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Can be used to access the method name or method annotations during requests, such as in calls to
 	 * {@link RestGuard#guard(RestRequest, RestResponse)}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This returns <jk>null</jk> when evaluating servlet-level guards since the method has not been resolved at that
 	 * 		point of execution.
@@ -1435,14 +1412,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The {@link VarResolverSession} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
 	 * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
 	 * </ul>
@@ -1474,8 +1449,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String, boolean)}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String)}
@@ -1534,8 +1508,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns an instance of a {@link StreamResource} that represents the contents of a resource binary file from the
 	 * classpath.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathStreamResource(String)}
 	 * </ul>
@@ -1576,7 +1549,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns a config file with session-level variable resolution.
 	 *
 	 * The config file is identified via one of the following:
-	 * <ul>
+	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link RestResource#config()}
 	 * 	<li class='jm'>{@link RestContextBuilder#config(Config)}
 	 * </ul>
@@ -1597,14 +1570,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The {@link Config} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.ConfigurationFiles}
 	 * </ul>
 	 *
@@ -1800,14 +1771,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The {@link RestLogger} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_logger}
 	 * 	<li class='jac'>{@link org.apache.juneau.rest.RestLogger}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level, String, Object...)}

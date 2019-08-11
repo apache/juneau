@@ -22,8 +22,7 @@ import org.apache.juneau.rest.helper.*;
 /**
  * Identical to {@link BasicRestServletGroup} but doesn't extend from {@link HttpServlet}
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRestGroup}
  * </ul>
  */

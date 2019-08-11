@@ -32,8 +32,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * Uses the URI resolver returned by {@link RestRequest#getUriResolver()}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
  * </ul>
  */

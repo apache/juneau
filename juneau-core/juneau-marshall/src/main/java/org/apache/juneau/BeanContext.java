@@ -140,8 +140,7 @@ import org.apache.juneau.transform.*;
  * 	Person p = m2.getBean();  <jc>// Get the bean instance that was created.</jc>
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.ContextsBuildersSessionsPropertyStores}
  * </ul>
  */
@@ -309,8 +308,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
 	 * </ul>
 	 */
@@ -435,8 +433,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanFilters}
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.InterfaceFilters}
 	 * </ul>
@@ -738,8 +735,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
 	 * </ul>
 	 */
@@ -1573,8 +1569,7 @@ public class BeanContext extends Context {
 	 * 	MyBean bean = p.parse(json, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PojoSwaps}
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.OneWayPojoSwaps}

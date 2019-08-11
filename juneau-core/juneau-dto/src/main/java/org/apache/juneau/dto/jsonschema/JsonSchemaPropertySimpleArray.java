@@ -26,8 +26,7 @@ package org.apache.juneau.dto.jsonschema;
  * 		);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='jp'>{@doc package-summary.html#TOC org.apache.juneau.dto.jsonschema}
  * </ul>
  */

@@ -21,8 +21,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Mocked {@link RestClient}.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}
  * </ul>
  */

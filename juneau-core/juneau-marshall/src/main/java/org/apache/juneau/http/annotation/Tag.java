@@ -56,8 +56,7 @@ import org.apache.juneau.jsonschema.annotation.ExternalDocs;
  * 	)
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='extlink'>{@doc SwaggerTagObject}
  * </ul>
@@ -69,8 +68,7 @@ public @interface Tag {
 	/**
 	 * <mk>name</mk> field of the {@doc SwaggerTagObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * </ul>
@@ -80,8 +78,7 @@ public @interface Tag {
 	/**
 	 * <mk>description</mk> field of the {@doc SwaggerTagObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -95,8 +92,7 @@ public @interface Tag {
 	/**
 	 * <mk>externalDocs</mk> field of the {@doc SwaggerTagObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -171,8 +167,7 @@ public @interface Tag {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>

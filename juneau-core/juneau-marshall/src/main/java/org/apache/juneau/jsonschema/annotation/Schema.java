@@ -68,8 +68,7 @@ import org.apache.juneau.oapi.*;
  * 	)
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='extlink'>{@doc SwaggerSchemaObject}
  * </ul>
@@ -84,8 +83,7 @@ public @interface Schema {
 	 * <p>
 	 * 	A JSON reference to the schema definition.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a <a href='https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03'>JSON Reference</a>.
 	 * 	<li>
@@ -107,8 +105,7 @@ public @interface Schema {
 	 * 	) {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 	<li>
@@ -116,8 +113,7 @@ public @interface Schema {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 */
@@ -126,8 +122,7 @@ public @interface Schema {
 	/**
 	 * <mk>title</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 	<li>
@@ -160,8 +155,7 @@ public @interface Schema {
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -175,8 +169,7 @@ public @interface Schema {
 	/**
 	 * <mk>default</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is any {@doc juneau-marshall.JsonDetails.SimplifiedJson}.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -190,8 +183,7 @@ public @interface Schema {
 	/**
 	 * <mk>multipleOf</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
@@ -204,8 +196,7 @@ public @interface Schema {
 	/**
 	 * <mk>maximum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
@@ -218,8 +209,7 @@ public @interface Schema {
 	/**
 	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
@@ -232,8 +222,7 @@ public @interface Schema {
 	/**
 	 * <mk>minimum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
@@ -246,8 +235,7 @@ public @interface Schema {
 	/**
 	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
@@ -260,8 +248,7 @@ public @interface Schema {
 	/**
 	 * <mk>maxLength</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
@@ -274,8 +261,7 @@ public @interface Schema {
 	/**
 	 * <mk>minLength</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
@@ -294,8 +280,7 @@ public @interface Schema {
 	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(format=<js>"/\\w+\\.\\d+/"</js>) String input) {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 	<li>
@@ -310,8 +295,7 @@ public @interface Schema {
 	/**
 	 * <mk>maxItems</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
@@ -324,8 +308,7 @@ public @interface Schema {
 	/**
 	 * <mk>minItems</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
@@ -338,8 +321,7 @@ public @interface Schema {
 	/**
 	 * <mk>uniqueItems</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is boolean.
 	 * 	<li>
@@ -353,8 +335,7 @@ public @interface Schema {
 	/**
 	 * <mk>maxProperties</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -369,8 +350,7 @@ public @interface Schema {
 	/**
 	 * <mk>minProperties</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -405,8 +385,7 @@ public @interface Schema {
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is boolean.
 	 * 	<li>
@@ -419,8 +398,7 @@ public @interface Schema {
 	/**
 	 * <mk>enum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array or comma-delimited list.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -451,8 +429,7 @@ public @interface Schema {
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 	<li>
@@ -471,8 +448,7 @@ public @interface Schema {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
+	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 *
@@ -482,8 +458,7 @@ public @interface Schema {
 	/**
 	 * <mk>items</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -542,8 +517,7 @@ public @interface Schema {
 	/**
 	 * <mk>allOf</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -557,8 +531,7 @@ public @interface Schema {
 	/**
 	 * <mk>properties</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -572,8 +545,7 @@ public @interface Schema {
 	/**
 	 * <mk>additionalProperties</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -587,8 +559,7 @@ public @interface Schema {
 	/**
 	 * <mk>discriminator</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -602,8 +573,7 @@ public @interface Schema {
 	/**
 	 * <mk>readOnly</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -617,8 +587,7 @@ public @interface Schema {
 	/**
 	 * <mk>xml</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -632,8 +601,7 @@ public @interface Schema {
 	/**
 	 * <mk>externalDocs</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -654,8 +622,7 @@ public @interface Schema {
 	 * This attribute defines a JSON representation of the body value that is used by <c>BasicRestInfoProvider</c> to construct
 	 * media-type-based examples of the body of the request.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -672,8 +639,7 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON object whose keys are media types and values are string representations of that value.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -731,8 +697,7 @@ public @interface Schema {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>

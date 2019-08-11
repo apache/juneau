@@ -60,8 +60,7 @@ import org.apache.juneau.http.annotation.*;
  * Note: because the meaning of "Pragma: no-cache as a response header field is not actually specified, it does not
  * provide a reliable replacement for "Cache-Control: no-cache" in a response.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

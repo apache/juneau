@@ -144,8 +144,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * <p>
 	 * This option only applies to beans.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		If parsing multi-part parameters, it's highly recommended to use <c>Collections</c> or <c>Lists</c>
 	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value

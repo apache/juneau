@@ -43,17 +43,17 @@
 <ul class='spaced-list'>
 	<li>
 		New utility class for diffing beans: 
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link oaj.utils.BeanDiff}
 		</ul>
 	<li>
 		New annotation for defining bean property names: 
-		<ul>
+		<ul class='javatree'>
 			<li class='ja'>{@link oaj.annotation.Name}
 		</ul>
 	<li>
 		New serializer properties:
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link oaj.serializer.WriterSerializer}
 			<ul>
 				<li class='jf'>{@link oaj.serializer.WriterSerializer#WSERIALIZER_fileCharset WSERIALIZER_fileCharset}
@@ -63,7 +63,7 @@
 	<li>
 		The following POJO methods can be used to convert a POJO to/from a Map before serialization and after parsing.
 		<br>It's a convenient way of defining a POJO transform.
-		<ul>
+		<ul class='javatree'>
 			<li class='jm'><c><jk>public</jk> Map toMap()</c> -  Can be any type of map with string keys and object vals. 
 			<li class='jm'><c><jk>public</jk> ObjectMap toMap()</c>
 			<li class='jm'><c><jk>public</jk> Map toMap(BeanSession bs)</c> -  Can be any type of map with string keys and object vals. 
@@ -75,7 +75,7 @@
 		</ul>
 	<li>
 		New convenience debugging methods on Marshall API:
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link oaj.marshall.Marshall}
 			<ul>
 				<li class='jm'>{@link oaj.marshall.Marshall#format(String,Object...) format(String,Object...)} - <c>MessageFormat</c>-style formatter.
@@ -88,14 +88,14 @@
 		easier to determine if problems are stream based or syntax based.
 	<li>
 		New Java 8 date-time transforms:
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link oaj.transforms.TemporalSwap} - For all Java 8 temporal types (e.g. {@link java.time.ZonedDateTime})
 			<li class='jc'>{@link oaj.transforms.TemporalDateSwap} - For {@link java.util.Date}
 			<li class='jc'>{@link oaj.transforms.TemporalCalendarSwap} - For {@link java.util.Calendar}
 		</ul>
 	<li>
 		All serializers and parsers now have built-in default swaps for common class types:
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link java.util.Enumeration}
 			<li class='jc'>{@link java.util.Iterator}
 			<li class='jc'>{@link java.util.Locale}
@@ -131,7 +131,7 @@
 	<li>
 		The {@link oaj.config.store.ConfigFileStore} now automatically resolves file extensions.
 		<br>New configuration property for specifying search paths for file extensions:
-		<ul class='doctree'>
+		<ul class='javatree'>
 			<li class='jf'>{@link oaj.config.store.ConfigFileStore#FILESTORE_extensions}
 		</ul>
 	<li>
@@ -186,7 +186,7 @@
 		<p>
 			Config annotations are provided for all serializers and parsers:
 		</p>
-		<ul>
+		<ul class='javatree'>
 			<li class='ja'>{@link oaj.annotation.BeanConfig BeanConfig}
 			<li class='ja'>{@link oaj.csv.annotation.CsvConfig CsvConfig}
 			<li class='ja'>{@link oaj.html.annotation.HtmlConfig HtmlConfig}
@@ -207,7 +207,7 @@
 		</ul>
 	<li>
 		New support for using Servlet request attributes.  
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link oajr.RequestAttributes}
 			<li class='jc'>{@link oajr.RestContext}
 			<ul>
@@ -236,7 +236,7 @@
 			<li class='ja'>{@link oajr.annotation.RestResource#attrs()}
 		</ul>
 		<br>This deprecates the following APIs:
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link oajr.RequestProperties}
 			<li class='jc'>{@link oajr.RestMethodProperties}
 			<li class='jc'>{@link oajr.RestRequest}
@@ -249,7 +249,7 @@
 		Added the following classes that provide the same support as the servlet classes but doesn't extend from <c>HttpServlet</c>.
 		<br>This fixes an issue where instances of {@link oajr.BasicRestServlet} are registered as top-level servlets even though
 		you don't want them to be.  
-		<ul>
+		<ul class='javatree'>
 			<li class='jac'>{@link oajr.BasicRest} - Non-servlet equivalent to {@link oajr.BasicRestServlet}
 			<li class='jac'>{@link oajr.BasicRestGroup} - Non-servlet equivalent to {@link oajr.BasicRestServletGroup}
 			<li class='jac'>{@link oajr.BasicRestJena} - Non-servlet equivalent to {@link oajr.BasicRestServletJena}
@@ -259,7 +259,7 @@
 		HTML widgets now have access to the <c>RestResponse</c> object if they need access to the output bean.
 	<li>
 		New annotations for simplified role-based guards on classes and methods:
-		<ul>
+		<ul class='javatree'>
 			<li class='ja'>{@link oajr.annotation.RestResource} 
 			<ul>
 				<li class='jm'>{@link oajr.annotation.RestResource#roleGuard roleGuard()}
@@ -273,7 +273,7 @@
 		</ul>
 	<li>
 		New annotations for fine-tuned handling of http-methods/http-headers as query parameters and others:
-		<ul>
+		<ul class='javatree'>
 			<li class='ja'>{@link oajr.annotation.RestResource} 
 			<ul>
 				<li class='jm'>{@link oajr.annotation.RestResource#allowedHeaderParams() allowedHeaderParams()}
@@ -291,7 +291,7 @@
 		</p>		
 	<li>
 		New methods:
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link oajr.RestRequest}
 			<ul>
 				<li class='jm'>{@link oajr.RestRequest#getCharset() getCharset()}
@@ -303,7 +303,7 @@
 		</ul>
 	<li>
 		New interface method for catching arbitrary thrown objects and converting them to other throwables.
-		<ul>
+		<ul class='javatree'>
 			<li class='jc'>{@link oajr.RestCallHandler}
 			<ul>
 				<li class='jm'>{@link oajr.RestCallHandler#convertThrowable(Throwable) convertThrowable(Throwable)}

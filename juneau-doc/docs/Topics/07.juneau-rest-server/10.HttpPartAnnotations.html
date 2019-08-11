@@ -18,7 +18,7 @@ HTTP-Part Annotations
 <p>
 	The annotations used for defining the schema for request HTTP parts are:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link oaj.http.annotation.Body}
 	<li class='ja'>{@link oaj.http.annotation.Header}
 	<li class='ja'>{@link oaj.http.annotation.FormData}
@@ -31,7 +31,7 @@ HTTP-Part Annotations
 <p>
 	The annotations used for defining the schema for response HTTP parts are:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link oaj.http.annotation.ResponseBody}
 	<li class='ja'>{@link oaj.http.annotation.ResponseHeader}
 	<li class='ja'>{@link oaj.http.annotation.ResponseStatus}
@@ -40,13 +40,12 @@ HTTP-Part Annotations
 <p>
 	The sub-annotations used in the annotation above are:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='ja'>{@link oaj.jsonschema.annotation.Schema}
 	<li class='ja'>{@link oaj.jsonschema.annotation.Items}
 </ul>
 
-<h5 class='section'>Other Notes:</h5>
-<ul class='spaced-list'>
+<ul class='notes'>
 	<li>
 		Annotation parameter values will be aggregated when used on POJO parent and child classes. 
 		<br>Values on child classes override values on parent classes.

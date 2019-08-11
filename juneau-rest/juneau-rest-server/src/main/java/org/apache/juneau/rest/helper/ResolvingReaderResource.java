@@ -81,8 +81,7 @@ public class ResolvingReaderResource extends ReaderResource {
 	/**
 	 * Builder class for constructing {@link ResolvingReaderResource} objects.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.ReaderResource}
 	 * </ul>
 	 */

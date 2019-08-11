@@ -79,8 +79,7 @@ import org.apache.juneau.rest.widget.*;
  * 	&lt;/html&gt;</xt>
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
  * </ul>
  *
@@ -106,8 +105,7 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
@@ -126,8 +124,7 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_aside}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#aside(Object...)}
 	 * </ul>
@@ -151,8 +148,7 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
@@ -171,8 +167,7 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_footer}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#footer(Object...)}
 	 * </ul>
@@ -197,8 +192,7 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
@@ -215,8 +209,7 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_head}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#head(Object...)}
 	 * </ul>
@@ -241,8 +234,7 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
@@ -261,8 +253,7 @@ public @interface HtmlDoc {
 	 * 		parent class if not overridden.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_header}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#header(Object...)}
 	 * </ul>
@@ -286,8 +277,7 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
@@ -308,8 +298,7 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_nav}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#nav(Object...)}
 	 * </ul>
@@ -342,8 +331,7 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -362,8 +350,7 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_navlinks}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#navlinks(Object...)}
 	 * </ul>
@@ -373,15 +360,13 @@ public @interface HtmlDoc {
 	/**
 	 * Specifies the text to display when serializing an empty array or collection.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_noResultsMessage}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#noResultsMessage(Object)}
 	 * </ul>
@@ -394,8 +379,7 @@ public @interface HtmlDoc {
 	 * <p>
 	 * This only applies to the rendered data portion of the page.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_nowrap}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#nowrap(boolean)}
 	 * </ul>
@@ -416,8 +400,7 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is Javascript.
 	 * 	<li>
@@ -436,8 +419,7 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_script}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#script(Object[])}
 	 * </ul>
@@ -459,8 +441,7 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is CSS.
 	 * 	<li>
@@ -479,8 +460,7 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_style}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#style(Object[])}
 	 * </ul>
@@ -502,8 +482,7 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of this value is a URL.
 	 * 	<li>
@@ -516,8 +495,7 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_stylesheet}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#stylesheet(Object[])}
 	 * </ul>
@@ -531,8 +509,7 @@ public @interface HtmlDoc {
 	 * By default, uses {@link BasicHtmlDocTemplate} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -540,8 +517,7 @@ public @interface HtmlDoc {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_template}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#template(Class)}
 	 * 	<li class='jm'>{@link HtmlDocBuilder#template(HtmlDocTemplate)}
@@ -592,16 +568,14 @@ public @interface HtmlDoc {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
 	 * 	<li>
 	 * 		Values are appended to the existing list.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
 	 * </ul>
 	 */

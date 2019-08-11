@@ -49,8 +49,7 @@ import org.apache.juneau.annotation.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanFilters}
  * </ul>
  *
@@ -111,8 +110,7 @@ public class BeanFilterBuilder<T> {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#typeName()}
 	 * </ul>
 	 *
@@ -149,8 +147,7 @@ public class BeanFilterBuilder<T> {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#properties()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
@@ -190,8 +187,7 @@ public class BeanFilterBuilder<T> {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#excludeProperties()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
@@ -249,8 +245,7 @@ public class BeanFilterBuilder<T> {
 	 * Note that this filter can be used on the parent class so that it filters to all child classes, or can be set
 	 * individually on the child classes.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#interfaceClass()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
@@ -308,8 +303,7 @@ public class BeanFilterBuilder<T> {
 	 * 	String json = s.serialize(<jk>new</jk> C3());
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#stopClass()}
 	 * </ul>
 	 *
@@ -347,8 +341,7 @@ public class BeanFilterBuilder<T> {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#sort()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
 	 * </ul>
@@ -369,8 +362,7 @@ public class BeanFilterBuilder<T> {
 	 * <p>
 	 * Shortcut for calling <code>sortProperties(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#sort()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
 	 * </ul>
@@ -407,8 +399,7 @@ public class BeanFilterBuilder<T> {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#fluentSetters()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
 	 * </ul>
@@ -429,8 +420,7 @@ public class BeanFilterBuilder<T> {
 	 * <p>
 	 * Shortcut for calling <code>fluentSetters(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#fluentSetters()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
 	 * </ul>
@@ -469,8 +459,7 @@ public class BeanFilterBuilder<T> {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#propertyNamer()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
 	 * 	<li class='jc'>{@link PropertyNamer}
@@ -512,8 +501,7 @@ public class BeanFilterBuilder<T> {
 	 * 	MyBean myBean = p.parse(json);
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#beanDictionary()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
@@ -553,8 +541,7 @@ public class BeanFilterBuilder<T> {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#propertyFilter()}
 	 * 	<li class='jc'>{@link PropertyFilter}
 	 * </ul>

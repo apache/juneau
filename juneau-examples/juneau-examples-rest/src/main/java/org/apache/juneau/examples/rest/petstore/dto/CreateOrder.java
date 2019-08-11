@@ -17,8 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Bean for creating {@link Order} objects.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */

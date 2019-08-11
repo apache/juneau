@@ -54,8 +54,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * If <jk>true</jk>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * after parsing is complete.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
 	 * </ul>
 	 *
@@ -74,8 +73,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>autoCloseStreams(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
 	 * </ul>
 	 *
@@ -92,8 +90,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * When parse errors occur, this specifies the number of lines of input before and after the
 	 * error location to be printed as part of the exception message.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_debugOutputLines}
 	 * </ul>
 	 *
@@ -112,8 +109,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
 	 * </ul>
 	 *
@@ -130,8 +126,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parser is enabled.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
 	 * </ul>
 	 *
@@ -150,8 +145,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
 	 * </ul>
 	 *
@@ -168,8 +162,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
 	 *
@@ -188,8 +181,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
 	 * </ul>
 	 *
@@ -205,8 +197,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * If <jk>true</jk>, don't use internal buffering during parsing.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
 	 * </ul>
 	 *
@@ -225,8 +216,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Shortcut for calling <code>unbuffered(<jk>true</jk>)</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
 	 * </ul>
 	 *

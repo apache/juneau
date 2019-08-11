@@ -28,8 +28,7 @@ import org.apache.juneau.reflect.*;
  * Captures the information in {@link RemoteResource @RemoteResource} and {@link RemoteMethod @RemoteMethod} annotations for
  * caching and reuse.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
  */

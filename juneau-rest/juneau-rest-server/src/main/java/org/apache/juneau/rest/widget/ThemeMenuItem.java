@@ -24,8 +24,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * The variable it resolves is <js>"$W{ThemeMenuItem}"</js>.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets}
  * </ul>
  */

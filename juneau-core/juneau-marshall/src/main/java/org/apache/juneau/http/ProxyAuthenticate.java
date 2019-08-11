@@ -43,8 +43,7 @@ import org.apache.juneau.http.annotation.*;
  * However, an intermediate proxy might need to obtain its own credentials by requesting them from the downstream
  * client, which in some circumstances will appear as if the proxy is forwarding the Proxy-Authenticate header field.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

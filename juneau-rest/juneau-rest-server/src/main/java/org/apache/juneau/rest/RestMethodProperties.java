@@ -21,12 +21,11 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * These are properties specified on a REST resource method that extends the properties defined on {@link RestContextProperties}
  * and adds the following:
- * <ul>
+ * <ul class='javatree'>
  * 	<li class='ja'>{@link RestMethod#properties()}
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
  * </ul>
  * @deprecated Use {@link RequestAttributes}

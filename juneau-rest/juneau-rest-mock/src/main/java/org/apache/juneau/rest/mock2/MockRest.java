@@ -57,8 +57,7 @@ import org.apache.juneau.serializer.*;
  *  }
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
  * </ul>
  */

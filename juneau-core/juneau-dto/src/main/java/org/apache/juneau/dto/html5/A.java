@@ -22,8 +22,7 @@ import org.apache.juneau.annotation.*;
  * DTO for an HTML {@doc HTML5.text-level-semantics#the-a-element <a>}
  * element.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-dto.HTML5}
  * </ul>
  */

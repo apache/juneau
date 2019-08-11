@@ -49,8 +49,7 @@ import java.lang.annotation.*;
  * 	)
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='extlink'>{@doc SwaggerExternalDocumentationObject}
  * </ul>
@@ -65,8 +64,7 @@ public @interface ExternalDocs {
 	 * <p>
 	 * A short description of the target documentation.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -83,8 +81,7 @@ public @interface ExternalDocs {
 	 * <p>
 	 * The URL for the target documentation. Value MUST be in the format of a URL.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The value is required.
 	 * 	<li>
@@ -146,8 +143,7 @@ public @interface ExternalDocs {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>

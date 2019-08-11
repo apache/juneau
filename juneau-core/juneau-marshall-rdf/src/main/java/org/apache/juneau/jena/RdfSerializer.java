@@ -37,8 +37,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li>{@link N3Serializer} - N3.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall-rdf}
  * </ul>
  */

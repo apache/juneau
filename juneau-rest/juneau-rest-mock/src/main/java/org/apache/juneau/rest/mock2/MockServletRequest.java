@@ -31,8 +31,7 @@ import org.apache.juneau.utils.*;
 /**
  * An implementation of {@link HttpServletRequest} for mocking purposes.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
  * </ul>
  */

@@ -98,8 +98,7 @@ import org.apache.juneau.internal.*;
  * British English is not available.
  * A user agent might suggest in such a case to add "en" to get the best matching behavior.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

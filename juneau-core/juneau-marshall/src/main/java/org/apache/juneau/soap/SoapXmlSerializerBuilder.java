@@ -58,8 +58,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * Configuration property:  The <c>SOAPAction</c> HTTP header value to set on responses.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link SoapXmlSerializer#SOAPXML_SOAPAction}
 	 * </ul>
 	 *

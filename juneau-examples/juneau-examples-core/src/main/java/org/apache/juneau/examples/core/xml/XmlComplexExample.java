@@ -20,8 +20,7 @@ import org.apache.juneau.xml.*;
 /**
  * Sample class which shows the complex usage of XmlSerializer.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */

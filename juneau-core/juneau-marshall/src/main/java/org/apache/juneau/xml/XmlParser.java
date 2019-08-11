@@ -125,8 +125,7 @@ public class XmlParser extends ReaderParser {
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Reporters are not copied to new parsers during a clone.
 	 * </ul>

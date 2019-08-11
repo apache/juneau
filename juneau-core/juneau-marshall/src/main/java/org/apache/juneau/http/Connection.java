@@ -71,8 +71,7 @@ import org.apache.juneau.http.annotation.*;
  * This protects against mistaken forwarding of such header fields by pre-HTTP/1.1 proxies.
  * See section 19.6.2.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

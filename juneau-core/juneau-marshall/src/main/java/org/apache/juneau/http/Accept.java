@@ -139,8 +139,7 @@ import org.apache.juneau.internal.*;
  * However, unless the user agent is a closed system which cannot interact with other rendering agents, this default
  * set ought to be configurable by the user.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */

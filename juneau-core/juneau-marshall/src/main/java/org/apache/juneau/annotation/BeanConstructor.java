@@ -42,8 +42,7 @@ import org.apache.juneau.*;
  * will result in a {@link BeanRuntimeException} being thrown.
  * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanConstructorAnnotation}
  * </ul>
  */

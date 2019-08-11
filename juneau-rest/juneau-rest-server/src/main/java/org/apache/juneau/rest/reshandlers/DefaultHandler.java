@@ -43,8 +43,7 @@ import org.apache.juneau.serializer.*;
  * The <c>Content-Type</c> header is set to the mime-type defined on the selected serializer based on the
  * <c>produces</c> value passed in through the constructor.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodReturnTypes}
  * </ul>
  */

@@ -22,8 +22,7 @@ import org.apache.juneau.rest.*;
  * <p>
  * Typically used in top-level GET methods of router resources to render a list of available child resources.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.PredefinedHelperBeans}
  * </ul>
  */

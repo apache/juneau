@@ -40,8 +40,7 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='jc'>{@link PojoRest} - Additional information on addressing elements in a POJO tree using URL notation.
  * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
  * 	<li class='link'>{@doc juneau-rest-server.Converters}

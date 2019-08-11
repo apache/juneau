@@ -22,7 +22,7 @@
 <p>
 	The API consists of the following classes:
 </p>	
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jp'>{@link oajr.mock2}
 	<ul>
 		<li class='jc'>{@link oajr.mock2.MockRest}
@@ -124,7 +124,7 @@
 <p>
 	Other media types headers can be specified via any of the following methods:
 </p>
-<ul>
+<ul class='javatree'>
 	<li class='jm'>{@link oajr.mock2.MockRest#build(Object,Marshall) build(Object,Marshall)} - Use media types defined on a marshall.
 	<li class='jm'>{@link oajr.mock2.MockRest#build(Object,Serializer,Parser) build(Object,Serializer,Parser)} - Use media types defined on a serializer and parser.
 	<li class='jm'>{@link oajr.mock2.MockRest.Builder#accept(String) accept(String)} - Explicitly set the <c>Accept</c> header.
@@ -155,7 +155,7 @@
 <p>
 	The {@link oajr.mock2.MockRest} class provides the following methods for creating requests:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link oajr.mock2.MockRest}
 	<ul>
 		<li class='jm'>{@link oajr.mock2.MockRest#request(String,String) request(String,String)} 
@@ -202,7 +202,7 @@
 <p>
 	The following fluent convenience methods are provided for setting common <c>Accept</c> and <c>Content-Type</c> headers.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link oajr.mock2.MockServletRequest}
 	<ul>
 		<li class='jm'>{@link oajr.mock2.MockServletRequest#json() json()}
@@ -218,7 +218,7 @@
 <p>
 	The following fluent convenience methods are provided for building up your request.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link oajr.mock2.MockServletRequest}
 	<ul>
 		<li class='jm'>{@link oajr.mock2.MockServletRequest#header(String,Object) header(String,Object)}
@@ -231,7 +231,7 @@
 <p>
 	Fluent setters are provided for all common request headers:
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link oajr.mock2.MockServletRequest}
 	<ul>
 		<li class='jm'>{@link oajr.mock2.MockServletRequest#accept(Object) accept(Object)}
@@ -245,7 +245,7 @@
 	The {@link oajr.mock2.MockServletResponse} class provides default implementations for all the methods defined
 	on the {@link javax.servlet.http.HttpServletResponse} in addition to many convenience methods.
 </p>
-<ul class='doctree'>
+<ul class='javatree'>
 	<li class='jc'>{@link oajr.mock2.MockServletResponse}
 	<ul>
 		<li class='jm'>{@link oajr.mock2.MockServletResponse#getBody() getBody()}

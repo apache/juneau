@@ -33,13 +33,7 @@ import org.apache.juneau.plaintext.*;
  * 	String string = PlainText.<jsf>DEFAULT</jsf>.write(myPojo);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'>{@doc juneau-marshall.Marshalls}
- * </ul>
- *
- * <h5 class='section'>See Also:</h5>
- * <ul>
+ * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Marshalls}
  * </ul>
  */

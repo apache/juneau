@@ -49,8 +49,7 @@ import org.apache.juneau.http.annotation.*;
  * It is therefore possible for a response to contain header fields for both Location and Content-Location.
  * Also see section 13.10 for cache requirements of some methods.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
+ * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
