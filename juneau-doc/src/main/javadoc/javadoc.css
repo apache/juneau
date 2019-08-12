@@ -685,7 +685,8 @@ h1.hidden {
 
 h5.section {
 	color: #4e4e4e;
-	margin: 10px 0 5px 0;
+	font-weight: bold;
+	margin: 20px 0 5px 0;
 }
 
 h1.preview-title {

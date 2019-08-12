@@ -1574,7 +1574,7 @@ public class BeanContext extends Context {
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.OneWayPojoSwaps}
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapMethods}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.AutoPojoSwaps}
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SurrogateClasses}
 	 * </ul>
 	 */

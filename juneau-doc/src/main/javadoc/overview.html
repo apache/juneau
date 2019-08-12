@@ -3294,8 +3294,7 @@
 	<jk>public</jk> MyPojo(MyBuilder b) {...}
 		</p>
 </ul>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.annotation.Builder}
 	<li class='jic'>{@link org.apache.juneau.transform.Builder}
 </ul>
@@ -4938,8 +4937,7 @@
 	<jsm>assertEquals</jsm>(<js>"{foo:'bar',baz:123}"</js>, ws.toString(myPojo));
 </p>			
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#JSON_simpleMode}
 </ul>
 </div><!-- END: 2.20.3 - juneau-marshall.JsonDetails.SimplifiedJson -->
@@ -9591,17 +9589,16 @@
 		fExtra=@(1,2,null)
 	)
 </p>
-<h5 class='topic'>Other Notes:</h5>
-<ul class='spaced-list'>
-	<li>
+<ul class='notes'>
+	<li class='note'>
 		Array properties can also use CSV/SSV/PIPES for array notation.
 		<br>Various notations can be mixed throughout.
-	<li>
+	<li class='note'>
 		Schemas and POJOs can be defined arbitrarily deep.
-	<li>
+	<li class='note'>
 		Schemas are optional.
 		They can be skipped or partially defined.
-	<li>
+	<li class='note'>
 		We make our best attempt to convert the input to the matching type.  
 		However, you will get <c>SerializeExceptions</c> if you attempt an impossible conversion.
 		(e.g. trying to serialize the string "foo" as a boolean). 
@@ -9925,8 +9922,7 @@
 	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	ObjectMap m = p.parse(schema, input, ObjectMap.<jk>class</jk>);
 </p>
-<h5 class='topic'>Other Notes:</h5>
-<ul class='spaced-list'>
+<ul class='notes'>
 	<li>
 		Array properties can also use CSV/SSV/PIPES for array notation.
 		<br>Various notations can be mixed throughout.
@@ -13867,8 +13863,7 @@
 	Initialization of and access to the child resources occurs through the parent resource.
 	Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_children}
 </ul>
 </div><!-- END: 7.3.4 - juneau-rest-server.Instantiation.Children -->
@@ -13985,8 +13980,7 @@
 	This API can be extended to provide your own custom resource resolution.
 	Later topics discuss how to use this API to instantiate resources using Spring.
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_resourceResolver}
 </ul>
 </div><!-- END: 7.3.7 - juneau-rest-server.Instantiation.ResourceResolvers -->
@@ -14048,8 +14042,7 @@
 		</ul>
 </ul>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestHook}
 </ul>
 </div><!-- END: 7.3.8 - juneau-rest-server.Instantiation.LifecycleHooks -->
@@ -14593,12 +14586,10 @@
 		<jc>// Do something with all of those</jc>
 	}
 </p>
-<h5 class='section'>Notes:</h5>
-<ul class='spaced-list'>
+<ul class='notes'>
 	<li>All annotations have programmatic equivalents on the {@link org.apache.juneau.rest.RestRequest} class.
 </ul>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_paramResolvers} - For configuring custom parameter types.
 </ul>
 </div><!-- END: 7.6.1 - juneau-rest-server.RestMethod.MethodParameters -->
@@ -14702,8 +14693,7 @@
 	</ul>
 </ul>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 </ul>
 </div><!-- END: 7.6.4 - juneau-rest-server.RestMethod.RequestBody -->
@@ -14750,8 +14740,7 @@
 	</ul>
 </ul>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 </ul>
 </div><!-- END: 7.6.5 - juneau-rest-server.RestMethod.RequestHeaders -->
@@ -14837,8 +14826,7 @@
 	</ul>
 </ul>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
 </ul>
@@ -14885,8 +14873,7 @@
 	</ul>
 </ul>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 </ul>
@@ -14994,8 +14981,7 @@
 		<jk>return</jk> <js>"GET /urlWithParams?foo="</js>+foo+<js>"&amp;bar="</js>+bar+<js>"&amp;baz="</js>+baz;
 	}
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_path}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestPath}
@@ -15041,8 +15027,7 @@
 	</ul>
 </ul>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 </ul>
 </div><!-- END: 7.6.10 - juneau-rest-server.RestMethod.RequestPathMatch -->
@@ -15136,8 +15121,7 @@
 		s.serialize(p, res.getNegotiatedWriter());
 	}
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_responseHandlers} - For configuring custom response handlers.
 </ul>
 </div><!-- END: 7.6.11 - juneau-rest-server.RestMethod.MethodReturnTypes -->
@@ -15236,8 +15220,7 @@
 	}
 </p>
 
-<h5 class='section'>Notes:</h5>
-<ul class='spaced-list'>
+<ul class='notes'>
 	<li>
 		If no methods are found with a matching matcher, a <l>412 Precondition Failed</l> status is returned.
 	<li>
@@ -15253,8 +15236,7 @@
 		<br>Otherwise, methods are attempted in the order they appear in the class.
 </ul>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#matchers RestMethod(matchers)}
 	<li class='jc'>{@link org.apache.juneau.rest.matchers.MultipartFormDataMatcher}
 	<li class='jc'>{@link org.apache.juneau.rest.matchers.UrlEncodedFormMatcher}
@@ -16209,8 +16191,7 @@
 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.Items}
 </ul>
 
-<h5 class='section'>Other Notes:</h5>
-<ul class='spaced-list'>
+<ul class='notes'>
 	<li>
 		Annotation parameter values will be aggregated when used on POJO parent and child classes. 
 		<br>Values on child classes override values on parent classes.
@@ -16386,8 +16367,7 @@
 	)
 </p>
 
-<h5 class='section'>Other Notes:</h5>
-<ul class='spaced-list'>
+<ul class='notes'>
 	<li>
 		Annotation parameter values will be aggregated when used on POJO parent and child classes. 
 		<br>Values on child classes override values on parent classes.
@@ -16396,8 +16376,7 @@
 		<br>Values on methods override values on POJO classes.
 </ul>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
@@ -16561,7 +16540,6 @@
 	)
 </p>
 
-<h5 class='section'>Notes:</h5>
 <div class='warn'>
 	This annotation should not be combined with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or {@link org.apache.juneau.rest.RestRequest#getBody()} method
 	for <c>application/x-www-form-urlencoded POST</c> posts, since it will trigger the underlying servlet
@@ -16569,8 +16547,7 @@
 	<br>The {@link org.apache.juneau.http.annotation.Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
 	servlet to drain the body content.
 </div>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jc'>{@link org.apache.juneau.rest.RequestFormData}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
@@ -16815,8 +16792,7 @@
 </p>
 
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jc'>{@link org.apache.juneau.rest.RequestQuery}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
@@ -17041,8 +17017,7 @@
 	)
 </p>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
@@ -17205,8 +17180,7 @@
 	)
 </p>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jc'>{@link org.apache.juneau.rest.RequestPath}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
@@ -17690,8 +17664,7 @@
 	}
 </p>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartSerializing}
 </ul>
 </div><!-- END: 7.10.9 - juneau-rest-server.HttpPartAnnotations.Response -->
@@ -18037,8 +18010,7 @@
 	}
 </p>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_serializers}
 </ul>
 </div><!-- END: 7.13 - juneau-rest-server.Serializers -->
@@ -18103,8 +18075,7 @@
 		}
 	}
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_parsers}
 </ul>
 </div><!-- END: 7.14 - juneau-rest-server.Parsers -->
@@ -18187,8 +18158,7 @@
 		...
 	}
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#flags() RestResource(flags)} - Shorthand for boolean properties.
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#flags() RestMethod(flags)} - Shorthand for boolean properties.
 	<li class='jc'>{@link org.apache.juneau.rest.RestContextProperties} 
@@ -18476,8 +18446,7 @@
 	the servlet.
 	If multiple guards are present, ALL guards must pass.
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_guards}
 </ul>
 </div><!-- END: 7.19 - juneau-rest-server.Guards -->
@@ -18649,8 +18618,7 @@
 	</ul>
 </ul>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_converters} 
 </ul>
 </div><!-- END: 7.21 - juneau-rest-server.Converters -->
@@ -18699,8 +18667,8 @@
 	#--------------------------------------------------------------------------------</cc>
 	<ck>MyRestServlet.greeting</ck> = Hello!
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_messages}
 </ul>
 </div><!-- END: 7.22 - juneau-rest-server.Messages -->
@@ -18737,8 +18705,8 @@
 			{@link org.apache.juneau.encoders.IdentityEncoder}
 	</ul>
 </ul>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_encoders}
 </ul>
 </div><!-- END: 7.23 - juneau-rest-server.Encoders -->
@@ -19181,8 +19149,8 @@
 		}
 	}
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+
+<ul class='seealso'>
 	<li>{@doc juneau-config}
 </ul>
 </div><!-- END: 7.25 - juneau-rest-server.ConfigurationFiles -->
@@ -19224,8 +19192,7 @@
 	<li><l>[working-dir]/docs</l> directory.
 </ol>
 
-<h5 class='section'>Notes:</h5>
-<ul class='spaced-list'>
+<ul class='notes'>
 	<li>
 		Mappings are cumulative from parent to child.  
 		<br>Child resources can override mappings made on parent resources.
@@ -19233,8 +19200,8 @@
 		The media type on the response is determined by the 
 		{@link org.apache.juneau.rest.RestContext#getMediaTypeForName(String)} method.
 </ul>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_staticFiles}
 </ul>
 </div><!-- END: 7.26 - juneau-rest-server.StaticFiles -->
@@ -19280,8 +19247,8 @@
 			...
 		}
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_clientVersionHeader}
 </ul>
 </div><!-- END: 7.27 - juneau-rest-server.ClientVersioning -->
@@ -20119,8 +20086,7 @@
 		examples=<js>"{PetCreate: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}}"</js>
 	)
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='ja'>{@link org.apache.juneau.annotation.Example}
 	<li class='jc'>{@link org.apache.juneau.BeanContext}
 	<ul>
@@ -20172,8 +20138,7 @@
 	<li>{@link org.apache.juneau.rest.annotation.RestResource#swagger() @RestResource(swagger)} / {@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod(swagger)} annotations.
 </ul>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Response}
 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.ResponseHeader}
 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.ResponseStatus}
@@ -20793,8 +20758,7 @@
 		}
 	}
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_widgets}
 </ul>
 </div><!-- END: 7.30.2 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
@@ -21186,8 +21150,7 @@
 	and allows you either hardcode your interface inside annotations or pull them in via string variables from other places such as
 	external config files.
 </p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='link'>{@doc juneau-microservice-jetty.UiCustomization}
 </ul>
 </div><!-- END: 7.30.4 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
@@ -22619,8 +22582,7 @@
 	}
 </p>
 
-<h5 class='section'>Notes:</h5>
-<ul class='spaced-list'>
+<ul class='notes'>
 	<li>
 		The {@link org.apache.juneau.rest.client.RestClient} class exposes all the builder methods on the Apache 
 		HttpClient {@link org.apache.http.impl.client.HttpClientBuilder} class.
@@ -23117,8 +23079,7 @@
 	See the link below for information about supported data types in OpenAPI serialization.
 </p>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
 </div><!-- END: 10.1.4 - juneau-rest-client.RestProxies.FormData -->
@@ -23228,8 +23189,7 @@
 	See the link below for information about supported data types in OpenAPI serialization.
 </p>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
 </div><!-- END: 10.1.5 - juneau-rest-client.RestProxies.Query -->
@@ -23325,8 +23285,7 @@
 	See the link below for information about supported data types in OpenAPI serialization.
 </p>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
 </div><!-- END: 10.1.6 - juneau-rest-client.RestProxies.Header -->
@@ -23415,8 +23374,7 @@
 	See the link below for information about supported data types in OpenAPI serialization.
 </p>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
 </div><!-- END: 10.1.7 - juneau-rest-client.RestProxies.Path -->
@@ -25188,8 +25146,7 @@
 	These will be described in detail later.
 </p>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='link'>{@doc juneau-config}
 </ul>
 </div><!-- END: 12.5 - juneau-microservice-core.Config -->
@@ -26104,8 +26061,7 @@
 	recursively to produce sophisticated results
 </p>
 
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
+<ul class='seealso'>
 	<li class='link'>{@doc juneau-config}
 </ul>
 </div><!-- END: 13.5 - juneau-microservice-jetty.Config -->
