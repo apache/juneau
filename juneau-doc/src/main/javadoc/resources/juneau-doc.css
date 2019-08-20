@@ -110,9 +110,20 @@ h4.topic {
 	cursor: zoom-out;
 	max-width: 1000px;
 }
+h5.topic {
+	margin-bottom: 20px;
+	margin-top: 40px;
+	padding-top: 3px;
+	padding-left: 10px;
+	color: #2c4557;
+	border-top: 1px groove #9eadc0;
+	max-width: 1000px;
+}
+
 h2.topic { font-size: 14pt; }
 h3.topic { font-size: 13pt; }
 h4.topic { font-size: 12pt; }
+h5.topic { font-size: 11pt; }
 
 .topic p {
 	max-width: 800px;
@@ -213,7 +224,6 @@ p.toc2 {
 
 /* Light-colored background headers */
 h5.toc, 
-h5.topic, 
 h2.title,
 div.docSummary > div.block,
 div.contentContainer > div.block > p:first-child {
@@ -243,13 +253,6 @@ h5.toc {
 	border-radius: 10px 10px 10px 0px;
 	text-decoration: none;
 	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.5);
-}
-
-h5.topic {
-	color: #2C4557;
-	padding: 5px 20px;
-	margin: 30px 10px 10px 0px;
-	text-decoration: none;
 }
 
 /* Light-colored title on package summary pages */
@@ -486,4 +489,16 @@ div.warn {
 div.severe {
 	background-color: #faced3;
 	border-left: 3px solid #b32400;
+}
+
+.new {
+	background-color:lightgreen;
+}
+
+.updated {
+	background-color:#CFC;
+}
+
+.todo {
+	background-color:#FD8;
 }

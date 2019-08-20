@@ -703,16 +703,3 @@ h2.preview-section {
 	border-radius:10px;
 	font-size: 1.2em;
 }
-
-.new {
-	background-color:lightgreen;
-}
-
-.updated {
-	background-color:#CFC;
-}
-
-.todo {
-	background-color:#FD8;
-}
-
