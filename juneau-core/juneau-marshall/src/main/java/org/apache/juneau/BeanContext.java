@@ -2349,7 +2349,7 @@ public class BeanContext extends Context {
 	 */
 	private ClassMeta<?> getTypedClassMeta(ClassMeta<?>[] c, int pos) {
 		ClassMeta<?> cm = c[pos++];
-		if (cm.isCollection()) {
+		if (cm.isCollection() || cm.isOptional()) {
 			ClassMeta<?> ce = c.length == pos ? object() : getTypedClassMeta(c, pos);
 			return (ce.isObject() ? cm : new ClassMeta(cm, null, null, ce));
 		} else if (cm.isMap()) {
@@ -2373,7 +2373,7 @@ public class BeanContext extends Context {
 				return cm;
 			if (cm.isMap())
 				return getClassMeta(cm.innerClass, cm.getKeyType(), cm.getValueType());
-			if (cm.isCollection())
+			if (cm.isCollection() || cm.isOptional())
 				return getClassMeta(cm.innerClass, cm.getElementType());
 			return getClassMeta(cm.innerClass);
 		}
@@ -2390,7 +2390,7 @@ public class BeanContext extends Context {
 		// If this is a Map or Collection, and the parameter types aren't part
 		// of the class definition itself (e.g. class AddressBook extends List<Person>),
 		// then we need to figure out the parameters.
-		if (rawType.isMap() || rawType.isCollection()) {
+		if (rawType.isMap() || rawType.isCollection() || rawType.isOptional()) {
 			ClassMeta[] params = findParameters(o, c);
 			if (params == null)
 				return rawType;
@@ -2401,12 +2401,20 @@ public class BeanContext extends Context {
 					return rawType;
 				return new ClassMeta(rawType, params[0], params[1], null);
 			}
-			if (rawType.isCollection()) {
+			if (rawType.isCollection() || rawType.isOptional()) {
 				if (params.length != 1)
 					return rawType;
 				if (params[0].isObject())
 					return rawType;
 				return new ClassMeta(rawType, null, null, params[0]);
+			}
+		}
+
+		if (rawType.isArray()) {
+			if (o instanceof GenericArrayType) {
+				GenericArrayType gat = (GenericArrayType)o;
+				ClassMeta elementType = resolveClassMeta(gat.getGenericComponentType(), typeVarImpls);
+				return new ClassMeta(rawType, null, null, elementType);
 			}
 		}
 
@@ -2551,10 +2559,10 @@ public class BeanContext extends Context {
 				return new ClassMeta<>(cm2, keyType, valueType, null);
 			}
 
-			if (cm2.isCollection()) {
+			if (cm2.isCollection() || cm2.isOptional()) {
 				Class<?>[] pParams = (p.params().length == 0 ? new Class[]{Object.class} : p.params());
 				if (pParams.length != 1)
-					throw new FormattedRuntimeException("Invalid number of parameters specified for Collection (must be 1): {0}", pParams.length);
+					throw new FormattedRuntimeException("Invalid number of parameters specified for "+(cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array")+" (must be 1): {0}", pParams.length);
 				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
 				if (elementType.isObject())
 					return cm2;

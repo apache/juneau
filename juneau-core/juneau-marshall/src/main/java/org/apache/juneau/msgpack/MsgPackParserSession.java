@@ -67,6 +67,10 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
+
+		if (sType.isOptional()) 
+			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), is, outer, pMeta));
+
 		setCurrentClass(sType);
 
 		Object o = null;

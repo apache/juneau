@@ -43,6 +43,20 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	}
 
 	/**
+	 * Convenience method for creating a list of objects.
+	 *
+	 * <p>
+	 * Identical to {@link #create(Object...)}.
+	 *
+	 * @param t The initial values.
+	 * @return A new list.
+	 */
+	@SafeVarargs
+	public static <T> ASet<T> of(T...t) {
+		return new ASet<T>().appendAll(t);
+	}
+
+	/**
 	 * Adds an entry to this set.
 	 *
 	 * @param t The entry to add to this set.

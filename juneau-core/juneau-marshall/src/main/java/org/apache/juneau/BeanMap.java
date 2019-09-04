@@ -148,6 +148,14 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			}
 			arrayPropertyCache = null;
 		}
+
+		// Initialize any null Optional<X> fields.
+		for (BeanPropertyMeta pMeta : this.meta.properties.values()) {
+			ClassMeta<?> cm = pMeta.getClassMeta();
+			if (cm.isOptional() && pMeta.get(this, pMeta.getName()) == null)
+				pMeta.set(this, pMeta.getName(), cm.getOptionalDefault());
+		}
+
 		return b;
 	}
 
@@ -265,7 +273,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		}
 		p.add(this, property, value);
 	}
-
 
 	/**
 	 * Gets a property on the bean.

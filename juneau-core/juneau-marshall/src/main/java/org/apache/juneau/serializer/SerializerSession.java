@@ -586,7 +586,12 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * @return The expected type.
 	 */
 	protected final ClassMeta<?> getExpectedRootType(Object o) {
-		return isAddRootType() ? object() : getClassMetaForObject(o);
+		if (isAddRootType())
+			return object();
+		ClassMeta<?> cm = getClassMetaForObject(o);
+		if (cm != null && cm.isOptional())
+			return cm.getElementType();
+		return cm;
 	}
 
 	/**

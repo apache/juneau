@@ -158,6 +158,13 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			aType = object();
 		}
 
+		// Handle Optional<X>
+		if (isOptional(aType)) {
+			o = getOptionalValue(o);
+			eType = getOptionalType(eType);
+			aType = getClassMetaForObject(o, object());
+		}
+
 		if (o != null) {
 
 			if (aType.isDelegate()) {

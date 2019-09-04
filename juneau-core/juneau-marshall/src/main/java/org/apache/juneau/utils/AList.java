@@ -43,6 +43,20 @@ public final class AList<T> extends LinkedList<T> {
 	}
 
 	/**
+	 * Convenience method for creating a list of objects.
+	 *
+	 * <p>
+	 * Identical to {@link #create(Object...)}.
+	 *
+	 * @param t The initial values.
+	 * @return A new list.
+	 */
+	@SafeVarargs
+	public static <T> AList<T> of(T...t) {
+		return new AList<T>().appendAll(t);
+	}
+
+	/**
 	 * Adds an entry to this list.
 	 *
 	 * @param t The entry to add to this list.

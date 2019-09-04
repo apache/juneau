@@ -239,6 +239,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			o = null;
 			aType = object();
 		}
+		
+		// Handle Optional<X>
+		if (isOptional(aType)) {
+			o = getOptionalValue(o);
+			eType = getOptionalType(eType);
+			aType = getClassMetaForObject(o, object());
+		}
 
 		indent += xIndent;
 

@@ -165,6 +165,42 @@ public class BeanTraverseSession extends BeanSession {
 	}
 
 	/**
+	 * Same as {@link ClassMeta#isOptional()} but gracefully handles a null {@link ClassMeta}.
+	 *
+	 * @param cm The meta to check.
+	 * @return <jk>true</jk> if the specified meta is an {@link Optional}.
+	 */
+	protected final boolean isOptional(ClassMeta<?> cm) {
+		return (cm != null && cm.isOptional());
+	}
+
+	/**
+	 * Returns the inner type of an {@link Optional}.
+	 *
+	 * @param cm The meta to check.
+	 * @return The inner type of an {@link Optional}.
+	 */
+	protected final ClassMeta<?> getOptionalType(ClassMeta<?> cm) {
+		if (cm.isOptional())
+			return getOptionalType(cm.getElementType());
+		return cm;
+	}
+
+	/**
+	 * If the specified object is an {@link Optional}, returns the inner object.
+	 *
+	 * @param o The object to check.
+	 * @return The inner object if it's an {@link Optional}, <jk>null</jk> if it's <jk>null</jk>, or else the same object.
+	 */
+	protected final Object getOptionalValue(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof Optional)
+			return getOptionalValue(((Optional<?>)o).orElse(null));
+		return o;
+	}
+
+	/**
 	 * Logs a warning message.
 	 *
 	 * @param t The throwable that was thrown (if there was one).

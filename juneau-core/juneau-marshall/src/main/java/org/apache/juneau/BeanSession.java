@@ -283,15 +283,18 @@ public class BeanSession extends Session {
 					return to.getPrimitiveDefault();
 
 				// Otherwise, just return null.
-				return null;
+				return to.isOptional() ? (T)to.getOptionalDefault() : null;
 			}
+
+			if (to.isOptional() && (! (value instanceof Optional)))
+				return (T) Optional.ofNullable(convertToMemberType(outer, value, to.getElementType()));
 
 			Class<T> tc = to.getInnerClass();
 
 			// If no conversion needed, then just return the value.
 			// Don't include maps or collections, because child elements may need conversion.
 			if (tc.isInstance(value))
-				if (! ((to.isMap() && to.getValueType().isNotObject()) || (to.isCollection() && to.getElementType().isNotObject())))
+				if (! ((to.isMap() && to.getValueType().isNotObject()) || ((to.isCollection() || to.isOptional()) && to.getElementType().isNotObject())))
 					return (T)value;
 
 			PojoSwap swap = to.getPojoSwap(this);
@@ -573,7 +576,7 @@ public class BeanSession extends Session {
 			if (to.isString()) {
 				if (from.isByteArray()) {
 					return (T) new String((byte[])value);
-				} else if (from.isMapOrBean() || from.isCollectionOrArray()) {
+				} else if (from.isMapOrBean() || from.isCollectionOrArrayOrOptional()) {
 					if (SimpleJsonSerializer.DEFAULT != null)
 						return (T)SimpleJsonSerializer.DEFAULT.serialize(value);
 				} else if (from.isClass()) {
@@ -1016,9 +1019,20 @@ public class BeanSession extends Session {
 	 * @return The ClassMeta object, or <jk>null</jk> if {@code o} is <jk>null</jk>.
 	 */
 	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
+		return (ClassMeta<T>)getClassMetaForObject(o, null);
+	}
+
+	/**
+	 * Shortcut for calling {@code getClassMeta(o.getClass())} but returns a default value if object is <jk>null</jk>.
+	 *
+	 * @param o The class to find the class type for.
+	 * @param def The default {@link ClassMeta} if the object is null.
+	 * @return The ClassMeta object, or the default value if {@code o} is <jk>null</jk>.
+	 */
+	protected final ClassMeta<?> getClassMetaForObject(Object o, ClassMeta<?> def) {
 		if (o == null)
-			return null;
-		return (ClassMeta<T>)getClassMeta(o.getClass());
+			return def;
+		return getClassMeta(o.getClass());
 	}
 
 	/**

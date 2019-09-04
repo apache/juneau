@@ -105,6 +105,13 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			aType = object();
 		}
 
+		// Handle Optional<X>
+		if (isOptional(aType)) {
+			o = getOptionalValue(o);
+			eType = getOptionalType(eType);
+			aType = getClassMetaForObject(o, object());
+		}
+
 		sType = aType;
 		String typeName = getBeanTypeName(eType, aType, pMeta);
 

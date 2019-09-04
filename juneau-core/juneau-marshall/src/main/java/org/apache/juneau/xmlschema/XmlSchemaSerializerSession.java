@@ -169,6 +169,8 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 		void process(Object o) throws IOException {
 			ClassMeta<?> cm = getClassMetaForObject(o);
+			if (cm != null && cm.isOptional())
+				cm = getClassMetaForObject(((Optional<?>)o).orElse(null));
 			Namespace ns = defaultNs;
 			if (cm == null)
 				queueElement(ns, "null", object());
@@ -311,6 +313,9 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 			int i = indent + 1;
 
 			cm = cm.getSerializedClassMeta(schemas.session);
+			while (cm.isOptional())
+				cm = cm.getElementType();
+
 			XmlBeanMeta xbm = cm.isBean() ? cm.getBeanMeta().getExtendedMeta(XmlBeanMeta.class) : null;
 
 			w.oTag(i, "complexType")

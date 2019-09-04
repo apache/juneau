@@ -124,6 +124,10 @@ public final class JsonParserSession extends ReaderParserSession {
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
+
+		if (sType.isOptional()) 
+			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), r, outer, pMeta));
+
 		setCurrentClass(sType);
 		String wrapperAttr = sType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
 

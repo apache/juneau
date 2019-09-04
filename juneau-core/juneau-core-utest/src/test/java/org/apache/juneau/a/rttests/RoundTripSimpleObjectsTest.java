@@ -43,6 +43,16 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	}
 
 	//====================================================================================================
+	// testOptional
+	//====================================================================================================
+	@Test
+	public void testOptional() throws Exception {
+		Optional<String> o = Optional.empty();
+		o = roundTrip(o);
+		assertFalse(o.isPresent());
+	}
+
+	//====================================================================================================
 	// testString
 	//====================================================================================================
 	@Test
@@ -53,6 +63,19 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 		t = "";
 		t = roundTrip(t);
 		assertEquals("", t);
+	}
+
+	//====================================================================================================
+	// testOptional
+	//====================================================================================================
+	@Test
+	public void testOptionalContainingString() throws Exception {
+		Optional<String> o = Optional.of("foobar");
+		o = roundTrip(o);
+		assertEquals("foobar", o.get());
+		o = Optional.of("");
+		o = roundTrip(o);
+		assertEquals("", o.get());
 	}
 
 	//====================================================================================================

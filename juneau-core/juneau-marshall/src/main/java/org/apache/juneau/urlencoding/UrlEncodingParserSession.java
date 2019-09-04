@@ -95,6 +95,9 @@ public class UrlEncodingParserSession extends UonParserSession {
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
+		
+		if (sType.isOptional()) 
+			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), r, outer));
 
 		int c = r.peekSkipWs();
 		if (c == '?')

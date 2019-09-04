@@ -98,6 +98,10 @@ public final class HtmlParserSession extends XmlParserSession {
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
+
+		if (sType.isOptional()) 
+			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), r, outer, isRoot, pMeta));
+
 		setCurrentClass(sType);
 
 		int event = r.getEventType();

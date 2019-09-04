@@ -185,6 +185,10 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
+		
+		if (sType.isOptional()) 
+			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), r, outer, isUrlParamValue, pMeta));
+		
 		setCurrentClass(sType);
 
 		Object o = null;

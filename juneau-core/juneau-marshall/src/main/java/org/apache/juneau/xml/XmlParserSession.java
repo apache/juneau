@@ -287,6 +287,10 @@ public class XmlParserSession extends ReaderParserSession {
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
+
+		if (sType.isOptional()) 
+			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), currAttr, r, outer, isRoot, pMeta));
+
 		setCurrentClass(sType);
 
 		String wrapperAttr = (isRoot && isPreserveRootElement()) ? r.getName().getLocalPart() : null;

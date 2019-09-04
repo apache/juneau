@@ -100,7 +100,8 @@ public class RdfParserSession extends ReaderParserSession {
 		}
 
 		if (roots.isEmpty())
-			return null;
+			return type.isOptional() ? (T)Optional.empty() : null;
+
 		if (roots.size() > 1)
 			throw new ParseException(this, "Too many root nodes found in model:  {0}", roots.size());
 		Resource resource = roots.get(0);
@@ -219,6 +220,10 @@ public class RdfParserSession extends ReaderParserSession {
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
+
+		if (sType.isOptional())
+			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), n, outer, pMeta));
+
 		setCurrentClass(sType);
 
 		if (! sType.canCreateNewInstance(outer)) {

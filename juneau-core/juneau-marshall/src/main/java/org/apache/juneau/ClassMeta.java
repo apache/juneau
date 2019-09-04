@@ -60,7 +60,7 @@ public final class ClassMeta<T> implements Type {
 
 	/** Class categories. */
 	enum ClassCategory {
-		MAP, COLLECTION, CLASS, METHOD, NUMBER, DECIMAL, BOOLEAN, CHAR, DATE, ARRAY, ENUM, OTHER, CHARSEQ, STR, OBJ, URI, BEANMAP, READER, INPUTSTREAM, VOID, ARGS
+		MAP, COLLECTION, CLASS, METHOD, NUMBER, DECIMAL, BOOLEAN, CHAR, DATE, ARRAY, ENUM, OTHER, CHARSEQ, STR, OBJ, URI, BEANMAP, READER, INPUTSTREAM, VOID, ARGS, OPTIONAL
 	}
 
 	final Class<T> innerClass;                              // The class being wrapped.
@@ -416,6 +416,8 @@ public final class ClassMeta<T> implements Type {
 					cc = READER;
 				else if (ci.isChildOf(InputStream.class))
 					cc = INPUTSTREAM;
+				else if (ci.is(Optional.class))
+					cc = OPTIONAL;
 			}
 
 			isMemberClass = ci.isMemberClass() && ci.isNotStatic();
@@ -552,7 +554,7 @@ public final class ClassMeta<T> implements Type {
 				}
 
 				// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
-				else if (cc == COLLECTION) {
+				else if (cc == COLLECTION || cc == OPTIONAL) {
 					ClassMeta[] parameters = findParameters();
 					if (parameters != null && parameters.length == 1) {
 						elementType = parameters[0];
@@ -654,6 +656,7 @@ public final class ClassMeta<T> implements Type {
 					case OBJ:
 					case OTHER:
 					case READER:
+					case OPTIONAL:
 					case VOID:
 						break;
 				}
@@ -1072,6 +1075,15 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this class is a subclass of {@link Optional}.
+	 *
+	 * @return <jk>true</jk> if this class is a subclass of {@link Optional}.
+	 */
+	public boolean isOptional() {
+		return cc == OPTIONAL;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Collection} or is an array.
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Collection} or is an array.
@@ -1080,6 +1092,14 @@ public final class ClassMeta<T> implements Type {
 		return cc == COLLECTION || cc == ARRAY;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this class is a subclass of {@link Collection} or is an array or {@link Optional}.
+	 *
+	 * @return <jk>true</jk> if this class is a subclass of {@link Collection} or is an array or {@link Optional}.
+	 */
+	public boolean isCollectionOrArrayOrOptional() {
+		return cc == COLLECTION || cc == ARRAY || cc == OPTIONAL;
+	}
 
 	/**
 	 * Returns <jk>true</jk> if this class extends from {@link Set}.
@@ -1638,6 +1658,20 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
+	 * If this is an {@link Optional}, returns an empty optional.
+	 *
+	 * <p>
+	 * Note that if this is a nested optional, will recursively create empty optionals.
+	 *
+	 * @return An empty optional, or <jk>null</jk> if this isn't an optional.
+	 */
+	public Optional<?> getOptionalDefault() {
+		if (isOptional())
+			return Optional.ofNullable(getElementType().getOptionalDefault());
+		return null;
+	}
+
+	/**
 	 * Converts the specified object to a string.
 	 *
 	 * @param t The object to convert.
@@ -1788,7 +1822,7 @@ public final class ClassMeta<T> implements Type {
 			return sb.append(n).append(keyType.isObject() && valueType.isObject() ? "" : "<"+keyType.toString(simple)+","+valueType.toString(simple)+">");
 		if (cc == BEANMAP)
 			return sb.append(BeanMap.class.getName()).append('<').append(n).append('>');
-		if (cc == COLLECTION)
+		if (cc == COLLECTION || cc == OPTIONAL)
 			return sb.append(n).append(elementType.isObject() ? "" : "<"+elementType.toString(simple)+">");
 		return sb.append(n);
 	}

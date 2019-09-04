@@ -67,13 +67,23 @@ public class OpenApiParserSession extends UonParserSession {
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
+		boolean isOptional = type.isOptional();
+		while (isOptional)
+			type = (ClassMeta<T>)type.getElementType();
+
 		schema = ObjectUtils.firstNonNull(schema, getSchema(), DEFAULT_SCHEMA);
+
 		T t = parseInner(partType, schema, in, type);
 		if (t == null && type.isPrimitive())
 			t = type.getPrimitiveDefault();
 		schema.validateOutput(t, ctx);
+
+		if (isOptional)
+			t = (T)Optional.ofNullable(t);
+
 		return t;
 	}
 
