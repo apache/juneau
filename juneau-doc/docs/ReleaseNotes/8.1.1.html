@@ -23,4 +23,7 @@
 <ul class='spaced-list'>
 	<li>
 		Support for serializing/parsing {@link java.util.Optional} objects and bean properties.
+	<li>
+		Fixed a bug in the parsers where the generic subtype of a complex bean property type involving both collections and arrays
+		was not being found.  (e.g. <c>List&lt;Long&gt;[]</c>)
 </ul>
