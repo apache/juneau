@@ -14,18 +14,19 @@ package org.apache.juneau.rest.annotation2;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.http.annotation.Query;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.testutils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -265,6 +266,59 @@ public class QueryAnnotationTest {
 		d.get("/d04").execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
 		d.get("/d04").query("f1",7).query("f2",8).query("f3",9).execute().assertBody("{f1:'7',f2:'8',f3:'9'}");
 	}
+
+	//=================================================================================================================
+	// Optional query parameter.
+	//=================================================================================================================
+
+	@RestResource(serializers=SimpleJsonSerializer.class)
+	public static class E {
+		@RestMethod(name=GET,path="/a")
+		public Object a(@Query("f1") Optional<Integer> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestMethod(name=GET,path="/b")
+		public Object b(@Query("f1") Optional<ABean> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestMethod(name=GET,path="/c")
+		public Object c(@Query("f1") Optional<List<ABean>> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestMethod(name=GET,path="/d")
+		public Object d(@Query("f1") List<Optional<ABean>> f1) throws Exception {
+			return f1;
+		}
+	}
+	static MockRest e = MockRest.create(E.class).json().build();
+
+	@Test
+	public void e01_optionalParam_integer() throws Exception {
+		e.get("/a?f1=123").execute().assertStatus(200).assertBody("123");
+		e.get("/a").execute().assertStatus(200).assertBody("null");
+	}
+
+	@Test
+	public void e02_optionalParam_bean() throws Exception {
+		e.get("/b?f1=(a=1,b=foo)").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
+		e.get("/b").execute().assertStatus(200).assertBody("null");
+	}
+
+	@Test
+	public void e03_optionalParam_listOfBeans() throws Exception {
+		e.get("/c?f1=@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
+		e.get("/c").execute().assertStatus(200).assertBody("null");
+	}
+
+	@Test
+	public void e04_optionalParam_listOfOptionals() throws Exception {
+		e.get("/d?f1=@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
+		e.get("/d").execute().assertStatus(200).assertBody("null");
+	}
+
 
 	//=================================================================================================================
 	// @Query on POJO

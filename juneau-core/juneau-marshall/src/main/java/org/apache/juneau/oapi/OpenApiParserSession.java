@@ -71,8 +71,12 @@ public class OpenApiParserSession extends UonParserSession {
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
 		boolean isOptional = type.isOptional();
-		while (isOptional)
+
+		while (type != null && type.isOptional())
 			type = (ClassMeta<T>)type.getElementType();
+
+		if (type == null)
+			type = (ClassMeta<T>)object();
 
 		schema = ObjectUtils.firstNonNull(schema, getSchema(), DEFAULT_SCHEMA);
 

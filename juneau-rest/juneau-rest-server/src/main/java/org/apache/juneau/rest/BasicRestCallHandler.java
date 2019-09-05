@@ -54,36 +54,19 @@ public class BasicRestCallHandler implements RestCallHandler {
 		this.restCallRouters = context.getCallRouters();
 	}
 
-	/**
-	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.
-	 *
-	 * <p>
-	 * Subclasses may choose to override this method to provide a specialized request object.
-	 *
-	 * @param req The request object from the {@link #service(HttpServletRequest, HttpServletResponse)} method.
-	 * @return The wrapped request object.
-	 * @throws ServletException If any errors occur trying to interpret the request.
-	 */
 	@Override /* RestCallHandler */
-	public RestRequest createRequest(HttpServletRequest req) throws ServletException {
-		return new RestRequest(context, req);
+	public RestCall createCall(HttpServletRequest req, HttpServletResponse res) {
+		return new RestCall(req, res).logger(context.getCallLogger()).loggerConfig(context.getCallLoggerConfig());
 	}
 
-	/**
-	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object
-	 * and the request returned by {@link #createRequest(HttpServletRequest)}.
-	 *
-	 * <p>
-	 * Subclasses may choose to override this method to provide a specialized response object.
-	 *
-	 * @param req The request object returned by {@link #createRequest(HttpServletRequest)}.
-	 * @param res The response object from the {@link #service(HttpServletRequest, HttpServletResponse)} method.
-	 * @return The wrapped response object.
-	 * @throws ServletException If any errors occur trying to interpret the request or response.
-	 */
 	@Override /* RestCallHandler */
-	public RestResponse createResponse(RestRequest req, HttpServletResponse res) throws ServletException {
-		return new RestResponse(context, req, res);
+	public RestRequest createRequest(RestCall call) throws ServletException {
+		return new RestRequest(context, call.getRequest());
+	}
+
+	@Override /* RestCallHandler */
+	public RestResponse createResponse(RestCall call) throws ServletException {
+		return new RestResponse(context, call.getRestRequest(), call.getResponse());
 	}
 
 	/**
@@ -100,112 +83,94 @@ public class BasicRestCallHandler implements RestCallHandler {
 	@Override /* RestCallHandler */
 	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
 
-		long startTime = System.currentTimeMillis();
-		RestRequest req = null;
-		RestResponse res = null;
-		RestCallLogger logger = context.getCallLogger();
-		RestCallLoggerConfig loggerConfig = context.getCallLoggerConfig();
+		RestCall call = createCall(r1, r2);
 
 		try {
 			context.checkForInitException();
-
-			String pathInfo = RestUtils.getPathInfoUndecoded(r1);  // Can't use r1.getPathInfo() because we don't want '%2F' resolved.
-			UrlPathInfo upi = new UrlPathInfo(pathInfo);
 
 			// If the resource path contains variables (e.g. @RestResource(path="/f/{a}/{b}"), then we want to resolve
 			// those variables and push the servletPath to include the resolved variables.  The new pathInfo will be
 			// the remainder after the new servletPath.
 			// Only do this for the top-level resource because the logic for child resources are processed next.
 			if (context.pathPattern.hasVars() && context.getParentContext() == null) {
-				String sp = r1.getServletPath();
-				UrlPathInfo upi2 = new UrlPathInfo(pathInfo == null ? sp : sp + pathInfo);
+				String sp = call.getServletPath();
+				String pi = call.getPathInfoUndecoded();
+				UrlPathInfo upi2 = new UrlPathInfo(pi == null ? sp : sp + pi);
 				UrlPathPatternMatch uppm = context.pathPattern.match(upi2);
 				if (uppm != null && ! uppm.hasEmptyVars()) {
-					RequestPath.addPathVars(r1, uppm.getVars());
-					r1 = new OverrideableHttpServletRequest(r1)
-						.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
-						.servletPath(uppm.getPrefix());
-					pathInfo = RestUtils.getPathInfoUndecoded(r1);  // Can't use r1.getPathInfo() because we don't want '%2F' resolved.
-					upi = new UrlPathInfo(pathInfo);
+					RequestPath.addPathVars(call.getRequest(), uppm.getVars());
+					call.request(
+						new OverrideableHttpServletRequest(call.getRequest())
+							.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
+							.servletPath(uppm.getPrefix())
+					);
 				} else {
-					if (isDebug(r1)) {
-						r1 = CachingHttpServletRequest.wrap(r1);
-						r1.setAttribute("Debug", true);
-					}
-					r2.setStatus(SC_NOT_FOUND);
+					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
 					return;
 				}
 			}
 
 			// If this resource has child resources, try to recursively call them.
-			if (context.hasChildResources() && pathInfo != null && ! pathInfo.equals("/")) {
+			String pi = call.getPathInfoUndecoded();
+			if (context.hasChildResources() && pi != null && ! pi.equals("/")) {
 				for (RestContext rc : context.getChildResources().values()) {
 					UrlPathPattern upp = rc.pathPattern;
-					UrlPathPatternMatch uppm = upp.match(upi);
+					UrlPathPatternMatch uppm = upp.match(call.getUrlPathInfo());
 					if (uppm != null) {
 						if (! uppm.hasEmptyVars()) {
-							RequestPath.addPathVars(r1, uppm.getVars());
-							HttpServletRequest childRequest = new OverrideableHttpServletRequest(r1)
+							RequestPath.addPathVars(call.getRequest(), uppm.getVars());
+							HttpServletRequest childRequest = new OverrideableHttpServletRequest(call.getRequest())
 								.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
-								.servletPath(r1.getServletPath() + uppm.getPrefix());
-							rc.getCallHandler().service(childRequest, r2);
+								.servletPath(call.getServletPath() + uppm.getPrefix());
+							rc.getCallHandler().service(childRequest, call.getResponse());
 						} else {
-							if (isDebug(r1)) {
-								r1 = CachingHttpServletRequest.wrap(r1);
-								r1.setAttribute("Debug", true);
-							}
-							r2.setStatus(SC_NOT_FOUND);
+							call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
 						}
 						return;
 					}
 				}
 			}
 
-			if (isDebug(r1)) {
-				r1 = CachingHttpServletRequest.wrap(r1);
-				r2 = CachingHttpServletResponse.wrap(r2);
-				r1.setAttribute("Debug", true);
-			}
+			call.debug(isDebug(call));
 
-			context.startCall(r1, r2);
+			context.startCall(call);
 
-			req = createRequest(r1);
-			res = createResponse(req, r2);
-			req.setResponse(res);
-			context.setRequest(req);
-			context.setResponse(res);
-			String method = req.getMethod();
-			String methodUC = method.toUpperCase(Locale.ENGLISH);
+			call.restRequest(createRequest(call));
+			call.restResponse(createResponse(call));
+
+			context.setRequest(call.getRestRequest());
+			context.setResponse(call.getRestResponse());
 
 			StreamResource r = null;
-			if (pathInfo != null) {
-				String p = pathInfo.substring(1);
+			if (call.getPathInfoUndecoded() != null) {
+				String p = call.getPathInfoUndecoded().substring(1);
 				if (context.isStaticFile(p)) {
 					StaticFile sf = context.resolveStaticFile(p);
 					r = sf.resource;
-					res.setResponseMeta(sf.meta);
+					call.responseMeta(sf.meta);
 				} else if (p.equals("favicon.ico")) {
-					res.setOutput(null);
+					call.output(null);
 				}
 			}
 
 			if (r != null) {
-				res.setStatus(SC_OK);
-				res.setOutput(r);
+				call.status(SC_OK);
+				call.output(r);
 			} else {
 
 				// If the specified method has been defined in a subclass, invoke it.
 				int rc = 0;
-				if (restCallRouters.containsKey(methodUC)) {
-					rc = restCallRouters.get(methodUC).invoke(upi, req, res);
+				String m = call.getMethod();
+				if (restCallRouters.containsKey(m)) {
+					rc = restCallRouters.get(m).invoke(call);
 				} else if (restCallRouters.containsKey("*")) {
-					rc = restCallRouters.get("*").invoke(upi, req, res);
+					rc = restCallRouters.get("*").invoke(call);
 				}
 
 				// Should be 405 if the URL pattern matched but HTTP method did not.
 				if (rc == 0)
 					for (RestCallRouter rcc : restCallRouters.values())
-						if (rcc.matches(upi))
+						if (rcc.matches(call))
 							rc = SC_METHOD_NOT_ALLOWED;
 
 				// Should be 404 if URL pattern didn't match.
@@ -214,54 +179,36 @@ public class BasicRestCallHandler implements RestCallHandler {
 
 				// If not invoked above, see if it's an OPTIONs request
 				if (rc != SC_OK)
-					handleNotFound(rc, req, res);
+					handleNotFound(call.status(rc));
 
-				if (res.getStatus() == 0)
-					res.setStatus(rc);
+				if (call.getStatus() == 0)
+					call.status(rc);
 			}
 
-			if (res.hasOutput()) {
+			if (call.hasOutput()) {
 				// Now serialize the output if there was any.
 				// Some subclasses may write to the OutputStream or Writer directly.
-				handleResponse(req, res);
+				handleResponse(call);
 			}
 
-			// Make sure our writer in RestResponse gets written.
-			res.flushBuffer();
-			req.close();
-
-			r1 = req.getInner();
-			r2 = res.getInner();
-			loggerConfig = req.getCallLoggerConfig();
-
-			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 
 		} catch (Throwable e) {
-			e = convertThrowable(e);
-			if (req != null) {
-				r1 = req.getInner();
-				loggerConfig = req.getCallLoggerConfig();
-			}
-			if (res != null)
-				r2 = res.getInner();
-			r1.setAttribute("Exception", e);
-			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
-			handleError(r1, r2, e);
+			handleError(call, convertThrowable(e));
 		} finally {
 			context.clearState();
 		}
 
-		logger.log(loggerConfig, r1, r2);
-		context.finishCall(r1, r2);
+		call.finish();
+		context.finishCall(call);
 	}
 
-	private boolean isDebug(HttpServletRequest req) {
+	private boolean isDebug(RestCall call) {
 		Enablement e = context.getDebug();
 		if (e == TRUE)
 			return true;
 		if (e == FALSE)
 			return false;
-		return "true".equalsIgnoreCase(req.getHeader("X-Debug"));
+		return "true".equalsIgnoreCase(call.getRequest().getHeader("X-Debug"));
 	}
 
 	/**
@@ -274,20 +221,24 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 *
 	 * <p>
 	 * The default implementation simply iterates through the response handlers on this resource
-	 * looking for the first one whose {@link ResponseHandler#handle(RestRequest, RestResponse)} method returns
+	 * looking for the first one whose {@link ResponseHandler#handle(RestRequest,RestResponse)} method returns
 	 * <jk>true</jk>.
 	 *
-	 * @param req The HTTP request.
-	 * @param res The HTTP response.
+	 * @param call The HTTP call.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws RestException Non-200 response.
 	 */
 	@Override /* RestCallHandler */
-	public void handleResponse(RestRequest req, RestResponse res) throws IOException, RestException, NotImplemented {
+	public void handleResponse(RestCall call) throws IOException, RestException, NotImplemented {
+
+		RestRequest req = call.getRestRequest();
+		RestResponse res = call.getRestResponse();
+
 		// Loop until we find the correct handler for the POJO.
 		for (ResponseHandler h : context.getResponseHandlers())
 			if (h.handle(req, res))
 				return;
+
 		Object output = res.getOutput();
 		throw new NotImplemented("No response handlers found to process output of type '"+(output == null ? null : output.getClass().getName())+"'");
 	}
@@ -325,14 +276,13 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 * Subclasses can override this method to provide a 2nd-chance for specifying a response.
 	 * The default implementation will simply throw an exception with an appropriate message.
 	 *
-	 * @param rc The HTTP response code.
-	 * @param req The HTTP request.
-	 * @param res The HTTP response.
+	 * @param call The HTTP call.
 	 */
 	@Override /* RestCallHandler */
-	public void handleNotFound(int rc, RestRequest req, RestResponse res) throws Exception {
-		String pathInfo = req.getPathInfo();
-		String methodUC = req.getMethod();
+	public void handleNotFound(RestCall call) throws Exception {
+		String pathInfo = call.getPathInfo();
+		String methodUC = call.getMethod();
+		int rc = call.getStatus();
 		String onPath = pathInfo == null ? " on no pathInfo"  : String.format(" on path '%s'", pathInfo);
 		if (rc == SC_NOT_FOUND)
 			throw new NotFound("Method ''{0}'' not found on resource with matching pattern{1}.", methodUC, onPath);
@@ -350,17 +300,21 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 * <p>
 	 * Subclasses can override this method to provide their own custom error response handling.
 	 *
-	 * @param req The servlet request.
-	 * @param res The servlet response.
+	 * @param call The rest call.
 	 * @param e The exception that occurred.
 	 * @throws IOException Can be thrown if a problem occurred trying to write to the output stream.
 	 */
 	@Override /* RestCallHandler */
 	@SuppressWarnings("deprecation")
-	public synchronized void handleError(HttpServletRequest req, HttpServletResponse res, Throwable e) throws IOException {
+	public synchronized void handleError(RestCall call, Throwable e) throws IOException {
+
+		call.exception(e);
 
 		int occurrence = context == null ? 0 : context.getStackTraceOccurrence(e);
 		RestException e2 = (e instanceof RestException ? (RestException)e : new RestException(e, 500)).setOccurrence(occurrence);
+
+		HttpServletRequest req = call.getRequest();
+		HttpServletResponse res = call.getResponse();
 
 		Throwable t = e2.getRootCause();
 		if (t != null) {

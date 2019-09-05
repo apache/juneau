@@ -2297,7 +2297,7 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestContext#isRenderResponseStackTraces() RestContext.isRenderResponseStackTraces()}
 	 * 		</ul>
-	 * 		That method is used by {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, Throwable)}.
+	 * 		That method is used by {@link BasicRestCallHandler#handleError(RestCall, Throwable)}.
 	 * </ul>
 	 */
 	public static final String REST_renderResponseStackTraces = PREFIX + ".renderResponseStackTraces.b";
@@ -3085,7 +3085,7 @@ public final class RestContext extends BeanContext {
 	 * Affects the following methods:
 	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestContext#getStackTraceOccurrence(Throwable) RestContext.getStackTraceOccurrance(Throwable)}
-	 * 	<li class='jm'>{@link RestCallHandler#handleError(HttpServletRequest, HttpServletResponse, Throwable)}
+	 * 	<li class='jm'>{@link RestCallHandler#handleError(RestCall, Throwable)}
 	 * 	<li class='jm'>{@link RestException#getOccurrence()} - Returns the number of times this exception occurred.
 	 * </ul>
 	 *
@@ -3763,20 +3763,20 @@ public final class RestContext extends BeanContext {
 							sm = new RestMethodContext(smb) {
 
 								@Override
-								int invoke(UrlPathInfo pathInfo, RestRequest req, RestResponse res) throws Throwable {
+								int invoke(RestCall call) throws Throwable {
 
-									int rc = super.invoke(pathInfo, req, res);
+									int rc = super.invoke(call);
 									if (rc != SC_OK)
 										return rc;
 
-									final Object o = res.getOutput();
+									final Object o = call.getOutput();
 
-									if ("GET".equals(req.getMethod())) {
-										res.setOutput(rim.getMethodsByPath().keySet());
+									if ("GET".equals(call.getMethod())) {
+										call.output(rim.getMethodsByPath().keySet());
 										return SC_OK;
 
-									} else if ("POST".equals(req.getMethod())) {
-										String pip = pathInfo.getPath();
+									} else if ("POST".equals(call.getMethod())) {
+										String pip = call.getUrlPathInfo().getPath();
 										if (pip.indexOf('/') != -1)
 											pip = pip.substring(pip.lastIndexOf('/')+1);
 										pip = urlDecode(pip);
@@ -3784,6 +3784,7 @@ public final class RestContext extends BeanContext {
 										if (rmm != null) {
 											Method m = rmm.getJavaMethod();
 											try {
+												RestRequest req = call.getRestRequest();
 												// Parse the args and invoke the method.
 												Parser p = req.getBody().getParser();
 												Object[] args = null;
@@ -3795,7 +3796,7 @@ public final class RestContext extends BeanContext {
 													}
 												}
 												Object output = m.invoke(o, args);
-												res.setOutput(output);
+												call.output(output);
 												return SC_OK;
 											} catch (Exception e) {
 												throw new InternalServerError(e);
@@ -5099,17 +5100,17 @@ public final class RestContext extends BeanContext {
 	/*
 	 * Calls all @RestHook(START) methods.
 	 */
-	void startCall(HttpServletRequest req, HttpServletResponse res) {
+	void startCall(RestCall call) {
 		for (int i = 0; i < startCallMethods.length; i++)
-			startOrFinish(resource, startCallMethods[i], startCallMethodParams[i], req, res);
+			startOrFinish(resource, startCallMethods[i], startCallMethodParams[i], call.getRequest(), call.getResponse());
 	}
 
 	/*
 	 * Calls all @RestHook(FINISH) methods.
 	 */
-	void finishCall(HttpServletRequest req, HttpServletResponse res) {
+	void finishCall(RestCall call) {
 		for (int i = 0; i < endCallMethods.length; i++)
-			startOrFinish(resource, endCallMethods[i], endCallMethodParams[i], req, res);
+			startOrFinish(resource, endCallMethods[i], endCallMethodParams[i], call.getRequest(), call.getResponse());
 	}
 
 	private static void startOrFinish(Object resource, Method m, Class<?>[] p, HttpServletRequest req, HttpServletResponse res) throws RestException, InternalServerError {

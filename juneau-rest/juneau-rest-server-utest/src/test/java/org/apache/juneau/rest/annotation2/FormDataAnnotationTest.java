@@ -14,16 +14,18 @@ package org.apache.juneau.rest.annotation2;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.http.annotation.FormData;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.urlencoding.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -154,6 +156,59 @@ public class FormDataAnnotationTest {
 		c.post("/annotatedAndDefaultFormData", null).contentType("application/x-www-form-urlencoded").execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
 		c.post("/annotatedAndDefaultFormData", null).contentType("application/x-www-form-urlencoded").formData("f1",7).formData("f2",8).formData("f3",9).execute().assertBody("{f1:'7',f2:'8',f3:'9'}");
 	}
+
+	//=================================================================================================================
+	// Optional form data parameter.
+	//=================================================================================================================
+
+	@RestResource(serializers=SimpleJsonSerializer.class)
+	public static class D {
+		@RestMethod(name=POST,path="/a")
+		public Object a(@FormData("f1") Optional<Integer> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestMethod(name=POST,path="/b")
+		public Object b(@FormData("f1") Optional<ABean> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestMethod(name=POST,path="/c")
+		public Object c(@FormData("f1") Optional<List<ABean>> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestMethod(name=POST,path="/d")
+		public Object d(@FormData("f1") List<Optional<ABean>> f1) throws Exception {
+			return f1;
+		}
+	}
+	static MockRest d = MockRest.create(D.class).accept("application/json").contentType("application/x-www-form-urlencoded").build();
+
+	@Test
+	public void d01_optionalParam_integer() throws Exception {
+		d.post("/a", "f1=123").execute().assertStatus(200).assertBody("123");
+		d.post("/a", "null").execute().assertStatus(200).assertBody("null");
+	}
+
+	@Test
+	public void d02_optionalParam_bean() throws Exception {
+		d.post("/b", "f1=(a=1,b=foo)").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
+		d.post("/b", "null").execute().assertStatus(200).assertBody("null");
+	}
+
+	@Test
+	public void d03_optionalParam_listOfBeans() throws Exception {
+		d.post("/c", "f1=@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
+		d.post("/c", "null").execute().assertStatus(200).assertBody("null");
+	}
+
+	@Test
+	public void d04_optionalParam_listOfOptionals() throws Exception {
+		d.post("/d", "f1=@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
+		d.post("/d", "null").execute().assertStatus(200).assertBody("null");
+	}
+
 
 	//=================================================================================================================
 	// @FormData on POJO

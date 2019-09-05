@@ -12,14 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation2;
 
+import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.testutils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -29,6 +33,59 @@ import org.junit.runners.*;
 @SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HeaderAnnotationTest {
+
+	//=================================================================================================================
+	// Optional header parameter.
+	//=================================================================================================================
+
+	@RestResource(serializers=SimpleJsonSerializer.class)
+	public static class A {
+		@RestMethod(name=GET,path="/a")
+		public Object a(@Header("f1") Optional<Integer> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestMethod(name=GET,path="/b")
+		public Object b(@Header("f1") Optional<ABean> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestMethod(name=GET,path="/c")
+		public Object c(@Header("f1") Optional<List<ABean>> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestMethod(name=GET,path="/d")
+		public Object d(@Header("f1") List<Optional<ABean>> f1) throws Exception {
+			return f1;
+		}
+	}
+	static MockRest a = MockRest.create(A.class).json().build();
+
+	@Test
+	public void a01_optionalParam_integer() throws Exception {
+		a.get("/a").header("f1", 123).execute().assertStatus(200).assertBody("123");
+		a.get("/a").execute().assertStatus(200).assertBody("null");
+	}
+
+	@Test
+	public void a02_optionalParam_bean() throws Exception {
+		a.get("/b").header("f1", "(a=1,b=foo)").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
+		a.get("/b").execute().assertStatus(200).assertBody("null");
+	}
+
+	@Test
+	public void a03_optionalParam_listOfBeans() throws Exception {
+		a.get("/c").header("f1", "@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
+		a.get("/c").execute().assertStatus(200).assertBody("null");
+	}
+
+	@Test
+	public void a04_optionalParam_listOfOptionals() throws Exception {
+		a.get("/d").header("f1", "@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
+		a.get("/d").execute().assertStatus(200).assertBody("null");
+	}
+
 
 	//=================================================================================================================
 	// @Header on POJO

@@ -687,13 +687,17 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.debug = getInstanceProperty(RESTMETHOD_debug, Enablement.class, context.getDebug());
 
-		Object clc = getProperty(RESTMETHOD_callLoggerConfig);
-		if (clc instanceof RestCallLoggerConfig)
-			this.callLoggerConfig = (RestCallLoggerConfig)clc;
-		else if (clc instanceof ObjectMap)
-			this.callLoggerConfig = RestCallLoggerConfig.create().parent(context.getCallLoggerConfig()).apply((ObjectMap)clc).build();
-		else
-			this.callLoggerConfig = context.getCallLoggerConfig();
+		if (debug == Enablement.TRUE) {
+			this.callLoggerConfig = RestCallLoggerConfig.DEFAULT_DEBUG;
+		} else {
+			Object clc = getProperty(RESTMETHOD_callLoggerConfig);
+			if (clc instanceof RestCallLoggerConfig)
+				this.callLoggerConfig = (RestCallLoggerConfig)clc;
+			else if (clc instanceof ObjectMap)
+				this.callLoggerConfig = RestCallLoggerConfig.create().parent(context.getCallLoggerConfig()).apply((ObjectMap)clc).build();
+			else
+				this.callLoggerConfig = context.getCallLoggerConfig();
+		}
 	}
 
 	ResponseBeanMeta getResponseBeanMeta(Object o) {
@@ -797,11 +801,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
 	 * @return The HTTP response code.
 	 */
-	int invoke(UrlPathInfo pathInfo, RestRequest req, RestResponse res) throws Throwable {
+	int invoke(RestCall call) throws Throwable {
 
-		UrlPathPatternMatch pm = pathPattern.match(pathInfo);
+		UrlPathPatternMatch pm = pathPattern.match(call.getUrlPathInfo());
 		if (pm == null)
 			return SC_NOT_FOUND;
+
+		RestRequest req = call.getRestRequest();
+		RestResponse res = call.getRestResponse();
 
 		RequestPath rp = req.getPathMatch();
 		for (Map.Entry<String,String> e : pm.getVars().entrySet())
@@ -828,6 +835,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		}
 
 		context.preCall(req, res);
+
+		call.debug(req.isDebug()).loggerConfig(req.getCallLoggerConfig());
 
 		Object[] args = new Object[methodParams.length];
 		for (int i = 0; i < methodParams.length; i++) {

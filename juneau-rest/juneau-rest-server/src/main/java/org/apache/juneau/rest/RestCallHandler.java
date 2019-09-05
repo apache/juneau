@@ -38,26 +38,6 @@ public interface RestCallHandler {
 	public interface Null extends RestCallHandler {}
 
 	/**
-	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.
-	 *
-	 * @param req The request object from the {@link #service(HttpServletRequest, HttpServletResponse)} method.
-	 * @return The wrapped request object.
-	 * @throws ServletException If any errors occur trying to interpret the request.
-	 */
-	public RestRequest createRequest(HttpServletRequest req) throws ServletException;
-
-	/**
-	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object
-	 * and the request returned by {@link #createRequest(HttpServletRequest)}.
-	 *
-	 * @param req The request object returned by {@link #createRequest(HttpServletRequest)}.
-	 * @param res The response object from the {@link #service(HttpServletRequest, HttpServletResponse)} method.
-	 * @return The wrapped response object.
-	 * @throws ServletException If any errors occur trying to interpret the request or response.
-	 */
-	public RestResponse createResponse(RestRequest req, HttpServletResponse res) throws ServletException;
-
-	/**
 	 * The main service method.
 	 *
 	 * @param r1 The incoming HTTP servlet request object.
@@ -68,34 +48,58 @@ public interface RestCallHandler {
 	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException;
 
 	/**
+	 * Wraps an incoming servlet request/response pair into a single {@link RestCall} object.
+	 *
+	 * @param req The rest request.
+	 * @param res The rest response.
+	 * @return The wrapped request/response pair.
+	 */
+	public RestCall createCall(HttpServletRequest req, HttpServletResponse res);
+
+	/**
+	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.
+	 *
+	 * @param call The current REST call.
+	 * @return The wrapped request object.
+	 * @throws ServletException If any errors occur trying to interpret the request.
+	 */
+	public RestRequest createRequest(RestCall call) throws ServletException;
+
+	/**
+	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object
+	 * and the request returned by {@link #createRequest(RestCall)}.
+	 *
+	 * @param call The current REST call.
+	 * @return The wrapped response object.
+	 * @throws ServletException If any errors occur trying to interpret the request or response.
+	 */
+	public RestResponse createResponse(RestCall call) throws ServletException;
+
+	/**
 	 * The main method for serializing POJOs passed in through the {@link RestResponse#setOutput(Object)} method or
 	 * returned by the Java method.
 	 *
-	 * @param req The HTTP request.
-	 * @param res The HTTP response.
+	 * @param call The current REST call.
 	 * @throws Exception Can be thrown if error occurred while handling response.
 	 */
-	public void handleResponse(RestRequest req, RestResponse res) throws Exception;
+	public void handleResponse(RestCall call) throws Exception;
 
 	/**
 	 * Handle the case where a matching method was not found.
 	 *
-	 * @param rc The HTTP response code.
-	 * @param req The HTTP request.
-	 * @param res The HTTP response.
+	 * @param call The current REST call.
 	 * @throws Exception Can be thrown if error occurred while handling response.
 	 */
-	public void handleNotFound(int rc, RestRequest req, RestResponse res) throws Exception;
+	public void handleNotFound(RestCall call) throws Exception;
 
 	/**
 	 * Method for handling response errors.
 	 *
-	 * @param req The servlet request.
-	 * @param res The servlet response.
+	 * @param call The current REST call.
 	 * @param e The exception that occurred.
 	 * @throws Exception Can be thrown if error occurred while handling response.
 	 */
-	public void handleError(HttpServletRequest req, HttpServletResponse res, Throwable e) throws Exception;
+	public void handleError(RestCall call, Throwable e) throws Exception;
 
 	/**
 	 * Method for converting thrown exceptions into other types before they are handled.

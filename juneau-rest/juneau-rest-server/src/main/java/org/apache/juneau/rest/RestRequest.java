@@ -1322,7 +1322,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		Boolean b = ObjectUtils.castOrNull(getAttribute("Debug"), Boolean.class);
 		if (b != null)
 			return b;
-		Enablement e = context.getDebug();
+		Enablement e = restJavaMethod != null ? restJavaMethod.getDebug() : context.getDebug();
 		if (e == TRUE)
 			return true;
 		if (e == FALSE)

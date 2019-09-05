@@ -61,7 +61,7 @@ public class TestUtils extends org.apache.juneau.testutils.TestUtils {
 	public static Swagger getSwagger(Class<?> c) {
 		try {
 			RestContext rc = RestContext.create(c.newInstance()).build();
-			RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
+			RestRequest req = rc.getCallHandler().createRequest(new RestCall(new MockServletRequest(), null));
 			RestInfoProvider ip = rc.getInfoProvider();
 			return ip.getSwagger(req);
 		} catch (Exception e) {

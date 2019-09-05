@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.testutils;
 
+import org.apache.juneau.marshall.*;
+
 public class ABean {
 	public int a;
 	public String b;
@@ -20,5 +22,10 @@ public class ABean {
 		this.a = 1;
 		this.b = "foo";
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		return SimpleJson.DEFAULT.toString(this);
 	}
 }

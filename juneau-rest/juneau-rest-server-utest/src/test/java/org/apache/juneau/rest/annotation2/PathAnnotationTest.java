@@ -14,17 +14,19 @@ package org.apache.juneau.rest.annotation2;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.http.annotation.Path;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.testutils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -675,6 +677,55 @@ public class PathAnnotationTest {
 	public void i06c_withRemainderWithStuff() throws Exception {
 		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4/foo/bar").execute().assertBody("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
+
+	//=================================================================================================================
+	// Optional path parameter.
+	//=================================================================================================================
+
+	@RestResource(serializers=SimpleJsonSerializer.class)
+	public static class J {
+		@RestMethod(name=GET,path="/a/{f1}")
+		public Object a(@Path("f1") Optional<Integer> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestMethod(name=GET,path="/b/{f1}")
+		public Object b(@Path("f1") Optional<ABean> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestMethod(name=GET,path="/c/{f1}")
+		public Object c(@Path("f1") Optional<List<ABean>> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestMethod(name=GET,path="/d/{f1}")
+		public Object d(@Path("f1") List<Optional<ABean>> f1) throws Exception {
+			return f1;
+		}
+	}
+	static MockRest j = MockRest.create(J.class).json().build();
+
+	@Test
+	public void j01_optionalParam_integer() throws Exception {
+		j.get("/a/123").execute().assertStatus(200).assertBody("123");
+	}
+
+	@Test
+	public void j02_optionalParam_bean() throws Exception {
+		j.get("/b/(a=1,b=foo)").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
+	}
+
+	@Test
+	public void j03_optionalParam_listOfBeans() throws Exception {
+		j.get("/c/@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
+	}
+
+	@Test
+	public void j04_optionalParam_listOfOptionals() throws Exception {
+		j.get("/d/@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
+	}
+
 
 	//=================================================================================================================
 	// @Path on POJO

@@ -68,9 +68,10 @@ public class RestCallRouter {
 		}
 	}
 
-	boolean matches(UrlPathInfo pathInfo) {
+	boolean matches(RestCall call) {
+		UrlPathInfo pi = call.getUrlPathInfo();
 		for (RestMethodContext m : restJavaMethods)
-			if (m.matches(pathInfo))
+			if (m.matches(pi))
 				return true;
 		return false;
 	}
@@ -84,13 +85,13 @@ public class RestCallRouter {
 	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
 	 * @return The HTTP response code.
 	 */
-	int invoke(UrlPathInfo pathInfo, RestRequest req, RestResponse res) throws Throwable {
+	int invoke(RestCall call) throws Throwable {
 		if (restJavaMethods.length == 1)
-			return restJavaMethods[0].invoke(pathInfo, req, res);
+			return restJavaMethods[0].invoke(call);
 
 		int maxRc = 0;
 		for (RestMethodContext m : restJavaMethods) {
-			int rc = m.invoke(pathInfo, req, res);
+			int rc = m.invoke(call);
 			if (rc == SC_OK)
 				return SC_OK;
 			maxRc = Math.max(maxRc, rc);

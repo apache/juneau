@@ -27,3 +27,13 @@
 		Fixed a bug in the parsers where the generic subtype of a complex bean property type involving both collections and arrays
 		was not being found.  (e.g. <c>List&lt;Long&gt;[]</c>)
 </ul>
+
+<h5 class='topic w800'>juneau-rest-server</h5>
+<ul class='spaced-list'>
+	<li>
+		Support for {@link Optional} on method parameters annotated with {@link oaj.http.annotation.Header}, {@link oaj.http.annotation.FormData},  
+		{@link oaj.http.annotation.Query}, {@link oaj.http.annotation.Path}, and {@link oaj.http.annotation.PathRemainder}.
+	<li>
+		Fixed issue where {@link oajr.annotation.RestRequest#debug() RestRequest.debug()} annotation wasn't resulting
+		in the HTTP request being logged.
+</ul>

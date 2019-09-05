@@ -14,7 +14,7 @@ package org.apache.juneau.rest.annotation2;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.*;
 import java.util.*;
@@ -26,12 +26,14 @@ import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.rest.testutils.DTOs;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -781,6 +783,59 @@ public class BodyAnnotationTest {
 		i.post("/", "{}").json().execute().assertStatus(200);
 	}
 
+	//=================================================================================================================
+	// Optional body parameter.
+	//=================================================================================================================
+
+	@RestResource(serializers=SimpleJsonSerializer.class,parsers=JsonParser.class)
+	public static class J {
+		@RestMethod(name=POST,path="/a")
+		public Object a(@Body Optional<Integer> body) throws Exception {
+			assertNotNull(body);
+			return body;
+		}
+		@RestMethod(name=POST,path="/b")
+		public Object b(@Body Optional<ABean> body) throws Exception {
+			assertNotNull(body);
+			return body;
+		}
+		@RestMethod(name=POST,path="/c")
+		public Object c(@Body Optional<List<ABean>> body) throws Exception {
+			assertNotNull(body);
+			return body;
+		}
+		@RestMethod(name=POST,path="/d")
+		public Object d(@Body List<Optional<ABean>> body) throws Exception {
+			return body;
+		}
+	}
+	static MockRest j = MockRest.create(J.class).json().build();;
+
+	@Test
+	public void j01_optionalParam_integer() throws Exception {
+		j.post("/a", "123").execute().assertStatus(200).assertBody("123");
+		j.post("/a", "null").execute().assertStatus(200).assertBody("null");
+	}
+
+	@Test
+	public void j02_optionalParam_bean() throws Exception {
+		j.post("/b", new ABean().init()).execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
+		j.post("/b", "null").execute().assertStatus(200).assertBody("null");
+	}
+
+	@Test
+	public void j03_optionalParam_listOfBeans() throws Exception {
+		String body = SimpleJson.DEFAULT.toString(AList.of(new ABean().init()));
+		j.post("/c", body).execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
+		j.post("/c", "null").execute().assertStatus(200).assertBody("null");
+	}
+
+	@Test
+	public void j04_optionalParam_listOfOptionals() throws Exception {
+		String body = SimpleJson.DEFAULT.toString(AList.of(Optional.of(new ABean().init())));
+		j.post("/d", body).execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
+		j.post("/d", "null").execute().assertStatus(200).assertBody("null");
+	}
 
 	//=================================================================================================================
 	// Swagger - @Body on POJO
