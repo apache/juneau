@@ -46,4 +46,23 @@
 		in the HTTP request being logged.
 	<li>
 		{@link oajr.RestException} has been deprecated and replaced by {@link oaj.http.exception.HttpException}.
+	<li>
+		Resolved issue where parameterized types on <ja>@RestMethod</ja>-annotated method parameters of Spring beans.
+		This is due to Spring relying on CGLIB for runtime-recompilation of beans that results in loss of parameterized-type
+		information.  
+		<br>In the following example, the <c>beans</c> parameter would resolve as an unparameterized <c>List</c>
+		which would typically result in getting a <c>List&lt;ObjectMap&gt;<c> and subsequent <c>ClassCastExceptions</c>.   
+		<p class='bpcode w800'>
+	<ja>@RestMethod</ja>
+	<jk>public void</jk> doFoo(<ja>@Body</ja> List&lt;MyBean&gt; beans) {...}
+		</p>
+		The fix involves resolving the original bean class for resolving parameterized type while leaving
+		method invocation on the proxy method so as not to bypass Spring features.
+</ul>
+
+<h5 class='topic w800'>juneau-rest-client</h5>
+<ul class='spaced-list'>
+	<li>
+		Removed the dependency on the <c>juneau-rest-server</c> module.  
+		Allows the client API to be used without pulling in all the javax.servlet and server dependencies.
 </ul>
