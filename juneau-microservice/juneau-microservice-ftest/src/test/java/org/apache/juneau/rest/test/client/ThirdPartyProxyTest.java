@@ -29,7 +29,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.client.remote.*;
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.test.*;
 import org.apache.juneau.rest.test.client.ThirdPartyProxyTest.ThirdPartyProxy.*;
 import org.apache.juneau.rest.testutils.*;

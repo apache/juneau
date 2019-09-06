@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.remote.RemoteMethod;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
@@ -84,14 +85,16 @@ public class RemoteMethodMeta {
 		RemoteMethodArg bodyArg;
 		RemoteMethodReturn methodReturn;
 
+		@SuppressWarnings("deprecation")
 		Builder(String parentPath, Method m, boolean useMethodSignatures, String defaultMethod) {
 
 			MethodInfo mi = MethodInfo.of(m);
 
+			org.apache.juneau.rest.client.remote.RemoteMethod orm = mi.getAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
 			RemoteMethod rm = mi.getAnnotation(RemoteMethod.class);
 
-			httpMethod = rm == null ? "" : rm.method();
-			path = rm == null ? "" : rm.path();
+			httpMethod = rm == null ? (orm == null ? "" : orm.method()) : rm.method();
+			path = rm == null ? (orm == null ? "" : orm.path()) : rm.path();
 
 			if (path.isEmpty()) {
 				path = HttpUtils.detectHttpPath(m, ! useMethodSignatures);

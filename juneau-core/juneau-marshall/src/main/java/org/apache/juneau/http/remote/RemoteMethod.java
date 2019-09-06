@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.client.remote;
+package org.apache.juneau.http.remote;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -26,14 +26,11 @@ import org.apache.juneau.http.annotation.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
- *
- * @deprecated Use {@link org.apache.juneau.http.remote.RemoteMethod}
  */
 @Documented
 @Target(METHOD)
 @Retention(RUNTIME)
 @Inherited
-@Deprecated
 public @interface RemoteMethod {
 
 	/**

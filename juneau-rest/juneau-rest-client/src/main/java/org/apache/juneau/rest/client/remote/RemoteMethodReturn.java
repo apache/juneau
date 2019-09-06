@@ -15,6 +15,8 @@ package org.apache.juneau.rest.client.remote;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.remote.RemoteMethod;
+import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.reflect.*;
@@ -32,16 +34,35 @@ public final class RemoteMethodReturn {
 	private final RemoteReturn returnValue;
 	private final ResponseBeanMeta meta;
 
+	@SuppressWarnings("deprecation")
 	RemoteMethodReturn(MethodInfo m) {
-		RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
 		ClassInfo rt = m.getReturnType();
-		RemoteReturn rv = rt.is(void.class) ? RemoteReturn.NONE : rm == null ? RemoteReturn.BODY : rm.returns();
+
+		org.apache.juneau.rest.client.remote.RemoteMethod orm = m.getAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
+		RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
+
+		RemoteReturn rv = null;
+		if (rt.is(void.class))
+			rv = RemoteReturn.NONE;
+		else if (orm != null)
+			switch (orm.returns()) {
+				case BEAN: rv = RemoteReturn.BEAN; break;
+				case BODY: rv = RemoteReturn.BODY; break;
+				case NONE: rv = RemoteReturn.NONE; break;
+				case STATUS: rv = RemoteReturn.STATUS; break;
+			}
+		else if (rm != null)
+			rv = rm.returns();
+		else
+			rv = RemoteReturn.BODY;
+
 		if (rt.hasAnnotation(Response.class) && rt.isInterface()) {
 			this.meta = ResponseBeanMeta.create(m, PropertyStore.DEFAULT);
 			rv = RemoteReturn.BEAN;
 		} else {
 			this.meta = null;
 		}
+
 		this.returnType = m.getReturnType().innerType();
 		this.returnValue = rv;
 	}

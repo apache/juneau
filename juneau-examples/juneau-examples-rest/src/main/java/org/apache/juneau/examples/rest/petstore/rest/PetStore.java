@@ -22,7 +22,7 @@ import org.apache.juneau.examples.rest.petstore.*;
 import org.apache.juneau.examples.rest.petstore.dto.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.client.remote.*;
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.response.*;
 

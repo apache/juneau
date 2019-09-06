@@ -19,7 +19,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.client.remote.*;
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.serializer.*;
 
 /**
