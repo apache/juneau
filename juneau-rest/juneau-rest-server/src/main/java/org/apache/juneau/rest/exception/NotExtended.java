@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * Further extensions to the request are required for the server to fulfill it.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.NotExtended}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class NotExtended extends RestException {
 	private static final long serialVersionUID = 1L;
 

@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 
 /**
  * Shows contents of the microservice configuration file.

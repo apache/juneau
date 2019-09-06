@@ -25,8 +25,11 @@ import org.apache.juneau.rest.*;
  * <p>
  * The user has sent too many requests in a given amount of time.
  * <br>Intended for use with rate-limiting schemes.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.TooManyRequests}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class TooManyRequests extends RestException {
 	private static final long serialVersionUID = 1L;
 

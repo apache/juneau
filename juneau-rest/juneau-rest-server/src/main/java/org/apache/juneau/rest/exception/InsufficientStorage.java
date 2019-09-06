@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The server is unable to store the representation needed to complete the request.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.InsufficientStorage}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class InsufficientStorage extends RestException {
 	private static final long serialVersionUID = 1L;
 

@@ -68,6 +68,8 @@ public final class ClassInfo {
 	private int dim = -1;
 	private ClassInfo componentType;
 
+	private static final Map<Class<?>,ClassInfo> CACHE = new ConcurrentHashMap<>();
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instantiation.
 	//-----------------------------------------------------------------------------------------------------------------
@@ -111,6 +113,23 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Same as {@link #of(Class)}} but caches the result for faster future lookup.
+	 *
+	 * @param c The class type.
+	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
+	 */
+	public static ClassInfo ofc(Class<?> c) {
+		if (c == null)
+			return null;
+		ClassInfo ci = CACHE.get(c);
+		if (ci == null) {
+			ci = ClassInfo.of(c);
+			CACHE.put(c, ci);
+		}
+		return ci;
+	}
+
+	/**
 	 * Returns a class info wrapper around the specified class type.
 	 *
 	 * @param c The class type.
@@ -125,7 +144,7 @@ public final class ClassInfo {
 	 * Same as using the constructor, but operates on an object instance.
 	 *
 	 * @param o The class instance.
-	 * @return The constructed class info.
+	 * @return The constructed class info, or <jk>null</jk> if the object was <jk>null</jk>.
 	 */
 	public static ClassInfo of(Object o) {
 		if (o == null)
@@ -134,8 +153,26 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Same as {@link #of(Object)}} but caches the result for faster future lookup.
+	 *
+	 * @param o The class instance.
+	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
+	 */
+	public static ClassInfo ofc(Object o) {
+		if (o == null)
+			return null;
+		Class<?> c = o.getClass();
+		ClassInfo ci = CACHE.get(c);
+		if (ci == null) {
+			ci = ClassInfo.of(o);
+			CACHE.put(c, ci);
+		}
+		return ci;
+	}
+
+	/**
 	 * When this metadata is against a CGLIB proxy, this method finds the underlying "real" class.
-	 * 
+	 *
 	 * @param o The class instance.
 	 * @return The non-proxy class, or <jk>null</jk> if it's not a CGLIB proxy.
 	 */
@@ -1560,6 +1597,15 @@ public final class ClassInfo {
 	 */
 	public boolean isClass() {
 		return c != null && ! c.isInterface();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a {@link RuntimeException}.
+	 *
+	 * @return <jk>true</jk> if this class is a {@link RuntimeException}.
+	 */
+	public boolean isRuntimeException() {
+		return isChildOf(RuntimeException.class);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

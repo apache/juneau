@@ -26,9 +26,12 @@ import org.apache.juneau.http.annotation.*;
  * In this case, the request should be repeated with another URI; however, future requests should still use the original URI.
  * In contrast to how 302 was historically implemented, the request method is not allowed to be changed when reissuing the original request.
  * For example, a POST request should be repeated using another POST request.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.response.TemporaryRedirect}
  */
 @Response(code=CODE, description=MESSAGE)
 @BeanIgnore
+@Deprecated
 public class TemporaryRedirect extends HttpResponse {
 
 	/** HTTP status code */

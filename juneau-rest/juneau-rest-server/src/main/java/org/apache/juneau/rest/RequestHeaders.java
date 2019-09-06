@@ -26,7 +26,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 
 /**
  * Represents the headers in an HTTP request.

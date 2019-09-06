@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The server does not support the HTTP protocol version used in the request.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.HttpVersionNotSupported}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class HttpVersionNotSupported extends RestException {
 	private static final long serialVersionUID = 1L;
 

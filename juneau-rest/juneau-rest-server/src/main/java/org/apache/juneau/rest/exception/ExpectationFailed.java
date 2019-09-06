@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The server cannot meet the requirements of the Expect request-header field.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.ExpectationFailed}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class ExpectationFailed extends RestException {
 	private static final long serialVersionUID = 1L;
 

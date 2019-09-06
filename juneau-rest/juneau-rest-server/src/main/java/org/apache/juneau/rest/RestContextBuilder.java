@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
+import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.serializer.Serializer.*;
 
 import java.nio.charset.*;
@@ -29,6 +30,7 @@ import org.apache.juneau.config.vars.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
@@ -189,10 +191,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public RestContext build() {
 		try {
 			return new RestContext(this);
-		} catch (RestException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw toHttpException(e, InternalServerError.class);
 		}
 	}
 

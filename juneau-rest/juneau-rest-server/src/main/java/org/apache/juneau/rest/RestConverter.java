@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.serializer.*;
@@ -85,8 +86,8 @@ public interface RestConverter {
 	 * @param req The servlet request.
 	 * @param res The response object set by the REST method through the {@link RestResponse#setOutput(Object)} method.
 	 * @return The converted object.
-	 * @throws RestException Thrown if any errors occur during conversion.
+	 * @throws HttpException Thrown if any errors occur during conversion.
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
-	public Object convert(RestRequest req, Object res) throws RestException, SerializeException;
+	public Object convert(RestRequest req, Object res) throws HttpException, SerializeException;
 }

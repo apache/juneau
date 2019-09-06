@@ -21,8 +21,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * The request has been fulfilled, resulting in the creation of a new resource.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.response.Created}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class Created extends HttpResponse {
 
 	/** HTTP status code */

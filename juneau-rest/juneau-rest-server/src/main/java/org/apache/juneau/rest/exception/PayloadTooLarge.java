@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The request is larger than the server is willing or able to process.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.PayloadTooLarge}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class PayloadTooLarge extends RestException {
 	private static final long serialVersionUID = 1L;
 

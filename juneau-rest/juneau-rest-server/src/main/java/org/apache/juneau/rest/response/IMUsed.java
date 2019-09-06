@@ -21,8 +21,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * The server has fulfilled a request for the resource, and the response is a representation of the result of one or more instance-manipulations applied to the current instance.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.response.IMUsed}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class IMUsed extends HttpResponse {
 
 	/** HTTP status code */

@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <br>
  * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.NotAcceptable}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class NotAcceptable extends RestException {
 	private static final long serialVersionUID = 1L;
 

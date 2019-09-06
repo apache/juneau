@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The resource that is being accessed is locked.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.Locked}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class Locked extends RestException {
 	private static final long serialVersionUID = 1L;
 

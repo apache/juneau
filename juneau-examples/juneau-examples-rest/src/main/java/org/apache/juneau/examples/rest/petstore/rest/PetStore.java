@@ -23,8 +23,8 @@ import org.apache.juneau.examples.rest.petstore.dto.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.remote.*;
-import org.apache.juneau.rest.exception.*;
-import org.apache.juneau.rest.response.*;
+import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 
 /**
  * Defines the interface for both the server-side and client-side pet store application.

@@ -21,8 +21,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * The members of a DAV binding have already been enumerated in a preceding part of the (multistatus) response, and are not being included again.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.response.AlreadyReported}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class AlreadyReported extends HttpResponse {
 
 	/** HTTP status code */

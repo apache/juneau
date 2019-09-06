@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * A server operator has received a legal demand to deny access to a resource or to a set of resources that includes the requested resource.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.UnavailableForLegalReasons}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class UnavailableForLegalReasons extends RestException {
 	private static final long serialVersionUID = 1L;
 

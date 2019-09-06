@@ -33,7 +33,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 
 /**
  * Abstract class for defining Remote Interface Services.

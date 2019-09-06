@@ -25,8 +25,11 @@ import org.apache.juneau.rest.*;
  * <p>
  * The requested resource could not be found but may be available in the future.
  * <br>Subsequent requests by the client are permissible.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.NotFound}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class NotFound extends RestException {
 	private static final long serialVersionUID = 1L;
 

@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.text.*;
 
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -25,7 +26,10 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * REST methods on subclasses of {@link RestServlet} can throw this exception to trigger an HTTP status other than the
  * automatically-generated <c>404</c>, <c>405</c>, and <c>500</c> statuses.
+ *
+ * @deprecated Use {@link HttpException}.
  */
+@Deprecated
 public class RestException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;

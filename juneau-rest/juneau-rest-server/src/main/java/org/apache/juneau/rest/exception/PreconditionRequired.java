@@ -25,8 +25,11 @@ import org.apache.juneau.rest.*;
  * <p>
  * The origin server requires the request to be conditional.
  * <br>Intended to prevent the 'lost update' problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.PreconditionRequired}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class PreconditionRequired extends RestException {
 	private static final long serialVersionUID = 1L;
 

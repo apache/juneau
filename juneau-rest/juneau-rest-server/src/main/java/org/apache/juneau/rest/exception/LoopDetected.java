@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.LoopDetected}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class LoopDetected extends RestException {
 	private static final long serialVersionUID = 1L;
 

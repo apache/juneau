@@ -12,9 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.converters;
 
+import static org.apache.juneau.rest.HttpRuntimeException.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
@@ -50,7 +52,7 @@ public final class Traversable implements RestConverter {
 
 	@Override /* RestConverter */
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public Object convert(RestRequest req, Object o) throws RestException, InternalServerError {
+	public Object convert(RestRequest req, Object o) throws HttpException, InternalServerError {
 		if (o == null)
 			return null;
 
@@ -65,9 +67,9 @@ public final class Traversable implements RestConverter {
 				PojoRest p = new PojoRest(o, req.getBody().getReaderParser());
 				o = p.get(pathRemainder);
 			} catch (PojoRestException e) {
-				throw new RestException(e, e.getStatus());
-			} catch (Exception e) {
-				throw new InternalServerError(e);
+				throw new HttpException(e, e.getStatus());
+			} catch (Throwable t) {
+				throw toHttpException(t, InternalServerError.class);
 			}
 		}
 

@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The request was well-formed but was unable to be followed due to semantic errors.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.UnprocessableEntity}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class UnprocessableEntity extends RestException {
 	private static final long serialVersionUID = 1L;
 

@@ -25,8 +25,11 @@ import org.apache.juneau.rest.*;
  * <p>
  * The server either does not recognize the request method, or it lacks the ability to fulfill the request.
  * <br>Usually this implies future availability (e.g., a new feature of a web-service API).
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.NotImplemented}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class NotImplemented extends RestException {
 	private static final long serialVersionUID = 1L;
 

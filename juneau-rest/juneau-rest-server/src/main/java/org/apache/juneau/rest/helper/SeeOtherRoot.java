@@ -15,7 +15,7 @@ package org.apache.juneau.rest.helper;
 import java.net.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.response.*;
+import org.apache.juneau.http.response.*;
 
 /**
  * Convenience subclass of {@link SeeOther} for redirecting a response to the servlet root.

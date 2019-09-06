@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 
 /**
  * Contains information about the matched path on the HTTP request.

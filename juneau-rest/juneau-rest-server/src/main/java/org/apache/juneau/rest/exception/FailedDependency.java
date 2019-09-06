@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The request failed because it depended on another request and that request failed (e.g., a PROPPATCH).
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.FailedDependency}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class FailedDependency extends RestException {
 	private static final long serialVersionUID = 1L;
 

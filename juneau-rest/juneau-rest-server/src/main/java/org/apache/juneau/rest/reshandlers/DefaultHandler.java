@@ -25,7 +25,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.util.FinishablePrintWriter;
 import org.apache.juneau.rest.util.FinishableServletOutputStream;
 import org.apache.juneau.serializer.*;

@@ -25,8 +25,11 @@ import org.apache.juneau.rest.*;
  * <p>
  * The request was valid, but the server is refusing action.
  * <br>The user might not have the necessary permissions for a resource, or may need an account of some sort.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.Forbidden}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class Forbidden extends RestException {
 	private static final long serialVersionUID = 1L;
 

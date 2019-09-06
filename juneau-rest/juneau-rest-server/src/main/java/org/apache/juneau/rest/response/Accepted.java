@@ -22,8 +22,11 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The request has been accepted for processing, but the processing has not been completed.
  * The request might or might not be eventually acted upon, and may be disallowed when processing occurs.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.response.Accepted}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class Accepted extends HttpResponse {
 
 	/** HTTP status code */

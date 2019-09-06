@@ -21,8 +21,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * The server successfully processed the request and is not returning any content.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.response.NoContent}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class NoContent extends HttpResponse {
 
 	/** HTTP status code */

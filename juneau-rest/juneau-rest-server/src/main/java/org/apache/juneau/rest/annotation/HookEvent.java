@@ -23,6 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
@@ -80,7 +81,7 @@ public enum HookEvent {
 	 * 		<br>The order of START_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li>
 	 * 		The method can throw any exception.
-	 * 		<br>{@link RestException RestExceptions} can be thrown to cause a particular HTTP error status code.
+	 * 		<br>{@link HttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
 	 * 		<br>All other exceptions cause an HTTP 500 error status code.
 	 * 	<li>
 	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
@@ -196,7 +197,7 @@ public enum HookEvent {
 	 * 		<br>The order of PRE_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li>
 	 * 		The method can throw any exception.
-	 * 		<br>{@link RestException RestExceptions} can be thrown to cause a particular HTTP error status code.
+	 * 		<br>{@link HttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
 	 * 		<br>All other exceptions cause an HTTP 500 error status code.
 	 * 	<li>
 	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.

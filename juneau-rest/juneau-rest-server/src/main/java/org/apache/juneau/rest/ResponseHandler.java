@@ -16,6 +16,7 @@ import java.io.*;
 
 import javax.servlet.http.*;
 
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.reshandlers.*;
 
@@ -98,9 +99,9 @@ public interface ResponseHandler {
 	 * @throws IOException
 	 * 	If low-level exception occurred on output stream.
 	 * 	Results in a {@link HttpServletResponse#SC_INTERNAL_SERVER_ERROR} error.
-	 * @throws RestException
+	 * @throws HttpException
 	 * 	If some other exception occurred.
 	 * 	Can be used to provide an appropriate HTTP response code and message.
 	 */
-	boolean handle(RestRequest req, RestResponse res) throws IOException, RestException;
+	boolean handle(RestRequest req, RestResponse res) throws IOException, HttpException;
 }

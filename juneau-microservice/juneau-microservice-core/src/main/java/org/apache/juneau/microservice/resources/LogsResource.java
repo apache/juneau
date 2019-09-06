@@ -30,7 +30,7 @@ import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.helper.*;
 
 /**

@@ -21,8 +21,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * The message body that follows is by default an XML message and can contain a number of separate response codes, depending on how many sub-requests were made.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.response.MultiStatus}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class MultiStatus extends HttpResponse {
 
 	/** HTTP status code */

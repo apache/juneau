@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The request did not specify the length of its content, which is required by the requested resource.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.LengthRequired}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class LengthRequired extends RestException {
 	private static final long serialVersionUID = 1L;
 

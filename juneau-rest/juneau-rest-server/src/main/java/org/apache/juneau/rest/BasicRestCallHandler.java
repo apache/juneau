@@ -24,8 +24,10 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.http.StreamResource;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.RestContext.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.util.*;
 
 /**
@@ -226,10 +228,10 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 *
 	 * @param call The HTTP call.
 	 * @throws IOException Thrown by underlying stream.
-	 * @throws RestException Non-200 response.
+	 * @throws HttpException Non-200 response.
 	 */
 	@Override /* RestCallHandler */
-	public void handleResponse(RestCall call) throws IOException, RestException, NotImplemented {
+	public void handleResponse(RestCall call) throws IOException, HttpException, NotImplemented {
 
 		RestRequest req = call.getRestRequest();
 		RestResponse res = call.getRestResponse();
@@ -257,9 +259,13 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 * @param t The thrown object.
 	 * @return The converted thrown object.
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public Throwable convertThrowable(Throwable t) {
-		if (t instanceof RestException)
+		ClassInfo ci = ClassInfo.ofc(t);
+		if (ci.is(HttpRuntimeException.class))
+			t = ((HttpRuntimeException)t).getInner();
+		if (ci.isChildOf(RestException.class) || ci.hasAnnotation(Response.class))
 			return t;
 		String n = t.getClass().getName();
 		if (n.contains("AccessDenied"))
@@ -311,12 +317,25 @@ public class BasicRestCallHandler implements RestCallHandler {
 		call.exception(e);
 
 		int occurrence = context == null ? 0 : context.getStackTraceOccurrence(e);
-		RestException e2 = (e instanceof RestException ? (RestException)e : new RestException(e, 500)).setOccurrence(occurrence);
+
+		int code = 500;
+
+		ClassInfo ci = ClassInfo.ofc(e);
+		Response r = ci.getAnnotation(Response.class);
+		if (r != null)
+			if (r.code().length > 0)
+				code = r.code()[0];
+
+		RestException e2 = (e instanceof RestException ? (RestException)e : new RestException(e, code)).setOccurrence(occurrence);
 
 		HttpServletRequest req = call.getRequest();
 		HttpServletResponse res = call.getResponse();
 
-		Throwable t = e2.getRootCause();
+		Throwable t = null;
+		if (e instanceof HttpRuntimeException)
+			t = ((HttpRuntimeException)e).getInner();
+		if (t == null)
+			t = e2.getRootCause();
 		if (t != null) {
 			res.setHeader("Exception-Name", t.getClass().getName());
 			res.setHeader("Exception-Message", t.getMessage());

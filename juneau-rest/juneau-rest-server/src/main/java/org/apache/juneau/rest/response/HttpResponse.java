@@ -19,8 +19,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * Consists simply of a simple string message.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.response.HttpResponse}
  */
 @Response
+@Deprecated
 public abstract class HttpResponse {
 
 	private final String message;

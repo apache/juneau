@@ -36,7 +36,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.matchers.*;
 import org.apache.juneau.serializer.*;

@@ -13,7 +13,7 @@
 package org.apache.juneau.examples.rest.petstore;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 
 /**
  * Exception thrown when trying to add an entry where the ID is already in use.

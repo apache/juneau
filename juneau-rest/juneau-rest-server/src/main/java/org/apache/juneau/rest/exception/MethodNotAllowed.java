@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * A request method is not supported for the requested resource; for example, a GET request on a form that requires data to be presented via POST, or a PUT request on a read-only resource.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.MethodNotAllowed}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class MethodNotAllowed extends RestException {
 	private static final long serialVersionUID = 1L;
 

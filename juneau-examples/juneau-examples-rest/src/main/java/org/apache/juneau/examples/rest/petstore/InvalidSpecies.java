@@ -13,7 +13,7 @@
 package org.apache.juneau.examples.rest.petstore;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 
 /**
  * Exception thrown when an invalid species is looked up.

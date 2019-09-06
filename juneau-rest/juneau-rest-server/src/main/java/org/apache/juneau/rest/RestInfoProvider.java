@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import java.lang.reflect.Method;
 
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -53,7 +54,7 @@ public interface RestInfoProvider {
 	 * 	A new {@link Swagger} instance.
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws Exception
-	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception
+	 * 	Throw a {@link HttpException} with a specific HTTP error status or any other exception
 	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
 	public Swagger getSwagger(RestRequest req) throws Exception;
@@ -72,7 +73,7 @@ public interface RestInfoProvider {
 	 * @param req The current request.
 	 * @return The localized site name of the REST resource, or <jk>null</jk> if none was found.
 	 * @throws Exception
-	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception
+	 * 	Throw a {@link HttpException} with a specific HTTP error status or any other exception
 	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
 	public String getSiteName(RestRequest req) throws Exception;
@@ -91,7 +92,7 @@ public interface RestInfoProvider {
 	 * @param req The current request.
 	 * @return The localized title of the REST resource, or <jk>null</jk> if none was found.
 	 * @throws Exception
-	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception
+	 * 	Throw a {@link HttpException} with a specific HTTP error status or any other exception
 	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
 	public String getTitle(RestRequest req) throws Exception;
@@ -110,7 +111,7 @@ public interface RestInfoProvider {
 	 * @param req The current request.
 	 * @return The localized description of the REST resource, or <jk>null</jk> if none was found.
 	 * @throws Exception
-	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception
+	 * 	Throw a {@link HttpException} with a specific HTTP error status or any other exception
 	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
 	public String getDescription(RestRequest req) throws Exception;
@@ -130,7 +131,7 @@ public interface RestInfoProvider {
 	 * @param req The current request.
 	 * @return The localized summary of the method, or <jk>null</jk> if none was found.
 	 * @throws Exception
-	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception
+	 * 	Throw a {@link HttpException} with a specific HTTP error status or any other exception
 	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
 	public String getMethodSummary(Method method, RestRequest req) throws Exception;
@@ -150,7 +151,7 @@ public interface RestInfoProvider {
 	 * @param req The current request.
 	 * @return The localized description of the method, or <jk>null</jk> if none was was found.
 	 * @throws Exception
-	 * 	Throw a {@link RestException} with a specific HTTP error status or any other exception
+	 * 	Throw a {@link HttpException} with a specific HTTP error status or any other exception
 	 * 	to cause a <jsf>SC_INTERNAL_SERVER_ERROR</jsf>.
 	 */
 	public String getMethodDescription(Method method, RestRequest req) throws Exception;

@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.FormattedIllegalArgumentException.*;
 
 import java.io.*;
@@ -61,7 +62,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
@@ -3498,7 +3499,7 @@ public final class RestContext extends BeanContext {
 	private final RestCallLoggerConfig callLoggerConfig;
 	private final RestCallHandler callHandler;
 	private final RestInfoProvider infoProvider;
-	private final RestException initException;
+	private final HttpException initException;
 	private final RestContext parentContext;
 	private final RestResourceResolver resourceResolver;
 	private final UriResolution uriResolution;
@@ -3566,7 +3567,7 @@ public final class RestContext extends BeanContext {
 	RestContext(RestContextBuilder builder) throws Exception {
 		super(builder.getPropertyStore());
 
-		RestException _initException = null;
+		HttpException _initException = null;
 
 		try {
 			ServletContext servletContext = builder.servletContext;
@@ -3799,7 +3800,7 @@ public final class RestContext extends BeanContext {
 												call.output(output);
 												return SC_OK;
 											} catch (Exception e) {
-												throw new InternalServerError(e);
+												throw toHttpException(e, InternalServerError.class);
 											}
 										}
 									}
@@ -3956,11 +3957,11 @@ public final class RestContext extends BeanContext {
 			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, BasicRestCallHandler.class, resourceResolver, this);
 			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, BasicRestInfoProvider.class, resourceResolver, this);
 
-		} catch (RestException e) {
+		} catch (HttpException e) {
 			_initException = e;
 			throw e;
 		} catch (Exception e) {
-			_initException = new RestException(e, SC_INTERNAL_SERVER_ERROR);
+			_initException = new InternalServerError(e);
 			throw e;
 		} finally {
 			initException = _initException;
@@ -4513,11 +4514,11 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Throws a {@link RestException} if an exception occurred in the constructor of this object.
+	 * Throws a {@link HttpException} if an exception occurred in the constructor of this object.
 	 *
-	 * @throws RestException The initialization exception wrapped in a {@link RestException}.
+	 * @throws HttpException The initialization exception wrapped in a {@link HttpException}.
 	 */
-	protected void checkForInitException() throws RestException {
+	protected void checkForInitException() throws HttpException {
 		if (initException != null)
 			throw initException;
 	}
@@ -5059,7 +5060,7 @@ public final class RestContext extends BeanContext {
 	/*
 	 * Calls all @RestHook(PRE) methods.
 	 */
-	void preCall(RestRequest req, RestResponse res) throws RestException {
+	void preCall(RestRequest req, RestResponse res) throws HttpException {
 		for (int i = 0; i < preCallMethods.length; i++)
 			preOrPost(resource, preCallMethods[i], preCallMethodParams[i], req, res);
 	}
@@ -5067,32 +5068,25 @@ public final class RestContext extends BeanContext {
 	/*
 	 * Calls all @RestHook(POST) methods.
 	 */
-	void postCall(RestRequest req, RestResponse res) throws RestException {
+	void postCall(RestRequest req, RestResponse res) throws HttpException {
 		for (int i = 0; i < postCallMethods.length; i++)
 			preOrPost(resource, postCallMethods[i], postCallMethodParams[i], req, res);
 	}
 
-	private static void preOrPost(Object resource, Method m, RestMethodParam[] mp, RestRequest req, RestResponse res) throws RestException {
+	private static void preOrPost(Object resource, Method m, RestMethodParam[] mp, RestRequest req, RestResponse res) throws HttpException {
 		if (m != null) {
 			Object[] args = new Object[mp.length];
 			for (int i = 0; i < mp.length; i++) {
 				try {
 					args[i] = mp[i].resolve(req, res);
-				} catch (RestException e) {
-					throw e;
 				} catch (Exception e) {
-					throw new BadRequest(e,
-						"Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.",
-						mp[i].getParamType().name(), mp[i].getName(), mp[i].getType(), m.getDeclaringClass().getName(), m.getName()
-					);
+					throw toHttpException(e, BadRequest.class, "Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.", mp[i].getParamType().name(), mp[i].getName(), mp[i].getType(), m.getDeclaringClass().getName(), m.getName());
 				}
 			}
 			try {
 				m.invoke(resource, args);
-			} catch (RestException e) {
-				throw e;
 			} catch (Exception e) {
-				throw new InternalServerError(e);
+				throw toHttpException(e, InternalServerError.class);
 			}
 		}
 	}
@@ -5113,7 +5107,7 @@ public final class RestContext extends BeanContext {
 			startOrFinish(resource, endCallMethods[i], endCallMethodParams[i], call.getRequest(), call.getResponse());
 	}
 
-	private static void startOrFinish(Object resource, Method m, Class<?>[] p, HttpServletRequest req, HttpServletResponse res) throws RestException, InternalServerError {
+	private static void startOrFinish(Object resource, Method m, Class<?>[] p, HttpServletRequest req, HttpServletResponse res) throws HttpException, InternalServerError {
 		if (m != null) {
 			Object[] args = new Object[p.length];
 			for (int i = 0; i < p.length; i++) {
@@ -5124,10 +5118,8 @@ public final class RestContext extends BeanContext {
 			}
 			try {
 				m.invoke(resource, args);
-			} catch (RestException e) {
-				throw e;
 			} catch (Exception e) {
-				throw new InternalServerError(e);
+				throw toHttpException(e, InternalServerError.class);
 			}
 		}
 	}
@@ -5173,9 +5165,9 @@ public final class RestContext extends BeanContext {
 			}
 			try {
 				m.invoke(r, args);
-			} catch (RestException e) {
-				throw e;
 			} catch (Exception e) {
+				if (e instanceof RuntimeException && ClassInfo.of(e).hasAnnotation(Response.class))
+					throw (RuntimeException)e;
 				throw new InternalServerError(e);
 			}
 		}

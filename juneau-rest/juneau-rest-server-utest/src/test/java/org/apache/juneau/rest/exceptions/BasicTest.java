@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.exception;
+package org.apache.juneau.rest.exceptions;
 
 import static org.junit.Assert.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
@@ -22,6 +22,7 @@ import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 import org.junit.runners.*;
+import org.apache.juneau.http.exception.*;
 
 @SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

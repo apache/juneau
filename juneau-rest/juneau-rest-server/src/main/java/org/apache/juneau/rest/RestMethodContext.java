@@ -21,6 +21,7 @@ import static org.apache.juneau.internal.StringUtils.firstNonEmpty;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -45,7 +46,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Method;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.guards.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
@@ -842,13 +843,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		for (int i = 0; i < methodParams.length; i++) {
 			try {
 				args[i] = methodParams[i].resolve(req, res);
-			} catch (RestException e) {
-				throw e;
 			} catch (Exception e) {
-				throw new BadRequest(e,
-					"Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.",
-					methodParams[i].getParamType().name(), methodParams[i].getName(), methodParams[i].getType(), mi.getDeclaringClass().getFullName(), mi.getSimpleName()
-				);
+				throw toHttpException(e, BadRequest.class, "Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.", methodParams[i].getParamType().name(), methodParams[i].getName(), methodParams[i].getType(), mi.getDeclaringClass().getFullName(), mi.getSimpleName());
 			}
 		}
 
@@ -893,13 +889,9 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			);
 		} catch (InvocationTargetException e) {
 			Throwable e2 = e.getTargetException();		// Get the throwable thrown from the doX() method.
-			if (e2 instanceof RestException)
-				throw (RestException)e2;
-			if (e2 instanceof ParseException)
+			if (e2 instanceof ParseException || e2 instanceof InvalidDataConversionException)
 				throw new BadRequest(e2);
-			if (e2 instanceof InvalidDataConversionException)
-				throw new BadRequest(e2);
-			throw e2;
+			throw toHttpException(e, InternalServerError.class);
 		}
 		return SC_OK;
 	}

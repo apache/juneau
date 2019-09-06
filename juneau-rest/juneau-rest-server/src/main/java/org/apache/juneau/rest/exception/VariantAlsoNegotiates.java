@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * Transparent content negotiation for the request results in a circular reference.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.VariantAlsoNegotiates}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class VariantAlsoNegotiates extends RestException {
 	private static final long serialVersionUID = 1L;
 

@@ -28,8 +28,11 @@ import org.apache.juneau.rest.*;
  * <br>Upon receiving a 410 status code, the client should not request the resource in the future.
  * <br>Clients such as search engines should remove the resource from their indices.
  * <br>Most use cases do not require clients and search engines to purge the resource, and a <js>"404 Not Found"</js> may be used instead.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.Gone}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class Gone extends RestException {
 	private static final long serialVersionUID = 1L;
 

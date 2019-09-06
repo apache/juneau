@@ -25,8 +25,11 @@ import org.apache.juneau.rest.*;
  * <p>
  * The server is currently unavailable (because it is overloaded or down for maintenance).
  * <br>Generally, this is a temporary state.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.ServiceUnavailable}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class ServiceUnavailable extends RestException {
 	private static final long serialVersionUID = 1L;
 

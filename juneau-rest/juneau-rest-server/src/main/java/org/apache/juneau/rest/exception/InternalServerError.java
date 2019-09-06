@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.InternalServerError}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class InternalServerError extends RestException {
 	private static final long serialVersionUID = 1L;
 

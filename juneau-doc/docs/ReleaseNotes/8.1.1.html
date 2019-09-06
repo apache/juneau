@@ -26,6 +26,14 @@
 	<li>
 		Fixed a bug in the parsers where the generic subtype of a complex bean property type involving both collections and arrays
 		was not being found.  (e.g. <c>List&lt;Long&gt;[]</c>)
+	<li>
+		New packages of HTTP response/exceptions beans moved from <c>juneau-rest-server</c> bundle so that they can be 
+		used when building REST proxy interfaces without having to pull in the server bundle.
+		<ul>
+			<li class='jp'>{@link oaj.http.response}
+			<li class='jp'>{@link oaj.http.exception}
+		</ul>
+		These replace the <c>org.apache.juneau.rest.response</c> and <c>org.apache.juneau.rest.exception</c> packages.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
@@ -36,4 +44,6 @@
 	<li>
 		Fixed issue where {@link oajr.annotation.RestRequest#debug() RestRequest.debug()} annotation wasn't resulting
 		in the HTTP request being logged.
+	<li>
+		{@link oajr.RestException} has been deprecated and replaced by {@link oaj.http.exception.HttpException}.
 </ul>

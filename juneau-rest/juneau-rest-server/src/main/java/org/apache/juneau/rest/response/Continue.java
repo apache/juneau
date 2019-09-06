@@ -25,8 +25,11 @@ import org.apache.juneau.http.annotation.*;
  * To have a server check the request's headers, a client must send Expect: 100-continue as a header in its initial request and receive a 100 Continue status code in response before sending the body.
  * If the client receives an error code such as 403 (Forbidden) or 405 (Method Not Allowed) then it shouldn't send the request's body.
  * The response 417 Expectation Failed indicates that the request should be repeated without the Expect header as it indicates that the server doesn't support expectations (this is the case, for example, of HTTP/1.0 servers).
+ *
+ * @deprecated Use {@link org.apache.juneau.http.response.Continue}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class Continue extends HttpResponse {
 
 	/** HTTP status code */

@@ -21,8 +21,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * Used to return some response headers before final HTTP message.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.response.EarlyHints}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class EarlyHints extends HttpResponse {
 
 	/** HTTP status code */

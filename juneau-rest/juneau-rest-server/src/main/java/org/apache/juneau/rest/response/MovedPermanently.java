@@ -24,9 +24,12 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * This and all future requests should be directed to the given URI.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.response.MovedPermanently}
  */
 @Response(code=CODE, description=MESSAGE)
 @BeanIgnore
+@Deprecated
 public class MovedPermanently extends HttpResponse {
 
 	/** HTTP status code */

@@ -16,6 +16,7 @@ import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.io.*;
 import java.text.*;
@@ -27,7 +28,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 
 /**
  * Servlet implementation of a REST resource.
@@ -61,22 +62,13 @@ public abstract class RestServlet extends HttpServlet {
 			builder.servletContext(this.getServletContext());
 			setContext(builder.build());
 			context.postInitChildFirst();
-		} catch (RestException e) {
-			// Thrown RestExceptions are simply caught and re-thrown on subsequent calls to service().
-			initException = e;
-			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
 		} catch (ServletException e) {
 			initException = e;
 			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
 			throw e;
-		} catch (Exception e) {
-			initException = e;
-			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
-			throw new ServletException(e);
 		} catch (Throwable e) {
-			initException = new Exception(e);
+			initException = toHttpException(e, InternalServerError.class);
 			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
-			throw new ServletException(e);
 		}
 	}
 
@@ -171,11 +163,8 @@ public abstract class RestServlet extends HttpServlet {
 		try {
 			// To avoid checking the volatile field context on every call, use the non-volatile isInitialized field as a first-check check.
 			if (! isInitialized) {
-				if (initException != null) {
-					if (initException instanceof RestException)
-						throw (RestException)initException;
-					throw new InternalServerError(initException);
-				}
+				if (initException != null)
+					throw initException;
 				if (context == null)
 					throw new InternalServerError("Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", getClass().getName());
 				isInitialized = true;
@@ -183,8 +172,6 @@ public abstract class RestServlet extends HttpServlet {
 
 			context.getCallHandler().service(r1, r2);
 
-		} catch (RestException e) {
-			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
 		} catch (Throwable e) {
 			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
 		}

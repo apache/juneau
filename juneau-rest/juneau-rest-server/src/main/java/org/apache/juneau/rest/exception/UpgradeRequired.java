@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The client should switch to a different protocol such as TLS/1.0, given in the Upgrade header field.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.UpgradeRequired}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class UpgradeRequired extends RestException {
 	private static final long serialVersionUID = 1L;
 

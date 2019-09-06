@@ -21,8 +21,11 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * The requester has asked the server to switch protocols and the server has agreed to do so.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.response.SwitchingProtocols}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class SwitchingProtocols extends HttpResponse {
 
 	/** HTTP status code */

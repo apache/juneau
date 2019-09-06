@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.MisdirectedRequest}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class MisdirectedRequest extends RestException {
 	private static final long serialVersionUID = 1L;
 

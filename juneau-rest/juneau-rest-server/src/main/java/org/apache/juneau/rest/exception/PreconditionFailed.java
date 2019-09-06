@@ -24,8 +24,11 @@ import org.apache.juneau.rest.*;
  *
  * <p>
  * The server does not meet one of the preconditions that the requester put on the request.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.exception.PreconditionFailed}
  */
 @Response(code=CODE, description=MESSAGE)
+@Deprecated
 public class PreconditionFailed extends RestException {
 	private static final long serialVersionUID = 1L;
 

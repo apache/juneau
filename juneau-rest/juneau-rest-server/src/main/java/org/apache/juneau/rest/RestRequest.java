@@ -19,6 +19,7 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.rest.Enablement.*;
+import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -53,9 +54,10 @@ import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
@@ -177,10 +179,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 			this.pathParams = new RequestPath(this);
 
-		} catch (RestException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new ServletException(e);
+			throw toHttpException(e, InternalServerError.class);
 		}
 	}
 
@@ -1015,10 +1015,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			if (swagger == null)
 				swagger = context.getInfoProvider().getSwagger(this);
 			return swagger;
-		} catch (RestException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new InternalServerError(e);
+			throw toHttpException(e, InternalServerError.class);
 		}
 	}
 
@@ -1048,10 +1046,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public String getSiteName() {
 		try {
 			return context.getInfoProvider().getSiteName(this);
-		} catch (RestException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new InternalServerError(e);
+			throw toHttpException(e, InternalServerError.class);
 		}
 	}
 
@@ -1066,10 +1062,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public String getResourceTitle() {
 		try {
 			return context.getInfoProvider().getTitle(this);
-		} catch (RestException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new InternalServerError(e);
+			throw toHttpException(e, InternalServerError.class);
 		}
 	}
 
@@ -1084,10 +1078,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public String getResourceDescription() {
 		try {
 			return context.getInfoProvider().getDescription(this);
-		} catch (RestException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new InternalServerError(e);
+			throw toHttpException(e, InternalServerError.class);
 		}
 	}
 
@@ -1102,10 +1094,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public String getMethodSummary() {
 		try {
 			return context.getInfoProvider().getMethodSummary(javaMethod, this);
-		} catch (RestException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new InternalServerError(e);
+			throw toHttpException(e, InternalServerError.class);
 		}
 	}
 
@@ -1120,10 +1110,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public String getMethodDescription() {
 		try {
 			return context.getInfoProvider().getMethodDescription(javaMethod, this);
-		} catch (RestException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new InternalServerError(e);
+			throw toHttpException(e, InternalServerError.class);
 		}
 	}
 

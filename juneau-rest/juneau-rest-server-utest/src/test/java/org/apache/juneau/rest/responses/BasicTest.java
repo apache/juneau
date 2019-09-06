@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.response;
+package org.apache.juneau.rest.responses;
 
 import static org.junit.Assert.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
@@ -22,6 +22,7 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.http.response.*;
 import org.junit.*;
 import org.junit.runners.*;
 
