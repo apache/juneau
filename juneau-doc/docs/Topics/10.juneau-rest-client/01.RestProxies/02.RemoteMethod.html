@@ -16,15 +16,15 @@
 @RemoteMethod
 
 <p>
-	The {@link oajrc.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
+	The {@link oaj.http.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
 	of <ja>@RemoteResource</ja>-annotated interfaces to identify REST endpoints.
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oajrc.remote.RemoteMethod}
+	<li class='ja'>{@link oaj.http.remote.RemoteMethod}
 	<ul>
-		<li class='jf'>{@link oajrc.remote.RemoteMethod#method method}
-		<li class='jf'>{@link oajrc.remote.RemoteMethod#path path}
-		<li class='jf'>{@link oajrc.remote.RemoteMethod#returns returns}
+		<li class='jf'>{@link oaj.http.remote.RemoteMethod#method method}
+		<li class='jf'>{@link oaj.http.remote.RemoteMethod#path path}
+		<li class='jf'>{@link oaj.http.remote.RemoteMethod#returns returns}
 	</ul>
 </ul>
 <h5 class='topic'>@RemoteMethod(method/path)</h5>
@@ -146,8 +146,8 @@
 </ul>
 
 <p>
-	If you're only interested in the HTTP status code of the response, you can use the {@link oajrc.remote.RemoteMethod#returns() returns}
-	annotation with a value of {@link oajrc.remote.RemoteReturn#STATUS STATUS}:
+	If you're only interested in the HTTP status code of the response, you can use the {@link oaj.http.remote.RemoteMethod#returns() returns}
+	annotation with a value of {@link oaj.http.remote.RemoteReturn#STATUS STATUS}:
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	

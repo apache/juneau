@@ -27,13 +27,14 @@
 		Fixed a bug in the parsers where the generic subtype of a complex bean property type involving both collections and arrays
 		was not being found.  (e.g. <c>List&lt;Long&gt;[]</c>)
 	<li>
-		New packages of HTTP response/exceptions beans moved from <c>juneau-rest-server</c> bundle so that they can be 
-		used when building REST proxy interfaces without having to pull in the server bundle.
+		New packages of HTTP response/exceptions beans from <c>juneau-rest-server</c> bundle and REST proxy annotations from <c>juneau-rest-client</c> 
+		so that they can be used when building REST proxy interfaces while only pulling in the marshall bundle.
 		<ul>
 			<li class='jp'>{@link oaj.http.response}
 			<li class='jp'>{@link oaj.http.exception}
+			<li class='jp'>{@link oaj.http.remote}
 		</ul>
-		These replace the <c>org.apache.juneau.rest.response</c> and <c>org.apache.juneau.rest.exception</c> packages.
+		These replace the <c>org.apache.juneau.rest.response</c>, <c>org.apache.juneau.rest.exception</c>, and <c>org.apache.juneau.rest.client.remote</c> packages.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
