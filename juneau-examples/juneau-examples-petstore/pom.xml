@@ -19,22 +19,19 @@
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau</artifactId>
+		<artifactId>juneau-examples</artifactId>
 		<version>8.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-examples</artifactId>
+	<artifactId>juneau-examples-petstore</artifactId>
 	<packaging>pom</packaging>
-	<name>Apache Juneau - Examples</name>
-	<description>Apache Juneau Examples</description>
+	<name>Apache Juneau Petstore Example</name>
+	<description>Apache Juneau Petstore Example</description>
 
 	<modules>
-		<module>juneau-examples-core</module>
-		<module>juneau-examples-rest</module>
-		<module>juneau-examples-rest-jetty</module>
-		<module>juneau-examples-rest-springboot</module>
-		<module>juneau-examples-rest-jetty-ftest</module>
-		<module>juneau-examples-petstore</module>
+		<module>juneau-examples-petstore-api</module>
+        <module>juneau-examples-petstore-server</module>
+        <module>juneau-examples-petstore-client</module>
 	</modules>
 
 </project>
