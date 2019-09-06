@@ -34,9 +34,10 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param c The constructor being wrapped.
+	 * @param rc The "real" constructor if the constructor above is defined against a CGLIB proxy.
 	 */
-	protected ConstructorInfo(ClassInfo declaringClass, Constructor<?> c) {
-		super(declaringClass, c);
+	protected ConstructorInfo(ClassInfo declaringClass, Constructor<?> c, Constructor<?> rc) {
+		super(declaringClass, c, rc);
 		this.c = c;
 	}
 
@@ -45,12 +46,13 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param c The constructor being wrapped.
+	 * @param rc The "real" constructor if the constructor above is defined against a CGLIB proxy.
 	 * @return A new {@link ConstructorInfo} object, or <jk>null</jk> if the method was null;
 	 */
-	public static ConstructorInfo of(ClassInfo declaringClass, Constructor<?> c) {
+	public static ConstructorInfo of(ClassInfo declaringClass, Constructor<?> c, Constructor<?> rc) {
 		if (c == null)
 			return null;
-		return new ConstructorInfo(declaringClass, c);
+		return new ConstructorInfo(declaringClass, c, rc);
 	}
 
 	/**
@@ -62,7 +64,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	public static ConstructorInfo of(Constructor<?> c) {
 		if (c == null)
 			return null;
-		return new ConstructorInfo(ClassInfo.of(c.getDeclaringClass()), c);
+		return new ConstructorInfo(ClassInfo.of(c.getDeclaringClass()), c, c);
 	}
 
 	/**

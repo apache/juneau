@@ -58,6 +58,7 @@ public final class ClassInfo {
 
 	private final Type t;
 	final Class<?> c;
+	private ClassInfo proxyFor;
 	private final boolean isParameterizedType;
 	private List<ClassInfo> interfaces, declaredInterfaces, parents, allParents;
 	private List<MethodInfo> publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
@@ -76,10 +77,12 @@ public final class ClassInfo {
 	 *
 	 * @param c The class type.
 	 * @param t The generic type (if parameterized type).
+	 * @param proxyFor If the class is a CGLIB proxy, this is the underlying wrapped class.
 	 */
-	protected ClassInfo(Class<?> c, Type t) {
+	protected ClassInfo(Class<?> c, Type t, Class<?> proxyFor) {
 		this.t = t;
 		this.c = c;
+		this.proxyFor = proxyFor == null ? null : ClassInfo.of(proxyFor);
 		this.isParameterizedType = t == null ? false : (t instanceof ParameterizedType);
 	}
 
@@ -92,7 +95,7 @@ public final class ClassInfo {
 	public static ClassInfo of(Type t) {
 		if (t == null)
 			return null;
-		return new ClassInfo(ClassUtils.toClass(t), t);
+		return new ClassInfo(ClassUtils.toClass(t), t, null);
 	}
 
 	/**
@@ -104,7 +107,7 @@ public final class ClassInfo {
 	public static ClassInfo of(Class<?> c) {
 		if (c == null)
 			return null;
-		return new ClassInfo(c, c);
+		return new ClassInfo(c, c, null);
 	}
 
 	/**
@@ -115,7 +118,7 @@ public final class ClassInfo {
 	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
 	 */
 	public static ClassInfo of(Class<?> c, Type t) {
-		return new ClassInfo(c, t);
+		return new ClassInfo(c, t, null);
 	}
 
 	/**
@@ -127,7 +130,28 @@ public final class ClassInfo {
 	public static ClassInfo of(Object o) {
 		if (o == null)
 			return null;
-		return new ClassInfo(o.getClass(), o.getClass());
+		return new ClassInfo(o.getClass(), o.getClass(), getProxyFor(o));
+	}
+
+	/**
+	 * When this metadata is against a CGLIB proxy, this method finds the underlying "real" class.
+	 * 
+	 * @param o The class instance.
+	 * @return The non-proxy class, or <jk>null</jk> if it's not a CGLIB proxy.
+	 */
+	private static Class<?> getProxyFor(Object o) {
+		Class<?> c = o.getClass();
+		String s = c.getName();
+		if (s.indexOf('$') == -1 || ! s.contains("$$EnhancerBySpringCGLIB$$"))
+			return null;
+		for (Method m : c.getMethods()) {
+			if (m.getName().equals("getTargetClass") && m.getParameterCount() == 0 && m.getReturnType().equals(Class.class)) {
+				try {
+					return (Class<?>) m.invoke(o);
+				} catch (Exception e) {}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -158,6 +182,26 @@ public final class ClassInfo {
 		if (Value.isType(t))
 			return of(Value.getParameterType(t));
 		return this;
+	}
+
+	/**
+	 * Identifies the inner target class when this class info represents a CGLIB proxy class.
+	 *
+	 * @param proxyFor The inner non-proxied class.
+	 * @return This object (for method chaining).
+	 */
+	public ClassInfo proxyFor(Class<?> proxyFor) {
+		this.proxyFor = ClassInfo.of(proxyFor);
+		return this;
+	}
+
+	/**
+	 * Returns the non-proxied inner class of a CGLIB proxy class.
+	 *
+	 * @return The non-proxied inner class of a CGLIB proxy class, or the inner class if it's not a proxy.
+	 */
+	public Class<?> getProxiedClass() {
+		return proxyFor == null ? c : proxyFor.inner();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -308,11 +352,29 @@ public final class ClassInfo {
 			List<MethodInfo> l = new ArrayList<>(mm.length);
 			for (Method m : mm)
 				if (m.getDeclaringClass() != Object.class)
-					l.add(MethodInfo.of(this, m));
+					l.add(MethodInfo.of(this, m, getProxyTarget(m)));
 			l.sort(null);
 			publicMethods = Collections.unmodifiableList(l);
 		}
 		return publicMethods;
+	}
+
+	private Method getProxyTarget(Method m) {
+		if (proxyFor != null) {
+			MethodInfo m2 = proxyFor.getMethod(m.getName(), m.getParameterTypes());
+			if (m2 != null)
+				return m2.inner();
+		}
+		return m;
+	}
+
+	private Constructor<?> getProxyTarget(Constructor<?> c) {
+		if (proxyFor != null) {
+			ConstructorInfo c2 = proxyFor.getConstructor(Visibility.PRIVATE, c.getParameterTypes());
+			if (c2 != null)
+				return c2.inner();
+		}
+		return c;
 	}
 
 	/**
@@ -358,7 +420,7 @@ public final class ClassInfo {
 			List<MethodInfo> l = new ArrayList<>(mm.length);
 			for (Method m : mm)
 				if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
-					l.add(MethodInfo.of(this, m));
+					l.add(MethodInfo.of(this, m, getProxyTarget(m)));
 			l.sort(null);
 			declaredMethods = Collections.unmodifiableList(l);
 		}
@@ -516,7 +578,7 @@ public final class ClassInfo {
 			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
 			List<ConstructorInfo> l = new ArrayList<>(cc.length);
 			for (Constructor<?> ccc : cc)
-				l.add(ConstructorInfo.of(this, ccc));
+				l.add(ConstructorInfo.of(this, ccc, getProxyTarget(ccc)));
 			l.sort(null);
 			publicConstructors = Collections.unmodifiableList(l);
 		}
@@ -575,7 +637,7 @@ public final class ClassInfo {
 			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
 			List<ConstructorInfo> l = new ArrayList<>(cc.length);
 			for (Constructor<?> ccc : cc)
-				l.add(ConstructorInfo.of(this, ccc));
+				l.add(ConstructorInfo.of(this, ccc, getProxyTarget(ccc)));
 			l.sort(null);
 			declaredConstructors = Collections.unmodifiableList(l);
 		}

@@ -43,9 +43,10 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param m The method being wrapped.
+	 * @param rm The "real" method if the method above is defined against a CGLIB proxy.
 	 */
-	protected MethodInfo(ClassInfo declaringClass, Method m) {
-		super(declaringClass, m);
+	protected MethodInfo(ClassInfo declaringClass, Method m, Method rm) {
+		super(declaringClass, m, rm);
 		this.m = m;
 	}
 
@@ -54,12 +55,13 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param m The method being wrapped.
+	 * @param rm The "real" method if the method above is defined against a CGLIB proxy.
 	 * @return A new {@link MethodInfo} object, or <jk>null</jk> if the method was null;
 	 */
-	public static MethodInfo of(ClassInfo declaringClass, Method m) {
+	public static MethodInfo of(ClassInfo declaringClass, Method m, Method rm) {
 		if (m == null)
 			return null;
-		return new MethodInfo(declaringClass, m);
+		return new MethodInfo(declaringClass, m, rm);
 	}
 
 	/**
@@ -71,7 +73,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	public static MethodInfo of(Method m) {
 		if (m == null)
 			return null;
-		return new MethodInfo(ClassInfo.of(m.getDeclaringClass()), m);
+		return new MethodInfo(ClassInfo.of(m.getDeclaringClass()), m, m);
 	}
 
 	/**

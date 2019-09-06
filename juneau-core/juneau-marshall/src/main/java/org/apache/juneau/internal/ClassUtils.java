@@ -55,7 +55,7 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Shortcut for calling {@link MethodInfo#of(ClassInfo, Method)}.
+	 * Shortcut for calling {@link MethodInfo#of(ClassInfo, Method, Method)}.
 	 *
 	 * @param c
 	 * 	The class containing the method.
@@ -65,7 +65,7 @@ public final class ClassUtils {
 	 * @return The wrapped method.
 	 */
 	public static MethodInfo getMethodInfo(Class<?> c, Method m) {
-		return MethodInfo.of(ClassInfo.of(c), m);
+		return MethodInfo.of(ClassInfo.of(c), m, m);
 	}
 
 	/**
