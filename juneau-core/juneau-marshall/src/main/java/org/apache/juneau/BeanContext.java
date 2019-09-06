@@ -2010,7 +2010,7 @@ public class BeanContext extends Context {
 
 		LinkedList<BeanFilter> lbf = new LinkedList<>();
 		for (Class<?> c : getClassListProperty(BEAN_beanFilters)) {
-			ClassInfo ci = getClassInfo(c);
+			ClassInfo ci = ClassInfo.of(c);
 			if (ci.isChildOf(BeanFilter.class))
 				lbf.add(castOrCreate(BeanFilter.class, c));
 			else if (ci.isChildOf(BeanFilterBuilder.class))
@@ -2023,7 +2023,7 @@ public class BeanContext extends Context {
 		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<>();
 		for (Object o : getListProperty(BEAN_pojoSwaps, Object.class)) {
 			if (o instanceof Class) {
-				ClassInfo ci = getClassInfo((Class<?>)o);
+				ClassInfo ci = ClassInfo.of((Class<?>)o);
 				if (ci.isChildOf(PojoSwap.class))
 					lpf.add(castOrCreate(PojoSwap.class, ci.inner()));
 				else if (ci.isChildOf(Surrogate.class))
@@ -2040,7 +2040,7 @@ public class BeanContext extends Context {
 
 		Map<String,ClassInfo> icm = new LinkedHashMap<>();
 		for (Map.Entry<String,Class<?>> e : getClassMapProperty(BEAN_implClasses).entrySet())
-			icm.put(e.getKey(), getClassInfo(e.getValue()));
+			icm.put(e.getKey(), ClassInfo.of(e.getValue()));
 		implClasses = unmodifiableMap(icm);
 
 		Map<String,String[]> m2 = new HashMap<>();
@@ -2192,7 +2192,7 @@ public class BeanContext extends Context {
 				if (p.getName().startsWith(p2))
 					return true;
 		}
-		ClassInfo ci = getClassInfo(c);
+		ClassInfo ci = ClassInfo.of(c);
 		for (Class exclude : notBeanClasses)
 			if (ci.isChildOf(exclude))
 				return true;
@@ -2657,7 +2657,7 @@ public class BeanContext extends Context {
 	private final <T> BeanFilter findBeanFilter(Class<T> c) {
 		if (c != null)
 			for (BeanFilter f : beanFilters)
-				if (getClassInfo(f.getBeanClass()).isParentOf(c))
+				if (ClassInfo.of(f.getBeanClass()).isParentOf(c))
 					return f;
 		return null;
 	}
@@ -2716,7 +2716,7 @@ public class BeanContext extends Context {
 		if (includeProperties.isEmpty())
 			return null;
 		String[] s = null;
-		ClassInfo ci = getClassInfo(c);
+		ClassInfo ci = ClassInfo.of(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
 			s = includeProperties.get(c2.getFullName());
 			if (s != null)
@@ -2738,7 +2738,7 @@ public class BeanContext extends Context {
 		if (excludeProperties.isEmpty())
 			return null;
 		String[] s = null;
-		ClassInfo ci = getClassInfo(c);
+		ClassInfo ci = ClassInfo.of(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
 			s = excludeProperties.get(c2.getFullName());
 			if (s != null)

@@ -13,8 +13,6 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
 
 import org.apache.juneau.reflect.*;
@@ -85,7 +83,7 @@ public class HttpUtils {
 			return "";
 		sb.append('(');
 		for (int i = 0; i < pt.length; i++) {
-			ClassInfo pti = getClassInfo(pt[i]);
+			ClassInfo pti = ClassInfo.of(pt[i]);
 			if (i > 0)
 				sb.append(',');
 			if (full)

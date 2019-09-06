@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
@@ -113,7 +112,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		this.parentContext = parentContext;
 		this.properties = new RestContextProperties();
 
-		ClassInfo rci = getClassInfo(resourceClass);
+		ClassInfo rci = ClassInfo.of(resourceClass);
 
 		// Default values.
 		logger(BasicRestLogger.class);
@@ -201,7 +200,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	RestContextBuilder init(Object resource) throws ServletException {
 		this.resource = resource;
-		ClassInfo rci = getClassInfo(resourceClass);
+		ClassInfo rci = ClassInfo.of(resourceClass);
 
 		Map<String,MethodInfo> map = new LinkedHashMap<>();
 		for (MethodInfo m : rci.getAllMethodsParentFirst()) {

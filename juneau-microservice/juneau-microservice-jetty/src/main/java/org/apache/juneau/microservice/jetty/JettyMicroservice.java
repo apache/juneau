@@ -14,8 +14,6 @@ package org.apache.juneau.microservice.jetty;
 
 import static org.apache.juneau.internal.SystemUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -347,7 +345,7 @@ public class JettyMicroservice extends Microservice {
 
 		for (String s : cf.getStringArray("Jetty/servlets", new String[0])) {
 			try {
-				ClassInfo c = getClassInfo(Class.forName(s));
+				ClassInfo c = ClassInfo.of(Class.forName(s));
 				if (c.isChildOf(RestServlet.class)) {
 					RestServlet rs = (RestServlet)c.newInstance();
 					addServlet(rs, rs.getPath());
@@ -361,7 +359,7 @@ public class JettyMicroservice extends Microservice {
 
 		for (Map.Entry<String,Object> e : cf.getObjectMap("Jetty/servletMap", ObjectMap.EMPTY_MAP).entrySet()) {
 			try {
-				ClassInfo c = getClassInfo(Class.forName(e.getValue().toString()));
+				ClassInfo c = ClassInfo.of(Class.forName(e.getValue().toString()));
 				if (c.isChildOf(Servlet.class)) {
 					Servlet rs = (Servlet)c.newInstance();
 					addServlet(rs, e.getKey());

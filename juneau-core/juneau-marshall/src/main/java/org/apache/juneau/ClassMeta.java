@@ -141,7 +141,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 		this.innerClass = innerClass;
-		this.info = getClassInfo(innerClass);
+		this.info = ClassInfo.of(innerClass);
 		this.beanContext = beanContext;
 		this.extMeta = new MetadataMap();
 		String notABeanReason = null;
@@ -256,7 +256,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings("unchecked")
 	ClassMeta(ClassMeta<?>[] args) {
 		this.innerClass = (Class<T>) Object[].class;
-		this.info = getClassInfo(innerClass);
+		this.info = ClassInfo.of(innerClass);
 		this.extMeta = new MetadataMap();
 		this.args = args;
 		this.implClass = null;
@@ -344,7 +344,7 @@ public final class ClassMeta<T> implements Type {
 			this.beanContext = beanContext;
 
 			this.implClass = implClass;
-			ClassInfo ici = getClassInfo(implClass);
+			ClassInfo ici = ClassInfo.of(implClass);
 			this.childPojoSwaps = childPojoSwaps;
 			if (childPojoSwaps == null) {
 				this.childSwapMap = null;
@@ -355,7 +355,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			Class<T> c = innerClass;
-			ci = getClassInfo(c);
+			ci = ClassInfo.of(c);
 
 			if (c.isPrimitive()) {
 				if (c == Boolean.TYPE)
@@ -704,7 +704,7 @@ public final class ClassMeta<T> implements Type {
 			Class<?> c = s.value();
 			if (c == Null.class)
 				c = s.impl();
-			ClassInfo ci = getClassInfo(c);
+			ClassInfo ci = ClassInfo.of(c);
 
 			if (ci.isChildOf(PojoSwap.class)) {
 				PojoSwap ps = castOrCreate(PojoSwap.class, c);
@@ -894,7 +894,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings({"unchecked"})
 	protected static <T> Constructor<? extends T> findNoArgConstructor(Class<?> c, Visibility v) {
-		ClassInfo ci = getClassInfo(c);
+		ClassInfo ci = ClassInfo.of(c);
 		if (ci.isAbstract())
 			return null;
 		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();
@@ -960,7 +960,7 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 			if (exampleMethod != null)
-				return (T)getMethodInfo(exampleMethod).invokeFuzzy(null, session);
+				return (T)MethodInfo.of(exampleMethod).invokeFuzzy(null, session);
 			if (exampleField != null)
 				return (T)exampleField.get(null);
 

@@ -64,7 +64,7 @@ public class BeanRegistry {
 	private void addClass(Class<?> c) {
 		try {
 			if (c != null) {
-				ClassInfo ci = getClassInfo(c);
+				ClassInfo ci = ClassInfo.of(c);
 				if (ci.isChildOf(Collection.class)) {
 					@SuppressWarnings("rawtypes")
 					Collection cc = castOrCreate(Collection.class, c);

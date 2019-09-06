@@ -196,7 +196,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (getter != null) {
-				BeanProperty p = getMethodInfo(getter).getAnnotation(BeanProperty.class);
+				BeanProperty p = MethodInfo.of(getter).getAnnotation(BeanProperty.class);
 				if (rawTypeMeta == null)
 					rawTypeMeta = f.resolveClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
@@ -212,7 +212,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (setter != null) {
-				BeanProperty p = getMethodInfo(setter).getAnnotation(BeanProperty.class);
+				BeanProperty p = MethodInfo.of(setter).getAnnotation(BeanProperty.class);
 				if (rawTypeMeta == null)
 					rawTypeMeta = f.resolveClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
@@ -270,7 +270,7 @@ public final class BeanPropertyMeta {
 			}
 			if (field != null) {
 				if (isDyna) {
-					if (! getClassInfo(field.getType()).isChildOf(Map.class))
+					if (! ClassInfo.of(field.getType()).isChildOf(Map.class))
 						return false;
 				} else {
 					if (! ci.isChildOf(field.getType()))
@@ -313,7 +313,7 @@ public final class BeanPropertyMeta {
 				c = s.impl();
 			if (c == Null.class)
 				return null;
-			ClassInfo ci = getClassInfo(c);
+			ClassInfo ci = ClassInfo.of(c);
 			if (ci.isChildOf(PojoSwap.class)) {
 				PojoSwap ps = castOrCreate(PojoSwap.class, c);
 				if (ps.forMediaTypes() != null)
@@ -373,11 +373,11 @@ public final class BeanPropertyMeta {
 		this.field = b.field;
 		this.innerField = b.innerField;
 		this.getter = b.getter;
-		this.getterInfo = getMethodInfo(b.getter);
+		this.getterInfo = MethodInfo.of(b.getter);
 		this.setter = b.setter;
-		this.setterInfo = getMethodInfo(b.setter);
+		this.setterInfo = MethodInfo.of(b.setter);
 		this.extraKeys = b.extraKeys;
-		this.extraKeysInfo = getMethodInfo(b.extraKeys);
+		this.extraKeysInfo = MethodInfo.of(b.extraKeys);
 		this.isUri = b.isUri;
 		this.beanMeta = b.beanMeta;
 		this.beanContext = b.beanContext;
@@ -1067,19 +1067,19 @@ public final class BeanPropertyMeta {
 		List<A> l = new LinkedList<>();
 		if (field != null) {
 			addIfNotNull(l, field.getAnnotation(a));
-			getClassInfo(field.getType()).appendAnnotations(l, a);
+			ClassInfo.of(field.getType()).appendAnnotations(l, a);
 		}
 		if (getter != null) {
-			addIfNotNull(l, getMethodInfo(getter).getAnnotation(a));
-			getClassInfo(getter.getReturnType()).appendAnnotations(l, a);
+			addIfNotNull(l, MethodInfo.of(getter).getAnnotation(a));
+			ClassInfo.of(getter.getReturnType()).appendAnnotations(l, a);
 		}
 		if (setter != null) {
-			addIfNotNull(l, getMethodInfo(setter).getAnnotation(a));
-			getClassInfo(setter.getReturnType()).appendAnnotations(l, a);
+			addIfNotNull(l, MethodInfo.of(setter).getAnnotation(a));
+			ClassInfo.of(setter.getReturnType()).appendAnnotations(l, a);
 		}
 		if (extraKeys != null) {
-			addIfNotNull(l, getMethodInfo(extraKeys).getAnnotation(a));
-			getClassInfo(extraKeys.getReturnType()).appendAnnotations(l, a);
+			addIfNotNull(l, MethodInfo.of(extraKeys).getAnnotation(a));
+			ClassInfo.of(extraKeys.getReturnType()).appendAnnotations(l, a);
 		}
 
 		getBeanMeta().getClassMeta().getInfo().appendAnnotations(l, a);

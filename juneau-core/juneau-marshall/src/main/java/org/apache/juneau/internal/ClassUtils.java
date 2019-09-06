@@ -25,70 +25,6 @@ import org.apache.juneau.utils.*;
 public final class ClassUtils {
 
 	/**
-	 * Shortcut for calling {@link ClassInfo#of(Type)}.
-	 *
-	 * @param t The class being wrapped.
-	 * @return The wrapped class.
-	 */
-	public static ClassInfo getClassInfo(Type t) {
-		return ClassInfo.of(t);
-	}
-
-	/**
-	 * Shortcut for calling {@link ClassInfo#of(Object)}.
-	 *
-	 * @param o The object whose class being wrapped.
-	 * @return The wrapped class.
-	 */
-	public static ClassInfo getClassInfo(Object o) {
-		return ClassInfo.of(o);
-	}
-
-	/**
-	 * Shortcut for calling {@link MethodInfo#of(Method)}.
-	 *
-	 * @param m The method being wrapped.
-	 * @return The wrapped method.
-	 */
-	public static MethodInfo getMethodInfo(Method m) {
-		return MethodInfo.of(m);
-	}
-
-	/**
-	 * Shortcut for calling {@link MethodInfo#of(ClassInfo, Method, Method)}.
-	 *
-	 * @param c
-	 * 	The class containing the method.
-	 * 	<br>Note that this isn't necessarily the declaring class, but could be a subclass
-	 * 	of the declaring class.
-	 * @param m The method being wrapped.
-	 * @return The wrapped method.
-	 */
-	public static MethodInfo getMethodInfo(Class<?> c, Method m) {
-		return MethodInfo.of(ClassInfo.of(c), m, m);
-	}
-
-	/**
-	 * Shortcut for calling {@link FieldInfo#of(Field)}.
-	 *
-	 * @param f The field being wrapped.
-	 * @return The wrapped field.
-	 */
-	public static FieldInfo getFieldInfo(Field f) {
-		return FieldInfo.of(f);
-	}
-
-	/**
-	 * Shortcut for calling {@link ConstructorInfo#of(Constructor)}.
-	 *
-	 * @param c The constructor being wrapped.
-	 * @return The wrapped constructor.
-	 */
-	public static ConstructorInfo getConstructorInfo(Constructor<?> c) {
-		return ConstructorInfo.of(c);
-	}
-
-	/**
 	 * Given the specified list of objects, return readable names for the class types of the objects.
 	 *
 	 * @param o The objects.
@@ -111,7 +47,7 @@ public final class ClassUtils {
 	public static boolean argsMatch(Class<?>[] paramTypes, Class<?>[] argTypes) {
 		if (paramTypes.length == argTypes.length) {
 			for (int i = 0; i < paramTypes.length; i++)
-				if (! getClassInfo(paramTypes[i]).isParentOf(argTypes[i]))
+				if (! ClassInfo.of(paramTypes[i]).isParentOf(argTypes[i]))
 					return false;
 			return true;
 		}
@@ -145,9 +81,9 @@ public final class ClassUtils {
 	public static int fuzzyArgsMatch(Class<?>[] paramTypes, Class<?>... argTypes) {
 		int matches = 0;
 		outer: for (Class<?> p : paramTypes) {
-			ClassInfo pi = getClassInfo(p).getWrapperInfoIfPrimitive();
+			ClassInfo pi = ClassInfo.of(p).getWrapperInfoIfPrimitive();
 			for (Class<?> a : argTypes) {
-				ClassInfo ai = getClassInfo(a).getWrapperInfoIfPrimitive();
+				ClassInfo ai = ClassInfo.of(a).getWrapperInfoIfPrimitive();
 				if (pi.isParentOf(ai.inner())) {
 					matches++;
 					continue outer;
@@ -168,7 +104,7 @@ public final class ClassUtils {
 	public static int fuzzyArgsMatch(Class<?>[] paramTypes, ClassInfo... argTypes) {
 		int matches = 0;
 		outer: for (Class<?> p : paramTypes) {
-			ClassInfo pi = getClassInfo(p).getWrapperInfoIfPrimitive();
+			ClassInfo pi = ClassInfo.of(p).getWrapperInfoIfPrimitive();
 			for (ClassInfo a : argTypes) {
 				ClassInfo ai = a.getWrapperInfoIfPrimitive();
 				if (pi.isParentOf(ai.inner())) {
@@ -284,7 +220,7 @@ public final class ClassUtils {
 			return null;
 		if (c2 instanceof Class) {
 			try {
-				ClassInfo c3 = getClassInfo((Class<?>)c2);
+				ClassInfo c3 = ClassInfo.of((Class<?>)c2);
 				if (c3.isInterface() || c3.isAbstract())
 					return null;
 
@@ -312,7 +248,7 @@ public final class ClassUtils {
 			} catch (Exception e) {
 				throw new FormattedRuntimeException(e, "Could not instantiate class {0}", c.getName());
 			}
-		} else if (getClassInfo(c).isParentOf(c2.getClass())) {
+		} else if (ClassInfo.of(c).isParentOf(c2.getClass())) {
 			return (T)c2;
 		} else {
 			throw new FormattedRuntimeException("Object of type {0} found but was expecting {1}.", c2.getClass(), c.getClass());
@@ -334,7 +270,7 @@ public final class ClassUtils {
 	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object... args) {
 		Object[] params = new Object[paramTypes.length];
 		for (int i = 0; i < paramTypes.length; i++) {
-			ClassInfo pt = getClassInfo(paramTypes[i]).getWrapperInfoIfPrimitive();
+			ClassInfo pt = ClassInfo.of(paramTypes[i]).getWrapperInfoIfPrimitive();
 			for (int j = 0; j < args.length; j++) {
 				if (args[j] != null && pt.isParentOf(args[j].getClass())) {
 					params[i] = args[j];

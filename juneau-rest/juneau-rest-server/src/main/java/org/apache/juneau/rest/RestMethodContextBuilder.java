@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
@@ -35,7 +33,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 		this.method = method;
 
 		String sig = method.getDeclaringClass().getName() + '.' + method.getName();
-		MethodInfo mi = getMethodInfo(servlet.getClass(), method);
+		MethodInfo mi = MethodInfo.of(servlet.getClass(), method, method);
 
 		try {
 

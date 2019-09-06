@@ -13,11 +13,12 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+
+import org.apache.juneau.reflect.*;
 
 /**
  * Quick and dirty utilities for working with arrays.
@@ -392,7 +393,7 @@ public final class ArrayUtils {
 		if (! c.isArray())
 			throw new IllegalArgumentException("Cannot pass non-array objects to toPrimitiveArray()");
 		int l = Array.getLength(o);
-		Class<?> tc = getClassInfo(c.getComponentType()).getPrimitiveForWrapper();
+		Class<?> tc = ClassInfo.of(c.getComponentType()).getPrimitiveForWrapper();
 		if (tc == null)
 			throw new IllegalArgumentException("Array type is not a primitive wrapper array.");
 		Object a = Array.newInstance(tc, l);

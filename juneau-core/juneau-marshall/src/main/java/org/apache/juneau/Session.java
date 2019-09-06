@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
@@ -88,7 +89,7 @@ public abstract class Session {
 		Object o = properties.get(key);
 		if (o == null)
 			return def;
-		type = (Class<T>)getClassInfo(type).getWrapperIfPrimitive();
+		type = (Class<T>)ClassInfo.of(type).getWrapperIfPrimitive();
 		T t = properties.get(key, type);
 		return t == null ? def : t;
 	}

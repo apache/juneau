@@ -132,7 +132,7 @@ public class MethodInfoTest {
 	@Test
 	public void of_null() {
 		check(null, MethodInfo.of(null));
-		check(null, MethodInfo.of(null, null, null));
+		check(null, MethodInfo.of((ClassInfo)null, null, null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

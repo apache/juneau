@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
+
+import org.apache.juneau.reflect.*;
 
 /**
  * Represents a simple settable value.
@@ -65,7 +65,7 @@ public class Value<T> {
 		} else if (t instanceof Class) {
 			Class<?> c = (Class<?>)t;
 			if (Value.class.isAssignableFrom(c)) {
-				return getClassInfo(c).getParameterType(0, Value.class);
+				return ClassInfo.of(c).getParameterType(0, Value.class);
 			}
 		}
 

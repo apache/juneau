@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -126,11 +124,11 @@ public abstract class PojoSwap<T,S> {
 	 * Constructor.
 	 */
 	protected PojoSwap() {
-		ClassInfo ci = getClassInfo(this.getClass());
+		ClassInfo ci = ClassInfo.of(this.getClass());
 		normalClass = (Class<T>)ci.getParameterType(0, PojoSwap.class);
 		swapClass = ci.getParameterType(1, PojoSwap.class);
-		normalClassInfo = getClassInfo(normalClass);
-		swapClassInfo = getClassInfo(swapClass);
+		normalClassInfo = ClassInfo.of(normalClass);
+		swapClassInfo = ClassInfo.of(swapClass);
 		forMediaTypes = forMediaTypes();
 		template = withTemplate();
 	}
@@ -144,8 +142,8 @@ public abstract class PojoSwap<T,S> {
 	protected PojoSwap(Class<T> normalClass, Class<?> swapClass) {
 		this.normalClass = normalClass;
 		this.swapClass = swapClass;
-		normalClassInfo = getClassInfo(normalClass);
-		swapClassInfo = getClassInfo(swapClass);
+		normalClassInfo = ClassInfo.of(normalClass);
+		swapClassInfo = ClassInfo.of(swapClass);
 		this.forMediaTypes = forMediaTypes();
 		this.template = withTemplate();
 	}

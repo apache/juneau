@@ -48,7 +48,7 @@ public class VarResolverContext {
 
 		Map<String,Var> m = new ConcurrentSkipListMap<>();
 		for (Class<?> c : vars) {
-			ClassInfo ci = getClassInfo(c);
+			ClassInfo ci = ClassInfo.of(c);
 			if (! ci.isChildOf(Var.class))
 				throw new VarResolverException("Invalid variable class.  Must extend from Var");
 			Var v = castOrCreate(Var.class, c);

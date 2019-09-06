@@ -14,8 +14,6 @@ package org.apache.juneau.remote;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -51,7 +49,7 @@ public class RemoteInterfaceMeta {
 	public RemoteInterfaceMeta(Class<?> c, String uri) {
 		this.c = c;
 		String path = "";
-		ClassInfo ci = getClassInfo(c);
+		ClassInfo ci = ClassInfo.of(c);
 		List<RemoteInterface> rr = ci.getAnnotationsParentFirst(RemoteInterface.class);
 		for (RemoteInterface r : rr)
 			if (! r.path().isEmpty())

@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.client;
 
 import static java.lang.String.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.format;
@@ -157,7 +156,7 @@ public final class RestCallException extends IOException {
 				if (t.getName().endsWith(serverExceptionName))
 					doThrow(t, serverExceptionMessage);
 			try {
-				ClassInfo t = getClassInfo(cl.loadClass(serverExceptionName));
+				ClassInfo t = ClassInfo.of(cl.loadClass(serverExceptionName));
 				if (t.isChildOf(RuntimeException.class) || t.isChildOf(Error.class))
 					doThrow(t.inner(), serverExceptionMessage);
 			} catch (ClassNotFoundException e2) { /* Ignore */ }
@@ -166,7 +165,7 @@ public final class RestCallException extends IOException {
 
 	private void doThrow(Class<?> t, String msg) throws Throwable {
 		ConstructorInfo c = null;
-		ClassInfo ci = getClassInfo(t);
+		ClassInfo ci = ClassInfo.of(t);
 		if (msg != null) {
 			c = ci.getPublicConstructor(String.class);
 			if (c != null)

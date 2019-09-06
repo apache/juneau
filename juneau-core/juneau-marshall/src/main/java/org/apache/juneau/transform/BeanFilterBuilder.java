@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.beans.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Builder class for {@link BeanFilter} objects.
@@ -73,7 +72,7 @@ public class BeanFilterBuilder<T> {
 	 * Bean class is determined through reflection of the parameter type.
 	 */
 	protected BeanFilterBuilder() {
-		beanClass = getClassInfo(this.getClass()).getParameterType(0, BeanFilterBuilder.class);
+		beanClass = ClassInfo.of(this.getClass()).getParameterType(0, BeanFilterBuilder.class);
 	}
 
 	/**

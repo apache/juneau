@@ -67,6 +67,20 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	/**
 	 * Convenience method for instantiating a {@link MethodInfo};
 	 *
+	 * @param declaringClass The class that declares this method.
+	 * @param m The method being wrapped.
+	 * @param rm The "real" method if the method above is defined against a CGLIB proxy.
+	 * @return A new {@link MethodInfo} object, or <jk>null</jk> if the method was null;
+	 */
+	public static MethodInfo of(Class<?> declaringClass, Method m, Method rm) {
+		if (m == null)
+			return null;
+		return new MethodInfo(ClassInfo.of(declaringClass), m, rm);
+	}
+
+	/**
+	 * Convenience method for instantiating a {@link MethodInfo};
+	 *
 	 * @param m The method being wrapped.
 	 * @return A new {@link MethodInfo} object, or <jk>null</jk> if the method was null;
 	 */

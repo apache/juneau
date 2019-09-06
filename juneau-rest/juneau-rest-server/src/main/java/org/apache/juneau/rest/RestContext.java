@@ -16,7 +16,6 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.FormattedIllegalArgumentException.*;
@@ -3601,7 +3600,7 @@ public final class RestContext extends BeanContext {
 			VarResolverSession vrs = this.varResolver.createSession();
 			config = builder.config.resolving(vrs);
 
-			ClassInfo rci = getClassInfo(resource);
+			ClassInfo rci = ClassInfo.of(resource);
 
 			PropertyStore ps = getPropertyStore();
 

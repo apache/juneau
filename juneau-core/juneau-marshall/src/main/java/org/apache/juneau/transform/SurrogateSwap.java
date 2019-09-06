@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -60,7 +58,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static List<SurrogateSwap<?,?>> findPojoSwaps(Class<?> c) {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
-		ClassInfo ci = getClassInfo(c);
+		ClassInfo ci = ClassInfo.of(c);
 		for (ConstructorInfo cc : ci.getPublicConstructors()) {
 			if (cc.getAnnotation(BeanIgnore.class) == null && cc.hasNumParams(1) && cc.isPublic()) {
 				Class<?> pt = cc.getRawParamType(0);

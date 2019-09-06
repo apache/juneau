@@ -39,6 +39,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.serializer.*;
@@ -1191,7 +1192,7 @@ public class RestClient extends BeanContext implements Closeable {
 							} else {
 								Object v = rc.getResponseBody(rmr.getReturnType());
 								if (v == null && method.getReturnType().isPrimitive())
-									v = getClassInfo(method.getReturnType()).getPrimitiveDefault();
+									v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
 								return v;
 							}
 
@@ -1310,7 +1311,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 							Object v = rc.getResponse(method.getGenericReturnType());
 							if (v == null && method.getReturnType().isPrimitive())
-								v = getClassInfo(method.getReturnType()).getPrimitiveDefault();
+								v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
 							return v;
 
 						} catch (RestCallException e) {

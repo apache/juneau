@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;
@@ -87,7 +86,7 @@ public class RemoteMethodMeta {
 
 		Builder(String parentPath, Method m, boolean useMethodSignatures, String defaultMethod) {
 
-			MethodInfo mi = getMethodInfo(m);
+			MethodInfo mi = MethodInfo.of(m);
 
 			RemoteMethod rm = mi.getAnnotation(RemoteMethod.class);
 

@@ -54,7 +54,7 @@ public class RequestBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Request}.
 	 */
 	public static RequestBeanMeta create(Class<?> c, PropertyStore ps) {
-		ClassInfo ci = getClassInfo(c);
+		ClassInfo ci = ClassInfo.of(c);
 		if (! ci.hasAnnotation(Request.class))
 			return null;
 		return new RequestBeanMeta.Builder(ps).apply(c).build();
@@ -95,7 +95,7 @@ public class RequestBeanMeta {
 		}
 
 		Builder apply(Class<?> c) {
-			ClassInfo ci = getClassInfo(c);
+			ClassInfo ci = ClassInfo.of(c);
 			apply(ci.getAnnotation(Request.class));
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			for (MethodInfo m : cm.getInfo().getAllMethods()) {

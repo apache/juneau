@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
 import static org.apache.juneau.rest.util.AnnotationUtils.*;
@@ -100,7 +99,7 @@ final class SwaggerGenerator {
 	 */
 	public Swagger getSwagger() throws Exception {
 
-		ClassInfo rci = getClassInfo(resource.getClass());
+		ClassInfo rci = ClassInfo.of(resource.getClass());
 
 		rci.getSimpleName();
 
@@ -224,7 +223,7 @@ final class SwaggerGenerator {
 			BeanSession bs = sm.createBeanSession();
 
 			Method m = sm.method;
-			MethodInfo mi = getMethodInfo(m);
+			MethodInfo mi = MethodInfo.of(m);
 			RestMethod rm = mi.getAnnotation(RestMethod.class);
 			String mn = m.getName();
 

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
@@ -554,9 +553,9 @@ public class BeanMeta<T> {
 			this.methodType = type;
 			this.method = method;
 			if (type == MethodType.SETTER)
-				this.type = getClassInfo(method.getParameterTypes()[0]);
+				this.type = ClassInfo.of(method.getParameterTypes()[0]);
 			else
-				this.type = getClassInfo(method.getReturnType());
+				this.type = ClassInfo.of(method.getReturnType());
 		}
 
 		/*
@@ -767,7 +766,7 @@ public class BeanMeta<T> {
 
 	private static void findClasses(Class<?> c, LinkedList<ClassInfo> l, Class<?> stopClass) {
 		while (c != null && stopClass != c) {
-			l.addFirst(getClassInfo(c));
+			l.addFirst(ClassInfo.of(c));
 			for (Class<?> ci : c.getInterfaces())
 				findClasses(ci, l, stopClass);
 			c = c.getSuperclass();

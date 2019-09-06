@@ -13,12 +13,11 @@
 package org.apache.juneau.transform;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Simple bean filter that simply identifies a class to be used as an interface class for all child classes.
@@ -54,7 +53,7 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 
 	private void init(Class<?> interfaceClass) {
 		interfaceClass(interfaceClass);
-		List<Bean> annotations = getClassInfo(interfaceClass).getAnnotations(Bean.class);
+		List<Bean> annotations = ClassInfo.of(interfaceClass).getAnnotations(Bean.class);
 
 		ListIterator<Bean> li = annotations.listIterator(annotations.size());
 		while (li.hasPrevious()) {

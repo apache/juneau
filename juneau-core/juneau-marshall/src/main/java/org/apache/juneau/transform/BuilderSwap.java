@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
@@ -142,12 +140,11 @@ public class BuilderSwap<T,B> {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static BuilderSwap<?,?> findSwapFromBuilderClass(Class<?> builderClass, Visibility cVis, Visibility mVis) {
-		ClassInfo bci = getClassInfo(builderClass);
+		ClassInfo bci = ClassInfo.of(builderClass);
 		if (bci.isNotPublic())
 			return null;
 
-//		Class<?> pojoClass = getClassInfo(Builder.class).getParameterType(0, builderClass);
-		Class<?> pojoClass = getClassInfo(builderClass).getParameterType(0, Builder.class);
+		Class<?> pojoClass = ClassInfo.of(builderClass).getParameterType(0, Builder.class);
 
 		MethodInfo createPojoMethod, createBuilderMethod;
 		ConstructorInfo pojoConstructor;
@@ -160,7 +157,7 @@ public class BuilderSwap<T,B> {
 		if (pojoClass == null)
 			return null;
 
-		ClassInfo pci = getClassInfo(pojoClass);
+		ClassInfo pci = ClassInfo.of(pojoClass);
 
 		pojoConstructor = pci.getConstructor(cVis, builderClass);
 		if (pojoConstructor == null)
@@ -195,7 +192,7 @@ public class BuilderSwap<T,B> {
 		if (b != null && b.value() != Null.class)
 			builderClass = b.value();
 
-		ClassInfo pci = getClassInfo(pojoClass);
+		ClassInfo pci = ClassInfo.of(pojoClass);
 
 		builderCreateMethod = pci.getBuilderCreateMethod();
 
@@ -217,7 +214,7 @@ public class BuilderSwap<T,B> {
 		if (builderClass == null)
 			return null;
 
-		ClassInfo bci = getClassInfo(builderClass);
+		ClassInfo bci = ClassInfo.of(builderClass);
 		builderConstructor = bci.getNoArgConstructor(cVis);
 		if (builderConstructor == null && builderCreateMethod == null)
 			return null;

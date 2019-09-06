@@ -22,6 +22,7 @@ import java.util.*;
 import org.apache.juneau.PropertyStoreBuilder.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.reflect.*;
 
 
 /**
@@ -778,7 +779,7 @@ public final class PropertyStore {
 		 * @throws ConfigException If value could not be converted.
 		 */
 		public <T> T as(Class<T> c) {
-			Class<?> c2 = getClassInfo(c).getPrimitiveWrapper();
+			Class<?> c2 = ClassInfo.of(c).getPrimitiveWrapper();
 			if (c2 != null)
 				c = (Class<T>)c2;
 			if (c.isInstance(value))
@@ -987,9 +988,9 @@ public final class PropertyStore {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	static <T> T instantiate(ResourceResolver resolver, Object outer, Class<T> c, Object value, Object...args) {
-		if (getClassInfo(c).isParentOf(value.getClass()))
+		if (ClassInfo.of(c).isParentOf(value.getClass()))
 			return (T)value;
-		if (getClassInfo(value.getClass()).isChildOf(Class.class))
+		if (ClassInfo.of(value.getClass()).isChildOf(Class.class))
 			return resolver.resolve(outer, (Class<T>)value, args);
 		return null;
 	}

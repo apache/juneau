@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 
 import java.util.concurrent.*;
@@ -146,7 +145,7 @@ public class Mutaters {
 			};
 		}
 
-		ClassInfo ici = getClassInfo(ic), oci = getClassInfo(oc);
+		ClassInfo ici = ClassInfo.of(ic), oci = ClassInfo.of(oc);
 
 		for (ClassInfo pic : ici.getAllParents()) {
 			Mutater t = m.get(pic.inner());
@@ -156,7 +155,7 @@ public class Mutaters {
 
 		if (ic == String.class) {
 			Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
-			ClassInfo oc2i = getClassInfo(oc2);
+			ClassInfo oc2i = ClassInfo.of(oc2);
 
 			final MethodInfo createMethod = oc2i.getStaticCreateMethod(ic, "forName");
 
