@@ -42,6 +42,37 @@
 
 
     <dependencies>
+        <!-- Juneau dependencies -->
+        <dependency>
+            <groupId>org.apache.juneau</groupId>
+            <artifactId>juneau-examples-petstore-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.juneau</groupId>
+            <artifactId>juneau-rest-server-springboot</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <!-- Spring Boot dependencies-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${springframework.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+		<!-- Needed for @Inject support -->
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>${javax.inject.version}</version>
+		</dependency>
 
     </dependencies>
 
