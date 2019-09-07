@@ -59,6 +59,21 @@
 		</p>
 		The fix involves resolving the original bean class for resolving parameterized type while leaving
 		method invocation on the proxy method so as not to bypass Spring features.
+	<li>
+		New methods on {@link oajr.BasicRest} to provide feature-parity with {@link oajr.RestServlet}:
+		<ul class='javatree'>
+			<li class='jc'>{@link oajr.BasicRest}
+			<ul>
+				<li class='jm'>{@link oajr.BasicRest#getContext() getContext()}
+				<li class='jm'>{@link oajr.BasicRest#getRequest() getRequest()}
+				<li class='jm'>{@link oajr.BasicRest#getResponse() getResponse()}
+				<li class='jm'>{@link oajr.BasicRest#log(String) log(String)}
+				<li class='jm'>{@link oajr.BasicRest#log(String,Throwable) log(String,Throwable)}
+				<li class='jm'>{@link oajr.BasicRest#log(Level,String,Object[]) log(Level,String,Object[])}
+				<li class='jm'>{@link oajr.BasicRest#logObjects(Level,String,Object[]) logObjects(Level,String,Object[])}
+				<li class='jm'>{@link oajr.BasicRest#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
+			</ul>
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>

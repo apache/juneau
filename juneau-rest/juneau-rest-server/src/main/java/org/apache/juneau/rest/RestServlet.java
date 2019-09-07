@@ -126,6 +126,10 @@ public abstract class RestServlet extends HttpServlet {
 		return builder;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Context methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the read-only context object that contains all the configuration information about this resource.
 	 *
@@ -143,12 +147,72 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The context information on this servlet.
 	 */
 	protected synchronized RestContext getContext() {
+		if (context == null)
+			throw new InternalServerError("RestContext object not set on resource.");
 		return context;
+	}
+
+	/**
+	 * Convenience method for calling <c>getContext().getProperties();</c>
+	 *
+	 * @return The resource properties as an {@link RestContextProperties}.
+	 * @see RestContext#getProperties()
+	 */
+	public RestContextProperties getProperties() {
+		return getContext().getProperties();
 	}
 
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
+	// Convenience logger methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* GenericServlet */
+	public void log(String msg) {
+		logger.info(msg);
+	}
+
+	@Override /* GenericServlet */
+	public void log(String msg, Throwable cause) {
+		logger.info(cause, msg);
+	}
+
+	/**
+	 * Log a message.
+	 *
+	 * @param level The log level.
+	 * @param msg The message to log.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public void log(Level level, String msg, Object...args) {
+		logger.log(level, msg, args);
+	}
+
+	/**
+	 * Log a message.
+	 *
+	 * @param level The log level.
+	 * @param msg The message to log.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public void logObjects(Level level, String msg, Object...args) {
+		logger.logObjects(level, msg, args);
+	}
+
+	/**
+	 * Log a message.
+	 *
+	 * @param level The log level.
+	 * @param cause The cause.
+	 * @param msg The message to log.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public void log(Level level, Throwable cause, String msg, Object...args) {
+		logger.log(level, cause, msg, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Lifecycle methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -177,58 +241,23 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	@Override /* GenericServlet */
-	public void log(String msg) {
-		logger.info(msg);
+	public synchronized void destroy() {
+		if (context != null)
+			context.destroy();
+		super.destroy();
 	}
 
-	@Override /* GenericServlet */
-	public void log(String msg, Throwable cause) {
-		logger.info(cause, msg);
-	}
-
-	/**
-	 * Convenience method for calling <c>getContext().getLogger().log(level, msg, args);</c>
-	 *
-	 * @param level The log level.
-	 * @param msg The message to log.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public void log(Level level, String msg, Object...args) {
-		logger.log(level, msg, args);
-	}
-
-	/**
-	 * Convenience method for calling <c>getContext().getLogger().logObjects(level, msg, args);</c>
-	 *
-	 * @param level The log level.
-	 * @param msg The message to log.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public void logObjects(Level level, String msg, Object...args) {
-		logger.logObjects(level, msg, args);
-	}
-
-	/**
-	 * Convenience method for calling <c>getContext().getLogger().log(level, cause, msg, args);</c>
-	 *
-	 * @param level The log level.
-	 * @param cause The cause.
-	 * @param msg The message to log.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public void log(Level level, Throwable cause, String msg, Object...args) {
-		logger.log(level, cause, msg, args);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Request-time methods.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the current HTTP request.
 	 *
 	 * @return The current HTTP request, or <jk>null</jk> if it wasn't created.
 	 */
-	public RestRequest getRequest() {
-		if (context == null)
-			return null;
-		return context.getRequest();
+	public synchronized RestRequest getRequest() {
+		return getContext().getRequest();
 	}
 
 	/**
@@ -236,26 +265,7 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @return The current HTTP response, or <jk>null</jk> if it wasn't created.
 	 */
-	public RestResponse getResponse() {
-		if (context == null)
-			return null;
-		return context.getResponse();
-	}
-
-	@Override /* GenericServlet */
-	public synchronized void destroy() {
-		if (context != null)
-			context.destroy();
-		super.destroy();
-	}
-
-	/**
-	 * Convenience method for calling <c>getContext().getProperties();</c>
-	 *
-	 * @return The resource properties as an {@link RestContextProperties}.
-	 * @see RestContext#getProperties()
-	 */
-	public RestContextProperties getProperties() {
-		return getContext().getProperties();
+	public synchronized RestResponse getResponse() {
+		return getContext().getResponse();
 	}
 }
