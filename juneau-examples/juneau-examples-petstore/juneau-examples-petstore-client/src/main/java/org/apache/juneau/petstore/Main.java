@@ -69,24 +69,29 @@ public class Main {
 			ps.deletePet("apiKey", x.getId());
 			w.println(format("Deleted pet:  id={0}", x.getId()));
 		}
+
 		for (Order x : ps.getOrders()) {
 			ps.deleteOrder(x.getId());
 			w.println(format("Deleted order:  id={0}", x.getId()));
 		}
+
 		for (User x : ps.getUsers()) {
 			ps.deleteUser(x.getUsername());
 			w.println(format("Deleted user:  username={0}", x.getUsername()));
 		}
+
 		for (CreatePet x : load("init/Pets.json", CreatePet[].class)) {
-			long id = ps.postPet(x);
+			long id = ps.createPet(x);
 			w.println(format("Created pet:  id={0}, name={1}", id, x.getName()));
 		}
+
 		for (Order x : load("init/Orders.json", Order[].class)) {
 			long id = ps.placeOrder(x.getPetId(), x.getUsername());
 			w.println(format("Created order:  id={0}", id));
 		}
+
 		for (User x : load("init/Users.json", User[].class)) {
-			ps.postUser(x);
+			ps.createUser(x);
 			w.println(format("Created user:  username={0}", x.getUsername()));
 		}
 	}

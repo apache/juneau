@@ -37,7 +37,6 @@
         <!-- Java 8 required because Jetty requires it. -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <springframework.version>2.0.1.RELEASE</springframework.version>
     </properties>
 
 
@@ -48,29 +47,14 @@
             <artifactId>juneau-marshall</artifactId>
             <version>${project.version}</version>
         </dependency>
-         <dependency>
-            <groupId>org.apache.juneau</groupId>
-            <artifactId>juneau-dto</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
-		<!-- Needed for JPA persistence of PetStore beans -->		
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>${derby.version}</version>
-		</dependency>
+		<!-- Needed for JPA persistence annotations -->		
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-
+		
     </dependencies>
 
     <build>

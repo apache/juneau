@@ -78,8 +78,7 @@ import org.apache.juneau.rest.widget.*;
 	},
 	stylesheet="servlet:/htdocs/themes/dark.css"
 )
-public class SqlQueryResource extends BasicRestServlet {
-	private static final long serialVersionUID = 1L;
+public class SqlQueryResource extends BasicRest {
 
 	private String driver, connectionUrl;
 	private boolean allowUpdates, allowTempUpdates, includeRowNums;

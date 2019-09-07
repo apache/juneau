@@ -81,7 +81,7 @@ public interface PetStore {
 	 * @throws UnsupportedMediaType Unsupported <c>Content-Type</c> header specified.
 	 */
 	@RemoteMethod /* method and path inferred from method name */
-	public long postPet(
+	public long createPet(
 		@Body(
 			description="Pet object to add to the store"
 		) CreatePet pet
@@ -303,7 +303,7 @@ public interface PetStore {
 	 * @throws UnsupportedMediaType Unsupported <c>Content-Type</c> header specified.
 	 */
 	@RemoteMethod
-	public Ok postUser(
+	public Ok createUser(
 		@Body(
 			description="Created user object"
 		)

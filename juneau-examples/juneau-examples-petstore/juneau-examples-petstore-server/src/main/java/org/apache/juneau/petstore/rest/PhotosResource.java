@@ -13,6 +13,7 @@
 package org.apache.juneau.petstore.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.jsonschema.annotation.Schema;
@@ -83,13 +84,12 @@ import org.apache.juneau.serializer.*;
 	// Make the anchor text on URLs be just the path relative to the servlet.
 	uriAnchorText="SERVLET_RELATIVE"
 )
-public class PhotosResource extends BasicRestServlet {
-	private static final long serialVersionUID = 1L;
+public class PhotosResource extends BasicRest {
 
 	// Our cache of photos
 	private Map<String,Photo> photos = new TreeMap<>();
 
-	@Override /* Servlet */
+	@RestHook(INIT)
 	public void init() {
 		try (InputStream is = getClass().getResourceAsStream("photos/cat.jpg")) {
 			BufferedImage image = ImageIO.read(is);

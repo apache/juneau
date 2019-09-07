@@ -31,8 +31,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.exception.*;
@@ -274,7 +272,7 @@ public class PetStoreResource extends BasicRest implements PetStore {
 			}
 		)
 	)
-	public long postPet(CreatePet pet) throws IdConflict, NotAcceptable, UnsupportedMediaType {
+	public long createPet(CreatePet pet) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 		return store.create(pet).getId();
 	}
 
@@ -345,93 +343,6 @@ public class PetStoreResource extends BasicRest implements PetStore {
 	public Ok deletePet(String apiKey, long petId) throws IdNotFound, NotAcceptable {
 		store.removePet(petId);
 		return OK;
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	// Pets - extra methods
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Displays the pet edit page.
-	 *
-	 * @param petId ID of pet to edit
-	 * @return Edit page contents.
-	 * @throws NotAcceptable Unsupported <bc>Accept</bc> header value specified.
-	 * @throws UnsupportedMediaType Unsupported <bc>Content-Type</bc> header value specified.
-	 */
-	@RestMethod(
-		name=GET,
-		path="/pet/{petId}/edit",
-		summary="Pet edit page",
-		swagger=@MethodSwagger(
-			tags="pet",
-			value={
-				"security:[ { petstore_auth:['write:pets','read:pets'] } ]"
-			}
-		)
-	)
-	public Div editPetPage(
-			@Path(
-				name="petId",
-				description="ID of pet to edit",
-				example="123"
-			)
-			long petId
-		) throws NotAcceptable, UnsupportedMediaType {
-
-		Pet pet = getPet(petId);
-
-		return div(
-			form().id("form").action("servlet:/pet/" + petId).method(POST).children(
-				table(
-					tr(
-						th("Id:"),
-						td(input().name("id").type("text").value(petId).readonly(true)),
-						td(new Tooltip("&#x2753;", "The name of the pet.", br(), "e.g. 'Fluffy'"))
-					),
-					tr(
-						th("Name:"),
-						td(input().name("name").type("text").value(pet.getName())),
-						td(new Tooltip("&#x2753;", "The name of the pet.", br(), "e.g. 'Fluffy'"))
-					),
-					tr(
-						th("Species:"),
-						td(
-							select().name("species").children(
-								option("cat"), option("dog"), option("bird"), option("fish"), option("mouse"), option("rabbit"), option("snake")
-							).choose(pet.getSpecies())
-						),
-						td(new Tooltip("&#x2753;", "The kind of animal."))
-					),
-					tr(
-						th("Price:"),
-						td(input().name("price").type("number").placeholder("1.0").step("0.01").min(1).max(100).value(pet.getPrice())),
-						td(new Tooltip("&#x2753;", "The price to charge for this pet."))
-					),
-					tr(
-						th("Tags:"),
-						td(input().name("tags").type("text").value(StringUtils.join(pet.getTags(), ','))),
-						td(new Tooltip("&#x2753;", "Arbitrary textual tags (comma-delimited).", br(), "e.g. 'fluffy,friendly'"))
-					),
-					tr(
-						th("Status:"),
-						td(
-							select().name("status").children(
-								option("AVAILABLE"), option("PENDING"), option("SOLD")
-							).choose(pet.getStatus())
-						),
-						td(new Tooltip("&#x2753;", "The current status of the animal."))
-					),
-					tr(
-						td().colspan(2).style("text-align:right").children(
-							button("reset", "Reset"),
-							button("button","Cancel").onclick("window.location.href='/'"),
-							button("submit", "Submit")
-						)
-					)
-				).style("white-space:nowrap")
-			)
-		);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -591,7 +502,7 @@ public class PetStoreResource extends BasicRest implements PetStore {
 			tags="user"
 		)
 	)
-	public Ok postUser(User user) throws InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType {
+	public Ok createUser(User user) throws InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType {
 		store.create(user);
 		return OK;
 	}

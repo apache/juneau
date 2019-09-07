@@ -10,15 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.petstore.dto;
 
-/**
- * Enum of all possible animal types.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
- */
-public enum Species {
-	BIRD, CAT, DOG, FISH, MOUSE, RABBIT, SNAKE;
-}
+[
+	{username:'mwatson',firstName:'Marie',lastName:'Watson',email:'marie.watson@fakemail.com',password:'123456',phone:'444-555-7777',userStatus:'ACTIVE'},
+	{username:'dvaughn',firstName:'Daniel',lastName:'Vaughn',email:'daniel.vaughn@test.com',password:'123456',phone:'666-777-3333',userStatus:'ACTIVE'},
+	{username:'bfuller',firstName:'Brenda',lastName:'Fuller',email:'brenda.fuller@example.com',password:'123456',phone:'777-888-3333',userStatus:'INACTIVE'}
+]
