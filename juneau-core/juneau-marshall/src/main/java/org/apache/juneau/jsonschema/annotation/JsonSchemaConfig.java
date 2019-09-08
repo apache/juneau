@@ -34,6 +34,14 @@ import org.apache.juneau.jsonschema.*;
 @PropertyStoreApply(JsonSchemaConfigApply.class)
 public @interface JsonSchemaConfig {
 
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 */
+	int rank() default 0;
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// JsonSchemaGenerator
 	//-------------------------------------------------------------------------------------------------------------------

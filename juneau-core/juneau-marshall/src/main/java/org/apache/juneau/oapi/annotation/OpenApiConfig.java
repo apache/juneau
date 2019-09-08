@@ -31,4 +31,13 @@ import org.apache.juneau.msgpack.*;
 @Retention(RUNTIME)
 @Inherited
 @PropertyStoreApply(OpenApiConfigApply.class)
-public @interface OpenApiConfig {}
+public @interface OpenApiConfig {
+
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 */
+	int rank() default 0;
+}

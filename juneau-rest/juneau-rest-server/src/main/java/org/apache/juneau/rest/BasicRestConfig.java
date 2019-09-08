@@ -156,6 +156,8 @@ public interface BasicRestConfig {
 		}
 	)
 	@HtmlDocConfig(
+		// Should override config annotations defined on class.
+		rank=10,
 		// Override the nav links for the swagger page.
 		navlinks={
 			"back: servlet:/",

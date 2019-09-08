@@ -42,7 +42,7 @@ import org.apache.juneau.serializer.annotation.*;
 		"options: ?method=OPTIONS",
 		"$W{ContentTypeMenuItem}",
 		"$W{ThemeMenuItem}",
-		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
+		"source: $C{Source/gitHub}/org/apache/juneau/petstore/rest/$R{servletClassSimple}.java"
 	},
 	aside={
 		"<div style='max-width:400px' class='text'>",

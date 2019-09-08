@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.function.*;
 
 /**
@@ -48,5 +48,22 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 			return true;
 		}
 		return false;
+	}
+
+	private static final Comparator<AnnotationInfo<?>> RANK_COMPARATOR = new Comparator<AnnotationInfo<?>>() {
+		@Override
+		public int compare(AnnotationInfo<?> o1, AnnotationInfo<?> o2) {
+			return o1.rank - o2.rank;
+		}
+	};
+
+	/**
+	 * Sort the annotations in this list based on rank.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public AnnotationList sort() {
+		Collections.sort(this, RANK_COMPARATOR);
+		return this;
 	}
 }

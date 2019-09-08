@@ -29,10 +29,11 @@ import org.apache.juneau.svl.*;
  */
 public class AnnotationInfo<T extends Annotation> {
 
-	private ClassInfo c;
-	private MethodInfo m;
-	private Package p;
-	private T a;
+	private final ClassInfo c;
+	private final MethodInfo m;
+	private final Package p;
+	private final T a;
+	final int rank;
 
 	/**
 	 * Constructor.
@@ -47,6 +48,20 @@ public class AnnotationInfo<T extends Annotation> {
 		this.m = m;
 		this.p = p;
 		this.a = a;
+		this.rank = getRank(a);
+	}
+
+	private static int getRank(Object a) {
+		ClassInfo ci = ClassInfo.ofc(a);
+		MethodInfo mi = ci.getPublicMethod("rank");
+		if (mi != null && mi.hasReturnType(int.class)) {
+			try {
+				return (int)mi.invoke(a);
+			} catch (ExecutableException e) {
+				e.printStackTrace();
+			}
+		}
+		return 0;
 	}
 
 	/**

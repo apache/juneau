@@ -214,7 +214,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 		String stylesheet = getQuery().getString("stylesheet");
 		if (stylesheet != null)
-			getSession().setAttribute("stylesheet", stylesheet.replace(' ', '$'));  // Prevent SVL insertion.
+			getSession().setAttribute(HTMLDOC_stylesheet, stylesheet.replace(' ', '$'));  // Prevent SVL insertion.
 		stylesheet = (String)getSession().getAttribute("stylesheet");
 		if (stylesheet != null)
 			properties.put(HTMLDOC_stylesheet, new String[]{stylesheet});

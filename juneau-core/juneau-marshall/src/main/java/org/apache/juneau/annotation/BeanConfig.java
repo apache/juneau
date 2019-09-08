@@ -37,6 +37,14 @@ import org.apache.juneau.transform.*;
 @PropertyStoreApply(BeanConfigApply.class)
 public @interface BeanConfig {
 
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 */
+	int rank() default 0;
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// BeanContext
 	//-----------------------------------------------------------------------------------------------------------------

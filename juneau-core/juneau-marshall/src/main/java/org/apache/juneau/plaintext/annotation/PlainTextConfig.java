@@ -31,4 +31,13 @@ import org.apache.juneau.plaintext.*;
 @Retention(RUNTIME)
 @Inherited
 @PropertyStoreApply(PlainTextConfigApply.class)
-public @interface PlainTextConfig {}
+public @interface PlainTextConfig {
+
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 */
+	int rank() default 0;
+}

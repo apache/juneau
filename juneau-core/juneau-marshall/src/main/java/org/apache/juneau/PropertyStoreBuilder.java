@@ -124,7 +124,7 @@ public class PropertyStoreBuilder {
 	 */
 	@SuppressWarnings("unchecked")
 	public PropertyStoreBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-		for (AnnotationInfo<?> ai : al) {
+		for (AnnotationInfo<?> ai : al.sort()) {
 			try {
 				ai.getConfigApply(r).apply((AnnotationInfo<Annotation>)ai, this);
 			} catch (ConfigException ex) {

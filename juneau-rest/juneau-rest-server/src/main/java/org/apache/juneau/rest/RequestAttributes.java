@@ -51,6 +51,8 @@ public class RequestAttributes extends ObjectMap {
 		String k = key.toString();
 		Object o = req.getAttribute(k);
 		if (o == null)
+			 o = req.getSession().getAttribute(k);
+		if (o == null)
 			o = defaultEntries.get(k);
 		return resolve(o);
 	}
@@ -79,6 +81,8 @@ public class RequestAttributes extends ObjectMap {
 					Set<String> keys = new LinkedHashSet<>();
 					{
 						for (String s : iterable(req.getAttributeNames()))
+							keys.add(s);
+						for (String s : iterable(req.getSession().getAttributeNames()))
 							keys.add(s);
 					}
 					Iterator<String> keyIterator = keys.iterator();

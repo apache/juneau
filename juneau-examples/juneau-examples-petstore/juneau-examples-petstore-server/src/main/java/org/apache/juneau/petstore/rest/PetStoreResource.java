@@ -108,10 +108,9 @@ import org.apache.juneau.rest.converters.*;
 	navlinks={
 		"up: request:/..",
 		"options: servlet:/?method=OPTIONS",
-		"init: servlet:/init",
 		"$W{ContentTypeMenuItem}",
 		"$W{ThemeMenuItem}",
-		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/petstore/$R{servletClassSimple}.java"
+		"source: $C{Source/gitHub}/org/apache/juneau/petstore/rest/$R{servletClassSimple}.java"
 	},
 	head={
 		"<link rel='icon' href='$U{servlet:/htdocs/cat.png}'/>"  // Add a cat icon to the page.

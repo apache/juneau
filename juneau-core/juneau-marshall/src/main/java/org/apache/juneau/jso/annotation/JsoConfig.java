@@ -31,4 +31,13 @@ import org.apache.juneau.jso.*;
 @Retention(RUNTIME)
 @Inherited
 @PropertyStoreApply(JsoConfigApply.class)
-public @interface JsoConfig {}
+public @interface JsoConfig {
+
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 */
+	int rank() default 0;
+}

@@ -33,6 +33,14 @@ import org.apache.juneau.urlencoding.*;
 @PropertyStoreApply(UrlEncodingConfigApply.class)
 public @interface UrlEncodingConfig {
 
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 */
+	int rank() default 0;
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// UrlEncodingSerializer
 	//-------------------------------------------------------------------------------------------------------------------

@@ -335,4 +335,78 @@ public class HtmlDocConfigAnnotationTest {
 			"<script>xxx| yyy|</script>"
 		);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Rank sorting
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@HtmlDocConfig(
+		rank=1,
+		aside="f1"
+	)
+	static class F1 {}
+
+	@HtmlDocConfig(
+		aside="f2"
+	)
+	static class F2 extends F1 {}
+
+	@HtmlDocConfig(
+		rank=3,
+		aside="f3"
+	)
+	static class F3 extends F2 {}
+
+	@HtmlDocConfig(
+		rank=2,
+		aside="f4"
+	)
+	static class F4 extends F3 {}
+
+	@HtmlDocConfig(
+		rank=3,
+		aside="f5"
+	)
+	static class F5 extends F4 {}
+
+	static ClassInfo f1 = ClassInfo.of(F1.class);
+	static ClassInfo f2 = ClassInfo.of(F2.class);
+	static ClassInfo f3 = ClassInfo.of(F3.class);
+	static ClassInfo f4 = ClassInfo.of(F4.class);
+	static ClassInfo f5 = ClassInfo.of(F5.class);
+
+	@Test
+	public void e01_rankedAnnotations_f1() throws Exception {
+		AnnotationList al = f1.getAnnotationListParentFirst(null).sort();
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		check("f1", x.getAside());
+	}
+
+	@Test
+	public void e02_rankedAnnotations_f2() throws Exception {
+		AnnotationList al = f2.getAnnotationListParentFirst(null).sort();
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		check("f1", x.getAside());
+	}
+
+	@Test
+	public void e03_rankedAnnotations_f3() throws Exception {
+		AnnotationList al = f3.getAnnotationListParentFirst(null).sort();
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		check("f3", x.getAside());
+	}
+
+	@Test
+	public void e04_rankedAnnotations_f4() throws Exception {
+		AnnotationList al = f4.getAnnotationListParentFirst(null).sort();
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		check("f3", x.getAside());
+	}
+
+	@Test
+	public void e05_rankedAnnotations_f5() throws Exception {
+		AnnotationList al = f5.getAnnotationListParentFirst(null).sort();
+		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
+		check("f5", x.getAside());
+	}
 }

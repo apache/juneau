@@ -82,7 +82,7 @@ public class MockHttpSession implements HttpSession {
 
 	@Override /* HttpSession */
 	public Enumeration<String> getAttributeNames() {
-		return null;
+		return Collections.enumeration(Collections.emptyList());
 	}
 
 	@Override /* HttpSession */

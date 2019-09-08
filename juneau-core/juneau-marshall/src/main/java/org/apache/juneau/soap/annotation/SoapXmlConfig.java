@@ -33,6 +33,14 @@ import org.apache.juneau.soap.*;
 @PropertyStoreApply(SoapXmlConfigApply.class)
 public @interface SoapXmlConfig {
 
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 */
+	int rank() default 0;
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// SoapXmlSerializer
 	//-------------------------------------------------------------------------------------------------------------------

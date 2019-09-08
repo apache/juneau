@@ -38,6 +38,14 @@ import org.apache.juneau.xml.*;
 @PropertyStoreApply(ParserConfigApply.class)
 public @interface ParserConfig {
 
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 */
+	int rank() default 0;
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// InputStreamParser
 	//-------------------------------------------------------------------------------------------------------------------

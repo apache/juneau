@@ -39,6 +39,14 @@ import org.apache.juneau.xmlschema.*;
 @PropertyStoreApply(XmlConfigApply.class)
 public @interface XmlConfig {
 
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 */
+	int rank() default 0;
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// XmlParser
 	//-------------------------------------------------------------------------------------------------------------------

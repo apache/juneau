@@ -35,6 +35,14 @@ import org.apache.juneau.urlencoding.*;
 @PropertyStoreApply(UonConfigApply.class)
 public @interface UonConfig {
 
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 */
+	int rank() default 0;
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// UonParser
 	//-------------------------------------------------------------------------------------------------------------------

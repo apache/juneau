@@ -36,6 +36,14 @@ import org.apache.juneau.xml.annotation.*;
 @PropertyStoreApply(RdfConfigApply.class)
 public @interface RdfConfig {
 
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 */
+	int rank() default 0;
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// RdfCommon
 	//-------------------------------------------------------------------------------------------------------------------

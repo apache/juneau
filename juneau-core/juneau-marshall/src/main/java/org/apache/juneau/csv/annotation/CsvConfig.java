@@ -31,4 +31,13 @@ import org.apache.juneau.csv.*;
 @Retention(RUNTIME)
 @Inherited
 @PropertyStoreApply(CsvConfigApply.class)
-public @interface CsvConfig {}
+public @interface CsvConfig {
+
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 */
+	int rank() default 0;
+}
