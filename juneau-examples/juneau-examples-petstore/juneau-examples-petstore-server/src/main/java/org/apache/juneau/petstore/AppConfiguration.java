@@ -13,17 +13,16 @@
 package org.apache.juneau.petstore;
 
 import org.apache.juneau.petstore.rest.*;
+import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.springboot.annotation.JuneauRestRoot;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
+import org.springframework.web.filter.*;
 
 @Configuration
 public class AppConfiguration {
-
-    public static String DEFAULT_JDBC_URL = "jdbc:h2:mem:testdb;MODE=PostgreSQL";
-    public static String DEFAULT_JDBC_USERNAME = "sa";
-    public static String DEFAULT_JDBC_PASSWORD = "";
 
     @Autowired
     private static volatile ApplicationContext appContext;
@@ -40,11 +39,17 @@ public class AppConfiguration {
     // Services
     //-----------------------------------------------------------------------------------------------------------------
 
+    @Bean
+    public PetStoreService petStoreService() {
+        return new PetStoreService();
+    }
+
     //-----------------------------------------------------------------------------------------------------------------
     // REST
     //-----------------------------------------------------------------------------------------------------------------
 
-    @Bean @JuneauRestRoot
+    @Bean
+    @JuneauRestRoot
     public RootResources rootResources() {
         return new RootResources();
     }
@@ -53,4 +58,18 @@ public class AppConfiguration {
     public PetStoreResource petStoreResource() {
         return new PetStoreResource();
     }
+
+	/**
+	 * We want to be able to consume url-encoded-form-post bodies, but HiddenHttpMethodFilter triggers the HTTP
+	 * body to be consumed.  So disable it.
+	 *
+	 * @param filter The filter.
+	 * @return Filter registration bean.
+	 */
+	@Bean
+	public FilterRegistrationBean<HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter filter) {
+	    FilterRegistrationBean<HiddenHttpMethodFilter> registration = new FilterRegistrationBean<>(filter);
+	    registration.setEnabled(false);
+	    return registration;
+	}
 }

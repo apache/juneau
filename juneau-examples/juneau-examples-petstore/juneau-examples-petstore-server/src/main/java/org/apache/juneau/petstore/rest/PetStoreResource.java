@@ -98,11 +98,7 @@ import org.apache.juneau.rest.converters.*;
 			)
 		}
 	),
-	staticFiles={"htdocs:htdocs"},  // Expose static files in htdocs subpackage.
-	children={
-		SqlQueryResource.class,
-		PhotosResource.class
-	}
+	staticFiles={"htdocs:/htdocs"}  // Expose static files in htdocs subpackage.
 )
 @HtmlDocConfig(
 	widgets={

@@ -10,52 +10,66 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.petstore.rest;
 
-import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.http.HttpMethodName.*;
-
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.widget.*;
-
-/**
- * Menu item for uploading a Photo.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
- */
-public class UploadPhotoMenuItem extends MenuItemWidget {
-
-	@Override /* MenuItemWidget */
-	public String getLabel(RestRequest req, RestResponse res) throws Exception {
-		return "upload";
-	}
-
-	@Override /* Widget */
-	public Object getContent(RestRequest req, RestResponse res) throws Exception {
-		return div(
-			form().id("form").action("servlet:/upload").method(POST).enctype("multipart/form-data").children(
-				table(
-					tr(
-						th("ID:"),
-						td(input().name("id").type("text")),
-						td(new Tooltip("&#x2753;", "The unique identifier of the photo.", br(), "e.g. 'Fluffy'"))
-					),
-					tr(
-						th("File:"),
-						td(input().name("file").type("file").accept("image/*")),
-						td(new Tooltip("&#x2753;", "The image file."))
-					),
-					tr(
-						td().colspan(2).style("text-align:right").children(
-							button("reset", "Reset"),
-							button("button","Cancel").onclick("window.location.href='/'"),
-							button("submit", "Submit")
-						)
-					)
-				).style("white-space:nowrap")
-			)
-		);
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0.0",
+		"title": "Swagger Petstore",
+		"termsOfService": "You are on your own.",
+		"contact": {
+			"name": "Juneau Development Team",
+			"email": "dev@juneau.apache.org",
+			"url": "http://juneau.apache.org"
+		},
+		"license": {
+			"name": "Apache 2.0",
+			"url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+		}
+	},
+	"externalDocs": {
+		"description": "Find out more about Juneau",
+		"url": "http://juneau.apache.org"
+	},
+	"tags": [
+		{
+			"name": "pet",
+			"description": "Everything about your Pets",
+			"externalDocs": {
+				"description": "Find out more",
+				"url": "http://juneau.apache.org"
+			}
+		},
+		{
+			"name": "store",
+			"description": "Access to Petstore orders"
+		},
+		{
+			"name": "user",
+			"description": "Operations about user",
+			"externalDocs": {
+				"description": "Find out more about our store",
+				"url": "http://juneau.apache.org"
+			}
+		}
+	],
+	"schemes": [
+		"http"
+	],
+	"securityDefinitions": {
+		"petstore_auth": {
+			"type": "oauth2",
+			"authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+			"flow": "implicit",
+			"scopes": {
+				"write:pets": "modify pets in your account",
+				"read:pets": "read your pets"
+			}
+		},
+		"api_key": {
+			"type": "apiKey",
+			"name": "api_key",
+			"in": "header"
+		}
 	}
 }
