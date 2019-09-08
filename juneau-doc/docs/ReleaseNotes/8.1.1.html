@@ -74,6 +74,15 @@
 				<li class='jm'>{@link oajr.BasicRest#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
 			</ul>
 		</ul>
+	<li>
+		The <c>@RestResource(staticFiles)</c> annotation now supports absolute path locations:
+		<p class='bpcode w800'>
+	<jc>// Resolves static files in root package "htdocs" or working directory "htdocs".
+	<ja>@RestResource</ja>(staticFiles=<js>"htdocs:/htdocs"</js>)
+		</p>
+	<li>
+		Fixed a bug in <c>@RestResource(staticFiles)</c> where the order of lookup between parent and child resources
+		was wrong.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>

@@ -13,11 +13,12 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.utils.*;
@@ -86,8 +87,8 @@ public class StaticFileMapping {
 	 */
 	public StaticFileMapping(Class<?> resourceClass, String path, String location, Map<String,Object> responseHeaders) {
 		this.resourceClass = resourceClass;
-		this.path = StringUtils.trimSlashes(path);
-		this.location = StringUtils.trimSlashes(location);
+		this.path = trimSlashes(path);
+		this.location = trimTrailingSlashes(location);
 		this.responseHeaders = immutableMap(responseHeaders);
 	}
 
@@ -109,11 +110,11 @@ public class StaticFileMapping {
 	 */
 	public StaticFileMapping(Class<?> resourceClass, String mappingString) {
 		this.resourceClass = resourceClass;
-		String[] parts = StringUtils.split(mappingString, ':', 3);
+		String[] parts = split(mappingString, ':', 3);
 		if (parts == null || parts.length <= 1)
 			throw new FormattedRuntimeException("Invalid mapping string format: ''{0}'' on resource class ''{1}''", mappingString, resourceClass.getName());
-		this.path = StringUtils.trimSlashes(parts[0]);
-		this.location = StringUtils.trimSlashes(parts[1]);
+		this.path = trimSlashes(parts[0]);
+		this.location = trimTrailingSlashes(parts[1]);
 		if (parts.length == 3) {
 			try {
 				responseHeaders = unmodifiableMap(new ObjectMap(parts[2]));
@@ -123,5 +124,28 @@ public class StaticFileMapping {
 		} else {
 			responseHeaders = null;
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Object */
+	public String toString() {
+		return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());
+	}
+
+	/**
+	 * Returns the properties defined on this bean as a simple map for debugging purposes.
+	 *
+	 * @return A new map containing the properties defined on this bean.
+	 */
+	public ObjectMap toMap() {
+		return new DefaultFilteringObjectMap()
+			.append("resourceClass", resourceClass)
+			.append("path", path)
+			.append("location", location)
+			.append("responseHeaders", responseHeaders)
+		;
 	}
 }

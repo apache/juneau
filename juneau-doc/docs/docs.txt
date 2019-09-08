@@ -4,6 +4,7 @@ PojoCategories = #juneau-marshall.PojoCategories, POJO Categories
 PojosConveribleToStrings = #PojosConveribleToStrings, POJOs Convertible to/from Strings
 PojosConveribleToOtherTypes = #PojosConveribleToOtherTypes, POJOs Convertible to/from Other Types
 ConfigurableProperties = #juneau-marshall.ConfigurableProperties, Configurable Properties
+SimpleJson = #juneau-marshall.JsonDetails.SimplifiedJson, Simple JSON
 
 SwaggerIO.v2 = https://swagger.io/specification/v2
 SwaggerIO.v3 = https://swagger.io/specification

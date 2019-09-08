@@ -50,7 +50,6 @@ import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.msgpack.*;
@@ -2755,6 +2754,16 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
+	 * <p>
+	 * Note that headers can also be specified per path-mapping via the {@link RestResource#staticFiles() @RestResource(staticFiles)} annotation.
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		staticFiles={
+	 * 			<js>"htdocs:docs:{'Cache-Control':'max-age=86400, public'}"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_staticFiles} for information about statically-served files.
 	 * </ul>
@@ -2790,6 +2799,13 @@ public final class RestContext extends BeanContext {
 	 * from the classpath or file system.
 	 *
 	 * <p>
+	 * The format of the value is one of the following:
+	 * <ol class='spaced-list'>
+	 * 	<li><js>"path:location"</js>
+	 * 	<li><js>"path:location:headers"</js>
+	 * </ol>
+	 *
+	 * <p>
 	 * An example where this class is used is in the {@link RestResource#staticFiles} annotation:
 	 * <p class='bcode w800'>
 	 * 	<jk>package</jk> com.foo.mypackage;
@@ -2809,11 +2825,40 @@ public final class RestContext extends BeanContext {
 	 * <p class='bcode w800'>
 	 *  	/myresource/htdocs/foobar.html
 	 * </p>
-	 * <br>...the servlet will attempt to find the <c>foobar.html</c> file in the following ordered locations:
+	 * <br>...the servlet will attempt to find the <c>foobar.html</c> file in the following location:
 	 * <ol class='spaced-list'>
 	 * 	<li><c>com.foo.mypackage.docs</c> package.
-	 * 	<li><c>[working-dir]/docs</c> directory.
 	 * </ol>
+	 *
+	 * <p>
+	 * The location is interpreted as an absolute path if it starts with <js>'/'</js>.
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		staticFiles={
+	 * 			<js>"htdocs:/docs"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 * <p>
+	 * In the example above, given a GET request to the following URL...
+	 * <p class='bcode w800'>
+	 *  	/myresource/htdocs/foobar.html
+	 * </p>
+	 * <br>...the servlet will attempt to find the <c>foobar.html</c> file in the following location:
+	 * <ol class='spaced-list'>
+	 * 	<li><c>docs</c> package (typically under <c>src/main/resources/docs</c> in your workspace).
+	 * 	<li><c>[working-dir]/docs</c> directory at runtime.
+	 * </ol>
+	 *
+	 * <p>
+	 * Response headers can be specified for served files by adding a 3rd section that consists of a {@doc SimpleJson} object.
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		staticFiles={
+	 * 			<js>"htdocs:docs:{'Cache-Control':'max-age=86400, public'}"</js>
+	 * 		}
+	 * 	)
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_classpathResourceFinder} for configuring how classpath resources are located and retrieved.
@@ -2828,6 +2873,8 @@ public final class RestContext extends BeanContext {
 	 * 		Mappings are cumulative from super classes.
 	 * 	<li>
 	 * 		Child resources can override mappings made on parent class resources.
+	 * 		<br>When both parent and child resources map against the same path, files will be search in the child location
+	 * 		and then the parent location.
 	 * </ul>
 	 */
 	public static final String REST_staticFiles = PREFIX + ".staticFiles.lo";
@@ -3485,7 +3532,7 @@ public final class RestContext extends BeanContext {
 	private final ObjectMap defaultRequestAttributes;
 	private final ResponseHandler[] responseHandlers;
 	private final MimetypesFileTypeMap mimetypesFileTypeMap;
-	private final StaticFileMapping[] staticFiles;
+	private final StaticFiles[] staticFiles;
 	private final String[] staticFilesPaths;
 	private final MessageBundle msgs;
 	private final Config config;
@@ -3688,10 +3735,14 @@ public final class RestContext extends BeanContext {
 			consumes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 			produces = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
 
-			staticFiles = ArrayUtils.reverse(getArrayProperty(REST_staticFiles, StaticFileMapping.class));
+			StaticFileMapping[] staticFileMappings = getArrayProperty(REST_staticFiles, StaticFileMapping.class, new StaticFileMapping[0]);
+			staticFiles = new StaticFiles[staticFileMappings.length];
+			for (int i = 0; i < staticFiles.length; i++)
+				staticFiles[i] = new StaticFiles(staticFileMappings[i], staticResourceManager, mimetypesFileTypeMap, staticFileResponseHeaders);
+
 			Set<String> s = new TreeSet<>();
-			for (StaticFileMapping sfm : staticFiles)
-				s.add(sfm.path);
+			for (StaticFiles sf : staticFiles)
+				s.add(sf.getPath());
 			staticFilesPaths = s.toArray(new String[s.size()]);
 
 			MessageBundleLocation[] mbl = getInstanceArrayProperty(REST_messages, MessageBundleLocation.class, new MessageBundleLocation[0]);
@@ -4085,24 +4136,10 @@ public final class RestContext extends BeanContext {
 			if (p.indexOf("..") != -1)
 				throw new NotFound("Invalid path");
 			StreamResource sr = null;
-			for (StaticFileMapping sfm : staticFiles) {
-				String path = sfm.path;
-				if (p.startsWith(path)) {
-					String remainder = (p.equals(path) ? "" : p.substring(path.length()));
-					if (remainder.isEmpty() || remainder.startsWith("/")) {
-						String p2 = sfm.location + remainder;
-						try (InputStream is = getClasspathResource(sfm.resourceClass, p2, null)) {
-							if (is != null) {
-								int i = p2.lastIndexOf('/');
-								String name = (i == -1 ? p2 : p2.substring(i+1));
-								String mediaType = mimetypesFileTypeMap.getContentType(name);
-								Map<String,Object> responseHeaders = sfm.responseHeaders != null ? sfm.responseHeaders : staticFileResponseHeaders;
-								sr = new StreamResource(MediaType.forString(mediaType), responseHeaders, true, is);
-								break;
-							}
-						}
-					}
-				}
+			for (StaticFiles sf : staticFiles) {
+				sr = sf.resolve(p);
+				if (sr != null)
+					break;
 			}
 			StaticFile sf = new StaticFile(sr);
 			if (useClasspathResourceCaching) {

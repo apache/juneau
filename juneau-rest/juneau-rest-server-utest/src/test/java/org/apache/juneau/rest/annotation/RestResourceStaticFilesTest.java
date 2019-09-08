@@ -23,9 +23,9 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestResourceStaticFilesTest {
 
-	//====================================================================================================
+	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
-	//====================================================================================================
+	//------------------------------------------------------------------------------------------------------------------
 
 	@RestResource(staticFiles={"xdocs:xdocs","xdocs2:xdocs2:{Foo:'Bar'}"})
 	public static class A {
@@ -47,9 +47,9 @@ public class RestResourceStaticFilesTest {
 		a.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true").execute().assertStatus(404);
 	}
 
-	//====================================================================================================
+	//------------------------------------------------------------------------------------------------------------------
 	// Static files with response headers.
-	//====================================================================================================
+	//------------------------------------------------------------------------------------------------------------------
 
 	@RestResource(staticFiles={"xdocs:xdocs:{Foo:'Bar'}"})
 	public static class B {
@@ -63,5 +63,45 @@ public class RestResourceStaticFilesTest {
 	@Test
 	public void b01() throws Exception {
 		b.get("/xdocs/test.txt").execute().assertHeader("Foo","Bar").assertBodyContains("OK-1");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Class hierarchy
+	//------------------------------------------------------------------------------------------------------------------
+
+	@RestResource(staticFiles={"xdocs:xdocs"})
+	public static class C1 {
+		@RestMethod
+		public String c01() {
+			return null;
+		}
+	}
+
+	@RestResource(staticFiles={"xdocs:/xdocs"})
+	public static class C2 extends C1 {
+		@RestMethod
+		public String c02() {
+			return null;
+		}
+	}
+
+	static MockRest c1 = MockRest.build(C1.class);
+	static MockRest c2 = MockRest.build(C2.class);
+
+	@Test
+	public void c01() throws Exception {
+		// Should resolve to relative xdocs folder.
+		c1.get("/xdocs/test.txt").execute().assertBodyContains("OK-1");
+		c1.get("/xdocs/xsubdocs/test.txt").execute().assertBodyContains("OK-2");
+
+		// Should be overridden to absolute xdocs folder.
+		c2.get("/xdocs/test.txt").execute().assertBodyContains("OK-3");
+		c2.get("/xdocs/xsubdocs/test.txt").execute().assertBodyContains("OK-4");
+
+		// Should pick up from file system.
+		c1.get("/xdocs/test2.txt").execute().assertBodyContains("OK-5");
+		c2.get("/xdocs/test2.txt").execute().assertBodyContains("OK-5");
+		c1.get("/xdocs/xsubdocs/test2.txt").execute().assertBodyContains("OK-6");
+		c2.get("/xdocs/xsubdocs/test2.txt").execute().assertBodyContains("OK-6");
 	}
 }

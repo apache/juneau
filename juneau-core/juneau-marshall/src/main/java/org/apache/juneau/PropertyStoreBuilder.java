@@ -341,6 +341,7 @@ public class PropertyStoreBuilder {
 	 * 		Out-of-range indexes are simply 'adjusted' to the beginning or the end of the list.
 	 * 		So, for example, a value of <js>"-100"</js> will always just cause the entry to be added to the beginning
 	 * 		of the list.
+	 * 		<br>NOTE:  If <jk>null</jk>, value will be inserted at position 0.
 	 * 	<br>For MAPs, this can be <jk>null</jk> if we're adding a map, or a string key if we're adding an entry.
 	 * @param value
 	 * 	The new value to add to the property.
@@ -370,10 +371,13 @@ public class PropertyStoreBuilder {
 	}
 
 	/**
-	 * Adds a value to a SET, LIST, or MAP property.
+	 * Adds/prepends a value to a SET, LIST, or MAP property.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>addTo(key, <jk>null</jk>, value);</code>.
+	 *
+	 * <p>
+	 * NOTE:  When adding to a list, the value is inserted at the beginning of the list.
 	 *
 	 * @param key The property key.
 	 * @param value
