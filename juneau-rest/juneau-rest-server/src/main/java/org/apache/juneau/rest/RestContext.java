@@ -2860,6 +2860,17 @@ public final class RestContext extends BeanContext {
 	 * 	)
 	 * </p>
 	 *
+	 * <p>
+	 * The same path can map to multiple locations.  Files are searched in the order
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		staticFiles={
+	 * 			<jc>// Search in absolute location '/htdocs/folder' before location 'htdocs.package' relative to servlet package.</jc>
+	 * 			<js>"htdocs:/htdocs/folder,htdocs:htdocs.package"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_classpathResourceFinder} for configuring how classpath resources are located and retrieved.
 	 * 	<li class='jf'>{@link #REST_mimeTypes} for configuring the media types based on file extension.

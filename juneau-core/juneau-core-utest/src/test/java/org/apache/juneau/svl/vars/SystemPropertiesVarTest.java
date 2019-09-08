@@ -10,46 +10,30 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.svl;
+package org.apache.juneau.svl.vars;
 
-/**
- * Interface for the resolution of vars with a default value if the <c>resolve()</c> method returns <jk>null</jk>.
- *
- * <p>
- * For example, to resolve the system property <js>"myProperty"</js> but resolve to <js>"not found"</js> if the
- * property doesn't exist: <js>"$S{myProperty,not found}"</js>
- *
- * <p>
- * Subclasses must implement the following method:
- * <ul class='javatree'>
- * 	<li class='jm'>{@link #resolve(VarResolverSession, String)}
- * </ul>
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-svl.SvlVariables}
- * </ul>
- */
-public abstract class DefaultingVar extends SimpleVar {
+import static org.junit.Assert.*;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param name The name of this variable.
-	 */
-	public DefaultingVar(String name) {
-		super(name);
-	}
+import org.apache.juneau.svl.*;
+import org.junit.*;
 
-	@Override /* Var*/
-	public String doResolve(VarResolverSession session, String s) throws Exception {
-		int i = s.indexOf(',');
-		if (i == -1)
-			return resolve(session, s.trim());
-		String s1 = s.substring(0, i);
-		String s2 = s.length() == i ? null : s.substring(i+1);
-		String v = resolve(session, s1);
-		if (v == null)
-			v = s2;
-		return v;
+public class SystemPropertiesVarTest {
+
+	//====================================================================================================
+	// test - Basic tests
+	//====================================================================================================
+	@Test
+	public void test() throws Exception {
+		VarResolver vr = new VarResolverBuilder().vars(SystemPropertiesVar.class).build();
+
+		System.setProperty("SystemPropertiesVar.x", "foo");
+		assertEquals("foo", vr.resolve("$S{SystemPropertiesVar.x}"));
+		assertEquals("foo", vr.resolve("$S{SystemPropertiesVar.x,bar}"));
+		assertEquals("", vr.resolve("$S{SystemPropertiesVar.y}"));
+		assertEquals("bar", vr.resolve("$S{SystemPropertiesVar.y,bar}"));
+		assertEquals("bar,bar", vr.resolve("$S{SystemPropertiesVar.y,bar,bar}"));
+		assertEquals(" bar ", vr.resolve("$S{ SystemPropertiesVar.y , bar }"));
+		assertEquals(" bar,bar ", vr.resolve("$S{ SystemPropertiesVar.y , bar,bar }"));
+		assertEquals("", vr.resolve("$S{SystemPropertiesVar.y,}"));
 	}
 }

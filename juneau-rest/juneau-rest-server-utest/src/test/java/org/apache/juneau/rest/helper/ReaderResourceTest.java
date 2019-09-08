@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.jueau.rest.helper;
+package org.apache.juneau.rest.helper;
 
 import static org.junit.Assert.*;
 
@@ -20,7 +20,6 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.ReaderResource;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 import org.junit.runners.*;

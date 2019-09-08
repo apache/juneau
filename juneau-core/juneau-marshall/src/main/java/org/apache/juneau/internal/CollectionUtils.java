@@ -100,6 +100,16 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Returns a reverse iterable over the specified list.
+	 *
+	 * @param c The collection to iterate over.
+	 * @return An iterable over the collection.
+	 */
+	public static <T> Iterable<T> reverseIterable(final List<T> c) {
+		return iterable(c, true);
+	}
+
+	/**
 	 * Returns an iterable over the specified array.
 	 *
 	 * @param c The collection to iterate over.
@@ -110,6 +120,16 @@ public final class CollectionUtils {
 		if (reverse)
 			return new ReverseIterable<>(Arrays.asList(c));
 		return Arrays.asList(c);
+	}
+
+	/**
+	 * Returns a reverse iterable over the specified array.
+	 *
+	 * @param c The collection to iterate over.
+	 * @return An iterable over the collection.
+	 */
+	public static <T> Iterable<T> reverseIterable(T[] c) {
+		return iterable(c, true);
 	}
 
 	/**

@@ -35,6 +35,9 @@
 			<li class='jp'>{@link oaj.http.remote}
 		</ul>
 		These replace the <c>org.apache.juneau.rest.response</c>, <c>org.apache.juneau.rest.exception</c>, and <c>org.apache.juneau.rest.client.remote</c> packages.
+	<li>
+		Defaulting SVL variables now won't ignore additional parameters.
+		<br><js>"$S{Foo,bar,baz}"</js> used to default to <js>"bar"</js> but now will default to <js>"bar,baz"</js>.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
@@ -75,10 +78,10 @@
 			</ul>
 		</ul>
 	<li>
-		The <c>@RestResource(staticFiles)</c> annotation now supports absolute path locations:
+		The <c>@RestResource(staticFiles)</c> annotation now supports absolute path locations and multiple mappings:
 		<p class='bpcode w800'>
-	<jc>// Resolves static files in root package "htdocs" or working directory "htdocs".
-	<ja>@RestResource</ja>(staticFiles=<js>"htdocs:/htdocs"</js>)
+	<jc>// Resolves static files in root package "htdocs" or working directory "htdocs", and then relative package "htdocs".</jc>
+	<ja>@RestResource</ja>(staticFiles=<js>"htdocs:/htdocsfolder,htdocs:htdocs.package"</js>)
 		</p>
 	<li>
 		Fixed a bug in <c>@RestResource(staticFiles)</c> where the order of lookup between parent and child resources

@@ -14,10 +14,13 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.StateMachineState.*;
+import static java.lang.Character.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -93,7 +96,7 @@ public class StaticFileMapping {
 	}
 
 	/**
-	 * Constructor using a mapping string to represent a path/location pairing.
+	 * Create one or more <c>StaticFileMappings</c> from the specified comma-delimited list of mappings.
 	 *
 	 * <p>
 	 * Mapping string must be one of these formats:
@@ -104,26 +107,101 @@ public class StaticFileMapping {
 	 *
 	 * @param resourceClass
 	 * 	The resource/servlet class which serves as the base location of the location below.
-	 * @param mappingString
+	 * @param mapping
 	 * 	The mapping string that represents the path/location mapping.
 	 * 	<br>Leading and trailing slashes and whitespace are trimmed from path and location.
+	 * @return A list of parsed mappings.  Never <jk>null</jk>.
+	 * @throws ParseException If mapping was malformed.
 	 */
-	public StaticFileMapping(Class<?> resourceClass, String mappingString) {
-		this.resourceClass = resourceClass;
-		String[] parts = split(mappingString, ':', 3);
-		if (parts == null || parts.length <= 1)
-			throw new FormattedRuntimeException("Invalid mapping string format: ''{0}'' on resource class ''{1}''", mappingString, resourceClass.getName());
-		this.path = trimSlashes(parts[0]);
-		this.location = trimTrailingSlashes(parts[1]);
-		if (parts.length == 3) {
-			try {
-				responseHeaders = unmodifiableMap(new ObjectMap(parts[2]));
-			} catch (ParseException e) {
-				throw new FormattedRuntimeException(e, "Invalid mapping string format: ''{0}'' on resource class ''{1}''", mappingString, resourceClass.getName());
+	public static List<StaticFileMapping> parse(Class<?> resourceClass, String mapping) throws ParseException {
+
+		mapping = trim(mapping);
+		if (isEmpty(mapping))
+			return Collections.emptyList();
+
+		// States:
+		// S01 = In path, looking for :
+		// S02 = Found path:, looking for : or , or end
+		// S03 = Found path:location:, looking for {
+		// S04 = Found path:location:{, looking for }
+		// S05 = Found path:location:{headers}, looking for , or end
+		// S06 = Found path:location:{headers} , looking for start of path
+
+		StateMachineState state = S01;
+		int mark = 0;
+
+		String path = null, location = null;
+		List<StaticFileMapping> l = new ArrayList<>();
+		String s = mapping;
+		int jsonDepth = 0;
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (state == S01) {
+				if (c == ':') {
+					path = trim(s.substring(mark, i));
+					mark = i+1;
+					state = S02;
+				}
+			} else if (state == S02) {
+				if (c == ':') {
+					location = trim(s.substring(mark, i));
+					mark = i+1;
+					state = S03;
+				} else if (c == ',') {
+					location = trim(s.substring(mark, i));
+					l.add(new StaticFileMapping(resourceClass, path, location, null));
+					mark = i+1;
+					state = S01;
+					path = null;
+					location = null;
+				}
+			} else if (state == S03) {
+				if (c == '{') {
+					mark = i;
+					state = S04;
+				} else if (! isWhitespace(c)) {
+					throw new ParseException("Invalid staticFiles mapping.  Expected '{' at beginning of headers.  mapping=[{0}]", mapping);
+				}
+			} else if (state == S04) {
+				if (c == '{') {
+					jsonDepth++;
+				} else if (c == '}') {
+					if (jsonDepth > 0) {
+						jsonDepth--;
+					} else {
+						String json = s.substring(mark, i+1);
+						l.add(new StaticFileMapping(resourceClass, path, location, new ObjectMap(json)));
+						state = S05;
+						path = null;
+						location = null;
+					}
+				}
+			} else if (state == S05) {
+				if (c == ',') {
+					state = S06;
+				} else if (! isWhitespace(c)) {
+					throw new ParseException("Invalid staticFiles mapping.  Invalid text following headers.  mapping=[{0}]", mapping);
+				}
+			} else /* state == S06 */ {
+				if (! isWhitespace(c)) {
+					mark = i;
+					state = S01;
+				}
 			}
-		} else {
-			responseHeaders = null;
 		}
+
+		if (state == S01) {
+			throw new ParseException("Invalid staticFiles mapping.  Couldn''t find '':'' following path.  mapping=[{0}]", mapping);
+		} else if (state == S02) {
+			location = trim(s.substring(mark, s.length()));
+			l.add(new StaticFileMapping(resourceClass, path, location, null));
+		} else if (state == S03) {
+			throw new ParseException("Invalid staticFiles mapping.  Found extra '':'' following location.  mapping=[{0}]", mapping);
+		} else if (state == S04) {
+			throw new ParseException("Invalid staticFiles mapping.  Malformed headers.  mapping=[{0}]", mapping);
+		}
+
+		return l;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

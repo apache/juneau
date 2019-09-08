@@ -17,6 +17,7 @@ import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.serializer.Serializer.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.nio.charset.*;
 import java.util.*;
@@ -1860,10 +1861,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * </ul>
 	 *
 	 * @param mappingString The static file mapping string.
+	 * @throws ParseException If mapping string is malformed.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder staticFiles(String mappingString) {
-		return staticFiles(new StaticFileMapping(resourceClass, mappingString));
+	public RestContextBuilder staticFiles(String mappingString) throws ParseException{
+		for (StaticFileMapping sfm : reverseIterable(StaticFileMapping.parse(resourceClass, mappingString)))
+			staticFiles(sfm);
+		return this;
 	}
 
 	/**
@@ -1888,10 +1892,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<br>If <jk>null<jk>, uses the REST resource class.
 	 * @param mappingString The static file mapping string.
 	 * @return This object (for method chaining).
+	 * @throws ParseException If mapping string is malformed.
 	 */
-	public RestContextBuilder staticFiles(Class<?> baseClass, String mappingString) {
-		if (isNotEmpty(mappingString))
-			staticFiles(new StaticFileMapping(baseClass, mappingString));
+	public RestContextBuilder staticFiles(Class<?> baseClass, String mappingString) throws ParseException {
+		for (StaticFileMapping sfm : reverseIterable(StaticFileMapping.parse(baseClass, mappingString)))
+			staticFiles(sfm);
 		return this;
 	}
 
@@ -1914,7 +1919,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder staticFiles(String path, String location) {
-		return staticFiles(new StaticFileMapping(null, path, location, null));
+		return staticFiles(new StaticFileMapping(resourceClass, path, location, null));
 	}
 
 	/**

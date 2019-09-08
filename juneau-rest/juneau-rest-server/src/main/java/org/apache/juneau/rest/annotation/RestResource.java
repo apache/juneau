@@ -1156,6 +1156,17 @@ public @interface RestResource {
 	 * 	)
 	 * </p>
 	 *
+	 * <p>
+	 * The same path can map to multiple locations.  Files are searched in the order
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		staticFiles={
+	 * 			<jc>// Search in absolute location '/htdocs/folder' before location 'htdocs.package' relative to servlet package.</jc>
+	 * 			<js>"htdocs:/htdocs/folder,htdocs:htdocs.package"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Mappings are cumulative from super classes.

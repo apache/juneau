@@ -78,7 +78,7 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 	// These are static files that are served up by the servlet under the specified sub-paths.
 	// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
 	// By default, we define static files through the external configuration file.
-	staticFiles="$C{REST/staticFiles,htdocs:htdocs}",
+	staticFiles="$C{REST/staticFiles,htdocs:/htdocs,htdocs:htdocs}",
 
 	logging=@Logging(
 		level="INFO",

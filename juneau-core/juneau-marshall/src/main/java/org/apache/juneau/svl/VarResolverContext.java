@@ -50,7 +50,7 @@ public class VarResolverContext {
 		for (Class<?> c : vars) {
 			ClassInfo ci = ClassInfo.of(c);
 			if (! ci.isChildOf(Var.class))
-				throw new VarResolverException("Invalid variable class.  Must extend from Var");
+				throw new VarResolverException("Invalid variable class ''{0}''.  Must extend from Var.", ci);
 			Var v = castOrCreate(Var.class, c);
 			m.put(v.getName(), v);
 		}

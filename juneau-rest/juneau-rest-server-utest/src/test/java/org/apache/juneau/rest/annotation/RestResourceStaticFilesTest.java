@@ -28,30 +28,50 @@ public class RestResourceStaticFilesTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestResource(staticFiles={"xdocs:xdocs","xdocs2:xdocs2:{Foo:'Bar'}"})
-	public static class A {
+	public static class A1 {
 		@RestMethod
 		public String a01() {
 			return null;
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRest a1 = MockRest.build(A1.class);
 
 	@Test
-	public void a01() throws Exception {
-		a.get("/xdocs/test.txt").execute().assertBodyContains("OK-1");
-		a.get("/xdocs/xsubdocs/test.txt").execute().assertBodyContains("OK-2");
+	public void a01a() throws Exception {
+		a1.get("/xdocs/test.txt").execute().assertBodyContains("OK-1");
+		a1.get("/xdocs/xsubdocs/test.txt").execute().assertBodyContains("OK-2");
 	}
 	@Test
-	public void a02_preventPathTraversals() throws Exception {
-		a.get("/xdocs/xsubdocs/../test.txt?noTrace=true").execute().assertStatus(404);
-		a.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true").execute().assertStatus(404);
+	public void a01b_preventPathTraversals() throws Exception {
+		a1.get("/xdocs/xsubdocs/../test.txt?noTrace=true").execute().assertStatus(404);
+		a1.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true").execute().assertStatus(404);
+	}
+
+	@RestResource(staticFiles={"xdocs2:xdocs2:{Foo:'Bar',Baz:'Qux'},xdocs:xdocs"})
+	public static class A2 {
+		@RestMethod
+		public String a02() {
+			return null;
+		}
+	}
+	static MockRest a2 = MockRest.build(A1.class);
+
+	@Test
+	public void a02a() throws Exception {
+		a1.get("/xdocs/test.txt").execute().assertBodyContains("OK-1");
+		a1.get("/xdocs/xsubdocs/test.txt").execute().assertBodyContains("OK-2");
+	}
+	@Test
+	public void a02b_preventPathTraversals() throws Exception {
+		a1.get("/xdocs/xsubdocs/../test.txt?noTrace=true").execute().assertStatus(404);
+		a1.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true").execute().assertStatus(404);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Static files with response headers.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(staticFiles={"xdocs:xdocs:{Foo:'Bar'}"})
+	@RestResource(staticFiles={"xdocs:xdocs:{Foo:'Bar',Baz:'Qux'}"})
 	public static class B {
 		@RestMethod
 		public String b01() {
@@ -62,7 +82,7 @@ public class RestResourceStaticFilesTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.get("/xdocs/test.txt").execute().assertHeader("Foo","Bar").assertBodyContains("OK-1");
+		b.get("/xdocs/test.txt").execute().assertHeader("Foo","Bar").assertHeader("Baz","Qux").assertBodyContains("OK-1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -104,4 +124,30 @@ public class RestResourceStaticFilesTest {
 		c1.get("/xdocs/xsubdocs/test2.txt").execute().assertBodyContains("OK-6");
 		c2.get("/xdocs/xsubdocs/test2.txt").execute().assertBodyContains("OK-6");
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Overridden patterns
+	//------------------------------------------------------------------------------------------------------------------
+
+	@RestResource(staticFiles={"xdocs:/xdocs,xdocs:xdocs"})
+	public static class D {
+		@RestMethod
+		public String d01() {
+			return null;
+		}
+	}
+
+	static MockRest d = MockRest.build(D.class);
+
+	@Test
+	public void d01() throws Exception {
+		// Should be overridden to absolute xdocs folder.
+		d.get("/xdocs/test.txt").execute().assertBodyContains("OK-3");
+		d.get("/xdocs/xsubdocs/test.txt").execute().assertBodyContains("OK-4");
+
+		// Should pick up from file system.
+		d.get("/xdocs/test2.txt").execute().assertBodyContains("OK-5");
+		d.get("/xdocs/xsubdocs/test2.txt").execute().assertBodyContains("OK-6");
+	}
+
 }
