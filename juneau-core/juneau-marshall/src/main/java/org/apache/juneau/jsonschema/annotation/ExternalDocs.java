@@ -97,7 +97,7 @@ public @interface ExternalDocs {
 	 * Free-form value for the {@doc SwaggerExternalDocumentationObject}.
 	 *
 	 * <p>
-	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this field.
+	 * This is a {@doc SimpleJson} object that makes up the swagger information for this field.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of documentation:
@@ -145,7 +145,7 @@ public @interface ExternalDocs {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

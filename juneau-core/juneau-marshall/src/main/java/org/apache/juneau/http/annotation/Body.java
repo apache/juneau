@@ -265,7 +265,7 @@ public @interface Body {
 	 * A serialized example of the body of a request.
 	 *
 	 * <p>
-	 * This is the {@doc juneau-marshall.JsonDetails.SimplifiedJson} of an example of the body.
+	 * This is the {@doc SimpleJson} of an example of the body.
 	 *
 	 * <p>
 	 * This value is converted to a POJO and then serialized to all the registered serializers on the REST method to produce examples for all
@@ -370,7 +370,7 @@ public @interface Body {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is any {@doc juneau-marshall.JsonDetails.SimplifiedJson} if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
+	 * 		The format is any {@doc SimpleJson} if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
 	 * 		has a schema associated with it meancan be converted from a String.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
@@ -386,7 +386,7 @@ public @interface Body {
 	 * Serialized examples of the body of a request.
 	 *
 	 * <p>
-	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object whose keys are media types and values are string representations of that value.
+	 * This is a {@doc SimpleJson} object whose keys are media types and values are string representations of that value.
 	 *
 	 * <p>
 	 * In general you won't need to populate this value directly since it will automatically be calculated based on the value provided in the {@link #example()} field.
@@ -410,7 +410,7 @@ public @interface Body {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object with string keys (media type) and string values (example for that media type) .
+	 * 		The format is a {@doc SimpleJson} object with string keys (media type) and string values (example for that media type) .
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 	<li>
@@ -429,7 +429,7 @@ public @interface Body {
 	 * Free-form value for the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
-	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this parameter-info.
+	 * This is a {@doc SimpleJson} object that makes up the swagger information for this parameter-info.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the body:
@@ -482,7 +482,7 @@ public @interface Body {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 	<li>
 	 * 		Schema-based serialization is NOT affected by values defined in this annotation.
 	 * 		<br>It only affects the generated Swagger documentation.

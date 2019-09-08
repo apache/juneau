@@ -81,7 +81,7 @@ public @interface MethodSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is either a comma-delimited list of simple strings or a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array.
+	 * 		The format is either a comma-delimited list of simple strings or a {@doc SimpleJson} array.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -125,7 +125,7 @@ public @interface MethodSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is either a comma-delimited list of simple strings or a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array.
+	 * 		The format is either a comma-delimited list of simple strings or a {@doc SimpleJson} array.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -143,7 +143,7 @@ public @interface MethodSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is either a comma-delimited list of simple strings or a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array.
+	 * 		The format is either a comma-delimited list of simple strings or a {@doc SimpleJson} array.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -200,7 +200,7 @@ public @interface MethodSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array consisting of the concatenated individual strings.
+	 * 		The format is a {@doc SimpleJson} array consisting of the concatenated individual strings.
 	 * 		<br>The leading and trailing <js>'['</js> and <js>']'</js> characters are optional.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -232,7 +232,7 @@ public @interface MethodSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} objc consisting of the concatenated individual strings.
+	 * 		The format is a {@doc SimpleJson} objc consisting of the concatenated individual strings.
 	 * 		<br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -306,7 +306,7 @@ public @interface MethodSwagger {
 	 * Free-form value for the swagger of a resource method.
 	 *
 	 * <p>
-	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this resource method.
+	 * This is a {@doc SimpleJson} object that makes up the swagger information for this resource method.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of a resource method:
@@ -364,7 +364,7 @@ public @interface MethodSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

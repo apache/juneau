@@ -808,7 +808,7 @@ public @interface FormData {
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
-	 * The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array or comma-delimited list.
+	 * The format is a {@doc SimpleJson} array or comma-delimited list.
 	 * <br>Multiple lines are concatenated with newlines.
 	 *
 	 * <h5 class='section'>Examples:</h5>
@@ -917,7 +917,7 @@ public @interface FormData {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object or plain text string.
+	 * 		The format is a {@doc SimpleJson} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -983,7 +983,7 @@ public @interface FormData {
 	 * 	<li>
 	 * 		Automatic validation is NOT performed on input based on attributes in this value.
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

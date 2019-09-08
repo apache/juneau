@@ -1032,6 +1032,49 @@ public @interface RestResource {
 	 * <p>
 	 * Used to customize the headers on responses returned for statically-served files.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@RestResource</ja>(
+	 * 		staticFileResponseHeaders={
+	 * 			<js>"Cache-Control: $C{REST/cacheControl,nocache}"</js>,
+	 * 			<js>"My-Header: $C{REST/myHeaderValue}"</js>
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder
+	 * 				.staticFileResponseHeader(<js>"Cache-Control"</js>, <js>"nocache"</js>);
+	 * 				.staticFileResponseHeaders(<js>"My-Header: foo"</js>);
+	 *
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder
+	 * 				.addTo(<jsf>REST_staticFileResponseHeaders</jsf>, <js>"Cache-Control"</js>, <js>"nocache"</js>);
+	 * 				.addTo(<jsf>REST_staticFileResponseHeaders</jsf>, <js>"My-Header"</js>, <js>"foo"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.staticFileResponseHeader(<js>"Cache-Control"</js>, <js>"nocache"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * Note that headers can also be specified per path-mapping via the {@link RestResource#staticFiles() @RestResource(staticFiles)} annotation.
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		staticFiles={
+	 * 			<js>"htdocs:docs:{'Cache-Control':'max-age=86400, public'}"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -1048,9 +1091,78 @@ public @interface RestResource {
 	 * Static file mappings.
 	 *
 	 * <p>
-	 * Used to define paths and locations of statically-served files such as images or HTML documents.
+	 * Used to define paths and locations of statically-served files such as images or HTML documents
+	 * from the classpath or file system.
+	 *
+	 * <p>
+	 * The format of the value is one of the following:
+	 * <ol class='spaced-list'>
+	 * 	<li><js>"path:location"</js>
+	 * 	<li><js>"path:location:headers"</js>
+	 * </ol>
+	 *
+	 * <p>
+	 * An example where this class is used is in the {@link RestResource#staticFiles} annotation:
+	 * <p class='bcode w800'>
+	 * 	<jk>package</jk> com.foo.mypackage;
+	 *
+	 * 	<ja>@RestResource</ja>(
+	 * 		path=<js>"/myresource"</js>,
+	 * 		staticFiles={
+	 * 			<js>"htdocs:docs"</js>,
+	 * 			<js>"styles:styles"</js>
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
+	 * </p>
+	 *
+	 * <p>
+	 * In the example above, given a GET request to the following URL...
+	 * <p class='bcode w800'>
+	 *  	/myresource/htdocs/foobar.html
+	 * </p>
+	 * <br>...the servlet will attempt to find the <c>foobar.html</c> file in the following location:
+	 * <ol class='spaced-list'>
+	 * 	<li><c>com.foo.mypackage.docs</c> package.
+	 * </ol>
+	 *
+	 * <p>
+	 * The location is interpreted as an absolute path if it starts with <js>'/'</js>.
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		staticFiles={
+	 * 			<js>"htdocs:/docs"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 * <p>
+	 * In the example above, given a GET request to the following URL...
+	 * <p class='bcode w800'>
+	 *  	/myresource/htdocs/foobar.html
+	 * </p>
+	 * <br>...the servlet will attempt to find the <c>foobar.html</c> file in the following location:
+	 * <ol class='spaced-list'>
+	 * 	<li><c>docs</c> package (typically under <c>src/main/resources/docs</c> in your workspace).
+	 * 	<li><c>[working-dir]/docs</c> directory at runtime.
+	 * </ol>
+	 *
+	 * <p>
+	 * Response headers can be specified for served files by adding a 3rd section that consists of a {@doc SimpleJson} object.
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		staticFiles={
+	 * 			<js>"htdocs:docs:{'Cache-Control':'max-age=86400, public'}"</js>
+	 * 		}
+	 * 	)
+	 * </p>
 	 *
 	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Mappings are cumulative from super classes.
+	 * 	<li>
+	 * 		Child resources can override mappings made on parent class resources.
+	 * 		<br>When both parent and child resources map against the same path, files will be search in the child location
+	 * 		and then the parent location.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).

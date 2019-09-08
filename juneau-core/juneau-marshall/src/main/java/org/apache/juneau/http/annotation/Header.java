@@ -773,7 +773,7 @@ public @interface Header {
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
-	 * The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array or comma-delimited list.
+	 * The format is a {@doc SimpleJson} array or comma-delimited list.
 	 * <br>Multiple lines are concatenated with newlines.
 	 *
 	 * <h5 class='section'>Examples:</h5>
@@ -883,7 +883,7 @@ public @interface Header {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object or plain text string.
+	 * 		The format is a {@doc SimpleJson} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -949,7 +949,7 @@ public @interface Header {
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 	<li>
 	 * 		Automatic validation is NOT performed on input based on attributes in this value.
 	 * 	<li>

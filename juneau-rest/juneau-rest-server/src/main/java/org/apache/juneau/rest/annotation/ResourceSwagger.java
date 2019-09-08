@@ -96,7 +96,7 @@ public @interface ResourceSwagger {
 	 * Defines the swagger field <c>/info/contact</c>.
 	 *
 	 * <p>
-	 * A {@doc juneau-marshall.JsonDetails.SimplifiedJson} string with the following fields:
+	 * A {@doc SimpleJson} string with the following fields:
 	 * <p class='bcode w800'>
 	 * 	{
 	 * 		name: string,
@@ -138,7 +138,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -176,7 +176,7 @@ public @interface ResourceSwagger {
 	 * It is used to populate the Swagger license field and to display on HTML pages.
 	 *
 	 * <p>
-	 * A {@doc juneau-marshall.JsonDetails.SimplifiedJson} string with the following fields:
+	 * A {@doc SimpleJson} string with the following fields:
 	 * <p class='bcode w800'>
 	 * 	{
 	 * 		name: string,
@@ -200,7 +200,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -219,7 +219,7 @@ public @interface ResourceSwagger {
 	 * It is used to populate the Swagger tags field and to display on HTML pages.
 	 *
 	 * <p>
-	 * A {@doc juneau-marshall.JsonDetails.SimplifiedJson} string with the following fields:
+	 * A {@doc SimpleJson} string with the following fields:
 	 * <p class='bcode w800'>
 	 * 	[
 	 * 		{
@@ -249,7 +249,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array.
+	 * 		The format is a {@doc SimpleJson} array.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -310,7 +310,7 @@ public @interface ResourceSwagger {
 	 * Free-form value for the swagger of a resource.
 	 *
 	 * <p>
-	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this resource.
+	 * This is a {@doc SimpleJson} object that makes up the swagger information for this resource.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of a resource:
@@ -399,7 +399,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

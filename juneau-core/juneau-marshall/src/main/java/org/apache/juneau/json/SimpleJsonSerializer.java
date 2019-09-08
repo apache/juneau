@@ -32,7 +32,7 @@ import org.apache.juneau.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.JsonDetails.SimplifiedJson}
+ * 	<li class='link'>{@doc SimpleJson}
  * </ul>
  */
 public class SimpleJsonSerializer extends JsonSerializer {

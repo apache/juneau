@@ -171,7 +171,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is any {@doc juneau-marshall.JsonDetails.SimplifiedJson}.
+	 * 		The format is any {@doc SimpleJson}.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -337,7 +337,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -352,7 +352,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -400,7 +400,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array or comma-delimited list.
+	 * 		The format is a {@doc SimpleJson} array or comma-delimited list.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -460,7 +460,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -519,7 +519,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -533,7 +533,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -547,7 +547,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -561,7 +561,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -575,7 +575,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -589,7 +589,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -603,7 +603,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -624,7 +624,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object or plain text string.
+	 * 		The format is a {@doc SimpleJson} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -641,7 +641,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -699,7 +699,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

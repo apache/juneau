@@ -952,7 +952,7 @@ public @interface RestMethod {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is {@doc juneau-marshall.JsonDetails.SimplifiedJson}.
+	 * 		The format is {@doc SimpleJson}.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.

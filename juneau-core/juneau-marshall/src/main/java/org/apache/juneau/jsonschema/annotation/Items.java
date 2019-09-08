@@ -314,7 +314,7 @@ public @interface Items {
 	 * Free-form value for the {@doc SwaggerItemsObject}.
 	 *
 	 * <p>
-	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this field.
+	 * This is a {@doc SimpleJson} object that makes up the swagger information for this field.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of an Items object:
@@ -380,7 +380,7 @@ public @interface Items {
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

@@ -80,7 +80,7 @@ public @interface Tag {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -94,7 +94,7 @@ public @interface Tag {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -107,7 +107,7 @@ public @interface Tag {
 	 * Free-form value for the {@doc SwaggerTagObject}.
 	 *
 	 * <p>
-	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this Tag object.
+	 * This is a {@doc SimpleJson} object that makes up the swagger information for this Tag object.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the resource tags:
@@ -169,7 +169,7 @@ public @interface Tag {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
+	 * 		The format is a {@doc SimpleJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
