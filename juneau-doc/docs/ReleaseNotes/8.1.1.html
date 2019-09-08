@@ -38,6 +38,9 @@
 	<li>
 		Defaulting SVL variables now won't ignore additional parameters.
 		<br><js>"$S{Foo,bar,baz}"</js> used to default to <js>"bar"</js> but now will default to <js>"bar,baz"</js>.
+	<li>
+		Ranking support has been added to all <ja>@XConfig</ja> annotations.
+		This allows you to override the normal precedence of application of config annotations on class and method hierarchies.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
