@@ -31,8 +31,7 @@ import org.apache.juneau.serializer.annotation.*;
 	description="Example serialization of predefined Data Transfer Objects.",
 	children={
 		AtomFeedResource.class,
-		JsonSchemaResource.class,
-		PredefinedLabelsResource.class,
+		JsonSchemaResource.class
 	}
 )
 @HtmlDocConfig(
