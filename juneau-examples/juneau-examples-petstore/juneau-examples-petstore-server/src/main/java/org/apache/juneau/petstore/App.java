@@ -15,7 +15,6 @@ package org.apache.juneau.petstore;
 import org.apache.juneau.rest.springboot.JuneauRestInitializer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * Entry point for PetStore application.
@@ -28,7 +27,8 @@ public class App {
     }
 
     protected void start(String[] args) {
-        ConfigurableApplicationContext context = new SpringApplicationBuilder(App.class).initializers(new JuneauRestInitializer(App.class)).run(args);
-        AppConfiguration.setAppContext(context);
+        new SpringApplicationBuilder(App.class)
+        	.initializers(new JuneauRestInitializer(App.class)) // Needed for Juneau resources as injectible Spring beans.
+        	.run(args);
     }
 }

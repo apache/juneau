@@ -15,25 +15,12 @@ package org.apache.juneau.petstore;
 import org.apache.juneau.petstore.rest.*;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.springboot.annotation.JuneauRestRoot;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.*;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.web.filter.*;
 
 @Configuration
 public class AppConfiguration {
-
-    @Autowired
-    private static volatile ApplicationContext appContext;
-
-    public static ApplicationContext getAppContext() {
-        return appContext;
-    }
-
-    public static void setAppContext(ApplicationContext appContext) {
-        AppConfiguration.appContext = appContext;
-    }
 
     //-----------------------------------------------------------------------------------------------------------------
     // Services
