@@ -97,6 +97,8 @@ import org.apache.juneau.rest.converters.*;
 		}
 	),
 	staticFiles={"htdocs:/htdocs"}  // Expose static files in htdocs subpackage.
+
+	,debug="true"
 )
 @HtmlDocConfig(
 	widgets={
@@ -159,8 +161,6 @@ public class PetStoreResource extends BasicRest implements PetStore {
 			.append("pet", "All pets in the store")
 			.append("store", "Orders and inventory")
 			.append("user", "Petstore users")
-			.append("photos", "Photos service")
-			.append("sql", "SQL query service")
 		;
 	}
 
@@ -207,6 +207,8 @@ public class PetStoreResource extends BasicRest implements PetStore {
 
 	@Override /* PetStore */
 	@RestMethod(
+		name=POST,
+		path="/pet",
 		summary="Add a new pet to the store",
 		swagger=@MethodSwagger(
 			tags="pet",
@@ -439,6 +441,8 @@ public class PetStoreResource extends BasicRest implements PetStore {
 
 	@Override
 	@RestMethod(
+		name=POST,
+		path="/user",
 		summary="Create user",
 		description="This can only be done by the logged in user.",
 		swagger=@MethodSwagger(

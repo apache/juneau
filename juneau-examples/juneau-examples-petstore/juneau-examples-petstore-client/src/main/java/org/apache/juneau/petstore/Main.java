@@ -48,7 +48,7 @@ public class Main {
 			SimpleJson.DEFAULT_READABLE.println(pets);
 
 			// Initialize the application through REST calls.
-			init(new PrintWriter(System.err), petStore);
+			init(new PrintWriter(System.out), petStore);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -94,6 +94,8 @@ public class Main {
 			ps.createUser(x);
 			w.println(format("Created user:  username={0}", x.getUsername()));
 		}
+
+		w.flush();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

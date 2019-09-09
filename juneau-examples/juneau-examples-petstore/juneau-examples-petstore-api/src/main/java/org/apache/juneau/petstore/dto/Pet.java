@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@Bean(typeName="Pet", fluentSetters=true, properties="id,species,name,tags,price,status,photo")
+@Bean(typeName="Pet", fluentSetters=true, properties="id,species,name,tags,price,status")
 @Entity(name="PetstorePet")
 public class Pet {
 
@@ -61,11 +61,6 @@ public class Pet {
 	@Schema(description="Pet species.")
 	private PetStatus status;
 
-	@Column
-	@Schema(description="Photo URL.")
-	@URI
-	private String photo;
-
 	/**
 	 * Applies the specified data to this object.
 	 *
@@ -77,7 +72,6 @@ public class Pet {
 		this.price = x.getPrice();
 		this.species = x.getSpecies();
 		this.tags = x.getTags() == null ? null : Arrays.asList(x.getTags());
-		this.photo = x.getPhoto();
 		return this;
 	}
 
@@ -94,7 +88,6 @@ public class Pet {
 		this.species = x.getSpecies();
 		this.tags = Arrays.asList(x.getTags());
 		this.status = x.getStatus();
-		this.photo = x.getPhoto();
 		return this;
 	}
 
@@ -204,22 +197,6 @@ public class Pet {
 	 */
 	public Pet status(PetStatus value) {
 		this.status = value;
-		return this;
-	}
-
-	/**
-	 * @return The <bc>photo</jc> property value.
-	 */
-	public String getPhoto() {
-		return photo;
-	}
-
-	/**
-	 * @param value The <bc>photo</jc> property value.
-	 * @return This object (for method chaining).
-	 */
-	public Pet photo(String value) {
-		this.photo = value;
 		return this;
 	}
 

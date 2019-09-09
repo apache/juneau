@@ -22,7 +22,7 @@ import org.apache.juneau.jsonschema.annotation.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@Bean(fluentSetters=true, properties="id,name,price,species,tags,photo,status")
+@Bean(fluentSetters=true, properties="id,name,price,species,tags,status")
 public class UpdatePet extends CreatePet {
 
 	@Schema(description="Pet identifier.", minimum="1")
@@ -40,10 +40,9 @@ public class UpdatePet extends CreatePet {
 	 * @param species The <bc>species</bc> property value.
 	 * @param tags The <bc>tags</bc> property value.
 	 * @param status The <bc>status</bc> property value.
-	 * @param photo The <bc>photo</bc> property value.
 	 */
-	public UpdatePet(long id, String name, float price, Species species, String[] tags, PetStatus status, String photo) {
-		super(name, price, species, tags, photo);
+	public UpdatePet(long id, String name, float price, Species species, String[] tags, PetStatus status) {
+		super(name, price, species, tags);
 		this.id = id;
 		this.status = status;
 	}
@@ -113,17 +112,11 @@ public class UpdatePet extends CreatePet {
 		return this;
 	}
 
-	@Override
-	public UpdatePet photo(String value) {
-		super.photo(value);
-		return this;
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static UpdatePet example() {
-		return new UpdatePet(123, "Doggie", 9.99f, Species.DOG, new String[]{"smart","friendly"}, PetStatus.SOLD, null);
+		return new UpdatePet(123, "Doggie", 9.99f, Species.DOG, new String[]{"smart","friendly"}, PetStatus.SOLD);
 	}
 }

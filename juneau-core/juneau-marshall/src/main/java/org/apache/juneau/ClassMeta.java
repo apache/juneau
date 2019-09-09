@@ -488,8 +488,6 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			for (MethodInfo m : ci.getDeclaredMethods()) {
-				if (ci.getSimpleName().equals("Order"))
-					System.err.println();
 				if (m.hasAnnotation(Example.class)) {
 					if (! (m.isStatic() && m.hasFuzzyParamTypes(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 						throw new ClassMetaRuntimeException(c, "@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m);

@@ -22,7 +22,7 @@ import org.apache.juneau.jsonschema.annotation.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@Bean(fluentSetters=true, properties="name,price,species,tags,photo")
+@Bean(fluentSetters=true, properties="name,price,species,tags")
 public class CreatePet {
 
 	@Schema(description="Pet name.", minLength=3, maxLength=50)
@@ -37,10 +37,6 @@ public class CreatePet {
 	@Schema(description="Pet attributes.", example="friendly,smart")
 	private String[] tags;
 
-	@Schema(description="Photo URL.")
-	@URI
-	private String photo;
-
 	/**
 	 * Constructor.
 	 *
@@ -50,12 +46,11 @@ public class CreatePet {
 	 * @param tags The <bc>tags</bc> property value.
 	 * @param photo The <bc>photo</bc> property value.
 	 */
-	public CreatePet(String name, float price, Species species, String[] tags, String photo) {
+	public CreatePet(String name, float price, Species species, String[] tags) {
 		this.name = name;
 		this.price = price;
 		this.species = species;
 		this.tags = tags;
-		this.photo = photo;
 	}
 
 	/**
@@ -131,22 +126,6 @@ public class CreatePet {
 		return this;
 	}
 
-	/**
-	 * @return The <bc>photo</bc> property value.
-	 */
-	public String getPhoto() {
-		return photo;
-	}
-
-	/**
-	 * @param value The <bc>photo</bc> property value.
-	 * @return This object (for method chaining).
-	 */
-	public CreatePet photo(String value) {
-		this.photo = value;
-		return this;
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other
 	//-----------------------------------------------------------------------------------------------------------------
@@ -155,6 +134,6 @@ public class CreatePet {
 	 * @return An example POJO.
 	 */
 	public static CreatePet example() {
-		return new CreatePet("Doggie", 9.99f, Species.DOG, new String[]{"smart","friendly"}, null);
+		return new CreatePet("Doggie", 9.99f, Species.DOG, new String[]{"smart","friendly"});
 	}
 }
