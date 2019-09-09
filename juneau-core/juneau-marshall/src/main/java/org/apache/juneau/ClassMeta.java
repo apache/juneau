@@ -450,13 +450,13 @@ public final class ClassMeta<T> implements Type {
 			for (FieldInfo f : ci.getAllFieldsParentFirst()) {
 				if (f.hasAnnotation(ParentProperty.class)) {
 					if (f.isStatic())
-						throw new ClassMetaRuntimeException("@ParentProperty used on invalid field ''{0}''.  Must be static.", f);
+						throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid field ''{0}''.  Must be static.", f);
 					f.setAccessible();
 					parentPropertyMethod = new Setter.FieldSetter(f.inner());
 				}
 				if (f.hasAnnotation(NameProperty.class)) {
 					if (f.isStatic())
-						throw new ClassMetaRuntimeException("@NameProperty used on invalid field ''{0}''.  Must be static.", f);
+						throw new ClassMetaRuntimeException(c, "@NameProperty used on invalid field ''{0}''.  Must be static.", f);
 					f.setAccessible();
 					namePropertyMethod = new Setter.FieldSetter(f.inner());
 				}
@@ -465,7 +465,7 @@ public final class ClassMeta<T> implements Type {
 			for (FieldInfo f : ci.getDeclaredFields()) {
 				if (f.hasAnnotation(Example.class)) {
 					if (! (f.isStatic() && ci.isParentOf(f.getType().inner())))
-						throw new ClassMetaRuntimeException("@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", f);
+						throw new ClassMetaRuntimeException(c, "@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", f);
 					f.setAccessible();
 					exampleField = f.inner();
 				}
@@ -475,22 +475,24 @@ public final class ClassMeta<T> implements Type {
 			for (MethodInfo m : ci.getAllMethodsParentFirst()) {
 				if (m.hasAnnotation(ParentProperty.class)) {
 					if (m.isStatic() || ! m.hasNumParams(1))
-						throw new ClassMetaRuntimeException("@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
+						throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
 					parentPropertyMethod = new Setter.MethodSetter(m.inner());
 				}
 				if (m.hasAnnotation(NameProperty.class)) {
 					if (m.isStatic() || ! m.hasNumParams(1))
-						throw new ClassMetaRuntimeException("@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
+						throw new ClassMetaRuntimeException(c, "@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
 					namePropertyMethod = new Setter.MethodSetter(m.inner());
 				}
 			}
 
 			for (MethodInfo m : ci.getDeclaredMethods()) {
+				if (ci.getSimpleName().equals("Order"))
+					System.err.println();
 				if (m.hasAnnotation(Example.class)) {
 					if (! (m.isStatic() && m.hasFuzzyParamTypes(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
-						throw new ClassMetaRuntimeException("@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m);
+						throw new ClassMetaRuntimeException(c, "@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m);
 					m.setAccessible();
 					exampleMethod = m.inner();
 				}
@@ -721,7 +723,7 @@ public final class ClassMeta<T> implements Type {
 					return (PojoSwap<T,?>)l.iterator().next();
 			}
 
-			throw new ClassMetaRuntimeException("Invalid swap class ''{0}'' specified.  Must extend from PojoSwap or Surrogate.", c);
+			throw new ClassMetaRuntimeException(c, "Invalid swap class ''{0}'' specified.  Must extend from PojoSwap or Surrogate.", c);
 		}
 
 		private ClassMeta<?> findClassMeta(Class<?> c) {

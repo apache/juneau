@@ -17,9 +17,9 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
 	<persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
-		<class>org.apache.juneau.examples.petstore.dto.Pet</class>
-		<class>org.apache.juneau.examples.petstore.dto.Order</class>
-		<class>org.apache.juneau.examples.petstore.dto.User</class>
+		<class>org.apache.juneau.petstore.dto.Pet</class>
+		<class>org.apache.juneau.petstore.dto.Order</class>
+		<class>org.apache.juneau.petstore.dto.User</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:derby:target/derby/testDB;create=true" />

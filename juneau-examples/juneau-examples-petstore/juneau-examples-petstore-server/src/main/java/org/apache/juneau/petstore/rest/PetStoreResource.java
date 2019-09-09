@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.petstore.rest;
 
-import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.dto.swagger.ui.SwaggerUI.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.http.response.Ok.*;
@@ -28,7 +27,6 @@ import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
@@ -164,56 +162,6 @@ public class PetStoreResource extends BasicRest implements PetStore {
 			.append("photos", "Photos service")
 			.append("sql", "SQL query service")
 		;
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	// Initialization
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Initialize database form entry page.
-	 *
-	 * @return Initialize database form entry page contents.
-	 */
-	@RestMethod(
-		summary="Initialize database form entry page"
-	)
-	public Div getInit() {
-		return div(
-			form("servlet:/init").method(POST).target("buf").children(
-				table(
-					tr(
-						th("Initialize petstore database:"),
-						td(input("radio").name("init-method").value("direct").checked(true), "direct", input("radio").name("init-method").value("rest"), "rest"),
-						td(button("submit", "Submit").style("float:right").onclick("scrolling=true"))
-					)
-				)
-			),
-			br(),
-			iframe().id("buf").name("buf").style("width:800px;height:600px;").onload("window.parent.scrolling=false;"),
-			script("text/javascript",
-				"var scrolling = false;",
-				"function scroll() { if (scrolling) { document.getElementById('buf').contentWindow.scrollBy(0,50); } setTimeout('scroll()',200); } ",
-				"scroll();"
-			)
-		);
-	}
-
-	/**
-	 * Initialize database.
-	 *
-	 * @param initMethod The method used to initialize the database.
-	 * @param res HTTP request.
-	 * @throws Exception Error occurred.
-	 */
-	@RestMethod(
-		summary="Initialize database"
-	)
-	public void postInit(
-		RestResponse res
-	) throws Exception {
-		res.setHeader("Content-Encoding", "identity");
-		store.initDirect(res.getDirectWriter("text/plain"));
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

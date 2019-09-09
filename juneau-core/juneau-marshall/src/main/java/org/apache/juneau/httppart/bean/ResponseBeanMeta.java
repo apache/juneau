@@ -67,7 +67,7 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(MethodInfo m, PropertyStore ps) {
-		if (! m.hasAnnotation(Response.class))
+		if (! (m.hasAnnotation(Response.class) || m.getResolvedReturnType().hasAnnotation(Response.class)))
 			return null;
 		Builder b = new Builder(ps);
 		b.apply(m.getReturnType().resolved().innerType());

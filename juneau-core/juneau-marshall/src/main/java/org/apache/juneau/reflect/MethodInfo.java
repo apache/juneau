@@ -311,7 +311,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 			for (Annotation a2 :  m2.getAnnotations())
 				if (a.isInstance(a2))
 					return (T)a2;
-		return getReturnType().resolved().getAnnotation(a);
+		return null;
 	}
 
 	AnnotationList appendAnnotationList(AnnotationList al) {
@@ -383,6 +383,20 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		if (returnType == null)
 			returnType = ClassInfo.of(m.getReturnType(), m.getGenericReturnType());
 		return returnType;
+	}
+
+	/**
+	 * Returns the generic return type of this method as a {@link ClassInfo} object.
+	 * 
+	 * <p>
+	 * Unwraps the type if it's a {@link Value}.
+	 *
+	 * @return The generic return type of this method.
+	 */
+	public ClassInfo getResolvedReturnType() {
+		if (returnType == null)
+			returnType = ClassInfo.of(m.getReturnType(), m.getGenericReturnType());
+		return returnType.resolved();
 	}
 
 	/**

@@ -304,10 +304,10 @@ public abstract class ExecutableInfo {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
+	 * Returns <jk>true</jk> if the specified annotation is present on this method.
 	 *
 	 * @param a The annotation to check for.
-	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
+	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
 	public final boolean hasAnnotation(Class<? extends Annotation> a) {
 		return getAnnotation(a) != null;
@@ -320,9 +320,6 @@ public abstract class ExecutableInfo {
 	 * If this is a method and the annotation cannot be found on the immediate method, searches methods with the same
 	 * signature on the parent classes or interfaces.
 	 * <br>The search is performed in child-to-parent order.
-	 *
-	 * <p>
-	 * If still not found, searches for the annotation on the return type of the method.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
@@ -342,9 +339,9 @@ public abstract class ExecutableInfo {
 	}
 
 	/**
-	 * Searched for the specified annotation.
+	 * Searched for the specified annotation on the method.
 	 *
-	 * @param a The annotation to search for.
+	 * @param a The annotation to search for on the method.
 	 * @return The annotation if found.
 	 */
 	protected <T extends Annotation> T findAnnotation(Class<T> a) {

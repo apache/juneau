@@ -1241,7 +1241,7 @@ public final class ClassInfo {
 		return m;
 	}
 
-	private <T extends Annotation> T findAnnotation(Class<T> a) {
+	<T extends Annotation> T findAnnotation(Class<T> a) {
 		T t2 = getDeclaredAnnotation(a);
 		if (t2 != null)
 			return t2;

@@ -389,8 +389,10 @@ final class SwaggerGenerator {
 						}
 					}
 					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {
-						if (ecmi.hasAnnotation(ResponseHeader.class)) {
-							ResponseHeader a = ecmi.getAnnotation(ResponseHeader.class);
+						ResponseHeader a = ecmi.getAnnotation(ResponseHeader.class);
+						if (a == null)
+							a = ecmi.getResolvedReturnType().getAnnotation(ResponseHeader.class);
+						if (a != null) {
 							String ha = a.name();
 							for (Integer code : codes) {
 								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
@@ -402,7 +404,7 @@ final class SwaggerGenerator {
 				}
 			}
 
-			if (mi.hasAnnotation(Response.class)) {
+			if (mi.hasAnnotation(Response.class) || mi.getResolvedReturnType().hasAnnotation(Response.class)) {
 				List<Response> la = mi.getAnnotationsParentFirst(Response.class);
 				Set<Integer> codes = getCodes(la, 200);
 				for (Response a : la) {

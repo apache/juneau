@@ -91,7 +91,11 @@ public class RemoteMethodMeta {
 			MethodInfo mi = MethodInfo.of(m);
 
 			org.apache.juneau.rest.client.remote.RemoteMethod orm = mi.getAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
+			if (orm == null)
+				orm = mi.getResolvedReturnType().getAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
 			RemoteMethod rm = mi.getAnnotation(RemoteMethod.class);
+			if (rm == null)
+				rm = mi.getResolvedReturnType().getAnnotation(RemoteMethod.class);
 
 			httpMethod = rm == null ? (orm == null ? "" : orm.method()) : rm.method();
 			path = rm == null ? (orm == null ? "" : orm.path()) : rm.path();
