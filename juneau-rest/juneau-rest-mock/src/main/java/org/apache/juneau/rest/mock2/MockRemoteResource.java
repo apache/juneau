@@ -243,7 +243,7 @@ public class MockRemoteResource<T> {
 	/**
 	 * Adds an <c>Accept</c> header to every request.
 	 *
-	 * @param value The <code>Accept/code> header value.
+	 * @param value The <c>Accept</c> header value.
 	 * @return This object (for method chaining).
 	 */
 	public MockRemoteResource<T> accept(String value) {

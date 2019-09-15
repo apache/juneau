@@ -143,9 +143,9 @@ public class RestCallLoggerConfig {
 		 * <p>
 		 * Possible values (case-insensitive):
 		 * <ul>
-		 * 	<li><{@link Enablement#TRUE TRUE} - No-trace mode enabled for all requests.
-		 * 	<li><{@link Enablement#FALSE FALSE} - No-trace mode disabled for all requests.
-		 * 	<li><{@link Enablement#PER_REQUEST PER_REQUEST} - No-trace mode enabled for requests that have a <js>"X-NoTrace: true"</js> header.
+		 * 	<li>{@link Enablement#TRUE TRUE} - No-trace mode enabled for all requests.
+		 * 	<li>{@link Enablement#FALSE FALSE} - No-trace mode disabled for all requests.
+		 * 	<li>{@link Enablement#PER_REQUEST PER_REQUEST} - No-trace mode enabled for requests that have a <js>"X-NoTrace: true"</js> header.
 		 * </ul>
 		 *
 		 * @param value

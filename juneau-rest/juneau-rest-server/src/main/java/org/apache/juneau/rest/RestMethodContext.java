@@ -466,7 +466,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	public static final String RESTMETHOD_path = PREFIX + ".path.s";
 
 	/**
-	 * Configuration property:  Priority
+	 * Configuration property:  Priority.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>

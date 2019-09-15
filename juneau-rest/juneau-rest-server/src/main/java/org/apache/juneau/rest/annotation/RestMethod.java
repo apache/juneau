@@ -759,7 +759,7 @@ public @interface RestMethod {
 	 * 			name=<jsf>GET</jsf>,
 	 * 			path=<js>"/foo"</js>,
 	 * 			rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
-	 * 			roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE && ROLE_SPECIAL)"</js>
+	 * 			roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	 * 		)
 	 * 		<jk>public</jk> Object doGet() {
 	 * 		}
@@ -785,7 +785,7 @@ public @interface RestMethod {
 	 * 		<ja>@RestMethod</ja>(
 	 * 			name=<jsf>GET</jsf>,
 	 * 			path=<js>"/foo"</js>,
-	 * 			roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE && ROLE_SPECIAL)"</js>
+	 * 			roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	 * 		)
 	 * 		<jk>public</jk> Object doGet() {
 	 * 		}
@@ -801,8 +801,8 @@ public @interface RestMethod {
 	 * 			<li><js>"foo | bar | baz"</js> - Multiple OR'ed arguments, pipe syntax.
 	 * 			<li><js>"foo || bar || baz"</js> - Multiple OR'ed arguments, Java-OR syntax.
 	 * 			<li><js>"fo*"</js> - Patterns including <js>'*'</js> and <js>'?'</js>.
-	 * 			<li><js>"fo* & *oo"</js> - Multiple AND'ed arguments, ampersand syntax.
-	 * 			<li><js>"fo* && *oo"</js> - Multiple AND'ed arguments, Java-AND syntax.
+	 * 			<li><js>"fo* &amp; *oo"</js> - Multiple AND'ed arguments, ampersand syntax.
+	 * 			<li><js>"fo* &amp;&amp; *oo"</js> - Multiple AND'ed arguments, Java-AND syntax.
 	 * 			<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
 	 * 		</ul>
 	 * 	<li>

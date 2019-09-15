@@ -271,7 +271,7 @@ public class MockRest implements MockHttpConnection {
 		/**
 		 * Specifies the <c>Accept</c> header to every request.
 		 *
-		 * @param value The <code>Accept/code> header value.
+		 * @param value The <c>Accept</c> header value.
 		 * @return This object (for method chaining).
 		 */
 		public Builder accept(String value) {

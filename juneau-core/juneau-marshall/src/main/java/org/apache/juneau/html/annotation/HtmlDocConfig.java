@@ -392,6 +392,7 @@ public @interface HtmlDocConfig {
 	 * Adds the specified Javascript code to the HTML page.
 	 *
 	 * <h5 class='section'>Example:</h5>
+	 * <p class='bpcode w800'>
 	 * 	htmldoc=<ja>@HtmlDocConfig</ja>(
 	 * 		script={
 	 * 			<js>"alert('hello!');"</js>
@@ -433,6 +434,7 @@ public @interface HtmlDocConfig {
 	 * Adds the specified CSS instructions to the HTML page.
 	 *
 	 * <h5 class='section'>Example:</h5>
+	 * <p class='bpcode w800'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		style={
 	 * 			<js>"h3 { color: red; }"</js>,

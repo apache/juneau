@@ -20,7 +20,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.helper.*;
 
 /**
- * Identical to {@link BasicRestServletGroup} but doesn't extend from {@link HttpServlet}
+ * Identical to {@link BasicRestServletGroup} but doesn't extend from {@link HttpServlet}.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRestGroup}

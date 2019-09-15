@@ -37,7 +37,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * Objects are designed to be lightweight to create and threadsafe.
  *
- * <h5 class='figure'>
+ * <h5 class='figure'>Example:</h5>
  * <p class='bpcode w800'>
  * 	<jc>// Wrap our class inside a ClassInfo.</jc>
  * 	ClassInfo ci = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
@@ -1853,7 +1853,7 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Same as {@link #getSimpleName()} but uses <js>"Array"</j> instead of <js>"[]"</js>.
+	 * Same as {@link #getSimpleName()} but uses <js>"Array"</js> instead of <js>"[]"</js>.
 	 *
 	 * @return The readable name for this class.
 	 */

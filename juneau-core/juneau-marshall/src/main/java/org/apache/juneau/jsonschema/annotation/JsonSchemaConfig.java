@@ -220,6 +220,7 @@ public @interface JsonSchemaConfig {
 	 * Swagger documentation.
 	 *
 	 * <ul class='notes'>
+	 * 	<li>
 	 * 		Format: Comma-delimited list of patterns
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).

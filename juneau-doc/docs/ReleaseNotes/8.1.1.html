@@ -46,10 +46,10 @@
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
-		Support for {@link Optional} on method parameters annotated with {@link oaj.http.annotation.Header}, {@link oaj.http.annotation.FormData},  
-		{@link oaj.http.annotation.Query}, {@link oaj.http.annotation.Path}, and {@link oaj.http.annotation.PathRemainder}.
+		Support for {@link java.util.Optional} on method parameters annotated with {@link oaj.http.annotation.Header}, {@link oaj.http.annotation.FormData},  
+		{@link oaj.http.annotation.Query}, {@link oaj.http.annotation.Path}.
 	<li>
-		Fixed issue where {@link oajr.annotation.RestRequest#debug() RestRequest.debug()} annotation wasn't resulting
+		Fixed issue where {@link oajr.annotation.RestMethod#debug() RestMethod.debug()} annotation wasn't resulting
 		in the HTTP request being logged.
 	<li>
 		{@link oajr.RestException} has been deprecated and replaced by {@link oaj.http.exception.HttpException}.
