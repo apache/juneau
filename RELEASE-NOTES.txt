@@ -11,6 +11,30 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 8.1.1
+
+** Bug
+    * [JUNEAU-143] - Static files mapping doesn't properly handle override scenarios.
+    * [JUNEAU-147] - Error in Swagger generator when @Example used on bean class.
+
+** Improvement
+    * [JUNEAU-144] - Add support for absolute paths on @RestResource(staticFiles)
+    * [JUNEAU-145] - @RestResource(staticFiles) should handle multiple mappings.
+    * [JUNEAU-146] - Add ranks to @Config annotations.
+
+** Task
+    * [JUNEAU-132] - Various HTTP parameter annotations should support Optional.
+    * [JUNEAU-133] - Serializers/parsers should support Optional objects and properties.
+    * [JUNEAU-134] - Parsers not correctly finding generic types on complex types involving arrays.
+    * [JUNEAU-135] - @RestMethod(debug=true) is not causing requests to be logged.
+    * [JUNEAU-136] - Juneau cannot reflect parameterized types on Spring bean methods.
+    * [JUNEAU-137] - Juneau cannot reflect parameterized types on Spring bean methods.
+    * [JUNEAU-138] - Move REST response/exception beans into juneau-marshall.
+    * [JUNEAU-139] - juneau-rest-client should not have dependency on juneau-rest-server.
+    * [JUNEAU-140] - Provide initial contents of PetStore modules.
+    * [JUNEAU-141] - Move @RemoteResource/@RemoteMethod annotations into juneau-marshall.
+    * [JUNEAU-142] - BasicRest subclasses need programmatic access to RestRequest/RestResponse
+
 
 Release Notes - Juneau - Version 8.1.0
 
