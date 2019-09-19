@@ -55,6 +55,7 @@ public class CalendarSwapTest {
 	private RdfSerializer getRdfSerializer() {
 		return RdfSerializer.create()
 			.sq()
+			.locale(Locale.getDefault())
 			.useWhitespace(false)
 			.set(RdfCommon.RDF_rdfxml_allowBadUris, true)
 			.set(RdfCommon.RDF_rdfxml_showDoctypeDeclaration, false)
@@ -74,7 +75,8 @@ public class CalendarSwapTest {
 		PojoSwap<Calendar,String> f;
 		String s;
 		Calendar c;
-		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanSessionArgs beanSessionArgs = BeanSessionArgs.create().locale(Locale.getDefault());
+		BeanSession session = BeanContext.DEFAULT.createSession(beanSessionArgs);
 
 		//-------------------------------------------------------------------------------------------------------------
 		// ISO8601DT
@@ -151,8 +153,8 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterJson() throws Exception {
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
-		ReaderParser p = JsonParser.DEFAULT;
+		WriterSerializer s = SimpleJsonSerializer.DEFAULT.builder().locale(Locale.getDefault()).build();
+		ReaderParser p = JsonParser.DEFAULT.builder().locale(Locale.getDefault()).build();
 
 		Calendar c = testDate;
 		A t = new A(c);
@@ -169,8 +171,8 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterXml() throws Exception {
-		WriterSerializer s = XmlSerializer.DEFAULT_SQ;
-		ReaderParser p = XmlParser.DEFAULT;
+		WriterSerializer s = XmlSerializer.DEFAULT_SQ.builder().locale(Locale.getDefault()).build();
+		ReaderParser p = XmlParser.DEFAULT.builder().locale(Locale.getDefault()).build();
 
 		Calendar c = testDate;
 		A t = new A(c);
@@ -187,8 +189,8 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterHtml() throws Exception {
-		WriterSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
-		ReaderParser p = HtmlParser.DEFAULT;
+		WriterSerializer s = HtmlSerializer.create().sq().locale(Locale.getDefault()).addKeyValueTableHeaders().build();
+		ReaderParser p = HtmlParser.DEFAULT.builder().locale(Locale.getDefault()).build();
 
 		Calendar c = testDate;
 		A t = new A(c);
@@ -205,9 +207,9 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterUon() throws Exception {
-		WriterSerializer s = UonSerializer.DEFAULT_ENCODING;
-		ReaderParser p = UonParser.DEFAULT;
-		ReaderParser pe = UonParser.DEFAULT_DECODING;
+		WriterSerializer s = UonSerializer.DEFAULT_ENCODING.builder().locale(Locale.getDefault()).build();
+		ReaderParser p = UonParser.DEFAULT.builder().locale(Locale.getDefault()).build();
+		ReaderParser pe = UonParser.DEFAULT_DECODING.builder().locale(Locale.getDefault()).build();
 
 		Calendar c = testDate;
 		A t = new A(c);
@@ -229,8 +231,8 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterUrlEncoding() throws Exception {
-		WriterSerializer s = UrlEncodingSerializer.DEFAULT;
-		ReaderParser p = UrlEncodingParser.DEFAULT;
+		WriterSerializer s = UrlEncodingSerializer.DEFAULT.builder().locale(Locale.getDefault()).build();
+		ReaderParser p = UrlEncodingParser.DEFAULT.builder().locale(Locale.getDefault()).build();
 
 		Calendar c = testDate;
 		A t = new A(c);
