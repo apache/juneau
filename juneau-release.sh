@@ -12,6 +12,8 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 
+. ~/.profile
+
 . juneau-release-env.sh
 
 function fail { 

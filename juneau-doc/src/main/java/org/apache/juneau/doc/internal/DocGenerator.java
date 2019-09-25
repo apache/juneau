@@ -135,7 +135,7 @@ public class DocGenerator {
 
 			for (ReleaseFile rf : releaseNotes.releaseFiles) {
 				tocRn
-					.append("<li><p><a class='doclink' href='#").append(rf.version).append("'>").append(rf.title).append("</a></p>\n");
+					.append("<li><p><a class='doclink' href='{OVERVIEW_URL}#").append(rf.version).append("'>").append(rf.title).append("</a></p>\n");
 				rn
 					.append("\n")
 					.append("<!-- ==================================================================================================== -->\n\n")
@@ -169,6 +169,9 @@ public class DocGenerator {
 
 			String toc2 = new StringBuilder().append("<!--").append(COPYRIGHT).append("\n-->\n").append(toc).toString();
 			IOUtils.writeFile("src/main/javadoc/resources/fragments/toc.html", toc2);
+
+			String tocRn2 = new StringBuilder().append("<!--").append(COPYRIGHT).append("\n-->\n").append(tocRn).toString();
+			IOUtils.writeFile("src/main/javadoc/resources/fragments/rntoc.html", tocRn2);
 
 			for (File f : new File("docs/Fragments").listFiles())
 				Files.copy(f.toPath(), Paths.get("src/main/javadoc/resources/fragments", f.getName()), StandardCopyOption.REPLACE_EXISTING);
