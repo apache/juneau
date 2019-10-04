@@ -1,0 +1,206 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+SVL Variables
+
+<p>
+	Variables are defined through the {@link oaj.svl.Var} API.
+	The API comes with several predefined variables and is easily extensible.
+</p>
+<p>
+	The following is an example of a variable that performs URL-Encoding on strings.
+</p>
+<p class='bpcode w800'>
+	<jc>// First create our var.</jc>
+	<jk>public class</jk> UrlEncodeVar <jk>extends</jk> SimpleVar {
+		
+		<jc>// Must have a no-arg constructor!</jc>
+		<jk>public</jk> UrlEncodeVar() {
+			<jk>super</jk>(<js>"UE"</js>);
+		}	
+		
+		<jc>// The method we must implement</jc>
+		<ja>@Override</ja>
+		<jk>public</jk> String resolve(VarResolverSession session, String key) {
+			<jk>return</jk> URLEncoder.<jsm>encode</jsm>(key, <js>"UTF-8"</js>);
+		}
+	}
+	
+	<jc>// Next create a var resolver that extends the existing DEFAULT resolver
+	// that supports resolving system properties.</jc>
+	VarResolver r = VarResolver.<jsf>DEFAULT</jsf>
+		.builder()
+		.vars(UrlEncodeVar.<jk>class</jk>)
+		.build();
+	
+	<jc>// Retrieve a system property and URL-encode it if necessary.</jc>
+	String myProperty = r.resolve(<js>"$UE{$S{my.property}}"</js>);
+</p>
+<p>
+	The following shows the class hierarchy of the {@link oaj.svl.Var} class:
+</p>  
+<ul class='javatree'>
+	<li class='jac'>{@link oaj.svl.Var} - Superclass of all vars.
+	<ul>
+		<li class='jac'>{@link oaj.svl.SimpleVar} - Superclass of all vars that return strings.
+		<ul>
+			<li class='jac'>{@link oaj.svl.DefaultingVar} - Variables that define a default value if the resolve method returns null.
+			<ul>
+				<li class='jac'>{@link oaj.svl.MapVar} - Variables that pull values from maps.
+			</ul>
+			<li class='jac'>{@link oaj.svl.MultipartVar} - Variables that consist of 2 or more comma-delimited arguments.
+		</ul>
+		<li class='jac'>{@link oaj.svl.StreamedVar} - Superclass of all vars that stream their value to writers.
+	</ul>
+</ul>
+<p>
+	The following is the list of default variables defined in all modules:
+</p>
+<table class='styled w800'>
+	<tr>
+		<th>Module</th><th>Class</th><th>Pattern</th>
+	</tr>
+	<tr class='dark'>
+		<td rowspan='15' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-svl</td>
+		<td>{@link oaj.svl.vars.EnvVariablesVar}</td>
+		<td class='code'>$E{key[,default]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.SystemPropertiesVar}</td>
+		<td class='code'>$S{key[,default]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.ArgsVar}</td>
+		<td class='code'>$A{key[,default]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.ManifestFileVar}</td>
+		<td class='code'>$MF{key[,default]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.IfVar}</td>
+		<td class='code'>$IF{arg,then[,else]}</td>
+	</tr>
+	<tr class='dark dd'>
+		<td>{@link oaj.svl.vars.SwitchVar}</td>
+		<td class='code'>$SW{arg,pattern1:then1[,pattern2:then2...]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.CoalesceVar}</td>
+		<td class='code'>$CO{arg1[,arg2...]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.PatternMatchVar}</td>
+		<td class='code'>$PM{arg,pattern}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.PatternReplaceVar}</td>
+		<td class='code'>$PR{arg,pattern,replace}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.PatternExtractVar}</td>
+		<td class='code'>$PE{arg,pattern,groupdIndex}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.NotEmptyVar}</td>
+		<td class='code'>$NE{arg}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.UpperCaseVar}</td>
+		<td class='code'>$UC{arg}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.LowerCaseVar}</td>
+		<td class='code'>$LC{arg}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.LenVar}</td>
+		<td class='code'>$LN{arg[,delimiter]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.SubstringVar}</td>
+		<td class='code'>$ST{arg,start[,end]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.html.HtmlWidgetVar}</td>
+		<td class='code'>$W{name}</td>
+	</tr>
+	<tr class='light dd'>
+		<td rowspan='1' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-config</td>
+		<td>{@link oaj.config.vars.ConfigVar}</td>
+		<td class='code'>$C{key[,default]}</td>
+	</tr>
+	<tr class='dark'>
+		<td rowspan='15' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest-server</td>
+		<td>{@link oajr.vars.FileVar}</td>
+		<td class='code'>$F{path[,default]}}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.ServletInitParamVar}</td>
+		<td class='code'>$I{name[,default]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.LocalizationVar}</td>
+		<td class='code'>$L{key[,args...]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.RequestAttributeVar}</td>
+		<td class='code'>$RA{key1[,key2...]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.RequestFormDataVar}</td>
+		<td class='code'>$RF{key1[,key2...]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.RequestHeaderVar}</td>
+		<td class='code'>$RH{key1[,key2...]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.RequestHeaderVar}</td>
+		<td class='code'>$RI{key}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.RequestPathVar}</td>
+		<td class='code'>$RP{key1[,key2...]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.RequestQueryVar}</td>
+		<td class='code'>$RQ{key1[,key2...]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.RequestVar}</td>
+		<td class='code'>$R{key1[,key2...]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.SerializedRequestAttrVar}</td>
+		<td class='code'>$SA{contentType,key[,default]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.SwaggerVar}</td>
+		<td class='code'>$SS{key1[,key2...]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.UrlVar}</td>
+		<td class='code'>$U{uri}></td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oajr.vars.UrlEncodeVar}</td>
+		<td class='code'>$UE{uriPart}</td>
+	</tr>
+	<tr class='dark dd'>
+		<td>{@link oajr.vars.WidgetVar} <i>(deprecated)</i></td>
+		<td class='code'>$W{name}</td>
+	</tr>
+</table>
