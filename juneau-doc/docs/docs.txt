@@ -1,5 +1,5 @@
 DefaultRestSvlVariables = #DefaultRestSvlVariables, Default REST SVL Variables
-DefaultSvlVariables = #juneau-svl.DefaultVarResolver, Default SVL Variables
+DefaultSvlVariables = #juneau-marshall.SimpleVariableLanguage.DefaultVarResolver, Default SVL Variables
 PojoCategories = #juneau-marshall.PojoCategories, POJO Categories
 PojosConveribleToStrings = #PojosConveribleToStrings, POJOs Convertible to/from Strings
 PojosConveribleToOtherTypes = #PojosConveribleToOtherTypes, POJOs Convertible to/from Other Types

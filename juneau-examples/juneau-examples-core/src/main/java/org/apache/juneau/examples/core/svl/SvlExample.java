@@ -62,8 +62,8 @@ public class SvlExample {
 
 		/*
 		 *  See all supported variable types at,
-		 *  http://juneau.apache.org/site/apidocs-8.0.0/overview-summary.html#juneau-svl
-		 *  NOTE - juneau-svl supports nested variables well
+		 *  http://juneau.apache.org/site/apidocs-8.0.0/overview-summary.html#juneau-marshall.SimpleVariableLanguage
+		 *  NOTE - juneau-marshall.SimpleVariableLanguage supports nested variables well
 		 * */
 	}
 

@@ -61,7 +61,7 @@ import org.apache.juneau.utils.*;
  * This allows you to place license headers in files without them being serialized to the output.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-svl.SvlVariables}
+ * 	<li class='link'>{@doc juneau-marshall.SimpleVariableLanguage.SvlVariables}
  * </ul>
  */
 public class FileVar extends DefaultingVar {
