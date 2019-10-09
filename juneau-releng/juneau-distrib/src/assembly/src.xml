@@ -36,7 +36,7 @@
 				<include>NOTICE</include>
 				<include>RELEASE-NOTES.txt</include>
 			</includes>
-			<directory>..</directory>
+			<directory>../..</directory>
 			<outputDirectory>apache-juneau-${project.version}</outputDirectory>
 		</fileSet>
 	</fileSets>

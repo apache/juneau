@@ -13,5 +13,5 @@
 
 . ~/.profile
 set -e
-export JUNEAU_VERSION=8.1.1
+export JUNEAU_VERSION=8.1.2
 [ -z "$X_VERSION" ] && export X_VERSION="${JUNEAU_VERSION}-SNAPSHOT"
