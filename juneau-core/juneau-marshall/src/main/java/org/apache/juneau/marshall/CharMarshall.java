@@ -22,7 +22,7 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'>{@doc juneau-marshall.Marshalls}
  * </ul>
  */
-public abstract class CharMarshall extends Marshall {
+public class CharMarshall extends Marshall {
 
 	private final WriterSerializer s;
 
@@ -36,7 +36,7 @@ public abstract class CharMarshall extends Marshall {
 	 * 	The parser to use for parsing input.
 	 * 	<br>Must not be <jk>null</jk>.
 	 */
-	protected CharMarshall(WriterSerializer s, ReaderParser p) {
+	public CharMarshall(WriterSerializer s, ReaderParser p) {
 		super(s, p);
 		this.s = s;
 	}

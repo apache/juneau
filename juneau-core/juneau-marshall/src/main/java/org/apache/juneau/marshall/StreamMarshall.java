@@ -22,7 +22,7 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'>{@doc juneau-marshall.Marshalls}
  * </ul>
  */
-public abstract class StreamMarshall extends Marshall {
+public class StreamMarshall extends Marshall {
 
 	private final OutputStreamSerializer s;
 
@@ -36,7 +36,7 @@ public abstract class StreamMarshall extends Marshall {
 	 * 	The parser to use for parsing input.
 	 * 	<br>Must not be <jk>null</jk>.
 	 */
-	protected StreamMarshall(OutputStreamSerializer s, InputStreamParser p) {
+	public StreamMarshall(OutputStreamSerializer s, InputStreamParser p) {
 		super(s, p);
 		this.s = s;
 	}

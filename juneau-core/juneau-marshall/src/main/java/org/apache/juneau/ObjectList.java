@@ -135,6 +135,17 @@ public class ObjectList extends LinkedList<Object> {
 	};
 
 	/**
+	 * Static constructor from JSON string.
+	 *
+	 * @param s JSON initialization string.  Can be <jk>null</jk>.
+	 * @return A new {@link ObjectList} object, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @throws ParseException Invalid JSON string.
+	 */
+	public static ObjectList create(CharSequence s) throws ParseException {
+		return s == null ? null : new ObjectList(s);
+	}
+
+	/**
 	 * Construct a JSON array directly from text using the specified parser.
 	 *
 	 * @param s The string being parsed.

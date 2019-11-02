@@ -156,6 +156,17 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
+	 * Static constructor from JSON string.
+	 *
+	 * @param s JSON initialization string.  Can be <jk>null</jk>.
+	 * @return A new {@link ObjectMap} object, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @throws ParseException Invalid JSON string.
+	 */
+	public static ObjectMap create(CharSequence s) throws ParseException {
+		return s == null ? null : new ObjectMap(s);
+	}
+
+	/**
 	 * Shortcut for <code><jk>new</jk> ObjectMap(string,JsonParser.<jsf>DEFAULT</jsf>);</code>
 	 *
 	 * @param s The JSON text to parse.
