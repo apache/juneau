@@ -57,6 +57,13 @@ public final class StringUtils {
 		.chars("{}|\\^[]`")  // unwise characters.
 		.build();
 
+	// Valid HTTP header characters (including quoted strings and comments).
+	private static final AsciiSet httpHeaderChars = AsciiSet
+		.create()
+		.chars("\t -")
+		.ranges("!-[","]-}")
+		.build();
+
 	// Maps BASE64 characters to 6-bit nibbles.
 	private static final byte[] base64m2 = new byte[128];
 	static {
@@ -2679,6 +2686,34 @@ public final class StringUtils {
 			if (sArray[i] != '\\') escapeCount = 0;
 		}
 		return new String(sArray);
+	}
+
+	/**
+	 * Strips invalid characters such as CTRL characters from a string meant to be encoded
+	 * as an HTTP header value.
+	 *
+	 * @param s The string to strip chars from.
+	 * @return The string with invalid characters removed.
+	 */
+	public static String stripInvalidHttpHeaderChars(String s) {
+		if (s == null)
+			return null;
+
+		boolean needsReplace = false;
+		for (int i = 0; i < s.length() && ! needsReplace; i++)
+			needsReplace |= httpHeaderChars.contains(s.charAt(i));
+
+		if (! needsReplace)
+			return s;
+
+		StringBuilder sb = new StringBuilder(s.length());
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (httpHeaderChars.contains(c))
+				sb.append(c);
+		}
+
+		return sb.toString();
 	}
 
 }

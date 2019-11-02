@@ -141,7 +141,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @return A new {@link ObjectList} object, or <jk>null</jk> if the input is <jk>null</jk>.
 	 * @throws ParseException Invalid JSON string.
 	 */
-	public static ObjectList create(CharSequence s) throws ParseException {
+	public static ObjectList parse(CharSequence s) throws ParseException {
 		return s == null ? null : new ObjectList(s);
 	}
 

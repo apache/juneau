@@ -67,8 +67,8 @@ public class DefaultHandler implements ResponseHandler {
 
 			boolean isThrowable = rm.getClassMeta().isType(Throwable.class);
 			if (isThrowable) {
-				res.setHeader("Exception-Name", rm.getClassMeta().getName());
-				res.setHeader("Exception-Message", ((Throwable)o).getMessage());
+				res.setHeaderSafe("Exception-Name", rm.getClassMeta().getName());
+				res.setHeaderSafe("Exception-Message", ((Throwable)o).getMessage());
 			}
 
 			ResponseBeanPropertyMeta stm = rm.getStatusMethod();
@@ -157,7 +157,7 @@ public class DefaultHandler implements ResponseHandler {
 				);
 
 				for (Map.Entry<String,String> h : session.getResponseHeaders().entrySet())
-					res.setHeader(h.getKey(), h.getValue());
+					res.setHeaderSafe(h.getKey(), h.getValue());
 
 				if (! session.isWriterSerializer()) {
 					if (req.isPlainText()) {

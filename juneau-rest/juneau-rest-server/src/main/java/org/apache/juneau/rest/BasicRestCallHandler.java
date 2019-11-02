@@ -337,8 +337,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 		if (t == null)
 			t = e2.getRootCause();
 		if (t != null) {
-			res.setHeader("Exception-Name", t.getClass().getName());
-			res.setHeader("Exception-Message", t.getMessage());
+			res.setHeader("Exception-Name", stripInvalidHttpHeaderChars(t.getClass().getName()));
+			res.setHeader("Exception-Message", stripInvalidHttpHeaderChars(t.getMessage()));
 		}
 
 		try {

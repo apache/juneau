@@ -24,8 +24,8 @@
 	<li>
 		New convenience methods:
 		<ul>	
-			<li class='jm'>{@link oaj.ObjectMap.create(String)}
-			<li class='jm'>{@link oaj.ObjectList.create(String)}
+			<li class='jm'>{@link oaj.ObjectMap.parse(String)}
+			<li class='jm'>{@link oaj.ObjectList.parse(String)}
 		</ul>
 	<li>
 		{@link oaj.marshall.CharMarshall} and {@link oaj.marshall.StreamMarshall} now have public constructors.
@@ -33,6 +33,10 @@
 
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
+	<li>
+		New method {@link oajr.RestResponse.setHeaderSafe(String,String)} to strip invalid characters from header values.
+	<li>
+		Fixed issues related to invalid characters being set on HTTP header values.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>
