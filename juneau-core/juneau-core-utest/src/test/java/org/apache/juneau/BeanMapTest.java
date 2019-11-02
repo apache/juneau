@@ -343,7 +343,7 @@ public class BeanMapTest {
 
 		// The rest are proper superclasses of ObjectList.
 		assertEquals(ObjectList.class.getName(), m.get("l1").getClass().getName());
-		assertEquals(LinkedList.class.getName(), m.get("ll1").getClass().getName());
+		assertEquals(ObjectList.class.getName(), m.get("ll1").getClass().getName());
 		assertEquals(ObjectList.class.getName(), m.get("c1").getClass().getName());
 		assertEquals(ObjectList.class.getName(), m.get("jl1").getClass().getName());
 
@@ -358,7 +358,7 @@ public class BeanMapTest {
 
 		// The rest are propert superclasses of ObjectMap
 		assertEquals(ObjectMap.class.getName(), m.get("m1").getClass().getName());
-		assertEquals(HashMap.class.getName(), m.get("hm1").getClass().getName());
+		assertEquals(ObjectMap.class.getName(), m.get("hm1").getClass().getName());
 		assertEquals(ObjectMap.class.getName(), m.get("jm1").getClass().getName());
 
 		// Initialized fields should reuse existing field value.
@@ -372,12 +372,12 @@ public class BeanMapTest {
 		m.put("jm2", new ObjectMap("{foo:'bar'}"));
 		m.put("jl2", new ObjectList("[1,2,3]"));
 
-		assertEquals(ArrayList.class.getName(), m.get("l2").getClass().getName());
+		assertEquals(ObjectList.class.getName(), m.get("l2").getClass().getName());
 		assertEquals(ArrayList.class.getName(), m.get("al2").getClass().getName());
-		assertEquals(LinkedList.class.getName(), m.get("ll2").getClass().getName());
-		assertEquals(ArrayList.class.getName(), m.get("c2").getClass().getName());
-		assertEquals(HashMap.class.getName(), m.get("m2").getClass().getName());
-		assertEquals(HashMap.class.getName(), m.get("hm2").getClass().getName());
+		assertEquals(ObjectList.class.getName(), m.get("ll2").getClass().getName());
+		assertEquals(ObjectList.class.getName(), m.get("c2").getClass().getName());
+		assertEquals(ObjectMap.class.getName(), m.get("m2").getClass().getName());
+		assertEquals(ObjectMap.class.getName(), m.get("hm2").getClass().getName());
 		assertEquals(TreeMap.class.getName(), m.get("tm2").getClass().getName());
 		assertEquals(ObjectMap.class.getName(), m.get("jm2").getClass().getName());
 		assertEquals(ObjectList.class.getName(), m.get("jl2").getClass().getName());
@@ -1931,5 +1931,28 @@ public class BeanMapTest {
 
 	public static class Z {
 		public String a, b, c;
+	}
+
+	//====================================================================================================
+	// testCollectionSetters_preferSetter
+	//====================================================================================================
+	@Test
+	public void testCollectionSetters_preferSetter() throws Exception {
+		AA aa = new AA();
+		BeanMap<AA> bm = BeanContext.DEFAULT.createSession().toBeanMap(aa);
+
+		bm.put("a", AList.create("x"));
+		assertObjectEquals("['x']", aa.a);
+	}
+
+	public static class AA {
+		private List<String> a = new ArrayList<>();
+
+		public List<String> getA() {
+			return Collections.emptyList();
+		}
+		public void setA(List<String> a) {
+			this.a = a;
+		}
 	}
 }

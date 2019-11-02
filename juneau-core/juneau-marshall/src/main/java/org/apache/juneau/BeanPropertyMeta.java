@@ -661,13 +661,16 @@ public final class BeanPropertyMeta {
 
 				Object r = (beanContext.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (getter != null || field != null) ? get(m, pName) : null;
 				Class<?> propertyClass = rawTypeMeta.getInnerClass();
+				ClassInfo pcInfo = rawTypeMeta.getInfo();
 
 				if (value == null && (isMap || isCollection)) {
 					invokeSetter(bean, pName, null);
 					return r;
 				}
 
-				if (isMap) {
+				Class<?> vc = value == null ? null : value.getClass();
+
+				if (isMap && (setter == null || ! pcInfo.isParentOf(vc))) {
 
 					if (! (value instanceof Map)) {
 						if (value instanceof CharSequence)
@@ -724,7 +727,7 @@ public final class BeanPropertyMeta {
 					if (setter != null || field != null)
 						invokeSetter(bean, pName, propMap);
 
-				} else if (isCollection) {
+				} else if (isCollection && (setter == null || ! pcInfo.isParentOf(vc))) {
 
 					if (! (value instanceof Collection)) {
 						if (value instanceof CharSequence)
