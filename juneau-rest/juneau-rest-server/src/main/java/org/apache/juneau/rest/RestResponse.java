@@ -27,7 +27,6 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.util.*;
@@ -550,18 +549,34 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * Same as {@link #setHeader(String, String)} but strips invalid characters from the value if present.
 	 *
 	 * These include CTRL characters, newlines, and non-ISO8859-1 characters.
+	 * Also limits the string length to 1024 characters.
 	 *
 	 * @param name Header name.
 	 * @param value Header value.
 	 */
 	public void setHeaderSafe(String name, String value) {
+		setHeaderSafe(name, value, 1024);
+	}
+
+	/**
+	 * Same as {@link #setHeader(String, String)} but strips invalid characters from the value if present.
+	 *
+	 * These include CTRL characters, newlines, and non-ISO8859-1 characters.
+	 *
+	 * @param name Header name.
+	 * @param value Header value.
+	 * @param maxLength
+	 * 	The maximum length of the header value.
+	 * 	Will be truncated with <js>"..."</js> added if the value exceeds the length.
+	 */
+	public void setHeaderSafe(String name, String value, int maxLength) {
 
 		// Jetty doesn't set the content type correctly if set through this method.
 		// Tomcat/WAS does.
 		if (name.equalsIgnoreCase("Content-Type"))
 			super.setContentType(value);
 		else
-			super.setHeader(name, StringUtils.stripInvalidHttpHeaderChars(value));
+			super.setHeader(name, abbreviate(stripInvalidHttpHeaderChars(value), maxLength));
 	}
 
 	/**

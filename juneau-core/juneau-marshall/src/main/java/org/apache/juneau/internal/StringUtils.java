@@ -2716,4 +2716,16 @@ public final class StringUtils {
 		return sb.toString();
 	}
 
+	/**
+	 * Abbreviates a String using ellipses.
+	 *
+	 * @param in The input string.
+	 * @param length The max length of the resulting string.
+	 * @return The abbreviated string.
+	 */
+	public static String abbreviate(String in, int length) {
+		if (in == null || in.length() <= length || in.length() <= 3)
+			return in;
+		return in.substring(0, length-3) + "...";
+	}
 }
