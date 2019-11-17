@@ -105,10 +105,12 @@ public class TestMicroservice {
 		try {
 			final RequestLine[] currentRequest = new RequestLine[1];
 			final StatusLine[] currentResponse = new StatusLine[1];
-			return RestClient.create()
+			RestClientBuilder rc = RestClient.create()
 				.json()
 				.rootUrl(microserviceURI)
-				.retryHandler(
+				.noTrace();
+			rc.getHttpClientBuilder()
+				.setRetryHandler(
 					new HttpRequestRetryHandler() {
 						@Override
 						public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
@@ -129,9 +131,8 @@ public class TestMicroservice {
 					public void process(HttpResponse r, HttpContext c) throws HttpException, IOException {
 						currentResponse[0] = r.getStatusLine();
 					}
-				})
-				.noTrace()
-			;
+				});
+			return rc;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

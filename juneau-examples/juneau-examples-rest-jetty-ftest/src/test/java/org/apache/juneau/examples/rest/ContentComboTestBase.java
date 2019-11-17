@@ -59,7 +59,7 @@ public class ContentComboTestBase extends RestTestcase {
 
 	protected RestClient getClient(String label, Serializer serializer, Parser parser) {
 		if (! clients.containsKey(label))
-			clients.put(label, SamplesMicroservice.client(serializer, parser).pooled().build());
+			clients.put(label, SamplesMicroservice.client(serializer, parser).build());
 		return clients.get(label);
 	}
 

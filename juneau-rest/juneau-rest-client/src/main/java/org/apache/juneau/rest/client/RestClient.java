@@ -163,7 +163,6 @@ public class RestClient extends BeanContext implements Closeable {
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#defaultHeaders(Collection)}
 	 * 			<li class='jm'>{@link RestClientBuilder#header(String, Object)}
 	 * 		</ul>
 	 * </ul>
@@ -480,26 +479,14 @@ public class RestClient extends BeanContext implements Closeable {
 	/**
 	 * Constructor.
 	 *
-	 * @param ps
-	 * 	Configuration properties for this client.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param httpClientBuilder
-	 * 	The HTTP client builder to use to create the HTTP client.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param httpClient
-	 * 	The HTTP client.
-	 * 	<br>Must not be <jk>null</jk>.
+	 * @param builder The REST client builder.
 	 */
 	@SuppressWarnings("unchecked")
-	protected RestClient(
-			PropertyStore ps,
-			HttpClientBuilder httpClientBuilder,
-			CloseableHttpClient httpClient) {
-		super(ps);
-		if (ps == null)
-			ps = PropertyStore.DEFAULT;
-		this.httpClientBuilder = httpClientBuilder;
-		this.httpClient = httpClient;
+	protected RestClient(RestClientBuilder builder) {
+		super(builder.getPropertyStore());
+		PropertyStore ps = getPropertyStore();
+		this.httpClientBuilder = builder.getHttpClientBuilder();
+		this.httpClient = builder.getHttpClient();
 		this.keepHttpClientOpen = getBooleanProperty(RESTCLIENT_keepHttpClientOpen, false);
 		this.headers = getMapProperty(RESTCLIENT_headers, String.class);
 		this.query = getMapProperty(RESTCLIENT_query, String.class);
@@ -591,7 +578,7 @@ public class RestClient extends BeanContext implements Closeable {
 	}
 
 	/**
-	 * Execute the specified request.
+	 * Execute the specified no-body request (e.g. GET/DELETE).
 	 *
 	 * <p>
 	 * Subclasses can override this method to provide specialized handling.
@@ -601,7 +588,22 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @throws IOException Stream exception occurred.
 	 * @throws ClientProtocolException ignals an error in the HTTP protocol.
 	 */
-	protected HttpResponse execute(HttpUriRequest req) throws ClientProtocolException, IOException {
+	protected HttpResponse execute(HttpRequestBase req) throws ClientProtocolException, IOException {
+		return httpClient.execute(req);
+	}
+
+	/**
+	 * Execute the specified body request (e.g. POST/PUT).
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide specialized handling.
+	 *
+	 * @param req The HTTP request.
+	 * @return The HTTP response.
+	 * @throws IOException Stream exception occurred.
+	 * @throws ClientProtocolException ignals an error in the HTTP protocol.
+	 */
+	protected HttpResponse execute(HttpEntityEnclosingRequestBase req) throws ClientProtocolException, IOException {
 		return httpClient.execute(req);
 	}
 
@@ -1055,8 +1057,6 @@ public class RestClient extends BeanContext implements Closeable {
 	 * 	<li>
 	 * 		If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
 	 * 		pooling client connection manager.
-	 * 		The easiest way to do this is to use the {@link RestClientBuilder#pooled()} method.
-	 * 		If you don't do this, you may end up seeing "Connection still allocated" exceptions.
 	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
@@ -1242,8 +1242,6 @@ public class RestClient extends BeanContext implements Closeable {
 	 * 	<li>
 	 * 		If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
 	 * 		pooling client connection manager.
-	 * 		The easiest way to do this is to use the {@link RestClientBuilder#pooled()} method.
-	 * 		If you don't do this, you may end up seeing "Connection still allocated" exceptions.
 	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.

@@ -83,16 +83,18 @@ import org.apache.juneau.xml.*;
  */
 public class RestClientBuilder extends BeanContextBuilder {
 
-	private HttpClientConnectionManager httpClientConnectionManager;
 	private HttpClientBuilder httpClientBuilder;
 	private CloseableHttpClient httpClient;
-	private boolean enableSsl = false;
-	private HostnameVerifier hostnameVerifier;
-	private KeyManager[] keyManagers;
-	private TrustManager[] trustManagers;
-	private SecureRandom secureRandom;
-	private String[] sslProtocols, cipherSuites;
-	private boolean pooled;
+
+	// Deprecated
+	@Deprecated private HttpClientConnectionManager httpClientConnectionManager;
+	@Deprecated private boolean enableSsl = false;
+	@Deprecated private HostnameVerifier hostnameVerifier;
+	@Deprecated private KeyManager[] keyManagers;
+	@Deprecated private TrustManager[] trustManagers;
+	@Deprecated private SecureRandom secureRandom;
+	@Deprecated private String[] sslProtocols, cipherSuites;
+	@Deprecated private boolean pooled;
 
 	/**
 	 * Constructor.
@@ -108,18 +110,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : createHttpClientBuilder();
 	}
 
-	@SuppressWarnings("resource")
 	@Override /* ContextBuilder */
 	public RestClient build() {
-		try {
-			CloseableHttpClient c = httpClient != null ? httpClient : createHttpClient();
-			PropertyStore ps = psb.build();
-
-			return new RestClient(ps, httpClientBuilder, c);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return new RestClient(this);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Convenience marshalling support methods.
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Convenience method for specifying JSON as the transmission media type.
@@ -229,6 +227,64 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return serializer(OpenApiSerializer.class).parser(OpenApiParser.class);
 	}
 
+	//------------------------------------------------------------------------------------------------------------------
+	// HttpClientBuilder
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates an instance of an {@link HttpClientBuilder} to be used to create the {@link HttpClient}.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own client builder.
+	 * The builder can also be specified using the {@link #httpClientBuilder(HttpClientBuilder)} method.
+	 *
+	 * <p>
+	 * The predefined method returns an {@link HttpClientBuilder} with the following settings:
+	 * <ul>
+	 * 	<li>Lax redirect strategy.
+	 * </ul>
+	 *
+	 * @return The HTTP client builder to use to create the HTTP client.
+	 */
+	protected HttpClientBuilder createHttpClientBuilder() {
+		return HttpClientBuilder.create().setRedirectStrategy(new AllowAllRedirects());
+	}
+
+	/**
+	 * Returns the {@link HttpClientBuilder} that will be used to create the {@link HttpClient} used by {@link RestClient}.
+	 *
+	 * <p>
+	 * This method can be used to make customizations to the {@link HttpClient}.
+	 *
+	 * <p>
+	 * If not set via {@link #httpClientBuilder(HttpClientBuilder)}, then this object is the one created by {@link #createHttpClientBuilder()}.
+	 *
+	 * @return The {@link HttpClientBuilder} that will be used to create the {@link HttpClient} used by {@link RestClient}.
+	 */
+	public HttpClientBuilder getHttpClientBuilder() {
+		if (httpClientBuilder == null)
+			httpClientBuilder = createHttpClientBuilder();
+		return httpClientBuilder;
+	}
+
+	/**
+	 * Sets the {@link HttpClientBuilder} that will be used to create the {@link HttpClient} used by {@link RestClient}.
+	 *
+	 * <p>
+	 * This can be used to bypass the builder created by {@link #createHttpClientBuilder()} method.
+	 *
+	 * @param value The {@link HttpClientBuilder} that will be used to create the {@link HttpClient} used by {@link RestClient}.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder httpClientBuilder(HttpClientBuilder value) {
+		this.httpClientBuilder = value;
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// HttpClient
+	//------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creates an instance of an {@link HttpClient} to be used to handle all HTTP communications with the target server.
 	 *
@@ -257,25 +313,76 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Creates an instance of an {@link HttpClientBuilder} to be used to create the {@link HttpClient}.
+	 * Returns the {@link HttpClient} to be used to handle all HTTP communications with the target server.
 	 *
-	 * <p>
-	 * Subclasses can override this method to provide their own client builder.
-	 *
-	 * <p>
-	 * The predefined method returns an {@link HttpClientBuilder} with the following settings:
-	 * <ul>
-	 * 	<li>Lax redirect strategy.
-	 * 	<li>The connection manager returned by {@link #createConnectionManager()}.
-	 * </ul>
-	 *
-	 * @return The HTTP client builder to use to create the HTTP client.
+	 * @return The {@link HttpClient} to be used to handle all HTTP communications with the target server.
 	 */
-	protected HttpClientBuilder createHttpClientBuilder() {
-		HttpClientBuilder b = HttpClientBuilder.create();
-		b.setRedirectStrategy(new AllowAllRedirects());
-		return b;
+	public CloseableHttpClient getHttpClient() {
+		try {
+			return httpClient != null ? httpClient : createHttpClient();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
+
+	/**
+	 * Sets the {@link HttpClient} to be used to handle all HTTP communications with the target server.
+	 *
+	 * <p>
+	 * This can be used to bypass the client created by {@link #createHttpClient()} method.
+	 *
+	 * @param value The {@link HttpClient} to be used to handle all HTTP communications with the target server.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder httpClient(CloseableHttpClient value) {
+		this.httpClient = value;
+		return this;
+	}
+
+	/**
+	 * Sets the internal {@link HttpClient} to use for handling HTTP communications.
+	 *
+	 * @param httpClient The HTTP client.
+	 * @param keepHttpClientOpen Don't close this client when the {@link RestClient#close()} method is called.
+	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #httpClient(CloseableHttpClient)} and {@link #keepHttpClientOpen(boolean)}.
+	 */
+	@Deprecated
+	public RestClientBuilder httpClient(CloseableHttpClient httpClient, boolean keepHttpClientOpen) {
+		this.httpClient = httpClient;
+		set(RESTCLIENT_keepHttpClientOpen, keepHttpClientOpen);
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Logging.
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Adds a {@link RestCallLogger} to the list of interceptors on this class.
+	 *
+	 * @param level The log level to log messages at.
+	 * @param log The logger to log messages to.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder logTo(Level level, Logger log) {
+		return interceptors(new RestCallLogger(level, log));
+	}
+
+	/**
+	 * Sets the internal {@link HttpClientConnectionManager}.
+	 *
+	 * @param httpClientConnectionManager The HTTP client connection manager.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder httpClientConnectionManager(HttpClientConnectionManager httpClientConnectionManager) {
+		this.httpClientConnectionManager = httpClientConnectionManager;
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Deprecated HttpClientBuilder methods.
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Creates the {@link HttpClientConnectionManager} returned by {@link #createConnectionManager()}.
@@ -289,8 +396,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return The HTTP client builder to use to create the HTTP client.
 	 * @throws NoSuchAlgorithmException Unknown cryptographic algorithm.
 	 * @throws KeyManagementException General key management exception.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
 	@SuppressWarnings("resource")
+	@Deprecated
 	protected HttpClientConnectionManager createConnectionManager() throws KeyManagementException, NoSuchAlgorithmException {
 		if (enableSsl) {
 
@@ -317,6 +426,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return (pooled ? new PoolingHttpClientConnectionManager() : new BasicHttpClientConnectionManager());
 	}
 
+	private static String[] getDefaultProtocols() {
+		String sp = System.getProperty("transport.client.protocol");
+		if (isEmpty(sp))
+			return new String[] {"SSL_TLS","TLS","SSL"};
+		return StringUtils.split(sp, ',');
+	}
+
 	/**
 	 * Enable SSL support on this client.
 	 *
@@ -332,7 +448,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
+	@Deprecated
 	public RestClientBuilder enableSSL() {
 		this.enableSsl = true;
 		return this;
@@ -353,7 +471,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @throws KeyStoreException Generic keystore exception.
 	 * @throws NoSuchAlgorithmException Unknown cryptographic algorithm.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
+	@Deprecated
 	public RestClientBuilder enableLaxSSL() throws KeyStoreException, NoSuchAlgorithmException {
 		this.enableSsl = true;
 		hostnameVerifier(new NoopHostnameVerifier());
@@ -379,7 +499,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param sslProtocols The supported SSL protocols.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
+	@Deprecated
 	public RestClientBuilder sslProtocols(String...sslProtocols) {
 		this.sslProtocols = sslProtocols;
 		return this;
@@ -402,7 +524,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param cipherSuites The supported cipher suites.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
+	@Deprecated
 	public RestClientBuilder cipherSuites(String...cipherSuites) {
 		this.cipherSuites = cipherSuites;
 		return this;
@@ -425,7 +549,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param hostnameVerifier The hostname verifier.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
+	@Deprecated
 	public RestClientBuilder hostnameVerifier(HostnameVerifier hostnameVerifier) {
 		this.hostnameVerifier = hostnameVerifier;
 		return this;
@@ -447,7 +573,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param keyManagers The key managers.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
+	@Deprecated
 	public RestClientBuilder keyManagers(KeyManager...keyManagers) {
 		this.keyManagers = keyManagers;
 		return this;
@@ -469,7 +597,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param trustManagers The trust managers.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
+	@Deprecated
 	public RestClientBuilder trustManagers(TrustManager...trustManagers) {
 		this.trustManagers = trustManagers;
 		return this;
@@ -491,31 +621,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param secureRandom The random number generator.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
+	@Deprecated
 	public RestClientBuilder secureRandom(SecureRandom secureRandom) {
 		this.secureRandom = secureRandom;
 		return this;
-	}
-
-	/**
-	 * Sets the client version by setting the value for the <js>"X-Client-Version"</js> header.
-	 *
-	 * @param version The version string (e.g. <js>"1.2.3"</js>)
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder clientVersion(String version) {
-		return header("X-Client-Version", version);
-	}
-
-	/**
-	 * Adds a {@link RestCallLogger} to the list of interceptors on this class.
-	 *
-	 * @param level The log level to log messages at.
-	 * @param log The logger to log messages to.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder logTo(Level level, Logger log) {
-		return interceptors(new RestCallLogger(level, log));
 	}
 
 	/**
@@ -523,7 +634,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * instead of a {@link BasicHttpClientConnectionManager}.
 	 *
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
+	@Deprecated
 	public RestClientBuilder pooled() {
 		this.pooled = true;
 		return this;
@@ -537,7 +650,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param user The username.
 	 * @param pw The password.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
+	@Deprecated
 	public RestClientBuilder basicAuth(String host, int port, String user, String pw) {
 		AuthScope scope = new AuthScope(host, port);
 		Credentials up = new UsernamePasswordCredentials(user, pw);
@@ -546,46 +661,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 		defaultCredentialsProvider(p);
 		return this;
 	}
-
-	/**
-	 * Sets the internal {@link HttpClient} to use for handling HTTP communications.
-	 *
-	 * @param httpClient The HTTP client.
-	 * @param keepHttpClientOpen Don't close this client when the {@link RestClient#close()} method is called.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder httpClient(CloseableHttpClient httpClient, boolean keepHttpClientOpen) {
-		this.httpClient = httpClient;
-		set(RESTCLIENT_keepHttpClientOpen, keepHttpClientOpen);
-		return this;
-	}
-
-	/**
-	 * Sets the internal {@link HttpClientConnectionManager}.
-	 *
-	 * @param httpClientConnectionManager The HTTP client connection manager.
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder httpClientConnectionManager(HttpClientConnectionManager httpClientConnectionManager) {
-		this.httpClientConnectionManager = httpClientConnectionManager;
-		return this;
-	}
-
-	/**
-	 * Sets a mock connection used to construct a connection manager for working against mocked REST interfaces.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-client.UnitTesting}
-	 * </ul>
-	 *
-	 * @param c The mock connection.
-	 * @return This object (for method chaining).
-	 */
-//	public RestClientBuilder mockHttpConnection(MockHttpConnection c) {
-//		rootUrl("http://localhost");
-//		return httpClientConnectionManager(new MockHttpClientConnectionManager(c));
-//	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// HTTP headers
@@ -681,6 +756,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	public RestClientBuilder cacheControl(Object value) {
 		return header("Cache-Control", value);
+	}
+
+	/**
+	 * Sets the client version by setting the value for the <js>"X-Client-Version"</js> header.
+	 *
+	 * @param version The version string (e.g. <js>"1.2.3"</js>)
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder clientVersion(String version) {
+		return header("X-Client-Version", version);
 	}
 
 	/**
@@ -1080,6 +1165,22 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	public RestClientBuilder keepHttpClientOpen(boolean value) {
 		return set(RESTCLIENT_keepHttpClientOpen, value);
+	}
+
+	/**
+	 * Configuration property:  Keep HttpClient open.
+	 *
+	 * <p>
+	 * Don't close this client when the {@link RestClient#close()} method is called.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_keepHttpClientOpen}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder keepHttpClientOpen() {
+		return keepHttpClientOpen(true);
 	}
 
 	/**
@@ -2646,10 +2747,21 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//------------------------------------------------------------------------------------------------
 
 	/**
+	 * @return This object (for method chaining).
+	 * @see HttpClientBuilder#disableRedirectHandling()
+	 */
+	public RestClientBuilder disableRedirectHandling() {
+		httpClientBuilder.disableRedirectHandling();
+		return this;
+	}
+
+	/**
 	 * @param redirectStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRedirectStrategy(RedirectStrategy)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setRedirectStrategy(RedirectStrategy)}.
 	 */
+	@Deprecated
 	public RestClientBuilder redirectStrategy(RedirectStrategy redirectStrategy) {
 		httpClientBuilder.setRedirectStrategy(redirectStrategy);
 		return this;
@@ -2659,7 +2771,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param cookieSpecRegistry New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)}.
 	 */
+	@Deprecated
 	public RestClientBuilder defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
 		httpClientBuilder.setDefaultCookieSpecRegistry(cookieSpecRegistry);
 		return this;
@@ -2669,7 +2783,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param requestExec New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRequestExecutor(HttpRequestExecutor)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setRequestExecutor(HttpRequestExecutor)}.
 	 */
+	@Deprecated
 	public RestClientBuilder requestExecutor(HttpRequestExecutor requestExec) {
 		httpClientBuilder.setRequestExecutor(requestExec);
 		return this;
@@ -2679,7 +2795,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param hostnameVerifier New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)}.
 	 */
+	@Deprecated
 	public RestClientBuilder sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
 		httpClientBuilder.setSSLHostnameVerifier(hostnameVerifier);
 		return this;
@@ -2689,7 +2807,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param publicSuffixMatcher New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)}.
 	 */
+	@Deprecated
 	public RestClientBuilder publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
 		httpClientBuilder.setPublicSuffixMatcher(publicSuffixMatcher);
 		return this;
@@ -2699,7 +2819,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param sslContext New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLContext(SSLContext)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setSSLContext(SSLContext)}.
 	 */
+	@Deprecated
 	public RestClientBuilder sslContext(SSLContext sslContext) {
 		httpClientBuilder.setSSLContext(sslContext);
 		return this;
@@ -2709,7 +2831,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param sslSocketFactory New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)}.
 	 */
+	@Deprecated
 	public RestClientBuilder sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
 		httpClientBuilder.setSSLSocketFactory(sslSocketFactory);
 		return this;
@@ -2719,7 +2843,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param maxConnTotal New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setMaxConnTotal(int)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setMaxConnTotal(int)}.
 	 */
+	@Deprecated
 	public RestClientBuilder maxConnTotal(int maxConnTotal) {
 		httpClientBuilder.setMaxConnTotal(maxConnTotal);
 		return this;
@@ -2729,7 +2855,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param maxConnPerRoute New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setMaxConnPerRoute(int)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setMaxConnPerRoute(int)}.
 	 */
+	@Deprecated
 	public RestClientBuilder maxConnPerRoute(int maxConnPerRoute) {
 		httpClientBuilder.setMaxConnPerRoute(maxConnPerRoute);
 		return this;
@@ -2739,7 +2867,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param config New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setDefaultSocketConfig(SocketConfig)}.
 	 */
+	@Deprecated
 	public RestClientBuilder defaultSocketConfig(SocketConfig config) {
 		httpClientBuilder.setDefaultSocketConfig(config);
 		return this;
@@ -2749,7 +2879,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param config New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)}.
 	 */
+	@Deprecated
 	public RestClientBuilder defaultConnectionConfig(ConnectionConfig config) {
 		httpClientBuilder.setDefaultConnectionConfig(config);
 		return this;
@@ -2760,7 +2892,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param connTimeToLiveTimeUnit New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setConnectionTimeToLive(long, TimeUnit)}.
 	 */
+	@Deprecated
 	public RestClientBuilder connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
 		httpClientBuilder.setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
 		return this;
@@ -2770,7 +2904,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param connManager New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
+	@Deprecated
 	public RestClientBuilder connectionManager(HttpClientConnectionManager connManager) {
 		this.httpClientConnectionManager = connManager;
 		httpClientBuilder.setConnectionManager(connManager);
@@ -2781,7 +2917,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param shared New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionManagerShared(boolean)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setConnectionManagerShared(boolean)}.
 	 */
+	@Deprecated
 	public RestClientBuilder connectionManagerShared(boolean shared) {
 		httpClientBuilder.setConnectionManagerShared(shared);
 		return this;
@@ -2791,7 +2929,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param reuseStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionReuseStrategy(ConnectionReuseStrategy)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setConnectionReuseStrategy(ConnectionReuseStrategy)}.
 	 */
+	@Deprecated
 	public RestClientBuilder connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
 		httpClientBuilder.setConnectionReuseStrategy(reuseStrategy);
 		return this;
@@ -2801,7 +2941,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param keepAliveStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setKeepAliveStrategy(ConnectionKeepAliveStrategy)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setKeepAliveStrategy(ConnectionKeepAliveStrategy)}.
 	 */
+	@Deprecated
 	public RestClientBuilder keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
 		httpClientBuilder.setKeepAliveStrategy(keepAliveStrategy);
 		return this;
@@ -2811,7 +2953,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param targetAuthStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setTargetAuthenticationStrategy(AuthenticationStrategy)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setTargetAuthenticationStrategy(AuthenticationStrategy)}.
 	 */
+	@Deprecated
 	public RestClientBuilder targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
 		httpClientBuilder.setTargetAuthenticationStrategy(targetAuthStrategy);
 		return this;
@@ -2821,7 +2965,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param proxyAuthStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setProxyAuthenticationStrategy(AuthenticationStrategy)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setProxyAuthenticationStrategy(AuthenticationStrategy)}.
 	 */
+	@Deprecated
 	public RestClientBuilder proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
 		httpClientBuilder.setProxyAuthenticationStrategy(proxyAuthStrategy);
 		return this;
@@ -2831,7 +2977,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param userTokenHandler New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setUserTokenHandler(UserTokenHandler)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setUserTokenHandler(UserTokenHandler)}.
 	 */
+	@Deprecated
 	public RestClientBuilder userTokenHandler(UserTokenHandler userTokenHandler) {
 		httpClientBuilder.setUserTokenHandler(userTokenHandler);
 		return this;
@@ -2840,7 +2988,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableConnectionState()
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#disableConnectionState()}.
 	 */
+	@Deprecated
 	public RestClientBuilder disableConnectionState() {
 		httpClientBuilder.disableConnectionState();
 		return this;
@@ -2850,7 +3000,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param schemePortResolver New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSchemePortResolver(SchemePortResolver)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setSchemePortResolver(SchemePortResolver)}.
 	 */
+	@Deprecated
 	public RestClientBuilder schemePortResolver(SchemePortResolver schemePortResolver) {
 		httpClientBuilder.setSchemePortResolver(schemePortResolver);
 		return this;
@@ -2860,7 +3012,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param userAgent New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setUserAgent(String)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setUserAgent(String)}.
 	 */
+	@Deprecated
 	public RestClientBuilder userAgent(String userAgent) {
 		httpClientBuilder.setUserAgent(userAgent);
 		return this;
@@ -2870,7 +3024,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param defaultHeaders New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultHeaders(Collection)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setDefaultHeaders(Collection)}.
 	 */
+	@Deprecated
 	public RestClientBuilder defaultHeaders(Collection<? extends Header> defaultHeaders) {
 		httpClientBuilder.setDefaultHeaders(defaultHeaders);
 		return this;
@@ -2880,7 +3036,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param itcp New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)}.
 	 */
+	@Deprecated
 	public RestClientBuilder addInterceptorFirst(HttpResponseInterceptor itcp) {
 		httpClientBuilder.addInterceptorFirst(itcp);
 		return this;
@@ -2890,7 +3048,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param itcp New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)}.
 	 */
+	@Deprecated
 	public RestClientBuilder addInterceptorLast(HttpResponseInterceptor itcp) {
 		httpClientBuilder.addInterceptorLast(itcp);
 		return this;
@@ -2900,7 +3060,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param itcp New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)}.
 	 */
+	@Deprecated
 	public RestClientBuilder addInterceptorFirst(HttpRequestInterceptor itcp) {
 		httpClientBuilder.addInterceptorFirst(itcp);
 		return this;
@@ -2910,7 +3072,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param itcp New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)}.
 	 */
+	@Deprecated
 	public RestClientBuilder addInterceptorLast(HttpRequestInterceptor itcp) {
 		httpClientBuilder.addInterceptorLast(itcp);
 		return this;
@@ -2919,7 +3083,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableCookieManagement()
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#disableCookieManagement()}.
 	 */
+	@Deprecated
 	public RestClientBuilder disableCookieManagement() {
 		httpClientBuilder.disableCookieManagement();
 		return this;
@@ -2928,7 +3094,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableContentCompression()
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#disableContentCompression()}.
 	 */
+	@Deprecated
 	public RestClientBuilder disableContentCompression() {
 		httpClientBuilder.disableContentCompression();
 		return this;
@@ -2937,7 +3105,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableAuthCaching()
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#disableAuthCaching()}.
 	 */
+	@Deprecated
 	public RestClientBuilder disableAuthCaching() {
 		httpClientBuilder.disableAuthCaching();
 		return this;
@@ -2947,7 +3117,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param httpprocessor New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setHttpProcessor(HttpProcessor)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setHttpProcessor(HttpProcessor)}.
 	 */
+	@Deprecated
 	public RestClientBuilder httpProcessor(HttpProcessor httpprocessor) {
 		httpClientBuilder.setHttpProcessor(httpprocessor);
 		return this;
@@ -2957,7 +3129,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param retryHandler New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)}.
 	 */
+	@Deprecated
 	public RestClientBuilder retryHandler(HttpRequestRetryHandler retryHandler) {
 		httpClientBuilder.setRetryHandler(retryHandler);
 		return this;
@@ -2966,7 +3140,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableAutomaticRetries()
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#disableAutomaticRetries()}.
 	 */
+	@Deprecated
 	public RestClientBuilder disableAutomaticRetries() {
 		httpClientBuilder.disableAutomaticRetries();
 		return this;
@@ -2976,7 +3152,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param proxy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setProxy(HttpHost)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setProxy(HttpHost)}.
 	 */
+	@Deprecated
 	public RestClientBuilder proxy(HttpHost proxy) {
 		httpClientBuilder.setProxy(proxy);
 		return this;
@@ -2986,18 +3164,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param routePlanner New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRoutePlanner(HttpRoutePlanner)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setRoutePlanner(HttpRoutePlanner)}.
 	 */
+	@Deprecated
 	public RestClientBuilder routePlanner(HttpRoutePlanner routePlanner) {
 		httpClientBuilder.setRoutePlanner(routePlanner);
-		return this;
-	}
-
-	/**
-	 * @return This object (for method chaining).
-	 * @see HttpClientBuilder#disableRedirectHandling()
-	 */
-	public RestClientBuilder disableRedirectHandling() {
-		httpClientBuilder.disableRedirectHandling();
 		return this;
 	}
 
@@ -3005,7 +3176,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param connectionBackoffStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionBackoffStrategy(ConnectionBackoffStrategy)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setConnectionBackoffStrategy(ConnectionBackoffStrategy)}.
 	 */
+	@Deprecated
 	public RestClientBuilder connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
 		httpClientBuilder.setConnectionBackoffStrategy(connectionBackoffStrategy);
 		return this;
@@ -3015,7 +3188,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param backoffManager New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setBackoffManager(BackoffManager)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setBackoffManager(BackoffManager)}.
 	 */
+	@Deprecated
 	public RestClientBuilder backoffManager(BackoffManager backoffManager) {
 		httpClientBuilder.setBackoffManager(backoffManager);
 		return this;
@@ -3025,7 +3200,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param serviceUnavailStrategy New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)}.
 	 */
+	@Deprecated
 	public RestClientBuilder serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
 		httpClientBuilder.setServiceUnavailableRetryStrategy(serviceUnavailStrategy);
 		return this;
@@ -3035,7 +3212,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param cookieStore New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCookieStore(CookieStore)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setDefaultCookieStore(CookieStore)}.
 	 */
+	@Deprecated
 	public RestClientBuilder defaultCookieStore(CookieStore cookieStore) {
 		httpClientBuilder.setDefaultCookieStore(cookieStore);
 		return this;
@@ -3045,7 +3224,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param credentialsProvider New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCredentialsProvider(CredentialsProvider)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setDefaultCredentialsProvider(CredentialsProvider)}.
 	 */
+	@Deprecated
 	public RestClientBuilder defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
 		httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
 		return this;
@@ -3055,7 +3236,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param authSchemeRegistry New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)}.
 	 */
+	@Deprecated
 	public RestClientBuilder defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
 		httpClientBuilder.setDefaultAuthSchemeRegistry(authSchemeRegistry);
 		return this;
@@ -3065,7 +3248,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param contentDecoderMap New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setContentDecoderRegistry(Map)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setContentDecoderRegistry(Map)}.
 	 */
+	@Deprecated
 	public RestClientBuilder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
 		httpClientBuilder.setContentDecoderRegistry(contentDecoderMap);
 		return this;
@@ -3075,7 +3260,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param config New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultRequestConfig(RequestConfig)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#setDefaultRequestConfig(RequestConfig)}.
 	 */
+	@Deprecated
 	public RestClientBuilder defaultRequestConfig(RequestConfig config) {
 		httpClientBuilder.setDefaultRequestConfig(config);
 		return this;
@@ -3084,7 +3271,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#useSystemProperties()
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#useSystemProperties()}.
 	 */
+	@Deprecated
 	public RestClientBuilder useSystemProperties() {
 		httpClientBuilder.useSystemProperties();
 		return this;
@@ -3093,7 +3282,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#evictExpiredConnections()
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#evictExpiredConnections()}.
 	 */
+	@Deprecated
 	public RestClientBuilder evictExpiredConnections() {
 		httpClientBuilder.evictExpiredConnections();
 		return this;
@@ -3104,16 +3295,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param maxIdleTimeUnit New property value.
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#evictIdleConnections(long,TimeUnit)
+	 * @deprecated Use {@link #getHttpClientBuilder()} and {@link HttpClientBuilder#evictIdleConnections(long, TimeUnit)}.
 	 */
+	@Deprecated
 	public RestClientBuilder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
 		httpClientBuilder.evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
 		return this;
-	}
-
-	private static String[] getDefaultProtocols() {
-		String sp = System.getProperty("transport.client.protocol");
-		if (isEmpty(sp))
-			return new String[] {"SSL_TLS","TLS","SSL"};
-		return StringUtils.split(sp, ',');
 	}
 }

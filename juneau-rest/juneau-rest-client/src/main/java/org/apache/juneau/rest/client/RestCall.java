@@ -1609,6 +1609,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		isConnected = true;
 
 		try {
+			HttpEntityEnclosingRequestBase request2 = request instanceof HttpEntityEnclosingRequestBase ? (HttpEntityEnclosingRequestBase)request : null;
 
 			request.setURI(uriBuilder.build());
 
@@ -1617,7 +1618,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				if (hasInput && formData != null)
 					throw new RestCallException("Both input and form data found on same request.");
 
-				if (! (request instanceof HttpEntityEnclosingRequestBase))
+				if (request2 == null)
 					throw new RestCallException(0, "Method does not support content entity.", request.getMethod(), request.getURI(), null);
 
 				HttpEntity entity = null;
@@ -1641,7 +1642,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				if (retries > 1 && ! entity.isRepeatable())
 					throw new RestCallException("Rest call set to retryable, but entity is not repeatable.");
 
-				((HttpEntityEnclosingRequestBase)request).setEntity(entity);
+				request2.setEntity(entity);
 			}
 
 			int sc = 0;
@@ -1649,7 +1650,10 @@ public final class RestCall extends BeanSession implements Closeable {
 				retries--;
 				Exception ex = null;
 				try {
-					response = client.execute(request);
+					if (request2 != null)
+						response = client.execute(request2);
+					else
+						response = client.execute(request);
 					sc = (response == null || response.getStatusLine() == null) ? -1 : response.getStatusLine().getStatusCode();
 				} catch (Exception e) {
 					ex = e;

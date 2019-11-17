@@ -41,6 +41,13 @@
 
 <h5 class='topic w800'>juneau-rest-client</h5>
 <ul class='spaced-list'>
+	<li>
+		{@link oajr.RestClient} is now extendible.  The constructor has been made public and simplified to:
+		{@link oajr.RestClient(RestClientBuilder)}.
+	<li>
+		Duplicate methods between {@link oajr.RestClientBuilder} and {@link org.apache.http.impl.client.HttpClientBuilder}
+		have been made deprecated on the former.  This eliminates the need to try to keep the two builder classes in
+		sync.
 </ul>
 
 <h5 class='topic w800'>juneau-examples</h5>
