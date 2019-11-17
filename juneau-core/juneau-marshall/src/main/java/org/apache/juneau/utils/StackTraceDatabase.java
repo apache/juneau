@@ -68,7 +68,8 @@ public class StackTraceDatabase {
 			for (StackTraceElement e : t.getStackTrace()) {
 				if (e.getClassName().equals(stopClass))
 					break;
-				i ^= e.hashCode();
+				if (e.getClassName().indexOf('$') == -1)
+					i ^= e.hashCode();
 			}
 			t = t.getCause();
 		}
