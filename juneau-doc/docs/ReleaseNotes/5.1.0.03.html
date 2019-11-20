@@ -30,14 +30,14 @@
 		</ul>
 		Removed <c>BeanContext.<jsf>INCLUDE_BEAN_FIELD_PROPERTIES</jsf></c> and <c>BeanContext.<jsf>INCLUDE_BEAN_METHOD_PROPERTIES</jsf></c> properties, since ignoring fields and methods
 		can be accomplished by setting the appropriate properties above to {@link oaj.Visibility#NONE NONE}.
-		Also, the {@link oaj.annotation.BeanProperty @BeanProperty} annotation can now be used on non-public fields/getters/setters to override
+		Also, the <dc>@BeanProperty</dc> annotation can now be used on non-public fields/getters/setters to override
 		the default behavior defined by the <c>VISIBILITY</c> properties identified above.  This is a convenient way of identifying protected or
 		private fields or methods as bean properties.  Previously, you could only identify public fields/getters/setters using this annotation.
 	</li>
 	<li>New {@link oaj.BeanContext#BEAN_useJavaBeanIntrospector} property that lets Juno use the Java bean <c>Introspector</c>
 		class to determine bean properties.  In the previous release, the method for determining bean properties was a mixture of Juno-based and Introspector-based.
 		Now it's either pure Juno-based or pure Introspector-based.  The result is considerably cleaner code and consistent behavior.
-	<li>New {@link oaj.annotation.BeanIgnore @BeanIgnore} annotation.  Replaces the previous <c><ja>@BeanProperty</ja>(hidden=<jk>true</jk>)</c> annotation
+	<li>New {@link oaj.annotation.BeanIgnore @BeanIgnore} annotation.  Replaces the previous <dc>@BeanProperty(hidden=true)</dc> annotation
 		for ignoring bean properties.  Can also be used on classes that look like beans so that they're not treated as beans.
 	<li>Support for parsing into non-static member classes.  This applies to all parsers.
 	<li>New {@link oaj.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)}	annotation that automatically wraps beans and objects in a wrapper

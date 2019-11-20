@@ -43,7 +43,7 @@ Bean Names and Dictionaries
  	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
  	<jk>public class</jk> Foo {
  		<jc>// A bean property where the object types cannot be inferred since it's an Object[].</jc>
- 		<ja>@BeanProperty</ja>(beanDictionary={Bar.<jk>class</jk>,Baz.<jk>class</jk>})
+ 		<ja>@Beanp</ja>(dictionary={Bar.<jk>class</jk>,Baz.<jk>class</jk>})
  		<jk>public</jk> Object[] x = <jk>new</jk> Object[]{<jk>new</jk> Bar(), <jk>new</jk> Baz()};
  	}
  		

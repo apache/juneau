@@ -173,7 +173,7 @@ public @interface Header {
 	 *
 	 * 		<jc>// Equivalent to @Header("Foo")</jc>
 	 * 		<ja>@Header</ja>
-	 * 		<ja>@BeanProperty</ja>(<js>"Foo"</js>)
+	 * 		<ja>@@Beanp</ja>(<js>"Foo"</js>)
 	 * 		String getFoo();
 	 * 	}
 	 * 		</p>

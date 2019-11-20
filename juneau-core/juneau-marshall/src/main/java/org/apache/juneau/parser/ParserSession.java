@@ -277,7 +277,7 @@ public abstract class ParserSession extends BeanSession {
 	protected final ClassMeta<?> getClassMeta(String typeName, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
 		BeanRegistry br = null;
 
-		// Resolve via @BeanProperty(beanDictionary={})
+		// Resolve via @@Beanp(dictionary={})
 		if (pMeta != null) {
 			br = pMeta.getBeanRegistry();
 			if (br != null && br.hasName(typeName))

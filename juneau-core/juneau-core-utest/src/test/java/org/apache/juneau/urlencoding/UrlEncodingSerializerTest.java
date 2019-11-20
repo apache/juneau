@@ -475,16 +475,16 @@ public class UrlEncodingSerializerTest {
 	@Bean(sort=true)
 	public static class A {
 
-		@BeanProperty(name="foo")
+		@Beanp(name="foo")
 		public String f1 = "foo";
 
-		@BeanProperty(name="'foo'")
+		@Beanp(name="'foo'")
 		public String f2 = "'foo'";
 
-		@BeanProperty(name="(foo)")
+		@Beanp(name="(foo)")
 		public String f3 = "(foo)";
 
-		@BeanProperty(name="@(foo)")
+		@Beanp(name="@(foo)")
 		public String f4 = "@(foo)";
 	}
 }

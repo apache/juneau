@@ -1396,7 +1396,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty("x-example")
+	@Beanp("x-example")
 	public String getExample() {
 		return example;
 	}
@@ -1409,7 +1409,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("x-example")
+	@Beanp("x-example")
 	public ParameterInfo setExample(String value) {
 		example = value;
 		return this;
@@ -1431,7 +1431,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty("x-examples")
+	@Beanp("x-examples")
 	public Map<String,String> getExamples() {
 		return examples;
 	}
@@ -1444,7 +1444,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("x-examples")
+	@Beanp("x-examples")
 	public ParameterInfo setExamples(Map<String,String> value) {
 		examples = newMap(value);
 		return this;

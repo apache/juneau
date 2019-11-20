@@ -33,7 +33,7 @@ public class HtmlElementRawText extends HtmlElement {
 	 * @return The inner text of this element, or <jk>null</jk> if no text is set.
 	 */
 	@Xml(format=XmlFormat.TEXT_PWS)
-	@BeanProperty("c")
+	@Beanp("c")
 	public Object getText() {
 		return text;
 	}
@@ -44,7 +44,7 @@ public class HtmlElementRawText extends HtmlElement {
 	 * @param text The inner text of this element, or <jk>null</jk> if no text is set.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("c")
+	@Beanp("c")
 	public HtmlElement setText(Object text) {
 		this.text = text;
 		return this;

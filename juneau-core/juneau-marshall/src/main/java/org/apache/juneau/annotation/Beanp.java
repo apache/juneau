@@ -28,15 +28,12 @@ import org.apache.juneau.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanPropertyAnnotation}
  * </ul>
- *
- * @deprecated Use {@link Beanp}
  */
 @Documented
 @Target({FIELD,METHOD,PARAMETER})
 @Retention(RUNTIME)
 @Inherited
-@Deprecated
-public @interface BeanProperty {
+public @interface Beanp {
 
 	/**
 	 * Identifies the name of the property.
@@ -65,7 +62,7 @@ public @interface BeanProperty {
 	 * 	// The field name can be anything.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaField {
 	 *
-	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Map&lt;String,Object&gt; extraStuff = <jk>new</jk> LinkedHashMap&lt;String,Object&gt;();
 	 * 	}
 	 *
@@ -75,12 +72,12 @@ public @interface BeanProperty {
 	 * 	// Setter must take in two arguments.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaMethods {
 	 *
-	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Map&lt;String,Object&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}
 	 *
-	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public void</jk> setAnExtraField(String name, Object value) {
 	 * 			...
 	 * 		}
@@ -90,7 +87,7 @@ public @interface BeanProperty {
 	 * 	// Properties will be added through the getter.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaGetterOnly {
 	 *
-	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Map&lt;String,Object&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}
@@ -100,17 +97,17 @@ public @interface BeanProperty {
 	 * 	// Define a method that returns a Collection&lt;String&gt; with currently-set property names.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaExtraKeys {
 	 *
-	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Object get(String name) {
 	 * 			...
 	 * 		}
 	 *
-	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public void</jk> set(String name, Object value) {
 	 * 			...
 	 * 		}
 	 *
-	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Collection&lt;String&gt; extraKeys() {
 	 * 			...
 	 * 		}
@@ -124,7 +121,7 @@ public @interface BeanProperty {
 	 * 	<jc>// A serializable type other than Object.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaFieldWithListValues {
 	 *
-	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Map&lt;String,List&lt;String&gt;&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}
@@ -133,7 +130,7 @@ public @interface BeanProperty {
 	 * 	<jc>// A swapped value.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaFieldWithSwappedValues {
 	 *
-	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>, swap=TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
+	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>, swap=TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
 	 * 		<jk>public</jk> Map&lt;String,Calendar&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}
@@ -158,9 +155,9 @@ public @interface BeanProperty {
 	 * The following annotations are equivalent:
 	 *
 	 * <p class='bcode w800'>
-	 * 	<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
+	 * 	<ja>@Beanp</ja>(name=<js>"foo"</js>)
 	 *
-	 * 	<ja>@BeanProperty</ja>(<js>"foo"</js>)
+	 * 	<ja>@Beanp</ja>(<js>"foo"</js>)
 	 * </p>
 	 */
 	String value() default "";
@@ -182,7 +179,7 @@ public @interface BeanProperty {
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Identify concrete map type.</jc>
-	 * 		<ja>@BeanProperty</ja>(type=HashMap.<jk>class</jk>)
+	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>)
 	 * 		<jk>public</jk> Map <jf>p1</jf>;
 	 * 	}
 	 * </p>
@@ -194,7 +191,7 @@ public @interface BeanProperty {
 	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
-	 * 		<ja>@BeanProperty</ja>(type=HashMap.<jk>class</jk>)
+	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>)
 	 * 		<jk>private</jk> Map <jf>p1</jf>;
 	 *
 	 * 		<jk>public</jk> Map getP1() {
@@ -214,7 +211,7 @@ public @interface BeanProperty {
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Identify concrete map type with String keys and Integer values.</jc>
-	 * 		<ja>@BeanProperty</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
+	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
 	 * 		<jk>public</jk> Map <jf>p1</jf>;
 	 * 	}
 	 * </p>
@@ -226,7 +223,7 @@ public @interface BeanProperty {
 	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
-	 * 		<ja>@BeanProperty</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
+	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
 	 * 		<jk>private</jk> Map <jf>p1</jf>;
 	 *
 	 * 		<jk>public</jk> Map getP1() {
@@ -254,7 +251,7 @@ public @interface BeanProperty {
 	 * 	<jk>public class</jk> MyClass {
 	 *
 	 * 		<jc>// Only render 'f1' when serializing this bean property.</jc>
-	 * 		<ja>@BeanProperty</ja>(properties=<js>"f1"</js>)
+	 * 		<ja>@Beanp</ja>(bpi=<js>"f1"</js>)
 	 * 		<jk>public</jk> MyChildClass x1 = <jk>new</jk> MyChildClass();
 	 * 	}
 	 *
@@ -274,7 +271,7 @@ public @interface BeanProperty {
 	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
-	 * 		<ja>@BeanProperty</ja>(properties=<js>"f1"</js>)
+	 * 		<ja>@Beanp</ja>(bpi=<js>"f1"</js>)
 	 * 		<jk>private</jk> MyChildClass <jf>x1</jf>;
 	 *
 	 * 		<jk>public</jk> MyChildClass getX1() {
@@ -283,7 +280,7 @@ public @interface BeanProperty {
 	 * 	}
 	 * </p>
 	 */
-	String properties() default "";
+	String bpi() default "";
 
 	/**
 	 * Bean dictionary.
@@ -298,7 +295,7 @@ public @interface BeanProperty {
 	 * <p>
 	 * This annotation can also be used on private fields of a property.
 	 */
-	Class<?>[] beanDictionary() default {};
+	Class<?>[] dictionary() default {};
 
 	/**
 	 * Specifies a String format for converting the bean property value to a formatted string.
@@ -312,7 +309,7 @@ public @interface BeanProperty {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@BeanProperty</ja>(format=<js>"$%.2f"</js>)
+	 * 	<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
 	 * 	<jk>public float</jk> <jf>price</jf>;
 	 * </p>
 	 *
@@ -323,7 +320,7 @@ public @interface BeanProperty {
 	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
-	 * 		<ja>@BeanProperty</ja>(format=<js>"$%.2f"</js>)
+	 * 		<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
 	 * 		<jk>private float</jk> <jf>price</jf>;
 	 *
 	 * 		<jk>public float</jk> gePrice() {

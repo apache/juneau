@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>In place of <code><ja>@BeanProperty</ja>(name=<js>"foo"</js>)</code> when just the name is specified.
+ * 	<li>In place of <code><ja>@Beanp</ja>(name=<js>"foo"</js>)</code> when just the name is specified.
  * 	<li>On constructor and method arguments when the parameter names are not in the compiled bytecode.
  * </ul>
  *
@@ -33,13 +33,13 @@ import java.lang.annotation.*;
  * 	// The field name can be anything.</jc>
  * 	<jk>public class</jk> MyBean {
  *
- * 		<jc>// Same as @BeanProperty(properties="bar")</jc>
+ * 		<jc>// Same as @Beanp(bpi="bar")</jc>
  * 		<jk>public</jk> MyBean(@Name("bar") <jk>int</jk> foo) {}
  *
- * 		<ja>@Name</ja>(<js>"bar"</js>) <jc>// Same as @BeanProperty(name="bar")</jc>
+ * 		<ja>@Name</ja>(<js>"bar"</js>) <jc>// Same as @Beanp(name="bar")</jc>
  * 		<jk>public int</jk> foo;
  *
- * 		<ja>@Name</ja>(<js>"*"</js>) <jc>// Same as @BeanProperty(name="*")</jc>
+ * 		<ja>@Name</ja>(<js>"*"</js>) <jc>// Same as @Beanp(name="*")</jc>
  * 		<jk>public</jk> Map&lt;String,Object&gt; extraStuff = <jk>new</jk> LinkedHashMap&lt;String,Object&gt;();
  * 	}
  * </p>

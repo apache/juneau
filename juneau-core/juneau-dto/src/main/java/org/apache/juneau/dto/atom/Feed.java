@@ -106,7 +106,7 @@ public class Feed extends CommonEntry {
 	 * @param generator The generator information on this feed.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("generator")
+	@Beanp("generator")
 	public Feed generator(Generator generator) {
 		this.generator = generator;
 		return this;
@@ -127,7 +127,7 @@ public class Feed extends CommonEntry {
 	 * @param icon The feed icon.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("icon")
+	@Beanp("icon")
 	public Feed icon(Icon icon) {
 		this.icon = icon;
 		return this;
@@ -148,7 +148,7 @@ public class Feed extends CommonEntry {
 	 * @param logo The feed logo.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("logo")
+	@Beanp("logo")
 	public Feed logo(Logo logo) {
 		this.logo = logo;
 		return this;
@@ -159,7 +159,7 @@ public class Feed extends CommonEntry {
 	 *
 	 * @return The feed subtitle.
 	 */
-	@BeanProperty("subtitle")
+	@Beanp("subtitle")
 	public Text getSubTitle() {
 		return subtitle;
 	}
@@ -170,7 +170,7 @@ public class Feed extends CommonEntry {
 	 * @param subtitle The feed subtitle.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("subtitle")
+	@Beanp("subtitle")
 	public Feed subtitle(Text subtitle) {
 		this.subtitle = subtitle;
 		return this;
@@ -203,7 +203,7 @@ public class Feed extends CommonEntry {
 	 * @param entries The entries in the feed.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("entries")
+	@Beanp("entries")
 	public Feed entries(Entry...entries) {
 		this.entries = entries;
 		return this;

@@ -434,7 +434,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 			return x;
 		}
 
-		@BeanProperty
+		@Beanp
 		public HBuilder fooBar(int fooBar) {
 			this.fooBar = fooBar;
 			return this;

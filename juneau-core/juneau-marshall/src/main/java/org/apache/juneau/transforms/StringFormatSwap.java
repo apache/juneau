@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Built-in POJO swap implementation class for the {@link BeanProperty#format() @BeanProperty(format)} annotation.
+ * Built-in POJO swap implementation class for the {@link Beanp#format() @Beanp(format)} annotation.
  */
 public class StringFormatSwap extends StringSwap<Object> {
 

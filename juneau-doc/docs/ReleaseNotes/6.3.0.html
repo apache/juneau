@@ -25,7 +25,7 @@
 	<li>
 		New package:  {@link oaj.http}.
 	<li>
-		Support for dynamic beans.  See {@link oaj.annotation.BeanProperty#name() @BeanProperty(name)}.
+		Support for dynamic beans.  See <dc>@BeanProperty(name)</dc>.
 	<li>
 		New doc: <dc>2.8 - Virtual Beans</dc>
 	<li>
@@ -55,7 +55,7 @@
 			<li><dc>ConfigFile.getObjectWithDefault(String,Parser,Object,Class)</dc> 
 		</ul>
 	<li>New ability to interact with config file sections with proxy interfaces with new method <dc>ConfigFile.getSectionAsInterface(String,Class)</dc>.
-	<li>{@link oaj.annotation.BeanProperty @BeanProperty} annotation can now be applied to getters
+	<li><dc>@BeanProperty</dc> annotation can now be applied to getters
 		and setters defined on interfaces.
 	<li>New methods on {@link oaj.serializer.SerializerSession} and {@link oaj.parser.ParserSession}
 		for retrieving context and runtime-override properties:
@@ -113,7 +113,7 @@
 				<li><dc>SerializerContext.SERIALIZER_uriResolution</dc>
 				<li><dc>SerializerContext.SERIALIZER_maxIndent</dc>
 		</ul>
-	<li>New annotation property: {@link oaj.annotation.BeanProperty#value() @BeanProperty(value)}.
+	<li>New annotation property: <dc>@BeanProperty(value)</dc>.
 		<br>The following two annotations are considered equivalent:
 		<p class='bcode w800'>
 	<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
@@ -171,7 +171,7 @@
 			<li>{@link oaj.BeanContext#BEAN_includeProperties BEAN_includeProperties}
 			<li>{@link oaj.BeanContext#BEAN_excludeProperties BEAN_excludeProperties}
 		</ul>
-	<li>New annotation property: {@link oaj.annotation.BeanProperty#format() @BeanProperty(format)}.
+	<li>New annotation property: <dc>@BeanProperty(format)</dc>.
 </ul>
 
 <h5 class='topic w800'>org.apache.juneau.rest</h5>

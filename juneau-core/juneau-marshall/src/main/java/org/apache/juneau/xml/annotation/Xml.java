@@ -89,7 +89,7 @@ public @interface Xml {
 	 *
 	 * 		<jc>// Normally, bean URL properties would be rendered as XML attributes on the bean element.</jc>
 	 * 		<jc>// Override so that it's rendered as an &lt;href&gt;http://foo&lt;/href&gt; child element instead.</jc>
-	 * 		<ja>@BeanProperty</ja>(uri=<jk>true</jk>)
+	 * 		<ja>@@Beanp</ja>(uri=<jk>true</jk>)
 	 * 		<ja>@Xml</ja>(format=XmlFormat.<jsf>ELEMENT</jsf>}
 	 * 		<jk>public</jk> URL <jf>href</jf> = <jk>new</jk> URL(<js>"http://foo"</js>);
 	 *

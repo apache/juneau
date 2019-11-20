@@ -227,7 +227,7 @@ public class CommonTest {
 	}
 
 	//====================================================================================================
-	// @BeanProperty.properties annotation.
+	// @Beanp.bpi annotation.
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperties() throws Exception {
@@ -303,12 +303,12 @@ public class CommonTest {
 	}
 
 	public static class E1 {
-		@BeanProperty(properties="f1") public E2 x1 = new E2();
-		@BeanProperty(properties="f1") public Map<String,Integer> x2 = new AMap<String,Integer>().append("f1",3).append("f2",4);
-		@BeanProperty(properties="f1") public E2[] x3 = {new E2()};
-		@BeanProperty(properties="f1") public List<E2> x4 = new AList<E2>().append(new E2());
-		@BeanProperty(properties="f1") public ObjectMap[] x5 = {new ObjectMap().append("f1",5).append("f2",6)};
-		@BeanProperty(properties="f1") public List<ObjectMap> x6 = new AList<ObjectMap>().append(new ObjectMap().append("f1",7).append("f2",8));
+		@Beanp(bpi="f1") public E2 x1 = new E2();
+		@Beanp(bpi="f1") public Map<String,Integer> x2 = new AMap<String,Integer>().append("f1",3).append("f2",4);
+		@Beanp(bpi="f1") public E2[] x3 = {new E2()};
+		@Beanp(bpi="f1") public List<E2> x4 = new AList<E2>().append(new E2());
+		@Beanp(bpi="f1") public ObjectMap[] x5 = {new ObjectMap().append("f1",5).append("f2",6)};
+		@Beanp(bpi="f1") public List<ObjectMap> x6 = new AList<ObjectMap>().append(new ObjectMap().append("f1",7).append("f2",8));
 	}
 
 	public static class E2 {
@@ -317,7 +317,7 @@ public class CommonTest {
 	}
 
 	//====================================================================================================
-	// @BeanProperty.properties annotation on list of beans.
+	// @Beanp.bpi annotation on list of beans.
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
@@ -343,7 +343,7 @@ public class CommonTest {
 	}
 
 	public static class F {
-		@BeanProperty(properties="x2") public List<F> x1 = new LinkedList<>();
+		@Beanp(bpi="x2") public List<F> x1 = new LinkedList<>();
 		public int x2 = 2;
 	}
 

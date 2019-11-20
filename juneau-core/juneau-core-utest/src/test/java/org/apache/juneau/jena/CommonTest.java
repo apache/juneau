@@ -197,7 +197,7 @@ public class CommonTest {
 	}
 
 	//====================================================================================================
-	// @BeanProperty.properties annotation.
+	// @Beanp.bpi annotation.
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperties() throws Exception {
@@ -213,12 +213,12 @@ public class CommonTest {
 	}
 
 	public static class E1 {
-		@BeanProperty(properties="f1") public E2 x1;
-		@BeanProperty(properties="f1") public Map<String,Integer> x2;
-		@BeanProperty(properties="f1") public E2[] x3;
-		@BeanProperty(properties="f1") public List<E2> x4;
-		@BeanProperty(properties="f1") public ObjectMap[] x5;
-		@BeanProperty(properties="f1") public List<ObjectMap> x6;
+		@Beanp(bpi="f1") public E2 x1;
+		@Beanp(bpi="f1") public Map<String,Integer> x2;
+		@Beanp(bpi="f1") public E2[] x3;
+		@Beanp(bpi="f1") public List<E2> x4;
+		@Beanp(bpi="f1") public ObjectMap[] x5;
+		@Beanp(bpi="f1") public List<ObjectMap> x6;
 
 		public static E1 create() {
 			E1 t = new E1();
@@ -238,7 +238,7 @@ public class CommonTest {
 	}
 
 	//====================================================================================================
-	// @BeanProperty.properties annotation on list of beans.
+	// @Beanp.bpi annotation on list of beans.
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperiesOnListOfBeans() throws Exception {
@@ -256,7 +256,7 @@ public class CommonTest {
 	}
 
 	public static class F {
-		@BeanProperty(properties="x2") public List<F> x1;
+		@Beanp(bpi="x2") public List<F> x1;
 		public int x2;
 
 		public static F create() {

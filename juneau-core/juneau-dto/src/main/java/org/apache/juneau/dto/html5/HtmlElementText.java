@@ -32,7 +32,7 @@ public class HtmlElementText extends HtmlElement {
 	 * @return The inner text of this element, or <jk>null</jk> if no text is set.
 	 */
 	@Xml(format=XmlFormat.TEXT)
-	@BeanProperty("c")
+	@Beanp("c")
 	public Object getText() {
 		return text;
 	}
@@ -43,7 +43,7 @@ public class HtmlElementText extends HtmlElement {
 	 * @param text The inner text of this element, or <jk>null</jk> if no text is set.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("c")
+	@Beanp("c")
 	public HtmlElement setText(Object text) {
 		this.text = text;
 		return this;

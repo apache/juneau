@@ -853,7 +853,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			return KEnum.FOO;
 		}
 
-		@BeanProperty(name="a")
+		@Beanp(name="a")
 		public String getA2() {
 			return a.toString();
 		}

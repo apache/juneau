@@ -91,7 +91,7 @@ public class Logo extends Common {
 	 * @param uri The URI of the logo.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("uri")
+	@Beanp("uri")
 	public Logo uri(Object uri) {
 		this.uri = toURI(uri);
 		return this;

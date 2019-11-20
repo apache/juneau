@@ -301,7 +301,7 @@ public class RestMethodBpiTest {
 
 	public static class MyBeanA {
 		public int a;
-		@BeanProperty("_b") public String b;
+		@Beanp("_b") public String b;
 
 		MyBeanA init() {
 			a = 1;
@@ -313,7 +313,7 @@ public class RestMethodBpiTest {
 	@Bean(properties="_b,a")
 	public static class MyBeanB {
 		public int a;
-		@BeanProperty("_b") public String b;
+		@Beanp("_b") public String b;
 
 		MyBeanB init() {
 			a = 1;

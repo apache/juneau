@@ -61,8 +61,8 @@ public final class BeanPropertyMeta {
 		rawTypeMeta,                                           // The real class type of the bean property.
 		typeMeta;                                              // The transformed class type of the bean property.
 
-	private final String[] properties;                        // The value of the @BeanProperty(properties) annotation.
-	private final PojoSwap swap;                              // PojoSwap defined only via @BeanProperty annotation.
+	private final String[] properties;                        // The value of the @Beanp(properties) annotation.
+	private final PojoSwap swap;                              // PojoSwap defined only via @Beanp annotation.
 
 	private final MetadataMap extMeta;                        // Extended metadata
 	private final BeanRegistry beanRegistry;
@@ -162,6 +162,7 @@ public final class BeanPropertyMeta {
 			return this;
 		}
 
+		@SuppressWarnings("deprecation")
 		boolean validate(BeanContext f, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls) throws Exception {
 
 			List<Class<?>> bdClasses = new ArrayList<>();
@@ -176,17 +177,23 @@ public final class BeanPropertyMeta {
 			canWrite |= (field != null || setter != null);
 
 			if (innerField != null) {
-				BeanProperty p = innerField.getAnnotation(BeanProperty.class);
-				if (field != null || p != null) {
-					// Only use field type if it's a bean property or has @BeanProperty annotation.
+				BeanProperty px = innerField.getAnnotation(BeanProperty.class);
+				Beanp p = innerField.getAnnotation(Beanp.class);
+				if (field != null || px != null || p != null) {
+					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
-					rawTypeMeta = f.resolveClassMeta(p, innerField.getGenericType(), typeVarImpls);
+					rawTypeMeta = f.resolveClassMeta(px, p, innerField.getGenericType(), typeVarImpls);
 					isUri |= (rawTypeMeta.isUri());
 				}
+				if (px != null) {
+					if (! px.properties().isEmpty())
+						properties = split(px.properties());
+					bdClasses.addAll(Arrays.asList(px.beanDictionary()));
+				}
 				if (p != null) {
-					if (! p.properties().isEmpty())
-						properties = split(p.properties());
-					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
+					if (! p.bpi().isEmpty())
+						properties = split(p.bpi());
+					bdClasses.addAll(Arrays.asList(p.dictionary()));
 				}
 				Swap s = innerField.getAnnotation(Swap.class);
 				if (s != null) {
@@ -196,14 +203,20 @@ public final class BeanPropertyMeta {
 			}
 
 			if (getter != null) {
-				BeanProperty p = MethodInfo.of(getter).getAnnotation(BeanProperty.class);
+				BeanProperty px = MethodInfo.of(getter).getAnnotation(BeanProperty.class);
+				Beanp p = MethodInfo.of(getter).getAnnotation(Beanp.class);
 				if (rawTypeMeta == null)
-					rawTypeMeta = f.resolveClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
+					rawTypeMeta = f.resolveClassMeta(px, p, getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
+				if (px != null) {
+					if (properties != null && ! px.properties().isEmpty())
+						properties = split(px.properties());
+					bdClasses.addAll(Arrays.asList(px.beanDictionary()));
+				}
 				if (p != null) {
-					if (properties != null && ! p.properties().isEmpty())
-						properties = split(p.properties());
-					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
+					if (properties != null && ! p.bpi().isEmpty())
+						properties = split(p.bpi());
+					bdClasses.addAll(Arrays.asList(p.dictionary()));
 				}
 				Swap s = getter.getAnnotation(Swap.class);
 				if (s != null && swap == null) {
@@ -212,16 +225,24 @@ public final class BeanPropertyMeta {
 			}
 
 			if (setter != null) {
-				BeanProperty p = MethodInfo.of(setter).getAnnotation(BeanProperty.class);
+				BeanProperty px = MethodInfo.of(setter).getAnnotation(BeanProperty.class);
+				Beanp p = MethodInfo.of(setter).getAnnotation(Beanp.class);
 				if (rawTypeMeta == null)
-					rawTypeMeta = f.resolveClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
+					rawTypeMeta = f.resolveClassMeta(px, p, setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
+				if (px != null) {
+					if (swap == null)
+						swap = getPropertyPojoSwap(px);
+					if (properties != null && ! px.properties().isEmpty())
+						properties = split(px.properties());
+					bdClasses.addAll(Arrays.asList(px.beanDictionary()));
+				}
 				if (p != null) {
 					if (swap == null)
 						swap = getPropertyPojoSwap(p);
-					if (properties != null && ! p.properties().isEmpty())
-						properties = split(p.properties());
-					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
+					if (properties != null && ! p.bpi().isEmpty())
+						properties = split(p.bpi());
+					bdClasses.addAll(Arrays.asList(p.dictionary()));
 				}
 				Swap s = setter.getAnnotation(Swap.class);
 				if (s != null && swap == null) {
@@ -301,7 +322,14 @@ public final class BeanPropertyMeta {
 			return new BeanPropertyMeta(this);
 		}
 
+		@SuppressWarnings("deprecation")
 		private PojoSwap getPropertyPojoSwap(BeanProperty p) throws Exception {
+			if (! p.format().isEmpty())
+				return castOrCreate(PojoSwap.class, StringFormatSwap.class, false, p.format());
+			return null;
+		}
+
+		private PojoSwap getPropertyPojoSwap(Beanp p) throws Exception {
 			if (! p.format().isEmpty())
 				return castOrCreate(PojoSwap.class, StringFormatSwap.class, false, p.format());
 			return null;
@@ -472,7 +500,7 @@ public final class BeanPropertyMeta {
 	 * <p>
 	 * The order of lookup for the dictionary is as follows:
 	 * <ol>
-	 * 	<li>Dictionary defined via {@link BeanProperty#beanDictionary() @BeanProperty(beanDictionary)}.
+	 * 	<li>Dictionary defined via {@link Beanp#dictionary() @Beanp(dictionary)}.
 	 * 	<li>Dictionary defined via {@link BeanContext#BEAN_beanDictionary} context property.
 	 * </ol>
 	 *
@@ -509,7 +537,7 @@ public final class BeanPropertyMeta {
 	}
 
 	/**
-	 * Returns the override list of properties defined through a {@link BeanProperty#properties() @BeanProperty(properties)} annotation
+	 * Returns the override list of properties defined through a {@link Beanp#bpi() @Beanp(bpi)} annotation
 	 * on this property.
 	 *
 	 * @return The list of override properties, or <jk>null</jk> if annotation not specified.
@@ -1116,7 +1144,7 @@ public final class BeanPropertyMeta {
 
 	private Object transform(BeanSession session, Object o) throws SerializeException {
 		try {
-			// First use swap defined via @BeanProperty.
+			// First use swap defined via @Beanp.
 			if (swap != null)
 				return swap.swap(session, o);
 			if (o == null)

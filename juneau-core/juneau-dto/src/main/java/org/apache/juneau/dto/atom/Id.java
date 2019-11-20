@@ -71,7 +71,7 @@ public class Id extends Common {
 	 * @param text The content of this identifier.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("text")
+	@Beanp("text")
 	public Id text(String text) {
 		this.text = text;
 		return this;

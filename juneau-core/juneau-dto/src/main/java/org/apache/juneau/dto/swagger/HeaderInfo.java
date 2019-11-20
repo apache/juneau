@@ -993,7 +993,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty("$ref")
+	@Beanp("$ref")
 	public String getRef() {
 		return ref;
 	}
@@ -1015,7 +1015,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("$ref")
+	@Beanp("$ref")
 	public HeaderInfo setRef(Object value) {
 		ref = StringUtils.stringify(value);
 		return this;
@@ -1038,7 +1038,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty("x-example")
+	@Beanp("x-example")
 	public Object getExample() {
 		return example;
 	}
@@ -1051,7 +1051,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("x-example")
+	@Beanp("x-example")
 	public HeaderInfo setExample(Object value) {
 		example = value;
 		return this;

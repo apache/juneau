@@ -244,7 +244,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Bean#beanDictionary()}
-	 * 			<li class='ja'>{@link BeanProperty#beanDictionary()}
+	 * 			<li class='ja'>{@link Beanp#dictionary()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -1200,7 +1200,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Bean#properties()}
-	 * 			<li class='ja'>{@link BeanProperty#properties()}
+	 * 			<li class='ja'>{@link Beanp#bpi()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -2529,9 +2529,10 @@ public class BeanContext extends Context {
 
 
 	/**
-	 * Used for determining the class type on a method or field where a {@code @BeanProperty} annotation may be present.
+	 * Used for determining the class type on a method or field where a {@code @Beanp} annotation may be present.
 	 *
 	 * @param <T> The class type we're wrapping.
+	 * @param px The property annotation on the type if there is one.
 	 * @param p The property annotation on the type if there is one.
 	 * @param t The type.
 	 * @param typeVarImpls
@@ -2540,9 +2541,39 @@ public class BeanContext extends Context {
 	 * 	Can be <jk>null</jk> if the information is not known.
 	 * @return The new {@code ClassMeta} object wrapped around the {@code Type} object.
 	 */
-	protected final <T> ClassMeta<T> resolveClassMeta(BeanProperty p, Type t, Map<Class<?>,Class<?>[]> typeVarImpls) {
+	@SuppressWarnings("deprecation")
+	protected final <T> ClassMeta<T> resolveClassMeta(BeanProperty px, Beanp p, Type t, Map<Class<?>,Class<?>[]> typeVarImpls) {
 		ClassMeta<T> cm = resolveClassMeta(t, typeVarImpls);
 		ClassMeta<T> cm2 = cm;
+		if (px != null) {
+
+			if (px.type() != Object.class)
+				cm2 = resolveClassMeta(px.type(), typeVarImpls);
+
+			if (cm2.isMap()) {
+				Class<?>[] pParams = (px.params().length == 0 ? new Class[]{Object.class, Object.class} : px.params());
+				if (pParams.length != 2)
+					throw new FormattedRuntimeException("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
+				ClassMeta<?> keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
+				ClassMeta<?> valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
+				if (keyType.isObject() && valueType.isObject())
+					return cm2;
+				return new ClassMeta<>(cm2, keyType, valueType, null);
+			}
+
+			if (cm2.isCollection() || cm2.isOptional()) {
+				Class<?>[] pParams = (px.params().length == 0 ? new Class[]{Object.class} : px.params());
+				if (pParams.length != 1)
+					throw new FormattedRuntimeException("Invalid number of parameters specified for "+(cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array")+" (must be 1): {0}", pParams.length);
+				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
+				if (elementType.isObject())
+					return cm2;
+				return new ClassMeta<>(cm2, null, null, elementType);
+			}
+
+			return cm2;
+		}
+
 		if (p != null) {
 
 			if (p.type() != Object.class)

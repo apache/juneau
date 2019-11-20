@@ -78,7 +78,7 @@ public class Person extends Common {
 	 * @param name The name of the person.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("name")
+	@Beanp("name")
 	public Person name(String name) {
 		this.name = name;
 		return this;
@@ -106,7 +106,7 @@ public class Person extends Common {
 	 * @param uri The URI of the person.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("uri")
+	@Beanp("uri")
 	public Person uri(Object uri) {
 		this.uri = toURI(uri);
 		return this;
@@ -127,7 +127,7 @@ public class Person extends Common {
 	 * @param email The email address of the person.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("email")
+	@Beanp("email")
 	public Person email(String email) {
 		this.email = email;
 		return this;

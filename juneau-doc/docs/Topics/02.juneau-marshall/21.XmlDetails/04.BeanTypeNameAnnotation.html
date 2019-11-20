@@ -120,7 +120,7 @@
 <p>
 	Beans with type names are often used in conjunction with the 
 	{@link oaj.annotation.Bean#beanDictionary() @Bean(beanDictionary)} and 
-	{@link oaj.annotation.BeanProperty#beanDictionary() @BeanProperty(beanDictionary)} 
+	{@link oaj.annotation.Beanp#dictionary() @Beanp(dictionary)} 
 	annotations so that the beans can be resolved at parse time.  
 	These annotations are not necessary during serialization, but are needed during parsing in order to 
 	resolve the bean types.
@@ -473,7 +473,7 @@
 		<td class='code'>
 	<ja>@Bean</ja>(typeName=<js>"  \b\f\n\t\r  "</js>)
 	<jk>class</jk> BeanWithNamesWithSpecialCharacters {
-		<ja>@BeanProperty</ja>(name=<js>"  \b\f\n\t\r  "</js>)
+		<ja>@Beanp</ja>(name=<js>"  \b\f\n\t\r  "</js>)
 		<jk>public</jk> String a = <js>"  \b\f\n\t\r  "</js>;
 	}
 		</td>

@@ -72,7 +72,7 @@ public class Source extends CommonEntry {
 	 * @param generator The generator info of this source.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("generator")
+	@Beanp("generator")
 	public Source generator(Generator generator) {
 		this.generator = generator;
 		return this;
@@ -93,7 +93,7 @@ public class Source extends CommonEntry {
 	 * @param icon The icon of this source.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("icon")
+	@Beanp("icon")
 	public Source icon(Icon icon) {
 		this.icon = icon;
 		return this;
@@ -114,7 +114,7 @@ public class Source extends CommonEntry {
 	 * @param logo The logo of this source.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("logo")
+	@Beanp("logo")
 	public Source logo(Logo logo) {
 		this.logo = logo;
 		return this;
@@ -135,7 +135,7 @@ public class Source extends CommonEntry {
 	 * @param subtitle The subtitle of this source.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("subtitle")
+	@Beanp("subtitle")
 	public Source subtitle(Text subtitle) {
 		this.subtitle = subtitle;
 		return this;
@@ -147,7 +147,7 @@ public class Source extends CommonEntry {
 	 * @param subtitle The subtitle of this source.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("subtitle")
+	@Beanp("subtitle")
 	public Source subtitle(String subtitle) {
 		this.subtitle = new Text(subtitle);
 		return this;

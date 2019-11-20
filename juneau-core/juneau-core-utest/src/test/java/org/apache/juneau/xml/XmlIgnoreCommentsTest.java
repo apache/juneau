@@ -814,11 +814,11 @@ public class XmlIgnoreCommentsTest {
 	}
 
 	public static class BeanWithMapProperties {
-		@BeanProperty(type=MapWithStrings.class)
+		@Beanp(type=MapWithStrings.class)
 		public Map<String,String> a;
-		@BeanProperty(type=MapWithNumbers.class)
+		@Beanp(type=MapWithNumbers.class)
 		public Map<String,Number> b;
-		@BeanProperty(type=MapWithObjects.class)
+		@Beanp(type=MapWithObjects.class)
 		public Map<String,Object> c;
 
 		BeanWithMapProperties init() {
@@ -907,10 +907,10 @@ public class XmlIgnoreCommentsTest {
 
 	public static class BeanWithChildTypeNames {
 		public BeanX a;
-		@BeanProperty(beanDictionary=BeanX.class)
+		@Beanp(dictionary=BeanX.class)
 		public Object b;
 		public BeanX[] c;
-		@BeanProperty(beanDictionary=BeanX.class)
+		@Beanp(dictionary=BeanX.class)
 		public Object[] d;
 		BeanWithChildTypeNames init() {
 			a = new BeanX().init();
@@ -1030,7 +1030,7 @@ public class XmlIgnoreCommentsTest {
 
 	public static class BeanWithMixedContent {
 		@Xml(format=XmlFormat.MIXED)
-		@BeanProperty(beanDictionary={BeanXSimple.class, BeanYSimple.class})
+		@Beanp(dictionary={BeanXSimple.class, BeanYSimple.class})
 		public Object[] a;
 		BeanWithMixedContent init() {
 			a = new Object[]{
@@ -1094,7 +1094,7 @@ public class XmlIgnoreCommentsTest {
 	@Bean(typeName="  \b\f\n\t\r  ")
 	public static class BeanWithSpecialCharacters2 {
 
-		@BeanProperty(name="  \b\f\n\t\r  ")
+		@Beanp(name="  \b\f\n\t\r  ")
 		public String a;
 
 		BeanWithSpecialCharacters2 init() {

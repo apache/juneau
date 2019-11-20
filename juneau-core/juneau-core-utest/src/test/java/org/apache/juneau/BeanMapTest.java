@@ -559,7 +559,7 @@ public class BeanMapTest {
 	}
 
 	//====================================================================================================
-	// @BeanProperty tests
+	// @Beanp tests
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyAnnotation() throws Exception {
@@ -620,10 +620,10 @@ public class BeanMapTest {
 
 		public List<G> l2 = new LinkedList<>();
 
-		@BeanProperty(type=List.class,params={G.class})
+		@Beanp(type=List.class,params={G.class})
 		public List<G> l3;
 
-		@BeanProperty(type=LinkedList.class,params={G.class})
+		@Beanp(type=LinkedList.class,params={G.class})
 		public List<G> l4;
 
 		private List<G> m1;
@@ -635,16 +635,16 @@ public class BeanMapTest {
 		public void setM2(List<G> m2) { this.m2 = m2; }
 
 		private List<G> m3;
-		@BeanProperty(type=List.class,params={G.class})
+		@Beanp(type=List.class,params={G.class})
 		public List<G> getM3() { return m3; }
 		public void setM3(List<G> m3) { this.m3 = m3; }
 
 		private List<G> m4;
-		@BeanProperty(type=LinkedList.class,params={G.class})
+		@Beanp(type=LinkedList.class,params={G.class})
 		public List<G> getM4() { return m4; }
 		public void setM4(List<G> m4) { this.m4 = m4; }
 
-		@BeanProperty(type=LinkedList.class,params={G.class})
+		@Beanp(type=LinkedList.class,params={G.class})
 		private List<G> m5;
 		public List<G> getM5() { return m5; }
 		public void setM5(List<G> m5) { this.m5 = m5; }
@@ -755,26 +755,26 @@ public class BeanMapTest {
 
 	public static class J {
 
-		@BeanProperty(params={Float.class})
+		@Beanp(params={Float.class})
 		public List<String> p1;
 
-		@BeanProperty(params={Float.class})
+		@Beanp(params={Float.class})
 		public List<Integer> getP2() {
 			return null;
 		}
 
-		@BeanProperty(params={Float.class})
+		@Beanp(params={Float.class})
 		public List<? extends Integer> p3;
 
-		@BeanProperty(params={Object.class, Float.class})
+		@Beanp(params={Object.class, Float.class})
 		public Map<String,Integer> p4;
 
-		@BeanProperty(params={Object.class, Float.class})
+		@Beanp(params={Object.class, Float.class})
 		public Map<String,Integer> getP5() {
 			return null;
 		}
 
-		@BeanProperty(params={String.class, Float.class})
+		@Beanp(params={String.class, Float.class})
 		public Map<String,? extends Integer> p6;
 	}
 
@@ -797,26 +797,26 @@ public class BeanMapTest {
 
 	public static class K {
 
-		@BeanProperty(params=Float.class)
+		@Beanp(params=Float.class)
 		public List<String> p1;
 
-		@BeanProperty(params=Float.class)
+		@Beanp(params=Float.class)
 		public List<Integer> getP2() {
 			return null;
 		}
 
-		@BeanProperty(params=Float.class)
+		@Beanp(params=Float.class)
 		public List<? extends Integer> p3;
 
-		@BeanProperty(params={String.class,Float.class})
+		@Beanp(params={String.class,Float.class})
 		public Map<String,Integer> p4;
 
-		@BeanProperty(params={String.class,Float.class})
+		@Beanp(params={String.class,Float.class})
 		public Map<String,Integer> getP5() {
 			return null;
 		}
 
-		@BeanProperty(params={String.class,Float.class})
+		@Beanp(params={String.class,Float.class})
 		public Map<String,? extends Integer> p6;
 	}
 

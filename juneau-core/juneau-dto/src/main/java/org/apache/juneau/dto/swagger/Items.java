@@ -971,7 +971,7 @@ public class Items extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty("$ref")
+	@Beanp("$ref")
 	public String getRef() {
 		return ref;
 	}
@@ -993,7 +993,7 @@ public class Items extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("$ref")
+	@Beanp("$ref")
 	public Items setRef(Object value) {
 		ref = StringUtils.stringify(value);
 		return this;

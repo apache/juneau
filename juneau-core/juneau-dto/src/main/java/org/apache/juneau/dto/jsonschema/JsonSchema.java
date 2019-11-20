@@ -144,7 +144,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>$schema</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty("$schema")
+	@Beanp("$schema")
 	public URI getSchemaVersionUri() {
 		return schemaVersion;
 	}
@@ -162,7 +162,7 @@ public class JsonSchema {
 	 * @param schemaVersion The new value for the <property>schemaVersion</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("$schema")
+	@Beanp("$schema")
 	public JsonSchema setSchemaVersionUri(Object schemaVersion) {
 		this.schemaVersion = toURI(schemaVersion);
 		return this;
@@ -1140,7 +1140,7 @@ public class JsonSchema {
 	 * @return This object (for method chaining).
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
-	@BeanProperty(beanDictionary={JsonSchema.class})
+	@Beanp(dictionary={JsonSchema.class})
 	public JsonSchema setAdditionalProperties(Object additionalProperties) {
 		this.additionalPropertiesBoolean = null;
 		this.additionalPropertiesSchema = null;
@@ -1357,7 +1357,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>$ref</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty("$ref")
+	@Beanp("$ref")
 	public URI getRef() {
 		return ref;
 	}
@@ -1375,7 +1375,7 @@ public class JsonSchema {
 	 * @param ref The new value for the <property>$ref</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("$ref")
+	@Beanp("$ref")
 	public JsonSchema setRef(Object ref) {
 		this.ref = toURI(ref);
 		return this;

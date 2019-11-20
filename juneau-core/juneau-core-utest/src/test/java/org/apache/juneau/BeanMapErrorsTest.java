@@ -23,7 +23,7 @@ import org.junit.*;
 public class BeanMapErrorsTest {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @BeanProperty(name) on method not in @Bean(properties)
+	// @Beanp(name) on method not in @Bean(properties)
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void beanPropertyMethodNotInBeanProperties() {
@@ -33,7 +33,7 @@ public class BeanMapErrorsTest {
 			bc.getClassMeta(A1.class);
 			fail();
 		} catch (Exception e) {
-			assertEquals("org.apache.juneau.BeanMapErrorsTest$A1: Found @BeanProperty(\"f2\") but name was not found in @Bean(properties)", e.getMessage());
+			assertEquals("org.apache.juneau.BeanMapErrorsTest$A1: Found @Beanp(\"f2\") but name was not found in @Bean(properties)", e.getMessage());
 		}
 	}
 
@@ -41,14 +41,14 @@ public class BeanMapErrorsTest {
 	public static class A1 {
 		public int f1;
 
-		@BeanProperty("f2")
+		@Beanp("f2")
 		public int f2() {
 			return -1;
 		};
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @BeanProperty(name) on field not in @Bean(properties)
+	// @Beanp(name) on field not in @Bean(properties)
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void beanPropertyFieldNotInBeanProperties() {
@@ -58,14 +58,14 @@ public class BeanMapErrorsTest {
 			bc.getClassMeta(A2.class);
 			fail();
 		} catch (Exception e) {
-			assertEquals("org.apache.juneau.BeanMapErrorsTest$A2: Found @BeanProperty(\"f2\") but name was not found in @Bean(properties)", e.getMessage());
+			assertEquals("org.apache.juneau.BeanMapErrorsTest$A2: Found @Beanp(\"f2\") but name was not found in @Bean(properties)", e.getMessage());
 		}
 	}
 	@Bean(properties="f1")
 	public static class A2 {
 		public int f1;
 
-		@BeanProperty("f2")
+		@Beanp("f2")
 		public int f2;
 	}
 }

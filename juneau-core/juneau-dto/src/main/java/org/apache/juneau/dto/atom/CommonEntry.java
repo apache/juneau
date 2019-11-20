@@ -86,7 +86,7 @@ public class CommonEntry extends Common {
 	 * @param authors The list of authors for this object.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("authors")
+	@Beanp("authors")
 	public CommonEntry authors(Person...authors) {
 		this.authors = authors;
 		return this;
@@ -108,7 +108,7 @@ public class CommonEntry extends Common {
 	 * @param categories The list of categories of this object.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("categories")
+	@Beanp("categories")
 	public CommonEntry categories(Category...categories) {
 		this.categories = categories;
 		return this;
@@ -130,7 +130,7 @@ public class CommonEntry extends Common {
 	 * @param contributors The list of contributors of this object.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("contributors")
+	@Beanp("contributors")
 	public CommonEntry contributors(Person...contributors) {
 		this.contributors = contributors;
 		return this;
@@ -151,7 +151,7 @@ public class CommonEntry extends Common {
 	 * @param id The ID of this object.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("id")
+	@Beanp("id")
 	public CommonEntry id(Id id) {
 		this.id = id;
 		return this;
@@ -184,7 +184,7 @@ public class CommonEntry extends Common {
 	 * @param links The list of links of this object.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("links")
+	@Beanp("links")
 	public CommonEntry links(Link...links) {
 		this.links = links;
 		return this;
@@ -205,7 +205,7 @@ public class CommonEntry extends Common {
 	 * @param rights The rights statement of this object.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("rights")
+	@Beanp("rights")
 	public CommonEntry rights(Text rights) {
 		this.rights = rights;
 		return this;
@@ -237,7 +237,7 @@ public class CommonEntry extends Common {
 	 * @param title The title of this object.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("title")
+	@Beanp("title")
 	public CommonEntry title(Text title) {
 		this.title = title;
 		return this;
@@ -269,7 +269,7 @@ public class CommonEntry extends Common {
 	 * @param updated The update timestamp of this object.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("updated")
+	@Beanp("updated")
 	public CommonEntry updated(Calendar updated) {
 		this.updated = updated;
 		return this;
@@ -281,7 +281,7 @@ public class CommonEntry extends Common {
 	 * @param updated The update timestamp of this object in ISO8601 format.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("updated")
+	@Beanp("updated")
 	public CommonEntry updated(String updated) {
 		this.updated = parseDateTime(updated);
 		return this;

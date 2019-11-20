@@ -51,7 +51,7 @@ import org.apache.juneau.utils.*;
  * 		<ul>
  * 			<li>Public fields (same order as {@code Class.getFields()}).
  * 			<li>Properties returned by {@code BeanInfo.getPropertyDescriptors()}.
- * 			<li>Non-standard getters/setters with {@link BeanProperty @BeanProperty} annotation defined on them.
+ * 			<li>Non-standard getters/setters with {@link Beanp @Beanp} annotation defined on them.
  * 		</ul>
  * </ul>
  *
@@ -163,6 +163,7 @@ public class BeanMeta<T> {
 			this.pNames = pNames;
 		}
 
+		@SuppressWarnings("deprecation")
 		String init(BeanMeta<T> beanMeta) {
 			Class<?> c = classMeta.getInnerClass();
 			ClassInfo ci = classMeta.getInfo();
@@ -326,6 +327,9 @@ public class BeanMeta<T> {
 								if (m.getAnnotation(BeanProperty.class) == null && bpm.getter.getAnnotation(BeanProperty.class) != null)
 									m = bpm.getter;  // @BeanProperty annotated method takes precedence.
 
+								else if (m.getAnnotation(Beanp.class) == null && bpm.getter.getAnnotation(Beanp.class) != null)
+									m = bpm.getter;  // @Beanp annotated method takes precedence.
+
 								else if (m.getName().startsWith("is") && bpm.getter.getName().startsWith("get"))
 									m = bpm.getter;  // getX() overrides isX().
 							}
@@ -485,9 +489,11 @@ public class BeanMeta<T> {
 		 * Returns null if the field isn't a valid property.
 		 */
 		private String findPropertyName(Field f, Set<String> fixedBeanProps) {
-			BeanProperty bp = f.getAnnotation(BeanProperty.class);
+			@SuppressWarnings("deprecation")
+			BeanProperty px = f.getAnnotation(BeanProperty.class);
+			Beanp p = f.getAnnotation(Beanp.class);
 			Name n = f.getAnnotation(Name.class);
-			String name = bpName(bp, n);
+			String name = bpName(px, p, n);
 			if (isNotEmpty(name)) {
 				if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
 					return name;
@@ -624,9 +630,11 @@ public class BeanMeta<T> {
 				if (bi != null)
 					continue;
 
-				BeanProperty bp = m.getAnnotation(BeanProperty.class);
+				@SuppressWarnings("deprecation")
+				BeanProperty px = m.getAnnotation(BeanProperty.class);
+				Beanp p = m.getAnnotation(Beanp.class);
 				Name n2 = m.getAnnotation(Name.class);
-				if (! (m.isVisible(v) || bp != null || n2 != null))
+				if (! (m.isVisible(v) || px != null || p != null || n2 != null))
 					continue;
 
 				String n = m.getSimpleName();
@@ -634,10 +642,10 @@ public class BeanMeta<T> {
 				List<ClassInfo> pt = m.getParamTypes();
 				ClassInfo rt = m.getReturnType();
 				MethodType methodType = UNKNOWN;
-				String bpName = bpName(bp, n2);
+				String bpName = bpName(px, p, n2);
 
 				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
-					throw new BeanRuntimeException(c, "Found @BeanProperty(\"{0}\") but name was not found in @Bean(properties)", bpName);
+					throw new BeanRuntimeException(c, "Found @Beanp(\"{0}\") but name was not found in @Bean(properties)", bpName);
 
 				if (pt.size() == 0) {
 					if ("*".equals(bpName)) {
@@ -702,7 +710,7 @@ public class BeanMeta<T> {
 				n = pn.getPropertyName(n);
 
 				if ("*".equals(bpName) && methodType == UNKNOWN)
-					throw new BeanRuntimeException(c, "Found @BeanProperty(\"*\") but could not determine method type on method ''{0}''.", m.getSimpleName());
+					throw new BeanRuntimeException(c, "Found @Beanp(\"*\") but could not determine method type on method ''{0}''.", m.getSimpleName());
 
 				if (methodType != UNKNOWN) {
 					if (bpName != null && ! bpName.isEmpty()) {
@@ -728,15 +736,17 @@ public class BeanMeta<T> {
 				if (f.hasAnnotation(BeanIgnore.class))
 					continue;
 
-				BeanProperty bp = f.getAnnotation(BeanProperty.class);
+				@SuppressWarnings("deprecation")
+				BeanProperty px = f.getAnnotation(BeanProperty.class);
+				Beanp p = f.getAnnotation(Beanp.class);
 				Name n = f.getAnnotation(Name.class);
-				String bpName = bpName(bp, n);
+				String bpName = bpName(px, p, n);
 
-				if (! (v.isVisible(f.inner()) || bp != null))
+				if (! (v.isVisible(f.inner()) || px != null || p != null))
 					continue;
 
 				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
-					throw new BeanRuntimeException(c, "Found @BeanProperty(\"{0}\") but name was not found in @Bean(properties)", bpName);
+					throw new BeanRuntimeException(c, "Found @Beanp(\"{0}\") but name was not found in @Bean(properties)", bpName);
 
 				l.add(f.inner());
 			}
@@ -906,16 +916,23 @@ public class BeanMeta<T> {
 		}
 	}
 
-	static final String bpName(BeanProperty bp, Name n) {
-		if (bp == null && n == null)
+	@SuppressWarnings("deprecation")
+	static final String bpName(BeanProperty px, Beanp p, Name n) {
+		if (px == null && p == null && n == null)
 			return null;
 		if (n != null)
 			return n.value();
-		if (bp == null)
-			return null;
-		if (! bp.name().isEmpty())
-			return bp.name();
-		return bp.value();
+		if (p != null) {
+			if (! p.name().isEmpty())
+				return p.name();
+			return p.value();
+		}
+		if (px != null) {
+			if (! px.name().isEmpty())
+				return px.name();
+			return px.value();
+		}
+		return null;
 	}
 
 	@Override /* Object */

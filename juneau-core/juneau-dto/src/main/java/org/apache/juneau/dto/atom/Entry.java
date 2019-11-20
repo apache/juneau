@@ -100,7 +100,7 @@ public class Entry extends CommonEntry {
 	 * @param content The content of this entry.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("content")
+	@Beanp("content")
 	public Entry content(Content content) {
 		this.content = content;
 		return this;
@@ -121,7 +121,7 @@ public class Entry extends CommonEntry {
 	 * @param published The publish timestamp of this entry.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("published")
+	@Beanp("published")
 	public Entry published(Calendar published) {
 		this.published = published;
 		return this;
@@ -133,7 +133,7 @@ public class Entry extends CommonEntry {
 	 * @param published The publish timestamp of this entry in ISO8601 format.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("published")
+	@Beanp("published")
 	public Entry published(String published) {
 		this.published = parseDateTime(published);
 		return this;
@@ -154,7 +154,7 @@ public class Entry extends CommonEntry {
 	 * @param source The source of this entry.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("source")
+	@Beanp("source")
 	public Entry source(Source source) {
 		this.source = source;
 		return this;
@@ -175,7 +175,7 @@ public class Entry extends CommonEntry {
 	 * @param summary The summary of this entry.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("summary")
+	@Beanp("summary")
 	public Entry summary(Text summary) {
 		this.summary = summary;
 		return this;
@@ -187,7 +187,7 @@ public class Entry extends CommonEntry {
 	 * @param summary The summary of this entry.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("summary")
+	@Beanp("summary")
 	public Entry summary(String summary) {
 		this.summary = new Text(summary);
 		return this;

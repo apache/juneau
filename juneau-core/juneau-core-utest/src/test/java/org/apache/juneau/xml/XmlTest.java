@@ -294,7 +294,7 @@ public class XmlTest {
 
 	@Bean(typeName="foo")
 	public static class J1 {
-		@BeanProperty(properties="f2") public List<J2> f1 = new AList<J2>().append(new J2());
+		@Beanp(bpi="f2") public List<J2> f1 = new AList<J2>().append(new J2());
 	}
 
 	@Bean(typeName="bar")
@@ -475,8 +475,8 @@ public class XmlTest {
 
 	@Bean(properties="url2,id2,name")
 	public static class O {
-		@BeanProperty(name="url2") @Xml(format=ELEMENT) public URL url;
-		@BeanProperty(name="id2") public int id;
+		@Beanp(name="url2") @Xml(format=ELEMENT) public URL url;
+		@Beanp(name="id2") public int id;
 		public String name;
 		public O() {}
 		public O(String url, int id, String name) throws Exception {
@@ -508,8 +508,8 @@ public class XmlTest {
 
 	@Bean(properties="url2,id2,name")
 	public static class P {
-		@BeanProperty(name="url2") @Xml(format=ATTR) public URL url;
-		@BeanProperty(name="id2") @Xml(format=ATTR) public int id;
+		@Beanp(name="url2") @Xml(format=ATTR) public URL url;
+		@Beanp(name="id2") @Xml(format=ATTR) public int id;
 		public String name;
 		public P() {}
 		public P(String url, int id, String name) throws Exception {
@@ -1022,7 +1022,7 @@ public class XmlTest {
 		@Xml(format=ATTR)
 		public String f2;
 
-		@BeanProperty(name="x3")
+		@Beanp(name="x3")
 		@Xml(format=ATTR, prefix="nsf3", namespace="http://nsf3")
 		public String f3;
 

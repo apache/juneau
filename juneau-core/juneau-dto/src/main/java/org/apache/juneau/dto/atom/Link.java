@@ -86,7 +86,7 @@ public class Link extends Common {
 	 * @param href The href of the target of this link.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("href")
+	@Beanp("href")
 	public Link href(String href) {
 		this.href = href;
 		return this;
@@ -108,7 +108,7 @@ public class Link extends Common {
 	 * @param rel The rel of this link.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("rel")
+	@Beanp("rel")
 	public Link rel(String rel) {
 		this.rel = rel;
 		return this;
@@ -139,7 +139,7 @@ public class Link extends Common {
 	 * @param type The content type of the target of this link.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("type")
+	@Beanp("type")
 	public Link type(String type) {
 		this.type = type;
 		return this;
@@ -161,7 +161,7 @@ public class Link extends Common {
 	 * @param hreflang The language of the target of this link.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("hreflang")
+	@Beanp("hreflang")
 	public Link hreflang(String hreflang) {
 		this.hreflang = hreflang;
 		return this;
@@ -183,7 +183,7 @@ public class Link extends Common {
 	 * @param title The title of the target of this link.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("title")
+	@Beanp("title")
 	public Link title(String title) {
 		this.title = title;
 		return this;
@@ -205,7 +205,7 @@ public class Link extends Common {
 	 * @param length The length of the contents of the target of this link.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("length")
+	@Beanp("length")
 	public Link length(Integer length) {
 		this.length = length;
 		return this;

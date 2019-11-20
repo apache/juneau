@@ -72,7 +72,7 @@ public abstract class Common {
 	 * @param base The URI base of this object.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("base")
+	@Beanp("base")
 	public Common base(Object base) {
 		this.base = toURI(base);
 		return this;
@@ -94,7 +94,7 @@ public abstract class Common {
 	 * @param lang The language of this object.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("lang")
+	@Beanp("lang")
 	public Common lang(String lang) {
 		this.lang = lang;
 		return this;

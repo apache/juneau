@@ -499,3 +499,4 @@ rollback
 enablement
 stacktraces
 timezones
+beanp

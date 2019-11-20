@@ -101,7 +101,7 @@ public abstract class SwaggerElement {
 	 * @param property The property name to retrieve.
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
 	 */
-	@BeanProperty("*")
+	@Beanp("*")
 	public Object get(String property) {
 		if (property == null || extra == null)
 			return null;
@@ -118,7 +118,7 @@ public abstract class SwaggerElement {
 	 * @param value The new value for the property.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("*")
+	@Beanp("*")
 	public SwaggerElement set(String property, Object value) {
 		if (property == null)
 			return this;
@@ -139,7 +139,7 @@ public abstract class SwaggerElement {
 	 * 	All the non-standard keys on this element.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	@BeanProperty("*")
+	@Beanp("*")
 	public Set<String> extraKeys() {
 		return extra == null ? Collections.emptySet() : extra.keySet();
 	}
