@@ -413,6 +413,42 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public OpenApiSerializerBuilder bpi(Class<?> beanClass, String value) {
+		super.bpi(beanClass, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OpenApiSerializerBuilder bpi(Map<String,String> values) {
+		super.bpi(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OpenApiSerializerBuilder bpi(String beanClassName, String value) {
+		super.bpi(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OpenApiSerializerBuilder bpx(Class<?> beanClass, String properties) {
+		super.bpx(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OpenApiSerializerBuilder bpx(Map<String,String> values) {
+		super.bpx(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OpenApiSerializerBuilder bpx(String beanClassName, String value) {
+		super.bpx(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public OpenApiSerializerBuilder debug() {
 		super.debug();
 		return this;

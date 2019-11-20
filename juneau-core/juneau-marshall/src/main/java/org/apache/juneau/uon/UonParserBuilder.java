@@ -361,6 +361,42 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonParserBuilder bpi(Class<?> beanClass, String value) {
+		super.bpi(beanClass, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonParserBuilder bpi(Map<String,String> values) {
+		super.bpi(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonParserBuilder bpi(String beanClassName, String value) {
+		super.bpi(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonParserBuilder bpx(Class<?> beanClass, String properties) {
+		super.bpx(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonParserBuilder bpx(Map<String,String> values) {
+		super.bpx(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonParserBuilder bpx(String beanClassName, String value) {
+		super.bpx(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonParserBuilder debug() {
 		super.debug();
 		return this;

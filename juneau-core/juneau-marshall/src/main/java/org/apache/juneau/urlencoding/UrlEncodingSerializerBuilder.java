@@ -475,6 +475,42 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpi(Class<?> beanClass, String value) {
+		super.bpi(beanClass, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpi(Map<String,String> values) {
+		super.bpi(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpi(String beanClassName, String value) {
+		super.bpi(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpx(Class<?> beanClass, String properties) {
+		super.bpx(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpx(Map<String,String> values) {
+		super.bpx(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpx(String beanClassName, String value) {
+		super.bpx(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder debug() {
 		super.debug();
 		return this;

@@ -250,6 +250,42 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder bpi(Class<?> beanClass, String value) {
+		super.bpi(beanClass, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder bpi(Map<String,String> values) {
+		super.bpi(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder bpi(String beanClassName, String value) {
+		super.bpi(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder bpx(Class<?> beanClass, String properties) {
+		super.bpx(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder bpx(Map<String,String> values) {
+		super.bpx(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder bpx(String beanClassName, String value) {
+		super.bpx(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder debug() {
 		super.debug();
 		return this;

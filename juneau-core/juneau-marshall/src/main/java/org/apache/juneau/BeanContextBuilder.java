@@ -620,6 +620,114 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Bean property includes.
+	 *
+	 * <p>
+	 * Specifies the set and order of names of properties associated with the bean class.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * </ul>
+	 *
+	 * @param beanClass The bean class.
+	 * @param value Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder bpi(Class<?> beanClass, String value) {
+		return addTo(BEAN_includeProperties, beanClass.getName(), value);
+	}
+
+	/**
+	 * Configuration property:  Bean property includes.
+	 *
+	 * <p>
+	 * Specifies the set and order of names of properties associated with the bean class.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * </ul>
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder bpi(Map<String,String> values) {
+		return set(BEAN_includeProperties, values);
+	}
+
+	/**
+	 * Configuration property:  Bean property includes.
+	 *
+	 * <p>
+	 * Specifies the set and order of names of properties associated with the bean class.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * </ul>
+	 *
+	 * @param beanClassName
+	 * 	The bean class name.
+	 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
+	 * @param value Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder bpi(String beanClassName, String value) {
+		return addTo(BEAN_includeProperties, beanClassName, value);
+	}
+
+	/**
+	 * Configuration property:  Bean property excludes.
+	 *
+	 * <p>
+	 * Specifies to exclude the specified list of properties for the specified bean class.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * </ul>
+	 *
+	 * @param beanClass The bean class.
+	 * @param properties Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder bpx(Class<?> beanClass, String properties) {
+		return addTo(BEAN_excludeProperties, beanClass.getName(), properties);
+	}
+
+	/**
+	 * Configuration property:  Bean property excludes.
+	 *
+	 * <p>
+	 * Specifies to exclude the specified list of properties for the specified bean classes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder bpx(Map<String,String> values) {
+		return set(BEAN_excludeProperties, values);
+	}
+
+	/**
+	 * Configuration property:  Bean property excludes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * </ul>
+	 *
+	 * @param beanClassName
+	 * 	The bean class name.
+	 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all bean classes.
+	 * @param value Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder bpx(String beanClassName, String value) {
+		return addTo(BEAN_excludeProperties, beanClassName, value);
+	}
+
+	/**
 	 * Configuration property:  Debug mode.
 	 *
 	 * <p>
@@ -846,7 +954,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param beanClass The bean class.
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #bpx(Class, String)}
 	 */
+	@Deprecated
 	public BeanContextBuilder excludeProperties(Class<?> beanClass, String properties) {
 		return addTo(BEAN_excludeProperties, beanClass.getName(), properties);
 	}
@@ -864,7 +974,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #bpx(Map)}
 	 */
+	@Deprecated
 	public BeanContextBuilder excludeProperties(Map<String,String> values) {
 		return set(BEAN_excludeProperties, values);
 	}
@@ -881,7 +993,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all bean classes.
 	 * @param value Comma-delimited list of property names.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #bpx(String, String)}
 	 */
+	@Deprecated
 	public BeanContextBuilder excludeProperties(String beanClassName, String value) {
 		return addTo(BEAN_excludeProperties, beanClassName, value);
 	}
@@ -1125,7 +1239,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param beanClass The bean class.
 	 * @param value Comma-delimited list of property names.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #bpi(Class, String)}
 	 */
+	@Deprecated
 	public BeanContextBuilder includeProperties(Class<?> beanClass, String value) {
 		return addTo(BEAN_includeProperties, beanClass.getName(), value);
 	}
@@ -1142,7 +1258,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #bpi(Map)}
 	 */
+	@Deprecated
 	public BeanContextBuilder includeProperties(Map<String,String> values) {
 		return set(BEAN_includeProperties, values);
 	}
@@ -1162,7 +1280,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
 	 * @param value Comma-delimited list of property names.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #bpi(String, String)}
 	 */
+	@Deprecated
 	public BeanContextBuilder includeProperties(String beanClassName, String value) {
 		return addTo(BEAN_includeProperties, beanClassName, value);
 	}
