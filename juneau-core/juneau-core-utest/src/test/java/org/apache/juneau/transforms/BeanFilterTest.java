@@ -173,7 +173,7 @@ public class BeanFilterTest {
 		public int getP2() { return 2; }
 	}
 
-	@Bean(excludeProperties="foo")
+	@Bean(bpx="foo")
 	public class E3 extends E2 {
 		public int f3 = 3;
 		public int getP3() { return 3; }

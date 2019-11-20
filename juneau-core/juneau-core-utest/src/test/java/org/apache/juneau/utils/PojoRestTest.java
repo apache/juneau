@@ -220,7 +220,7 @@ public class PojoRestTest {
 		}
 	}
 
-	@Bean(properties="street,city,state,zip,isCurrent")
+	@Bean(bpi="street,city,state,zip,isCurrent")
 	public static class Address {
 		public String street;
 		public String city;
@@ -243,7 +243,7 @@ public class PojoRestTest {
 		}
 	}
 
-	@Bean(typeName="Person",properties="name,age,addresses")
+	@Bean(typeName="Person",bpi="name,age,addresses")
 	public static class Person {
 		public String name;
 		public int age;

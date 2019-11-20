@@ -57,7 +57,7 @@ public class RoundTripGenericsTest extends RoundTripTest {
 	}
 
 	// Class with unbound type variables.
-	@Bean(properties="s,t")
+	@Bean(bpi="s,t")
 	public static class Pair<S,T> {
 		private S s;
 		private T t;

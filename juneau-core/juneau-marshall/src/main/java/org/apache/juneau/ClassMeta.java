@@ -55,7 +55,7 @@ import org.apache.juneau.utils.*;
  *
  * @param <T> The class type of the wrapped class.
  */
-@Bean(properties="innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
+@Bean(bpi="innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
 public final class ClassMeta<T> implements Type {
 
 	/** Class categories. */

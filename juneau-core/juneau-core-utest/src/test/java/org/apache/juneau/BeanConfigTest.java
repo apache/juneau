@@ -406,7 +406,7 @@ public class BeanConfigTest {
 	}
 
 
-	@Bean(properties="name,age")
+	@Bean(bpi="name,age")
 	public static class ReadOnlyPerson {
 		private final String name;
 		private final int age;

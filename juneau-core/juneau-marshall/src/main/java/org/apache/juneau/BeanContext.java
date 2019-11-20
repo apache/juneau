@@ -859,7 +859,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#excludeProperties()}
+	 * 			<li class='ja'>{@link Bean#bpx()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -1199,7 +1199,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#properties()}
+	 * 			<li class='ja'>{@link Bean#bpi()}
 	 * 			<li class='ja'>{@link Beanp#bpi()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>

@@ -158,7 +158,7 @@ public class XmlTest {
 	}
 
 	/** Class with explicitly specified properties */
-	@Bean(typeName="Person1", properties="name,age")
+	@Bean(typeName="Person1", bpi="name,age")
 	public static class Person1 {
 		public int age;
 		private String name;
@@ -440,7 +440,7 @@ public class XmlTest {
 		validateXml(t, s);
 	}
 
-	@Bean(properties="url,id,name")
+	@Bean(bpi="url,id,name")
 	public static class N {
 		@Rdf(beanUri=true) @Xml(format=ELEMENT) public URL url;
 		public int id;
@@ -473,7 +473,7 @@ public class XmlTest {
 		validateXml(t, s);
 	}
 
-	@Bean(properties="url2,id2,name")
+	@Bean(bpi="url2,id2,name")
 	public static class O {
 		@Beanp(name="url2") @Xml(format=ELEMENT) public URL url;
 		@Beanp(name="id2") public int id;
@@ -506,7 +506,7 @@ public class XmlTest {
 		validateXml(t, s);
 	}
 
-	@Bean(properties="url2,id2,name")
+	@Bean(bpi="url2,id2,name")
 	public static class P {
 		@Beanp(name="url2") @Xml(format=ATTR) public URL url;
 		@Beanp(name="id2") @Xml(format=ATTR) public int id;

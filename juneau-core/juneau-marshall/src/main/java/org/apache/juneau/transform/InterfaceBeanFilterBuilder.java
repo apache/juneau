@@ -63,6 +63,9 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 			if (! b.properties().isEmpty())
 				properties(split(b.properties()));
 
+			if (! b.bpi().isEmpty())
+				properties(split(b.bpi()));
+
 			if (! b.typeName().isEmpty())
 				typeName(b.typeName());
 
@@ -74,6 +77,9 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 
 			if (! b.excludeProperties().isEmpty())
 				excludeProperties(split(b.excludeProperties()));
+
+			if (! b.bpx().isEmpty())
+				excludeProperties(split(b.bpx()));
 
 			try {
 				if (b.propertyNamer() != PropertyNamerDefault.class)

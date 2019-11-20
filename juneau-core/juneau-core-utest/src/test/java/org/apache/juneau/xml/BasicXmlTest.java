@@ -1558,7 +1558,7 @@ public class BasicXmlTest {
 		public String[] b;
 	}
 
-	@Bean(dictionary={A.class},properties="a,ia,aa,o")
+	@Bean(dictionary={A.class},bpi="a,ia,aa,o")
 	public static class BeanWithAbstractFields {
 		public A a;
 		public IA ia;
@@ -1574,7 +1574,7 @@ public class BasicXmlTest {
 		}
 	}
 
-	@Bean(dictionary={A.class},properties="a,ia1,ia2,aa1,aa2,o1,o2")
+	@Bean(dictionary={A.class},bpi="a,ia1,ia2,aa1,aa2,o1,o2")
 	public static class BeanWithAbstractArrayFields {
 		public A[] a;
 		public IA[] ia1, ia2;
@@ -1610,7 +1610,7 @@ public class BasicXmlTest {
 		}
 	}
 
-	@Bean(dictionary={A.class},properties="a,ia,aa,o")
+	@Bean(dictionary={A.class},bpi="a,ia,aa,o")
 	public static class BeanWithAbstractMapArrayFields {
 		public Map<String,A[]> a;
 		public Map<String,IA[]> ia;

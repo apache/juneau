@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.SimpleJson;
  * 	System.<jsf>err</jsf>.println(bf);
  * </p>
  */
-@Bean(properties="v1,v2")
+@Bean(bpi="v1,v2")
 public class BeanDiff {
 
 	private ObjectMap v1 = new ObjectMap(), v2 = new ObjectMap();

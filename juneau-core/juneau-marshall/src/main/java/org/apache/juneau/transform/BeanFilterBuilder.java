@@ -147,7 +147,7 @@ public class BeanFilterBuilder<T> {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#properties()}
+	 * 	<li class='ja'>{@link Bean#bpi()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
 	 *
@@ -187,7 +187,7 @@ public class BeanFilterBuilder<T> {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#excludeProperties()}
+	 * 	<li class='ja'>{@link Bean#bpx()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
 	 *

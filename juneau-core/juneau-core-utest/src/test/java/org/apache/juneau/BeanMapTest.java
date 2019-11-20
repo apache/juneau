@@ -529,7 +529,7 @@ public class BeanMapTest {
 		assertEquals("{s:['foo'],s2:[['foo']],i:[0,0,0],i2:[[0,0,0],[0,0,0]]}", SimpleJsonSerializer.DEFAULT.serialize(t));
 	}
 
-	@Bean(properties="s,s2,i,i2")
+	@Bean(bpi="s,s2,i,i2")
 	public static class E {
 		public String[] s;
 		public String[][] s2;

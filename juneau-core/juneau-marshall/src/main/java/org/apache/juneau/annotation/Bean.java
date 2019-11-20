@@ -52,6 +52,56 @@ public @interface Bean {
 	Class<?>[] beanDictionary() default {};
 
 	/**
+	 * Bean property includes.
+	 *
+	 * <p>
+	 * The set and order of names of properties associated with a bean class.
+	 *
+	 * <p>
+	 * The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and
+	 * related methods.
+	 *
+	 * <p>
+	 * This value is entirely optional if you simply want to expose all the getters and public fields on
+	 * a class as bean properties.
+	 * <br>However, it's useful if you want certain getters to be ignored or you want the properties to be
+	 * serialized in a particular order.
+	 * <br>Note that on IBM JREs, the property order is the same as the order in the source code,
+	 * whereas on Oracle JREs, the order is entirely random.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
+	 * 	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * </ul>
+	 */
+	String bpi() default "";
+
+	/**
+	 * Bean property excludes
+	 *
+	 * <p>
+	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Exclude the 'city' and 'state' properties from the Address class.</jc>
+	 * 	<ja>@Bean</ja>(bpx=<js>"city,state"</js>})
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * </ul>
+	 */
+	String bpx() default "";
+
+	/**
 	 * Bean dictionary.
 	 *
 	 * <p>
@@ -76,7 +126,9 @@ public @interface Bean {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
+	 * @deprecated Use {@link #bpx()}
 	 */
+	@Deprecated
 	String excludeProperties() default "";
 
 	/**
@@ -170,7 +222,9 @@ public @interface Bean {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
+	 * @deprecated Use {@link #bpi()}
 	 */
+	@Deprecated
 	String properties() default "";
 
 	/**

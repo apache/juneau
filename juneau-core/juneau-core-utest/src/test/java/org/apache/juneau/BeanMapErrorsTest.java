@@ -37,7 +37,7 @@ public class BeanMapErrorsTest {
 		}
 	}
 
-	@Bean(properties="f1")
+	@Bean(bpi="f1")
 	public static class A1 {
 		public int f1;
 
@@ -61,7 +61,7 @@ public class BeanMapErrorsTest {
 			assertEquals("org.apache.juneau.BeanMapErrorsTest$A2: Found @Beanp(\"f2\") but name was not found in @Bean(properties)", e.getMessage());
 		}
 	}
-	@Bean(properties="f1")
+	@Bean(bpi="f1")
 	public static class A2 {
 		public int f1;
 
