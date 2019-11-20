@@ -783,36 +783,42 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public HtmlDocSerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public HtmlDocSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public HtmlDocSerializerBuilder beanDictionaryReplace(Class<?>...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public HtmlDocSerializerBuilder beanDictionaryReplace(Object...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public HtmlDocSerializerBuilder beanDictionaryRemove(Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public HtmlDocSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
@@ -929,6 +935,42 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlDocSerializerBuilder debug() {
 		super.debug();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlDocSerializerBuilder dictionary(Class<?>...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlDocSerializerBuilder dictionary(Object...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlDocSerializerBuilder dictionaryReplace(Class<?>...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlDocSerializerBuilder dictionaryReplace(Object...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlDocSerializerBuilder dictionaryRemove(Class<?>...values) {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlDocSerializerBuilder dictionaryRemove(Object...values) {
+		super.dictionaryRemove(values);
 		return this;
 	}
 

@@ -211,36 +211,42 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public UonParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public UonParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public UonParserBuilder beanDictionaryReplace(Class<?>...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public UonParserBuilder beanDictionaryReplace(Object...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public UonParserBuilder beanDictionaryRemove(Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public UonParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
@@ -357,6 +363,42 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public UonParserBuilder debug() {
 		super.debug();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonParserBuilder dictionary(Class<?>...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonParserBuilder dictionary(Object...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonParserBuilder dictionaryReplace(Class<?>...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonParserBuilder dictionaryReplace(Object...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonParserBuilder dictionaryRemove(Class<?>...values) {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonParserBuilder dictionaryRemove(Object...values) {
+		super.dictionaryRemove(values);
 		return this;
 	}
 

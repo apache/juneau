@@ -239,36 +239,42 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public ParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public ParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public ParserBuilder beanDictionaryReplace(Class<?>...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public ParserBuilder beanDictionaryReplace(Object...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public ParserBuilder beanDictionaryRemove(Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public ParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
@@ -385,6 +391,42 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserBuilder debug() {
 		super.debug();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserBuilder dictionary(Class<?>...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserBuilder dictionary(Object...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserBuilder dictionaryReplace(Class<?>...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserBuilder dictionaryReplace(Object...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserBuilder dictionaryRemove(Class<?>...values) {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserBuilder dictionaryRemove(Object...values) {
+		super.dictionaryRemove(values);
 		return this;
 	}
 

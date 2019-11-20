@@ -111,36 +111,42 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public OpenApiParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public OpenApiParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public OpenApiParserBuilder beanDictionaryReplace(Class<?>...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public OpenApiParserBuilder beanDictionaryReplace(Object...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public OpenApiParserBuilder beanDictionaryRemove(Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
+	@Deprecated
 	public OpenApiParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
@@ -257,6 +263,42 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	@Override /* BeanContextBuilder */
 	public OpenApiParserBuilder debug() {
 		super.debug();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OpenApiParserBuilder dictionary(Class<?>...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OpenApiParserBuilder dictionary(Object...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OpenApiParserBuilder dictionaryReplace(Class<?>...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OpenApiParserBuilder dictionaryReplace(Object...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OpenApiParserBuilder dictionaryRemove(Class<?>...values) {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OpenApiParserBuilder dictionaryRemove(Object...values) {
+		super.dictionaryRemove(values);
 		return this;
 	}
 

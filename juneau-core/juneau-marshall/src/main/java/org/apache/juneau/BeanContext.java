@@ -248,12 +248,12 @@ public class BeanContext extends Context {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryReplace(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryReplace(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryRemove(Class...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#dictionary(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#dictionary(Class...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#dictionaryReplace(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#dictionaryReplace(Class...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#dictionaryRemove(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#dictionaryRemove(Class...)}
 	 * 			<li class='jm'>{@link BeanFilterBuilder#dictionary(Class...)}
 	 * 		</ul>
 	 * </ul>
@@ -286,7 +286,7 @@ public class BeanContext extends Context {
 	 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.beanDictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
@@ -304,7 +304,7 @@ public class BeanContext extends Context {
 	 * 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
 	 * 	ReaderParser p = HtmlParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.beanDictionary(HtmlBeanDictionary.<jk>class</jk>)
+	 * 		.dictionary(HtmlBeanDictionary.<jk>class</jk>)
 	 * 		.build();
 	 * </p>
 	 *

@@ -39,6 +39,7 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		super(c, r);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void apply(AnnotationInfo<BeanConfig> ai, PropertyStoreBuilder psb) {
 		BeanConfig a = ai.getAnnotation();
@@ -52,6 +53,12 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.set(BEAN_beanDictionary, a.beanDictionary_replace());
 		if (a.beanDictionary_remove().length != 0)
 			psb.removeFrom(BEAN_beanDictionary, a.beanDictionary_remove());
+		if (a.dictionary().length != 0)
+			psb.addTo(BEAN_beanDictionary, a.dictionary());
+		if (a.dictionary_replace().length != 0)
+			psb.set(BEAN_beanDictionary, a.dictionary_replace());
+		if (a.dictionary_remove().length != 0)
+			psb.removeFrom(BEAN_beanDictionary, a.dictionary_remove());
 		if (! a.beanFieldVisibility().isEmpty())
 			psb.set(BEAN_beanFieldVisibility, visibility(a.beanFieldVisibility(), "beanFieldVisibility"));
 		if (a.beanFilters().length != 0)

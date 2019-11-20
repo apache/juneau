@@ -94,7 +94,7 @@ public class PojoRestTest {
 		assertEquals(expectedValue, s);
 
 		// Parse it back to Java objects.
-		p = (Person)JsonParser.create().beanDictionary(Person.class).build().parse(s, Object.class);
+		p = (Person)JsonParser.create().dictionary(Person.class).build().parse(s, Object.class);
 		expectedValue = "city B";
 		s = p.addresses[1].city;
 		assertEquals(expectedValue, s);

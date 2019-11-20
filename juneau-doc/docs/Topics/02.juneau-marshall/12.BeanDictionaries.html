@@ -86,13 +86,13 @@ Bean Names and Dictionaries
 	Bean dictionaries are registered through the following:
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oaj.annotation.BeanProperty#beanDictionary() BeanProperty(beanDictionary)} 
+	<li class='ja'>{@link oaj.annotation.Beanp#dictionary() Beanp(dictionary)} 
 		- On individual bean properties through the annotation.
-	<li class='ja'>{@link oaj.annotation.Bean#beanDictionary() Bean(beanDictionary)} 
+	<li class='ja'>{@link oaj.annotation.Bean#dictionary() Bean(dictionary)} 
 		- On all properties on a bean and all subclasses.
 	<li class='jf'>{@link oaj.BeanContext#BEAN_beanDictionary} 
 		- Configuration property on serializers and parsers.
-	<li class='jm'>{@link oaj.BeanContextBuilder#beanDictionary(Object...)}
+	<li class='jm'>{@link oaj.BeanContextBuilder#dictionary(Object...)}
 		- Builder method on serializers and parsers.
 </ul>
 <p>
@@ -108,7 +108,7 @@ Bean Names and Dictionaries
 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
 	ReaderParser p = JsonParser
 		.<jsm>create</jsm>()
-		.beanDictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 		.build();
 	
 	<jc>// Same, but use property.</jc>
@@ -121,7 +121,7 @@ Bean Names and Dictionaries
 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
 	ReaderParser p = HtmlParser
 		.<jsm>create</jsm>()
-		.beanDictionary(HtmlBeanDictionary.<jk>class</jk>)
+		.dictionary(HtmlBeanDictionary.<jk>class</jk>)
 		.build();
 </p>
 <p>

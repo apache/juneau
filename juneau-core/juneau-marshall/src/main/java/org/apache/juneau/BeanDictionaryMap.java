@@ -49,7 +49,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Use it in a parser.</jc>
  * 	ReaderParser p = JsonParser
  * 		.<jsm>create</jsm>()
- * 		.beanDictionary(MyBeanDictionaryMap.<jk>class</jk>)
+ * 		.dictionary(MyBeanDictionaryMap.<jk>class</jk>)
  * 		.build();
  * </p>
  *

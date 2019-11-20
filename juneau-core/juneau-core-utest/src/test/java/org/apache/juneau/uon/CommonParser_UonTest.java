@@ -24,7 +24,7 @@ import org.junit.*;
 @SuppressWarnings({"rawtypes","serial"})
 public class CommonParser_UonTest {
 
-	ReaderParser p = UonParser.create().beanDictionary(A1.class).build();
+	ReaderParser p = UonParser.create().dictionary(A1.class).build();
 	ReaderParser pe = UonParser.DEFAULT_DECODING;
 
 	//====================================================================================================

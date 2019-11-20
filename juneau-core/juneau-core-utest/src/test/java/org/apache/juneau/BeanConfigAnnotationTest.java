@@ -105,9 +105,9 @@ public class BeanConfigAnnotationTest {
 	@BeanConfig(
 		beanClassVisibility="$X{PRIVATE}",
 		beanConstructorVisibility="$X{PRIVATE}",
-		beanDictionary={A1.class,A2.class},
-		beanDictionary_replace={A1.class,A2.class,A3.class},
-		beanDictionary_remove=A2.class,
+		dictionary={A1.class,A2.class},
+		dictionary_replace={A1.class,A2.class,A3.class},
+		dictionary_remove=A2.class,
 		beanFieldVisibility="$X{PRIVATE}",
 		beanFilters={A1.class,A2.class},
 		beanFilters_replace={A1.class,A2.class,A3.class},

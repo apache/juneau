@@ -133,7 +133,9 @@ public @interface BeanConfig {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
 	 * </ul>
+	 * @deprecated Use {@link #dictionary()}
 	 */
+	@Deprecated
 	Class<?>[] beanDictionary() default {};
 
 	/**
@@ -142,7 +144,9 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
+	 * @deprecated Use {@link #dictionary_replace()}
 	 */
+	@Deprecated
 	Class<?>[] beanDictionary_replace() default {};
 
 	/**
@@ -151,7 +155,9 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary_remove}
 	 * </ul>
+	 * @deprecated Use {@link #dictionary_remove()}
 	 */
+	@Deprecated
 	Class<?>[] beanDictionary_remove() default {};
 
 	/**
@@ -585,6 +591,47 @@ public @interface BeanConfig {
 	 * </ul>
 	 */
 	String debug() default "";
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * <p>
+	 * The list of classes that make up the bean dictionary in this bean context.
+	 *
+	 * <p>
+	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
+	 * through reflection.
+	 * <br>The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined on the bean class.
+	 * <br>For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up serialized
+	 * as <js>"{_type:'myfoo',...}"</js>.
+	 *
+	 * <p>
+	 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
+	 * </ul>
+	 */
+	Class<?>[] dictionary() default {};
+
+	/**
+	 * Configuration property:  Add to bean dictionary.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 */
+	Class<?>[] dictionary_replace() default {};
+
+	/**
+	 * Configuration property:  Remove from bean dictionary.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary_remove}
+	 * </ul>
+	 */
+	Class<?>[] dictionary_remove() default {};
 
 	/**
 	 * Configuration property:  POJO examples.

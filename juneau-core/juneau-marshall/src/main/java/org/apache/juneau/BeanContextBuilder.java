@@ -146,7 +146,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #dictionary(Object...)}
 	 */
+	@Deprecated
 	public BeanContextBuilder beanDictionary(Object...values) {
 		return addTo(BEAN_beanDictionary, values);
 	}
@@ -164,7 +166,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #dictionary(Class...)}
 	 */
+	@Deprecated
 	public BeanContextBuilder beanDictionary(Class<?>...values) {
 		return addTo(BEAN_beanDictionary, values);
 	}
@@ -182,7 +186,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The new values for this property.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #dictionaryReplace(Class...)}
 	 */
+	@Deprecated
 	public BeanContextBuilder beanDictionaryReplace(Class<?>...values) {
 		return set(BEAN_beanDictionary, values);
 	}
@@ -200,7 +206,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The new values for this property.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #dictionaryReplace(Object...)}
 	 */
+	@Deprecated
 	public BeanContextBuilder beanDictionaryReplace(Object...values) {
 		return set(BEAN_beanDictionary, values);
 	}
@@ -218,7 +226,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to remove from this property.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #dictionaryRemove(Class...)}
 	 */
+	@Deprecated
 	public BeanContextBuilder beanDictionaryRemove(Class<?>...values) {
 		return removeFrom(BEAN_beanDictionary, values);
 	}
@@ -236,7 +246,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to remove from this property.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #dictionaryRemove(Object...)}
 	 */
+	@Deprecated
 	public BeanContextBuilder beanDictionaryRemove(Object...values) {
 		return removeFrom(BEAN_beanDictionary, values);
 	}
@@ -631,6 +643,114 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	public BeanContextBuilder debug(boolean value) {
 		return set(BEAN_debug, value);
+	}
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * <p>
+	 * Adds to the list of classes that make up the bean dictionary in this bean context.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder dictionary(Object...values) {
+		return addTo(BEAN_beanDictionary, values);
+	}
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * <p>
+	 * Same as {@link #beanDictionary(Object...)} but takes in an array of classes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder dictionary(Class<?>...values) {
+		return addTo(BEAN_beanDictionary, values);
+	}
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * <p>
+	 * Same as {@link #beanDictionary(Object...)} but replaces the existing value.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The new values for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder dictionaryReplace(Class<?>...values) {
+		return set(BEAN_beanDictionary, values);
+	}
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * <p>
+	 * Same as {@link #beanDictionary(Object...)} but replaces the existing value.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The new values for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder dictionaryReplace(Object...values) {
+		return set(BEAN_beanDictionary, values);
+	}
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * <p>
+	 * Removes from the list of classes that make up the bean dictionary in this bean context.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to remove from this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder dictionaryRemove(Class<?>...values) {
+		return removeFrom(BEAN_beanDictionary, values);
+	}
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * <p>
+	 * Removes from the list of classes that make up the bean dictionary in this bean context.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to remove from this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder dictionaryRemove(Object...values) {
+		return removeFrom(BEAN_beanDictionary, values);
 	}
 
 	/**
