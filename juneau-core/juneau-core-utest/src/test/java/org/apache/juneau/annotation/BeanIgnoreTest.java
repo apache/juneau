@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
-import static org.junit.Assert.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 
-import org.apache.juneau.json.*;
 import org.junit.*;
 
 public class BeanIgnoreTest {
@@ -36,7 +35,31 @@ public class BeanIgnoreTest {
 
 	@Test
 	public void test() throws Exception {
-		assertEquals("{c:'c',a:'a'}", SimpleJsonSerializer.DEFAULT.toString(new A()));
+		assertObjectEquals("{c:'c',a:'a'}", new A());
+	}
+
+	@Test
+	public void testBeanIgnoreOnBean() throws Exception {
+		assertObjectEquals("{f2:2,f3:'xxx',f4:'xxx'}", new B());
+	}
+
+	@BeanIgnore
+	public static class B1 {
+		public int f = 1;
+
+		@Override
+		public String toString() {
+			return "xxx";
+		}
+	}
+
+	public static class B {
+		public int f2 = 2;
+		public B1 f3 = new B1();
+
+		public B1 getF4() {
+			return new B1();
+		}
 	}
 }
 
