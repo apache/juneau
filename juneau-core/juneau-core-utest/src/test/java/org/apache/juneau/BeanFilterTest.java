@@ -52,7 +52,7 @@ public class BeanFilterTest {
 		assertEquals("f2", ((B2)a.fb).f2);
 	}
 
-	@Bean(beanDictionary={A1.class, A2.class})
+	@Bean(dictionary={A1.class, A2.class})
 	public static abstract class A {
 		public String f0 = "f0";
 		public B fb;
@@ -68,7 +68,7 @@ public class BeanFilterTest {
 		public String f2;
 	}
 
-	@Bean(beanDictionary={B1.class,B2.class})
+	@Bean(dictionary={B1.class,B2.class})
 	public static abstract class B {
 		public String f0b = "f0b";
 	}

@@ -62,7 +62,7 @@ public class BeanFilterBuilder<T> {
 	Class<?> interfaceClass, stopClass;
 	boolean sortProperties, fluentSetters;
 	Object propertyNamer;
-	List<Class<?>> beanDictionary;
+	List<Class<?>> dictionary;
 	Object propertyFilter;
 
 	/**
@@ -501,7 +501,52 @@ public class BeanFilterBuilder<T> {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#beanDictionary()}
+	 * 	<li class='ja'>{@link Bean#dictionary()}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #dictionary(Class...)}.
+	 */
+	@Deprecated
+	public BeanFilterBuilder<T> beanDictionary(Class<?>...values) {
+		if (dictionary == null)
+			dictionary = new ArrayList<>(Arrays.asList(values));
+		else for (Class<?> cc : values)
+			dictionary.add(cc);
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * <p>
+	 * Adds to the list of classes that make up the bean dictionary for this bean.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define our filter.</jc>
+	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
+	 * 		<jk>public</jk> MyFilter() {
+	 * 			<jc>// Our bean contains generic collections of Foo and Bar objects.</jc>
+	 * 			beanDictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Register it with a parser.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFilters(MyFilter.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Instantiate our bean.</jc>
+	 * 	MyBean myBean = p.parse(json);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Bean#dictionary()}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 *
@@ -509,11 +554,11 @@ public class BeanFilterBuilder<T> {
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder<T> beanDictionary(Class<?>...values) {
-		if (beanDictionary == null)
-			beanDictionary = new ArrayList<>(Arrays.asList(values));
+	public BeanFilterBuilder<T> dictionary(Class<?>...values) {
+		if (dictionary == null)
+			dictionary = new ArrayList<>(Arrays.asList(values));
 		else for (Class<?> cc : values)
-			beanDictionary.add(cc);
+			dictionary.add(cc);
 		return this;
 	}
 

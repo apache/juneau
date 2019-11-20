@@ -12,6 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils.pojos;
 
-@org.apache.juneau.annotation.Bean(beanDictionary={TypedBeanImpl.class})
+@org.apache.juneau.annotation.Bean(dictionary={TypedBeanImpl.class})
 public interface TypedBean {
 }

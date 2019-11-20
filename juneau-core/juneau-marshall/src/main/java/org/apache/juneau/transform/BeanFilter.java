@@ -57,9 +57,9 @@ public final class BeanFilter {
 		this.fluentSetters = builder.fluentSetters;
 		this.propertyNamer = castOrCreate(PropertyNamer.class, builder.propertyNamer);
 		this.beanDictionary =
-			builder.beanDictionary == null
+			builder.dictionary == null
 			? null
-			: builder.beanDictionary.toArray(new Class<?>[builder.beanDictionary.size()]);
+			: builder.dictionary.toArray(new Class<?>[builder.dictionary.size()]);
 		this.propertyFilter =
 			builder.propertyFilter == null
 			? PropertyFilter.DEFAULT

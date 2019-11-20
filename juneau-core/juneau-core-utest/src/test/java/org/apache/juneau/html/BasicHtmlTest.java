@@ -2768,7 +2768,7 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@Bean(beanDictionary={B.class})
+	@Bean(dictionary={B.class})
 	public static class BeanWithPropertiesWithTypeNames {
 		public B b1;
 		public Object b2;
@@ -2780,7 +2780,7 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@Bean(beanDictionary={B.class})
+	@Bean(dictionary={B.class})
 	public static class BeanWithPropertiesWithArrayTypeNames {
 		public B[] b1;
 		public Object[] b2;
@@ -2794,7 +2794,7 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@Bean(beanDictionary={B.class})
+	@Bean(dictionary={B.class})
 	public static class BeanWithPropertiesWith2dArrayTypeNames {
 		public B[][] b1;
 		public Object[][] b2;
@@ -2808,7 +2808,7 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@Bean(beanDictionary={B.class})
+	@Bean(dictionary={B.class})
 	public static class BeanWithPropertiesWithMapTypeNames {
 		public Map<String,B> b1;
 		public Map<String,Object> b2;
@@ -2891,7 +2891,7 @@ public class BasicHtmlTest {
 		public String[] b;
 	}
 
-	@Bean(beanDictionary={A.class},properties="a,ia,aa,o")
+	@Bean(dictionary={A.class},properties="a,ia,aa,o")
 	public static class BeanWithAbstractFields {
 		public A a;
 		public IA ia;
@@ -2907,7 +2907,7 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@Bean(beanDictionary={A.class},properties="a,ia1,ia2,aa1,aa2,o1,o2")
+	@Bean(dictionary={A.class},properties="a,ia1,ia2,aa1,aa2,o1,o2")
 	public static class BeanWithAbstractArrayFields {
 		public A[] a;
 		public IA[] ia1, ia2;
@@ -2926,7 +2926,7 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@Bean(beanDictionary={A.class})
+	@Bean(dictionary={A.class})
 	public static class BeanWithAbstractMapFields {
 		public Map<String,A> a;
 		public Map<String,AA> b;

@@ -243,7 +243,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#beanDictionary()}
+	 * 			<li class='ja'>{@link Bean#dictionary()}
 	 * 			<li class='ja'>{@link Beanp#dictionary()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -254,7 +254,7 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryReplace(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryRemove(Class...)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#beanDictionary(Class...)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#dictionary(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -298,7 +298,7 @@ public class BeanContext extends Context {
 	 *
 	 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
 	 * 	<jc>// This applies to all properties on this class and all subclasses.</jc>
-	 * 	<ja>@Bean</ja>(beanDictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
+	 * 	<ja>@Bean</ja>(dictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyBean {...}
 	 *
 	 * 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>

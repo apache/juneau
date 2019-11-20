@@ -339,6 +339,7 @@ public final class ClassMeta<T> implements Type {
 		Object example;
 		Mutater<String,T> stringMutater;
 
+		@SuppressWarnings("deprecation")
 		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 			this.innerClass = innerClass;
 			this.beanContext = beanContext;
@@ -601,6 +602,8 @@ public final class ClassMeta<T> implements Type {
 			if (b != null) {
 				if (b.beanDictionary().length != 0)
 					beanRegistry = new BeanRegistry(beanContext, null, b.beanDictionary());
+				if (b.dictionary().length != 0)
+					beanRegistry = new BeanRegistry(beanContext, null, b.dictionary());
 
 				// This could be a non-bean POJO with a type name.
 				if (dictionaryName == null && ! b.typeName().isEmpty())
@@ -774,7 +777,7 @@ public final class ClassMeta<T> implements Type {
 	 * Returns the bean registry for this class.
 	 *
 	 * <p>
-	 * This bean registry contains names specified in the {@link Bean#beanDictionary() @Bean(beanDictionary)} annotation
+	 * This bean registry contains names specified in the {@link Bean#dictionary() @Bean(dictionary)} annotation
 	 * defined on the class, regardless of whether the class is an actual bean.
 	 * This allows interfaces to define subclasses with type names.
 	 *

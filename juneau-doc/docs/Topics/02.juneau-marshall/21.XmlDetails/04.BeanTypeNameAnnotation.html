@@ -140,7 +140,7 @@
 	</tr>
 	<tr>
 		<td class='code'>
-	<ja>@Bean</ja>(beanDictionary={BeanX.<jk>class</jk>})
+	<ja>@Bean</ja>(dictionary={BeanX.<jk>class</jk>})
 	<jk>class</jk> BeanWithArrayPropertiesWithTypeNames {
 		<jk>public</jk> BeanX[] b1 = <jk>new</jk> BeanX[]{ 
 			<jk>new</jk> BeanX() 
@@ -175,7 +175,7 @@
 	</tr>				
 	<tr>
 		<td class='code'>
-	<ja>@Bean</ja>(beanDictionary={BeanX.<jk>class</jk>})
+	<ja>@Bean</ja>(dictionary={BeanX.<jk>class</jk>})
 	<jk>class</jk> BeanWith2dArrayPropertiesWithTypeNames {
 		<jk>public</jk> BeanX[][] b1 = <jk>new</jk> BeanX[][]{{
 			<jk>new</jk> BeanX()
@@ -216,7 +216,7 @@
 	</tr>		
 	<tr>
 		<td class='code'>
-	<ja>@Bean</ja>(beanDictionary={BeanX.<jk>class</jk>})
+	<ja>@Bean</ja>(dictionary={BeanX.<jk>class</jk>})
 	<jk>class</jk> BeanWithMapPropertiesWithTypeNames {
 		<jk>public</jk> Map&lt;String,BeanX&gt; b1 = <jk>new</jk> HashMap&lt;&gt;() {{ 
 			put(<js>"k1"</js>, <jk>new</jk> BeanX()); 
@@ -253,7 +253,7 @@
 	</tr>
 	<tr>
 		<td class='code'>
-	<ja>@Bean</ja>(beanDictionary={A.<jk>class</jk>})
+	<ja>@Bean</ja>(dictionary={A.<jk>class</jk>})
 	<jk>class</jk> BeanWithAbstractFields {
 		<jk>public</jk> A a = <jk>new</jk> A();
 		<jk>public</jk> IA ia = <jk>new</jk> A();
@@ -289,7 +289,7 @@
 	</tr>
 	<tr>
 		<td class='code'>
-	<ja>@Bean</ja>(beanDictionary={A.<jk>class</jk>})
+	<ja>@Bean</ja>(dictionary={A.<jk>class</jk>})
 	<jk>class</jk> BeanWithAbstractArrayFields {
 		<jk>public</jk> A[] a = <jk>new</jk> A[]{<jk>new</jk> A()};
 		<jk>public</jk> IA[] ia1 = <jk>new</jk> A[]{<jk>new</jk> A()};
@@ -342,7 +342,7 @@
 	</tr>
 	<tr>
 		<td class='code'>
-	<ja>@Bean</ja>(beanDictionary={A.<jk>class</jk>})
+	<ja>@Bean</ja>(dictionary={A.<jk>class</jk>})
 	<jk>class</jk> BeanWithAbstractMapFields {
 		<jk>public</jk> Map&lt;String,A&gt; a = <jk>new</jk> HashMap&lt;&gt;() {{
 			put(<js>"k1"</js>, <jk>new</jk> A());
@@ -377,7 +377,7 @@
 	</tr>
 	<tr>
 		<td class='code'>
-	<ja>@Bean</ja>(beanDictionary={A.<jk>class</jk>})
+	<ja>@Bean</ja>(dictionary={A.<jk>class</jk>})
 	<jk>class</jk> BeanWithAbstractMapArrayFields {
 		<jk>public</jk> Map&lt;String,A[]&gt; a = <jk>new</jk> LinkedHashMap&lt;&gt;() {{
 			put(<js>"a1"</js>, <jk>new</jk> A[]{<jk>new</jk> A()});

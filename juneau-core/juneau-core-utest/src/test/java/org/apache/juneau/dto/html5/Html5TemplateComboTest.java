@@ -70,7 +70,7 @@ public class Html5TemplateComboTest extends ComboRoundTripTest {
 	}
 
 
-	@Bean(beanDictionary=HtmlBeanDictionary.class)
+	@Bean(dictionary=HtmlBeanDictionary.class)
 	public static class FormTemplate {
 
 		private String action;

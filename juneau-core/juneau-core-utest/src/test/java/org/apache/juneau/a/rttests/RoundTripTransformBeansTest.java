@@ -274,7 +274,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	}
 
 
-	@Bean(beanDictionary={C3.class})
+	@Bean(dictionary={C3.class})
 	public static interface C1<T> extends Serializable {
 		void setF1(T f1);
 		T getF1();

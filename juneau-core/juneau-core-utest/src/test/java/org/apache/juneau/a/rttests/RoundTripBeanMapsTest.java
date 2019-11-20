@@ -244,7 +244,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 }
 
 	@Bean(
-		beanDictionary={B1.class,B2.class,B3.class}
+		dictionary={B1.class,B2.class,B3.class}
 	)
 	public abstract static class B {
 		public String f0 = "f0";
@@ -352,7 +352,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	public static class CFilter extends BeanFilterBuilder<C> {
 		public CFilter() {
-			beanDictionary(CFilterDictionaryMap.class);
+			dictionary(CFilterDictionaryMap.class);
 		}
 	}
 
@@ -383,7 +383,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		assertObjectEquals("{_type:'BA1',f0a:'f0a',f0b:'f0b',f1:'f1'}", b);
 	}
 
-	@Bean(beanDictionary={BA1.class,BA2.class})
+	@Bean(dictionary={BA1.class,BA2.class})
 	public abstract static class BA {
 		public String f0a, f0b;
 	}
@@ -446,7 +446,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	public static class CAFilter extends BeanFilterBuilder<CA> {
 		public CAFilter() {
-			beanDictionary(CAFilterDictionaryMap.class);
+			dictionary(CAFilterDictionaryMap.class);
 		}
 	}
 

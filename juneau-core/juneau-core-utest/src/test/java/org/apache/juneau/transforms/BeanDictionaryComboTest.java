@@ -864,7 +864,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 		return p.builder().build();
 	}
 
-	@Bean(beanDictionary={A.class})
+	@Bean(dictionary={A.class})
 	public static interface IA {}
 
 	@Bean(typeName="A")
@@ -877,7 +877,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 		}
 	}
 
-	@Bean(beanDictionary={B.class}, typePropertyName="z")
+	@Bean(dictionary={B.class}, typePropertyName="z")
 	public static interface IB {}
 
 	@Bean(typeName="B")

@@ -51,6 +51,7 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 		init(interfaceClass);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void init(Class<?> interfaceClass) {
 		interfaceClass(interfaceClass);
 		List<Bean> annotations = ClassInfo.of(interfaceClass).getAnnotations(Bean.class);
@@ -88,7 +89,10 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 				stopClass(b.stopClass());
 
 			if (b.beanDictionary().length > 0)
-				beanDictionary(b.beanDictionary());
+				dictionary(b.beanDictionary());
+
+			if (b.dictionary().length > 0)
+				dictionary(b.dictionary());
 		}
 	}
 }
