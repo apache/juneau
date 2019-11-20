@@ -49,8 +49,8 @@ public final class BeanFilter {
 	BeanFilter(BeanFilterBuilder<?> builder) {
 		this.beanClass = builder.beanClass;
 		this.typeName = builder.typeName;
-		this.properties = split(builder.includeProperties, ',');
-		this.excludeProperties = split(builder.excludeProperties, ',');
+		this.properties = split(builder.bpi, ',');
+		this.excludeProperties = split(builder.bpx, ',');
 		this.interfaceClass = builder.interfaceClass;
 		this.stopClass = builder.stopClass;
 		this.sortProperties = builder.sortProperties;

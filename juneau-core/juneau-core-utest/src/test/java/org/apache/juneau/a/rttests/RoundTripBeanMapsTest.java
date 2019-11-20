@@ -519,7 +519,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 	public static class D2Filter extends BeanFilterBuilder<D2> {
 		public D2Filter() {
-			properties("f3,f2");
+			bpi("f3,f2");
 		}
 	}
 
@@ -581,7 +581,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 	public static class E2Filter extends BeanFilterBuilder<E2> {
 		public E2Filter() {
-			excludeProperties("f2");
+			bpx("f2");
 		}
 	}
 

@@ -58,7 +58,7 @@ public class BeanFilterBuilder<T> {
 
 	Class<?> beanClass;
 	String typeName;
-	String[] includeProperties, excludeProperties;
+	String[] bpi, bpx;
 	Class<?> interfaceClass, stopClass;
 	boolean sortProperties, fluentSetters;
 	Object propertyNamer;
@@ -155,9 +155,11 @@ public class BeanFilterBuilder<T> {
 	 * 	The new value for this setting.
 	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #bpi(String...)}
 	 */
+	@Deprecated
 	public BeanFilterBuilder<T> properties(String...value) {
-		this.includeProperties = value;
+		this.bpi = value;
 		return this;
 	}
 
@@ -195,9 +197,11 @@ public class BeanFilterBuilder<T> {
 	 * 	The new value for this setting.
 	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #bpx(String...)}
 	 */
+	@Deprecated
 	public BeanFilterBuilder<T> excludeProperties(String...value) {
-		this.excludeProperties = value;
+		this.bpx = value;
 		return this;
 	}
 
@@ -516,6 +520,86 @@ public class BeanFilterBuilder<T> {
 			dictionary = new ArrayList<>(Arrays.asList(values));
 		else for (Class<?> cc : values)
 			dictionary.add(cc);
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Bean property includes.
+	 *
+	 * <p>
+	 * Specifies the set and order of names of properties associated with the bean class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define our filter.</jc>
+	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
+	 * 		<jk>public</jk> MyFilter() {
+	 * 			bpi(<js>"foo,bar,baz"</js>);
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Register it with a serializer.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFilters(MyFilter.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Only serializes the properties 'foo', 'bar', and 'baz'.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Bean#bpi()}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>Values can contain comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 */
+	public BeanFilterBuilder<T> bpi(String...value) {
+		this.bpi = value;
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Bean property excludes.
+	 *
+	 * <p>
+	 * Specifies properties to exclude from the bean class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define our filter.</jc>
+	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
+	 * 		<jk>public</jk> MyFilter() {
+	 * 			bpx(<js>"foo,bar"</js>);
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Register it with a serializer.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFilters(MyFilter.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Serializes all properties except for 'foo' and 'bar'.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Bean#bpx()}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>Values can contain comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 */
+	public BeanFilterBuilder<T> bpx(String...value) {
+		this.bpx = value;
 		return this;
 	}
 

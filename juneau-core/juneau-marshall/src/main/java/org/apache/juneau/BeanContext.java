@@ -866,7 +866,7 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanContextBuilder#excludeProperties(Class, String)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#excludeProperties(String, String)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#excludeProperties(Map)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#excludeProperties(String...)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#bpx(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1207,7 +1207,7 @@ public class BeanContext extends Context {
 	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(Class, String)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(String, String)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#includeProperties(Map)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#properties(String...)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#bpi(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
