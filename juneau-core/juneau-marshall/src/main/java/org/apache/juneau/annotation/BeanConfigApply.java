@@ -93,6 +93,8 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.addTo(BEAN_examples, objectMap(a.examples(), "examples"));
 		for (CS e : a.excludeProperties())
 			psb.addTo(BEAN_excludeProperties, e.k().getName(), string(e.v()));
+		for (CS e : a.bpxMap())
+			psb.addTo(BEAN_excludeProperties, e.k().getName(), string(e.v()));
 		if (! a.fluentSetters().isEmpty())
 			psb.set(BEAN_fluentSetters, bool(a.fluentSetters()));
 		if (! a.ignoreInvocationExceptionsOnGetters().isEmpty())
@@ -108,6 +110,8 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		for (CC e : a.implClasses())
 			psb.addTo(BEAN_implClasses, e.k().getName(), e.v());
 		for (CS e : a.includeProperties())
+			psb.addTo(BEAN_includeProperties, e.k().getName(), string(e.v()));
+		for (CS e : a.bpiMap())
 			psb.addTo(BEAN_includeProperties, e.k().getName(), string(e.v()));
 		if (! a.locale().isEmpty())
 			psb.set(BEAN_locale, locale(a.locale()));

@@ -35,7 +35,7 @@ import org.apache.juneau.annotation.*;
 public final class BeanFilter {
 
 	private final Class<?> beanClass;
-	private final String[] properties, excludeProperties;
+	private final String[] bpi, bpx;
 	private final PropertyNamer propertyNamer;
 	private final Class<?> interfaceClass, stopClass;
 	private final boolean sortProperties, fluentSetters;
@@ -49,8 +49,8 @@ public final class BeanFilter {
 	BeanFilter(BeanFilterBuilder<?> builder) {
 		this.beanClass = builder.beanClass;
 		this.typeName = builder.typeName;
-		this.properties = split(builder.bpi, ',');
-		this.excludeProperties = split(builder.bpx, ',');
+		this.bpi = split(builder.bpi, ',');
+		this.bpx = split(builder.bpx, ',');
 		this.interfaceClass = builder.interfaceClass;
 		this.stopClass = builder.stopClass;
 		this.sortProperties = builder.sortProperties;
@@ -92,7 +92,7 @@ public final class BeanFilter {
 	 * 	be used.
 	 */
 	public String[] getProperties() {
-		return properties;
+		return bpi;
 	}
 
 	/**
@@ -132,7 +132,7 @@ public final class BeanFilter {
 	 * @return The name of the properties to ignore on a bean, or <jk>null</jk> to not ignore any properties.
 	 */
 	public String[] getExcludeProperties() {
-		return excludeProperties;
+		return bpx;
 	}
 
 	/**

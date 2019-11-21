@@ -255,8 +255,8 @@ public class BeanMeta<T> {
 
 				// Explicitly defined property names in @Bean annotation.
 				Set<String> fixedBeanProps = new LinkedHashSet<>();
-				String[] includeProperties = ctx.getIncludeProperties(c);
-				String[] excludeProperties = ctx.getExcludeProperties(c);
+				String[] bpi = ctx.getBpi(c);
+				String[] bpx = ctx.getBpx(c);
 
 				Set<String> filterProps = new HashSet<>();  // Names of properties defined in @Bean(properties)
 
@@ -266,7 +266,7 @@ public class BeanMeta<T> {
 						filterProps.addAll(Arrays.asList(beanFilter.getProperties()));
 
 					// Get the 'properties' attribute if specified.
-					if (beanFilter.getProperties() != null && includeProperties == null)
+					if (beanFilter.getProperties() != null && bpi == null)
 						for (String p : beanFilter.getProperties())
 							fixedBeanProps.add(p);
 
@@ -274,8 +274,8 @@ public class BeanMeta<T> {
 						propertyNamer = beanFilter.getPropertyNamer();
 				}
 
-				if (includeProperties != null)
-					fixedBeanProps.addAll(Arrays.asList(includeProperties));
+				if (bpi != null)
+					fixedBeanProps.addAll(Arrays.asList(bpi));
 
 				if (propertyNamer == null)
 					propertyNamer = ctx.getPropertyNamer();
@@ -425,7 +425,7 @@ public class BeanMeta<T> {
 					// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
 					String[] includeKeys = beanFilter.getProperties();
 					String[] excludeKeys = beanFilter.getExcludeProperties();
-					if (excludeKeys != null && excludeProperties == null) {
+					if (excludeKeys != null && bpx == null) {
 						for (String k : excludeKeys)
 							properties.remove(k);
 
@@ -441,8 +441,8 @@ public class BeanMeta<T> {
 					}
 				}
 
-				if (excludeProperties != null)
-					for (String ep : excludeProperties)
+				if (bpx != null)
+					for (String ep : bpx)
 						properties.remove(ep);
 
 				if (pNames != null) {

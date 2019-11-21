@@ -431,7 +431,7 @@ public @interface BeanConfig {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * Shortcut for specifying the {@link BeanContext#BEAN_includeProperties} property on all serializers.
+	 * Shortcut for specifying the {@link BeanContext#BEAN_bpi} property on all serializers.
 	 *
 	 * <p>
 	 * The typical use case is when you're rendering summary and details views of the same bean in a resource and
@@ -486,15 +486,48 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
 	 * </ul>
 	 */
 	String[] bpi() default {};
 
 	/**
+	 * Configuration property:  Bean property includes.
+	 *
+	 * <p>
+	 * Specifies the set and order of names of properties associated with the bean class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@BeanConfig</ja>(
+	 * 		bpiMap={
+	 * 			<ja>@CS</ja>(key=MyBean.<jk>class</jk>, value=<js>"foo,bar"</js>)
+	 * 		}
+	 * 	)
+	 * <p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Keys are the class applied to.
+	 * 		<br>Values are comma-delimited lists of property names.
+	 * 	<li>
+	 * 		Setting applies to specified class and all subclasses.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.properties.sms"</js>.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
+	 * </ul>
+	 */
+	CS[] bpiMap() default {};
+
+	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * Shortcut for specifying the {@link BeanContext#BEAN_excludeProperties} property on all serializers.
+	 * Shortcut for specifying the {@link BeanContext#BEAN_bpx} property on all serializers.
 	 *
 	 * <p>
 	 * Same as {@link #bpi()} except you specify a list of bean property names that you want to exclude from
@@ -543,14 +576,47 @@ public @interface BeanConfig {
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.excludeProperties.sms"</js>.
+	 * 		A default global value can be set via the system property <js>"BeanContext.bpx.sms"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
 	 * </ul>
 	 */
 	String[] bpx() default {};
+
+	/**
+	 * Configuration property:  Bean property excludes.
+	 *
+	 * <p>
+	 * Specifies to exclude the specified list of properties for the specified bean class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@BeanConfig</ja>(
+	 * 		bpxMap={
+	 * 			<ja>@CS</ja>(key=MyBean.<jk>class</jk>, value=<js>"foo,bar"</js>)
+	 * 		}
+	 * 	)
+	 * <p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Keys are the class applied to.
+	 * 		<br>Values are comma-delimited lists of property names.
+	 *	<li>
+	 * 		Setting applies to specified class and all subclasses.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.bpx.sms"</js>.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
+	 * </ul>
+	 */
+	CS[] bpxMap() default {};
 
 	/**
 	 * Configuration property:  Debug mode.
@@ -713,34 +779,9 @@ public @interface BeanConfig {
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * <p>
-	 * Specifies to exclude the specified list of properties for the specified bean class.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@BeanConfig</ja>(
-	 * 		excludeProperties={
-	 * 			<ja>@CSEntry</ja>(key=MyBean.<jk>class</jk>, value=<js>"foo,bar"</js>)
-	 * 		}
-	 * 	)
-	 * <p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Keys are the class applied to.
-	 * 		<br>Values are comma-delimited lists of property names.
-	 *	<li>
-	 * 		Setting applies to specified class and all subclasses.
-	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.excludeProperties.sms"</js>.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
-	 * </ul>
+	 * @deprecated Use {@link #bpxMap()}
 	 */
+	@Deprecated
 	CS[] excludeProperties() default {};
 
 	/**
@@ -940,7 +981,7 @@ public @interface BeanConfig {
 	 * <p class='bcode w800'>
 	 * 	<ja>@BeanConfig</ja>(
 	 * 		includeProperties={
-	 * 			<ja>@CSEntry</ja>(key=MyBean.<jk>class</jk>, value=<js>"foo,bar"</js>)
+	 * 			<ja>@CS</ja>(key=MyBean.<jk>class</jk>, value=<js>"foo,bar"</js>)
 	 * 		}
 	 * 	)
 	 * <p>
@@ -960,7 +1001,9 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
+	 * @deprecated Use {@link #bpiMap()}
 	 */
+	@Deprecated
 	CS[] includeProperties() default {};
 
 	/**

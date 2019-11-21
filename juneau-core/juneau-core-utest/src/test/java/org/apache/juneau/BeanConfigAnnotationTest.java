@@ -119,10 +119,11 @@ public class BeanConfigAnnotationTest {
 		beansRequireSettersForGetters="$X{true}",
 		beansRequireSomeProperties="$X{true}",
 		beanTypePropertyName="$X{foo}",
+		bpiMap=@CS(k=A1.class,v="$X{foo}"),
+		bpxMap=@CS(k=A1.class,v="$X{foo}"),
 		debug="$X{true}",
 		detectRecursions="$X{true}",
 		examples="$X{A1}: {foo:1}",
-		excludeProperties=@CS(k=A1.class,v="$X{foo}"),
 		fluentSetters="$X{true}",
 		ignoreInvocationExceptionsOnGetters="$X{true}",
 		ignoreInvocationExceptionsOnSetters="$X{true}",
@@ -131,7 +132,6 @@ public class BeanConfigAnnotationTest {
 		ignoreUnknownBeanProperties="$X{true}",
 		ignoreUnknownNullBeanProperties="$X{true}",
 		implClasses=@CC(k=A1.class,v=A1.class),
-		includeProperties=@CS(k=A1.class,v="$X{foo}"),
 		initialDepth="$X{1}",
 		locale="$X{en-US}",
 		maxDepth="$X{1}",
@@ -175,7 +175,7 @@ public class BeanConfigAnnotationTest {
 		check("true", bc.isDebug());
 		check("true", bc.isDetectRecursions());
 		check("A1={foo:1}", bc.getExamples());
-		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getExcludeProperties());
+		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getBpx());
 		check("true", bc.isFluentSetters());
 		check("true", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("true", bc.isIgnoreInvocationExceptionsOnSetters());
@@ -184,7 +184,7 @@ public class BeanConfigAnnotationTest {
 		check("true", bc.isIgnoreUnknownBeanProperties());
 		check("true", bc.isIgnoreUnknownNullBeanProperties());
 		check("org.apache.juneau.BeanConfigAnnotationTest$A1=A1", bc.getImplClasses());
-		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getIncludeProperties());
+		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getBpi());
 		check("1", bc.getInitialDepth());
 		check("en_US", bc.getLocale());
 		check("1", bc.getMaxDepth());

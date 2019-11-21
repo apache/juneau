@@ -1301,11 +1301,11 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * @see BeanContext#BEAN_excludeProperties
+	 * @see BeanContext#BEAN_bpx
 	 * @return
 	 * 	The list of property names to exclude keyed by class name.
 	 */
-	protected final Map<String,String[]> getExcludeProperties() {
+	protected final Map<String,String[]> getBpx() {
 		return ctx.getExcludeProperties();
 	}
 
@@ -1396,11 +1396,11 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * @see BeanContext#BEAN_includeProperties
+	 * @see BeanContext#BEAN_bpi
 	 * @return
 	 * 	Include properties keyed by class name.
 	 */
-	protected final Map<String,String[]> getIncludeProperties() {
+	protected final Map<String,String[]> getBpi() {
 		return ctx.getIncludeProperties();
 	}
 

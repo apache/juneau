@@ -524,7 +524,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 
 	//====================================================================================================
-	// Test @Bean(excludeProperties=xxx)
+	// Test @Bean(bpx=xxx)
 	//====================================================================================================
 	@Test
 	public void testExcludePropertiesUsingAnnotation() throws Exception {
@@ -553,7 +553,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 
 	//====================================================================================================
-	// Test @Bean(excludeProperties=xxx) using BeanFilter
+	// Test @Bean(bpx=xxx) using BeanFilter
 	//====================================================================================================
 	@Test
 	public void testExcludePropertiesUsingBeanFilter() throws Exception {

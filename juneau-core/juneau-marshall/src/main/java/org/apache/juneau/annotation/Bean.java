@@ -77,7 +77,7 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
 	 * </ul>
 	 */
 	String bpi() default "";
@@ -96,7 +96,7 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
 	 * </ul>
 	 */
 	String bpx() default "";
@@ -116,16 +116,6 @@ public @interface Bean {
 	/**
 	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Exclude the 'city' and 'state' properties from the Address class.</jc>
-	 * 	<ja>@Bean</ja>(excludeProperties=<js>"city,state"</js>})
-	 * 	<jk>public class</jk> Address {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
-	 * </ul>
 	 * @deprecated Use {@link #bpx()}
 	 */
 	@Deprecated

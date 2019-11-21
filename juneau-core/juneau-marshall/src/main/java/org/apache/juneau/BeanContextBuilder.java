@@ -626,7 +626,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Specifies the set and order of names of properties associated with the bean class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
 	 * </ul>
 	 *
 	 * @param beanClass The bean class.
@@ -634,7 +634,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpi(Class<?> beanClass, String value) {
-		return addTo(BEAN_includeProperties, beanClass.getName(), value);
+		return addTo(BEAN_bpi, beanClass.getName(), value);
 	}
 
 	/**
@@ -644,14 +644,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Specifies the set and order of names of properties associated with the bean class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
 	 * </ul>
 	 *
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpi(Map<String,String> values) {
-		return set(BEAN_includeProperties, values);
+		return set(BEAN_bpi, values);
 	}
 
 	/**
@@ -661,7 +661,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Specifies the set and order of names of properties associated with the bean class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
 	 * </ul>
 	 *
 	 * @param beanClassName
@@ -671,7 +671,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpi(String beanClassName, String value) {
-		return addTo(BEAN_includeProperties, beanClassName, value);
+		return addTo(BEAN_bpi, beanClassName, value);
 	}
 
 	/**
@@ -681,7 +681,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Specifies to exclude the specified list of properties for the specified bean class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
 	 * </ul>
 	 *
 	 * @param beanClass The bean class.
@@ -689,7 +689,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpx(Class<?> beanClass, String properties) {
-		return addTo(BEAN_excludeProperties, beanClass.getName(), properties);
+		return addTo(BEAN_bpx, beanClass.getName(), properties);
 	}
 
 	/**
@@ -699,7 +699,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Specifies to exclude the specified list of properties for the specified bean classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
 	 * </ul>
 	 *
 	 * @param values
@@ -707,14 +707,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpx(Map<String,String> values) {
-		return set(BEAN_excludeProperties, values);
+		return set(BEAN_bpx, values);
 	}
 
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
 	 * </ul>
 	 *
 	 * @param beanClassName
@@ -724,7 +724,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpx(String beanClassName, String value) {
-		return addTo(BEAN_excludeProperties, beanClassName, value);
+		return addTo(BEAN_bpx, beanClassName, value);
 	}
 
 	/**

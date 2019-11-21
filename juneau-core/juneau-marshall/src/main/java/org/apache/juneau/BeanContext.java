@@ -742,6 +742,129 @@ public class BeanContext extends Context {
 	public static final String BEAN_beanTypePropertyName = PREFIX + ".beanTypePropertyName.s";
 
 	/**
+	 * Configuration property:  Bean property includes.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.bpi.sms"</js>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>Default:</b>  <c>{}</c>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean#bpi()}
+	 * 			<li class='ja'>{@link Beanp#bpi()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#bpi(Class, String)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#bpi(String, String)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#bpi(Map)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#bpi(String...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies the set and order of names of properties associated with the bean class.
+	 *
+	 * <p>
+	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
+	 * names.
+	 * The key <js>"*"</js> means all bean classes.
+	 *
+	 * <p>
+	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means only serialize the <c>foo</c> and
+	 * <c>bar</c> properties on the specified bean.
+	 *
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that includes only the 'foo' and 'bar' properties on the MyBean class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpi(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addTo(<jsf>BEAN_bpi</jsf>, MyBean.<jk>class</jk>.getName(), <js>"foo,bar"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Alternate using JSON object.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addTo(<jsf>BEAN_bpi</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
+	 * 		.build();
+	 * </p>
+	 */
+	public static final String BEAN_bpi = PREFIX + ".bpi.sms";
+
+	/**
+	 * Configuration property:  Bean property excludes.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.bpx.sms"</js>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>Default:</b>  <c>{}</c>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean#bpx()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#bpx(Class, String)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#bpx(String...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies to exclude the specified list of properties for the specified bean class.
+	 *
+	 * <p>
+	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
+	 * names.
+	 * The key <js>"*"</js> means all bean classes.
+	 *
+	 * <p>
+	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means don't serialize the <c>foo</c> and
+	 * <c>bar</c> properties on any beans whose simple class name is <c>Bean1</c>.
+	 *
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpx(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addTo(<jsf>BEAN_bpx</jsf>, MyBean.<jk>class</jk>.getName(), <js>"foo,bar"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Alternate using JSON object.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addTo(<jsf>BEAN_bpx</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
+	 * 		.build();
+	 * </p>
+	 */
+	public static final String BEAN_bpx = PREFIX + ".bpx.sms";
+
+	/**
 	 * Configuration property:  Debug mode.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -851,63 +974,10 @@ public class BeanContext extends Context {
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.excludeProperties.sms"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
-	 * 	<li><b>Default:</b>  <c>{}</c>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#bpx()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpx(Class, String)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#bpx(String...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies to exclude the specified list of properties for the specified bean class.
-	 *
-	 * <p>
-	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
-	 * names.
-	 * The key <js>"*"</js> means all bean classes.
-	 *
-	 * <p>
-	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means don't serialize the <c>foo</c> and
-	 * <c>bar</c> properties on any beans whose simple class name is <c>Bean1</c>.
-	 *
-	 * <p>
-	 * Setting applies to specified class and all subclasses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.excludeProperties(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_excludeProperties</jsf>, MyBean.<jk>class</jk>.getName(), <js>"foo,bar"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Alternate using JSON object.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_excludeProperties</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
-	 * 		.build();
-	 * </p>
+	 * @deprecated Use {@link #BEAN_bpx}
 	 */
-	public static final String BEAN_excludeProperties = PREFIX + ".excludeProperties.sms";
+	@Deprecated
+	public static final String BEAN_excludeProperties = BEAN_bpx;
 
 	/**
 	 * Configuration property:  Find fluent setters.
@@ -1191,64 +1261,10 @@ public class BeanContext extends Context {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BeanContext.properties.sms"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
-	 * 	<li><b>Default:</b>  <c>{}</c>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#bpi()}
-	 * 			<li class='ja'>{@link Beanp#bpi()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpi(Class, String)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpi(String, String)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpi(Map)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#bpi(String...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies the set and order of names of properties associated with the bean class.
-	 *
-	 * <p>
-	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
-	 * names.
-	 * The key <js>"*"</js> means all bean classes.
-	 *
-	 * <p>
-	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means only serialize the <c>foo</c> and
-	 * <c>bar</c> properties on the specified bean.
-	 *
-	 * <p>
-	 * Setting applies to specified class and all subclasses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that includes only the 'foo' and 'bar' properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.includeProperties(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_includeProperties</jsf>, MyBean.<jk>class</jk>.getName(), <js>"foo,bar"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Alternate using JSON object.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_includeProperties</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
-	 * 		.build();
-	 * </p>
+	 * @deprecated Use {@link #BEAN_bpi}
 	 */
-	public static final String BEAN_includeProperties = PREFIX + ".includeProperties.sms";
+	@Deprecated
+	public static final String BEAN_includeProperties = BEAN_bpi;
 
 	/**
 	 * Configuration property:  Locale.
@@ -1943,7 +1959,7 @@ public class BeanContext extends Context {
 	private final Locale locale;
 	private final TimeZone timeZone;
 	private final MediaType mediaType;
-	private final Map<String,String[]> includeProperties, excludeProperties;
+	private final Map<String,String[]> bpi, bpx;
 	private final PropertyNamer propertyNamer;
 	private final String beanTypePropertyName;
 	private final int beanHashCode;
@@ -2046,12 +2062,12 @@ public class BeanContext extends Context {
 		Map<String,String[]> m2 = new HashMap<>();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_includeProperties, String.class).entrySet())
 			m2.put(e.getKey(), StringUtils.split(e.getValue()));
-		includeProperties = unmodifiableMap(m2);
+		bpi = unmodifiableMap(m2);
 
 		m2 = new HashMap<>();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_excludeProperties, String.class).entrySet())
 			m2.put(e.getKey(), StringUtils.split(e.getValue()));
-		excludeProperties = unmodifiableMap(m2);
+		bpx = unmodifiableMap(m2);
 
 		locale = getInstanceProperty(BEAN_locale, Locale.class, Locale.getDefault());
 		timeZone = getInstanceProperty(BEAN_timeZone, TimeZone.class, null);
@@ -2743,20 +2759,20 @@ public class BeanContext extends Context {
 	 * @param c The class.
 	 * @return The properties to include for the specified class, or <jk>null</jk> if it's not defined for the class.
 	 */
-	protected String[] getIncludeProperties(Class<?> c) {
-		if (includeProperties.isEmpty())
+	protected String[] getBpi(Class<?> c) {
+		if (bpi.isEmpty())
 			return null;
 		String[] s = null;
 		ClassInfo ci = ClassInfo.of(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
-			s = includeProperties.get(c2.getFullName());
+			s = bpi.get(c2.getFullName());
 			if (s != null)
 				return s;
-			s = includeProperties.get(c2.getSimpleName());
+			s = bpi.get(c2.getSimpleName());
 			if (s != null)
 				return s;
 		}
-		return includeProperties.get("*");
+		return bpi.get("*");
 	}
 
 	/**
@@ -2765,20 +2781,20 @@ public class BeanContext extends Context {
 	 * @param c The class.
 	 * @return The properties to exclude for the specified class, or <jk>null</jk> if it's not defined for the class.
 	 */
-	protected String[] getExcludeProperties(Class<?> c) {
-		if (excludeProperties.isEmpty())
+	protected String[] getBpx(Class<?> c) {
+		if (bpx.isEmpty())
 			return null;
 		String[] s = null;
 		ClassInfo ci = ClassInfo.of(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
-			s = excludeProperties.get(c2.getFullName());
+			s = bpx.get(c2.getFullName());
 			if (s != null)
 				return s;
-			s = excludeProperties.get(c2.getSimpleName());
+			s = bpx.get(c2.getSimpleName());
 			if (s != null)
 				return s;
 		}
-		return excludeProperties.get("*");
+		return bpx.get("*");
 	}
 
 	/**
@@ -3011,7 +3027,7 @@ public class BeanContext extends Context {
 	 * 	The list of property names to exclude keyed by class name.
 	 */
 	protected final Map<String,String[]> getExcludeProperties() {
-		return excludeProperties;
+		return bpx;
 	}
 
 	/**
@@ -3105,7 +3121,7 @@ public class BeanContext extends Context {
 	 * 	Include properties keyed by class name.
 	 */
 	protected final Map<String,String[]> getIncludeProperties() {
-		return includeProperties;
+		return bpi;
 	}
 
 	/**
@@ -3261,14 +3277,14 @@ public class BeanContext extends Context {
 				.append("beansRequireSerializable", beansRequireSerializable)
 				.append("beansRequireSettersForGetters", beansRequireSettersForGetters)
 				.append("beansRequireSomeProperties", beansRequireSomeProperties)
-				.append("excludeProperties", excludeProperties)
+				.append("excludeProperties", bpx)
 				.append("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
 				.append("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
 				.append("ignorePropertiesWithoutSetters", ignorePropertiesWithoutSetters)
 				.append("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
 				.append("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
 				.append("implClasses", implClasses)
-				.append("includeProperties", includeProperties)
+				.append("includeProperties", bpi)
 				.append("locale", locale)
 				.append("mediaType", mediaType)
 				.append("notBeanClasses", notBeanClasses)

@@ -166,39 +166,9 @@ public class BeanFilterBuilder<T> {
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * <p>
-	 * Specifies properties to exclude from the bean class.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Define our filter.</jc>
-	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
-	 * 		<jk>public</jk> MyFilter() {
-	 * 			excludeProperties(<js>"foo,bar"</js>);
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Register it with a serializer.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanFilters(MyFilter.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Serializes all properties except for 'foo' and 'bar'.</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#bpx()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>Values can contain comma-delimited list of property names.
-	 * @return This object (for method chaining).
 	 * @deprecated Use {@link #bpx(String...)}
 	 */
+	@SuppressWarnings("javadoc")
 	@Deprecated
 	public BeanFilterBuilder<T> excludeProperties(String...value) {
 		this.bpx = value;
@@ -550,7 +520,7 @@ public class BeanFilterBuilder<T> {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#bpi()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
 	 * </ul>
 	 *
 	 * @param value
@@ -590,7 +560,7 @@ public class BeanFilterBuilder<T> {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#bpx()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
 	 * </ul>
 	 *
 	 * @param value

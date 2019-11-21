@@ -30,13 +30,13 @@
 	<jk>public class</jk> Address { ... }
 </p>
 <p> 
-	Bean properties can be excluded using the {@link oaj.annotation.Bean#excludeProperties() @Bean(excludeProperties)}
+	Bean properties can be excluded using the {@link oaj.annotation.Bean#bpx() @Bean(bpx)}
 	annotation.
 </p>
 <p class='bpcode w800'>
 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	<jc>// All other properties are ignored.</jc>
-	<ja>@Bean</ja>(excludeProperties=<js>"city,state"</js>})
+	<ja>@Bean</ja>(bpx=<js>"city,state"</js>})
 	<jk>public class</jk> Address { ... }
 </p>
 <p>
