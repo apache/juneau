@@ -257,17 +257,19 @@ public class BeanMeta<T> {
 				Set<String> fixedBeanProps = new LinkedHashSet<>();
 				String[] bpi = ctx.getBpi(c);
 				String[] bpx = ctx.getBpx(c);
+				String[] bpro = ctx.getBpro(c);
+				String[] bpwo = ctx.getBpwo(c);
 
 				Set<String> filterProps = new HashSet<>();  // Names of properties defined in @Bean(properties)
 
 				if (beanFilter != null) {
 
-					if (beanFilter.getProperties() != null)
-						filterProps.addAll(Arrays.asList(beanFilter.getProperties()));
+					if (beanFilter.getBpi() != null)
+						filterProps.addAll(Arrays.asList(beanFilter.getBpi()));
 
 					// Get the 'properties' attribute if specified.
-					if (beanFilter.getProperties() != null && bpi == null)
-						for (String p : beanFilter.getProperties())
+					if (beanFilter.getBpi() != null && bpi == null)
+						for (String p : beanFilter.getBpi())
 							fixedBeanProps.add(p);
 
 					if (beanFilter.getPropertyNamer() != null)
@@ -423,17 +425,20 @@ public class BeanMeta<T> {
 				if (beanFilter != null) {
 
 					// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
-					String[] includeKeys = beanFilter.getProperties();
-					String[] excludeKeys = beanFilter.getExcludeProperties();
-					if (excludeKeys != null && bpx == null) {
-						for (String k : excludeKeys)
+					String[] bfbpi = beanFilter.getBpi();
+					String[] bfbpx = beanFilter.getBpx();
+					String[] bfbpro = beanFilter.getBpro();
+					String[] bfbpwo = beanFilter.getBpwo();
+
+					if (bfbpx != null && bpx == null) {
+						for (String k : bfbpx)
 							properties.remove(k);
 
 					// Only include specified properties if BeanFilter.includeKeys is specified.
 					// Note that the order must match includeKeys.
-					} else if (includeKeys != null) {
+					} else if (bfbpi != null) {
 						Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<>();
-						for (String k : includeKeys) {
+						for (String k : bfbpi) {
 							if (properties.containsKey(k))
 								properties2.put(k, properties.get(k));
 						}

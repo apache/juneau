@@ -35,7 +35,7 @@ import org.apache.juneau.annotation.*;
 public final class BeanFilter {
 
 	private final Class<?> beanClass;
-	private final String[] bpi, bpx;
+	private final String[] bpi, bpx, bpro, bpwo;
 	private final PropertyNamer propertyNamer;
 	private final Class<?> interfaceClass, stopClass;
 	private final boolean sortProperties, fluentSetters;
@@ -51,6 +51,8 @@ public final class BeanFilter {
 		this.typeName = builder.typeName;
 		this.bpi = split(builder.bpi, ',');
 		this.bpx = split(builder.bpx, ',');
+		this.bpro = split(builder.bpro, ',');
+		this.bpwo = split(builder.bpwo, ',');
 		this.interfaceClass = builder.interfaceClass;
 		this.stopClass = builder.stopClass;
 		this.sortProperties = builder.sortProperties;
@@ -85,17 +87,6 @@ public final class BeanFilter {
 	}
 
 	/**
-	 * Returns the set and order of names of properties associated with a bean class.
-	 *
-	 * @return
-	 * 	The name of the properties associated with a bean class, or <jk>null</jk> if all bean properties should
-	 * 	be used.
-	 */
-	public String[] getProperties() {
-		return bpi;
-	}
-
-	/**
 	 * Returns the bean dictionary defined on this bean.
 	 *
 	 * @return The bean dictionary defined on this bean, or <jk>null</jk> if no bean dictionary is defined.
@@ -105,10 +96,38 @@ public final class BeanFilter {
 	}
 
 	/**
+	 * Returns the set and order of names of properties associated with a bean class.
+	 *
+	 * @return
+	 * 	The name of the properties associated with a bean class, or <jk>null</jk> if all bean properties should
+	 * 	be used.
+	 */
+	public String[] getBpi() {
+		return bpi;
+	}
+
+	/**
+	 * Returns the list of properties to ignore on a bean.
+	 *
+	 * @return The name of the properties to ignore on a bean, or <jk>null</jk> to not ignore any properties.
+	 */
+	public String[] getBpx() {
+		return bpx;
+	}
+
+	public String[] getBpro() {
+		return bpro;
+	}
+
+	public String[] getBpwo() {
+		return bpwo;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the properties defined on this bean class should be ordered alphabetically.
 	 *
 	 * <p>
-	 * This method is only used when the {@link #getProperties()} method returns <jk>null</jk>.
+	 * This method is only used when the {@link #getBpi()} method returns <jk>null</jk>.
 	 * Otherwise, the ordering of the properties in the returned value is used.
 	 *
 	 * @return <jk>true</jk> if bean properties should be sorted.
@@ -124,15 +143,6 @@ public final class BeanFilter {
 	 */
 	public boolean isFluentSetters() {
 		return fluentSetters;
-	}
-
-	/**
-	 * Returns the list of properties to ignore on a bean.
-	 *
-	 * @return The name of the properties to ignore on a bean, or <jk>null</jk> to not ignore any properties.
-	 */
-	public String[] getExcludeProperties() {
-		return bpx;
 	}
 
 	/**

@@ -58,7 +58,7 @@ public class BeanFilterBuilder<T> {
 
 	Class<?> beanClass;
 	String typeName;
-	String[] bpi, bpx;
+	String[] bpi, bpx, bpro, bpwo;
 	Class<?> interfaceClass, stopClass;
 	boolean sortProperties, fluentSetters;
 	Object propertyNamer;
@@ -538,6 +538,16 @@ public class BeanFilterBuilder<T> {
 	 */
 	public BeanFilterBuilder<T> bpx(String...value) {
 		this.bpx = value;
+		return this;
+	}
+
+	public BeanFilterBuilder<T> bpro(String...value) {
+		this.bpro = value;
+		return this;
+	}
+
+	public BeanFilterBuilder<T> bpwo(String...value) {
+		this.bpwo = value;
 		return this;
 	}
 

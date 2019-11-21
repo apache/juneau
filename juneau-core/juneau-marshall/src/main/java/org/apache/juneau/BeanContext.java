@@ -864,6 +864,10 @@ public class BeanContext extends Context {
 	 */
 	public static final String BEAN_bpx = PREFIX + ".bpx.sms";
 
+	public static final String BEAN_bpro = PREFIX + ".bpro.sms";
+
+	public static final String BEAN_bpwo = PREFIX + ".bpwo.sms";
+
 	/**
 	 * Configuration property:  Debug mode.
 	 *
@@ -1957,7 +1961,7 @@ public class BeanContext extends Context {
 	private final Locale locale;
 	private final TimeZone timeZone;
 	private final MediaType mediaType;
-	private final Map<String,String[]> bpi, bpx;
+	private final Map<String,String[]> bpi, bpx, bpro, bpwo;
 	private final PropertyNamer propertyNamer;
 	private final String beanTypePropertyName;
 	private final int beanHashCode;
@@ -2066,6 +2070,16 @@ public class BeanContext extends Context {
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpx, String.class).entrySet())
 			m2.put(e.getKey(), StringUtils.split(e.getValue()));
 		bpx = unmodifiableMap(m2);
+
+		m2 = new HashMap<>();
+		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpro, String.class).entrySet())
+			m2.put(e.getKey(), StringUtils.split(e.getValue()));
+		bpro = unmodifiableMap(m2);
+
+		m2 = new HashMap<>();
+		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpwo, String.class).entrySet())
+			m2.put(e.getKey(), StringUtils.split(e.getValue()));
+		bpwo = unmodifiableMap(m2);
 
 		locale = getInstanceProperty(BEAN_locale, Locale.class, Locale.getDefault());
 		timeZone = getInstanceProperty(BEAN_timeZone, TimeZone.class, null);
@@ -3015,6 +3029,46 @@ public class BeanContext extends Context {
 				return s;
 		}
 		return bpx.get("*");
+	}
+
+	protected final Map<String,String[]> getBpro() {
+		return bpro;
+	}
+
+	protected String[] getBpro(Class<?> c) {
+		if (bpro.isEmpty())
+			return null;
+		String[] s = null;
+		ClassInfo ci = ClassInfo.of(c);
+		for (ClassInfo c2 : ci.getAllParents()) {
+			s = bpro.get(c2.getFullName());
+			if (s != null)
+				return s;
+			s = bpro.get(c2.getSimpleName());
+			if (s != null)
+				return s;
+		}
+		return bpro.get("*");
+	}
+
+	protected final Map<String,String[]> getBpwo() {
+		return bpwo;
+	}
+
+	protected String[] getBpwo(Class<?> c) {
+		if (bpwo.isEmpty())
+			return null;
+		String[] s = null;
+		ClassInfo ci = ClassInfo.of(c);
+		for (ClassInfo c2 : ci.getAllParents()) {
+			s = bpwo.get(c2.getFullName());
+			if (s != null)
+				return s;
+			s = bpwo.get(c2.getSimpleName());
+			if (s != null)
+				return s;
+		}
+		return bpwo.get("*");
 	}
 
 	/**

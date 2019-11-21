@@ -101,6 +101,10 @@ public @interface Bean {
 	 */
 	String bpx() default "";
 
+	String bpro() default "";
+
+	String bpwo() default "";
+
 	/**
 	 * Bean dictionary.
 	 *

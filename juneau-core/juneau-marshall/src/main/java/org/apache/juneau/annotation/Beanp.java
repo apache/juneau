@@ -330,4 +330,7 @@ public @interface Beanp {
 	 * </p>
 	 */
 	String format() default "";
+
+	boolean ro() default false;
+	boolean wo() default false;
 }

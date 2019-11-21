@@ -66,6 +66,12 @@ public final class AnnotationBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 			if (! b.bpx().isEmpty())
 				bpx(split(b.bpx()));
 
+			if (! b.bpro().isEmpty())
+				bpro(split(b.bpro()));
+
+			if (! b.bpwo().isEmpty())
+				bpwo(split(b.bpwo()));
+
 			if (b.propertyNamer() != PropertyNamerDefault.class)
 				propertyNamer(b.propertyNamer());
 
