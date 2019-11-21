@@ -32,7 +32,7 @@ import org.apache.juneau.jsonschema.annotation.Schema;
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.PredefinedHelperBeans}
  * </ul>
  */
-@Bean(properties="name,description", fluentSetters=true)
+@Bean(bpi="name,description", fluentSetters=true)
 @Response(schema=@Schema(ignore=true))
 public final class ResourceDescription implements Comparable<ResourceDescription> {
 

@@ -54,7 +54,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>{@doc juneau-dto.Swagger}
  * </ul>
  */
-@Bean(properties="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,*")
+@Bean(bpi="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,*")
 public class Items extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array"};

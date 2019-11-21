@@ -26,7 +26,7 @@ import org.apache.juneau.xml.annotation.*;
  * </p>
  */
 @SuppressWarnings({"rawtypes"})
-@Bean(typeName="item", properties="name,type,length")
+@Bean(typeName="item", bpi="name,type,length")
 public class Column {
 
 	private String name, type;

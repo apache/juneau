@@ -386,7 +386,7 @@ public class BeanMeta<T> {
 				// Check for missing properties.
 				for (String fp : fixedBeanProps)
 					if (! normalProps.containsKey(fp))
-						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation but was not found on the class definition.", fp);
+						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Bean(bpi=X) annotation but was not found on the class definition.", fp);
 
 				// Mark constructor arg properties.
 				for (String fp : constructorArgs) {

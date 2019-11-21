@@ -712,7 +712,7 @@ public @interface BeanConfig {
 	 * <p class='bcode w800'>
 	 * 	<ja>@BeanConfig</ja>(
 	 * 		examples={
-	 * 			<ja>@CSEntry</ja>(key=MyBean.<jk>class</jk>, value=<js>"{foo:'bar'}"</js>)
+	 * 			<ja>@CS</ja>(key=MyBean.<jk>class</jk>, value=<js>"{foo:'bar'}"</js>)
 	 * 		}
 	 * 	)
 	 * </p>

@@ -254,7 +254,7 @@ public @interface BeanProperty {
 	 * 	<jk>public class</jk> MyClass {
 	 *
 	 * 		<jc>// Only render 'f1' when serializing this bean property.</jc>
-	 * 		<ja>@BeanProperty</ja>(properties=<js>"f1"</js>)
+	 * 		<ja>@BeanProperty</ja>(bpi=<js>"f1"</js>)
 	 * 		<jk>public</jk> MyChildClass x1 = <jk>new</jk> MyChildClass();
 	 * 	}
 	 *

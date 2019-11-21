@@ -50,7 +50,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>{@doc juneau-dto.Swagger}
  * </ul>
  */
-@Bean(properties="description,url,*")
+@Bean(bpi="description,url,*")
 public class ExternalDocumentation extends SwaggerElement {
 
 	private String description;
