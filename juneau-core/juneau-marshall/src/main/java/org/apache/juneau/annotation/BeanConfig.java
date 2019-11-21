@@ -781,8 +781,7 @@ public @interface BeanConfig {
 	 *
 	 * @deprecated Use {@link #bpxMap()}
 	 */
-	@Deprecated
-	CS[] excludeProperties() default {};
+	@Deprecated CS[] excludeProperties() default {};
 
 	/**
 	 * Configuration property:  Find fluent setters.
@@ -974,37 +973,9 @@ public @interface BeanConfig {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * <p>
-	 * Specifies the set and order of names of properties associated with the bean class.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@BeanConfig</ja>(
-	 * 		includeProperties={
-	 * 			<ja>@CS</ja>(key=MyBean.<jk>class</jk>, value=<js>"foo,bar"</js>)
-	 * 		}
-	 * 	)
-	 * <p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Keys are the class applied to.
-	 * 		<br>Values are comma-delimited lists of property names.
-	 * 	<li>
-	 * 		Setting applies to specified class and all subclasses.
-	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.properties.sms"</js>.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
-	 * </ul>
 	 * @deprecated Use {@link #bpiMap()}
 	 */
-	@Deprecated
-	CS[] includeProperties() default {};
+	@Deprecated CS[] includeProperties() default {};
 
 	/**
 	 * Configuration property:  Locale.

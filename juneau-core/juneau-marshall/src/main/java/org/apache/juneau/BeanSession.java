@@ -1306,7 +1306,7 @@ public class BeanSession extends Session {
 	 * 	The list of property names to exclude keyed by class name.
 	 */
 	protected final Map<String,String[]> getBpx() {
-		return ctx.getExcludeProperties();
+		return ctx.getBpx();
 	}
 
 
@@ -1401,7 +1401,7 @@ public class BeanSession extends Session {
 	 * 	Include properties keyed by class name.
 	 */
 	protected final Map<String,String[]> getBpi() {
-		return ctx.getIncludeProperties();
+		return ctx.getBpi();
 	}
 
 	/**

@@ -416,7 +416,7 @@ public class BeanContext extends Context {
 	 *
 	 * 		<jc>// Must provide a no-arg constructor!</jc>
 	 * 		<jk>public</jk> MyBeanFilter() {
-	 * 			includeProperties(<js>"foo,bar,baz"</js>);  <jc>// The properties we want exposed.</jc>
+	 * 			bpi(<js>"foo,bar,baz"</js>);  <jc>// The properties we want exposed.</jc>
 	 * 		}
 	 * 	}
 	 *
@@ -976,8 +976,7 @@ public class BeanContext extends Context {
 	 *
 	 * @deprecated Use {@link #BEAN_bpx}
 	 */
-	@Deprecated
-	public static final String BEAN_excludeProperties = BEAN_bpx;
+	@Deprecated public static final String BEAN_excludeProperties = BEAN_bpx;
 
 	/**
 	 * Configuration property:  Find fluent setters.
@@ -1263,8 +1262,7 @@ public class BeanContext extends Context {
 	 *
 	 * @deprecated Use {@link #BEAN_bpi}
 	 */
-	@Deprecated
-	public static final String BEAN_includeProperties = BEAN_bpi;
+	@Deprecated public static final String BEAN_includeProperties = BEAN_bpi;
 
 	/**
 	 * Configuration property:  Locale.
@@ -2060,12 +2058,12 @@ public class BeanContext extends Context {
 		implClasses = unmodifiableMap(icm);
 
 		Map<String,String[]> m2 = new HashMap<>();
-		for (Map.Entry<String,String> e : getMapProperty(BEAN_includeProperties, String.class).entrySet())
+		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpi, String.class).entrySet())
 			m2.put(e.getKey(), StringUtils.split(e.getValue()));
 		bpi = unmodifiableMap(m2);
 
 		m2 = new HashMap<>();
-		for (Map.Entry<String,String> e : getMapProperty(BEAN_excludeProperties, String.class).entrySet())
+		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpx, String.class).entrySet())
 			m2.put(e.getKey(), StringUtils.split(e.getValue()));
 		bpx = unmodifiableMap(m2);
 
@@ -2754,50 +2752,6 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Returns the {@link #BEAN_includeProperties} setting for the specified class.
-	 *
-	 * @param c The class.
-	 * @return The properties to include for the specified class, or <jk>null</jk> if it's not defined for the class.
-	 */
-	protected String[] getBpi(Class<?> c) {
-		if (bpi.isEmpty())
-			return null;
-		String[] s = null;
-		ClassInfo ci = ClassInfo.of(c);
-		for (ClassInfo c2 : ci.getAllParents()) {
-			s = bpi.get(c2.getFullName());
-			if (s != null)
-				return s;
-			s = bpi.get(c2.getSimpleName());
-			if (s != null)
-				return s;
-		}
-		return bpi.get("*");
-	}
-
-	/**
-	 * Returns the {@link #BEAN_excludeProperties} setting for the specified class.
-	 *
-	 * @param c The class.
-	 * @return The properties to exclude for the specified class, or <jk>null</jk> if it's not defined for the class.
-	 */
-	protected String[] getBpx(Class<?> c) {
-		if (bpx.isEmpty())
-			return null;
-		String[] s = null;
-		ClassInfo ci = ClassInfo.of(c);
-		for (ClassInfo c2 : ci.getAllParents()) {
-			s = bpx.get(c2.getFullName());
-			if (s != null)
-				return s;
-			s = bpx.get(c2.getSimpleName());
-			if (s != null)
-				return s;
-		}
-		return bpx.get("*");
-	}
-
-	/**
 	 * Returns a reusable {@link ClassMeta} representation for the class <c>Object</c>.
 	 *
 	 * <p>
@@ -2998,6 +2952,72 @@ public class BeanContext extends Context {
 	}
 
 	/**
+	 * Configuration property:  Bean property includes.
+	 *
+	 * @see #BEAN_bpi
+	 * @return
+	 * 	Include properties keyed by class name.
+	 */
+	protected final Map<String,String[]> getBpi() {
+		return bpi;
+	}
+
+	/**
+	 * Returns the {@link #BEAN_bpi} setting for the specified class.
+	 *
+	 * @param c The class.
+	 * @return The properties to include for the specified class, or <jk>null</jk> if it's not defined for the class.
+	 */
+	protected String[] getBpi(Class<?> c) {
+		if (bpi.isEmpty())
+			return null;
+		String[] s = null;
+		ClassInfo ci = ClassInfo.of(c);
+		for (ClassInfo c2 : ci.getAllParents()) {
+			s = bpi.get(c2.getFullName());
+			if (s != null)
+				return s;
+			s = bpi.get(c2.getSimpleName());
+			if (s != null)
+				return s;
+		}
+		return bpi.get("*");
+	}
+
+	/**
+	 * Configuration property:  Bean property excludes.
+	 *
+	 * @see #BEAN_bpx
+	 * @return
+	 * 	The list of property names to exclude keyed by class name.
+	 */
+	protected final Map<String,String[]> getBpx() {
+		return bpx;
+	}
+
+	/**
+	 * Returns the {@link #BEAN_bpx} setting for the specified class.
+	 *
+	 * @param c The class.
+	 * @return The properties to exclude for the specified class, or <jk>null</jk> if it's not defined for the class.
+	 */
+	protected String[] getBpx(Class<?> c) {
+		if (bpx.isEmpty())
+			return null;
+		String[] s = null;
+		ClassInfo ci = ClassInfo.of(c);
+		for (ClassInfo c2 : ci.getAllParents()) {
+			s = bpx.get(c2.getFullName());
+			if (s != null)
+				return s;
+			s = bpx.get(c2.getSimpleName());
+			if (s != null)
+				return s;
+		}
+		return bpx.get("*");
+	}
+
+	/**
 	 * Configuration property:  Debug mode.
 	 *
 	 * @see #BEAN_debug
@@ -3017,17 +3037,6 @@ public class BeanContext extends Context {
 	 */
 	protected final Map<String,?> getExamples() {
 		return examples;
-	}
-
-	/**
-	 * Configuration property:  Bean property excludes.
-	 *
-	 * @see #BEAN_excludeProperties
-	 * @return
-	 * 	The list of property names to exclude keyed by class name.
-	 */
-	protected final Map<String,String[]> getExcludeProperties() {
-		return bpx;
 	}
 
 	/**
@@ -3111,17 +3120,6 @@ public class BeanContext extends Context {
 	 */
 	protected final Map<String,ClassInfo> getImplClasses() {
 		return implClasses;
-	}
-
-	/**
-	 * Configuration property:  Bean property includes.
-	 *
-	 * @see #BEAN_includeProperties
-	 * @return
-	 * 	Include properties keyed by class name.
-	 */
-	protected final Map<String,String[]> getIncludeProperties() {
-		return bpi;
 	}
 
 	/**
@@ -3277,14 +3275,14 @@ public class BeanContext extends Context {
 				.append("beansRequireSerializable", beansRequireSerializable)
 				.append("beansRequireSettersForGetters", beansRequireSettersForGetters)
 				.append("beansRequireSomeProperties", beansRequireSomeProperties)
-				.append("excludeProperties", bpx)
+				.append("bpi", bpi)
+				.append("bpx", bpx)
 				.append("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
 				.append("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
 				.append("ignorePropertiesWithoutSetters", ignorePropertiesWithoutSetters)
 				.append("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
 				.append("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
 				.append("implClasses", implClasses)
-				.append("includeProperties", bpi)
 				.append("locale", locale)
 				.append("mediaType", mediaType)
 				.append("notBeanClasses", notBeanClasses)

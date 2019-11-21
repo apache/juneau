@@ -227,7 +227,7 @@ public class BeanConfigAnnotationTest {
 		check("false", bc.isDebug());
 		check("false", bc.isDetectRecursions());
 		check("", bc.getExamples());
-		check("", bc.getExcludeProperties());
+		check("", bc.getBpx());
 		check("false", bc.isFluentSetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnSetters());
@@ -236,7 +236,7 @@ public class BeanConfigAnnotationTest {
 		check("false", bc.isIgnoreUnknownBeanProperties());
 		check("true", bc.isIgnoreUnknownNullBeanProperties());
 		check("", bc.getImplClasses());
-		check("", bc.getIncludeProperties());
+		check("", bc.getBpi());
 		check("0", bc.getInitialDepth());
 		check(Locale.getDefault().toString(), bc.getLocale());
 		check("100", bc.getMaxDepth());
@@ -277,7 +277,7 @@ public class BeanConfigAnnotationTest {
 		check("false", bc.isDebug());
 		check("false", bc.isDetectRecursions());
 		check("", bc.getExamples());
-		check("", bc.getExcludeProperties());
+		check("", bc.getBpx());
 		check("false", bc.isFluentSetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnSetters());
@@ -286,7 +286,7 @@ public class BeanConfigAnnotationTest {
 		check("false", bc.isIgnoreUnknownBeanProperties());
 		check("true", bc.isIgnoreUnknownNullBeanProperties());
 		check("", bc.getImplClasses());
-		check("", bc.getIncludeProperties());
+		check("", bc.getBpi());
 		check("0", bc.getInitialDepth());
 		check(Locale.getDefault().toString(), bc.getLocale());
 		check("100", bc.getMaxDepth());

@@ -82,9 +82,9 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		if (! a.beanTypePropertyName().isEmpty())
 			psb.set(BEAN_beanTypePropertyName, string(a.beanTypePropertyName()));
 		if (a.bpi().length > 0)
-			psb.addTo(BEAN_includeProperties, stringsMap(a.bpi(), "bpi"));
+			psb.addTo(BEAN_bpi, stringsMap(a.bpi(), "bpi"));
 		if (a.bpx().length > 0)
-			psb.addTo(BEAN_excludeProperties, stringsMap(a.bpi(), "bpx"));
+			psb.addTo(BEAN_bpx, stringsMap(a.bpi(), "bpx"));
 		if (! a.debug().isEmpty())
 			psb.set(BEAN_debug, bool(a.debug()));
 		for (CS e : a.example())
@@ -92,9 +92,9 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		if (a.examples().length > 0)
 			psb.addTo(BEAN_examples, objectMap(a.examples(), "examples"));
 		for (CS e : a.excludeProperties())
-			psb.addTo(BEAN_excludeProperties, e.k().getName(), string(e.v()));
+			psb.addTo(BEAN_bpx, e.k().getName(), string(e.v()));
 		for (CS e : a.bpxMap())
-			psb.addTo(BEAN_excludeProperties, e.k().getName(), string(e.v()));
+			psb.addTo(BEAN_bpx, e.k().getName(), string(e.v()));
 		if (! a.fluentSetters().isEmpty())
 			psb.set(BEAN_fluentSetters, bool(a.fluentSetters()));
 		if (! a.ignoreInvocationExceptionsOnGetters().isEmpty())
@@ -110,9 +110,9 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		for (CC e : a.implClasses())
 			psb.addTo(BEAN_implClasses, e.k().getName(), e.v());
 		for (CS e : a.includeProperties())
-			psb.addTo(BEAN_includeProperties, e.k().getName(), string(e.v()));
+			psb.addTo(BEAN_bpi, e.k().getName(), string(e.v()));
 		for (CS e : a.bpiMap())
-			psb.addTo(BEAN_includeProperties, e.k().getName(), string(e.v()));
+			psb.addTo(BEAN_bpi, e.k().getName(), string(e.v()));
 		if (! a.locale().isEmpty())
 			psb.set(BEAN_locale, locale(a.locale()));
 		if (! a.mediaType().isEmpty())

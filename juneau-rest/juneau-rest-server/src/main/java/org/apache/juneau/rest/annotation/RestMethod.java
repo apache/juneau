@@ -81,123 +81,21 @@ public @interface RestMethod {
 	 *
 	 * @deprecated Use {@link BeanConfig#beanFilters()}
 	 */
-	@Deprecated
-	Class<?>[] beanFilters() default {};
+	@Deprecated Class<?>[] beanFilters() default {};
 
 	/**
-	 * Shortcut for specifying the {@link BeanContext#BEAN_includeProperties} property on all serializers.
-	 *
-	 * <p>
-	 * The typical use case is when you're rendering summary and details views of the same bean in a resource and
-	 * you want to expose or hide specific properties depending on the level of detail you want.
-	 *
-	 * <p>
-	 * In the example below, our 'summary' view is a list of beans where we only want to show the ID property,
-	 * and our detail view is a single bean where we want to expose different fields:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our bean</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<jc>// Summary properties</jc>
-	 * 		<ja>@Html</ja>(link=<js>"servlet:/mybeans/{id}"</js>)
-	 * 		<jk>public</jk> String <jf>id</jf>;
-	 *
-	 * 		<jc>// Detail properties</jc>
-	 * 		<jk>public</jk> String <jf>a</jf>, <jf>b</jf>;
-	 * 	}
-	 *
-	 * 	<jc>// Only render "id" property.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>, bpi=<js>"MyBean: id"</js>)
-	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary() {...}
-	 *
-	 * 	<jc>// Only render "a" and "b" properties.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans/{id}"</js>, bpi=<js>"MyBean: a,b"</js>)
-	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id) {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
-	 * 	<li>
-	 * 		Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
-	 * 	<li>
-	 * 		Values are comma-delimited lists of bean property names.
-	 * 	<li>
-	 * 		Properties apply to specified class and all subclasses.
-	 * 	<li>
-	 * 		Semicolons can be used as an additional separator for multiple values:
-	 * 		<p class='bcode w800'>
-	 * 	<jc>// Equivalent</jc>
-	 * 	bpi={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
-	 * 	bpi=<js>"Bean1: foo; Bean2: bar,baz"</js>
-	 * 		</p>
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
-	 * </ul>
+	 * Shortcut for specifying the {@link BeanContext#BEAN_bpi} property on all serializers.
 	 *
 	 * @deprecated Use {@link BeanConfig#bpi()}
 	 */
-	@Deprecated
-	String[] bpi() default {};
+	@Deprecated String[] bpi() default {};
 
 	/**
-	 * Shortcut for specifying the {@link BeanContext#BEAN_excludeProperties} property on all serializers.
-	 *
-	 * <p>
-	 * Same as {@link #bpi()} except you specify a list of bean property names that you want to exclude from
-	 * serialization.
-	 *
-	 * <p>
-	 * In the example below, our 'summary' view is a list of beans where we want to exclude some properties:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our bean</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<jc>// Summary properties</jc>
-	 * 		<ja>@Html</ja>(link=<js>"servlet:/mybeans/{id}"</js>)
-	 * 		<jk>public</jk> String <jf>id</jf>;
-	 *
-	 * 		<jc>// Detail properties</jc>
-	 * 		<jk>public</jk> String <jf>a</jf>, <jf>b</jf>;
-	 * 	}
-	 *
-	 * 	<jc>// Don't show "a" and "b" properties.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>, bpx=<js>"MyBean: a,b"</js>)
-	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary() {...}
-	 *
-	 * 	<jc>// Render all properties.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans/{id}"</js>)
-	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id) {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
-	 * 	<li>
-	 * 		Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
-	 * 	<li>
-	 * 		Values are comma-delimited lists of bean property names.
-	 * 	<li>
-	 * 		Properties apply to specified class and all subclasses.
-	 * 	<li>
-	 * 		Semicolons can be used as an additional separator for multiple values:
-	 * 		<p class='bcode w800'>
-	 * 	<jc>// Equivalent</jc>
-	 * 	bpx={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
-	 * 	bpx=<js>"Bean1: foo; Bean2: bar,baz"</js>
-	 * 		</p>
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
-	 * </ul>
+	 * Shortcut for specifying the {@link BeanContext#BEAN_bpx} property on all serializers.
 	 *
 	 * @deprecated Use {@link BeanConfig#bpx()}
 	 */
-	@Deprecated
-	String[] bpx() default {};
+	@Deprecated String[] bpx() default {};
 
 	/**
 	 * Specifies whether this method can be called based on the client version.

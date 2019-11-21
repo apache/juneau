@@ -124,7 +124,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 					bpiMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
 				}
 			}
-			psb.addTo(BEAN_includeProperties, bpiMap);
+			psb.addTo(BEAN_bpi, bpiMap);
 		}
 
 		if (a.bpx().length > 0) {
@@ -138,7 +138,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 					bpxMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
 				}
 			}
-			psb.addTo(BEAN_excludeProperties, bpxMap);
+			psb.addTo(BEAN_bpx, bpxMap);
 		}
 
 		if (! a.defaultCharset().isEmpty())

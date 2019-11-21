@@ -497,7 +497,7 @@ public class BeanMeta<T> {
 			if (isNotEmpty(name)) {
 				if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
 					return name;
-				return null;  // Could happen if filtered via BEAN_includeProperties/BEAN_excludeProperties.
+				return null;  // Could happen if filtered via BEAN_bpi/BEAN_bpx.
 			}
 			name = propertyNamer.getPropertyName(f.getName());
 			if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
@@ -717,7 +717,7 @@ public class BeanMeta<T> {
 						n = bpName;
 						if (! fixedBeanProps.isEmpty())
 							if (! fixedBeanProps.contains(n))
-								n = null;  // Could happen if filtered via BEAN_includeProperties/BEAN_excludeProperties
+								n = null;  // Could happen if filtered via BEAN_bpi/BEAN_bpx
 					}
 					if (n != null)
 						l.add(new BeanMethod(n, methodType, m.inner()));

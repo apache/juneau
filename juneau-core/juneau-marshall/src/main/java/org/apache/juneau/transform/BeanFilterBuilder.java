@@ -35,7 +35,7 @@ import org.apache.juneau.reflect.*;
  * 		<jk>public</jk> MyFilter() {
  *
  * 			<jc>// Call one or more configuration methods.</jc>
- * 			includeProperties(<js>"foo,bar,baz"</js>);
+ * 			bpi(<js>"foo,bar,baz"</js>);
  * 			sortProperties();
  * 			propertyNamer(PropertyNamerULC.<jk>class</jk>);
  * 		}
@@ -124,41 +124,10 @@ public class BeanFilterBuilder<T> {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * <p>
-	 * Specifies the set and order of names of properties associated with the bean class.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Define our filter.</jc>
-	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
-	 * 		<jk>public</jk> MyFilter() {
-	 * 			includeProperties(<js>"foo,bar,baz"</js>);
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Register it with a serializer.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanFilters(MyFilter.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Only serializes the properties 'foo', 'bar', and 'baz'.</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#bpi()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>Values can contain comma-delimited list of property names.
-	 * @return This object (for method chaining).
 	 * @deprecated Use {@link #bpi(String...)}
 	 */
-	@Deprecated
-	public BeanFilterBuilder<T> properties(String...value) {
+	@SuppressWarnings("javadoc")
+	@Deprecated public BeanFilterBuilder<T> properties(String...value) {
 		this.bpi = value;
 		return this;
 	}
@@ -169,8 +138,7 @@ public class BeanFilterBuilder<T> {
 	 * @deprecated Use {@link #bpx(String...)}
 	 */
 	@SuppressWarnings("javadoc")
-	@Deprecated
-	public BeanFilterBuilder<T> excludeProperties(String...value) {
+	@Deprecated public BeanFilterBuilder<T> excludeProperties(String...value) {
 		this.bpx = value;
 		return this;
 	}

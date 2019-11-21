@@ -32,7 +32,7 @@ BeanFilter Class
 	In the previous examples, we defined this bean annotation:
 </p>
 <p class='bpcode w800'>
-	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
+	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
 	<jk>public class</jk> Address { ... }
 </p>
 <p>
@@ -43,7 +43,7 @@ BeanFilter Class
 		
 		<jc>// Must provide a no-arg constructor!</jc>
 		<jk>public</jk> AddressFilter() {
-			includeProperties(<js>"street,city,state"</js>);  <jc>// The properties we want exposed.</jc>
+			bpi(<js>"street,city,state"</js>);  <jc>// The properties we want exposed.</jc>
 		}
 	}	
 </p>		
