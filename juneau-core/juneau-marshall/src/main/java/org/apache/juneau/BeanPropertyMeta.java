@@ -582,10 +582,16 @@ public final class BeanPropertyMeta {
 	 *
 	 * @param m The bean map to get the transformed value from.
 	 * @param pName The property name.
-	 * @return The property value.
+	 * @return 
+	 * 	The property value.
+	 * 	<br>Returns <jk>null</jk> if this is a write-only property.
 	 */
 	public Object get(BeanMap<?> m, String pName) {
 		try {
+
+			if (writeOnly)
+				return null;
+
 			if (overrideValue != null)
 				return overrideValue;
 
@@ -669,6 +675,9 @@ public final class BeanPropertyMeta {
 	/**
 	 * Equivalent to calling {@link BeanMap#put(String, Object)}, but is faster since it avoids looking up the property
 	 * meta.
+	 * 
+	 * <p>
+	 * This is a no-op on a read-only property.
 	 *
 	 * @param m The bean map to set the property value on.
 	 * @param pName The property name.
@@ -678,6 +687,9 @@ public final class BeanPropertyMeta {
 	 */
 	public Object set(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
 		try {
+
+			if (readOnly)
+				return null;
 
 			BeanSession session = m.getBeanSession();
 
