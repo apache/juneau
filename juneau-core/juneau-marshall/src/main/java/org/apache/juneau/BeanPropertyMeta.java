@@ -69,7 +69,7 @@ public final class BeanPropertyMeta {
 
 	private final Object overrideValue;                       // The bean property value (if it's an overridden delegate).
 	private final BeanPropertyMeta delegateFor;               // The bean property that this meta is a delegate for.
-	private final boolean canRead, canWrite;
+	private final boolean canRead, canWrite, readOnly, writeOnly;
 
 	/**
 	 * Creates a builder for {@link #BeanPropertyMeta} objects.
@@ -99,7 +99,7 @@ public final class BeanPropertyMeta {
 		Object overrideValue;
 		BeanPropertyMeta delegateFor;
 		MetadataMap extMeta = new MetadataMap();
-		boolean canRead, canWrite;
+		boolean canRead, canWrite, readOnly, writeOnly;
 
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;
@@ -163,7 +163,7 @@ public final class BeanPropertyMeta {
 		}
 
 		@SuppressWarnings("deprecation")
-		boolean validate(BeanContext f, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls) throws Exception {
+		boolean validate(BeanContext f, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
 			List<Class<?>> bdClasses = new ArrayList<>();
 
@@ -194,6 +194,10 @@ public final class BeanPropertyMeta {
 					if (! p.bpi().isEmpty())
 						properties = split(p.bpi());
 					bdClasses.addAll(Arrays.asList(p.dictionary()));
+					if (! p.ro().isEmpty())
+						readOnly = Boolean.valueOf(p.ro());
+					if (! p.wo().isEmpty())
+						writeOnly = Boolean.valueOf(p.wo());
 				}
 				Swap s = innerField.getAnnotation(Swap.class);
 				if (s != null) {
@@ -217,6 +221,10 @@ public final class BeanPropertyMeta {
 					if (properties != null && ! p.bpi().isEmpty())
 						properties = split(p.bpi());
 					bdClasses.addAll(Arrays.asList(p.dictionary()));
+					if (! p.ro().isEmpty())
+						readOnly = Boolean.valueOf(p.ro());
+					if (! p.wo().isEmpty())
+						writeOnly = Boolean.valueOf(p.wo());
 				}
 				Swap s = getter.getAnnotation(Swap.class);
 				if (s != null && swap == null) {
@@ -243,6 +251,10 @@ public final class BeanPropertyMeta {
 					if (properties != null && ! p.bpi().isEmpty())
 						properties = split(p.bpi());
 					bdClasses.addAll(Arrays.asList(p.dictionary()));
+					if (! p.ro().isEmpty())
+						readOnly = Boolean.valueOf(p.ro());
+					if (! p.wo().isEmpty())
+						writeOnly = Boolean.valueOf(p.wo());
 				}
 				Swap s = setter.getAnnotation(Swap.class);
 				if (s != null && swap == null) {
@@ -311,6 +323,11 @@ public final class BeanPropertyMeta {
 				typeMeta = (swap != null ? beanContext.getClassMeta(swap.getSwapClass().innerType()) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta);
 			if (typeMeta == null)
 				typeMeta = rawTypeMeta;
+
+			if (bpro.contains(name) || bpro.contains("*"))
+				readOnly = true;
+			if (bpwo.contains(name) || bpwo.contains("*"))
+				writeOnly = true;
 
 			return true;
 		}
@@ -422,6 +439,8 @@ public final class BeanPropertyMeta {
 		this.isDynaGetterMap = b.isDynaGetterMap;
 		this.canRead = b.canRead;
 		this.canWrite = b.canWrite;
+		this.readOnly = b.readOnly;
+		this.writeOnly = b.writeOnly;
 	}
 
 	/**
@@ -1228,5 +1247,29 @@ public final class BeanPropertyMeta {
 	 */
 	public boolean canWrite() {
 		return canWrite;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this property is read-only.
+	 *
+	 * <p>
+	 * This implies the property MIGHT be writable, but that parsers should not set a value for it.
+	 *
+	 * @return <jk>true</jk> if this property is read-only.
+	 */
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this property is write-only.
+	 *
+	 * <p>
+	 * This implies the property MIGHT be readable, but that serializers should not serialize it.
+	 *
+	 * @return <jk>true</jk> if this property is write-only.
+	 */
+	protected boolean isWriteOnly() {
+		return writeOnly;
 	}
 }

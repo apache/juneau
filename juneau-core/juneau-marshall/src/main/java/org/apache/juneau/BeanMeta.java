@@ -257,8 +257,8 @@ public class BeanMeta<T> {
 				Set<String> fixedBeanProps = new LinkedHashSet<>();
 				String[] bpi = ctx.getBpi(c);
 				String[] bpx = ctx.getBpx(c);
-				String[] bpro = ctx.getBpro(c);
-				String[] bpwo = ctx.getBpwo(c);
+				Set<String> bpro = ctx.getBpro(c) == null ? newHashSet() : newHashSet(ctx.getBpro(c));
+				Set<String> bpwo = ctx.getBpwo(c) == null ? newHashSet() : newHashSet(ctx.getBpwo(c));
 
 				Set<String> filterProps = new HashSet<>();  // Names of properties defined in @Bean(properties)
 
@@ -274,6 +274,12 @@ public class BeanMeta<T> {
 
 					if (beanFilter.getPropertyNamer() != null)
 						propertyNamer = beanFilter.getPropertyNamer();
+
+					if (beanFilter.getBpro() != null)
+						bpro.addAll(Arrays.asList(beanFilter.getBpro()));
+					
+					if (beanFilter.getBpwo() != null)
+						bpwo.addAll(Arrays.asList(beanFilter.getBpwo()));
 				}
 
 				if (bpi != null)
@@ -369,7 +375,7 @@ public class BeanMeta<T> {
 						if (p.field == null)
 							p.setInnerField(findInnerBeanField(c, stopClass, p.name));
 
-						if (p.validate(ctx, beanRegistry, typeVarImpls)) {
+						if (p.validate(ctx, beanRegistry, typeVarImpls, bpro, bpwo)) {
 
 							if (p.getter != null)
 								getterProps.put(p.getter, p.name);
@@ -427,8 +433,6 @@ public class BeanMeta<T> {
 					// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
 					String[] bfbpi = beanFilter.getBpi();
 					String[] bfbpx = beanFilter.getBpx();
-					String[] bfbpro = beanFilter.getBpro();
-					String[] bfbpwo = beanFilter.getBpwo();
 
 					if (bfbpx != null && bpx == null) {
 						for (String k : bfbpx)

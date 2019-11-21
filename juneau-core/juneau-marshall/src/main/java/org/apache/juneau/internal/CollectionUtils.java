@@ -503,6 +503,17 @@ public final class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <T> Set<T> newUnmodifiableHashSet(T...values) {
-		return Collections.unmodifiableSet(new HashSet<>(Arrays.asList(values)));
+		return Collections.unmodifiableSet(newHashSet(values));
+	}
+
+	/**
+	 * Converts the specified arguments into a modifiable {@link HashSet}.
+	 *
+	 * @param values The entries to populate the hashset with.
+	 * @return A new {@link HashSet} populated with the specified arguments.
+	 */
+	@SafeVarargs
+	public static <T> Set<T> newHashSet(T...values) {
+		return new HashSet<>(Arrays.asList(values));
 	}
 }

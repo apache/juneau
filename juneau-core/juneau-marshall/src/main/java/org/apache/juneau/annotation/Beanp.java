@@ -331,6 +331,6 @@ public @interface Beanp {
 	 */
 	String format() default "";
 
-	boolean ro() default false;
-	boolean wo() default false;
+	String ro() default "";
+	String wo() default "";
 }

@@ -3048,7 +3048,10 @@ public class BeanContext extends Context {
 			if (s != null)
 				return s;
 		}
-		return bpro.get("*");
+		s = bpro.get("*");
+		if (s != null)
+			return s;
+		return null;
 	}
 
 	protected final Map<String,String[]> getBpwo() {
@@ -3068,7 +3071,10 @@ public class BeanContext extends Context {
 			if (s != null)
 				return s;
 		}
-		return bpwo.get("*");
+		s = bpwo.get("*");
+		if (s != null)
+			return s;
+		return null;
 	}
 
 	/**
