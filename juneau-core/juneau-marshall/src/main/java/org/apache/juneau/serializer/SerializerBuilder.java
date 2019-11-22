@@ -700,6 +700,42 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerBuilder bpro(Class<?> beanClass, String value) {
+		super.bpro(beanClass, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder bpro(Map<String,String> values) {
+		super.bpro(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder bpro(String beanClassName, String value) {
+		super.bpro(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder bpwo(Class<?> beanClass, String properties) {
+		super.bpwo(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder bpwo(Map<String,String> values) {
+		super.bpwo(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder bpwo(String beanClassName, String value) {
+		super.bpwo(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerBuilder debug() {
 		super.debug();
 		return this;

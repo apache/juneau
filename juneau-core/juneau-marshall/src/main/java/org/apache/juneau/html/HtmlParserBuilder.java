@@ -344,6 +344,42 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder bpro(Class<?> beanClass, String value) {
+		super.bpro(beanClass, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder bpro(Map<String,String> values) {
+		super.bpro(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder bpro(String beanClassName, String value) {
+		super.bpro(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder bpwo(Class<?> beanClass, String properties) {
+		super.bpwo(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder bpwo(Map<String,String> values) {
+		super.bpwo(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder bpwo(String beanClassName, String value) {
+		super.bpwo(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder debug() {
 		super.debug();
 		return this;

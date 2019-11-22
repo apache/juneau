@@ -448,6 +448,42 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public PlainTextSerializerBuilder bpro(Class<?> beanClass, String value) {
+		super.bpro(beanClass, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextSerializerBuilder bpro(Map<String,String> values) {
+		super.bpro(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextSerializerBuilder bpro(String beanClassName, String value) {
+		super.bpro(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextSerializerBuilder bpwo(Class<?> beanClass, String properties) {
+		super.bpwo(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextSerializerBuilder bpwo(Map<String,String> values) {
+		super.bpwo(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextSerializerBuilder bpwo(String beanClassName, String value) {
+		super.bpwo(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public PlainTextSerializerBuilder debug() {
 		super.debug();
 		return this;

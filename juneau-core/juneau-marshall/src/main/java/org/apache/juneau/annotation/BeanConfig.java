@@ -618,6 +618,11 @@ public @interface BeanConfig {
 	 */
 	CS[] bpxMap() default {};
 
+	String[] bpro() default {};
+	CS[] bproMap() default {};
+	String[] bpwo() default {};
+	CS[] bpwoMap() default {};
+
 	/**
 	 * Configuration property:  Debug mode.
 	 *

@@ -360,6 +360,42 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsonParserBuilder bpro(Class<?> beanClass, String value) {
+		super.bpro(beanClass, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonParserBuilder bpro(Map<String,String> values) {
+		super.bpro(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonParserBuilder bpro(String beanClassName, String value) {
+		super.bpro(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonParserBuilder bpwo(Class<?> beanClass, String properties) {
+		super.bpwo(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonParserBuilder bpwo(Map<String,String> values) {
+		super.bpwo(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonParserBuilder bpwo(String beanClassName, String value) {
+		super.bpwo(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsonParserBuilder debug() {
 		super.debug();
 		return this;

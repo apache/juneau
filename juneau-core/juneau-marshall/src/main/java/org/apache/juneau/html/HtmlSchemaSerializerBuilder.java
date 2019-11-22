@@ -599,6 +599,42 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder bpro(Class<?> beanClass, String value) {
+		super.bpro(beanClass, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder bpro(Map<String,String> values) {
+		super.bpro(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder bpro(String beanClassName, String value) {
+		super.bpro(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder bpwo(Class<?> beanClass, String properties) {
+		super.bpwo(beanClass, properties);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder bpwo(Map<String,String> values) {
+		super.bpwo(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder bpwo(String beanClassName, String value) {
+		super.bpwo(beanClassName, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder debug() {
 		super.debug();
 		return this;

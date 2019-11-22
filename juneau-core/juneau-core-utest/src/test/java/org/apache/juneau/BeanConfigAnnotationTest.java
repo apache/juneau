@@ -121,6 +121,8 @@ public class BeanConfigAnnotationTest {
 		beanTypePropertyName="$X{foo}",
 		bpiMap=@CS(k=A1.class,v="$X{foo}"),
 		bpxMap=@CS(k=A1.class,v="$X{foo}"),
+		bproMap=@CS(k=A1.class,v="$X{foo}"),
+		bpwoMap=@CS(k=A1.class,v="$X{foo}"),
 		debug="$X{true}",
 		detectRecursions="$X{true}",
 		examples="$X{A1}: {foo:1}",
@@ -172,10 +174,13 @@ public class BeanConfigAnnotationTest {
 		check("true", bc.isBeansRequireSettersForGetters());
 		check("true", bc.isBeansRequireSomeProperties());
 		check("foo", bc.getBeanTypePropertyName());
+		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getBpi());
+		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getBpx());
+		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getBpro());
+		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getBpwo());
 		check("true", bc.isDebug());
 		check("true", bc.isDetectRecursions());
 		check("A1={foo:1}", bc.getExamples());
-		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getBpx());
 		check("true", bc.isFluentSetters());
 		check("true", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("true", bc.isIgnoreInvocationExceptionsOnSetters());
@@ -184,7 +189,6 @@ public class BeanConfigAnnotationTest {
 		check("true", bc.isIgnoreUnknownBeanProperties());
 		check("true", bc.isIgnoreUnknownNullBeanProperties());
 		check("org.apache.juneau.BeanConfigAnnotationTest$A1=A1", bc.getImplClasses());
-		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getBpi());
 		check("1", bc.getInitialDepth());
 		check("en_US", bc.getLocale());
 		check("1", bc.getMaxDepth());
@@ -224,10 +228,13 @@ public class BeanConfigAnnotationTest {
 		check("false", bc.isBeansRequireSettersForGetters());
 		check("true", bc.isBeansRequireSomeProperties());
 		check("_type", bc.getBeanTypePropertyName());
+		check("", bc.getBpi());
+		check("", bc.getBpx());
+		check("", bc.getBpro());
+		check("", bc.getBpwo());
 		check("false", bc.isDebug());
 		check("false", bc.isDetectRecursions());
 		check("", bc.getExamples());
-		check("", bc.getBpx());
 		check("false", bc.isFluentSetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnSetters());
@@ -236,7 +243,6 @@ public class BeanConfigAnnotationTest {
 		check("false", bc.isIgnoreUnknownBeanProperties());
 		check("true", bc.isIgnoreUnknownNullBeanProperties());
 		check("", bc.getImplClasses());
-		check("", bc.getBpi());
 		check("0", bc.getInitialDepth());
 		check(Locale.getDefault().toString(), bc.getLocale());
 		check("100", bc.getMaxDepth());
@@ -274,10 +280,13 @@ public class BeanConfigAnnotationTest {
 		check("false", bc.isBeansRequireSettersForGetters());
 		check("true", bc.isBeansRequireSomeProperties());
 		check("_type", bc.getBeanTypePropertyName());
+		check("", bc.getBpi());
+		check("", bc.getBpx());
+		check("", bc.getBpro());
+		check("", bc.getBpwo());
 		check("false", bc.isDebug());
 		check("false", bc.isDetectRecursions());
 		check("", bc.getExamples());
-		check("", bc.getBpx());
 		check("false", bc.isFluentSetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnSetters());
@@ -286,7 +295,6 @@ public class BeanConfigAnnotationTest {
 		check("false", bc.isIgnoreUnknownBeanProperties());
 		check("true", bc.isIgnoreUnknownNullBeanProperties());
 		check("", bc.getImplClasses());
-		check("", bc.getBpi());
 		check("0", bc.getInitialDepth());
 		check(Locale.getDefault().toString(), bc.getLocale());
 		check("100", bc.getMaxDepth());

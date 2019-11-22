@@ -1748,6 +1748,22 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Returns all possible names for this class.
+	 *
+	 * @return
+	 * 	An array consisting of:
+	 * 	<ul>
+	 * 		<li>{@link #getFullName()}
+	 * 		<li>{@link Class#getName()} - Note that this might be a dup.
+	 * 		<li>{@link #getShortName()}
+	 * 		<li>{@link #getSimpleName()}
+	 * 	</ul>
+	 */
+	public String[] getNames() {
+		return new String[]{ getFullName(), c.getName(), getShortName(), getSimpleName() };
+	}
+
+	/**
 	 * Same as {@link #getFullName()} but appends to an existing string builder.
 	 *
 	 * @param sb The string builder to append to.

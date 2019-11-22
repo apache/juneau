@@ -727,6 +727,30 @@ public class BeanContextBuilder extends ContextBuilder {
 		return addTo(BEAN_bpx, beanClassName, value);
 	}
 
+	public BeanContextBuilder bpro(Class<?> beanClass, String properties) {
+		return addTo(BEAN_bpro, beanClass.getName(), properties);
+	}
+
+	public BeanContextBuilder bpro(Map<String,String> values) {
+		return set(BEAN_bpro, values);
+	}
+
+	public BeanContextBuilder bpro(String beanClassName, String value) {
+		return addTo(BEAN_bpro, beanClassName, value);
+	}
+
+	public BeanContextBuilder bpwo(Class<?> beanClass, String properties) {
+		return addTo(BEAN_bpwo, beanClass.getName(), properties);
+	}
+
+	public BeanContextBuilder bpwo(Map<String,String> values) {
+		return set(BEAN_bpwo, values);
+	}
+
+	public BeanContextBuilder bpwo(String beanClassName, String value) {
+		return addTo(BEAN_bpwo, beanClassName, value);
+	}
+
 	/**
 	 * Configuration property:  Debug mode.
 	 *

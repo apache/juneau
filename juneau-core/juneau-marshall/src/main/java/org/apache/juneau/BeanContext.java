@@ -26,6 +26,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
@@ -2985,15 +2986,13 @@ public class BeanContext extends Context {
 	protected String[] getBpi(Class<?> c) {
 		if (bpi.isEmpty())
 			return null;
-		String[] s = null;
 		ClassInfo ci = ClassInfo.of(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
-			s = bpi.get(c2.getFullName());
-			if (s != null)
-				return s;
-			s = bpi.get(c2.getSimpleName());
-			if (s != null)
-				return s;
+			for (String n : c2.getNames()) {
+				String[] s = bpi.get(n);
+				if (s != null)
+					return s;
+			}
 		}
 		return bpi.get("*");
 	}
@@ -3018,15 +3017,13 @@ public class BeanContext extends Context {
 	protected String[] getBpx(Class<?> c) {
 		if (bpx.isEmpty())
 			return null;
-		String[] s = null;
 		ClassInfo ci = ClassInfo.of(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
-			s = bpx.get(c2.getFullName());
-			if (s != null)
-				return s;
-			s = bpx.get(c2.getSimpleName());
-			if (s != null)
-				return s;
+			for (String n : c2.getNames()) {
+				String[] s = bpx.get(n);
+				if (s != null)
+					return s;
+			}
 		}
 		return bpx.get("*");
 	}
@@ -3038,20 +3035,15 @@ public class BeanContext extends Context {
 	protected String[] getBpro(Class<?> c) {
 		if (bpro.isEmpty())
 			return null;
-		String[] s = null;
 		ClassInfo ci = ClassInfo.of(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
-			s = bpro.get(c2.getFullName());
-			if (s != null)
-				return s;
-			s = bpro.get(c2.getSimpleName());
-			if (s != null)
-				return s;
+			for (String n : c2.getNames()) {
+				String[] s = bpro.get(n);
+				if (s != null)
+					return s;
+			}
 		}
-		s = bpro.get("*");
-		if (s != null)
-			return s;
-		return null;
+		return bpro.get("*");
 	}
 
 	protected final Map<String,String[]> getBpwo() {
@@ -3061,20 +3053,15 @@ public class BeanContext extends Context {
 	protected String[] getBpwo(Class<?> c) {
 		if (bpwo.isEmpty())
 			return null;
-		String[] s = null;
 		ClassInfo ci = ClassInfo.of(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
-			s = bpwo.get(c2.getFullName());
-			if (s != null)
-				return s;
-			s = bpwo.get(c2.getSimpleName());
-			if (s != null)
-				return s;
+			for (String n : c2.getNames()) {
+				String[] s = bpwo.get(n);
+				if (s != null)
+					return s;
+			}
 		}
-		s = bpwo.get("*");
-		if (s != null)
-			return s;
-		return null;
+		return bpwo.get("*");
 	}
 
 	/**

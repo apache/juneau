@@ -43,16 +43,22 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 	@Override
 	public void apply(AnnotationInfo<BeanConfig> ai, PropertyStoreBuilder psb) {
 		BeanConfig a = ai.getAnnotation();
-		if (! a.beanClassVisibility().isEmpty())
-			psb.set(BEAN_beanClassVisibility, visibility(a.beanClassVisibility(), "beanClassVisibility"));
-		if (! a.beanConstructorVisibility().isEmpty())
-			psb.set(BEAN_beanConstructorVisibility, visibility(a.beanConstructorVisibility(), "beanConstructorVisibility"));
+
+		for (CS e : a.excludeProperties())
+			psb.addTo(BEAN_bpx, e.k().getName(), string(e.v()));
+		for (CS e : a.includeProperties())
+			psb.addTo(BEAN_bpi, e.k().getName(), string(e.v()));
 		if (a.beanDictionary().length != 0)
 			psb.addTo(BEAN_beanDictionary, a.beanDictionary());
 		if (a.beanDictionary_replace().length != 0)
 			psb.set(BEAN_beanDictionary, a.beanDictionary_replace());
 		if (a.beanDictionary_remove().length != 0)
 			psb.removeFrom(BEAN_beanDictionary, a.beanDictionary_remove());
+
+		if (! a.beanClassVisibility().isEmpty())
+			psb.set(BEAN_beanClassVisibility, visibility(a.beanClassVisibility(), "beanClassVisibility"));
+		if (! a.beanConstructorVisibility().isEmpty())
+			psb.set(BEAN_beanConstructorVisibility, visibility(a.beanConstructorVisibility(), "beanConstructorVisibility"));
 		if (a.dictionary().length != 0)
 			psb.addTo(BEAN_beanDictionary, a.dictionary());
 		if (a.dictionary_replace().length != 0)
@@ -83,18 +89,26 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.set(BEAN_beanTypePropertyName, string(a.beanTypePropertyName()));
 		if (a.bpi().length > 0)
 			psb.addTo(BEAN_bpi, stringsMap(a.bpi(), "bpi"));
+		for (CS e : a.bpiMap())
+			psb.addTo(BEAN_bpi, e.k().getName(), string(e.v()));
 		if (a.bpx().length > 0)
 			psb.addTo(BEAN_bpx, stringsMap(a.bpi(), "bpx"));
+		for (CS e : a.bpxMap())
+			psb.addTo(BEAN_bpx, e.k().getName(), string(e.v()));
+		if (a.bpro().length > 0)
+			psb.addTo(BEAN_bpro, stringsMap(a.bpro(), "bpro"));
+		for (CS e : a.bproMap())
+			psb.addTo(BEAN_bpro, e.k().getName(), string(e.v()));
+		if (a.bpwo().length > 0)
+			psb.addTo(BEAN_bpwo, stringsMap(a.bpi(), "bpwo"));
+		for (CS e : a.bpwoMap())
+			psb.addTo(BEAN_bpwo, e.k().getName(), string(e.v()));
 		if (! a.debug().isEmpty())
 			psb.set(BEAN_debug, bool(a.debug()));
 		for (CS e : a.example())
 			psb.addTo(BEAN_examples, e.k().getName(), parse(e.k(), e.v(), "example"));
 		if (a.examples().length > 0)
 			psb.addTo(BEAN_examples, objectMap(a.examples(), "examples"));
-		for (CS e : a.excludeProperties())
-			psb.addTo(BEAN_bpx, e.k().getName(), string(e.v()));
-		for (CS e : a.bpxMap())
-			psb.addTo(BEAN_bpx, e.k().getName(), string(e.v()));
 		if (! a.fluentSetters().isEmpty())
 			psb.set(BEAN_fluentSetters, bool(a.fluentSetters()));
 		if (! a.ignoreInvocationExceptionsOnGetters().isEmpty())
@@ -109,10 +123,6 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.set(BEAN_ignoreUnknownNullBeanProperties, bool(a.ignoreUnknownNullBeanProperties()));
 		for (CC e : a.implClasses())
 			psb.addTo(BEAN_implClasses, e.k().getName(), e.v());
-		for (CS e : a.includeProperties())
-			psb.addTo(BEAN_bpi, e.k().getName(), string(e.v()));
-		for (CS e : a.bpiMap())
-			psb.addTo(BEAN_bpi, e.k().getName(), string(e.v()));
 		if (! a.locale().isEmpty())
 			psb.set(BEAN_locale, locale(a.locale()));
 		if (! a.mediaType().isEmpty())

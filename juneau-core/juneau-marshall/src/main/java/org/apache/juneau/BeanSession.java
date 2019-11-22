@@ -1276,6 +1276,25 @@ public class BeanSession extends Session {
 	}
 
 	/**
+	 * Configuration property:  Bean property excludes.
+	 *
+	 * @see BeanContext#BEAN_bpx
+	 * @return
+	 * 	The list of property names to exclude keyed by class name.
+	 */
+	protected final Map<String,String[]> getBpx() {
+		return ctx.getBpx();
+	}
+
+	protected final Map<String,String[]> getBpro() {
+		return ctx.getBpro();
+	}
+
+	protected final Map<String,String[]> getBpwo() {
+		return ctx.getBpwo();
+	}
+
+	/**
 	 * Configuration property:  Debug mode.
 	 *
 	 * @see BeanContext#BEAN_debug
@@ -1296,19 +1315,6 @@ public class BeanSession extends Session {
 	protected final Map<String,?> getExamples() {
 		return ctx.getExamples();
 	}
-
-
-	/**
-	 * Configuration property:  Bean property excludes.
-	 *
-	 * @see BeanContext#BEAN_bpx
-	 * @return
-	 * 	The list of property names to exclude keyed by class name.
-	 */
-	protected final Map<String,String[]> getBpx() {
-		return ctx.getBpx();
-	}
-
 
 	/**
 	 * Configuration property:  Find fluent setters.
