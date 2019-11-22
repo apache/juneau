@@ -556,6 +556,43 @@ public class BeanFilterBuilder<T> {
 		return this;
 	}
 
+	/**
+	 * Configuration property:  Read-only bean properties.
+	 *
+	 * <p>
+	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
+	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define our filter.</jc>
+	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
+	 * 		<jk>public</jk> MyFilter() {
+	 * 			bpro(<js>"foo,bar"</js>);
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Register it with a parser.</jc>
+	 *  ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFilters(MyFilter.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Parsers all properties except for 'foo' and 'bar'.</jc>
+	 * 	MyBean b = p.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Bean#bpro()}
+	 * 	<li class='ja'>{@link Beanp#ro()}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>Values can contain comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 */
 	public BeanFilterBuilder<T> bpro(String...value) {
 		this.bpro = new LinkedHashSet<>();
 		for (String v : value)
@@ -563,6 +600,43 @@ public class BeanFilterBuilder<T> {
 		return this;
 	}
 
+	/**
+	 * Configuration property:  Write-only bean properties.
+	 *
+	 * <p>
+	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
+	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define our filter.</jc>
+	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
+	 * 		<jk>public</jk> MyFilter() {
+	 * 			bpwo(<js>"foo,bar"</js>);
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Register it with a serializer.</jc>
+	 *  WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFilters(MyFilter.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Serializes all properties except for 'foo' and 'bar'.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Bean#bpwo()}
+	 * 	<li class='ja'>{@link Beanp#wo()}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>Values can contain comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 */
 	public BeanFilterBuilder<T> bpwo(String...value) {
 		this.bpwo = new LinkedHashSet<>();
 		for (String v : value)

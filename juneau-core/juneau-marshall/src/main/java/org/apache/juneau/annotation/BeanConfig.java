@@ -618,9 +618,162 @@ public @interface BeanConfig {
 	 */
 	CS[] bpxMap() default {};
 
+	/**
+	 * Configuration property:  Read-only bean properties.
+	 *
+	 * Shortcut for specifying the {@link BeanContext#BEAN_bpro} property on all parsers.
+	 *
+	 * <p>
+	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
+	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Ignore 'a' and 'b' properties if they're present in the HTTP request body.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/mybeans"</js>)
+	 * 	<ja>@BeanConfig</ja>(bpro=<js>"MyBean: a,b"</js>)
+	 * 	<jk>public void</jk> postMyBeans(List&lt;MyBean&gt; l) {...}
+	 * </p>
+	 *
+	 * <ul class=''>
+	 * 	<li>
+	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
+	 * 	<li>
+	 * 		Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
+	 * 	<li>
+	 * 		Values are comma-delimited lists of bean property names.
+	 * 	<li>
+	 * 		Properties apply to specified class and all subclasses.
+	 * 	<li>
+	 * 		Semicolons can be used as an additional separator for multiple values:
+	 * 		<p class='bcode w800'>
+	 * 	<jc>// Equivalent</jc>
+	 * 	bpro={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
+	 * 	bpro=<js>"Bean1: foo; Bean2: bar,baz"</js>
+	 * 		</p>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.bpro.sms"</js>.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * </ul>
+	 */
 	String[] bpro() default {};
+
+	/**
+	 * Configuration property:  Read-only bean properties.
+	 *
+	 * Shortcut for specifying the {@link BeanContext#BEAN_bpro} property on all parsers.
+	 *
+	 * <p>
+	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
+	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Ignore 'a' and 'b' properties if they're present in the HTTP request body.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/mybeans"</js>)
+	 * 	<ja>@BeanConfig</ja>(bproMap={<ja>@CS</ja>(MyBean.<jk>class</jk>, <js>"a,b"</js>)})
+	 * 	<jk>public void</jk> postMyBeans(List&lt;MyBean&gt; l) {...}
+	 * </p>
+	 *
+	 * <ul class=''>
+	 * 	<li>
+	 * 		Values are comma-delimited lists of bean property names.
+	 * 	<li>
+	 * 		Properties apply to specified class and all subclasses.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.bpro.sms"</js>.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * </ul>
+	 */
 	CS[] bproMap() default {};
+
+	/**
+	 * Configuration property:  Write-only bean properties.
+	 *
+	 * Shortcut for specifying the {@link BeanContext#BEAN_bpwo} property on all serializers.
+	 *
+	 * <p>
+	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
+	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Ignore 'a' and 'b' properties when serializing the response body.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>)
+	 * 	<ja>@BeanConfig</ja>(bpwo=<js>"MyBean: a,b"</js>)
+	 * 	<jk>public</jk> List&lt;MyBean&gt; getMyBeans() {...}
+	 * </p>
+	 *
+	 * <ul class=''>
+	 * 	<li>
+	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
+	 * 	<li>
+	 * 		Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
+	 * 	<li>
+	 * 		Values are comma-delimited lists of bean property names.
+	 * 	<li>
+	 * 		Properties apply to specified class and all subclasses.
+	 * 	<li>
+	 * 		Semicolons can be used as an additional separator for multiple values:
+	 * 		<p class='bcode w800'>
+	 * 	<jc>// Equivalent</jc>
+	 * 	bpwo={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
+	 * 	bpwo=<js>"Bean1: foo; Bean2: bar,baz"</js>
+	 * 		</p>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.bpro.sms"</js>.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * </ul>
+	 */
 	String[] bpwo() default {};
+
+	/**
+	 * Configuration property:  Write-only bean properties.
+	 *
+	 * Shortcut for specifying the {@link BeanContext#BEAN_bpwo} property on all serializers.
+	 *
+	 * <p>
+	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
+	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Ignore 'a' and 'b' properties if they're present in the HTTP request body.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>)
+	 * 	<ja>@BeanConfig</ja>(bpwoMap={<ja>@CS</ja>(MyBean.<jk>class</jk>, <js>"a,b"</js>)})
+	 * 	<jk>public void</jk> List&lt;MyBean&gt; getMyBeans() {...}
+	 * </p>
+	 *
+	 * <ul class=''>
+	 * 	<li>
+	 * 		Values are comma-delimited lists of bean property names.
+	 * 	<li>
+	 * 		Properties apply to specified class and all subclasses.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.bpro.sms"</js>.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * </ul>
+	 */
 	CS[] bpwoMap() default {};
 
 	/**

@@ -100,7 +100,7 @@ public final class BeanFilter {
 	 * Returns the set and order of names of properties associated with a bean class.
 	 *
 	 * @return
-	 * 	The name of the properties associated with a bean class, or <jk>null</jk> if all bean properties should
+	 * 	The names of the properties associated with a bean class, or and empty set if all bean properties should
 	 * 	be used.
 	 */
 	public Set<String> getBpi() {
@@ -110,16 +110,26 @@ public final class BeanFilter {
 	/**
 	 * Returns the list of properties to ignore on a bean.
 	 *
-	 * @return The name of the properties to ignore on a bean, or <jk>null</jk> to not ignore any properties.
+	 * @return The names of the properties to ignore on a bean, or an empty set to not ignore any properties.
 	 */
 	public Set<String> getBpx() {
 		return bpx;
 	}
 
+	/**
+	 * Returns the list of read-only properties on a bean.
+	 *
+	 * @return The names of the read-only properties on a bean, or an empty set to not have any read-only properties.
+	 */
 	public Set<String> getBpro() {
 		return bpro;
 	}
 
+	/**
+	 * Returns the list of write-only properties on a bean.
+	 *
+	 * @return The names of the write-only properties on a bean, or an empty set to not have any write-only properties.
+	 */
 	public Set<String> getBpwo() {
 		return bpwo;
 	}

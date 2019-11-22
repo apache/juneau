@@ -24,9 +24,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
@@ -865,8 +863,130 @@ public class BeanContext extends Context {
 	 */
 	public static final String BEAN_bpx = PREFIX + ".bpx.sms";
 
+	/**
+	 * Configuration property:  Read-only bean properties.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.bpro.sms"</js>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>Default:</b>  <c>{}</c>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean#bpro()}
+	 * 			<li class='ja'>{@link Beanp#ro()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#bpro(Class, String)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#bpro(String, String)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#bpro(Map)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#bpro(String...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
+	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
+	 *
+	 * <p>
+	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
+	 * names.
+	 * The key <js>"*"</js> means all bean classes.
+	 *
+	 * <p>
+	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means the <c>foo</c> and
+	 * <c>bar</c> properties on any beans whose simple class name is <c>Bean1</c>.
+	 *
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpro(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.addTo(<jsf>BEAN_bpro</jsf>, MyBean.<jk>class</jk>.getName(), <js>"foo,bar"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Alternate using JSON object.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.addTo(<jsf>BEAN_bpro</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
+	 * 		.build();
+	 * </p>
+	 */
 	public static final String BEAN_bpro = PREFIX + ".bpro.sms";
 
+	/**
+	 * Configuration property:  Write-only bean properties.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.bpwo.sms"</js>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>Default:</b>  <c>{}</c>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Bean#bpwo()}
+	 * 			<li class='ja'>{@link Beanp#wo()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#bpwo(Class, String)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#bpwo(String, String)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#bpwo(Map)}
+	 * 			<li class='jm'>{@link BeanFilterBuilder#bpwo(String...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
+	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
+	 *
+	 * <p>
+	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
+	 * names.
+	 * The key <js>"*"</js> means all bean classes.
+	 *
+	 * <p>
+	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means the <c>foo</c> and
+	 * <c>bar</c> properties on any beans whose simple class name is <c>Bean1</c>.
+	 *
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpwo(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addTo(<jsf>BEAN_bpwo</jsf>, MyBean.<jk>class</jk>.getName(), <js>"foo,bar"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Alternate using JSON object.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addTo(<jsf>BEAN_bpwo</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
+	 * 		.build();
+	 * </p>
+	 */
 	public static final String BEAN_bpwo = PREFIX + ".bpwo.sms";
 
 	/**
@@ -3032,10 +3152,23 @@ public class BeanContext extends Context {
 		return emptySet();
 	}
 
+	/**
+	 * Configuration property:  Read-only bean properties.
+	 *
+	 * @see #BEAN_bpro
+	 * @return
+	 * 	The list of read-only property names keyed by class name.
+	 */
 	protected final Map<String,Set<String>> getBpro() {
 		return bpro;
 	}
 
+	/**
+	 * Returns the {@link #BEAN_bpro} setting for the specified class.
+	 *
+	 * @param c The class.
+	 * @return The read-only properties for the specified class, or an empty set if it's not defined for the class.
+	 */
 	protected Set<String> getBpro(Class<?> c) {
 		if (bpro.isEmpty())
 			return emptySet();
@@ -3052,10 +3185,23 @@ public class BeanContext extends Context {
 		return emptySet();
 	}
 
+	/**
+	 * Configuration property:  Write-only bean properties.
+	 *
+	 * @see #BEAN_bpwo
+	 * @return
+	 * 	The list of write-only property names keyed by class name.
+	 */
 	protected final Map<String,Set<String>> getBpwo() {
 		return bpwo;
 	}
 
+	/**
+	 * Returns the {@link #BEAN_bpwo} setting for the specified class.
+	 *
+	 * @param c The class.
+	 * @return The write-only properties for the specified class, or an empty set if it's not defined for the class.
+	 */
 	protected Set<String> getBpwo(Class<?> c) {
 		if (bpwo.isEmpty())
 			return emptySet();

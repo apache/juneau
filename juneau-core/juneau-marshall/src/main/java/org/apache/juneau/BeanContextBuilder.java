@@ -727,26 +727,114 @@ public class BeanContextBuilder extends ContextBuilder {
 		return addTo(BEAN_bpx, beanClassName, value);
 	}
 
+	/**
+	 * Configuration property:  Read-only bean properties.
+	 *
+	 * <p>
+	 * Specifies the read-only properties for the specified bean class.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * </ul>
+	 *
+	 * @param beanClass The bean class.
+	 * @param properties Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 */
 	public BeanContextBuilder bpro(Class<?> beanClass, String properties) {
 		return addTo(BEAN_bpro, beanClass.getName(), properties);
 	}
 
+	/**
+	 * Configuration property:  Read-only bean properties.
+	 *
+	 * <p>
+	 * Specifies the read-only properties for the specified bean classes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
 	public BeanContextBuilder bpro(Map<String,String> values) {
 		return set(BEAN_bpro, values);
 	}
 
+	/**
+	 * Configuration property:  Read-only bean properties.
+	 *
+	 * <p>
+	 * Specifies the read-only properties for the specified bean class.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * </ul>
+	 *
+	 * @param beanClassName
+	 * 	The bean class name.
+	 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all bean classes.
+	 * @param value Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 */
 	public BeanContextBuilder bpro(String beanClassName, String value) {
 		return addTo(BEAN_bpro, beanClassName, value);
 	}
 
+	/**
+	 * Configuration property:  Write-only bean properties.
+	 *
+	 * <p>
+	 * Specifies the write-only properties for the specified bean class.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * </ul>
+	 *
+	 * @param beanClass The bean class.
+	 * @param properties Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 */
 	public BeanContextBuilder bpwo(Class<?> beanClass, String properties) {
 		return addTo(BEAN_bpwo, beanClass.getName(), properties);
 	}
 
+	/**
+	 * Configuration property:  Write-only bean properties.
+	 *
+	 * <p>
+	 * Specifies the write-only properties for the specified bean classes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
 	public BeanContextBuilder bpwo(Map<String,String> values) {
 		return set(BEAN_bpwo, values);
 	}
 
+	/**
+	 * Configuration property:  Write-only bean properties.
+	 *
+	 * <p>
+	 * Specifies the write-only properties for the specified bean class.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * </ul>
+	 *
+	 * @param beanClassName
+	 * 	The bean class name.
+	 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all bean classes.
+	 * @param value Comma-delimited list of property names.
+	 * @return This object (for method chaining).
+	 */
 	public BeanContextBuilder bpwo(String beanClassName, String value) {
 		return addTo(BEAN_bpwo, beanClassName, value);
 	}

@@ -1297,10 +1297,24 @@ public class BeanSession extends Session {
 		return ctx.getBpx();
 	}
 
+	/**
+	 * Configuration property:  Read-only bean properties.
+	 *
+	 * @see BeanContext#BEAN_bpro
+	 * @return
+	 * 	The list of read-only property names keyed by class name.
+	 */
 	protected final Map<String,Set<String>> getBpro() {
 		return ctx.getBpro();
 	}
 
+	/**
+	 * Configuration property:  Write-only bean properties.
+	 *
+	 * @see BeanContext#BEAN_bpwo
+	 * @return
+	 * 	The list of write-only property names keyed by class name.
+	 */
 	protected final Map<String,Set<String>> getBpwo() {
 		return ctx.getBpwo();
 	}

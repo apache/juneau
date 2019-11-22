@@ -323,7 +323,7 @@ public @interface Beanp {
 	 * 		<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
 	 * 		<jk>private float</jk> <jf>price</jf>;
 	 *
-	 * 		<jk>public float</jk> gePrice() {
+	 * 		<jk>public float</jk> getPrice() {
 	 * 			<jk>return</jk> <jf>price</jf>;
 	 * 		}
 	 * 	}
@@ -331,6 +331,43 @@ public @interface Beanp {
 	 */
 	String format() default "";
 
+	/**
+	 * Identifies a property as read-only.
+	 *
+	 * <p>
+	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<ja>@Beanp</ja>(ro=<js>"true"</js>)
+	 * 		<jk>public float</jk> <jf>price</jf>;
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * </ul>
+	 */
 	String ro() default "";
+
+	/**
+	 * Identifies a property as write-only.
+	 *
+	 * <p>
+	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<ja>@Beanp</ja>(wo=<js>"true"</js>)
+	 * 		<jk>public float</jk> <jf>price</jf>;
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * </ul>
+	 */
 	String wo() default "";
 }

@@ -83,7 +83,7 @@ public @interface Bean {
 	String bpi() default "";
 
 	/**
-	 * Bean property excludes
+	 * Bean property excludes.
 	 *
 	 * <p>
 	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
@@ -101,8 +101,44 @@ public @interface Bean {
 	 */
 	String bpx() default "";
 
+	/**
+	 * Read-only bean properties.
+	 *
+	 * <p>
+	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
+	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Exclude the 'city' and 'state' properties from being parsed, but not serialized.</jc>
+	 * 	<ja>@Bean</ja>(bpro=<js>"city,state"</js>})
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * </ul>
+	 */
 	String bpro() default "";
 
+	/**
+	 * Write-only bean properties.
+	 *
+	 * <p>
+	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
+	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Exclude the 'city' and 'state' properties from being serialized, but not parsed.</jc>
+	 * 	<ja>@Bean</ja>(bpro=<js>"city,state"</js>})
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * </ul>
+	 */
 	String bpwo() default "";
 
 	/**
