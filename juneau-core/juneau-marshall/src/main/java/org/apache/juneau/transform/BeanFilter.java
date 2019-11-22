@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import java.util.*;
+
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import org.apache.juneau.*;
@@ -35,7 +36,7 @@ import org.apache.juneau.annotation.*;
 public final class BeanFilter {
 
 	private final Class<?> beanClass;
-	private final String[] bpi, bpx, bpro, bpwo;
+	private final Set<String> bpi, bpx, bpro, bpwo;
 	private final PropertyNamer propertyNamer;
 	private final Class<?> interfaceClass, stopClass;
 	private final boolean sortProperties, fluentSetters;
@@ -49,10 +50,10 @@ public final class BeanFilter {
 	BeanFilter(BeanFilterBuilder<?> builder) {
 		this.beanClass = builder.beanClass;
 		this.typeName = builder.typeName;
-		this.bpi = split(builder.bpi, ',');
-		this.bpx = split(builder.bpx, ',');
-		this.bpro = split(builder.bpro, ',');
-		this.bpwo = split(builder.bpwo, ',');
+		this.bpi = new LinkedHashSet<>(builder.bpi);
+		this.bpx = new LinkedHashSet<>(builder.bpx);
+		this.bpro = new LinkedHashSet<>(builder.bpro);
+		this.bpwo = new LinkedHashSet<>(builder.bpwo);
 		this.interfaceClass = builder.interfaceClass;
 		this.stopClass = builder.stopClass;
 		this.sortProperties = builder.sortProperties;
@@ -102,7 +103,7 @@ public final class BeanFilter {
 	 * 	The name of the properties associated with a bean class, or <jk>null</jk> if all bean properties should
 	 * 	be used.
 	 */
-	public String[] getBpi() {
+	public Set<String> getBpi() {
 		return bpi;
 	}
 
@@ -111,15 +112,15 @@ public final class BeanFilter {
 	 *
 	 * @return The name of the properties to ignore on a bean, or <jk>null</jk> to not ignore any properties.
 	 */
-	public String[] getBpx() {
+	public Set<String> getBpx() {
 		return bpx;
 	}
 
-	public String[] getBpro() {
+	public Set<String> getBpro() {
 		return bpro;
 	}
 
-	public String[] getBpwo() {
+	public Set<String> getBpwo() {
 		return bpwo;
 	}
 

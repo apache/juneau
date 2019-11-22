@@ -516,4 +516,53 @@ public final class CollectionUtils {
 	public static <T> Set<T> newHashSet(T...values) {
 		return new HashSet<>(Arrays.asList(values));
 	}
+
+	/**
+	 * Converts the specified arguments into an unmodifiable {@link LinkedHashSet}.
+	 *
+	 * @param values The entries to populate the hashset with.
+	 * @return A new {@link LinkedHashSet} populated with the specified arguments.
+	 */
+	@SafeVarargs
+	public static <T> Set<T> newUnmodifiableLinkedHashSet(T...values) {
+		return Collections.unmodifiableSet(newLinkedHashSet(values));
+	}
+
+	/**
+	 * Converts the specified arguments into a modifiable {@link LinkedHashSet}.
+	 *
+	 * @param values The entries to populate the hashset with.
+	 * @return A new {@link LinkedHashSet} populated with the specified arguments.
+	 */
+	@SafeVarargs
+	public static <T> Set<T> newLinkedHashSet(T...values) {
+		return new LinkedHashSet<>(Arrays.asList(values));
+	}
+
+	/**
+	 * Simple passthrough to {@link Collections#emptySet()}
+	 *
+	 * @return A new unmodifiable empty set.
+	 */
+	public static <T> Set<T> emptySet() {
+		return Collections.emptySet();
+	}
+
+	/**
+	 * Simple passthrough to {@link Collections#emptyList()}
+	 *
+	 * @return A new unmodifiable empty list.
+	 */
+	public static <T> List<T> emptyList() {
+		return Collections.emptyList();
+	}
+
+	/**
+	 * Simple passthrough to {@link Collections#emptyMap()}
+	 *
+	 * @return A new unmodifiable empty set.
+	 */
+	public static <K,V> Map<K,V> emptyMap() {
+		return Collections.emptyMap();
+	}
 }

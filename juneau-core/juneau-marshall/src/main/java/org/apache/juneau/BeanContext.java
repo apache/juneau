@@ -1962,7 +1962,7 @@ public class BeanContext extends Context {
 	private final Locale locale;
 	private final TimeZone timeZone;
 	private final MediaType mediaType;
-	private final Map<String,String[]> bpi, bpx, bpro, bpwo;
+	private final Map<String,Set<String>> bpi, bpx, bpro, bpwo;
 	private final PropertyNamer propertyNamer;
 	private final String beanTypePropertyName;
 	private final int beanHashCode;
@@ -2062,24 +2062,24 @@ public class BeanContext extends Context {
 			icm.put(e.getKey(), ClassInfo.of(e.getValue()));
 		implClasses = unmodifiableMap(icm);
 
-		Map<String,String[]> m2 = new HashMap<>();
+		Map<String,Set<String>> m2 = new HashMap<>();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpi, String.class).entrySet())
-			m2.put(e.getKey(), StringUtils.split(e.getValue()));
+			m2.put(e.getKey(), newUnmodifiableLinkedHashSet(split(e.getValue())));
 		bpi = unmodifiableMap(m2);
 
 		m2 = new HashMap<>();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpx, String.class).entrySet())
-			m2.put(e.getKey(), StringUtils.split(e.getValue()));
+			m2.put(e.getKey(), newUnmodifiableLinkedHashSet(split(e.getValue())));
 		bpx = unmodifiableMap(m2);
 
 		m2 = new HashMap<>();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpro, String.class).entrySet())
-			m2.put(e.getKey(), StringUtils.split(e.getValue()));
+			m2.put(e.getKey(), newUnmodifiableLinkedHashSet(split(e.getValue())));
 		bpro = unmodifiableMap(m2);
 
 		m2 = new HashMap<>();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpwo, String.class).entrySet())
-			m2.put(e.getKey(), StringUtils.split(e.getValue()));
+			m2.put(e.getKey(), newUnmodifiableLinkedHashSet(split(e.getValue())));
 		bpwo = unmodifiableMap(m2);
 
 		locale = getInstanceProperty(BEAN_locale, Locale.class, Locale.getDefault());
@@ -2973,7 +2973,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	Include properties keyed by class name.
 	 */
-	protected final Map<String,String[]> getBpi() {
+	protected final Map<String,Set<String>> getBpi() {
 		return bpi;
 	}
 
@@ -2981,20 +2981,22 @@ public class BeanContext extends Context {
 	 * Returns the {@link #BEAN_bpi} setting for the specified class.
 	 *
 	 * @param c The class.
-	 * @return The properties to include for the specified class, or <jk>null</jk> if it's not defined for the class.
+	 * @return The properties to include for the specified class, or an empty set if it's not defined for the class.
 	 */
-	protected String[] getBpi(Class<?> c) {
+	protected Set<String> getBpi(Class<?> c) {
 		if (bpi.isEmpty())
-			return null;
+			return emptySet();
 		ClassInfo ci = ClassInfo.of(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
 			for (String n : c2.getNames()) {
-				String[] s = bpi.get(n);
+				Set<String> s = bpi.get(n);
 				if (s != null)
 					return s;
 			}
 		}
-		return bpi.get("*");
+		if (bpi.containsKey("*"))
+			return bpi.get("*");
+		return emptySet();
 	}
 
 	/**
@@ -3004,7 +3006,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	The list of property names to exclude keyed by class name.
 	 */
-	protected final Map<String,String[]> getBpx() {
+	protected final Map<String,Set<String>> getBpx() {
 		return bpx;
 	}
 
@@ -3012,56 +3014,62 @@ public class BeanContext extends Context {
 	 * Returns the {@link #BEAN_bpx} setting for the specified class.
 	 *
 	 * @param c The class.
-	 * @return The properties to exclude for the specified class, or <jk>null</jk> if it's not defined for the class.
+	 * @return The properties to exclude for the specified class, or an empty set if it's not defined for the class.
 	 */
-	protected String[] getBpx(Class<?> c) {
+	protected Set<String> getBpx(Class<?> c) {
 		if (bpx.isEmpty())
-			return null;
+			return emptySet();
 		ClassInfo ci = ClassInfo.of(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
 			for (String n : c2.getNames()) {
-				String[] s = bpx.get(n);
+				Set<String> s = bpx.get(n);
 				if (s != null)
 					return s;
 			}
 		}
-		return bpx.get("*");
+		if (bpx.containsKey("*"))
+			return bpx.get("*");
+		return emptySet();
 	}
 
-	protected final Map<String,String[]> getBpro() {
+	protected final Map<String,Set<String>> getBpro() {
 		return bpro;
 	}
 
-	protected String[] getBpro(Class<?> c) {
+	protected Set<String> getBpro(Class<?> c) {
 		if (bpro.isEmpty())
-			return null;
+			return emptySet();
 		ClassInfo ci = ClassInfo.of(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
 			for (String n : c2.getNames()) {
-				String[] s = bpro.get(n);
+				Set<String> s = bpro.get(n);
 				if (s != null)
 					return s;
 			}
 		}
-		return bpro.get("*");
+		if (bpro.containsKey("*"))
+			return bpro.get("*");
+		return emptySet();
 	}
 
-	protected final Map<String,String[]> getBpwo() {
+	protected final Map<String,Set<String>> getBpwo() {
 		return bpwo;
 	}
 
-	protected String[] getBpwo(Class<?> c) {
+	protected Set<String> getBpwo(Class<?> c) {
 		if (bpwo.isEmpty())
-			return null;
+			return emptySet();
 		ClassInfo ci = ClassInfo.of(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
 			for (String n : c2.getNames()) {
-				String[] s = bpwo.get(n);
+				Set<String> s = bpwo.get(n);
 				if (s != null)
 					return s;
 			}
 		}
-		return bpwo.get("*");
+		if (bpwo.containsKey("*"))
+			return bpwo.get("*");
+		return emptySet();
 	}
 
 	/**

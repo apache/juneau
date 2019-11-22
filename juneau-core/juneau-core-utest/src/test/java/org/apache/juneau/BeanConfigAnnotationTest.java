@@ -120,9 +120,9 @@ public class BeanConfigAnnotationTest {
 		beansRequireSomeProperties="$X{true}",
 		beanTypePropertyName="$X{foo}",
 		bpiMap=@CS(k=A1.class,v="$X{foo}"),
-		bpxMap=@CS(k=A1.class,v="$X{foo}"),
-		bproMap=@CS(k=A1.class,v="$X{foo}"),
-		bpwoMap=@CS(k=A1.class,v="$X{foo}"),
+		bpxMap=@CS(k=A1.class,v="$X{bar}"),
+		bproMap=@CS(k=A1.class,v="$X{baz}"),
+		bpwoMap=@CS(k=A1.class,v="$X{qux}"),
 		debug="$X{true}",
 		detectRecursions="$X{true}",
 		examples="$X{A1}: {foo:1}",
@@ -174,10 +174,10 @@ public class BeanConfigAnnotationTest {
 		check("true", bc.isBeansRequireSettersForGetters());
 		check("true", bc.isBeansRequireSomeProperties());
 		check("foo", bc.getBeanTypePropertyName());
-		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getBpi());
-		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getBpx());
-		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getBpro());
-		check("org.apache.juneau.BeanConfigAnnotationTest$A1=foo", bc.getBpwo());
+		check("org.apache.juneau.BeanConfigAnnotationTest$A1=[foo]", bc.getBpi());
+		check("org.apache.juneau.BeanConfigAnnotationTest$A1=[bar]", bc.getBpx());
+		check("org.apache.juneau.BeanConfigAnnotationTest$A1=[baz]", bc.getBpro());
+		check("org.apache.juneau.BeanConfigAnnotationTest$A1=[qux]", bc.getBpwo());
 		check("true", bc.isDebug());
 		check("true", bc.isDetectRecursions());
 		check("A1={foo:1}", bc.getExamples());

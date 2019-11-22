@@ -255,35 +255,31 @@ public class BeanMeta<T> {
 
 				// Explicitly defined property names in @Bean annotation.
 				Set<String> fixedBeanProps = new LinkedHashSet<>();
-				String[] bpi = ctx.getBpi(c);
-				String[] bpx = ctx.getBpx(c);
-				Set<String> bpro = ctx.getBpro(c) == null ? newHashSet() : newHashSet(ctx.getBpro(c));
-				Set<String> bpwo = ctx.getBpwo(c) == null ? newHashSet() : newHashSet(ctx.getBpwo(c));
+				Set<String> bpi = new LinkedHashSet<>(ctx.getBpi(c));
+				Set<String> bpx = new LinkedHashSet<>(ctx.getBpx(c));
+				Set<String> bpro = new LinkedHashSet<>(ctx.getBpro(c));
+				Set<String> bpwo = new LinkedHashSet<>(ctx.getBpwo(c));
 
 				Set<String> filterProps = new HashSet<>();  // Names of properties defined in @Bean(properties)
 
 				if (beanFilter != null) {
 
-					if (beanFilter.getBpi() != null)
-						filterProps.addAll(Arrays.asList(beanFilter.getBpi()));
+					Set<String> bfbpi = beanFilter.getBpi();
+
+					filterProps.addAll(bfbpi);
 
 					// Get the 'properties' attribute if specified.
-					if (beanFilter.getBpi() != null && bpi == null)
-						for (String p : beanFilter.getBpi())
-							fixedBeanProps.add(p);
+					if (bpi.isEmpty())
+						fixedBeanProps.addAll(bfbpi);
 
 					if (beanFilter.getPropertyNamer() != null)
 						propertyNamer = beanFilter.getPropertyNamer();
 
-					if (beanFilter.getBpro() != null)
-						bpro.addAll(Arrays.asList(beanFilter.getBpro()));
-					
-					if (beanFilter.getBpwo() != null)
-						bpwo.addAll(Arrays.asList(beanFilter.getBpwo()));
+					bpro.addAll(beanFilter.getBpro());
+					bpwo.addAll(beanFilter.getBpwo());
 				}
 
-				if (bpi != null)
-					fixedBeanProps.addAll(Arrays.asList(bpi));
+				fixedBeanProps.addAll(bpi);
 
 				if (propertyNamer == null)
 					propertyNamer = ctx.getPropertyNamer();
@@ -431,16 +427,17 @@ public class BeanMeta<T> {
 				if (beanFilter != null) {
 
 					// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
-					String[] bfbpi = beanFilter.getBpi();
-					String[] bfbpx = beanFilter.getBpx();
+					Set<String> bfbpi = beanFilter.getBpi();
+					Set<String> bfbpx = beanFilter.getBpx();
 
-					if (bfbpx != null && bpx == null) {
+					if (bpx.isEmpty() && ! bfbpx.isEmpty()) {
+
 						for (String k : bfbpx)
 							properties.remove(k);
 
 					// Only include specified properties if BeanFilter.includeKeys is specified.
 					// Note that the order must match includeKeys.
-					} else if (bfbpi != null) {
+					} else if (! bfbpi.isEmpty()) {
 						Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<>();
 						for (String k : bfbpi) {
 							if (properties.containsKey(k))
@@ -450,9 +447,8 @@ public class BeanMeta<T> {
 					}
 				}
 
-				if (bpx != null)
-					for (String ep : bpx)
-						properties.remove(ep);
+				for (String ep : bpx)
+					properties.remove(ep);
 
 				if (pNames != null) {
 					Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<>();

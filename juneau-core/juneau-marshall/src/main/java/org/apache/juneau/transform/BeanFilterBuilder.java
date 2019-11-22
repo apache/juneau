@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Arrays.*;
+
 import java.beans.*;
 import java.util.*;
 
@@ -58,7 +61,11 @@ public class BeanFilterBuilder<T> {
 
 	Class<?> beanClass;
 	String typeName;
-	String[] bpi, bpx, bpro, bpwo;
+	Set<String>
+		bpi = new LinkedHashSet<>(),
+		bpx = new LinkedHashSet<>(),
+		bpro = new LinkedHashSet<>(),
+		bpwo = new LinkedHashSet<>();
 	Class<?> interfaceClass, stopClass;
 	boolean sortProperties, fluentSetters;
 	Object propertyNamer;
@@ -128,7 +135,9 @@ public class BeanFilterBuilder<T> {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanFilterBuilder<T> properties(String...value) {
-		this.bpi = value;
+		this.bpi = new LinkedHashSet<>();
+		for (String v : value)
+			bpi.addAll(asList(split(v)));
 		return this;
 	}
 
@@ -139,7 +148,9 @@ public class BeanFilterBuilder<T> {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanFilterBuilder<T> excludeProperties(String...value) {
-		this.bpx = value;
+		this.bpx = new LinkedHashSet<>();
+		for (String v : value)
+			bpx.addAll(asList(split(v)));
 		return this;
 	}
 
@@ -497,7 +508,9 @@ public class BeanFilterBuilder<T> {
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> bpi(String...value) {
-		this.bpi = value;
+		this.bpi = new LinkedHashSet<>();
+		for (String v : value)
+			bpi.addAll(asList(split(v)));
 		return this;
 	}
 
@@ -537,17 +550,23 @@ public class BeanFilterBuilder<T> {
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> bpx(String...value) {
-		this.bpx = value;
+		this.bpx = new LinkedHashSet<>();
+		for (String v : value)
+			bpx.addAll(asList(split(v)));
 		return this;
 	}
 
 	public BeanFilterBuilder<T> bpro(String...value) {
-		this.bpro = value;
+		this.bpro = new LinkedHashSet<>();
+		for (String v : value)
+			bpro.addAll(asList(split(v)));
 		return this;
 	}
 
 	public BeanFilterBuilder<T> bpwo(String...value) {
-		this.bpwo = value;
+		this.bpwo = new LinkedHashSet<>();
+		for (String v : value)
+			bpwo.addAll(asList(split(v)));
 		return this;
 	}
 

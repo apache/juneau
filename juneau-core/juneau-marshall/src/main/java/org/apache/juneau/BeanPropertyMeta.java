@@ -582,7 +582,7 @@ public final class BeanPropertyMeta {
 	 *
 	 * @param m The bean map to get the transformed value from.
 	 * @param pName The property name.
-	 * @return 
+	 * @return
 	 * 	The property value.
 	 * 	<br>Returns <jk>null</jk> if this is a write-only property.
 	 */
@@ -675,7 +675,7 @@ public final class BeanPropertyMeta {
 	/**
 	 * Equivalent to calling {@link BeanMap#put(String, Object)}, but is faster since it avoids looking up the property
 	 * meta.
-	 * 
+	 *
 	 * <p>
 	 * This is a no-op on a read-only property.
 	 *

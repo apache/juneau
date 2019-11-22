@@ -1276,21 +1276,32 @@ public class BeanSession extends Session {
 	}
 
 	/**
+	 * Configuration property:  Bean property includes.
+	 *
+	 * @see BeanContext#BEAN_bpi
+	 * @return
+	 * 	Include properties keyed by class name.
+	 */
+	protected final Map<String,Set<String>> getBpi() {
+		return ctx.getBpi();
+	}
+
+	/**
 	 * Configuration property:  Bean property excludes.
 	 *
 	 * @see BeanContext#BEAN_bpx
 	 * @return
 	 * 	The list of property names to exclude keyed by class name.
 	 */
-	protected final Map<String,String[]> getBpx() {
+	protected final Map<String,Set<String>> getBpx() {
 		return ctx.getBpx();
 	}
 
-	protected final Map<String,String[]> getBpro() {
+	protected final Map<String,Set<String>> getBpro() {
 		return ctx.getBpro();
 	}
 
-	protected final Map<String,String[]> getBpwo() {
+	protected final Map<String,Set<String>> getBpwo() {
 		return ctx.getBpwo();
 	}
 
@@ -1397,17 +1408,6 @@ public class BeanSession extends Session {
 	 */
 	protected final Map<String,ClassInfo> getImplClasses() {
 		return ctx.getImplClasses();
-	}
-
-	/**
-	 * Configuration property:  Bean property includes.
-	 *
-	 * @see BeanContext#BEAN_bpi
-	 * @return
-	 * 	Include properties keyed by class name.
-	 */
-	protected final Map<String,String[]> getBpi() {
-		return ctx.getBpi();
 	}
 
 	/**
