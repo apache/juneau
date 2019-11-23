@@ -411,7 +411,7 @@ public class BeanConfigTest {
 		private final String name;
 		private final int age;
 
-		@BeanConstructor(properties="name,age")
+		@Beanc(properties="name,age")
 		public ReadOnlyPerson(String name, int age) {
 			this.name = name;
 			this.age = age;

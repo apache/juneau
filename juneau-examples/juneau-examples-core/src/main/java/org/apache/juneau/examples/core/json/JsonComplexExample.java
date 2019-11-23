@@ -72,7 +72,7 @@ public class JsonComplexExample {
 		assert parse.getInnerPojo().getName().equals(pojoc.getInnerPojo().getName());
 		assert parse.getInnerPojo().getId().equals(pojoc.getInnerPojo().getId());
 
-		// The object above can be parsed thanks to the @BeanConstructor(properties = id,name) annotation on Pojo
+		// The object above can be parsed thanks to the @Beanc(properties = id,name) annotation on Pojo
 		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
 	}
 }

@@ -36,7 +36,7 @@ public class PojoComplex {
 	 * @param innerPojo The <bc>innerPojo</bc> property value.
 	 * @param values The <bc>values</bc> property value.
 	 */
-	@BeanConstructor
+	@Beanc
 	public PojoComplex(@Name("id") String id, @Name("innerPojo") Pojo innerPojo, @Name("values") HashMap<String, List<Pojo>> values) {
 		this.id = id;
 		this.innerPojo = innerPojo;

@@ -57,7 +57,7 @@ public class XmlComplexExample {
 		assert obj.getClass().equals(pojoc.getClass());
 		assert obj.getInnerPojo().getId().equals(pojoc.getInnerPojo().getId());
 
-		// The object above can be parsed thanks to the @BeanConstructor annotation on PojoComplex
+		// The object above can be parsed thanks to the @Beanc annotation on PojoComplex
 		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
 
 	}

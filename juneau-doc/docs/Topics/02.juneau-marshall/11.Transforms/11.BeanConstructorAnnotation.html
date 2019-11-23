@@ -13,10 +13,10 @@
  ***************************************************************************************************************************/
  -->
 
-@BeanConstructor Annotation
+@BeancAnnotation
 
 <p>
-	The {@link oaj.annotation.BeanConstructor @BeanConstructor} annotation is used to 
+	The {@link oaj.annotation.Beanc @Beanc} annotation is used to 
 	map constructor arguments to property names on bean with read-only properties.
 	Since method parameter names are lost during compilation, this annotation essentially redefines 
 	them so that they are available at runtime.
@@ -30,7 +30,7 @@
 		<jk>private final</jk> String <jf>name</jf>;
 		<jk>private final int</jk> <jf>age</jf>;
 
-		<ja>@BeanConstructor</ja>(properties=<js>"name,age"</js>})
+		<ja>@Beanc</ja>(properties=<js>"name,age"</js>})
 		<jk>public</jk> Person(String name, <jk>int</jk> age) {
 			<jk>this</jk>.<jf>name</jf> = name;
 			<jk>this</jk>.<jf>age</jf> = age;
@@ -59,16 +59,16 @@
 	Beans can also be defined with a combination of read-only and read-write properties.
 </p>
 <p>
-	The {@link oaj.annotation.Name @Name} annotation can also be used instead of <c><ja>@BeanConstructor</ja>(properties)</c>:
+	The {@link oaj.annotation.Name @Name} annotation can also be used instead of <c><ja>@Beanc</ja>(properties)</c>:
 </p>
 <p class='bpcode w800'>
-	<ja>@BeanConstructor</ja>
+	<ja>@Beanc</ja>
 	<jk>public</jk> Person(<ja>@Name</ja>(<js>"name"</js>) String name, <ja>@Name</ja>(<js>"age"</js>) <jk>int</jk> age) {
 		<jk>this</jk>.<jf>name</jf> = name;
 		<jk>this</jk>.<jf>age</jf> = age;
 	}
 </p>
 <p>
-	If neither <c><ja>@BeanConstructor</ja>(properties)</c> or <ja>@Name</ja> is used to identify the bean property names, 
+	If neither <c><ja>@Beanc</ja>(properties)</c> or <ja>@Name</ja> is used to identify the bean property names, 
 	we will try to use the parameter names if they are available in the bytecode.
 </p>

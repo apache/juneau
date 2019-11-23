@@ -43,22 +43,19 @@ import org.apache.juneau.*;
  * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanConstructorAnnotation}
+ * 	<li class='link'>{@doc juneau-marshall.Transforms.BeancAnnotation}
  * </ul>
- *
- * @deprecated Use {@link Beanc}
  */
 @Documented
 @Target(CONSTRUCTOR)
 @Retention(RUNTIME)
 @Inherited
-@Deprecated
-public @interface BeanConstructor {
+public @interface Beanc {
 
 	/**
 	 * The names of the properties of the constructor arguments.
 	 * <p>
-	 *	The {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} annotation is used to
+	 *	The {@link org.apache.juneau.annotation.Beanc @Beanc} annotation is used to
 	 *	map constructor arguments to property names on bean with read-only properties.
 	 * 	<br>Since method parameter names are lost during compilation, this annotation essentially redefines
 	 *	them so that they are available at runtime.
@@ -72,7 +69,7 @@ public @interface BeanConstructor {
 	 *			<jk>private final</jk> String <jf>name</jf>;
 	 *			<jk>private final int</jk> <jf>age</jf>;
 	 *
-	 *			<ja>@BeanConstructor</ja>(properties=<js>"name,age"</js>)
+	 *			<ja>@Beanc</ja>(properties=<js>"name,age"</js>)
 	 *			<jk>public</jk> Person(String name, <jk>int</jk> age) {
 	 *				<jk>this</jk>.<jf>name</jf> = name;
 	 *				<jk>this</jk>.<jf>age</jf> = age;

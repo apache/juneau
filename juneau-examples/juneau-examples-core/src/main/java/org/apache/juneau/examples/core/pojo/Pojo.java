@@ -36,7 +36,7 @@ public class Pojo {
 	 * @param id The <bc>id</bc> property value.
 	 * @param name The <bc>name</bc> property value.
 	 */
-	@BeanConstructor
+	@Beanc
 	public Pojo(@Name("id") String id, @Name("name") String name) {
 		this.id = id;
 		this.name = name;

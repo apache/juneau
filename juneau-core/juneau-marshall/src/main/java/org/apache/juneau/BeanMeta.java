@@ -89,7 +89,7 @@ public class BeanMeta<T> {
 	/** The constructor for this bean. */
 	protected final ConstructorInfo constructor;
 
-	/** For beans with constructors with BeanConstructor annotation, this is the list of constructor arg properties. */
+	/** For beans with constructors with Beanc annotation, this is the list of constructor arg properties. */
 	protected final String[] constructorArgs;
 
 	private final MetadataMap extMeta;  // Extended metadata
@@ -227,6 +227,25 @@ public class BeanMeta<T> {
 						if (constructorArgs.length != x.getParamCount()) {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@BeanConstructor' annotation does not match number of parameters in constructor.");
+							constructorArgs = new String[x.getParamCount()];
+							int i = 0;
+							for (ParamInfo pi : x.getParams()) {
+								String pn = pi.getName();
+								if (pn == null)
+									throw new BeanRuntimeException(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
+								constructorArgs[i++] = pn;
+							}
+						}
+						constructor.setAccessible();
+					}
+					if (x.hasAnnotation(Beanc.class)) {
+						if (constructor != null)
+							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
+						constructor = x;
+						constructorArgs = split(x.getAnnotation(Beanc.class).properties());
+						if (constructorArgs.length != x.getParamCount()) {
+							if (constructorArgs.length != 0)
+								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
 							constructorArgs = new String[x.getParamCount()];
 							int i = 0;
 							for (ParamInfo pi : x.getParams()) {
@@ -396,7 +415,7 @@ public class BeanMeta<T> {
 				for (String fp : constructorArgs) {
 					BeanPropertyMeta.Builder m = normalProps.get(fp);
 					if (m == null)
-						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @BeanConstructor(properties=X) annotation but was not found on the class definition.", fp);
+						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Beanc(properties=X) annotation but was not found on the class definition.", fp);
 					m.setAsConstructorArg();
 				}
 

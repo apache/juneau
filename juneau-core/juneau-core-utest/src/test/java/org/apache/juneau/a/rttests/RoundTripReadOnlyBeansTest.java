@@ -48,7 +48,7 @@ public class RoundTripReadOnlyBeansTest extends RoundTripTest {
 		private B f1;
 		private final B f2;
 
-		@BeanConstructor(properties="f2")
+		@Beanc(properties="f2")
 		public A(B f2) {
 			this.f2 = f2;
 		}
@@ -75,7 +75,7 @@ public class RoundTripReadOnlyBeansTest extends RoundTripTest {
 		private int f1;
 		private final String f2;
 
-		@BeanConstructor(properties="f2")
+		@Beanc(properties="f2")
 		public B(String sField) {
 			this.f2 = sField;
 		}

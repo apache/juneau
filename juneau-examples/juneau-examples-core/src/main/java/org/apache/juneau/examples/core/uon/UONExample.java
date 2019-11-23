@@ -56,7 +56,7 @@ public class UONExample {
 		assert obj.getId().equals(pojo.getId());
 		assert obj.getName().equals(pojo.getName());
 
-		// The object above can be parsed thanks to the @BeanConstructor annotation on PojoComplex
+		// The object above can be parsed thanks to the @Beanc annotation on PojoComplex
 		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
 
 	}
