@@ -25,13 +25,13 @@ import org.apache.juneau.rest.helper.*;
  * They're meant to be used as jumping-off points for child resources.
  *
  * <p>
- * Child resources are specified using the {@link RestResource#children() @RestResource(children)} annotation.
+ * Child resources are specified using the {@link Rest#children() @Rest(children)} annotation.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRestServletGroup}
  * </ul>
  */
-@RestResource
+@Rest
 public abstract class BasicRestServletGroup extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 

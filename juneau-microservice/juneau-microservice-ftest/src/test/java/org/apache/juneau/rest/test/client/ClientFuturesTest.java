@@ -32,7 +32,7 @@ public class ClientFuturesTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod
 		public ObjectMap get(RestRequest req) throws Exception {

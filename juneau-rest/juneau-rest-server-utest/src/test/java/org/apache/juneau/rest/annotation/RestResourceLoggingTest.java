@@ -22,7 +22,7 @@ import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests that validate the behavior of @RestResource(logging).
+ * Tests that validate the behavior of @Rest(logging).
  */
 @SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -39,7 +39,7 @@ public class RestResourceLoggingTest {
 	// Default logger config
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class A  {
 		@RestMethod
 		public String get(RestRequest req) {
@@ -58,7 +58,7 @@ public class RestResourceLoggingTest {
 	// Level
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(logging=@Logging(level="WARNING"))
+	@Rest(logging=@Logging(level="WARNING"))
 	public static class B1 {
 		@RestMethod(path="b01")
 		public String b01(RestRequest req) {
@@ -74,7 +74,7 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class B2 {
 		@RestMethod(path="b03")
 		public String getB03(RestRequest req) {
@@ -155,7 +155,7 @@ public class RestResourceLoggingTest {
 	// useStackTraceHashing
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(logging=@Logging(useStackTraceHashing="true"))
+	@Rest(logging=@Logging(useStackTraceHashing="true"))
 	public static class C1 {
 		@RestMethod(path="c01")
 		public String c01(RestRequest req) {
@@ -171,7 +171,7 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class C2 {
 		@RestMethod(path="c03")
 		public String c03(RestRequest req) {
@@ -210,7 +210,7 @@ public class RestResourceLoggingTest {
 			return string(req.getCallLoggerConfig());
 		}
 	}
-	@RestResource(logging=@Logging(useStackTraceHashing="foo"))
+	@Rest(logging=@Logging(useStackTraceHashing="foo"))
 	public static class C4 {
 		@RestMethod(path="c11")
 		public String c11(RestRequest req) {
@@ -272,7 +272,7 @@ public class RestResourceLoggingTest {
 	// stackTraceHashingTimeout
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(logging=@Logging(stackTraceHashingTimeout="1"))
+	@Rest(logging=@Logging(stackTraceHashingTimeout="1"))
 	public static class D1 {
 		@RestMethod(path="d01")
 		public String d01(RestRequest req) {
@@ -288,7 +288,7 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class D2 {
 		@RestMethod(path="d03")
 		public String d03(RestRequest req) {
@@ -369,7 +369,7 @@ public class RestResourceLoggingTest {
 	// noTrace
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(logging=@Logging(disabled="true"))
+	@Rest(logging=@Logging(disabled="true"))
 	public static class E1 {
 		@RestMethod(path="e01")
 		public String e01(RestRequest req) {
@@ -385,7 +385,7 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class E2 {
 		@RestMethod(path="e03")
 		public String e03(RestRequest req) {
@@ -424,7 +424,7 @@ public class RestResourceLoggingTest {
 			return string(req.getCallLoggerConfig());
 		}
 	}
-	@RestResource(logging=@Logging(disabled="foo"))
+	@Rest(logging=@Logging(disabled="foo"))
 	public static class E4 {
 		@RestMethod(path="e11")
 		public String e11(RestRequest req) {
@@ -486,7 +486,7 @@ public class RestResourceLoggingTest {
 	// rules
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(logging=@Logging(rules=@LoggingRule(codes="1")))
+	@Rest(logging=@Logging(rules=@LoggingRule(codes="1")))
 	public static class F1 {
 		@RestMethod(path="f01")
 		public String f01(RestRequest req) {
@@ -502,7 +502,7 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class F2 {
 		@RestMethod(path="f03")
 		public String f03(RestRequest req) {
@@ -583,7 +583,7 @@ public class RestResourceLoggingTest {
 	// rules
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(
+	@Rest(
 		logging=@Logging(
 			rules=@LoggingRule(
 				exceptions="1",
@@ -615,7 +615,7 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class G2 {
 		@RestMethod(path="g03",
 			logging=@Logging(
@@ -652,7 +652,7 @@ public class RestResourceLoggingTest {
 	// Examples
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(
+	@Rest(
 		debug="always",
 		logging=@Logging(
 			useStackTraceHashing="true",

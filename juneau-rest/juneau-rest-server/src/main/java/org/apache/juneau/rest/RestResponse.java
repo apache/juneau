@@ -252,7 +252,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * <p>
 	 * This contains all resource and method level properties from the following:
 	 * <ul class='javatree'>
-	 * 	<li class='ja'>{@link RestResource#properties()}
+	 * 	<li class='ja'>{@link Rest#properties()}
 	 * 	<li class='ja'>{@link RestMethod#properties()}
 	 * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
 	 * </ul>

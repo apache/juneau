@@ -30,7 +30,7 @@ public class HtmlDocConfigNavlinksTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource()
+	@Rest()
 	@HtmlDocConfig(navlinks={"a01a","a01b"})
 	public static class A extends BasicRestServlet {
 		@RestMethod(path="/a01")
@@ -139,7 +139,7 @@ public class HtmlDocConfigNavlinksTest {
 	// Inheritance
 	//=================================================================================================================
 
-	@RestResource()
+	@Rest()
 	@HtmlDocConfig(navlinks={"INHERIT","b01a","b01b"})
 	public static class B extends A {
 		@RestMethod(path="/b01")

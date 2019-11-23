@@ -46,7 +46,7 @@ public class AcceptEncodingTest {
 	// Test with no compression enabled.
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod
 		public String get() {
@@ -117,7 +117,7 @@ public class AcceptEncodingTest {
 	// Test with compression enabled.
 	//=================================================================================================================
 
-	@RestResource(encoders=MyEncoder.class)
+	@Rest(encoders=MyEncoder.class)
 	public static class B {
 		@RestMethod
 		public String b01() {
@@ -181,7 +181,7 @@ public class AcceptEncodingTest {
 	// Test with compression enabled but with servlet using output stream directly.
 	//=================================================================================================================
 
-	@RestResource(encoders=MyEncoder.class)
+	@Rest(encoders=MyEncoder.class)
 	@SuppressWarnings("resource")
 	public static class C {
 		@RestMethod

@@ -16,7 +16,7 @@
 8.1.2 (TBD)
 
 <p>
-	Juneau 8.1.2 is a minor release with mostly bug fixes.  Improvements around specifying bean properties have also been made.
+	Juneau 8.1.2 is a moderate release.
 </p>
 
 <h5 class='topic w800'>juneau-marshall</h5>
@@ -51,6 +51,8 @@
 
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
+	<li>
+		{@link oajr.annotation.Rest @Rest} replaces {@link oajr.annotation.RestResource @RestResource} with shorter syntax.
 	<li>
 		New method {@link oajr.RestResponse#setHeaderSafe(String,String)} to strip invalid characters from header values.
 	<li>

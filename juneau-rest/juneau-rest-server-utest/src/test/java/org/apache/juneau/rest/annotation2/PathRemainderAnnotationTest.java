@@ -36,7 +36,7 @@ public class PathRemainderAnnotationTest {
 	// Simple tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A  {
 		@RestMethod(name=GET, path="/*")
 		public String b(@Path("/*") String remainder) {
@@ -62,7 +62,7 @@ public class PathRemainderAnnotationTest {
 	// Optional path remainer parameter.
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class B {
 		@RestMethod(name=GET,path="/a/*")
 		public Object a(@Path("/*") Optional<Integer> f1) throws Exception {

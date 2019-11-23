@@ -38,7 +38,7 @@ public class BeanContextPropertiesTest  {
 	// Validate that transforms defined on class transform to underlying bean context.
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	@BeanConfig(pojoSwaps=TemporalDateSwap.IsoInstant.class)
 	public static class A {
 		@RestMethod(name=GET, path="/{d1}")

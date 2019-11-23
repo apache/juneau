@@ -59,7 +59,7 @@ public class EndToEndInterfaceTest {
 		public String a03(@Header("foo") String b);
 	}
 
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static class A implements IA {
 
 		@Override
@@ -101,7 +101,7 @@ public class EndToEndInterfaceTest {
 	//=================================================================================================================
 
 	@RemoteResource
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IB {
 
 		@RemoteMethod(method="PUT", path="/a01")
@@ -155,7 +155,7 @@ public class EndToEndInterfaceTest {
 	//=================================================================================================================
 
 	@RemoteResource
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IC {
 		@RemoteMethod @RestMethod Ok ok();
 		@RemoteMethod @RestMethod Accepted accepted();
@@ -306,7 +306,7 @@ public class EndToEndInterfaceTest {
 	//=================================================================================================================
 
 	@RemoteResource
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface ID {
 		@RemoteMethod @RestMethod StreamResource streamResource() throws IOException ;
 		@RemoteMethod @RestMethod ReaderResource readerResource() throws IOException ;
@@ -366,7 +366,7 @@ public class EndToEndInterfaceTest {
 	//=================================================================================================================
 
 	@RemoteResource
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IE {
 		@RemoteMethod @RestMethod void badRequest() throws BadRequest;
 		@RemoteMethod @RestMethod void conflict() throws Conflict;
@@ -1278,7 +1278,7 @@ public class EndToEndInterfaceTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@RemoteResource
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IF {
 		@RemoteMethod @RestMethod BadRequest badRequest();
 		@RemoteMethod @RestMethod Conflict conflict();
@@ -1589,7 +1589,7 @@ public class EndToEndInterfaceTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@RemoteResource
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IG {
 		@RemoteMethod @RestMethod Reader reader();
 		@RemoteMethod @RestMethod InputStream inputStream();
@@ -1622,7 +1622,7 @@ public class EndToEndInterfaceTest {
 	//=================================================================================================================
 
 	@RemoteResource
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IH {
 		@RemoteMethod @RestMethod SeeOtherRoot seeOtherRoot();
 	}

@@ -77,7 +77,7 @@ public class BasicRestInfoProviderTest {
 	// /<root>
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A01 {}
 
 	@Test
@@ -98,7 +98,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 
-	@RestResource(swagger=@ResourceSwagger("{swagger:'3.0',host:'a-host',basePath:'a-basePath',schemes:['a-scheme']}"))
+	@Rest(swagger=@ResourceSwagger("{swagger:'3.0',host:'a-host',basePath:'a-basePath',schemes:['a-scheme']}"))
 	public static class A02 {}
 
 	@Test
@@ -122,14 +122,14 @@ public class BasicRestInfoProviderTest {
 	// /info
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		title="a-title",
 		description="a-description"
 	)
 	public static class B01 {}
 
 	@Test
-	public void b01a_info_RestResource() throws Exception {
+	public void b01a_info_Rest() throws Exception {
 		Info x = getSwagger(new B01()).getInfo();
 		assertEquals("a-title", x.getTitle());
 		assertEquals("a-description", x.getDescription());
@@ -139,7 +139,7 @@ public class BasicRestInfoProviderTest {
 		assertEquals(null, x.getLicense());
 	}
 	@Test
-	public void b01b_info_RestResource_withFile() throws Exception {
+	public void b01b_info_Rest_withFile() throws Exception {
 		Info x = getSwaggerWithFile(new B01()).getInfo();
 		assertEquals("s-title", x.getTitle());
 		assertEquals("s-description", x.getDescription());
@@ -149,7 +149,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{name:'s-name',url:'s-url'}", x.getLicense());
 	}
 
-	@RestResource(
+	@Rest(
 		messages="BasicRestInfoProviderTest",
 		title="$L{foo}",
 		description="$L{foo}"
@@ -157,19 +157,19 @@ public class BasicRestInfoProviderTest {
 	public static class B02 {}
 
 	@Test
-	public void b02a_info_RestResource_localized() throws Exception {
+	public void b02a_info_Rest_localized() throws Exception {
 		Info x = getSwagger(new B02()).getInfo();
 		assertEquals("l-foo", x.getTitle());
 		assertEquals("l-foo", x.getDescription());
 	}
 	@Test
-	public void b02b_info_RestResource_localized_withFile() throws Exception {
+	public void b02b_info_Rest_localized_withFile() throws Exception {
 		Info x = getSwaggerWithFile(new B02()).getInfo();
 		assertEquals("s-title", x.getTitle());
 		assertEquals("s-description", x.getDescription());
 	}
 
-	@RestResource(
+	@Rest(
 		title="a-title",
 		description="a-description",
 		swagger=@ResourceSwagger(
@@ -208,7 +208,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{name:'a-name',url:'a-url'}", x.getLicense());
 	}
 
-	@RestResource(
+	@Rest(
 		messages="BasicRestInfoProviderTest",
 		title="a-title",
 		description="a-description",
@@ -224,7 +224,7 @@ public class BasicRestInfoProviderTest {
 		assertEquals("l-bar", getSwaggerWithFile(new B04()).getInfo().getDescription());
 	}
 
-	@RestResource(
+	@Rest(
 		title="a-title",
 		description="a-description",
 		swagger=@ResourceSwagger(
@@ -269,7 +269,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{name:'b-name',url:'b-url'}", x.getLicense());
 	}
 
-	@RestResource(
+	@Rest(
 		title="a-title",
 		description="a-description",
 		swagger=@ResourceSwagger(
@@ -315,7 +315,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{name:'l-foo',url:'l-bar'}", x.getLicense());
 	}
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			title="c-title",
 			description="c-description"
@@ -340,7 +340,7 @@ public class BasicRestInfoProviderTest {
 	// /tags
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class C01 {}
 
 	@Test
@@ -355,7 +355,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	// Tags in @ResourceSwagger(value) should override file.
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			"{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}"
 		)
@@ -374,7 +374,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	// Tags in both @ResourceSwagger(value) and @ResourceSwagger(tags) should accumulate.
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			value="{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}",
 			tags=@Tag(name="b-name",description="b-description",externalDocs=@ExternalDocs(description="b-description",url="b-url"))
@@ -394,7 +394,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	// Same as above but without [] outer characters.
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			value="{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}",
 			tags=@Tag(name="b-name",value=" { description:'b-description', externalDocs: { description:'b-description', url:'b-url' } } ")
@@ -414,7 +414,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	// Tags in both Swagger.json and @ResourceSwagger(tags) should accumulate.
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			tags=@Tag(name="b-name",description="b-description",externalDocs=@ExternalDocs(description="b-description",url="b-url"))
 		)
@@ -433,7 +433,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	// Dup tag names should be overwritten
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			tags={
 				@Tag(name="s-name",description="b-description",externalDocs=@ExternalDocs(description="b-description",url="b-url")),
@@ -454,7 +454,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]", x.getTags());
 	}
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			value="{tags:[{name:'$L{foo}',description:'$L{foo}',externalDocs:{description:'$L{foo}',url:'$L{foo}'}}]}",
 			tags=@Tag(name="$L{foo}",description="$L{foo}",externalDocs=@ExternalDocs(description="$L{foo}",url="$L{foo}"))
@@ -475,7 +475,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	// Auto-detect tags defined on methods.
-	@RestResource
+	@Rest
 	public static class C08 {
 		@RestMethod(swagger=@MethodSwagger(tags="foo"))
 		public void doFoo() {}
@@ -493,7 +493,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	// Comma-delimited list
-	@RestResource
+	@Rest
 	public static class C09 {
 		@RestMethod(swagger=@MethodSwagger(tags=" foo, bar "))
 		public void doFoo() {}
@@ -511,7 +511,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	// ObjectList
-	@RestResource
+	@Rest
 	public static class C10 {
 		@RestMethod(swagger=@MethodSwagger(tags="['foo', 'bar']"))
 		public void doFoo() {}
@@ -529,7 +529,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	// ObjectList localized
-	@RestResource(messages="BasicRestInfoProviderTest")
+	@Rest(messages="BasicRestInfoProviderTest")
 	public static class C11 {
 		@RestMethod(swagger=@MethodSwagger(tags="['$L{foo}', '$L{bar}']"))
 		public void doFoo() {}
@@ -547,7 +547,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 	// Comma-delimited list localized
-	@RestResource(messages="BasicRestInfoProviderTest")
+	@Rest(messages="BasicRestInfoProviderTest")
 	public static class C12 {
 		@RestMethod(swagger=@MethodSwagger(tags=" $L{foo}, $L{bar} "))
 		public void doFoo() {}
@@ -568,7 +568,7 @@ public class BasicRestInfoProviderTest {
 	// /externalDocs
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class D01 {}
 
 	@Test
@@ -583,7 +583,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger("{externalDocs:{description:'a-description',url:'a-url'}}")
 	)
 	public static class D02 {}
@@ -600,7 +600,7 @@ public class BasicRestInfoProviderTest {
 	}
 
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			value="{externalDocs:{description:'a-description',url:'a-url'}}",
 			externalDocs=@ExternalDocs(description="b-description",url="b-url")
@@ -619,7 +619,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{description:'b-description',url:'b-url'}", x);
 	}
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			value="{info:{externalDocs:{description:'a-description',url:'a-url'}}}",
 			externalDocs=@ExternalDocs(" description:'b-description', url:'b-url' ")
@@ -638,7 +638,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{description:'b-description',url:'b-url'}", x);
 	}
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			value="{externalDocs:{description:'a-description',url:'a-url'}}",
 			externalDocs=@ExternalDocs("{description:'$L{foo}',url:'$L{bar}'}")
@@ -662,7 +662,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class E01 {
 		@RestMethod(name=GET,path="/path/{foo}")
 		public Foo doFoo() {
@@ -689,7 +689,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['s-scheme']", x.getSchemes());
 	}
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			"paths:{'/path/{foo}':{get:{operationId:'a-operationId',summary:'a-summary',description:'a-description',deprecated:false,schemes:['a-scheme']}}}"
 		)
@@ -720,7 +720,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['a-scheme']", x.getSchemes());
 	}
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			"paths:{'/path/{foo}':{get:{operationId:'a-operationId',summary:'a-summary',description:'a-description',deprecated:false,schemes:['a-scheme']}}}"
 		)
@@ -753,7 +753,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['b-scheme']", x.getSchemes());
 	}
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			"paths:{'/path/{foo}':{get:{operationId:'a-operationId',summary:'a-summary',description:'a-description',deprecated:false,schemes:['a-scheme']}}}"
 		)
@@ -790,7 +790,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['d-scheme-1','d-scheme-2']", x.getSchemes());
 	}
 
-	@RestResource(
+	@Rest(
 		messages="BasicRestInfoProviderTest",
 		swagger=@ResourceSwagger(
 			"paths:{'/path/{foo}':{get:{operationId:'a-operationId',summary:'a-summary',description:'a-description',deprecated:false,schemes:['a-scheme']}}}"
@@ -830,7 +830,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['l-foo']", x.getSchemes());
 	}
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			"paths:{'/path/{foo}':{get:{summary:'a-summary',description:'a-description'}}}"
 		)
@@ -858,7 +858,7 @@ public class BasicRestInfoProviderTest {
 		assertEquals("a-description", x.getDescription());
 	}
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger(
 			"paths:{'/path/{foo}':{get:{}}}"
 		)
@@ -890,7 +890,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/tags
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class MD01 {
 
 		@RestMethod(name=GET,path="/path/{foo}")
@@ -905,7 +905,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['s-tag']", getSwaggerWithFile(new MD01()).getPaths().get("/path/{foo}").get("get").getTags());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
 	public static class MD02 {
 		@RestMethod(name=GET,path="/path/{foo}")
 		public Foo doFoo() {
@@ -919,7 +919,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['a-tag']", getSwaggerWithFile(new MD02()).getPaths().get("/path/{foo}").get("get").getTags());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
 	public static class MD03 {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("tags:['b-tag']"))
 		public Foo doFoo() {
@@ -933,7 +933,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['b-tag']", getSwaggerWithFile(new MD03()).getPaths().get("/path/{foo}").get("get").getTags());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
 	public static class MD04a {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(tags="['c-tag-1','c-tag-2']"))
 		public Foo doFoo() {
@@ -947,7 +947,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['c-tag-1','c-tag-2']", getSwaggerWithFile(new MD04a()).getPaths().get("/path/{foo}").get("get").getTags());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
 	public static class MD04b {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(tags="c-tag-1, c-tag-2"))
 		public Foo doFoo() {
@@ -961,7 +961,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['c-tag-1','c-tag-2']", getSwaggerWithFile(new MD04b()).getPaths().get("/path/{foo}").get("get").getTags());
 	}
 
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:'a-tags'}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:'a-tags'}}}"))
 	public static class MD05 {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(tags="$L{foo}"))
 		public Foo doFoo() {
@@ -979,7 +979,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/externalDocs
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class ME01 {
 
 		@RestMethod(name=GET,path="/path/{foo}")
@@ -994,7 +994,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{description:'s-description',url:'s-url'}", getSwaggerWithFile(new ME01()).getPaths().get("/path/{foo}").get("get").getExternalDocs());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class ME02 {
 		@RestMethod(name=GET,path="/path/{foo}")
 		public Foo doFoo() {
@@ -1008,7 +1008,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{description:'a-description',url:'a-url'}", getSwaggerWithFile(new ME02()).getPaths().get("/path/{foo}").get("get").getExternalDocs());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class ME03 {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("externalDocs:{description:'b-description',url:'b-url'}"))
 		public Foo doFoo() {
@@ -1022,7 +1022,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{description:'b-description',url:'b-url'}", getSwaggerWithFile(new ME03()).getPaths().get("/path/{foo}").get("get").getExternalDocs());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class ME04a {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(externalDocs=@ExternalDocs(description="c-description",url="c-url")))
 		public Foo doFoo() {
@@ -1036,7 +1036,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{description:'c-description',url:'c-url'}", getSwaggerWithFile(new ME04a()).getPaths().get("/path/{foo}").get("get").getExternalDocs());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class ME04b {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(externalDocs=@ExternalDocs("{description:'d-description',url:'d-url'}")))
 		public Foo doFoo() {
@@ -1050,7 +1050,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{description:'d-description',url:'d-url'}", getSwaggerWithFile(new ME04b()).getPaths().get("/path/{foo}").get("get").getExternalDocs());
 	}
 
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class ME05 {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(externalDocs=@ExternalDocs("{description:'$L{foo}',url:'$L{foo}'}")))
 		public Foo doFoo() {
@@ -1068,7 +1068,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/consumes
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class MF01 {
 
 		@RestMethod(name=GET,path="/path/{foo}")
@@ -1083,7 +1083,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['s-consumes']", getSwaggerWithFile(new MF01()).getPaths().get("/path/{foo}").get("get").getConsumes());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
 	public static class MF02 {
 		@RestMethod(name=GET,path="/path/{foo}")
 		public Foo doFoo() {
@@ -1097,7 +1097,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['a-consumes']", getSwaggerWithFile(new MF02()).getPaths().get("/path/{foo}").get("get").getConsumes());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
 	public static class MF03 {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("consumes:['b-consumes']"))
 		public Foo doFoo() {
@@ -1111,7 +1111,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['b-consumes']", getSwaggerWithFile(new MF03()).getPaths().get("/path/{foo}").get("get").getConsumes());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
 	public static class MF04a {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(consumes="['c-consumes-1','c-consumes-2']"))
 		public Foo doFoo() {
@@ -1125,7 +1125,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['c-consumes-1','c-consumes-2']", getSwaggerWithFile(new MF04a()).getPaths().get("/path/{foo}").get("get").getConsumes());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
 	public static class MF04b {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(consumes="c-consumes-1, c-consumes-2"))
 		public Foo doFoo() {
@@ -1139,7 +1139,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['c-consumes-1','c-consumes-2']", getSwaggerWithFile(new MF04b()).getPaths().get("/path/{foo}").get("get").getConsumes());
 	}
 
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
 	public static class MF05 {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(consumes="['$L{foo}']"))
 		public Foo doFoo() {
@@ -1153,7 +1153,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['l-foo']", getSwaggerWithFile(new MF05()).getPaths().get("/path/{foo}").get("get").getConsumes());
 	}
 
-	@RestResource(parsers={JsonParser.class})
+	@Rest(parsers={JsonParser.class})
 	public static class MF06a {
 		@RestMethod(name=PUT,path="/path2/{foo}")
 		public Foo doFoo() {
@@ -1167,7 +1167,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("null", getSwaggerWithFile(new MF06a()).getPaths().get("/path2/{foo}").get("put").getConsumes());
 	}
 
-	@RestResource(parsers={JsonParser.class})
+	@Rest(parsers={JsonParser.class})
 	public static class MF06b {
 		@RestMethod(name=PUT,path="/path2/{foo}",parsers={XmlParser.class})
 		public Foo doFoo() {
@@ -1181,7 +1181,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['text/xml','application/xml']", getSwaggerWithFile(new MF06b()).getPaths().get("/path2/{foo}").get("put").getConsumes());
 	}
 
-	@RestResource(parsers={JsonParser.class},swagger=@ResourceSwagger("paths:{'/path2/{foo}':{put:{consumes:['a-consumes']}}}"))
+	@Rest(parsers={JsonParser.class},swagger=@ResourceSwagger("paths:{'/path2/{foo}':{put:{consumes:['a-consumes']}}}"))
 	public static class MF06c {
 		@RestMethod(name=PUT,path="/path2/{foo}",parsers={XmlParser.class})
 		public Foo doFoo() {
@@ -1199,7 +1199,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/produces
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class MG01 {
 
 		@RestMethod(name=GET,path="/path/{foo}")
@@ -1214,7 +1214,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['s-produces']", getSwaggerWithFile(new MG01()).getPaths().get("/path/{foo}").get("get").getProduces());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
 	public static class MG02 {
 		@RestMethod(name=GET,path="/path/{foo}")
 		public Foo doFoo() {
@@ -1228,7 +1228,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['a-produces']", getSwaggerWithFile(new MG02()).getPaths().get("/path/{foo}").get("get").getProduces());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
 	public static class MG03 {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("produces:['b-produces']"))
 		public Foo doFoo() {
@@ -1242,7 +1242,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['b-produces']", getSwaggerWithFile(new MG03()).getPaths().get("/path/{foo}").get("get").getProduces());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
 	public static class MG04a {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(produces="['c-produces-1','c-produces-2']"))
 		public Foo doFoo() {
@@ -1256,7 +1256,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['c-produces-1','c-produces-2']", getSwaggerWithFile(new MG04a()).getPaths().get("/path/{foo}").get("get").getProduces());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
 	public static class MG04b {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(produces="c-produces-1, c-produces-2"))
 		public Foo doFoo() {
@@ -1270,7 +1270,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['c-produces-1','c-produces-2']", getSwaggerWithFile(new MG04b()).getPaths().get("/path/{foo}").get("get").getProduces());
 	}
 
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
 	public static class MG05 {
 		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(produces="['$L{foo}']"))
 		public Foo doFoo() {
@@ -1284,7 +1284,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['l-foo']", getSwaggerWithFile(new MG05()).getPaths().get("/path/{foo}").get("get").getProduces());
 	}
 
-	@RestResource(serializers={JsonSerializer.class})
+	@Rest(serializers={JsonSerializer.class})
 	public static class MG06a {
 		@RestMethod(name=PUT,path="/path2/{foo}")
 		public Foo doFoo() {
@@ -1298,7 +1298,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("null", getSwaggerWithFile(new MG06a()).getPaths().get("/path2/{foo}").get("put").getProduces());
 	}
 
-	@RestResource(serializers={JsonSerializer.class})
+	@Rest(serializers={JsonSerializer.class})
 	public static class MG06b {
 		@RestMethod(name=PUT,path="/path2/{foo}",serializers={XmlSerializer.class})
 		public Foo doFoo() {
@@ -1312,7 +1312,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("['text/xml']", getSwaggerWithFile(new MG06b()).getPaths().get("/path2/{foo}").get("put").getProduces());
 	}
 
-	@RestResource(serializers={JsonSerializer.class},swagger=@ResourceSwagger("paths:{'/path2/{foo}':{put:{produces:['a-produces']}}}"))
+	@Rest(serializers={JsonSerializer.class},swagger=@ResourceSwagger("paths:{'/path2/{foo}':{put:{produces:['a-produces']}}}"))
 	public static class MG06c {
 		@RestMethod(name=PUT,path="/path2/{foo}",serializers={XmlSerializer.class})
 		public Foo doFoo() {
@@ -1330,7 +1330,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/deprecated
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class MH06 {
 		@RestMethod(name=GET,path="/path2/{foo}")
 		@Deprecated
@@ -1345,7 +1345,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("true", getSwaggerWithFile(new MH06()).getPaths().get("/path2/{foo}").get("get").getDeprecated());
 	}
 
-	@RestResource
+	@Rest
 	@Deprecated
 	public static class MH07 {
 		@RestMethod(name=GET,path="/path2/{foo}")
@@ -1364,7 +1364,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/parameters/query
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class NA01 {
 		@RestMethod(name=GET,path="/path/{foo}/query")
 		public Foo doFoo(@Query("foo") Foo foo) {
@@ -1415,7 +1415,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("1", x.getMinItems());
 	}
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger({
 			"paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',",
 				"name:'foo',",
@@ -1489,7 +1489,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("2", x.getMinItems());
 	}
 
-	@RestResource(
+	@Rest(
 		swagger=@ResourceSwagger({
 			"paths:{'/path/{foo}/query':{get:{parameters:[{",
 				"'in':'query',",
@@ -1591,7 +1591,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/parameters/query/example
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class NR01 {
 		@RestMethod(name=GET,path="/path/{foo}/query")
 		public Foo doFoo(@Query("foo") Foo foo) {
@@ -1605,7 +1605,7 @@ public class BasicRestInfoProviderTest {
 		assertEquals("{id:1}", getSwaggerWithFile(new NR01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
 	public static class NR02 {
 		@RestMethod(name=GET,path="/path/{foo}/query")
 		public Foo doFoo(@Query("foo") Foo foo) {
@@ -1619,7 +1619,7 @@ public class BasicRestInfoProviderTest {
 		assertEquals("{id:2}", getSwaggerWithFile(new NR02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
 	public static class NR03 {
 		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',x-example:'{id:3}'}]"))
 		public Foo doFoo() {
@@ -1633,7 +1633,7 @@ public class BasicRestInfoProviderTest {
 		assertEquals("{id:3}", getSwaggerWithFile(new NR03()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
 	public static class NR04 {
 		@RestMethod(name=GET,path="/path/{foo}/query")
 		public Foo doFoo(@Query(name="foo",example="{id:4}") Foo foo) {
@@ -1647,7 +1647,7 @@ public class BasicRestInfoProviderTest {
 		assertEquals("{id:4}", getSwaggerWithFile(new NR04()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getExample());
 	}
 
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
 	public static class NR05 {
 		@RestMethod(name=GET,path="/path/{foo}/query")
 		public Foo doFoo(@Query(name="foo",example="{id:$L{5}}") Foo foo) {
@@ -1665,7 +1665,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/parameters/body/examples
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class NS01 {
 		@RestMethod(name=GET,path="/path/{foo}/body")
 		public Foo doFoo(@Body Foo foo) {
@@ -1679,7 +1679,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{foo:'a'}", getSwaggerWithFile(new NS01()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
 	public static class NS02 {
 		@RestMethod(name=GET,path="/path/{foo}/body")
 		public Foo doFoo(@Body Foo foo) {
@@ -1693,7 +1693,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{foo:'b'}", getSwaggerWithFile(new NS02()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
 	public static class NS03 {
 		@RestMethod(name=GET,path="/path/{foo}/body",swagger=@MethodSwagger("parameters:[{'in':'body',x-examples:{foo:'c'}}]"))
 		public Foo doFoo() {
@@ -1707,7 +1707,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{foo:'c'}", getSwaggerWithFile(new NS03()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
 	public static class NS04 {
 		@RestMethod(name=GET,path="/path/{foo}/body")
 		public Foo doFoo(@Body(examples="{foo:'d'}") Foo foo) {
@@ -1721,7 +1721,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{foo:'d'}", getSwaggerWithFile(new NS04()).getPaths().get("/path/{foo}/body").get("get").getParameter("body",null).getExamples());
 	}
 
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',examples:{foo:'b'}}]}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',examples:{foo:'b'}}]}}}"))
 	public static class NS05 {
 		@RestMethod(name=GET,path="/path/{foo}/body")
 		public Foo doFoo(@Body(examples="{foo:'$L{foo}'}") Foo foo) {
@@ -1739,7 +1739,7 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/parameters/query/schema
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class NT01 {
 		@RestMethod(name=GET,path="/path/{foo}/query")
 		public Foo doFoo(@Query("foo") Foo foo) {
@@ -1753,7 +1753,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{'$ref':'#/definitions/Foo'}", getSwaggerWithFile(new NT01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{in:'query',name:'foo',schema:{$ref:'b'}}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{in:'query',name:'foo',schema:{$ref:'b'}}]}}}"))
 	public static class NT02 {
 		@RestMethod(name=GET,path="/path/{foo}/query")
 		public Foo doFoo(@Query("foo") Foo foo) {
@@ -1767,7 +1767,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{'$ref':'b'}", getSwaggerWithFile(new NT02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{in:'query',name:'foo',schema:{$ref:'b'}}]}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{in:'query',name:'foo',schema:{$ref:'b'}}]}}}"))
 	public static class NT03 {
 
 		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',schema:{$ref:'c'}}]"))
@@ -1786,12 +1786,12 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/responses/<response>/description
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class OA01a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OA01x> foo) {}
 	}
-	@RestResource
+	@Rest
 	public static class OA01b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OA01x doFoo() { return null;}
@@ -1812,7 +1812,7 @@ public class BasicRestInfoProviderTest {
 		assertEquals("s-100-description", getSwaggerWithFile(new OA01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class OA02 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(@ResponseStatus Value<Integer> foo) {}
@@ -1824,7 +1824,7 @@ public class BasicRestInfoProviderTest {
 		assertEquals("a-100-description", getSwaggerWithFile(new OA02()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class OA03 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{description:'b-100-description'}}"))
 		public void doFoo(@ResponseStatus Value<Integer> foo) {}
@@ -1836,12 +1836,12 @@ public class BasicRestInfoProviderTest {
 		assertEquals("b-100-description", getSwaggerWithFile(new OA03()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class OA04a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OA04x> foo) {}
 	}
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class OA04b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OA04x doFoo() {return null;}
@@ -1860,12 +1860,12 @@ public class BasicRestInfoProviderTest {
 		assertEquals("c-100-description", getSwaggerWithFile(new OA04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
 	}
 
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class OA05a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OA05x> foo) {}
 	}
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class OA05b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OA05x doFoo() {return null;}
@@ -1888,12 +1888,12 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/responses/<response>/headers
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class OB01a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OB01x> foo) {}
 	}
-	@RestResource
+	@Rest
 	public static class OB01b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OB01x doFoo() {return null;}
@@ -1914,7 +1914,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{'X-Foo':{description:'s-description',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class OB02 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
@@ -1928,7 +1928,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB02()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class OB03 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{headers:{'X-Foo':{description:'c-description',type:'integer',format:'int32'}}}}"))
 		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
@@ -1942,12 +1942,12 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{'X-Foo':{description:'c-description',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB03()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class OB04a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OB04x> foo) {}
 	}
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class OB04b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OB04x doFoo() {return null;}
@@ -1966,12 +1966,12 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{'X-Foo':{description:'d-description',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
 	}
 
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class OB05a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OB05x> foo) {}
 	}
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class OB05b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OB05x doFoo() {return null;}
@@ -1994,12 +1994,12 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/responses/<response>/example
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class OC01a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OC01x> foo) {}
 	}
-	@RestResource
+	@Rest
 	public static class OC01b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OC01x doFoo() {return null;}
@@ -2020,7 +2020,7 @@ public class BasicRestInfoProviderTest {
 		assertEquals("{foo:'a'}", getSwaggerWithFile(new OC01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class OC02 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(@ResponseStatus Value<Integer> foo) {}
@@ -2032,7 +2032,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{foo:'b'}", getSwaggerWithFile(new OC02()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class OC03 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{example:{foo:'c'}}}"))
 		public void doFoo(@ResponseStatus Value<Integer> foo) {}
@@ -2044,12 +2044,12 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{foo:'c'}", getSwaggerWithFile(new OC03()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class OC04a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OC04x> foo) {}
 	}
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class OC04b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OC04x doFoo() {return null;}
@@ -2070,12 +2070,12 @@ public class BasicRestInfoProviderTest {
 		assertEquals("{foo:'d'}", getSwaggerWithFile(new OC04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
 	}
 
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class OC05a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OC05x> foo) {}
 	}
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class OC05b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OC05x doFoo() {return null;}
@@ -2100,12 +2100,12 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/responses/<response>/examples
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class OD01a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OD01x> foo) {}
 	}
-	@RestResource
+	@Rest
 	public static class OD01b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OD01x doFoo() {return null;}
@@ -2126,7 +2126,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{foo:'a'}", getSwaggerWithFile(new OD01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class OD02 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(@ResponseStatus Value<Integer> foo) {}
@@ -2138,7 +2138,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{foo:{bar:'b'}}", getSwaggerWithFile(new OD02()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class OD03 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{examples:{foo:{bar:'c'}}}}"))
 		public void doFoo(@ResponseStatus Value<Integer> foo) {}
@@ -2150,12 +2150,12 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{foo:{bar:'c'}}", getSwaggerWithFile(new OD03()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class OD04a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OD04x> foo) {}
 	}
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class OD04b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OD04x doFoo() {return null;}
@@ -2174,12 +2174,12 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{foo:{bar:'d'}}", getSwaggerWithFile(new OD04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
 	}
 
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class OD05a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OD05x> foo) {}
 	}
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class OD05b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OD05x doFoo() {return null;}
@@ -2202,12 +2202,12 @@ public class BasicRestInfoProviderTest {
 	// /paths/<path>/<method>/responses/<response>/schema
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class OE01a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OE01x> foo) {}
 	}
-	@RestResource
+	@Rest
 	public static class OE01b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OE01x doFoo() {return null;}
@@ -2226,7 +2226,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{type:'array',items:{'$ref':'#/definitions/Foo'}}", getSwaggerWithFile(new OE01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class OE02 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(@ResponseStatus Value<Integer> foo) {}
@@ -2238,7 +2238,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{'$ref':'b'}", getSwaggerWithFile(new OE02()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class OE03 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{schema:{$ref:'c'}}}}"))
 		public void doFoo(@ResponseStatus Value<Integer> foo) {}
@@ -2250,12 +2250,12 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{'$ref':'c'}", getSwaggerWithFile(new OE03()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
 	}
 
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class OE04a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OE04x> foo) {}
 	}
-	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
+	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class OE04b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OE04x doFoo() {return null;}
@@ -2274,12 +2274,12 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("{'$ref':'d'}", getSwaggerWithFile(new OE04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
 	}
 
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class OE05a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public void doFoo(Value<OE05x> foo) {}
 	}
-	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
+	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class OE05b {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OE05x doFoo() {return null;}
@@ -2307,7 +2307,7 @@ public class BasicRestInfoProviderTest {
 	// Example bean with getter-only property.
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class P extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 

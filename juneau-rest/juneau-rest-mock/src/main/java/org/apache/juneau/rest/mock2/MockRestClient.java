@@ -33,7 +33,7 @@ public class MockRestClient extends RestClientBuilder {
 	 * Constructor.
 	 *
 	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 */
 	protected MockRestClient(Object impl) {
@@ -46,7 +46,7 @@ public class MockRestClient extends RestClientBuilder {
 	 * Creates a new RestClient builder configured with the specified REST implementation bean or bean class.
 	 *
 	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @return A new builder.
 	 */
@@ -58,7 +58,7 @@ public class MockRestClient extends RestClientBuilder {
 	 * Creates a new RestClient builder configured with the specified REST implementation bean or bean class.
 	 *
 	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param m
 	 * 	The marshall to use for serializing and parsing HTTP bodies.
@@ -73,7 +73,7 @@ public class MockRestClient extends RestClientBuilder {
 	 * Creates a new RestClient builder configured with the specified REST implementation bean or bean class.
 	 *
 	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param s
 	 * 	The serializer to use for serializing HTTP bodies.
@@ -88,7 +88,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	/**
-	 * Convenience method for creating a Restclient over the specified REST implementation bean or bean class.
+	 * Convenience method for creating a RestClient over the specified REST implementation bean or bean class.
 	 *
 	 * <p>
 	 * Equivalent to calling:
@@ -97,7 +97,7 @@ public class MockRestClient extends RestClientBuilder {
 	 * </p>
 	 *
 	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param m
 	 * 	The marshall to use for specifying the <c>Accept</c> and <c>Content-Type</c> headers.
@@ -109,7 +109,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	/**
-	 * Convenience method for creating a Restclient over the specified REST implementation bean or bean class.
+	 * Convenience method for creating a RestClient over the specified REST implementation bean or bean class.
 	 *
 	 * <p>
 	 * Equivalent to calling:
@@ -118,7 +118,7 @@ public class MockRestClient extends RestClientBuilder {
 	 * </p>
 	 *
 	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param s
 	 * 	The serializer to use for serializing HTTP bodies.

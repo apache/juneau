@@ -20,7 +20,7 @@ import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests the @RestResource(clientVersion) attribute.
+ * Tests the @Rest(clientVersion) attribute.
  */
 @SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -30,7 +30,7 @@ public class ClientVersionTest {
 	// Basic tests - default X-Client-Version header.
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod(name=GET, path="/")
 		public String test0() {
@@ -73,7 +73,7 @@ public class ClientVersionTest {
 	// Basic tests - Custom-Client-Version header.
 	//=================================================================================================================
 
-	@RestResource(clientVersionHeader="Custom-Client-Version")
+	@Rest(clientVersionHeader="Custom-Client-Version")
 	public static class B {
 		@RestMethod(name=GET, path="/")
 		public String test0() {

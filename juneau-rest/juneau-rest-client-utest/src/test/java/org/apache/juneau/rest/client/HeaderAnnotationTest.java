@@ -51,7 +51,7 @@ public class HeaderAnnotationTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod
 		public String getA(@Header("*") ObjectMap m) {
@@ -151,7 +151,7 @@ public class HeaderAnnotationTest {
 	// @Header(_default/allowEmptyValue)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class B {
 		@RestMethod
 		public String get(@Header("*") ObjectMap m) {
@@ -215,7 +215,7 @@ public class HeaderAnnotationTest {
 	// @Header(collectionFormat)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class C {
 		@RestMethod
 		public String getA(@Header("*") ObjectMap m) {
@@ -271,7 +271,7 @@ public class HeaderAnnotationTest {
 	// @Header(maximum,exclusiveMaximum,minimum,exclusiveMinimum)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class D {
 		@RestMethod
 		public String get(@Header("*") ObjectMap m) {
@@ -645,7 +645,7 @@ public class HeaderAnnotationTest {
 	// @Header(maxItems,minItems,uniqueItems)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class E {
 		@RestMethod
 		public String get(@Header("*") ObjectMap m) {
@@ -705,7 +705,7 @@ public class HeaderAnnotationTest {
 	// @Header(maxLength,minLength,enum)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class F {
 		@RestMethod
 		public String get(@Header("*") ObjectMap m) {
@@ -771,7 +771,7 @@ public class HeaderAnnotationTest {
 	// @Header(multipleOf)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class G {
 		@RestMethod
 		public String get(@Header("*") ObjectMap m) {
@@ -875,7 +875,7 @@ public class HeaderAnnotationTest {
 	// @Header(required)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class H {
 		@RestMethod
 		public String get(@Header("*") ObjectMap m) {
@@ -911,7 +911,7 @@ public class HeaderAnnotationTest {
 	// @Header(skipIfEmpty)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class I {
 		@RestMethod
 		public String get(@Header("*") ObjectMap m) {
@@ -946,7 +946,7 @@ public class HeaderAnnotationTest {
 	// @Header(serializer)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class J {
 		@RestMethod
 		public String get(@Header("*") ObjectMap m) {

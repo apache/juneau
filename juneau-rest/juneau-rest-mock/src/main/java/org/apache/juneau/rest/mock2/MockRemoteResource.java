@@ -43,7 +43,7 @@ public class MockRemoteResource<T> {
 	 * @param intf
 	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
 	 * @param impl
-	 * 	The REST implementation bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 */
 	protected MockRemoteResource(Class<T> intf, Object impl) {
@@ -61,7 +61,7 @@ public class MockRemoteResource<T> {
 	 * @param intf
 	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
 	 * @param impl
-	 * 	The REST implementation bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @return A new builder.
 	 */
@@ -78,7 +78,7 @@ public class MockRemoteResource<T> {
 	 * @param intf
 	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
 	 * @param impl
-	 * 	The REST implementation bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param m
 	 * 	The marshall to use for serializing and parsing the HTTP bodies.
@@ -97,7 +97,7 @@ public class MockRemoteResource<T> {
 	 * @param intf
 	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
 	 * @param impl
-	 * 	The REST implementation bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param s
 	 * 	The serializer to use for serializing request bodies.
@@ -136,7 +136,7 @@ public class MockRemoteResource<T> {
 	 * @param intf
 	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
 	 * @param impl
-	 * 	The REST implementation bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @return A new proxy interface.
 	 */
@@ -159,7 +159,7 @@ public class MockRemoteResource<T> {
 	 * @param intf
 	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
 	 * @param impl
-	 * 	The REST implementation bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param m
 	 * 	The marshall to use for serializing request bodies and parsing response bodies.
@@ -185,7 +185,7 @@ public class MockRemoteResource<T> {
 	 * @param intf
 	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
 	 * @param impl
-	 * 	The REST implementation bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param s
 	 * 	The serializer to use for serializing request bodies.

@@ -16,7 +16,7 @@ import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Extended annotation for {@link RestResource#swagger() @RestResource(swagger)}.
+ * Extended annotation for {@link Rest#swagger() @Rest(swagger)}.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
@@ -47,7 +47,7 @@ public @interface ResourceSwagger {
 	 * 			<li><c>{resource-class}.title</c> property in resource bundle.
 	 * 			<li>{@link ResourceSwagger#title()} on this class, then any parent classes.
 	 * 			<li>Value defined in Swagger JSON file.
-	 * 			<li>{@link RestResource#title()} on this class, then any parent classes.
+	 * 			<li>{@link Rest#title()} on this class, then any parent classes.
 	 * 			<li>
 	 * 		</ol>
 	 * 	<li>
@@ -82,7 +82,7 @@ public @interface ResourceSwagger {
 	 * 			<li><c>{resource-class}.description</c> property in resource bundle.
 	 * 			<li>{@link ResourceSwagger#description()} on this class, then any parent classes.
 	 * 			<li>Value defined in Swagger JSON file.
-	 * 			<li>{@link RestResource#description()} on this class, then any parent classes.
+	 * 			<li>{@link Rest#description()} on this class, then any parent classes.
 	 * 			<li>
 	 * 		</ol>
 	 * 	<li>

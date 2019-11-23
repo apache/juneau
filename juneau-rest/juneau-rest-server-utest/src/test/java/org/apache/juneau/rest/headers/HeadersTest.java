@@ -37,7 +37,7 @@ public class HeadersTest {
 	// HTTP 1.1 headers
 	//====================================================================================================
 
-	@RestResource(
+	@Rest(
 		serializers=AnythingSerializer.class,
 		parsers=AnythingParser.class,
 		encoders=AnythingEncoder.class,
@@ -411,7 +411,7 @@ public class HeadersTest {
 	// Custom header.
 	//====================================================================================================
 
-	@RestResource(
+	@Rest(
 		paramResolvers=CustomHeaderParam.class,
 		allowedHeaderParams="Custom"
 	)
@@ -457,7 +457,7 @@ public class HeadersTest {
 	// Default values - Default request headers
 	//====================================================================================================
 
-	@RestResource
+	@Rest
 	public static class C {
 		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public ObjectMap c(RequestHeaders headers) {
@@ -486,7 +486,7 @@ public class HeadersTest {
 	// Default values - Default request headers, case-insensitive matching
 	//====================================================================================================
 
-	@RestResource
+	@Rest
 	public static class D {
 		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public ObjectMap d(RequestHeaders headers) {
@@ -515,7 +515,7 @@ public class HeadersTest {
 	// Default values - Annotated headers.
 	//====================================================================================================
 
-	@RestResource
+	@Rest
 	public static class E {
 		@RestMethod
 		public ObjectMap e(@Header(name="H1") String h1, @Header("H2") String h2, @Header("H3") String h3) {
@@ -544,7 +544,7 @@ public class HeadersTest {
 	// Default values - Annotated headers, case-insensitive matching.
 	//====================================================================================================
 
-	@RestResource
+	@Rest
 	public static class F {
 		@RestMethod
 		public ObjectMap f(@Header("h1") String h1, @Header("h2") String h2, @Header("h3") String h3) {
@@ -573,7 +573,7 @@ public class HeadersTest {
 	// Default values - Annotated headers with default values.
 	//====================================================================================================
 
-	@RestResource
+	@Rest
 	public static class G {
 		@RestMethod
 		public ObjectMap g(@Header(name="h1",_default="1") String h1, @Header(name="h2",_default="2") String h2, @Header(name="h3",_default="3") String h3) {
@@ -598,7 +598,7 @@ public class HeadersTest {
 		g.get("/g").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
-	@RestResource
+	@Rest
 	public static class GB {
 		@RestMethod
 		public ObjectMap g(@Header(value="h1",_default="1") String h1, @Header(value="h2",_default="2") String h2, @Header(value="h3",_default="3") String h3) {
@@ -627,7 +627,7 @@ public class HeadersTest {
 	// Default values - Annotated headers with default values and default request headers.
 	//====================================================================================================
 
-	@RestResource
+	@Rest
 	public static class H {
 		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public ObjectMap h(@Header(value="h1",_default="4") String h1, @Header(value="h2",_default="5") String h2, @Header(value="h3",_default="6") String h3) {

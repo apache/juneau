@@ -46,7 +46,7 @@ public class ResponseAnnotationTest {
 	// HTTP status code
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod
 		public A01 a01() {
@@ -89,7 +89,7 @@ public class ResponseAnnotationTest {
 	// @Response(usePartSerializer)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource(serializers=OpenApiSerializer.class,defaultAccept="text/openapi")
+	@Rest(serializers=OpenApiSerializer.class,defaultAccept="text/openapi")
 	public static class B {
 
 		@Response
@@ -147,7 +147,7 @@ public class ResponseAnnotationTest {
 	// @Response(partSerializer) with schemas
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource(serializers=OpenApiSerializer.class,defaultAccept="text/openapi")
+	@Rest(serializers=OpenApiSerializer.class,defaultAccept="text/openapi")
 	public static class D {
 
 		@Response(schema=@Schema(collectionFormat="pipes"))
@@ -253,7 +253,7 @@ public class ResponseAnnotationTest {
 	// Basic
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class E {
 		@RestMethod
 		public void e01(@Response Value<E01> body) {
@@ -308,7 +308,7 @@ public class ResponseAnnotationTest {
 	// Basic swagger
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource(serializers=OpenApiSerializer.class,defaultAccept="text/openapi")
+	@Rest(serializers=OpenApiSerializer.class,defaultAccept="text/openapi")
 	public static class F {
 		@RestMethod
 		public void f01(@Response(schema=@Schema(description="f01", collectionFormat="pipes")) Value<List<Integer>> body) {
@@ -381,7 +381,7 @@ public class ResponseAnnotationTest {
 	// Test JSON Accept
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class G {
 		@RestMethod
 		public void g01(@Response Value<List<Integer>> body) {
@@ -459,7 +459,7 @@ public class ResponseAnnotationTest {
 	// @Response on RestMethod
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
 	public static class J {
 
 		@RestMethod(name="POST")
@@ -483,7 +483,7 @@ public class ResponseAnnotationTest {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SA {
 
 		@Response(
@@ -653,7 +653,7 @@ public class ResponseAnnotationTest {
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SB {
 
 		@Response(schema=@Schema(" type:'number' "))
@@ -736,7 +736,7 @@ public class ResponseAnnotationTest {
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SC {
 
 		@Response(example="{f1:'a'}")
@@ -789,7 +789,7 @@ public class ResponseAnnotationTest {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class UA {
 
 		@Response(
@@ -899,7 +899,7 @@ public class ResponseAnnotationTest {
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class UB {
 
 		@Response(schema=@Schema(" type:'number' "))
@@ -920,7 +920,7 @@ public class ResponseAnnotationTest {
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class UC {
 
 		@Response(example={" {f1:'b'} "})

@@ -26,7 +26,7 @@ import org.apache.juneau.rest.helper.*;
 /**
  * Microservice debug utilities.
  */
-@RestResource(
+@Rest(
 	path="/debug",
 	title="Debug",
 	description="Debug Utilities.",

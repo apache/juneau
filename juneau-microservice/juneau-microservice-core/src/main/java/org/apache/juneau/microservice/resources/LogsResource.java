@@ -36,7 +36,7 @@ import org.apache.juneau.rest.helper.*;
 /**
  * REST resource for viewing and accessing log files.
  */
-@RestResource(
+@Rest(
 	path="/logs",
 	title="Log files",
 	description="Log files from this service",

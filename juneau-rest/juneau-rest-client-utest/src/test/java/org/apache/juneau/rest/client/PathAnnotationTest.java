@@ -51,7 +51,7 @@ public class PathAnnotationTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod(path="/a/{x}")
 		public String getA(@Path("x") Object x) {
@@ -151,7 +151,7 @@ public class PathAnnotationTest {
 	// @Query(collectionFormat)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class C {
 		@RestMethod(path="/a/{x}")
 		public String getA(@Path("x") Object x) {
@@ -206,7 +206,7 @@ public class PathAnnotationTest {
 	// @Path(maximum,exclusiveMaximum,minimum,exclusiveMinimum)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class D {
 		@RestMethod(path="/a/{x}")
 		public String get(@Path("*") ObjectMap m) {
@@ -562,7 +562,7 @@ public class PathAnnotationTest {
 	// @Path(maxItems,minItems,uniqueItems)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class E {
 		@RestMethod(path="/{x}")
 		public String get(@Path("*") ObjectMap m) {
@@ -622,7 +622,7 @@ public class PathAnnotationTest {
 	// @Path(maxLength,minLength,enum)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class F {
 		@RestMethod(path="/{x}")
 		public String get(@Path("*") ObjectMap m) {
@@ -685,7 +685,7 @@ public class PathAnnotationTest {
 	// @Path(multipleOf)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class G {
 		@RestMethod(path="/{x}")
 		public String get(@Path("*") ObjectMap m) {
@@ -789,7 +789,7 @@ public class PathAnnotationTest {
 	// @Path(required)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class H {
 		@RestMethod(path="/{x}")
 		public String get(@Path("*") ObjectMap m) {
@@ -814,7 +814,7 @@ public class PathAnnotationTest {
 	// @Path(serializer)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class J {
 		@RestMethod(path="/{x}")
 		public String get(@Path("*") ObjectMap m) {

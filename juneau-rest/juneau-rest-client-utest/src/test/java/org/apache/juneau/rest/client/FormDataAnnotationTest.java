@@ -53,7 +53,7 @@ public class FormDataAnnotationTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod
 		public String postA(@FormData("*") ObjectMap m, @Header("Content-Type") String ct) {
@@ -173,7 +173,7 @@ public class FormDataAnnotationTest {
 	// @FormData(_default/allowEmptyValue)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class B {
 		@RestMethod
 		public String post(@FormData("*") ObjectMap m) {
@@ -236,7 +236,7 @@ public class FormDataAnnotationTest {
 	// @FormData(collectionFormat)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class C {
 		@RestMethod
 		public String postA(@FormData("*") ObjectMap m) {
@@ -331,7 +331,7 @@ public class FormDataAnnotationTest {
 	// @FormData(maximum,exclusiveMaximum,minimum,exclusiveMinimum)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class D {
 		@RestMethod
 		public String post(@FormData("*") ObjectMap m) {
@@ -705,7 +705,7 @@ public class FormDataAnnotationTest {
 	// @FormData(maxItems,minItems,uniqueItems)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class E {
 		@RestMethod
 		public String post(@FormData("*") ObjectMap m) {
@@ -764,7 +764,7 @@ public class FormDataAnnotationTest {
 	// @FormData(maxLength,minLength,enum,pattern)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class F {
 		@RestMethod
 		public String post(@FormData("*") ObjectMap m) {
@@ -829,7 +829,7 @@ public class FormDataAnnotationTest {
 	// @FormData(multipleOf)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class G {
 		@RestMethod
 		public String post(@FormData("*") ObjectMap m) {
@@ -932,7 +932,7 @@ public class FormDataAnnotationTest {
 	// @FormData(required)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class H {
 		@RestMethod
 		public String post(@FormData("*") ObjectMap m) {
@@ -967,7 +967,7 @@ public class FormDataAnnotationTest {
 	// @FormData(skipIfEmpty)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class I {
 		@RestMethod
 		public String post(@FormData("*") ObjectMap m) {
@@ -1001,7 +1001,7 @@ public class FormDataAnnotationTest {
 	// @FormData(serializer)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class J {
 		@RestMethod
 		public String post(@FormData("*") ObjectMap m) {

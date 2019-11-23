@@ -39,7 +39,7 @@ public class RemoteMethodAnnotationTest {
 	// Inferred methods/paths
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod
 		public String get() {
@@ -85,7 +85,7 @@ public class RemoteMethodAnnotationTest {
 	// Return types
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class B {
 
 		@RestMethod
@@ -134,7 +134,7 @@ public class RemoteMethodAnnotationTest {
 	// Return types, JSON
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
 	public static class C {
 
 		@RestMethod(name="POST")
@@ -172,7 +172,7 @@ public class RemoteMethodAnnotationTest {
 	// Return types, part serialization
 	//=================================================================================================================
 
-	@RestResource(serializers=OpenApiSerializer.class, parsers=OpenApiParser.class, defaultAccept="text/openapi")
+	@Rest(serializers=OpenApiSerializer.class, parsers=OpenApiParser.class, defaultAccept="text/openapi")
 	public static class D {
 
 		@RestMethod(name="POST")

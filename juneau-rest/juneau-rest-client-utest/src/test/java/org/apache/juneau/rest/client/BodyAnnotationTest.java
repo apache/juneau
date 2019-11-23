@@ -52,7 +52,7 @@ public class BodyAnnotationTest {
 	// Basic tests - JSON
 	//=================================================================================================================
 
-	@RestResource(parsers=JsonParser.class)
+	@Rest(parsers=JsonParser.class)
 	public static class A {
 		@RestMethod
 		public String postA01(@Body int b, @Header("Content-Type") String ct) {
@@ -177,7 +177,7 @@ public class BodyAnnotationTest {
 	// Basic tests - OpenAPI
 	//=================================================================================================================
 
-	@RestResource(serializers=OpenApiSerializer.class,parsers=OpenApiParser.class,defaultAccept="text/openapi")
+	@Rest(serializers=OpenApiSerializer.class,parsers=OpenApiParser.class,defaultAccept="text/openapi")
 	public static class B {
 		@RestMethod
 		public Object postB01(@Body int b, @Header("Content-Type") String ct) {
@@ -311,7 +311,7 @@ public class BodyAnnotationTest {
 	// Basic tests - OpenAPI, overridden Content-Type
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class C {
 		@RestMethod
 		public Reader postC01(@Body Reader b, @Header("Content-Type") String ct) {

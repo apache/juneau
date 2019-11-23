@@ -32,7 +32,7 @@ public class BasicTest {
 	// Basic sanity tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod public void badRequest() { throw new BadRequest(); }
 		@RestMethod public void conflict() { throw new Conflict(); }
@@ -208,7 +208,7 @@ public class BasicTest {
 	// User-specified message
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class B {
 		@RestMethod public void badRequest() { throw new BadRequest("foo {0}", "bar"); }
 		@RestMethod public void conflict() { throw new Conflict("foo {0}", "bar"); }
@@ -386,7 +386,7 @@ public class BasicTest {
 
 	static final Throwable t = new Throwable("foo");
 
-	@RestResource
+	@Rest
 	public static class C {
 		@RestMethod public void badRequest() { throw new BadRequest(t); }
 		@RestMethod public void conflict() { throw new Conflict(t); }
@@ -562,7 +562,7 @@ public class BasicTest {
 	// Throwable with message
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class D {
 		@RestMethod public void badRequest() { throw new BadRequest(t, "foo {0}", "bar"); }
 		@RestMethod public void conflict() { throw new Conflict(t, "foo {0}", "bar"); }
@@ -738,7 +738,7 @@ public class BasicTest {
 	// Should use Accept language for serialization.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class E {
 		@RestMethod public void badRequest() { throw new BadRequest(t, "foo {0}", "bar"); }
 	}
@@ -754,7 +754,7 @@ public class BasicTest {
 	// Test Swagger
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class F {
 		@RestMethod public void badRequest() throws BadRequest {}
 		@RestMethod public void conflict() throws Conflict {}
@@ -963,7 +963,7 @@ public class BasicTest {
 	// Thrown object doesn't match return type.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class G {
 		@RestMethod
 		public SeeOtherRoot thrownObjectDoesntMatchReturnType() throws Exception { throw new NotFound(); }

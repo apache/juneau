@@ -21,7 +21,7 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * JUnit automated testcase resource.
  */
-@RestResource(
+@Rest(
 	path="/testConfig"
 )
 @SuppressWarnings({"serial"})

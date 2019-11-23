@@ -33,7 +33,7 @@ import org.apache.juneau.http.exception.*;
 /**
  * Shows contents of the microservice configuration file.
  */
-@RestResource(
+@Rest(
 	path="/config",
 	title="Configuration",
 	description="Contents of configuration file."

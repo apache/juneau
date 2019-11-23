@@ -20,7 +20,7 @@ import org.springframework.context.ApplicationContext;
  * Implementation of a {@link RestResourceResolver} for resolving resource classes using Spring.
  *
  * <p>
- * Used for resolving resource classes defined via {@link RestResource#children()}.
+ * Used for resolving resource classes defined via {@link Rest#children()}.
  *
  * <p>
  * A typical usage pattern for registering a Juneau REST resource class is shown below:

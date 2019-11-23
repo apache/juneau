@@ -49,7 +49,7 @@ public class PathsTest {
 	// No subpath
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod(name=GET,path="/*")
 		public ObjectMap get(RestRequest req, @Path("/*") String r) {
@@ -346,10 +346,10 @@ public class PathsTest {
 	// Child resource
 	//=================================================================================================================
 
-	@RestResource(children={C01.class})
+	@Rest(children={C01.class})
 	public static class C {}
 
-	@RestResource(path="/a")
+	@Rest(path="/a")
 	public static class C01 {
 		@RestMethod(name=GET,path="/*")
 		public ObjectMap get(RestRequest req, @Path("/*") String r) {
@@ -498,10 +498,10 @@ public class PathsTest {
 	// Child resource and subpath in method
 	//=================================================================================================================
 
-	@RestResource(children={D01.class})
+	@Rest(children={D01.class})
 	public static class D {}
 
-	@RestResource(path="/a")
+	@Rest(path="/a")
 	public static class D01 {
 		@RestMethod(name=GET, path="/subpath/*")
 		public ObjectMap get(RestRequest req, @Path("/*") String r) {

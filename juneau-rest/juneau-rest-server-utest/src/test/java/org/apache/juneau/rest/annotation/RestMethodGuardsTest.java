@@ -28,7 +28,7 @@ public class RestMethodGuardsTest {
 	// Overlapping guards
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod(guards=Test1Guard.class)
 		public String a01() {

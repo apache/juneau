@@ -33,7 +33,7 @@ public class AnnotationInheritanceTest {
 	// @Body on parameter
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IA {
 		@RestMethod(name=PUT, path="/a01")
 		public String a01(@Body String b);

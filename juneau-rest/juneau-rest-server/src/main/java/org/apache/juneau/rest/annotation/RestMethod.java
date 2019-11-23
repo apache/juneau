@@ -102,7 +102,7 @@ public @interface RestMethod {
 	 *
 	 * <p>
 	 * The client version is identified via the HTTP request header identified by
-	 * {@link RestResource#clientVersionHeader() @RestResource(clientVersionHeader)} which by default is <js>"X-Client-Version"</js>.
+	 * {@link Rest#clientVersionHeader() @Rest(clientVersionHeader)} which by default is <js>"X-Client-Version"</js>.
 	 *
 	 * <p>
 	 * This is a specialized kind of {@link RestMatcher} that allows you to invoke different Java methods for the same
@@ -632,7 +632,7 @@ public @interface RestMethod {
 	int priority() default 0;
 
 	/**
-	 * Same as {@link RestResource#properties() @RestResource(properties)}, except defines property values by default when this method is called.
+	 * Same as {@link Rest#properties() @Rest(properties)}, except defines property values by default when this method is called.
 	 *
 	 * <p>
 	 * This is equivalent to simply calling <c>res.addProperties()</c> in the Java method, but is provided for

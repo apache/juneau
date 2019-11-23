@@ -29,7 +29,7 @@ public class HtmlDocConfigScriptTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource()
+	@Rest()
 	@HtmlDocConfig(script={"a01a","a01b"})
 	public static class A extends BasicRestServlet {
 		@RestMethod(path="/a01")
@@ -84,7 +84,7 @@ public class HtmlDocConfigScriptTest {
 	// Inheritance
 	//=================================================================================================================
 
-	@RestResource()
+	@Rest()
 	@HtmlDocConfig(script={"b01a","b01b"})
 	public static class B extends A {
 		@RestMethod(path="/b01")

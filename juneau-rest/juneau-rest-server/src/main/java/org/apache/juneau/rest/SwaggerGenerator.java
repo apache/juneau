@@ -97,6 +97,7 @@ final class SwaggerGenerator {
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws Exception Error occurred.
 	 */
+	@SuppressWarnings("deprecation")
 	public Swagger getSwagger() throws Exception {
 
 		ClassInfo rci = ClassInfo.of(resource.getClass());
@@ -164,6 +165,62 @@ final class SwaggerGenerator {
 				)
 			);
 		}
+
+		// Combine it with @Rest(swagger)
+		for (Rest rr : rci.getAnnotationsParentFirst(Rest.class)) {
+
+			ObjectMap sInfo = omSwagger.getObjectMap("info", true);
+			sInfo.appendSkipEmpty("title",
+				firstNonEmpty(
+					sInfo.getString("title"),
+					resolve(rr.title())
+				)
+			);
+			sInfo.appendSkipEmpty("description",
+				firstNonEmpty(
+					sInfo.getString("description"),
+					resolve(rr.description())
+				)
+			);
+
+			ResourceSwagger r = rr.swagger();
+
+			omSwagger.appendAll(parseMap(r.value(), "@ResourceSwagger(value) on class {0}", c));
+
+			if (! empty(r)) {
+				ObjectMap info = omSwagger.getObjectMap("info", true);
+				info.appendSkipEmpty("title", resolve(r.title()));
+				info.appendSkipEmpty("description", resolve(r.description()));
+				info.appendSkipEmpty("version", resolve(r.version()));
+				info.appendSkipEmpty("termsOfService", resolve(r.termsOfService()));
+				info.appendSkipEmpty("contact",
+					merge(
+						info.getObjectMap("contact"),
+						toMap(r.contact(), "@ResourceSwagger(contact) on class {0}", c)
+					)
+				);
+				info.appendSkipEmpty("license",
+					merge(
+						info.getObjectMap("license"),
+						toMap(r.license(), "@ResourceSwagger(license) on class {0}", c)
+					)
+				);
+			}
+
+			omSwagger.appendSkipEmpty("externalDocs",
+				merge(
+					omSwagger.getObjectMap("externalDocs"),
+					toMap(r.externalDocs(), "@ResourceSwagger(externalDocs) on class {0}", c)
+				)
+			);
+			omSwagger.appendSkipEmpty("tags",
+				merge(
+					omSwagger.getObjectList("tags"),
+					toList(r.tags(), "@ResourceSwagger(tags) on class {0}", c)
+				)
+			);
+		}
+
 
 		omSwagger.appendSkipEmpty("externalDocs", parseMap(mb.findFirstString(locale, "externalDocs"), "Messages/externalDocs on class {0}", c));
 

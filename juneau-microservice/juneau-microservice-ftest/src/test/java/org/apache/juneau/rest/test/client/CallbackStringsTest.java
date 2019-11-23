@@ -32,7 +32,7 @@ public class CallbackStringsTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod(name=GET,path="/*")
 		public ObjectMap get(RestRequest req) throws Exception {

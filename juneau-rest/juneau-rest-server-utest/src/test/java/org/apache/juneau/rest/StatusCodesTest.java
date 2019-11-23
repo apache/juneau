@@ -36,7 +36,7 @@ public class StatusCodesTest {
 	//=================================================================================================================
 	// OK (200)
 	//=================================================================================================================
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod(name=PUT)
 		public Reader a01(@Body String b) {
@@ -54,7 +54,7 @@ public class StatusCodesTest {
 	// Bad Request (400)
 	//=================================================================================================================
 
-	@RestResource(parsers=JsonParser.class)
+	@Rest(parsers=JsonParser.class)
 	public static class B {
 		@RestMethod(name=PUT, path="/nonExistentBeanProperties")
 		public String b01(@Body B01 in) {
@@ -195,7 +195,7 @@ public class StatusCodesTest {
 	// Not Found (404) and Method Not Allowed (405)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class C {
 		@RestMethod(name=GET, path="/")
 		public String c01() {
@@ -224,7 +224,7 @@ public class StatusCodesTest {
 	// Precondition Failed (412)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class D {
 		@RestMethod(name=GET, matchers=NeverMatcher.class)
 		public String d() {

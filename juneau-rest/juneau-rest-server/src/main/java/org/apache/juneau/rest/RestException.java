@@ -181,7 +181,7 @@ public class RestException extends RuntimeException {
 	 * Returns the number of times this exception occurred on this servlet.
 	 *
 	 * @return
-	 * 	The occurrence number if {@link RestResource#useStackTraceHashes() @RestResource(useStackTraceHashes)} is enabled, or <c>0</c> otherwise.
+	 * 	The occurrence number if {@link Rest#useStackTraceHashes() @Rest(useStackTraceHashes)} is enabled, or <c>0</c> otherwise.
 	 * @deprecated Not used by new logging API.
 	 */
 	@Deprecated

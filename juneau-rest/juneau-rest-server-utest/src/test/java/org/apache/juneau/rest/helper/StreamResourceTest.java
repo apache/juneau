@@ -29,7 +29,7 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StreamResourceTest {
 
-	@RestResource
+	@Rest
 	public static class A {
 
 		@RestMethod

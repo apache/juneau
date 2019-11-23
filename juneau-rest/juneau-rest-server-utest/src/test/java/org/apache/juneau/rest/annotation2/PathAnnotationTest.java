@@ -41,7 +41,7 @@ public class PathAnnotationTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A  {
 		@RestMethod(name=GET, path="/")
 		public void noPath(RestResponse res) {
@@ -105,7 +105,7 @@ public class PathAnnotationTest {
 	// Primitives
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class B  {
 		@RestMethod(name=GET, path="/int/{x}/foo")
 		public String b01(@Path(name="x") int x) {
@@ -187,7 +187,7 @@ public class PathAnnotationTest {
 	// Primitive objects
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class C  {
 		@RestMethod(name=GET, path="/Integer/{x}/foo")
 		public String c01(@Path(name="x") Integer x) {
@@ -269,7 +269,7 @@ public class PathAnnotationTest {
 	// POJOs convertible from strings
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class D {
 		// Object with forString(String) method
 		@RestMethod(name=GET, path="/uuid/{uuid}")
@@ -289,7 +289,7 @@ public class PathAnnotationTest {
 	// @Path annotation without name.
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class E  {
 		@RestMethod(name=GET, path="/x/{foo}/{bar}")
 		public Object normal1(@Path String foo, @Path String bar) {
@@ -339,7 +339,7 @@ public class PathAnnotationTest {
 	// Path variables on class.
 	//=================================================================================================================
 
-	@RestResource(path="/f/{a}/{b}")
+	@Rest(path="/f/{a}/{b}")
 	public static class F  {
 		@RestMethod(name=GET, path="/")
 		public String noPath(RequestPath path) {
@@ -451,7 +451,7 @@ public class PathAnnotationTest {
 	// Path variables on child class.
 	//=================================================================================================================
 
-	@RestResource(children={F.class})
+	@Rest(children={F.class})
 	public static class G {}
 
 	static MockRest g = MockRest.create(G.class).build();
@@ -524,7 +524,7 @@ public class PathAnnotationTest {
 	// Path variables on parent and child class.
 	//=================================================================================================================
 
-	@RestResource(path="/h/{ha}/{hb}", children={F.class})
+	@Rest(path="/h/{ha}/{hb}", children={F.class})
 	public static class H {}
 
 	static MockRest h = MockRest.create(H.class).servletPath("/h").build();
@@ -610,7 +610,7 @@ public class PathAnnotationTest {
 	// Path variables on parents and child class.
 	//=================================================================================================================
 
-	@RestResource(path="/i/{ia}/{ib}", children={H.class})
+	@Rest(path="/i/{ia}/{ib}", children={H.class})
 	public static class I {}
 
 	static MockRest i = MockRest.create(I.class).servletPath("/i").build();
@@ -682,7 +682,7 @@ public class PathAnnotationTest {
 	// Optional path parameter.
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class J {
 		@RestMethod(name=GET,path="/a/{f1}")
 		public Object a(@Path("f1") Optional<Integer> f1) throws Exception {
@@ -735,7 +735,7 @@ public class PathAnnotationTest {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SA {
 
 		@Path(
@@ -868,7 +868,7 @@ public class PathAnnotationTest {
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SB {
 
 		@Path(name="P")
@@ -923,7 +923,7 @@ public class PathAnnotationTest {
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SC {
 
 		@Path(name="P", example={" {f1:'a'} "})
@@ -951,7 +951,7 @@ public class PathAnnotationTest {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TA {
 
 		@RestMethod(name=GET,path="/basic/{P}")
@@ -1023,7 +1023,7 @@ public class PathAnnotationTest {
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TB {
 
 		@RestMethod(name=GET,path="/schemaValue/{P}")
@@ -1089,7 +1089,7 @@ public class PathAnnotationTest {
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TC {
 
 		@RestMethod(name=GET,path="/example/{P}")

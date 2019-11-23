@@ -15,13 +15,12 @@ package org.apache.juneau.microservice.springboot.template;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.RestMethod;
-import org.apache.juneau.rest.annotation.RestResource;
+import org.apache.juneau.rest.annotation.*;
 
 /**
  * Sample REST resource that prints out a simple "Hello world!" message.
  */
-@RestResource(
+@Rest(
 	title="Hello World example",
 	path="/helloworld",
 	description="Simplest possible REST resource"

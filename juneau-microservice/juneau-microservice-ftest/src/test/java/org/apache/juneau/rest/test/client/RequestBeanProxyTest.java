@@ -45,7 +45,7 @@ public class RequestBeanProxyTest {
 	// @Query
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod(name=GET, path="/echoQuery")
 		public String echoQuery(RestRequest req) throws Exception {
@@ -333,7 +333,7 @@ public class RequestBeanProxyTest {
 	// @FormData
 	//=================================================================================================================
 
-	@RestResource(parsers=UrlEncodingParser.class)
+	@Rest(parsers=UrlEncodingParser.class)
 	public static class C {
 		@RestMethod(name=POST)
 		public String echoFormData(RestRequest req) throws Exception {
@@ -636,7 +636,7 @@ public class RequestBeanProxyTest {
 	// @Header
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class E {
 		@RestMethod(name=GET)
 		public String echoHeaders(RestRequest req) throws Exception {
@@ -888,7 +888,7 @@ public class RequestBeanProxyTest {
 	// @Path
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class G  {
 		@RestMethod(name=GET,path="/*")
 		public String echoPath(RestRequest req) throws Exception {

@@ -101,7 +101,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#allowBodyParam()}
+	 * 			<li class='ja'>{@link Rest#allowBodyParam()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -163,7 +163,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#allowedHeaderParams()}
+	 * 			<li class='ja'>{@link Rest#allowedHeaderParams()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -230,7 +230,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#allowedMethodHeaders()}
+	 * 			<li class='ja'>{@link Rest#allowedMethodHeaders()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -294,7 +294,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#allowedMethodParams()}
+	 * 			<li class='ja'>{@link Rest#allowedMethodParams()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -369,7 +369,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#allowHeaderParams()}
+	 * 			<li class='ja'>{@link Rest#allowHeaderParams()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -433,7 +433,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#callHandler()}
+	 * 			<li class='ja'>{@link Rest#callHandler()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -522,7 +522,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#callLogger()}
+	 * 			<li class='ja'>{@link Rest#callLogger()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -585,7 +585,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#logging()}
+	 * 			<li class='ja'>{@link Rest#logging()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -661,7 +661,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#children()}
+	 * 			<li class='ja'>{@link Rest#children()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -684,7 +684,7 @@ public final class RestContext extends BeanContext {
 	 * large numbers of servlets.
 	 *
 	 * <p>
-	 * Child resources must specify a value for {@link RestResource#path() @RestResource(path)} that identifies the subpath of the child resource
+	 * Child resources must specify a value for {@link Rest#path() @Rest(path)} that identifies the subpath of the child resource
 	 * relative to the ascendant path UNLESS you use the {@link RestContextBuilder#child(String, Object)} method to register it.
 	 *
 	 * <p>
@@ -772,7 +772,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#classpathResourceFinder()}
+	 * 			<li class='ja'>{@link Rest#classpathResourceFinder()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -873,7 +873,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#clientVersionHeader()}
+	 * 			<li class='ja'>{@link Rest#clientVersionHeader()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -946,7 +946,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#converters()}
+	 * 			<li class='ja'>{@link Rest#converters()}
 	 * 			<li class='ja'>{@link RestMethod#converters()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -1038,7 +1038,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#debug()}
+	 * 			<li class='ja'>{@link Rest#debug()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -1067,7 +1067,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#defaultCharset()}
+	 * 			<li class='ja'>{@link Rest#defaultCharset()}
 	 * 			<li class='ja'>{@link RestMethod#defaultCharset()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -1122,7 +1122,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#attrs()}
+	 * 			<li class='ja'>{@link Rest#attrs()}
 	 * 			<li class='ja'>{@link RestMethod#attrs()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -1190,7 +1190,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#defaultRequestHeaders()}
+	 * 			<li class='ja'>{@link Rest#defaultRequestHeaders()}
 	 * 			<li class='ja'>{@link RestMethod#defaultRequestHeaders()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -1257,7 +1257,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#defaultResponseHeaders()}
+	 * 			<li class='ja'>{@link Rest#defaultResponseHeaders()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -1321,7 +1321,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#encoders()}
+	 * 			<li class='ja'>{@link Rest#encoders()}
 	 * 			<li class='ja'>{@link RestMethod#encoders()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -1391,7 +1391,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#guards()}
+	 * 			<li class='ja'>{@link Rest#guards()}
 	 * 			<li class='ja'>{@link RestMethod#guards()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -1474,7 +1474,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#infoProvider()}
+	 * 			<li class='ja'>{@link Rest#infoProvider()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -1562,7 +1562,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#logger()}
+	 * 			<li class='ja'>{@link Rest#logger()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -1641,7 +1641,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#maxInput()}
+	 * 			<li class='ja'>{@link Rest#maxInput()}
 	 * 			<li class='ja'>{@link RestMethod#maxInput()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -1706,7 +1706,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#messages()}
+	 * 			<li class='ja'>{@link Rest#messages()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -1791,7 +1791,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#mimeTypes()}
+	 * 			<li class='ja'>{@link Rest#mimeTypes()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -1858,7 +1858,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#paramResolvers()}
+	 * 			<li class='ja'>{@link Rest#paramResolvers()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -1947,7 +1947,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#parsers()}
+	 * 			<li class='ja'>{@link Rest#parsers()}
 	 * 			<li class='ja'>{@link RestMethod#parsers()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -2040,7 +2040,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#partParser()}
+	 * 			<li class='ja'>{@link Rest#partParser()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -2107,7 +2107,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#partSerializer()}
+	 * 			<li class='ja'>{@link Rest#partSerializer()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -2179,7 +2179,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#path()}
+	 * 			<li class='ja'>{@link Rest#path()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -2225,7 +2225,7 @@ public final class RestContext extends BeanContext {
 	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
 	 * 	<li>
 	 * 		Typically, this setting is only applicable to resources defined as children through the
-	 * 		{@link RestResource#children() @RestResource(children)} annotation.
+	 * 		{@link Rest#children() @Rest(children)} annotation.
 	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
 	 * 	<li>
 	 * 		Slashes are trimmed from the path ends.
@@ -2250,7 +2250,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#renderResponseStackTraces()}
+	 * 			<li class='ja'>{@link Rest#renderResponseStackTraces()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -2312,7 +2312,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#resourceResolver()}
+	 * 			<li class='ja'>{@link Rest#resourceResolver()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -2398,7 +2398,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#responseHandlers()}
+	 * 			<li class='ja'>{@link Rest#responseHandlers()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -2491,7 +2491,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#rolesDeclared()}
+	 * 			<li class='ja'>{@link Rest#rolesDeclared()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -2535,7 +2535,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#roleGuard()}
+	 * 			<li class='ja'>{@link Rest#roleGuard()}
 	 * 			<li class='ja'>{@link RestMethod#roleGuard()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -2579,7 +2579,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
 	 * 	<li>
-	 * 		If patterns are used, you must specify the list of declared roles using {@link RestResource#rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
+	 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -2604,7 +2604,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#serializers()}
+	 * 			<li class='ja'>{@link Rest#serializers()}
 	 * 			<li class='ja'>{@link RestMethod#serializers()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -2706,7 +2706,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#staticFileResponseHeaders()}
+	 * 			<li class='ja'>{@link Rest#staticFileResponseHeaders()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -2755,7 +2755,7 @@ public final class RestContext extends BeanContext {
 	 * </p>
 	 *
 	 * <p>
-	 * Note that headers can also be specified per path-mapping via the {@link RestResource#staticFiles() @RestResource(staticFiles)} annotation.
+	 * Note that headers can also be specified per path-mapping via the {@link Rest#staticFiles() @Rest(staticFiles)} annotation.
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		staticFiles={
@@ -2781,7 +2781,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#staticFiles()}
+	 * 			<li class='ja'>{@link Rest#staticFiles()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -2806,7 +2806,7 @@ public final class RestContext extends BeanContext {
 	 * </ol>
 	 *
 	 * <p>
-	 * An example where this class is used is in the {@link RestResource#staticFiles} annotation:
+	 * An example where this class is used is in the {@link Rest#staticFiles} annotation:
 	 * <p class='bcode w800'>
 	 * 	<jk>package</jk> com.foo.mypackage;
 	 *
@@ -2901,7 +2901,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#produces()}
+	 * 			<li class='ja'>{@link Rest#produces()}
 	 * 			<li class='ja'>{@link RestMethod#produces()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -2964,8 +2964,8 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#properties()}
-	 * 			<li class='ja'>{@link RestResource#flags()}
+	 * 			<li class='ja'>{@link Rest#properties()}
+	 * 			<li class='ja'>{@link Rest#flags()}
 	 * 			<li class='ja'>{@link RestMethod#properties()}
 	 * 			<li class='ja'>{@link RestMethod#flags()}
 	 * 		</ul>
@@ -3010,7 +3010,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#consumes()}
+	 * 			<li class='ja'>{@link Rest#consumes()}
 	 * 			<li class='ja'>{@link RestMethod#consumes()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -3073,7 +3073,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#useClasspathResourceCaching()}
+	 * 			<li class='ja'>{@link Rest#useClasspathResourceCaching()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -3127,7 +3127,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#useStackTraceHashes()}
+	 * 			<li class='ja'>{@link Rest#useStackTraceHashes()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -3187,7 +3187,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#uriAuthority()}
+	 * 			<li class='ja'>{@link Rest#uriAuthority()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -3257,7 +3257,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#uriContext()}
+	 * 			<li class='ja'>{@link Rest#uriContext()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -3320,7 +3320,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#uriRelativity()}
+	 * 			<li class='ja'>{@link Rest#uriRelativity()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -3381,7 +3381,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#uriResolution()}
+	 * 			<li class='ja'>{@link Rest#uriResolution()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -4115,7 +4115,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * The config file is identified via one of the following:
 	 * <ul class='javatree'>
-	 * 	<li class='ja'>{@link RestResource#config()}
+	 * 	<li class='ja'>{@link Rest#config()}
 	 * 	<li class='jm'>{@link RestContextBuilder#config(Config)}
 	 * </ul>
 	 *
@@ -4417,7 +4417,7 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the path for this resource as defined by the {@link RestResource#path() @RestResource(path)} annotation or
+	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
 	 * {@link RestContextBuilder#path(String)} method concatenated with those on all parent classes.
 	 *
 	 * <p>
@@ -4538,7 +4538,7 @@ public final class RestContext extends BeanContext {
 	 * Returns the resource object.
 	 *
 	 * <p>
-	 * This is the instance of the class annotated with the {@link RestResource @RestResource} annotation, usually
+	 * This is the instance of the class annotated with the {@link Rest @Rest} annotation, usually
 	 * an instance of {@link RestServlet}.
 	 *
 	 * @return
@@ -4589,7 +4589,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Properties at the class level are defined via the following:
 	 * <ul class='javatree'>
-	 * 	<li class='ja'>{@link RestResource#properties()}
+	 * 	<li class='ja'>{@link Rest#properties()}
 	 * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
 	 * 	<li class='jm'>{@link RestContextBuilder#set(Map)}
 	 * </ul>
@@ -4621,7 +4621,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @return
 	 * 	An unmodifiable map of child resources.
-	 * 	Keys are the {@link RestResource#path() @RestResource(path)} annotation defined on the child resource.
+	 * 	Keys are the {@link Rest#path() @Rest(path)} annotation defined on the child resource.
 	 */
 	public Map<String,RestContext> getChildResources() {
 		return Collections.unmodifiableMap(childResources);

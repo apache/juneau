@@ -20,7 +20,7 @@ import org.apache.juneau.rest.*;
  * Configures the {@link RestCallLogger} used by REST classes and methods.
  *
  * <p>
- * This annotation can be used on the {@link RestResource#logging()} and {@link RestMethod#logging()} annotations
+ * This annotation can be used on the {@link Rest#logging()} and {@link RestMethod#logging()} annotations
  * to control how and when HTTP requests are logged and at what level of detail.
  *
  * <h5 class='section'>Example:</h5>

@@ -30,7 +30,7 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ReaderResourceTest {
 
-	@RestResource
+	@Rest
 	public static class A {
 
 		@RestMethod

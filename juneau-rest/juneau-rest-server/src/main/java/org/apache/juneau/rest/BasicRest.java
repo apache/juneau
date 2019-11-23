@@ -30,7 +30,7 @@ import org.apache.juneau.http.exception.*;
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRest}
  * </ul>
  */
-@RestResource(
+@Rest(
 	// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.
 	allowedMethodParams="OPTIONS"
 )

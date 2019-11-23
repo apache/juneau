@@ -26,7 +26,7 @@ import org.apache.juneau.rest.helper.*;
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRestGroup}
  * </ul>
  */
-@RestResource
+@Rest
 public abstract class BasicRestGroup extends BasicRest {
 
 	/**

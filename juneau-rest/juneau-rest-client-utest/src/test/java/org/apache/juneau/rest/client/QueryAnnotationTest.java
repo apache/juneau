@@ -54,7 +54,7 @@ public class QueryAnnotationTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod
 		public String getA(@Query("*") ObjectMap m) {
@@ -173,7 +173,7 @@ public class QueryAnnotationTest {
 	// @Query(_default/allowEmptyValue)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class B {
 		@RestMethod
 		public String get(@Query("*") ObjectMap m) {
@@ -236,7 +236,7 @@ public class QueryAnnotationTest {
 	// @Query(collectionFormat)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class C {
 		@RestMethod
 		public String getA(@Query("*") ObjectMap m) {
@@ -331,7 +331,7 @@ public class QueryAnnotationTest {
 	// @Query(maximum,exclusiveMaximum,minimum,exclusiveMinimum)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class D {
 		@RestMethod
 		public String get(@Query("*") ObjectMap m) {
@@ -704,7 +704,7 @@ public class QueryAnnotationTest {
 	// @Query(maxItems,minItems,uniqueItems)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class E {
 		@RestMethod
 		public String get(@Query("*") ObjectMap m) {
@@ -763,7 +763,7 @@ public class QueryAnnotationTest {
 	// @Query(maxLength,minLength,enum)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class F {
 		@RestMethod
 		public String get(@Query("*") ObjectMap m) {
@@ -828,7 +828,7 @@ public class QueryAnnotationTest {
 	// @Query(multipleOf)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class G {
 		@RestMethod
 		public String get(@Query("*") ObjectMap m) {
@@ -931,7 +931,7 @@ public class QueryAnnotationTest {
 	// @Query(required)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class H {
 		@RestMethod
 		public String get(@Query("*") ObjectMap m) {
@@ -966,7 +966,7 @@ public class QueryAnnotationTest {
 	// @Query(skipIfEmpty)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class I {
 		@RestMethod
 		public String get(@Query("*") ObjectMap m) {
@@ -1000,7 +1000,7 @@ public class QueryAnnotationTest {
 	// @Query(serializer)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class J {
 		@RestMethod
 		public String get(@Query("*") ObjectMap m) {

@@ -25,7 +25,7 @@ import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests that validate the behavior of @RestResource(properties).
+ * Tests that validate the behavior of @Rest(properties).
  */
 @SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -35,7 +35,7 @@ public class RestResourcePropertiesTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		path="/p1",
 		attrs={
 			"A1: a1",

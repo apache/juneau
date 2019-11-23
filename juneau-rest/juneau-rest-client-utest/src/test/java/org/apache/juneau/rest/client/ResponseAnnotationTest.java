@@ -46,7 +46,7 @@ public class ResponseAnnotationTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod
 		public String get(RestResponse res) {

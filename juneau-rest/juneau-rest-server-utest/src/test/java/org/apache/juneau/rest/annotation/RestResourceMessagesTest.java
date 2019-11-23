@@ -41,7 +41,7 @@ public class RestResourceMessagesTest {
 	// Basic tests
 	//====================================================================================================
 
-	@RestResource(messages="RestResourceMessagesTest1")
+	@Rest(messages="RestResourceMessagesTest1")
 	public static class A {
 		@RestMethod
 		public ObjectMap a01(ResourceBundle rb) {
@@ -60,7 +60,7 @@ public class RestResourceMessagesTest {
 	// Overridden on subclass.
 	//====================================================================================================
 
-	@RestResource(messages="RestResourceMessagesTest2")
+	@Rest(messages="RestResourceMessagesTest2")
 	public static class B extends A {}
 	static MockRest b = MockRest.build(B.class, null);
 

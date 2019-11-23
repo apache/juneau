@@ -229,7 +229,7 @@ public class InterfaceProxyTest {
 		}
 	}
 
-	@RestResource(
+	@Rest(
 		logging=@Logging(
 			disabled="true"
 		)

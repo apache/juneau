@@ -27,7 +27,7 @@ import org.apache.juneau.serializer.annotation.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@RestResource(
+@Rest(
 	path="/*",
 	title="Root resources",
 	description="Example of a router resource page.",

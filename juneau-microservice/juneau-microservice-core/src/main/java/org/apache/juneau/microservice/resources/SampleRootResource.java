@@ -18,7 +18,7 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Sample root REST resource.
  */
-@RestResource(
+@Rest(
 	path="/",
 	title="Sample Root Resource",
 	description="This is a sample router page",

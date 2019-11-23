@@ -17,7 +17,7 @@ import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests that validate the behavior of @RestResource(staticFiles).
+ * Tests that validate the behavior of @Rest(staticFiles).
  */
 @SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -27,7 +27,7 @@ public class RestResourceStaticFilesTest {
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(staticFiles={"xdocs:xdocs","xdocs2:xdocs2:{Foo:'Bar'}"})
+	@Rest(staticFiles={"xdocs:xdocs","xdocs2:xdocs2:{Foo:'Bar'}"})
 	public static class A1 {
 		@RestMethod
 		public String a01() {
@@ -47,7 +47,7 @@ public class RestResourceStaticFilesTest {
 		a1.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true").execute().assertStatus(404);
 	}
 
-	@RestResource(staticFiles={"xdocs2:xdocs2:{Foo:'Bar',Baz:'Qux'},xdocs:xdocs"})
+	@Rest(staticFiles={"xdocs2:xdocs2:{Foo:'Bar',Baz:'Qux'},xdocs:xdocs"})
 	public static class A2 {
 		@RestMethod
 		public String a02() {
@@ -71,7 +71,7 @@ public class RestResourceStaticFilesTest {
 	// Static files with response headers.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(staticFiles={"xdocs:xdocs:{Foo:'Bar',Baz:'Qux'}"})
+	@Rest(staticFiles={"xdocs:xdocs:{Foo:'Bar',Baz:'Qux'}"})
 	public static class B {
 		@RestMethod
 		public String b01() {
@@ -89,7 +89,7 @@ public class RestResourceStaticFilesTest {
 	// Class hierarchy
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(staticFiles={"xdocs:xdocs"})
+	@Rest(staticFiles={"xdocs:xdocs"})
 	public static class C1 {
 		@RestMethod
 		public String c01() {
@@ -97,7 +97,7 @@ public class RestResourceStaticFilesTest {
 		}
 	}
 
-	@RestResource(staticFiles={"xdocs:/xdocs"})
+	@Rest(staticFiles={"xdocs:/xdocs"})
 	public static class C2 extends C1 {
 		@RestMethod
 		public String c02() {
@@ -129,7 +129,7 @@ public class RestResourceStaticFilesTest {
 	// Overridden patterns
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestResource(staticFiles={"xdocs:/xdocs,xdocs:xdocs"})
+	@Rest(staticFiles={"xdocs:/xdocs,xdocs:xdocs"})
 	public static class D {
 		@RestMethod
 		public String d01() {

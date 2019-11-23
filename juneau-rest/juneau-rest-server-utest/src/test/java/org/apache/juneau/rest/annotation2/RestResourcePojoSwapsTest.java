@@ -27,7 +27,7 @@ import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests that validate the behavior of @RestResource(pojoSwaps).
+ * Tests that validate the behavior of @Rest(pojoSwaps).
  */
 @SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -86,10 +86,10 @@ public class RestResourcePojoSwapsTest {
 		}
 	}
 
-	@RestResource(pojoSwaps={SwapA1.class}, serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	@Rest(pojoSwaps={SwapA1.class}, serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
 	public static class A01_Parent {}
 
-	@RestResource(pojoSwaps={SwapA2.class})
+	@Rest(pojoSwaps={SwapA2.class})
 	public static class A01 extends A01_Parent {
 
 		@RestMethod(name=GET, path="/classTransformOverridesParentClassTransform")

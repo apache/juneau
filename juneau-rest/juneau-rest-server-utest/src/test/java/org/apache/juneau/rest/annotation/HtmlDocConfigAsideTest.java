@@ -29,7 +29,7 @@ public class HtmlDocConfigAsideTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource()
+	@Rest()
 	@HtmlDocConfig(aside={"a01a","a01b","INHERIT"})
 	public static class A extends BasicRestServlet {
 		@RestMethod(path="/a01")
@@ -84,7 +84,7 @@ public class HtmlDocConfigAsideTest {
 	// Inheritance
 	//=================================================================================================================
 
-	@RestResource()
+	@Rest()
 	@HtmlDocConfig(aside={"INHERIT","b01a","b01b"})
 	public static class B extends A {
 		@RestMethod(path="/b01")

@@ -32,7 +32,7 @@ public class ResponseHeaderAnnotationTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod
 		public void a01(Value<A01> h) {
@@ -73,7 +73,7 @@ public class ResponseHeaderAnnotationTest {
 	// @ResponseHeader on POJO
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class SA {
 
 		@ResponseHeader(
@@ -176,7 +176,7 @@ public class ResponseHeaderAnnotationTest {
 	// @ResponseHeader on parameter
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class SB {
 
 		public static class SB01 {}

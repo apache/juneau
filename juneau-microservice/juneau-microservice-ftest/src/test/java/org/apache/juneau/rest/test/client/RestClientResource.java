@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * JUnit automated testcase resource.
  */
-@RestResource(
+@Rest(
 	path="/testRestClient"
 )
 public class RestClientResource extends BasicRestServlet {

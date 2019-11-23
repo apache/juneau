@@ -31,7 +31,7 @@ public class MockRestTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod(name=PUT, path="/a01")
 		public String a01(@Body String body) {

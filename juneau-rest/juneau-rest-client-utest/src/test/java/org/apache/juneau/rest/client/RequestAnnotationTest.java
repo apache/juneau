@@ -40,7 +40,7 @@ public class RequestAnnotationTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
@@ -92,7 +92,7 @@ public class RequestAnnotationTest {
 	// Annotation on parent
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class B {
 		@RestMethod(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
@@ -156,7 +156,7 @@ public class RequestAnnotationTest {
 	// Annotation on interface
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class C {
 		@RestMethod(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
@@ -220,7 +220,7 @@ public class RequestAnnotationTest {
 	// Annotation on parameter
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class D {
 		@RestMethod(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
@@ -272,7 +272,7 @@ public class RequestAnnotationTest {
 	// @Request(partSerializer)
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class E {
 		@RestMethod(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {

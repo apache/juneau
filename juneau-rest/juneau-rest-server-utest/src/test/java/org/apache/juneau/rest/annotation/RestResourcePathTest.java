@@ -20,7 +20,7 @@ import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests that validate the behavior of @RestResource(path).
+ * Tests that validate the behavior of @Rest(path).
  */
 @SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -30,14 +30,14 @@ public class RestResourcePathTest {
 	// Nested children.
 	//=================================================================================================================
 
-	@RestResource(path="/p0", children={A01.class})
+	@Rest(path="/p0", children={A01.class})
 	public static class A  {
 		@RestMethod(name=GET, path="/")
 		public String doGet(RestContext c) {
 			return "A-" + c.getPath();
 		}
 	}
-	@RestResource(path="/p1", children={A02.class})
+	@Rest(path="/p1", children={A02.class})
 	public static class A01 {
 		@RestMethod(name=GET, path="/")
 		public String doGet(RestContext c) {
@@ -50,7 +50,7 @@ public class RestResourcePathTest {
 			return "A02a-" + c.getPath();
 		}
 	}
-	@RestResource(path="/p2")
+	@Rest(path="/p2")
 	public static class A02 extends A02a {}
 
 	static MockRest a = MockRest.build(A.class, null);

@@ -21,7 +21,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.test.client.*;
 
-@RestResource(
+@Rest(
 	path="/*",
 	children={
 		DebugResource.class,

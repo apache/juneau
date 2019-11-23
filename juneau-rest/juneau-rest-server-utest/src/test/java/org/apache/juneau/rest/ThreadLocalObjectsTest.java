@@ -31,7 +31,7 @@ public class ThreadLocalObjectsTest {
 	//=================================================================================================================
 
 	@SuppressWarnings("serial")
-	@RestResource(path="/a")
+	@Rest(path="/a")
 	public static class A extends BasicRestServlet {
 		@RestMethod
 		public void getA01() throws Exception {
@@ -58,7 +58,7 @@ public class ThreadLocalObjectsTest {
 	//=================================================================================================================
 
 	@SuppressWarnings("serial")
-	@RestResource(
+	@Rest(
 		children={
 			A.class
 		}

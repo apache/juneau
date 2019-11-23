@@ -40,7 +40,7 @@ public class QueryAnnotationTest {
 	// Simple tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod
 		public String get(RestRequest req, @Query(name="p1",allowEmptyValue=true) String p1, @Query(name="p2",allowEmptyValue=true) int p2) throws Exception {
@@ -90,7 +90,7 @@ public class QueryAnnotationTest {
 	// UON parameters
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class B {
 		@RestMethod(name=GET,path="/get1")
 		public String get1(RestRequest req, @Query(name="p1") String p1) throws Exception {
@@ -140,7 +140,7 @@ public class QueryAnnotationTest {
 	// Multipart parameters (e.g. &key=val1,&key=val2).
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class C {
 		public static class C01 {
 			public String a;
@@ -210,7 +210,7 @@ public class QueryAnnotationTest {
 	// Default values.
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class D {
 		@RestMethod(defaultQuery={"f1:1","f2=2"," f3 : 3 "})
 		public ObjectMap d01(RequestQuery query) {
@@ -271,7 +271,7 @@ public class QueryAnnotationTest {
 	// Optional query parameter.
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class E {
 		@RestMethod(name=GET,path="/a")
 		public Object a(@Query("f1") Optional<Integer> f1) throws Exception {
@@ -328,7 +328,7 @@ public class QueryAnnotationTest {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SA {
 
 		@Query(
@@ -409,7 +409,7 @@ public class QueryAnnotationTest {
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SB {
 
 		@Query(name="Q")
@@ -464,7 +464,7 @@ public class QueryAnnotationTest {
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SC {
 
 		@Query(name="Q", example={"{f1:'a'}"})
@@ -491,7 +491,7 @@ public class QueryAnnotationTest {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TA {
 
 		@RestMethod
@@ -564,7 +564,7 @@ public class QueryAnnotationTest {
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TB {
 
 		@RestMethod
@@ -583,7 +583,7 @@ public class QueryAnnotationTest {
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TC {
 
 		@RestMethod

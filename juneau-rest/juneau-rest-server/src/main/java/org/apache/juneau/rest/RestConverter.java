@@ -27,7 +27,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Converters are associated with REST methods through the following:
  * <ul class='javatree'>
- * 	<li class='ja'>{@link RestResource#converters()}
+ * 	<li class='ja'>{@link Rest#converters()}
  * 	<li class='ja'>{@link RestMethod#converters()}
  * 	<li class='jf'>{@link RestContext#REST_converters}
  * 	<li class='jm'>{@link RestContextBuilder#converters(Class...)}
@@ -48,7 +48,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  * <p>
- * Converters can also be associated at the servlet level using the {@link RestResource#converters() @RestResource(converters)} annotation.
+ * Converters can also be associated at the servlet level using the {@link Rest#converters() @Rest(converters)} annotation.
  * <br>Applying converters at the resource level is equivalent to applying converters to each resource method individually.
  *
  * <h5 class='topic'>How to implement</h5>

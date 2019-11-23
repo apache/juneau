@@ -61,7 +61,7 @@ public class AcceptTest {
 	// Test that default Accept headers on servlet annotation are picked up.
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
 	)
@@ -90,7 +90,7 @@ public class AcceptTest {
 	// when @RestMethod.parsers/serializers annotations are used.
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
 	)
@@ -122,7 +122,7 @@ public class AcceptTest {
 	// when @RestMethod.addParsers/addSerializers annotations are used.
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
 	)
@@ -156,7 +156,7 @@ public class AcceptTest {
 	// Various Accept incantations.
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
 	)
@@ -194,7 +194,7 @@ public class AcceptTest {
 	// when @RestMethod.parsers/serializers annotations are used.
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		defaultRequestHeaders={" Accept : text/s2 "},
 		serializers={S1.class,S2.class}
 	)
@@ -232,7 +232,7 @@ public class AcceptTest {
 	// 	when @RestMethod.addParsers/addSerializers annotations are used.
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		defaultRequestHeaders={" Accept : text/s2 ",},
 		serializers={S1.class,S2.class}
 	)

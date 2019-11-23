@@ -138,10 +138,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			VarResolver vr = varResolverBuilder.build();
 
 			List<AnnotationInfo<RestResource>> restResourceAnnotationsParentFirst = rci.getAnnotationInfosParentFirst(RestResource.class);
+			List<AnnotationInfo<Rest>> restAnnotationsParentFirst = rci.getAnnotationInfosParentFirst(Rest.class);
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			String configPath = "";
 			for (AnnotationInfo<RestResource> r : restResourceAnnotationsParentFirst)
+				if (! r.getAnnotation().config().isEmpty())
+					configPath = r.getAnnotation().config();
+			for (AnnotationInfo<Rest> r : restAnnotationsParentFirst)
 				if (! r.getAnnotation().config().isEmpty())
 					configPath = r.getAnnotation().config();
 			String cf = vr.resolve(configPath);
@@ -174,8 +178,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			// Load stuff from parent-to-child order.
 			// This allows child settings to overwrite parent settings.
 			for (AnnotationInfo<RestResource> e : restResourceAnnotationsParentFirst) {
-
 				RestResource r = e.getAnnotation();
+				for (Property p : r.properties())
+					set(vr.resolve(p.name()), vr.resolve(p.value()));
+				for (String p : r.flags())
+					set(p, true);
+			}
+			for (AnnotationInfo<Rest> e : restAnnotationsParentFirst) {
+				Rest r = e.getAnnotation();
 				for (Property p : r.properties())
 					set(vr.resolve(p.name()), vr.resolve(p.value()));
 				for (String p : r.flags())
@@ -288,7 +298,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Overwrites the default config file with a custom config file.
 	 *
 	 * <p>
-	 * By default, the config file is determined using the {@link RestResource#config() @RestResource(config)}
+	 * By default, the config file is determined using the {@link Rest#config() @Rest(config)}
 	 * annotation.
 	 * This method allows you to programmatically override it with your own custom config file.
 	 *
@@ -318,7 +328,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Returns the external configuration file for this resource.
 	 *
 	 * <p>
-	 * The configuration file location is determined via the {@link RestResource#config() @RestResource(config)}
+	 * The configuration file location is determined via the {@link Rest#config() @Rest(config)}
 	 * annotation on the resource.
 	 *
 	 * <p>
@@ -340,7 +350,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Returns the configuration properties for this resource.
 	 *
 	 * <p>
-	 * The configuration properties are determined via the {@link RestResource#properties() @RestResource(properties)} annotation on the resource.
+	 * The configuration properties are determined via the {@link Rest#properties() @Rest(properties)} annotation on the resource.
 	 *
 	 * <p>
 	 * The configuration properties can be augmented programmatically by adding the following method to your resource:
@@ -667,7 +677,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Shortcut for adding a single child to this resource.
 	 *
 	 * <p>
-	 * This can be used for resources that don't have a {@link RestResource#path() @RestResource(path)} annotation.
+	 * This can be used for resources that don't have a {@link Rest#path() @Rest(path)} annotation.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_children}
@@ -1641,7 +1651,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li>
 	 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
 	 * 	<li>
-	 * 		If patterns are used, you must specify the list of declared roles using {@link RestResource#rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
+	 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).

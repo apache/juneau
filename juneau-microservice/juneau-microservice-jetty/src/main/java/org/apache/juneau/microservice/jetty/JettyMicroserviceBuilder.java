@@ -154,7 +154,7 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 	 *
 	 * <p>
 	 * This method can only be used with servlets with no-arg constructors.
-	 * <br>The path is pulled from the {@link RestResource#path()} annotation.
+	 * <br>The path is pulled from the {@link Rest#path()} annotation.
 	 *
 	 * @param c The servlet to add to the servlet container.
 	 * @return This object (for method chaining).

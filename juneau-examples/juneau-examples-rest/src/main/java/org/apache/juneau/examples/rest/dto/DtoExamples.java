@@ -25,7 +25,7 @@ import org.apache.juneau.serializer.annotation.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@RestResource(
+@Rest(
 	path="/dto",
 	title="DTO examples",
 	description="Example serialization of predefined Data Transfer Objects.",

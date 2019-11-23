@@ -32,7 +32,7 @@ import org.apache.juneau.transforms.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@RestResource(
+@Rest(
 	path="/echo",
 	title="Request echo service",
 	description="Echos the current HttpServletRequest object back to the browser.",

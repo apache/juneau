@@ -48,7 +48,7 @@ public class BodyAnnotationTest {
 	// @Body on parameter
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static class A {
 		@RestMethod(name=PUT, path="/String")
 		public String a01(@Body String b) {
@@ -270,7 +270,7 @@ public class BodyAnnotationTest {
 	// @Body on POJO
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
 	public static class B {
 		@RestMethod(name=PUT, path="/StringTransform")
 		public B01 b01(B01 b) {
@@ -463,7 +463,7 @@ public class BodyAnnotationTest {
 	// No serializers or parsers needed when using only streams and readers.
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class D {
 		@RestMethod(name=PUT, path="/String")
 		public Reader d01(@Body Reader b) throws Exception {
@@ -615,7 +615,7 @@ public class BodyAnnotationTest {
 	// Complex POJOs
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
 	public static class E {
 		@RestMethod(name=PUT, path="/B")
 		public DTOs.B testPojo1(@Body DTOs.B b) {
@@ -653,7 +653,7 @@ public class BodyAnnotationTest {
 	// Form POSTS with @Body parameter
 	//=================================================================================================================
 
-	@RestResource(serializers=JsonSerializer.class,parsers=JsonParser.class)
+	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class F {
 		@RestMethod(name=POST, path="/*")
 		public Reader formPostAsContent(
@@ -683,7 +683,7 @@ public class BodyAnnotationTest {
 	// A simple round-trip test to verify that both serializing and parsing works.
 	//=================================================================================================================
 
-	@RestResource(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
+	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	public static class G {
 		@RestMethod(name=POST,path="/")
 		public DTOs.C g(@Body DTOs.C content) throws Exception {
@@ -724,7 +724,7 @@ public class BodyAnnotationTest {
 	// A simple round-trip test to verify that both serializing and parsing works.
 	//=================================================================================================================
 
-	@RestResource(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
+	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	public static class H {
 		@RestMethod(name=POST,path="/",
 			properties={
@@ -768,7 +768,7 @@ public class BodyAnnotationTest {
 	// Test behavior of @Body(required=true).
 	//=================================================================================================================
 
-	@RestResource(serializers=JsonSerializer.class,parsers=JsonParser.class)
+	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class I {
 		@RestMethod(name=POST,path="/")
 		public DTOs.B g(@Body(required=true) DTOs.B content) throws Exception {
@@ -787,7 +787,7 @@ public class BodyAnnotationTest {
 	// Optional body parameter.
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class,parsers=JsonParser.class)
+	@Rest(serializers=SimpleJsonSerializer.class,parsers=JsonParser.class)
 	public static class J {
 		@RestMethod(name=POST,path="/a")
 		public Object a(@Body Optional<Integer> body) throws Exception {
@@ -845,7 +845,7 @@ public class BodyAnnotationTest {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SA {
 
 		@Body(
@@ -928,7 +928,7 @@ public class BodyAnnotationTest {
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SB {
 
 		@Body(schema=@Schema(" type:'b' "))
@@ -983,7 +983,7 @@ public class BodyAnnotationTest {
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SC {
 
 		@Body(example=" {f1:'b'} ")
@@ -1020,7 +1020,7 @@ public class BodyAnnotationTest {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TA {
 
 		public static class TA01 {
@@ -1106,7 +1106,7 @@ public class BodyAnnotationTest {
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TB {
 
 		public static class TB01 {}
@@ -1173,7 +1173,7 @@ public class BodyAnnotationTest {
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TC {
 
 		public static class TC01 {

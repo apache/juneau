@@ -40,16 +40,13 @@ import org.apache.juneau.utils.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestResource}
  * </ul>
- *
- * @deprecated Use {@link Rest}
  */
 @Documented
 @Target(TYPE)
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(RestResourceConfigApply.class)
-@Deprecated
-public @interface RestResource {
+@PropertyStoreApply(RestConfigApply.class)
+public @interface Rest {
 
 	/**
 	 * Allow body URL parameter.
@@ -1069,7 +1066,7 @@ public @interface RestResource {
 	 * </p>
 	 *
 	 * <p>
-	 * Note that headers can also be specified per path-mapping via the {@link RestResource#staticFiles() @RestResource(staticFiles)} annotation.
+	 * Note that headers can also be specified per path-mapping via the {@link Rest#staticFiles() @RestResource(staticFiles)} annotation.
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		staticFiles={
@@ -1105,7 +1102,7 @@ public @interface RestResource {
 	 * </ol>
 	 *
 	 * <p>
-	 * An example where this class is used is in the {@link RestResource#staticFiles} annotation:
+	 * An example where this class is used is in the {@link Rest#staticFiles} annotation:
 	 * <p class='bcode w800'>
 	 * 	<jk>package</jk> com.foo.mypackage;
 	 *

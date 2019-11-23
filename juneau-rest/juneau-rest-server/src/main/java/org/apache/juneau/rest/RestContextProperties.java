@@ -23,7 +23,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * These are properties specified on a REST resource class through the following:
  * <ul class='javatree'>
- * 	<li class='ja'>{@link RestResource#properties()}
+ * 	<li class='ja'>{@link Rest#properties()}
  * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
  * 	<li class='jm'>{@link RestContextBuilder#set(Map)}
  * </ul>

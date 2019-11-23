@@ -29,7 +29,7 @@ public class HtmlDocConfigStyleTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource()
+	@Rest()
 	@HtmlDocConfig(style={"a01a","a01b"},stylesheet="a01s",nowrap="false")
 	public static class A extends BasicRestServlet {
 		@RestMethod(path="/a01")
@@ -84,7 +84,7 @@ public class HtmlDocConfigStyleTest {
 	// Inheritance
 	//=================================================================================================================
 
-	@RestResource()
+	@Rest()
 	@HtmlDocConfig(style={"b01a","b01b"},stylesheet="b01s")
 	public static class B extends A {
 		@RestMethod(path="/b01")

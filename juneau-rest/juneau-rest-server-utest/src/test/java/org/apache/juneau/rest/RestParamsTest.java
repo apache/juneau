@@ -42,7 +42,7 @@ public class RestParamsTest {
 	// Various parameters
 	//=================================================================================================================
 
-	@RestResource(messages="RestParamsTest")
+	@Rest(messages="RestParamsTest")
 	public static class A {
 		@RestMethod
 		public String a01(ResourceBundle t) {

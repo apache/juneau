@@ -57,7 +57,7 @@ public @interface LoggingRule {
 	 * Allows you to tailor logging on debug requests.
 	 *
 	 * <p>
-	 * See the {@link RestResource#debug() @RestResource(debug)} annotation on details of how to enable debugging.
+	 * See the {@link Rest#debug() @Rest(debug)} annotation on details of how to enable debugging.
 	 *
 	 * <p>
 	 * The possible values are (case-insensitive):

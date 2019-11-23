@@ -39,10 +39,9 @@ import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Applies {@link RestResource} annotations to a {@link PropertyStoreBuilder}.
+ * Applies {@link Rest} annotations to a {@link PropertyStoreBuilder}.
  */
-@Deprecated
-public class RestResourceConfigApply extends ConfigApply<RestResource> {
+public class RestConfigApply extends ConfigApply<Rest> {
 
 	/**
 	 * Constructor.
@@ -50,13 +49,14 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public RestResourceConfigApply(Class<RestResource> c, VarResolverSession r) {
+	public RestConfigApply(Class<Rest> c, VarResolverSession r) {
 		super(c, r);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void apply(AnnotationInfo<RestResource> ai, PropertyStoreBuilder psb) {
-		RestResource a = ai.getAnnotation();
+	public void apply(AnnotationInfo<Rest> ai, PropertyStoreBuilder psb) {
+		Rest a = ai.getAnnotation();
 		String s = null;
 		ClassInfo c = ai.getClassOn();
 

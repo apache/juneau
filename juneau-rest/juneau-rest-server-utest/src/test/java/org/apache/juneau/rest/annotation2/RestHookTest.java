@@ -44,7 +44,7 @@ public class RestHookTest {
 	// @RestHook(PRE_CALL)
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		parsers=A01.class,
 		attrs={
 			"p1:sp1", // Unchanged servlet-level property.
@@ -117,7 +117,7 @@ public class RestHookTest {
 	// @RestHook(POST_CALL)
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		serializers=B01.class,
 		attrs={
 			"p1:sp1", // Unchanged servlet-level property.
@@ -216,11 +216,11 @@ public class RestHookTest {
 	// @RestHook(INIT)
 	//====================================================================================================
 
-	@RestResource(children={C_Super.class,C_Sub.class})
+	@Rest(children={C_Super.class,C_Sub.class})
 	public static class C {}
 	static MockRest c = MockRest.build(C.class, null);
 
-	@RestResource(path="/super")
+	@Rest(path="/super")
 	public static class C_Super {
 		protected ObjectList events = new ObjectList();
 		@RestHook(INIT)
@@ -245,7 +245,7 @@ public class RestHookTest {
 		}
 	}
 
-	@RestResource(path="/sub", children={C_Child.class})
+	@Rest(path="/sub", children={C_Child.class})
 	public static class C_Sub extends C_Super {
 		@Override
 		@RestHook(INIT)
@@ -268,7 +268,7 @@ public class RestHookTest {
 		}
 	}
 
-	@RestResource(path="/child")
+	@Rest(path="/child")
 	public static class C_Child extends C_Super {
 		@Override
 		@RestHook(INIT)
@@ -291,11 +291,11 @@ public class RestHookTest {
 	//====================================================================================================
 	// @RestHook(POST_INIT)
 	//====================================================================================================
-	@RestResource(children={D_Super.class,D_Sub.class})
+	@Rest(children={D_Super.class,D_Sub.class})
 	public static class D {}
 	static MockRest d = MockRest.build(D.class, null);
 
-	@RestResource(path="/super")
+	@Rest(path="/super")
 	public static class D_Super {
 		protected ObjectList events = new ObjectList();
 		@RestHook(POST_INIT)
@@ -320,7 +320,7 @@ public class RestHookTest {
 		}
 	}
 
-	@RestResource(path="/sub",children={D_Child.class})
+	@Rest(path="/sub",children={D_Child.class})
 	public static class D_Sub extends D_Super {
 		protected static String LAST_CALLED;
 		@Override
@@ -352,7 +352,7 @@ public class RestHookTest {
 		}
 	}
 
-	@RestResource(path="/child")
+	@Rest(path="/child")
 	public static class D_Child extends D_Super {
 		@Override
 		@RestHook(POST_INIT)
@@ -384,7 +384,7 @@ public class RestHookTest {
 	// @RestHook(POST_INIT_CHILD_FIRST)
 	//====================================================================================================
 
-	@RestResource(
+	@Rest(
 		children={
 			E_Super.class,
 			E_Sub.class
@@ -393,7 +393,7 @@ public class RestHookTest {
 	public static class E {}
 	static MockRest e = MockRest.build(E.class, null);
 
-	@RestResource(path="/super")
+	@Rest(path="/super")
 	public static class E_Super {
 		protected ObjectList events = new ObjectList();
 		@RestHook(POST_INIT_CHILD_FIRST)
@@ -418,7 +418,7 @@ public class RestHookTest {
 		}
 	}
 
-	@RestResource(path="/sub", children={E_Child.class})
+	@Rest(path="/sub", children={E_Child.class})
 	public static class E_Sub extends E_Super {
 		protected static String LAST_CALLED;
 		@Override
@@ -450,7 +450,7 @@ public class RestHookTest {
 		}
 	}
 
-	@RestResource(path="/child")
+	@Rest(path="/child")
 	public static class E_Child extends E_Super {
 		@Override
 		@RestHook(POST_INIT_CHILD_FIRST)
@@ -482,7 +482,7 @@ public class RestHookTest {
 	// @RestHook(START_CALL)
 	//====================================================================================================
 
-	@RestResource
+	@Rest
 	public static class F extends F_Parent {
 		private boolean start3Called;
 		@RestHook(START_CALL)
@@ -533,7 +533,7 @@ public class RestHookTest {
 	// @RestHook(PRE_CALL)
 	//====================================================================================================
 
-	@RestResource
+	@Rest
 	public static class G extends G_Parent {
 		private boolean pre3Called;
 		@RestHook(PRE_CALL)
@@ -584,7 +584,7 @@ public class RestHookTest {
 	// @RestHook(POST_CALL)
 	//====================================================================================================
 
-	@RestResource
+	@Rest
 	public static class H extends H_Parent {
 		private boolean post3Called;
 		@RestHook(POST_CALL)

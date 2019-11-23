@@ -30,7 +30,7 @@ public class RestMethodMatchersTest {
 	// Overlapping matchers
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod(name=GET, path="/one", matchers=M1.class)
 		public String a01a() {

@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@RestResource(
+@Rest(
 	title="Hello World",
 	description="An example of the simplest-possible resource",
 	path="/helloWorld"

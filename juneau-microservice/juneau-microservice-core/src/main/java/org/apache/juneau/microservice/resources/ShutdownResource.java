@@ -20,7 +20,7 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Provides the capability to shut down this REST microservice through a REST call.
  */
-@RestResource(
+@Rest(
 	path="/shutdown",
 	title="Shut down this resource"
 )

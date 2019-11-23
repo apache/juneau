@@ -19,7 +19,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resource group with additional RDF support.
  */
 @SuppressWarnings("serial")
-@RestResource(
+@Rest(
 	serializers={
 		Inherit.class,
 		RdfXmlSerializer.class,

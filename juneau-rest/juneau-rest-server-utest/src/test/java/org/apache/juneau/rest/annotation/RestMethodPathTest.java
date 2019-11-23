@@ -29,7 +29,7 @@ public class RestMethodPathTest {
 	// Overlapping URL patterns
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod(name=GET, path="/")
 		public String a01a() {

@@ -36,7 +36,7 @@ import org.apache.juneau.serializer.annotation.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@RestResource(
+@Rest(
 	path="/atom",
 	title="Sample ATOM feed resource",
 	description="Sample resource that shows how to render ATOM feeds",

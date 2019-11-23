@@ -17,11 +17,10 @@ import static org.apache.juneau.http.HttpMethodName.GET;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.json.JsonSerializer;
 import org.apache.juneau.rest.RestServlet;
-import org.apache.juneau.rest.annotation.RestMethod;
-import org.apache.juneau.rest.annotation.RestResource;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.server.config.repository.GetConfiguration;
 
-@RestResource(path = "/configs/*")
+@Rest(path="/configs/*")
 @SuppressWarnings("javadoc")
 public class LoadConfigResource extends RestServlet {
 

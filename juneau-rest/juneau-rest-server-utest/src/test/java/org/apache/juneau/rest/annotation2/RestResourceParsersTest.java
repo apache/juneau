@@ -105,7 +105,7 @@ public class RestResourceParsersTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource(parsers=PA.class)
+	@Rest(parsers=PA.class)
 	public static class A {
 		@RestMethod(name=PUT, path="/parserOnClass")
 		public String a01(@Body String in) {

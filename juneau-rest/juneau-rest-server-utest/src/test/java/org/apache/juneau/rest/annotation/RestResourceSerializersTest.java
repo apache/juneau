@@ -97,7 +97,7 @@ public class RestResourceSerializersTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource(serializers=SA.class)
+	@Rest(serializers=SA.class)
 	public static class A {
 		@RestMethod
 		public String a01() {

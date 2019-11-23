@@ -29,7 +29,7 @@ public class HtmlDocConfigFooterTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource()
+	@Rest()
 	@HtmlDocConfig(footer={"a01a","a01b"})
 	public static class A extends BasicRestServlet {
 		@RestMethod(path="/a01")
@@ -84,7 +84,7 @@ public class HtmlDocConfigFooterTest {
 	// Inheritance
 	//=================================================================================================================
 
-	@RestResource()
+	@Rest()
 	@HtmlDocConfig(footer={"b01a","INHERIT","b01b"})
 	public static class B extends A {
 		@RestMethod(path="/b01")

@@ -55,7 +55,7 @@ import org.apache.juneau.utils.*;
  * 		<l>DirectoryResource.allowDeletes</l> - If <jk>true</jk>, allows files to be deleted.
  * </ul>
  */
-@RestResource(
+@Rest(
 	title="File System Explorer",
 	messages="nls/DirectoryResource",
 	allowedMethodParams="*"

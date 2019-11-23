@@ -129,13 +129,13 @@ public class RestMethodInheritTest {
 	// Test serializer inheritance.
 	//=================================================================================================================
 
-	@RestResource(serializers={S1.class,S2.class})
+	@Rest(serializers={S1.class,S2.class})
 	public static class A {}
 
-	@RestResource(serializers={S3.class,S4.class,Inherit.class})
+	@Rest(serializers={S3.class,S4.class,Inherit.class})
 	public static class A01 extends A {}
 
-	@RestResource
+	@Rest
 	public static class A02 extends A01 {
 		@RestMethod(path="/default")
 		public ObjectList a01(RestResponse res) {
@@ -172,13 +172,13 @@ public class RestMethodInheritTest {
 	// Test parser inheritance.
 	//=================================================================================================================
 
-	@RestResource(parsers={P1.class,P2.class})
+	@Rest(parsers={P1.class,P2.class})
 	public static class B {}
 
-	@RestResource(parsers={P3.class,P4.class,Inherit.class})
+	@Rest(parsers={P3.class,P4.class,Inherit.class})
 	public static class B01 extends B {}
 
-	@RestResource
+	@Rest
 	public static class B02 extends B01 {
 		@RestMethod(path="/default")
 		public ObjectList b01(RestRequest req) {
@@ -215,13 +215,13 @@ public class RestMethodInheritTest {
 	// Test filter inheritance.
 	//=================================================================================================================
 
-	@RestResource(pojoSwaps={F1Swap.class})
+	@Rest(pojoSwaps={F1Swap.class})
 	public static class D {}
 
-	@RestResource(pojoSwaps={F2Swap.class,Inherit.class})
+	@Rest(pojoSwaps={F2Swap.class,Inherit.class})
 	public static class D01 extends D {}
 
-	@RestResource(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class D02 extends D01 {
 		@RestMethod
 		public Object[] d01() {
@@ -268,13 +268,13 @@ public class RestMethodInheritTest {
 	// Test properties inheritance.
 	//=================================================================================================================
 
-	@RestResource(attrs={"p1:v1","p2:v2"})
+	@Rest(attrs={"p1:v1","p2:v2"})
 	public static class E {}
 
-	@RestResource(attrs={"p2:v2a","p3:v3","p4:v4"})
+	@Rest(attrs={"p2:v2a","p3:v3","p4:v4"})
 	public static class E01 extends E {}
 
-	@RestResource
+	@Rest
 	public static class E02 extends E01 {
 		@RestMethod
 		public ObjectMap e01(RequestAttributes attrs) {

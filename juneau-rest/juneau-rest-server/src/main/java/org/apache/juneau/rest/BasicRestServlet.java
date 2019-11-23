@@ -132,8 +132,8 @@ import org.apache.juneau.xml.*;
  *
  * <p>
  * The list of serializers and parsers can be appended to using the
- * {@link RestResource#serializers() @RestResource(serializers)} and
- * {@link RestResource#parsers() @RestResource(parsers)} annotations on subclasses.
+ * {@link Rest#serializers() @Rest(serializers)} and
+ * {@link Rest#parsers() @Rest(parsers)} annotations on subclasses.
  *
  * <p>
  * This subclass also provides a default OPTIONS page by implementing a {@link #getOptions(RestRequest)} that returns a
@@ -148,7 +148,7 @@ import org.apache.juneau.xml.*;
  * 		to <js>"styles/juneau.css"</js>.
  * 	<li>
  * 		Provides a default classpath entry "htdocs" by setting
- * 		{@link RestResource#staticFiles() @RestResource(staticFiles)} to <code>{<js>"htdocs:htdocs"</js>,<js>"styles:styles"</js>}</code>.
+ * 		{@link Rest#staticFiles() @Rest(staticFiles)} to <code>{<js>"htdocs:htdocs"</js>,<js>"styles:styles"</js>}</code>.
  * 		This allows files inside the <c>[servletPackage].htdocs</c> package to be served up under the URL
  * 		<c>/servletPath/htdocs</c>.
  * </ul>
@@ -157,7 +157,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRestServlet}
  * </ul>
  */
-@RestResource(
+@Rest(
 	// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.
 	allowedMethodParams="OPTIONS"
 )

@@ -20,34 +20,34 @@ import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests that validate the behavior of @RestResource.
+ * Tests that validate the behavior of @Rest.
  */
 @SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestResourceTest {
 
 	//====================================================================================================
-	// @RestResource(allowBodyParam)
+	// @Rest(allowBodyParam)
 	//====================================================================================================
 
-	@RestResource(allowBodyParam="true")
+	@Rest(allowBodyParam="true")
 	public static class A1 {
 		@RestMethod
 		public ObjectMap put(@Body ObjectMap body) {
 			return body;
 		}
 	}
-	@RestResource(allowBodyParam="false")
+	@Rest(allowBodyParam="false")
 	public static class A2 {
 		@RestMethod
 		public ObjectMap put(@Body ObjectMap body) {
 			return body;
 		}
 	}
-	@RestResource(allowBodyParam="false")
+	@Rest(allowBodyParam="false")
 	public static class A3 extends A1 {}
 
-	@RestResource(allowBodyParam="true")
+	@Rest(allowBodyParam="true")
 	public static class A4 extends A2 {}
 
 	static MockRest a1 = MockRest.build(A1.class, null);
@@ -80,7 +80,7 @@ public class RestResourceTest {
 	}
 
 	//====================================================================================================
-	// @RestResource(allowedHeaderParams)
+	// @Rest(allowedHeaderParams)
 	//====================================================================================================
 
 	public static class B {
@@ -90,28 +90,28 @@ public class RestResourceTest {
 		}
 	}
 
-	@RestResource()
+	@Rest()
 	public static class B1 extends B {}
 
-	@RestResource(allowedHeaderParams="Accept, Content-Type")
+	@Rest(allowedHeaderParams="Accept, Content-Type")
 	public static class B2 extends B {}
 
-	@RestResource(allowedHeaderParams="ACCEPT, CONTENT-TYPE")
+	@Rest(allowedHeaderParams="ACCEPT, CONTENT-TYPE")
 	public static class B3 extends B {}
 
-	@RestResource(allowedHeaderParams="Custom")
+	@Rest(allowedHeaderParams="Custom")
 	public static class B4 extends B {}
 
-	@RestResource(allowedHeaderParams="*")
+	@Rest(allowedHeaderParams="*")
 	public static class B5 extends B {}
 
-	@RestResource(allowedHeaderParams="NONE")
+	@Rest(allowedHeaderParams="NONE")
 	public static class B6 extends B {}
 
-	@RestResource(allowedHeaderParams="None")
+	@Rest(allowedHeaderParams="None")
 	public static class B7 extends B {}
 
-	@RestResource(allowedHeaderParams="None")
+	@Rest(allowedHeaderParams="None")
 	public static class B8 extends B5 {}
 
 	static MockRest b1 = MockRest.build(B1.class, null);
@@ -180,7 +180,7 @@ public class RestResourceTest {
 	}
 
 	//====================================================================================================
-	// @RestResource(allowedMethodHeaders)
+	// @Rest(allowedMethodHeaders)
 	//====================================================================================================
 
 	public static class C {
@@ -198,28 +198,28 @@ public class RestResourceTest {
 		}
 	}
 
-	@RestResource()
+	@Rest()
 	public static class C1 extends C {}
 
-	@RestResource(allowedMethodHeaders="GET")
+	@Rest(allowedMethodHeaders="GET")
 	public static class C2 extends C {}
 
-	@RestResource(allowedMethodHeaders="get")
+	@Rest(allowedMethodHeaders="get")
 	public static class C3 extends C {}
 
-	@RestResource(allowedMethodHeaders="FOO")
+	@Rest(allowedMethodHeaders="FOO")
 	public static class C4 extends C {}
 
-	@RestResource(allowedMethodHeaders="*")
+	@Rest(allowedMethodHeaders="*")
 	public static class C5 extends C {}
 
-	@RestResource(allowedMethodHeaders="NONE")
+	@Rest(allowedMethodHeaders="NONE")
 	public static class C6 extends C {}
 
-	@RestResource(allowedMethodHeaders="None")
+	@Rest(allowedMethodHeaders="None")
 	public static class C7 extends C {}
 
-	@RestResource(allowedMethodHeaders="None")
+	@Rest(allowedMethodHeaders="None")
 	public static class C8 extends C5 {}
 
 	static MockRest c1 = MockRest.build(C1.class, null);
@@ -316,7 +316,7 @@ public class RestResourceTest {
 	}
 
 	//====================================================================================================
-	// @RestResource(allowedMethodParams)
+	// @Rest(allowedMethodParams)
 	//====================================================================================================
 
 	public static class D {
@@ -342,28 +342,28 @@ public class RestResourceTest {
 		}
 	}
 
-	@RestResource()
+	@Rest()
 	public static class D1 extends D {}
 
-	@RestResource(allowedMethodParams="GET")
+	@Rest(allowedMethodParams="GET")
 	public static class D2 extends D {}
 
-	@RestResource(allowedMethodParams="get")
+	@Rest(allowedMethodParams="get")
 	public static class D3 extends D {}
 
-	@RestResource(allowedMethodParams="FOO")
+	@Rest(allowedMethodParams="FOO")
 	public static class D4 extends D {}
 
-	@RestResource(allowedMethodParams="*")
+	@Rest(allowedMethodParams="*")
 	public static class D5 extends D {}
 
-	@RestResource(allowedMethodParams="NONE")
+	@Rest(allowedMethodParams="NONE")
 	public static class D6 extends D {}
 
-	@RestResource(allowedMethodParams="None")
+	@Rest(allowedMethodParams="None")
 	public static class D7 extends D {}
 
-	@RestResource(allowedMethodParams="None")
+	@Rest(allowedMethodParams="None")
 	public static class D8 extends D5 {}
 
 	static MockRest d1 = MockRest.build(D1.class, null);

@@ -21,7 +21,7 @@ import org.apache.juneau.rest.annotation.*;
  * Identical to {@link BasicRestServletJenaGroup} but doesn't extend from {@link HttpServlet}
  */
 @SuppressWarnings("serial")
-@RestResource(
+@Rest(
 	serializers={
 		Inherit.class,
 		RdfXmlSerializer.class,

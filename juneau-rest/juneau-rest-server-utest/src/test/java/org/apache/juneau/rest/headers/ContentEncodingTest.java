@@ -44,7 +44,7 @@ public class ContentEncodingTest {
 	// Test with no compression enabled.
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod
 		public String put(@Body String in) {
@@ -73,7 +73,7 @@ public class ContentEncodingTest {
 	// Test with compression enabled.
 	//=================================================================================================================
 
-	@RestResource(encoders=MyEncoder.class)
+	@Rest(encoders=MyEncoder.class)
 	public static class B {
 		@RestMethod(name=PUT, path="/")
 		public String test1put(@Body String in) {

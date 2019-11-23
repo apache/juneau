@@ -17,14 +17,14 @@ import org.apache.juneau.microservice.jetty.resources.DebugResource;
 import org.apache.juneau.microservice.resources.ConfigResource;
 import org.apache.juneau.microservice.resources.LogsResource;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.RestResource;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.ContentTypeMenuItem;
 import org.apache.juneau.rest.widget.ThemeMenuItem;
 
 /**
  * Root microservice page.
  */
-@RestResource(
+@Rest(
 	path="/*",
 	title="My Microservice",
 	description="Top-level resources page",

@@ -37,7 +37,7 @@ import org.apache.juneau.utils.*;
 /**
  * JUnit automated testcase resource.
  */
-@RestResource(
+@Rest(
 	path="/testThirdPartyProxy",
 	logging=@Logging(
 		disabled="true"

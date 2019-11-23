@@ -197,7 +197,7 @@
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.SurrogateClasses'>Surrogate Classes</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.BeanAnnotation'>@Bean Annotation</a></p>
 			<li><p class='updated'><a class='doclink' href='#juneau-marshall.Transforms.BeanpAnnotation'>@Beanp Annotation</a></p>
-			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.BeanConstructorAnnotation'>@BeanConstructor Annotation</a></p>
+			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.BeanConstructorAnnotation'>@BeancAnnotation</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.BeanIgnoreAnnotation'>@BeanIgnore Annotation</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.NamePropertyAnnotation'>@NameProperty Annotation</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.ParentPropertyAnnotation'>@ParentProperty Annotation</a></p>
@@ -499,7 +499,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-rest-mock.MockRest'>MockRest</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-mock.MockRemoteResource'>MockRemoteResource</a></p>
 	</ol>
-	<li><p class='toc2'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a></p>
+	<li><p class='updated'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a></p>
 	<ol>
 		<li><p class=''><a class='doclink' href='#juneau-microservice-core.Overview'>Microservice Overview</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-microservice-core.LifecycleMethods'>Lifecycle Methods</a></p>
@@ -512,7 +512,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-microservice-core.Logging'>Logging</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-microservice-core.Listeners'>Listeners</a></p>
 	</ol>
-	<li><p class='toc2'><a class='doclink' href='#juneau-microservice-jetty'>juneau-microservice-jetty</a></p>
+	<li><p class='updated'><a class='doclink' href='#juneau-microservice-jetty'>juneau-microservice-jetty</a></p>
 	<ol>
 		<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.Overview'>Overview</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.LifecycleMethods'>Lifecycle Methods</a></p>
@@ -523,7 +523,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.UiCustomization'>UI Customization</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.Extending'>Extending JettyMicroservice</a></p>
 	</ol>
-	<li><p class='toc2'><a class='doclink' href='#my-jetty-microservice'>my-jetty-microservice</a></p>
+	<li><p class='updated'><a class='doclink' href='#my-jetty-microservice'>my-jetty-microservice</a></p>
 	<ol>
 		<li><p class=''><a class='doclink' href='#my-jetty-microservice.Installing'>Installing in Eclipse</a></p>
 		<li><p class=''><a class='doclink' href='#my-jetty-microservice.Running'>Running in Eclipse</a></p>
@@ -548,7 +548,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.ConfigResource'>ConfigResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.LogsResource'>LogsResource</a></p>
 	</ol>
-	<li><p class='toc2'><a class='doclink' href='#juneau-examples-rest-jetty'>juneau-examples-rest-jetty</a></p>
+	<li><p class='updated'><a class='doclink' href='#juneau-examples-rest-jetty'>juneau-examples-rest-jetty</a></p>
 	<ol>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest-jetty.Installing'>Installing in Eclipse</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest-jetty.Running'>Running in Eclipse</a></p>
@@ -2040,14 +2040,14 @@
 		{@link org.apache.juneau.annotation.Bean} 
 		- Used to tailor how beans get interpreted by the framework.
 	<li class='ja'>
-		{@link org.apache.juneau.annotation.BeanConstructor} 
+		{@link org.apache.juneau.annotation.Beanc} 
 		- Maps constructor arguments to property names on beans with read-only properties.
+	<li class='ja'>
+		{@link org.apache.juneau.annotation.Beanp} 
+		- Used to tailor how bean properties get interpreted by the framework.
 	<li class='ja'>
 		{@link org.apache.juneau.annotation.BeanIgnore} 
 		- Ignore classes, fields, and methods from being interpreted as bean or bean components.
-	<li class='ja'>
-		{@link org.apache.juneau.annotation.BeanProperty} 
-		- Used to tailor how bean properties get interpreted by the framework.
 	<li class='ja'>
 		{@link org.apache.juneau.annotation.NameProperty} 
 		- Identifies a setter as a method for setting the name of a POJO as it's known by its parent object.
@@ -3115,10 +3115,10 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BeanConstructorAnnotation' id='juneau-marshall.Transforms.BeanConstructorAnnotation'>2.11.11 - @BeanConstructor Annotation</a></h4>
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BeanConstructorAnnotation' id='juneau-marshall.Transforms.BeanConstructorAnnotation'>2.11.11 - @BeancAnnotation</a></h4>
 <div class='topic'><!-- START: 2.11.11 - juneau-marshall.Transforms.BeanConstructorAnnotation -->
 <p>
-	The {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} annotation is used to 
+	The {@link org.apache.juneau.annotation.Beanc @Beanc} annotation is used to 
 	map constructor arguments to property names on bean with read-only properties.
 	Since method parameter names are lost during compilation, this annotation essentially redefines 
 	them so that they are available at runtime.
@@ -3132,7 +3132,7 @@
 		<jk>private final</jk> String <jf>name</jf>;
 		<jk>private final int</jk> <jf>age</jf>;
 
-		<ja>@BeanConstructor</ja>(properties=<js>"name,age"</js>})
+		<ja>@Beanc</ja>(properties=<js>"name,age"</js>})
 		<jk>public</jk> Person(String name, <jk>int</jk> age) {
 			<jk>this</jk>.<jf>name</jf> = name;
 			<jk>this</jk>.<jf>age</jf> = age;
@@ -3161,17 +3161,17 @@
 	Beans can also be defined with a combination of read-only and read-write properties.
 </p>
 <p>
-	The {@link org.apache.juneau.annotation.Name @Name} annotation can also be used instead of <c><ja>@BeanConstructor</ja>(properties)</c>:
+	The {@link org.apache.juneau.annotation.Name @Name} annotation can also be used instead of <c><ja>@Beanc</ja>(properties)</c>:
 </p>
 <p class='bpcode w800'>
-	<ja>@BeanConstructor</ja>
+	<ja>@Beanc</ja>
 	<jk>public</jk> Person(<ja>@Name</ja>(<js>"name"</js>) String name, <ja>@Name</ja>(<js>"age"</js>) <jk>int</jk> age) {
 		<jk>this</jk>.<jf>name</jf> = name;
 		<jk>this</jk>.<jf>age</jf> = age;
 	}
 </p>
 <p>
-	If neither <c><ja>@BeanConstructor</ja>(properties)</c> or <ja>@Name</ja> is used to identify the bean property names, 
+	If neither <c><ja>@Beanc</ja>(properties)</c> or <ja>@Name</ja> is used to identify the bean property names, 
 	we will try to use the parameter names if they are available in the bytecode.
 </p>
 </div><!-- END: 2.11.11 - juneau-marshall.Transforms.BeanConstructorAnnotation -->
@@ -3279,7 +3279,7 @@
 <p>
 	Juneau parsers can use builders to instantiate POJOs.
 	This is useful in cases where you want to create beans with read-only properties.
-	Note that while it's possible to do this using the {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor}
+	Note that while it's possible to do this using the {@link org.apache.juneau.annotation.Beanc @Beanc}
 	annotation, using builders can often be cleaner.
 </p>
 <p>
@@ -4389,7 +4389,7 @@
 			<br><ja>@JsonProperty</ja>
 		</td>
 		<td>
-			{@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor}
+			{@link org.apache.juneau.annotation.Beanc @Beanc}
 		</td>
 	</tr>
 	<tr>
@@ -24792,11 +24792,11 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core' id='juneau-microservice-core'>11 - juneau-microservice-core</a></h2>
+<h2 class='topic updated' onclick='toggle(this)'><a href='#juneau-microservice-core' id='juneau-microservice-core'>11 - juneau-microservice-core</a></h2>
 <div class='topic'><!-- START: 11 - juneau-microservice-core -->
 <div class='warn'>
 	The Juneau Microservice libraries are likely to be removed in Juneau 9.0 due to the popularity of the Spring Boot
-	framework for creating microservices.
+	framework for creating microservices and the ability for Juneau to be used within Spring Boot.
 </div>
 
 <h5 class='figure'>Maven Dependency</h5>
@@ -25623,11 +25623,11 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty' id='juneau-microservice-jetty'>12 - juneau-microservice-jetty</a></h2>
+<h2 class='topic updated' onclick='toggle(this)'><a href='#juneau-microservice-jetty' id='juneau-microservice-jetty'>12 - juneau-microservice-jetty</a></h2>
 <div class='topic'><!-- START: 12 - juneau-microservice-jetty -->
 <div class='warn'>
 	The Juneau Microservice libraries are likely to be removed in Juneau 9.0 due to the popularity of the Spring Boot
-	framework for creating microservices.
+	framework for creating microservices and the ability for Juneau to be used within Spring Boot.
 </div>
 
 <h5 class='figure'>Maven Dependency</h5>
@@ -26455,11 +26455,11 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic ' onclick='toggle(this)'><a href='#my-jetty-microservice' id='my-jetty-microservice'>13 - my-jetty-microservice</a></h2>
+<h2 class='topic updated' onclick='toggle(this)'><a href='#my-jetty-microservice' id='my-jetty-microservice'>13 - my-jetty-microservice</a></h2>
 <div class='topic'><!-- START: 13 - my-jetty-microservice -->
 <div class='warn'>
 	The Juneau Microservice libraries are likely to be removed in Juneau 9.0 due to the popularity of the Spring Boot
-	framework for creating microservices.
+	framework for creating microservices and the ability for Juneau to be used within Spring Boot.
 </div>
 
 <h5 class='figure'>Starter Project Zip</h5>
@@ -27779,11 +27779,11 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty' id='juneau-examples-rest-jetty'>17 - juneau-examples-rest-jetty</a></h2>
+<h2 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty' id='juneau-examples-rest-jetty'>17 - juneau-examples-rest-jetty</a></h2>
 <div class='topic'><!-- START: 17 - juneau-examples-rest-jetty -->
 <div class='warn'>
 	The Juneau Microservice libraries are likely to be removed in Juneau 9.0 due to the popularity of the Spring Boot
-	framework for creating microservices.
+	framework for creating microservices and the ability for Juneau to be used within Spring Boot.
 </div>
 
 <h5 class='figure'>Starter Project Zip</h5>
@@ -28968,7 +28968,7 @@
 	</li>
 	<li> 
 		Support for parsing into beans with read-only properties.<br>
-		New {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} annotation allows you to specify bean property values to be passed in through a constructor.
+		New <dc>@BeanConstructor</dc> annotation allows you to specify bean property values to be passed in through a constructor.
 	</li>
 	<li> 
 		Separated the rest library into separate independent client and server libraries.<br>
@@ -28987,7 +28987,7 @@
 <ul class='spaced-list'>
 	<li>
 		Support for parsing into read-only beans (i.e. beans with only getters, property values set through constructor args).<br>
-		To support this, the {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} annotation has been added.
+		To support this, the <dc>@BeanConstructor</dc> annotation has been added.
 	</li>
 	<li>
 		Merged separate settings classes back into their base classes (simplifies the API).
@@ -35395,6 +35395,8 @@
 		{@link org.apache.juneau.marshall.CharMarshall} and {@link org.apache.juneau.marshall.StreamMarshall} now have public constructors.
 	<li>
 		{@link org.apache.juneau.annotation.Beanp @Beanp} replaces {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} with shorter syntax.
+	<li>
+		{@link org.apache.juneau.annotation.Beanc @Beanc} replaces {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} with shorter syntax.
 	<li>
 		Shortened names for {@link org.apache.juneau.annotation.Bean#dictionary @Bean(dictionary)} and {@link org.apache.juneau.BeanContextBuilder#dictionary(Class...)}.
 </ul>

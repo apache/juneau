@@ -33,7 +33,7 @@ public class NlsTest {
 	// Test getting an NLS property defined on a class or method.
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		serializers={A01.class},
 		attrs={"TestProperty:$L{key1}"},
 		messages="NlsTest"
@@ -81,7 +81,7 @@ public class NlsTest {
 	// Test OPTIONS pages without NLS
 	//=================================================================================================================
 
-	@RestResource(title="test")
+	@Rest(title="test")
 	public static class B {
 		@RestMethod(description="foo")
 		public Swagger options(RestRequest req) {
@@ -100,7 +100,7 @@ public class NlsTest {
 	// Test Missing resource bundles.
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class C {
 		@RestMethod
 		public String test(RestRequest req) {

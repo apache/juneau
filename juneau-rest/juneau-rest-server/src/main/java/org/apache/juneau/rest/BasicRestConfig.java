@@ -39,7 +39,7 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
  * Classes that don't extend from {@link BasicRestServlet} can implement this interface to
  * be configured with the same serializers/parsers/etc... as {@link BasicRestServlet}.
  */
-@RestResource(
+@Rest(
 
 	// Default serializers for all Java methods in the class.
 	serializers={

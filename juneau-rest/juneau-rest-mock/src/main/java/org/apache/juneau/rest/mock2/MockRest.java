@@ -116,7 +116,7 @@ public class MockRest implements MockHttpConnection {
 	 * No <c>Accept</c> or <c>Content-Type</c> header is specified by default.
 	 *
 	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @return A new builder.
 	 */
@@ -138,7 +138,7 @@ public class MockRest implements MockHttpConnection {
 	 * </p>
 	 *
 	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @return A new {@link MockRest} object.
 	 */
@@ -162,7 +162,7 @@ public class MockRest implements MockHttpConnection {
 	 * </p>
 	 *
 	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param m
 	 * 	The marshall to use for specifying the <c>Accept</c> and <c>Content-Type</c> headers.
@@ -189,7 +189,7 @@ public class MockRest implements MockHttpConnection {
 	 * </p>
 	 *
 	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @param s
 	 * 	The serializer to use for specifying the <c>Content-Type</c> header.

@@ -33,7 +33,7 @@ import org.apache.juneau.utils.*;
  * Used to define paths and locations of statically-served files such as images or HTML documents.
  *
  * <p>
- * An example where this class is used is in the {@link RestResource#staticFiles} annotation:
+ * An example where this class is used is in the {@link Rest#staticFiles} annotation:
  * <p class='bcode w800'>
  * <jk>package</jk> com.foo.mypackage;
  *

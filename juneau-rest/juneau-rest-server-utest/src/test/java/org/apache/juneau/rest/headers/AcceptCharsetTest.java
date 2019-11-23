@@ -37,7 +37,7 @@ public class AcceptCharsetTest {
 	// Test that Q-values are being resolved correctly.
 	//=================================================================================================================
 
-	@RestResource(defaultCharset="utf-8",serializers=PlainTextSerializer.class)
+	@Rest(defaultCharset="utf-8",serializers=PlainTextSerializer.class)
 	public static class A {
 		@RestMethod
 		public String qValues() {
@@ -65,7 +65,7 @@ public class AcceptCharsetTest {
 	// Validate various Accept-Charset variations.
 	//=================================================================================================================
 
-	@RestResource(defaultCharset="utf-8")
+	@Rest(defaultCharset="utf-8")
 	public static class B {
 
 		@RestMethod(name=PUT, parsers=TestParser.class, serializers=TestSerializer.class)

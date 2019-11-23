@@ -63,7 +63,7 @@ public class ContentTypeTest {
 	// Test that default Content-Type headers on servlet annotation are picked up.
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		defaultRequestHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
 	)
@@ -92,7 +92,7 @@ public class ContentTypeTest {
 	// when @RestMethod.parsers/serializers annotations are used.
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		defaultRequestHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
 	)
@@ -136,7 +136,7 @@ public class ContentTypeTest {
 	// when @RestMethod.addParsers/addSerializers annotations are used.
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		defaultRequestHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
 	)
@@ -171,7 +171,7 @@ public class ContentTypeTest {
 	// when @RestMethod.parsers/serializers annotations are used.
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		defaultRequestHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
 	)
@@ -209,7 +209,7 @@ public class ContentTypeTest {
 	// 	when @RestMethod.addParsers/addSerializers annotations are used.
 	//=================================================================================================================
 
-	@RestResource(
+	@Rest(
 		defaultRequestHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
 	)

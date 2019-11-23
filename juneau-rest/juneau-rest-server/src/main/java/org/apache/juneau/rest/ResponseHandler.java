@@ -30,7 +30,7 @@ import org.apache.juneau.rest.reshandlers.*;
  * <p>
  * Response handlers can be associated with REST resources via the following:
  * <ul>
- * 	<li class='ja'>{@link RestResource#responseHandlers}
+ * 	<li class='ja'>{@link Rest#responseHandlers}
  * 	<li class='jm'>{@link RestContextBuilder#responseHandlers(Class...)}
  * 	<li class='jm'>{@link RestContextBuilder#responseHandlers(ResponseHandler...)}
  * </ul>

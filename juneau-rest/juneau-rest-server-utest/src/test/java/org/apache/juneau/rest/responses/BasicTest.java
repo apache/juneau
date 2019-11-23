@@ -34,7 +34,7 @@ public class BasicTest {
 	// Basic sanity tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod public Accepted accepted() { return new Accepted(); }
 		@RestMethod public AlreadyReported alreadyReported() { return new AlreadyReported(); }
@@ -155,7 +155,7 @@ public class BasicTest {
 	// Statuses with URIs.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class B {
 		@RestMethod public MovedPermanently movedPermanently() { return new MovedPermanently(URI.create("servlet:/foo")); }
 		@RestMethod public PermanentRedirect permanentRedirect() { return new PermanentRedirect(URI.create("servlet:/foo")); }
@@ -186,7 +186,7 @@ public class BasicTest {
 	// Overridden messages
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class C {
 		@RestMethod public Accepted accepted() { return new Accepted("foo"); }
 		@RestMethod public AlreadyReported alreadyReported() { return new AlreadyReported("foo"); }
@@ -307,7 +307,7 @@ public class BasicTest {
 	// Should use Accept language for serialization.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class D {
 		@RestMethod public Accepted accepted() { return new Accepted("foo"); }
 	}

@@ -107,14 +107,18 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Returns the path defined on this servlet if it's defined via {@link RestResource#path()}.
+	 * Returns the path defined on this servlet if it's defined via {@link Rest#path()}.
 	 *
 	 * @return The path defined on this servlet, or an empty string if not specified.
 	 */
+	@SuppressWarnings("deprecation")
 	public synchronized String getPath() {
 		if (context != null)
 			return context.getPath();
 		ClassInfo ci = ClassInfo.of(getClass());
+		for (Rest rr : ci.getAnnotations(Rest.class))
+			if (! rr.path().isEmpty())
+				return trimSlashes(rr.path());
 		for (RestResource rr : ci.getAnnotations(RestResource.class))
 			if (! rr.path().isEmpty())
 				return trimSlashes(rr.path());

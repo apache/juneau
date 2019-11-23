@@ -40,7 +40,7 @@ public class FormDataAnnotationTest {
 	// Simple tests
 	//=================================================================================================================
 
-	@RestResource(parsers=UrlEncodingParser.class)
+	@Rest(parsers=UrlEncodingParser.class)
 	public static class A {
 		@RestMethod
 		public String post(RestRequest req, @FormData(name="p1",allowEmptyValue=true) String p1, @FormData(name="p2",allowEmptyValue=true) int p2) throws Exception {
@@ -70,7 +70,7 @@ public class FormDataAnnotationTest {
 	// UON parameters
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class B {
 		@RestMethod(name=POST,path="/post1")
 		public String post1(RestRequest req, @FormData(value="p1") String p1) throws Exception {
@@ -100,7 +100,7 @@ public class FormDataAnnotationTest {
 	// Default values.
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class C {
 		@RestMethod(name=POST, path="/defaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
 		public ObjectMap c01(RequestFormData formData) {
@@ -161,7 +161,7 @@ public class FormDataAnnotationTest {
 	// Optional form data parameter.
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class D {
 		@RestMethod(name=POST,path="/a")
 		public Object a(@FormData("f1") Optional<Integer> f1) throws Exception {
@@ -218,7 +218,7 @@ public class FormDataAnnotationTest {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SA {
 
 		@FormData(
@@ -299,7 +299,7 @@ public class FormDataAnnotationTest {
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SB {
 
 		@FormData(name="F")
@@ -354,7 +354,7 @@ public class FormDataAnnotationTest {
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SC {
 
 		@FormData(name="F", example={"{f1:'a'}"})
@@ -381,7 +381,7 @@ public class FormDataAnnotationTest {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TA {
 
 		@RestMethod
@@ -451,7 +451,7 @@ public class FormDataAnnotationTest {
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TB {
 
 		@RestMethod
@@ -517,7 +517,7 @@ public class FormDataAnnotationTest {
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TC {
 
 		@RestMethod

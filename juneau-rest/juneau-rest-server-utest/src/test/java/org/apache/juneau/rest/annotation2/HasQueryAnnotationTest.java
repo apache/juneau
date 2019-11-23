@@ -31,7 +31,7 @@ public class HasQueryAnnotationTest {
 	// Simple tests
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod(name=GET,path="/")
 		public String get(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {

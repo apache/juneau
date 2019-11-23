@@ -38,7 +38,7 @@ public class HeaderAnnotationTest {
 	// Optional header parameter.
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class A {
 		@RestMethod(name=GET,path="/a")
 		public Object a(@Header("f1") Optional<Integer> f1) throws Exception {
@@ -95,7 +95,7 @@ public class HeaderAnnotationTest {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SA {
 
 		@Header(
@@ -163,7 +163,7 @@ public class HeaderAnnotationTest {
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SB {
 
 		@Header(name="H")
@@ -218,7 +218,7 @@ public class HeaderAnnotationTest {
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class SC {
 
 		@Header(name="H", example="{f1:'a'}")
@@ -245,7 +245,7 @@ public class HeaderAnnotationTest {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TA {
 
 		@RestMethod
@@ -315,7 +315,7 @@ public class HeaderAnnotationTest {
 	// Schema
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TB {
 
 		@RestMethod
@@ -381,7 +381,7 @@ public class HeaderAnnotationTest {
 	// Examples
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class TC {
 
 		@RestMethod

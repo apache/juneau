@@ -22,7 +22,7 @@ import org.apache.juneau.testutils.pojos.*;
 /**
  * JUnit automated testcase resource.
  */
-@RestResource(
+@Rest(
 	path="/testLargePojos"
 )
 public class LargePojosResource extends BasicRestServletJena {

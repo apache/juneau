@@ -31,7 +31,7 @@ public class RemoteResourceAnnotationTest {
 	// @RemoteResource(path), relative paths
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 
 		@RestMethod
@@ -204,7 +204,7 @@ public class RemoteResourceAnnotationTest {
 	// @RemoteResource(path), absolute paths
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class B {
 
 		@RestMethod(path="B/b01")

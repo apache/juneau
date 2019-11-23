@@ -29,7 +29,7 @@ import org.apache.juneau.rest.widget.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@RestResource(
+@Rest(
 	path="/jsonSchema",
 	messages="nls/JsonSchemaResource",
 	title="Sample JSON-Schema document",

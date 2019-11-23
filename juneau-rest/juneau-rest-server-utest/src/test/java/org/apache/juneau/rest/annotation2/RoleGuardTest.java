@@ -18,7 +18,7 @@ import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests the @RestResource(roleGuard) and @RestMethod(roleGuard) annotations.
+ * Tests the @Rest(roleGuard) and @RestMethod(roleGuard) annotations.
  */
 @SuppressWarnings({})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -28,7 +28,7 @@ public class RoleGuardTest {
 	// Simple guard on class
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource(roleGuard="foo")
+	@Rest(roleGuard="foo")
 	public static class A1 {
 		@RestMethod
 		public String get() {
@@ -55,7 +55,7 @@ public class RoleGuardTest {
 	// Simple guard on method
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class A2 {
 		@RestMethod(roleGuard="foo")
 		public String get() {
@@ -82,7 +82,7 @@ public class RoleGuardTest {
 	// Simple guards on class and method
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource(roleGuard="foo")
+	@Rest(roleGuard="foo")
 	public static class A3 {
 		@RestMethod(roleGuard="bar")
 		public String get() {
@@ -111,7 +111,7 @@ public class RoleGuardTest {
 	// Simple guards on class and method, inherited
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource(roleGuard="foo")
+	@Rest(roleGuard="foo")
 	public static class A4a {
 		@RestMethod(roleGuard="bar")
 		public String get() {
@@ -119,7 +119,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource(roleGuard="baz")
+	@Rest(roleGuard="baz")
 	public static class A4b extends A4a {
 		@Override
 		@RestMethod(roleGuard="qux")
@@ -150,10 +150,10 @@ public class RoleGuardTest {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @RestResource(roleGuard), multiple guards on class
+	// @Rest(roleGuard), multiple guards on class
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class B1 {
 		@RestMethod
 		public String get() {
@@ -161,28 +161,28 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource(roleGuard="foo,bar")
+	@Rest(roleGuard="foo,bar")
 	public static class B1a extends B1 {}
 
-	@RestResource(roleGuard="foo | bar")
+	@Rest(roleGuard="foo | bar")
 	public static class B1b extends B1 {}
 
-	@RestResource(roleGuard="foo || bar")
+	@Rest(roleGuard="foo || bar")
 	public static class B1c extends B1 {}
 
-	@RestResource(roleGuard="foo & bar")
+	@Rest(roleGuard="foo & bar")
 	public static class B1d extends B1 {}
 
-	@RestResource(roleGuard="foo && bar")
+	@Rest(roleGuard="foo && bar")
 	public static class B1e extends B1 {}
 
-	@RestResource(roleGuard="(foo) && (bar)")
+	@Rest(roleGuard="(foo) && (bar)")
 	public static class B1f extends B1 {}
 
-	@RestResource(roleGuard="foo && (bar || baz)")
+	@Rest(roleGuard="foo && (bar || baz)")
 	public static class B1g extends B1 {}
 
-	@RestResource(roleGuard="foo || (bar && baz)")
+	@Rest(roleGuard="foo || (bar && baz)")
 	public static class B1h extends B1 {}
 
 	static MockRest b1a = MockRest.build(B1a.class, null);
@@ -196,7 +196,7 @@ public class RoleGuardTest {
 
 	@Test
 	public void b01a_orsWithComma_pass() throws Exception {
-		// @RestResource(roleGuard="foo,bar")
+		// @Rest(roleGuard="foo,bar")
 		b1a.get().roles("foo").execute().assertStatus(200);
 		b1a.get().roles("bar").execute().assertStatus(200);
 		b1a.get().roles("foo","bar").execute().assertStatus(200);
@@ -205,14 +205,14 @@ public class RoleGuardTest {
 
 	@Test
 	public void b01b_orsWithComma_fail() throws Exception {
-		// @RestResource(roleGuard="foo,bar")
+		// @Rest(roleGuard="foo,bar")
 		b1a.get().roles().execute().assertStatus(403);
 		b1a.get().roles("baz").execute().assertStatus(403);
 	}
 
 	@Test
 	public void b01c_orsWithSinglePipe_pass() throws Exception {
-		// @RestResource(roleGuard="foo | bar")
+		// @Rest(roleGuard="foo | bar")
 		b1b.get().roles("foo").execute().assertStatus(200);
 		b1b.get().roles("bar").execute().assertStatus(200);
 		b1b.get().roles("foo","bar").execute().assertStatus(200);
@@ -221,14 +221,14 @@ public class RoleGuardTest {
 
 	@Test
 	public void b01d_orsWithSinglePipe_fail() throws Exception {
-		// @RestResource(roleGuard="foo | bar")
+		// @Rest(roleGuard="foo | bar")
 		b1b.get().roles().execute().assertStatus(403);
 		b1b.get().roles("baz").execute().assertStatus(403);
 	}
 
 	@Test
 	public void b01e_orsWithDoublePipe_pass() throws Exception {
-		// @RestResource(roleGuard="foo || bar")
+		// @Rest(roleGuard="foo || bar")
 		b1c.get().roles("foo").execute().assertStatus(200);
 		b1c.get().roles("bar").execute().assertStatus(200);
 		b1c.get().roles("foo","bar").execute().assertStatus(200);
@@ -237,21 +237,21 @@ public class RoleGuardTest {
 
 	@Test
 	public void b01f_orsWithDoublePipe_fail() throws Exception {
-		// @RestResource(roleGuard="foo || bar")
+		// @Rest(roleGuard="foo || bar")
 		b1c.get().roles().execute().assertStatus(403);
 		b1c.get().roles("baz").execute().assertStatus(403);
 	}
 
 	@Test
 	public void b01g_andsWithSingleAmp_pass() throws Exception {
-		// @RestResource(roleGuard="foo & bar")
+		// @Rest(roleGuard="foo & bar")
 		b1d.get().roles("foo","bar").execute().assertStatus(200);
 		b1d.get().roles("foo","bar","baz").execute().assertStatus(200);
 	}
 
 	@Test
 	public void b01h_andsWithSingleAmp_fail() throws Exception {
-		// @RestResource(roleGuard="foo & bar")
+		// @Rest(roleGuard="foo & bar")
 		b1d.get().roles().execute().assertStatus(403);
 		b1d.get().roles("foo").execute().assertStatus(403);
 		b1d.get().roles("bar").execute().assertStatus(403);
@@ -260,14 +260,14 @@ public class RoleGuardTest {
 
 	@Test
 	public void b01i_andsWithDoubleAmp_pass() throws Exception {
-		// @RestResource(roleGuard="foo && bar")
+		// @Rest(roleGuard="foo && bar")
 		b1e.get().roles("foo","bar").execute().assertStatus(200);
 		b1e.get().roles("foo","bar","baz").execute().assertStatus(200);
 	}
 
 	@Test
 	public void b01j_andsWithDoubleAmp_fail() throws Exception {
-		// @RestResource(roleGuard="foo && bar")
+		// @Rest(roleGuard="foo && bar")
 		b1e.get().roles().execute().assertStatus(403);
 		b1e.get().roles("foo").execute().assertStatus(403);
 		b1e.get().roles("bar").execute().assertStatus(403);
@@ -276,14 +276,14 @@ public class RoleGuardTest {
 
 	@Test
 	public void b01k_andsWithDoubleAmpAndParens_pass() throws Exception {
-		// @RestResource(roleGuard="(foo) && (bar)")
+		// @Rest(roleGuard="(foo) && (bar)")
 		b1f.get().roles("foo","bar").execute().assertStatus(200);
 		b1f.get().roles("foo","bar","baz").execute().assertStatus(200);
 	}
 
 	@Test
 	public void b01l_andsWithDoubleAmpAndParens_fail() throws Exception {
-		// @RestResource(roleGuard="(foo) && (bar)")
+		// @Rest(roleGuard="(foo) && (bar)")
 		b1f.get().roles().execute().assertStatus(403);
 		b1f.get().roles("foo").execute().assertStatus(403);
 		b1f.get().roles("bar").execute().assertStatus(403);
@@ -292,7 +292,7 @@ public class RoleGuardTest {
 
 	@Test
 	public void b01m_complex_pass() throws Exception {
-		// @RestResource(roleGuard="foo && (bar || baz)")
+		// @Rest(roleGuard="foo && (bar || baz)")
 		b1g.get().roles("foo","bar").execute().assertStatus(200);
 		b1g.get().roles("foo","baz").execute().assertStatus(200);
 		b1g.get().roles("foo","bar","baz").execute().assertStatus(200);
@@ -300,7 +300,7 @@ public class RoleGuardTest {
 
 	@Test
 	public void b01n_complex_fail() throws Exception {
-		// @RestResource(roleGuard="foo && (bar || baz)")
+		// @Rest(roleGuard="foo && (bar || baz)")
 		b1g.get().roles().execute().assertStatus(403);
 		b1g.get().roles("foo").execute().assertStatus(403);
 		b1g.get().roles("bar","baz").execute().assertStatus(403);
@@ -309,7 +309,7 @@ public class RoleGuardTest {
 
 	@Test
 	public void b01o_complex_pass() throws Exception {
-		// @RestResource(roleGuard="foo || (bar && baz)")
+		// @Rest(roleGuard="foo || (bar && baz)")
 		b1h.get().roles("foo").execute().assertStatus(200);
 		b1h.get().roles("bar","baz").execute().assertStatus(200);
 		b1h.get().roles("foo","bar","baz").execute().assertStatus(200);
@@ -317,7 +317,7 @@ public class RoleGuardTest {
 
 	@Test
 	public void b01p_complex_fail() throws Exception {
-		// @RestResource(roleGuard="foo || (bar && baz)")
+		// @Rest(roleGuard="foo || (bar && baz)")
 		b1h.get().roles().execute().assertStatus(403);
 		b1h.get().roles("bar").execute().assertStatus(403);
 		b1h.get().roles("baz").execute().assertStatus(403);
@@ -327,7 +327,7 @@ public class RoleGuardTest {
 	// @RestMethod(roleGuard), multiple guards on method
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class B2a {
 		@RestMethod(roleGuard="foo,bar")
 		public String get() {
@@ -335,7 +335,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class B2b {
 		@RestMethod(roleGuard="foo | bar")
 		public String get() {
@@ -343,7 +343,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class B2c {
 		@RestMethod(roleGuard="foo || bar")
 		public String get() {
@@ -351,7 +351,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class B2d {
 		@RestMethod(roleGuard="foo & bar")
 		public String get() {
@@ -359,7 +359,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class B2e {
 		@RestMethod(roleGuard="foo && bar")
 		public String get() {
@@ -367,7 +367,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class B2f {
 		@RestMethod(roleGuard="(foo) && (bar)")
 		public String get() {
@@ -375,7 +375,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class B2g {
 		@RestMethod(roleGuard="foo && (bar || baz)")
 		public String get() {
@@ -383,7 +383,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class B2h {
 		@RestMethod(roleGuard="foo || (bar && baz)")
 		public String get() {
@@ -530,10 +530,10 @@ public class RoleGuardTest {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @RestResource(roleGuard), pattern guards on class
+	// @Rest(roleGuard), pattern guards on class
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource(rolesDeclared="foo,bar,baz")
+	@Rest(rolesDeclared="foo,bar,baz")
 	public static class C1 {
 		@RestMethod
 		public String get() {
@@ -541,28 +541,28 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource(roleGuard="fo*,*ar")
+	@Rest(roleGuard="fo*,*ar")
 	public static class C1a extends C1 {}
 
-	@RestResource(roleGuard="fo* | *ar")
+	@Rest(roleGuard="fo* | *ar")
 	public static class C1b extends C1 {}
 
-	@RestResource(roleGuard="fo* || *ar")
+	@Rest(roleGuard="fo* || *ar")
 	public static class C1c extends C1 {}
 
-	@RestResource(roleGuard="fo* & *ar")
+	@Rest(roleGuard="fo* & *ar")
 	public static class C1d extends C1 {}
 
-	@RestResource(roleGuard="fo* && *ar")
+	@Rest(roleGuard="fo* && *ar")
 	public static class C1e extends C1 {}
 
-	@RestResource(roleGuard="(fo*) && (*ar)")
+	@Rest(roleGuard="(fo*) && (*ar)")
 	public static class C1f extends C1 {}
 
-	@RestResource(roleGuard="fo* && (*ar || *az)")
+	@Rest(roleGuard="fo* && (*ar || *az)")
 	public static class C1g extends C1 {}
 
-	@RestResource(roleGuard="fo* || (*ar && *az)")
+	@Rest(roleGuard="fo* || (*ar && *az)")
 	public static class C1h extends C1 {}
 
 	static MockRest c1a = MockRest.build(C1a.class, null);
@@ -576,7 +576,7 @@ public class RoleGuardTest {
 
 	@Test
 	public void c01a_orPatternsWithComma_pass() throws Exception {
-		// @RestResource(roleGuard="fo*,*ar")
+		// @Rest(roleGuard="fo*,*ar")
 		c1a.get().roles("foo").execute().assertStatus(200);
 		c1a.get().roles("bar").execute().assertStatus(200);
 		c1a.get().roles("foo","bar").execute().assertStatus(200);
@@ -585,14 +585,14 @@ public class RoleGuardTest {
 
 	@Test
 	public void c01b_orPatternsWithComma_fail() throws Exception {
-		// @RestResource(roleGuard="fo*,*ar")
+		// @Rest(roleGuard="fo*,*ar")
 		c1a.get().roles().execute().assertStatus(403);
 		c1a.get().roles("baz").execute().assertStatus(403);
 	}
 
 	@Test
 	public void c01c_orPatternsWithSinglePipe_pass() throws Exception {
-		// @RestResource(roleGuard="fo* | *ar")
+		// @Rest(roleGuard="fo* | *ar")
 		c1b.get().roles("foo").execute().assertStatus(200);
 		c1b.get().roles("bar").execute().assertStatus(200);
 		c1b.get().roles("foo","bar").execute().assertStatus(200);
@@ -601,14 +601,14 @@ public class RoleGuardTest {
 
 	@Test
 	public void c01d_orPatternsWithSinglePipe_fail() throws Exception {
-		// @RestResource(roleGuard="fo* | *ar")
+		// @Rest(roleGuard="fo* | *ar")
 		c1b.get().roles().execute().assertStatus(403);
 		c1b.get().roles("baz").execute().assertStatus(403);
 	}
 
 	@Test
 	public void c01e_orPatternsWithDoublePipe_pass() throws Exception {
-		// @RestResource(roleGuard="fo* || *ar")
+		// @Rest(roleGuard="fo* || *ar")
 		c1c.get().roles("foo").execute().assertStatus(200);
 		c1c.get().roles("bar").execute().assertStatus(200);
 		c1c.get().roles("foo","bar").execute().assertStatus(200);
@@ -617,21 +617,21 @@ public class RoleGuardTest {
 
 	@Test
 	public void c01f_orPatternsWithDoublePipe_fail() throws Exception {
-		// @RestResource(roleGuard="fo* || *ar")
+		// @Rest(roleGuard="fo* || *ar")
 		c1c.get().roles().execute().assertStatus(403);
 		c1c.get().roles("baz").execute().assertStatus(403);
 	}
 
 	@Test
 	public void c01g_andPatternsWithSingleAmp_pass() throws Exception {
-		// @RestResource(roleGuard="fo* & *ar")
+		// @Rest(roleGuard="fo* & *ar")
 		c1d.get().roles("foo","bar").execute().assertStatus(200);
 		c1d.get().roles("foo","bar","baz").execute().assertStatus(200);
 	}
 
 	@Test
 	public void c01h_andPatternsWithSingleAmp_fail() throws Exception {
-		// @RestResource(roleGuard="fo* & *ar")
+		// @Rest(roleGuard="fo* & *ar")
 		c1d.get().roles().execute().assertStatus(403);
 		c1d.get().roles("foo").execute().assertStatus(403);
 		c1d.get().roles("bar").execute().assertStatus(403);
@@ -640,14 +640,14 @@ public class RoleGuardTest {
 
 	@Test
 	public void c01i_andPatternsWithDoubleAmp_pass() throws Exception {
-		// @RestResource(roleGuard="fo* && *ar")
+		// @Rest(roleGuard="fo* && *ar")
 		c1e.get().roles("foo","bar").execute().assertStatus(200);
 		c1e.get().roles("foo","bar","baz").execute().assertStatus(200);
 	}
 
 	@Test
 	public void c01j_andPatternsWithDoubleAmp_fail() throws Exception {
-		// @RestResource(roleGuard="fo* && *ar")
+		// @Rest(roleGuard="fo* && *ar")
 		c1e.get().roles().execute().assertStatus(403);
 		c1e.get().roles("foo").execute().assertStatus(403);
 		c1e.get().roles("bar").execute().assertStatus(403);
@@ -656,14 +656,14 @@ public class RoleGuardTest {
 
 	@Test
 	public void c01k_andPatternsWithDoubleAmpAndParens_pass() throws Exception {
-		// @RestResource(roleGuard="(fo*) && (*ar)")
+		// @Rest(roleGuard="(fo*) && (*ar)")
 		c1f.get().roles("foo","bar").execute().assertStatus(200);
 		c1f.get().roles("foo","bar","baz").execute().assertStatus(200);
 	}
 
 	@Test
 	public void c01l_andPatternsWithDoubleAmpAndParens_fail() throws Exception {
-		// @RestResource(roleGuard="(fo*) && (*ar)")
+		// @Rest(roleGuard="(fo*) && (*ar)")
 		c1f.get().roles().execute().assertStatus(403);
 		c1f.get().roles("foo").execute().assertStatus(403);
 		c1f.get().roles("bar").execute().assertStatus(403);
@@ -672,7 +672,7 @@ public class RoleGuardTest {
 
 	@Test
 	public void c01m_complexPatterns_pass() throws Exception {
-		// @RestResource(roleGuard="fo* && (*ar || *az)")
+		// @Rest(roleGuard="fo* && (*ar || *az)")
 		c1g.get().roles("foo","bar").execute().assertStatus(200);
 		c1g.get().roles("foo","baz").execute().assertStatus(200);
 		c1g.get().roles("foo","bar","baz").execute().assertStatus(200);
@@ -680,7 +680,7 @@ public class RoleGuardTest {
 
 	@Test
 	public void c01n_complexPatterns_fail() throws Exception {
-		// @RestResource(roleGuard="fo* && (*ar || *az)")
+		// @Rest(roleGuard="fo* && (*ar || *az)")
 		c1g.get().roles().execute().assertStatus(403);
 		c1g.get().roles("foo").execute().assertStatus(403);
 		c1g.get().roles("bar","baz").execute().assertStatus(403);
@@ -689,7 +689,7 @@ public class RoleGuardTest {
 
 	@Test
 	public void c01o_complexPatterns_pass() throws Exception {
-		// @RestResource(roleGuard="fo* || (*ar && *az)")
+		// @Rest(roleGuard="fo* || (*ar && *az)")
 		c1h.get().roles("foo").execute().assertStatus(200);
 		c1h.get().roles("bar","baz").execute().assertStatus(200);
 		c1h.get().roles("foo","bar","baz").execute().assertStatus(200);
@@ -697,7 +697,7 @@ public class RoleGuardTest {
 
 	@Test
 	public void c01p_complexPatterns_fail() throws Exception {
-		// @RestResource(roleGuard="fo* || (*ar && *az)")
+		// @Rest(roleGuard="fo* || (*ar && *az)")
 		c1h.get().roles().execute().assertStatus(403);
 		c1h.get().roles("bar").execute().assertStatus(403);
 		c1h.get().roles("baz").execute().assertStatus(403);
@@ -707,7 +707,7 @@ public class RoleGuardTest {
 	// @RestMethod(roleGuard), pattern guards on method
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class C2a {
 		@RestMethod(roleGuard="fo*,*ar",rolesDeclared="foo,bar,baz")
 		public String get() {
@@ -715,7 +715,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class C2b {
 		@RestMethod(roleGuard="fo* | *ar",rolesDeclared="foo,bar,baz")
 		public String get() {
@@ -723,7 +723,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class C2c {
 		@RestMethod(roleGuard="fo* || *ar",rolesDeclared="foo,bar,baz")
 		public String get() {
@@ -731,7 +731,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class C2d {
 		@RestMethod(roleGuard="fo* & *ar",rolesDeclared="foo,bar,baz")
 		public String get() {
@@ -739,7 +739,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class C2e {
 		@RestMethod(roleGuard="fo* && *ar",rolesDeclared="foo,bar,baz")
 		public String get() {
@@ -747,7 +747,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class C2f {
 		@RestMethod(roleGuard="(fo*) && (*ar)",rolesDeclared="foo,bar,baz")
 		public String get() {
@@ -755,7 +755,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class C2g {
 		@RestMethod(roleGuard="fo* && (*ar || *az)",rolesDeclared="foo,bar,baz")
 		public String get() {
@@ -763,7 +763,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	@RestResource
+	@Rest
 	public static class C2h {
 		@RestMethod(roleGuard="fo* || (*ar && *az)",rolesDeclared="foo,bar,baz")
 		public String get() {
@@ -913,7 +913,7 @@ public class RoleGuardTest {
 	// @RestMethod(roleGuard), pattern guards on method but no roles defined
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource
+	@Rest
 	public static class D {
 		@RestMethod(roleGuard="fo*,*ar")
 		public String get() {
@@ -937,7 +937,7 @@ public class RoleGuardTest {
 	// @RestMethod(roleGuard), any role.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RestResource(rolesDeclared="foo,bar,baz")
+	@Rest(rolesDeclared="foo,bar,baz")
 	public static class E {
 		@RestMethod(roleGuard="*")
 		public String get() {

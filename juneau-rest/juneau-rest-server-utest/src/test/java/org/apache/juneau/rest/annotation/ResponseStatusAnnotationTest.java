@@ -28,7 +28,7 @@ public class ResponseStatusAnnotationTest {
 	// Test on parameter
 	//=================================================================================================================
 
-	@RestResource
+	@Rest
 	public static class A {
 		@RestMethod
 		public void a01(@ResponseStatus Value<Integer> status) {
