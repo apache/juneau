@@ -43,9 +43,9 @@
 		<httpclient.version>4.5.6</httpclient.version>
 		<jetty.version>9.4.13.v20181111</jetty.version>
 		<juneau.compare.version>8.0.0</juneau.compare.version>
-		<javadoc.juneau.version>8.1.0</javadoc.juneau.version>
-		<juneauVersion>8.1.0</juneauVersion>
-		<juneauVersionNext>8.1.1</juneauVersionNext>
+		<javadoc.juneau.version>8.1.2</javadoc.juneau.version>
+		<juneauVersion>8.1.2</juneauVersion>
+		<juneauVersionNext>8.1.3</juneauVersionNext>
 		<derby.version>10.10.2.0</derby.version>
 		<hibernate.version>5.0.9.Final</hibernate.version>
 		<javax.inject.version>1</javax.inject.version>

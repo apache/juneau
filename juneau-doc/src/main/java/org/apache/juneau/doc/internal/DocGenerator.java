@@ -173,9 +173,6 @@ public class DocGenerator {
 			String tocRn2 = new StringBuilder().append("<!--").append(COPYRIGHT).append("\n-->\n").append(tocRn).toString();
 			IOUtils.writeFile("src/main/javadoc/resources/fragments/rntoc.html", tocRn2);
 
-			for (File f : new File("docs/Fragments").listFiles())
-				Files.copy(f.toPath(), Paths.get("src/main/javadoc/resources/fragments", f.getName()), StandardCopyOption.REPLACE_EXISTING);
-
 			info("Copied doc-files in {0}ms", System.currentTimeMillis()-startTime);
 
 		} catch (IOException e) {

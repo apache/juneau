@@ -16,7 +16,7 @@
 8.1.2 (TBD)
 
 <p>
-	Juneau 8.1.2 is ...
+	Juneau 8.1.2 is a minor release with mostly bug fixes.  Improvements around specifying bean properties have also been made.
 </p>
 
 <h5 class='topic w800'>juneau-marshall</h5>
@@ -24,10 +24,10 @@
 	<li>
 		Support for read-only and write-only properties.
 		<ul>
-			<li class='ja'>{@link oaja.Bean#bpro()}
-			<li class='ja'>{@link oaja.Bean#bpwo()}
-			<li class='ja'>{@link oaja.Beanp#ro()}
-			<li class='ja'>{@link oaja.Beanp#wo()}
+			<li class='ja'>{@link oaj.annotation.Bean#bpro()}
+			<li class='ja'>{@link oaj.annotation.Bean#bpwo()}
+			<li class='ja'>{@link oaj.annotation.Beanp#ro()}
+			<li class='ja'>{@link oaj.annotation.Beanp#wo()}
 			<li class='jf'>{@link oaj.BeanContext#BEAN_bpro}
 			<li class='jf'>{@link oaj.BeanContext#BEAN_bpwo}
 			<li class='jm'>{@link oaj.BeanContextBuilder#bpro(Map)}
@@ -36,8 +36,8 @@
 	<li>
 		New convenience methods:
 		<ul>	
-			<li class='jm'>{@link oaj.ObjectMap.parse(String)}
-			<li class='jm'>{@link oaj.ObjectList.parse(String)}
+			<li class='jm'>{@link oaj.ObjectMap#parse(CharSequence)}
+			<li class='jm'>{@link oaj.ObjectList#parse(CharSequence)}
 		</ul>
 	<li>
 		{@link oaj.marshall.CharMarshall} and {@link oaj.marshall.StreamMarshall} now have public constructors.
@@ -50,7 +50,7 @@
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
-		New method {@link oajr.RestResponse.setHeaderSafe(String,String)} to strip invalid characters from header values.
+		New method {@link oajr.RestResponse#setHeaderSafe(String,String)} to strip invalid characters from header values.
 	<li>
 		Fixed issues related to invalid characters being set on HTTP header values.
 </ul>
@@ -58,14 +58,10 @@
 <h5 class='topic w800'>juneau-rest-client</h5>
 <ul class='spaced-list'>
 	<li>
-		{@link oajr.RestClient} is now extendible.  The constructor has been made public and simplified to:
-		{@link oajr.RestClient(RestClientBuilder)}.
+		{@link oajrc.RestClient} is now extendible.  The constructor has been made public and simplified to:
+		{@link oajrc.RestClient#RestClient(RestClientBuilder)}.
 	<li>
-		Duplicate methods between {@link oajr.RestClientBuilder} and {@link org.apache.http.impl.client.HttpClientBuilder}
+		Duplicate methods between {@link oajrc.RestClientBuilder} and {@link org.apache.http.impl.client.HttpClientBuilder}
 		have been made deprecated on the former.  This eliminates the need to try to keep the two builder classes in
 		sync.
-</ul>
-
-<h5 class='topic w800'>juneau-examples</h5>
-<ul class='spaced-list'>
 </ul>

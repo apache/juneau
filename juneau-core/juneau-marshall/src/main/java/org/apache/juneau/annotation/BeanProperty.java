@@ -26,7 +26,7 @@ import org.apache.juneau.*;
  * This annotation is applied to public fields and public getter/setter methods of beans.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanPropertyAnnotation}
+ * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanpAnnotation}
  * </ul>
  *
  * @deprecated Use {@link Beanp}

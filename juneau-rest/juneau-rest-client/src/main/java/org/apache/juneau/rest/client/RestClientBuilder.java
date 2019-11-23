@@ -396,7 +396,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return The HTTP client builder to use to create the HTTP client.
 	 * @throws NoSuchAlgorithmException Unknown cryptographic algorithm.
 	 * @throws KeyManagementException General key management exception.
-	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
 	@SuppressWarnings("resource")
 	@Deprecated
@@ -448,7 +448,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
 	@Deprecated
 	public RestClientBuilder enableSSL() {
@@ -471,7 +471,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @throws KeyStoreException Generic keystore exception.
 	 * @throws NoSuchAlgorithmException Unknown cryptographic algorithm.
-	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
 	@Deprecated
 	public RestClientBuilder enableLaxSSL() throws KeyStoreException, NoSuchAlgorithmException {
@@ -499,7 +499,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param sslProtocols The supported SSL protocols.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
 	@Deprecated
 	public RestClientBuilder sslProtocols(String...sslProtocols) {
@@ -524,7 +524,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param cipherSuites The supported cipher suites.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
 	@Deprecated
 	public RestClientBuilder cipherSuites(String...cipherSuites) {
@@ -549,7 +549,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param hostnameVerifier The hostname verifier.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
 	@Deprecated
 	public RestClientBuilder hostnameVerifier(HostnameVerifier hostnameVerifier) {
@@ -573,7 +573,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param keyManagers The key managers.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
 	@Deprecated
 	public RestClientBuilder keyManagers(KeyManager...keyManagers) {
@@ -597,7 +597,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param trustManagers The trust managers.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
 	@Deprecated
 	public RestClientBuilder trustManagers(TrustManager...trustManagers) {
@@ -621,7 +621,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param secureRandom The random number generator.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
 	@Deprecated
 	public RestClientBuilder secureRandom(SecureRandom secureRandom) {
@@ -634,7 +634,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * instead of a {@link BasicHttpClientConnectionManager}.
 	 *
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
 	@Deprecated
 	public RestClientBuilder pooled() {
@@ -650,7 +650,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param user The username.
 	 * @param pw The password.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@Link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
+	 * @deprecated Use {@link #getHttpClientBuilder()} and modify the client builder directly using {@link HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)}.
 	 */
 	@Deprecated
 	public RestClientBuilder basicAuth(String host, int port, String user, String pw) {
