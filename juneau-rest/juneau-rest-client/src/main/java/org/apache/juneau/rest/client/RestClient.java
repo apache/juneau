@@ -34,7 +34,7 @@ import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.remote.RemoteReturn;
-import org.apache.juneau.http.remote.RemoteResource;
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
@@ -1003,7 +1003,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <p>
 	 * The URL to the REST interface is based on the following values:
 	 * <ul>
-	 * 	<li>The {@link RemoteResource#path() @RemoteResource(path)} annotation on the interface (<c>remote-path</c>).
+	 * 	<li>The {@link Remote#path() @Remote(path)} annotation on the interface (<c>remote-path</c>).
 	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<c>root-url</c>).
 	 * 	<li>The fully-qualified class name of the interface (<c>class-name</c>).
 	 * </ul>
@@ -1063,23 +1063,23 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @return The new proxy interface.
 	 * @throws RemoteMetadataException If the REST URI cannot be determined based on the information given.
 	 */
-	public <T> T getRemoteResource(final Class<T> interfaceClass) {
-		return getRemoteResource(interfaceClass, null);
+	public <T> T getRemote(final Class<T> interfaceClass) {
+		return getRemote(interfaceClass, null);
 	}
 
 	/**
-	 * Same as {@link #getRemoteResource(Class)} except explicitly specifies the URL of the REST interface.
+	 * Same as {@link #getRemote(Class)} except explicitly specifies the URL of the REST interface.
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param restUrl The URL of the REST interface.
 	 * @return The new proxy interface.
 	 */
-	public <T> T getRemoteResource(final Class<T> interfaceClass, final Object restUrl) {
-		return getRemoteResource(interfaceClass, restUrl, serializer, parser);
+	public <T> T getRemote(final Class<T> interfaceClass, final Object restUrl) {
+		return getRemote(interfaceClass, restUrl, serializer, parser);
 	}
 
 	/**
-	 * Same as {@link #getRemoteResource(Class, Object)} but allows you to override the serializer and parser used.
+	 * Same as {@link #getRemote(Class, Object)} but allows you to override the serializer and parser used.
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param restUrl The URL of the REST interface.
@@ -1088,7 +1088,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public <T> T getRemoteResource(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
+	public <T> T getRemote(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
 
 		if (restUrl == null)
 			restUrl = rootUrl;
@@ -1101,7 +1101,7 @@ public class RestClient extends BeanContext implements Closeable {
 				new Class[] { interfaceClass },
 				new InvocationHandler() {
 
-					final RemoteResourceMeta rm = new RemoteResourceMeta(interfaceClass);
+					final RemoteMeta rm = new RemoteMeta(interfaceClass);
 
 					@Override /* InvocationHandler */
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -1212,6 +1212,24 @@ public class RestClient extends BeanContext implements Closeable {
 		}
 	}
 
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public <T> T getRemoteResource(final Class<T> interfaceClass) {
+		return getRemote(interfaceClass, null);
+	}
+
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public <T> T getRemoteResource(final Class<T> interfaceClass, final Object restUrl) {
+		return getRemote(interfaceClass, null);
+	}
+
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public <T> T getRemoteResource(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
+		return getRemote(interfaceClass, null);
+	}
+
 	/**
 	 * Create a new Remote Interface against a {@link RemoteInterface @RemoteInterface}-annotated class.
 	 *
@@ -1222,7 +1240,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <p>
 	 * The URL to the REST interface is based on the following values:
 	 * <ul>
-	 * 	<li>The {@link RemoteResource#path() @RemoteResource(path)} annotation on the interface (<c>remote-path</c>).
+	 * 	<li>The {@link Remote#path() @Remote(path)} annotation on the interface (<c>remote-path</c>).
 	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<c>root-url</c>).
 	 * 	<li>The fully-qualified class name of the interface (<c>class-name</c>).
 	 * </ul>

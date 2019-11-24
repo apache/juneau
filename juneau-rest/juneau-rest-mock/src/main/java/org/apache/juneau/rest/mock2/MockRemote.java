@@ -26,12 +26,12 @@ import org.apache.juneau.serializer.*;
  * Creates a mocked interface against a REST resource class to use for creating test remote resource interfaces.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-mock.MockRemoteResource}
+ * 	<li class='link'>{@doc juneau-rest-mock.MockRemote}
  * </ul>
  *
  * @param <T> The interface class.
  */
-public class MockRemoteResource<T> {
+public class MockRemote<T> {
 
 	private MockRest.Builder mrb;
 	private RestClientBuilder rcb = RestClient.create().json();
@@ -41,12 +41,12 @@ public class MockRemoteResource<T> {
 	 * Constructor.
 	 *
 	 * @param intf
-	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
+	 * 	The remote interface annotated with {@link Remote @Remote}.
 	 * @param impl
 	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 */
-	protected MockRemoteResource(Class<T> intf, Object impl) {
+	protected MockRemote(Class<T> intf, Object impl) {
 		this.intf = intf;
 		mrb = MockRest.create(impl);
 	}
@@ -59,14 +59,14 @@ public class MockRemoteResource<T> {
 	 *
 	 *
 	 * @param intf
-	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
+	 * 	The remote interface annotated with {@link Remote @Remote}.
 	 * @param impl
 	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @return A new builder.
 	 */
-	public static <T> MockRemoteResource<T> create(Class<T> intf, Object impl) {
-		return new MockRemoteResource<>(intf, impl);
+	public static <T> MockRemote<T> create(Class<T> intf, Object impl) {
+		return new MockRemote<>(intf, impl);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class MockRemoteResource<T> {
 	 * Uses the serializer and parser defined on the specified marshall for serializing and parsing by default.
 	 *
 	 * @param intf
-	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
+	 * 	The remote interface annotated with {@link Remote @Remote}.
 	 * @param impl
 	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
@@ -84,8 +84,8 @@ public class MockRemoteResource<T> {
 	 * 	The marshall to use for serializing and parsing the HTTP bodies.
 	 * @return A new builder.
 	 */
-	public static <T> MockRemoteResource<T> create(Class<T> intf, Object impl, Marshall m) {
-		return new MockRemoteResource<>(intf, impl).marshall(m);
+	public static <T> MockRemote<T> create(Class<T> intf, Object impl, Marshall m) {
+		return new MockRemote<>(intf, impl).marshall(m);
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class MockRemoteResource<T> {
 	 * Uses the serializer and parser defined on the specified marshall for serializing and parsing by default.
 	 *
 	 * @param intf
-	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
+	 * 	The remote interface annotated with {@link Remote @Remote}.
 	 * @param impl
 	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
@@ -107,8 +107,8 @@ public class MockRemoteResource<T> {
 	 * 	<br>Can be <jk>null</jk> to force no parser to be used and no <c>Accept</c> header.
 	 * @return A new builder.
 	 */
-	public static <T> MockRemoteResource<T> create(Class<T> intf, Object impl, Serializer s, Parser p) {
-		return new MockRemoteResource<>(intf, impl).serializer(s).parser(p);
+	public static <T> MockRemote<T> create(Class<T> intf, Object impl, Serializer s, Parser p) {
+		return new MockRemote<>(intf, impl).serializer(s).parser(p);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class MockRemoteResource<T> {
 	 */
 	public T build() {
 		MockRest mr = mrb.build();
-		return rcb.httpClientConnectionManager(new MockHttpClientConnectionManager(mr)).rootUrl("http://localhost").headers(mr.getHeaders()).build().getRemoteResource(intf);
+		return rcb.httpClientConnectionManager(new MockHttpClientConnectionManager(mr)).rootUrl("http://localhost").headers(mr.getHeaders()).build().getRemote(intf);
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class MockRemoteResource<T> {
 	 * </p>
 	 *
 	 * @param intf
-	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
+	 * 	The remote interface annotated with {@link Remote @Remote}.
 	 * @param impl
 	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
@@ -157,7 +157,7 @@ public class MockRemoteResource<T> {
 	 * </p>
 	 *
 	 * @param intf
-	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
+	 * 	The remote interface annotated with {@link Remote @Remote}.
 	 * @param impl
 	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
@@ -183,7 +183,7 @@ public class MockRemoteResource<T> {
 	 * </p>
 	 *
 	 * @param intf
-	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
+	 * 	The remote interface annotated with {@link Remote @Remote}.
 	 * @param impl
 	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
@@ -204,7 +204,7 @@ public class MockRemoteResource<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> debug() {
+	public MockRemote<T> debug() {
 		mrb.debug();
 		rcb.debug();
 		return this;
@@ -219,7 +219,7 @@ public class MockRemoteResource<T> {
 	 * 	<br>Can be <jk>null</jk> (will be skipped).
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> header(String name, Object value) {
+	public MockRemote<T> header(String name, Object value) {
 		mrb.header(name, value);
 		rcb.header(name, value);
 		return this;
@@ -234,7 +234,7 @@ public class MockRemoteResource<T> {
 	 * 	<br><jk>null</jk> null map values will be ignored.
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> headers(Map<String,Object> value) {
+	public MockRemote<T> headers(Map<String,Object> value) {
 		mrb.headers(value);
 		rcb.headers(value);
 		return this;
@@ -246,7 +246,7 @@ public class MockRemoteResource<T> {
 	 * @param value The <c>Accept</c> header value.
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> accept(String value) {
+	public MockRemote<T> accept(String value) {
 		mrb.accept(value);
 		rcb.accept(value);
 		return this;
@@ -258,7 +258,7 @@ public class MockRemoteResource<T> {
 	 * @param value The <c>Content-Type</c> header value.
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> contentType(String value) {
+	public MockRemote<T> contentType(String value) {
 		mrb.contentType(value);
 		rcb.contentType(value);
 		return this;
@@ -269,7 +269,7 @@ public class MockRemoteResource<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> json() {
+	public MockRemote<T> json() {
 		marshall(Json.DEFAULT);
 		return this;
 	}
@@ -279,7 +279,7 @@ public class MockRemoteResource<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> simpleJson() {
+	public MockRemote<T> simpleJson() {
 		marshall(SimpleJson.DEFAULT);
 		return this;
 	}
@@ -289,7 +289,7 @@ public class MockRemoteResource<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> xml() {
+	public MockRemote<T> xml() {
 		marshall(Xml.DEFAULT);
 		return this;
 	}
@@ -299,7 +299,7 @@ public class MockRemoteResource<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> html() {
+	public MockRemote<T> html() {
 		marshall(Html.DEFAULT);
 		return this;
 	}
@@ -309,7 +309,7 @@ public class MockRemoteResource<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> plainText() {
+	public MockRemote<T> plainText() {
 		marshall(PlainText.DEFAULT);
 		return this;
 	}
@@ -319,7 +319,7 @@ public class MockRemoteResource<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> msgpack() {
+	public MockRemote<T> msgpack() {
 		marshall(MsgPack.DEFAULT);
 		return this;
 	}
@@ -329,7 +329,7 @@ public class MockRemoteResource<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> uon() {
+	public MockRemote<T> uon() {
 		marshall(Uon.DEFAULT);
 		return this;
 	}
@@ -339,7 +339,7 @@ public class MockRemoteResource<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> urlEnc() {
+	public MockRemote<T> urlEnc() {
 		marshall(UrlEncoding.DEFAULT);
 		return this;
 	}
@@ -349,7 +349,7 @@ public class MockRemoteResource<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> openapi() {
+	public MockRemote<T> openapi() {
 		marshall(OpenApi.DEFAULT);
 		return this;
 	}
@@ -366,7 +366,7 @@ public class MockRemoteResource<T> {
 	 * 	<br>Can be <jk>null</jk> (will remote the existing serializer/parser).
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> marshall(Marshall value) {
+	public MockRemote<T> marshall(Marshall value) {
 		if (value != null)
 			serializer(value.getSerializer()).parser(value.getParser());
 		else
@@ -382,7 +382,7 @@ public class MockRemoteResource<T> {
 	 * 	<br>Can be <jk>null</jk> (will remote the existing serializer).
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> serializer(Serializer value) {
+	public MockRemote<T> serializer(Serializer value) {
 		rcb.serializer(value);
 		contentType(value == null ? null : value.getPrimaryMediaType().toString());
 		return this;
@@ -396,7 +396,7 @@ public class MockRemoteResource<T> {
 	 * 	<br>Can be <jk>null</jk> (will remote the existing parser).
 	 * @return This object (for method chaining).
 	 */
-	public MockRemoteResource<T> parser(Parser value) {
+	public MockRemote<T> parser(Parser value) {
 		rcb.parser(value);
 		accept(value == null ? null : value.getPrimaryMediaType().toString());
 		return this;

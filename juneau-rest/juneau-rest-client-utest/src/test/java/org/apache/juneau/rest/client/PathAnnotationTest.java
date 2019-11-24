@@ -59,7 +59,7 @@ public class PathAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface A01 {
 		@RemoteMethod(path="a/{x}") String getA01(@Path("x") int b);
 		@RemoteMethod(path="a/{x}") String getA02(@Path("x") float b);
@@ -79,7 +79,7 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="a/{x}") String getA09b(@Path NameValuePairs b);
 	}
 
-	private static A01 a01 = MockRemoteResource.build(A01.class, A.class, null);
+	private static A01 a01 = MockRemote.build(A01.class, A.class, null);
 
 	@Test
 	public void a01_int() throws Exception {
@@ -159,7 +159,7 @@ public class PathAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface CR {
 		@RemoteMethod(path="/a/{x}") String getC01(@Path(name="x") String...b);
 		@RemoteMethod(path="/a/{x}") String getC02(@Path(name="x",collectionFormat="csv") String...b);
@@ -170,7 +170,7 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="/a/{x}") String getC07(@Path(name="x",collectionFormat="uon") String...b);
 	}
 
-	private static CR cr = MockRemoteResource.build(CR.class, C.class, null);
+	private static CR cr = MockRemote.build(CR.class, C.class, null);
 
 	@Test
 	public void c01a_default() throws Exception {
@@ -215,7 +215,7 @@ public class PathAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface DR {
 		@RemoteMethod(path="/a/{x}") String getC01a(@Path(name="x",minimum="1",maximum="10") int b);
 		@RemoteMethod(path="/a/{x}") String getC01b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) int b);
@@ -261,7 +261,7 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="/a/{x}") String getC16c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Byte b);
 	}
 
-	private static DR dr = MockRemoteResource.build(DR.class, D.class, null);
+	private static DR dr = MockRemote.build(DR.class, D.class, null);
 
 	@Test
 	public void d01a_int_defaultExclusive() throws Exception {
@@ -571,7 +571,7 @@ public class PathAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface ER {
 		@RemoteMethod(path="/{x}") String getE01(@Path(name="x",collectionFormat="pipes",minItems=1,maxItems=2) String...b);
 		@RemoteMethod(path="/{x}") String getE02(@Path(name="x",items=@Items(collectionFormat="pipes",minItems=1,maxItems=2)) String[]...b);
@@ -581,7 +581,7 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="/{x}") String getE06(@Path(name="x",items=@Items(collectionFormat="pipes",uniqueItems=true)) String[]...b);
 	}
 
-	private static ER er = MockRemoteResource.build(ER.class, E.class, null);
+	private static ER er = MockRemote.build(ER.class, E.class, null);
 
 	@Test
 	public void e01_minMax() throws Exception {
@@ -631,7 +631,7 @@ public class PathAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface FR {
 		@RemoteMethod(path="/{x}") String getF01(@Path(name="x",minLength=2,maxLength=3) String b);
 		@RemoteMethod(path="/{x}") String getF02(@Path(name="x",collectionFormat="pipes",items=@Items(minLength=2,maxLength=3)) String...b);
@@ -641,7 +641,7 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="/{x}") String getF06(@Path(name="x",collectionFormat="pipes",items=@Items(pattern="foo\\d{1,3}")) String...b);
 	}
 
-	private static FR fr = MockRemoteResource.build(FR.class, F.class, null);
+	private static FR fr = MockRemote.build(FR.class, F.class, null);
 
 	@Test
 	public void f01_minMaxLength() throws Exception {
@@ -694,7 +694,7 @@ public class PathAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface GR {
 		@RemoteMethod(path="/{x}") String getG01(@Path(name="x",multipleOf="2") int b);
 		@RemoteMethod(path="/{x}") String getG02(@Path(name="x",multipleOf="2") short b);
@@ -712,7 +712,7 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="/{x}") String getG16(@Path(name="x",multipleOf="2") Byte b);
 	}
 
-	private static GR gr = MockRemoteResource.build(GR.class, G.class, null);
+	private static GR gr = MockRemote.build(GR.class, G.class, null);
 
 	@Test
 	public void g01_multipleOf_int() throws Exception {
@@ -798,12 +798,12 @@ public class PathAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface HR {
 		@RemoteMethod(path="/{x}") String getH01(@Path(name="x") String b);
 	}
 
-	private static HR hr = MockRemoteResource.build(HR.class, H.class);
+	private static HR hr = MockRemote.build(HR.class, H.class);
 
 	@Test
 	public void h01_required_default() throws Exception {
@@ -823,12 +823,12 @@ public class PathAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface JR {
 		@RemoteMethod(path="/{x}") String getJ01(@Path(name="x",serializer=XPartSerializer.class) String b);
 	}
 
-	private static JR jr = MockRemoteResource.build(JR.class, J.class, null);
+	private static JR jr = MockRemote.build(JR.class, J.class, null);
 
 	@Test
 	public void j01_serializer() throws Exception {

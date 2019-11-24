@@ -13,25 +13,25 @@
  ***************************************************************************************************************************/
  -->
 
-@RemoteResource
+{updated} @Remote
 
 <p>
-	The {@link oaj.http.remote.RemoteResource @RemoteResource} annotation is used on your interface class
+	The {@link oaj.http.remote.Remote @Remote} annotation is used on your interface class
 	to identify it as a REST proxy interface.
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oaj.http.remote.RemoteResource}
+	<li class='ja'>{@link oaj.http.remote.Remote}
 	<ul>
-		<li class='jf'>{@link oaj.http.remote.RemoteResource#path path}
+		<li class='jf'>{@link oaj.http.remote.Remote#path path}
 	</ul>
 </ul>
 <p>
-	The <ja>@RemoteResource</ja> annotation is optional, but often included for code readability.
+	The <ja>@Remote</ja> annotation is optional, but often included for code readability.
 </p>
 
-<h5 class='topic'>@RemoteResource(path)</h5>
+<h5 class='topic'>@Remote(path)</h5>
 <p>
-	The {@link oaj.http.remote.RemoteResource#path @RemoteResource(path)} annotation is used to define the
+	The {@link oaj.http.remote.Remote#path @Remote(path)} annotation is used to define the
 	HTTP path of the REST service.
 </p>
 <p>
@@ -39,34 +39,34 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>(path=<js>"http://localhost:10000/petstore"</js>)
+	<ja>@Remote</ja>(path=<js>"http://localhost:10000/petstore"</js>)
 	<jk>public interface</jk> PetStore {...}
 </p>
 <p class='bpcode w800'>	
-	PetStore p = client.getRemoteResource(PetStore.<jk>class</jk>);
+	PetStore p = client.getRemote(PetStore.<jk>class</jk>);
 </p>
 <p>
 	When a relative path is specified, it's relative to the root-url defined on the <c>RestClient</c> used to instantiate the interface.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>(path=<js>"/petstore"</js>)
+	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {...}
 </p>
 <p class='bpcode w800'>
 	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build();	
-	PetStore p = client.getRemoteResource(PetStore.<jk>class</jk>);
+	PetStore p = client.getRemote(PetStore.<jk>class</jk>);
 </p>
 <p>
 	When no path is specified, the root-url defined on the <c>RestClient</c> is used.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>
+	<ja>@Remote</ja>
 	<jk>public interface</jk> PetStore {...}
 </p>
 <p class='bpcode w800'>
 	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000/petstore"</js>).build();	
-	PetStore p = client.getRemoteResource(PetStore.<jk>class</jk>);
+	PetStore p = client.getRemote(PetStore.<jk>class</jk>);
 </p>
 

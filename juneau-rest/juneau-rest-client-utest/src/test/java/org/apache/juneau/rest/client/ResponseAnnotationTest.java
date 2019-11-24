@@ -69,12 +69,12 @@ public class ResponseAnnotationTest {
 		int getStatus();
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface AR {
 		@RemoteMethod AResponse get();
 	}
 
-	private static AR ar = MockRemoteResource.build(AR.class, A.class, null);
+	private static AR ar = MockRemote.build(AR.class, A.class, null);
 
 	@Test
 	public void a01_basic() throws Exception {

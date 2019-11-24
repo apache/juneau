@@ -17,20 +17,21 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.reflect.*;
 
 /**
  * Contains the meta-data about a REST proxy class.
  *
  * <p>
- * Captures the information in {@link org.apache.juneau.http.remote.RemoteResource @RemoteResource} and {@link org.apache.juneau.http.remote.RemoteMethod @RemoteMethod} annotations for
+ * Captures the information in {@link org.apache.juneau.http.remote.Remote @Remote} and {@link org.apache.juneau.http.remote.RemoteMethod @RemoteMethod} annotations for
  * caching and reuse.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
  */
-public class RemoteResourceMeta {
+public class RemoteMeta {
 
 	private final Map<Method,RemoteMethodMeta> methods;
 	private final String path;
@@ -38,10 +39,10 @@ public class RemoteResourceMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param c The interface class annotated with a {@link org.apache.juneau.http.remote.RemoteResource @RemoteResource} annotation (optional).
+	 * @param c The interface class annotated with a {@link org.apache.juneau.http.remote.Remote @Remote} annotation (optional).
 	 */
 	@SuppressWarnings("deprecation")
-	public RemoteResourceMeta(Class<?> c) {
+	public RemoteMeta(Class<?> c) {
 		String path = "";
 
 		ClassInfo ci = ClassInfo.of(c);
@@ -49,6 +50,9 @@ public class RemoteResourceMeta {
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 		for (org.apache.juneau.http.remote.RemoteResource r : ci.getAnnotationsParentFirst(org.apache.juneau.http.remote.RemoteResource.class))
+			if (! r.path().isEmpty())
+				path = trimSlashes(r.path());
+		for (Remote r : ci.getAnnotationsParentFirst(Remote.class))
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 

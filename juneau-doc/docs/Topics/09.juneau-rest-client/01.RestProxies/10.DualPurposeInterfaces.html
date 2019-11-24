@@ -27,11 +27,11 @@ Dual-purpose (end-to-end) interfaces
 	annotations defined on overridden methods.
 </p>
 <p>
-	The general approach is to define your {@link oajr.client.remote.RemoteResource @RemoteResource}-annotated interface first.
+	The general approach is to define your {@link oajr.client.remote.Remote @Remote}-annotated interface first.
 	The following example is pulled from the PetStore app:
 </p>
 <p class='bpcode w800'>
-	<ja>@RemoteResource</ja>(path=<js>"/petstore"</js>)
+	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {
 	
 		<ja>@RemoteMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/pet"</js>)
@@ -97,7 +97,7 @@ Dual-purpose (end-to-end) interfaces
 </p>
 <p class='bpcode w800'>
 	<jk>try</jk> (RestClient rc = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build()) {
-		PetStore ps = rc.getRemoteResource(PetStore.<jk>class</jk>);
+		PetStore ps = rc.getRemote(PetStore.<jk>class</jk>);
 
 		<jk>for</jk> (Pet x : ps.getPets()) {
 			ps.deletePet(<js>"my-special-key"</js>, x.getId());

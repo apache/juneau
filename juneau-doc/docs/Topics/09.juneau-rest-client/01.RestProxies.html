@@ -26,9 +26,9 @@ REST Proxies
 <ul class='javatree'>
 	<li class='jc'>{@link oajrc.RestClient}
 	<ul>
-		<li class='jm'>{@link oajrc.RestClient#getRemoteResource(Class) getRemoteResource(Class)}
-		<li class='jm'>{@link oajrc.RestClient#getRemoteResource(Class,Object) getRemoteResource(Class,Object)}
-		<li class='jm'>{@link oajrc.RestClient#getRemoteResource(Class,Object,Serializer,Parser) getRemoteResource(Class,Object,Serializer,Parser)}
+		<li class='jm'>{@link oajrc.RestClient#getRemote(Class) getRemote(Class)}
+		<li class='jm'>{@link oajrc.RestClient#getRemote(Class,Object) getRemote(Class,Object)}
+		<li class='jm'>{@link oajrc.RestClient#getRemote(Class,Object,Serializer,Parser) getRemote(Class,Object,Serializer,Parser)}
 	</ul>
 </ul>
 <p>
@@ -38,7 +38,7 @@ REST Proxies
 <ul class='javatree'>
 	<li class='jp'>{@link oaj.http.remote}
 	<ul>
-		<li class='ja'>{@link oaj.http.remote.RemoteResource}
+		<li class='ja'>{@link oaj.http.remote.Remote}
 		<li class='ja'>{@link oaj.http.remote.RemoteMethod}
 	</ul>
 	<li class='jp'>{@link oaj.http.annotation}
@@ -55,7 +55,7 @@ REST Proxies
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>(path=<js>"/petstore"</js>)
+	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {
 		
 		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
@@ -69,7 +69,7 @@ REST Proxies
 <p class='bpcode w800'>	
 	<jc>// Use a RestClient with default Simple JSON support.</jc>
 	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().simpleJson().build()) {
-		PetStore store = client.getRemoteResource(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+		PetStore store = client.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
 		CreatePet pet = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
 		String response = store.createPet(pet, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
 	}

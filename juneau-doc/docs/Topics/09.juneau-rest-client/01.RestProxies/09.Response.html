@@ -29,7 +29,7 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>
+	<ja>@Remote</ja>
 	<jk>public interface</jk> PetStore {
 		
 		<ja>@RemoteMethod</ja>
@@ -51,7 +51,7 @@
 	}
 </p>
 <p class='bpcode w800'>
-	PetStore store = restClient.getRemoteResource(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	PetStore store = restClient.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
 	CreatePetResponse response = store.postPet(...);
 	Pet pet = response.getBody();
 	UUID uuid = response.getUUID();

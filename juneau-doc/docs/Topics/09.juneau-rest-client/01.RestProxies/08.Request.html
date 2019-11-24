@@ -30,7 +30,7 @@
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RemoteResource</ja>(path=<js>"/petstore"</js>)
+	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {
 
 		<ja>@RemoteMethod</ja>
@@ -64,7 +64,7 @@
 	}
 </p>
 <p class='bpcode w800'>
-	PetStore store = restClient.getRemoteResource(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	PetStore store = restClient.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
 	CreatePetRequest requestBean = <jk>new</jk> CreatePetRequest(<js>"Fluffy"</js>, 9.99);
 	String response = store.postPet(requestBean);
 </p>

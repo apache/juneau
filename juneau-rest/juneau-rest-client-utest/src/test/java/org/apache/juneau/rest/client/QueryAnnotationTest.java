@@ -62,7 +62,7 @@ public class QueryAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface A01 {
 		@RemoteMethod(path="a") String getA01(@Query("x") int b);
 		@RemoteMethod(path="a") String getA02(@Query("x") float b);
@@ -86,7 +86,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="a") String getA09b(@Query NameValuePairs b);
 	}
 
-	private static A01 a01 = MockRemoteResource.build(A01.class, A.class, null);
+	private static A01 a01 = MockRemote.build(A01.class, A.class, null);
 
 	@Test
 	public void a01_int() throws Exception {
@@ -181,7 +181,7 @@ public class QueryAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface BR {
 		@RemoteMethod(path="/") String getB01(@Query(name="x",_default="foo") String b);
 		@RemoteMethod(path="/") String getB02(@Query(name="x",_default="foo",allowEmptyValue=true) String b);
@@ -189,7 +189,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getB04(@Query(name="x",_default="",allowEmptyValue=true) String b);
 	}
 
-	private static BR br = MockRemoteResource.build(BR.class, B.class, null);
+	private static BR br = MockRemote.build(BR.class, B.class, null);
 
 	@Test
 	public void b01a_default() throws Exception {
@@ -248,7 +248,7 @@ public class QueryAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface CR {
 		@RemoteMethod(path="/a") String getC01a(@Query(name="x") String...b);
 		@RemoteMethod(path="/b") String getC01b(@Query(name="x") String...b);
@@ -266,7 +266,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/b") String getC07b(@Query(name="x",collectionFormat="uon") String...b);
 	}
 
-	private static CR cr = MockRemoteResource.build(CR.class, C.class, null);
+	private static CR cr = MockRemote.build(CR.class, C.class, null);
 
 	@Test
 	public void c01a_default() throws Exception {
@@ -339,7 +339,7 @@ public class QueryAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface DR {
 		@RemoteMethod(path="/") String getC01a(@Query(name="x",minimum="1",maximum="10") int b);
 		@RemoteMethod(path="/") String getC01b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) int b);
@@ -385,7 +385,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getC16c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Byte b);
 	}
 
-	private static DR dr = MockRemoteResource.build(DR.class, D.class, null);
+	private static DR dr = MockRemote.build(DR.class, D.class, null);
 
 	@Test
 	public void d01a_int_defaultExclusive() throws Exception {
@@ -712,7 +712,7 @@ public class QueryAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface ER {
 		@RemoteMethod(path="/") String getE01(@Query(name="x",collectionFormat="pipes",minItems=1,maxItems=2) String...b);
 		@RemoteMethod(path="/") String getE02(@Query(name="x",items=@Items(collectionFormat="pipes",minItems=1,maxItems=2)) String[]...b);
@@ -722,7 +722,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getE06(@Query(name="x",items=@Items(collectionFormat="pipes",uniqueItems=true)) String[]...b);
 	}
 
-	private static ER er = MockRemoteResource.build(ER.class, E.class, null);
+	private static ER er = MockRemote.build(ER.class, E.class, null);
 
 	@Test
 	public void e01_minMax() throws Exception {
@@ -771,7 +771,7 @@ public class QueryAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface FR {
 		@RemoteMethod(path="/") String getF01(@Query(name="x",minLength=2,maxLength=3) String b);
 		@RemoteMethod(path="/") String getF02(@Query(name="x",collectionFormat="pipes",items=@Items(minLength=2,maxLength=3)) String...b);
@@ -781,7 +781,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getF06(@Query(name="x",collectionFormat="pipes",items=@Items(pattern="foo\\d{1,3}")) String...b);
 	}
 
-	private static FR fr = MockRemoteResource.build(FR.class, F.class, null);
+	private static FR fr = MockRemote.build(FR.class, F.class, null);
 
 	@Test
 	public void f01_minMaxLength() throws Exception {
@@ -836,7 +836,7 @@ public class QueryAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface GR {
 		@RemoteMethod(path="/") String getG01(@Query(name="x",multipleOf="2") int b);
 		@RemoteMethod(path="/") String getG02(@Query(name="x",multipleOf="2") short b);
@@ -854,7 +854,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getG16(@Query(name="x",multipleOf="2") Byte b);
 	}
 
-	private static GR gr = MockRemoteResource.build(GR.class, G.class, null);
+	private static GR gr = MockRemote.build(GR.class, G.class, null);
 
 	@Test
 	public void g01_multipleOf_int() throws Exception {
@@ -939,14 +939,14 @@ public class QueryAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface HR {
 		@RemoteMethod(path="/") String getH01(@Query(name="x") String b);
 		@RemoteMethod(path="/") String getH02(@Query(name="x",required=false) String b);
 		@RemoteMethod(path="/") String getH03(@Query(name="x",required=true) String b);
 	}
 
-	private static HR hr = MockRemoteResource.build(HR.class, H.class, null);
+	private static HR hr = MockRemote.build(HR.class, H.class, null);
 
 	@Test
 	public void h01_required_default() throws Exception {
@@ -974,14 +974,14 @@ public class QueryAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface IR {
 		@RemoteMethod(path="/") String getI01(@Query(name="x",allowEmptyValue=true) String b);
 		@RemoteMethod(path="/") String getI02(@Query(name="x",allowEmptyValue=true,skipIfEmpty=false) String b);
 		@RemoteMethod(path="/") String getI03(@Query(name="x",skipIfEmpty=true) String b);
 	}
 
-	private static IR ir = MockRemoteResource.build(IR.class, I.class, null);
+	private static IR ir = MockRemote.build(IR.class, I.class, null);
 
 	@Test
 	public void h01_skipIfEmpty_default() throws Exception {
@@ -1008,12 +1008,12 @@ public class QueryAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface JR {
 		@RemoteMethod(path="/") String getJ01(@Query(name="x",serializer=XPartSerializer.class) String b);
 	}
 
-	private static JR jr = MockRemoteResource.build(JR.class, J.class, null);
+	private static JR jr = MockRemote.build(JR.class, J.class, null);
 
 	@Test
 	public void j01_serializer() throws Exception {

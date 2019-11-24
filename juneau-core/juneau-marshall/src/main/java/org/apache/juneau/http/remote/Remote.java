@@ -23,14 +23,12 @@ import java.lang.annotation.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
- * @deprecated Use {@link Remote}
  */
 @Documented
 @Target({TYPE})
 @Retention(RUNTIME)
 @Inherited
-@Deprecated
-public @interface RemoteResource {
+public @interface Remote {
 
 	/**
 	 * REST service path.

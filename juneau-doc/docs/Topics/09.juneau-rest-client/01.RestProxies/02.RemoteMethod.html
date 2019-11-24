@@ -17,7 +17,7 @@
 
 <p>
 	The {@link oaj.http.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
-	of <ja>@RemoteResource</ja>-annotated interfaces to identify REST endpoints.
+	of <ja>@Remote</ja>-annotated interfaces to identify REST endpoints.
 </p>
 <ul class='javatree'>
 	<li class='ja'>{@link oaj.http.remote.RemoteMethod}
@@ -33,7 +33,7 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>
+	<ja>@Remote</ja>
 	<jk>public interface</jk> PetStore {
 		
 		<jc>// GET /pets/{petId}</jc>
@@ -54,7 +54,7 @@
 	For example, the <c>getPet</c> method below defaults to <c>GET /pet</c>:
 </p>
 <p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>
+	<ja>@Remote</ja>
 	<jk>public interface</jk> PetStore {
 		
 		<jc>// GET /pet</jc>
@@ -151,7 +151,7 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>
+	<ja>@Remote</ja>
 	<jk>public interface</jk> PetStore {
 		
 		<jc>// POST /pets</jc>

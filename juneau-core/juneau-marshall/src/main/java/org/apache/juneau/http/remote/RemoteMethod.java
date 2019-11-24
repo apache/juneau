@@ -40,7 +40,7 @@ public @interface RemoteMethod {
 	 * The possible values are:
 	 * <ul class='spaced-list'>
 	 * 	<li>An absolute URL.
-	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <c>RestClient</c> and/or {@link RemoteResource#path()}.
+	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <c>RestClient</c> and/or {@link Remote#path()}.
 	 * 	<li>No path.
 	 * </ul>
 	 *

@@ -30,7 +30,7 @@ import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.helper.*;
-import org.apache.juneau.rest.mock2.MockRemoteResource;
+import org.apache.juneau.rest.mock2.MockRemote;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -46,7 +46,7 @@ public class EndToEndInterfaceTest {
 	// Simple tests, split annotations.
 	//=================================================================================================================
 
-	@RemoteResource
+	@Remote
 	public static interface IA {
 
 		@RemoteMethod(method="PUT", path="/a01")
@@ -81,7 +81,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IA ia = MockRemoteResource.build(IA.class, A.class, Json.DEFAULT);
+	private static IA ia = MockRemote.build(IA.class, A.class, Json.DEFAULT);
 
 	@Test
 	public void a01_splitAnnotations_Body() throws Exception {
@@ -100,7 +100,7 @@ public class EndToEndInterfaceTest {
 	// Simple tests, combined annotations.
 	//=================================================================================================================
 
-	@RemoteResource
+	@Remote
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IB {
 
@@ -135,7 +135,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IB ib = MockRemoteResource.build(IB.class, B.class);
+	private static IB ib = MockRemote.build(IB.class, B.class);
 
 	@Test
 	public void b01_combinedAnnotations_Body() throws Exception {
@@ -154,7 +154,7 @@ public class EndToEndInterfaceTest {
 	// Standard responses
 	//=================================================================================================================
 
-	@RemoteResource
+	@Remote
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IC {
 		@RemoteMethod @RestMethod Ok ok();
@@ -206,7 +206,7 @@ public class EndToEndInterfaceTest {
 		@Override public UseProxy useProxy() { return UseProxy.INSTANCE; }
 	}
 
-	private static IC ic = MockRestClient.create(C.class).json().disableRedirectHandling().build().getRemoteResource(IC.class);
+	private static IC ic = MockRestClient.create(C.class).json().disableRedirectHandling().build().getRemote(IC.class);
 
 	@Test
 	public void c01_standardResponses_Ok() throws Exception {
@@ -305,7 +305,7 @@ public class EndToEndInterfaceTest {
 	// ReaderResource and StreamResource responses
 	//=================================================================================================================
 
-	@RemoteResource
+	@Remote
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface ID {
 		@RemoteMethod @RestMethod StreamResource streamResource() throws IOException ;
@@ -325,7 +325,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static ID id = MockRemoteResource.build(ID.class, D.class);
+	private static ID id = MockRemote.build(ID.class, D.class);
 
 	@Test
 	public void d01_StreamResource() throws Exception {
@@ -343,7 +343,7 @@ public class EndToEndInterfaceTest {
 		assertEquals("text/foo", r.getMediaType().toString());
 	}
 
-	private static ID id2 = MockRemoteResource.build(ID.class, D.class);
+	private static ID id2 = MockRemote.build(ID.class, D.class);
 
 	@Test
 	public void d03_StreamResource_noMediaTypes() throws Exception {
@@ -365,7 +365,7 @@ public class EndToEndInterfaceTest {
 	// Predefined exceptions
 	//=================================================================================================================
 
-	@RemoteResource
+	@Remote
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IE {
 		@RemoteMethod @RestMethod void badRequest() throws BadRequest;
@@ -538,7 +538,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IE iea = MockRemoteResource.build(IE.class, EA.class);
+	private static IE iea = MockRemote.build(IE.class, EA.class);
 
 	@Test
 	public void ea01_badRequest() {
@@ -973,7 +973,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IE ieb = MockRemoteResource.build(IE.class, EB.class);
+	private static IE ieb = MockRemote.build(IE.class, EB.class);
 
 	@Test
 	public void eb01_badRequest() {
@@ -1277,7 +1277,7 @@ public class EndToEndInterfaceTest {
 	// Throwables returned by method instead of thrown.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RemoteResource
+	@Remote
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IF {
 		@RemoteMethod @RestMethod BadRequest badRequest();
@@ -1450,7 +1450,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IF ifa = MockRemoteResource.build(IF.class, F.class);
+	private static IF ifa = MockRemote.build(IF.class, F.class);
 
 	@Test
 	public void fa01_badRequest() {
@@ -1588,7 +1588,7 @@ public class EndToEndInterfaceTest {
 	// Reader/InputStream return types.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RemoteResource
+	@Remote
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IG {
 		@RemoteMethod @RestMethod Reader reader();
@@ -1606,7 +1606,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IG ig = MockRemoteResource.build(IG.class, G.class);
+	private static IG ig = MockRemote.build(IG.class, G.class);
 
 	@Test
 	public void g01_reader() throws Exception {
@@ -1621,7 +1621,7 @@ public class EndToEndInterfaceTest {
 	// Helper responses
 	//=================================================================================================================
 
-	@RemoteResource
+	@Remote
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IH {
 		@RemoteMethod @RestMethod SeeOtherRoot seeOtherRoot();
@@ -1634,7 +1634,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IH ih = MockRestClient.create(H.class).json().disableRedirectHandling().build().getRemoteResource(IH.class);
+	private static IH ih = MockRestClient.create(H.class).json().disableRedirectHandling().build().getRemote(IH.class);
 
 	@Test
 	public void h01_seeOtherRoot() throws Exception {

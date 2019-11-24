@@ -62,7 +62,7 @@ public class RemoteMethodAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface A01 {
 		public String doGet();
 		public String doGET();
@@ -73,7 +73,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void a01_inferredMethodsAndPaths() throws Exception {
-		A01 t = MockRemoteResource.build(A01.class, A.class, null);
+		A01 t = MockRemote.build(A01.class, A.class, null);
 		assertEquals("foo", t.doGet());
 		assertEquals("foo", t.doGET());
 		assertEquals("qux", t.doFoo());
@@ -110,7 +110,7 @@ public class RemoteMethodAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface B01 {
 		public void b01();
 
@@ -122,7 +122,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void b01_returnTypes() throws Exception {
-		B01 t = MockRemoteResource.build(B01.class, B.class, null);
+		B01 t = MockRemote.build(B01.class, B.class, null);
 		t.b01();
 		assertEquals("foo", t.b02());
 		assertEquals("bar", IOUtils.read(t.b02a().getEntity().getContent()));
@@ -143,7 +143,7 @@ public class RemoteMethodAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface C01 {
 
 		@RemoteMethod(method="POST",path="c01")
@@ -161,7 +161,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void c01_returnTypes_json() throws Exception {
-		C01 t = MockRemoteResource.build(C01.class, C.class, Json.DEFAULT);
+		C01 t = MockRemote.build(C01.class, C.class, Json.DEFAULT);
 		assertEquals("foo", t.c01a("foo"));
 		assertEquals("'foo'", IOUtils.read(t.c01b("foo").getEntity().getContent()));
 		assertEquals("'foo'", IOUtils.read(t.c01c("foo")));
@@ -182,7 +182,7 @@ public class RemoteMethodAnnotationTest {
 		}
 	}
 
-	@RemoteResource
+	@Remote
 	public static interface D01 {
 
 		@RemoteMethod(method="POST",path="d01")
@@ -200,7 +200,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void d01_returnTypes_partSerialization() throws Exception {
-		D01 t = MockRemoteResource.build(D01.class, D.class, OpenApi.DEFAULT);
+		D01 t = MockRemote.build(D01.class, D.class, OpenApi.DEFAULT);
 		assertEquals("foo", t.d01a("foo"));
 		assertEquals("foo", IOUtils.read(t.d01b("foo").getEntity().getContent()));
 		assertEquals("foo", IOUtils.read(t.d01c("foo")));

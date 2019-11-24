@@ -13,20 +13,20 @@
  ***************************************************************************************************************************/
  -->
 
-MockRemoteResource
+{updated} MockRemote
 
 <p>
-	The {@link oajr.mock2.MockRemoteResource} class is used for serverless unit testing of {@link oaj.http.remote.RemoteResource @RemoteResource}-annotated
+	The {@link oajr.mock2.MockRemote} class is used for serverless unit testing of {@link oaj.http.remote.Remote @Remote}-annotated
 	classes.  
 </p>
 <p>
-	The {@link oajr.mock2.MockRemoteResource} API requires a {@link oajr.annotation.Rest @Rest}-annotated class to be used as
+	The {@link oajr.mock2.MockRemote} API requires a {@link oajr.annotation.Rest @Rest}-annotated class to be used as
 	an underlying mocked resource to process the request and return a response.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Our remote resource to test.</jc>
-	<ja>@RemoteResource</ja>
+	<ja>@Remote</ja>
 	<jk>public interface</jk> MyRemoteInterface {
 	
 		<ja>@RemoteMethod</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
@@ -45,7 +45,7 @@ MockRemoteResource
 
 	<ja>@Test</ja>
 	<jk>public void</jk> testProxy() {
-		MyRemoteInterface mri = MockRemoteResource.build(MyRemoteInterface.<jk>class</jk>, MyRest.<jk>class</jk>);
+		MyRemoteInterface mri = MockRemote.build(MyRemoteInterface.<jk>class</jk>, MyRest.<jk>class</jk>);
 		<jsm>assertEquals</jsm>(123, mri.echoQuery(123));
 	}
 </p>
@@ -53,8 +53,8 @@ MockRemoteResource
 	It looks simple, but there's a lot going on here.   
 </p>
 <p>
-	Remote resource interfaces are normally created through the {@link oajrc.RestClient#getRemoteResource(Class)} method.
-	The {@link oajr.mock2.MockRemoteResource} will create a {@link oajrc.RestClient} using a specialized <c>HttpClientConnectionManager</c>
+	Remote resource interfaces are normally created through the {@link oajrc.RestClient#getRemote(Class)} method.
+	The {@link oajr.mock2.MockRemote} will create a {@link oajrc.RestClient} using a specialized <c>HttpClientConnectionManager</c>
 	designed to transform client-side <c>HttpRequest</c>/<c>HttpResponse</c> objects into server-side 
 	{@link oajr.mock2.MockServletRequest}/{@link oajr.mock2.MockServletResponse} objects and then pass those to the {@link oajr.mock2.MockRest} 
 	object described in the previous section.
@@ -65,24 +65,24 @@ MockRemoteResource
 </p>
 <hr>
 <p>
-	By default, the {@link oajr.mock2.MockRemoteResource} class uses JSON marshalling.
+	By default, the {@link oajr.mock2.MockRemote} class uses JSON marshalling.
 	This can be overridden via any of the following methods: 
 </p>
 <ul class='javatree'>
-	<li class='jm'>{@link oajr.mock2.MockRemoteResource#build(Class,Object,Marshall)}
-	<li class='jm'>{@link oajr.mock2.MockRemoteResource#build(Class,Object,Serializer,Parser)}
-	<li class='jm'>{@link oajr.mock2.MockRemoteResource#create(Class,Object,Marshall)}
-	<li class='jm'>{@link oajr.mock2.MockRemoteResource#create(Class,Object,Serializer,Parser)}
+	<li class='jm'>{@link oajr.mock2.MockRemote#build(Class,Object,Marshall)}
+	<li class='jm'>{@link oajr.mock2.MockRemote#build(Class,Object,Serializer,Parser)}
+	<li class='jm'>{@link oajr.mock2.MockRemote#create(Class,Object,Marshall)}
+	<li class='jm'>{@link oajr.mock2.MockRemote#create(Class,Object,Serializer,Parser)}
 </ul>
 <hr>
 <p>
-	The {@link oajr.mock2.MockRemoteResource} class has a debug mode that will cause your HTTP requests and responses to
+	The {@link oajr.mock2.MockRemote} class has a debug mode that will cause your HTTP requests and responses to
 	be sent to the console on both the client and server sides:
 </p>
 <p class='bpcode w800'>
 	<ja>@Test</ja>
 	<jk>public void</jk> testProxy() {
-		MyRemoteInterface mri = MockRemoteResource
+		MyRemoteInterface mri = MockRemote
 			.create(MyRemoteInterface.<jk>class</jk>, MyRest.<jk>class</jk>)
 			.debug()
 			.build();

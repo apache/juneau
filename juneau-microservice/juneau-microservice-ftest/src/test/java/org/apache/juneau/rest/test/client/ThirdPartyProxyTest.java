@@ -65,7 +65,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public ThirdPartyProxyTest(String label, Serializer serializer, Parser parser) {
 		proxy = getCached(label, ThirdPartyProxy.class);
 		if (proxy == null) {
-			this.proxy = getClient(label, serializer, parser).builder().partSerializer(UonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build()).build().getRemoteResource(ThirdPartyProxy.class, null, serializer, parser);
+			this.proxy = getClient(label, serializer, parser).builder().partSerializer(UonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build()).build().getRemote(ThirdPartyProxy.class, null, serializer, parser);
 			cache(label, proxy);
 		}
 	}
@@ -1593,7 +1593,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	// Proxy class
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@RemoteResource(path="/testThirdPartyProxy")
+	@Remote(path="/testThirdPartyProxy")
 	public static interface ThirdPartyProxy {
 
 		//-------------------------------------------------------------------------------------------------------------
