@@ -11,6 +11,24 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 8.1.2
+
+** Bug
+    * [JUNEAU-156] - Test Fails on ko_KR Locale.
+    * [JUNEAU-158] - The KEYS link should have KEYS as the text
+    * [JUNEAU-160] - Setting bean properties of type list don't use setters.
+    * [JUNEAU-161] - Exeption-Message header can contain CR/LF characters.
+    * [JUNEAU-162] - RestClient class should be subclassible.
+    * [JUNEAU-163] - Request Exception-Message response header should be truncated to some reasonable value.
+    * [JUNEAU-164] - Stacktrace hashing should take proxies and lamba expressions into account.
+
+** Improvement
+    * [JUNEAU-155] - Split bpi/bpx into serializer and parser configuration properties.
+
+** Task
+    * [JUNEAU-159] - Package pet store application in jar format.
+
+
 Release Notes - Juneau - Version 8.1.1
 
 ** Bug
