@@ -25,7 +25,7 @@
 
 	<artifactId>juneau-examples</artifactId>
 	<packaging>pom</packaging>
-	<name>Apache Juneau - Examples</name>
+	<name>juneau/examples</name>
 	<description>Apache Juneau Examples</description>
 
 	<modules>

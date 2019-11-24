@@ -18,8 +18,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>juneau-sc-client</artifactId>
-	<name>Apache Juneau Configuration Server - Client API</name>
-	<description>Apache Juneau Server Config - Client</description>
+	<name>juneau/sc/sc-client</name>
+	<description>Apache Juneau Server Config Client API</description>
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>

@@ -21,8 +21,8 @@
 	<artifactId>juneau</artifactId>
 	<version>8.1.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>Apache Juneau</name>
-	<description>All the Apache Juneau content in one convenient package.</description>
+	<name>juneau</name>
+	<description>Apache Juneau</description>
 	
 	<parent>
 		<groupId>org.apache</groupId>

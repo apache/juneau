@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-rest-mock</artifactId>
-	<name>Apache Juneau REST Mock API</name>
-	<description>REST mock API</description>
+	<name>juneau/rest/rest-mock</name>
+	<description>Apache Juneau REST mock API</description>
 	<packaging>bundle</packaging>
 
 	<dependencies>

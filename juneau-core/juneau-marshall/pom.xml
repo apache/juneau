@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-marshall</artifactId>
-	<name>Apache Juneau Marshall</name>
-	<description>Base toolkit for serializers, parsers, and bean contexts.</description>
+	<name>juneau/core/marshall</name>
+	<description>Apache Juneau Marshall API</description>
 	<packaging>bundle</packaging>
 
 	<properties>

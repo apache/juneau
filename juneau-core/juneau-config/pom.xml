@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-config</artifactId>
-	<name>Apache Juneau Config File API</name>
-	<description>Dynamic configuration files.</description>
+	<name>juneau/core/config</name>
+	<description>Apache Juneau Dynamic Configuration Files API</description>
 	<packaging>bundle</packaging>
 
 	<dependencies>

@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-examples-rest-jetty</artifactId>
-	<name>Apache Juneau REST Examples using Jetty</name>
-	<description>Sample code deployed using Jetty.</description>
+	<name>juneau/examples/examples-rest-jetty</name>
+	<description>Apache Juneau REST Examples using Jetty</description>
 
 	<properties>
 		<encoding>UTF-8</encoding>

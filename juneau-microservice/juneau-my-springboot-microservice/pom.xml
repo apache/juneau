@@ -32,8 +32,8 @@
 	</parent>
 
 	<artifactId>juneau-my-springboot-microservice</artifactId>
-	<name>Apache Juneau Spring Boot Microservice Template</name>
-	<description>A template project developers use to start with to create a microservice.</description>
+	<name>juneau/microservice/my-springboot-microservice</name>
+	<description>Apache Juneau Spring Boot Microservice Template</description>
 	
 	<properties>
 		<juneau.version>8.1.2-SNAPSHOT</juneau.version>

@@ -18,8 +18,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>juneau-sc-server</artifactId>
-	<name>Apache Juneau Configuration Server API</name>
-	<description>Apache Juneau Server Config</description>
+	<name>juneau/sc/sc-server</name>
+	<description>Apache Juneau Server Config Server API</description>
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>

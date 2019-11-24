@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-core-utest</artifactId>
-	<name>Apache Juneau Core (Unit Tests)</name>
-	<description>Core API tests.</description>
+	<name>juneau/core/core-utest</name>
+	<description>Apache Juneau Core API Unit Tests</description>
 	<packaging>bundle</packaging>
 
 	<dependencies>

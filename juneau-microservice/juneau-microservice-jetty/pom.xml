@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-microservice-jetty</artifactId>
-	<name>Apache Juneau Microservice Server</name>
-	<description>API for creating standalone executable jars that can be used to start lightweight configurable REST interfaces.</description>
+	<name>juneau/microservice/microservice-jetty</name>
+	<description>Apache Juneau Microservice Server</description>
 
 	<properties>
 		<!-- Skip javadoc generation since we generate them in the aggregate pom -->

@@ -25,7 +25,7 @@
 
 	<artifactId>juneau-core</artifactId>
 	<packaging>pom</packaging>
-	<name>Apache Juneau - Core APIs</name>
+	<name>juneau/core</name>
 	<description>Apache Juneau Core APIs</description>
 
 	<modules>

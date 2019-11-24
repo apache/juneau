@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-marshall-rdf</artifactId>
-	<name>Apache Juneau Marshal RDF</name>
-	<description>Addition to the marshall API for RDF support.</description>
+	<name>juneau/core/marshall-rdf</name>
+	<description>Apache Juneau Marshal RDF API</description>
 	<packaging>bundle</packaging>
 
 	<dependencies>

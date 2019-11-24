@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-doc</artifactId>
-	<name>Apache Juneau Javadocs</name>
-	<description>Juneau Javadocs.</description>
+	<name>juneau/doc</name>
+	<description>Apache Juneau Javadocs</description>
 	<packaging>bundle</packaging>
 
 	<properties>

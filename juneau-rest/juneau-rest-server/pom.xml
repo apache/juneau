@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-rest-server</artifactId>
-	<name>Apache Juneau REST Servlet API</name>
-	<description>REST servlet API</description>
+	<name>juneau/rest/rest-server</name>
+	<description>Apache Juneau REST Servlet API</description>
 	<packaging>bundle</packaging>
 
 	<dependencies>

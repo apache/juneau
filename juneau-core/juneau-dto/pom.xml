@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-dto</artifactId>
-	<name>Apache Juneau Data Transfer Objects</name>
-	<description>Data Transfer Objects.</description>
+	<name>juneau/core/dto</name>
+	<description>Apache Juneau Data Transfer Objects</description>
 	<packaging>bundle</packaging>
 
 	<dependencies>

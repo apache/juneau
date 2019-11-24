@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-rest-client-utest</artifactId>
-	<name>Apache Juneau REST Client API (Unit Tests)</name>
-	<description>REST client API - Tests</description>
+	<name>juneau/rest/rest-client-utest</name>
+	<description>Apache Juneau REST Client Unit Tests</description>
 
 	<dependencies>
 		<dependency>

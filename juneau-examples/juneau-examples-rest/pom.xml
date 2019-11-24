@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-examples-rest</artifactId>
-	<name>Apache Juneau REST Examples</name>
-	<description>Sample code packaged as a microservice.</description>
+	<name>juneau/examples/rest</name>
+	<description>Apache Juneau REST Examples</description>
 
 	<properties>
 		<encoding>UTF-8</encoding>

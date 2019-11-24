@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-examples-rest-jetty-ftest</artifactId>
-	<name>Apache Juneau REST Examples (Function Tests)</name>
-	<description>Tests for the Juneau REST examples.</description>
+	<name>juneau/examples/examples-rest-jetty-ftest</name>
+	<description>Apache Juneau REST Example Function Tests</description>
 
 	<properties>
 		<encoding>UTF-8</encoding>

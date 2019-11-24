@@ -25,8 +25,8 @@
 
 	<artifactId>juneau-releng</artifactId>
 	<packaging>pom</packaging>
-	<name>Apache Juneau - Release Engineering</name>
-	<description>Release engineering projects</description>
+	<name>juneau/releng</name>
+	<description>Apache Juneau Release Engineering Projects</description>
 
 	<modules>
 		<module>juneau-all</module>

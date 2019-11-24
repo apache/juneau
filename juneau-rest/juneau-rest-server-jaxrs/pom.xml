@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-rest-server-jaxrs</artifactId>
-	<name>Apache Juneau REST JAX/RS API</name>
-	<description>REST servlet API</description>
+	<name>juneau/rest/rest-server-jaxrs</name>
+	<description>Apache Juneau REST Servlet JAX-RS Support</description>
 	<packaging>bundle</packaging>
 
 	<dependencies>

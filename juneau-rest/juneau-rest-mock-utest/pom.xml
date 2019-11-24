@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-rest-mock-utest</artifactId>
-	<name>Apache Juneau REST Mock API (Unit Tests)</name>
-	<description>REST mock API Tests</description>
+	<name>juneau/rest/rest-mock-utest</name>
+	<description>Apache Juneau REST Mock Unit Tests</description>
 	<packaging>bundle</packaging>
 
 	<dependencies>

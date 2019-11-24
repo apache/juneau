@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-all</artifactId>
-	<name>Apache Juneau UberJar</name>
-	<description>Combined contents of Core/Server/Client/Microservice jars</description>
+	<name>juneau/releng/all</name>
+	<description>Apache Juneau UberJar</description>
 	<packaging>jar</packaging>
 
 	<dependencies>

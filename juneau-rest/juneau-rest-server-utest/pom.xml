@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-rest-server-utest</artifactId>
-	<name>Apache Juneau REST Servlet API (Unit Tests)</name>
-	<description>Unit tests for REST servlet API</description>
+	<name>juneau/rest/rest-server-utest</name>
+	<description>Apache Juneau REST Servlet Unit Tests</description>
 	<packaging>bundle</packaging>
 
 	<dependencies>

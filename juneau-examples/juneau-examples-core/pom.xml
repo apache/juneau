@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-examples-core</artifactId>
-	<name>Apache Juneau Core Examples</name>
-	<description>Apache Juneau Examples for Core parser functionality</description>
+	<name>juneau/examples/examples-core</name>
+	<description>Apache Juneau Core Examples</description>
 
 	<properties>
 		<!-- Skip javadoc generation since we generate them in the aggregate pom -->

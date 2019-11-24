@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-microservice-core</artifactId>
-	<name>Apache Juneau Microservice Core Library</name>
-	<description>API for creating standalone executable jars that can be used to start lightweight configurable microservices.</description>
+	<name>juneau/microservice/microservice-core</name>
+	<description>Apache Juneau Microservice Core API</description>
 
 	<properties>
 		<!-- Skip javadoc generation since we generate them in the aggregate pom -->

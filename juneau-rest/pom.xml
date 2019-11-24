@@ -25,7 +25,7 @@
 
 	<artifactId>juneau-rest</artifactId>
 	<packaging>pom</packaging>
-	<name>Apache Juneau - REST APIs</name>
+	<name>juneau/rest</name>
 	<description>Apache Juneau REST APIs</description>
 
 	<modules>

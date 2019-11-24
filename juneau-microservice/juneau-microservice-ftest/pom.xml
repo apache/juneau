@@ -24,8 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-microservice-ftest</artifactId>
-	<name>Apache Juneau Microservice (Function Tests)</name>
-	<description>Tests for Juneau Client/Server/Microservice.</description>
+	<name>juneau/microservice/microservice-ftest</name>
+	<description>Apache Juneau Microservice Function Tests</description>
 
 	<properties>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
