@@ -43,7 +43,7 @@ import org.apache.juneau.*;
  * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanConstructorAnnotation}
+ * 	<li class='link'>{@doc juneau-marshall.Transforms.BeancAnnotation}
  * </ul>
  *
  * @deprecated Use {@link Beanc}

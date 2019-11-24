@@ -38,7 +38,7 @@ import org.apache.juneau.utils.*;
  * a REST resource.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestResource}
+ * 	<li class='link'>{@doc juneau-rest-server.Rest}
  * </ul>
  *
  * @deprecated Use {@link Rest}
