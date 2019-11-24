@@ -15,6 +15,7 @@ package org.apache.juneau.rest.annotation2;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.json.*;
@@ -86,10 +87,12 @@ public class RestResourcePojoSwapsTest {
 		}
 	}
 
-	@Rest(pojoSwaps={SwapA1.class}, serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	@BeanConfig(pojoSwaps={SwapA1.class})
 	public static class A01_Parent {}
 
-	@Rest(pojoSwaps={SwapA2.class})
+	@Rest
+	@BeanConfig(pojoSwaps={SwapA2.class})
 	public static class A01 extends A01_Parent {
 
 		@RestMethod(name=GET, path="/classTransformOverridesParentClassTransform")

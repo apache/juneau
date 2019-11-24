@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.HasQuery;
 import org.apache.juneau.json.*;
@@ -215,10 +216,12 @@ public class RestMethodInheritTest {
 	// Test filter inheritance.
 	//=================================================================================================================
 
-	@Rest(pojoSwaps={F1Swap.class})
+	@Rest
+	@BeanConfig(pojoSwaps={F1Swap.class})
 	public static class D {}
 
-	@Rest(pojoSwaps={F2Swap.class,Inherit.class})
+	@Rest
+	@BeanConfig(pojoSwaps={F2Swap.class})
 	public static class D01 extends D {}
 
 	@Rest(serializers=SimpleJsonSerializer.class)

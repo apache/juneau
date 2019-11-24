@@ -30,7 +30,7 @@ public class HtmlDocScriptTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@Rest(htmldoc=@HtmlDoc(script={"a01a","a01b"}))
+	@RestResource(htmldoc=@HtmlDoc(script={"a01a","a01b"}))
 	public static class A extends BasicRestServlet {
 		@RestMethod(path="/a01")
 		public Object a01() {
@@ -80,7 +80,7 @@ public class HtmlDocScriptTest {
 	// Inheritance
 	//=================================================================================================================
 
-	@Rest(htmldoc=@HtmlDoc(script={"b01a","b01b"}))
+	@RestResource(htmldoc=@HtmlDoc(script={"b01a","b01b"}))
 	public static class B extends A {
 		@RestMethod(path="/b01")
 		public Object b01() {

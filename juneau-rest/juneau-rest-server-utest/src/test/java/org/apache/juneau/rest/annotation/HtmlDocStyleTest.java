@@ -30,7 +30,7 @@ public class HtmlDocStyleTest {
 	// Basic tests
 	//=================================================================================================================
 
-	@Rest(htmldoc=@HtmlDoc(style={"a01a","a01b"},stylesheet="a01s",nowrap="false"))
+	@RestResource(htmldoc=@HtmlDoc(style={"a01a","a01b"},stylesheet="a01s",nowrap="false"))
 	public static class A extends BasicRestServlet {
 		@RestMethod(path="/a01")
 		public Object a01() {
@@ -80,7 +80,7 @@ public class HtmlDocStyleTest {
 	// Inheritance
 	//=================================================================================================================
 
-	@Rest(htmldoc=@HtmlDoc(style={"b01a","b01b"},stylesheet="b01s"))
+	@RestResource(htmldoc=@HtmlDoc(style={"b01a","b01b"},stylesheet="b01s"))
 	public static class B extends A {
 		@RestMethod(path="/b01")
 		public Object b01() {

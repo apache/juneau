@@ -19,10 +19,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.logging.*;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.parser.Parser.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
@@ -33,8 +30,6 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.AnnotationUtils;
 import org.apache.juneau.rest.annotation.Logging;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.rest.widget.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 
@@ -53,7 +48,6 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		super(c, r);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void apply(AnnotationInfo<Rest> ai, PropertyStoreBuilder psb) {
 		Rest a = ai.getAnnotation();
@@ -135,17 +129,7 @@ public class RestConfigApply extends ConfigApply<Rest> {
 
 		psb.addTo(REST_children, a.children());
 
-		psb.set(BEAN_beanFilters, merge(ObjectUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), a.beanFilters()));
-
-		psb.set(BEAN_pojoSwaps, merge(ObjectUtils.toType(psb.peek(BEAN_pojoSwaps), Object[].class), a.pojoSwaps()));
-
 		psb.addTo(REST_paramResolvers, a.paramResolvers());
-
-		if (a.serializerListener() != SerializerListener.Null.class)
-			psb.set(SERIALIZER_listener, a.serializerListener());
-
-		if (a.parserListener() != ParserListener.Null.class)
-			psb.set(PARSER_listener, a.parserListener());
 
 		s = string(a.uriContext());
 		if (isNotEmpty(s))
@@ -197,9 +181,6 @@ public class RestConfigApply extends ConfigApply<Rest> {
 
 		if (a.resourceResolver() != RestResourceResolver.Null.class)
 			psb.set(REST_resourceResolver, a.resourceResolver());
-
-		if (a.logger() != RestLogger.Null.class)
-			psb.set(REST_logger, a.logger());
 
 		if (a.callLogger() != RestCallLogger.Null.class)
 			psb.set(REST_callLogger, a.callLogger());
@@ -275,14 +256,8 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		if (! a.allowedMethodParams().isEmpty())
 			psb.set(REST_allowedMethodParams, string(a.allowedMethodParams()));
 
-		if (! a.allowHeaderParams().isEmpty())
-			psb.set(REST_allowHeaderParams, bool(a.allowHeaderParams()));
-
 		if (! a.renderResponseStackTraces().isEmpty())
 			psb.set(REST_renderResponseStackTraces, bool(a.renderResponseStackTraces()));
-
-		if (! a.useStackTraceHashes().isEmpty())
-			psb.set(REST_useStackTraceHashes, bool(a.useStackTraceHashes()));
 
 		if (! a.defaultCharset().isEmpty())
 			psb.set(REST_defaultCharset, string(a.defaultCharset()));
@@ -301,15 +276,6 @@ public class RestConfigApply extends ConfigApply<Rest> {
 
 		if (! a.roleGuard().isEmpty())
 			psb.addTo(REST_roleGuard, string(a.roleGuard()));
-
-		HtmlDoc hd = a.htmldoc();
-		new HtmlDocBuilder(psb).process(hd);
-		for (Class<? extends Widget> wc : hd.widgets()) {
-			Widget w = castOrCreate(Widget.class, wc);
-			psb.addTo(REST_widgets, w);
-			psb.addTo(HTMLDOC_script, "$W{"+w.getName()+".script}");
-			psb.addTo(HTMLDOC_script, "$W{"+w.getName()+".style}");
-		}
 	}
 
 	private String trimLeadingSlash(String value) {

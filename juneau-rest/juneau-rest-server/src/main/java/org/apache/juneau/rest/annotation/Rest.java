@@ -21,13 +21,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -155,32 +150,6 @@ public @interface Rest {
 	String allowedMethodParams() default "";
 
 	/**
-	 * Allow header URL parameters.
-	 *
-	 * <p>
-	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
-	 * parameters.
-	 * <br>
-	 * For example:
-	 * <p class='bcode w800'>
-	 *  ?Accept=text/json&amp;Content-Type=text/json
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
-	 * </ul>
-	 * @deprecated Use {@link #allowedHeaderParams()}
-	 */
-	@Deprecated
-	String allowHeaderParams() default "";
-
-	/**
 	 * Default request attributes.
 	 *
 	 * <p>
@@ -197,21 +166,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String[] attrs() default {};
-
-	/**
-	 * Class-level bean filters.
-	 *
-	 * <p>
-	 * Shortcut to add bean filters to the bean contexts of all serializers and parsers on all methods in the class.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * </ul>
-	 *
-	 * @deprecated Use {@link BeanConfig#beanFilters()}
-	 */
-	@Deprecated
-	Class<?>[] beanFilters() default {};
 
 	/**
 	 * REST call handler.
@@ -448,57 +402,6 @@ public @interface Rest {
 	Class<? extends RestGuard>[] guards() default {};
 
 	/**
-	 * Provides HTML-doc-specific metadata on this method.
-	 *
-	 * <p>
-	 * Used to customize the output from the HTML Doc serializer.
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		path=<js>"/addressBook"</js>,
-	 *
-	 * 		<jc>// Links on the HTML rendition page.
-	 * 		// "request:/..." URIs are relative to the request URI.
-	 * 		// "servlet:/..." URIs are relative to the servlet URI.
-	 * 		// "$C{...}" variables are pulled from the config file.</jc>
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			<jc>// Widgets for $W variables.</jc>
-	 * 			widgets={
-	 * 				PoweredByJuneau.<jk>class</jk>,
-	 * 				ContentTypeLinks.<jk>class</jk>
-	 * 			}
-	 * 			navlinks={
-	 * 				<js>"up: request:/.."</js>,
-	 * 				<js>"options: servlet:/?method=OPTIONS"</js>,
-	 * 				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"</js>,
-	 * 			},
-	 * 			aside={
-	 * 				<js>"&lt;div style='max-width:400px;min-width:200px'&gt;"</js>,
-	 * 				<js>"	&lt;p&gt;Proof-of-concept resource that shows off the capabilities of working with POJO resources.&lt;/p&gt;"</js>,
-	 * 				<js>"	&lt;p&gt;Provides examples of: &lt;/p&gt;"</js>,
-	 * 				<js>"		&lt;ul&gt;"</js>,
-	 * 				<js>"			&lt;li&gt;XML and RDF namespaces"</js>,
-	 * 				<js>"			&lt;li&gt;Swagger documentation"</js>,
-	 * 				<js>"			&lt;li&gt;Widgets"</js>,
-	 * 				<js>"		&lt;/ul&gt;"</js>,
-	 * 				<js>"	&lt;p style='text-weight:bold;text-decoration:underline;'&gt;Available Content Types&lt;/p&gt;"</js>,
-	 * 				<js>"	$W{ContentTypeLinks}"</js>,
-	 * 				<js>"&lt;/div&gt;"</js>
-	 * 			},
-	 * 			footer=<js>"$W{PoweredByJuneau}"</js>
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
-	 * </ul>
-	 *
-	 * @deprecated Use {@link HtmlDocConfig}
-	 */
-	@Deprecated
-	HtmlDoc htmldoc() default @HtmlDoc;
-
-	/**
 	 * Configuration property:  REST info provider.
 	 *
 	 * <p>
@@ -509,20 +412,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.Null.class;
-
-	/**
-	 * REST logger.
-	 *
-	 * <p>
-	 * Specifies the logger to use for logging.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_logger}
-	 * </ul>
-	 * @deprecated Use {@link #callLogger()}
-	 */
-	@SuppressWarnings("dep-ann")
-	Class<? extends RestLogger> logger() default RestLogger.Null.class;
 
 	/**
 	 * Specifies the logger to use for logging of HTTP requests and responses.
@@ -611,21 +500,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	Class<? extends RestMethodParam>[] paramResolvers() default {};
-
-	/**
-	 * Parser listener.
-	 *
-	 * <p>
-	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_listener}
-	 * </ul>
-	 *
-	 * @deprecated Use {@link ParserConfig#listener()}
-	 */
-	@Deprecated
-	Class<? extends ParserListener> parserListener() default ParserListener.Null.class;
 
 	/**
 	 * Parsers.
@@ -802,21 +676,6 @@ public @interface Rest {
 	String path() default "";
 
 	/**
-	 * Class-level POJO swaps.
-	 *
-	 * <p>
-	 * Shortcut to add POJO swaps to the bean contexts of all serializers and parsers on all methods in the class.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
-	 * </ul>
-	 *
-	 * @deprecated {@link BeanConfig#pojoSwaps()}
-	 */
-	@Deprecated
-	Class<?>[] pojoSwaps() default {};
-
-	/**
 	 * Class-level properties.
 	 *
 	 * <p>
@@ -958,21 +817,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String roleGuard() default "";
-
-	/**
-	 * Serializer listener.
-	 *
-	 * <p>
-	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
-	 * </ul>
-	 *
-	 * @deprecated Use {@link SerializerConfig#listener()}
-	 */
-	@Deprecated
-	Class<? extends SerializerListener> serializerListener() default SerializerListener.Null.class;
 
 	/**
 	 * Serializers.
@@ -1368,28 +1212,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String useClasspathResourceCaching() default "";
-
-	/**
-	 * Use stack trace hashes.
-	 *
-	 * <p>
-	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
-	 * made available through the {@link RestException#getOccurrence()} method.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
-	 * </ul>
-	 *
-	 * @deprecated Use {@link Logging#useStackTraceHashing()}
-	 */
-	@Deprecated
-	String useStackTraceHashes() default "";
 
 	/**
 	 * Enable debug mode.

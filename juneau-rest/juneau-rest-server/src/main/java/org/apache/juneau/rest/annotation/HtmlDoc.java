@@ -21,7 +21,7 @@ import org.apache.juneau.rest.widget.*;
  * Contains all the configurable annotations for the {@link HtmlDocSerializer}.
  *
  * <p>
- * Used with {@link Rest#htmldoc() @Rest(htmldoc)} and {@link RestMethod#htmldoc() @RestMethod(htmldoc)}
+ * Used with {@link RestResource#htmldoc() @RestResource(htmldoc)} and {@link RestMethod#htmldoc() @RestMethod(htmldoc)}
  * to customize the HTML view of serialized POJOs.
  *
  * <p>
@@ -32,14 +32,14 @@ import org.apache.juneau.rest.widget.*;
  * For example, the following two methods for defining the HTML nav links are considered equivalent:
  * <p class='bcode w800'>
  * 	<jc>// Defined via properties.</jc>
- * 	<ja>@Rest</ja>(
+ * 	<ja>@RestResource</ja>(
  * 		properties={
  * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
  * 		}
  * 	)
  *
  * 	<jc>// Defined via annotation.</jc>
- * 	<ja>@Rest</ja>(
+ * 	<ja>@RestResource</ja>(
  * 		htmldoc=<ja>@HtmlDoc</ja>(
  * 			navlinks={
  * 				<js>"options: ?method=OPTIONS"</js>,
@@ -96,7 +96,7 @@ public @interface HtmlDoc {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
+	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			aside={
 	 * 				<js>"&lt;p&gt;Custom aside content&lt;/p&gt;"</js>
@@ -139,7 +139,7 @@ public @interface HtmlDoc {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
+	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			footer={
 	 * 				<js>"&lt;p&gt;Custom footer content&lt;/p&gt;"</js>
@@ -179,7 +179,7 @@ public @interface HtmlDoc {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
+	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			head={
 	 * 				<jc>// Add a shortcut link in the browser tab</jc>
@@ -225,7 +225,7 @@ public @interface HtmlDoc {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
+	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			header={
 	 * 				<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>
@@ -268,7 +268,7 @@ public @interface HtmlDoc {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
+	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			nav={
 	 * 				<js>"&lt;h5&gt;Custom nav content&lt;/h5&gt;"</js>
@@ -321,7 +321,7 @@ public @interface HtmlDoc {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
+	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			navlinks={
 	 * 				<js>"up: request:/.."</js>,
@@ -391,7 +391,7 @@ public @interface HtmlDoc {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
+	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			script={
 	 * 				<js>"alert('Hello!')"</js>
@@ -431,7 +431,7 @@ public @interface HtmlDoc {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
+	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			style={
 	 * 				<js>".red{color:red;}"</js>,
@@ -475,7 +475,7 @@ public @interface HtmlDoc {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
+	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			stylesheet=<js>"http://someOtherHost/stealTheir.css"</js>
 	 * 		)

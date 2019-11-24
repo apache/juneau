@@ -369,7 +369,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#allowHeaderParams()}
+	 * 			<li class='ja'>{@link RestResource#allowHeaderParams()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -1562,7 +1562,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#logger()}
+	 * 			<li class='ja'>{@link RestResource#logger()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -3127,7 +3127,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#useStackTraceHashes()}
+	 * 			<li class='ja'>{@link RestResource#useStackTraceHashes()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
