@@ -81,13 +81,13 @@
 			</ul>
 		</ul>
 	<li>
-		The <c>@RestResource(staticFiles)</c> annotation now supports absolute path locations and multiple mappings:
+		The <dc>@RestResource(staticFiles)</dc> annotation now supports absolute path locations and multiple mappings:
 		<p class='bpcode w800'>
 	<jc>// Resolves static files in root package "htdocs" or working directory "htdocs", and then relative package "htdocs".</jc>
 	<ja>@RestResource</ja>(staticFiles=<js>"htdocs:/htdocsfolder,htdocs:htdocs.package"</js>)
 		</p>
 	<li>
-		Fixed a bug in <c>@RestResource(staticFiles)</c> where the order of lookup between parent and child resources
+		Fixed a bug in <dc>@RestResource(staticFiles)</dc> where the order of lookup between parent and child resources
 		was wrong.
 </ul>
 

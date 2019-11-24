@@ -90,7 +90,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 		try {
 			context.checkForInitException();
 
-			// If the resource path contains variables (e.g. @RestResource(path="/f/{a}/{b}"), then we want to resolve
+			// If the resource path contains variables (e.g. @Rest(path="/f/{a}/{b}"), then we want to resolve
 			// those variables and push the servletPath to include the resolved variables.  The new pathInfo will be
 			// the remainder after the new servletPath.
 			// Only do this for the top-level resource because the logic for child resources are processed next.

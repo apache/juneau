@@ -21,12 +21,12 @@ RestContext
 	It's by-far the most important class in the REST API.
 </p>
 <p>
-	Every class annotated with <l>@RestResource</l> ends up with an instance of this object.
+	Every class annotated with <l>@Rest</l> ends up with an instance of this object.
 	The object itself is read-only and unchangeable.
 	It is populated through the following:
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oajr.annotation.RestResource} - Settings copied from the annotation during servlet initialization.
+	<li class='ja'>{@link oajr.annotation.Rest} - Settings copied from the annotation during servlet initialization.
 	<li class='jm'>{@link oajr.RestContextBuilder} - Builder used during servlet initialization.
 </ul>
 <p>

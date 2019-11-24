@@ -29,11 +29,11 @@ Overloading HTTP Methods
 	}
 </p>
 <p>
-	To support overloaded methods, the {@link oajr.annotation.RestResource#allowedMethodParams() @RestResource(allowedMethodParams)} 
+	To support overloaded methods, the {@link oajr.annotation.Rest#allowedMethodParams() @Rest(allowedMethodParams)} 
 	setting must be enabled on your servlet.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		<jc>// Allow &amp;method parameter on BAR requests</jc>
 		allowedMethodParams=<js>"BAR"</js>
 	)

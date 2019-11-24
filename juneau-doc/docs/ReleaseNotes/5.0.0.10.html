@@ -26,7 +26,7 @@
 <h5 class='topic w800'>REST server API changes</h5>
 <ul class='spaced-list'>
 	<li>New <c>RestServletProperties</c> class that defines all the class-level properties that can be set on the servlet.</li>
-	<li>Properties can be set through {@link oajr.annotation.RestResource#properties() @RestResource.properties} annotation, or new <dc>RestServlet.setProperty(String,Object)</dc> method.</li>
+	<li>Properties can be set through <dc>@RestResource.propertie</dc> annotation, or new <dc>RestServlet.setProperty(String,Object)</dc> method.</li>
 	<li>New <js>"?noTrace"</js> URL parameter to prevent stack traces from being logged (for JUnit testing of error conditions).</li>
 	<li>New <c>RestServletProperties.REST_useStackTraceHashes</c> property to prevent the same stack trace from being logged multiple times.</li>
 	<li>New <c>RestServletProperties.REST_renderResponseStackTraces</c> property for preventing stack traces in responses for security reasons.</li>

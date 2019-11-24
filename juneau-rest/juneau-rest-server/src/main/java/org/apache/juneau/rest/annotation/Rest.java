@@ -38,7 +38,7 @@ import org.apache.juneau.utils.*;
  * a REST resource.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestResource}
+ * 	<li class='link'>{@doc juneau-rest-server.Rest}
  * </ul>
  */
 @Documented
@@ -453,7 +453,7 @@ public @interface Rest {
 	 * <p>
 	 * Used to customize the output from the HTML Doc serializer.
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/addressBook"</js>,
 	 *
 	 * 		<jc>// Links on the HTML rendition page.
@@ -689,18 +689,18 @@ public @interface Rest {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bpcode'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		children={ChildResource.<jk>class</jk>}
 	 * 	)
 	 * 	<jk>public class</jk> TopLevelResource <jk>extends</jk> BasicRestServlet {...}
 	 *
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 *		path=<js>"/child"</js>,
 	 *		children={GrandchildResource.<jk>class</jk>}
 	 *	)
 	 *	<jk>public class</jk> ChildResource {...}
 	 *
-	 *	<ja>@RestResource</ja>(
+	 *	<ja>@Rest</ja>(
 	 *		path=<js>"/grandchild"</js>
 	 *	)
 	 *	<jk>public class</jk> GrandchildResource {
@@ -746,7 +746,7 @@ public @interface Rest {
 	 * 		}
 	 * 	}
 	 *
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/myResource"</js>
 	 * 	)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
@@ -762,7 +762,7 @@ public @interface Rest {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bpcode'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/myResource/{foo}/{bar}"</js>
 	 * 	)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
@@ -895,7 +895,7 @@ public @interface Rest {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
 	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	 * 	)
@@ -918,7 +918,7 @@ public @interface Rest {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/foo"</js>,
 	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	 * 	)
@@ -1035,7 +1035,7 @@ public @interface Rest {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		staticFileResponseHeaders={
 	 * 			<js>"Cache-Control: $C{REST/cacheControl,nocache}"</js>,
 	 * 			<js>"My-Header: $C{REST/myHeaderValue}"</js>
@@ -1066,9 +1066,9 @@ public @interface Rest {
 	 * </p>
 	 *
 	 * <p>
-	 * Note that headers can also be specified per path-mapping via the {@link Rest#staticFiles() @RestResource(staticFiles)} annotation.
+	 * Note that headers can also be specified per path-mapping via the {@link Rest#staticFiles() Rest(staticFiles)} annotation.
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		staticFiles={
 	 * 			<js>"htdocs:docs:{'Cache-Control':'max-age=86400, public'}"</js>
 	 * 		}
@@ -1106,7 +1106,7 @@ public @interface Rest {
 	 * <p class='bcode w800'>
 	 * 	<jk>package</jk> com.foo.mypackage;
 	 *
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/myresource"</js>,
 	 * 		staticFiles={
 	 * 			<js>"htdocs:docs"</js>,
@@ -1129,7 +1129,7 @@ public @interface Rest {
 	 * <p>
 	 * The location is interpreted as an absolute path if it starts with <js>'/'</js>.
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		staticFiles={
 	 * 			<js>"htdocs:/docs"</js>
 	 * 		}
@@ -1149,7 +1149,7 @@ public @interface Rest {
 	 * <p>
 	 * Response headers can be specified for served files by adding a 3rd section that consists of a {@doc SimpleJson} object.
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		staticFiles={
 	 * 			<js>"htdocs:docs:{'Cache-Control':'max-age=86400, public'}"</js>
 	 * 		}
@@ -1159,7 +1159,7 @@ public @interface Rest {
 	 * <p>
 	 * The same path can map to multiple locations.  Files are searched in the order
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		staticFiles={
 	 * 			<jc>// Search in absolute location '/htdocs/folder' before location 'htdocs.package' relative to servlet package.</jc>
 	 * 			<js>"htdocs:/htdocs/folder,htdocs:htdocs.package"</js>
@@ -1229,7 +1229,7 @@ public @interface Rest {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/addressBook"</js>,
 	 *
 	 * 		<jc>// Swagger info.</jc>

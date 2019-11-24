@@ -67,7 +67,7 @@ Installing in Eclipse
 		<br>This is identical to the Jetty example.
 		<br><br>
 		<p class='bcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		path=<js>"/"</js>,
 		title=<js>"My Microservice"</js>,
 		description=<js>"Top-level resources page"</js>,
@@ -108,7 +108,7 @@ Installing in Eclipse
 	#=======================================================================================================================</cc>
 	<cs>[REST]</cs>
 	
-	<cc># Comma-delimited list of key-value pairs that represent locations of static files that can be served up by your @RestResource-annotated
+	<cc># Comma-delimited list of key-value pairs that represent locations of static files that can be served up by your @Rest-annotated
 	# classes.  These are static files that are served up by the servlet under the specified sub-paths.
 	# For example, given the following setting...
 	# 	staticFiles = htdocs:my-docs,styles/my-styles

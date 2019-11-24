@@ -157,7 +157,7 @@ Parameter Examples
 			],
 </p>
 <p>
-	Another option is to define these directly in your resource Swagger JSON file, or via {@link oajr.annotation.RestResource#swagger() @RestResource(swagger)}/{@link oajr.annotation.RestMethod#swagger() @RestMethod(swagger)}. 
+	Another option is to define these directly in your resource Swagger JSON file, or via {@link oajr.annotation.Rest#swagger() @Rest(swagger)}/{@link oajr.annotation.RestMethod#swagger() @RestMethod(swagger)}. 
 </p>
 <p>
 	Juneau also supports auto-generation of JSON-Schema directly from POJO classes.
@@ -218,7 +218,7 @@ Parameter Examples
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Examples defined at class level.</jc>
-	<ja>@RestResource</ja>(...)
+	<ja>@Rest</ja>(...)
 	<ja>@BeanConfig</ja>(
 		examples=<js>"{PetCreate: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}}"</js>
 	)

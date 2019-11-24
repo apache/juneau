@@ -16,11 +16,11 @@
 Messages
 
 <p>
-	The {@link oajr.annotation.RestResource#messages @RestResource(messages)} annotation is used to associate a resource bundle with a servlet class.
+	The {@link oajr.annotation.Rest#messages @Rest(messages)} annotation is used to associate a resource bundle with a servlet class.
 </p>
 <p class='bpcode w800'>
 	<jc>// Servlet with associated resource bundle</jc>
-	<ja>@RestResource</ja>(messages=<js>"nls/MyMessages"</js>)
+	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 
 		<jc>// Returns the localized greeting from the "greeting" key in MyMessages.properties</jc>

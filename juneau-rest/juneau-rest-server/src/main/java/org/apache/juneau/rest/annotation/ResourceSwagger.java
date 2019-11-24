@@ -30,7 +30,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			title=<js>"Petstore application"</js>
 	 * 		)
@@ -62,7 +62,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			description={
 	 * 				<js>"This is a sample server Petstore server based on the Petstore sample at Swagger.io."<js>,
@@ -112,7 +112,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			contact=<js>"{name:'John Smith',email:'john.smith@foo.bar'}"</js>
 	 * 		)
@@ -160,7 +160,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			externalDocs=<ja>@ExternalDocs</ja>(url=<js>"http://juneau.apache.org"</js>)
 	 * 		)
@@ -191,7 +191,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>
 	 * 		)
@@ -240,7 +240,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			tags=<js>"[{name:'Foo',description:'Foobar'}]"</js>
 	 * 		)
@@ -316,7 +316,7 @@ public @interface ResourceSwagger {
 	 * The following are completely equivalent ways of defining the swagger description of a resource:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			title=<js>"Petstore application"</js>,
 	 * 			description={
@@ -352,7 +352,7 @@ public @interface ResourceSwagger {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=@ResourceSwagger({
 	 * 			<js>"title: 'Petstore application',"</js>,
 	 * 			<js>"description: 'This is a sample server Petstore server based on the Petstore sample at Swagger.io.\nYou can find out more about Swagger at &lt;a class='link' href='http://swagger.io'&gt;http://swagger.io&lt;/a&gt;.',"</js>,
@@ -385,7 +385,7 @@ public @interface ResourceSwagger {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=@ResourceSwagger(<js>"$F{MyResourceSwagger.json}"</js>)
 	 * 	)
 	 * </p>

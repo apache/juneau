@@ -122,7 +122,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(allowBodyParam=<js>"$C{REST/allowBodyParam,false}"</js>)
+	 * 	<ja>@Rest</ja>(allowBodyParam=<js>"$C{REST/allowBodyParam,false}"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -184,7 +184,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(allowedHeaderParams=<js>"Accept,Content-Type"</js>)
+	 * 	<ja>@Rest</ja>(allowedHeaderParams=<js>"Accept,Content-Type"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -251,7 +251,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(allowedMethodHeaders=<js>"PATCH"</js>)
+	 * 	<ja>@Rest</ja>(allowedMethodHeaders=<js>"PATCH"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -324,7 +324,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(allowedMethodParams=<js>"HEAD,OPTIONS,PUT"</js>)
+	 * 	<ja>@Rest</ja>(allowedMethodParams=<js>"HEAD,OPTIONS,PUT"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -390,7 +390,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(allowMethodParams=<js>"$C{REST/allowHeaderParams,false}"</js>)
+	 * 	<ja>@Rest</ja>(allowMethodParams=<js>"$C{REST/allowHeaderParams,false}"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -477,7 +477,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(callHandler=MyRestCallHandler.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(callHandler=MyRestCallHandler.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
@@ -547,7 +547,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(callLogger=MyLogger.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(callLogger=MyLogger.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
@@ -600,7 +600,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		logging=<ja>@Logging</ja>(
 	 * 			level=<js>"INFO"</js>,
 	 * 			rules={
@@ -717,11 +717,11 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Our child resource.</jc>
-	 * 	<ja>@RestResource</ja>(path=<js>"/child"</js>)
+	 * 	<ja>@Rest</ja>(path=<js>"/child"</js>)
 	 * 	<jk>public class</jk> MyChildResource {...}
 	 *
 	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(children={MyChildResource.<jk>class</jk>})
+	 * 	<ja>@Rest</ja>(children={MyChildResource.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
@@ -820,7 +820,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(classpathResourceFinder=MyClasspathResourceFinder.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(classpathResourceFinder=MyClasspathResourceFinder.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
@@ -892,7 +892,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(clientVersionHeader=<js>"$C{REST/clientVersionHeader,Client-Version}"</js>)
+	 * 	<ja>@Rest</ja>(clientVersionHeader=<js>"$C{REST/clientVersionHeader,Client-Version}"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -983,7 +983,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(converters={MyConverter.<jk>class</jk>})
+	 * 	<ja>@Rest</ja>(converters={MyConverter.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
@@ -1084,7 +1084,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(defaultCharset=<js>"$C{REST/defaultCharset,US-ASCII}"</js>)
+	 * 	<ja>@Rest</ja>(defaultCharset=<js>"$C{REST/defaultCharset,US-ASCII}"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -1150,7 +1150,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(defaultRequestAttributes={<js>"Foo: bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
+	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo: bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -1217,7 +1217,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(defaultRequestHeaders={<js>"Accept: application/json"</js>, <js>"My-Header: $C{REST/myHeaderValue}"</js>})
+	 * 	<ja>@Rest</ja>(defaultRequestHeaders={<js>"Accept: application/json"</js>, <js>"My-Header: $C{REST/myHeaderValue}"</js>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -1283,7 +1283,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(defaultResponseHeaders={<js>"Content-Type: $C{REST/defaultContentType,text/plain}"</js>,<js>"My-Header: $C{REST/myHeaderValue}"</js>})
+	 * 	<ja>@Rest</ja>(defaultResponseHeaders={<js>"Content-Type: $C{REST/defaultContentType,text/plain}"</js>,<js>"My-Header: $C{REST/myHeaderValue}"</js>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -1338,7 +1338,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
+	 * 	<ja>@Rest</ja>(encoders={GzipEncoder.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
@@ -1421,7 +1421,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(guards={BillyGuard.<jk>class</jk>})
+	 * 	<ja>@Rest</ja>(guards={BillyGuard.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
@@ -1517,7 +1517,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(infoProvider=MyRestInfoProvider.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(infoProvider=MyRestInfoProvider.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
@@ -1601,7 +1601,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(logger=MyRestLogger.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(logger=MyRestLogger.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
@@ -1658,7 +1658,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
+	 * 	<ja>@Rest</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -1747,7 +1747,7 @@ public final class RestContext extends BeanContext {
 	 * 	<jk>package</jk> org.apache.foo;
 	 *
 	 * 	<jc>// Resolve messages to org/apache/foo/nls/MyMessages.properties</jc>
-	 * 	<ja>@RestResource</ja>(messages=<js>"nls/MyMessages"</js>)
+	 * 	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
 	 *
 	 * 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/hello/{you}"</js>)
@@ -1818,7 +1818,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(mimeTypes={<js>"text/plain txt text TXT"</js>})
+	 * 	<ja>@Rest</ja>(mimeTypes={<js>"text/plain txt text TXT"</js>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -1894,7 +1894,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Option #1 - Registered via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(paramResolvers=MyRestParam.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(paramResolvers=MyRestParam.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
@@ -1974,7 +1974,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(parsers={JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>})
+	 * 	<ja>@Rest</ja>(parsers={JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -2061,7 +2061,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(partParser=SimplePartParser.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(partParser=SimplePartParser.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -2132,7 +2132,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(partSerializer=SimplePartSerializer.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(partSerializer=SimplePartSerializer.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -2197,7 +2197,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(path=<js>"/myResource"</js>)
+	 * 	<ja>@Rest</ja>(path=<js>"/myResource"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -2266,7 +2266,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(renderResponseStackTraces=<jk>true</jk>)
+	 * 	<ja>@Rest</ja>(renderResponseStackTraces=<jk>true</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -2346,7 +2346,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(resourceResolver=MyResourceResolver.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(resourceResolver=MyResourceResolver.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -2438,7 +2438,7 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(responseHandlers=MyResponseHandler.<jk>class</jk>)
+	 * 	<ja>@Rest</ja>(responseHandlers=MyResponseHandler.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -2509,7 +2509,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
 	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	 * 	)
@@ -2550,7 +2550,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/foo"</js>,
 	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	 * 	)
@@ -2632,7 +2632,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
-	 * 	<ja>@RestResource</ja>(serializers={JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>})
+	 * 	<ja>@Rest</ja>(serializers={JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -2724,7 +2724,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		staticFileResponseHeaders={
 	 * 			<js>"Cache-Control: $C{REST/cacheControl,nocache}"</js>,
 	 * 			<js>"My-Header: $C{REST/myHeaderValue}"</js>
@@ -2757,7 +2757,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Note that headers can also be specified per path-mapping via the {@link Rest#staticFiles() @Rest(staticFiles)} annotation.
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		staticFiles={
 	 * 			<js>"htdocs:docs:{'Cache-Control':'max-age=86400, public'}"</js>
 	 * 		}
@@ -2810,7 +2810,7 @@ public final class RestContext extends BeanContext {
 	 * <p class='bcode w800'>
 	 * 	<jk>package</jk> com.foo.mypackage;
 	 *
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/myresource"</js>,
 	 * 		staticFiles={
 	 * 			<js>"htdocs:docs"</js>,
@@ -2833,7 +2833,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * The location is interpreted as an absolute path if it starts with <js>'/'</js>.
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		staticFiles={
 	 * 			<js>"htdocs:/docs"</js>
 	 * 		}
@@ -2853,7 +2853,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Response headers can be specified for served files by adding a 3rd section that consists of a {@doc SimpleJson} object.
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		staticFiles={
 	 * 			<js>"htdocs:docs:{'Cache-Control':'max-age=86400, public'}"</js>
 	 * 		}
@@ -2863,7 +2863,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * The same path can map to multiple locations.  Files are searched in the order
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		staticFiles={
 	 * 			<jc>// Search in absolute location '/htdocs/folder' before location 'htdocs.package' relative to servlet package.</jc>
 	 * 			<js>"htdocs:/htdocs/folder,htdocs:htdocs.package"</js>
@@ -2922,7 +2922,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(produces={<js>"$C{REST/supportedProduces,application/json}"</js>})
+	 * 	<ja>@Rest</ja>(produces={<js>"$C{REST/supportedProduces,application/json}"</js>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -3031,7 +3031,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(consumes={<js>"$C{REST/supportedConsumes,application/json}"</js>})
+	 * 	<ja>@Rest</ja>(consumes={<js>"$C{REST/supportedConsumes,application/json}"</js>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -3089,7 +3089,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(useClasspathResourceCaching=<js>"$C{REST/useClasspathResourceCaching,false}"</js>)
+	 * 	<ja>@Rest</ja>(useClasspathResourceCaching=<js>"$C{REST/useClasspathResourceCaching,false}"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -3150,7 +3150,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(useStackTraceHashes=<js>"$C{REST/useStackTraceHashes,false}"</js>)
+	 * 	<ja>@Rest</ja>(useStackTraceHashes=<js>"$C{REST/useStackTraceHashes,false}"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
@@ -3220,7 +3220,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/servlet"</js>,
 	 * 		uriAuthority=<js>"$C{REST/authorityPathOverride,http://localhost:10000}"</js>
 	 * 	)
@@ -3283,7 +3283,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/servlet"</js>,
 	 * 		uriContext=<js>"$C{REST/contextPathOverride,/foo}"</js>
 	 * 	)
@@ -3344,7 +3344,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/servlet"</js>,
 	 * 		uriRelativity=<js>"$C{REST/uriRelativity,PATH_INFO}"</js>
 	 * 	)
@@ -3405,7 +3405,7 @@ public final class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/servlet"</js>,
 	 * 		uriResolution=<js>"$C{REST/uriResolution,ABSOLUTE}"</js>
 	 * 	)
@@ -3593,7 +3593,7 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Constructor.
 	 *
-	 * @param resource The resource annotated with <ja>@RestResource</ja>.
+	 * @param resource The resource annotated with <ja>@Rest</ja>.
 	 * @return A new builder object.
 	 * @throws ServletException Something bad happened.
 	 */
@@ -3605,7 +3605,7 @@ public final class RestContext extends BeanContext {
 	 * Constructor.
 	 *
 	 * @param servletConfig The servlet config passed into the servlet by the servlet container.
-	 * @param resourceClass The class annotated with <ja>@RestResource</ja>.
+	 * @param resourceClass The class annotated with <ja>@Rest</ja>.
 	 * @param parentContext The parent context, or <jk>null</jk> if there is no parent context.
 	 * @return A new builder object.
 	 * @throws ServletException Something bad happened.
@@ -4061,7 +4061,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		messages=<js>"nls/Messages"</js>,
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=<js>"title"</js>,value=<js>"$L{title}"</js>),  <jc>// Localized variable in Messages.properties</jc>

@@ -246,7 +246,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 			properties={
 	 * 				<ja>@Property</ja>(name=<jsf>JSONSCHEMA_ignoreTypes</jsf>, value=<js>"Swagger,*.proto.*"</js>)
 	 * 			}

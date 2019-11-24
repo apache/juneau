@@ -25,7 +25,7 @@ Configurable Annotations
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Servlet with properties applied</jc>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		properties={
 			<ja>@Property</ja>(name=<jsf>BEAN_sortProperties</jsf>, value=<js>"true"</js>),
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_trimNulls</jsf>, value=<js>"true"</js>),
@@ -36,7 +36,7 @@ Configurable Annotations
 </p>
 <p class='bpcode w800'>
 	<jc>// Servlet with config annotations applied</jc>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		...
 	)
 	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>)

@@ -44,7 +44,7 @@ Stylesheets
 	The stylesheet URL is controlled by the {@link oaj.html.annotation.HtmlDocConfig#stylesheet() @HtmlDocConfig(stylesheet)} annotation.
 	The {@link oajr.BasicRestServlet} class defines the stylesheet served up as a static file:
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		htmldoc=<ja>@HtmlDoc</ja>(
 			stylesheet=<js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js>,
 		),
@@ -63,7 +63,7 @@ Stylesheets
 	file:	
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		htmldoc=<ja>@HtmlDoc</ja>(
 			stylesheet=<js>"servlet:/my-styles/my-style.css}"</js>,
 		),
@@ -80,7 +80,7 @@ Stylesheets
 	In case you're curious about how the menu item works, it's defined via a widget:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		htmldoc=<ja>@HtmlDoc</ja>(
 			widgets={
 				PoweredByApache.<jk>class</jk>,

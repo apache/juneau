@@ -294,7 +294,7 @@
 	<li>
 		Support for static files has been simplified and improved.
 		<ul>
-			<li>Syntax on {@link oajr.annotation.RestResource#staticFiles() @RestResource(staticFiles)} has been simplified, and
+			<li>Syntax on <dc>@RestResource(staticFiles)</dc> has been simplified, and
 				now allows you to specify response headers in the strings.
 			<li>Response headers for static files can also be configured through 
 				{@link oajr.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}.
@@ -308,7 +308,7 @@
 		<br>You can now simply create a {@link oajr.RestMatcher} that has a public constructor that 
 		takes in the server and method arguments.
 	<li>
-		<c>@RestResource.allowMethodParam</c> renamed to {@link oajr.annotation.RestResource#allowedMethodParams}.
+		<dc>@RestResource.allowMethodParam</dc> renamed to <dc>RestResource.allowedMethodParams</dc>.
 	<li>
 		<c>@RestMethod.serializersInherit</c> and <c>@RestMethod.parsersInherit</c> replaced with
 		simplified <dc>@RestMethod(inherit)</dc>. 
@@ -358,9 +358,9 @@
 				{@link oajr.RestRequest#getClasspathReaderResource(String) getClasspathReaderResource(String)}
 		</ul>
 	<li>
-		Changes to {@link oajr.annotation.RestResource @RestResource}:
+		Changes to <dc>@RestResource</dc>
 		<ul>
-			<li>New {@link oajr.annotation.RestResource#mimeTypes() mimeTypes()} annotation.
+			<li>New <dc>mimeTypes()</dc> annotation.
 		</ul>
 	<li>
 		Changes to {@link oajr.annotation.RestMethod @RestMethod}:

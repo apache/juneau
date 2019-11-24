@@ -56,7 +56,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Resolve schema references up to 5 levels deep.
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 			properties={
 	 * 				<ja>@Property</ja>(name=<jsf>SWAGGERUI_resolveRefsMaxDepth</jsf>, value=<js>"5"</js>)
 	 * 			}

@@ -23,12 +23,12 @@ import java.lang.annotation.*;
  * Allows referencing an external resource for extended documentation.
  *
  * <p>
- * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Normal</jc>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@Rest</ja>(
  * 		swagger=<ja>@ResourceSwagger</ja>(
  * 			externalDocs=<ja>@ExternalDocs</ja>(
  * 				description=<js>"Apache Juneau"</js>,
@@ -39,7 +39,7 @@ import java.lang.annotation.*;
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Free-form</jc>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@Rest</ja>(
  * 		swagger=<ja>@ResourceSwagger</ja>(
  * 			contact=<ja>@ExternalDocs</ja>({
  * 				<js>"description:'Apache Juneau',"</js>,
@@ -103,7 +103,7 @@ public @interface ExternalDocs {
 	 * The following are completely equivalent ways of defining the swagger description of documentation:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			externalDocs=<ja>@ExternalDocs</ja>(
 	 * 				description=<js>"Find out more about Juneau"</js>,
@@ -114,7 +114,7 @@ public @interface ExternalDocs {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			externalDocs=<ja>@ExternalDocs</ja>({
 	 * 				<js>"description: 'Find out more about Juneau',"</js>,
@@ -125,7 +125,7 @@ public @interface ExternalDocs {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			externalDocs=<ja>@ExternalDocs</ja>(<js>"$L{externalDocsSwagger}"</js>)
 	 * 		)

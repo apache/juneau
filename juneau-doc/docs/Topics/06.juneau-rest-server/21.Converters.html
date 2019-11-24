@@ -22,14 +22,14 @@ Converters
 	Converters are associated with resource classes and methods via the following:
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oajr.annotation.RestResource#converters() RestResource(converters)} 
+	<li class='ja'>{@link oajr.annotation.Rest#converters() Rest(converters)} 
 	<li class='ja'>{@link oajr.annotation.RestMethod#converters() RestMethod(converters)} 
 	<li class='jm'>{@link oajr.RestContextBuilder#converters(Class...)} 
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Associate the Traversable converter to all Java REST methods in this servlet</jc>
-	<ja>@RestResource</ja>(converters=Traversable.<jk>class</jk>)
+	<ja>@Rest</ja>(converters=Traversable.<jk>class</jk>)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 		...
 	}

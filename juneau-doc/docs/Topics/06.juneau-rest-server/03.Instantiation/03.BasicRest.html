@@ -19,14 +19,14 @@ BasicRest
 	The {@link oajr.BasicRest} class is identical to the {@link oajr.BasicRestServlet} class except that
 	it does not extend from <c>HttpServlet</c>.
 	It defines the exact same set of serializers, parsers, etc., but it cannot be deployed as a top-level
-	servlet.  It can however be used for child resources registered via the {@link oajr.annotation.RestResource#children() @RestResource(children)} 
+	servlet.  It can however be used for child resources registered via the {@link oajr.annotation.Rest#children() @Rest(children)} 
 	annotation. 
 </p>
 <p>
 	The code for this class is virtually identical to {@link oajr.BasicRestServlet} but lacks a parent class:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 	
 		<jc>// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter. </jc>
 		allowedMethodParams=<js>"OPTIONS"</js>,

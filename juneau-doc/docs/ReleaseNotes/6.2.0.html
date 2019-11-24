@@ -113,7 +113,7 @@
 
 <h5 class='topic w800'>org.apache.juneau.rest</h5>
 <ul class='spaced-list'>
-	<li>{@link oajr.annotation.RestResource @RestResource} annotation can now be applied to 
+	<li><dc>@RestResource</dc> annotation can now be applied to 
 		any class!  You're no longer restricted to subclassing your resources from {@link oajr.RestServlet}.
 		<br>This is a major enhancement in the API.  Anything you could do by subclassing from <c>RestServlet</c>
 		should have an equivalent for non-<c>RestServlet</c> classes.
@@ -143,19 +143,19 @@
 			<li><dc><jk>public</jk> init(RestConfig)</dc>
 			<li><dc><jk>public</jk> init(RestContext)</dc>
 		</ul>
-	<li>New annotations added to {@link oajr.annotation.RestResource @RestResource} to allow non-<c>RestServlet</c>
+	<li>New annotations added to <dc>@RestResource</dc> to allow non-<c>RestServlet</c>
 		resources to do the same as subclassing directly from <c>RestServlet</c>:
 		<ul>
-			<li>{@link oajr.annotation.RestResource#resourceResolver() resourceResolver()} 
+			<li><dc>RestResource.resourceResolver()</dc> 
 				- Specify a {@link oajr.RestResourceResolver} class for resolving child resources.
-			<li>{@link oajr.annotation.RestResource#callHandler() callHandler()} 
+			<li><dc>RestResource.callHandler()</dc> 
 				- Specify a {@link oajr.RestCallHandler} class for handling the lifecycle of a REST call.
-			<li>{@link oajr.annotation.RestResource#infoProvider() infoProvider()} 
+			<li><dc>RestResource.infoProvider()</dc> 
 				- Specify a {@link oajr.RestInfoProvider} class for customizing title/description/Swagger information on a REST resource.
-			<li>{@link oajr.annotation.RestResource#logger() logger()} 
+			<li><dc>RestResource.logger()</dc> 
 				- Specify a {@link oajr.RestLogger} class for handling logging.
 		</ul>
-	<li>New annotations added to {@link oajr.annotation.RestResource @RestResource} and {@link oajr.annotation.RestMethod @RestMethod}
+	<li>New annotations added to <dc>@RestResource</dc> and {@link oajr.annotation.RestMethod @RestMethod}
 		to simplify defining page title, text, and links on HTML views:
 		<ul>
 			<li><dc>@RestResource(pageTitle)</dc>

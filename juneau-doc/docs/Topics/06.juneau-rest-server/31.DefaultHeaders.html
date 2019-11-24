@@ -20,17 +20,17 @@ Default Headers
 </p>
 <ul class='javatree'>
 	<li class='ja'>
-		{@link oajr.annotation.RestResource#defaultRequestHeaders() RestResource(defaultRequestHeaders)} 
+		{@link oajr.annotation.Rest#defaultRequestHeaders() Rest(defaultRequestHeaders)} 
 		<br>Defines default headers on request when the client doesn't specify them.
 	<li class='ja'>
-		{@link oajr.annotation.RestResource#defaultResponseHeaders() RestResource(defaultResponseHeaders)}
+		{@link oajr.annotation.Rest#defaultResponseHeaders() Rest(defaultResponseHeaders)}
 		<br>Appends the specified headers if they weren't already set programmatically.	
 </ul>		
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Servlet with default headers</jc>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 
 		<jc>// Assume "text/json" Accept value when Accept not specified</jc>
 		defaultRequestHeaders={<js>"Accept: text/json"</js>},

@@ -20,10 +20,10 @@ Role guards
 	These are controlled via annotations on the REST class and methods:
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oajr.annotation.RestResource}
+	<li class='ja'>{@link oajr.annotation.Rest}
 	<ul>
-		<li class='jf'>{@link oajr.annotation.RestResource#roleGuard() roleGuard()}
-		<li class='jf'>{@link oajr.annotation.RestResource#rolesDeclared() rolesDeclared()}
+		<li class='jf'>{@link oajr.annotation.Rest#roleGuard() roleGuard()}
+		<li class='jf'>{@link oajr.annotation.Rest#rolesDeclared() rolesDeclared()}
 	</ul>
 	<li class='ja'>{@link oajr.annotation.RestMethod}
 	<ul>
@@ -39,7 +39,7 @@ Role guards
 <p class='bpcode w800'>
 	<jc>// Only admin users or users with both read/write and special access 
 	// can run any methods on this class.</jc>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		path=<js>"/foo"</js>,
 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	)
@@ -69,7 +69,7 @@ Role guards
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
 		roleGuard=<js>"ROLE_ADMIN || (*WRITE* &amp;&amp; *SPECIAL*)"</js>
 	)

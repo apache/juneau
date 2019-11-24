@@ -96,8 +96,8 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 
 	// Default page header contents.
 	header={
-		"<h1>$R{resourceTitle}</h1>",  // Use @RestResource(title)
-		"<h2>$R{methodSummary,resourceDescription}</h2>", // Use either @RestMethod(summary) or @RestResource(description)
+		"<h1>$R{resourceTitle}</h1>",  // Use @Rest(title)
+		"<h2>$R{methodSummary,resourceDescription}</h2>", // Use either @RestMethod(summary) or @Rest(description)
 		"$C{REST/header}"  // Extra header HTML defined in external config file.
 	},
 

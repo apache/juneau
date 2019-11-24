@@ -21,7 +21,7 @@
 	It's used in the following locations:
 </p>
 <ul>
-	<li>{@link oajr.annotation.RestResource @RestResource}-annotated classes. 
+	<li>{@link oajr.annotation.Rest @Rest}-annotated classes. 
 	<li>{@link oajr.annotation.RestMethod @RestMethod}-annotated methods.
 </ul>
 <p>
@@ -31,14 +31,14 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Title defined via property.</jc>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		properties={
 			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"My Resource Page"</js>)
 		}
 	)
 
 	<jc>// Title defined via @HtmlDoc annotation.</jc>
-	<ja>@RestResource</ja>()
+	<ja>@Rest</ja>()
 	<ja>@HtmlDocConfig</ja>(
 		title=<js>"My Resource Page"</js>
 	)
@@ -84,7 +84,7 @@
 	<jd>/** 
 	 * Sample REST resource that prints out a simple "Hello world!" message.
 	 */</jd>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		path=<js>"/helloWorld"</js>
 	)
 	<ja>@HtmlDocConfig</ja>(
@@ -105,7 +105,7 @@
 	SVL variables can be used in any of these annotations:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		path=<js>"/helloWorld"</js>,
 		<jc>// Register a config file.</jc>
 		config=<js>"MyConfig.cfg"</js>

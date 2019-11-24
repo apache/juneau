@@ -28,7 +28,7 @@ Parsers
 </p>
 <ul class='javatree'>
 	<li class='ja'>
-		{@link oajr.annotation.RestResource#parsers() RestResource(parsers)} 
+		{@link oajr.annotation.Rest#parsers() Rest(parsers)} 
 		- Annotation on resource Java class.
 	<li class='ja'>
 		{@link oajr.annotation.RestMethod#parsers() RestMethod(parsers)} 
@@ -42,7 +42,7 @@ Parsers
 </p>
 <p class='bpcode w800'>
 	<jc>// Option #1 - Defined via annotation.</jc>
-	<ja>@RestResource</ja>(parsers={JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>})
+	<ja>@Rest</ja>(parsers={JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>})
 	<jk>public class</jk> MyResource {
 		
 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>

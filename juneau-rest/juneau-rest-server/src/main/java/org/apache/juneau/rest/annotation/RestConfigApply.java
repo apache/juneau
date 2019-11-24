@@ -326,7 +326,7 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		try {
 			return Level.parse(string(in).toUpperCase());
 		} catch (Exception e) {
-			throw new ConfigException("Invalid syntax for level on annotation @RestResource({0}): {1}", loc, in);
+			throw new ConfigException("Invalid syntax for level on annotation @Rest({0}): {1}", loc, in);
 		}
 	}
 }

@@ -40,7 +40,7 @@
 	<li><dc>StringVarResolver</dc> now has support for chained resolvers.
 	<li><dc>StringVarResolver</dc>  now resolves variables inside resolved values.
 		i.e. if a resolved variable value itself contains a variable, it now resolves that variable too.
-	<li>Fixed bug where inner interface classes being used in <c>RestResource.filters()</c> were being
+	<li>Fixed bug where inner interface classes being used in <dc>RestResource.filters()</dc> were being
 		interpreted as surrogate classes because they have hidden 1-arg constructors due to being inner classes.
 	<li>Fixed bug in {@link oaj.internal.MultiSet} where exception was being thrown if last set was empty.
 	<li>New {@link oaj.utils.ZipFileList} class for providing efficiently zipped directories through the REST interface.
@@ -107,7 +107,7 @@
 		want to provide labels in resource bundles.
 		<ul>
 			<li><dc>RestResource.label()</dc>
-			<li>{@link oajr.annotation.RestResource#description() @RestResource(description)}
+			<li><dc>@RestResource(description)</dc>
 			<li>{@link oajr.annotation.RestMethod#description() @RestMethod(description)}
 			<li><dc>RestMethod#responses()</dc>
 			<li><dc>Attr.description()</dc>

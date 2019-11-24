@@ -117,7 +117,7 @@
 			</li>
 			<li>
 				Declaration of widgets moved to {@link oajr.annotation.HtmlDoc#widgets() @HtmlDoc(widgets)} 
-				instead of separately on <ja>@RestResource</ja> and <ja>@RestMethod</ja> annotations.
+				instead of separately on <dc>@RestResource</dc> and <ja>@RestMethod</ja> annotations.
 			<li>
 				{@link oajr.widget.Widget#getName()} now defaults to the simple class name.
 				<br>So now you can just refer to the class name: <js>"$W{ContentTypeMenuItem}"</js>.
@@ -165,13 +165,13 @@
 	<li>
 		Annotations added:
 		<ul>
-			<li>{@link oajr.annotation.RestResource#siteName() @RestResource(siteName)}
-			<li>{@link oajr.annotation.RestResource#flags() @RestResource(flags)}
+			<li><dc>@RestResource(siteName)</dc>
+			<li><dc>@RestResource(flags)</dc>
 			<li>{@link oajr.annotation.RestMethod#flags() @RestMethod(flags)}
 		</ul>
 	</li>
 	<li>
-		Eliminated the <c>@RestResource(stylesheet)</c> annotation.  
+		Eliminated the <dc>@RestResource(stylesheet)</dc> annotation.  
 		It's no longer needed now that you can easily specify styles via <ja>@Htmldoc</ja>.
 	<li>
 		Eliminated the following annotations since they are now redundant with {@link oajr.annotation.HtmlDoc#header() @HtmlDoc(header)}:

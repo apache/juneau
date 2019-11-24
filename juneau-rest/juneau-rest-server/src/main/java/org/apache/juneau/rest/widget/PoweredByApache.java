@@ -26,7 +26,7 @@ import org.apache.juneau.rest.*;
  * Typically it's used in the footer of the page, as shown below in the <c>RootResources</c> from the examples:
  *
  * <p class='bcode'>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@Rest</ja>(
  * 		path=<js>"/"</js>,
  * 		title=<js>"Root resources"</js>,
  * 		description=<js>"Example of a router resource page."</js>,

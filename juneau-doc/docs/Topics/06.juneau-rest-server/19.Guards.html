@@ -22,7 +22,7 @@ Guards
 	Guards are associated with resource classes and methods via the following:
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oajr.annotation.RestResource#guards() RestResource(guards)} 
+	<li class='ja'>{@link oajr.annotation.Rest#guards() Rest(guards)} 
 	<li class='ja'>{@link oajr.annotation.RestMethod#guards() RestMethod(guards)} 
 	<li class='jm'>{@link oajr.RestContextBuilder#guards(Class...)} 
 </ul>
@@ -37,7 +37,7 @@ Guards
 	}
 
 	<jc>// Servlet with class-level guard applied</jc>
-	<ja>@RestResource</ja>(guards=BillyGuard.<jk>class</jk>)
+	<ja>@Rest</ja>(guards=BillyGuard.<jk>class</jk>)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 
  		<jc>// Delete method that only Billy is allowed to call.</jc>

@@ -23,12 +23,12 @@ import java.lang.annotation.*;
  * The contact information for the exposed API.
  *
  * <p>
- * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Normal</jc>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@Rest</ja>(
  * 		swagger=<ja>@ResourceSwagger</ja>(
  * 			contact=<ja>@Contact</ja>(
  * 				name=<js>"Juneau Development Team"</js>,
@@ -40,7 +40,7 @@ import java.lang.annotation.*;
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Free-form</jc>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@Rest</ja>(
  * 		swagger=<ja>@ResourceSwagger</ja>(
  * 			contact=<ja>@Contact</ja>({
  * 				<js>"name:'Juneau Development Team',"</js>,
@@ -119,7 +119,7 @@ public @interface Contact {
 	 * The following are completely equivalent ways of defining the swagger description of the contact information:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			contact=<ja>@Contact</ja>(
 	 * 				name=<js>"Juneau Development Team"</js>,
@@ -131,7 +131,7 @@ public @interface Contact {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			contact=<ja>@Contact</ja>({
 	 * 				<js>"name: 'Juneau Development Team',"</js>,
@@ -143,7 +143,7 @@ public @interface Contact {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			contact=<ja>@Contact</ja>(<js>"$L{contactSwagger}"</js>)
 	 * 	)

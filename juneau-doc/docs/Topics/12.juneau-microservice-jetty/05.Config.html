@@ -27,7 +27,7 @@ Config
 	classes that extend from {@link oajr.BasicRestServlet} use several <c>$C</c> variables to externalize values:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		...
 			
 		<jc>// HTML-page specific settings</jc>
@@ -35,8 +35,8 @@ Config
 	
 			<jc>// Default page header contents.</jc>
 			header={
-				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,  <jc>// Use @RestResource(title)</jc>
-				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @RestResource(description)</jc>
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @Rest(description)</jc>
 				<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
 			},
 	
@@ -118,7 +118,7 @@ Config
 	<cc>#---------------------------------</cc>
 	<cc># Contents of MyHelloResource.java </cc>
 	<cc>#---------------------------------</cc>
-	<ja>@RestResource</ja>(...)
+	<ja>@Rest</ja>(...)
 	<jk>public class</jk> MyHelloResource <jk>extends</jk> BasicRestServlet {
 		<jk>private</jk> String <jf>greeting</jf>; 
 		
@@ -153,7 +153,7 @@ Config
 	<cc>#---------------------------------</cc>
 	<cc># Contents of MyHelloResource.java </cc>
 	<cc>#---------------------------------</cc>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		path=<js>"/hello"</js>,
 		messages=<js>"nls/Messages"</js>,
 		...

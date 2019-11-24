@@ -26,12 +26,12 @@ import org.apache.juneau.jsonschema.annotation.ExternalDocs;
  * It is not mandatory to have a Tag Object per tag used there.
  *
  * <p>
- * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jc>// A response object thats a hex-encoded string</jc>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@Rest</ja>(
  * 		swagger={
  * 			tags={
  * 				<ja>@Tag</ja>(
@@ -44,7 +44,7 @@ import org.apache.juneau.jsonschema.annotation.ExternalDocs;
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Free-form</jc>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@Rest</ja>(
  * 		swagger={
  * 			tags={
  * 				<ja>@Tag</ja>({
@@ -113,7 +113,7 @@ public @interface Tag {
 	 * The following are completely equivalent ways of defining the swagger description of the resource tags:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		tags={
 	 * 			<ja>@Tag</ja>(
 	 * 				name=<js>"pet"</js>,
@@ -128,7 +128,7 @@ public @interface Tag {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		tags={
 	 * 			<ja>@Tag</ja>(
 	 * 				name=<js>"pet"</js>,
@@ -146,7 +146,7 @@ public @interface Tag {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		tags={
 	 * 			<ja>@Tag</ja>(
 	 * 				name=<js>"pet"</js>,

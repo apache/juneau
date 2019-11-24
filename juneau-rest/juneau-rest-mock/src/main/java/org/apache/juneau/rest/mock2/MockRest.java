@@ -37,7 +37,7 @@ import org.apache.juneau.serializer.*;
  *  <jk>public class</jk> MockTest {
  *
  *  	<jc>// Our REST resource to test.</jc>
- *  	<ja>@RestResource</ja>(serializers=JsonSerializer.Simple.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
+ *  	<ja>@Rest</ja>(serializers=JsonSerializer.Simple.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
  *  	<jk>public static class</jk> MyRest {
  *
  *  		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/String"</js>)

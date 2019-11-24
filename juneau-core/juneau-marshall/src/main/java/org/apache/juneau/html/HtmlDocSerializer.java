@@ -35,12 +35,12 @@ import org.apache.juneau.svl.*;
  * <code><xt>&lt;head&gt;</code>, and <code><xt>&lt;body&gt;</code> tags so that it can be rendered in a browser.
  *
  * <p>
- * Configurable properties are typically specified via <ja>@RestResource(properties)</ja> and <ja>@RestMethod(properties)</ja>
+ * Configurable properties are typically specified via <ja>@Rest(properties)</ja> and <ja>@RestMethod(properties)</ja>
  * annotations, although they can also be set programmatically via the <c>RestResponse.setProperty()</c> method.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@Rest</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
  * 		properties={
  * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_title</jsf>, value=<js>"$L{title}"</js>),
@@ -54,7 +54,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * Note that shortcut annotations are also provided for these particular settings:
  * <p class='bcode w800'>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@Rest</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
  * 		title=<js>"$L{title}"</js>,
  * 		description=<js>"$L{description}"</js>,
@@ -104,7 +104,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			aside={
 	 * 				<js>"&lt;ul&gt;"</js>,
@@ -139,7 +139,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			footer={
 	 * 				<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
@@ -167,7 +167,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_links</jsf>,
 	 * 				value=<js>"['&lt;link rel=\"icon\" href=\"htdocs/mypageicon.ico\"&gt;']"</js>)
@@ -176,9 +176,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * </p>
 	 *
 	 * <p>
-	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
+	 * A shortcut on <ja>@Rest</ja> is also provided for this setting:
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		htmldoc=@HtmlDoc(
 	 * 			head={
 	 * 				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>
@@ -207,7 +207,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			header={
 	 * 				<js>"&lt;h1&gt;My own header&lt;/h1&gt;"</js>
@@ -236,7 +236,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			nav={
 	 * 				<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
@@ -288,7 +288,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * The <c>AddressBookResource</c> sample class uses this property...
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>,
 	 * 				value=<js>"['options: ?method=OPTIONS', 'doc: doc']"</js>)
@@ -298,9 +298,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * </p>
 	 *
 	 * <p>
-	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
+	 * A shortcut on <ja>@Rest</ja> is also provided for this setting:
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		htmldoc=@HtmlDoc(
 	 * 			navlinks={
 	 * 				<js>"options: ?method=OPTIONS"</js>,
@@ -335,7 +335,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			noResultsMessage=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
 	 * 		)
@@ -381,7 +381,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_script</jsf>,
 	 * 				value=<js>"alert('hello!');"</js>)
@@ -390,9 +390,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * </p>
 	 *
 	 * <p>
-	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
+	 * A shortcut on <ja>@Rest</ja> is also provided for this setting:
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		htmldoc=@HtmlDoc(
 	 * 			script={
 	 * 				<js>"alert('hello!');"</js>
@@ -425,7 +425,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_style</jsf>,
 	 * 				value=<js>"h3 { color: red; }\nh5 { font-weight: bold; }"</js>)
@@ -434,9 +434,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * </p>
 	 *
 	 * <p>
-	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
+	 * A shortcut on <ja>@Rest</ja> is also provided for this setting:
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		htmldoc=@HtmlDoc(
 	 * 			style={
 	 * 				<js>"h3 { color: red; }"</js>,
@@ -469,7 +469,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Adds a link to the specified stylesheet URL.
 	 *
 	 * <p>
-	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
+	 * Note that this stylesheet is controlled by the <code><ja>@Rest</ja>.stylesheet()</code> annotation.
 	 */
 	public static final String HTMLDOC_stylesheet = PREFIX + ".stylesheet.ls";
 
@@ -499,7 +499,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		htmldoc=@HtmlDoc(
 	 * 			template=MySpecialDocTemplate.<jk>class</jk>
 	 * 		)

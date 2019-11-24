@@ -369,7 +369,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * Adds a link to the specified stylesheet URL.
 	 *
 	 * <p>
-	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
+	 * Note that this stylesheet is controlled by the <code><ja>@Rest</ja>.stylesheet()</code> annotation.
 	 *
 	 * @param value
 	 * 	The new value for this property.

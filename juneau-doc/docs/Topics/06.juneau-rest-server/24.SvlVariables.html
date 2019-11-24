@@ -20,7 +20,7 @@ SVL Variables
 	annotation values:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		title=<js>"$L{my.label}"</js>
     )
 </p>
@@ -62,7 +62,7 @@ SVL Variables
 	}
 
 	<jc>// Register it with our resource.</jc>
-	<ja>@RestResource</ja>(...)
+	<ja>@Rest</ja>(...)
 	<jk>public class</jk> MyResource {
 	
 		<jk>public</jk> MyResource(RestContextBuilder builder) {
@@ -83,7 +83,7 @@ SVL Variables
 </p>
 <ul class='spaced-list'>
 	<li><l>Initialization-time variables</l>
-		<br>These are variables that can be used in many of the annotations in {@link oajr.annotation.RestResource @RestResource}. 
+		<br>These are variables that can be used in many of the annotations in {@link oajr.annotation.Rest @Rest}. 
 		<br>The {@link oajr.RestContext#getVarResolver()} method returns initialization-time variables only.
 	<li><l>Request-time variables</l>
 		<br>These are variables that are available during HTTP-requests and can be used on annotation such as {@link oajr.annotation.HtmlDoc @HtmlDoc}. 

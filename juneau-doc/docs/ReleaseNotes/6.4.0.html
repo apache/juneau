@@ -407,26 +407,26 @@
 		{@link oajr.RestResourceResolver} instances are now inherited from parent resources to child resources
 		unless explicitly overridden at the child level.
 		<br>It's also been changed to an interface.
-	<li>New annotations on {@link oajr.annotation.RestResource @RestResource}:
+	<li>New annotations on <dc>@RestResource</dc>:
 		<ul>
-			<li>{@link oajr.annotation.RestResource#resourceResolver() resourceResolver()}
+			<li><dc>resourceResolver()</dc>
 				<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
 				dependency injection frameworks.
-			<li><dc>RestResource.contextPath()</dc> - 
+			<li><dc>contextPath()</dc> - 
 				<br>Allows you to override the context path value inherited from the servlet container.
-			<li>{@link oajr.annotation.RestResource#allowHeaderParams() allowHeaderParams()} - 
+			<li><dc>allowHeaderParams()</dc> - 
 				<br>Replaces the <c>RestContext.REST_allowHeaderParams</c> setting.
-			<li><dc>RestResource.allowMethodParam()</dc> - 
+			<li><dc>allowMethodParam()</dc> - 
 				<br>Replaces the <c>RestContext.REST_allowMethodParam</c> setting.
-			<li>{@link oajr.annotation.RestResource#allowBodyParam() allowBodyParam()} - 
+			<li><dc>allowBodyParam()</dc> - 
 				<br>Replaces the <c>RestContext.REST_allowBodyParam</c> setting.
-			<li>{@link oajr.annotation.RestResource#renderResponseStackTraces() renderResponseStackTraces()} - 
+			<li><dc>renderResponseStackTraces()</dc> - 
 				<br>Replaces the <c>RestContext.REST_xxx</c> setting.
-			<li>{@link oajr.annotation.RestResource#useStackTraceHashes() useStackTraceHashes()} - 
+			<li><dc>useStackTraceHashes()</dc> - 
 				<br>Replaces the <c>RestContext.REST_useStackTraceHashes</c> setting.
-			<li>{@link oajr.annotation.RestResource#defaultCharset() defaultCharset()} - 
+			<li><dc>defaultCharset()</dc> - 
 				<br>Replaces the <c>RestContext.REST_defaultCharset</c> setting.
-			<li><dc>RestResource.paramFormat()</dc> - 
+			<li><dc>paramFormat()</dc> - 
 				<br>Replaces the <c>RestContext.REST_paramFormat</c> setting.
 		</ul>
 	<li>New annotations on {@link oajr.annotation.RestMethod @RestMethod}:

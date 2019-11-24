@@ -252,11 +252,11 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// Direct value</jc>
-	 * 	<ja>@RestResource</ja>(siteName=<js>"My Site"</js>)
+	 * 	<ja>@Rest</ja>(siteName=<js>"My Site"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
 	 *
 	 * 	<jc>// Pulled from some other location</jc>
-	 * 	<ja>@RestResource</ja>(siteName=<js>"$L{myLocalizedSiteName}"</js>)
+	 * 	<ja>@Rest</ja>(siteName=<js>"$L{myLocalizedSiteName}"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
 	 * 		</p>
 	 * 	<li>Localized strings from resource bundle identified by {@link Rest#messages() @Rest(messages)}
@@ -304,11 +304,11 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// Direct value</jc>
-	 * 	<ja>@RestResource</ja>(title=<js>"My Resource"</js>)
+	 * 	<ja>@Rest</ja>(title=<js>"My Resource"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
 	 *
 	 * 	<jc>// Pulled from some other location</jc>
-	 * 	<ja>@RestResource</ja>(title=<js>"$L{myLocalizedTitle}"</js>)
+	 * 	<ja>@Rest</ja>(title=<js>"$L{myLocalizedTitle}"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
 	 * 		</p>
 	 * 	<li>Localized strings from resource bundle identified by {@link Rest#messages() @Rest(messages)}
@@ -357,11 +357,11 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// Direct value</jc>
-	 * 	<ja>@RestResource</ja>(description=<js>"My Resource"</js>)
+	 * 	<ja>@Rest</ja>(description=<js>"My Resource"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
 	 *
 	 * 	<jc>// Pulled from some other location</jc>
-	 * 	<ja>@RestResource</ja>(description=<js>"$L{myLocalizedDescription}"</js>)
+	 * 	<ja>@Rest</ja>(description=<js>"$L{myLocalizedDescription}"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
 	 * 		</p>
 	 * 	<li>Localized strings from resource bundle identified by {@link Rest#messages() @Rest(messages)}

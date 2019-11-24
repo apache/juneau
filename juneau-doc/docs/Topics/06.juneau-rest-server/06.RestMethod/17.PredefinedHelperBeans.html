@@ -157,7 +157,7 @@ Predefined Helper Beans
 	The {@link oajr.BasicRestServletGroup} class uses this to generate router pages:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>
+	<ja>@Rest</ja>
 	<jk>public abstract class</jk> BasicRestServletGroup <jk>extends</jk> BasicRestServlet {
 	
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, summary=<js>"Navigation page"</js>)
@@ -178,7 +178,7 @@ Predefined Helper Beans
 	The <c>RootResources</c> page consists of the following and extends from the {@link oajr.BasicRestServletGroup} class:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		...
 		children={
 			HelloWorldResource.<jk>class</jk>,

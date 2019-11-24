@@ -46,7 +46,7 @@ import org.apache.juneau.svl.vars.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Defines the initial configuration of a <c>RestServlet</c> or <c>@RestResource</c> annotated object.
+ * Defines the initial configuration of a <c>RestServlet</c> or <c>@Rest</c> annotated object.
  *
  * <p>
  * An extension of the {@link ServletConfig} object used during servlet initialization.
@@ -60,8 +60,8 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <p>
- * Methods are provided for overriding or augmenting the information provided by the <ja>@RestResource</ja> annotation.
- * In general, most information provided in the <ja>@RestResource</ja> annotation can be specified programmatically
+ * Methods are provided for overriding or augmenting the information provided by the <ja>@Rest</ja> annotation.
+ * In general, most information provided in the <ja>@Rest</ja> annotation can be specified programmatically
  * through calls on this object.
  *
  * <p>
@@ -1595,7 +1595,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
 	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	 * 	)
@@ -1622,7 +1622,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/foo"</js>,
 	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	 * 	)

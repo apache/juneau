@@ -23,14 +23,14 @@ Client Versioning
 	The APIs involved with defining client version headers are:
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oajr.annotation.RestResource#clientVersionHeader() RestResource(clientVersionHeader)}
+	<li class='ja'>{@link oajr.annotation.Rest#clientVersionHeader() Rest(clientVersionHeader)}
 	<li class='jm'>{@link oajr.RestContextBuilder#clientVersionHeader(String)}
 	<li class='ja'>{@link oajr.annotation.RestMethod#clientVersion() RestMethod(clientVersion)}
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	<ja>@RestResource</ja>(clientVersionHeader=<js>"Client-Version"</js>)
+	<ja>@Rest</ja>(clientVersionHeader=<js>"Client-Version"</js>)
 	<jk>public class</jk> MyResource {
 
 		<jc>// Call this method if Client-Version is at least 2.0.

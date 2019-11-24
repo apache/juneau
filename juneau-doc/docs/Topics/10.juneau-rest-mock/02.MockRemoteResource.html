@@ -20,7 +20,7 @@ MockRemoteResource
 	classes.  
 </p>
 <p>
-	The {@link oajr.mock2.MockRemoteResource} API requires a {@link oajr.annotation.RestResource @RestResource}-annotated class to be used as
+	The {@link oajr.mock2.MockRemoteResource} API requires a {@link oajr.annotation.Rest @Rest}-annotated class to be used as
 	an underlying mocked resource to process the request and return a response.
 </p>
 <h5 class='figure'>Example:</h5>
@@ -34,7 +34,7 @@ MockRemoteResource
 	}
 
 	<jc>// Our mocked-up REST interface to test against.</jc>
-	<ja>@RestResource</ja>
+	<ja>@Rest</ja>
 	<jk>public class</jk> MyRest {
 	
 		<ja>@RestMethod</ja>(name=GET, path=<js>"/echoQuery"</js>)

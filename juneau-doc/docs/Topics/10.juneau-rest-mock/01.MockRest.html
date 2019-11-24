@@ -16,7 +16,7 @@
 MockRest
 
 <p>
-	The {@link oajr.mock2.MockRest} class is used for performing serverless unit testing of {@link oajr.annotation.RestResource @RestResource}-annotated
+	The {@link oajr.mock2.MockRest} class is used for performing serverless unit testing of {@link oajr.annotation.Rest @Rest}-annotated
 	classes.  These include both parent resource classes that extend from {@link oajr.RestServlet} and child resources that do not.
 </p>
 <p>
@@ -41,7 +41,7 @@ MockRest
 	<jk>public class</jk> MockTest {
 	
 		<jc>// Our REST resource to test.</jc>
-		<ja>@RestResource</ja>(
+		<ja>@Rest</ja>(
 			serializers=SimpleJsonSerializer.<jk>class</jk>, 
 			parsers=JsonParser.<jk>class</jk>
 		)

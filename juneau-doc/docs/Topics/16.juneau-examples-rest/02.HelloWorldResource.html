@@ -24,7 +24,7 @@ HelloWorldResource
 	<jd>/** 
 	* Sample REST resource that prints out a simple "Hello world!" message. 
 	*/</jd> 
-	<ja>@RestResource</ja>( 
+	<ja>@Rest</ja>( 
 		title=<js>"Hello World"</js>,
 		description=<js>"An example of the simplest-possible resource"</js>,
 		path=<js>"/helloWorld"</js>,
@@ -49,7 +49,7 @@ HelloWorldResource
 <p>
 	Notice that in this case we're not extending from {@link oajr.RestServlet}.  
 	We are however implementing {@link oajr.BasicRestConfig} which is a no-op
-	interface that defines a default <ja>@RestResource</ja> annotation with all the serializers, parsers, 
+	interface that defines a default <ja>@Rest</ja> annotation with all the serializers, parsers, 
 	and configuration defined on the {@link oajr.BasicRestServlet} class.
 </p>
 <p>

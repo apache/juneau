@@ -57,7 +57,7 @@ public enum HookEvent {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(...)
+	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<jc>// Add a request attribute to all incoming requests.</jc>
@@ -173,7 +173,7 @@ public enum HookEvent {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(...)
+	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<jc>// Log the incoming request.</jc>
@@ -222,7 +222,7 @@ public enum HookEvent {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(...)
+	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<jc>// Log the result of the request.</jc>
@@ -279,7 +279,7 @@ public enum HookEvent {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(...)
+	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<jc>// Log the time it took to execute the request.</jc>
@@ -333,7 +333,7 @@ public enum HookEvent {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(...)
+	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
 	 *
 	 * 		<jc>// Our database.</jc>
@@ -443,7 +443,7 @@ public enum HookEvent {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(...)
+	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
 	 *
 	 * 		<jc>// Our database.</jc>

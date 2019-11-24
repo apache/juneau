@@ -312,7 +312,7 @@
 	The following examples show part-schema-based serialization of response bodies:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>
+	<ja>@Rest</ja>
 	<jk>public class</jk> ExampleResource {
 
 		<jc>// Example 1 - String[] should be serialized using part serializer.</jc>
@@ -343,7 +343,7 @@
 	The <c><ja>@Response</ja>(schema)</c> annotation can be used to define the format of the output using OpenAPI-based rules.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>
+	<ja>@Rest</ja>
 	<jk>public class</jk> ExampleResource {
 
 		<ja>@Response</ja>(

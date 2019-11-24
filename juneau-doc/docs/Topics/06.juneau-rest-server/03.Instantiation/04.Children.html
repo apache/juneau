@@ -17,12 +17,12 @@ Children
 
 <p>
 	Child Resources are REST servlets or objects that are linked to parent resources through the 
-	{@link oajr.annotation.RestResource#children() @RestResource(children)} annotation.
+	{@link oajr.annotation.Rest#children() @Rest(children)} annotation.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jd>/** Parent Resource */</jd>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		path=<js>"/parent"</js>,
 		children={FooResource.<jk>class</jk>}
 	)
@@ -30,7 +30,7 @@ Children
 </p>
 <p class='bpcode w800'>
 	<jd>/** Child Resource */</jd>
- 	<ja>@RestResource</ja>(
+ 	<ja>@Rest</ja>(
 		path=<js>"/foo"</js>  <jc>// Path relative to parent resource.</jc>
 	)
 	<jk>public</jk> FooResource {...} <jc>// Note that we don't need to extend from RestServlet.</jc>

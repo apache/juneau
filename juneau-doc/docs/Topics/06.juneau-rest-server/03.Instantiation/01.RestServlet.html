@@ -20,7 +20,7 @@ RestServlet
 	It extends directly from <l>HttpServlet</l> and is deployed like any other servlet.
 </p>
 <p>
-	When the servlet <l>init()</l> method is called, it triggers the code to find and process the <l>@RestResource</l>
+	When the servlet <l>init()</l> method is called, it triggers the code to find and process the <l>@Rest</l>
 	annotations on that class and all child classes.
 	These get constructed into a {@link oajr.RestContext} object that holds all the configuration
 	information about your resource in a read-only object.

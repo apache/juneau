@@ -217,7 +217,7 @@ public @interface Response {
 	 * Examples can also be specified via generic properties as well using the {@link BeanContext#BEAN_examples} property at either the class or method level.
 	 * <p class='bcode w800'>
 	 * 	<jc>// Examples defined at class level.</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(
 	 * 				name=<jsf>BEAN_examples</jsf>,

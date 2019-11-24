@@ -16,7 +16,7 @@
 Static files
 
 <p>
-	The {@link oajr.annotation.RestResource#staticFiles @RestResource(staticFiles)} 
+	The {@link oajr.annotation.Rest#staticFiles @Rest(staticFiles)} 
 	annotation is used to define paths and locations of statically-served files such as images or HTML 
 	documents.
 </p>
@@ -29,7 +29,7 @@ Static files
 <p class='bpcode w800'>
 	<jk>package</jk> com.foo.mypackage;
 
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		path=<js>"/myresource"</js>,
 		staticFiles={<js>"htdocs:docs"</js>}
 	)

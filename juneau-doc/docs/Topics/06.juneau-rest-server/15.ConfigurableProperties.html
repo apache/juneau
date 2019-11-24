@@ -23,7 +23,7 @@ Configurable Properties
 	These properties can be defined for serializers and parsers registered on a REST resource via the following:
 </p>
 <ul class='javatree'>
-	<li class='ja'>{@link oajr.annotation.RestResource#properties() RestResource(properties)} 
+	<li class='ja'>{@link oajr.annotation.Rest#properties() Rest(properties)} 
 	<li class='jc'>{@link oajr.RestContextBuilder} - Various methods on the context builder.
 </ul>
 <h5 class='figure'>Example:</h5>
@@ -33,7 +33,7 @@ Configurable Properties
 	<jk>import static</jk> org.apache.juneau.json.JsonSerializer.*;
 
 	<jc>// Servlet with properties applied</jc>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		properties={
 			<jc>// Bean properties should be sorted alphabetically.</jc>
 			<ja>@Property</ja>(name=<jsf>BEAN_sortProperties</jsf>, value=<js>"true"</js>),
@@ -52,7 +52,7 @@ Configurable Properties
 </p>
 <p class='bpcode w800'>
 	<jc>// Servlet with properties applied</jc>
-	<ja>@RestResource</ja>(...)
+	<ja>@Rest</ja>(...)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 	
 		<jk>public</jk> MyRestServlet(RestContextBuilder builder) {
@@ -90,7 +90,7 @@ Configurable Properties
 	}
 </p>
 <ul class='seealso'>
-	<li class='ja'>{@link oajr.annotation.RestResource#flags() RestResource(flags)} - Shorthand for boolean properties.
+	<li class='ja'>{@link oajr.annotation.Rest#flags() Rest(flags)} - Shorthand for boolean properties.
 	<li class='ja'>{@link oajr.annotation.RestMethod#flags() RestMethod(flags)} - Shorthand for boolean properties.
 	<li class='jc'>{@link oajr.RestContextProperties} 
 	<li class='jc'>{@link oajr.RestMethodProperties} 

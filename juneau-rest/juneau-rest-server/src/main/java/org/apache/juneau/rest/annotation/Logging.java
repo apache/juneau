@@ -25,7 +25,7 @@ import org.apache.juneau.rest.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@Rest</ja>(
  * 		logging=<ja>@Logging</ja>(
  * 			level=<js>"INFO"</js>,
  * 			rules={

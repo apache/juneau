@@ -128,11 +128,11 @@
 		<ul>
 			<li>{@link oaj.serializer.SerializerListener}
 			<li>{@link oaj.serializer.SerializerBuilder#listener(Class)}
-			<li>{@link oajr.annotation.RestResource#serializerListener() @RestResource(serializerListener)}
+			<li><dc>@RestResource(serializerListener)</dc>
 			<li><dc>RestConfig.serializerListener(Class)</dc>
 			<li>{@link oaj.parser.ParserListener}
 			<li>{@link oaj.parser.ParserBuilder#listener(Class)}
-			<li>{@link oajr.annotation.RestResource#parserListener() @RestResource(parserListener)}
+			<li><dc> @RestResource(parserListener)</dc>
 			<li><dc>RestConfig.parserListener(Class)</dc>
 			<li><dc>RestClientBuilder.listeners(Class,Class)</dc>
 		</ul>juneau-examples-core.import1.pngjuneau-examples-core.import1.png
@@ -285,7 +285,7 @@
 	)
 		</p>
 	<li>
-		A new annotation {@link oajr.annotation.RestResource#paramResolvers() @RestResource(paramResolvers)}
+		A new annotation <dc>@RestResource(paramResolvers)</dc>}
 		that allows you to define your own custom Java method parameter resolvers.
 	<li>
 		Fixed bug where Writer returned by {@link oajr.RestResponse#getWriter()} was not being flushed automatically
@@ -306,13 +306,13 @@
 			<li><dc>@FormData(def)</dc> - Default form data parameter value.
 		</ul>
 	<li>
-		New attributes on {@link oajr.annotation.RestResource @RestResource}:
+		New attributes on <dc>@RestResource</dc>:
 		<ul>
-			<li>{@link oajr.annotation.RestResource#serializerListener() serializerListener()}
-			<li>{@link oajr.annotation.RestResource#parserListener() parserListener()}
+			<li><dc>serializerListener()</dc>
+			<li><dc>parserListener()</dc>
 			<li><dc>widgets()</dc>
-			<li>{@link oajr.annotation.RestResource#swagger() swagger()}
-			<li>{@link oajr.annotation.RestResource#htmldoc() htmldoc()}
+			<li><dc>swagger()</dc>
+			<li><dc>htmldoc()</dc>
 		</ul>
 	<li>
 		New attributes on {@link oajr.annotation.RestMethod @RestMethod}:

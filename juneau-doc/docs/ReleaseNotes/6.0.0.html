@@ -122,8 +122,8 @@
 			<li>Eliminated <c>ResourceOptions</c> and related code.
 			<li>New annotations and related methods:
 				<ul>
-					<li>{@link oajr.annotation.RestResource#title() @RestResource(title)} / {@link oajr.RestInfoProvider#getTitle(RestRequest)}
-					<li>{@link oajr.annotation.RestResource#description() @RestResource(description)} / {@link oajr.RestInfoProvider#getDescription(RestRequest)}
+					<li><dc>@RestResource(title)</dc> / {@link oajr.RestInfoProvider#getTitle(RestRequest)}
+					<li><dc>@RestResource(description)</dc> / {@link oajr.RestInfoProvider#getDescription(RestRequest)}
 					<li><dc>@RestResource(termsOfService)</dc> / <dc>RestInfoProvider.getTermsOfService(RestRequest)</dc>
 					<li><dc>@RestResource(contact)</dc> / <dc>RestInfoProvider.getContact(RestRequest)</dc>
 					<li><dc>@RestResource(license)</dc> / <dc>RestInfoProvider.getLicense(RestRequest)</dc>
@@ -161,7 +161,7 @@
 	</li>
 	<li>New client-version annotations:
 		<ul>
-			<li>{@link oajr.annotation.RestResource#clientVersionHeader}  - The name of the header used to identify the client version.
+			<li><dc>RestResource.clientVersionHeader</dc>  - The name of the header used to identify the client version.
 			<li>{@link oajr.annotation.RestMethod#clientVersion}  - The client version range applied to a Java method.
 		</ul>
 	</li>

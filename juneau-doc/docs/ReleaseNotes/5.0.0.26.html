@@ -24,8 +24,8 @@
 	</li>
 	<li>
 		Changed the way child REST resources are defined.<br>
-		Eliminated the <ja>@RestChild</ja> annotation on getter methods and replaced it with {@link oajr.annotation.RestResource#children() @RestResource(children)} defined on the resource class itself.<br>
-		Child resource paths are specified through {@link oajr.annotation.RestResource#path() @RestResource(path)}.
+		Eliminated the <ja>@RestChild</ja> annotation on getter methods and replaced it with <dc>@RestResource(children)</dc> defined on the resource class itself.<br>
+		Child resource paths are specified through <dc>@RestResource(path)</dc>.
    		</li>
    		<li>
    			New <dc>ChildResourceDescriptions</dc> bean for automatically generating the contents of router resource pages.

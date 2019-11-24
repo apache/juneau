@@ -23,10 +23,10 @@ Logging / Debugging
 </p>
 <ul class='javatree'>
 	<li class='ja'>
-		{@link oajr.annotation.RestResource}
+		{@link oajr.annotation.Rest}
 		<ul>
-			<li class='jm'>{@link oajr.annotation.RestResource#logging() logging()} - Class-level logging configuration and rules.
-			<li class='jm'>{@link oajr.annotation.RestResource#debug() debug()} - Enable debug mode.
+			<li class='jm'>{@link oajr.annotation.Rest#logging() logging()} - Class-level logging configuration and rules.
+			<li class='jm'>{@link oajr.annotation.Rest#debug() debug()} - Enable debug mode.
 		</ul>
 	</li>
 	<li class='ja'>
@@ -39,12 +39,12 @@ Logging / Debugging
 	<li class='jc'>
 		{@link oajr.RestContext}
 		<ul>
-			<li class='jf'>{@link oajr.RestContext#REST_callLoggerConfig REST_callLoggerConfig} - Underlying configuration property for {@link oajr.annotation.RestResource#logging() @RestResource(logging)}.
-			<li class='jf'>{@link oajr.RestContext#REST_debug REST_debug} - Underlying configuration property for {@link oajr.annotation.RestResource#debug() @RestResource(debug)}.
+			<li class='jf'>{@link oajr.RestContext#REST_callLoggerConfig REST_callLoggerConfig} - Underlying configuration property for {@link oajr.annotation.Rest#logging() @Rest(logging)}.
+			<li class='jf'>{@link oajr.RestContext#REST_debug REST_debug} - Underlying configuration property for {@link oajr.annotation.Rest#debug() @Rest(debug)}.
 		</ul>
 	</li>
 	<li class='ja'>
-		{@link oajr.annotation.Logging} - Annotation for {@link oajr.annotation.RestResource#logging() @RestResource(logging)} and {@link oajr.annotation.RestMethod#logging() @RestMethod(logging)}
+		{@link oajr.annotation.Logging} - Annotation for {@link oajr.annotation.Rest#logging() @Rest(logging)} and {@link oajr.annotation.RestMethod#logging() @RestMethod(logging)}
 		<ul>
 			<li class='jm'>{@link oajr.annotation.Logging#level() level()} - The logging level.
 			<li class='jm'>{@link oajr.annotation.Logging#rules() rules()} - The logging rules.
@@ -82,7 +82,7 @@ Logging / Debugging
 	The following code shows the output produced using the <js>"short"</js> setting:
 </p>
 <p class='bpcode'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		logging=<ja>@Logging</ja>(
 			level=<js>"info"</js>,
 			rules={
@@ -125,7 +125,7 @@ Logging / Debugging
 	In comparison, using <js>"long"</js> formatting adds information about headers and body.  
 </p>
 <p class='bpcode'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		debug=<js>"true"</js>,  <jc>// Needed to capture request/response bodies for logging.</jc>
 		logging=<ja>@Logging</ja>(
 			level=<js>"info"</js>,
@@ -180,7 +180,7 @@ Logging / Debugging
 </p>
 
 <p class='bpcode'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		logging=<ja>@Logging</ja>(
 			rules={
 				<jc>// Individual status codes.</jc>
@@ -216,7 +216,7 @@ Logging / Debugging
 	The debug mode setting allows HTTP request/response bodies to be cached in memory for logging purposes:
 </p>
 <p class='bpcode'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		debug=<js>"true"</js>
 	)
 </p>
@@ -250,7 +250,7 @@ Logging / Debugging
 	can be used to disable logging entirely or on a per-request basis:
 </p>
 <p class='bpcode'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		logging=<ja>@Logging</ja>(
 			disabled=<js>"true"</js>
 			rules={
@@ -288,7 +288,7 @@ Logging / Debugging
 	In the example below, we're causing two exceptions but only logging the first one:
 </p>
 <p class='bpcode'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		logging=<ja>@Logging</ja>(
 			useStackTraceHashing=<js>"true"</js>,
 			rules={

@@ -32,7 +32,7 @@ BasicRestServlet
 	annotations:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 	
 		<jc>// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter. </jc>
 		allowedMethodParams=<js>"OPTIONS"</js>,
@@ -101,7 +101,7 @@ BasicRestServlet
 	Notice that it has no code at all.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 	
 		<jc>// Default serializers for all Java methods in the class.</jc>
 		serializers={
@@ -137,8 +137,8 @@ BasicRestServlet
 		
 			<jc>// Default page header contents.</jc>
 			header={
-				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>, <jc>// Use @RestResource(title)</jc>
-				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @RestResource(description)</jc>
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>, <jc>// Use @Rest(title)</jc>
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @Rest(description)</jc>
 				<js>"$C{REST/header}"</js> <jc>// Extra header HTML defined in external config file.</jc>
 			},
 			
@@ -185,7 +185,7 @@ BasicRestServlet
 	from a couple sections back.
 </p>
 <p>
-	It's important to notice that the <ja>@RestResource</ja> annotation is inheritable and overridable from parent
+	It's important to notice that the <ja>@Rest</ja> annotation is inheritable and overridable from parent
 	class and interfaces.  
 	They'll all get merged into a single set of annotation values for the resource class.
 </p>

@@ -16,7 +16,7 @@
 Encoders
 
 <p>
-	The {@link oajr.annotation.RestResource#encoders @RestResource(encoders)} annotation can 
+	The {@link oajr.annotation.Rest#encoders @Rest(encoders)} annotation can 
 	be used to associate character encoders with a servlet class.
 	Encoders can be used to enable various kinds of compression (e.g. <l>"gzip"</l>) on requests and responses 
 	based on the request <l>Accept-Encoding</l> and <l>Content-Encoding</l> headers.
@@ -25,7 +25,7 @@ Encoders
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Servlet with automated support for GZIP compression</jc>
-	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
+	<ja>@Rest</ja>(encoders={GzipEncoder.<jk>class</jk>})
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 		...
 	}

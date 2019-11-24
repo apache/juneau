@@ -33,15 +33,15 @@ UI Customization
 	Instead, it just uses the existing open-ended API for defining branding via annotations on your REST classes.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		...
 		<jc>// HTML-page specific settings</jc>
 		htmldoc=<ja>@HtmlDoc</ja>(
 	
 			<jc>// Default page header contents.</jc>
 			header={
-				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,  <jc>// Use @RestResource(title)</jc>
-				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @RestResource(description)</jc>
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @Rest(description)</jc>
 				<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
 			},
 	
@@ -72,7 +72,7 @@ UI Customization
 	<jk>public interface</jk> BasicRestConfig {}
 </p>
 <p class='bpcode w800'>			
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		...
 		htmldoc=<ja>@HtmlDoc</ja>(
 			htmldoc=<ja>@HtmlDoc</ja>(
@@ -88,11 +88,11 @@ UI Customization
 	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {...}
 </p>
 <p class='bpcode w800'>			
-	<ja>@RestResource</ja>
+	<ja>@Rest</ja>
 	<jk>public abstract class</jk> BasicRestServletGroup <jk>extends</jk> BasicRestServlet {...}
 </p>
 <p class='bpcode w800'>			
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		htmldoc=<ja>@HtmlDoc</ja>(
 			widgets={
 				ContentTypeMenuItem.<jk>class</jk>,

@@ -341,7 +341,7 @@
 		</ul>
 	<li>New methods in {@link oajr.RestServlet}:
 		<ul>
-			<li><dc>RestServlet.getChildClasses()</dc>  - Programmatic equivalent to {@link oajr.annotation.RestResource#children() @RestResource(children)} annotation.
+			<li><dc>RestServlet.getChildClasses()</dc>  - Programmatic equivalent to <dc>@RestResource(children)</dc> annotation.
 			<li><dc>RestServlet.shouldLog(HttpServletRequest,HttpServletResponse,RestException)</dc> 
 			<li><dc>RestServlet.shouldLogStackTrace(HttpServletRequest,HttpServletResponse,RestException)</dc> 
 			<li><dc>RestServlet.logObjects(Level,String,Object[])</dc> 
@@ -355,12 +355,12 @@
 		from {@link oajr.BasicRestServlet} and <dc>RestServletJenaDefault</dc>.  
 		These may represent a security risk if not handled correctly, so removed
 		them as a precaution.
-	<li>Removed <c>RestServletProperties.REST_htDocsFolder</c>.  Replaced with {@link oajr.annotation.RestResource#staticFiles() @RestResource(staticFiles)}.
-	<li>New annotations on {@link oajr.annotation.RestResource @RestResource}.
+	<li>Removed <c>RestServletProperties.REST_htDocsFolder</c>.  Replaced with <dc>@RestResource(staticFiles)</dc>}.
+	<li>New annotations on <dc>@RestResource</dc>.
 		<ul>
 			<li><dc>RestResource.stylesheet()</dc>
 			<li><dc>RestResource.favicon()</dc>
-			<li>{@link oajr.annotation.RestResource#staticFiles() @RestResource(staticFiles)}
+			<li><dc>@RestResource(staticFiles)</dc>
 		</ul>
 	<li>Eliminated <c>org.apache.juneau.rest.jaxrs.JsonProvider</c> class.  
 		Some JAX-RS implementations use code scanning to find providers, so if you were using <c>DefaultJenaProvider</c>, it would

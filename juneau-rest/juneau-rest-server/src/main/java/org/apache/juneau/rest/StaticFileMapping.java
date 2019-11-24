@@ -37,7 +37,7 @@ import org.apache.juneau.utils.*;
  * <p class='bcode w800'>
  * <jk>package</jk> com.foo.mypackage;
  *
- * <ja>@RestResource</ja>(
+ * <ja>@Rest</ja>(
  * 	path=<js>"/myresource"</js>,
  * 	staticFiles={<js>"htdocs:docs"</js>}
  * )

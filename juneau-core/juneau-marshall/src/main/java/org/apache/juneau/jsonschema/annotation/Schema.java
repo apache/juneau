@@ -29,7 +29,7 @@ import org.apache.juneau.oapi.*;
  * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
  *
  * <p>
- * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
  * <br>Also used to define OpenAPI schema information for POJOs serialized through {@link OpenApiSerializer} and parsed through {@link OpenApiParser}.
  *
  * <h5 class='section'>Examples:</h5>

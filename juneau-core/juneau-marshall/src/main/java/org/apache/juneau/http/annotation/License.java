@@ -23,12 +23,12 @@ import java.lang.annotation.*;
  * License information for the exposed API.
  *
  * <p>
- * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Normal</jc>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@Rest</ja>(
  * 		swagger=<ja>@ResourceSwagger</ja>(
  * 			license=<ja>@License</ja>(
  * 				name=<js>"Apache 2.0"</js>,
@@ -39,7 +39,7 @@ import java.lang.annotation.*;
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Free-form</jc>
- * 	<ja>@RestResource</ja>(
+ * 	<ja>@Rest</ja>(
  * 		swagger=<ja>@ResourceSwagger</ja>(
  * 			license=<ja>@License</ja>({
  * 				<js>"name:'Apache 2.0',"</js>,
@@ -94,7 +94,7 @@ public @interface License {
 	 * The following are completely equivalent ways of defining the swagger description of the license information:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			license=<ja>@License</ja>(
 	 * 				name=<js>"Apache 2.0"</js>,
@@ -105,7 +105,7 @@ public @interface License {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			license=<ja>@License</ja>({
 	 * 				<js>"name: 'Apache 2.0',"</js>,
@@ -116,7 +116,7 @@ public @interface License {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
-	 * 	<ja>@RestResource</ja>(
+	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(<js>"$L{licenseSwagger}"</js>)
 	 * 	)
 	 * </p>

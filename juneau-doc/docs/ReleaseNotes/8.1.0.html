@@ -28,7 +28,7 @@
 	<li>
 		<a href='#juneau-rest-server.Instantiation.BasicRest'>BasicRest</a>, <a href='#juneau-rest-server.Instantiation.BasicRestGroup'>BasicRestGroup</a> classes
 	<li>
-		<a href='#juneau-rest-server.RestResource.RestResourcePath'>Path variables on resource paths</a>
+		<a href='#juneau-rest-server.Rest.RestPath'>Path variables on resource paths</a>
 	<li>
 		<a href='#juneau-rest-server.RestMethod.RequestAttributes'>Request Attributes API</a>
 	<li>
@@ -233,7 +233,7 @@
 			</ul>
 			<li class='ja'>{@link oajr.annotation.Attr}
 			<li class='ja'>{@link oajr.annotation.RestMethod#attrs()}
-			<li class='ja'>{@link oajr.annotation.RestResource#attrs()}
+			<li class='ja'><dc>RestResource.attrs()</dc>
 		</ul>
 		<br>This deprecates the following APIs:
 		<ul class='javatree'>
@@ -260,10 +260,10 @@
 	<li>
 		New annotations for simplified role-based guards on classes and methods:
 		<ul class='javatree'>
-			<li class='ja'>{@link oajr.annotation.RestResource} 
+			<li class='ja'><dc>RestResource</dc> 
 			<ul>
-				<li class='jm'>{@link oajr.annotation.RestResource#roleGuard roleGuard()}
-				<li class='jm'>{@link oajr.annotation.RestResource#rolesDeclared rolesDeclared()}
+				<li class='jm'><dc>roleGuard()</dc>
+				<li class='jm'><dc>rolesDeclared()</dc>
 			</ul>
 			<li class='ja'>{@link oajr.annotation.RestMethod} 
 			<ul>
@@ -274,15 +274,15 @@
 	<li>
 		New annotations for fine-tuned handling of http-methods/http-headers as query parameters and others:
 		<ul class='javatree'>
-			<li class='ja'>{@link oajr.annotation.RestResource} 
+			<li class='ja'><dc>RestResource</dc> 
 			<ul>
-				<li class='jm'>{@link oajr.annotation.RestResource#allowedHeaderParams() allowedHeaderParams()}
-				<li class='jm'>{@link oajr.annotation.RestResource#allowedMethodHeaders() allowedMethodHeaders()}
-				<li class='jm'>{@link oajr.annotation.RestResource#allowedMethodParams() allowedMethodParams()}
+				<li class='jm'><dc>allowedHeaderParams()</dc>
+				<li class='jm'><dc>allowedMethodHeaders()}</dc>
+				<li class='jm'><dc>allowedMethodParams()</dc>
 			</ul>
 		</ul>
 	<li>
-		The {@link oajr.annotation.RestResource#path() @RestResource(path)} annotation can now use variables:
+		The <dc>@RestResource(path)</dc> annotation can now use variables:
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
 		path=<js>"/myResource/{foo}/{bar}"</js>

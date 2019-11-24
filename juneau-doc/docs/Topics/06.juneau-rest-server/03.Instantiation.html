@@ -28,7 +28,7 @@ Instantiation
 <p>
 	<b>When deployed as a child of another resource, you MAY extend from one of the servlet classes but it's 
 	not necessary.</b>
-	The only requirement is that the class be annotated with <ja>@RestResource</ja> and have one of the following constructors:
+	The only requirement is that the class be annotated with <ja>@Rest</ja> and have one of the following constructors:
 </p>
 <ul class='javatree'>
 	<li class='jm'><c><jk>public</jk> T()</c>
@@ -42,7 +42,7 @@ Instantiation
 </p>
 <p class='bpcode w800'>
 	<jc>// Top level resource is deployed like any other servlet and must subclass from RestServlet.</jc>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		path=<js>"/top"</js>,
 		children={
 			ChildResource.<jk>class</jk>  <jc>// Accessed via URI "/top/child"</jc>
@@ -52,7 +52,7 @@ Instantiation
 </p>
 <p class='bpcode w800'>
 	<jc>// Child resources can inherit from RestServlet but it's not a requirement.</jc>
-	<ja>@RestResource</ja>(
+	<ja>@Rest</ja>(
 		path=<js>"/child"</js>
 	)
 	<jk>public class</jk> ChildResource <jk>extends</jk> WhateverYouWant {...}
