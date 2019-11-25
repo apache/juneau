@@ -111,12 +111,12 @@
 	<modules>
 		<module>juneau-core</module>
 		<module>juneau-rest</module>
-        <module>juneau-microservice</module>
-        <module>juneau-examples</module>
-        <module>juneau-doc</module>
-		<module>juneau-releng</module>
+		<module>juneau-microservice</module>
 		<module>juneau-sc</module>
-    </modules>
+		<module>juneau-examples</module>
+		<module>juneau-doc</module>
+		<module>juneau-releng</module>
+	</modules>
 
 	<distributionManagement>
 		<!-- Uncomment to generate Maven site in /tmp/site --> 
@@ -281,35 +281,35 @@
 						<source>1.8</source>
 						<target>1.8</target>
 						<compilerArgument>-parameters</compilerArgument>
-      						<testCompilerArgument>-parameters</testCompilerArgument>
+						<testCompilerArgument>-parameters</testCompilerArgument>
 					</configuration>
 				</plugin>
 
-		        <plugin>
-		            <groupId>org.eclipse.m2e</groupId>
-		            <artifactId>lifecycle-mapping</artifactId>
-		            <version>1.0.0</version>
-		            <configuration>
-		                <lifecycleMappingMetadata>
-		                    <pluginExecutions>
-		                        <pluginExecution>
-		                            <pluginExecutionFilter>
-		                                <groupId>org.apache.maven.plugins</groupId>
-		                                <artifactId>maven-remote-resources-plugin</artifactId>
-		                                <versionRange>[1.0,)</versionRange>
-		                                <goals>
-		                                    <goal>process</goal>
-		                                </goals>
-		                            </pluginExecutionFilter>
-		                            <action>
-		                                <ignore>
-		                                </ignore>
-		                            </action>
-		                        </pluginExecution>
-		                    </pluginExecutions>
-		                </lifecycleMappingMetadata>
-		            </configuration>
-		        </plugin>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-remote-resources-plugin</artifactId>
+										<versionRange>[1.0,)</versionRange>
+										<goals>
+											<goal>process</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore>
+										</ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -358,13 +358,14 @@
 	</reporting>
 
 	<url>https://juneau.apache.org/</url>
-	<!-- Inherited from parent pom 
+	<!-- 
+	Inherited from parent pom 
 	<organization>
 		<name>The Apache Software Foundation</name>
 		<url>https://www.apache.org/</url>
 	</organization>
-	     -->
-        <inceptionYear>2016</inceptionYear>
+	-->
+	<inceptionYear>2016</inceptionYear>
 
 	<scm>
 		<connection>scm:git:https://gitbox.apache.org/repos/asf/juneau.git</connection>
