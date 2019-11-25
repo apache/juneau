@@ -84,8 +84,15 @@ cd ~/.m2
 
 message "Cleaning existing Git repository"
 st
-mv repository repository-old
-rm -rf repository-old & 
+if [ "$X_CLEANM2" != "N" ] && [ "$X_CLEANM2" != "n" ] 
+then
+	mv repository repository-old
+	rm -rf repository-old & 
+fi
+et
+
+message "Making git folder"
+st
 rm -rf $X_STAGING
 mkdir -p $X_STAGING
 mkdir $X_STAGING/git
@@ -123,12 +130,33 @@ WORKSPACE=target/workspace
 XV=${X_VERSION}-SNAPSHOT
 rm -Rf $WORKSPACE
 mkdir -p $WORKSPACE
-unzip -o juneau-microservice/juneau-my-jetty-microservice/target/my-jetty-microservice-$XV-bin.zip -d $WORKSPACE/my-jetty-microservice
-unzip -o juneau-microservice/juneau-my-springboot-microservice/target/my-springboot-microservice-$XV-bin.zip -d $WORKSPACE/my-springboot-microservice
-unzip -o juneau-examples/juneau-examples-core/target/juneau-examples-core-$XV-bin.zip -d $WORKSPACE/juneau-examples-core
-unzip -o juneau-examples/juneau-examples-rest-jetty/target/juneau-examples-rest-jetty-$XV-bin.zip -d $WORKSPACE/juneau-examples-rest-jetty
-unzip -o juneau-examples/juneau-examples-rest-springboot/target/juneau-examples-rest-springboot-$XV-bin.zip -d $WORKSPACE/juneau-examples-rest-springboot
-yprompt "Can all workspace projecs in $X_STAGING/git/juneau/target/workspace be cleanly imported into Eclipse?"
+
+ZIP_SRC=juneau-microservice/juneau-my-jetty-microservice/target/my-jetty-microservice-$XV-bin.zip
+ZIP_TGT=$WORKSPACE/my-jetty-microservice
+echo Unzipping $ZIP_SRC to $ZIP_TGT
+unzip -o $ZIP_SRC -d $ZIP_TGT
+
+ZIP_SRC=juneau-microservice/juneau-my-springboot-microservice/target/my-springboot-microservice-$XV-bin.zip
+ZIP_TGT=$WORKSPACE/my-springboot-microservice
+echo Unzipping $ZIP_SRC to $ZIP_TGT
+unzip -o $ZIP_SRC -d $ZIP_TGT
+
+ZIP_SRC=juneau-examples/juneau-examples-core/target/juneau-examples-core-$XV-bin.zip
+ZIP_TGT=$WORKSPACE/juneau-examples-core
+echo Unzipping $ZIP_SRC to $ZIP_TGT
+unzip -o $ZIP_SRC -d $ZIP_TGT
+
+ZIP_SRC=juneau-examples/juneau-examples-rest-jetty/target/juneau-examples-rest-jetty-$XV-bin.zip
+ZIP_TGT=$WORKSPACE/juneau-examples-rest-jetty
+echo Unzipping $ZIP_SRC to $ZIP_TGT
+unzip -o $ZIP_SRC -d $ZIP_TGT
+
+ZIP_SRC=juneau-examples/juneau-examples-rest-springboot/target/juneau-examples-rest-springboot-$XV-bin.zip
+ZIP_TGT=$WORKSPACE/juneau-examples-rest-springboot
+echo Unzipping $ZIP_SRC to $ZIP_TGT
+unzip -o $ZIP_SRC -d $ZIP_TGT
+
+yprompt "Can all workspace projecs in $X_STAGING/git/juneau/target/workspace be cleanly imported as Maven projects into Eclipse?"
 
 message "Running deploy"
 st
