@@ -24,12 +24,9 @@ timestamps {
 			withEnv(["JAVA_HOME=${ tool 'JDK 1.8 (latest)' }", "PATH=${env.JAVA_HOME}/bin"]) { 
 	
 				withMaven(jdk: 'JDK 1.8 (latest)', maven: 'Maven 3.2.5') { 
-					if(isUnix()) {
-						sh "mvn clean install deploy javadoc:aggregate " 
-					} else { 
-						bat "mvn clean install deploy javadoc:aggregate " 
-					} 
+					sh "mvn clean install deploy javadoc:aggregate"
 				}
+				
 				// JUnit Results
 				junit '**/target/surefire-reports/*.xml' 
 			}
