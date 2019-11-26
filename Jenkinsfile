@@ -21,7 +21,7 @@ timestamps {
 		
 		stage ('Juneau-Java-1.8 - Build') {
 	
-			withEnv(["JAVA_HOME=${ tool '"+JDK+"' }", "PATH=${env.JAVA_HOME}/bin"]) { 
+			withEnv(["JAVA_HOME=${ tool 'jdk-1.8.0_64bits' }", "PATH=${env.JAVA_HOME}/bin"]) { 
 	
 				withMaven(jdk: 'JDK 1.8 (latest)', maven: 'Maven 3.2.5') { 
 					if(isUnix()) {
