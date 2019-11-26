@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau</artifactId>
-		<version>8.1.2-SNAPSHOT</version>
+		<version>8.1.2</version>
 	</parent>
 
 	<artifactId>juneau-sc</artifactId>
