@@ -15,6 +15,10 @@ timestamps {
 
 	node ('ubuntu') { 
 	
+		script {
+			System.setProperty("org.jenkinsci.plugins.durabletask.BourneShellScript.LAUNCH_DIAGNOSTICS", "true");
+ 		}	
+	
 		stage ('Juneau-Java-1.8 - Checkout') {
 			checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/apache/juneau']]]) 
 		}
