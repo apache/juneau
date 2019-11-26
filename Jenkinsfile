@@ -24,6 +24,7 @@ timestamps {
 			withEnv(["JAVA_HOME=${ tool 'JDK 1.8 (latest)' }", "PATH=${env.JAVA_HOME}/bin"]) { 
 	
 				withMaven(jdk: 'JDK 1.8 (latest)', maven: 'Maven 3.2.5') { 
+					sh "echo hello"
 					sh "mvn clean install deploy javadoc:aggregate"
 				}
 				
