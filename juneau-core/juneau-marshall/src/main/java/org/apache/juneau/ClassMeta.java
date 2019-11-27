@@ -149,7 +149,7 @@ public final class ClassMeta<T> implements Type {
 		wLock.lock();
 		try {
 			// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
-			if (beanContext != null && beanContext.cmCache != null)
+			if (beanContext != null && beanContext.cmCache != null && isCacheable(innerClass))
 				beanContext.cmCache.put(innerClass, this);
 
 			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, implClass, beanFilter, pojoSwaps, childPojoSwaps, example);
@@ -194,6 +194,19 @@ public final class ClassMeta<T> implements Type {
 			this.notABeanReason = notABeanReason;
 			wLock.unlock();
 		}
+	}
+
+	/**
+	 * Generated classes shouldn't be cacheable to prevent needlessly filling up the cache.
+	 */
+	private static boolean isCacheable(Class<?> c) {
+		String n = c.getName();
+		char x = n.charAt(n.length()-1);  // All generated classes appear to end with digits.
+		if (x >= '0' && x <= '9') {
+			if (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1)
+				return false;
+		}
+		return true;
 	}
 
 	/**
