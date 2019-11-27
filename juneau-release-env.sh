@@ -20,6 +20,7 @@ export X_RELEASE=juneau-7.0.0-RC1
 export X_STAGING=~/tmp/dist-release-juneau
 export X_USERNAME=your apache username
 export X_EMAIL=you@apache.org
+export X_CLEANM2=Y
 
 echo ' '
 echo --- Settings ------------------------------------------------------------------
@@ -29,4 +30,5 @@ echo X_RELEASE = $X_RELEASE
 echo X_STAGING = $X_STAGING
 echo X_USERNAME = $X_USERNAME
 echo X_EMAIL = $X_EMAIL
+echo X_CLEANM2 = $X_CLEANM2
 echo -------------------------------------------------------------------------------
