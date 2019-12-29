@@ -581,7 +581,9 @@ public final class BeanPropertyMeta {
 	 * Equivalent to calling {@link BeanMap#get(Object)}, but is faster since it avoids looking up the property meta.
 	 *
 	 * @param m The bean map to get the transformed value from.
-	 * @param pName The property name.
+	 * @param pName
+	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
+	 * 	<br>Otherwise can be <jk>null</jk>.
 	 * @return
 	 * 	The property value.
 	 * 	<br>Returns <jk>null</jk> if this is a write-only property.
@@ -616,7 +618,9 @@ public final class BeanPropertyMeta {
 	 * Equivalent to calling {@link BeanMap#getRaw(Object)}, but is faster since it avoids looking up the property meta.
 	 *
 	 * @param m The bean map to get the transformed value from.
-	 * @param pName The property name.
+	 * @param pName
+	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
+	 * 	<br>Otherwise can be <jk>null</jk>.
 	 * @return The raw property value.
 	 */
 	public Object getRaw(BeanMap<?> m, String pName) {
@@ -680,7 +684,9 @@ public final class BeanPropertyMeta {
 	 * This is a no-op on a read-only property.
 	 *
 	 * @param m The bean map to set the property value on.
-	 * @param pName The property name.
+	 * @param pName
+	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
+	 * 	<br>Otherwise can be <jk>null</jk>.
 	 * @param value The value to set.
 	 * @return The previous property value.
 	 * @throws BeanRuntimeException If property could not be set.
@@ -966,7 +972,9 @@ public final class BeanPropertyMeta {
 	 * larger array on each operation.
 	 *
 	 * @param m The bean of the field being set.
-	 * @param pName The property name.
+	 * @param pName
+	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
+	 * 	<br>Otherwise can be <jk>null</jk>.
 	 * @param value The value to add to the field.
 	 * @throws BeanRuntimeException If field is not a collection or array.
 	 */
@@ -1042,7 +1050,9 @@ public final class BeanPropertyMeta {
 	 * Adds a value to a {@link Map} or bean property.
 	 *
 	 * @param m The bean of the field being set.
-	 * @param pName The property name.
+	 * @param pName
+	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
+	 * 	<br>Otherwise can be <jk>null</jk>.
 	 * @param key The key to add to the field.
 	 * @param value The value to add to the field.
 	 * @throws BeanRuntimeException If field is not a map or array.

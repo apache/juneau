@@ -99,7 +99,7 @@ public final class HtmlParserSession extends XmlParserSession {
 		else
 			sType = eType;
 
-		if (sType.isOptional()) 
+		if (sType.isOptional())
 			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), r, outer, isRoot, pMeta));
 
 		setCurrentClass(sType);
@@ -511,7 +511,9 @@ public final class HtmlParserSession extends XmlParserSession {
 					pMeta.set(m, key, value);
 				}
 			}
-			nextTag(r, xTR);
+			HtmlTag t = nextTag(r, xTD, xTR);
+			if (t == xTD)
+				nextTag(r, xTR);
 		}
 		return m;
 	}

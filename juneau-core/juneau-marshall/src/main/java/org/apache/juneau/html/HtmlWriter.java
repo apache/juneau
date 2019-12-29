@@ -67,7 +67,7 @@ public class HtmlWriter extends XmlWriter {
 				append("&gt;");
 			else if (test == '\n')
 				append(preserveWhitespace ? "\n" : "<br/>");
-			else if (test == '\f')  // XML 1.0 doesn't support formfeeds or backslashes, so we have to invent something.
+			else if (test == '\f')  // XML 1.0 doesn't support form feeds or backslashes, so we have to invent something.
 				append(preserveWhitespace ? "\f" : "<ff/>");
 			else if (test == '\b')
 				append(preserveWhitespace ? "\b" : "<bs/>");

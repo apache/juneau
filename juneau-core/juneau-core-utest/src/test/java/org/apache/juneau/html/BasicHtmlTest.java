@@ -2174,9 +2174,9 @@ public class BasicHtmlTest {
 					"BeanWithWhitespaceTextFields-1",
 					BeanWithWhitespaceTextFields.class,
 					new BeanWithWhitespaceTextFields().init(null),
-					"<object></object>",
-					"<object></object>\n",
-					"<object></object>"
+					"<object nil='true'></object>",
+					"<object nil='true'>\n</object>\n",
+					"<object nil='true'></object>"
 				)
 				{
 					@Override
@@ -2254,9 +2254,9 @@ public class BasicHtmlTest {
 					"BeanWithWhitespaceTextPwsFields-1",
 					BeanWithWhitespaceTextPwsFields.class,
 					new BeanWithWhitespaceTextPwsFields().init(null),
-					"<object></object>",
-					"<object></object>\n",
-					"<object></object>"
+					"<object nil='true'></object>",
+					"<object nil='true'>\n</object>\n",
+					"<object nil='true'></object>"
 				)
 				{
 					@Override
@@ -2334,9 +2334,9 @@ public class BasicHtmlTest {
 					"BeanWithWhitespaceMixedFields-1",
 					BeanWithWhitespaceMixedFields.class,
 					new BeanWithWhitespaceMixedFields().init(null),
-					"<object></object>",
-					"<object></object>\n",
-					"<object></object>"
+					"<object nil='true'></object>",
+					"<object nil='true'>\n</object>\n",
+					"<object nil='true'></object>"
 				)
 				{
 					@Override
@@ -2430,9 +2430,9 @@ public class BasicHtmlTest {
 					"BeanWithWhitespaceMixedPwsFields-1",
 					BeanWithWhitespaceMixedPwsFields.class,
 					new BeanWithWhitespaceMixedPwsFields().init(null),
-					"<object></object>",
-					"<object></object>\n",
-					"<object></object>"
+					"<object nil='true'></object>",
+					"<object nil='true'>\n</object>\n",
+					"<object nil='true'></object>"
 				)
 				{
 					@Override

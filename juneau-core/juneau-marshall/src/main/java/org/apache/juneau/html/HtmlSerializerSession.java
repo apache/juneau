@@ -164,7 +164,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @throws IOException If a problem occurred trying to send output to the writer.
 	 */
 	private XmlWriter doSerialize(Object o, XmlWriter w) throws IOException, SerializeException {
-		serializeAnything(w, o, getExpectedRootType(o), null, null, getInitialDepth()-1, true);
+		serializeAnything(w, o, getExpectedRootType(o), null, null, getInitialDepth()-1, true, false);
 		return w;
 	}
 
@@ -201,7 +201,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		HtmlClassMeta cHtml = cHtml(type);
 
 		if (type.isMapOrBean() && ! cHtml.isXml())
-			return serializeAnything(out, o, eType, elementName, pMeta, 0, false);
+			return serializeAnything(out, o, eType, elementName, pMeta, 0, false, false);
 
 		return super.serializeAnything(out, o, eType, elementName, elementNamespace, addNamespaceUris, format, isMixed, preserveWhitespace, pMeta);
 	}
@@ -217,13 +217,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @param pMeta The bean property being serialized, or <jk>null</jk> if we're not serializing a bean property.
 	 * @param xIndent The current indentation value.
 	 * @param isRoot <jk>true</jk> if this is the root element of the document.
+	 * @param nlIfElement <jk>true</jk> if we should add a newline to the output before serializing only if the object is an element and not text.
 	 * @return The type of content encountered.  Either simple (no whitespace) or normal (elements with whitespace).
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected ContentResult serializeAnything(XmlWriter out, Object o,
-			ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot) throws IOException, SerializeException {
+			ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement) throws IOException, SerializeException {
 
 		ClassMeta<?> aType = null;       // The actual type
 		ClassMeta<?> wType = null;     // The wrapped type (delegate)
@@ -239,7 +240,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			o = null;
 			aType = object();
 		}
-		
+
 		// Handle Optional<X>
 		if (isOptional(aType)) {
 			o = getOptionalValue(o);
@@ -300,13 +301,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					indent -= xIndent;
 					pop();
 					out.nl(indent);
-					return serializeAnything(out, o2, null, typeName, null, xIndent, false);
+					return serializeAnything(out, o2, null, typeName, null, xIndent, false, false);
 				}
 			}
 
 			if (cHtml.isXml() || bpHtml.isXml()) {
 				pop();
 				indent++;
+				if (nlIfElement)
+					out.nl(0);
 				super.serializeAnything(out, o, null, null, null, false, XmlFormat.MIXED, false, false, null);
 				indent -= xIndent+1;
 				return cr;
@@ -424,14 +427,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.cTag();
 			if (link != null)
 				out.oTag(i+3, "a").attrUri("href", link.replace("{#}", stringify(value))).cTag();
-			ContentResult cr = serializeAnything(out, key, keyType, null, null, 2, false);
+			ContentResult cr = serializeAnything(out, key, keyType, null, null, 2, false, false);
 			if (link != null)
 				out.eTag("a");
 			if (cr == CR_ELEMENTS)
 				out.i(i+2);
 			out.eTag("td").nl(i+2);
 			out.sTag(i+2, "td");
-			cr = serializeAnything(out, value, valueType, (key == null ? "_x0000_" : toString(key)), null, 2, false);
+			cr = serializeAnything(out, value, valueType, (key == null ? "_x0000_" : toString(key)), null, 2, false, false);
 			if (cr == CR_ELEMENTS)
 				out.ie(i+2);
 			out.eTag("td").nl(i+2);
@@ -494,7 +497,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			try {
 				if (link != null)
 					out.oTag(i+3, "a").attrUri("href", link).cTag();
-				ContentResult cr = serializeAnything(out, value, cMeta, key, pMeta, 2, false);
+				ContentResult cr = serializeAnything(out, value, cMeta, key, pMeta, 2, false, true);
 				if (cr == CR_ELEMENTS)
 					out.i(i+2);
 				if (link != null)
@@ -577,7 +580,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 				if (cm == null) {
 					out.i(i+2);
-					serializeAnything(out, o, null, null, null, 1, false);
+					serializeAnything(out, o, null, null, null, 1, false, false);
 					out.nl(0);
 
 				} else if (cm.isMap() && ! (cm.isBeanMap())) {
@@ -585,7 +588,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 					for (Object k : th) {
 						out.sTag(i+2, "td");
-						ContentResult cr = serializeAnything(out, m2.get(k), eType.getElementType(), toString(k), null, 2, false);
+						ContentResult cr = serializeAnything(out, m2.get(k), eType.getElementType(), toString(k), null, 2, false, true);
 						if (cr == CR_ELEMENTS)
 							out.i(i+2);
 						out.eTag("td").nl(i+2);
@@ -619,7 +622,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 							out.cTag();
 							if (link != null)
 								out.oTag("a").attrUri("href", link).cTag();
-							ContentResult cr = serializeAnything(out, value, pMeta.getClassMeta(), p.getKey().toString(), pMeta, 2, false);
+							ContentResult cr = serializeAnything(out, value, pMeta.getClassMeta(), p.getKey().toString(), pMeta, 2, false, true);
 							if (cr == CR_ELEMENTS)
 								out.i(i+2);
 							if (link != null)
@@ -651,7 +654,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					out.cTag();
 				if (link != null)
 					out.oTag(i+2, "a").attrUri("href", link.replace("{#}", stringify(o))).cTag();
-				ContentResult cr = serializeAnything(out, o, eType.getElementType(), name, null, 1, false);
+				ContentResult cr = serializeAnything(out, o, eType.getElementType(), name, null, 1, false, true);
 				if (link != null)
 					out.eTag("a");
 				if (cr == CR_ELEMENTS)

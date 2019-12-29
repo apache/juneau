@@ -234,7 +234,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @param elementNamespace The namespace of the element.
 	 * @param addNamespaceUris Flag indicating that namespace URIs need to be added.
 	 * @param format The format to serialize the output to.
-	 * @param isMixed We're serializing mixed content, so don't use whitespace.
+	 * @param isMixedOrText We're serializing mixed content, so don't use whitespace.
 	 * @param preserveWhitespace
 	 * 	<jk>true</jk> if we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
 	 * @param pMeta The bean property metadata if this is a bean property being serialized.
@@ -250,12 +250,12 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			Namespace elementNamespace,
 			boolean addNamespaceUris,
 			XmlFormat format,
-			boolean isMixed,
+			boolean isMixedOrText,
 			boolean preserveWhitespace,
 			BeanPropertyMeta pMeta) throws IOException, SerializeException {
 
 		JsonType type = null;              // The type string (e.g. <type> or <x x='type'>
-		int i = isMixed ? 0 : indent;       // Current indentation
+		int i = isMixedOrText ? 0 : indent;       // Current indentation
 		ClassMeta<?> aType = null;     // The actual type
 		ClassMeta<?> wType = null;     // The wrapped type (delegate)
 		ClassMeta<?> sType = object(); // The serialized type
@@ -372,7 +372,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		}
 
 		// Do we need a carriage return after the start tag?
-		boolean cr = o != null && (sType.isMapOrBean() || sType.isCollectionOrArray()) && ! isMixed;
+		boolean cr = o != null && (sType.isMapOrBean() || sType.isCollectionOrArray()) && ! isMixedOrText;
 
 		String en = elementName;
 		if (en == null && ! isRaw) {
@@ -435,21 +435,21 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				out.append(o);
 			} else if (sType.isMap() || (wType != null && wType.isMap())) {
 				if (o instanceof BeanMap)
-					rc = serializeBeanMap(out, (BeanMap)o, elementNamespace, isCollapsed, isMixed);
+					rc = serializeBeanMap(out, (BeanMap)o, elementNamespace, isCollapsed, isMixedOrText);
 				else
-					rc = serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixed);
+					rc = serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixedOrText);
 			} else if (sType.isBean()) {
-				rc = serializeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixed);
+				rc = serializeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixedOrText);
 			} else if (sType.isCollection() || (wType != null && wType.isCollection())) {
 				if (isCollapsed)
 					this.indent--;
-				serializeCollection(out, o, sType, eType, pMeta, isMixed);
+				serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);
 				if (isCollapsed)
 					this.indent++;
 			} else if (sType.isArray()) {
 				if (isCollapsed)
 					this.indent--;
-				serializeCollection(out, o, sType, eType, pMeta, isMixed);
+				serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);
 				if (isCollapsed)
 					this.indent++;
 			} else if (sType.isReader() || sType.isInputStream()) {
@@ -478,7 +478,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				else
 					out.ie(cr && rc != CR_MIXED ? i : 0).eTag(elementNs, en, encodeEn);
 			}
-			if (! isMixed)
+			if (! isMixedOrText)
 				out.nl(i);
 		}
 
@@ -527,7 +527,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	private ContentResult serializeBeanMap(XmlWriter out, BeanMap<?> m,
-			Namespace elementNs, boolean isCollapsed, boolean isMixed) throws IOException, SerializeException {
+			Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws IOException, SerializeException {
 		boolean hasChildren = false;
 		BeanMeta<?> bm = m.getMeta();
 
@@ -581,9 +581,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 							}
 						} else /* Map */ {
 							Map m2 = (Map)value;
-							for (Map.Entry e : (Set<Map.Entry>)(m2.entrySet())) {
-								out.attr(ns, toString(e.getKey()), e.getValue());
-							}
+							if (m2 != null)
+								for (Map.Entry e : (Set<Map.Entry>)(m2.entrySet()))
+									out.attr(ns, toString(e.getKey()), e.getValue());
 						}
 					} else {
 						out.attr(ns, key, value);
@@ -609,7 +609,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					hasContent = true;
 					cf = xbm.getContentFormat();
 					if (cf.isOneOf(MIXED,MIXED_PWS,TEXT,TEXT_PWS,XMLTEXT))
-						isMixed = true;
+						isMixedOrText = true;
 					if (cf.isOneOf(MIXED_PWS, TEXT_PWS))
 						preserveWhitespace = true;
 					if (contentType.isCollection() && ((Collection)content).isEmpty())
@@ -628,46 +628,40 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 					if (! hasChildren) {
 						hasChildren = true;
-						out.appendIf(! isCollapsed, '>').nlIf(! isMixed, indent);
+						out.appendIf(! isCollapsed, '>').nlIf(! isMixedOrText, indent);
 					}
 
 					XmlBeanPropertyMeta bpXml = bpXml(pMeta);
-					serializeAnything(out, value, cMeta, key, bpXml.getNamespace(), false, bpXml.getXmlFormat(), isMixed, false, pMeta);
+					serializeAnything(out, value, cMeta, key, bpXml.getNamespace(), false, bpXml.getXmlFormat(), isMixedOrText, false, pMeta);
 				}
 			}
 		}
-		if (! hasContent)
+		if (contentProperty == null && ! hasContent)
 			return (hasChildren ? CR_ELEMENTS : isVoidElement ? CR_VOID : CR_EMPTY);
-		out.append('>').nlIf(! isMixed, indent);
 
 		// Serialize XML content.
 		if (content != null) {
+			out.append('>').nlIf(! isMixedOrText, indent);
 			if (contentType == null) {
 			} else if (contentType.isCollection()) {
 				Collection c = (Collection)content;
 				for (Iterator i = c.iterator(); i.hasNext();) {
 					Object value = i.next();
-					serializeAnything(out, value, contentType.getElementType(), null, null, false, cf, isMixed, preserveWhitespace, null);
+					serializeAnything(out, value, contentType.getElementType(), null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 				}
 			} else if (contentType.isArray()) {
 				Collection c = toList(Object[].class, content);
 				for (Iterator i = c.iterator(); i.hasNext();) {
 					Object value = i.next();
-					serializeAnything(out, value, contentType.getElementType(), null, null, false, cf, isMixed, preserveWhitespace, null);
+					serializeAnything(out, value, contentType.getElementType(), null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 				}
 			} else {
-				serializeAnything(out, content, contentType, null, null, false, cf, isMixed, preserveWhitespace, null);
+				serializeAnything(out, content, contentType, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 			}
 		} else {
-			if (! isTrimNullProperties()) {
-				if (! isMixed)
-					out.i(indent);
-				out.text(content);
-				if (! isMixed)
-					out.nl(indent);
-			}
+			out.attr("nil", "true").append('>').nlIf(! isMixedOrText, indent);
 		}
-		return isMixed ? CR_MIXED : CR_ELEMENTS;
+		return isMixedOrText ? CR_MIXED : CR_ELEMENTS;
 	}
 
 	private XmlWriter serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType,

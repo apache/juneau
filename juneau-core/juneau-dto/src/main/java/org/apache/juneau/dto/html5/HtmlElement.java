@@ -60,10 +60,12 @@ public abstract class HtmlElement {
 	 */
 	@Beanp("a")
 	public HtmlElement setAttrs(LinkedHashMap<String,Object> attrs) {
-		for (Entry<String,Object> e : attrs.entrySet()) {
-			String key = e.getKey();
-			if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
-				e.setValue(StringUtils.toURI(e.getValue()));
+		if (attrs != null) {
+			for (Entry<String,Object> e : attrs.entrySet()) {
+				String key = e.getKey();
+				if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
+					e.setValue(StringUtils.toURI(e.getValue()));
+			}
 		}
 		this.attrs = attrs;
 		return this;

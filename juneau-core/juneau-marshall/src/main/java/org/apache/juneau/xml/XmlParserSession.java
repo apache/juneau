@@ -288,13 +288,14 @@ public class XmlParserSession extends ReaderParserSession {
 		else
 			sType = eType;
 
-		if (sType.isOptional()) 
+		if (sType.isOptional())
 			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), currAttr, r, outer, isRoot, pMeta));
 
 		setCurrentClass(sType);
 
 		String wrapperAttr = (isRoot && isPreserveRootElement()) ? r.getName().getLocalPart() : null;
 		String typeAttr = r.getAttributeValue(null, getBeanTypePropertyName(eType));
+		boolean isNil = "true".equals(r.getAttributeValue(null, "nil"));
 		int jsonType = getJsonType(typeAttr);
 		String elementName = getElementName(r);
 		if (jsonType == 0) {
@@ -367,7 +368,7 @@ public class XmlParserSession extends ReaderParserSession {
 				o = builder != null ? builder.build(this, m.getBean(), eType) : m.getBean();
 			} else {
 				BeanMap m = builder != null ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
-				m = parseIntoBean(r, m);
+				m = parseIntoBean(r, m, isNil);
 				o = builder != null ? builder.build(this, m.getBean(), eType) : m.getBean();
 			}
 		} else if (sType.isArray() || sType.isArgs()) {
@@ -469,23 +470,25 @@ public class XmlParserSession extends ReaderParserSession {
 		return UNKNOWN;
 	}
 
-	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException, XMLStreamException {
+	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m, boolean isNil) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		BeanMeta<?> bMeta = m.getMeta();
 		XmlBeanMeta xmlMeta = bMeta.getExtendedMeta(XmlBeanMeta.class);
 
 		for (int i = 0; i < r.getAttributeCount(); i++) {
 			String key = getAttributeName(r, i);
-			String val = r.getAttributeValue(i);
-			String ns = r.getAttributeNamespace(i);
-			BeanPropertyMeta bpm = xmlMeta.getPropertyMeta(key);
-			if (bpm == null) {
-				if (xmlMeta.getAttrsProperty() != null) {
-					xmlMeta.getAttrsProperty().add(m, key, key, val);
-				} else if (ns == null) {
-					onUnknownProperty(key, m);
+			if (! "nil".equals(key)) {
+				String val = r.getAttributeValue(i);
+				String ns = r.getAttributeNamespace(i);
+				BeanPropertyMeta bpm = xmlMeta.getPropertyMeta(key);
+				if (bpm == null) {
+					if (xmlMeta.getAttrsProperty() != null) {
+						xmlMeta.getAttrsProperty().add(m, key, key, val);
+					} else if (ns == null) {
+						onUnknownProperty(key, m);
+					}
+				} else {
+					bpm.set(m, key, val);
 				}
-			} else {
-				bpm.set(m, key, val);
 			}
 		}
 
@@ -600,10 +603,17 @@ public class XmlParserSession extends ReaderParserSession {
 			}
 		} while (depth >= 0);
 
-		if (sb != null && cp != null)
-			cp.set(m, null, sb.toString());
-		else if (l != null && cp != null)
-			cp.set(m, null, XmlUtils.collapseTextNodes(l));
+		if (cp != null && ! isNil) {
+			if (sb != null)
+				cp.set(m, null, sb.toString());
+			else if (l != null)
+				cp.set(m, null, XmlUtils.collapseTextNodes(l));
+			else if (cpcm.isCollectionOrArray()) {
+				Object o = cp.get(m, null);
+				if (o == null)
+					cp.set(m, cp.getName(), new ArrayList<>());
+			}
+		}
 
 		returnStringBuilder(sb);
 		return m;

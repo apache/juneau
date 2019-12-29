@@ -16,11 +16,13 @@ import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
+import java.util.Map;
 
 import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.parser.*;
@@ -957,6 +959,35 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			M m = new M();
 			m.f1 = Integer.parseInt(s);
 			return m;
+		}
+	}
+
+	//====================================================================================================
+	// testBeanPropertyWithBeanWithAttrsField
+	//====================================================================================================
+
+	@Test
+	public void testBeanPropertyWithBeanWithAttrsField() throws Exception {
+		N t = N.create();
+		t = roundTrip(t, N.class);
+
+		t.f1.type("foo");
+		t = roundTrip(t, N.class);
+
+		t.f1.attr("foo", "bar").attrUri("href", "http://foo");
+		t = roundTrip(t, N.class);
+
+		Head h = new Head().child(new Style());
+		h = roundTrip(h, Head.class);
+	}
+
+	public static class N {
+		public Style f1;
+
+		static N create() {
+			N n = new N();
+			n.f1 = new Style();
+			return n;
 		}
 	}
 }

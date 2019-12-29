@@ -47,7 +47,7 @@ public class XmlContentTest {
 		session = s1.createSession(SerializerSessionArgs.create());
 		session.serialize(t, sw);
 		r = sw.toString();
-		assertEquals("<A f1='f1'>_x0000_</A>", r);
+		assertEquals("<A f1='f1' nil='true'></A>", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t, t2);
 
@@ -55,7 +55,7 @@ public class XmlContentTest {
 		session = s2.createSession(SerializerSessionArgs.create());
 		session.serialize(t, sw);
 		r = sw.toString();
-		assertEquals("<A f1='f1'>_x0000_</A>\n", r);
+		assertEquals("<A f1='f1' nil='true'></A>\n", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t, t2);
 
@@ -155,7 +155,7 @@ public class XmlContentTest {
 		session = s1.createSession(SerializerSessionArgs.create());
 		session.serialize(t, sw);
 		r = sw.toString();
-		assertEquals("<A f1='f1'>_x0000_</A>", r);
+		assertEquals("<A f1='f1' nil='true'></A>", r);
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t, t2);
 
@@ -163,7 +163,7 @@ public class XmlContentTest {
 		session = s2.createSession(SerializerSessionArgs.create());
 		session.serialize(t, sw);
 		r = sw.toString();
-		assertEquals("<A f1='f1'>_x0000_</A>\n", r);
+		assertEquals("<A f1='f1' nil='true'></A>\n", r);
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t, t2);
 

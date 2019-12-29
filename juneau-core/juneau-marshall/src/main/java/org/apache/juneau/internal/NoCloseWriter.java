@@ -82,4 +82,9 @@ public final class NoCloseWriter extends Writer {
 	public void write(String str, int off, int len) throws IOException {
 		w.write(str, off, len);
 	}
+
+	@Override /* Object */
+	public String toString() {
+		return w.toString();
+	}
 }

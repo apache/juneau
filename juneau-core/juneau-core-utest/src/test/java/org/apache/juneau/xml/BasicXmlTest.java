@@ -940,9 +940,9 @@ public class BasicXmlTest {
 			{	/* 42 */
 				"BeanWithWhitespaceTextFields-1",
 				new BeanWithWhitespaceTextFields().init(null),
-				"<object/>",
-				"<object/>\n",
-				"<object/>",
+				"<object nil='true'></object>",
+				"<object nil='true'>\n</object>\n",
+				"<object nil='true'></object>",
 			},
 			{	/* 43 */
 				"BeanWithWhitespaceTextFields-2",
@@ -975,9 +975,9 @@ public class BasicXmlTest {
 			{	/* 47 */
 				"BeanWithWhitespaceTextPwsFields-1",
 				new BeanWithWhitespaceTextPwsFields().init(null),
-				"<object/>",
-				"<object/>\n",
-				"<object/>",
+				"<object nil='true'></object>",
+				"<object nil='true'>\n</object>\n",
+				"<object nil='true'></object>",
 			},
 			{	/* 48 */
 				"BeanWithWhitespaceTextPwsFields-2",
@@ -1010,16 +1010,16 @@ public class BasicXmlTest {
 			{	/* 52 */
 				"BeanWithWhitespaceMixedFields-1",
 				new BeanWithWhitespaceMixedFields().init(null),
-				"<object/>",
-				"<object/>\n",
-				"<object/>",
+				"<object nil='true'></object>",
+				"<object nil='true'>\n</object>\n",
+				"<object nil='true'></object>",
 			},
 			{	/* 53 */
 				"BeanWithWhitespaceMixedFields-2",
 				new BeanWithWhitespaceMixedFields().init(new String[0]),
-				"<object/>",
-				"<object/>\n",
-				"<object/>",
+				"<object></object>",
+				"<object></object>\n",
+				"<object></object>",
 			},
 			{	/* 54 */
 				"BeanWithWhitespaceMixedFields-3",
@@ -1052,16 +1052,16 @@ public class BasicXmlTest {
 			{	/* 58 */
 				"BeanWithWhitespaceMixedPwsFields-1",
 				new BeanWithWhitespaceMixedPwsFields().init(null),
-				"<object/>",
-				"<object/>\n",
-				"<object/>",
+				"<object nil='true'></object>",
+				"<object nil='true'>\n</object>\n",
+				"<object nil='true'></object>",
 			},
 			{	/* 59 */
 				"BeanWithWhitespaceMixedPwsFields-2",
 				new BeanWithWhitespaceMixedPwsFields().init(new String[0]),
-				"<object/>",
-				"<object/>\n",
-				"<object/>",
+				"<object></object>",
+				"<object></object>\n",
+				"<object></object>",
 			},
 			{	/* 60 */
 				"BeanWithWhitespaceMixedPwsFields-3",

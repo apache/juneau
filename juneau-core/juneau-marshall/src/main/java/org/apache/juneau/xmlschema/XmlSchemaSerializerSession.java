@@ -329,6 +329,8 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 			w.cTag().nl(i);
 
+			boolean hasAnyAttrs = false;
+
 			if (! (cm.isMapOrBean() || cm.isCollectionOrArray() || (cm.isAbstract() && ! cm.isNumber()) || cm.isObject())) {
 				w.oTag(i+1, "attribute").attr("name", getBeanTypePropertyName(cm)).attr("type", "string").ceTag().nl(i+1);
 
@@ -343,7 +345,9 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 					for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
 						if (pMeta.canRead()) {
 							XmlFormat bpXml = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
-							if (bpXml != XmlFormat.ATTR)
+							if (bpXml == ATTRS)
+								hasAnyAttrs = true;
+							else if (bpXml != XmlFormat.ATTR)
 								hasChildElements = true;
 						}
 					}
@@ -376,11 +380,12 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 									if (xmlMeta.getXmlFormat() == COLLAPSED)
 										hasCollapsed = true;
 								}
-
 							}
 						}
 
-						if (hasOtherNsElement || hasCollapsed) {
+						if (hasAnyAttrs) {
+							w.oTag(i+1, "anyAttribute").attr("processContents", "skip").ceTag().nl(i+1);
+						} else if (hasOtherNsElement || hasCollapsed) {
 							// If this bean has any child elements in another namespace,
 							// we need to add an <any> element.
 							w.oTag(i+1, "choice").attr("maxOccurs", "unbounded").cTag().nl(i+1);
@@ -443,10 +448,12 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 							// Otherwise, it's just a plain attribute of this bean.
 							else {
-								w.oTag(i+1, "attribute")
+								if (! hasAnyAttrs) {
+									w.oTag(i+1, "attribute")
 									.attr("name", pMeta.getName(), true)
 									.attr("type", getXmlAttrType(pMeta.getClassMeta()))
 									.ceTag().nl(i+1);
+								}
 							}
 						}
 					}
@@ -485,10 +492,12 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 					w.eTag(i+1, "sequence").nl(i+1);
 				}
 
-				w.oTag(i+1, "attribute")
+				if (! hasAnyAttrs) {
+					w.oTag(i+1, "attribute")
 					.attr("name", getBeanTypePropertyName(null))
 					.attr("type", "string")
 					.ceTag().nl(i+1);
+				}
 			}
 
 			w.eTag(i, "complexType").nl(i);
@@ -578,6 +587,6 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 	public ObjectMap toMap() {
 		return super.toMap()
 			.append("XmlSchemaSerializerSession", new DefaultFilteringObjectMap()
-			);
+		);
 	}
 }

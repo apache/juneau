@@ -604,7 +604,7 @@ public class XmlIgnoreCommentsTest {
 				"BeanWithWhitespaceMixedFields-1",
 				BeanWithWhitespaceMixedFields.class,
 				new BeanWithWhitespaceMixedFields().init(null),
-				"|<object/>|",
+				"|<object nil='true'></object>|",
 				false
 			},
 			{ 	/* 53 */
@@ -639,7 +639,7 @@ public class XmlIgnoreCommentsTest {
 				"BeanWithWhitespaceMixedPwsFields-1",
 				BeanWithWhitespaceMixedPwsFields.class,
 				new BeanWithWhitespaceMixedPwsFields().init(null),
-				"|<object/>|",
+				"|<object nil='true'></object>|",
 				false
 			},
 			{ 	/* 58 */
