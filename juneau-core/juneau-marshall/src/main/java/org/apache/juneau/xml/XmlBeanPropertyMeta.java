@@ -21,7 +21,7 @@ import org.apache.juneau.xml.annotation.*;
  * Metadata on bean properties specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation
  * on the bean property.
  */
-public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
+public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.
@@ -31,14 +31,17 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	private Namespace namespace = null;
 	private XmlFormat xmlFormat = XmlFormat.DEFAULT;
 	private String childName;
+	private final XmlMetaProvider xmlMetaProvider;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
+	 * @param xmlMetaProvider XML metadata provider (for finding information about other artifacts).
 	 */
-	public XmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+	public XmlBeanPropertyMeta(BeanPropertyMeta bpm, XmlMetaProvider xmlMetaProvider) {
 		super(bpm);
+		this.xmlMetaProvider = xmlMetaProvider;
 
 		if (bpm.getInnerField() != null)
 			findXmlInfo(bpm.getInnerField().getAnnotation(Xml.class));
@@ -48,11 +51,12 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 			findXmlInfo(bpm.getSetter().getAnnotation(Xml.class));
 
 		if (namespace == null)
-			namespace = bpm.getBeanMeta().getClassMeta().getExtendedMeta(XmlClassMeta.class).getNamespace();
+			namespace = xmlMetaProvider.getXmlClassMeta(bpm.getBeanMeta().getClassMeta()).getNamespace();
 	}
 
 	private XmlBeanPropertyMeta() {
 		super(null);
+		this.xmlMetaProvider = null;
 	}
 
 	/**
@@ -120,8 +124,8 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 		if (xmlFormat == XmlFormat.COLLAPSED) {
 			if (isCollection) {
-				if (cen.isEmpty())
-					cen = cmProperty.getExtendedMeta(XmlClassMeta.class).getChildName();
+				if (cen.isEmpty() && xmlMetaProvider != null)
+					cen = xmlMetaProvider.getXmlClassMeta(cmProperty).getChildName();
 				if (cen == null || cen.isEmpty())
 					cen = cmProperty.getElementType().getDictionaryName();
 				if (cen == null || cen.isEmpty())

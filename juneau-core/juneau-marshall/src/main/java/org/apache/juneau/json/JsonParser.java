@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
@@ -100,7 +103,7 @@ import org.apache.juneau.parser.*;
  * The end result should be the same.
  */
 @ConfigurableContext
-public class JsonParser extends ReaderParser {
+public class JsonParser extends ReaderParser implements JsonMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -196,6 +199,7 @@ public class JsonParser extends ReaderParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final boolean validateEnd;
+	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -246,6 +250,20 @@ public class JsonParser extends ReaderParser {
 	@Override /* Parser */
 	public JsonParserSession createSession(ParserSessionArgs args) {
 		return new JsonParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* JsonMetaProvider */
+	public JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
+		JsonClassMeta m = jsonClassMetas.get(cm);
+		if (m == null) {
+			m = new JsonClassMeta(cm, this);
+			jsonClassMetas.put(cm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

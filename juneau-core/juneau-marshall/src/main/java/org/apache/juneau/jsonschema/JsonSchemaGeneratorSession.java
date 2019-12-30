@@ -140,9 +140,9 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		JsonSchemaClassMeta jscm = null;
 		if (pojoSwap != null && pojoSwap.getClass().getAnnotation(Schema.class) != null)
-			jscm = getClassMeta(pojoSwap.getClass()).getExtendedMeta(JsonSchemaClassMeta.class);
+			jscm = getJsonSchemaClassMeta(getClassMeta(pojoSwap.getClass()));
 		if (jscm == null)
-			jscm = sType.getExtendedMeta(JsonSchemaClassMeta.class);
+			jscm = getJsonSchemaClassMeta(sType);
 
 		TypeCategory tc = null;
 
@@ -220,7 +220,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 				for (Iterator<BeanPropertyMeta> i = bm.getPropertyMetas().iterator(); i.hasNext();) {
 					BeanPropertyMeta p = i.next();
 					if (p.canRead())
-						properties.put(p.getName(), getSchema(p.getClassMeta(), p.getName(), p.getProperties(), exampleAdded, descriptionAdded, p.getExtendedMeta(JsonSchemaBeanPropertyMeta.class)));
+						properties.put(p.getName(), getSchema(p.getClassMeta(), p.getName(), p.getProperties(), exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));
 				}
 				out.put("properties", properties);
 
@@ -446,6 +446,30 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 */
 	protected final boolean isUseBeanDefs() {
 		return ctx.isUseBeanDefs();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	public JsonSchemaClassMeta getJsonSchemaClassMeta(ClassMeta<?> cm) {
+		return ctx.getJsonSchemaClassMeta(cm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getJsonSchemaBeanPropertyMeta(bpm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

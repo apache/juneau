@@ -30,7 +30,6 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Contains metadata about a bean property.
@@ -64,12 +63,12 @@ public final class BeanPropertyMeta {
 	private final String[] properties;                        // The value of the @Beanp(properties) annotation.
 	private final PojoSwap swap;                              // PojoSwap defined only via @Beanp annotation.
 
-	private final MetadataMap extMeta;                        // Extended metadata
 	private final BeanRegistry beanRegistry;
 
 	private final Object overrideValue;                       // The bean property value (if it's an overridden delegate).
 	private final BeanPropertyMeta delegateFor;               // The bean property that this meta is a delegate for.
 	private final boolean canRead, canWrite, readOnly, writeOnly;
+	private final int hashCode;
 
 	/**
 	 * Creates a builder for {@link #BeanPropertyMeta} objects.
@@ -98,7 +97,6 @@ public final class BeanPropertyMeta {
 		BeanRegistry beanRegistry;
 		Object overrideValue;
 		BeanPropertyMeta delegateFor;
-		MetadataMap extMeta = new MetadataMap();
 		boolean canRead, canWrite, readOnly, writeOnly;
 
 		Builder(BeanMeta<?> beanMeta, String name) {
@@ -434,13 +432,13 @@ public final class BeanPropertyMeta {
 		this.beanRegistry = b.beanRegistry;
 		this.overrideValue = b.overrideValue;
 		this.delegateFor = b.delegateFor;
-		this.extMeta = b.extMeta;
 		this.isDyna = b.isDyna;
 		this.isDynaGetterMap = b.isDynaGetterMap;
 		this.canRead = b.canRead;
 		this.canWrite = b.canWrite;
 		this.readOnly = b.readOnly;
 		this.writeOnly = b.writeOnly;
+		this.hashCode = HashCode.create().add(beanMeta.hashCode()).add(name == null ? 0 : name.hashCode()).get();
 	}
 
 	/**
@@ -566,15 +564,12 @@ public final class BeanPropertyMeta {
 	}
 
 	/**
-	 * Returns the language-specified extended metadata on this bean property.
+	 * Returns the metadata on the property that this metadata is a delegate for.
 	 *
-	 * @param c The name of the metadata class to create.
-	 * @return Extended metadata on this bean property.  Never <jk>null</jk>.
+	 * @return the metadata on the property that this metadata is a delegate for, or this object if it's not a delegate.
 	 */
-	public <M extends BeanPropertyMetaExtended> M getExtendedMeta(Class<M> c) {
-		if (delegateFor != null)
-			return delegateFor.getExtendedMeta(c);
-		return extMeta.get(c, this);
+	public BeanPropertyMeta getDelegateFor() {
+		return delegateFor != null ? delegateFor : this;
 	}
 
 	/**
@@ -1293,5 +1288,18 @@ public final class BeanPropertyMeta {
 	 */
 	protected boolean isWriteOnly() {
 		return writeOnly;
+	}
+
+	@Override /* Object */
+	public int hashCode() {
+		return hashCode;
+	}
+
+	@Override /* Object */
+	public boolean equals(Object o) {
+		if (o == null || ! (o instanceof BeanPropertyMeta))
+			return false;
+		BeanPropertyMeta o2 = (BeanPropertyMeta)o;
+		return o2.beanMeta.equals(this.beanMeta) && isEquals(o2.name, this.name);
 	}
 }

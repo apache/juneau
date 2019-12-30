@@ -13,41 +13,28 @@
 package org.apache.juneau;
 
 /**
- * Defines extended language-specific metadata associated with a class.
- *
- * <p>
- * Serializers and parsers can implement their own language-specific metadata on a class and retrieve the metadata
- * using the {@link ClassMeta#getExtendedMeta(Class)} method.
+ * Defines extended language-specific metadata associated with a bean property.
  */
-public class ClassMetaExtended {
+public class ExtendedBeanPropertyMeta extends ExtendedMeta {
 
-	private final ClassMeta<?> cm;
+	private final BeanPropertyMeta bpm;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param cm The metadata of the class we're extending.
+	 * @param bpm The metadata of the bean property we're extending.
 	 * @throws BeanRuntimeException If any error occurred trying to construct the metadata.
 	 */
-	public ClassMetaExtended(ClassMeta<?> cm) throws BeanRuntimeException {
-		this.cm = cm;
+	public ExtendedBeanPropertyMeta(BeanPropertyMeta bpm) throws BeanRuntimeException {
+		this.bpm = bpm;
 	}
 
 	/**
-	 * Returns the class metadata that was passed into the constructor.
+	 * Returns the bean property metadata that was passed into the constructor.
 	 *
-	 * @return The class metadata that was passed into the constructor.
+	 * @return The bean property metadata that was passed into the constructor.
 	 */
-	protected ClassMeta<?> getClassMeta() {
-		return cm;
-	}
-
-	/**
-	 * Convenience method for calling {@link ClassMeta#getInnerClass()} on the metadata passed to the constructor.
-	 *
-	 * @return The class wrapped by this metadata.
-	 */
-	protected Class<?> getInnerClass() {
-		return cm.getInnerClass();
+	protected BeanPropertyMeta getBeanPropertyMeta() {
+		return bpm;
 	}
 }

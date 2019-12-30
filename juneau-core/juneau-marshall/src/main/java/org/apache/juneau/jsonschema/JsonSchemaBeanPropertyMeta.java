@@ -22,7 +22,7 @@ import org.apache.juneau.parser.*;
  * Metadata on bean properties specific to the JSON-Schema pulled from the {@link Schema @Schema} annotation
  * on the bean property.
  */
-public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
+public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.
@@ -35,8 +35,9 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
+	 * @param jsonSchemaMetaProvider JSON-schema metadata provider (for finding information about other artifacts).
 	 */
-	public JsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
+	public JsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm, JsonSchemaMetaProvider jsonSchemaMetaProvider) {
 		super(bpm);
 
 		this.schema = new ObjectMap();

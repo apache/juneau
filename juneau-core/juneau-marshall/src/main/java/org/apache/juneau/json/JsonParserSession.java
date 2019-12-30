@@ -125,11 +125,11 @@ public final class JsonParserSession extends ReaderParserSession {
 		else
 			sType = eType;
 
-		if (sType.isOptional()) 
+		if (sType.isOptional())
 			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), r, outer, pMeta));
 
 		setCurrentClass(sType);
-		String wrapperAttr = sType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
+		String wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
 
 		Object o = null;
 
@@ -798,6 +798,20 @@ public final class JsonParserSession extends ReaderParserSession {
 	 */
 	protected final boolean isValidateEnd() {
 		return ctx.isValidateEnd();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
+		return ctx.getJsonClassMeta(cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

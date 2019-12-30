@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
@@ -111,7 +114,7 @@ import org.apache.juneau.xmlschema.XmlSchemaSerializer;
  * </ul>
  */
 @ConfigurableContext
-public class XmlSerializer extends WriterSerializer {
+public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -455,6 +458,9 @@ public class XmlSerializer extends WriterSerializer {
 	private final Namespace
 		xsNamespace;
 	private final Namespace[] namespaces;
+	private final Map<ClassMeta<?>,XmlClassMeta> xmlClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanMeta<?>,XmlBeanMeta> xmlBeanMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,XmlBeanPropertyMeta> xmlBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	private volatile XmlSchemaSerializer schemaSerializer;
 
@@ -544,6 +550,40 @@ public class XmlSerializer extends WriterSerializer {
 	@Override /* Serializer */
 	public XmlSerializerSession createSession(SerializerSessionArgs args) {
 		return new XmlSerializerSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* XmlMetaProvider */
+	public XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
+		XmlClassMeta m = xmlClassMetas.get(cm);
+		if (m == null) {
+			m = new XmlClassMeta(cm, this);
+			xmlClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* XmlMetaProvider */
+	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
+		XmlBeanMeta m = xmlBeanMetas.get(bm);
+		if (m == null) {
+			m = new XmlBeanMeta(bm, this);
+			xmlBeanMetas.put(bm, m);
+		}
+		return m;
+	}
+
+	@Override /* XmlMetaProvider */
+	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		XmlBeanPropertyMeta m = xmlBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new XmlBeanPropertyMeta(bpm.getDelegateFor(), this);
+			xmlBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

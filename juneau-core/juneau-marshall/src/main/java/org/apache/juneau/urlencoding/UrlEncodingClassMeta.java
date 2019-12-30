@@ -18,7 +18,7 @@ import org.apache.juneau.urlencoding.annotation.*;
 /**
  * Metadata on classes specific to the URL-Encoding serializers and parsers pulled from the {@link UrlEncoding @UrlEncoding} annotation on the class.
  */
-public class UrlEncodingClassMeta extends ClassMetaExtended {
+public class UrlEncodingClassMeta extends ExtendedClassMeta {
 
 	private final UrlEncoding urlEncoding;
 	private final boolean expandedParams;
@@ -27,8 +27,9 @@ public class UrlEncodingClassMeta extends ClassMetaExtended {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
+	 * @param urlEncodingMetaProvider URL-encoding metadata provider (for finding information about other artifacts).
 	 */
-	public UrlEncodingClassMeta(ClassMeta<?> cm) {
+	public UrlEncodingClassMeta(ClassMeta<?> cm, UrlEncodingMetaProvider urlEncodingMetaProvider) {
 		super(cm);
 		this.urlEncoding = cm.getInfo().getAnnotation(UrlEncoding.class);
 		if (urlEncoding != null) {

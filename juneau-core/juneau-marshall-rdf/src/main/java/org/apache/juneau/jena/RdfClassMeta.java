@@ -23,7 +23,7 @@ import org.apache.juneau.xml.*;
  * Metadata on classes specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the
  * class.
  */
-public class RdfClassMeta extends ClassMetaExtended {
+public class RdfClassMeta extends ExtendedClassMeta {
 
 	private final Rdf rdf;
 	private final RdfCollectionFormat collectionFormat;
@@ -33,8 +33,9 @@ public class RdfClassMeta extends ClassMetaExtended {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
+	 * @param rdfMetaProvider RDF metadata provider (for finding information about other artifacts).
 	 */
-	public RdfClassMeta(ClassMeta<?> cm) {
+	public RdfClassMeta(ClassMeta<?> cm, RdfMetaProvider rdfMetaProvider) {
 		super(cm);
 		ClassInfo ci = cm.getInfo();
 		this.rdf = ci.getAnnotation(Rdf.class);

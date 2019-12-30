@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
@@ -36,7 +39,7 @@ import org.apache.juneau.urlencoding.annotation.*;
  * This parser uses a state machine, which makes it very fast and efficient.
  */
 @ConfigurableContext
-public class UrlEncodingParser extends UonParser {
+public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -110,6 +113,7 @@ public class UrlEncodingParser extends UonParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final boolean expandedParams;
+	private final Map<ClassMeta<?>,UrlEncodingClassMeta> urlEncodingClassMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -160,6 +164,20 @@ public class UrlEncodingParser extends UonParser {
 	@Override /* Parser */
 	public UrlEncodingParserSession createSession(ParserSessionArgs args) {
 		return new UrlEncodingParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* UrlEncodingMetaProvider */
+	public UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
+		UrlEncodingClassMeta m = urlEncodingClassMetas.get(cm);
+		if (m == null) {
+			m = new UrlEncodingClassMeta(cm, this);
+			urlEncodingClassMetas.put(cm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

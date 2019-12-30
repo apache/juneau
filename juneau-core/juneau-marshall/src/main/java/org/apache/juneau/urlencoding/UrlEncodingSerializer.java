@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -112,7 +115,7 @@ import org.apache.juneau.uon.*;
  * </p>
  */
 @ConfigurableContext
-public class UrlEncodingSerializer extends UonSerializer {
+public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -249,6 +252,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 	private final boolean
 		expandedParams;
+	private final Map<ClassMeta<?>,UrlEncodingClassMeta> urlEncodingClassMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -331,6 +335,20 @@ public class UrlEncodingSerializer extends UonSerializer {
 	@Override /* Serializer */
 	public UrlEncodingSerializerSession createSession(SerializerSessionArgs args) {
 		return new UrlEncodingSerializerSession(this, null, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* UrlEncodingMetaProvider */
+	public UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
+		UrlEncodingClassMeta m = urlEncodingClassMetas.get(cm);
+		if (m == null) {
+			m = new UrlEncodingClassMeta(cm, this);
+			urlEncodingClassMetas.put(cm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

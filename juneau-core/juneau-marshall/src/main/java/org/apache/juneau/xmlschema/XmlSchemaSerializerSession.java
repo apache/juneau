@@ -175,7 +175,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 			if (cm == null)
 				queueElement(ns, "null", object());
 			else {
-				XmlClassMeta xmlMeta = cm.getExtendedMeta(XmlClassMeta.class);
+				XmlClassMeta xmlMeta = getXmlClassMeta(cm);
 				if (cm.getDictionaryName() != null && xmlMeta.getNamespace() != null)
 					ns = xmlMeta.getNamespace();
 				queueElement(ns, cm.getDictionaryName(), cm);
@@ -277,7 +277,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 			ClassMeta<?> ft = cm.getSerializedClassMeta(schemas.session);
 			if (name == null)
 				name = getElementName(ft);
-			Namespace ns = first(ft.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
+			Namespace ns = first(getXmlClassMeta(ft).getNamespace(), defaultNs);
 			String type = getXmlType(ns, ft);
 
 			w.oTag(indent+1, "element")
@@ -316,7 +316,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 			while (cm.isOptional())
 				cm = cm.getElementType();
 
-			XmlBeanMeta xbm = cm.isBean() ? cm.getBeanMeta().getExtendedMeta(XmlBeanMeta.class) : null;
+			XmlBeanMeta xbm = cm.isBean() ? getXmlBeanMeta(cm.getBeanMeta()) : null;
 
 			w.oTag(i, "complexType")
 				.attr("name", name);
@@ -344,7 +344,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 					for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
 						if (pMeta.canRead()) {
-							XmlFormat bpXml = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
+							XmlFormat bpXml = getXmlBeanPropertyMeta(pMeta).getXmlFormat();
 							if (bpXml == ATTRS)
 								hasAnyAttrs = true;
 							else if (bpXml != XmlFormat.ATTR)
@@ -352,7 +352,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 						}
 					}
 
-					XmlBeanMeta xbm2 = bm.getExtendedMeta(XmlBeanMeta.class);
+					XmlBeanMeta xbm2 = getXmlBeanMeta(bm);
 					if (xbm2.getContentProperty() != null && xbm2.getContentFormat() == ELEMENTS) {
 						w.sTag(i+1, "sequence").nl(i+1);
 						w.oTag(i+2, "any")
@@ -368,11 +368,11 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 						for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
 							if (pMeta.canRead()) {
-								XmlBeanPropertyMeta xmlMeta = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
+								XmlBeanPropertyMeta xmlMeta = getXmlBeanPropertyMeta(pMeta);
 								if (xmlMeta.getXmlFormat() != ATTR) {
 									if (xmlMeta.getNamespace() != null) {
 										ClassMeta<?> ct2 = pMeta.getClassMeta();
-										Namespace cNs = first(xmlMeta.getNamespace(), ct2.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
+										Namespace cNs = first(xmlMeta.getNamespace(), getXmlClassMeta(ct2).getNamespace(), getXmlClassMeta(cm).getNamespace(), defaultNs);
 										// Child element is in another namespace.
 										schemas.queueElement(cNs, pMeta.getName(), ct2);
 										hasOtherNsElement = true;
@@ -399,7 +399,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 							w.sTag(i+1, "all").nl(i+1);
 							for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
 								if (pMeta.canRead()) {
-									XmlBeanPropertyMeta xmlMeta = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
+									XmlBeanPropertyMeta xmlMeta = getXmlBeanPropertyMeta(pMeta);
 									if (xmlMeta.getXmlFormat() != ATTR) {
 										boolean isCollapsed = xmlMeta.getXmlFormat() == COLLAPSED;
 										ClassMeta<?> ct2 = pMeta.getClassMeta();
@@ -409,7 +409,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 												childName = xmlMeta.getChildName();
 											ct2 = pMeta.getClassMeta().getElementType();
 										}
-										Namespace cNs = first(xmlMeta.getNamespace(), ct2.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
+										Namespace cNs = first(xmlMeta.getNamespace(), getXmlClassMeta(ct2).getNamespace(), getXmlClassMeta(cm).getNamespace(), defaultNs);
 										if (xmlMeta.getNamespace() == null) {
 											w.oTag(i+2, "element")
 												.attr("name", XmlUtils.encodeElementName(childName), false)
@@ -430,9 +430,9 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 					}
 
-					for (BeanPropertyMeta pMeta : bm.getExtendedMeta(XmlBeanMeta.class).getAttrProperties().values()) {
+					for (BeanPropertyMeta pMeta : getXmlBeanMeta(bm).getAttrProperties().values()) {
 						if (pMeta.canRead()) {
-							Namespace pNs = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
+							Namespace pNs = getXmlBeanPropertyMeta(pMeta).getNamespace();
 							if (pNs == null)
 								pNs = defaultNs;
 
@@ -470,7 +470,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 							.ceTag().nl(i+2);
 						w.eTag(i+1, "sequence").nl(i+1);
 					} else {
-						Namespace cNs = first(elementType.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
+						Namespace cNs = first(getXmlClassMeta(elementType).getNamespace(), getXmlClassMeta(cm).getNamespace(), defaultNs);
 						schemas.queueType(cNs, null, elementType);
 						w.sTag(i+1, "sequence").nl(i+1);
 						w.oTag(i+2, "any")

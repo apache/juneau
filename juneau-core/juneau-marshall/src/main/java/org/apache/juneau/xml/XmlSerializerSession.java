@@ -151,7 +151,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		}
 
 		if (aType != null) {
-			Namespace ns = cXml(aType).getNamespace();
+			Namespace ns = getXmlClassMeta(aType).getNamespace();
 			if (ns != null) {
 				if (ns.uri != null)
 					addNamespace(ns);
@@ -170,7 +170,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				bm = toBeanMap(o);
 			} else if (aType.isDelegate()) {
 				ClassMeta<?> innerType = ((Delegate<?>)o).getClassMeta();
-				Namespace ns = cXml(innerType).getNamespace();
+				Namespace ns = getXmlClassMeta(innerType).getNamespace();
 				if (ns != null) {
 					if (ns.uri != null)
 						addNamespace(ns);
@@ -181,7 +181,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				if (innerType.isBean()) {
 					for (BeanPropertyMeta bpm : innerType.getBeanMeta().getPropertyMetas()) {
 						if (bpm.canRead()) {
-							ns = bpXml(bpm).getNamespace();
+							ns = getXmlBeanPropertyMeta(bpm).getNamespace();
 							if (ns != null && ns.uri != null)
 								addNamespace(ns);
 						}
@@ -208,7 +208,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			if (bm != null) {
 				for (BeanPropertyValue p : bm.getValues(isTrimNullProperties())) {
 
-					Namespace ns = bpXml(p.getMeta()).getNamespace();
+					Namespace ns = getXmlBeanPropertyMeta(p.getMeta()).getNamespace();
 					if (ns != null && ns.uri != null)
 						addNamespace(ns);
 
@@ -340,7 +340,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		} else if (sType.isBoolean()) {
 			type = BOOLEAN;
 		} else if (sType.isMapOrBean()) {
-			isCollapsed = cXml(sType).getFormat() == COLLAPSED;
+			isCollapsed = getXmlClassMeta(sType).getFormat() == COLLAPSED;
 			type = OBJECT;
 		} else if (sType.isCollectionOrArray()) {
 			isCollapsed = (format == COLLAPSED && ! addNamespaceUris);
@@ -360,9 +360,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		if (isEnableNamespaces()) {
 			if (elementNamespace == null)
-				elementNamespace = cXml(sType).getNamespace();
+				elementNamespace = getXmlClassMeta(sType).getNamespace();
 			if (elementNamespace == null)
-				elementNamespace = cXml(aType).getNamespace();
+				elementNamespace = getXmlClassMeta(aType).getNamespace();
 			if (elementNamespace != null && elementNamespace.uri == null)
 				elementNamespace = null;
 			if (elementNamespace == null)
@@ -488,7 +488,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	private boolean isXmlText(XmlFormat format, ClassMeta<?> sType) {
 		if (format == XMLTEXT)
 			return true;
-		XmlClassMeta xcm = sType.getExtendedMeta(XmlClassMeta.class);
+		XmlClassMeta xcm = getXmlClassMeta(sType);
 		if (xcm == null)
 			return false;
 		return xcm.getFormat() == XMLTEXT;
@@ -533,7 +533,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		List<BeanPropertyValue> lp = m.getValues(isTrimNullProperties());
 
-		XmlBeanMeta xbm = bXml(bm);
+		XmlBeanMeta xbm = getXmlBeanMeta(bm);
 
 		Set<String>
 			attrs = xbm.getAttrPropertyNames(),
@@ -563,7 +563,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					if (canIgnoreValue(cMeta, key, value))
 						continue;
 
-					XmlBeanPropertyMeta bpXml = bpXml(pMeta);
+					XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(pMeta);
 					Namespace ns = (isEnableNamespaces() && bpXml.getNamespace() != elementNs ? bpXml.getNamespace() : null);
 
 					if (pMeta.isUri()  ) {
@@ -631,7 +631,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 						out.appendIf(! isCollapsed, '>').nlIf(! isMixedOrText, indent);
 					}
 
-					XmlBeanPropertyMeta bpXml = bpXml(pMeta);
+					XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(pMeta);
 					serializeAnything(out, value, cMeta, key, bpXml.getNamespace(), false, bpXml.getXmlFormat(), isMixedOrText, false, pMeta);
 				}
 			}
@@ -679,7 +679,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		Namespace eNs = null;
 
 		if (ppMeta != null) {
-			XmlBeanPropertyMeta bpXml = bpXml(ppMeta);
+			XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(ppMeta);
 			eName = bpXml.getChildName();
 			eNs = bpXml.getNamespace();
 		}
@@ -689,18 +689,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			serializeAnything(out, value, eeType, eName, eNs, false, XmlFormat.DEFAULT, isMixed, false, null);
 		}
 		return out;
-	}
-
-	private static XmlClassMeta cXml(ClassMeta<?> cm) {
-		return cm.getExtendedMeta(XmlClassMeta.class);
-	}
-
-	private static XmlBeanPropertyMeta bpXml(BeanPropertyMeta pMeta) {
-		return pMeta == null ? XmlBeanPropertyMeta.DEFAULT : pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
-	}
-
-	private static XmlBeanMeta bXml(BeanMeta bm) {
-		return (XmlBeanMeta)bm.getExtendedMeta(XmlBeanMeta.class);
 	}
 
 	static enum JsonType {
@@ -817,6 +805,40 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 */
 	protected final Namespace getXsNamespace() {
 		return ctx.getXsNamespace();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	public XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
+		return ctx.getXmlClassMeta(cm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean.
+	 *
+	 * @param bm The bean to return the metadata on.
+	 * @return The metadata.
+	 */
+	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
+		return ctx.getXmlBeanMeta(bm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

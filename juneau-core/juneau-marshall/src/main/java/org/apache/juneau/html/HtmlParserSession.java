@@ -44,6 +44,8 @@ public final class HtmlParserSession extends XmlParserSession {
 		)
 	);
 
+	private final HtmlParser ctx;
+
 	/**
 	 * Create a new session using properties specified in the context.
 	 *
@@ -55,6 +57,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 */
 	protected HtmlParserSession(HtmlParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
+		this.ctx = ctx;
 	}
 
 	@Override /* ParserSession */
@@ -120,7 +123,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			throw new ParseException(this, "Unexpected end of stream in parseAnything for type ''{0}''", eType);
 
 		// Handle @Html(asXml=true) beans.
-		HtmlClassMeta hcm = sType.getExtendedMeta(HtmlClassMeta.class);
+		HtmlClassMeta hcm = getHtmlClassMeta(sType);
 		if (hcm.getFormat() == HtmlFormat.XML)
 			return super.parseAnything(eType, null, r, outer, false, pMeta);
 
@@ -154,8 +157,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			else
 				isValid = false;
 
-		} else if (tag == STRING || (tag == A && pMeta != null
-				&& pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).getLink() != null)) {
+		} else if (tag == STRING || (tag == A && pMeta != null && getHtmlBeanPropertyMeta(pMeta).getLink() != null)) {
 			String text = getElementText(r);
 			if (sType.isObject() || sType.isCharSequence())
 				o = text;
@@ -735,6 +737,30 @@ public final class HtmlParserSession extends XmlParserSession {
 		} else {
 			throw new ParseException(this, "Invalid tag found in parseWhitespaceElement(): ''{0}''", tag);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected HtmlClassMeta getHtmlClassMeta(ClassMeta<?> cm) {
+		return ctx.getHtmlClassMeta(cm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getHtmlBeanPropertyMeta(bpm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

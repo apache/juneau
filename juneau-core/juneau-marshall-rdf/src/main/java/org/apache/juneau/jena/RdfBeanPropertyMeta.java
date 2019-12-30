@@ -22,7 +22,7 @@ import org.apache.juneau.xml.*;
  * Metadata on bean properties specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation
  * on the bean property.
  */
-public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
+public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.
@@ -38,8 +38,9 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
+	 * @param rdfMetaProvider RDF metadata provider (for finding information about other artifacts).
 	 */
-	public RdfBeanPropertyMeta(BeanPropertyMeta bpm) {
+	public RdfBeanPropertyMeta(BeanPropertyMeta bpm, RdfMetaProvider rdfMetaProvider) {
 		super(bpm);
 
 		List<Rdf> rdfs = bpm.findAnnotations(Rdf.class);

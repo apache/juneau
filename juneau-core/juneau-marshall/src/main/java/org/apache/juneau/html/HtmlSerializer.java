@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -124,7 +125,7 @@ import org.apache.juneau.xml.*;
  * </p>
  */
 @ConfigurableContext
-public class HtmlSerializer extends XmlSerializer {
+public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -635,6 +636,8 @@ public class HtmlSerializer extends XmlSerializer {
 		addKeyValueTableHeaders,
 		addBeanTypes;
 	private final String labelParameter;
+	private final Map<ClassMeta<?>,HtmlClassMeta> htmlClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,HtmlBeanPropertyMeta> htmlBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	private volatile HtmlSchemaSerializer schemaSerializer;
 
@@ -721,6 +724,32 @@ public class HtmlSerializer extends XmlSerializer {
 		if (schemaSerializer == null)
 			schemaSerializer = builder().build(HtmlSchemaSerializer.class);
 		return schemaSerializer;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* HtmlMetaProvider */
+	public HtmlClassMeta getHtmlClassMeta(ClassMeta<?> cm) {
+		HtmlClassMeta m = htmlClassMetas.get(cm);
+		if (m == null) {
+			m = new HtmlClassMeta(cm, this);
+			htmlClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* HtmlMetaProvider */
+	public HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return HtmlBeanPropertyMeta.DEFAULT;
+		HtmlBeanPropertyMeta m = htmlBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new HtmlBeanPropertyMeta(bpm.getDelegateFor(), this);
+			htmlBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

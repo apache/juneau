@@ -127,7 +127,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 				sType = getClassMetaForObject(o);
 		}
 
-		String wrapperAttr = sType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
+		String wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
 		if (wrapperAttr != null) {
 			out.append('{').cr(indent).attr(wrapperAttr).append(':').s(indent);
 			indent++;
@@ -305,6 +305,20 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 */
 	protected final boolean isSimpleMode() {
 		return ctx.isSimpleMode();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
+		return ctx.getJsonClassMeta(cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -27,7 +27,6 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).
@@ -92,8 +91,6 @@ public class BeanMeta<T> {
 	/** For beans with constructors with Beanc annotation, this is the list of constructor arg properties. */
 	protected final String[] constructorArgs;
 
-	private final MetadataMap extMeta;  // Extended metadata
-
 	// Other fields
 	final String typePropertyName;                         // "_type" property actual name.
 	private final BeanPropertyMeta typeProperty;           // "_type" mock bean property.
@@ -129,7 +126,6 @@ public class BeanMeta<T> {
 		this.typeVarImpls = unmodifiableMap(b.typeVarImpls);
 		this.constructor = b.constructor;
 		this.constructorArgs = b.constructorArgs;
-		this.extMeta = b.extMeta;
 		this.beanRegistry = b.beanRegistry;
 		this.typePropertyName = b.typePropertyName;
 		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
@@ -150,7 +146,6 @@ public class BeanMeta<T> {
 		Map<Class<?>,Class<?>[]> typeVarImpls;
 		ConstructorInfo constructor;
 		String[] constructorArgs = new String[0];
-		MetadataMap extMeta = new MetadataMap();
 		PropertyNamer propertyNamer;
 		BeanRegistry beanRegistry;
 		String dictionaryName, typePropertyName;
@@ -832,16 +827,6 @@ public class BeanMeta<T> {
 	}
 
 	/**
-	 * Returns the language-specified extended metadata on this bean class.
-	 *
-	 * @param metaDataClass The name of the metadata class to create.
-	 * @return Extended metadata on this bean class.  Never <jk>null</jk>.
-	 */
-	public <M extends BeanMetaExtended> M getExtendedMeta(Class<M> metaDataClass) {
-		return extMeta.get(metaDataClass, this);
-	}
-
-	/**
 	 * Returns metadata about the specified property.
 	 *
 	 * @param name The name of the property on this bean.
@@ -967,5 +952,18 @@ public class BeanMeta<T> {
 			sb.append('\t').append(pm.toString()).append(",\n");
 		sb.append('}');
 		return sb.toString();
+	}
+
+	@Override /* Object */
+	public int hashCode() {
+		return classMeta.hashCode();
+	}
+
+	@Override /* Object */
+	public boolean equals(Object o) {
+		if (o == null || ! (o instanceof BeanMeta))
+			return false;
+		BeanMeta<?> o2 = (BeanMeta<?>)o;
+		return o2.classMeta.equals(this.classMeta);
 	}
 }

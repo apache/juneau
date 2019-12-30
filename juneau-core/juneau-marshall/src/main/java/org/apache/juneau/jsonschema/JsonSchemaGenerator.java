@@ -15,6 +15,7 @@ package org.apache.juneau.jsonschema;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
@@ -25,7 +26,7 @@ import org.apache.juneau.json.*;
  * Generates JSON-schema metadata about POJOs.
  */
 @ConfigurableContext
-public class JsonSchemaGenerator extends BeanTraverseContext {
+public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSchemaMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -282,6 +283,8 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	private final Map<String,ObjectMap> defaultSchemas;
 	private final JsonSerializer jsonSerializer;
 	private final Set<Pattern> ignoreTypes;
+	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,JsonSchemaBeanPropertyMeta> jsonSchemaBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -428,6 +431,30 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 */
 	protected final boolean isUseBeanDefs() {
 		return useBeanDefs;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public JsonSchemaClassMeta getJsonSchemaClassMeta(ClassMeta<?> cm) {
+		JsonSchemaClassMeta m = jsonSchemaClassMetas.get(cm);
+		if (m == null) {
+			m = new JsonSchemaClassMeta(cm, this);
+			jsonSchemaClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override
+	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
+		JsonSchemaBeanPropertyMeta m = jsonSchemaBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new JsonSchemaBeanPropertyMeta(bpm, this);
+			jsonSchemaBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

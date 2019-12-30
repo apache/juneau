@@ -24,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
  * Metadata on beans specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the
  * class.
  */
-public class XmlBeanMeta extends BeanMetaExtended {
+public class XmlBeanMeta extends ExtendedBeanMeta {
 
 	// XML related fields
 	private final Map<String,BeanPropertyMeta> attrs;                        // Map of bean properties that are represented as XML attributes.
@@ -38,12 +38,13 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	 * Constructor.
 	 *
 	 * @param beanMeta The metadata on the bean that this metadata applies to.
+	 * @param xmlMetaProvider XML metadata provider (for finding information about other artifacts).
 	 */
-	public XmlBeanMeta(BeanMeta<?> beanMeta) {
+	public XmlBeanMeta(BeanMeta<?> beanMeta, XmlMetaProvider xmlMetaProvider) {
 		super(beanMeta);
 
 		Class<?> c = beanMeta.getClassMeta().getInnerClass();
-		XmlBeanMetaBuilder b = new XmlBeanMetaBuilder(beanMeta);
+		XmlBeanMetaBuilder b = new XmlBeanMetaBuilder(beanMeta, xmlMetaProvider);
 
 		attrs = unmodifiableMap(b.attrs);
 		elements = unmodifiableMap(b.elements);
@@ -76,7 +77,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 			contentProperty;
 		XmlFormat contentFormat = DEFAULT;
 
-		XmlBeanMetaBuilder(BeanMeta<?> beanMeta) {
+		XmlBeanMetaBuilder(BeanMeta<?> beanMeta, XmlMetaProvider xmlMetaProvider) {
 			Class<?> c = beanMeta.getClassMeta().getInnerClass();
 			Xml xml = c.getAnnotation(Xml.class);
 			XmlFormat defaultFormat = null;
@@ -96,7 +97,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 			}
 
 			for (BeanPropertyMeta p : beanMeta.getPropertyMetas()) {
-				XmlFormat xf = p.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
+				XmlFormat xf = xmlMetaProvider.getXmlBeanPropertyMeta(p).getXmlFormat();
 				ClassMeta<?> pcm = p.getClassMeta();
 				if (xf == ATTR) {
 					attrs.put(p.getName(), p);
@@ -127,7 +128,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 					contentFormat = xf;
 				}
 				// Look for any properties that are collections with @Xml.childName specified.
-				String n = p.getExtendedMeta(XmlBeanPropertyMeta.class).getChildName();
+				String n = xmlMetaProvider.getXmlBeanPropertyMeta(p).getChildName();
 				if (n != null) {
 					if (collapsedProperties.containsKey(n) && collapsedProperties.get(n) != p)
 						throw new BeanRuntimeException(c, "Multiple properties found with the child name ''{0}''.", n);

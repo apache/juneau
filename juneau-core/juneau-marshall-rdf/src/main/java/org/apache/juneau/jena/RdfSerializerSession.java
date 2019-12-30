@@ -223,7 +223,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			if (o instanceof BeanMap) {
 				BeanMap bm = (BeanMap)o;
 				Object uri = null;
-				RdfBeanMeta rbm = bRdf(bm.getMeta());
+				RdfBeanMeta rbm = getRdfBeanMeta(bm.getMeta());
 				if (rbm.hasBeanUri())
 					uri = rbm.getBeanUriProperty().get(bm, null);
 				String uri2 = getUri(uri, null);
@@ -238,7 +238,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		} else if (sType.isBean()) {
 			BeanMap bm = toBeanMap(o);
 			Object uri = null;
-			RdfBeanMeta rbm = bRdf(bm.getMeta());
+			RdfBeanMeta rbm = getRdfBeanMeta(bm.getMeta());
 			if (rbm.hasBeanUri())
 				uri = rbm.getBeanUriProperty().get(bm, null);
 			String uri2 = getUri(uri, null);
@@ -249,8 +249,8 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 			Collection c = sort(sType.isCollection() ? (Collection)o : toList(sType.getInnerClass(), o));
 			RdfCollectionFormat f = getCollectionFormat();
-			RdfClassMeta cRdf = cRdf(sType);
-			RdfBeanPropertyMeta bpRdf = bpRdf(bpm);
+			RdfClassMeta cRdf = getRdfClassMeta(sType);
+			RdfBeanPropertyMeta bpRdf = getRdfBeanPropertyMeta(bpm);
 
 			if (cRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 				f = cRdf.getCollectionFormat();
@@ -315,8 +315,8 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 			BeanPropertyMeta bpMeta = bpv.getMeta();
 			ClassMeta<?> cMeta = bpMeta.getClassMeta();
-			RdfBeanPropertyMeta bpRdf = bpRdf(bpMeta);
-			XmlBeanPropertyMeta bpXml = bpXml(bpMeta);
+			RdfBeanPropertyMeta bpRdf = getRdfBeanPropertyMeta(bpMeta);
+			XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(bpMeta);
 
 			if (bpRdf.isBeanUri())
 				continue;
@@ -369,8 +369,8 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			BeanPropertyMeta bpm, String attrName, Resource parentResource) throws IOException, SerializeException {
 
 		ClassMeta<?> elementType = sType.getElementType();
-		RdfBeanPropertyMeta bpRdf = bpRdf(bpm);
-		XmlBeanPropertyMeta bpXml = bpXml(bpm);
+		RdfBeanPropertyMeta bpRdf = getRdfBeanPropertyMeta(bpm);
+		XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(bpm);
 
 		for (Object e : c) {
 			Namespace ns = bpRdf.getNamespace();
@@ -386,22 +386,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		}
 	}
 
-	private static RdfClassMeta cRdf(ClassMeta<?> cm) {
-		return cm.getExtendedMeta(RdfClassMeta.class);
-	}
-
-	private static XmlBeanPropertyMeta bpXml(BeanPropertyMeta pMeta) {
-		return pMeta == null ? XmlBeanPropertyMeta.DEFAULT : pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
-	}
-
-	private static RdfBeanPropertyMeta bpRdf(BeanPropertyMeta pMeta) {
-		return pMeta == null ? RdfBeanPropertyMeta.DEFAULT : pMeta.getExtendedMeta(RdfBeanPropertyMeta.class);
-	}
-
-	private static RdfBeanMeta bRdf(BeanMeta bm) {
-		return (RdfBeanMeta)bm.getExtendedMeta(RdfBeanMeta.class);
-	}
-
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// Common properties
 	//-----------------------------------------------------------------------------------------------------------------
@@ -548,6 +533,50 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	 */
 	protected final boolean isUseXmlNamespaces() {
 		return ctx.isUseXmlNamespaces();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
+		return ctx.getRdfClassMeta(cm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean.
+	 *
+	 * @param bm The bean to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
+		return ctx.getRdfBeanMeta(bm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return bpm == null ? RdfBeanPropertyMeta.DEFAULT : ctx.getRdfBeanPropertyMeta(bpm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

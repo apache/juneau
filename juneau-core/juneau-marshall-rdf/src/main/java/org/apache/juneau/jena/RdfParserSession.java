@@ -168,7 +168,7 @@ public class RdfParserSession extends ReaderParserSession {
 
 	private <T> BeanMap<T> parseIntoBeanMap(Resource r2, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 		BeanMeta<T> bm = m.getMeta();
-		RdfBeanMeta rbm = bm.getExtendedMeta(RdfBeanMeta.class);
+		RdfBeanMeta rbm = getRdfBeanMeta(bm);
 		if (rbm.hasBeanUri() && r2.getURI() != null)
 			rbm.getBeanUriProperty().set(m, null, r2.getURI());
 		for (StmtIterator i = r2.listProperties(); i.hasNext();) {
@@ -199,7 +199,7 @@ public class RdfParserSession extends ReaderParserSession {
 	}
 
 	private boolean isMultiValuedCollections(BeanPropertyMeta pMeta) {
-		RdfBeanPropertyMeta bpRdf = (pMeta == null ? RdfBeanPropertyMeta.DEFAULT : pMeta.getExtendedMeta(RdfBeanPropertyMeta.class));
+		RdfBeanPropertyMeta bpRdf = (pMeta == null ? RdfBeanPropertyMeta.DEFAULT : getRdfBeanPropertyMeta(pMeta));
 
 		if (bpRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 			return bpRdf.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
@@ -513,6 +513,50 @@ public class RdfParserSession extends ReaderParserSession {
 	 */
 	protected final boolean isTrimWhitespace() {
 		return ctx.isTrimWhitespace();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
+		return ctx.getRdfClassMeta(cm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean.
+	 *
+	 * @param bm The bean to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
+		return ctx.getRdfBeanMeta(bm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getRdfBeanPropertyMeta(bpm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getXmlBeanPropertyMeta(bpm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

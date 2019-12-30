@@ -15,6 +15,7 @@ package org.apache.juneau.jena;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -43,7 +44,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @ConfigurableContext(prefixes={RdfCommon.PREFIX,RdfParser.PREFIX})
-public class RdfParser extends ReaderParser implements RdfCommon {
+public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvider {
 
 	private static final Namespace
 		DEFAULT_JUNEAU_NS = Namespace.create("j", "http://www.apache.org/juneau/"),
@@ -105,6 +106,14 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 
 	final Map<String,Object> jenaProperties;
 
+	private final Map<ClassMeta<?>,RdfClassMeta> rdfClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanMeta<?>,RdfBeanMeta> rdfBeanMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,RdfBeanPropertyMeta> rdfBeanPropertyMetas = new ConcurrentHashMap<>();
+
+	private final Map<ClassMeta<?>,XmlClassMeta> xmlClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanMeta<?>,XmlBeanMeta> xmlBeanMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,XmlBeanPropertyMeta> xmlBeanPropertyMetas = new ConcurrentHashMap<>();
+
 	/**
 	 * Constructor.
 	 *
@@ -165,6 +174,70 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	@Override /* Parser */
 	public RdfParserSession createSession(ParserSessionArgs args) {
 		return new RdfParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* RdfMetaProvider */
+	public RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
+		RdfClassMeta m = rdfClassMetas.get(cm);
+		if (m == null) {
+			m = new RdfClassMeta(cm, this);
+			rdfClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* RdfMetaProvider */
+	public RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
+		RdfBeanMeta m = rdfBeanMetas.get(bm);
+		if (m == null) {
+			m = new RdfBeanMeta(bm, this);
+			rdfBeanMetas.put(bm, m);
+		}
+		return m;
+	}
+
+	@Override /* RdfMetaProvider */
+	public RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
+		RdfBeanPropertyMeta m = rdfBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new RdfBeanPropertyMeta(bpm.getDelegateFor(), this);
+			rdfBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
+	}
+
+	@Override /* XmlMetaProvider */
+	public XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
+		XmlClassMeta m = xmlClassMetas.get(cm);
+		if (m == null) {
+			m = new XmlClassMeta(cm, this);
+			xmlClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* XmlMetaProvider */
+	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
+		XmlBeanMeta m = xmlBeanMetas.get(bm);
+		if (m == null) {
+			m = new XmlBeanMeta(bm, this);
+			xmlBeanMetas.put(bm, m);
+		}
+		return m;
+	}
+
+	@Override /* XmlMetaProvider */
+	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		XmlBeanPropertyMeta m = xmlBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new XmlBeanPropertyMeta(bpm.getDelegateFor(), this);
+			xmlBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

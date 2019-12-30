@@ -22,7 +22,7 @@ import org.apache.juneau.html.annotation.*;
  * annotation on the bean property.
  */
 @SuppressWarnings("rawtypes")
-public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
+public final class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.
@@ -38,9 +38,9 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @throws Exception If render class could not be instantiated.
+	 * @param htmlMetaProvider HTML metadata provider (for finding information about other artifacts).
 	 */
-	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm) throws Exception {
+	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm, HtmlMetaProvider htmlMetaProvider) {
 		super(bpm);
 		Builder b = new Builder();
 		if (bpm.getInnerField() != null)

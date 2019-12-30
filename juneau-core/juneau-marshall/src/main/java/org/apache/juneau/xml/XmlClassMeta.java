@@ -24,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
  * Metadata on classes specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the
  * class.
  */
-public class XmlClassMeta extends ClassMetaExtended {
+public class XmlClassMeta extends ExtendedClassMeta {
 
 	private final Namespace namespace;
 	private final Xml xml;
@@ -35,8 +35,9 @@ public class XmlClassMeta extends ClassMetaExtended {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
+	 * @param xmlMetaProvider XML metadata provider (for finding information about other artifacts).
 	 */
-	public XmlClassMeta(ClassMeta<?> cm) {
+	public XmlClassMeta(ClassMeta<?> cm, XmlMetaProvider xmlMetaProvider) {
 		super(cm);
 		this.namespace = findNamespace(cm);
 		this.xml = cm.getInfo().getAnnotation(Xml.class);

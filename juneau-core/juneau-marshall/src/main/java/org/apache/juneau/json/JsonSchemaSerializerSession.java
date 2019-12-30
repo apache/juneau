@@ -28,6 +28,7 @@ import org.apache.juneau.serializer.*;
 public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 	private final JsonSchemaGeneratorSession genSession;
+	private final JsonSchemaSerializer ctx;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -44,6 +45,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	protected JsonSchemaSerializerSession(JsonSchemaSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		genSession = ctx.getGenerator().createSession(args);
+		this.ctx = ctx;
 	}
 
 	@Override /* SerializerSession */
@@ -53,6 +55,30 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		} catch (BeanRecursionException e) {
 			throw new SerializeException(e);
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected JsonSchemaClassMeta getJsonSchemaClassMeta(ClassMeta<?> cm) {
+		return ctx.getJsonSchemaClassMeta(cm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getJsonSchemaBeanPropertyMeta(bpm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -357,10 +357,10 @@ public class XmlParserSession extends ReaderParserSession {
 		} else if (sType.isNumber()) {
 			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.getInnerClass());
 		} else if (builder != null || sType.canCreateNewBean(outer)) {
-			if (sType.getExtendedMeta(XmlClassMeta.class).getFormat() == COLLAPSED) {
+			if (getXmlClassMeta(sType).getFormat() == COLLAPSED) {
 				String fieldName = r.getLocalName();
 				BeanMap<?> m = builder != null ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
-				BeanPropertyMeta bpm = m.getMeta().getExtendedMeta(XmlBeanMeta.class).getPropertyMeta(fieldName);
+				BeanPropertyMeta bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);
 				ClassMeta<?> cm = m.getMeta().getClassMeta();
 				Object value = parseAnything(cm, currAttr, r, m.getBean(false), false, null);
 				setName(cm, value, currAttr);
@@ -472,7 +472,7 @@ public class XmlParserSession extends ReaderParserSession {
 
 	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m, boolean isNil) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		BeanMeta<?> bMeta = m.getMeta();
-		XmlBeanMeta xmlMeta = bMeta.getExtendedMeta(XmlBeanMeta.class);
+		XmlBeanMeta xmlMeta = getXmlBeanMeta(bMeta);
 
 		for (int i = 0; i < r.getAttributeCount(); i++) {
 			String key = getAttributeName(r, i);
@@ -567,7 +567,7 @@ public class XmlParserSession extends ReaderParserSession {
 						skipCurrentTag(r);
 					} else {
 						setCurrentProperty(pMeta);
-						XmlFormat xf = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
+						XmlFormat xf = getXmlBeanPropertyMeta(pMeta).getXmlFormat();
 						if (xf == COLLAPSED) {
 							ClassMeta<?> et = pMeta.getClassMeta().getElementType();
 							Object value = parseAnything(et, currAttr, r, m.getBean(false), false, pMeta);
@@ -760,6 +760,40 @@ public class XmlParserSession extends ReaderParserSession {
 	 */
 	protected final boolean isValidating() {
 		return ctx.isValidating();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
+		return ctx.getXmlClassMeta(cm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean.
+	 *
+	 * @param bm The bean to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
+		return ctx.getXmlBeanMeta(bm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getXmlBeanPropertyMeta(bpm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

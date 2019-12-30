@@ -14,12 +14,13 @@ package org.apache.juneau.jsonschema;
 
 import org.apache.juneau.*;
 import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.parser.*;
 
 /**
  * Metadata on classes specific to the JSON-Schema serializer and pulled from the {@link Schema @Schema} annotation on
  * the class.
  */
-public class JsonSchemaClassMeta extends ClassMetaExtended {
+public class JsonSchemaClassMeta extends ExtendedClassMeta {
 
 	private final ObjectMap schema;
 
@@ -27,12 +28,16 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @throws Exception If invalid <ja>@Schema</ja> definition was encountered.
+	 * @param jsonSchemaMetaProvider JSON-schema metadata provider (for finding information about other artifacts).
 	 */
-	public JsonSchemaClassMeta(ClassMeta<?> cm) throws Exception {
+	public JsonSchemaClassMeta(ClassMeta<?> cm, JsonSchemaMetaProvider jsonSchemaMetaProvider) {
 		super(cm);
-		Schema s = cm.getInfo().getAnnotation(Schema.class);
-		schema = s == null ? ObjectMap.EMPTY_MAP : SchemaUtils.asMap(s);
+		try {
+			Schema s = cm.getInfo().getAnnotation(Schema.class);
+			schema = s == null ? ObjectMap.EMPTY_MAP : SchemaUtils.asMap(s);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

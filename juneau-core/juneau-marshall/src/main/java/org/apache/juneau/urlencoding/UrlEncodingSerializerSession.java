@@ -62,7 +62,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		if (cm.isCollectionOrArray()) {
 			if (isExpandedParams())
 				return true;
-			if (pMeta.getBeanMeta().getClassMeta().getExtendedMeta(UrlEncodingClassMeta.class).isExpandedParams())
+			if (getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams())
 				return true;
 		}
 		return false;
@@ -273,6 +273,20 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	protected final boolean isExpandedParams() {
 		return ctx.isExpandedParams();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
+		return ctx.getUrlEncodingClassMeta(cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

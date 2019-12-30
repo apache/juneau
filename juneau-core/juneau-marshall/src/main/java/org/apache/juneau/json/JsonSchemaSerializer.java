@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.jsonschema.*;
@@ -31,7 +34,7 @@ import org.apache.juneau.serializer.*;
  * Produces the JSON-schema for the JSON produced by the {@link JsonSerializer} class with the same properties.
  */
 @ConfigurableContext
-public class JsonSchemaSerializer extends JsonSerializer {
+public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -118,6 +121,8 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final JsonSchemaGenerator generator;
+	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,JsonSchemaBeanPropertyMeta> jsonSchemaBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -165,6 +170,30 @@ public class JsonSchemaSerializer extends JsonSerializer {
 
 	JsonSchemaGenerator getGenerator() {
 		return generator;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* JsonSchemaMetaProvider */
+	public JsonSchemaClassMeta getJsonSchemaClassMeta(ClassMeta<?> cm) {
+		JsonSchemaClassMeta m = jsonSchemaClassMetas.get(cm);
+		if (m == null) {
+			m = new JsonSchemaClassMeta(cm, this);
+			jsonSchemaClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* JsonSchemaMetaProvider */
+	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
+		JsonSchemaBeanPropertyMeta m = jsonSchemaBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new JsonSchemaBeanPropertyMeta(bpm.getDelegateFor(), this);
+			jsonSchemaBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

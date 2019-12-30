@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
@@ -31,7 +34,7 @@ import org.apache.juneau.xml.*;
  * This class is used primarily for automated testing of the {@link HtmlSerializer} class.
  */
 @ConfigurableContext
-public class HtmlParser extends XmlParser {
+public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -50,6 +53,9 @@ public class HtmlParser extends XmlParser {
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
+
+	private final Map<ClassMeta<?>,HtmlClassMeta> htmlClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,HtmlBeanPropertyMeta> htmlBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -89,6 +95,32 @@ public class HtmlParser extends XmlParser {
 	@Override /* Parser */
 	public HtmlParserSession createSession(ParserSessionArgs args) {
 		return new HtmlParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* HtmlMetaProvider */
+	public HtmlClassMeta getHtmlClassMeta(ClassMeta<?> cm) {
+		HtmlClassMeta m = htmlClassMetas.get(cm);
+		if (m == null) {
+			m = new HtmlClassMeta(cm, this);
+			htmlClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* HtmlMetaProvider */
+	public HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return HtmlBeanPropertyMeta.DEFAULT;
+		HtmlBeanPropertyMeta m = htmlBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new HtmlBeanPropertyMeta(bpm.getDelegateFor(), this);
+			htmlBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

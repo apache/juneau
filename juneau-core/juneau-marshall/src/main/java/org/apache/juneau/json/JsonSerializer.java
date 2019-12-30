@@ -13,6 +13,7 @@
 package org.apache.juneau.json;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -88,7 +89,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  */
 @ConfigurableContext
-public class JsonSerializer extends WriterSerializer {
+public class JsonSerializer extends WriterSerializer implements JsonMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -312,6 +313,7 @@ public class JsonSerializer extends WriterSerializer {
 		simpleMode,
 		escapeSolidus,
 		addBeanTypes;
+	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
 
 	private volatile JsonSchemaSerializer schemaSerializer;
 
@@ -403,6 +405,20 @@ public class JsonSerializer extends WriterSerializer {
 	@Override /* Serializer */
 	public JsonSerializerSession createSession(SerializerSessionArgs args) {
 		return new JsonSerializerSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* JsonMetaProvider */
+	public JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
+		JsonClassMeta m = jsonClassMetas.get(cm);
+		if (m == null) {
+			m = new JsonClassMeta(cm, this);
+			jsonClassMetas.put(cm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

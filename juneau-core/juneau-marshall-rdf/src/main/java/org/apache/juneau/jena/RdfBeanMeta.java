@@ -19,7 +19,7 @@ import org.apache.juneau.jena.annotation.*;
  * Metadata on beans specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the
  * class.
  */
-public class RdfBeanMeta extends BeanMetaExtended {
+public class RdfBeanMeta extends ExtendedBeanMeta {
 
 	// RDF related fields
 	private final BeanPropertyMeta beanUriProperty;    // Bean property that identifies the URI of the bean.
@@ -28,13 +28,14 @@ public class RdfBeanMeta extends BeanMetaExtended {
 	 * Constructor.
 	 *
 	 * @param beanMeta The metadata on the bean that this metadata applies to.
+	 * @param rdfMetaProvider RDF metadata provider (for finding information about other artifacts).
 	 */
-	public RdfBeanMeta(BeanMeta<?> beanMeta) {
+	public RdfBeanMeta(BeanMeta<?> beanMeta, RdfMetaProvider rdfMetaProvider) {
 		super(beanMeta);
 
 		BeanPropertyMeta t_beanUriProperty = null;
 		for (BeanPropertyMeta p : beanMeta.getPropertyMetas()) {
-			RdfBeanPropertyMeta bpm = p.getExtendedMeta(RdfBeanPropertyMeta.class);
+			RdfBeanPropertyMeta bpm = rdfMetaProvider.getRdfBeanPropertyMeta(p);
 			if (bpm.isBeanUri())
 				t_beanUriProperty = p;
 		}

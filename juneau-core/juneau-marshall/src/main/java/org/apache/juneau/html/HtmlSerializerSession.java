@@ -198,7 +198,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				type = getClassMetaForObject(o);
 		}
 
-		HtmlClassMeta cHtml = cHtml(type);
+		HtmlClassMeta cHtml = getHtmlClassMeta(type);
 
 		if (type.isMapOrBean() && ! cHtml.isXml())
 			return serializeAnything(out, o, eType, elementName, pMeta, 0, false, false);
@@ -290,8 +290,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				return ContentResult.CR_MIXED;
 			}
 
-			HtmlClassMeta cHtml = cHtml(sType);
-			HtmlBeanPropertyMeta bpHtml = bpHtml(pMeta);
+			HtmlClassMeta cHtml = getHtmlClassMeta(sType);
+			HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(pMeta);
 
 			HtmlRender render = firstNonNull(bpHtml.getRender(), cHtml.getRender());
 
@@ -388,8 +388,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		ClassMeta<?> keyType = eKeyType == null ? string() : eKeyType;
 		ClassMeta<?> valueType = eValueType == null ? object() : eValueType;
 		ClassMeta<?> aType = getClassMetaForObject(m);       // The actual type
-		HtmlClassMeta cHtml = cHtml(aType);
-		HtmlBeanPropertyMeta bpHtml = bpHtml(ppMeta);
+		HtmlClassMeta cHtml = getHtmlClassMeta(aType);
+		HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(ppMeta);
 
 		int i = indent;
 
@@ -445,8 +445,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws IOException, SerializeException {
 
-		HtmlClassMeta cHtml = cHtml(m.getClassMeta());
-		HtmlBeanPropertyMeta bpHtml = bpHtml(ppMeta);
+		HtmlClassMeta cHtml = getHtmlClassMeta(m.getClassMeta());
+		HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(ppMeta);
 
 		int i = indent;
 
@@ -519,8 +519,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws IOException, SerializeException {
 
-		HtmlClassMeta cHtml = cHtml(sType);
-		HtmlBeanPropertyMeta bpHtml = bpHtml(ppMeta);
+		HtmlClassMeta cHtml = getHtmlClassMeta(sType);
+		HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(ppMeta);
 
 		Collection c = (sType.isCollection() ? (Collection)in : toList(sType.getInnerClass(), in));
 
@@ -667,37 +667,29 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		}
 	}
 
-	private static HtmlRender<?> getRender(HtmlSerializerSession session, BeanPropertyMeta pMeta, Object value) {
+	private HtmlRender<?> getRender(HtmlSerializerSession session, BeanPropertyMeta pMeta, Object value) {
 		if (pMeta == null)
 			return null;
-		HtmlRender<?> render = bpHtml(pMeta).getRender();
+		HtmlRender<?> render = getHtmlBeanPropertyMeta(pMeta).getRender();
 		if (render != null)
 			return render;
 		ClassMeta<?> cMeta = session.getClassMetaForObject(value);
-		render = cMeta == null ? null : cHtml(cMeta).getRender();
+		render = cMeta == null ? null : getHtmlClassMeta(cMeta).getRender();
 		return render;
 	}
 
 	@SuppressWarnings({"rawtypes","unchecked"})
-	private static String getStyle(HtmlSerializerSession session, BeanPropertyMeta pMeta, Object value) {
+	private String getStyle(HtmlSerializerSession session, BeanPropertyMeta pMeta, Object value) {
 		HtmlRender render = getRender(session, pMeta, value);
 		return render == null ? null : render.getStyle(session, value);
 	}
 
-	private static String getLink(BeanPropertyMeta pMeta) {
-		return pMeta == null ? null : pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).getLink();
+	private String getLink(BeanPropertyMeta pMeta) {
+		return pMeta == null ? null : getHtmlBeanPropertyMeta(pMeta).getLink();
 	}
 
-	private static String getAnchorText(BeanPropertyMeta pMeta) {
-		return pMeta == null ? null : pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).getAnchorText();
-	}
-
-	private static HtmlClassMeta cHtml(ClassMeta<?> cm) {
-		return cm.getExtendedMeta(HtmlClassMeta.class);
-	}
-
-	private static HtmlBeanPropertyMeta bpHtml(BeanPropertyMeta pMeta) {
-		return pMeta == null ? HtmlBeanPropertyMeta.DEFAULT : pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class);
+	private String getAnchorText(BeanPropertyMeta pMeta) {
+		return pMeta == null ? null : getHtmlBeanPropertyMeta(pMeta).getAnchorText();
 	}
 
 	/*
@@ -733,7 +725,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (cm.getInnerClass().isAnnotationPresent(HtmlLink.class))
 			return null;
 
-		HtmlClassMeta cHtml = cHtml(cm);
+		HtmlClassMeta cHtml = getHtmlClassMeta(cm);
 
 		if (cHtml.isNoTables() || bpHtml.isNoTables())
 			return null;
@@ -894,6 +886,30 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	protected final AnchorText getUriAnchorText() {
 		return ctx.getUriAnchorText();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected HtmlClassMeta getHtmlClassMeta(ClassMeta<?> cm) {
+		return ctx.getHtmlClassMeta(cm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getHtmlBeanPropertyMeta(bpm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

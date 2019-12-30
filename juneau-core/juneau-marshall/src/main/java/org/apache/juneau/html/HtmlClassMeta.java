@@ -21,7 +21,7 @@ import org.apache.juneau.html.annotation.*;
  * Metadata on classes specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on
  * the class.
  */
-public class HtmlClassMeta extends ClassMetaExtended {
+public class HtmlClassMeta extends ExtendedClassMeta {
 
 	private final Html html;
 	private final boolean noTables, noTableHeaders;
@@ -32,8 +32,9 @@ public class HtmlClassMeta extends ClassMetaExtended {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
+	 * @param htmlMetaProvider HTML metadata provider (for finding information about other artifacts).
 	 */
-	public HtmlClassMeta(ClassMeta<?> cm) {
+	public HtmlClassMeta(ClassMeta<?> cm, HtmlMetaProvider htmlMetaProvider) {
 		super(cm);
 		this.html = cm.getInfo().getAnnotation(Html.class);
 		if (html != null) {

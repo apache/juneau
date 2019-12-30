@@ -33,7 +33,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.utils.*;
 
 /**
  * A wrapper class around the {@link Class} object that provides cached information about that class.
@@ -93,7 +92,6 @@ public final class ClassMeta<T> implements Type {
 	private final PojoSwap<T,?>[] pojoSwaps;                // The object POJO swaps associated with this bean (if it has any).
 	private final BeanFilter beanFilter;                    // The bean filter associated with this bean (if it has one).
 	private final BuilderSwap<T,?> builderSwap;             // The builder swap associated with this bean (if it has one).
-	private final MetadataMap extMeta;                      // Extended metadata
 	private final BeanContext beanContext;                  // The bean context that created this object.
 	private final ClassMeta<?>
 		elementType,                                         // If ARRAY or COLLECTION, the element class type.
@@ -143,7 +141,6 @@ public final class ClassMeta<T> implements Type {
 		this.innerClass = innerClass;
 		this.info = ClassInfo.of(innerClass);
 		this.beanContext = beanContext;
-		this.extMeta = new MetadataMap();
 		String notABeanReason = null;
 
 		wLock.lock();
@@ -253,7 +250,6 @@ public final class ClassMeta<T> implements Type {
 		this.pojoSwaps = mainType.pojoSwaps;
 		this.builderSwap = mainType.builderSwap;
 		this.beanFilter = mainType.beanFilter;
-		this.extMeta = mainType.extMeta;
 		this.initException = mainType.initException;
 		this.beanRegistry = mainType.beanRegistry;
 		this.exampleMethod = mainType.exampleMethod;
@@ -270,7 +266,6 @@ public final class ClassMeta<T> implements Type {
 	ClassMeta(ClassMeta<?>[] args) {
 		this.innerClass = (Class<T>) Object[].class;
 		this.info = ClassInfo.of(innerClass);
-		this.extMeta = new MetadataMap();
 		this.args = args;
 		this.implClass = null;
 		this.childPojoSwaps = null;
@@ -1524,16 +1519,6 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the language-specified extended metadata on this class.
-	 *
-	 * @param c The name of the metadata class to create.
-	 * @return Extended metadata on this class.  Never <jk>null</jk>.
-	 */
-	public <M extends ClassMetaExtended> M getExtendedMeta(Class<M> c) {
-		return extMeta.get(c, this);
-	}
-
-	/**
 	 * Returns the interface proxy invocation handler for this class.
 	 *
 	 * @return The interface proxy invocation handler, or <jk>null</jk> if it does not exist.
@@ -1778,20 +1763,6 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Checks to see if the specified class type is the same as this one.
-	 *
-	 * @param t The specified class type.
-	 * @return <jk>true</jk> if the specified class type is the same as the class for this type.
-	 */
-	@Override /* Object */
-	public boolean equals(Object t) {
-		if (t == null || ! (t instanceof ClassMeta))
-			return false;
-		ClassMeta<?> t2 = (ClassMeta<?>)t;
-		return t2.getInnerClass() == this.getInnerClass();
-	}
-
-	/**
 	 * Similar to {@link #equals(Object)} except primitive and Object types that are similar are considered the same.
 	 * (e.g. <jk>boolean</jk> == <c>Boolean</c>).
 	 *
@@ -1883,11 +1854,6 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public String getSimpleName() {
 		return innerClass.getSimpleName();
-	}
-
-	@Override /* Object */
-	public int hashCode() {
-		return super.hashCode();
 	}
 
 	/**
@@ -2078,5 +2044,18 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public <A extends Annotation> A getAnnotation(Class<A> a) {
 		return this.innerClass.getAnnotation(a);
+	}
+
+	@Override /* Object */
+	public int hashCode() {
+		return innerClass.hashCode();
+	}
+
+	@Override /* Object */
+	public boolean equals(Object o) {
+		if (o == null || ! (o instanceof ClassMeta))
+			return false;
+		ClassMeta<?> o2 = (ClassMeta<?>)o;
+		return o2.innerClass.equals(innerClass);
 	}
 }

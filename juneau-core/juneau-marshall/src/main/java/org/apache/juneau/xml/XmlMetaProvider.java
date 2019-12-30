@@ -10,35 +10,36 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau;
+package org.apache.juneau.xml;
+
+import org.apache.juneau.*;
 
 /**
- * Defines extended language-specific metadata associated with a bean.
- *
- * <p>
- * Serializers and parsers can implement their own language-specific metadata on a bean and retrieve the metadata using
- * the {@link BeanMeta#getExtendedMeta(Class)} method.
+ * Interface for providing access to {@link XmlClassMeta}, {@link XmlBeanMeta}, and {@link XmlBeanPropertyMeta} objects.
  */
-public class BeanMetaExtended {
-
-	private final BeanMeta<?> bm;
+public interface XmlMetaProvider {
 
 	/**
-	 * Constructor.
+	 * Returns the language-specific metadata on the specified class.
 	 *
-	 * @param bm The metadata of the bean we're extending.
-	 * @throws BeanRuntimeException If any error occurred trying to construct the metadata.
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
 	 */
-	public BeanMetaExtended(BeanMeta<?> bm) throws BeanRuntimeException {
-		this.bm = bm;
-	}
+	XmlClassMeta getXmlClassMeta(ClassMeta<?> cm);
 
 	/**
-	 * Returns the bean metadata that was passed into the constructor.
+	 * Returns the language-specific metadata on the specified bean.
 	 *
-	 * @return The bean metadata that was passed into the constructor.
+	 * @param bm The bean to return the metadata on.
+	 * @return The metadata.
 	 */
-	protected BeanMeta<?> getBeanMeta() {
-		return bm;
-	}
+	XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm);
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm);
 }
