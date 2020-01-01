@@ -17,6 +17,8 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
@@ -1754,6 +1756,43 @@ public class PropertyStoreTest {
 		psb.set("A.foo.ls", new String[]{"INHERIT", "[10]:quux"});
 		assertEquals("{A:{'foo.ls':['baz','qux','foo','bar','quux']}}", psb.build().toString());
 	}
+
+	@Test
+	public void testListOfAnnotations() {
+
+		// Per the Annotation spec, two annotations have the same hashcode and are equivalent if their individual
+		// values are equal.  Therefore, the annotations on A1 and A2 are two different but equivalent instances.
+
+		Html html1 = A1.class.getAnnotation(Html.class);
+		Html html1a = A1.class.getAnnotation(Html.class);
+		Html html2 = A2.class.getAnnotation(Html.class);
+		Html html3 = A3.class.getAnnotation(Html.class);
+		Json json4 = A4.class.getAnnotation(Json.class);
+
+		PropertyStore
+			ps1 = PropertyStore.create().set("xxx", AList.create(html1)).build(),
+			ps1a = PropertyStore.create().set("xxx", AList.create(html1a)).build(),
+			ps2 = PropertyStore.create().set("xxx", AList.create(html2)).build(),
+			ps3 = PropertyStore.create().set("xxx", AList.create(html3)).build(),
+			ps4 = PropertyStore.create().set("xxx", AList.create(json4)).build();
+
+		assertTrue(ps1.equals(ps1a));
+		assertTrue(ps1.equals(ps2));
+		assertFalse(ps1.equals(ps3));
+		assertFalse(ps1.equals(ps4));
+	}
+
+	@Html(on="foo")
+	public static class A1 {}
+
+	@Html(on="foo")
+	public static class A2 {}
+
+	@Html(on="bar")
+	public static class A3 {}
+
+	@Json(on="foo")
+	public static class A4 {}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Utility methods

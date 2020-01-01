@@ -28,7 +28,7 @@ import org.apache.juneau.serializer.*;
  * Produces <c>Content-Type</c> types:  <bc>application/x-java-serialized-object</bc>
  */
 @ConfigurableContext
-public class JsoSerializer extends OutputStreamSerializer {
+public class JsoSerializer extends OutputStreamSerializer implements JsoCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

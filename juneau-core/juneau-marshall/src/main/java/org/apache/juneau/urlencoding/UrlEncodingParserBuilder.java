@@ -14,6 +14,7 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.urlencoding.UrlEncodingParser.*;
 
+import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -656,6 +657,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* BeanContextBuilder */
 	public UrlEncodingParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public UrlEncodingParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

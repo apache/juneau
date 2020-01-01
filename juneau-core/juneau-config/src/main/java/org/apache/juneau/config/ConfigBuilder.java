@@ -14,6 +14,7 @@ package org.apache.juneau.config;
 
 import static org.apache.juneau.config.Config.*;
 
+import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -290,6 +291,12 @@ public class ConfigBuilder extends ContextBuilder {
 	 */
 	public ConfigBuilder readOnly() {
 		return set(CONFIG_readOnly, true);
+	}
+
+	@Override /* ContextBuilder */
+	public ConfigBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
 	}
 
 	@Override /* ContextBuilder */

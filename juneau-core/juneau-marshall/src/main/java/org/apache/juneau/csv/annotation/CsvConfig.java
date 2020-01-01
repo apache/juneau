@@ -40,4 +40,29 @@ public @interface CsvConfig {
 	 * Can be used to override default ordering and application of config annotations.
 	 */
 	int rank() default 0;
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// CsvCommon
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Indirectly applies {@link Csv @Csv} annotations to classes/methods.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Csv#on() @Csv.on}
+	 * annotation to specify the class/method names to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	Csv[] annotateCsv() default {};
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// CsvSerializer
+	//-------------------------------------------------------------------------------------------------------------------
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// CsvParser
+	//-------------------------------------------------------------------------------------------------------------------
 }

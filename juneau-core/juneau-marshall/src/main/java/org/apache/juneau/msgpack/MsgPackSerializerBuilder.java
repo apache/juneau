@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -719,6 +720,12 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public MsgPackSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public MsgPackSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

@@ -20,7 +20,7 @@ import org.apache.juneau.parser.*;
  * TODO - Work in progress.  CSV parser.
  */
 @ConfigurableContext
-public class CsvParser extends ReaderParser {
+public class CsvParser extends ReaderParser implements CsvCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -76,7 +76,7 @@ public class CsvParser extends ReaderParser {
 	public CsvParserSession createSession(ParserSessionArgs args) {
 		return new CsvParserSession(this, args);
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------

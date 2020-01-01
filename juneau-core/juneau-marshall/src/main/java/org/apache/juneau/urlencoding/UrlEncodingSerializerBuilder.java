@@ -14,6 +14,7 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.urlencoding.UrlEncodingSerializer.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -825,6 +826,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public UrlEncodingSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

@@ -25,7 +25,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 @ConfigurableContext
-public class OpenApiParser extends UonParser {
+public class OpenApiParser extends UonParser implements OpenApiCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

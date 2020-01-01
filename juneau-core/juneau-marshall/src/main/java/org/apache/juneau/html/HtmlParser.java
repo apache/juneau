@@ -34,7 +34,7 @@ import org.apache.juneau.xml.*;
  * This class is used primarily for automated testing of the {@link HtmlSerializer} class.
  */
 @ConfigurableContext
-public class HtmlParser extends XmlParser implements HtmlMetaProvider {
+public class HtmlParser extends XmlParser implements HtmlMetaProvider, HtmlCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

@@ -42,6 +42,23 @@ public @interface SoapXmlConfig {
 	int rank() default 0;
 
 	//-------------------------------------------------------------------------------------------------------------------
+	// SoapXmlCommon
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Indirectly applies {@link SoapXml @SoapXml} annotations to classes/methods.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link SoapXml#on() @SoapXml.on}
+	 * annotation to specify the class/method names to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	SoapXml[] annotateSoapXml() default {};
+
+	//-------------------------------------------------------------------------------------------------------------------
 	// SoapXmlSerializer
 	//-------------------------------------------------------------------------------------------------------------------
 
@@ -53,4 +70,8 @@ public @interface SoapXmlConfig {
 	 * </ul>
 	 */
 	String soapAction() default "";
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// SoapXmlParser
+	//-------------------------------------------------------------------------------------------------------------------
 }

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi.annotation;
 
+import static org.apache.juneau.Context.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -33,5 +35,9 @@ public class OpenApiConfigApply extends ConfigApply<OpenApiConfig> {
 
 	@Override
 	public void apply(AnnotationInfo<OpenApiConfig> ai, PropertyStoreBuilder psb) {
+		OpenApiConfig a = ai.getAnnotation();
+
+		if (a.annotateOpenApi().length > 0)
+			psb.addTo(CONTEXT_annotations, a.annotateOpenApi());
 	}
 }

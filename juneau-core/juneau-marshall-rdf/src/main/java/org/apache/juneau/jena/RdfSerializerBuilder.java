@@ -15,6 +15,7 @@ package org.apache.juneau.jena;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.jena.RdfSerializer.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -1560,6 +1561,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public RdfSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RdfSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

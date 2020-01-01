@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -763,6 +764,12 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public OpenApiSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public OpenApiSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

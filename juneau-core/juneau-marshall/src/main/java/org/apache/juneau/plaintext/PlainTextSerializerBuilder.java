@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -762,6 +763,12 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public PlainTextSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public PlainTextSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

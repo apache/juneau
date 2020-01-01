@@ -203,6 +203,28 @@ public @interface Beanp {
 	Class<?> type() default Object.class;
 
 	/**
+	 * Defines which classes/methods this annotation applies to.
+	 *
+	 * <p>
+	 * Used in conjunction with the {@link BeanConfig#annotateBeanp()}.
+	 * It is ignored when the annotation is applied directly to classes and methods.
+	 *
+	 * The format can be any of the following:
+	 * <ul>
+	 * 	<li>Full class name (e.g. <js>"com.foo.MyClass"</js>).
+	 * 	<li>Simple class name (e.g. <js>"MyClass"</js>).
+	 * 	<li>Full method name (e.g. <js>"com.foo.MyClass.myMethod"</js>).
+	 * 	<li>Simple method name (e.g. <js>"MyClass.myMethod"</js>).
+	 * 	<li>A comma-delimited list of anything on this list.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	String on() default "";
+
+	/**
 	 * For bean properties of maps and collections, this annotation can be used to identify the class types of the
 	 * contents of the bean property object when the generic parameter types are interfaces or abstract classes.
 	 *

@@ -42,6 +42,23 @@ public @interface UrlEncodingConfig {
 	int rank() default 0;
 
 	//-------------------------------------------------------------------------------------------------------------------
+	// UrlEncodingCommon
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Indirectly applies {@link UrlEncoding @UrlEncoding} annotations to classes/methods.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link UrlEncoding#on() @UrlEncoding.on}
+	 * annotation to specify the class/method names to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	UrlEncoding[] annotateUrlEncoding() default {};
+
+	//-------------------------------------------------------------------------------------------------------------------
 	// UrlEncodingSerializer
 	//-------------------------------------------------------------------------------------------------------------------
 
@@ -79,4 +96,8 @@ public @interface UrlEncodingConfig {
 	 * </ul>
 	 */
 	String expandedParams() default "";
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// UrlEncodingParser
+	//-------------------------------------------------------------------------------------------------------------------
 }

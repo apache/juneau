@@ -45,5 +45,8 @@ public class JsonConfigApply extends ConfigApply<JsonConfig> {
 
 		if (! a.validateEnd().isEmpty())
 			psb.set(JSON_validateEnd, bool(a.validateEnd()));
+
+		if (a.annotateJson().length > 0)
+			psb.addTo(CONTEXT_annotations, a.annotateJson());
 	}
 }

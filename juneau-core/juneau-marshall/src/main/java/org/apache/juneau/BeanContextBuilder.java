@@ -16,6 +16,7 @@ import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -1874,6 +1875,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	public BeanContextBuilder useJavaBeanIntrospector() {
 		return set(BEAN_useJavaBeanIntrospector, true);
+	}
+
+	@Override /* ContextBuilder */
+	public BeanContextBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
 	}
 
 	@Override /* ContextBuilder */

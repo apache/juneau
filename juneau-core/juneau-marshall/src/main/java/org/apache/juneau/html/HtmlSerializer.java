@@ -125,7 +125,7 @@ import org.apache.juneau.xml.*;
  * </p>
  */
 @ConfigurableContext
-public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
+public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, HtmlCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

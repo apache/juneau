@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
+import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -636,6 +637,12 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public CsvParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public CsvParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

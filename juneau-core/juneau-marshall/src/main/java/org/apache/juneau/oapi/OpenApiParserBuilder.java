@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
+import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -611,6 +612,12 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	@Override /* BeanContextBuilder */
 	public OpenApiParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public OpenApiParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jso;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -719,6 +720,12 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public JsoSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public JsoSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

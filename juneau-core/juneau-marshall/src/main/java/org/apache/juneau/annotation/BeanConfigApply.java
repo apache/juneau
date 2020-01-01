@@ -165,6 +165,11 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.set(BEANTRAVERSE_initialDepth, integer(a.initialDepth(), "initialDepth"));
 		if (! a.maxDepth().isEmpty())
 			psb.set(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));
+
+		if (a.annotateBean().length > 0)
+			psb.addTo(CONTEXT_annotations, a.annotateBean());
+		if (a.annotateBeanp().length > 0)
+			psb.addTo(CONTEXT_annotations, a.annotateBeanp());
 	}
 
 	private Locale locale(String in) {

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -762,6 +763,12 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public CsvSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public CsvSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

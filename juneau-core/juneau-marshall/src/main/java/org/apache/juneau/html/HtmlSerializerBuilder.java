@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlSerializer.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -936,6 +937,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public HtmlSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

@@ -50,6 +50,32 @@ public @interface BeanConfig {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Indirectly applies {@link Bean @Bean} annotations to classes/methods.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Bean#on() @Bean.on}
+	 * annotation to specify the class/method names to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	Bean[] annotateBean() default {};
+
+	/**
+	 * Indirectly applies {@link Beanp @Beanp} annotations to classes/methods.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Beanp#on() @Beanp.on}
+	 * annotation to specify the class/method names to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	Beanp[] annotateBeanp() default {};
+
+	/**
 	 * Configuration property:  Minimum bean class visibility.
 	 *
 	 * <p>

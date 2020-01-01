@@ -116,7 +116,7 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  */
 @ConfigurableContext
-public class UonSerializer extends WriterSerializer implements HttpPartSerializer {
+public class UonSerializer extends WriterSerializer implements HttpPartSerializer, UonCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

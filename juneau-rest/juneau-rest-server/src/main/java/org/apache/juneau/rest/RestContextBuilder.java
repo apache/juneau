@@ -19,6 +19,7 @@ import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
+import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -2868,6 +2869,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* BeanContextBuilder */
 	public RestContextBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestContextBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

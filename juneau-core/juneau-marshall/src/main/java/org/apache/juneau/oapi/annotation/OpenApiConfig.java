@@ -40,4 +40,29 @@ public @interface OpenApiConfig {
 	 * Can be used to override default ordering and application of config annotations.
 	 */
 	int rank() default 0;
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// OpenApiCommon
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Indirectly applies {@link OpenApi @OpenApi} annotations to classes/methods.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link OpenApi#on() @OpenApi.on}
+	 * annotation to specify the class/method names to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	OpenApi[] annotateOpenApi() default {};
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// OpenApiSerializer
+	//-------------------------------------------------------------------------------------------------------------------
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// OpenApiParser
+	//-------------------------------------------------------------------------------------------------------------------
 }

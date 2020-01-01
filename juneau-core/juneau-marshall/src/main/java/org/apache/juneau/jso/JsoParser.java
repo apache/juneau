@@ -26,7 +26,7 @@ import org.apache.juneau.parser.*;
  * Consumes <c>Content-Type</c> types:  <bc>application/x-java-serialized-object</bc>
  */
 @ConfigurableContext
-public final class JsoParser extends InputStreamParser {
+public final class JsoParser extends InputStreamParser implements JsoCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

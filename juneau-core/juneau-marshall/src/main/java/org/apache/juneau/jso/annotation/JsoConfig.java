@@ -40,4 +40,29 @@ public @interface JsoConfig {
 	 * Can be used to override default ordering and application of config annotations.
 	 */
 	int rank() default 0;
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// JsoCommon
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Indirectly applies {@link Jso @Jso} annotations to classes/methods.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Jso#on() @Jso.on}
+	 * annotation to specify the class/method names to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	Jso[] annotateJso() default {};
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// JsoSerializer
+	//-------------------------------------------------------------------------------------------------------------------
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// JsoParser
+	//-------------------------------------------------------------------------------------------------------------------
 }

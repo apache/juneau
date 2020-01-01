@@ -39,7 +39,7 @@ import org.apache.juneau.urlencoding.annotation.*;
  * This parser uses a state machine, which makes it very fast and efficient.
  */
 @ConfigurableContext
-public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider {
+public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider, UrlEncodingCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

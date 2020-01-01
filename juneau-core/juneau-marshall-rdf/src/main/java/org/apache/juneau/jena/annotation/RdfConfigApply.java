@@ -108,5 +108,8 @@ public class RdfConfigApply extends ConfigApply<RdfConfig> {
 
 		if (! a.trimWhitespace().isEmpty())
 			psb.set(RDF_trimWhitespace, bool(a.trimWhitespace()));
+
+		if (a.annotateRdf().length > 0)
+			psb.addTo(CONTEXT_annotations, a.annotateRdf());
 	}
 }

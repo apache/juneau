@@ -26,7 +26,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 @ConfigurableContext
-public class OpenApiSerializer extends UonSerializer {
+public class OpenApiSerializer extends UonSerializer implements OpenApiCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.BeanTraverseContext.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -681,6 +682,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public BeanTraverseBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

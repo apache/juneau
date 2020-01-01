@@ -34,7 +34,7 @@ import org.apache.juneau.parser.*;
  * See the {@link XmlSerializer} class for a description of Juneau-generated XML.
  */
 @ConfigurableContext
-public class XmlParser extends ReaderParser implements XmlMetaProvider {
+public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

@@ -44,6 +44,23 @@ public @interface UonConfig {
 	int rank() default 0;
 
 	//-------------------------------------------------------------------------------------------------------------------
+	// UonCommon
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Indirectly applies {@link Uon @Uon} annotations to classes/methods.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Uon#on() @Uon.on}
+	 * annotation to specify the class/method names to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	Uon[] annotateUon() default {};
+
+	//-------------------------------------------------------------------------------------------------------------------
 	// UonParser
 	//-------------------------------------------------------------------------------------------------------------------
 

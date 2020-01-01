@@ -89,7 +89,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  */
 @ConfigurableContext
-public class JsonSerializer extends WriterSerializer implements JsonMetaProvider {
+public class JsonSerializer extends WriterSerializer implements JsonMetaProvider, JsonCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

@@ -20,7 +20,7 @@ import org.apache.juneau.serializer.*;
  * TODO - Work in progress.  CSV serializer.
  */
 @ConfigurableContext
-public final class CsvSerializer extends WriterSerializer {
+public final class CsvSerializer extends WriterSerializer implements CsvCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties

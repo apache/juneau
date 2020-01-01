@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
+import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -629,6 +630,12 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	@Override /* BeanContextBuilder */
 	public MsgPackParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public MsgPackParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

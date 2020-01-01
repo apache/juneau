@@ -14,6 +14,7 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -600,6 +601,12 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public OutputStreamSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

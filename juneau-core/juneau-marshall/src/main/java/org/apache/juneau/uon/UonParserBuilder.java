@@ -14,6 +14,7 @@ package org.apache.juneau.uon;
 
 import static org.apache.juneau.uon.UonParser.*;
 
+import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -711,6 +712,12 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public UonParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public UonParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

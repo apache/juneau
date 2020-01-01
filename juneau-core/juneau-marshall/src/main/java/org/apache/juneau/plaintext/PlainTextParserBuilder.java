@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
+import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -636,6 +637,12 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public PlainTextParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

@@ -265,6 +265,48 @@ public @interface Bean {
 	Class<? extends PropertyNamer> propertyNamer() default PropertyNamerDefault.class;
 
 	/**
+	 * Defines which classes/methods this annotation applies to.
+	 *
+	 * <p>
+	 * Used in conjunction with the {@link BeanConfig#annotateBean()}.
+	 * It is ignored when the annotation is applied directly to classes and methods.
+	 *
+	 * <p>
+	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation:
+	 * <p class='bpcode w800'>
+	 * 	<jc>// Class with explicit annotation.</jc>
+	 * 	<ja>@Bean</ja>(bpi=<jk>"street,city,state"</js>)
+	 * 	<jk>public class</jk> A {...}
+	 *
+	 * 	<jc>// Class with annotation applied via @BeanConfig</jc>
+	 * 	<jk>public class</jk> B {...}
+	 *
+	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
+	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@BeanConfig</ja>(
+	 * 		annotateBean={
+	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, bpi=<jk>"street,city,state"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public void</jk> doFoo() {...}
+	 * </p>
+	 *
+	 * The format can be any of the following:
+	 * <ul>
+	 * 	<li>Full class name (e.g. <js>"com.foo.MyClass"</js>).
+	 * 	<li>Simple class name (e.g. <js>"MyClass"</js>).
+	 * 	<li>Full method name (e.g. <js>"com.foo.MyClass.myMethod"</js>).
+	 * 	<li>Simple method name (e.g. <js>"MyClass.myMethod"</js>).
+	 * 	<li>A comma-delimited list of anything on this list.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	String on() default "";
+
+	/**
 	 * Sort bean properties in alphabetical order.
 	 *
 	 * <p>

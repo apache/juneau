@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.parser.InputStreamParser.*;
 import static org.apache.juneau.parser.ReaderParser.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -883,6 +884,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public ParserGroupBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

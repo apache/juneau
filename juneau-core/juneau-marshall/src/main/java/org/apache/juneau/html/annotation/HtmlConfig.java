@@ -43,6 +43,23 @@ public @interface HtmlConfig {
 	int rank() default 0;
 
 	//-------------------------------------------------------------------------------------------------------------------
+	// HtmlCommon
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Indirectly applies {@link Html @Html} annotations to classes/methods.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Html#on() @Html.on}
+	 * annotation to specify the class/method names to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	Html[] annotateHtml() default {};
+
+	//-------------------------------------------------------------------------------------------------------------------
 	// HtmlSerializer
 	//-------------------------------------------------------------------------------------------------------------------
 

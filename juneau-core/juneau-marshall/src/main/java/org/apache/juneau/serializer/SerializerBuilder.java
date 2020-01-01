@@ -14,6 +14,7 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.serializer.Serializer.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -1014,6 +1015,12 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

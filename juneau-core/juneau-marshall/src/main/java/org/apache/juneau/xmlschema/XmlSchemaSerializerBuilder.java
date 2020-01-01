@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xmlschema;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -805,6 +806,12 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public XmlSchemaSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

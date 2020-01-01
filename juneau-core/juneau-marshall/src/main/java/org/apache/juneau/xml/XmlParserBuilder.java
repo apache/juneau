@@ -14,6 +14,7 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.xml.XmlParser.*;
 
+import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -814,6 +815,12 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public XmlParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

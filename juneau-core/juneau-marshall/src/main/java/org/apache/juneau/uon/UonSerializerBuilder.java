@@ -14,6 +14,7 @@ package org.apache.juneau.uon;
 
 import static org.apache.juneau.uon.UonSerializer.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -853,6 +854,12 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public UonSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

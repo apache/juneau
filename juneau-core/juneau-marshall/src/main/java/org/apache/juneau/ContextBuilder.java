@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.BeanContext.*;
+
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -224,6 +227,29 @@ public abstract class ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Annotations.
+	 *
+	 * <p>
+	 * Defines annotations to apply to specific classes and methods.
+	 *
+	 * <p>
+	 * Allows you to dynamically apply Juneau annotations typically applied directly to classes and methods.
+	 * Useful in cases where you want to use the functionality of the annotation on beans and bean properties but
+	 * do not have access to the code to do so.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link Context#CONTEXT_annotations}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * @return This object (for method chaining).
+	 */
+	public ContextBuilder annotations(Annotation...values) {
+		return addTo(CONTEXT_annotations, values);
+	}
 
 	/**
 	 * Sets a configuration property on this object.

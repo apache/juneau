@@ -14,6 +14,7 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.parser.Parser.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -739,6 +740,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public ParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

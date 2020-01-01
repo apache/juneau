@@ -48,6 +48,23 @@ public @interface XmlConfig {
 	int rank() default 0;
 
 	//-------------------------------------------------------------------------------------------------------------------
+	// XmlCommon
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Indirectly applies {@link Xml @Xml} annotations to classes/methods.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Xml#on() @Xml.on}
+	 * annotation to specify the class/method names to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	Xml[] annotateXml() default {};
+
+	//-------------------------------------------------------------------------------------------------------------------
 	// XmlParser
 	//-------------------------------------------------------------------------------------------------------------------
 

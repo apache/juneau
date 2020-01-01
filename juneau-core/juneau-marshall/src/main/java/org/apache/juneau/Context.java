@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -40,6 +41,57 @@ import org.apache.juneau.json.*;
  * @see PropertyStore
  */
 public abstract class Context {
+
+	static final String PREFIX = "Context";
+
+	/**
+	 * Configuration property:  Annotations.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Context.annotations.lo"</js>
+	 * 	<li><b>Data type:</b>  <c>List&lt;Annotation&gt;</c>
+	 * 	<li><b>Default:</b>  Empty list.
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link ContextBuilder#annotations(Annotation...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Defines annotations to apply to specific classes and methods.
+	 *
+	 * <p>
+	 * Allows you to dynamically apply Juneau annotations typically applied directly to classes and methods.
+	 * Useful in cases where you want to use the functionality of the annotation on beans and bean properties but
+	 * do not have access to the code to do so.
+	 * 
+	 * <p>
+	 * As a rule, any Juneau annotation with an <c>on()</c> method can be used with this property.
+	 *
+	 * <p>
+	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation:
+	 * <p class='bpcode w800'>
+	 * 	<jc>// Class with explicit annotation.</jc>
+	 * 	<ja>@Bean</ja>(bpi=<jk>"street,city,state"</js>)
+	 * 	<jk>public class</jk> A {...}
+	 *
+	 * 	<jc>// Class with annotation applied via @BeanConfig</jc>
+	 * 	<jk>public class</jk> B {...}
+	 *
+	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
+	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@BeanConfig</ja>(
+	 * 		annotations={
+	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, bpi=<jk>"street,city,state"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public void</jk> doFoo() {...}
+	 * </p>
+	 */
+	public static final String CONTEXT_annotations = PREFIX + ".annotations.lo";
+
 
 	private final PropertyStore propertyStore;
 	private final int identityCode;

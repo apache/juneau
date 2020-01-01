@@ -21,6 +21,7 @@ import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 import static org.apache.juneau.uon.UonSerializer.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.net.URI;
@@ -2793,6 +2794,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public RestClientBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestClientBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

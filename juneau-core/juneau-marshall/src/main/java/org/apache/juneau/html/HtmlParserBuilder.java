@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -658,6 +659,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public HtmlParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

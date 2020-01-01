@@ -14,6 +14,7 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -961,6 +962,12 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public JsonSchemaSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public JsonSchemaSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

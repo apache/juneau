@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jso;
 
+import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -629,6 +630,12 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	@Override /* BeanContextBuilder */
 	public JsoParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public JsoParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

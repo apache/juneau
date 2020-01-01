@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jso.annotation;
 
+import static org.apache.juneau.Context.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -33,5 +35,9 @@ public class JsoConfigApply extends ConfigApply<JsoConfig> {
 
 	@Override
 	public void apply(AnnotationInfo<JsoConfig> ai, PropertyStoreBuilder psb) {
+		JsoConfig a = ai.getAnnotation();
+
+		if (a.annotateJso().length > 0)
+			psb.addTo(CONTEXT_annotations, a.annotateJso());
 	}
 }

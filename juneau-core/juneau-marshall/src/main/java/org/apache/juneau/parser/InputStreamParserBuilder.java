@@ -14,6 +14,7 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.parser.InputStreamParser.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -660,6 +661,12 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public InputStreamParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public InputStreamParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

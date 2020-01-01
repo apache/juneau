@@ -49,6 +49,19 @@ public @interface RdfConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Indirectly applies {@link Rdf @Rdf} annotations to classes/methods.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Rdf#on() @Rdf.on}
+	 * annotation to specify the class/method names to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	Rdf[] annotateRdf() default {};
+
+	/**
 	 * Configuration property:  RDF language.
 	 *
 	 * <p>

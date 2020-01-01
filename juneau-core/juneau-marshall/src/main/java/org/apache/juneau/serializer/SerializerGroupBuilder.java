@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -1188,6 +1189,12 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public SerializerGroupBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

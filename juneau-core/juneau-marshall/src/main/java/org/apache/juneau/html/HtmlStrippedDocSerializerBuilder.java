@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -847,6 +848,12 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public HtmlStrippedDocSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
 		return this;
 	}
 

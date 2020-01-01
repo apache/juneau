@@ -32,7 +32,7 @@ import org.apache.juneau.urlencoding.*;
  * This parser uses a state machine, which makes it very fast and efficient.
  */
 @ConfigurableContext
-public class UonParser extends ReaderParser implements HttpPartParser {
+public class UonParser extends ReaderParser implements HttpPartParser, UonCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
