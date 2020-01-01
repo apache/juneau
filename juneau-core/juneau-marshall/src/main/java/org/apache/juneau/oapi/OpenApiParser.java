@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
@@ -25,7 +28,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 @ConfigurableContext
-public class OpenApiParser extends UonParser implements OpenApiCommon {
+public class OpenApiParser extends UonParser implements OpenApiMetaProvider, OpenApiCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -44,6 +47,9 @@ public class OpenApiParser extends UonParser implements OpenApiCommon {
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
+
+	private final Map<ClassMeta<?>,OpenApiClassMeta> openApiClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,OpenApiBeanPropertyMeta> openApiBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -99,6 +105,32 @@ public class OpenApiParser extends UonParser implements OpenApiCommon {
 	@Override
 	public OpenApiParserSession createPartSession(ParserSessionArgs args) {
 		return new OpenApiParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* OpenApiMetaProvider */
+	public OpenApiClassMeta getOpenApiClassMeta(ClassMeta<?> cm) {
+		OpenApiClassMeta m = openApiClassMetas.get(cm);
+		if (m == null) {
+			m = new OpenApiClassMeta(cm, this);
+			openApiClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* OpenApiMetaProvider */
+	public OpenApiBeanPropertyMeta getOpenApiBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return OpenApiBeanPropertyMeta.DEFAULT;
+		OpenApiBeanPropertyMeta m = openApiBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new OpenApiBeanPropertyMeta(bpm.getDelegateFor(), this);
+			openApiBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

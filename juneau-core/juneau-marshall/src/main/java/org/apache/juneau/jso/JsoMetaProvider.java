@@ -10,14 +10,14 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.json;
+package org.apache.juneau.jso;
 
 import org.apache.juneau.*;
 
 /**
- * Interface for providing access to {@link JsonClassMeta} and {@link JsonBeanPropertyMeta} objects.
+ * Interface for providing access to {@link JsoClassMeta} and {@link JsoBeanPropertyMeta} objects.
  */
-public interface JsonMetaProvider extends MetaProvider {
+public interface JsoMetaProvider extends MetaProvider {
 
 	/**
 	 * Returns the language-specific metadata on the specified class.
@@ -25,7 +25,7 @@ public interface JsonMetaProvider extends MetaProvider {
 	 * @param cm The class to return the metadata on.
 	 * @return The metadata.
 	 */
-	JsonClassMeta getJsonClassMeta(ClassMeta<?> cm);
+	JsoClassMeta getJsoClassMeta(ClassMeta<?> cm);
 
 	/**
 	 * Returns the language-specific metadata on the specified bean property.
@@ -33,5 +33,5 @@ public interface JsonMetaProvider extends MetaProvider {
 	 * @param bpm The bean property to return the metadata on.
 	 * @return The metadata.
 	 */
-	JsonBeanPropertyMeta getJsonBeanPropertyMeta(BeanPropertyMeta bpm);
+	JsoBeanPropertyMeta getJsoBeanPropertyMeta(BeanPropertyMeta bpm);
 }

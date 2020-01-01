@@ -15,9 +15,9 @@ package org.apache.juneau.urlencoding;
 import org.apache.juneau.*;
 
 /**
- * Interface for providing access to {@link UrlEncodingClassMeta} objects.
+ * Interface for providing access to {@link UrlEncodingClassMeta} and {@link UrlEncodingBeanPropertyMeta} objects.
  */
-public interface UrlEncodingMetaProvider {
+public interface UrlEncodingMetaProvider extends MetaProvider {
 
 	/**
 	 * Returns the language-specific metadata on the specified class.
@@ -26,4 +26,12 @@ public interface UrlEncodingMetaProvider {
 	 * @return The metadata.
 	 */
 	UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm);
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	UrlEncodingBeanPropertyMeta getUrlEncodingBeanPropertyMeta(BeanPropertyMeta bpm);
 }

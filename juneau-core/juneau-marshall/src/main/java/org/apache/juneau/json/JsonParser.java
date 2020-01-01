@@ -200,6 +200,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 
 	private final boolean validateEnd;
 	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,JsonBeanPropertyMeta> jsonBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -262,6 +263,18 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 		if (m == null) {
 			m = new JsonClassMeta(cm, this);
 			jsonClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* JsonMetaProvider */
+	public JsonBeanPropertyMeta getJsonBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return JsonBeanPropertyMeta.DEFAULT;
+		JsonBeanPropertyMeta m = jsonBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new JsonBeanPropertyMeta(bpm.getDelegateFor(), this);
+			jsonBeanPropertyMetas.put(bpm, m);
 		}
 		return m;
 	}

@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
@@ -24,7 +27,7 @@ import org.apache.juneau.parser.*;
  * Handles <c>Content-Type</c> types:  <bc>octal/msgpack</bc>
  */
 @ConfigurableContext
-public class MsgPackParser extends InputStreamParser implements MsgPackCommon {
+public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvider, MsgPackCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -83,6 +86,9 @@ public class MsgPackParser extends InputStreamParser implements MsgPackCommon {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
+	private final Map<ClassMeta<?>,MsgPackClassMeta> msgPackClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,MsgPackBeanPropertyMeta> msgPackBeanPropertyMetas = new ConcurrentHashMap<>();
+
 	/**
 	 * Constructor.
 	 *
@@ -121,6 +127,32 @@ public class MsgPackParser extends InputStreamParser implements MsgPackCommon {
 	@Override /* Parser */
 	public MsgPackParserSession createSession(ParserSessionArgs args) {
 		return new MsgPackParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* MsgPackMetaProvider */
+	public MsgPackClassMeta getMsgPackClassMeta(ClassMeta<?> cm) {
+		MsgPackClassMeta m = msgPackClassMetas.get(cm);
+		if (m == null) {
+			m = new MsgPackClassMeta(cm, this);
+			msgPackClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* MsgPackMetaProvider */
+	public MsgPackBeanPropertyMeta getMsgPackBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return MsgPackBeanPropertyMeta.DEFAULT;
+		MsgPackBeanPropertyMeta m = msgPackBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new MsgPackBeanPropertyMeta(bpm.getDelegateFor(), this);
+			msgPackBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.soap;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -31,7 +34,7 @@ import org.apache.juneau.xml.*;
  * Essentially the same output as {@link XmlDocSerializer}, except wrapped in a standard SOAP envelope.
  */
 @ConfigurableContext
-public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlCommon {
+public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvider,SoapXmlCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -61,6 +64,8 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlCom
 	//-------------------------------------------------------------------------------------------------------------------
 
 	final String soapAction;
+	private final Map<ClassMeta<?>,SoapXmlClassMeta> soapXmlClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,SoapXmlBeanPropertyMeta> soapXmlBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -101,6 +106,32 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlCom
 	@Override /* Serializer */
 	public SoapXmlSerializerSession createSession(SerializerSessionArgs args) {
 		return new SoapXmlSerializerSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* SoapXmlMetaProvider */
+	public SoapXmlClassMeta getSoapXmlClassMeta(ClassMeta<?> cm) {
+		SoapXmlClassMeta m = soapXmlClassMetas.get(cm);
+		if (m == null) {
+			m = new SoapXmlClassMeta(cm, this);
+			soapXmlClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* SoapXmlMetaProvider */
+	public SoapXmlBeanPropertyMeta getSoapXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return SoapXmlBeanPropertyMeta.DEFAULT;
+		SoapXmlBeanPropertyMeta m = soapXmlBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new SoapXmlBeanPropertyMeta(bpm.getDelegateFor(), this);
+			soapXmlBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

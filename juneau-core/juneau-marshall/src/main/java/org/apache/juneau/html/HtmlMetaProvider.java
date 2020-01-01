@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 /**
  * Interface for providing access to {@link HtmlClassMeta} and {@link HtmlBeanPropertyMeta} objects.
  */
-public interface HtmlMetaProvider {
+public interface HtmlMetaProvider extends MetaProvider {
 
 	/**
 	 * Returns the language-specific metadata on the specified class.

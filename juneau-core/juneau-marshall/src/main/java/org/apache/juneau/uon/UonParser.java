@@ -13,6 +13,8 @@
 package org.apache.juneau.uon;
 
 import java.lang.reflect.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -32,7 +34,7 @@ import org.apache.juneau.urlencoding.*;
  * This parser uses a state machine, which makes it very fast and efficient.
  */
 @ConfigurableContext
-public class UonParser extends ReaderParser implements HttpPartParser, UonCommon {
+public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider, UonCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -158,6 +160,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonCommon
 
 	private final boolean
 		decoding, validateEnd;
+	private final Map<ClassMeta<?>,UonClassMeta> uonClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,UonBeanPropertyMeta> uonBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -255,6 +259,32 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonCommon
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
 		return createPartSession().parse(null, schema, in, toType, toTypeArgs);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* UonMetaProvider */
+	public UonClassMeta getUonClassMeta(ClassMeta<?> cm) {
+		UonClassMeta m = uonClassMetas.get(cm);
+		if (m == null) {
+			m = new UonClassMeta(cm, this);
+			uonClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* UonMetaProvider */
+	public UonBeanPropertyMeta getUonBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return UonBeanPropertyMeta.DEFAULT;
+		UonBeanPropertyMeta m = uonBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new UonBeanPropertyMeta(bpm.getDelegateFor(), this);
+			uonBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

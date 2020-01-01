@@ -13,6 +13,8 @@
 package org.apache.juneau.jso;
 
 import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -28,7 +30,7 @@ import org.apache.juneau.serializer.*;
  * Produces <c>Content-Type</c> types:  <bc>application/x-java-serialized-object</bc>
  */
 @ConfigurableContext
-public class JsoSerializer extends OutputStreamSerializer implements JsoCommon {
+public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProvider, JsoCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -46,6 +48,9 @@ public class JsoSerializer extends OutputStreamSerializer implements JsoCommon {
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
+
+	private final Map<ClassMeta<?>,JsoClassMeta> jsoClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,JsoBeanPropertyMeta> jsoBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -85,6 +90,32 @@ public class JsoSerializer extends OutputStreamSerializer implements JsoCommon {
 	@Override /* Serializer */
 	public JsoSerializerSession createSession(SerializerSessionArgs args) {
 		return new JsoSerializerSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* JsoMetaProvider */
+	public JsoClassMeta getJsoClassMeta(ClassMeta<?> cm) {
+		JsoClassMeta m = jsoClassMetas.get(cm);
+		if (m == null) {
+			m = new JsoClassMeta(cm, this);
+			jsoClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* JsoMetaProvider */
+	public JsoBeanPropertyMeta getJsoBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return JsoBeanPropertyMeta.DEFAULT;
+		JsoBeanPropertyMeta m = jsoBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new JsoBeanPropertyMeta(bpm.getDelegateFor(), this);
+			jsoBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

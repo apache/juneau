@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -35,7 +38,7 @@ import org.apache.juneau.transform.*;
  * transform defined on it.
  */
 @ConfigurableContext
-public class PlainTextSerializer extends WriterSerializer implements PlainTextCommon {
+public class PlainTextSerializer extends WriterSerializer implements PlainTextMetaProvider, PlainTextCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -54,6 +57,9 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextCo
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
+
+	private final Map<ClassMeta<?>,PlainTextClassMeta> plainTextClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,PlainTextBeanPropertyMeta> plainTextBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -125,6 +131,32 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextCo
 	@Override /* Serializer */
 	public PlainTextSerializerSession createSession(SerializerSessionArgs args) {
 		return new PlainTextSerializerSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* PlainTextMetaProvider */
+	public PlainTextClassMeta getPlainTextClassMeta(ClassMeta<?> cm) {
+		PlainTextClassMeta m = plainTextClassMetas.get(cm);
+		if (m == null) {
+			m = new PlainTextClassMeta(cm, this);
+			plainTextClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* PlainTextMetaProvider */
+	public PlainTextBeanPropertyMeta getPlainTextBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return PlainTextBeanPropertyMeta.DEFAULT;
+		PlainTextBeanPropertyMeta m = plainTextBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new PlainTextBeanPropertyMeta(bpm.getDelegateFor(), this);
+			plainTextBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

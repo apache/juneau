@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -26,7 +29,7 @@ import org.apache.juneau.serializer.*;
  * Produces <c>Content-Type</c> types: <bc>octal/msgpack</bc>
  */
 @ConfigurableContext
-public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackCommon {
+public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider, MsgPackCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -114,6 +117,8 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 
 	private final boolean
 		addBeanTypes;
+	private final Map<ClassMeta<?>,MsgPackClassMeta> msgPackClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,MsgPackBeanPropertyMeta> msgPackBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -154,6 +159,32 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	@Override /* Serializer */
 	public MsgPackSerializerSession createSession(SerializerSessionArgs args) {
 		return new MsgPackSerializerSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* MsgPackMetaProvider */
+	public MsgPackClassMeta getMsgPackClassMeta(ClassMeta<?> cm) {
+		MsgPackClassMeta m = msgPackClassMetas.get(cm);
+		if (m == null) {
+			m = new MsgPackClassMeta(cm, this);
+			msgPackClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* MsgPackMetaProvider */
+	public MsgPackBeanPropertyMeta getMsgPackBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return MsgPackBeanPropertyMeta.DEFAULT;
+		MsgPackBeanPropertyMeta m = msgPackBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new MsgPackBeanPropertyMeta(bpm.getDelegateFor(), this);
+			msgPackBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

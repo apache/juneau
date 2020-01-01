@@ -314,6 +314,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		escapeSolidus,
 		addBeanTypes;
 	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,JsonBeanPropertyMeta> jsonBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	private volatile JsonSchemaSerializer schemaSerializer;
 
@@ -417,6 +418,18 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		if (m == null) {
 			m = new JsonClassMeta(cm, this);
 			jsonClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* JsonMetaProvider */
+	public JsonBeanPropertyMeta getJsonBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return JsonBeanPropertyMeta.DEFAULT;
+		JsonBeanPropertyMeta m = jsonBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new JsonBeanPropertyMeta(bpm.getDelegateFor(), this);
+			jsonBeanPropertyMetas.put(bpm, m);
 		}
 		return m;
 	}

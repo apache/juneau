@@ -253,6 +253,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	private final boolean
 		expandedParams;
 	private final Map<ClassMeta<?>,UrlEncodingClassMeta> urlEncodingClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,UrlEncodingBeanPropertyMeta> urlEncodingBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -347,6 +348,18 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		if (m == null) {
 			m = new UrlEncodingClassMeta(cm, this);
 			urlEncodingClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* UrlEncodingMetaProvider */
+	public UrlEncodingBeanPropertyMeta getUrlEncodingBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return UrlEncodingBeanPropertyMeta.DEFAULT;
+		UrlEncodingBeanPropertyMeta m = urlEncodingBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new UrlEncodingBeanPropertyMeta(bpm.getDelegateFor(), this);
+			urlEncodingBeanPropertyMetas.put(bpm, m);
 		}
 		return m;
 	}

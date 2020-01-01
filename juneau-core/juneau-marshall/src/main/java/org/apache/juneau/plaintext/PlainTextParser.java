@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
@@ -39,7 +42,7 @@ import org.apache.juneau.transform.*;
  * defined on it.
  */
 @ConfigurableContext
-public class PlainTextParser extends ReaderParser implements PlainTextCommon {
+public class PlainTextParser extends ReaderParser implements PlainTextMetaProvider, PlainTextCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -58,6 +61,9 @@ public class PlainTextParser extends ReaderParser implements PlainTextCommon {
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
+
+	private final Map<ClassMeta<?>,PlainTextClassMeta> plainTextClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,PlainTextBeanPropertyMeta> plainTextBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -109,6 +115,32 @@ public class PlainTextParser extends ReaderParser implements PlainTextCommon {
 	@Override /* Parser */
 	public PlainTextParserSession createSession(ParserSessionArgs args) {
 		return new PlainTextParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* PlainTextMetaProvider */
+	public PlainTextClassMeta getPlainTextClassMeta(ClassMeta<?> cm) {
+		PlainTextClassMeta m = plainTextClassMetas.get(cm);
+		if (m == null) {
+			m = new PlainTextClassMeta(cm, this);
+			plainTextClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* PlainTextMetaProvider */
+	public PlainTextBeanPropertyMeta getPlainTextBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return PlainTextBeanPropertyMeta.DEFAULT;
+		PlainTextBeanPropertyMeta m = plainTextBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new PlainTextBeanPropertyMeta(bpm.getDelegateFor(), this);
+			plainTextBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

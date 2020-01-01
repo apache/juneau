@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 /**
  * Interface for providing access to {@link JsonSchemaClassMeta} and {@link JsonSchemaBeanPropertyMeta} objects.
  */
-public interface JsonSchemaMetaProvider {
+public interface JsonSchemaMetaProvider extends MetaProvider  {
 
 	/**
 	 * Returns the language-specific metadata on the specified class.

@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
@@ -20,7 +23,7 @@ import org.apache.juneau.parser.*;
  * TODO - Work in progress.  CSV parser.
  */
 @ConfigurableContext
-public class CsvParser extends ReaderParser implements CsvCommon {
+public class CsvParser extends ReaderParser implements CsvMetaProvider, CsvCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -39,6 +42,9 @@ public class CsvParser extends ReaderParser implements CsvCommon {
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
+
+	private final Map<ClassMeta<?>,CsvClassMeta> csvClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,CsvBeanPropertyMeta> csvBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -75,6 +81,32 @@ public class CsvParser extends ReaderParser implements CsvCommon {
 	@Override /* Parser */
 	public CsvParserSession createSession(ParserSessionArgs args) {
 		return new CsvParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* CsvMetaProvider */
+	public CsvClassMeta getCsvClassMeta(ClassMeta<?> cm) {
+		CsvClassMeta m = csvClassMetas.get(cm);
+		if (m == null) {
+			m = new CsvClassMeta(cm, this);
+			csvClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* CsvMetaProvider */
+	public CsvBeanPropertyMeta getCsvBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return CsvBeanPropertyMeta.DEFAULT;
+		CsvBeanPropertyMeta m = csvBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new CsvBeanPropertyMeta(bpm.getDelegateFor(), this);
+			csvBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

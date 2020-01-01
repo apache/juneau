@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 /**
  * Interface for providing access to {@link XmlClassMeta}, {@link XmlBeanMeta}, and {@link XmlBeanPropertyMeta} objects.
  */
-public interface XmlMetaProvider {
+public interface XmlMetaProvider extends MetaProvider  {
 
 	/**
 	 * Returns the language-specific metadata on the specified class.

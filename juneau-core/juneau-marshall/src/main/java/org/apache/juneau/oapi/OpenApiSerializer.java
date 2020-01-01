@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
@@ -26,7 +29,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 @ConfigurableContext
-public class OpenApiSerializer extends UonSerializer implements OpenApiCommon {
+public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvider, OpenApiCommon {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -45,6 +48,9 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiCommon {
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
+
+	private final Map<ClassMeta<?>,OpenApiClassMeta> openApiClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta,OpenApiBeanPropertyMeta> openApiBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -142,6 +148,32 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiCommon {
 	@Override /* HttpPartSerializer */
 	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
 		return createPartSession().serialize(null, schema, value);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Extended metadata
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* OpenApiMetaProvider */
+	public OpenApiClassMeta getOpenApiClassMeta(ClassMeta<?> cm) {
+		OpenApiClassMeta m = openApiClassMetas.get(cm);
+		if (m == null) {
+			m = new OpenApiClassMeta(cm, this);
+			openApiClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	@Override /* OpenApiMetaProvider */
+	public OpenApiBeanPropertyMeta getOpenApiBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return OpenApiBeanPropertyMeta.DEFAULT;
+		OpenApiBeanPropertyMeta m = openApiBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new OpenApiBeanPropertyMeta(bpm.getDelegateFor(), this);
+			openApiBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
