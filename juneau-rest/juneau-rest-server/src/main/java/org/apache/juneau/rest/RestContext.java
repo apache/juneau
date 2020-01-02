@@ -3694,13 +3694,17 @@ public final class RestContext extends BeanContext {
 			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, NoOpRestLogger.class, resourceResolver, this);
 			callLogger = getInstanceProperty(REST_callLogger, resource, RestCallLogger.class, BasicRestCallLogger.class, resourceResolver, this);
 
-			Object clc = getProperty(REST_callLoggerConfig);
-			if (clc instanceof RestCallLoggerConfig)
-				this.callLoggerConfig = (RestCallLoggerConfig)clc;
-			else if (clc instanceof ObjectMap)
-				this.callLoggerConfig = RestCallLoggerConfig.create().apply((ObjectMap)clc).build();
-			else
-				this.callLoggerConfig = RestCallLoggerConfig.DEFAULT;
+			if (debug == Enablement.TRUE) {
+				this.callLoggerConfig = RestCallLoggerConfig.DEFAULT_DEBUG;
+			} else {
+				Object clc = getProperty(REST_callLoggerConfig);
+				if (clc instanceof RestCallLoggerConfig)
+					this.callLoggerConfig = (RestCallLoggerConfig)clc;
+				else if (clc instanceof ObjectMap)
+					this.callLoggerConfig = RestCallLoggerConfig.create().apply((ObjectMap)clc).build();
+				else
+					this.callLoggerConfig = RestCallLoggerConfig.DEFAULT;
+			}
 
 			properties = builder.properties;
 			serializers =
