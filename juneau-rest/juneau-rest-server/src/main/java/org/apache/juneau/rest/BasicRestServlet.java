@@ -182,4 +182,18 @@ public abstract class BasicRestServlet extends RestServlet implements BasicRestC
 		// Localized Swagger for this resource is available through the RestRequest object.
 		return req.getSwagger();
 	}
+
+	/**
+	 * [* /error] - Error occurred.
+	 *
+	 * <p>
+	 * Servlet chains will often automatically redirect to <js>"/error"</js> when any sort of error condition occurs
+	 * (such as failed authentication) and will set appropriate response parameters (such as an <c>WWW-Authenticate</c>
+	 * response header).
+	 *
+	 * <p>
+	 * These responses should be left as-is without any additional processing.
+	 */
+	@Override /* BasicRestConfig */
+	public void error() {}
 }

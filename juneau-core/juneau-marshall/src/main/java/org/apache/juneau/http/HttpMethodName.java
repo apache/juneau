@@ -53,4 +53,7 @@ public final class HttpMethodName {
 
 	/** A non-standard value. */
 	public static final String OTHER = "OTHER";
+
+	/** Represents any HTTP method. */
+	public static final String ANY = "*";
 }

@@ -167,4 +167,21 @@ public interface BasicRestConfig {
 		aside="NONE"
 	)
 	public Swagger getOptions(RestRequest req);
+
+	/**
+	 * [* /error] - Error occurred.
+	 *
+	 * <p>
+	 * Servlet chains will often automatically redirect to <js>"/error"</js> when any sort of error condition occurs
+	 * (such as failed authentication) and will set appropriate response parameters (such as an <c>WWW-Authenticate</c>
+	 * response header).
+	 *
+	 * <p>
+	 * These responses should be left as-is without any additional processing.
+	 */
+	@RestMethod(name=ANY, path="/error",
+		summary="Error occurred",
+		description="An error occurred during handling of the request."
+	)
+	public void error();
 }
