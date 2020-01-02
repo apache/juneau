@@ -29,8 +29,31 @@
 
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
+	<li> 
+		Fixed bug in {@link oajr.BasicRestCallHandler} where if you have the following REST methods...
+		<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo"</js>)
+	<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/bar"</js>)
+		</p>
+		...and you tried to make a GET request to /bar, you'd erroneously get a 404 error instead of matching the 2nd method.
+	<li> 
+		Fixed an issue involving using Juneau REST with Spring Security.  When Spring Security cannot authenticate a 
+		request, it sets the URL on the request to <js>"/error"</js> with a 401 status.  When Juneau then processes
+		this request, it cannot find that mapping and changes the status to 404 which messes with HTTP clients.
+		<br>Solution was to add a default no-op error method to the {@link oajr.BasicRestConfig} (and implementers):
+		<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/error"</js>)
+	<jk>public void</jk> error() {}
+		</p>
+	<li>
+		Fixed a bug where <c><ja>@RestResource</ja>(debug=<js>"true"</js>)</c> wouldn't log requests if a 
+		<ja>@RestMethod</ja>-annotated method was not matched.
+		
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>
 <ul class='spaced-list'>
+	<li>
+		Several convenience methods defined in {@link oajrc.RestClientBuilder} that were deprecated in 8.1.2 have been
+		undeprecated in this release due to user feedback.
 </ul>
