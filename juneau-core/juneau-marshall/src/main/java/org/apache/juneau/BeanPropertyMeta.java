@@ -1128,8 +1128,10 @@ public final class BeanPropertyMeta {
 	 * @param mp The metadata provider for finding annotations.
 	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> List<A> findAnnotations(Class<A> a, MetaProvider mp) {
+	public <A extends Annotation> List<A> getAllAnnotations(Class<A> a, MetaProvider mp) {
 		List<A> l = new LinkedList<>();
+		if (a == null)
+			return l;
 		if (field != null) {
 			addIfNotNull(l, mp.getAnnotation(a, field));
 			ClassInfo.of(field.getType()).appendAnnotations(l, a, mp);
@@ -1151,31 +1153,24 @@ public final class BeanPropertyMeta {
 		return l;
 	}
 
-//	/**
-//	 * Returns the specified annotation on the field or methods that define this property.
-//	 *
-//	 * <p>
-//	 * This method will search up the parent class/interface hierarchy chain to search for the annotation on
-//	 * overridden getters and setters.
-//	 *
-//	 * @param a The annotation to search for.
-//	 * @return The annotation, or <jk>null</jk> if it wasn't found.
-//	 */
-//	public <A extends Annotation> A findAnnotation(Class<A> a) {
-//		A t = null;
-//		if (field != null)
-//			t = field.getAnnotation(a);
-//		if (t == null && getter != null)
-//			t = getterInfo.getAnnotation(a);
-//		if (t == null && setter != null)
-//			t = setterInfo.getAnnotation(a);
-//		if (t == null && extraKeys != null)
-//			t = extraKeysInfo.getAnnotation(a);
-//		if (t == null)
-//			t = typeMeta.getInfo().getAnnotation(a);
-//		return t;
-//	}
-//
+	/**
+	 * Returns all instances of the specified annotation on the getter/setter/field of the property.
+	 *
+	 * @param <A> The class to find annotations for.
+	 * @param a The class to find annotations for.
+	 * @param mp The metadata provider for finding annotations.
+	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, MetaProvider mp) {
+		List<A> l = new LinkedList<>();
+		if (a == null)
+			return l;
+		addIfNotNull(l, mp.getAnnotation(a, field));
+		addIfNotNull(l, mp.getAnnotation(a, getter));
+		addIfNotNull(l, mp.getAnnotation(a, setter));
+		return l;
+	}
+
 	private Object transform(BeanSession session, Object o) throws SerializeException {
 		try {
 			// First use swap defined via @Beanp.

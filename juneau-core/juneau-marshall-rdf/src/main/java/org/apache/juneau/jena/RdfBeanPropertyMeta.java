@@ -43,8 +43,8 @@ public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	public RdfBeanPropertyMeta(BeanPropertyMeta bpm, RdfMetaProvider mp) {
 		super(bpm);
 
-		List<Rdf> rdfs = bpm.findAnnotations(Rdf.class, mp);
-		List<RdfSchema> schemas = bpm.findAnnotations(RdfSchema.class, mp);
+		List<Rdf> rdfs = bpm.getAllAnnotations(Rdf.class, mp);
+		List<RdfSchema> schemas = bpm.getAllAnnotations(RdfSchema.class, mp);
 
 		for (Rdf rdf : rdfs) {
 			if (collectionFormat == RdfCollectionFormat.DEFAULT)

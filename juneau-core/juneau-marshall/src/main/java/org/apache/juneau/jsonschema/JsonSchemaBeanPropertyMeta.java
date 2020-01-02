@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
-import java.lang.reflect.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.*;
@@ -42,16 +40,9 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 		this.schema = new ObjectMap();
 
-		Field field = bpm.getInnerField();
-		Method getter = bpm.getGetter(), setter = bpm.getSetter();
-
 		try {
-			if (field != null)
-				schema.appendAll(SchemaUtils.asMap(mp.getAnnotation(Schema.class, field)));
-			if (getter != null)
-				schema.appendAll(SchemaUtils.asMap(mp.getAnnotation(Schema.class, getter)));
-			if (setter != null)
-				schema.appendAll(SchemaUtils.asMap(mp.getAnnotation(Schema.class, setter)));
+			for (Schema s : bpm.getAnnotations(Schema.class, mp))
+				schema.appendAll(SchemaUtils.asMap(s));
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
