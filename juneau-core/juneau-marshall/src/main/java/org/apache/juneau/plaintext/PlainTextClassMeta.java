@@ -31,7 +31,7 @@ public class PlainTextClassMeta extends ExtendedClassMeta {
 	 */
 	public PlainTextClassMeta(ClassMeta<?> cm, PlainTextMetaProvider mp) {
 		super(cm);
-		this.plainText = mp.getAnnotation(PlainText.class, cm.getInnerClass());
+		this.plainText = cm.getAnnotation(PlainText.class, mp);
 	}
 
 	/**

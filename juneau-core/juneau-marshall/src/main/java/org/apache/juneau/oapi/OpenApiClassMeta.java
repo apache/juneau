@@ -31,7 +31,7 @@ public class OpenApiClassMeta extends ExtendedClassMeta {
 	 */
 	public OpenApiClassMeta(ClassMeta<?> cm, OpenApiMetaProvider mp) {
 		super(cm);
-		this.openApi = mp.getAnnotation(OpenApi.class, cm.getInnerClass());
+		this.openApi = cm.getAnnotation(OpenApi.class, mp);
 	}
 
 	/**

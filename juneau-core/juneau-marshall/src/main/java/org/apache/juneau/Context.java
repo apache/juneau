@@ -606,31 +606,31 @@ public abstract class Context implements MetaProvider {
 	@SuppressWarnings("unchecked")
 	@Override /* MetaProvider */
 	public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c) {
-		return (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+		return a == null || c == null ? null : (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override /* MetaProvider */
 	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c) {
-		return (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+		return a == null || c == null ? null : (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override /* MetaProvider */
 	public <A extends Annotation> A getAnnotation(Class<A> a, Method m) {
-		return (A)annotations.findFirst(m, a).orElse(m.getAnnotation(a));
+		return a == null || m == null ? null : (A)annotations.findFirst(m, a).orElse(m.getAnnotation(a));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override /* MetaProvider */
 	public <A extends Annotation> A getAnnotation(Class<A> a, Field f) {
-		return (A)annotations.findFirst(f, a).orElse(f.getAnnotation(a));
+		return a == null || f == null ? null : (A)annotations.findFirst(f, a).orElse(f.getAnnotation(a));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override /* MetaProvider */
 	public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c) {
-		return (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+		return a == null || c == null ? null : (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

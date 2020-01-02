@@ -27,27 +27,27 @@ public interface MetaProvider {
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c) {
-			return c.getAnnotation(a);
+			return a == null || c == null ? null : c.getAnnotation(a);
 		}
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c) {
-			return c.getDeclaredAnnotation(a);
+			return a == null || c == null ? null : c.getDeclaredAnnotation(a);
 		}
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> A getAnnotation(Class<A> a, Method m) {
-			return m.getAnnotation(a);
+			return a == null || m == null ? null : m.getAnnotation(a);
 		}
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> A getAnnotation(Class<A> a, Field f) {
-			return f.getAnnotation(a);
+			return a == null || f == null ? null : f.getAnnotation(a);
 		}
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c) {
-			return c.getAnnotation(a);
+			return a == null || c == null ? null : c.getAnnotation(a);
 		}
 	};
 

@@ -31,7 +31,7 @@ public class JsoClassMeta extends ExtendedClassMeta {
 	 */
 	public JsoClassMeta(ClassMeta<?> cm, JsoMetaProvider mp) {
 		super(cm);
-		this.jso = mp.getAnnotation(Jso.class, cm.getInnerClass());
+		this.jso = cm.getAnnotation(Jso.class, mp);
 	}
 
 	/**

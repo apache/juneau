@@ -2043,7 +2043,88 @@ public final class ClassMeta<T> implements Type {
 	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.
 	 */
 	public <A extends Annotation> A getAnnotation(Class<A> a) {
-		return this.innerClass.getAnnotation(a);
+		return info.getAnnotation(a);
+	}
+
+	/**
+	 * Returns the annotation defined on this class using the specified meta-provider for lookup.
+	 *
+	 * @param a The annotation to retrieve.
+	 * @param mp The meta-provider to use for lookup of annotations.
+	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.
+	 */
+	public <A extends Annotation> A getAnnotation(Class<A> a, MetaProvider mp) {
+		return info.getAnnotation(a, mp);
+	}
+
+	/**
+	 * Returns the declared annotation defined on this class.
+	 *
+	 * @param a The annotation to retrieve.
+	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.
+	 */
+	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a) {
+		return info.getDeclaredAnnotation(a);
+	}
+
+	/**
+	 * Returns the declared annotation defined on this class using the specified meta-provider for lookup.
+	 *
+	 * @param a The annotation to retrieve.
+	 * @param mp The meta-provider to use for lookup of annotations.
+	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.
+	 */
+	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, MetaProvider mp) {
+		return info.getDeclaredAnnotation(a);
+	}
+
+	/**
+	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @return
+	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
+	 */
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a) {
+		return info.getAnnotations(a);
+	}
+
+	/**
+	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces.
+	 *
+	 * @param a The annotation to search for.
+	 * @param mp The metadata provider for finding annotations.
+	 * @return
+	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
+	 */
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, MetaProvider mp) {
+		return info.getAnnotations(a, mp);
+	}
+
+	/**
+	 * Identical to {@link #getAnnotations(Class)} but optionally returns the list in reverse (parent-to-child) order.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @return
+	 * 	A list of all matching annotations found or an empty list if none found.
+	 */
+	public <A extends Annotation> List<A> getAnnotationsParentFirst(Class<A> a) {
+		return info.getAnnotationsParentFirst(a);
+	}
+
+	/**
+	 * Identical to {@link #getAnnotations(Class,MetaProvider)} but optionally returns the list in reverse (parent-to-child) order.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @param mp The metadata provider for finding annotations.
+	 * @return
+	 * 	A list of all matching annotations found or an empty list if none found.
+	 */
+	public <A extends Annotation> List<A> getAnnotationsParentFirst(Class<A> a, MetaProvider mp) {
+		return info.getAnnotationsParentFirst(a, mp);
 	}
 
 	@Override /* Object */

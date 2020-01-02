@@ -89,7 +89,7 @@ public class BeanRegistry {
 						addToMap(typeName, val);
 					}
 				} else {
-					Bean b = c.getAnnotation(Bean.class);
+					Bean b = ci.getAnnotation(Bean.class);
 					if (b == null || b.typeName().isEmpty())
 						throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", c.getName());
 					addToMap(b.typeName(), beanContext.getClassMeta(c));

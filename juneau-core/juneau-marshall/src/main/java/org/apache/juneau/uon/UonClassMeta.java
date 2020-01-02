@@ -31,7 +31,7 @@ public class UonClassMeta extends ExtendedClassMeta {
 	 */
 	public UonClassMeta(ClassMeta<?> cm, UonMetaProvider mp) {
 		super(cm);
-		this.uon = mp.getAnnotation(Uon.class, cm.getInnerClass());
+		this.uon = cm.getAnnotation(Uon.class, mp);
 	}
 
 	/**

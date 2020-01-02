@@ -36,7 +36,7 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	 */
 	public HtmlClassMeta(ClassMeta<?> cm, HtmlMetaProvider mp) {
 		super(cm);
-		this.html = mp.getAnnotation(Html.class, cm.getInnerClass());
+		this.html = cm.getAnnotation(Html.class, mp);
 		if (html != null) {
 			format = html.format();
 			noTables = html.noTables();

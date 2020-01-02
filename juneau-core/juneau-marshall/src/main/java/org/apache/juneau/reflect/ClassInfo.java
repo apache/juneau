@@ -64,7 +64,6 @@ public final class ClassInfo {
 	private List<MethodInfo> publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
 	private List<ConstructorInfo> publicConstructors, declaredConstructors;
 	private List<FieldInfo> publicFields, declaredFields, allFields, allFieldsParentFirst;
-	private Map<Class<?>,Optional<Annotation>> annotationMap, declaredAnnotationMap;
 	private int dim = -1;
 	private ClassInfo componentType;
 
@@ -934,16 +933,26 @@ public final class ClassInfo {
 	 * @return
 	 * 	The annotation if found, or <jk>null</jk> if not.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T extends Annotation> T getAnnotation(Class<T> a) {
-		if (a == null)
-			return null;
-		Optional<Annotation> o = annotationMap().get(a);
-		if (o == null) {
-			o = Optional.ofNullable(findAnnotation(a));
-			annotationMap().put(a, o);
-		}
-		return o.isPresent() ? (T)o.get() : null;
+		return getAnnotation(a, MetaProvider.DEFAULT);
+	}
+
+	/**
+	 * Finds the annotation of the specified type defined on this class or parent class/interface.
+	 *
+	 * <p>
+	 * If the annotation cannot be found on the immediate class, searches methods with the same
+	 * signature on the parent classes or interfaces.
+	 * <br>The search is performed in child-to-parent order.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @param mp The metadata provider for finding annotations on classes and methods.
+	 * @return
+	 * 	The annotation if found, or <jk>null</jk> if not.
+	 */
+	public <T extends Annotation> T getAnnotation(Class<T> a, MetaProvider mp) {
+		return findAnnotation(a, mp);
 	}
 
 	/**
@@ -969,16 +978,24 @@ public final class ClassInfo {
 	 * @param a The annotation class.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a) {
-		if (a == null)
-			return null;
-		Optional<Annotation> o = declaredAnnotationMap().get(a);
-		if (o == null) {
-			o = Optional.ofNullable(findDeclaredAnnotation(a));
-			declaredAnnotationMap().put(a, o);
-		}
-		return o.isPresent() ? (T)o.get() : null;
+		return a == null ? null : c.getDeclaredAnnotation(a);
+	}
+
+	/**
+	 * Returns the specified annotation only if it's been declared on this class.
+	 *
+	 * <p>
+	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't recursively look for the class
+	 * up the parent chain.
+	 *
+	 * @param <T> The annotation class type.
+	 * @param a The annotation class.
+	 * @param mp The metadata provider for finding annotations on classes and methods.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a, MetaProvider mp) {
+		return mp.getDeclaredAnnotation(a, c);
 	}
 
 	/**
@@ -1050,6 +1067,19 @@ public final class ClassInfo {
 	 */
 	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
 		return appendAnnotationsParentFirst(new ArrayList<>(), a);
+	}
+
+	/**
+	 * Identical to {@link #getAnnotations(Class,MetaProvider)} but optionally returns the list in reverse (parent-to-child) order.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @param mp The metadata provider for finding annotations.
+	 * @return
+	 * 	A list of all matching annotations found or an empty list if none found.
+	 */
+	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a, MetaProvider mp) {
+		return appendAnnotationsParentFirst(new ArrayList<>(), a, mp);
 	}
 
 	/**
@@ -1189,11 +1219,33 @@ public final class ClassInfo {
 	 * @return The same list.
 	 */
 	public <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a) {
+		return appendAnnotationsParentFirst(l, a, MetaProvider.DEFAULT);
+	}
+
+	/**
+	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * list.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param l The list of annotations.
+	 * @param a The annotation to search for.
+	 * @param mp The metadata provider for finding annotations on classes and methods.
+	 * @return The same list.
+	 */
+	public <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a, MetaProvider mp) {
 		addIfNotNull(l, getPackageAnnotation(a));
 		for (ClassInfo ci : getInterfacesParentFirst())
-			addIfNotNull(l, ci.getDeclaredAnnotation(a));
+			addIfNotNull(l, mp.getDeclaredAnnotation(a, ci.inner()));
 		for (ClassInfo ci : getParentsParentFirst())
-			addIfNotNull(l, ci.getDeclaredAnnotation(a));
+			addIfNotNull(l, mp.getDeclaredAnnotation(a, ci.inner()));
 		return l;
 	}
 
@@ -1277,45 +1329,28 @@ public final class ClassInfo {
 		return m;
 	}
 
-	<T extends Annotation> T findAnnotation(Class<T> a) {
-		T t2 = getDeclaredAnnotation(a);
+	<T extends Annotation> T findAnnotation(Class<T> a, MetaProvider mp) {
+		if (a == null)
+			return null;
+
+		T t2 = mp.getDeclaredAnnotation(a, c);
 		if (t2 != null)
 			return t2;
 
 		ClassInfo sci = getParent();
 		if (sci != null) {
-			t2 = sci.getAnnotation(a);
+			t2 = sci.getAnnotation(a, mp);
 			if (t2 != null)
 				return t2;
 		}
 
 		for (ClassInfo c2 : getInterfaces()) {
-			t2 = c2.getAnnotation(a);
+			t2 = c2.getAnnotation(a, mp);
 			if (t2 != null)
 				return t2;
 		}
 
 		return null;
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T extends Annotation> T findDeclaredAnnotation(Class<T> a) {
-		for (Annotation a2 : c.getDeclaredAnnotations())
-			if (a2.annotationType() == a)
-				return (T)a2;
-		return null;
-	}
-
-	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {
-		if (annotationMap == null)
-			annotationMap = new ConcurrentHashMap<>();
-		return annotationMap;
-	}
-
-	private synchronized Map<Class<?>,Optional<Annotation>> declaredAnnotationMap() {
-		if (declaredAnnotationMap == null)
-			declaredAnnotationMap = new ConcurrentHashMap<>();
-		return declaredAnnotationMap;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -40,7 +39,7 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	public XmlClassMeta(ClassMeta<?> cm, XmlMetaProvider mp) {
 		super(cm);
 		this.namespace = findNamespace(cm, mp);
-		this.xml = mp.getAnnotation(Xml.class, cm.getInnerClass());
+		this.xml = cm.getAnnotation(Xml.class, mp);
 		if (xml != null) {
 			this.format = xml.format();
 			this.childName = nullIfEmpty(xml.childName());
@@ -102,9 +101,8 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	private static Namespace findNamespace(ClassMeta<?> cm, MetaProvider mp) {
 		if (cm == null)
 			return null;
-		ClassInfo ci = cm.getInfo();
-		List<Xml> xmls = ci.getAnnotations(Xml.class, mp);
-		List<XmlSchema> schemas = ci.getAnnotations(XmlSchema.class, mp);
+		List<Xml> xmls = cm.getAnnotations(Xml.class, mp);
+		List<XmlSchema> schemas = cm.getAnnotations(XmlSchema.class, mp);
 		return XmlUtils.findNamespace(xmls, schemas);
 	}
 }

@@ -16,7 +16,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.jena.annotation.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -37,15 +36,14 @@ public class RdfClassMeta extends ExtendedClassMeta {
 	 */
 	public RdfClassMeta(ClassMeta<?> cm, RdfMetaProvider mp) {
 		super(cm);
-		ClassInfo ci = cm.getInfo();
-		this.rdf = mp.getAnnotation(Rdf.class, cm.getInnerClass());
+		this.rdf = cm.getAnnotation(Rdf.class, mp);
 		if (rdf != null) {
 			collectionFormat = rdf.collectionFormat();
 		} else {
 			collectionFormat = RdfCollectionFormat.DEFAULT;
 		}
-		List<Rdf> rdfs = ci.getAnnotations(Rdf.class, mp);
-		List<RdfSchema> schemas = ci.getAnnotations(RdfSchema.class, mp);
+		List<Rdf> rdfs = cm.getAnnotations(Rdf.class, mp);
+		List<RdfSchema> schemas = cm.getAnnotations(RdfSchema.class, mp);
 		this.namespace = RdfUtils.findNamespace(rdfs, schemas);
 	}
 
