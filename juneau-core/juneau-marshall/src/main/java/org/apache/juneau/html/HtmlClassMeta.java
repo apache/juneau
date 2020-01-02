@@ -32,11 +32,11 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param htmlMetaProvider HTML metadata provider (for finding information about other artifacts).
+	 * @param mp HTML metadata provider (for finding information about other artifacts).
 	 */
-	public HtmlClassMeta(ClassMeta<?> cm, HtmlMetaProvider htmlMetaProvider) {
+	public HtmlClassMeta(ClassMeta<?> cm, HtmlMetaProvider mp) {
 		super(cm);
-		this.html = cm.getInfo().getAnnotation(Html.class);
+		this.html = mp.getAnnotation(Html.class, cm.getInnerClass());
 		if (html != null) {
 			format = html.format();
 			noTables = html.noTables();

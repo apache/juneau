@@ -1028,6 +1028,19 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces.
+	 *
+	 * @param <T> The annotation to search for.
+	 * @param a The annotation to search for.
+	 * @param mp The metadata provider for finding annotations.
+	 * @return
+	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
+	 */
+	public <T extends Annotation> List<T> getAnnotations(Class<T> a, MetaProvider mp) {
+		return appendAnnotations(new ArrayList<>(), a, mp);
+	}
+
+	/**
 	 * Identical to {@link #getAnnotations(Class)} but optionally returns the list in reverse (parent-to-child) order.
 	 *
 	 * @param a
@@ -1127,10 +1140,33 @@ public final class ClassInfo {
 	 * @return The same list.
 	 */
 	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
+		return appendAnnotations(l, a, MetaProvider.DEFAULT);
+	}
+
+	/**
+	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * list.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On this class.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On the package of this class.
+	 * </ol>
+	 *
+	 * @param <T> The annotation to search for.
+	 * @param l The list of annotations.
+	 * @param a The annotation to search for.
+	 * @param mp The metadata provider for finding annotations on classes and methods.
+	 * @return The same list.
+	 */
+	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, MetaProvider mp) {
 		for (ClassInfo ci : getParents())
-			addIfNotNull(l, ci.getDeclaredAnnotation(a));
+			addIfNotNull(l, mp.getDeclaredAnnotation(a, ci.inner()));
 		for (ClassInfo ci : getInterfaces())
-			addIfNotNull(l, ci.getDeclaredAnnotation(a));
+			addIfNotNull(l, mp.getDeclaredAnnotation(a, ci.inner()));
 		addIfNotNull(l, getPackageAnnotation(a));
 		return l;
 	}

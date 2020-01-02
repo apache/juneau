@@ -35,12 +35,12 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param xmlMetaProvider XML metadata provider (for finding information about other artifacts).
+	 * @param mp XML metadata provider (for finding information about other artifacts).
 	 */
-	public XmlClassMeta(ClassMeta<?> cm, XmlMetaProvider xmlMetaProvider) {
+	public XmlClassMeta(ClassMeta<?> cm, XmlMetaProvider mp) {
 		super(cm);
-		this.namespace = findNamespace(cm);
-		this.xml = cm.getInfo().getAnnotation(Xml.class);
+		this.namespace = findNamespace(cm, mp);
+		this.xml = mp.getAnnotation(Xml.class, cm.getInnerClass());
 		if (xml != null) {
 			this.format = xml.format();
 			this.childName = nullIfEmpty(xml.childName());
@@ -99,12 +99,12 @@ public class XmlClassMeta extends ExtendedClassMeta {
 		return namespace;
 	}
 
-	private static Namespace findNamespace(ClassMeta<?> cm) {
+	private static Namespace findNamespace(ClassMeta<?> cm, MetaProvider mp) {
 		if (cm == null)
 			return null;
 		ClassInfo ci = cm.getInfo();
-		List<Xml> xmls = ci.getAnnotations(Xml.class);
-		List<XmlSchema> schemas = ci.getAnnotations(XmlSchema.class);
+		List<Xml> xmls = ci.getAnnotations(Xml.class, mp);
+		List<XmlSchema> schemas = ci.getAnnotations(XmlSchema.class, mp);
 		return XmlUtils.findNamespace(xmls, schemas);
 	}
 }

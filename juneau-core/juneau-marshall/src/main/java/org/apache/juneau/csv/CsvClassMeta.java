@@ -27,11 +27,11 @@ public class CsvClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param csvMetaProvider CSV metadata provider (for finding information about other artifacts).
+	 * @param mp CSV metadata provider (for finding information about other artifacts).
 	 */
-	public CsvClassMeta(ClassMeta<?> cm, CsvMetaProvider csvMetaProvider) {
+	public CsvClassMeta(ClassMeta<?> cm, CsvMetaProvider mp) {
 		super(cm);
-		this.csv = cm.getInfo().getAnnotation(Csv.class);
+		this.csv = mp.getAnnotation(Csv.class, cm.getInnerClass());
 	}
 
 	/**

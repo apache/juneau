@@ -27,11 +27,11 @@ public class MsgPackClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param msgPackMetaProvider MessagePack metadata provider (for finding information about other artifacts).
+	 * @param mp MessagePack metadata provider (for finding information about other artifacts).
 	 */
-	public MsgPackClassMeta(ClassMeta<?> cm, MsgPackMetaProvider msgPackMetaProvider) {
+	public MsgPackClassMeta(ClassMeta<?> cm, MsgPackMetaProvider mp) {
 		super(cm);
-		this.msgPack = cm.getInfo().getAnnotation(MsgPack.class);
+		this.msgPack = mp.getAnnotation(MsgPack.class, cm.getInnerClass());
 	}
 
 	/**

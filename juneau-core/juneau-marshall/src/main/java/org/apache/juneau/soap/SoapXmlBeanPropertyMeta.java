@@ -30,9 +30,9 @@ public final class SoapXmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param soapXmlMetaProvider SOAP/XML metadata provider (for finding information about other artifacts).
+	 * @param mp SOAP/XML metadata provider (for finding information about other artifacts).
 	 */
-	public SoapXmlBeanPropertyMeta(BeanPropertyMeta bpm, SoapXmlMetaProvider soapXmlMetaProvider) {
+	public SoapXmlBeanPropertyMeta(BeanPropertyMeta bpm, SoapXmlMetaProvider mp) {
 		super(bpm);
 	}
 

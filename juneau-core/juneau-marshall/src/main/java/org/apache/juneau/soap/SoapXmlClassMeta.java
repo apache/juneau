@@ -27,11 +27,11 @@ public class SoapXmlClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param soapXmlMetaProvider SOAP/XML metadata provider (for finding information about other artifacts).
+	 * @param mp SOAP/XML metadata provider (for finding information about other artifacts).
 	 */
-	public SoapXmlClassMeta(ClassMeta<?> cm, SoapXmlMetaProvider soapXmlMetaProvider) {
+	public SoapXmlClassMeta(ClassMeta<?> cm, SoapXmlMetaProvider mp) {
 		super(cm);
-		this.soapXml = cm.getInfo().getAnnotation(SoapXml.class);
+		this.soapXml = mp.getAnnotation(SoapXml.class, cm.getInnerClass());
 	}
 
 	/**

@@ -30,9 +30,9 @@ public final class UonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param uonMetaProvider UON metadata provider (for finding information about other artifacts).
+	 * @param mp UON metadata provider (for finding information about other artifacts).
 	 */
-	public UonBeanPropertyMeta(BeanPropertyMeta bpm, UonMetaProvider uonMetaProvider) {
+	public UonBeanPropertyMeta(BeanPropertyMeta bpm, UonMetaProvider mp) {
 		super(bpm);
 	}
 

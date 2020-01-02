@@ -33,19 +33,19 @@ public class RdfClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param rdfMetaProvider RDF metadata provider (for finding information about other artifacts).
+	 * @param mp RDF metadata provider (for finding information about other artifacts).
 	 */
-	public RdfClassMeta(ClassMeta<?> cm, RdfMetaProvider rdfMetaProvider) {
+	public RdfClassMeta(ClassMeta<?> cm, RdfMetaProvider mp) {
 		super(cm);
 		ClassInfo ci = cm.getInfo();
-		this.rdf = ci.getAnnotation(Rdf.class);
+		this.rdf = mp.getAnnotation(Rdf.class, cm.getInnerClass());
 		if (rdf != null) {
 			collectionFormat = rdf.collectionFormat();
 		} else {
 			collectionFormat = RdfCollectionFormat.DEFAULT;
 		}
-		List<Rdf> rdfs = ci.getAnnotations(Rdf.class);
-		List<RdfSchema> schemas = ci.getAnnotations(RdfSchema.class);
+		List<Rdf> rdfs = ci.getAnnotations(Rdf.class, mp);
+		List<RdfSchema> schemas = ci.getAnnotations(RdfSchema.class, mp);
 		this.namespace = RdfUtils.findNamespace(rdfs, schemas);
 	}
 

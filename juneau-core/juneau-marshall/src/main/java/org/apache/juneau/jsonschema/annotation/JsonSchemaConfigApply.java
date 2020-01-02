@@ -55,7 +55,7 @@ public class JsonSchemaConfigApply extends ConfigApply<JsonSchemaConfig> {
 		if (! a.useBeanDefs().isEmpty())
 			psb.set(JSONSCHEMA_useBeanDefs, bool(a.useBeanDefs()));
 
-		if (a.annotateJsonSchema().length > 0)
-			psb.addTo(CONTEXT_annotations, a.annotateJsonSchema());
+		if (a.annotateSchema().length > 0)
+			psb.addTo(CONTEXT_annotations, a.annotateSchema());
 	}
 }

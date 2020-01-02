@@ -26,7 +26,8 @@ import java.util.stream.*;
 public class ReflectionMap<V> {
 
 	private final List<ClassEntry<V>> classEntries;
-	private final List<MethodEntry<V>> methodEntries;
+	private final List<MemberEntry<V>> memberEntries;
+	private final boolean noClassEntries, noMemberEntries;
 
 	/**
 	 * Constructor.
@@ -35,7 +36,9 @@ public class ReflectionMap<V> {
 	 */
 	ReflectionMap(Builder<V> b) {
 		this.classEntries = Collections.unmodifiableList(new ArrayList<>(b.classEntries));
-		this.methodEntries = Collections.unmodifiableList(new ArrayList<>(b.methodEntries));
+		this.memberEntries = Collections.unmodifiableList(new ArrayList<>(b.memberEntries));
+		this.noClassEntries = classEntries.isEmpty();
+		this.noMemberEntries = memberEntries.isEmpty();
 	}
 
 	/**
@@ -56,7 +59,7 @@ public class ReflectionMap<V> {
 	 */
 	public static class Builder<V> {
 		List<ClassEntry<V>> classEntries = new ArrayList<>();
-		List<MethodEntry<V>> methodEntries = new ArrayList<>();
+		List<MemberEntry<V>> memberEntries = new ArrayList<>();
 
 		/**
 		 * Adds a mapping to this builder.
@@ -88,7 +91,7 @@ public class ReflectionMap<V> {
 					if (Character.isUpperCase(s2.charAt(0))) {
 						classEntries.add(new ClassEntry<>(s, value));
 					} else {
-						methodEntries.add(new MethodEntry<>(s1, s2, value));
+						memberEntries.add(new MemberEntry<>(s1, s2, value));
 					}
 				}
 			}
@@ -113,7 +116,7 @@ public class ReflectionMap<V> {
 	 * @return All matching objects.  Never <jk>null</jk>.
 	 */
 	public List<V> find(Class<?> c) {
-		return classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value).collect(Collectors.toList());
+		return noClassEntries ? Collections.emptyList() : classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value).collect(Collectors.toList());
 	}
 
 	/**
@@ -123,7 +126,7 @@ public class ReflectionMap<V> {
 	 * @return The matching object.  Never <jk>null</jk>.
 	 */
 	public Optional<V> findFirst(Class<?> c) {
-		return classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value).findFirst();
+		return noClassEntries ? Optional.empty() : classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value).findFirst();
 	}
 
 	/**
@@ -134,7 +137,7 @@ public class ReflectionMap<V> {
 	 * @return All matching objects.  Never <jk>null</jk>.
 	 */
 	public List<V> find(Class<?> c, Class<? extends V> ofType) {
-		return classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value).filter(x -> ofType.isInstance(x)).collect(Collectors.toList());
+		return noClassEntries ? Collections.emptyList() : classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value).filter(x -> ofType.isInstance(x)).collect(Collectors.toList());
 	}
 
 	/**
@@ -145,7 +148,7 @@ public class ReflectionMap<V> {
 	 * @return The matching object.  Never <jk>null</jk>.
 	 */
 	public Optional<V> findFirst(Class<?> c, Class<? extends V> ofType) {
-		return classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value).filter(x -> ofType.isInstance(x)).findFirst();
+		return noClassEntries ? Optional.empty() : classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value).filter(x -> ofType.isInstance(x)).findFirst();
 	}
 
 	/**
@@ -154,8 +157,8 @@ public class ReflectionMap<V> {
 	 * @param m The method to test for.
 	 * @return All matching objects.  Never <jk>null</jk>.
 	 */
-	public List<V> find(Method m) {
-		return methodEntries.stream().filter(x -> x.matches(m)).map(x -> x.value).collect(Collectors.toList());
+	public List<V> find(Member m) {
+		return noMemberEntries ? Collections.emptyList() : memberEntries.stream().filter(x -> x.matches(m)).map(x -> x.value).collect(Collectors.toList());
 	}
 
 	/**
@@ -164,8 +167,8 @@ public class ReflectionMap<V> {
 	 * @param m The method to test for.
 	 * @return The matching object.  Never <jk>null</jk>.
 	 */
-	public Optional<V> findFirst(Method m) {
-		return methodEntries.stream().filter(x -> x.matches(m)).map(x -> x.value).findFirst();
+	public Optional<V> findFirst(Member m) {
+		return noMemberEntries ? Optional.empty() : memberEntries.stream().filter(x -> x.matches(m)).map(x -> x.value).findFirst();
 	}
 
 	/**
@@ -175,8 +178,8 @@ public class ReflectionMap<V> {
 	 * @param ofType Only return objects of the specified type.
 	 * @return All matching objects.  Never <jk>null</jk>.
 	 */
-	public List<V> find(Method m, Class<? extends V> ofType) {
-		return methodEntries.stream().filter(x -> x.matches(m)).map(x -> x.value).filter(x -> ofType.isInstance(x)).collect(Collectors.toList());
+	public List<V> find(Member m, Class<? extends V> ofType) {
+		return noMemberEntries ? Collections.emptyList() : memberEntries.stream().filter(x -> x.matches(m)).map(x -> x.value).filter(x -> ofType.isInstance(x)).collect(Collectors.toList());
 	}
 
 	/**
@@ -186,8 +189,8 @@ public class ReflectionMap<V> {
 	 * @param ofType Only return objects of the specified type.
 	 * @return The matching object.  Never <jk>null</jk>.
 	 */
-	public Optional<V> findFirst(Method m, Class<? extends V> ofType) {
-		return methodEntries.stream().filter(x -> x.matches(m)).map(x -> x.value).filter(x -> ofType.isInstance(x)).findFirst();
+	public Optional<V> findFirst(Member m, Class<? extends V> ofType) {
+		return noMemberEntries ? Optional.empty() : memberEntries.stream().filter(x -> x.matches(m)).map(x -> x.value).filter(x -> ofType.isInstance(x)).findFirst();
 	}
 
 	static class ClassEntry<V> {
@@ -204,17 +207,17 @@ public class ReflectionMap<V> {
 		}
 	}
 
-	static class MethodEntry<V> {
+	static class MemberEntry<V> {
 		String className, methodName;
 		V value;
 
-		MethodEntry(String className, String methodName, V value) {
+		MemberEntry(String className, String methodName, V value) {
 			this.className = className;
 			this.methodName = methodName;
 			this.value = value;
 		}
 
-		public boolean matches(Method m) {
+		public boolean matches(Member m) {
 			if (m == null)
 				return false;
 			Class<?> c = m.getDeclaringClass();

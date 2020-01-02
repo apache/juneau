@@ -27,11 +27,11 @@ public class OpenApiClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param openApiMetaProvider OpenApi metadata provider (for finding information about other artifacts).
+	 * @param mp OpenApi metadata provider (for finding information about other artifacts).
 	 */
-	public OpenApiClassMeta(ClassMeta<?> cm, OpenApiMetaProvider openApiMetaProvider) {
+	public OpenApiClassMeta(ClassMeta<?> cm, OpenApiMetaProvider mp) {
 		super(cm);
-		this.openApi = cm.getInfo().getAnnotation(OpenApi.class);
+		this.openApi = mp.getAnnotation(OpenApi.class, cm.getInnerClass());
 	}
 
 	/**

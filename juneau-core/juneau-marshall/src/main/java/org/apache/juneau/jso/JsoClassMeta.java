@@ -27,11 +27,11 @@ public class JsoClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param jsoMetaProvider JSO metadata provider (for finding information about other artifacts).
+	 * @param mp JSO metadata provider (for finding information about other artifacts).
 	 */
-	public JsoClassMeta(ClassMeta<?> cm, JsoMetaProvider jsoMetaProvider) {
+	public JsoClassMeta(ClassMeta<?> cm, JsoMetaProvider mp) {
 		super(cm);
-		this.jso = cm.getInfo().getAnnotation(Jso.class);
+		this.jso = mp.getAnnotation(Jso.class, cm.getInnerClass());
 	}
 
 	/**

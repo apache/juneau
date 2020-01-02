@@ -27,11 +27,11 @@ public class UrlEncodingClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param urlEncodingMetaProvider URL-encoding metadata provider (for finding information about other artifacts).
+	 * @param mp URL-encoding metadata provider (for finding information about other artifacts).
 	 */
-	public UrlEncodingClassMeta(ClassMeta<?> cm, UrlEncodingMetaProvider urlEncodingMetaProvider) {
+	public UrlEncodingClassMeta(ClassMeta<?> cm, UrlEncodingMetaProvider mp) {
 		super(cm);
-		this.urlEncoding = cm.getInfo().getAnnotation(UrlEncoding.class);
+		this.urlEncoding = mp.getAnnotation(UrlEncoding.class, cm.getInnerClass());
 		if (urlEncoding != null) {
 			expandedParams = urlEncoding.expandedParams();
 		} else {

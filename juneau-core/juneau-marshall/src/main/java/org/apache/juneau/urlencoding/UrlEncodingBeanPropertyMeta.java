@@ -30,9 +30,9 @@ public final class UrlEncodingBeanPropertyMeta extends ExtendedBeanPropertyMeta 
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param urlEncodingMetaProvider URL-Encoding metadata provider (for finding information about other artifacts).
+	 * @param mp URL-Encoding metadata provider (for finding information about other artifacts).
 	 */
-	public UrlEncodingBeanPropertyMeta(BeanPropertyMeta bpm, UrlEncodingMetaProvider urlEncodingMetaProvider) {
+	public UrlEncodingBeanPropertyMeta(BeanPropertyMeta bpm, UrlEncodingMetaProvider mp) {
 		super(bpm);
 	}
 

@@ -37,21 +37,21 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param xmlMetaProvider XML metadata provider (for finding information about other artifacts).
+	 * @param mp XML metadata provider (for finding information about other artifacts).
 	 */
-	public XmlBeanPropertyMeta(BeanPropertyMeta bpm, XmlMetaProvider xmlMetaProvider) {
+	public XmlBeanPropertyMeta(BeanPropertyMeta bpm, XmlMetaProvider mp) {
 		super(bpm);
-		this.xmlMetaProvider = xmlMetaProvider;
+		this.xmlMetaProvider = mp;
 
 		if (bpm.getInnerField() != null)
-			findXmlInfo(bpm.getInnerField().getAnnotation(Xml.class));
+			findXmlInfo(mp.getAnnotation(Xml.class, bpm.getInnerField()), mp);
 		if (bpm.getGetter() != null)
-			findXmlInfo(bpm.getGetter().getAnnotation(Xml.class));
+			findXmlInfo(mp.getAnnotation(Xml.class, bpm.getGetter()), mp);
 		if (bpm.getSetter() != null)
-			findXmlInfo(bpm.getSetter().getAnnotation(Xml.class));
+			findXmlInfo(mp.getAnnotation(Xml.class, bpm.getSetter()), mp);
 
 		if (namespace == null)
-			namespace = xmlMetaProvider.getXmlClassMeta(bpm.getBeanMeta().getClassMeta()).getNamespace();
+			namespace = mp.getXmlClassMeta(bpm.getBeanMeta().getClassMeta()).getNamespace();
 	}
 
 	private XmlBeanPropertyMeta() {
@@ -100,7 +100,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		return childName;
 	}
 
-	private void findXmlInfo(Xml xml) {
+	private void findXmlInfo(Xml xml, MetaProvider mp) {
 		if (xml == null)
 			return;
 		BeanPropertyMeta bpm = getBeanPropertyMeta();
@@ -108,8 +108,8 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		ClassMeta<?> cmBean = bpm.getBeanMeta().getClassMeta();
 		String name = bpm.getName();
 
-		List<Xml> xmls = bpm.findAnnotations(Xml.class);
-		List<XmlSchema> schemas = bpm.findAnnotations(XmlSchema.class);
+		List<Xml> xmls = bpm.findAnnotations(Xml.class, mp);
+		List<XmlSchema> schemas = bpm.findAnnotations(XmlSchema.class, mp);
 		namespace = XmlUtils.findNamespace(xmls, schemas);
 
 		if (xmlFormat == XmlFormat.DEFAULT)

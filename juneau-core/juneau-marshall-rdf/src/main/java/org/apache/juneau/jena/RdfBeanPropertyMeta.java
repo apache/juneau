@@ -38,13 +38,13 @@ public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param rdfMetaProvider RDF metadata provider (for finding information about other artifacts).
+	 * @param mp RDF metadata provider (for finding information about other artifacts).
 	 */
-	public RdfBeanPropertyMeta(BeanPropertyMeta bpm, RdfMetaProvider rdfMetaProvider) {
+	public RdfBeanPropertyMeta(BeanPropertyMeta bpm, RdfMetaProvider mp) {
 		super(bpm);
 
-		List<Rdf> rdfs = bpm.findAnnotations(Rdf.class);
-		List<RdfSchema> schemas = bpm.findAnnotations(RdfSchema.class);
+		List<Rdf> rdfs = bpm.findAnnotations(Rdf.class, mp);
+		List<RdfSchema> schemas = bpm.findAnnotations(RdfSchema.class, mp);
 
 		for (Rdf rdf : rdfs) {
 			if (collectionFormat == RdfCollectionFormat.DEFAULT)

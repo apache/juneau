@@ -171,17 +171,17 @@ public @interface JsonSchemaConfig {
 	String allowNestedExamples() default "";
 
 	/**
-	 * Indirectly applies {@link JsonSchema @JsonSchema} annotations to classes/methods.
+	 * Indirectly applies {@link Schema @Schema} annotations to classes/methods.
 	 *
 	 * <p>
-	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link JsonSchema#on() @JsonSchema.on}
+	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Schema#on() @Schema.on}
 	 * annotation to specify the class/method names to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
 	 * </ul>
 	 */
-	JsonSchema[] annotateJsonSchema() default {};
+	Schema[] annotateSchema() default {};
 
 	/**
 	 * Configuration property:  Bean schema definition mapper.

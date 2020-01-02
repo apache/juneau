@@ -30,11 +30,11 @@ public class JsonClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param jsonMetaProvider JSON metadata provider (for finding information about other artifacts).
+	 * @param mp JSON metadata provider (for finding information about other artifacts).
 	 */
-	public JsonClassMeta(ClassMeta<?> cm, JsonMetaProvider jsonMetaProvider) {
+	public JsonClassMeta(ClassMeta<?> cm, JsonMetaProvider mp) {
 		super(cm);
-		this.json = cm.getInfo().getAnnotation(Json.class);
+		this.json = mp.getAnnotation(Json.class, cm.getInnerClass());
 		if (json != null) {
 			wrapperAttr = nullIfEmpty(json.wrapperAttr());
 		} else {

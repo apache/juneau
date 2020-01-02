@@ -13,11 +13,13 @@
 package org.apache.juneau;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.utils.*;
 
 /**
  * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session}
@@ -40,7 +42,7 @@ import org.apache.juneau.json.*;
  *
  * @see PropertyStore
  */
-public abstract class Context {
+public abstract class Context implements MetaProvider {
 
 	static final String PREFIX = "Context";
 
@@ -66,7 +68,7 @@ public abstract class Context {
 	 * Allows you to dynamically apply Juneau annotations typically applied directly to classes and methods.
 	 * Useful in cases where you want to use the functionality of the annotation on beans and bean properties but
 	 * do not have access to the code to do so.
-	 * 
+	 *
 	 * <p>
 	 * As a rule, any Juneau annotation with an <c>on()</c> method can be used with this property.
 	 *
@@ -95,6 +97,7 @@ public abstract class Context {
 
 	private final PropertyStore propertyStore;
 	private final int identityCode;
+	private final ReflectionMap<Annotation> annotations;
 
 	/**
 	 * Constructor for this class.
@@ -108,6 +111,18 @@ public abstract class Context {
 	public Context(PropertyStore ps, boolean allowReuse) {
 		this.propertyStore = ps == null ? PropertyStore.DEFAULT : ps;
 		this.identityCode = allowReuse ? new HashCode().add(getClass().getName()).add(ps).get() : System.identityHashCode(this);
+
+		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
+		for (Annotation a : propertyStore.getListProperty(CONTEXT_annotations, Annotation.class)) {
+			try {
+				Method m = a.getClass().getMethod("on");
+				String on = (String)m.invoke(a);
+				rmb.append(on, a);
+			} catch (Exception e) {
+				throw new ConfigException("Invalid annotation @{0} used in CONTEXT_annotations property.  Annotation must define an on() method.", a.getClass().getSimpleName());
+			}
+		}
+		this.annotations = rmb.build();
 	}
 
 	/**
@@ -582,6 +597,40 @@ public abstract class Context {
 			return false;
 		Context c = (Context)o;
 		return (c.propertyStore.equals(propertyStore));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// MetaProvider methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@SuppressWarnings("unchecked")
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c) {
+		return (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c) {
+		return (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getAnnotation(Class<A> a, Method m) {
+		return (A)annotations.findFirst(m, a).orElse(m.getAnnotation(a));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getAnnotation(Class<A> a, Field f) {
+		return (A)annotations.findFirst(f, a).orElse(f.getAnnotation(a));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c) {
+		return (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

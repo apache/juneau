@@ -30,9 +30,9 @@ public final class JsoBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param jsoMetaProvider JSO metadata provider (for finding information about other artifacts).
+	 * @param mp JSO metadata provider (for finding information about other artifacts).
 	 */
-	public JsoBeanPropertyMeta(BeanPropertyMeta bpm, JsoMetaProvider jsoMetaProvider) {
+	public JsoBeanPropertyMeta(BeanPropertyMeta bpm, JsoMetaProvider mp) {
 		super(bpm);
 	}
 

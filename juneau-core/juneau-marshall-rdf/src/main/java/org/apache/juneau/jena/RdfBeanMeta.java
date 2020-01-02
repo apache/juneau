@@ -28,14 +28,14 @@ public class RdfBeanMeta extends ExtendedBeanMeta {
 	 * Constructor.
 	 *
 	 * @param beanMeta The metadata on the bean that this metadata applies to.
-	 * @param rdfMetaProvider RDF metadata provider (for finding information about other artifacts).
+	 * @param mp RDF metadata provider (for finding information about other artifacts).
 	 */
-	public RdfBeanMeta(BeanMeta<?> beanMeta, RdfMetaProvider rdfMetaProvider) {
+	public RdfBeanMeta(BeanMeta<?> beanMeta, RdfMetaProvider mp) {
 		super(beanMeta);
 
 		BeanPropertyMeta t_beanUriProperty = null;
 		for (BeanPropertyMeta p : beanMeta.getPropertyMetas()) {
-			RdfBeanPropertyMeta bpm = rdfMetaProvider.getRdfBeanPropertyMeta(p);
+			RdfBeanPropertyMeta bpm = mp.getRdfBeanPropertyMeta(p);
 			if (bpm.isBeanUri())
 				t_beanUriProperty = p;
 		}

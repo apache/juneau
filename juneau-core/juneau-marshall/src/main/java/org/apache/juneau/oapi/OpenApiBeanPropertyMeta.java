@@ -30,9 +30,9 @@ public final class OpenApiBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param openApiMetaProvider OpenApi metadata provider (for finding information about other artifacts).
+	 * @param mp OpenApi metadata provider (for finding information about other artifacts).
 	 */
-	public OpenApiBeanPropertyMeta(BeanPropertyMeta bpm, OpenApiMetaProvider openApiMetaProvider) {
+	public OpenApiBeanPropertyMeta(BeanPropertyMeta bpm, OpenApiMetaProvider mp) {
 		super(bpm);
 	}
 

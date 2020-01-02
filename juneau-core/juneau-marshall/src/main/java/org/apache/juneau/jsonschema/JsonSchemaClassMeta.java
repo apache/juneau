@@ -28,12 +28,12 @@ public class JsonSchemaClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param jsonSchemaMetaProvider JSON-schema metadata provider (for finding information about other artifacts).
+	 * @param mp JSON-schema metadata provider (for finding information about other artifacts).
 	 */
-	public JsonSchemaClassMeta(ClassMeta<?> cm, JsonSchemaMetaProvider jsonSchemaMetaProvider) {
+	public JsonSchemaClassMeta(ClassMeta<?> cm, JsonSchemaMetaProvider mp) {
 		super(cm);
 		try {
-			Schema s = cm.getInfo().getAnnotation(Schema.class);
+			Schema s = mp.getAnnotation(Schema.class, cm.getInnerClass());
 			schema = s == null ? ObjectMap.EMPTY_MAP : SchemaUtils.asMap(s);
 		} catch (ParseException e) {
 			throw new RuntimeException(e);

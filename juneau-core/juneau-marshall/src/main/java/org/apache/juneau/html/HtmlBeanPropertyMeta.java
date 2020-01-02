@@ -38,17 +38,18 @@ public final class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param htmlMetaProvider HTML metadata provider (for finding information about other artifacts).
+	 * @param mp HTML metadata provider (for finding information about other artifacts).
 	 */
-	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm, HtmlMetaProvider htmlMetaProvider) {
+	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm, HtmlMetaProvider mp) {
 		super(bpm);
+
 		Builder b = new Builder();
 		if (bpm.getInnerField() != null)
-			b.findHtmlInfo(bpm.getInnerField().getAnnotation(Html.class));
+			b.findHtmlInfo(mp.getAnnotation(Html.class, bpm.getInnerField()));
 		if (bpm.getGetter() != null)
-			b.findHtmlInfo(bpm.getGetter().getAnnotation(Html.class));
+			b.findHtmlInfo(mp.getAnnotation(Html.class, bpm.getGetter()));
 		if (bpm.getSetter() != null)
-			b.findHtmlInfo(bpm.getSetter().getAnnotation(Html.class));
+			b.findHtmlInfo(mp.getAnnotation(Html.class, bpm.getSetter()));
 
 		this.format = b.format;
 		this.noTables = b.noTables;

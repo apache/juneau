@@ -27,11 +27,11 @@ public class PlainTextClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param plainTextMetaProvider PlainText metadata provider (for finding information about other artifacts).
+	 * @param mp PlainText metadata provider (for finding information about other artifacts).
 	 */
-	public PlainTextClassMeta(ClassMeta<?> cm, PlainTextMetaProvider plainTextMetaProvider) {
+	public PlainTextClassMeta(ClassMeta<?> cm, PlainTextMetaProvider mp) {
 		super(cm);
-		this.plainText = cm.getInfo().getAnnotation(PlainText.class);
+		this.plainText = mp.getAnnotation(PlainText.class, cm.getInnerClass());
 	}
 
 	/**

@@ -30,9 +30,9 @@ public final class MsgPackBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param msgPackMetaProvider MessagePack metadata provider (for finding information about other artifacts).
+	 * @param mp MessagePack metadata provider (for finding information about other artifacts).
 	 */
-	public MsgPackBeanPropertyMeta(BeanPropertyMeta bpm, MsgPackMetaProvider msgPackMetaProvider) {
+	public MsgPackBeanPropertyMeta(BeanPropertyMeta bpm, MsgPackMetaProvider mp) {
 		super(bpm);
 	}
 

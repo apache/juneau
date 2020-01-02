@@ -52,7 +52,6 @@ public final class BeanPropertyMeta {
 	private final Field field;                                // The bean property field (if it has one).
 	private final Field innerField;                                // The bean property field (if it has one).
 	private final Method getter, setter, extraKeys;           // The bean property getter and setter.
-	private final MethodInfo getterInfo, setterInfo, extraKeysInfo;           // The bean property getter and setter.
 	private final boolean isUri;                              // True if this is a URL/URI or annotated with @URI.
 	private final boolean isDyna, isDynaGetterMap;            // This is a dyna property (i.e. name="*")
 
@@ -416,11 +415,8 @@ public final class BeanPropertyMeta {
 		this.field = b.field;
 		this.innerField = b.innerField;
 		this.getter = b.getter;
-		this.getterInfo = MethodInfo.of(b.getter);
 		this.setter = b.setter;
-		this.setterInfo = MethodInfo.of(b.setter);
 		this.extraKeys = b.extraKeys;
-		this.extraKeysInfo = MethodInfo.of(b.extraKeys);
 		this.isUri = b.isUri;
 		this.beanMeta = b.beanMeta;
 		this.beanContext = b.beanContext;
@@ -1127,57 +1123,59 @@ public final class BeanPropertyMeta {
 	 * Searches through the class hierarchy (e.g. superclasses, interfaces, packages) for all instances of the
 	 * specified annotation.
 	 *
+	 * @param <A> The class to find annotations for.
 	 * @param a The class to find annotations for.
+	 * @param mp The metadata provider for finding annotations.
 	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> List<A> findAnnotations(Class<A> a) {
+	public <A extends Annotation> List<A> findAnnotations(Class<A> a, MetaProvider mp) {
 		List<A> l = new LinkedList<>();
 		if (field != null) {
-			addIfNotNull(l, field.getAnnotation(a));
-			ClassInfo.of(field.getType()).appendAnnotations(l, a);
+			addIfNotNull(l, mp.getAnnotation(a, field));
+			ClassInfo.of(field.getType()).appendAnnotations(l, a, mp);
 		}
 		if (getter != null) {
-			addIfNotNull(l, MethodInfo.of(getter).getAnnotation(a));
-			ClassInfo.of(getter.getReturnType()).appendAnnotations(l, a);
+			addIfNotNull(l, mp.getAnnotation(a, getter));
+			ClassInfo.of(getter.getReturnType()).appendAnnotations(l, a, mp);
 		}
 		if (setter != null) {
-			addIfNotNull(l, MethodInfo.of(setter).getAnnotation(a));
-			ClassInfo.of(setter.getReturnType()).appendAnnotations(l, a);
+			addIfNotNull(l, mp.getAnnotation(a, setter));
+			ClassInfo.of(setter.getReturnType()).appendAnnotations(l, a, mp);
 		}
 		if (extraKeys != null) {
-			addIfNotNull(l, MethodInfo.of(extraKeys).getAnnotation(a));
-			ClassInfo.of(extraKeys.getReturnType()).appendAnnotations(l, a);
+			addIfNotNull(l, mp.getAnnotation(a, extraKeys));
+			ClassInfo.of(extraKeys.getReturnType()).appendAnnotations(l, a, mp);
 		}
 
-		getBeanMeta().getClassMeta().getInfo().appendAnnotations(l, a);
+		getBeanMeta().getClassMeta().getInfo().appendAnnotations(l, a, mp);
 		return l;
 	}
 
-	/**
-	 * Returns the specified annotation on the field or methods that define this property.
-	 *
-	 * <p>
-	 * This method will search up the parent class/interface hierarchy chain to search for the annotation on
-	 * overridden getters and setters.
-	 *
-	 * @param a The annotation to search for.
-	 * @return The annotation, or <jk>null</jk> if it wasn't found.
-	 */
-	public <A extends Annotation> A findAnnotation(Class<A> a) {
-		A t = null;
-		if (field != null)
-			t = field.getAnnotation(a);
-		if (t == null && getter != null)
-			t = getterInfo.getAnnotation(a);
-		if (t == null && setter != null)
-			t = setterInfo.getAnnotation(a);
-		if (t == null && extraKeys != null)
-			t = extraKeysInfo.getAnnotation(a);
-		if (t == null)
-			t = typeMeta.getInfo().getAnnotation(a);
-		return t;
-	}
-
+//	/**
+//	 * Returns the specified annotation on the field or methods that define this property.
+//	 *
+//	 * <p>
+//	 * This method will search up the parent class/interface hierarchy chain to search for the annotation on
+//	 * overridden getters and setters.
+//	 *
+//	 * @param a The annotation to search for.
+//	 * @return The annotation, or <jk>null</jk> if it wasn't found.
+//	 */
+//	public <A extends Annotation> A findAnnotation(Class<A> a) {
+//		A t = null;
+//		if (field != null)
+//			t = field.getAnnotation(a);
+//		if (t == null && getter != null)
+//			t = getterInfo.getAnnotation(a);
+//		if (t == null && setter != null)
+//			t = setterInfo.getAnnotation(a);
+//		if (t == null && extraKeys != null)
+//			t = extraKeysInfo.getAnnotation(a);
+//		if (t == null)
+//			t = typeMeta.getInfo().getAnnotation(a);
+//		return t;
+//	}
+//
 	private Object transform(BeanSession session, Object o) throws SerializeException {
 		try {
 			// First use swap defined via @Beanp.

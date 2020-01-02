@@ -30,9 +30,9 @@ public final class CsvBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param csvMetaProvider CSV metadata provider (for finding information about other artifacts).
+	 * @param mp CSV metadata provider (for finding information about other artifacts).
 	 */
-	public CsvBeanPropertyMeta(BeanPropertyMeta bpm, CsvMetaProvider csvMetaProvider) {
+	public CsvBeanPropertyMeta(BeanPropertyMeta bpm, CsvMetaProvider mp) {
 		super(bpm);
 	}
 

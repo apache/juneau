@@ -38,13 +38,13 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	 * Constructor.
 	 *
 	 * @param beanMeta The metadata on the bean that this metadata applies to.
-	 * @param xmlMetaProvider XML metadata provider (for finding information about other artifacts).
+	 * @param mp XML metadata provider (for finding information about other artifacts).
 	 */
-	public XmlBeanMeta(BeanMeta<?> beanMeta, XmlMetaProvider xmlMetaProvider) {
+	public XmlBeanMeta(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
 		super(beanMeta);
 
 		Class<?> c = beanMeta.getClassMeta().getInnerClass();
-		XmlBeanMetaBuilder b = new XmlBeanMetaBuilder(beanMeta, xmlMetaProvider);
+		XmlBeanMetaBuilder b = new XmlBeanMetaBuilder(beanMeta, mp);
 
 		attrs = unmodifiableMap(b.attrs);
 		elements = unmodifiableMap(b.elements);
@@ -77,9 +77,9 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 			contentProperty;
 		XmlFormat contentFormat = DEFAULT;
 
-		XmlBeanMetaBuilder(BeanMeta<?> beanMeta, XmlMetaProvider xmlMetaProvider) {
+		XmlBeanMetaBuilder(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
 			Class<?> c = beanMeta.getClassMeta().getInnerClass();
-			Xml xml = c.getAnnotation(Xml.class);
+			Xml xml = mp.getAnnotation(Xml.class, c);
 			XmlFormat defaultFormat = null;
 
 			if (xml != null) {
@@ -97,7 +97,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 			}
 
 			for (BeanPropertyMeta p : beanMeta.getPropertyMetas()) {
-				XmlFormat xf = xmlMetaProvider.getXmlBeanPropertyMeta(p).getXmlFormat();
+				XmlFormat xf = mp.getXmlBeanPropertyMeta(p).getXmlFormat();
 				ClassMeta<?> pcm = p.getClassMeta();
 				if (xf == ATTR) {
 					attrs.put(p.getName(), p);
@@ -128,7 +128,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 					contentFormat = xf;
 				}
 				// Look for any properties that are collections with @Xml.childName specified.
-				String n = xmlMetaProvider.getXmlBeanPropertyMeta(p).getChildName();
+				String n = mp.getXmlBeanPropertyMeta(p).getChildName();
 				if (n != null) {
 					if (collapsedProperties.containsKey(n) && collapsedProperties.get(n) != p)
 						throw new BeanRuntimeException(c, "Multiple properties found with the child name ''{0}''.", n);

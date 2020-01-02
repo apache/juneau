@@ -30,9 +30,9 @@ public final class PlainTextBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param plainTextMetaProvider PlainText metadata provider (for finding information about other artifacts).
+	 * @param mp PlainText metadata provider (for finding information about other artifacts).
 	 */
-	public PlainTextBeanPropertyMeta(BeanPropertyMeta bpm, PlainTextMetaProvider plainTextMetaProvider) {
+	public PlainTextBeanPropertyMeta(BeanPropertyMeta bpm, PlainTextMetaProvider mp) {
 		super(bpm);
 	}
 

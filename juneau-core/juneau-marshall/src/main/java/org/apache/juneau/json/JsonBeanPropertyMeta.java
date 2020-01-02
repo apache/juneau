@@ -30,9 +30,9 @@ public final class JsonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param jsonMetaProvider JSON metadata provider (for finding information about other artifacts).
+	 * @param mp JSON metadata provider (for finding information about other artifacts).
 	 */
-	public JsonBeanPropertyMeta(BeanPropertyMeta bpm, JsonMetaProvider jsonMetaProvider) {
+	public JsonBeanPropertyMeta(BeanPropertyMeta bpm, JsonMetaProvider mp) {
 		super(bpm);
 	}
 

@@ -35,9 +35,9 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param jsonSchemaMetaProvider JSON-schema metadata provider (for finding information about other artifacts).
+	 * @param mp JSON-schema metadata provider (for finding information about other artifacts).
 	 */
-	public JsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm, JsonSchemaMetaProvider jsonSchemaMetaProvider) {
+	public JsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm, JsonSchemaMetaProvider mp) {
 		super(bpm);
 
 		this.schema = new ObjectMap();
@@ -47,11 +47,11 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 		try {
 			if (field != null)
-				schema.appendAll(SchemaUtils.asMap(field.getAnnotation(Schema.class)));
+				schema.appendAll(SchemaUtils.asMap(mp.getAnnotation(Schema.class, field)));
 			if (getter != null)
-				schema.appendAll(SchemaUtils.asMap(getter.getAnnotation(Schema.class)));
+				schema.appendAll(SchemaUtils.asMap(mp.getAnnotation(Schema.class, getter)));
 			if (setter != null)
-				schema.appendAll(SchemaUtils.asMap(setter.getAnnotation(Schema.class)));
+				schema.appendAll(SchemaUtils.asMap(mp.getAnnotation(Schema.class, setter)));
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}

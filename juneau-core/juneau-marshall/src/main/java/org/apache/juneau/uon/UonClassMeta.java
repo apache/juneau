@@ -27,11 +27,11 @@ public class UonClassMeta extends ExtendedClassMeta {
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
-	 * @param uonMetaProvider Uon metadata provider (for finding information about other artifacts).
+	 * @param mp Uon metadata provider (for finding information about other artifacts).
 	 */
-	public UonClassMeta(ClassMeta<?> cm, UonMetaProvider uonMetaProvider) {
+	public UonClassMeta(ClassMeta<?> cm, UonMetaProvider mp) {
 		super(cm);
-		this.uon = cm.getInfo().getAnnotation(Uon.class);
+		this.uon = mp.getAnnotation(Uon.class, cm.getInnerClass());
 	}
 
 	/**
