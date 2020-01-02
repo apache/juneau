@@ -55,4 +55,7 @@ public class HelloWorldResource implements BasicRestConfig {
 	public Swagger getOptions(RestRequest req) {
 		return req.getSwagger();
 	}
+
+	@Override
+	public void error() {}
 }
