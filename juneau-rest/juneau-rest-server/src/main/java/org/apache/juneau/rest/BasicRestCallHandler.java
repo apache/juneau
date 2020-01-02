@@ -163,11 +163,12 @@ public class BasicRestCallHandler implements RestCallHandler {
 				// If the specified method has been defined in a subclass, invoke it.
 				int rc = 0;
 				String m = call.getMethod();
-				if (restCallRouters.containsKey(m)) {
+
+				if (restCallRouters.containsKey(m))
 					rc = restCallRouters.get(m).invoke(call);
-				} else if (restCallRouters.containsKey("*")) {
+
+				if ((rc == 0 || rc == 404) && restCallRouters.containsKey("*"))
 					rc = restCallRouters.get("*").invoke(call);
-				}
 
 				// Should be 405 if the URL pattern matched but HTTP method did not.
 				if (rc == 0)
@@ -295,7 +296,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 		else if (rc == SC_PRECONDITION_FAILED)
 			throw new PreconditionFailed("Method ''{0}'' not found on resource{1} with matching matcher.", methodUC, onPath);
 		else if (rc == SC_METHOD_NOT_ALLOWED)
-			throw new MethodNotAllowed("Method ''{0}'' not found on resource.", methodUC);
+			throw new MethodNotAllowed("Method ''{0}'' not found on resource{1}.", methodUC, onPath);
 		else
 			throw new ServletException("Invalid method response: " + rc);
 	}
