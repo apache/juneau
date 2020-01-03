@@ -44,7 +44,7 @@ public class InvalidAnnotationException extends FormattedRuntimeException {
 	 */
 	@SafeVarargs
 	public static void assertNoInvalidAnnotations(MethodInfo m, Class<? extends Annotation>...a) throws InvalidAnnotationException {
-		Annotation aa = m.getAnnotation(a);
+		Annotation aa = m.getAnyAnnotation(a);
 		if (aa != null)
 			throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", aa.getClass().getSimpleName(), m.getDeclaringClass().getSimpleName(), m);
 	}

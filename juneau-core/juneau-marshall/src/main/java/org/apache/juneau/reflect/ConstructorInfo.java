@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
@@ -76,6 +77,48 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	public <T> Constructor<T> inner() {
 		return (Constructor<T>)c;
 	}
+
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Finds the annotation of the specified type defined on this constructor.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @return
+	 * 	The annotation if found, or <jk>null</jk> if not.
+	 */
+	public final <T extends Annotation> T getAnnotation(Class<T> a) {
+		return getAnnotation(a, MetaProvider.DEFAULT);
+	}
+
+	/**
+	 * Finds the annotation of the specified type defined on this constructor.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @param mp
+	 * 	The meta provider for looking up annotations on classes/methods/fields.
+	 * @return
+	 * 	The first annotation found, or <jk>null</jk> if it doesn't exist.
+	 */
+	public final <T extends Annotation> T getAnnotation(Class<T> a, MetaProvider mp) {
+		return mp.getAnnotation(a, c);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
+	 *
+	 * @param a The annotation to check for.
+	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
+	 */
+	public final boolean hasAnnotation(Class<? extends Annotation> a) {
+		return getAnnotation(a) != null;
+	}
+
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods

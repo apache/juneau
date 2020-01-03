@@ -98,9 +98,18 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
 	public <T extends Annotation> T getAnnotation(Class<T> a) {
-		if (a == null)
-			return null;
-		return f.getAnnotation(a);
+		return getAnnotation(a, MetaProvider.DEFAULT);
+	}
+
+	/**
+	 * Returns the specified annotation on this field.
+	 *
+	 * @param a The annotation to look for.
+	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <T extends Annotation> T getAnnotation(Class<T> a, MetaProvider mp) {
+		return mp.getAnnotation(a, f);
 	}
 
 	/**

@@ -151,6 +151,58 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Finds the annotation of the specified type defined on this method.
+	 *
+	 * <p>
+	 * If this is a method and the annotation cannot be found on the immediate method, searches methods with the same
+	 * signature on the parent classes or interfaces.
+	 * <br>The search is performed in child-to-parent order.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @return
+	 * 	The annotation if found, or <jk>null</jk> if not.
+	 */
+	public final <T extends Annotation> T getAnnotation(Class<T> a) {
+		return getAnnotation(a, MetaProvider.DEFAULT);
+	}
+
+	/**
+	 * Finds the annotation of the specified type defined on this method.
+	 *
+	 * <p>
+	 * Searches all methods with the same signature on the parent classes or interfaces
+	 * and the return type on the method.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @param mp
+	 * 	The meta provider for looking up annotations on classes/methods/fields.
+	 * @return
+	 * 	The first annotation found, or <jk>null</jk> if it doesn't exist.
+	 */
+	public final <T extends Annotation> T getAnnotation(Class<T> a, MetaProvider mp) {
+		if (a == null)
+			return null;
+		for (Method m2 : getMatching()) {
+			T t = mp.getAnnotation(a, m2);
+			if (t != null)
+				return t;
+		}
+		return null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is present on this method.
+	 *
+	 * @param a The annotation to check for.
+	 * @return <jk>true</jk> if the specified annotation is present on this method.
+	 */
+	public final boolean hasAnnotation(Class<? extends Annotation> a) {
+		return getAnnotation(a) != null;
+	}
+
+	/**
 	 * Returns all annotations of the specified type defined on the specified method.
 	 *
 	 * <p>
@@ -226,7 +278,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return <jk>true</jk> if this method does not have any of the specified annotations.
 	 */
 	@SafeVarargs
-	public final Annotation getAnnotation(Class<? extends Annotation>...c) {
+	public final Annotation getAnyAnnotation(Class<? extends Annotation>...c) {
 		for (Class<? extends Annotation> cc : c) {
 			Annotation a = getAnnotation(cc);
 			if (a != null)
@@ -304,16 +356,6 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		return false;
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")
-	protected <T extends Annotation> T findAnnotation(Class<T> a) {
-		for (Method m2 : getMatching())
-			for (Annotation a2 :  m2.getAnnotations())
-				if (a.isInstance(a2))
-					return (T)a2;
-		return null;
-	}
-
 	AnnotationList appendAnnotationList(AnnotationList al) {
 		ClassInfo c = this.declaringClass;
 		for (ClassInfo ci : c.getParents()) {
@@ -387,7 +429,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 
 	/**
 	 * Returns the generic return type of this method as a {@link ClassInfo} object.
-	 * 
+	 *
 	 * <p>
 	 * Unwraps the type if it's a {@link Value}.
 	 *

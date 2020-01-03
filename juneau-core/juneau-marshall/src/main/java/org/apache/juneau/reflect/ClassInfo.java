@@ -947,7 +947,7 @@ public final class ClassInfo {
 	 *
 	 * @param a
 	 * 	The annotation to search for.
-	 * @param mp The metadata provider for finding annotations on classes and methods.
+	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @return
 	 * 	The annotation if found, or <jk>null</jk> if not.
 	 */
@@ -991,7 +991,7 @@ public final class ClassInfo {
 	 *
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class.
-	 * @param mp The metadata provider for finding annotations on classes and methods.
+	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
 	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a, MetaProvider mp) {
@@ -1049,7 +1049,7 @@ public final class ClassInfo {
 	 *
 	 * @param <T> The annotation to search for.
 	 * @param a The annotation to search for.
-	 * @param mp The metadata provider for finding annotations.
+	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @return
 	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
 	 */
@@ -1074,7 +1074,7 @@ public final class ClassInfo {
 	 *
 	 * @param a
 	 * 	The annotation to search for.
-	 * @param mp The metadata provider for finding annotations.
+	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @return
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
@@ -1189,7 +1189,7 @@ public final class ClassInfo {
 	 * @param <T> The annotation to search for.
 	 * @param l The list of annotations.
 	 * @param a The annotation to search for.
-	 * @param mp The metadata provider for finding annotations on classes and methods.
+	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @return The same list.
 	 */
 	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, MetaProvider mp) {
@@ -1237,7 +1237,7 @@ public final class ClassInfo {
 	 *
 	 * @param l The list of annotations.
 	 * @param a The annotation to search for.
-	 * @param mp The metadata provider for finding annotations on classes and methods.
+	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @return The same list.
 	 */
 	public <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a, MetaProvider mp) {

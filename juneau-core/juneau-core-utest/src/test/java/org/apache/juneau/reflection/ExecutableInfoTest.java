@@ -288,10 +288,12 @@ public class ExecutableInfoTest {
 		public @CA void m(int bar) {}
 	}
 	static ClassInfo c = ClassInfo.of(C.class);
-	static ExecutableInfo
+	static ConstructorInfo
 		c_c1=c.getPublicConstructor(),
 		c_c2=c.getPublicConstructor(String.class),
-		c_c3=c.getPublicConstructor(int.class),
+		c_c3=c.getPublicConstructor(int.class)
+	;
+	static MethodInfo
 		c_m1=c.getPublicMethod("m"),
 		c_m2=c.getPublicMethod("m", String.class),
 		c_m3=c.getPublicMethod("m", int.class)

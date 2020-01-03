@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
@@ -36,7 +35,6 @@ public abstract class ExecutableInfo {
 	private Class<?>[] rawParamTypes, rawExceptionTypes;
 	private Type[] rawGenericParamTypes;
 	private Parameter[] rawParameters;
-	private Map<Class<?>,Optional<Annotation>> annotationMap;
 
 	/**
 	 * Constructor.
@@ -301,57 +299,6 @@ public abstract class ExecutableInfo {
 	public final Annotation[] getParameterAnnotations(int index) {
 		checkIndex(index);
 		return e.getParameterAnnotations()[index];
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation is present on this method.
-	 *
-	 * @param a The annotation to check for.
-	 * @return <jk>true</jk> if the specified annotation is present on this method.
-	 */
-	public final boolean hasAnnotation(Class<? extends Annotation> a) {
-		return getAnnotation(a) != null;
-	}
-
-	/**
-	 * Finds the annotation of the specified type defined on this executable.
-	 *
-	 * <p>
-	 * If this is a method and the annotation cannot be found on the immediate method, searches methods with the same
-	 * signature on the parent classes or interfaces.
-	 * <br>The search is performed in child-to-parent order.
-	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	The annotation if found, or <jk>null</jk> if not.
-	 */
-	@SuppressWarnings("unchecked")
-	public final <T extends Annotation> T getAnnotation(Class<T> a) {
-		if (a == null)
-			return null;
-		Optional<Annotation> o = annotationMap().get(a);
-		if (o == null) {
-			o = Optional.ofNullable(findAnnotation(a));
-			annotationMap().put(a, o);
-		}
-		return o.isPresent() ? (T)o.get() : null;
-	}
-
-	/**
-	 * Searched for the specified annotation on the method.
-	 *
-	 * @param a The annotation to search for on the method.
-	 * @return The annotation if found.
-	 */
-	protected <T extends Annotation> T findAnnotation(Class<T> a) {
-		return e.getAnnotation(a);
-	}
-
-	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {
-		if (annotationMap == null)
-			annotationMap = new ConcurrentHashMap<>();
-		return annotationMap;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

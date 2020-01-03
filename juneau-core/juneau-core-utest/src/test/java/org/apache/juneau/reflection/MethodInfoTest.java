@@ -259,11 +259,11 @@ public class MethodInfoTest {
 
 	@Test
 	public void getAnnotationAny() {
-		check("@A(a1)", c_a1.getAnnotation(AX.class, A.class));
-		check("@A(a2b)", c_a2.getAnnotation(AX.class, A.class));
-		check("@A(a3)", c_a3.getAnnotation(AX.class, A.class));
-		check("@A(a4)", c_a4.getAnnotation(AX.class, A.class));
-		check(null, c_a5.getAnnotation(AX.class, A.class));
+		check("@A(a1)", c_a1.getAnyAnnotation(AX.class, A.class));
+		check("@A(a2b)", c_a2.getAnyAnnotation(AX.class, A.class));
+		check("@A(a3)", c_a3.getAnyAnnotation(AX.class, A.class));
+		check("@A(a4)", c_a4.getAnyAnnotation(AX.class, A.class));
+		check(null, c_a5.getAnyAnnotation(AX.class, A.class));
 	}
 
 	@Test
