@@ -64,7 +64,7 @@ public class ContentTypeTest {
 	//=================================================================================================================
 
 	@Rest(
-		defaultRequestHeaders={" Content-Type : text/p2 "},
+		reqHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
 	)
 	public static class A {
@@ -93,7 +93,7 @@ public class ContentTypeTest {
 	//=================================================================================================================
 
 	@Rest(
-		defaultRequestHeaders={" Content-Type : text/p2 "},
+		reqHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
 	)
 	public static class B {
@@ -137,7 +137,7 @@ public class ContentTypeTest {
 	//=================================================================================================================
 
 	@Rest(
-		defaultRequestHeaders={" Content-Type : text/p2 "},
+		reqHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
 	)
 	public static class C {
@@ -172,11 +172,11 @@ public class ContentTypeTest {
 	//=================================================================================================================
 
 	@Rest(
-		defaultRequestHeaders={" Content-Type : text/p2 "},
+		reqHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
 	)
 	public static class E {
-		@RestMethod(name=PUT, defaultRequestHeaders={"Content-Type: text/p3"}, parsers=P3.class)
+		@RestMethod(name=PUT, reqHeaders={"Content-Type: text/p3"}, parsers=P3.class)
 		public String e(@Body String in) {
 			return in;
 		}
@@ -210,11 +210,11 @@ public class ContentTypeTest {
 	//=================================================================================================================
 
 	@Rest(
-		defaultRequestHeaders={" Content-Type : text/p2 "},
+		reqHeaders={" Content-Type : text/p2 "},
 		parsers={P1.class,P2.class}
 	)
 	public static class F {
-		@RestMethod(name=PUT, defaultRequestHeaders={"Content-Type: text/p3"}, parsers={Inherit.class,P3.class})
+		@RestMethod(name=PUT, reqHeaders={"Content-Type: text/p3"}, parsers={Inherit.class,P3.class})
 		public String f(@Body String in) {
 			return in;
 		}

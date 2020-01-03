@@ -48,6 +48,15 @@
 	<li>
 		Fixed a bug where <c><ja>@RestResource</ja>(debug=<js>"true"</js>)</c> wouldn't log requests if a 
 		<ja>@RestMethod</ja>-annotated method was not matched.
+	<li>
+		Renamed the following annotations:
+		<ul>
+			<li><ja>@Rest(attrs)</ja> --&gt; {@link oajr.annotation.Rest#reqAttrs() @Rest(reqAttrs)}
+			<li><ja>@Rest(defaultRequestHeaders)</ja> --&gt; {@link oajr.annotation.Rest#reqHeaders() @Rest(reqHeaders)}
+			<li><ja>@Rest(defaultResponseHeaders)</ja> --&gt; {@link oajr.annotation.Rest#resHeaders() @Rest(resHeaders)}
+			<li><ja>@RestMethod(attrs)</ja> --&gt; {@link oajr.annotation.RestMethod#reqAttrs() @RestMethod(reqAttrs)}
+			<li><ja>@RestMethod(defaultRequestHeaders)</ja> --&gt; {@link oajr.annotation.RestMethod#reqHeaders() @RestMethod(reqHeaders)}
+		</ul>
 		
 </ul>
 

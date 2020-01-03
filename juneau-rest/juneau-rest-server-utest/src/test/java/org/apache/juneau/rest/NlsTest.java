@@ -35,7 +35,7 @@ public class NlsTest {
 
 	@Rest(
 		serializers={A01.class},
-		attrs={"TestProperty:$L{key1}"},
+		reqAttrs={"TestProperty:$L{key1}"},
 		messages="NlsTest"
 	)
 	public static class A {
@@ -44,7 +44,7 @@ public class NlsTest {
 			return null;
 		}
 		@RestMethod(
-			attrs={"TestProperty:$L{key2}"}
+			reqAttrs={"TestProperty:$L{key2}"}
 		)
 		public String a02() {
 			return null;

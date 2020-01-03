@@ -39,27 +39,10 @@ public @interface RestMethod {
 
 	/**
 	 * Default request attributes.
-	 *
-	 * <p>
-	 * Specifies default values for request attributes if they're not already set on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, attrs={<js>"Foo: bar"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_attrs}
-	 * </ul>
+	 * 
+	 * @deprecated Use {@link #reqAttrs()}
 	 */
+	@Deprecated
 	String[] attrs() default {};
 
 	/**
@@ -202,7 +185,7 @@ public @interface RestMethod {
 	 * The default value for the <c>Accept</c> header if not specified on a request.
 	 *
 	 * <p>
-	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
+	 * This is a shortcut for using {@link #reqHeaders()} for just this specific header.
 	 */
 	String defaultAccept() default "";
 
@@ -231,7 +214,7 @@ public @interface RestMethod {
 	 * The default value for the <c>Content-Type</c> header if not specified on a request.
 	 *
 	 * <p>
-	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
+	 * This is a shortcut for using {@link #reqHeaders()} for just this specific header.
 	 */
 	String defaultContentType() default "";
 
@@ -292,27 +275,10 @@ public @interface RestMethod {
 
 	/**
 	 * Default request headers.
-	 *
-	 * <p>
-	 * Specifies default values for request headers if they're not passed in through the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
-	 * </ul>
+	 * 
+	 * @deprecated Use {@link #reqHeaders()}
 	 */
+	@Deprecated
 	String[] defaultRequestHeaders() default {};
 
 	/**
@@ -639,6 +605,56 @@ public @interface RestMethod {
 	 * convenience.
 	 */
 	Property[] properties() default {};
+
+	/**
+	 * Default request attributes.
+	 *
+	 * <p>
+	 * Specifies default values for request attributes if they're not already set on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, reqAttrs={<js>"Foo: bar"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_reqAttrs}
+	 * </ul>
+	 */
+	String[] reqAttrs() default {};
+
+	/**
+	 * Default request headers.
+	 *
+	 * <p>
+	 * Specifies default values for request headers if they're not passed in through the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, reqHeaders={<js>"Accept: text/json"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_reqHeaders}
+	 * </ul>
+	 */
+	String[] reqHeaders() default {};
 
 	/**
 	 * Declared roles.

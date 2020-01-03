@@ -271,10 +271,10 @@ public class RestMethodInheritTest {
 	// Test properties inheritance.
 	//=================================================================================================================
 
-	@Rest(attrs={"p1:v1","p2:v2"})
+	@Rest(reqAttrs={"p1:v1","p2:v2"})
 	public static class E {}
 
-	@Rest(attrs={"p2:v2a","p3:v3","p4:v4"})
+	@Rest(reqAttrs={"p2:v2a","p3:v3","p4:v4"})
 	public static class E01 extends E {}
 
 	@Rest
@@ -284,7 +284,7 @@ public class RestMethodInheritTest {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
 			return transform(attrs);
 		}
-		@RestMethod(attrs={"p4:v4a","p5:v5"})
+		@RestMethod(reqAttrs={"p4:v4a","p5:v5"})
 		public ObjectMap e02(RequestAttributes attrs, @HasQuery("override") boolean override) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.

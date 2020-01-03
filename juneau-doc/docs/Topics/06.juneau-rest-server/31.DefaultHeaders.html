@@ -20,10 +20,10 @@ Default Headers
 </p>
 <ul class='javatree'>
 	<li class='ja'>
-		{@link oajr.annotation.Rest#defaultRequestHeaders() Rest(defaultRequestHeaders)} 
+		{@link oajr.annotation.Rest#reqHeaders() Rest(reqHeaders)} 
 		<br>Defines default headers on request when the client doesn't specify them.
 	<li class='ja'>
-		{@link oajr.annotation.Rest#defaultResponseHeaders() Rest(defaultResponseHeaders)}
+		{@link oajr.annotation.Rest#resHeaders() Rest(resHeaders)}
 		<br>Appends the specified headers if they weren't already set programmatically.	
 </ul>		
 
@@ -33,10 +33,10 @@ Default Headers
 	<ja>@Rest</ja>(
 
 		<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-		defaultRequestHeaders={<js>"Accept: text/json"</js>},
+		reqHeaders={<js>"Accept: text/json"</js>},
 
 		<jc>// Add a version header attribute to all responses</jc>
-		defaultResponseHeaders={<js>"X-Version: 1.0"</js>}
+		resHeaders={<js>"X-Version: 1.0"</js>}
 	)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 		...
@@ -50,9 +50,9 @@ Default Headers
 		{@link oajr.RestContextBuilder}
 		<ul>
 			<li class='jm'>
-				{@link oajr.RestContextBuilder#defaultRequestHeaders(String[])}
+				{@link oajr.RestContextBuilder#reqHeaders(String[])}
 			<li class='jm'>
-				{@link oajr.RestContextBuilder#defaultResponseHeaders(String[])}
+				{@link oajr.RestContextBuilder#resHeaders(String[])}
 		</ul>
 	</li>
 </ul>

@@ -1113,202 +1113,27 @@ public final class RestContext extends BeanContext {
 
 	/**
 	 * Configuration property:  Default request attributes.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.attrs.smo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
-	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#attrs()}
-	 * 			<li class='ja'>{@link RestMethod#attrs()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#attrs(String...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#attr(String,Object)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies default values for request attributes if they're not already set on the request.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Strings are in the format <js>"Name: value"</js>.
-	 * 	<li>
-	 * 		Affects values returned by the following methods:
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestRequest#getAttribute(String)}.
-	 * 			<li class='jm'>{@link RestRequest#getAttributes()}.
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo: bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder
-	 * 				.attr(<js>"Foo"</js>, <js>"bar"</js>);
-	 * 				.attr(<js>"Baz: true"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.addTo(<jsf>REST_attrs</jsf>, <js>"Foo"</js>, <js>"bar"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.attr(<js>"Foo"</js>, <js>"bar"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestMethod</ja>(attrs={<js>"Foo: bar"</js>})
-	 * 		public Object myMethod() {...}
-	 * 	}
-	 * </p>
+	 * 
+	 * @deprecated Use {@link #REST_reqAttrs}
 	 */
-	public static final String REST_attrs = PREFIX + ".attrs.smo";
+	@Deprecated
+	public static final String REST_attrs = PREFIX + ".reqAttrs.smo";
 
 	/**
 	 * Configuration property:  Default request headers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.defaultRequestHeaders.smo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
-	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#defaultRequestHeaders()}
-	 * 			<li class='ja'>{@link RestMethod#defaultRequestHeaders()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#defaultRequestHeader(String,Object)}
-	 * 			<li class='jm'>{@link RestContextBuilder#defaultRequestHeaders(String...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies default values for request headers if they're not passed in through the request.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Strings are in the format <js>"Header-Name: header-value"</js>.
-	 * 	<li>
-	 * 		Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
-	 * 	<li>
-	 * 		The most useful reason for this annotation is to provide a default <c>Accept</c> header when one is not
-	 * 		specified so that a particular default {@link Serializer} is picked.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(defaultRequestHeaders={<js>"Accept: application/json"</js>, <js>"My-Header: $C{REST/myHeaderValue}"</js>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder
-	 * 				.defaultRequestHeader(<js>"Accept"</js>, <js>"application/json"</js>);
-	 * 				.defaultRequestHeaders(<js>"My-Header: foo"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.addTo(<jsf>REST_defaultRequestHeaders</jsf>, <js>"Accept"</js>, <js>"application/json"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.defaultRequestHeader(<js>"Accept"</js>, <js>"application/json"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Override at the method level.</jc>
-	 * 		<ja>@RestMethod</ja>(defaultRequestHeaders={<js>"Accept: text/xml"</js>})
-	 * 		public Object myMethod() {...}
-	 * 	}
-	 * </p>
+	 * 
+	 * @deprecated Use {@link #REST_reqHeaders}
 	 */
-	public static final String REST_defaultRequestHeaders = PREFIX + ".defaultRequestHeaders.smo";
+	@Deprecated
+	public static final String REST_defaultRequestHeaders = PREFIX + ".reqHeaders.smo";
 
 	/**
 	 * Configuration property:  Default response headers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.defaultResponseHeaders.omo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
-	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#defaultResponseHeaders()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#defaultResponseHeader(String,Object)}
-	 * 			<li class='jm'>{@link RestContextBuilder#defaultResponseHeaders(String...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies default values for response headers if they're not set after the Java REST method is called.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Strings are in the format <js>"Header-Name: header-value"</js>.
-	 * 	<li>
-	 * 		This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of
-	 * 		the Java methods.
-	 * 	<li>
-	 * 		The header value will not be set if the header value has already been specified (hence the 'default' in the name).
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(defaultResponseHeaders={<js>"Content-Type: $C{REST/defaultContentType,text/plain}"</js>,<js>"My-Header: $C{REST/myHeaderValue}"</js>})
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder
-	 * 				.defaultResponseHeader(<js>"Content-Type"</js>, <js>"text/plain"</js>);
-	 * 				.defaultResponseHeaders(<js>"My-Header: foo"</js>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder
-	 * 				.addTo(<jsf>REST_defaultRequestHeaders</jsf>, <js>"Accept"</js>, <js>"application/json"</js>);
-	 * 				.addTo(<jsf>REST_defaultRequestHeaders</jsf>, <js>"My-Header"</js>, <js>"foo"</js>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.defaultResponseHeader(<js>"Content-Type"</js>, <js>"text/plain"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
+	 * 
+	 * @deprecated Use {@link #REST_resHeaders}
 	 */
-	public static final String REST_defaultResponseHeaders = PREFIX + ".defaultResponseHeaders.omo";
+	@Deprecated
+	public static final String REST_defaultResponseHeaders = PREFIX + ".resHeaders.omo";
 
 	/**
 	 * Configuration property:  Compression encoders.
@@ -2300,6 +2125,205 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_renderResponseStackTraces = PREFIX + ".renderResponseStackTraces.b";
+
+	/**
+	 * Configuration property:  Default request attributes.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.reqAttrs.smo"</js>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
+	 * 	<li><b>Default:</b>  empty map
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Rest#reqAttrs()}
+	 * 			<li class='ja'>{@link RestMethod#reqAttrs()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#reqAttrs(String...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#reqAttr(String,Object)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies default values for request attributes if they're not already set on the request.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Strings are in the format <js>"Name: value"</js>.
+	 * 	<li>
+	 * 		Affects values returned by the following methods:
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestRequest#getAttribute(String)}.
+	 * 			<li class='jm'>{@link RestRequest#getAttributes()}.
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(reqAttrs={<js>"Foo: bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder
+	 * 				.attr(<js>"Foo"</js>, <js>"bar"</js>);
+	 * 				.attr(<js>"Baz: true"</js>);
+	 *
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.addTo(<jsf>REST_reqAttrs</jsf>, <js>"Foo"</js>, <js>"bar"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.reqAttr(<js>"Foo"</js>, <js>"bar"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestMethod</ja>(reqAttrs={<js>"Foo: bar"</js>})
+	 * 		public Object myMethod() {...}
+	 * 	}
+	 * </p>
+	 */
+	public static final String REST_reqAttrs = PREFIX + ".reqAttrs.smo";
+
+	/**
+	 * Configuration property:  Default request headers.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.reqHeaders.smo"</js>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>Default:</b>  empty map
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Rest#reqHeaders()}
+	 * 			<li class='ja'>{@link RestMethod#reqHeaders()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#reqHeader(String,Object)}
+	 * 			<li class='jm'>{@link RestContextBuilder#reqHeaders(String...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies default values for request headers if they're not passed in through the request.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Strings are in the format <js>"Header-Name: header-value"</js>.
+	 * 	<li>
+	 * 		Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
+	 * 	<li>
+	 * 		The most useful reason for this annotation is to provide a default <c>Accept</c> header when one is not
+	 * 		specified so that a particular default {@link Serializer} is picked.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(reqHeaders={<js>"Accept: application/json"</js>, <js>"My-Header: $C{REST/myHeaderValue}"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder
+	 * 				.reqHeader(<js>"Accept"</js>, <js>"application/json"</js>);
+	 * 				.reqHeaders(<js>"My-Header: foo"</js>);
+	 *
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder.addTo(<jsf>REST_reqHeaders</jsf>, <js>"Accept"</js>, <js>"application/json"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.reqHeader(<js>"Accept"</js>, <js>"application/json"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Override at the method level.</jc>
+	 * 		<ja>@RestMethod</ja>(reqHeaders={<js>"Accept: text/xml"</js>})
+	 * 		public Object myMethod() {...}
+	 * 	}
+	 * </p>
+	 */
+	public static final String REST_reqHeaders = PREFIX + ".reqHeaders.smo";
+
+	/**
+	 * Configuration property:  Default response headers.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestContext.resHeaders.omo"</js>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>Default:</b>  empty map
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link Rest#resHeaders()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestContextBuilder#resHeader(String,Object)}
+	 * 			<li class='jm'>{@link RestContextBuilder#resHeaders(String...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Specifies default values for response headers if they're not set after the Java REST method is called.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Strings are in the format <js>"Header-Name: header-value"</js>.
+	 * 	<li>
+	 * 		This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of
+	 * 		the Java methods.
+	 * 	<li>
+	 * 		The header value will not be set if the header value has already been specified (hence the 'default' in the name).
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+	 * 	<ja>@Rest</ja>(resHeaders={<js>"Content-Type: $C{REST/defaultContentType,text/plain}"</js>,<js>"My-Header: $C{REST/myHeaderValue}"</js>})
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 *
+	 * 			<jc>// Using method on builder.</jc>
+	 * 			builder
+	 * 				.resHeader(<js>"Content-Type"</js>, <js>"text/plain"</js>);
+	 * 				.resHeaders(<js>"My-Header: foo"</js>);
+	 *
+	 * 			<jc>// Same, but using property.</jc>
+	 * 			builder
+	 * 				.addTo(<jsf>REST_resHeaders</jsf>, <js>"Accept"</js>, <js>"application/json"</js>);
+	 * 				.addTo(<jsf>REST_resHeaders</jsf>, <js>"My-Header"</js>, <js>"foo"</js>);
+	 * 		}
+	 *
+	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			builder.resHeader(<js>"Content-Type"</js>, <js>"text/plain"</js>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 */
+	public static final String REST_resHeaders = PREFIX + ".resHeaders.omo";
 
 	/**
 	 * Configuration property:  REST resource resolver.
@@ -3537,10 +3561,10 @@ public final class RestContext extends BeanContext {
 		consumes,
 		produces;
 	private final Map<String,Object>
-		defaultRequestHeaders,
-		defaultResponseHeaders,
+		reqHeaders,
+		resHeaders,
 		staticFileResponseHeaders;
-	private final ObjectMap defaultRequestAttributes;
+	private final ObjectMap reqAttrs;
 	private final ResponseHandler[] responseHandlers;
 	private final MimetypesFileTypeMap mimetypesFileTypeMap;
 	private final StaticFiles[] staticFiles;
@@ -3683,12 +3707,12 @@ public final class RestContext extends BeanContext {
 				_paramResolvers.put(rp.forClass(), rp);
 			paramResolvers = unmodifiableMap(_paramResolvers);
 
-			Map<String,Object> _defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-			_defaultRequestHeaders.putAll(getMapProperty(REST_defaultRequestHeaders, String.class));
-			defaultRequestHeaders = unmodifiableMap(new LinkedHashMap<>(_defaultRequestHeaders));
+			Map<String,Object> _reqHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+			_reqHeaders.putAll(getMapProperty(REST_reqHeaders, String.class));
+			reqHeaders = unmodifiableMap(new LinkedHashMap<>(_reqHeaders));
 
-			defaultRequestAttributes = new ObjectMap(getMapProperty(REST_attrs, Object.class)).unmodifiable();
-			defaultResponseHeaders = getMapProperty(REST_defaultResponseHeaders, Object.class);
+			reqAttrs = new ObjectMap(getMapProperty(REST_reqAttrs, Object.class)).unmodifiable();
+			resHeaders = getMapProperty(REST_resHeaders, Object.class);
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);
 
 			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, NoOpRestLogger.class, resourceResolver, this);
@@ -4841,45 +4865,45 @@ public final class RestContext extends BeanContext {
 	 * Returns the default request headers for this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * 	<li class='jf'>{@link RestContext#REST_reqHeaders}
 	 * </ul>
 	 *
 	 * @return
 	 * 	The default request headers for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Map<String,Object> getDefaultRequestHeaders() {
-		return defaultRequestHeaders;
+	public Map<String,Object> getReqHeaders() {
+		return reqHeaders;
 	}
 
 	/**
-	 * Returns the default request headers for this resource.
+	 * Returns the default request attributes for this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * 	<li class='jf'>{@link RestContext#REST_reqAttrs}
 	 * </ul>
 	 *
 	 * @return
 	 * 	The default request headers for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public ObjectMap getDefaultRequestAttributes() {
-		return defaultRequestAttributes;
+	public ObjectMap getReqAttrs() {
+		return reqAttrs;
 	}
 
 	/**
 	 * Returns the default response headers for this resource.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * 	<li class='jf'>{@link RestContext#REST_resHeaders}
 	 * </ul>
 	 *
 	 * @return
 	 * 	The default response headers for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Map<String,Object> getDefaultResponseHeaders() {
-		return defaultResponseHeaders;
+	public Map<String,Object> getResHeaders() {
+		return resHeaders;
 	}
 
 	/**
@@ -5299,8 +5323,6 @@ public final class RestContext extends BeanContext {
 				.append("callHandler", callHandler)
 				.append("clientVersionHeader", clientVersionHeader)
 				.append("consumes", consumes)
-				.append("defaultRequestHeaders", defaultRequestHeaders)
-				.append("defaultResponseHeaders", defaultResponseHeaders)
 				.append("infoProvider", infoProvider)
 				.append("logger", logger)
 				.append("paramResolvers", paramResolvers)
@@ -5310,6 +5332,8 @@ public final class RestContext extends BeanContext {
 				.append("produces", produces)
 				.append("properties", properties)
 				.append("renderResponseStackTraces", renderResponseStackTraces)
+				.append("reqHeaders", reqHeaders)
+				.append("resHeaders", resHeaders)
 				.append("resourceResolver", resourceResolver)
 				.append("responseHandlers", responseHandlers)
 				.append("serializers", serializers)

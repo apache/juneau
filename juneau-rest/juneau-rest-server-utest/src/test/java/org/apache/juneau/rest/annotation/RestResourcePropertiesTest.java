@@ -37,7 +37,7 @@ public class RestResourcePropertiesTest {
 
 	@Rest(
 		path="/p1",
-		attrs={
+		reqAttrs={
 			"A1: a1",
 			"A2: a2",
 			"foo: bar",
@@ -54,7 +54,7 @@ public class RestResourcePropertiesTest {
 	public static class A {
 
 		@RestMethod(name=GET, path="/p2",
-			attrs={"B1: b1", "B2:b"},
+			reqAttrs={"B1: b1", "B2:b"},
 			serializers=A01.class
 		)
 		public void testPropertiesDefinedOnMethod(RestResponse res) {

@@ -151,20 +151,10 @@ public @interface Rest {
 
 	/**
 	 * Default request attributes.
-	 *
-	 * <p>
-	 * Specifies default values for request attributes if they're not already set on the request.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_attrs}
-	 * </ul>
+	 * 
+	 * @deprecated Use {@link #reqAttrs()}
 	 */
+	@Deprecated
 	String[] attrs() default {};
 
 	/**
@@ -261,7 +251,7 @@ public @interface Rest {
 	 * The default value for the <c>Accept</c> header if not specified on a request.
 	 *
 	 * <p>
-	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
+	 * This is a shortcut for using {@link #reqHeaders()} for just this specific header.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -296,7 +286,7 @@ public @interface Rest {
 	 * The default value for the <c>Content-Type</c> header if not specified on a request.
 	 *
 	 * <p>
-	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
+	 * This is a shortcut for using {@link #reqHeaders()} for just this specific header.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -308,38 +298,18 @@ public @interface Rest {
 
 	/**
 	 * Default request headers.
-	 *
-	 * <p>
-	 * Specifies default values for request headers if they're not passed in through the request.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
-	 * </ul>
+	 * 
+	 * @deprecated Use {@link #reqHeaders()}
 	 */
+	@Deprecated
 	String[] defaultRequestHeaders() default {};
 
 	/**
 	 * Default response headers.
-	 *
-	 * <p>
-	 * Specifies default values for response headers if they're not set after the Java REST method is called.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
-	 * </ul>
+	 * 
+	 * @deprecated Use {@link #resHeaders()}
 	 */
+	@Deprecated
 	String[] defaultResponseHeaders() default {};
 
 	/**
@@ -717,6 +687,60 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String renderResponseStackTraces() default "";
+
+	/**
+	 * Default request attributes.
+	 *
+	 * <p>
+	 * Specifies default values for request attributes if they're not already set on the request.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_reqAttrs}
+	 * </ul>
+	 */
+	String[] reqAttrs() default {};
+
+	/**
+	 * Default request headers.
+	 *
+	 * <p>
+	 * Specifies default values for request headers if they're not passed in through the request.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_reqHeaders}
+	 * </ul>
+	 */
+	String[] reqHeaders() default {};
+
+	/**
+	 * Default response headers.
+	 *
+	 * <p>
+	 * Specifies default values for response headers if they're not set after the Java REST method is called.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_resHeaders}
+	 * </ul>
+	 */
+	String[] resHeaders() default {};
 
 	/**
 	 * REST resource resolver.

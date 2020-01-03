@@ -80,7 +80,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		this.inner = res;
 		this.request = req;
 
-		for (Map.Entry<String,Object> e : context.getDefaultResponseHeaders().entrySet())
+		for (Map.Entry<String,Object> e : context.getResHeaders().entrySet())
 			setHeaderSafe(e.getKey(), stringify(e.getValue()));
 
 		try {

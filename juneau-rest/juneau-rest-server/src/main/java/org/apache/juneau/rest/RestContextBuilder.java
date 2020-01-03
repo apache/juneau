@@ -869,50 +869,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Default request attributes.
-	 *
-	 * <p>
-	 * Specifies default values for request attributes if they're not already set on the request.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_attrs}
-	 * </ul>
-	 *
-	 * @param values The attributes in the format <js>"Name: value"</js>.
-	 * @return This object (for method chaining).
-	 * @throws RestServletException If malformed header is found.
+	 * 
+	 * @deprecated Use {@link #reqAttrs(String...)}
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	public RestContextBuilder attrs(String...values) throws RestServletException {
-		for (String v : values) {
-			String[] p = RestUtils.parseKeyValuePair(v);
-			if (p == null)
-				throw new RestServletException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", v);
-			defaultRequestHeader(p[0], p[1]);
-		}
-		return this;
+		return reqAttrs(values);
 	}
 
 	/**
 	 * Configuration property:  Default request headers.
-	 *
-	 * <p>
-	 * Specifies default values for request headers if they're not passed in through the request.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
-	 * </ul>
-	 *
-	 * @param headers The headers in the format <js>"Header-Name: header-value"</js>.
-	 * @return This object (for method chaining).
-	 * @throws RestServletException If malformed header is found.
+	 * 
+	 * @deprecated Use {@link #reqHeaders(String...)}
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	public RestContextBuilder defaultRequestHeaders(String...headers) throws RestServletException {
-		for (String header : headers) {
-			String[] h = RestUtils.parseHeader(header);
-			if (h == null)
-				throw new RestServletException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-			defaultRequestHeader(h[0], h[1]);
-		}
-		return this;
+		return reqHeaders(headers);
 	}
 
 	/**
@@ -925,7 +899,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder defaultAccept(String value) {
 		if (isNotEmpty(value))
-			defaultRequestHeader("Accept", value);
+			reqHeader("Accept", value);
 		return this;
 	}
 
@@ -939,86 +913,52 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder defaultContentType(String value) {
 		if (isNotEmpty(value))
-			defaultRequestHeader("Content-Type", value);
+			reqHeader("Content-Type", value);
 		return this;
 	}
 
 	/**
 	 * Configuration property:  Default request attribute.
 	 *
-	 * <p>
-	 * Same as {@link #attrs(String...)} but adds a single attribute name/value pair.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_attrs}
-	 * </ul>
-	 *
-	 * @param name The HTTP header name.
-	 * @param value The HTTP header value.
-	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #reqAttr(String, Object)}
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	public RestContextBuilder attr(String name, Object value) {
-		return addTo(REST_attrs, name, value);
+		return reqAttr(name, value);
 	}
 
 	/**
 	 * Configuration property:  Default request headers.
-	 *
-	 * <p>
-	 * Same as {@link #defaultRequestHeaders(String...)} but adds a single header name/value pair.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
-	 * </ul>
-	 *
-	 * @param name The HTTP header name.
-	 * @param value The HTTP header value.
-	 * @return This object (for method chaining).
+	 * 
+	 * @deprecated Use {@link #reqHeader(String,Object)}
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	public RestContextBuilder defaultRequestHeader(String name, Object value) {
-		return addTo(REST_defaultRequestHeaders, name, value);
+		return reqHeader(name, value);
 	}
 
 	/**
 	 * Configuration property:  Default response headers.
 	 *
-	 * <p>
-	 * Specifies default values for response headers if they're not set after the Java REST method is called.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
-	 * </ul>
-	 *
-	 * @param headers The headers in the format <js>"Header-Name: header-value"</js>.
-	 * @return This object (for method chaining).
-	 * @throws RestServletException If malformed header is found.
+	 * @deprecated Use {@link #resHeaders(String...)}
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	public RestContextBuilder defaultResponseHeaders(String...headers) throws RestServletException {
-		for (String header : headers) {
-			String[] h = RestUtils.parseHeader(header);
-			if (h == null)
-				throw new RestServletException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-			defaultResponseHeader(h[0], h[1]);
-		}
-		return this;
+		return resHeaders(headers);
 	}
 
 	/**
 	 * Configuration property:  Default response headers.
 	 *
-	 * <p>
-	 * Same as {@link #defaultResponseHeaders(String...)} but adds a single header name/value pair.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
-	 * </ul>
-	 *
-	 * @param name The HTTP header name.
-	 * @param value The HTTP header value.
-	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #resHeader(String, Object)}
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	public RestContextBuilder defaultResponseHeader(String name, Object value) {
-		return addTo(REST_defaultResponseHeaders, name, value);
+		return resHeader(name, value);
 	}
 
 	/**
@@ -1507,6 +1447,132 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder renderResponseStackTraces() {
 		return set(REST_renderResponseStackTraces, true);
+	}
+
+	/**
+	 * Configuration property:  Default request attribute.
+	 *
+	 * <p>
+	 * Same as {@link #reqAttrs(String...)} but adds a single attribute name/value pair.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_reqAttrs}
+	 * </ul>
+	 *
+	 * @param name The HTTP header name.
+	 * @param value The HTTP header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder reqAttr(String name, Object value) {
+		return addTo(REST_reqAttrs, name, value);
+	}
+
+	/**
+	 * Configuration property:  Default request attributes.
+	 *
+	 * <p>
+	 * Specifies default values for request attributes if they're not already set on the request.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_reqAttrs}
+	 * </ul>
+	 *
+	 * @param values The attributes in the format <js>"Name: value"</js>.
+	 * @return This object (for method chaining).
+	 * @throws RestServletException If malformed header is found.
+	 */
+	public RestContextBuilder reqAttrs(String...values) throws RestServletException {
+		for (String v : values) {
+			String[] p = RestUtils.parseKeyValuePair(v);
+			if (p == null)
+				throw new RestServletException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", v);
+			reqHeader(p[0], p[1]);
+		}
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Default request headers.
+	 *
+	 * <p>
+	 * Same as {@link #reqHeaders(String...)} but adds a single header name/value pair.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_reqHeaders}
+	 * </ul>
+	 *
+	 * @param name The HTTP header name.
+	 * @param value The HTTP header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder reqHeader(String name, Object value) {
+		return addTo(REST_reqHeaders, name, value);
+	}
+
+	/**
+	 * Configuration property:  Default request headers.
+	 *
+	 * <p>
+	 * Specifies default values for request headers if they're not passed in through the request.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_reqHeaders}
+	 * </ul>
+	 *
+	 * @param headers The headers in the format <js>"Header-Name: header-value"</js>.
+	 * @return This object (for method chaining).
+	 * @throws RestServletException If malformed header is found.
+	 */
+	public RestContextBuilder reqHeaders(String...headers) throws RestServletException {
+		for (String header : headers) {
+			String[] h = RestUtils.parseHeader(header);
+			if (h == null)
+				throw new RestServletException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
+			reqHeader(h[0], h[1]);
+		}
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Default response headers.
+	 *
+	 * <p>
+	 * Specifies default values for response headers if they're not set after the Java REST method is called.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_resHeaders}
+	 * </ul>
+	 *
+	 * @param headers The headers in the format <js>"Header-Name: header-value"</js>.
+	 * @return This object (for method chaining).
+	 * @throws RestServletException If malformed header is found.
+	 */
+	public RestContextBuilder resHeaders(String...headers) throws RestServletException {
+		for (String header : headers) {
+			String[] h = RestUtils.parseHeader(header);
+			if (h == null)
+				throw new RestServletException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
+			resHeader(h[0], h[1]);
+		}
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Default response headers.
+	 *
+	 * <p>
+	 * Same as {@link #resHeaders(String...)} but adds a single header name/value pair.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_resHeaders}
+	 * </ul>
+	 *
+	 * @param name The HTTP header name.
+	 * @param value The HTTP header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder resHeader(String name, Object value) {
+		return addTo(REST_resHeaders, name, value);
 	}
 
 	/**

@@ -196,7 +196,7 @@ public @interface RestResource {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_attrs}
+	 * 	<li class='jf'>{@link RestContext#REST_reqAttrs}
 	 * </ul>
 	 */
 	String[] attrs() default {};
@@ -368,7 +368,7 @@ public @interface RestResource {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
+	 * 	<li class='jf'>{@link RestContext#REST_reqHeaders}
 	 * </ul>
 	 */
 	String[] defaultRequestHeaders() default {};
@@ -386,7 +386,7 @@ public @interface RestResource {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultResponseHeaders}
+	 * 	<li class='jf'>{@link RestContext#REST_resHeaders}
 	 * </ul>
 	 */
 	String[] defaultResponseHeaders() default {};

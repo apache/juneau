@@ -459,7 +459,7 @@ public class HeadersTest {
 
 	@Rest
 	public static class C {
-		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
+		@RestMethod(reqHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public ObjectMap c(RequestHeaders headers) {
 			return new ObjectMap()
 				.append("h1", headers.getString("H1"))
@@ -470,15 +470,15 @@ public class HeadersTest {
 	static MockRest c = MockRest.build(C.class, null);
 
 	@Test
-	public void c01_defaultRequestHeaders_default() throws Exception {
+	public void c01_reqHeaders_default() throws Exception {
 		c.get("/c").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
-	public void c02_defaultRequestHeaders_override() throws Exception {
+	public void c02_reqHeaders_override() throws Exception {
 		c.get("/c").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
-	public void c03_defaultRequestHeaders_override_caseInsensitive() throws Exception {
+	public void c03_reqHeaders_override_caseInsensitive() throws Exception {
 		c.get("/c").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
@@ -488,7 +488,7 @@ public class HeadersTest {
 
 	@Rest
 	public static class D {
-		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
+		@RestMethod(reqHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public ObjectMap d(RequestHeaders headers) {
 			return new ObjectMap()
 				.append("h1", headers.getString("h1"))
@@ -499,15 +499,15 @@ public class HeadersTest {
 	static MockRest d = MockRest.build(D.class, null);
 
 	@Test
-	public void d01_defaultRequestHeadersCaseInsensitive_default() throws Exception {
+	public void d01_reqHeadersCaseInsensitive_default() throws Exception {
 		d.get("/d").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
-	public void d02_defaultRequestHeadersCaseInsensitive_override() throws Exception {
+	public void d02_reqHeadersCaseInsensitive_override() throws Exception {
 		d.get("/d").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
-	public void d03_defaultRequestHeadersCaseInsensitive_override_caseInsensitive() throws Exception {
+	public void d03_reqHeadersCaseInsensitive_override_caseInsensitive() throws Exception {
 		d.get("/d").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
@@ -629,7 +629,7 @@ public class HeadersTest {
 
 	@Rest
 	public static class H {
-		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
+		@RestMethod(reqHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public ObjectMap h(@Header(value="h1",_default="4") String h1, @Header(value="h2",_default="5") String h2, @Header(value="h3",_default="6") String h3) {
 			return new ObjectMap()
 				.append("h1", h1)

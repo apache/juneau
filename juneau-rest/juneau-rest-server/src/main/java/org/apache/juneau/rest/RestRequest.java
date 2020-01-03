@@ -111,7 +111,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private UriContext uriContext;
 	private String charset, authorityPath;
 	private RequestHeaders headers;
-	private RequestAttributes attributes;
+	private RequestAttributes attrs;
 	private Config cf;
 	private Swagger swagger;
 	private SerializerSessionArgs serializerSessionArgs;
@@ -198,10 +198,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.addDefault(rjm.defaultQuery)
 			.parser(rjm.partParser);
 		this.headers
-			.addDefault(rjm.defaultRequestHeaders)
-			.addDefault(context.getDefaultRequestHeaders())
+			.addDefault(rjm.reqHeaders)
+			.addDefault(context.getReqHeaders())
 			.parser(rjm.partParser);
-		this.attributes = new RequestAttributes(this, rjm.defaultRequestAttributes);
+		this.attrs = new RequestAttributes(this, rjm.reqAttrs);
 		this.body
 			.encoders(rjm.encoders)
 			.parsers(rjm.parsers)
@@ -510,7 +510,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public RequestAttributes getAttributes() {
-		return attributes;
+		return attrs;
 	}
 
 	/**
@@ -1689,7 +1689,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			sb.append("\t").append(h).append(": ").append(getHeader(h)).append("\n");
 		}
 		sb.append("---Default Servlet Headers---\n");
-		for (Map.Entry<String,Object> e : context.getDefaultRequestHeaders().entrySet()) {
+		for (Map.Entry<String,Object> e : context.getReqHeaders().entrySet()) {
 			sb.append("\t").append(e.getKey()).append(": ").append(e.getValue()).append("\n");
 		}
 		if (javaMethod == null) {

@@ -48,6 +48,7 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		super(c, r);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void apply(AnnotationInfo<Rest> ai, PropertyStoreBuilder psb) {
 		Rest a = ai.getAnnotation();
@@ -92,6 +93,14 @@ public class RestConfigApply extends ConfigApply<Rest> {
 				psb.addTo(REST_attrs, ra2[0], ra2[1]);
 		}
 
+		for (String ra : strings(a.reqAttrs())) {
+			String[] ra2 = RestUtils.parseKeyValuePair(ra);
+			if (ra2 == null)
+				throw new FormattedRuntimeException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", ra);
+			if (isNotEmpty(ra2[1]))
+				psb.addTo(REST_reqAttrs, ra2[0], ra2[1]);
+		}
+
 		for (String header : strings(a.defaultRequestHeaders())) {
 			String[] h = RestUtils.parseHeader(header);
 			if (h == null)
@@ -100,16 +109,24 @@ public class RestConfigApply extends ConfigApply<Rest> {
 				psb.addTo(REST_defaultRequestHeaders, h[0], h[1]);
 		}
 
+		for (String header : strings(a.reqHeaders())) {
+			String[] h = RestUtils.parseHeader(header);
+			if (h == null)
+				throw new FormattedRuntimeException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
+			if (isNotEmpty(h[1]))
+				psb.addTo(REST_reqHeaders, h[0], h[1]);
+		}
+
 		if (a.defaultAccept().length() > 0) {
 			s = string(a.defaultAccept());
 			if (isNotEmpty(s))
-				psb.addTo(REST_defaultRequestHeaders, "Accept", s);
+				psb.addTo(REST_reqHeaders, "Accept", s);
 		}
 
 		if (a.defaultContentType().length() > 0) {
 			s = string(a.defaultContentType());
 			if (isNotEmpty(s))
-				psb.addTo(REST_defaultRequestHeaders, "Content-Type", s);
+				psb.addTo(REST_reqHeaders, "Content-Type", s);
 
 		}
 
@@ -119,6 +136,14 @@ public class RestConfigApply extends ConfigApply<Rest> {
 				throw new FormattedRuntimeException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
 			if (isNotEmpty(h[1]))
 				psb.addTo(REST_defaultResponseHeaders, h[0], h[1]);
+		}
+
+		for (String header : strings(a.resHeaders())) {
+			String[] h = parseHeader(header);
+			if (h == null)
+				throw new FormattedRuntimeException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
+			if (isNotEmpty(h[1]))
+				psb.addTo(REST_resHeaders, h[0], h[1]);
 		}
 
 		psb.addTo(REST_responseHandlers, a.responseHandlers());

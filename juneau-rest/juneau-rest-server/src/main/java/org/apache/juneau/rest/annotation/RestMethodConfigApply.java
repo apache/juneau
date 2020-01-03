@@ -88,16 +88,24 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 				psb.addTo(REST_defaultRequestHeaders, h[0], h[1]);
 		}
 
+		for (String header : strings(a.reqHeaders())) {
+			String[] h = RestUtils.parseHeader(header);
+			if (h == null)
+				throw new ConfigException("Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''Header-Name: header-value''", sig, header);
+			if (isNotEmpty(h[1]))
+				psb.addTo(REST_reqHeaders, h[0], h[1]);
+		}
+
 		if (a.defaultAccept().length() > 0) {
 			s = string(a.defaultAccept());
 			if (isNotEmpty(s))
-				psb.addTo(REST_defaultRequestHeaders, "Accept", s);
+				psb.addTo(REST_reqHeaders, "Accept", s);
 		}
 
 		if (a.defaultContentType().length() > 0) {
 			s = string(a.defaultContentType());
 			if (isNotEmpty(s))
-				psb.addTo(REST_defaultRequestHeaders, "Content-Type", s);
+				psb.addTo(REST_reqHeaders, "Content-Type", s);
 		}
 
 		psb.addTo(REST_converters, a.converters());
@@ -167,6 +175,14 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			psb.addTo(RESTMETHOD_defaultRequestHeaders, h2[0], h2[1]);
 		}
 
+		for (String h : a.reqHeaders()) {
+			String[] h2 = RestUtils.parseKeyValuePair(string(h));
+			if (h2 == null)
+				throw new ConfigException(
+					"Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
+			psb.addTo(RESTMETHOD_reqHeaders, h2[0], h2[1]);
+		}
+
 		for (String ra : a.attrs()) {
 			String[] ra2 = RestUtils.parseKeyValuePair(string(ra));
 			if (ra2 == null)
@@ -175,11 +191,19 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			psb.addTo(RESTMETHOD_attrs, ra2[0], ra2[1]);
 		}
 
+		for (String ra : a.reqAttrs()) {
+			String[] ra2 = RestUtils.parseKeyValuePair(string(ra));
+			if (ra2 == null)
+				throw new ConfigException(
+					"Invalid default request attribute specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
+			psb.addTo(RESTMETHOD_reqAttrs, ra2[0], ra2[1]);
+		}
+
 		if (! a.defaultAccept().isEmpty())
-			psb.addTo(RESTMETHOD_defaultRequestHeaders, "Accept", string(a.defaultAccept()));
+			psb.addTo(RESTMETHOD_reqHeaders, "Accept", string(a.defaultAccept()));
 
 		if (! a.defaultContentType().isEmpty())
-			psb.addTo(RESTMETHOD_defaultRequestHeaders, string(a.defaultContentType()));
+			psb.addTo(RESTMETHOD_reqHeaders, string(a.defaultContentType()));
 
 		for (String h : a.defaultQuery()) {
 			String[] h2 = RestUtils.parseKeyValuePair(string(h));

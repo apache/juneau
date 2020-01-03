@@ -182,7 +182,7 @@ public class BasicRestCallLogger implements RestCallLogger {
 			}
 
 			if (context != null && reqd.isOneOf(MEDIUM, LONG)) {
-				Map<String,Object> hh = context.getDefaultRequestHeaders();
+				Map<String,Object> hh = context.getReqHeaders();
 				if (! hh.isEmpty()) {
 					sb.append("\n---Default Servlet Headers---");
 					for (Map.Entry<String,Object> h : hh.entrySet()) {

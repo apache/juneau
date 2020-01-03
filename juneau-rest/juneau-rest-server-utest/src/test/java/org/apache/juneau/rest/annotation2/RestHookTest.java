@@ -46,7 +46,7 @@ public class RestHookTest {
 
 	@Rest(
 		parsers=A01.class,
-		attrs={
+		reqAttrs={
 			"p1:sp1", // Unchanged servlet-level property.
 			"p2:sp2", // Servlet-level property overridden by onPreCall.
 			"p3:sp3", // Servlet-level property overridded by method.
@@ -67,7 +67,7 @@ public class RestHookTest {
 		}
 
 		@RestMethod(name=PUT, path="/propertiesOverriddenByAnnotation",
-			attrs={
+			reqAttrs={
 				"p3:mp3",
 				"p4:mp4"
 			}
@@ -119,7 +119,7 @@ public class RestHookTest {
 
 	@Rest(
 		serializers=B01.class,
-		attrs={
+		reqAttrs={
 			"p1:sp1", // Unchanged servlet-level property.
 			"p2:sp2", // Servlet-level property overridden by onPostCall.
 			"p3:sp3", // Servlet-level property overridded by method.
@@ -143,11 +143,11 @@ public class RestHookTest {
 		}
 
 		@RestMethod(name=PUT, path="/propertiesOverridenByAnnotation",
-			attrs={
+			reqAttrs={
 				"p3:mp3",
 				"p4:mp4"
 			},
-			defaultRequestHeaders="Accept: text/s2"
+			reqHeaders="Accept: text/s2"
 		)
 		public String b01() {
 			return null;

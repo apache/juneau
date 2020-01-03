@@ -67,43 +67,11 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 	/**
 	 * Configuration property:  Default request attributes.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultRequestAttributes.smo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link RestMethod#attrs()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * Default request attributes.
-	 *
-	 * <p>
-	 * Specifies default values for request attributes if they are not already set on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestAttributes={<js>"Foo: bar"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_attrs}
-	 * </ul>
+	 * 
+	 * @deprecated Use {@link #RESTMETHOD_reqAttrs}
 	 */
-	public static final String RESTMETHOD_attrs = PREFIX + ".attrs.smo";
+	@Deprecated
+	public static final String RESTMETHOD_attrs = PREFIX + ".reqAttrs.smo";
 
 	/**
 	 * Configuration property:  Client version pattern matcher.
@@ -274,45 +242,11 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 	/**
 	 * Configuration property:  Default request headers.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultRequestHeaders.smo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link RestMethod#defaultRequestHeaders()}
-	 * 			<li class='ja'>{@link RestMethod#defaultAccept()}
-	 * 			<li class='ja'>{@link RestMethod#defaultContentType()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * Default request headers.
-	 *
-	 * <p>
-	 * Specifies default values for request headers if they're not passed in through the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
-	 * 	<jk>public</jk> String doGet()  {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_defaultRequestHeaders}
-	 * </ul>
+	 * 
+	 * @deprecated Use {@link #RESTMETHOD_defaultRequestHeaders}
 	 */
-	public static final String RESTMETHOD_defaultRequestHeaders = PREFIX + ".defaultRequestHeaders.smo";
+	@Deprecated
+	public static final String RESTMETHOD_defaultRequestHeaders = PREFIX + ".reqHeaders.smo";
 
 	/**
 	 * Configuration property:  HTTP method name.
@@ -491,6 +425,88 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	public static final String RESTMETHOD_priority = PREFIX + ".priority.i";
 
+	/**
+	 * Configuration property:  Default request attributes.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.reqAttrs.smo"</js>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#reqAttrs()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * Default request attributes.
+	 *
+	 * <p>
+	 * Specifies default values for request attributes if they are not already set on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, reqAttrs={<js>"Foo: bar"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_reqAttrs}
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_reqAttrs = PREFIX + ".reqAttrs.smo";
+
+	/**
+	 * Configuration property:  Default request headers.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.reqHeaders.smo"</js>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link RestMethod#reqHeaders()}
+	 * 			<li class='ja'>{@link RestMethod#defaultAccept()}
+	 * 			<li class='ja'>{@link RestMethod#defaultContentType()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * Default request headers.
+	 *
+	 * <p>
+	 * Specifies default values for request headers if they're not passed in through the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, reqHeaders={<js>"Accept: text/json"</js>})
+	 * 	<jk>public</jk> String doGet()  {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_reqHeaders}
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_reqHeaders = PREFIX + ".reqHeaders.smo";
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -515,10 +531,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final HttpPartParser partParser;
 	final JsonSchemaGenerator jsonSchemaGenerator;
 	final Map<String,Object>
-		defaultRequestHeaders,
+		reqHeaders,
 		defaultQuery,
 		defaultFormData;
-	final ObjectMap defaultRequestAttributes;
+	final ObjectMap reqAttrs;
 	final String defaultCharset;
 	final long maxInput;
 	final Map<String,Widget> widgets;
@@ -625,10 +641,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.jsonSchemaGenerator = JsonSchemaGenerator.create().apply(ps).build();
 
-		Map<String,Object> _defaultRequestHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-		_defaultRequestHeaders.putAll(getMapProperty(RESTMETHOD_defaultRequestHeaders, Object.class));
+		Map<String,Object> _reqHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+		_reqHeaders.putAll(getMapProperty(RESTMETHOD_reqHeaders, Object.class));
 
-		ObjectMap _defaultRequestAttributes = new ObjectMap(context.getDefaultRequestAttributes()).appendAll(getMapProperty(RESTMETHOD_attrs, Object.class));
+		ObjectMap _reqAttrs = new ObjectMap(context.getReqAttrs()).appendAll(getMapProperty(RESTMETHOD_reqAttrs, Object.class));
 
 		Map<String,Object> _defaultQuery = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultQuery, Object.class));
 
@@ -642,7 +658,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 					Header h = (Header)a;
 					if (h._default().length > 0) {
 						try {
-							_defaultRequestHeaders.put(firstNonEmpty(h.name(), h.value()), parseAnything(joinnl(h._default())));
+							_reqHeaders.put(firstNonEmpty(h.name(), h.value()), parseAnything(joinnl(h._default())));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @Header annotation");
 						}
@@ -669,8 +685,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			}
 		}
 
-		this.defaultRequestHeaders = Collections.unmodifiableMap(_defaultRequestHeaders);
-		this.defaultRequestAttributes = _defaultRequestAttributes.unmodifiable();
+		this.reqHeaders = Collections.unmodifiableMap(_reqHeaders);
+		this.reqAttrs = _reqAttrs.unmodifiable();
 		this.defaultQuery = Collections.unmodifiableMap(_defaultQuery);
 		this.defaultFormData = Collections.unmodifiableMap(_defaultFormData);
 
@@ -1026,7 +1042,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			.append("RestMethodContext", new DefaultFilteringObjectMap()
 				.append("defaultFormData", defaultFormData)
 				.append("defaultQuery", defaultQuery)
-				.append("defaultRequestHeaders", defaultRequestHeaders)
+				.append("reqHeaders", reqHeaders)
 				.append("httpMethod", httpMethod)
 				.append("priority", priority)
 			);
