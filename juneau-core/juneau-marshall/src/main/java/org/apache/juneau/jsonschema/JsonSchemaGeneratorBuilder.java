@@ -882,14 +882,14 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaGeneratorBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public JsonSchemaGeneratorBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaGeneratorBuilder applyAnnotations(Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public JsonSchemaGeneratorBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

@@ -13,6 +13,7 @@
 package org.apache.juneau.oapi;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -663,9 +664,21 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public OpenApiParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
 		super.applyAnnotations(al, vrs);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public OpenApiParserBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public OpenApiParserBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

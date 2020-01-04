@@ -25,9 +25,9 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","rawtypes","serial"})
 public class HtmlTest {
 
-	//====================================================================================================
+	//-----------------------------------------------------------------------------------------------------------------
 	// Verifies that lists of maps/beans are converted to tables correctly.
-	//====================================================================================================
+	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void testTables1() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
@@ -44,9 +44,9 @@ public class HtmlTest {
 		public String f1 = "f1";
 	}
 
-	//====================================================================================================
+	//-----------------------------------------------------------------------------------------------------------------
 	// Test URI_ANCHOR_SET options
-	//====================================================================================================
+	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void testAnchorTextOptions() throws Exception {
 		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().uriResolution(UriResolution.NONE);
@@ -205,9 +205,9 @@ public class HtmlTest {
 			.replace("</td></tr>", "");
 	}
 
-	//====================================================================================================
+	//-----------------------------------------------------------------------------------------------------------------
 	// Test @Html.asPlainText annotation on classes and fields
-	//====================================================================================================
+	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void testHtmlAnnotationAsPlainText() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
@@ -237,9 +237,39 @@ public class HtmlTest {
 		public String f1 = "<f1>";
 	}
 
-	//====================================================================================================
+	@Test
+	public void testHtmlAnnotationAsPlainText_usingConfig() throws Exception {
+		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(B3.class).applyAnnotations(B4.class).build();
+
+		Object o = null;
+		String r;
+
+		o = new B3();
+		r = s.serialize(o);
+		assertEquals("<test>", r);
+
+		o = new B4();
+		r = s.serialize(o);
+		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><f1></td></tr></table>", r);
+	}
+
+	@HtmlConfig(annotateHtml=@Html(on="B3", format=PLAIN_TEXT))
+	public static class B3 {
+		public String f1 = "<f1>";
+		@Override /* Object */
+		public String toString() {
+			return "<test>";
+		}
+	}
+
+	@HtmlConfig(annotateHtml=@Html(on="B4.f1", format=PLAIN_TEXT))
+	public static class B4 {
+		public String f1 = "<f1>";
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Test @Html.asXml annotation on classes and fields
-	//====================================================================================================
+	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void testHtmlAnnotationAsXml() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
@@ -265,9 +295,33 @@ public class HtmlTest {
 		public String f1 = "<f1>";
 	}
 
-	//====================================================================================================
+	@Test
+	public void testHtmlAnnotationAsXml_usingConfig() throws Exception {
+		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(C3.class).build();
+		Object o = null;
+		String r;
+
+		o = new C3();
+		r = s.serialize(o);
+		assertEquals("<object><f1>&lt;f1&gt;</f1></object>", r);
+
+		o = new C4();
+		r = s.serialize(o);
+		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td>&lt;f1&gt;</td></tr></table>", r);
+	}
+
+	@HtmlConfig(annotateHtml=@Html(on="C3,C4.f1",format=XML))
+	public static class C3 {
+		public String f1 = "<f1>";
+	}
+
+	public static class C4 {
+		public String f1 = "<f1>";
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Test @Html.noTableHeaders
-	//====================================================================================================
+	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void testNoTableHeaders() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
@@ -284,4 +338,19 @@ public class HtmlTest {
 	@Html(noTables=true, noTableHeaders=true)
 	public static class MyMap extends LinkedHashMap<String,String> {}
 
+	@Test
+	public void testNoTableHeaders_usingConfig() throws Exception {
+		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().applyAnnotations(MyMap2.class).build();
+		Object o = null;
+		String r;
+
+		Map m = new MyMap2();
+		m.put("foo", "bar");
+		o = new ObjectList().append(m);
+		r = s.serialize(o);
+		assertEquals("<ul><li><table><tr><td>foo</td><td>bar</td></tr></table></li></ul>", r);
+	}
+
+	@HtmlConfig(annotateHtml=@Html(on="org.apache.juneau.html.HtmlTest$MyMap2", noTables=true, noTableHeaders=true))
+	public static class MyMap2 extends LinkedHashMap<String,String> {}
 }

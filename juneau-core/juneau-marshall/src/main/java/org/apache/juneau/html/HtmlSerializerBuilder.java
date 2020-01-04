@@ -995,14 +995,14 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public HtmlSerializerBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public HtmlSerializerBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public HtmlSerializerBuilder applyAnnotations(Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public HtmlSerializerBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

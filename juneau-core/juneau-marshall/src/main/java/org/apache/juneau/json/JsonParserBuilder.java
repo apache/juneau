@@ -15,6 +15,7 @@ package org.apache.juneau.json;
 import static org.apache.juneau.json.JsonParser.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -726,9 +727,21 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public JsonParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
 		super.applyAnnotations(al, vrs);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public JsonParserBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public JsonParserBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

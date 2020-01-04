@@ -370,6 +370,62 @@ public class UrlEncodingSerializerTest {
 		assertEquals(e, r);
 	}
 
+	@Test
+	public void testMultiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
+		UrlEncodingSerializer s;
+		DTOs2.B t = DTOs2.B.create();
+		String r;
+
+		s = UrlEncodingSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build();
+		r = s.serialize(t);
+		String e = ""
+			+ "f01=@(a,b)"
+			+ "&f02=@(c,d)"
+			+ "&f03=@(1,2)"
+			+ "&f04=@(3,4)"
+			+ "&f05=@(@(e,f),@(g,h))"
+			+ "&f06=@(@(i,j),@(k,l))"
+			+ "&f07=@((a=a,b=1,c=true),(a=a,b=1,c=true))"
+			+ "&f08=@((a=a,b=1,c=true),(a=a,b=1,c=true))"
+			+ "&f09=@(@((a=a,b=1,c=true)),@((a=a,b=1,c=true)))"
+			+ "&f10=@(@((a=a,b=1,c=true)),@((a=a,b=1,c=true)))"
+			+ "&f11=@(a,b)"
+			+ "&f12=@(c,d)"
+			+ "&f13=@(1,2)"
+			+ "&f14=@(3,4)"
+			+ "&f15=@(@(e,f),@(g,h))"
+			+ "&f16=@(@(i,j),@(k,l))"
+			+ "&f17=@((a=a,b=1,c=true),(a=a,b=1,c=true))"
+			+ "&f18=@((a=a,b=1,c=true),(a=a,b=1,c=true))"
+			+ "&f19=@(@((a=a,b=1,c=true)),@((a=a,b=1,c=true)))"
+			+ "&f20=@(@((a=a,b=1,c=true)),@((a=a,b=1,c=true)))";
+		assertEquals(e, r);
+
+		s = UrlEncodingSerializer.create().expandedParams().applyAnnotations(DTOs2.Annotations.class).build();
+		r = s.serialize(t);
+		e = ""
+			+ "f01=a&f01=b"
+			+ "&f02=c&f02=d"
+			+ "&f03=1&f03=2"
+			+ "&f04=3&f04=4"
+			+ "&f05=@(e,f)&f05=@(g,h)"
+			+ "&f06=@(i,j)&f06=@(k,l)"
+			+ "&f07=(a=a,b=1,c=true)&f07=(a=a,b=1,c=true)"
+			+ "&f08=(a=a,b=1,c=true)&f08=(a=a,b=1,c=true)"
+			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=a,b=1,c=true))"
+			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=a,b=1,c=true))"
+			+ "&f11=a&f11=b"
+			+ "&f12=c&f12=d"
+			+ "&f13=1&f13=2"
+			+ "&f14=3&f14=4"
+			+ "&f15=@(e,f)&f15=@(g,h)"
+			+ "&f16=@(i,j)&f16=@(k,l)"
+			+ "&f17=(a=a,b=1,c=true)&f17=(a=a,b=1,c=true)"
+			+ "&f18=(a=a,b=1,c=true)&f18=(a=a,b=1,c=true)"
+			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=a,b=1,c=true))"
+			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=a,b=1,c=true))";
+		assertEquals(e, r);
+	}
 
 	//====================================================================================================
 	// Multi-part parameters on beans via @UrlEncoding.expandedParams on class
@@ -406,6 +462,63 @@ public class UrlEncodingSerializerTest {
 		assertEquals(e, r);
 
 		s = UrlEncodingSerializer.create().expandedParams().build();
+		r = s.serialize(t);
+		e = ""
+			+ "f01=a&f01=b"
+			+ "&f02=c&f02=d"
+			+ "&f03=1&f03=2"
+			+ "&f04=3&f04=4"
+			+ "&f05=@(e,f)&f05=@(g,h)"
+			+ "&f06=@(i,j)&f06=@(k,l)"
+			+ "&f07=(a=a,b=1,c=true)&f07=(a=a,b=1,c=true)"
+			+ "&f08=(a=a,b=1,c=true)&f08=(a=a,b=1,c=true)"
+			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=a,b=1,c=true))"
+			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=a,b=1,c=true))"
+			+ "&f11=a&f11=b"
+			+ "&f12=c&f12=d"
+			+ "&f13=1&f13=2"
+			+ "&f14=3&f14=4"
+			+ "&f15=@(e,f)&f15=@(g,h)"
+			+ "&f16=@(i,j)&f16=@(k,l)"
+			+ "&f17=(a=a,b=1,c=true)&f17=(a=a,b=1,c=true)"
+			+ "&f18=(a=a,b=1,c=true)&f18=(a=a,b=1,c=true)"
+			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=a,b=1,c=true))"
+			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=a,b=1,c=true))";
+		assertEquals(e, r);
+	}
+
+	@Test
+	public void testMultiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
+		UrlEncodingSerializer s;
+		DTOs2.C t = DTOs2.C.create();
+		String r;
+
+		s = UrlEncodingSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build();
+		r = s.serialize(t);
+		String e = ""
+			+ "f01=a&f01=b"
+			+ "&f02=c&f02=d"
+			+ "&f03=1&f03=2"
+			+ "&f04=3&f04=4"
+			+ "&f05=@(e,f)&f05=@(g,h)"
+			+ "&f06=@(i,j)&f06=@(k,l)"
+			+ "&f07=(a=a,b=1,c=true)&f07=(a=a,b=1,c=true)"
+			+ "&f08=(a=a,b=1,c=true)&f08=(a=a,b=1,c=true)"
+			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=a,b=1,c=true))"
+			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=a,b=1,c=true))"
+			+ "&f11=a&f11=b"
+			+ "&f12=c&f12=d"
+			+ "&f13=1&f13=2"
+			+ "&f14=3&f14=4"
+			+ "&f15=@(e,f)&f15=@(g,h)"
+			+ "&f16=@(i,j)&f16=@(k,l)"
+			+ "&f17=(a=a,b=1,c=true)&f17=(a=a,b=1,c=true)"
+			+ "&f18=(a=a,b=1,c=true)&f18=(a=a,b=1,c=true)"
+			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=a,b=1,c=true))"
+			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=a,b=1,c=true))";
+		assertEquals(e, r);
+
+		s = UrlEncodingSerializer.create().expandedParams().applyAnnotations(DTOs2.Annotations.class).build();
 		r = s.serialize(t);
 		e = ""
 			+ "f01=a&f01=b"

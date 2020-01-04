@@ -1020,14 +1020,14 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializerBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public JsonSchemaSerializerBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializerBuilder applyAnnotations(Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public JsonSchemaSerializerBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

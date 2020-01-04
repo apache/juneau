@@ -821,14 +821,14 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public PlainTextSerializerBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder applyAnnotations(Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public PlainTextSerializerBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

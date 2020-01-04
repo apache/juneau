@@ -821,14 +821,14 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public CsvSerializerBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public CsvSerializerBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public CsvSerializerBuilder applyAnnotations(Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public CsvSerializerBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

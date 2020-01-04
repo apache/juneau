@@ -1247,14 +1247,14 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public SerializerGroupBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public SerializerGroupBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public SerializerGroupBuilder applyAnnotations(Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public SerializerGroupBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

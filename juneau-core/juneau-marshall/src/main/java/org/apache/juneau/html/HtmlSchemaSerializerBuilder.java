@@ -954,14 +954,14 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public HtmlSchemaSerializerBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public HtmlSchemaSerializerBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public HtmlSchemaSerializerBuilder applyAnnotations(Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public HtmlSchemaSerializerBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

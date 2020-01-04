@@ -224,6 +224,38 @@ public class JsonTest {
 		}
 	}
 
+	@Test
+	public void testWrapperAttrAnnotationOnBean_usingConfig() throws Exception {
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(A2.class).build();
+		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(A2.class).build();
+		String r;
+
+		A2 t = A2.create();
+		r = s.serialize(t);
+		assertEquals("{foo:{f1:1}}", r);
+		t = p.parse(r, A2.class);
+		assertEquals(1, t.f1);
+
+		Map<String,A2> m = new LinkedHashMap<>();
+		m.put("bar", A2.create());
+		r = s.serialize(m);
+		assertEquals("{bar:{foo:{f1:1}}}", r);
+
+		m = p.parse(r, LinkedHashMap.class, String.class, A2.class);
+		assertEquals(1, m.get("bar").f1);
+	}
+
+	@JsonConfig(annotateJson=@Json(on="A2",wrapperAttr="foo"))
+	public static class A2 {
+		public int f1;
+
+		static A2 create() {
+			A2 a = new A2();
+			a.f1 = 1;
+			return a;
+		}
+	}
+
 	//====================================================================================================
 	// testWrapperAttrAnnotationOnNonBean
 	//====================================================================================================
@@ -265,6 +297,49 @@ public class JsonTest {
 
 		public static B valueOf(String s) {
 			B b = new B();
+			b.f1 = Integer.parseInt(s);
+			return b;
+		}
+	}
+
+	@Test
+	public void testWrapperAttrAnnotationOnNonBean_usingConfig() throws Exception {
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(B2.class).build();
+		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(B2.class).build();;
+		String r;
+
+		B2 t = B2.create();
+		r = s.serialize(t);
+		assertEquals("{foo:'1'}", r);
+		t = p.parse(r, B2.class);
+		assertEquals(1, t.f1);
+
+		Map<String,B2> m = new LinkedHashMap<>();
+		m.put("bar", B2.create());
+		r = s.serialize(m);
+		assertEquals("{bar:{foo:'1'}}", r);
+
+		m = p.parse(r, LinkedHashMap.class, String.class, B2.class);
+		assertEquals(1, m.get("bar").f1);
+	}
+
+	@JsonConfig(annotateJson=@Json(on="B2",wrapperAttr="foo"))
+	public static class B2 {
+		int f1;
+
+		static B2 create() {
+			B2 b = new B2();
+			b.f1 = 1;
+			return b;
+		}
+
+		@Override /* Object */
+		public String toString() {
+			return String.valueOf(f1);
+		}
+
+		public static B2 valueOf(String s) {
+			B2 b = new B2();
 			b.f1 = Integer.parseInt(s);
 			return b;
 		}

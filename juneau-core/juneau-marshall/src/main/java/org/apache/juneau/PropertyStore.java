@@ -22,6 +22,7 @@ import java.util.*;
 import org.apache.juneau.PropertyStoreBuilder.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
 
 
@@ -721,6 +722,11 @@ public final class PropertyStore {
 		 */
 		public Map<String,Property> swap() {
 			return properties;
+		}
+
+		@Override /* Object */
+		public String toString() {
+			return "[hash="+hashCode()+"]" + (SimpleJson.DEFAULT == null ? "" : SimpleJson.DEFAULT.toString(properties));
 		}
 	}
 

@@ -38,8 +38,10 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","serial"})
 public class RoundTripBeanMapsTest extends RoundTripTest {
 
+	static Class<?>[] ANNOTATED_CLASSES={L2.class, M2.class};
+
 	public RoundTripBeanMapsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
-		super(label, s, p, flags);
+		super(label, s.applyAnnotations(ANNOTATED_CLASSES), p == null ? null : p.applyAnnotations(ANNOTATED_CLASSES), flags);
 	}
 
 	@Override /* RoundTripTest */
@@ -927,6 +929,27 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 	}
 
+	@Test
+	public void testWrapperAttrAnnotationOnBean_usingConfig() throws Exception {
+		L2 t = L2.create();
+		t = roundTrip(t, L2.class);
+
+		Map<String,L2> m = new LinkedHashMap<>();
+		m.put("bar", L2.create());
+		roundTrip(m, LinkedHashMap.class, String.class, L2.class);
+	}
+
+	@JsonConfig(annotateJson=@Json(on="L2",wrapperAttr="foo"))
+	public static class L2 {
+		public int f1;
+
+		static L2 create() {
+			L2 l = new L2();
+			l.f1 = 1;
+			return l;
+		}
+	}
+
 	//====================================================================================================
 	// testWrapperAttrAnnotationOnNonBean
 	//====================================================================================================
@@ -957,6 +980,38 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 		public static M valueOf(String s) {
 			M m = new M();
+			m.f1 = Integer.parseInt(s);
+			return m;
+		}
+	}
+
+	@Test
+	public void testWrapperAttrAnnotationOnNonBean_usingConfig() throws Exception {
+		M2 t = M2.create();
+		t = roundTrip(t, M2.class);
+
+		Map<String,M2> m = new LinkedHashMap<>();
+		m.put("bar", M2.create());
+		roundTrip(m, LinkedHashMap.class, String.class, M2.class);
+	}
+
+	@JsonConfig(annotateJson=@Json(on="M2",wrapperAttr="foo"))
+	public static class M2 {
+		int f1;
+
+		static M2 create() {
+			M2 m = new M2();
+			m.f1 = 1;
+			return m;
+		}
+
+		@Override /* Object */
+		public String toString() {
+			return String.valueOf(f1);
+		}
+
+		public static M2 valueOf(String s) {
+			M2 m = new M2();
 			m.f1 = Integer.parseInt(s);
 			return m;
 		}

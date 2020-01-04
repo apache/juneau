@@ -31,7 +31,7 @@ public class CsvClassMeta extends ExtendedClassMeta {
 	 */
 	public CsvClassMeta(ClassMeta<?> cm, CsvMetaProvider mp) {
 		super(cm);
-		this.csv = cm.getAnnotation(Csv.class, mp);
+		this.csv = cm.getAnnotation(Csv.class);
 	}
 
 	/**

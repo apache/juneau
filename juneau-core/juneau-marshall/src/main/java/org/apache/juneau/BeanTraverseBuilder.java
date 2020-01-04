@@ -740,14 +740,14 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public BeanTraverseBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public BeanTraverseBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public BeanTraverseBuilder applyAnnotations(Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public BeanTraverseBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 

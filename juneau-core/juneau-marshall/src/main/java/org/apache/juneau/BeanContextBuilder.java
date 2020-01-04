@@ -1932,14 +1932,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public BeanContextBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public BeanContextBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public BeanContextBuilder applyAnnotations(Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public BeanContextBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

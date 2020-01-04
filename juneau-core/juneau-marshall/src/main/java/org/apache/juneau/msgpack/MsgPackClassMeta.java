@@ -31,7 +31,7 @@ public class MsgPackClassMeta extends ExtendedClassMeta {
 	 */
 	public MsgPackClassMeta(ClassMeta<?> cm, MsgPackMetaProvider mp) {
 		super(cm);
-		this.msgPack = cm.getAnnotation(MsgPack.class, mp);
+		this.msgPack = cm.getAnnotation(MsgPack.class);
 	}
 
 	/**

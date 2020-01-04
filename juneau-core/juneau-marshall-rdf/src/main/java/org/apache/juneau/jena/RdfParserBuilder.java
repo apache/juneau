@@ -16,6 +16,7 @@ import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.jena.RdfParser.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -1368,9 +1369,21 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public RdfParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
 		super.applyAnnotations(al, vrs);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RdfParserBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RdfParserBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

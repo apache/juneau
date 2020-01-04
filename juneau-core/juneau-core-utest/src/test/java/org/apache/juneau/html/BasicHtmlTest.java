@@ -31,11 +31,14 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicHtmlTest {
 
+	private static final Class<?>[] ANNOTATED_CLASSES = {
+		BeanWithWhitespaceTextFields2.class, BeanWithWhitespaceTextPwsFields2.class, BeanWithWhitespaceMixedFields2.class, BeanWithWhitespaceMixedPwsFields2.class
+	};
 	private static final HtmlSerializer
-		s1 = HtmlSerializer.DEFAULT_SQ.builder().addRootType().build(),
-		s2 = HtmlSerializer.DEFAULT_SQ_READABLE.builder().addRootType().build(),
-		s3 = HtmlSerializer.DEFAULT_SQ.builder().build();
-	private static final HtmlParser parser = HtmlParser.DEFAULT;
+		s1 = HtmlSerializer.DEFAULT_SQ.builder().addRootType().applyAnnotations(ANNOTATED_CLASSES).build(),
+		s2 = HtmlSerializer.DEFAULT_SQ_READABLE.builder().addRootType().applyAnnotations(ANNOTATED_CLASSES).build(),
+		s3 = HtmlSerializer.DEFAULT_SQ.builder().applyAnnotations(ANNOTATED_CLASSES).build();
+	private static final HtmlParser parser = HtmlParser.DEFAULT.builder().applyAnnotations(ANNOTATED_CLASSES).build();
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
@@ -2521,6 +2524,358 @@ public class BasicHtmlTest {
 					}
 				}
 			},
+			{	/* 56 */
+				new Input<BeanWithWhitespaceTextFields2>(
+					"BeanWithWhitespaceTextFields2-1",
+					BeanWithWhitespaceTextFields2.class,
+					new BeanWithWhitespaceTextFields2().init(null),
+					"<object nil='true'></object>",
+					"<object nil='true'>\n</object>\n",
+					"<object nil='true'></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceTextFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceTextFields2.class, o);
+					}
+				}
+			},
+			{	/* 57 */
+				new Input<BeanWithWhitespaceTextFields2>(
+					"BeanWithWhitespaceTextFields2-2",
+					BeanWithWhitespaceTextFields2.class,
+					new BeanWithWhitespaceTextFields2().init(""),
+					"<object><sp/></object>",
+					"<object><sp/></object>\n",
+					"<object><sp/></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceTextFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceTextFields2.class, o);
+					}
+				}
+			},
+			{	/* 58 */
+				new Input<BeanWithWhitespaceTextFields2>(
+					"BeanWithWhitespaceTextFields2-3",
+					BeanWithWhitespaceTextFields2.class,
+					new BeanWithWhitespaceTextFields2().init(" "),
+					"<object><sp> </sp></object>",
+					"<object><sp> </sp></object>\n",
+					"<object><sp> </sp></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceTextFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceTextFields2.class, o);
+					}
+				}
+			},
+			{	/* 59 */
+				new Input<BeanWithWhitespaceTextFields2>(
+					"BeanWithWhitespaceTextFields2-4",
+					BeanWithWhitespaceTextFields2.class,
+					new BeanWithWhitespaceTextFields2().init("  "),
+					"<object><sp> </sp><sp> </sp></object>",
+					"<object><sp> </sp><sp> </sp></object>\n",
+					"<object><sp> </sp><sp> </sp></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceTextFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceTextFields2.class, o);
+					}
+				}
+			},
+			{	/* 60 */
+				new Input<BeanWithWhitespaceTextFields2>(
+					"BeanWithWhitespaceTextFields2-5",
+					BeanWithWhitespaceTextFields2.class,
+					new BeanWithWhitespaceTextFields2().init("  foobar  "),
+					"<object><sp> </sp> foobar <sp> </sp></object>",
+					"<object><sp> </sp> foobar <sp> </sp></object>\n",
+					"<object><sp> </sp> foobar <sp> </sp></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceTextFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceTextFields2.class, o);
+					}
+				}
+			},
+			{	/* 61 */
+				new Input<BeanWithWhitespaceTextPwsFields2>(
+					"BeanWithWhitespaceTextPwsFields2-1",
+					BeanWithWhitespaceTextPwsFields2.class,
+					new BeanWithWhitespaceTextPwsFields2().init(null),
+					"<object nil='true'></object>",
+					"<object nil='true'>\n</object>\n",
+					"<object nil='true'></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceTextPwsFields2.class, o);
+					}
+				}
+			},
+			{	/* 62 */
+				new Input<BeanWithWhitespaceTextPwsFields2>(
+					"BeanWithWhitespaceTextPwsFields2-2",
+					BeanWithWhitespaceTextPwsFields2.class,
+					new BeanWithWhitespaceTextPwsFields2().init(""),
+					"<object><sp/></object>",
+					"<object><sp/></object>\n",
+					"<object><sp/></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceTextPwsFields2.class, o);
+					}
+				}
+			},
+			{	/* 63 */
+				new Input<BeanWithWhitespaceTextPwsFields2>(
+					"BeanWithWhitespaceTextPwsFields2-3",
+					BeanWithWhitespaceTextPwsFields2.class,
+					new BeanWithWhitespaceTextPwsFields2().init(" "),
+					"<object> </object>",
+					"<object> </object>\n",
+					"<object> </object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceTextPwsFields2.class, o);
+					}
+				}
+			},
+			{	/* 64 */
+				new Input<BeanWithWhitespaceTextPwsFields2>(
+					"BeanWithWhitespaceTextPwsFields2-4",
+					BeanWithWhitespaceTextPwsFields2.class,
+					new BeanWithWhitespaceTextPwsFields2().init("  "),
+					"<object>  </object>",
+					"<object>  </object>\n",
+					"<object>  </object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceTextPwsFields2.class, o);
+					}
+				}
+			},
+			{	/* 65 */
+				new Input<BeanWithWhitespaceTextPwsFields2>(
+					"BeanWithWhitespaceTextPwsFields2-5",
+					BeanWithWhitespaceTextPwsFields2.class,
+					new BeanWithWhitespaceTextPwsFields2().init("  foobar  "),
+					"<object>  foobar  </object>",
+					"<object>  foobar  </object>\n",
+					"<object>  foobar  </object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceTextPwsFields2.class, o);
+					}
+				}
+			},
+			{	/* 66 */
+				new Input<BeanWithWhitespaceMixedFields2>(
+					"BeanWithWhitespaceMixedFields2-1",
+					BeanWithWhitespaceMixedFields2.class,
+					new BeanWithWhitespaceMixedFields2().init(null),
+					"<object nil='true'></object>",
+					"<object nil='true'>\n</object>\n",
+					"<object nil='true'></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceMixedFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceMixedFields2.class, o);
+					}
+				}
+			},
+			{	/* 67 */
+				new Input<BeanWithWhitespaceMixedFields2>(
+					"BeanWithWhitespaceMixedFields2-2",
+					BeanWithWhitespaceMixedFields2.class,
+					new BeanWithWhitespaceMixedFields2().init(new String[0]),
+					"<object></object>",
+					"<object></object>\n",
+					"<object></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceMixedFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceMixedFields2.class, o);
+					}
+				}
+			},
+			{	/* 68 */
+				new Input<BeanWithWhitespaceMixedFields2>(
+					"BeanWithWhitespaceMixedFields2-3",
+					BeanWithWhitespaceMixedFields2.class,
+					new BeanWithWhitespaceMixedFields2().init(new String[]{""}),
+					"<object><sp/></object>",
+					"<object><sp/></object>\n",
+					"<object><sp/></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceMixedFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceMixedFields2.class, o);
+					}
+				}
+			},
+			{	/* 69 */
+				new Input<BeanWithWhitespaceMixedFields2>(
+					"BeanWithWhitespaceMixedFields2-4",
+					BeanWithWhitespaceMixedFields2.class,
+					new BeanWithWhitespaceMixedFields2().init(new String[]{" "}),
+					"<object><sp> </sp></object>",
+					"<object><sp> </sp></object>\n",
+					"<object><sp> </sp></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceMixedFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceMixedFields2.class, o);
+					}
+				}
+			},
+			{	/* 70 */
+				new Input<BeanWithWhitespaceMixedFields2>(
+					"BeanWithWhitespaceMixedFields2-5",
+					BeanWithWhitespaceMixedFields2.class,
+					new BeanWithWhitespaceMixedFields2().init(new String[]{"  "}),
+					"<object><sp> </sp><sp> </sp></object>",
+					"<object><sp> </sp><sp> </sp></object>\n",
+					"<object><sp> </sp><sp> </sp></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceMixedFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceMixedFields2.class, o);
+					}
+				}
+			},
+			{	/* 71 */
+				new Input<BeanWithWhitespaceMixedFields2>(
+					"BeanWithWhitespaceMixedFields2-6",
+					BeanWithWhitespaceMixedFields2.class,
+					new BeanWithWhitespaceMixedFields2().init(new String[]{"  foobar  "}),
+					"<object><sp> </sp> foobar <sp> </sp></object>",
+					"<object><sp> </sp> foobar <sp> </sp></object>\n",
+					"<object><sp> </sp> foobar <sp> </sp></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceMixedFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceMixedFields2.class, o);
+					}
+				}
+			},
+			{	/* 72 */
+				new Input<BeanWithWhitespaceMixedPwsFields2>(
+					"BeanWithWhitespaceMixedPwsFields2-1",
+					BeanWithWhitespaceMixedPwsFields2.class,
+					new BeanWithWhitespaceMixedPwsFields2().init(null),
+					"<object nil='true'></object>",
+					"<object nil='true'>\n</object>\n",
+					"<object nil='true'></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceMixedPwsFields2.class, o);
+					}
+				}
+			},
+			{	/* 73 */
+				new Input<BeanWithWhitespaceMixedPwsFields2>(
+					"BeanWithWhitespaceMixedPwsFields2-2",
+					BeanWithWhitespaceMixedPwsFields2.class,
+					new BeanWithWhitespaceMixedPwsFields2().init(new String[0]),
+					"<object></object>",
+					"<object></object>\n",
+					"<object></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceMixedPwsFields2.class, o);
+					}
+				}
+			},
+			{	/* 74 */
+				new Input<BeanWithWhitespaceMixedPwsFields2>(
+					"BeanWithWhitespaceMixedPwsFields2-3",
+					BeanWithWhitespaceMixedPwsFields2.class,
+					new BeanWithWhitespaceMixedPwsFields2().init(new String[]{""}),
+					"<object><sp/></object>",
+					"<object><sp/></object>\n",
+					"<object><sp/></object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceMixedPwsFields2.class, o);
+					}
+				}
+			},
+			{	/* 75 */
+				new Input<BeanWithWhitespaceMixedPwsFields2>(
+					"BeanWithWhitespaceMixedPwsFields2-4",
+					BeanWithWhitespaceMixedPwsFields2.class,
+					new BeanWithWhitespaceMixedPwsFields2().init(new String[]{" "}),
+					"<object> </object>",
+					"<object> </object>\n",
+					"<object> </object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceMixedPwsFields2.class, o);
+					}
+				}
+			},
+			{	/* 76 */
+				new Input<BeanWithWhitespaceMixedPwsFields2>(
+					"BeanWithWhitespaceMixedPwsFields2-5",
+					BeanWithWhitespaceMixedPwsFields2.class,
+					new BeanWithWhitespaceMixedPwsFields2().init(new String[]{"  "}),
+					"<object>  </object>",
+					"<object>  </object>\n",
+					"<object>  </object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceMixedPwsFields2.class, o);
+					}
+				}
+			},
+			{	/* 77 */
+				new Input<BeanWithWhitespaceMixedPwsFields2>(
+					"BeanWithWhitespaceMixedPwsFields2-6",
+					BeanWithWhitespaceMixedPwsFields2.class,
+					new BeanWithWhitespaceMixedPwsFields2().init(new String[]{"  foobar  "}),
+					"<object>  foobar  </object>",
+					"<object>  foobar  </object>\n",
+					"<object>  foobar  </object>"
+				)
+				{
+					@Override
+					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
+						assertInstanceOf(BeanWithWhitespaceMixedPwsFields2.class, o);
+					}
+				}
+			},
 		});
 	}
 
@@ -3013,4 +3368,50 @@ public class BasicHtmlTest {
 			return this;
 		}
 	}
+
+	@HtmlConfig(annotateHtml={@Html(on="BeanWithWhitespaceTextFields2",format=XML)})
+	@XmlConfig(annotateXml={@Xml(on="BeanWithWhitespaceTextFields2.a",format=XmlFormat.TEXT)})
+	public static class BeanWithWhitespaceTextFields2 {
+		public String a;
+
+		public BeanWithWhitespaceTextFields2 init(String s) {
+			a = s;
+			return this;
+		}
+	}
+
+	@HtmlConfig(annotateHtml={@Html(on="BeanWithWhitespaceTextPwsFields2",format=XML)})
+	@XmlConfig(annotateXml={@Xml(on="BeanWithWhitespaceTextPwsFields2.a",format=XmlFormat.TEXT_PWS)})
+	public static class BeanWithWhitespaceTextPwsFields2 {
+		public String a;
+
+		public BeanWithWhitespaceTextPwsFields2 init(String s) {
+			a = s;
+			return this;
+		}
+	}
+
+	@HtmlConfig(annotateHtml={@Html(on="BeanWithWhitespaceMixedFields2",format=XML)})
+	@XmlConfig(annotateXml={@Xml(on="BeanWithWhitespaceMixedFields2.a",format=XmlFormat.MIXED)})
+	public static class BeanWithWhitespaceMixedFields2 {
+		public String[] a;
+
+		public BeanWithWhitespaceMixedFields2 init(String[] s) {
+			a = s;
+			return this;
+		}
+	}
+
+	@HtmlConfig(annotateHtml={@Html(on="BeanWithWhitespaceMixedPwsFields2",format=XML)})
+	@XmlConfig(annotateXml={@Xml(on="BeanWithWhitespaceMixedPwsFields2.a",format=XmlFormat.MIXED_PWS)})
+	@Html(format=XML)
+	public static class BeanWithWhitespaceMixedPwsFields2 {
+		public String[] a;
+
+		public BeanWithWhitespaceMixedPwsFields2 init(String[] s) {
+			a = s;
+			return this;
+		}
+	}
+
 }

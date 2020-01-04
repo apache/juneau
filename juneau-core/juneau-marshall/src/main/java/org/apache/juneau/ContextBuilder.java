@@ -153,11 +153,12 @@ public abstract class ContextBuilder {
 	 * 	<li>On this class.
 	 * </ol>
 	 *
-	 * @param fromClass The class on which the annotations are defined.
+	 * @param fromClasses The classes on which the annotations are defined.
 	 * @return This object (for method chaining).
 	 */
-	public ContextBuilder applyAnnotations(Class<?> fromClass) {
-		applyAnnotations(ClassInfo.of(fromClass).getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
+	public ContextBuilder applyAnnotations(Class<?>...fromClasses) {
+		for (Class<?> c : fromClasses)
+			applyAnnotations(ClassInfo.of(c).getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 
@@ -196,11 +197,12 @@ public abstract class ContextBuilder {
 	 * 	<li>On this method and matching methods ordered parent-to-child.
 	 * </ol>
 	 *
-	 * @param fromMethod The method on which the annotations are defined.
+	 * @param fromMethods The methods on which the annotations are defined.
 	 * @return This object (for method chaining).
 	 */
-	public ContextBuilder applyAnnotations(Method fromMethod) {
-		applyAnnotations(MethodInfo.of(fromMethod).getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
+	public ContextBuilder applyAnnotations(Method...fromMethods) {
+		for (Method m : fromMethods)
+			applyAnnotations(MethodInfo.of(m).getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 

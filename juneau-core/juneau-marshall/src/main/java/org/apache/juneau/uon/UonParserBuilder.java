@@ -15,6 +15,7 @@ package org.apache.juneau.uon;
 import static org.apache.juneau.uon.UonParser.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -763,9 +764,21 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public UonParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
 		super.applyAnnotations(al, vrs);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public UonParserBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public UonParserBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

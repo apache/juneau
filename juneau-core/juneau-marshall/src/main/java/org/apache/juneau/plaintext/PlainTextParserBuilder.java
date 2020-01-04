@@ -13,6 +13,7 @@
 package org.apache.juneau.plaintext;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -688,9 +689,21 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override
+	@Override /* ContextBuilder */
 	public PlainTextParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
 		super.applyAnnotations(al, vrs);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public PlainTextParserBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public PlainTextParserBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

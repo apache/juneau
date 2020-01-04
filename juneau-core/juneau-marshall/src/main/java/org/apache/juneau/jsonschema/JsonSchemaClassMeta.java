@@ -33,7 +33,7 @@ public class JsonSchemaClassMeta extends ExtendedClassMeta {
 	public JsonSchemaClassMeta(ClassMeta<?> cm, JsonSchemaMetaProvider mp) {
 		super(cm);
 		try {
-			Schema s = cm.getAnnotation(Schema.class, mp);
+			Schema s = cm.getAnnotation(Schema.class);
 			schema = s == null ? ObjectMap.EMPTY_MAP : SchemaUtils.asMap(s);
 		} catch (ParseException e) {
 			throw new RuntimeException(e);

@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.HasQuery;
@@ -31,8 +32,11 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.rest.testutils.DTOs;
+import org.apache.juneau.rest.testutils.DTOs2;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.urlencoding.annotation.*;
+import org.apache.juneau.urlencoding.annotation.UrlEncoding;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -649,6 +653,42 @@ public class BodyAnnotationTest {
 		e.put("/C?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE), "a").execute().assertBody(expected);
 	}
 
+	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
+	@BeanConfig(annotateBean={@Bean(on="A,B,C",sort=true)})
+	@UrlEncodingConfig(annotateUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
+	public static class E2 {
+		@RestMethod(name=PUT, path="/B")
+		public DTOs2.B testPojo1(@Body DTOs2.B b) {
+			return b;
+		}
+		@RestMethod(name=PUT, path="/C")
+		public DTOs2.C testPojo2(@Body DTOs2.C c) {
+			return c;
+		}
+	}
+	private static MockRest e2 = MockRest.build(E2.class);
+
+	@Test
+	public void e05_complexPojos_B_body() throws Exception {
+		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
+		e2.put("/B", SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().toString(DTOs2.B.INSTANCE)).json().execute().assertBody(expected);
+	}
+	@Test
+	public void e06_complexPojos_B_bodyParam() throws Exception {
+		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
+		e2.put("/B?body=" + UonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().serialize(DTOs2.B.INSTANCE), "a").execute().assertBody(expected);
+	}
+	@Test
+	public void e07_complexPojos_C_body() throws Exception {
+		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
+		e2.put("/C", SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().toString(DTOs2.B.INSTANCE)).json().execute().assertBody(expected);
+	}
+	@Test
+	public void e08_complexPojos_C_bodyParam() throws Exception {
+		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
+		e2.put("/C?body=" + UonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().serialize(DTOs2.B.INSTANCE), "a").execute().assertBody(expected);
+	}
+
 	//=================================================================================================================
 	// Form POSTS with @Body parameter
 	//=================================================================================================================
@@ -764,6 +804,48 @@ public class BodyAnnotationTest {
 		h.post("/", in).urlEnc().execute().assertBody(in);
 	}
 
+	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
+	@BeanConfig(annotateBean={@Bean(on="A,B,C",sort=true)})
+	@UrlEncodingConfig(annotateUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
+	public static class H2 {
+		@RestMethod(name=POST,path="/",
+			properties={
+				@Property(name=UrlEncodingSerializer.URLENC_expandedParams, value="true"),
+				@Property(name=UrlEncodingParser.URLENC_expandedParams, value="true")
+			}
+		)
+		public DTOs2.B g(@Body DTOs2.B content) throws Exception {
+			return content;
+		}
+	}
+	static MockRest h2 = MockRest.build(H2.class);
+
+	@Test
+	public void h02() throws Exception {
+		String in = ""
+			+ "f01=a&f01=b"
+			+ "&f02=c&f02=d"
+			+ "&f03=1&f03=2"
+			+ "&f04=3&f04=4"
+			+ "&f05=@(e,f)&f05=@(g,h)"
+			+ "&f06=@(i,j)&f06=@(k,l)"
+			+ "&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)"
+			+ "&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)"
+			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))"
+			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))"
+			+ "&f11=a&f11=b"
+			+ "&f12=c&f12=d"
+			+ "&f13=1&f13=2"
+			+ "&f14=3&f14=4"
+			+ "&f15=@(e,f)&f15=@(g,h)"
+			+ "&f16=@(i,j)&f16=@(k,l)"
+			+ "&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)"
+			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
+			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
+			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
+		h2.post("/", in).urlEnc().execute().assertBody(in);
+	}
+
 	//=================================================================================================================
 	// Test behavior of @Body(required=true).
 	//=================================================================================================================
@@ -781,6 +863,23 @@ public class BodyAnnotationTest {
 	public void i01() throws Exception {
 		i.post("/", "").json().execute().assertStatus(400).assertBodyContains("Required value not provided.");
 		i.post("/", "{}").json().execute().assertStatus(200);
+	}
+
+	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
+	public static class I2 {
+		@RestMethod(name=POST,path="/")
+		@BeanConfig(annotateBean={@Bean(on="A,B,C",sort=true)})
+		@UrlEncodingConfig(annotateUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
+		public DTOs2.B g(@Body(required=true) DTOs2.B content) throws Exception {
+			return content;
+		}
+	}
+	static MockRest i2 = MockRest.build(I2.class);
+
+	@Test
+	public void i02() throws Exception {
+		i2.post("/", "").json().execute().assertStatus(400).assertBodyContains("Required value not provided.");
+		i2.post("/", "{}").json().execute().assertStatus(200);
 	}
 
 	//=================================================================================================================

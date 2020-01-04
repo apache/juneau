@@ -718,14 +718,14 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public ReaderParserBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public ReaderParserBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public ReaderParserBuilder applyAnnotations(Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public ReaderParserBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 }

@@ -42,6 +42,7 @@ import org.apache.juneau.utils.*;
  *
  * @see PropertyStore
  */
+@ConfigurableContext
 public abstract class Context implements MetaProvider {
 
 	static final String PREFIX = "Context";

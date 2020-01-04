@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.utils.*;
@@ -1793,6 +1794,23 @@ public class PropertyStoreTest {
 
 	@Json(on="foo")
 	public static class A4 {}
+
+	@Test
+	public void testEqualsWithAnnotations() {
+		HtmlSerializer
+			s1 = HtmlSerializer.create().build(),
+			s2 = HtmlSerializer.create().applyAnnotations(B1.class).build(),
+			s3 = HtmlSerializer.create().applyAnnotations(B1.class).build(),
+			s4 = HtmlSerializer.create().applyAnnotations(B2.class).build();
+		assertFalse(s1.getPropertyStore().equals(s2.getPropertyStore()));
+		assertFalse(s1.getPropertyStore().equals(s4.getPropertyStore()));
+		assertTrue(s2.getPropertyStore().equals(s3.getPropertyStore()));
+	}
+
+	@HtmlConfig(annotateHtml={@Html(on="B1", format=HtmlFormat.XML)})
+	public static class B1 {}
+	@HtmlConfig(annotateHtml={@Html(on="B2", format=HtmlFormat.HTML)})
+	public static class B2 {}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Utility methods

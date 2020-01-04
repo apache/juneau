@@ -2852,14 +2852,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public RestClientBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder applyAnnotations(Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public RestClientBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 

@@ -31,7 +31,7 @@ public class SoapXmlClassMeta extends ExtendedClassMeta {
 	 */
 	public SoapXmlClassMeta(ClassMeta<?> cm, SoapXmlMetaProvider mp) {
 		super(cm);
-		this.soapXml = cm.getAnnotation(SoapXml.class, mp);
+		this.soapXml = cm.getAnnotation(SoapXml.class);
 	}
 
 	/**

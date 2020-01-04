@@ -719,14 +719,14 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public InputStreamParserBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public InputStreamParserBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public InputStreamParserBuilder applyAnnotations(Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public InputStreamParserBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 

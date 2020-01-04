@@ -869,7 +869,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Default request attributes.
-	 * 
+	 *
 	 * @deprecated Use {@link #reqAttrs(String...)}
 	 */
 	@SuppressWarnings("javadoc")
@@ -880,7 +880,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Default request headers.
-	 * 
+	 *
 	 * @deprecated Use {@link #reqHeaders(String...)}
 	 */
 	@SuppressWarnings("javadoc")
@@ -930,7 +930,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  Default request headers.
-	 * 
+	 *
 	 * @deprecated Use {@link #reqHeader(String,Object)}
 	 */
 	@SuppressWarnings("javadoc")
@@ -2998,14 +2998,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* ContextBuilder */
-	public RestContextBuilder applyAnnotations(Class<?> fromClass) {
-		super.applyAnnotations(fromClass);
+	public RestContextBuilder applyAnnotations(Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public RestContextBuilder applyAnnotations(java.lang.reflect.Method fromMethod) {
-		super.applyAnnotations(fromMethod);
+	public RestContextBuilder applyAnnotations(java.lang.reflect.Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
