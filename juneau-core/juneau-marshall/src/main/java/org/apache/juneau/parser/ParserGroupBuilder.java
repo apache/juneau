@@ -372,6 +372,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -884,12 +890,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public ParserGroupBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

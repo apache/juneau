@@ -294,6 +294,12 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlSchemaSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -806,12 +812,6 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public XmlSchemaSerializerBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

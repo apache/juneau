@@ -342,6 +342,12 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -854,12 +860,6 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public UonSerializerBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

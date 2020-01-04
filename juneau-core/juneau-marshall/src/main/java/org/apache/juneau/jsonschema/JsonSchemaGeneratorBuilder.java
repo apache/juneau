@@ -312,6 +312,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -824,12 +830,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public JsonSchemaGeneratorBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

@@ -148,6 +148,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -660,12 +666,6 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public HtmlParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

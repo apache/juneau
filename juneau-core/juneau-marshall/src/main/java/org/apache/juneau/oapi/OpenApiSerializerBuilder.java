@@ -252,6 +252,12 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public OpenApiSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public OpenApiSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -764,12 +770,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public OpenApiSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public OpenApiSerializerBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

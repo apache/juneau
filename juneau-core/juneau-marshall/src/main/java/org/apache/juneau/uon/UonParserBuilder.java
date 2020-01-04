@@ -201,6 +201,12 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -713,12 +719,6 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public UonParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public UonParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

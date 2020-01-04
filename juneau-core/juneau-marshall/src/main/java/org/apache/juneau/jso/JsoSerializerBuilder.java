@@ -208,6 +208,12 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsoSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsoSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -720,12 +726,6 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public JsoSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public JsoSerializerBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

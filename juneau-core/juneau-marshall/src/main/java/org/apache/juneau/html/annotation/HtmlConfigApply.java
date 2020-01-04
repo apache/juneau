@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html.annotation;
 
-import static org.apache.juneau.Context.*;
 import static org.apache.juneau.html.HtmlSerializer.*;
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
@@ -50,6 +49,6 @@ public class HtmlConfigApply extends ConfigApply<HtmlConfig> {
 			psb.set(HTML_uriAnchorText, string(a.uriAnchorText()));
 
 		if (a.annotateHtml().length > 0)
-			psb.addTo(CONTEXT_annotations, a.annotateHtml());
+			psb.addTo(BEAN_annotations, a.annotateHtml());
 	}
 }

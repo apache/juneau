@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack.annotation;
 
-import static org.apache.juneau.Context.*;
 import static org.apache.juneau.msgpack.MsgPackSerializer.*;
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
@@ -41,6 +40,6 @@ public class MsgPackConfigApply extends ConfigApply<MsgPackConfig> {
 			psb.set(MSGPACK_addBeanTypes, bool(a.addBeanTypes()));
 
 		if (a.annotateMsgPack().length > 0)
-			psb.addTo(CONTEXT_annotations, a.annotateMsgPack());
+			psb.addTo(BEAN_annotations, a.annotateMsgPack());
 	}
 }

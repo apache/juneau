@@ -164,6 +164,12 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsonParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsonParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -676,12 +682,6 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public JsonParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public JsonParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

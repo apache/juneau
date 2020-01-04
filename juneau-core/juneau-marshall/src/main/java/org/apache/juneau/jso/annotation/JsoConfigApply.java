@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jso.annotation;
 
-import static org.apache.juneau.Context.*;
+import static org.apache.juneau.BeanContext.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
@@ -38,6 +38,6 @@ public class JsoConfigApply extends ConfigApply<JsoConfig> {
 		JsoConfig a = ai.getAnnotation();
 
 		if (a.annotateJso().length > 0)
-			psb.addTo(CONTEXT_annotations, a.annotateJso());
+			psb.addTo(BEAN_annotations, a.annotateJso());
 	}
 }

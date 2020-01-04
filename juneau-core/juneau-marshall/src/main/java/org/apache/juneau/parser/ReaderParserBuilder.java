@@ -148,6 +148,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -660,12 +666,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public ReaderParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

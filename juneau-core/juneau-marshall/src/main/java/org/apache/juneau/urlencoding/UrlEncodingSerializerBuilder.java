@@ -314,6 +314,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -826,12 +832,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public UrlEncodingSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

@@ -89,6 +89,12 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -601,12 +607,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public OutputStreamSerializerBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

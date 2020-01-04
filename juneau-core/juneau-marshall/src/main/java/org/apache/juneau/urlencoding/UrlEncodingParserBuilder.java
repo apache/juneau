@@ -146,6 +146,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UrlEncodingParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UrlEncodingParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -658,12 +664,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* BeanContextBuilder */
 	public UrlEncodingParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

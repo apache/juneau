@@ -126,6 +126,12 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -638,12 +644,6 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public PlainTextParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

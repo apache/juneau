@@ -503,6 +503,12 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -1015,12 +1021,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public SerializerBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

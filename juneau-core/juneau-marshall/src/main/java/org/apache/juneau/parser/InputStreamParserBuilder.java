@@ -149,6 +149,12 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public InputStreamParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public InputStreamParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -661,12 +667,6 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public InputStreamParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public InputStreamParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -28,6 +29,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Core class of the Juneau architecture.
@@ -145,9 +147,57 @@ import org.apache.juneau.transform.*;
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 @ConfigurableContext
-public class BeanContext extends Context {
+public class BeanContext extends Context implements MetaProvider {
 
 	static final String PREFIX = "BeanContext";
+
+	/**
+	 * Configuration property:  Annotations.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.annotations.lo"</js>
+	 * 	<li><b>Data type:</b>  <c>List&lt;Annotation&gt;</c>
+	 * 	<li><b>Default:</b>  Empty list.
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Defines annotations to apply to specific classes and methods.
+	 *
+	 * <p>
+	 * Allows you to dynamically apply Juneau annotations typically applied directly to classes and methods.
+	 * Useful in cases where you want to use the functionality of the annotation on beans and bean properties but
+	 * do not have access to the code to do so.
+	 *
+	 * <p>
+	 * As a rule, any Juneau annotation with an <c>on()</c> method can be used with this property.
+	 *
+	 * <p>
+	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation:
+	 * <p class='bpcode w800'>
+	 * 	<jc>// Class with explicit annotation.</jc>
+	 * 	<ja>@Bean</ja>(bpi=<jk>"street,city,state"</js>)
+	 * 	<jk>public class</jk> A {...}
+	 *
+	 * 	<jc>// Class with annotation applied via @BeanConfig</jc>
+	 * 	<jk>public class</jk> B {...}
+	 *
+	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
+	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@BeanConfig</ja>(
+	 * 		annotations={
+	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, bpi=<jk>"street,city,state"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public void</jk> doFoo() {...}
+	 * </p>
+	 */
+	public static final String BEAN_annotations = PREFIX + ".annotations.lo";
 
 	/**
 	 * Configuration property:  Minimum bean class visibility.
@@ -2086,6 +2136,7 @@ public class BeanContext extends Context {
 	private final PropertyNamer propertyNamer;
 	private final String beanTypePropertyName;
 	private final int beanHashCode;
+	private final ReflectionMap<Annotation> annotations;
 
 	final Map<Class,ClassMeta> cmCache;
 	private final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
@@ -2106,6 +2157,19 @@ public class BeanContext extends Context {
 
 		if (ps == null)
 			ps = PropertyStore.DEFAULT;
+
+
+		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
+		for (Annotation a : ps.getListProperty(BEAN_annotations, Annotation.class)) {
+			try {
+				Method m = a.getClass().getMethod("on");
+				String on = (String)m.invoke(a);
+				rmb.append(on, a);
+			} catch (Exception e) {
+				throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method.", a.getClass().getSimpleName());
+			}
+		}
+		this.annotations = rmb.build();
 
 		beanHashCode = ps.hashCode("BeanContext");
 
@@ -2941,6 +3005,35 @@ public class BeanContext extends Context {
 	 */
 	protected final BeanRegistry getBeanRegistry() {
 		return beanRegistry;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// MetaProvider methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c) {
+		return a == null || c == null ? null : (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c) {
+		return a == null || c == null ? null : (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getAnnotation(Class<A> a, Method m) {
+		return a == null || m == null ? null : (A)annotations.findFirst(m, a).orElse(m.getAnnotation(a));
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getAnnotation(Class<A> a, Field f) {
+		return a == null || f == null ? null : (A)annotations.findFirst(f, a).orElse(f.getAnnotation(a));
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c) {
+		return a == null || c == null ? null : (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

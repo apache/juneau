@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding.annotation;
 
-import static org.apache.juneau.Context.*;
+import static org.apache.juneau.BeanContext.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
@@ -44,6 +44,6 @@ public class UrlEncodingConfigApply extends ConfigApply<UrlEncodingConfig> {
 		}
 
 		if (a.annotateUrlEncoding().length > 0)
-			psb.addTo(CONTEXT_annotations, a.annotateUrlEncoding());
+			psb.addTo(BEAN_annotations, a.annotateUrlEncoding());
 	}
 }

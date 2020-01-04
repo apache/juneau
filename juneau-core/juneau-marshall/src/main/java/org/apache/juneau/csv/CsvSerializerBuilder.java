@@ -251,6 +251,12 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public CsvSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public CsvSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -763,12 +769,6 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public CsvSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public CsvSerializerBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv.annotation;
 
-import static org.apache.juneau.Context.*;
+import static org.apache.juneau.BeanContext.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
@@ -38,6 +38,6 @@ public class CsvConfigApply extends ConfigApply<CsvConfig> {
 		CsvConfig a = ai.getAnnotation();
 
 		if (a.annotateCsv().length > 0)
-			psb.addTo(CONTEXT_annotations, a.annotateCsv());
+			psb.addTo(BEAN_annotations, a.annotateCsv());
 	}
 }

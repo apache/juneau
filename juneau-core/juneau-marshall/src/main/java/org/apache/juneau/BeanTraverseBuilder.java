@@ -168,6 +168,11 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return set(BEANTRAVERSE_maxDepth, value);
 	}
 
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
 
 	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder beanClassVisibility(Visibility value) {
@@ -682,12 +687,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public BeanTraverseBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

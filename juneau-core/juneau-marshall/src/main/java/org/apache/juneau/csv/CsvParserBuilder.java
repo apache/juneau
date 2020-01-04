@@ -126,6 +126,12 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public CsvParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public CsvParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -638,12 +644,6 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public CsvParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public CsvParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

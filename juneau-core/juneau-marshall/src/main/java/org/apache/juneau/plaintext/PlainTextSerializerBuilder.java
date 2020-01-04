@@ -251,6 +251,12 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public PlainTextSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public PlainTextSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -763,12 +769,6 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public PlainTextSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public PlainTextSerializerBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

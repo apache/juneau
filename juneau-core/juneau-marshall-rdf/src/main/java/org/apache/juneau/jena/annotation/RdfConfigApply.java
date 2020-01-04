@@ -110,6 +110,6 @@ public class RdfConfigApply extends ConfigApply<RdfConfig> {
 			psb.set(RDF_trimWhitespace, bool(a.trimWhitespace()));
 
 		if (a.annotateRdf().length > 0)
-			psb.addTo(CONTEXT_annotations, a.annotateRdf());
+			psb.addTo(BEAN_annotations, a.annotateRdf());
 	}
 }

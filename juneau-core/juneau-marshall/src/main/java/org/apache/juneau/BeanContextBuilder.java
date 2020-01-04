@@ -93,6 +93,29 @@ public class BeanContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Configuration property:  Annotations.
+	 *
+	 * <p>
+	 * Defines annotations to apply to specific classes and methods.
+	 *
+	 * <p>
+	 * Allows you to dynamically apply Juneau annotations typically applied directly to classes and methods.
+	 * Useful in cases where you want to use the functionality of the annotation on beans and bean properties but
+	 * do not have access to the code to do so.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_annotations}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder annotations(Annotation...values) {
+		return addTo(BEAN_annotations, values);
+	}
+
+	/**
 	 * Configuration property:  Minimum bean class visibility.
 	 *
 	 * <p>
@@ -1875,12 +1898,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	public BeanContextBuilder useJavaBeanIntrospector() {
 		return set(BEAN_useJavaBeanIntrospector, true);
-	}
-
-	@Override /* ContextBuilder */
-	public BeanContextBuilder annotations(Annotation...values) {
-		super.annotations(values);
-		return this;
 	}
 
 	@Override /* ContextBuilder */

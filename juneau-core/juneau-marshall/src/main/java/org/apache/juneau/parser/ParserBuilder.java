@@ -228,6 +228,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -740,12 +746,6 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public ParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext.annotation;
 
-import static org.apache.juneau.Context.*;
+import static org.apache.juneau.BeanContext.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
@@ -38,6 +38,6 @@ public class PlainTextConfigApply extends ConfigApply<PlainTextConfig> {
 		PlainTextConfig a = ai.getAnnotation();
 
 		if (a.annotatePlainText().length > 0)
-			psb.addTo(CONTEXT_annotations, a.annotatePlainText());
+			psb.addTo(BEAN_annotations, a.annotatePlainText());
 	}
 }

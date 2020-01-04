@@ -451,6 +451,12 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlSerializerBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -963,12 +969,6 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public XmlSerializerBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 

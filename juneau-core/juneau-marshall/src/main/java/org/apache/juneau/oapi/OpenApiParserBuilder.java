@@ -101,6 +101,12 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public OpenApiParserBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public OpenApiParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
@@ -613,12 +619,6 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	@Override /* BeanContextBuilder */
 	public OpenApiParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public OpenApiParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
 		return this;
 	}
 
