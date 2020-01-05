@@ -25,6 +25,12 @@
 		Better representation of nulls for XML and HTML content properties.
 		<br>Old:  <js>"&lt;myBean&gt;&lt;null&gt;&lt;/myBean&gt;"</js>
 		<br>New:  <js>"&lt;myBean nil='true'&gt;&lt;/myBean&gt;"</js>
+	<li>
+		Configurable properties such as {@link oaj.BeanContext#BEAN_debug} can now be set globally by either
+		system properties or environment variables.
+		<br>For <jsf>BEAN_debug</jsf> which resolves to <js>"BEAN_debug"</js>, you can use either the system
+		property <js>"BeanContext.debug.b"</js> or environment variables <js>"BeanContext_debug_b"</js> or 
+		<js>"BEANCONTEXT_DEBUG_B"</js>.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>

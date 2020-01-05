@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-Configurable Properties
+{updated} Configurable Properties
 
 <p>
 	Serializers and parsers have a wide variety of configurable properties.  They all extend from the 
@@ -78,8 +78,13 @@ Configurable Properties
 <p class='bpcode w800'>
 	<jc>// Clone and customize an existing serializer.</jc>
 	WriterSerializer s = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
-
 		.builder()  <jc>// Create a new builder with copied settings.</jc>
 		.quoteChar(<js>'"'</js>)  <jc>// Use a different quote character.</jc>
 		.build();
+</p>
+<p>
+	Configurable properties can be set globally using either system properties or environment variables.
+	<br>For example, the <jsf>WSERIALIZER_useWhitespace</jsf> variable resolves to the string <js>"WriterSerializer.useWhitespace.b"</js>.
+	This setting can be enabled by setting the system property <js>"WriterSerializer.useWhitespace"</js> or environment
+	variables <js>"WriterSerializer_useWhitespace"</js> or <js>"WRITERSERIALIZER_USEWHITESPACE"</js> to <js>"true"</js>.
 </p>

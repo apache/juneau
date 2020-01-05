@@ -240,6 +240,16 @@ public final class PropertyStore {
 		if (s != null)
 			return PropertyStoreBuilder.MutableProperty.create(k, s).build();
 
+		try {
+			String ke = key.replace('.',  '_');
+			s = System.getenv(ke);
+			if (s != null)
+				return PropertyStoreBuilder.MutableProperty.create(k, s).build();
+			s = System.getenv(ke.toUpperCase());
+			if (s != null)
+				return PropertyStoreBuilder.MutableProperty.create(k, s).build();
+		} catch (SecurityException e) {}
+
 		return null;
 	}
 
