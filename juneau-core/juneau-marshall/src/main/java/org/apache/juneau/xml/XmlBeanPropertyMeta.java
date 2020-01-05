@@ -43,7 +43,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		super(bpm);
 		this.xmlMetaProvider = mp;
 
-		for (Xml xml : bpm.getAnnotations(Xml.class, mp))
+		for (Xml xml : bpm.getAnnotations(Xml.class))
 			findXmlInfo(xml, mp);
 
 		if (namespace == null)
@@ -104,8 +104,8 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		ClassMeta<?> cmBean = bpm.getBeanMeta().getClassMeta();
 		String name = bpm.getName();
 
-		List<Xml> xmls = bpm.getAllAnnotations(Xml.class, mp);
-		List<XmlSchema> schemas = bpm.getAllAnnotations(XmlSchema.class, mp);
+		List<Xml> xmls = bpm.getAllAnnotations(Xml.class);
+		List<XmlSchema> schemas = bpm.getAllAnnotations(XmlSchema.class);
 		namespace = XmlUtils.findNamespace(xmls, schemas);
 
 		if (xmlFormat == XmlFormat.DEFAULT)

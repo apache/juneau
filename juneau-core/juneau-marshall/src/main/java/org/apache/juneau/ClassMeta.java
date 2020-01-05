@@ -351,6 +351,7 @@ public final class ClassMeta<T> implements Type {
 		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 			this.innerClass = innerClass;
 			this.beanContext = beanContext;
+			BeanContext bc = beanContext;
 
 			this.implClass = implClass;
 			ClassInfo ici = ClassInfo.of(implClass);
@@ -534,15 +535,15 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			if (beanFilter == null)
-				beanFilter = findBeanFilter();
+				beanFilter = findBeanFilter(bc);
 
 			if (pojoSwaps != null)
 				this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
 
-			if (beanContext != null)
-				this.builderSwap = BuilderSwap.findSwapFromPojoClass(c, beanContext.getBeanConstructorVisibility(), beanContext.getBeanMethodVisibility());
+			if (bc != null)
+				this.builderSwap = BuilderSwap.findSwapFromPojoClass(c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
 
-			findPojoSwaps(this.pojoSwaps);
+			findPojoSwaps(this.pojoSwaps, bc);
 
 			try {
 
@@ -578,7 +579,7 @@ public final class ClassMeta<T> implements Type {
 
 					BeanMeta newMeta = null;
 					try {
-						newMeta = new BeanMeta(ClassMeta.this, beanContext, beanFilter, null);
+						newMeta = new BeanMeta(ClassMeta.this, bc, beanFilter, null);
 						notABeanReason = newMeta.notABeanReason;
 
 						// Always get these even if it's not a bean:
@@ -603,22 +604,22 @@ public final class ClassMeta<T> implements Type {
 			if (beanMeta != null)
 				dictionaryName = beanMeta.getDictionaryName();
 
-			if (beanMeta != null && beanContext != null && beanContext.isUseInterfaceProxies() && innerClass.isInterface())
+			if (beanMeta != null && bc != null && bc.isUseInterfaceProxies() && innerClass.isInterface())
 				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
 
-			Bean b = c.getAnnotation(Bean.class);
+			Bean b = bc == null ? null : bc.getAnnotation(Bean.class, c);
 			if (b != null) {
 				if (b.beanDictionary().length != 0)
-					beanRegistry = new BeanRegistry(beanContext, null, b.beanDictionary());
+					beanRegistry = new BeanRegistry(bc, null, b.beanDictionary());
 				if (b.dictionary().length != 0)
-					beanRegistry = new BeanRegistry(beanContext, null, b.dictionary());
+					beanRegistry = new BeanRegistry(bc, null, b.dictionary());
 
 				// This could be a non-bean POJO with a type name.
 				if (dictionaryName == null && ! b.typeName().isEmpty())
 					dictionaryName = b.typeName();
 			}
 
-			Example e = c.getAnnotation(Example.class);
+			Example e = bc == null ? null : bc.getAnnotation(Example.class, c);
 
 			if (example == null && e != null && ! e.value().isEmpty())
 				example = e.value();
@@ -678,9 +679,9 @@ public final class ClassMeta<T> implements Type {
 			this.stringMutater = Mutaters.get(String.class, c);
 		}
 
-		private BeanFilter findBeanFilter() {
+		private BeanFilter findBeanFilter(BeanContext bc) {
 			try {
-				List<Bean> ba = info.getAnnotations(Bean.class);
+				List<Bean> ba = info.getAnnotations(Bean.class, bc);
 				if (! ba.isEmpty())
 					return new AnnotationBeanFilterBuilder(innerClass, ba).build();
 			} catch (Exception e) {
@@ -689,11 +690,11 @@ public final class ClassMeta<T> implements Type {
 			return null;
 		}
 
-		private void findPojoSwaps(List<PojoSwap> l) {
-			Swap swap = innerClass.getAnnotation(Swap.class);
+		private void findPojoSwaps(List<PojoSwap> l, BeanContext bc) {
+			Swap swap = bc == null ? null : bc.getAnnotation(Swap.class, innerClass);
 			if (swap != null)
 				l.add(createPojoSwap(swap));
-			Swaps swaps = innerClass.getAnnotation(Swaps.class);
+			Swaps swaps = bc == null ? null : bc.getAnnotation(Swaps.class, innerClass);
 			if (swaps != null)
 				for (Swap s : swaps.value())
 					l.add(createPojoSwap(s));
@@ -727,7 +728,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			if (ci.isChildOf(Surrogate.class)) {
-				List<SurrogateSwap<?,?>> l = SurrogateSwap.findPojoSwaps(c);
+				List<SurrogateSwap<?,?>> l = SurrogateSwap.findPojoSwaps(c, beanContext);
 				if (! l.isEmpty())
 					return (PojoSwap<T,?>)l.iterator().next();
 			}

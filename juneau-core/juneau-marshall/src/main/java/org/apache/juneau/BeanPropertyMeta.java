@@ -160,14 +160,14 @@ public final class BeanPropertyMeta {
 		}
 
 		@SuppressWarnings("deprecation")
-		boolean validate(BeanContext f, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
+		boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
 			List<Class<?>> bdClasses = new ArrayList<>();
 
 			if (field == null && getter == null && setter == null)
 				return false;
 
-			if (field == null && setter == null && f.isBeansRequireSettersForGetters() && ! isConstructorArg)
+			if (field == null && setter == null && bc.isBeansRequireSettersForGetters() && ! isConstructorArg)
 				return false;
 
 			canRead |= (field != null || getter != null);
@@ -175,11 +175,11 @@ public final class BeanPropertyMeta {
 
 			if (innerField != null) {
 				BeanProperty px = innerField.getAnnotation(BeanProperty.class);
-				Beanp p = innerField.getAnnotation(Beanp.class);
+				Beanp p = bc.getAnnotation(Beanp.class, innerField);
 				if (field != null || px != null || p != null) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
-					rawTypeMeta = f.resolveClassMeta(px, p, innerField.getGenericType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(px, p, innerField.getGenericType(), typeVarImpls);
 					isUri |= (rawTypeMeta.isUri());
 				}
 				if (px != null) {
@@ -196,19 +196,19 @@ public final class BeanPropertyMeta {
 					if (! p.wo().isEmpty())
 						writeOnly = Boolean.valueOf(p.wo());
 				}
-				Swap s = innerField.getAnnotation(Swap.class);
+				Swap s = bc.getAnnotation(Swap.class, innerField);
 				if (s != null) {
 					swap = getPropertyPojoSwap(s);
 				}
-				isUri |= innerField.isAnnotationPresent(org.apache.juneau.annotation.URI.class);
+				isUri |= bc.getAnnotation(org.apache.juneau.annotation.URI.class, innerField) != null;
 			}
 
 			if (getter != null) {
 				BeanProperty px = MethodInfo.of(getter).getAnnotation(BeanProperty.class);
-				Beanp p = MethodInfo.of(getter).getAnnotation(Beanp.class);
+				Beanp p = bc.getAnnotation(Beanp.class, getter);
 				if (rawTypeMeta == null)
-					rawTypeMeta = f.resolveClassMeta(px, p, getter.getGenericReturnType(), typeVarImpls);
-				isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
+					rawTypeMeta = bc.resolveClassMeta(px, p, getter.getGenericReturnType(), typeVarImpls);
+				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(org.apache.juneau.annotation.URI.class, getter));
 				if (px != null) {
 					if (properties != null && ! px.properties().isEmpty())
 						properties = split(px.properties());
@@ -223,7 +223,7 @@ public final class BeanPropertyMeta {
 					if (! p.wo().isEmpty())
 						writeOnly = Boolean.valueOf(p.wo());
 				}
-				Swap s = getter.getAnnotation(Swap.class);
+				Swap s = bc.getAnnotation(Swap.class, getter);
 				if (s != null && swap == null) {
 					swap = getPropertyPojoSwap(s);
 				}
@@ -231,9 +231,9 @@ public final class BeanPropertyMeta {
 
 			if (setter != null) {
 				BeanProperty px = MethodInfo.of(setter).getAnnotation(BeanProperty.class);
-				Beanp p = MethodInfo.of(setter).getAnnotation(Beanp.class);
+				Beanp p = bc.getAnnotation(Beanp.class, setter);
 				if (rawTypeMeta == null)
-					rawTypeMeta = f.resolveClassMeta(px, p, setter.getGenericParameterTypes()[0], typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(px, p, setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 				if (px != null) {
 					if (swap == null)
@@ -253,7 +253,7 @@ public final class BeanPropertyMeta {
 					if (! p.wo().isEmpty())
 						writeOnly = Boolean.valueOf(p.wo());
 				}
-				Swap s = setter.getAnnotation(Swap.class);
+				Swap s = bc.getAnnotation(Swap.class, setter);
 				if (s != null && swap == null) {
 					swap = getPropertyPojoSwap(s);
 				}
@@ -1125,31 +1125,31 @@ public final class BeanPropertyMeta {
 	 *
 	 * @param <A> The class to find annotations for.
 	 * @param a The class to find annotations for.
-	 * @param mp The metadata provider for finding annotations.
 	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> List<A> getAllAnnotations(Class<A> a, MetaProvider mp) {
+	public <A extends Annotation> List<A> getAllAnnotations(Class<A> a) {
 		List<A> l = new LinkedList<>();
+		BeanContext bc = beanContext;
 		if (a == null)
 			return l;
 		if (field != null) {
-			addIfNotNull(l, mp.getAnnotation(a, field));
-			ClassInfo.of(field.getType()).appendAnnotations(l, a, mp);
+			addIfNotNull(l, bc.getAnnotation(a, field));
+			ClassInfo.of(field.getType()).appendAnnotations(l, a, bc);
 		}
 		if (getter != null) {
-			addIfNotNull(l, mp.getAnnotation(a, getter));
-			ClassInfo.of(getter.getReturnType()).appendAnnotations(l, a, mp);
+			addIfNotNull(l, bc.getAnnotation(a, getter));
+			ClassInfo.of(getter.getReturnType()).appendAnnotations(l, a, bc);
 		}
 		if (setter != null) {
-			addIfNotNull(l, mp.getAnnotation(a, setter));
-			ClassInfo.of(setter.getReturnType()).appendAnnotations(l, a, mp);
+			addIfNotNull(l, bc.getAnnotation(a, setter));
+			ClassInfo.of(setter.getReturnType()).appendAnnotations(l, a, bc);
 		}
 		if (extraKeys != null) {
-			addIfNotNull(l, mp.getAnnotation(a, extraKeys));
-			ClassInfo.of(extraKeys.getReturnType()).appendAnnotations(l, a, mp);
+			addIfNotNull(l, bc.getAnnotation(a, extraKeys));
+			ClassInfo.of(extraKeys.getReturnType()).appendAnnotations(l, a, bc);
 		}
 
-		getBeanMeta().getClassMeta().getInfo().appendAnnotations(l, a, mp);
+		getBeanMeta().getClassMeta().getInfo().appendAnnotations(l, a, bc);
 		return l;
 	}
 
@@ -1158,16 +1158,16 @@ public final class BeanPropertyMeta {
 	 *
 	 * @param <A> The class to find annotations for.
 	 * @param a The class to find annotations for.
-	 * @param mp The metadata provider for finding annotations.
 	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, MetaProvider mp) {
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a) {
 		List<A> l = new LinkedList<>();
+		BeanContext bc = beanContext;
 		if (a == null)
 			return l;
-		addIfNotNull(l, mp.getAnnotation(a, field));
-		addIfNotNull(l, mp.getAnnotation(a, getter));
-		addIfNotNull(l, mp.getAnnotation(a, setter));
+		addIfNotNull(l, bc.getAnnotation(a, field));
+		addIfNotNull(l, bc.getAnnotation(a, getter));
+		addIfNotNull(l, bc.getAnnotation(a, setter));
 		return l;
 	}
 

@@ -316,10 +316,9 @@ public final class HtmlParserSession extends XmlParserSession {
 			throws IOException, ParseException, XMLStreamException {
 		String href = r.getAttributeValue(null, "href");
 		String name = getElementText(r);
-		Class<T> beanClass = beanType.getInnerClass();
-		if (beanClass.isAnnotationPresent(HtmlLink.class)) {
-			HtmlLink h = beanClass.getAnnotation(HtmlLink.class);
-			BeanMap<T> m = newBeanMap(beanClass);
+		if (beanType.hasAnnotation(HtmlLink.class)) {
+			HtmlLink h = beanType.getAnnotation(HtmlLink.class);
+			BeanMap<T> m = newBeanMap(beanType.getInnerClass());
 			m.put(h.uriProperty(), href);
 			m.put(h.nameProperty(), name);
 			return m.getBean();

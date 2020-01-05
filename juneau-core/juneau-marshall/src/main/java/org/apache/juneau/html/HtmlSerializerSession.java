@@ -345,9 +345,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			} else if (sType.isBean()) {
 				BeanMap m = toBeanMap(o);
-				Class<?> c = o.getClass();
-				if (c.isAnnotationPresent(HtmlLink.class)) {
-					HtmlLink h = o.getClass().getAnnotation(HtmlLink.class);
+				if (aType.hasAnnotation(HtmlLink.class)) {
+					HtmlLink h = aType.getAnnotation(HtmlLink.class);
 					Object urlProp = m.get(h.uriProperty());
 					Object nameProp = m.get(h.nameProperty());
 					out.oTag("a").attrUri("href", urlProp).append('>').text(nameProp).eTag("a");

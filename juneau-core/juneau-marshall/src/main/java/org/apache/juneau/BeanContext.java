@@ -2230,7 +2230,7 @@ public class BeanContext extends Context implements MetaProvider {
 				if (ci.isChildOf(PojoSwap.class))
 					lpf.add(castOrCreate(PojoSwap.class, ci.inner()));
 				else if (ci.isChildOf(Surrogate.class))
-					lpf.addAll(SurrogateSwap.findPojoSwaps(ci.inner()));
+					lpf.addAll(SurrogateSwap.findPojoSwaps(ci.inner(), this));
 				else
 					throw new FormattedRuntimeException("Invalid class {0} specified in BeanContext.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.inner());
 			} else if (o instanceof PojoSwap) {
@@ -3011,29 +3011,252 @@ public class BeanContext extends Context implements MetaProvider {
 	// MetaProvider methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	private static final boolean DISABLE_ANNOTATION_CACHING = ! Boolean.getBoolean("juneau.disableAnnotationCaching");
+
+	private TwoKeyConcurrentHashMap<Class<?>,Class<? extends Annotation>,Optional<Annotation>> classAnnotationCache = new TwoKeyConcurrentHashMap<>();
+	private TwoKeyConcurrentHashMap<Class<?>,Class<? extends Annotation>,Optional<Annotation>> declaredClassAnnotationCache = new TwoKeyConcurrentHashMap<>();
+	private TwoKeyConcurrentHashMap<Method,Class<? extends Annotation>,Optional<Annotation>> methodAnnotationCache = new TwoKeyConcurrentHashMap<>();
+	private TwoKeyConcurrentHashMap<Field,Class<? extends Annotation>,Optional<Annotation>> fieldAnnotationCache = new TwoKeyConcurrentHashMap<>();
+	private TwoKeyConcurrentHashMap<Constructor<?>,Class<? extends Annotation>,Optional<Annotation>> constructorAnnotationCache = new TwoKeyConcurrentHashMap<>();
+
 	@Override /* MetaProvider */
 	public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c) {
-		return a == null || c == null ? null : (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+		if (a == null || c == null)
+			return null;
+		if (DISABLE_ANNOTATION_CACHING)
+			return (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+		Optional<Annotation> aa = classAnnotationCache.get(c, a);
+		if (aa == null) {
+			aa = Optional.ofNullable((A)annotations.findFirst(c, a).orElse(c.getAnnotation(a)));
+			classAnnotationCache.put(c, a, aa);
+		}
+		return (A)aa.orElse(null);
+	}
+
+	/**
+	 * Finds the specified annotation on the specified class.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param c The class to search on.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <A extends Annotation> A getAnnotation(Class<A> a, ClassInfo c) {
+		return getAnnotation(a, c == null ? null : c.inner());
 	}
 
 	@Override /* MetaProvider */
 	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c) {
-		return a == null || c == null ? null : (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+		if (a == null || c == null)
+			return null;
+		if (DISABLE_ANNOTATION_CACHING)
+			return (A)annotations.findFirst(c, a).orElse(c.getDeclaredAnnotation(a));
+		Optional<Annotation> aa = declaredClassAnnotationCache.get(c, a);
+		if (aa == null) {
+			aa =  Optional.ofNullable((A)annotations.findFirst(c, a).orElse(c.getDeclaredAnnotation(a)));
+			declaredClassAnnotationCache.put(c, a, aa);
+		}
+		return (A)aa.orElse(null);
+	}
+
+	/**
+	 * Finds the specified declared annotation on the specified class.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param c The class to search on.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, ClassInfo c) {
+		return getDeclaredAnnotation(a, c == null ? null : c.inner());
 	}
 
 	@Override /* MetaProvider */
 	public <A extends Annotation> A getAnnotation(Class<A> a, Method m) {
-		return a == null || m == null ? null : (A)annotations.findFirst(m, a).orElse(m.getAnnotation(a));
+		if (a == null || m == null)
+			return null;
+		if (DISABLE_ANNOTATION_CACHING)
+			return (A)annotations.findFirst(m, a).orElse(m.getAnnotation(a));
+		Optional<Annotation> aa = methodAnnotationCache.get(m, a);
+		if (aa == null) {
+			aa =  Optional.ofNullable((A)annotations.findFirst(m, a).orElse(m.getAnnotation(a)));
+			methodAnnotationCache.put(m, a, aa);
+		}
+		return (A)aa.orElse(null);
+	}
+
+	/**
+	 * Finds the specified annotation on the specified method.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param m The method to search on.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <A extends Annotation> A getAnnotation(Class<A> a, MethodInfo m) {
+		return getAnnotation(a, m == null ? null : m.inner());
 	}
 
 	@Override /* MetaProvider */
 	public <A extends Annotation> A getAnnotation(Class<A> a, Field f) {
-		return a == null || f == null ? null : (A)annotations.findFirst(f, a).orElse(f.getAnnotation(a));
+		if (a == null || f == null)
+			return null;
+		if (DISABLE_ANNOTATION_CACHING)
+			return (A)annotations.findFirst(f, a).orElse(f.getAnnotation(a));
+		Optional<Annotation> aa = fieldAnnotationCache.get(f, a);
+		if (aa == null) {
+			aa =  Optional.ofNullable((A)annotations.findFirst(f, a).orElse(f.getAnnotation(a)));
+			fieldAnnotationCache.put(f, a, aa);
+		}
+		return (A)aa.orElse(null);
+	}
+
+	/**
+	 * Finds the specified annotation on the specified field.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param f The field to search on.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <A extends Annotation> A getAnnotation(Class<A> a, FieldInfo f) {
+		return getAnnotation(a, f == null ? null: f.inner());
 	}
 
 	@Override /* MetaProvider */
 	public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c) {
-		return a == null || c == null ? null : (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+		if (a == null || c == null)
+			return null;
+		if (DISABLE_ANNOTATION_CACHING)
+			return (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+		Optional<Annotation> aa = constructorAnnotationCache.get(c, a);
+		if (aa == null) {
+			aa =  Optional.ofNullable((A)annotations.findFirst(c, a).orElse(c.getAnnotation(a)));
+			constructorAnnotationCache.put(c, a, aa);
+		}
+		return (A)aa.orElse(null);
+	}
+
+	/**
+	 * Finds the specified annotation on the specified constructor.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param c The constructor to search on.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <A extends Annotation> A getAnnotation(Class<A> a, ConstructorInfo c) {
+		return getAnnotation(a, c == null ? null : c.inner());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
+	 *
+	 * @param a The annotation being checked for.
+	 * @param c The class being checked on.
+	 * @return <jk>true</jk> if the annotation exists on the specified class.
+	 */
+	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Class<?> c) {
+		return getAnnotation(a, c) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
+	 *
+	 * @param a The annotation being checked for.
+	 * @param c The class being checked on.
+	 * @return <jk>true</jk> if the annotation exists on the specified class.
+	 */
+	public <A extends Annotation> boolean hasAnnotation(Class<A> a, ClassInfo c) {
+		return getAnnotation(a, c == null ? null : c.inner()) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
+	 *
+	 * @param a The annotation being checked for.
+	 * @param c The class being checked on.
+	 * @return <jk>true</jk> if the annotation exists on the specified class.
+	 */
+	public <A extends Annotation> boolean hasDeclaredAnnotation(Class<A> a, Class<?> c) {
+		return getDeclaredAnnotation(a, c) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if <c>getDeclaredAnnotation(a,c)</c> returns a non-null value.
+	 *
+	 * @param a The annotation being checked for.
+	 * @param c The class being checked on.
+	 * @return <jk>true</jk> if the annotation exists on the specified class.
+	 */
+	public <A extends Annotation> boolean hasDeclaredAnnotation(Class<A> a, ClassInfo c) {
+		return getDeclaredAnnotation(a, c == null ? null : c.inner()) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if <c>getAnnotation(a,m)</c> returns a non-null value.
+	 *
+	 * @param a The annotation being checked for.
+	 * @param m The method being checked on.
+	 * @return <jk>true</jk> if the annotation exists on the specified method.
+	 */
+	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Method m) {
+		return getAnnotation(a, m) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if <c>getAnnotation(a,m)</c> returns a non-null value.
+	 *
+	 * @param a The annotation being checked for.
+	 * @param m The method being checked on.
+	 * @return <jk>true</jk> if the annotation exists on the specified method.
+	 */
+	public <A extends Annotation> boolean hasAnnotation(Class<A> a, MethodInfo m) {
+		return getAnnotation(a, m == null ? null : m.inner()) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if <c>getAnnotation(a,f)</c> returns a non-null value.
+	 *
+	 * @param a The annotation being checked for.
+	 * @param f The field being checked on.
+	 * @return <jk>true</jk> if the annotation exists on the specified field.
+	 */
+	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Field f) {
+		return getAnnotation(a, f) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if <c>getAnnotation(a,f)</c> returns a non-null value.
+	 *
+	 * @param a The annotation being checked for.
+	 * @param f The field being checked on.
+	 * @return <jk>true</jk> if the annotation exists on the specified field.
+	 */
+	public <A extends Annotation> boolean hasAnnotation(Class<A> a, FieldInfo f) {
+		return getAnnotation(a, f == null ? null : f.inner()) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
+	 *
+	 * @param a The annotation being checked for.
+	 * @param c The constructor being checked on.
+	 * @return <jk>true</jk> if the annotation exists on the specified constructor.
+	 */
+	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Constructor<?> c) {
+		return getAnnotation(a, c) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
+	 *
+	 * @param a The annotation being checked for.
+	 * @param c The constructor being checked on.
+	 * @return <jk>true</jk> if the annotation exists on the specified constructor.
+	 */
+	public <A extends Annotation> boolean hasAnnotation(Class<A> a, ConstructorInfo c) {
+		return getAnnotation(a, c == null ? null : c.inner()) != null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

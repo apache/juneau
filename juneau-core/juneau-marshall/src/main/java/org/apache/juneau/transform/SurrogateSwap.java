@@ -53,14 +53,15 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	 * Returns an empty list if no public 1-arg constructors are found.
 	 *
 	 * @param c The surrogate class.
+	 * @param bc The bean context to use for looking up annotations.
 	 * @return The list of POJO swaps that apply to this class.
 	 */
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public static List<SurrogateSwap<?,?>> findPojoSwaps(Class<?> c) {
+	public static List<SurrogateSwap<?,?>> findPojoSwaps(Class<?> c, BeanContext bc) {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
 		ClassInfo ci = ClassInfo.of(c);
 		for (ConstructorInfo cc : ci.getPublicConstructors()) {
-			if (cc.getAnnotation(BeanIgnore.class) == null && cc.hasNumParams(1) && cc.isPublic()) {
+			if (! bc.hasAnnotation(BeanIgnore.class, cc) && cc.hasNumParams(1) && cc.isPublic()) {
 				Class<?> pt = cc.getRawParamType(0);
 				if (! pt.equals(c.getDeclaringClass())) {
 					// Find the unswap method if there is one.

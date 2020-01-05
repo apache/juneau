@@ -95,9 +95,8 @@ public class RequestBeanMeta {
 		}
 
 		Builder apply(Class<?> c) {
-			ClassInfo ci = ClassInfo.of(c);
-			apply(ci.getAnnotation(Request.class));
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
+			apply(cm.getAnnotation(Request.class));
 			for (MethodInfo m : cm.getInfo().getAllMethods()) {
 
 				if (m.isPublic()) {

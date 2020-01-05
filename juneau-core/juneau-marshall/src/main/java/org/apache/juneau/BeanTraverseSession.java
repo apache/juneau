@@ -120,8 +120,6 @@ public class BeanTraverseSession extends BeanSession {
 				return null;
 			isBottom = false;
 			stack.add(new StackElement(stack.size(), attrName, o, cm));
-			if (isDebug())
-				getLogger().info(getStack(false));
 			set.put(o, o);
 		}
 		return cm;

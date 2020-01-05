@@ -233,11 +233,11 @@ public class BeanMeta<T> {
 						}
 						constructor.setAccessible();
 					}
-					if (x.hasAnnotation(Beanc.class)) {
+					if (ctx.hasAnnotation(Beanc.class, x)) {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
-						constructorArgs = split(x.getAnnotation(Beanc.class).properties());
+						constructorArgs = split(ctx.getAnnotation(Beanc.class, x).properties());
 						if (constructorArgs.length != x.getParamCount()) {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -320,7 +320,7 @@ public class BeanMeta<T> {
 
 				} else /* Use 'better' introspection */ {
 
-					for (Field f : findBeanFields(c2, stopClass, fVis, filterProps)) {
+					for (Field f : findBeanFields(ctx, c2, stopClass, fVis, filterProps)) {
 						String name = findPropertyName(f, fixedBeanProps);
 						if (name != null) {
 							if (! normalProps.containsKey(name))
@@ -329,7 +329,7 @@ public class BeanMeta<T> {
 						}
 					}
 
-					List<BeanMethod> bms = findBeanMethods(c2, stopClass, mVis, fixedBeanProps, filterProps, propertyNamer, fluentSetters);
+					List<BeanMethod> bms = findBeanMethods(ctx, c2, stopClass, mVis, fixedBeanProps, filterProps, propertyNamer, fluentSetters);
 
 					// Iterate through all the getters.
 					for (BeanMethod bm : bms) {
@@ -345,7 +345,7 @@ public class BeanMeta<T> {
 								if (m.getAnnotation(BeanProperty.class) == null && bpm.getter.getAnnotation(BeanProperty.class) != null)
 									m = bpm.getter;  // @BeanProperty annotated method takes precedence.
 
-								else if (m.getAnnotation(Beanp.class) == null && bpm.getter.getAnnotation(Beanp.class) != null)
+								else if (! ctx.hasAnnotation(Beanp.class, m) && ctx.hasAnnotation(Beanp.class, bpm.getter))
 									m = bpm.getter;  // @Beanp annotated method takes precedence.
 
 								else if (m.getName().startsWith("is") && bpm.getter.getName().startsWith("get"))
@@ -510,8 +510,8 @@ public class BeanMeta<T> {
 		private String findPropertyName(Field f, Set<String> fixedBeanProps) {
 			@SuppressWarnings("deprecation")
 			BeanProperty px = f.getAnnotation(BeanProperty.class);
-			Beanp p = f.getAnnotation(Beanp.class);
-			Name n = f.getAnnotation(Name.class);
+			Beanp p = ctx.getAnnotation(Beanp.class, f);
+			Name n = ctx.getAnnotation(Name.class, f);
 			String name = bpName(px, p, n);
 			if (isNotEmpty(name)) {
 				if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
@@ -633,7 +633,7 @@ public class BeanMeta<T> {
 	 * @param fixedBeanProps Only include methods whose properties are in this list.
 	 * @param pn Use this property namer to determine property names from the method names.
 	 */
-	static final List<BeanMethod> findBeanMethods(Class<?> c, Class<?> stopClass, Visibility v, Set<String> fixedBeanProps, Set<String> filterProps, PropertyNamer pn, boolean fluentSetters) {
+	static final List<BeanMethod> findBeanMethods(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v, Set<String> fixedBeanProps, Set<String> filterProps, PropertyNamer pn, boolean fluentSetters) {
 		List<BeanMethod> l = new LinkedList<>();
 
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
@@ -645,14 +645,14 @@ public class BeanMeta<T> {
 				if (m.getParamCount() > 2)
 					continue;
 
-				BeanIgnore bi = m.getAnnotation(BeanIgnore.class);
+				BeanIgnore bi = ctx.getAnnotation(BeanIgnore.class, m);
 				if (bi != null)
 					continue;
 
 				@SuppressWarnings("deprecation")
 				BeanProperty px = m.getAnnotation(BeanProperty.class);
-				Beanp p = m.getAnnotation(Beanp.class);
-				Name n2 = m.getAnnotation(Name.class);
+				Beanp p = ctx.getAnnotation(Beanp.class, m);
+				Name n2 = ctx.getAnnotation(Name.class, m);
 				if (! (m.isVisible(v) || px != null || p != null || n2 != null))
 					continue;
 
@@ -746,7 +746,7 @@ public class BeanMeta<T> {
 		return l;
 	}
 
-	static final Collection<Field> findBeanFields(Class<?> c, Class<?> stopClass, Visibility v, Set<String> filterProps) {
+	static final Collection<Field> findBeanFields(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v, Set<String> filterProps) {
 		List<Field> l = new LinkedList<>();
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
 			for (FieldInfo f : c2.getDeclaredFields()) {
@@ -757,8 +757,8 @@ public class BeanMeta<T> {
 
 				@SuppressWarnings("deprecation")
 				BeanProperty px = f.getAnnotation(BeanProperty.class);
-				Beanp p = f.getAnnotation(Beanp.class);
-				Name n = f.getAnnotation(Name.class);
+				Beanp p = ctx.getAnnotation(Beanp.class, f);
+				Name n = ctx.getAnnotation(Name.class, f);
 				String bpName = bpName(px, p, n);
 
 				if (! (v.isVisible(f.inner()) || px != null || p != null))
