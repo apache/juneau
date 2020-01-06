@@ -127,13 +127,20 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_addBeanTypes XML_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>XmlSerializer.addBeanTypes</c>
+	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_ADDBEANTYPES</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#addBeanTypes()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlSerializerBuilder#addBeanTypes(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -153,14 +160,21 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_addNamespaceUrisToRoot XML_addNamespaceUrisToRoot}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addNamespaceUrisToRoot.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>XmlSerializer.addNamespaceUrisToRoot</c>
+	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_ADDNAMESPACEURISTOROOT</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#addNamespaceUrisToRoot()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlSerializerBuilder#addNamespaceUrisToRoot(boolean)}
-	 * 			<li class='jm'>{@link XmlSerializerBuilder#addNamespaceUrisToRoot()}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#addNamespaceUrisToRoot(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#addNamespaceUrisToRoot()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -182,13 +196,20 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_autoDetectNamespaces XML_autoDetectNamespaces}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.autoDetectNamespaces.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>XmlSerializer.autoDetectNamespaces</c>
+	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_AUTODETECTNAMESPACES</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#autoDetectNamespaces()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlSerializerBuilder#autoDetectNamespaces(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#autoDetectNamespaces(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -225,13 +246,20 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_defaultNamespace XML_defaultNamespace}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.defaultNamespace.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link Namespace})
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.xml.Namespace}
+	 * 	<li><b>System property:</b>  <c>XmlSerializer.defaultNamespace</c>
+	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_DEFAULTNAMESPACE</c>
 	 * 	<li><b>Default:</b>  <js>"juneau: http://www.apache.org/2013/Juneau"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#defaultNamespace()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlSerializerBuilder#defaultNamespace(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#defaultNamespace(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -250,13 +278,20 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_enableNamespaces XML_enableNamespaces}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.enableNamespaces.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>XmlSerializer.enableNamespaces</c>
+	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_ENABLENAMESPACES</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#enableNamespaces()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlSerializerBuilder#enableNamespaces(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#enableNamespaces(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -275,13 +310,20 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_namespaces XML_namespaces}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.namespaces.ls"</js>
-	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c> ({@link Namespace})
+	 * 	<li><b>Data type:</b>  <c>Set&lt;{@link org.apache.juneau.xml.Namespace}&gt;</c>
+	 * 	<li><b>System property:</b>  <c>XmlSerializer.namespaces</c>
+	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_NAMESPACES</c>
 	 * 	<li><b>Default:</b>  empty set
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#defaultNamespace()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlSerializerBuilder#defaultNamespace(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#defaultNamespace(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -300,13 +342,20 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_xsNamespace XML_xsNamespace}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.xsNamespace.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link Namespace})
+	 * 	<li><b>Data type:</b>  <c>String</c> ({@link org.apache.juneau.xml.Namespace})
+	 * 	<li><b>System property:</b>  <c>XmlSerializer.xsNamespace</c>
+	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_XSNAMESPACE</c>
 	 * 	<li><b>Default:</b>  <js>"xs: http://www.w3.org/2001/XMLSchema"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#xsNamespace()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlSerializerBuilder#xsNamespace(Namespace)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#xsNamespace(Namespace)}
 	 * 		</ul>
 	 * </ul>
 	 *

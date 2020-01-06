@@ -42,13 +42,20 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.msgpack.MsgPackSerializer#MSGPACK_addBeanTypes MSGPACK_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"MsgPackSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>MsgPackSerializer.addBeanTypes</c>
+	 * 	<li><b>Environment variable:</b>  <c>MSGPACKSERIALIZER_ADDBEANTYPES</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackConfig#addBeanTypes()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link MsgPackSerializerBuilder#addBeanTypes(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.msgpack.MsgPackSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *

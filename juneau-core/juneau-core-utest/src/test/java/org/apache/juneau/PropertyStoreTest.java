@@ -1434,94 +1434,161 @@ public class PropertyStoreTest {
 
 	@Test
 	public void testStringDefault() {
-		PropertyStore ps = PropertyStore.create().build();
 
 		System.setProperty("A.f1", "foo");
+		PropertyStore ps = PropertyStore.create().build();
 		assertEquals("foo", ps.getProperty("A.f1"));
+
 		System.clearProperty("A.f1");
+		ps = PropertyStore.create().build();
+		assertNull(ps.getProperty("A.f1"));
 	}
 
 	@Test
 	public void testIntegerDefault() {
-		PropertyStore ps = PropertyStore.create().build();
 
 		System.setProperty("A.f1.i", "1");
+		PropertyStore ps = PropertyStore.create().build();
 		assertEquals(1, ps.getProperty("A.f1.i"));
 		assertInstanceOf(Integer.class, ps.getProperty("A.f1.i"));
+
 		System.clearProperty("A.f1.i");
+		System.setProperty("A.f1", "1");
+		ps = PropertyStore.create().build();
+		assertEquals(1, ps.getProperty("A.f1.i"));
+		assertInstanceOf(Integer.class, ps.getProperty("A.f1.i"));
+
+		System.clearProperty("A.f1");
+		assertNull(ps.getProperty("A.f1.i"));
 	}
 
 	@Test
 	public void testObjectDefault() {
-		PropertyStore ps = PropertyStore.create().build();
 
 		System.setProperty("A.f1.o", "123");
+		PropertyStore ps = PropertyStore.create().build();
 		assertEquals("123", ps.getProperty("A.f1.o"));
 		assertInstanceOf(String.class, ps.getProperty("A.f1.o"));
+
 		System.clearProperty("A.f1.o");
+		System.setProperty("A.f1", "123");
+		assertEquals("123", ps.getProperty("A.f1.o"));
+		assertInstanceOf(String.class, ps.getProperty("A.f1.o"));
+
+		System.clearProperty("A.f1");
+		assertNull(ps.getProperty("A.f1.o"));
 	}
 
 	@Test
 	public void testSetStringDefault() {
-		PropertyStore ps = PropertyStore.create().build();
 
 		System.setProperty("A.f1.ss", "['foo','bar']");
+		PropertyStore ps = PropertyStore.create().build();
 		assertObjectEquals("['bar','foo']", ps.getProperty("A.f1.ss"));
+
 		System.clearProperty("A.f1.ss");
+		System.setProperty("A.f1", "['foo','bar']");
+		ps = PropertyStore.create().build();
+		assertObjectEquals("['bar','foo']", ps.getProperty("A.f1.ss"));
+
+		System.clearProperty("A.f1");
+		assertNull(ps.getProperty("A.f1.ss"));
 	}
 
 	@Test
 	public void testSetIntegerDefault() {
-		PropertyStore ps = PropertyStore.create().build();
 
 		System.setProperty("A.f1.si", "['2','1']");
+		PropertyStore ps = PropertyStore.create().build();
 		assertObjectEquals("[1,2]", ps.getProperty("A.f1.si"));
+
 		System.clearProperty("A.f1.si");
+		System.setProperty("A.f1", "['2','1']");
+		ps = PropertyStore.create().build();
+		assertObjectEquals("[1,2]", ps.getProperty("A.f1.si"));
+
+		System.clearProperty("A.f1");
+		assertNull(ps.getProperty("A.f1.si"));
 	}
 
 	@Test
 	public void testListStringDefault() {
-		PropertyStore ps = PropertyStore.create().build();
 
 		System.setProperty("A.f1.ls", "['foo','bar']");
+		PropertyStore ps = PropertyStore.create().build();
 		assertObjectEquals("['foo','bar']", ps.getProperty("A.f1.ls"));
+
 		System.clearProperty("A.f1.ls");
+		System.setProperty("A.f1", "['foo','bar']");
+		ps = PropertyStore.create().build();
+		assertObjectEquals("['foo','bar']", ps.getProperty("A.f1.ls"));
+
+		System.clearProperty("A.f1");
+		assertNull(ps.getProperty("A.f1.ls"));
 	}
 
 	@Test
 	public void testListIntegerDefault() {
-		PropertyStore ps = PropertyStore.create().build();
 
 		System.setProperty("A.f1.li", "['2','1']");
+		PropertyStore ps = PropertyStore.create().build();
 		assertObjectEquals("[2,1]", ps.getProperty("A.f1.li"));
+
 		System.clearProperty("A.f1.li");
+		System.setProperty("A.f1", "['2','1']");
+		ps = PropertyStore.create().build();
+		assertObjectEquals("[2,1]", ps.getProperty("A.f1.li"));
+
+		System.clearProperty("A.f1");
+		assertNull(ps.getProperty("A.f1.li"));
 	}
 
 	@Test
 	public void testMapStringDefault() {
-		PropertyStore ps = PropertyStore.create().build();
 
 		System.setProperty("A.f1.sms", "{foo:'bar',baz:null}");
+		PropertyStore ps = PropertyStore.create().build();
 		assertObjectEquals("{foo:'bar'}", ps.getProperty("A.f1.sms"));
+
 		System.clearProperty("A.f1.sms");
+		System.setProperty("A.f1", "{foo:'bar',baz:null}");
+		ps = PropertyStore.create().build();
+		assertObjectEquals("{foo:'bar'}", ps.getProperty("A.f1.sms"));
+
+		System.clearProperty("A.f1");
+		assertNull(ps.getProperty("A.f1.sms"));
 	}
 
 	@Test
 	public void testMapIntegerDefault() {
-		PropertyStore ps = PropertyStore.create().build();
 
 		System.setProperty("A.f1.smi", "{foo:'123',baz:null}");
+		PropertyStore ps = PropertyStore.create().build();
 		assertObjectEquals("{foo:123}", ps.getProperty("A.f1.smi"));
+
 		System.clearProperty("A.f1.smi");
+		System.setProperty("A.f1", "{foo:'123',baz:null}");
+		ps = PropertyStore.create().build();
+		assertObjectEquals("{foo:123}", ps.getProperty("A.f1.smi"));
+
+		System.clearProperty("A.f1");
+		assertNull(ps.getProperty("A.f1.smi"));
 	}
 
 	@Test
 	public void testMapObjectDefault() {
-		PropertyStore ps = PropertyStore.create().build();
 
 		System.setProperty("A.f1.smo", "{foo:123,bar:'baz',qux:true,quux:null}");
+		PropertyStore ps = PropertyStore.create().build();
 		assertObjectEquals("{bar:'baz',foo:123,qux:true}", ps.getProperty("A.f1.smo"));
+
 		System.clearProperty("A.f1.smo");
+		System.setProperty("A.f1", "{foo:123,bar:'baz',qux:true,quux:null}");
+		ps = PropertyStore.create().build();
+		assertObjectEquals("{bar:'baz',foo:123,qux:true}", ps.getProperty("A.f1.smo"));
+
+		System.clearProperty("A.f1");
+		assertNull(ps.getProperty("A.f1.smo"));
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------

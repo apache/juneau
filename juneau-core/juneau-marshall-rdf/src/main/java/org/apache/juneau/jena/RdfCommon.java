@@ -46,22 +46,29 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.language.s"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_language RDF_language}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.language.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.language</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_LANGUAGE</c>
 	 * 	<li><b>Default:</b>  <js>"RDF/XML-ABBREV"</js>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#language()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#language(String)}
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#n3()}
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#ntriple()}
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#turtle()}
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#xml()}
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#xmlabbrev()}
-	 * 			<li class='jm'>{@link RdfParserBuilder#language(String)}
-	 * 			<li class='jm'>{@link RdfParserBuilder#n3()}
-	 * 			<li class='jm'>{@link RdfParserBuilder#ntriple()}
-	 * 			<li class='jm'>{@link RdfParserBuilder#turtle()}
-	 * 			<li class='jm'>{@link RdfParserBuilder#xml()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#language(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#n3()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#ntriple()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#turtle()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#xml()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#xmlabbrev()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#language(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#n3()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#ntriple()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#turtle()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#xml()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -105,13 +112,20 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.juneauNs.s"</js>
-	 * 	<li><b>Data type:</b>  {@link Namespace}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_juneauNs RDF_juneauNs}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.juneauNs.s"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.xml.Namespace}
+	 * 	<li><b>System property:</b>  <c>RdfCommon.juneauNs</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JUNEAUNS</c>
 	 * 	<li><b>Default:</b>  <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#juneauNs()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#juneauNs(Namespace)}
-	 * 			<li class='jm'>{@link RdfParserBuilder#juneauNs(Namespace)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#juneauNs(Namespace)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#juneauNs(Namespace)}
 	 * 		</ul>
 	 * </ul>
 	 */
@@ -122,13 +136,20 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.juneauBpNs.s"</js>
-	 * 	<li><b>Data type:</b>  {@link Namespace}
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_juneauBpNs RDF_juneauBpNs}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.juneauBpNs.s"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.xml.Namespace}
+	 * 	<li><b>System property:</b>  <c>RdfCommon.juneauBpNs</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JUNEAUBPNS</c>
 	 * 	<li><b>Default:</b>  <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#juneauBpNs()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#juneauBpNs(Namespace)}
-	 * 			<li class='jm'>{@link RdfParserBuilder#juneauBpNs(Namespace)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#juneauBpNs(Namespace)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#juneauBpNs(Namespace)}
 	 * 		</ul>
 	 * </ul>
 	 */
@@ -139,9 +160,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.iri-rules.s"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_iriRules RDF_arp_iriRules}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.iri-rules.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.iri-rules</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_IRI_RULES</c>
 	 * 	<li><b>Default:</b>  <js>"lax"</js>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#arp_iriRules()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -170,9 +198,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.error-mode.s"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_errorMode RDF_arp_errorMode}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.error-mode.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.error-mode</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_ERROR_MODE</c>
 	 * 	<li><b>Default:</b>  <js>"lax"</js>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#arp_errorMode()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -209,9 +244,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.embedding.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_embedding RDF_arp_embedding}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.embedding.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.embedding</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_EMBEDDING</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#arp_embedding()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -230,8 +272,11 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.ERR_"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_err_ RDF_arp_err_}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.ERR_"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.ERR_</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_ERR_</c>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -261,8 +306,11 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.WARN_"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_warn_ RDF_arp_warn_}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.WARN_"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.WARN_</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_WARN_</c>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -276,8 +324,11 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.IGN_"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_ign_ RDF_arp_ign_}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.IGN_"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.IGN_</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_IGN_</c>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -291,9 +342,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.xmlbase.s"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_xmlBase RDF_rdfxml_xmlBase}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.xmlbase.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.xmlbase</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_XMLBASE</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_xmlBase()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -307,9 +365,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.longId.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_longId RDF_rdfxml_longId}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.longId.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.longId</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_LONGID</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_longId()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -324,9 +389,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.allowBadURIs.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_allowBadUris RDF_rdfxml_allowBadUris}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.allowBadURIs.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.allowBadURIs</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_ALLOWBADURIS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_allowBadUris()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -340,9 +412,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.relativeURIs.s"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_relativeUris RDF_rdfxml_relativeUris}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.relativeURIs.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.relativeURIs</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_RELATIVEURIS</c>
 	 * 	<li><b>Default:</b>  <js>"same-document, absolute, relative, parent"</js>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_relativeUris()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -378,9 +457,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.showXmlDeclaration.s"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showXmlDeclaration RDF_rdfxml_showXmlDeclaration}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.showXmlDeclaration.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.showXmlDeclaration</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_SHOWXMLDECLARATION</c>
 	 * 	<li><b>Default:</b>  <js>"default"</js>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_showXmlDeclaration()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -404,9 +490,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.showDoctypeDeclaration.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showDoctypeDeclaration RDF_rdfxml_showDoctypeDeclaration}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.showDoctypeDeclaration.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.showDoctypeDeclaration</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_SHOWDOCTYPEDECLARATION</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_showDoctypeDeclaration()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -423,9 +516,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.tab.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_tab RDF_rdfxml_tab}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.tab.i"</js>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.tab</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_TAB</c>
 	 * 	<li><b>Default:</b>  <c>2</c>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_tab()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -439,9 +539,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.attributeQuoteChar.s"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_attributeQuoteChar RDF_rdfxml_attributeQuoteChar}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.attributeQuoteChar.s"</js>
 	 * 	<li><b>Data type:</b>  <c>Character</c>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.attributeQuoteChar</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_ATTRIBUTEQUOTECHAR</c>
 	 * 	<li><b>Default:</b>  <js>'"'</js>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_attributeQuoteChar()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -455,9 +562,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.rdfXml.blockRules.s"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_blockRules RDF_rdfxml_blockRules}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.blockRules.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.blockRules</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_BLOCKRULES</c>
 	 * 	<li><b>Default:</b>  <js>""</js>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_blockRules()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -473,9 +587,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.minGap.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_minGap RDF_n3_minGap}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.minGap.i"</js>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.minGap</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_MINGAP</c>
 	 * 	<li><b>Default:</b>  <c>1</c>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_minGap()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -489,9 +610,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.objectLists.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_objectLists RDF_n3_objectLists}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.objectLists.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.objectLists</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_OBJECTLISTS</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_objectLists()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -505,9 +633,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.subjectColumn.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_subjectColumn RDF_n3_subjectColumn}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.subjectColumn.i"</js>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.subjectColumn</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_SUBJECTCOLUMN</c>
 	 * 	<li><b>Default:</b>  indentProperty
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_subjectColumn()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -521,9 +656,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.propertyColumn.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_propertyColumn RDF_n3_propertyColumn}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.propertyColumn.i"</js>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.propertyColumn</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_PROPERTYCOLUMN</c>
 	 * 	<li><b>Default:</b>  <c>8</c>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_propertyColumn()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -537,9 +679,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.indentProperty.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_indentProperty RDF_n3_indentProperty}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.indentProperty.i"</js>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.indentProperty</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_INDENTPROPERTY</c>
 	 * 	<li><b>Default:</b>  <c>6</c>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_indentProperty()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -553,9 +702,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.widePropertyLen.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_widePropertyLen RDF_n3_widePropertyLen}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.widePropertyLen.i"</js>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.widePropertyLen</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_WIDEPROPERTYLEN</c>
 	 * 	<li><b>Default:</b>  <c>20</c>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_widePropertyLen()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -570,9 +726,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.abbrevBaseURI.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_abbrevBaseUri RDF_n3_abbrevBaseUri}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.abbrevBaseURI.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.abbrevBaseURI</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_ABBREVBASEURI</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_abbrevBaseUri()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -586,9 +749,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.usePropertySymbols.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_usePropertySymbols RDF_n3_usePropertySymbols}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.usePropertySymbols.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.usePropertySymbols</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_USEPROPERTYSYMBOLS</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_usePropertySymbols()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -602,9 +772,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.useTripleQuotedStrings.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_useTripleQuotedStrings RDF_n3_useTripleQuotedStrings}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.useTripleQuotedStrings.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.useTripleQuotedStrings</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_USETRIPLEQUOTEDSTRINGS</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_useTripleQuotedStrings()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -618,9 +795,16 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.jena.n3.useDoubles.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_useDoubles RDF_n3_useDoubles}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.useDoubles.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.useDoubles</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_USEDOUBLES</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_useDoubles()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -634,13 +818,20 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.collectionFormat.s"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_collectionFormat RDF_collectionFormat}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.collectionFormat.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.collectionFormat</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_COLLECTIONFORMAT</c>
 	 * 	<li><b>Default:</b>  <js>"DEFAULT"</js>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#collectionFormat()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#collectionFormat(RdfCollectionFormat)}
-	 * 			<li class='jm'>{@link RdfParserBuilder#collectionFormat(RdfCollectionFormat)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#collectionFormat(RdfCollectionFormat)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#collectionFormat(RdfCollectionFormat)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -673,15 +864,22 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.looseCollections.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_looseCollections RDF_looseCollections}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.looseCollections.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.looseCollections</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_LOOSECOLLECTIONS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#looseCollections()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#looseCollections(boolean)}
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#looseCollections()}
-	 * 			<li class='jm'>{@link RdfParserBuilder#looseCollections(boolean)}
-	 * 			<li class='jm'>{@link RdfParserBuilder#looseCollections()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#looseCollections(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#looseCollections()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#looseCollections(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#looseCollections()}
 	 * 		</ul>
 	 * </ul>
 	 *

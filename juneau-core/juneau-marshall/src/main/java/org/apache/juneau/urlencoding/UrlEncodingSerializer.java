@@ -128,14 +128,21 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#URLENC_expandedParams URLENC_expandedParams}
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingSerializer.expandedParams.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>UrlEncodingSerializer.expandedParams</c>
+	 * 	<li><b>Environment variable:</b>  <c>URLENCODINGSERIALIZER_EXPANDEDPARAMS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingConfig#expandedParams()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link UrlEncodingSerializerBuilder#expandedParams(boolean)}
-	 * 			<li class='jm'>{@link UrlEncodingSerializerBuilder#expandedParams()}
+	 * 			<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializerBuilder#expandedParams(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializerBuilder#expandedParams()}
 	 * 		</ul>
 	 * </ul>
 	 *

@@ -37,14 +37,21 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions BEANTRAVERSE_detectRecursions}
 	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.detectRecursions.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanTraverseContext.detectRecursions</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANTRAVERSECONTEXT_DETECTRECURSIONS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#detectRecursions()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanTraverseBuilder#detectRecursions(boolean)}
-	 * 			<li class='jm'>{@link BeanTraverseBuilder#detectRecursions()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#detectRecursions(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#detectRecursions()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -107,14 +114,21 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_ignoreRecursions BEANTRAVERSE_ignoreRecursions}
 	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.ignoreRecursions.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanTraverseContext.ignoreRecursions</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANTRAVERSECONTEXT_IGNORERECURSIONS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreRecursions()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanTraverseBuilder#ignoreRecursions(boolean)}
-	 * 			<li class='jm'>{@link BeanTraverseBuilder#ignoreRecursions()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#ignoreRecursions(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#ignoreRecursions()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -134,13 +148,20 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_initialDepth BEANTRAVERSE_initialDepth}
 	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.initialDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>BeanTraverseContext.initialDepth</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANTRAVERSECONTEXT_INITIALDEPTH</c>
 	 * 	<li><b>Default:</b>  <c>0</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#initialDepth()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanTraverseBuilder#initialDepth(int)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#initialDepth(int)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -176,13 +197,20 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_maxDepth BEANTRAVERSE_maxDepth}
 	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.maxDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>BeanTraverseContext.maxDepth</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANTRAVERSECONTEXT_MAXDEPTH</c>
 	 * 	<li><b>Default:</b>  <c>100</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#maxDepth()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanTraverseBuilder#maxDepth(int)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#maxDepth(int)}
 	 * 		</ul>
 	 * </ul>
 	 *

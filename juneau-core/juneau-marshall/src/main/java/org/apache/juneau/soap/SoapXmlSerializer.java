@@ -47,12 +47,19 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMet
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.soap.SoapXmlSerializer#SOAPXML_SOAPAction SOAPXML_SOAPAction}
 	 * 	<li><b>Name:</b>  <js>"SoapXmlSerializer.SOAPAction.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>SoapXmlSerializer.SOAPAction</c>
+	 * 	<li><b>Environment variable:</b>  <c>SOAPXMLSERIALIZER_SOAPACTION</c>
 	 * 	<li><b>Default:</b>  <js>"http://www.w3.org/2003/05/soap-envelope"</js>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlConfig#soapAction()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SoapXmlSerializerBuilder#soapAction(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.soap.SoapXmlSerializerBuilder#soapAction(String)}
 	 * 		</ul>
 	 * </ul>
 	 */

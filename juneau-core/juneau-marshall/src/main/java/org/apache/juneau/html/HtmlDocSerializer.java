@@ -87,10 +87,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_aside HTMLDOC_aside}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.aside.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.aside</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_ASIDE</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#aside()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -124,10 +131,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_footer HTMLDOC_footer}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.footer.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.footer</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_FOOTER</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#footer()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -155,10 +169,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_head HTMLDOC_head}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.head.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.head</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_HEAD</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#head()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -194,10 +215,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_header HTMLDOC_header}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.header.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.header</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_HEADER</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#header()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -223,10 +251,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nav HTMLDOC_nav}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nav.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.nav</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_NAV</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#nav()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -255,10 +290,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_navlinks HTMLDOC_navlinks}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.navlinks.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.navlinks</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_NAVLINKS</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#navlinks()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -323,10 +365,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_noResultsMessage HTMLDOC_noResultsMessage}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.noResultsMessage.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.noResultsMessage</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_NORESULTSMESSAGE</c>
 	 * 	<li><b>Default:</b>  <js>"&lt;p&gt;no results&lt;/p&gt;"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#noResultsMessage()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -352,10 +401,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nowrap HTMLDOC_nowrap}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nowrap.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.nowrap</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_NOWRAP</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#nowrap()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -369,10 +425,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_script HTMLDOC_script}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.script.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.script</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_SCRIPT</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#script()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -413,10 +476,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_style HTMLDOC_style}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.style.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.style</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_STYLE</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#style()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -458,10 +528,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_stylesheet HTMLDOC_stylesheet}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.stylesheet.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.stylesheet</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_STYLESHEET</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#stylesheet()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -483,10 +560,15 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.template.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> HtmlDocTemplate&gt;</code>
-	 * 	<li><b>Default:</b>  <code>HtmlDocTemplateBasic.<jk>class</jk></code>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link org.apache.juneau.html.HtmlDocTemplate}&gt;</code>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.html.BasicHtmlDocTemplate}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#template()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -513,13 +595,15 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_widgets HTMLDOC_widgets}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.widgets.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;{@link HtmlWidget} | Class&lt;? <jk>extends</jk> {@link HtmlWidget}&gt;&gt;</code>
+	 * 	<li><b>Data type:</b><c>List&lt;{@link org.apache.juneau.html.HtmlWidget}|Class&lt;{@link org.apache.juneau.html.HtmlWidget}&gt;&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link HtmlDocConfig#widgets()}
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#widgets()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>

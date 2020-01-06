@@ -36,13 +36,20 @@ public abstract class WriterSerializer extends Serializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_fileCharset WSERIALIZER_fileCharset}
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.fileCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>WriterSerializer.fileCharset</c>
+	 * 	<li><b>Environment variable:</b>  <c>WRITERSERIALIZER_FILECHARSET</c>
 	 * 	<li><b>Default:</b>  <js>"DEFAULT"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#fileCharset()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link WriterSerializerBuilder#fileCharset(Charset)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#fileCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -81,13 +88,20 @@ public abstract class WriterSerializer extends Serializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_maxIndent WSERIALIZER_maxIndent}
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.maxIndent.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>WriterSerializer.maxIndent</c>
+	 * 	<li><b>Environment variable:</b>  <c>WRITERSERIALIZER_MAXINDENT</c>
 	 * 	<li><b>Default:</b>  <c>100</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#maxIndent()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link WriterSerializerBuilder#maxIndent(int)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#maxIndent(int)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -120,14 +134,21 @@ public abstract class WriterSerializer extends Serializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_quoteChar WSERIALIZER_quoteChar}
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.quoteChar.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>WriterSerializer.quoteChar</c>
+	 * 	<li><b>Environment variable:</b>  <c>WRITERSERIALIZER_QUOTECHAR</c>
 	 * 	<li><b>Default:</b>  <js>"\""</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#quoteChar()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link WriterSerializerBuilder#quoteChar(char)}
-	 * 			<li class='jm'>{@link WriterSerializerBuilder#sq()}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#quoteChar(char)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#sq()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -160,13 +181,20 @@ public abstract class WriterSerializer extends Serializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_streamCharset WSERIALIZER_streamCharset}
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.streamCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>WriterSerializer.streamCharset</c>
+	 * 	<li><b>Environment variable:</b>  <c>WRITERSERIALIZER_STREAMCHARSET</c>
 	 * 	<li><b>Default:</b>  <js>"UTF-8"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#streamCharset()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link WriterSerializerBuilder#streamCharset(Charset)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#streamCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -202,15 +230,22 @@ public abstract class WriterSerializer extends Serializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_useWhitespace WSERIALIZER_useWhitespace}
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.useWhitespace.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>WriterSerializer.useWhitespace</c>
+	 * 	<li><b>Environment variable:</b>  <c>WRITERSERIALIZER_USEWHITESPACE</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#useWhitespace()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link WriterSerializerBuilder#useWhitespace(boolean)}
-	 * 			<li class='jm'>{@link WriterSerializerBuilder#useWhitespace()}
-	 * 			<li class='jm'>{@link WriterSerializerBuilder#ws()}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#useWhitespace(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#useWhitespace()}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#ws()}
 	 * 		</ul>
 	 * </ul>
 	 *

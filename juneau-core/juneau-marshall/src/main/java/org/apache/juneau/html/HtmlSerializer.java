@@ -138,13 +138,20 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_addBeanTypes HTML_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>HtmlSerializer.addBeanTypes</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_ADDBEANTYPES</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#addBeanTypes()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link HtmlSerializerBuilder#addBeanTypes(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -164,18 +171,21 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_addKeyValueTableHeaders HTML_addKeyValueTableHeaders}
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>HtmlSerializer.addKeyValueTableHeaders</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_ADDKEYVALUETABLEHEADERS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Html#noTableHeaders()}
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.Html#noTableHeaders()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link HtmlSerializerBuilder#addKeyValueTableHeaders(boolean)}
-	 * 			<li class='jm'>{@link HtmlSerializerBuilder#addKeyValueTableHeaders()}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#addKeyValueTableHeaders(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#addKeyValueTableHeaders()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -235,13 +245,20 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_detectLinksInStrings HTML_detectLinksInStrings}
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLinksInStrings.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>HtmlSerializer.detectLinksInStrings</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_DETECTLINKSINSTRINGS</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#detectLinksInStrings()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link HtmlSerializerBuilder#detectLinksInStrings(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#detectLinksInStrings(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -305,13 +322,20 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_labelParameter HTML_labelParameter}
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.labelParameter.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>HtmlSerializer.labelParameter</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_LABELPARAMETER</c>
 	 * 	<li><b>Default:</b>  <js>"label"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#labelParameter()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link HtmlSerializerBuilder#labelParameter(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#labelParameter(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -329,13 +353,20 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_detectLabelParameters HTML_detectLabelParameters}
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLabelParameters.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>HtmlSerializer.detectLabelParameters</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_DETECTLABELPARAMETERS</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#detectLabelParameters()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link HtmlSerializerBuilder#detectLabelParameters(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#detectLabelParameters(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -402,18 +433,22 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_uriAnchorText HTML_uriAnchorText}
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.uriAnchorText.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link AnchorText})
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.html.AnchorText}
+	 * 	<li><b>System property:</b>  <c>HtmlSerializer.uriAnchorText</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_URIANCHORTEXT</c>
 	 * 	<li><b>Default:</b>  <js>"TO_STRING"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Html#anchorText()}
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.Html#anchorText()}
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#uriAnchorText()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link HtmlSerializerBuilder#uriAnchorText(AnchorText)}
-	 * 			<li class='jm'>{@link HtmlSerializerBuilder#uriAnchorText(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#uriAnchorText(AnchorText)}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#uriAnchorText(String)}
 	 * 		</ul>
 	 * </ul>
 	 *

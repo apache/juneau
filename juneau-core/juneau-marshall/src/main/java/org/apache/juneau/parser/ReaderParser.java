@@ -43,13 +43,20 @@ public abstract class ReaderParser extends Parser {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.ReaderParser#RPARSER_fileCharset RPARSER_fileCharset}
 	 * 	<li><b>Name:</b>  <js>"ReaderParser.fileCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>ReaderParser.fileCharset</c>
+	 * 	<li><b>Environment variable:</b>  <c>READERPARSER_FILECHARSET</c>
 	 * 	<li><b>Default:</b>  <js>"DEFAULT"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#fileCharset()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ReaderParserBuilder#fileCharset(Charset)}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.ReaderParserBuilder#fileCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -88,13 +95,20 @@ public abstract class ReaderParser extends Parser {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.ReaderParser#RPARSER_streamCharset RPARSER_streamCharset}
 	 * 	<li><b>Name:</b>  <js>"ReaderParser.streamCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>ReaderParser.streamCharset</c>
+	 * 	<li><b>Environment variable:</b>  <c>READERPARSER_STREAMCHARSET</c>
 	 * 	<li><b>Default:</b>  <js>"UTF-8"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#streamCharset()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ReaderParserBuilder#streamCharset(Charset)}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.ReaderParserBuilder#streamCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
 	 *

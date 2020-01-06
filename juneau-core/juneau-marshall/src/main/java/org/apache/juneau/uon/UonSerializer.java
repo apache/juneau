@@ -19,7 +19,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Serializes POJO models to UON (a notation for URL-encoded query parameter values).
@@ -132,13 +131,20 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonSerializer#UON_addBeanTypes UON_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>UonSerializer.addBeanTypes</c>
+	 * 	<li><b>Environment variable:</b>  <c>UONSERIALIZER_ADDBEANTYPES</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.uon.annotation.UonConfig#addBeanTypes()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link UonSerializerBuilder#addBeanTypes(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -158,14 +164,21 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonSerializer#UON_encoding UON_encoding}
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.encoding.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>UonSerializer.encoding</c>
+	 * 	<li><b>Environment variable:</b>  <c>UONSERIALIZER_ENCODING</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link org.apache.juneau.uon.UonSerializer}, <jk>true</jk> for {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.uon.annotation.UonConfig#encoding()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link UonSerializerBuilder#encoding(boolean)}
-	 * 			<li class='jm'>{@link UonSerializerBuilder#encoding()}
+	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#encoding(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#encoding()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -207,14 +220,21 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonSerializer#UON_paramFormat UON_paramFormat}
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.paramFormat.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link ParamFormat})
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.uon.ParamFormat}
+	 * 	<li><b>System property:</b>  <c>UonSerializer.paramFormat</c>
+	 * 	<li><b>Environment variable:</b>  <c>UONSERIALIZER_PARAMFORMAT</c>
 	 * 	<li><b>Default:</b>  <js>"UON"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.uon.annotation.UonConfig#paramFormat()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link UonSerializerBuilder#paramFormat(ParamFormat)}
-	 * 			<li class='jm'>{@link UonSerializerBuilder#paramFormatPlain()}
+	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#paramFormat(ParamFormat)}
+	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#paramFormatPlain()}
 	 * 		</ul>
 	 * </ul>
 	 *

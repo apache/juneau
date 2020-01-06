@@ -40,13 +40,20 @@ public abstract class InputStreamParser extends Parser {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.InputStreamParser#ISPARSER_binaryFormat ISPARSER_binaryFormat}
 	 * 	<li><b>Name:</b>  <js>"InputStreamParser.binaryFormat.s"</js>
-	 * 	<li><b>Data type:</b>  {@link BinaryFormat}
-	 * 	<li><b>Default:</b>  {@link BinaryFormat#HEX}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.BinaryFormat}
+	 * 	<li><b>System property:</b>  <c>InputStreamParser.binaryFormat</c>
+	 * 	<li><b>Environment variable:</b>  <c>INPUTSTREAMFORMAT_BINARYFORMAT</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.BinaryFormat#HEX}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#binaryFormat()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link InputStreamParserBuilder#binaryFormat(BinaryFormat)}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.InputStreamParserBuilder#binaryFormat(BinaryFormat)}
 	 * 		</ul>
 	 * </ul>
 	 *

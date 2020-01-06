@@ -52,14 +52,21 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"Serializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Serializer.addBeanTypes</c>
+	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_ADDBEANTYPES</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#addBeanTypes()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#addBeanTypes()}
-	 * 			<li class='jm'>{@link SerializerBuilder#addBeanTypes(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#addBeanTypes()}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -112,14 +119,21 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
 	 * 	<li><b>Name:</b>  <js>"Serializer.addRootType.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Serializer.addRootType</c>
+	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_ADDROOTTYPE</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#addRootType()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#addRootType(boolean)}
-	 * 			<li class='jm'>{@link SerializerBuilder#addRootType()}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#addRootType(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#addRootType()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -168,13 +182,18 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_listener SERIALIZER_listener}
 	 * 	<li><b>Name:</b>  <js>"Serializer.listener.c"</js>
-	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends SerializerListener&gt;</c>
+	 * 	<li><b>Data type:</b>  <c>Class&lt;{@link org.apache.juneau.serializer.SerializerListener}&gt;</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#listener()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#listener(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#listener(Class)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -231,14 +250,21 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortCollections SERIALIZER_sortCollections}
 	 * 	<li><b>Name:</b>  <js>"Serializer.sortCollections.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Serializer.sortCollections</c>
+	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_SORTCOLLECTIONS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#sortCollections()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#sortCollections(boolean)}
-	 * 			<li class='jm'>{@link SerializerBuilder#sortCollections()}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#sortCollections(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#sortCollections()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -272,14 +298,21 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortMaps SERIALIZER_sortMaps}
 	 * 	<li><b>Name:</b>  <js>"Serializer.sortMaps.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Serializer.sortMaps</c>
+	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_SORTMAPS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#sortMaps()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#sortMaps(boolean)}
-	 * 			<li class='jm'>{@link SerializerBuilder#sortMaps()}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#sortMaps(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#sortMaps()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -313,14 +346,21 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyCollections SERIALIZER_trimEmptyCollections}
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyCollections.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Serializer.trimEmptyCollections</c>
+	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_TRIMEMPTYCOLLECTIONS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#trimEmptyCollections()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyCollections(boolean)}
-	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyCollections()}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimEmptyCollections(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimEmptyCollections()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -360,14 +400,21 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyMaps SERIALIZER_trimEmptyMaps}
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyMaps.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Serializer.trimEmptyMaps</c>
+	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_TRIMEMPTYMAPS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#trimEmptyMaps()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyMaps(boolean)}
-	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyMaps()}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimEmptyMaps(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimEmptyMaps()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -404,13 +451,20 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimNullProperties SERIALIZER_trimNullProperties}
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimNullProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Serializer.trimNullProperties</c>
+	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_TRIMNULLPROPERTIES</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#trimNullProperties()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#trimNullProperties(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimNullProperties(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -447,14 +501,21 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimStrings SERIALIZER_trimStrings}
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimStrings.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Serializer.trimStrings</c>
+	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_TRIMSTRINGS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#trimStrings()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#trimStrings(boolean)}
-	 * 			<li class='jm'>{@link SerializerBuilder#trimStrings()}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimStrings(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimStrings()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -490,14 +551,21 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext SERIALIZER_uriContext}
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriContext.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> (JSON object representing a {@link UriContext})
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.UriContext}
+	 * 	<li><b>System property:</b>  <c>Serializer.uriContext</c>
+	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_URICONTEXT</c>
 	 * 	<li><b>Default:</b>  <js>"{}"</js>
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#uriContext()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#uriContext(UriContext)}
-	 * 			<li class='jm'>{@link SerializerBuilder#uriContext(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriContext(UriContext)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriContext(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -548,14 +616,21 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity SERIALIZER_uriRelativity}
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriRelativity.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link UriRelativity})
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.UriRelativity}
+	 * 	<li><b>System property:</b>  <c>Serializer.uriRelativity</c>
+	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_URIRELATIVITY</c>
 	 * 	<li><b>Default:</b>  <js>"RESOURCE"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#uriRelativity()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#uriRelativity(UriRelativity)}
-	 * 			<li class='jm'>{@link SerializerBuilder#uriRelativity(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriRelativity(UriRelativity)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriRelativity(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -599,14 +674,21 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution SERIALIZER_uriResolution}
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriResolution.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link UriResolution})
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.UriResolution}
+	 * 	<li><b>System property:</b>  <c>Serializer.uriResolution</c>
+	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_URIRESOLUTION</c>
 	 * 	<li><b>Default:</b>  <js>"NONE"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#uriResolution()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#uriResolution(UriResolution)}
-	 * 			<li class='jm'>{@link SerializerBuilder#uriResolution(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriResolution(UriResolution)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriResolution(String)}
 	 * 		</ul>
 	 * </ul>
 	 *

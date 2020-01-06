@@ -236,21 +236,21 @@ public final class PropertyStore {
 				return p;
 		}
 
-		String s = System.getProperty(key);
-		if (s != null)
-			return PropertyStoreBuilder.MutableProperty.create(k, s).build();
+		String s = null;
+		String k1 = key, k2 = key.indexOf('.') == -1 ? key : key.substring(0, key.lastIndexOf('.'));
+
+		s = System.getProperty(k1);
+		if (s == null)
+			s = System.getProperty(k2);
 
 		try {
-			String ke = key.replace('.',  '_');
-			s = System.getenv(ke);
-			if (s != null)
-				return PropertyStoreBuilder.MutableProperty.create(k, s).build();
-			s = System.getenv(ke.toUpperCase());
-			if (s != null)
-				return PropertyStoreBuilder.MutableProperty.create(k, s).build();
+			if (s == null)
+				s = System.getenv(k1.replace('.', '_').replace('-', '_').toUpperCase());
+			if (s == null)
+				s = System.getenv(k2.replace('.', '_').replace('-', '_').toUpperCase());
 		} catch (SecurityException e) {}
 
-		return null;
+		return s == null ? null : PropertyStoreBuilder.MutableProperty.create(k, s).build();
 	}
 
 	/**

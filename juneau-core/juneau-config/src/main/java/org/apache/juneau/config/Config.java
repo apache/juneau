@@ -158,8 +158,11 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_name CONFIG_name}
 	 * 	<li><b>Name:</b>  <js>"Config.name.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>Config.name</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIG_NAME</c>
 	 * 	<li><b>Default:</b>  <js>"Configuration.cfg"</js>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -180,12 +183,13 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_store CONFIG_store}
 	 * 	<li><b>Name:</b>  <js>"Config.store.o"</js>
-	 * 	<li><b>Data type:</b>  {@link ConfigStore}
-	 * 	<li><b>Default:</b>  {@link ConfigFileStore#DEFAULT}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.config.store.ConfigStore}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#DEFAULT}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#store(ConfigStore)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#store(ConfigStore)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -200,13 +204,14 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_serializer CONFIG_serializer}
 	 * 	<li><b>Name:</b>  <js>"Config.serializer.o"</js>
-	 * 	<li><b>Data type:</b>  {@link WriterSerializer}
-	 * 	<li><b>Default:</b>  {@link SimpleJsonSerializer#DEFAULT}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.serializer.WriterSerializer}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#serializer(Class)}
-	 * 			<li class='jm'>{@link ConfigBuilder#serializer(WriterSerializer)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#serializer(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#serializer(WriterSerializer)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -221,13 +226,14 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_parser CONFIG_parser}
 	 * 	<li><b>Name:</b>  <js>"Config.parser.o"</js>
-	 * 	<li><b>Data type:</b>  {@link ReaderParser}
-	 * 	<li><b>Default:</b>  {@link JsonParser#DEFAULT}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.parser.ReaderParser}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.json.JsonParser#DEFAULT}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#parser(Class)}
-	 * 			<li class='jm'>{@link ConfigBuilder#parser(ReaderParser)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#parser(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#parser(ReaderParser)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -242,13 +248,14 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_encoder CONFIG_encoder}
 	 * 	<li><b>Name:</b>  <js>"Config.encoder.o"</js>
-	 * 	<li><b>Data type:</b>  {@link ConfigEncoder}
-	 * 	<li><b>Default:</b>  {@link ConfigXorEncoder#INSTANCE}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.config.encode.ConfigEncoder}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.config.encode.ConfigXorEncoder#INSTANCE}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#encoder(Class)}
-	 * 			<li class='jm'>{@link ConfigBuilder#encoder(ConfigEncoder)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#encoder(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#encoder(ConfigEncoder)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -263,13 +270,14 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_varResolver CONFIG_varResolver}
 	 * 	<li><b>Name:</b>  <js>"Config.varResolver.o"</js>
-	 * 	<li><b>Data type:</b>  {@link VarResolver}
-	 * 	<li><b>Default:</b>  {@link VarResolver#DEFAULT}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.svl.VarResolver}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.svl.VarResolver#DEFAULT}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#varResolver(Class)}
-	 * 			<li class='jm'>{@link ConfigBuilder#varResolver(VarResolver)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#varResolver(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#varResolver(VarResolver)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -284,12 +292,15 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_binaryLineLength CONFIG_binaryLineLength}
 	 * 	<li><b>Name:</b>  <js>"Config.binaryLineLength.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>Config.binaryLineLength</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIG_BINARYLINELENGTH</c>
 	 * 	<li><b>Default:</b>  <c>-1</c>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#binaryLineLength(int)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#binaryLineLength(int)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -305,12 +316,15 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_binaryFormat CONFIG_binaryFormat}
 	 * 	<li><b>Name:</b>  <js>"Config.binaryFormat.s"</js>
-	 * 	<li><b>Data type:</b>  {@link BinaryFormat}
-	 * 	<li><b>Default:</b>  {@link BinaryFormat#BASE64}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.BinaryFormat}
+	 * 	<li><b>System property:</b>  <c>Config.binaryFormat</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIG_BINARYFORMAT</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.BinaryFormat#BASE64}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#binaryFormat(BinaryFormat)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#binaryFormat(BinaryFormat)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -333,12 +347,15 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_multiLineValuesOnSeparateLines CONFIG_multiLineValuesOnSeparateLines}
 	 * 	<li><b>Name:</b>  <js>"Config.multiLineValuesOnSeparateLines.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Config.multiLineValuesOnSeparateLine</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIG_MULTILINEVALUESONSEPARATELINE</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#multiLineValuesOnSeparateLines()}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#multiLineValuesOnSeparateLines()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -353,12 +370,15 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_readOnly CONFIG_readOnly}
 	 * 	<li><b>Name:</b>  <js>"Config.readOnly.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Config.readOnly</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIG_READONLY</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigBuilder#readOnly()}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#readOnly()}
 	 * 		</ul>
 	 * </ul>
 	 *

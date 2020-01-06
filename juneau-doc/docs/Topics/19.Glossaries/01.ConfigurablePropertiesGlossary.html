@@ -1,0 +1,1483 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{new} Configurable Properties Glossary
+
+<p>
+	The following is a list of all properties defined throughout Juneau:
+</p>
+<table class='styled w1000'>
+	<tr>
+		<th>Context</th><th>ID</th><th style='min-width:250px'>Description</th><th>Data type</th>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.BeanContext}</td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_annotations BEAN_annotations}</td>
+		<td>Annotations.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link java.lang.annotation.Annotation}&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_beanClassVisibility BEAN_beanClassVisibility}</td>
+		<td>Minimum bean class visibility.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.Visibility}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_beanConstructorVisibility BEAN_beanConstructorVisibility}</td>
+		<td>Minimum bean constructor visibility.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.Visibility}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_beanDictionary BEAN_beanDictionary}</td>
+		<td>Bean dictionary.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;Class&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility BEAN_beanFieldVisibility}</td>
+		<td>Minimum bean field visibility.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.Visibility}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_beanFilters BEAN_beanFilters}</td>
+		<td>Bean filters.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;Class&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_beanMapPutReturnsOldValue BEAN_beanMapPutReturnsOldValue}</td>
+		<td>BeanMap.put() returns old property value.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_beanMethodVisibility BEAN_beanMethodVisibility}</td>
+		<td>Minimum bean method visibility.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.Visibility}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName BEAN_beanTypePropertyName}</td>
+		<td>Bean type property name.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_beansRequireDefaultConstructor BEAN_beansRequireDefaultConstructor}</td>
+		<td>Beans require no-arg constructors.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_beansRequireSerializable BEAN_beansRequireSerializable}</td>
+		<td>Beans require Serializable interface.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_beansRequireSettersForGetters BEAN_beansRequireSettersForGetters}</td>
+		<td>Beans require setters for getters.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_beansRequireSomeProperties BEAN_beansRequireSomeProperties}</td>
+		<td>Beans require at least one property.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_bpi BEAN_bpi}</td>
+		<td>Bean property includes.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_bpro BEAN_bpro}</td>
+		<td>Read-only bean properties.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_bpwo BEAN_bpwo}</td>
+		<td>Write-only bean properties.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_bpx BEAN_bpx}</td>
+		<td>Bean property excludes.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_debug BEAN_debug}</td>
+		<td>Debug mode.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_examples BEAN_examples}</td>
+		<td>POJO examples.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,Object&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_fluentSetters BEAN_fluentSetters}</td>
+		<td>Find fluent setters.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnGetters BEAN_ignoreInvocationExceptionsOnGetters}</td>
+		<td>Ignore invocation errors on getters.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnSetters BEAN_ignoreInvocationExceptionsOnSetters}</td>
+		<td>Ignore invocation errors on setters.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_ignorePropertiesWithoutSetters BEAN_ignorePropertiesWithoutSetters}</td>
+		<td>Ignore properties without setters.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties BEAN_ignoreUnknownBeanProperties}</td>
+		<td>Ignore unknown properties.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownNullBeanProperties BEAN_ignoreUnknownNullBeanProperties}</td>
+		<td>Ignore unknown properties with null values.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_implClasses BEAN_implClasses}</td>
+		<td>Implementation classes.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,Class&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_locale BEAN_locale}</td>
+		<td>Locale.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link java.util.Locale}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_mediaType BEAN_mediaType}</td>
+		<td>Media type.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.http.MediaType}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_notBeanClasses BEAN_notBeanClasses}</td>
+		<td>Bean class exclusions.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Set&lt;Class&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_notBeanPackages BEAN_notBeanPackages}</td>
+		<td>Bean package exclusions.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Set&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_pojoSwaps BEAN_pojoSwaps}</td>
+		<td>POJO swaps.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;Object&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_propertyNamer BEAN_propertyNamer}</td>
+		<td>Bean property namer.</td>
+		<td style='max-width:250px;overflow:hidden'><code>Class&lt;{@link org.apache.juneau.PropertyNamer}&gt;</code></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_sortProperties BEAN_sortProperties}</td>
+		<td>Sort bean properties.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_timeZone BEAN_timeZone}</td>
+		<td>Time zone.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link java.util.TimeZone}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_useEnumNames BEAN_useEnumNames}</td>
+		<td>Use enum names.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_useInterfaceProxies BEAN_useInterfaceProxies}</td>
+		<td>Use interface proxies.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_useJavaBeanIntrospector BEAN_useJavaBeanIntrospector}</td>
+		<td>Use Java Introspector.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.BeanTraverseContext}</td>
+		<td>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions BEANTRAVERSE_detectRecursions}</td>
+		<td>Automatically detect POJO recursions.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_ignoreRecursions BEANTRAVERSE_ignoreRecursions}</td>
+		<td>Ignore recursion errors.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_initialDepth BEANTRAVERSE_initialDepth}</td>
+		<td>Initial depth.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_maxDepth BEANTRAVERSE_maxDepth}</td>
+		<td>Max traversal depth.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.config.Config}</td>
+		<td>{@link org.apache.juneau.config.Config#CONFIG_binaryFormat CONFIG_binaryFormat}</td>
+		<td>Binary value format.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.BinaryFormat}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.Config#CONFIG_binaryLineLength CONFIG_binaryLineLength}</td>
+		<td>Binary value line length.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.Config#CONFIG_encoder CONFIG_encoder}</td>
+		<td>Value encoder.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.config.encode.ConfigEncoder}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.Config#CONFIG_multiLineValuesOnSeparateLines CONFIG_multiLineValuesOnSeparateLines}</td>
+		<td>Multi-line values should always be on separate lines.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.Config#CONFIG_name CONFIG_name}</td>
+		<td>Configuration name.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.Config#CONFIG_parser CONFIG_parser}</td>
+		<td>POJO parser.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.parser.ReaderParser}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.Config#CONFIG_readOnly CONFIG_readOnly}</td>
+		<td>Read-only.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.Config#CONFIG_serializer CONFIG_serializer}</td>
+		<td>POJO serializer.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.serializer.WriterSerializer}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.Config#CONFIG_store CONFIG_store}</td>
+		<td>Configuration store.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.config.store.ConfigStore}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.Config#CONFIG_varResolver CONFIG_varResolver}</td>
+		<td>SVL variable resolver.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.svl.VarResolver}</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.config.store.ConfigFileStore}</td>
+		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_charset FILESTORE_charset}</td>
+		<td>Charset.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link java.nio.charset.Charset}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_directory FILESTORE_directory}</td>
+		<td>Local file system directory.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_extensions FILESTORE_extensions}</td>
+		<td>File extensions.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c> (comma-delimited)</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_updateOnWrite FILESTORE_updateOnWrite}</td>
+		<td>Update-on-write.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_useWatcher FILESTORE_useWatcher}</td>
+		<td>Use watcher.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_watcherSensitivity FILESTORE_watcherSensitivity}</td>
+		<td>Watcher sensitivity.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.config.store.WatcherSensitivity}</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer}</td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_aside HTMLDOC_aside}</td>
+		<td>Aside section contents.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_footer HTMLDOC_footer}</td>
+		<td>Footer section contents.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_head HTMLDOC_head}</td>
+		<td>Additional head section content.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_header HTMLDOC_header}</td>
+		<td>Header section contents.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nav HTMLDOC_nav}</td>
+		<td>Nav section contents.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_navlinks HTMLDOC_navlinks}</td>
+		<td>Page navigation links.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_noResultsMessage HTMLDOC_noResultsMessage}</td>
+		<td>No-results message.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nowrap HTMLDOC_nowrap}</td>
+		<td>Prevent word wrap on page.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_script HTMLDOC_script}</td>
+		<td>Javascript code.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_style HTMLDOC_style}</td>
+		<td>CSS style code.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_stylesheet HTMLDOC_stylesheet}</td>
+		<td>Stylesheet import URLs.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}</td>
+		<td>HTML document template.</td>
+		<td style='max-width:250px;overflow:hidden'><code>Class&lt;{@link org.apache.juneau.html.HtmlDocTemplate}&gt;</code></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_widgets HTMLDOC_widgets}</td>
+		<td>HTML Widgets.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.html.HtmlWidget}|Class&lt;{@link org.apache.juneau.html.HtmlWidget}&gt;&gt;</c></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.html.HtmlSerializer}</td>
+		<td>{@link org.apache.juneau.html.HtmlSerializer#HTML_addBeanTypes HTML_addBeanTypes}</td>
+		<td>Add <js>"_type"</js> properties when needed.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlSerializer#HTML_addKeyValueTableHeaders HTML_addKeyValueTableHeaders}</td>
+		<td>Add key/value headers on bean/map tables.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlSerializer#HTML_detectLabelParameters HTML_detectLabelParameters}</td>
+		<td>Look for link labels in URIs.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlSerializer#HTML_detectLinksInStrings HTML_detectLinksInStrings}</td>
+		<td>Look for URLs in {@link String Strings}.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlSerializer#HTML_labelParameter HTML_labelParameter}</td>
+		<td>Link label parameter name.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlSerializer#HTML_uriAnchorText HTML_uriAnchorText}</td>
+		<td>Anchor text source.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.html.AnchorText}</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.parser.InputStreamParser}</td>
+		<td>{@link org.apache.juneau.parser.InputStreamParser#ISPARSER_binaryFormat ISPARSER_binaryFormat}</td>
+		<td>Binary input format.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.BinaryFormat}</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.json.JsonParser}</td>
+		<td>{@link org.apache.juneau.json.JsonParser#JSON_validateEnd JSON_validateEnd}</td>
+		<td>Validate end.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator}</td>
+		<td>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo JSONSCHEMA_addDescriptionsTo}</td>
+		<td>Add descriptions to types.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}</td>
+		<td>Add examples.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions JSONSCHEMA_allowNestedDescriptions}</td>
+		<td>Allow nested descriptions.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}</td>
+		<td>Allow nested examples.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_beanDefMapper JSONSCHEMA_beanDefMapper}</td>
+		<td>Bean schema definition mapper.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.jsonschema.BeanDefMapper}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_defaultSchemas JSONSCHEMA_defaultSchemas}</td>
+		<td>Default schemas.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,{@link org.apache.juneau.ObjectMap}&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_ignoreTypes JSONSCHEMA_ignoreTypes}</td>
+		<td>Ignore types from schema definitions.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c> (comma-delimited)</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_useBeanDefs JSONSCHEMA_useBeanDefs}</td>
+		<td>Use bean definitions.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.json.JsonSerializer}</td>
+		<td>{@link org.apache.juneau.json.JsonSerializer#JSON_addBeanTypes JSON_addBeanTypes}</td>
+		<td>Add <js>"_type"</js> properties when needed.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.json.JsonSerializer#JSON_escapeSolidus JSON_escapeSolidus}</td>
+		<td>Prefix solidus <js>'/'</js> characters with escapes.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.json.JsonSerializer#JSON_simpleMode JSON_simpleMode}</td>
+		<td>Simple JSON mode.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.msgpack.MsgPackSerializer}</td>
+		<td>{@link org.apache.juneau.msgpack.MsgPackSerializer#MSGPACK_addBeanTypes MSGPACK_addBeanTypes}</td>
+		<td>Add <js>"_type"</js> properties when needed.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.serializer.OutputStreamSerializer}</td>
+		<td>{@link org.apache.juneau.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat OSSERIALIZER_binaryFormat}</td>
+		<td>Binary output format.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.BinaryFormat}</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.parser.Parser}</td>
+		<td>{@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams PARSER_autoCloseStreams}</td>
+		<td>Auto-close streams.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.parser.Parser#PARSER_debugOutputLines PARSER_debugOutputLines}</td>
+		<td>Debug output lines.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.parser.Parser#PARSER_listener PARSER_listener}</td>
+		<td>Parser listener.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Class&lt;{@link org.apache.juneau.parser.ParserListener}&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.parser.Parser#PARSER_strict PARSER_strict}</td>
+		<td>Strict mode.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.parser.Parser#PARSER_trimStrings PARSER_trimStrings}</td>
+		<td>Trim parsed strings.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.parser.Parser#PARSER_unbuffered PARSER_unbuffered}</td>
+		<td>Unbuffered.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.jena.RdfCommon}</td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_collectionFormat RDF_collectionFormat}</td>
+		<td>RDF format for representing collections and arrays.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_abbrevBaseUri RDF_n3_abbrevBaseUri}</td>
+		<td>N3/Turtle property: <c>abbrevBaseURI</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_indentProperty RDF_n3_indentProperty}</td>
+		<td>N3/Turtle property: <c>indentProperty</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_minGap RDF_n3_minGap}</td>
+		<td>N3/Turtle property: <c>minGap</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_objectLists RDF_n3_objectLists}</td>
+		<td>N3/Turtle property: <c>objectLists</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_propertyColumn RDF_n3_propertyColumn}</td>
+		<td>N3/Turtle property: <c>propertyColumn</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_subjectColumn RDF_n3_subjectColumn}</td>
+		<td>N3/Turtle property: <c>subjectColumn</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_useDoubles RDF_n3_useDoubles}</td>
+		<td>N3/Turtle property: <c>useDoubles</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_usePropertySymbols RDF_n3_usePropertySymbols}</td>
+		<td>N3/Turtle property: <c>usePropertySymbols</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_useTripleQuotedStrings RDF_n3_useTripleQuotedStrings}</td>
+		<td>N3/Turtle property: <c>useTripleQuotedStrings</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_widePropertyLen RDF_n3_widePropertyLen}</td>
+		<td>N3/Turtle property: <c>widePropertyLen</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_err_ RDF_arp_err_}</td>
+		<td>RDF/XML ARP property: <c>ERR_xxx</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_ign_ RDF_arp_ign_}</td>
+		<td></td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_warn_ RDF_arp_warn_}</td>
+		<td>RDF/XML ARP property: <c>WARN_xxx</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_allowBadUris RDF_rdfxml_allowBadUris}</td>
+		<td>RDF/XML property: <c>allowBadURIs</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_attributeQuoteChar RDF_rdfxml_attributeQuoteChar}</td>
+		<td>RDF/XML property: <c>attributeQuoteChar</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Character</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_blockRules RDF_rdfxml_blockRules}</td>
+		<td>RDF/XML property: <c>blockRules</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_embedding RDF_arp_embedding}</td>
+		<td>RDF/XML ARP property: <c>embedding</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_errorMode RDF_arp_errorMode}</td>
+		<td>RDF/XML ARP property: <c>error-mode</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_iriRules RDF_arp_iriRules}</td>
+		<td>RDF/XML property: <c>iri_rules</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_longId RDF_rdfxml_longId}</td>
+		<td>RDF/XML property: <c>longId</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_relativeUris RDF_rdfxml_relativeUris}</td>
+		<td>RDF/XML property: <c>relativeURIs</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showDoctypeDeclaration RDF_rdfxml_showDoctypeDeclaration}</td>
+		<td>RDF/XML property: <c>showDoctypeDeclaration</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showXmlDeclaration RDF_rdfxml_showXmlDeclaration}</td>
+		<td>RDF/XML property: <c>showXmlDeclaration</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_tab RDF_rdfxml_tab}</td>
+		<td>RDF/XML property: <c>tab</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_xmlBase RDF_rdfxml_xmlBase}</td>
+		<td>RDF/XML property: <c>xmlbase</c>.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_juneauBpNs RDF_juneauBpNs}</td>
+		<td>Default XML namespace for bean properties.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.xml.Namespace}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_juneauNs RDF_juneauNs}</td>
+		<td>XML namespace for Juneau properties.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.xml.Namespace}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_language RDF_language}</td>
+		<td>RDF language.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_looseCollections RDF_looseCollections}</td>
+		<td>Collections should be serialized and parsed as loose collections.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.jena.RdfParser}</td>
+		<td>{@link org.apache.juneau.jena.RdfParser#RDF_trimWhitespace RDF_trimWhitespace}</td>
+		<td>Trim whitespace from text elements.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.jena.RdfSerializer}</td>
+		<td>{@link org.apache.juneau.jena.RdfSerializer#RDF_useXmlNamespaces RDF_useXmlNamespaces}</td>
+		<td>Reuse XML namespaces when RDF namespaces not specified.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfSerializer#RDF_addBeanTypes RDF_addBeanTypes}</td>
+		<td>Add <js>"_type"</js> properties when needed.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfSerializer#RDF_addLiteralTypes RDF_addLiteralTypes}</td>
+		<td>Add XSI data types to non-<c>String</c> literals.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfSerializer#RDF_addRootProperty RDF_addRootProperty}</td>
+		<td>Add RDF root identifier property to root node.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfSerializer#RDF_autoDetectNamespaces RDF_autoDetectNamespaces}</td>
+		<td>Auto-detect namespace usage.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.jena.RdfSerializer#RDF_namespaces RDF_namespaces}</td>
+		<td>Default namespaces.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.xml.Namespace}&gt;</c></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.parser.ReaderParser}</td>
+		<td>{@link org.apache.juneau.parser.ReaderParser#RPARSER_fileCharset RPARSER_fileCharset}</td>
+		<td>File charset.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.parser.ReaderParser#RPARSER_streamCharset RPARSER_streamCharset}</td>
+		<td>Input stream charset.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.client.RestClient}</td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_debug RESTCLIENT_debug}</td>
+		<td>Debug.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_executorService RESTCLIENT_executorService}</td>
+		<td>Executor service.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link java.util.concurrent.ExecutorService}&gt;</c><li>{@link java.util.concurrent.ExecutorService}</ul></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_executorServiceShutdownOnClose RESTCLIENT_executorServiceShutdownOnClose}</td>
+		<td>Shut down executor service on close.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_interceptors RESTCLIENT_interceptors}</td>
+		<td>Call interceptors.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;Class&lt;{@link org.apache.juneau.rest.client.RestCallInterceptor}&gt;|{@link org.apache.juneau.rest.client.RestCallInterceptor}&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_keepHttpClientOpen RESTCLIENT_keepHttpClientOpen}</td>
+		<td>Keep HttpClient open.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_parser RESTCLIENT_parser}</td>
+		<td>Parser.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link org.apache.juneau.parser.Parser}&gt;</c><li>{@link org.apache.juneau.parser.Parser}</ul></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_partParser RESTCLIENT_partParser}</td>
+		<td>Part parser.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link org.apache.juneau.httppart.HttpPartParser}&gt;</c><li>{@link org.apache.juneau.httppart.HttpPartParser}</ul></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_partSerializer RESTCLIENT_partSerializer}</td>
+		<td>Part serializer.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link org.apache.juneau.httppart.HttpPartSerializer}&gt;</c><li>{@link org.apache.juneau.httppart.HttpPartSerializer}</ul></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_query RESTCLIENT_query}</td>
+		<td>Request query parameters.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_headers RESTCLIENT_headers}</td>
+		<td>Request headers.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_retries RESTCLIENT_retries}</td>
+		<td>Number of retries to attempt.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_retryInterval RESTCLIENT_retryInterval}</td>
+		<td>The time in milliseconds between retry attempts.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_retryOn RESTCLIENT_retryOn}</td>
+		<td>Retry-on determination object.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link org.apache.juneau.rest.client.RetryOn}&gt;</c><li>{@link org.apache.juneau.rest.client.RetryOn}</ul></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_rootUri RESTCLIENT_rootUri}</td>
+		<td>Root URI.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_serializer RESTCLIENT_serializer}</td>
+		<td>Serializer.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link org.apache.juneau.serializer.Serializer}&gt;</c><li>{@link org.apache.juneau.serializer.Serializer}</ul></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.RestContext}</td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_allowBodyParam REST_allowBodyParam}</td>
+		<td>Allow body URL parameter.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_allowedHeaderParams REST_allowedHeaderParams}</td>
+		<td>Allowed header URL parameters.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c> (comma-delimited)</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_allowedMethodHeaders REST_allowedMethodHeaders}</td>
+		<td>Allowed method headers.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c> (comma-delimited)</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_allowedMethodParams REST_allowedMethodParams}</td>
+		<td>Allowed method URL parameters.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c> (comma-delimited)</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_callHandler REST_callHandler}</td>
+		<td>REST call handler.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li>{@link org.apache.juneau.rest.RestCallHandler}<li><c>Class&lt;{@link org.apache.juneau.rest.RestCallHandler}&gt;</c></ul></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_callLogger REST_callLogger}</td>
+		<td>REST call logger.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li>{@link org.apache.juneau.rest.RestCallLogger}<li><c>Class&lt;{@link org.apache.juneau.rest.RestCallLogger}&gt;</c></ul></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_callLoggerConfig REST_callLoggerConfig}</td>
+		<td>REST call logging rules.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.rest.RestCallLoggerConfig}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_children REST_children}</td>
+		<td>Children.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;Class|Object|{@link org.apache.juneau.rest.RestChild}&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}</td>
+		<td>Classpath resource finder.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.utils.ClasspathResourceFinder}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_clientVersionHeader REST_clientVersionHeader}</td>
+		<td>Client version header.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_consumes REST_consumes}</td>
+		<td>Supported content media types.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_converters REST_converters}</td>
+		<td>Class-level response converters.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.rest.RestConverter}|Class&lt;{@link org.apache.juneau.rest.RestConverter}&gt;&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_debug REST_debug}</td>
+		<td>Debug mode.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.rest.Enablement}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_defaultCharset REST_defaultCharset}</td>
+		<td>Default character encoding.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_encoders REST_encoders}</td>
+		<td>Compression encoders.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.encoders.Encoder}|Class&lt;{@link org.apache.juneau.encoders.Encoder}&gt;&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_guards REST_guards}</td>
+		<td>Class-level guards.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.rest.RestGuard}|Class&lt;{@link org.apache.juneau.rest.RestGuard}&gt;&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_infoProvider REST_infoProvider}</td>
+		<td>REST info provider.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li>{@link org.apache.juneau.rest.RestInfoProvider}<li><c>Class&lt;{@link org.apache.juneau.rest.RestInfoProvider}&gt;</c></ul></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_maxInput REST_maxInput}</td>
+		<td>The maximum allowed input size (in bytes) on HTTP requests.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_messages REST_messages}</td>
+		<td>Messages.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.rest.MessageBundleLocation}&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_mimeTypes REST_mimeTypes}</td>
+		<td>MIME types.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Set&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_paramResolvers REST_paramResolvers}</td>
+		<td>Java method parameter resolvers.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.rest.RestMethodParam}|Class&lt;{@link org.apache.juneau.rest.RestMethodParam}&gt;&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_parsers REST_parsers}</td>
+		<td>Parsers.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.parser.Parser}|Class&lt;{@link org.apache.juneau.parser.Parser}&gt;&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser}</td>
+		<td>HTTP part parser.</td>
+		<td style='max-width:250px;overflow:hidden'><c>{@link org.apache.juneau.httppart.HttpPartParser}|Class&lt;{@link org.apache.juneau.httppart.HttpPartParser}&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_partSerializer REST_partSerializer}</td>
+		<td>HTTP part serializer.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li>{@link org.apache.juneau.httppart.HttpPartSerializer}<li><c>Class&lt;{@link org.apache.juneau.httppart.HttpPartSerializer}&gt;</c></ul></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_path REST_path}</td>
+		<td>Resource path.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_produces REST_produces}</td>
+		<td>Supported accept media types.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_properties REST_properties}</td>
+		<td>Properties.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_renderResponseStackTraces REST_renderResponseStackTraces}</td>
+		<td>Render response stack traces in responses.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_reqAttrs REST_reqAttrs}</td>
+		<td>Default request attributes.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,Object&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_reqHeaders REST_reqHeaders}</td>
+		<td>Default request headers.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_resHeaders REST_resHeaders}</td>
+		<td>Default response headers.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_resourceResolver REST_resourceResolver}</td>
+		<td>REST resource resolver.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li>{@link org.apache.juneau.rest.RestResourceResolver}<li><c>Class&lt;{@link org.apache.juneau.rest.RestResourceResolver}&gt;</c></ul></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_responseHandlers REST_responseHandlers}</td>
+		<td>Response handlers.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.rest.ResponseHandler}|Class&lt;{@link org.apache.juneau.rest.ResponseHandler}&gt;&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_roleGuard REST_roleGuard}</td>
+		<td>Role guard.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Set&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_rolesDeclared REST_rolesDeclared}</td>
+		<td>Declared roles.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Set&lt;String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_serializers REST_serializers}</td>
+		<td>Serializers.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.serializer.Serializer}|Class&lt;{@link org.apache.juneau.serializer.Serializer}&gt;&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}</td>
+		<td>Static file response headers.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_staticFiles REST_staticFiles}</td>
+		<td>Static file mappings.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.rest.StaticFileMapping}&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_uriAuthority REST_uriAuthority}</td>
+		<td>Resource URI authority path.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_uriContext REST_uriContext}</td>
+		<td>Resource URI context path.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_uriRelativity REST_uriRelativity}</td>
+		<td>URI resolution relativity.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_uriResolution REST_uriResolution}</td>
+		<td>URI resolution.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_useClasspathResourceCaching REST_useClasspathResourceCaching}</td>
+		<td>Use classpath resource caching.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.RestMethodContext}</td>
+		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_callLoggerConfig RESTMETHOD_callLoggerConfig}</td>
+		<td>Logging rules.</td>
+		<td style='max-width:250px;overflow:hidden'><c>{@link org.apache.juneau.rest.RestCallLoggerConfig}</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_clientVersion RESTMETHOD_clientVersion}</td>
+		<td>Client version pattern matcher.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_debug RESTMETHOD_debug}</td>
+		<td>Debug mode.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link Enablement}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_defaultFormData RESTMETHOD_defaultFormData}</td>
+		<td>Default form data.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,Object&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_defaultQuery RESTMETHOD_defaultQuery}</td>
+		<td>Default query parameters.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,Object&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_httpMethod RESTMETHOD_httpMethod}</td>
+		<td>HTTP method name.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_matchers RESTMETHOD_matchers}</td>
+		<td>Method-level matchers.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.rest.RestMatcher}|Class&lt;{@link org.apache.juneau.rest.RestMatcher}&gt;&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_path RESTMETHOD_path}</td>
+		<td>Resource method path.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_priority RESTMETHOD_priority}</td>
+		<td>Priority.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_reqAttrs RESTMETHOD_reqAttrs}</td>
+		<td>Default request attributes.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,Object&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_reqHeaders RESTMETHOD_reqHeaders}</td>
+		<td>Default request headers.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,Object&gt;</c></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.serializer.Serializer}</td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}</td>
+		<td>Add <js>"_type"</js> properties when needed.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}</td>
+		<td>Add type attribute to root nodes.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_listener SERIALIZER_listener}</td>
+		<td>Serializer listener.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Class&lt;{@link org.apache.juneau.serializer.SerializerListener}&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortCollections SERIALIZER_sortCollections}</td>
+		<td>Sort arrays and collections alphabetically.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortMaps SERIALIZER_sortMaps}</td>
+		<td>Sort maps alphabetically.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyCollections SERIALIZER_trimEmptyCollections}</td>
+		<td>Trim empty lists and arrays.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyMaps SERIALIZER_trimEmptyMaps}</td>
+		<td>Trim empty maps.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimNullProperties SERIALIZER_trimNullProperties}</td>
+		<td>Trim null bean property values.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimStrings SERIALIZER_trimStrings}</td>
+		<td>Trim strings.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext SERIALIZER_uriContext}</td>
+		<td>URI context bean.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.UriContext}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity SERIALIZER_uriRelativity}</td>
+		<td>URI relativity.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.UriRelativity}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution SERIALIZER_uriResolution}</td>
+		<td>URI resolution.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.UriResolution}</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.soap.SoapXmlSerializer}</td>
+		<td>{@link org.apache.juneau.soap.SoapXmlSerializer#SOAPXML_SOAPAction SOAPXML_SOAPAction}</td>
+		<td>The <c>SOAPAction</c> HTTP header value to set on responses.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.dto.swagger.ui.SwaggerUI}</td>
+		<td>{@link org.apache.juneau.dto.swagger.ui.SwaggerUI#SWAGGERUI_resolveRefsMaxDepth SWAGGERUI_resolveRefsMaxDepth}</td>
+		<td>Resolve <c>$ref</c> references in schema up to the specified depth.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.uon.UonParser}</td>
+		<td>{@link org.apache.juneau.uon.UonParser#UON_decoding UON_decoding}</td>
+		<td>Decode <js>"%xx"</js> sequences.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.uon.UonParser#UON_validateEnd UON_validateEnd}</td>
+		<td>Validate end.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.uon.UonSerializer}</td>
+		<td>{@link org.apache.juneau.uon.UonSerializer#UON_addBeanTypes UON_addBeanTypes}</td>
+		<td>Add <js>"_type"</js> properties when needed.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.uon.UonSerializer#UON_encoding UON_encoding}</td>
+		<td>Encode non-valid URI characters.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.uon.UonSerializer#UON_paramFormat UON_paramFormat}</td>
+		<td>Format to use for query/form-data/header values.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.uon.ParamFormat}</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.urlencoding.UrlEncodingParser}</td>
+		<td>{@link org.apache.juneau.urlencoding.UrlEncodingParser#URLENC_expandedParams URLENC_expandedParams}</td>
+		<td>Parser bean property collections/arrays as separate key/value pairs.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}</td>
+		<td>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#URLENC_expandedParams URLENC_expandedParams}</td>
+		<td>Serialize bean property collections/arrays as separate key/value pairs.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.serializer.WriterSerializer}</td>
+		<td>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_fileCharset WSERIALIZER_fileCharset}</td>
+		<td>File charset.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_maxIndent WSERIALIZER_maxIndent}</td>
+		<td>Maximum indentation.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_quoteChar WSERIALIZER_quoteChar}</td>
+		<td>Quote character.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_streamCharset WSERIALIZER_streamCharset}</td>
+		<td>Output stream charset.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_useWhitespace WSERIALIZER_useWhitespace}</td>
+		<td>Use whitespace.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.xml.XmlParser}</td>
+		<td>{@link org.apache.juneau.xml.XmlParser#XML_eventAllocator XML_eventAllocator}</td>
+		<td>XML event allocator.</td>
+		<td style='max-width:250px;overflow:hidden'><code>Class&lt;{@link javax.xml.stream.util.XMLEventAllocator}&gt;</code></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.xml.XmlParser#XML_preserveRootElement XML_preserveRootElement}</td>
+		<td>Preserve root element during generalized parsing.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.xml.XmlParser#XML_reporter XML_reporter}</td>
+		<td>XML reporter.</td>
+		<td style='max-width:250px;overflow:hidden'><code>Class&lt;{@link javax.xml.stream.XMLReporter}&gt;</code></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.xml.XmlParser#XML_resolver XML_resolver}</td>
+		<td>XML resolver.</td>
+		<td style='max-width:250px;overflow:hidden'><code>Class&lt;{@link javax.xml.stream.XMLResolver}&gt;</code></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.xml.XmlParser#XML_validating XML_validating}</td>
+		<td>Enable validation.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.xml.XmlSerializer}</td>
+		<td>{@link org.apache.juneau.xml.XmlSerializer#XML_addBeanTypes XML_addBeanTypes}</td>
+		<td>Add <js>"_type"</js> properties when needed.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.xml.XmlSerializer#XML_addNamespaceUrisToRoot XML_addNamespaceUrisToRoot}</td>
+		<td>Add namespace URLs to the root element.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.xml.XmlSerializer#XML_autoDetectNamespaces XML_autoDetectNamespaces}</td>
+		<td>Auto-detect namespace usage.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.xml.XmlSerializer#XML_defaultNamespace XML_defaultNamespace}</td>
+		<td>Default namespace.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.xml.Namespace}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.xml.XmlSerializer#XML_enableNamespaces XML_enableNamespaces}</td>
+		<td>Enable support for XML namespaces.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.xml.XmlSerializer#XML_namespaces XML_namespaces}</td>
+		<td>Default namespaces.</td>
+		<td style='max-width:250px;overflow:hidden'><c>Set&lt;{@link org.apache.juneau.xml.Namespace}&gt;</c></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.xml.XmlSerializer#XML_xsNamespace XML_xsNamespace}</td>
+		<td>XMLSchema namespace.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c> ({@link org.apache.juneau.xml.Namespace})</td>
+	</tr>
+</table>

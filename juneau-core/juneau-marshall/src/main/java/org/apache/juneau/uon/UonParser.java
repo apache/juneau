@@ -20,7 +20,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Parses UON (a notation for URL-encoded query parameter values) text into POJO models.
@@ -47,14 +46,21 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonParser#UON_decoding UON_decoding}
 	 * 	<li><b>Name:</b>  <js>"UonParser.decoding.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>UonParser.decoding</c>
+	 * 	<li><b>Environment variable:</b>  <c>UONPARSER_DECODING</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link org.apache.juneau.uon.UonParser}, <jk>true</jk> for {@link org.apache.juneau.urlencoding.UrlEncodingParser}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.uon.annotation.UonConfig#decoding()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link UonParserBuilder#decoding(boolean)}
-	 * 			<li class='jm'>{@link UonParserBuilder#decoding()}
+	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonParserBuilder#decoding(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonParserBuilder#decoding()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -88,14 +94,21 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonParser#UON_validateEnd UON_validateEnd}
 	 * 	<li><b>Name:</b>  <js>"UonParser.validateEnd.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>UonParser.validateEnd</c>
+	 * 	<li><b>Environment variable:</b>  <c>UONPARSER_VALIDATEEND</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.uon.annotation.UonConfig#validateEnd()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link UonParserBuilder#validateEnd(boolean)}
-	 * 			<li class='jm'>{@link UonParserBuilder#validateEnd()}
+	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonParserBuilder#validateEnd(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonParserBuilder#validateEnd()}
 	 * 		</ul>
 	 * </ul>
 	 *

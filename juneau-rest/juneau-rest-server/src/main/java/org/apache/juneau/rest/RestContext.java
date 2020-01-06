@@ -64,7 +64,6 @@ import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
-import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.svl.*;
@@ -95,17 +94,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_allowBodyParam REST_allowBodyParam}
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowBodyParam.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RestContext.allowBodyParam</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_ALLOWBODYPARAM</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#allowBodyParam()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#allowBodyParam()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#allowBodyParam(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#allowBodyParam(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -157,17 +159,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_allowedHeaderParams REST_allowedHeaderParams}
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowedHeaderParams.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited list)
+	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
+	 * 	<li><b>System property:</b>  <c>RestContext.allowedHeaderParams</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_ALLOWHEADERPARAMS</c>
 	 * 	<li><b>Default:</b>  <js>"Accept,Content-Type"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#allowedHeaderParams()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#allowedHeaderParams()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#allowedHeaderParams(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#allowedHeaderParams(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -224,17 +229,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_allowedMethodHeaders REST_allowedMethodHeaders}
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowedMethodHeaders.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited list)
+	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
+	 * 	<li><b>System property:</b>  <c>RestContext.allowedMethodHeaders</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_ALLOWEDMETHODHEADERS</c>
 	 * 	<li><b>Default:</b>  empty string
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#allowedMethodHeaders()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#allowedMethodHeaders()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#allowedMethodHeaders(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#allowedMethodHeaders(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -288,17 +296,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_allowedMethodParams REST_allowedMethodParams}
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowedMethodParams.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited list)
+	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
+	 * 	<li><b>System property:</b>  <c>RestContext.allowedMethodParams</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_ALLOWEDMETHODPARAMS</c>
 	 * 	<li><b>Default:</b>  <js>"HEAD,OPTIONS"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#allowedMethodParams()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#allowedMethodParams()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#allowedMethodParams(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#allowedMethodParams(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -361,62 +372,6 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Allow header URL parameters.
 	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.allowHeaderParams.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#allowHeaderParams()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#allowHeaderParams(boolean)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
-	 * parameters.
-	 * <br>
-	 * For example:
-	 * <p class='bcode w800'>
-	 *  ?Accept=text/json&amp;Content-Type=text/json
-	 * </p>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(allowMethodParams=<js>"$C{REST/allowHeaderParams,false}"</js>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.allowHeaderParams(<jk>false</jk>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.set(<jsf>REST_allowHeaderParams</jsf>, <jk>false</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.allowHeaderParams(<jk>false</jk>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Header names are case-insensitive.
-	 * 	<li>
-	 * 		Useful for debugging REST interface using only a browser.
-	 * </ul>
 	 * @deprecated Use {@link #REST_allowedHeaderParams}
 	 */
 	@Deprecated
@@ -427,18 +382,23 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_callHandler REST_callHandler}
 	 * 	<li><b>Name:</b>  <js>"RestContext.callHandler.o"</js>
-	 * 	<li><b>Data type:</b>  {@link RestCallHandler} | <code>Class&lt;? <jk>extends</jk> {@link RestCallHandler}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link BasicRestCallHandler}
+	 * 	<li><b>Data type:</b>
+	 * 		<ul>
+	 * 			<li>{@link org.apache.juneau.rest.RestCallHandler}
+	 * 			<li><c>Class&lt;{@link org.apache.juneau.rest.RestCallHandler}&gt;</c>
+	 * 		</ul>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicRestCallHandler}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#callHandler()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#callHandler()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#callHandler(Class)}
-	 * 			<li class='jm'>{@link RestContextBuilder#callHandler(RestCallHandler)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callHandler(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callHandler(RestCallHandler)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -516,18 +476,23 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_callLogger REST_callLogger}
 	 * 	<li><b>Name:</b>  <js>"RestContext.callLogger.o"</js>
-	 * 	<li><b>Data type:</b>  <code>{@link RestCallLogger} | Class&lt;? <jk>extends</jk> {@link RestCallLogger}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link BasicRestCallLogger}
+	 * 	<li><b>Data type:</b>
+	 * 		<ul>
+	 * 			<li>{@link org.apache.juneau.rest.RestCallLogger}
+	 * 			<li><c>Class&lt;{@link org.apache.juneau.rest.RestCallLogger}&gt;</c>
+	 * 		</ul>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicRestCallLogger}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#callLogger()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#callLogger()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#callLogger(Class)}
-	 * 			<li class='jm'>{@link RestContextBuilder#callLogger(RestCallLogger)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callLogger(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callLogger(RestCallLogger)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -579,17 +544,18 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_callLoggerConfig REST_callLoggerConfig}
 	 * 	<li><b>Name:</b>  <js>"RestContext.callLoggerConfig.o"</js>
-	 * 	<li><b>Data type:</b>  <c>RestCallLoggerConfig</c>
-	 * 	<li><b>Default:</b>  {@link RestCallLoggerConfig#DEFAULT}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.RestCallLoggerConfig}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestCallLoggerConfig#DEFAULT}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#logging()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#logging()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#callLoggerConfig(RestCallLoggerConfig)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callLoggerConfig(RestCallLoggerConfig)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -655,19 +621,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_children REST_children}
 	 * 	<li><b>Name:</b>  <js>"RestContext.children.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;Class | Object | {@link RestChild}&gt;</c>
+	 * 	<li><b>Data type:</b>  <c>List&lt;Class|Object|{@link org.apache.juneau.rest.RestChild}&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#children()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#children()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#child(String,Object)}
-	 * 			<li class='jm'>{@link RestContextBuilder#children(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#children(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#child(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#children(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#children(Object...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -766,18 +733,19 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}
 	 * 	<li><b>Name:</b>  <js>"RestContext.classpathResourceFinder.o"</js>
-	 * 	<li><b>Data type:</b>  {@link ClasspathResourceFinder}
-	 * 	<li><b>Default:</b>  {@link ClasspathResourceFinderBasic}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.utils.ClasspathResourceFinder}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.utils.ClasspathResourceFinderBasic}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#classpathResourceFinder()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#classpathResourceFinder()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#classpathResourceFinder(Class)}
-	 * 			<li class='jm'>{@link RestContextBuilder#classpathResourceFinder(ClasspathResourceFinder)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#classpathResourceFinder(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#classpathResourceFinder(ClasspathResourceFinder)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -867,17 +835,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_clientVersionHeader REST_clientVersionHeader}
 	 * 	<li><b>Name:</b>  <js>"RestContext.clientVersionHeader.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.clientVersionHeader</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_CLIENTVERSIONHEADER</c>
 	 * 	<li><b>Default:</b>  <js>"X-Client-Version"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#clientVersionHeader()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#clientVersionHeader()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#clientVersionHeader(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#clientVersionHeader(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -940,19 +911,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_converters REST_converters}
 	 * 	<li><b>Name:</b>  <js>"RestContext.converters.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;{@link RestConverter} | Class&lt;? <jk>extends</jk> {@link RestConverter}&gt;&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.RestConverter}|Class&lt;{@link org.apache.juneau.rest.RestConverter}&gt;&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#converters()}
-	 * 			<li class='ja'>{@link RestMethod#converters()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#converters()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#converters()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#converters(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#converters(RestConverter...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#converters(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#converters(RestConverter...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1032,17 +1004,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_debug REST_debug}
 	 * 	<li><b>Name:</b>  <js>"RestContext.debug.s"</js>
-	 * 	<li><b>Data type:</b>  {@link Enablement}
-	 * 	<li><b>Default:</b>  {@link Enablement#FALSE}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.Enablement}
+	 * 	<li><b>System property:</b>  <c>RestContext.debug</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DEBUG</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.Enablement#FALSE}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#debug()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#debug()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#debug(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debug(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1061,19 +1036,22 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_defaultCharset REST_defaultCharset}
 	 * 	<li><b>Name:</b>  <js>"RestContext.defaultCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.defaultCharset</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DEFAULTCHARSET</c>
 	 * 	<li><b>Default:</b>  <js>"utf-8"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#defaultCharset()}
-	 * 			<li class='ja'>{@link RestMethod#defaultCharset()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#defaultCharset()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultCharset()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#defaultCharset(String)}
-	 * 			<li class='jm'>{@link RestContextBuilder#defaultCharset(Charset)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#defaultCharset(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#defaultCharset(Charset)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1113,7 +1091,7 @@ public final class RestContext extends BeanContext {
 
 	/**
 	 * Configuration property:  Default request attributes.
-	 * 
+	 *
 	 * @deprecated Use {@link #REST_reqAttrs}
 	 */
 	@Deprecated
@@ -1121,7 +1099,7 @@ public final class RestContext extends BeanContext {
 
 	/**
 	 * Configuration property:  Default request headers.
-	 * 
+	 *
 	 * @deprecated Use {@link #REST_reqHeaders}
 	 */
 	@Deprecated
@@ -1129,7 +1107,7 @@ public final class RestContext extends BeanContext {
 
 	/**
 	 * Configuration property:  Default response headers.
-	 * 
+	 *
 	 * @deprecated Use {@link #REST_resHeaders}
 	 */
 	@Deprecated
@@ -1140,19 +1118,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_encoders REST_encoders}
 	 * 	<li><b>Name:</b>  <js>"RestContext.encoders.o"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;{@link Encoder} | Class&lt;? <jk>extends</jk> {@link Encoder}&gt;&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.encoders.Encoder}|Class&lt;{@link org.apache.juneau.encoders.Encoder}&gt;&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#encoders()}
-	 * 			<li class='ja'>{@link RestMethod#encoders()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#encoders()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#encoders()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#encoders(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#encoders(Encoder...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#encoders(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#encoders(Encoder...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1210,19 +1189,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_guards REST_guards}
 	 * 	<li><b>Name:</b>  <js>"RestContext.guards.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;{@link RestGuard} | Class&lt;? <jk>extends</jk> {@link RestGuard}&gt;&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.RestGuard}|Class&lt;{@link org.apache.juneau.rest.RestGuard}&gt;&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#guards()}
-	 * 			<li class='ja'>{@link RestMethod#guards()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#guards()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#guards()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#guards(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#guards(RestGuard...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#guards(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#guards(RestGuard...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1293,18 +1273,23 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_infoProvider REST_infoProvider}
 	 * 	<li><b>Name:</b>  <js>"RestContext.infoProvider.o"</js>
-	 * 	<li><b>Data type:</b>  <code>{@link RestInfoProvider} | Class&lt;? <jk>extends</jk> {@link RestInfoProvider}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link BasicRestInfoProvider}
+	 * 	<li><b>Data type:</b>
+	 * 		<ul>
+	 * 			<li>{@link org.apache.juneau.rest.RestInfoProvider}
+	 * 			<li><c>Class&lt;{@link org.apache.juneau.rest.RestInfoProvider}&gt;</c>
+	 * 		</ul>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicRestInfoProvider}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#infoProvider()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#infoProvider()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#infoProvider(Class)}
-	 * 			<li class='jm'>{@link RestContextBuilder#infoProvider(RestInfoProvider)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#infoProvider(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#infoProvider(RestInfoProvider)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1379,77 +1364,6 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  REST logger.
 	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.logger.o"</js>
-	 * 	<li><b>Data type:</b>  <code>{@link RestLogger} | Class&lt;? <jk>extends</jk> {@link RestLogger}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link BasicRestLogger}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#logger()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#logger(Class)}
-	 * 			<li class='jm'>{@link RestContextBuilder#logger(RestLogger)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies the logger to use for logging.
-	 *
-	 * <p>
-	 * Two implementations are provided by default:
-	 * <ul class='javatree'>
-	 * 	<li class='jc'>{@link BasicRestLogger} - Default logging.
-	 * 	<li class='jc'>{@link NoOpRestLogger} - Logging disabled.
-	 * </ul>
-	 *
-	 * <p>
-	 * Loggers are accessible through the following:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestContext#getLogger() RestContext.getLogger()}
-	 * 	<li class='jm'>{@link RestRequest#getLogger() RestRequest.getLogger()}
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our customized logger.</jc>
-	 * 	<jk>public class</jk> MyRestLogger <jk>extends</jk> BasicRestLogger {
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> log(Level level, Throwable cause, String msg, Object...args) {
-	 * 			<jc>// Handle logging ourselves.</jc>
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(logger=MyRestLogger.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.logger(MyRestLogger.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.set(<jsf>REST_logger</jsf>, MyRestLogger.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.logger(MyRestLogger.<jk>class</jk>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
-	 * </ul>
 	 * @deprecated Use {@link #REST_callLogger}
 	 */
 	@Deprecated
@@ -1460,18 +1374,21 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_maxInput REST_maxInput}
 	 * 	<li><b>Name:</b>  <js>"RestContext.maxInput.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.maxInput</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_MAXINPUT</c>
 	 * 	<li><b>Default:</b>  <js>"100M"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#maxInput()}
-	 * 			<li class='ja'>{@link RestMethod#maxInput()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#maxInput()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#maxInput()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#maxInput(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#maxInput(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1525,19 +1442,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_messages REST_messages}
 	 * 	<li><b>Name:</b>  <js>"RestContext.messages.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link MessageBundleLocation}&gt;</c>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.MessageBundleLocation}&gt;</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#messages()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#messages()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#messages(String)},
-	 * 			<li class='jm'>{@link RestContextBuilder#messages(Class,String)}
-	 * 			<li class='jm'>{@link RestContextBuilder#messages(MessageBundleLocation...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#messages(String)},
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#messages(Class,String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#messages(MessageBundleLocation...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1610,17 +1528,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_mimeTypes REST_mimeTypes}
 	 * 	<li><b>Name:</b>  <js>"RestContext.mimeTypes.ss"</js>
 	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.mimeTypes</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_MIMETYPES</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#mimeTypes()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#mimeTypes()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#mimeTypes(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#mimeTypes(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1677,18 +1598,19 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_paramResolvers REST_paramResolvers}
 	 * 	<li><b>Name:</b>  <js>"RestContext.paramResolvers.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;{@link RestMethodParam} | Class&lt;? <jk>extends</jk> {@link RestMethodParam}&gt;&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.RestMethodParam}|Class&lt;{@link org.apache.juneau.rest.RestMethodParam}&gt;&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#paramResolvers()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#paramResolvers()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#paramResolvers(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#paramResolvers(RestMethodParam...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#paramResolvers(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#paramResolvers(RestMethodParam...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1766,20 +1688,21 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_parsers REST_parsers}
 	 * 	<li><b>Name:</b>  <js>"RestContext.parsers.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;{@link Parser} | Class&lt;? <jk>extends</jk> {@link Parser}&gt;&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.parser.Parser}|Class&lt;{@link org.apache.juneau.parser.Parser}&gt;&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#parsers()}
-	 * 			<li class='ja'>{@link RestMethod#parsers()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#parsers()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#parsers()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#parsers(Object...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#parsers(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#parsersReplace(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#parsers(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#parsers(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#parsersReplace(Object...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1859,18 +1782,19 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser}
 	 * 	<li><b>Name:</b>  <js>"RestContext.partParser.o"</js>
-	 * 	<li><b>Data type:</b>  <code>{@link HttpPartParser} | Class&lt;? <jk>extends</jk> {@link HttpPartParser}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link OpenApiParser}
+	 * 	<li><b>Data type:</b>  <c>{@link org.apache.juneau.httppart.HttpPartParser}|Class&lt;{@link org.apache.juneau.httppart.HttpPartParser}&gt;</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.oapi.OpenApiParser}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#partParser()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#partParser()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#partParser(Class)}
-	 * 			<li class='jm'>{@link RestContextBuilder#partParser(HttpPartParser)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#partParser(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#partParser(HttpPartParser)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1926,18 +1850,23 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_partSerializer REST_partSerializer}
 	 * 	<li><b>Name:</b>  <js>"RestContext.partSerializer.o"</js>
-	 * 	<li><b>Data type:</b>  <code>{@link HttpPartSerializer} | Class&lt;? <jk>extends</jk> {@link HttpPartSerializer}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link OpenApiSerializer}
+	 * 	<li><b>Data type:</b>
+	 * 		<ul>
+	 * 			<li>{@link org.apache.juneau.httppart.HttpPartSerializer}
+	 * 			<li><c>Class&lt;{@link org.apache.juneau.httppart.HttpPartSerializer}&gt;</c>
+	 * 		</ul>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.oapi.OpenApiSerializer}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#partSerializer()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#partSerializer()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#partSerializer(Class)}
-	 * 			<li class='jm'>{@link RestContextBuilder#partSerializer(HttpPartSerializer)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#partSerializer(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#partSerializer(HttpPartSerializer)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1998,17 +1927,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_path REST_path}
 	 * 	<li><b>Name:</b>  <js>"RestContext.path.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.path.</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_PATH</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#path()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#path()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#path(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#path(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2069,18 +2001,21 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_renderResponseStackTraces REST_renderResponseStackTraces}
 	 * 	<li><b>Name:</b>  <js>"RestContext.renderResponseStackTraces.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RestContext.renderResponseStackTraces</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_RENDERRESPONSESTACKTRACES</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#renderResponseStackTraces()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#renderResponseStackTraces()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#renderResponseStackTraces(boolean)}
-	 * 			<li class='jm'>{@link RestContextBuilder#renderResponseStackTraces()}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#renderResponseStackTraces(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#renderResponseStackTraces()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2131,19 +2066,22 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_reqAttrs REST_reqAttrs}
 	 * 	<li><b>Name:</b>  <js>"RestContext.reqAttrs.smo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.reqAttrs</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_REQATTRS</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#reqAttrs()}
-	 * 			<li class='ja'>{@link RestMethod#reqAttrs()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#reqAttrs()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#reqAttrs()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#reqAttrs(String...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#reqAttr(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#reqAttrs(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#reqAttr(String,Object)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2199,19 +2137,22 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_reqHeaders REST_reqHeaders}
 	 * 	<li><b>Name:</b>  <js>"RestContext.reqHeaders.smo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.reqHeaders</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_REQHEADERS</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#reqHeaders()}
-	 * 			<li class='ja'>{@link RestMethod#reqHeaders()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#reqHeaders()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#reqHeaders()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#reqHeader(String,Object)}
-	 * 			<li class='jm'>{@link RestContextBuilder#reqHeaders(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#reqHeader(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#reqHeaders(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2266,18 +2207,21 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_resHeaders REST_resHeaders}
 	 * 	<li><b>Name:</b>  <js>"RestContext.resHeaders.omo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.resHeaders</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_RESHEADERS</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#resHeaders()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#resHeaders()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#resHeader(String,Object)}
-	 * 			<li class='jm'>{@link RestContextBuilder#resHeaders(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#resHeader(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#resHeaders(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2330,18 +2274,23 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_resourceResolver REST_resourceResolver}
 	 * 	<li><b>Name:</b>  <js>"RestContext.resourceResolver.o"</js>
-	 * 	<li><b>Data type:</b>  <code>{@link RestResourceResolver} | Class&lt;? <jk>extends</jk> {@link RestResourceResolver}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link BasicRestResourceResolver}
+	 * 	<li><b>Data type:</b>
+	 * 		<ul>
+	 * 			<li>{@link org.apache.juneau.rest.RestResourceResolver}
+	 * 			<li><c>Class&lt;{@link org.apache.juneau.rest.RestResourceResolver}&gt;</c>
+	 * 		</ul>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicRestResourceResolver}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#resourceResolver()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#resourceResolver()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#resourceResolver(Class)}
-	 * 			<li class='jm'>{@link RestContextBuilder#resourceResolver(RestResourceResolver)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#resourceResolver(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#resourceResolver(RestResourceResolver)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2416,18 +2365,19 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_responseHandlers REST_responseHandlers}
 	 * 	<li><b>Name:</b>  <js>"RestContext.responseHandlers.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;{@link ResponseHandler} | Class&lt;? <jk>extends</jk> {@link ResponseHandler}&gt;&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.ResponseHandler}|Class&lt;{@link org.apache.juneau.rest.ResponseHandler}&gt;&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#responseHandlers()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#responseHandlers()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#responseHandlers(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#responseHandlers(ResponseHandler...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#responseHandlers(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#responseHandlers(ResponseHandler...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2509,17 +2459,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_rolesDeclared REST_rolesDeclared}
 	 * 	<li><b>Name:</b>  <js>"RestContext.rolesDeclared.ss"</js>
 	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.rolesDeclared</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_ROLESDECLARED</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#rolesDeclared()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#rolesDeclared()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#rolesDeclared(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#rolesDeclared(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2553,18 +2506,21 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_roleGuard REST_roleGuard}
 	 * 	<li><b>Name:</b>  <js>"RestContext.roleGuard.ss"</js>
 	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.roleGuard</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_ROLEGUARD</c>
 	 * 	<li><b>Default:</b>  empty set
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#roleGuard()}
-	 * 			<li class='ja'>{@link RestMethod#roleGuard()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#roleGuard()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#roleGuard()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#roleGuard(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#roleGuard(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2622,21 +2578,22 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_serializers REST_serializers}
 	 * 	<li><b>Name:</b>  <js>"RestContext.serializers.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;{@link Serializer} | Class&lt;? <jk>extends</jk> {@link Serializer}&gt;&gt;</code>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.serializer.Serializer}|Class&lt;{@link org.apache.juneau.serializer.Serializer}&gt;&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#serializers()}
-	 * 			<li class='ja'>{@link RestMethod#serializers()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#serializers()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#serializers()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#serializers(Object...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#serializers(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#serializersReplace(Object...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#serializersReplace(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializers(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializers(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializersReplace(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#serializersReplace(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2724,20 +2681,23 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}
 	 * 	<li><b>Name:</b>  <js>"RestContext.staticFileResponseHeaders.omo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.staticFileResponseHeaders</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_STATICFILERESPONSEHEADERS</c>
 	 * 	<li><b>Default:</b>  <code>{<js>'Cache-Control'</js>: <js>'max-age=86400, public</js>}</code>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#staticFileResponseHeaders()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#staticFileResponseHeaders()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#staticFileResponseHeaders(Map)}
-	 * 			<li class='jm'>{@link RestContextBuilder#staticFileResponseHeaders(String...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#staticFileResponseHeader(String,String)}
-	 * 			<li class='jm'>{@link RestContextBuilder#staticFileResponseHeadersReplace(Map)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFileResponseHeaders(Map)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFileResponseHeaders(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFileResponseHeader(String,String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFileResponseHeadersReplace(Map)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2799,21 +2759,22 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_staticFiles REST_staticFiles}
 	 * 	<li><b>Name:</b>  <js>"RestContext.staticFiles.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;StaticFileMapping&gt;</c>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.StaticFileMapping}&gt;</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#staticFiles()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#staticFiles()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#staticFiles(String)},
-	 * 			<li class='jm'>{@link RestContextBuilder#staticFiles(Class,String)}
-	 * 			<li class='jm'>{@link RestContextBuilder#staticFiles(String,String)}
-	 * 			<li class='jm'>{@link RestContextBuilder#staticFiles(Class,String,String)}
-	 * 			<li class='jm'>{@link RestContextBuilder#staticFiles(StaticFileMapping...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(String)},
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(Class,String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(String,String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(Class,String,String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#staticFiles(StaticFileMapping...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2919,21 +2880,24 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_produces REST_produces}
 	 * 	<li><b>Name:</b>  <js>"RestContext.produces.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.produces</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_PRODUCES</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#produces()}
-	 * 			<li class='ja'>{@link RestMethod#produces()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#produces()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#produces()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#produces(String...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#produces(MediaType...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#producesReplace(String...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#producesReplace(MediaType...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#produces(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#produces(MediaType...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#producesReplace(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#producesReplace(MediaType...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2982,21 +2946,24 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_properties REST_properties}
 	 * 	<li><b>Name:</b>  <js>"RestContext.properties.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.properties</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_PROPERTIES</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#properties()}
-	 * 			<li class='ja'>{@link Rest#flags()}
-	 * 			<li class='ja'>{@link RestMethod#properties()}
-	 * 			<li class='ja'>{@link RestMethod#flags()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#properties()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#flags()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#properties()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#flags()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#property(String,Object)}
-	 * 			<li class='jm'>{@link RestContextBuilder#properties(Map)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#property(String,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#properties(Map)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -3028,21 +2995,24 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_consumes REST_consumes}
 	 * 	<li><b>Name:</b>  <js>"RestContext.consumes.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.consumes</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_CONSUMES</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#consumes()}
-	 * 			<li class='ja'>{@link RestMethod#consumes()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#consumes()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#consumes()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#consumes(String...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#consumes(MediaType...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#consumesReplace(String...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#consumesReplace(MediaType...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#consumes(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#consumes(MediaType...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#consumesReplace(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#consumesReplace(MediaType...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -3091,17 +3061,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_useClasspathResourceCaching REST_useClasspathResourceCaching}
 	 * 	<li><b>Name:</b>  <js>"RestContext.useClasspathResourceCaching.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RestContext.useClasspathResourceCaching</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_USECLASSPATHRESOURCECACHING</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#useClasspathResourceCaching()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#useClasspathResourceCaching()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#useClasspathResourceCaching(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#useClasspathResourceCaching(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -3143,58 +3116,6 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Use stack trace hashes.
 	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.useStackTraceHashes.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link RestResource#useStackTraceHashes()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#useStackTraceHashes(boolean)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When enabled, the number of times an exception has occurred will be tracked based on stack trace hashsums.
-	 *
-	 * <p>
-	 * Affects the following methods:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestContext#getStackTraceOccurrence(Throwable) RestContext.getStackTraceOccurrance(Throwable)}
-	 * 	<li class='jm'>{@link RestCallHandler#handleError(RestCall, Throwable)}
-	 * 	<li class='jm'>{@link RestException#getOccurrence()} - Returns the number of times this exception occurred.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(useStackTraceHashes=<js>"$C{REST/useStackTraceHashes,false}"</js>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.useStackTraceHashes(<jk>false</jk>)
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.set(<jsf>REST_useStackTraceHashes</jsf>, <jk>false</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.useStackTraceHashes(<jk>false</jk>)
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
 	 * @deprecated Use {@link Logging#useStackTraceHashing}
 	 */
 	@Deprecated
@@ -3205,17 +3126,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_uriAuthority REST_uriAuthority}
 	 * 	<li><b>Name:</b>  <js>"RestContext.uriAuthority.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.uriAuthority</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_URIAUTHORITY</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#uriAuthority()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#uriAuthority()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#uriAuthority(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#uriAuthority(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -3275,17 +3199,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_uriContext REST_uriContext}
 	 * 	<li><b>Name:</b>  <js>"RestContext.uriContext.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.uriContext</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_URICONTEXT</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#uriContext()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#uriContext()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#uriContext(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#uriContext(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -3338,17 +3265,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_uriRelativity REST_uriRelativity}
 	 * 	<li><b>Name:</b>  <js>"RestContext.uriRelativity.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.uriRelativity</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_URIRELATIVITY</c>
 	 * 	<li><b>Default:</b>  <js>"RESOURCE"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#uriRelativity()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#uriRelativity()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#uriRelativity(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#uriRelativity(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -3399,17 +3329,20 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_uriResolution REST_uriResolution}
 	 * 	<li><b>Name:</b>  <js>"RestContext.uriResolution.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RestContext.uriResolution</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_URIRESOLUTION</c>
 	 * 	<li><b>Default:</b>  <js>"ROOT_RELATIVE"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Rest#uriResolution()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#uriResolution()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#uriResolution(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#uriResolution(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -3457,70 +3390,6 @@ public final class RestContext extends BeanContext {
 
 	/**
 	 * Configuration property:  HTML Widgets.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestContext.widgets.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;{@link Widget} | Class&lt;? <jk>extends</jk> {@link Widget}&gt;&gt;</code>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link HtmlDoc#widgets()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#widgets(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#widgets(Widget...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#widgetsReplace(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#widgetsReplace(Widget...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
-	 * generate arbitrary replacement text.
-	 *
-	 * Widgets resolve the following variables:
-	 * <ul class='spaced-list'>
-	 * 	<li><js>"$W{name}"</js> - Contents returned by {@link Widget#getHtml(RestRequest,RestResponse)}.
-	 * 	<li><js>"$W{name.script}"</js> - Contents returned by {@link Widget#getScript(RestRequest,RestResponse)}.
-	 * 		<br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
-	 * 			 in the HTML page.
-	 * 	<li><js>"$W{name.style}"</js> - Contents returned by {@link Widget#getStyle(RestRequest,RestResponse)}.
-	 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
-	 * 			 in the HTML page.
-	 * </ul>
-	 *
-	 * <p>
-	 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
-	 * and aside section of the page:
-	 *
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(
-	 * 		widgets={
-	 * 			MyWidget.<jk>class</jk>
-	 * 		}
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			navlinks={
-	 * 				<js>"$W{MyWidget}"</js>
-	 * 			},
-	 * 			aside={
-	 * 				<js>"Check out this widget:  $W{MyWidget}"</js>
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Widgets are inherited from super classes, but can be overridden by reusing the widget name.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
-	 * </ul>
 	 *
 	 * @deprecated Use {@link HtmlDocSerializer#HTMLDOC_widgets}
 	 */

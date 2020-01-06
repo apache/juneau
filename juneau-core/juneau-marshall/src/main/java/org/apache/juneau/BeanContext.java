@@ -156,12 +156,18 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_annotations BEAN_annotations}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.annotations.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;Annotation&gt;</c>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link java.lang.annotation.Annotation}&gt;</c>
 	 * 	<li><b>Default:</b>  Empty list.
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#annotateBean()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#annotateBeanp()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#annotations(Annotation...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -204,13 +210,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanClassVisibility BEAN_beanClassVisibility}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanClassVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link Visibility})
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
+	 * 	<li><b>System property:</b>  <c>BeanContext.beanClassVisibility</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANCLASSVISIBILITY</c>
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanClassVisibility()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanClassVisibility(Visibility)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanClassVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -245,13 +258,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanConstructorVisibility BEAN_beanConstructorVisibility}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanConstructorVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link Visibility})
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
+	 * 	<li><b>System property:</b>  <c>BeanContext.beanConstructorVisibility</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANCONSTRUCTORVISIBILITY</c>
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanConstructorVisibility()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanConstructorVisibility(Visibility)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanConstructorVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -286,24 +306,26 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanDictionary BEAN_beanDictionary}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanDictionary.lc"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;Class&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#dictionary()}
-	 * 			<li class='ja'>{@link Beanp#dictionary()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#dictionary(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#dictionary(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#dictionaryReplace(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#dictionaryReplace(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#dictionaryRemove(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#dictionaryRemove(Class...)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#dictionary(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionaryReplace(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionaryReplace(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionaryRemove(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionaryRemove(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#dictionary(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -378,13 +400,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility BEAN_beanFieldVisibility}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFieldVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link Visibility})
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
+	 * 	<li><b>System property:</b>  <c>BeanContext.beanFieldVisibility</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANFIELDVISIBILITY</c>
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFieldVisibility()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanFieldVisibility(Visibility)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFieldVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -425,18 +454,23 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanFilters BEAN_beanFilters}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFilters.lc"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;Class&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFilters()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanFiltersReplace(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanFiltersReplace(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanFiltersRemove(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanFiltersRemove(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFilters(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFilters(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFiltersReplace(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFiltersReplace(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFiltersRemove(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFiltersRemove(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -504,14 +538,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanMapPutReturnsOldValue BEAN_beanMapPutReturnsOldValue}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMapPutReturnsOldValue.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.beanMapPutReturnsOldValue</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANMAPPUTRETURNSOLDVALUE</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMapPutReturnsOldValue()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanMapPutReturnsOldValue(boolean)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanMapPutReturnsOldValue()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanMapPutReturnsOldValue(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanMapPutReturnsOldValue()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -550,13 +591,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanMethodVisibility BEAN_beanMethodVisibility}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMethodVisibility.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link Visibility})
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
+	 * 	<li><b>System property:</b>  <c>BeanContext.beanMethodVisibility</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANMETHODVISIBILITY</c>
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMethodVisibility()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanMethodVisibility(Visibility)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanMethodVisibility(Visibility)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -591,14 +639,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beansRequireDefaultConstructor BEAN_beansRequireDefaultConstructor}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireDefaultConstructor.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.beansRequireDefaultConstructor</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANSREQUIREDEFAULTCONSTRUCTOR</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireDefaultConstructor()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireDefaultConstructor(boolean)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireDefaultConstructor()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireDefaultConstructor(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireDefaultConstructor()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -632,14 +687,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beansRequireSerializable BEAN_beansRequireSerializable}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSerializable.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.beansRequireSerializable</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANSREQUIRESERIALIZABLE</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSerializable()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSerializable(boolean)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSerializable()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSerializable(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSerializable()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -673,14 +735,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beansRequireSettersForGetters BEAN_beansRequireSettersForGetters}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSettersForGetters.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.beansRequireSettersForGetters</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANSREQUIRESETTERSFORGETTERS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSettersForGetters()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSettersForGetters(boolean)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSettersForGetters()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSettersForGetters(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSettersForGetters()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -711,13 +780,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beansRequireSomeProperties BEAN_beansRequireSomeProperties}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSomeProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.beansRequireSomeProperties</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANSREQUIRESOMEPROPERTIES</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSomeProperties()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSomeProperties(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSomeProperties(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -751,17 +827,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName BEAN_beanTypePropertyName}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanTypePropertyName.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>BeanContext.beanTypePropertyName</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANTYPEPROPERTYNAME</c>
 	 * 	<li><b>Default:</b>  <js>"_type"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#typePropertyName()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanTypePropertyName()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanTypePropertyName(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanTypePropertyName(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -795,21 +875,25 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_bpi BEAN_bpi}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.bpi.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>BeanContext.bpi</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BPI</c>
 	 * 	<li><b>Default:</b>  <c>{}</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#bpi()}
-	 * 			<li class='ja'>{@link Beanp#bpi()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#bpi()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Beanp#bpi()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#bpi()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpi(Class, String)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpi(String, String)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpi(Map)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#bpi(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpi(Class, String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpi(String, String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpi(Map)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#bpi(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -857,20 +941,28 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_bpx BEAN_bpx}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.bpx.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>BeanContext.bpx</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BPX</c>
 	 * 	<li><b>Default:</b>  <c>{}</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#bpx()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
+	 * 		</ul>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#bpx()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#bpx()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpx(Class, String)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#bpx(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpx(Class, String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpx(String, String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpx(Map)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#bpx(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -918,21 +1010,25 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_bpro BEAN_bpro}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.bpro.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>BeanContext.bpro</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BPRO</c>
 	 * 	<li><b>Default:</b>  <c>{}</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#bpro()}
-	 * 			<li class='ja'>{@link Beanp#ro()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#bpro()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Beanp#ro()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#bpro()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpro(Class, String)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpro(String, String)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpro(Map)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#bpro(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpro(Class, String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpro(String, String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpro(Map)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#bpro(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -981,21 +1077,25 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_bpwo BEAN_bpwo}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.bpwo.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>BeanContext.bpwo</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BPWO</c>
 	 * 	<li><b>Default:</b>  <c>{}</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#bpwo()}
-	 * 			<li class='ja'>{@link Beanp#wo()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#bpwo()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Beanp#wo()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#bpwo()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpwo(Class, String)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpwo(String, String)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#bpwo(Map)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#bpwo(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpwo(Class, String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpwo(String, String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpwo(Map)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#bpwo(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1044,15 +1144,22 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_debug BEAN_debug}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.debug.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.debug</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_DEBUG</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#debug(boolean)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#debug()}
-	 * 			<li class='jm'>{@link BeanSessionArgs#debug(Boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#debug(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#debug()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#debug(Boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1097,17 +1204,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_examples BEAN_examples}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.examples.smo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
 	 * 	<li><b>Default:</b>  <c>{}</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Example}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Example}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#example()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#examples()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#example(Class,Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#example(Class,Object)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1158,20 +1268,24 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_fluentSetters BEAN_fluentSetters}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.fluentSetters.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.fluentSetters</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_FLUENTSETTERS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#fluentSetters()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#fluentSetters()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#fluentSetters()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#fluentSetters(boolean)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#fluentSetters()}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#fluentSetters(boolean)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#fluentSetters()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#fluentSetters(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#fluentSetters()}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#fluentSetters(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#fluentSetters()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1210,14 +1324,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnGetters BEAN_ignoreInvocationExceptionsOnGetters}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreInvocationExceptionsOnGetters.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.ignoreInvocationExceptionsOnGetters</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_IGNOREINVOCATIONEXCEPTIONONGETTERS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnGetters()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnGetters(boolean)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnGetters()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreInvocationExceptionsOnGetters(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreInvocationExceptionsOnGetters()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1248,14 +1369,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnSetters BEAN_ignoreInvocationExceptionsOnSetters}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreInvocationExceptionsOnSetters.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.ignoreInvocationExceptionsOnSetters</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_IGNOREINVOCATIONEXCEPTIONSONSETTERS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnSetters()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnSetters(boolean)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnSetters()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreInvocationExceptionsOnSetters(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreInvocationExceptionsOnSetters()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1286,13 +1414,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignorePropertiesWithoutSetters BEAN_ignorePropertiesWithoutSetters}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignorePropertiesWithoutSetters.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.ignorePropertiesWithoutSetters</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_IGNOREPROPERTIESWITHOUTSETTERS</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignorePropertiesWithoutSetters()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#ignorePropertiesWithoutSetters(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignorePropertiesWithoutSetters(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1323,14 +1458,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties BEAN_ignoreUnknownBeanProperties}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownBeanProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.ignoreUnknownBeanProperties</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_IGNOREUNKNOWNBEANPROPERTIES</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownBeanProperties()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreUnknownBeanProperties(boolean)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreUnknownBeanProperties()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreUnknownBeanProperties(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreUnknownBeanProperties()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1361,13 +1503,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownNullBeanProperties BEAN_ignoreUnknownNullBeanProperties}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownNullBeanProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.ignoreUnknownNullBeanProperties</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_IGNOREUNKNOWNNULLBEANPROPERTIES</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownNullBeanProperties()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreUnknownNullBeanProperties(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreUnknownNullBeanProperties(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1398,14 +1547,19 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_implClasses BEAN_implClasses}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.implClasses.smc"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Class&gt;</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#implClasses()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#implClasses(Map)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#implClass(Class, Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#implClasses(Map)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#implClass(Class, Class)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1444,14 +1598,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_locale BEAN_locale}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.locale.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link Locale})
-	 * 	<li><b>Default:</b>  <jk>null</jk> (defaults to {@link Locale#getDefault()})
+	 * 	<li><b>Data type:</b>  {@link java.util.Locale}
+	 * 	<li><b>System property:</b>  <c>BeanContext.locale</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_LOCALE</c>
+	 * 	<li><b>Default:</b>  <jk>null</jk> (defaults to {@link java.util.Locale#getDefault()})
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#locale(Locale)}
-	 * 			<li class='jm'>{@link BeanSessionArgs#locale(Locale)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#locale(Locale)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#locale(Locale)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1487,14 +1648,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_mediaType BEAN_mediaType}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.mediaType.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link MediaType})
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.http.MediaType}
+	 * 	<li><b>System property:</b>  <c>BeanContext.mediaType</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_MEDIATYPE</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#mediaType(MediaType)}
-	 * 			<li class='jm'>{@link BeanSessionArgs#mediaType(MediaType)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#mediaType(MediaType)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#mediaType(MediaType)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1530,22 +1698,24 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_notBeanClasses BEAN_notBeanClasses}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanClasses.sc"</js>
 	 * 	<li><b>Data type:</b>  <c>Set&lt;Class&gt;</c>
 	 * 	<li><b>Default:</b>  empty set
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link BeanIgnore}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnore}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#notBeanClasses()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClassesReplace(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClassesReplace(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClassesRemove(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClassesRemove(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClasses(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClasses(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClassesReplace(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClassesReplace(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClassesRemove(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClassesRemove(Object...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1593,8 +1763,11 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_notBeanPackages BEAN_notBeanPackages}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanPackages.ss"</js>
 	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>BeanContext.notBeanPackages</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_NOTBEANPACKAGES</c>
 	 * 	<li><b>Default:</b>
 	 * 	<ul>
 	 * 		<li><c>java.lang</c>
@@ -1607,14 +1780,18 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		<li><c>java.util.*</c>
 	 * 	</ul>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#notBeanPackages()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackages(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackages(String...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackagesReplace(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackagesReplace(String...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackagesRemove(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackagesRemove(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackages(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackages(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackagesReplace(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackagesReplace(String...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackagesRemove(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackagesRemove(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1668,23 +1845,25 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_pojoSwaps BEAN_pojoSwaps}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.pojoSwaps.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;Object&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Swap}
-	 * 			<li class='ja'>{@link Swaps}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Swap}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Swaps}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#pojoSwaps()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwapsReplace(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwapsReplace(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwaps(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwaps(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwapsReplace(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwapsReplace(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwapsRemove(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwapsRemove(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1784,18 +1963,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_propertyNamer BEAN_propertyNamer}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.propertyNamer.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> {@link PropertyNamer}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link PropertyNamerDefault}
+	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link org.apache.juneau.PropertyNamer}&gt;</code>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.PropertyNamerDefault}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#propertyNamer()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#propertyNamer()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#propertyNamer()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#propertyNamer(Class)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#propertyNamer(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#propertyNamer(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#propertyNamer(Class)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1834,20 +2015,24 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_sortProperties BEAN_sortProperties}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.sortProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.sortProperties</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_SORTPROPERTIES</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link Bean#sort()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#sort()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#sortProperties()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#sortProperties(boolean)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#sortProperties()}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#sortProperties(boolean)}
-	 * 			<li class='jm'>{@link BeanFilterBuilder#sortProperties()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#sortProperties(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#sortProperties()}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#sortProperties(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#sortProperties()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1885,14 +2070,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_timeZone BEAN_timeZone}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.timeZone.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> ({@link TimeZone})
+	 * 	<li><b>Data type:</b>  {@link java.util.TimeZone}
+	 * 	<li><b>System property:</b>  <c>BeanContext.timeZone</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_TIMEZONE</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#timeZone(TimeZone)}
-	 * 			<li class='jm'>{@link BeanSessionArgs#timeZone(TimeZone)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#timeZone(TimeZone)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#timeZone(TimeZone)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1928,13 +2120,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_useEnumNames BEAN_useEnumNames}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useEnumNames.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.useEnumNames</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_USEENUMNAMES</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#useEnumNames()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#useEnumNames()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#useEnumNames()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1982,13 +2181,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_useInterfaceProxies BEAN_useInterfaceProxies}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useInterfaceProxies.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.useInterfaceProxies</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_USEINTERFACEPROXIES</c>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#useInterfaceProxies()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#useInterfaceProxies(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#useInterfaceProxies(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2020,14 +2226,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_useJavaBeanIntrospector BEAN_useJavaBeanIntrospector}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useJavaBeanIntrospector.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.useJavaBeanIntrospector</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_USEJAVABEANINTROSPECTOR</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#useJavaBeanIntrospector()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link BeanContextBuilder#useJavaBeanIntrospector(boolean)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#useJavaBeanIntrospector()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#useJavaBeanIntrospector(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#useJavaBeanIntrospector()}
 	 * 		</ul>
 	 * </ul>
 	 *

@@ -14,6 +14,8 @@ package org.apache.juneau.doc.internal;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.*;
+import java.util.regex.*;
 
 /**
  * Various I/O related utility methods.
@@ -24,6 +26,17 @@ public final class IOUtils {
 	public static String readFile(String path) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, "UTF-8");
+	}
+
+	private static final Pattern JDOC_PATTERN = Pattern.compile("(?s)\\/\\*\\*.*?\\*\\/");
+
+	public static List<String> findJavadocs(String contents) {
+		List<String> l = new ArrayList<>();
+		Matcher m = JDOC_PATTERN.matcher(contents);
+		while (m.find()) {
+			l.add(m.group());
+		}
+		return l;
 	}
 
 	public static String read(File f) throws IOException {

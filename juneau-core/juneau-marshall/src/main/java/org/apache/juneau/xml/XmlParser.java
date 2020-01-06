@@ -47,13 +47,18 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_eventAllocator XML_eventAllocator}
 	 * 	<li><b>Name:</b>  <js>"XmlParser.eventAllocator.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLEventAllocator}&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link javax.xml.stream.util.XMLEventAllocator}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#eventAllocator()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlParserBuilder#eventAllocator(XMLEventAllocator)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#eventAllocator(XMLEventAllocator)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -68,14 +73,21 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_preserveRootElement XML_preserveRootElement}
 	 * 	<li><b>Name:</b>  <js>"XmlParser.preserveRootElement.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>XmlParser.preserveRootElement</c>
+	 * 	<li><b>Environment variable:</b>  <c>XMLPARSER_PRESERVEROOTELEMENT</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#preserveRootElement()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlParserBuilder#preserveRootElement(boolean)}
-	 * 			<li class='jm'>{@link XmlParserBuilder#preserveRootElement()}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#preserveRootElement(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#preserveRootElement()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -114,13 +126,18 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_reporter XML_reporter}
 	 * 	<li><b>Name:</b>  <js>"XmlParser.reporter.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLReporter}&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link javax.xml.stream.XMLReporter}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#reporter()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlParserBuilder#reporter(XMLReporter)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#reporter(XMLReporter)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -140,13 +157,18 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_resolver XML_resolver}
 	 * 	<li><b>Name:</b>  <js>"XmlParser.resolver.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLResolver}&gt;</code>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link javax.xml.stream.XMLResolver}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#resolver()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlParserBuilder#resolver(XMLResolver)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#resolver(XMLResolver)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -161,14 +183,21 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_validating XML_validating}
 	 * 	<li><b>Name:</b>  <js>"XmlParser.validating.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>XmlParser.validating</c>
+	 * 	<li><b>Environment variable:</b>  <c>XMLPARSER_VALIDATING</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#validating()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link XmlParserBuilder#validating(boolean)}
-	 * 			<li class='jm'>{@link XmlParserBuilder#validating()}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#validating(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#validating()}
 	 * 		</ul>
 	 * </ul>
 	 *

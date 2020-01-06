@@ -19,7 +19,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.annotation.*;
 
 /**
  * Parses URL-encoded text into POJO models.
@@ -52,15 +51,22 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.urlencoding.UrlEncodingParser#URLENC_expandedParams URLENC_expandedParams}
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingParser.expandedParams.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>UrlEncodingParser.expandedParams</c>
+	 * 	<li><b>Environment variable:</b>  <c>URLENCODINGPARSER_EXPANDEDPARAMS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingConfig#expandedParams()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link UrlEncodingParserBuilder#expandedParams(boolean)}
-	 * 			<li class='jm'>{@link UrlEncodingParserBuilder#expandedParams()}
-	 * 			<li class='ja'>{@link UrlEncoding#expandedParams()}
+	 * 			<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingParserBuilder#expandedParams(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingParserBuilder#expandedParams()}
+	 * 			<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams()}
 	 * 		</ul>
 	 * </ul>
 	 *

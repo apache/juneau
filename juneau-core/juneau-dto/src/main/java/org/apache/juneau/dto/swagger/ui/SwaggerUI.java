@@ -41,8 +41,11 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.dto.swagger.ui.SwaggerUI#SWAGGERUI_resolveRefsMaxDepth SWAGGERUI_resolveRefsMaxDepth}
 	 * 	<li><b>Name:</b>  <js>"SwaggerUI.resolveRefsMaxDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>SwaggerUI.resolveRefsMaxDepth</c>
+	 * 	<li><b>Environment variable:</b>  <c>SWAGGERUI_RESOLVEREFSMAXDEPTH</c>
 	 * 	<li><b>Default:</b>  <c>1</c>
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>

@@ -102,13 +102,20 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonSerializer#JSON_addBeanTypes JSON_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"JsonSerializer.addBeanTypes.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>JsonSerializer.addBeanTypes</c>
+	 * 	<li><b>Environment variable:</b>  <c>JSONSERIALIZER_ADDBEANTYPES</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.json.annotation.JsonConfig#addBeanTypes()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSerializerBuilder#addBeanTypes(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -128,14 +135,21 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonSerializer#JSON_escapeSolidus JSON_escapeSolidus}
 	 * 	<li><b>Name:</b>  <js>"JsonSerializer.escapeSolidus.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>JsonSerializer.escapeSolidus</c>
+	 * 	<li><b>Environment variable:</b>  <c>JSONSERIALIZER_ESCAPESOLIDUS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.json.annotation.JsonConfig#escapeSolidus()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSerializerBuilder#escapeSolidus(boolean)}
-	 * 			<li class='jm'>{@link JsonSerializerBuilder#escapeSolidus()}
+	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#escapeSolidus(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#escapeSolidus()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -173,15 +187,22 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonSerializer#JSON_simpleMode JSON_simpleMode}
 	 * 	<li><b>Name:</b>  <js>"JsonSerializer.simpleMode.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>JsonSerializer.simpleMode</c>
+	 * 	<li><b>Environment variable:</b>  <c>JSONSERIALIZER_SIMPLEMODE</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.json.annotation.JsonConfig#simpleMode()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSerializerBuilder#simple(boolean)}
-	 * 			<li class='jm'>{@link JsonSerializerBuilder#simple()}
-	 * 			<li class='jm'>{@link JsonSerializerBuilder#ssq()}
+	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#simple(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#simple()}
+	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#ssq()}
 	 * 		</ul>
 	 * </ul>
 	 *

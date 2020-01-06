@@ -85,12 +85,15 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_debug RESTCLIENT_debug}
 	 * 	<li><b>Name:</b>  <js>"RestClient.debug.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RestClient.debug</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_DEBUG</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#debug()}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#debug()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -105,12 +108,17 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_executorService RESTCLIENT_executorService}
 	 * 	<li><b>Name:</b>  <js>"RestClient.executorService.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> ExecutorService&gt;</code> or {@link ExecutorService}.
+	 * 	<li><b>Data type:</b>
+	 * 		<ul>
+	 * 			<li><c>Class&lt;{@link java.util.concurrent.ExecutorService}&gt;</c>
+	 * 			<li>{@link java.util.concurrent.ExecutorService}
+	 * 		</ul>
 	 * 	<li><b>Default:</b>  <jk>null</jk>.
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#executorService(ExecutorService, boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#executorService(ExecutorService, boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -138,12 +146,15 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_executorServiceShutdownOnClose RESTCLIENT_executorServiceShutdownOnClose}
 	 * 	<li><b>Name:</b>  <js>"RestClient.executorServiceShutdownOnClose.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RestClient.executorServiceShutdownOnClose</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_EXECUTORSERVICESHUTDOWNONCLOSE</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#executorService(ExecutorService, boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#executorService(ExecutorService, boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -158,12 +169,15 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestClient.requestHeader.sms"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_headers RESTCLIENT_headers}
+	 * 	<li><b>Name:</b>  <js>"RestClient.requestHeaders.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>RestClient.requestHeaders</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_REQUESTHEADERS</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#header(String, Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#header(String, Object)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -178,12 +192,13 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_interceptors RESTCLIENT_interceptors}
 	 * 	<li><b>Name:</b>  <js>"RestClient.interceptors.lo"</js>
-	 * 	<li><b>Data type:</b>  <code>List&lt;Class&lt;? <jk>implements</jk> RestCallInterceptor&gt; | RestCallInterceptor&gt;</code>
+	 * 	<li><b>Data type:</b><c>List&lt;Class&lt;{@link org.apache.juneau.rest.client.RestCallInterceptor}&gt;|{@link org.apache.juneau.rest.client.RestCallInterceptor}&gt;</c>
 	 * 	<li><b>Default:</b>  empty list.
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#interceptors(RestCallInterceptor...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -203,12 +218,15 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_keepHttpClientOpen RESTCLIENT_keepHttpClientOpen}
 	 * 	<li><b>Name:</b>  <js>"RestClient.keepHttpClientOpen.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RestClient.keepHttpClientOpen</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_KEEPHTTPCLIENTOPEN</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#keepHttpClientOpen(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#keepHttpClientOpen(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -223,13 +241,18 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_parser RESTCLIENT_parser}
 	 * 	<li><b>Name:</b>  <js>"RestClient.parser.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> Parser&gt;</code> or {@link Parser}.
-	 * 	<li><b>Default:</b>  {@link JsonParser};
+	 * 	<li><b>Data type:</b>
+	 * 		<ul>
+	 * 			<li><c>Class&lt;{@link org.apache.juneau.parser.Parser}&gt;</c>
+	 * 			<li>{@link org.apache.juneau.parser.Parser}
+	 * 		</ul>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.json.JsonParser};
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#parser(Class)}
-	 * 			<li class='jm'>{@link RestClientBuilder#parser(Parser)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#parser(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#parser(Parser)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -244,13 +267,18 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_partParser RESTCLIENT_partParser}
 	 * 	<li><b>Name:</b>  <js>"RestClient.partParser.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> HttpPartParser&gt;</code> or {@link HttpPartParser}.
-	 * 	<li><b>Default:</b>  {@link OpenApiParser};
+	 * 	<li><b>Data type:</b>
+	 * 		<ul>
+	 * 			<li><c>Class&lt;{@link org.apache.juneau.httppart.HttpPartParser}&gt;</c>
+	 * 			<li>{@link org.apache.juneau.httppart.HttpPartParser}
+	 * 		</ul>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.oapi.OpenApiParser};
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#partParser(Class)}
-	 * 			<li class='jm'>{@link RestClientBuilder#partParser(HttpPartParser)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#partParser(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#partParser(HttpPartParser)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -265,13 +293,18 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_partSerializer RESTCLIENT_partSerializer}
 	 * 	<li><b>Name:</b>  <js>"RestClient.partSerializer.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> HttpPartSerializer&gt;</code> or {@link HttpPartSerializer}.
-	 * 	<li><b>Default:</b>  {@link OpenApiSerializer};
+	 * 	<li><b>Data type:</b>
+	 * 		<ul>
+	 * 			<li><c>Class&lt;{@link org.apache.juneau.httppart.HttpPartSerializer}&gt;</c>
+	 * 			<li>{@link org.apache.juneau.httppart.HttpPartSerializer}
+	 * 		</ul>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.oapi.OpenApiSerializer};
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#partSerializer(Class)}
-	 * 			<li class='jm'>{@link RestClientBuilder#partSerializer(HttpPartSerializer)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#partSerializer(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#partSerializer(HttpPartSerializer)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -286,12 +319,15 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_query RESTCLIENT_query}
 	 * 	<li><b>Name:</b>  <js>"RestClient.query.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
+	 * 	<li><b>System property:</b>  <c>RestClient.query</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_QUERY</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#query(String, Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#query(String, Object)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -306,12 +342,15 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_retries RESTCLIENT_retries}
 	 * 	<li><b>Name:</b>  <js>"RestClient.retries.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>RestClient.retries</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_RETRIES</c>
 	 * 	<li><b>Default:</b>  <c>1</c>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#retryable(int, int, RetryOn)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#retryable(int, int, RetryOn)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -326,12 +365,15 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_retryInterval RESTCLIENT_retryInterval}
 	 * 	<li><b>Name:</b>  <js>"RestClient.retryInterval.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>RestClient.retryInterval</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_RETRYINTERVAL</c>
 	 * 	<li><b>Default:</b>  <c>-1</c>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#retryable(int, int, RetryOn)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#retryable(int, int, RetryOn)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -347,12 +389,17 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_retryOn RESTCLIENT_retryOn}
 	 * 	<li><b>Name:</b>  <js>"RestClient.retryOn.o"</js>
-	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends {@link RetryOn}</c> or {@link RetryOn}
-	 * 	<li><b>Default:</b>  {@link RetryOn#DEFAULT}
+	 * 	<li><b>Data type:</b>
+	 * 		<ul>
+	 * 			<li><c>Class&lt;{@link org.apache.juneau.rest.client.RetryOn}&gt;</c>
+	 * 			<li>{@link org.apache.juneau.rest.client.RetryOn}
+	 * 		</ul>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.client.RetryOn#DEFAULT}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#retryable(int, int, RetryOn)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#retryable(int, int, RetryOn)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -367,12 +414,15 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_rootUri RESTCLIENT_rootUri}
 	 * 	<li><b>Name:</b>  <js>"RestClient.rootUri.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>RestClient.rootUri</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_ROOTURI</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#rootUrl(Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#rootUrl(Object)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -390,13 +440,18 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_serializer RESTCLIENT_serializer}
 	 * 	<li><b>Name:</b>  <js>"RestClient.serializer.o"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> Serializer&gt;</code> or {@link Serializer}.
-	 * 	<li><b>Default:</b>  {@link JsonSerializer};
+	 * 	<li><b>Data type:</b>
+	 * 		<ul>
+	 * 			<li><c>Class&lt;{@link org.apache.juneau.serializer.Serializer}&gt;</c>
+	 * 			<li>{@link org.apache.juneau.serializer.Serializer}
+	 * 		</ul>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.json.JsonSerializer};
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestClientBuilder#serializer(Class)}
-	 * 			<li class='jm'>{@link RestClientBuilder#serializer(Serializer)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#serializer(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#serializer(Serializer)}
 	 * 		</ul>
 	 * </ul>
 	 *

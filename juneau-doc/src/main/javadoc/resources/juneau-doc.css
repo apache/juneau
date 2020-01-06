@@ -65,7 +65,7 @@ table.styled,.contentContainer .description table.styled,.contentContainer ul li
 
 table.styled th { background-color: #dee3e9; border: 1px solid #9eadc0; padding: 3px 10px 3px 10px; }
 table.styled td { padding: 3px; }
-table.styled ul { padding: 0px 10px; }
+table.styled ul { padding: 0px 10px; margin: 0px; }
 table.styled tr:nth-child(1) { background-color: #dee3e9; }
 table.styled tr:nth-child(2n+2) { background-color: #eeeeef; }
 table.styled tr:nth-child(2n+3) { background-color: white; }

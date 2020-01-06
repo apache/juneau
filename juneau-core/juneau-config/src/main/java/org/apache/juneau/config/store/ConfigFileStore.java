@@ -47,13 +47,16 @@ public class ConfigFileStore extends ConfigStore {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_directory FILESTORE_directory}
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.directory.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>ConfigFileStore.directory</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_DIRECTORY</c>
 	 * 	<li><b>Default:</b>  <js>"."</js>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#directory(String)}
-	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#directory(File)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#directory(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#directory(File)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -68,13 +71,16 @@ public class ConfigFileStore extends ConfigStore {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_charset FILESTORE_charset}
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.charset.s"</js>
-	 * 	<li><b>Data type:</b>  {@link Charset}
-	 * 	<li><b>Default:</b>  {@link Charset#defaultCharset()}
+	 * 	<li><b>Data type:</b>  {@link java.nio.charset.Charset}
+	 * 	<li><b>System property:</b>  <c>ConfigFileStore.charset</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_CHARSET</c>
+	 * 	<li><b>Default:</b>  {@link java.nio.charset.Charset#defaultCharset()}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#charset(String)}
-	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#charset(Charset)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#charset(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#charset(Charset)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -89,12 +95,15 @@ public class ConfigFileStore extends ConfigStore {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_useWatcher FILESTORE_useWatcher}
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.useWatcher.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>ConfigFileStore.useWatcher</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_USEWATCHER</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#useWatcher()}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#useWatcher()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -113,13 +122,16 @@ public class ConfigFileStore extends ConfigStore {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_watcherSensitivity FILESTORE_watcherSensitivity}
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.watcherSensitivity.s"</js>
-	 * 	<li><b>Data type:</b>  {@link WatcherSensitivity}
-	 * 	<li><b>Default:</b>  {@link WatcherSensitivity#MEDIUM}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.config.store.WatcherSensitivity}
+	 * 	<li><b>System property:</b>  <c>ConfigFileStore.watcherSensitivity</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_WATCHERSENSITIVITY</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.config.store.WatcherSensitivity#MEDIUM}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#watcherSensitivity(WatcherSensitivity)}
-	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#watcherSensitivity(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#watcherSensitivity(WatcherSensitivity)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#watcherSensitivity(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -138,12 +150,15 @@ public class ConfigFileStore extends ConfigStore {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_updateOnWrite FILESTORE_updateOnWrite}
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.updateOnWrite.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>ConfigFileStore.updateOnWrite</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_UPDATEONWRITE</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#updateOnWrite()}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#updateOnWrite()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -162,12 +177,15 @@ public class ConfigFileStore extends ConfigStore {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_extensions FILESTORE_extensions}
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.extensions.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited list)
-	 * 	<li><b>Default:</b>  <jk>"cfg"</jk>
+	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
+	 * 	<li><b>System property:</b>  <c>ConfigFileStore.extensions</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_EXTENSIONS</c>
+	 * 	<li><b>Default:</b>  <js>"cfg"</js>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#extensions(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#extensions(String)}
 	 * 		</ul>
 	 * </ul>
 	 *

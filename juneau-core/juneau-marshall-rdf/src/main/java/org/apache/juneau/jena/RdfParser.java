@@ -61,14 +61,21 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfParser#RDF_trimWhitespace RDF_trimWhitespace}
 	 * 	<li><b>Name:</b>  <js>"RdfParser.trimWhitespace.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>RdfParser.trimWhitespace</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFPARSER_TRIMWHITESPACE</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#trimWhitespace()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RdfParserBuilder#trimWhitespace(boolean)}
-	 * 			<li class='jm'>{@link RdfParserBuilder#trimWhitespace()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#trimWhitespace(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfParserBuilder#trimWhitespace()}
 	 * 		</ul>
 	 * </ul>
 	 *

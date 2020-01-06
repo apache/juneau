@@ -116,14 +116,21 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonParser#JSON_validateEnd JSON_validateEnd}
 	 * 	<li><b>Name:</b>  <js>"JsonParser.validateEnd.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>JsonParser.validateEnd</c>
+	 * 	<li><b>Environment variable:</b>  <c>JSONPARSER_VALIDATEEND</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.json.annotation.JsonConfig#validateEnd()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonParserBuilder#validateEnd(boolean)}
-	 * 			<li class='jm'>{@link JsonParserBuilder#validateEnd()}
+	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonParserBuilder#validateEnd(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonParserBuilder#validateEnd()}
 	 * 		</ul>
 	 * </ul>
 	 *

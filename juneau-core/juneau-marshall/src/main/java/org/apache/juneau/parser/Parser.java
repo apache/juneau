@@ -130,14 +130,21 @@ public abstract class Parser extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams PARSER_autoCloseStreams}
 	 * 	<li><b>Name:</b>  <js>"Parser.autoCloseStreams.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Parser.autoCloseStreams</c>
+	 * 	<li><b>Environment variable:</b>  <c>PARSER_AUTOCLOSESTREAMS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#autoCloseStreams()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ParserBuilder#autoCloseStreams(boolean)}
-	 * 			<li class='jm'>{@link ParserBuilder#autoCloseStreams()}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#autoCloseStreams(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#autoCloseStreams()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -173,13 +180,20 @@ public abstract class Parser extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_debugOutputLines PARSER_debugOutputLines}
 	 * 	<li><b>Name:</b>  <js>"Parser.debugOutputLines.i"</js>
-	 * 	<li><b>Data type:</b>  <c>Integer</c>
+	 * 	<li><b>Data type:</b>  <jk>int</jk>
+	 * 	<li><b>System property:</b>  <c>Parser.debugOutputLines</c>
+	 * 	<li><b>Environment variable:</b>  <c>PARSER_DEBUGOUTPUTLINES</c>
 	 * 	<li><b>Default:</b>  <c>5</c>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#debugOutputLines()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ParserBuilder#debugOutputLines(int)}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#debugOutputLines(int)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -219,13 +233,18 @@ public abstract class Parser extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_listener PARSER_listener}
 	 * 	<li><b>Name:</b>  <js>"Parser.listener.c"</js>
-	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends ParserListener&gt;</c>
+	 * 	<li><b>Data type:</b>  <c>Class&lt;{@link org.apache.juneau.parser.ParserListener}&gt;</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#listener()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ParserBuilder#listener(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#listener(Class)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -282,14 +301,21 @@ public abstract class Parser extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_strict PARSER_strict}
 	 * 	<li><b>Name:</b>  <js>"Parser.strict.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Parser.strict</c>
+	 * 	<li><b>Environment variable:</b>  <c>PARSER_STRICT</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#strict()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ParserBuilder#strict(boolean)}
-	 * 			<li class='jm'>{@link ParserBuilder#strict()}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#strict(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#strict()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -355,14 +381,21 @@ public abstract class Parser extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_trimStrings PARSER_trimStrings}
 	 * 	<li><b>Name:</b>  <js>"Parser.trimStrings.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Parser.trimStrings</c>
+	 * 	<li><b>Environment variable:</b>  <c>PARSER_TRIMSTRINGS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#trimStrings()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ParserBuilder#trimStrings(boolean)}
-	 * 			<li class='jm'>{@link ParserBuilder#trimStrings()}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#trimStrings(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#trimStrings()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -398,14 +431,21 @@ public abstract class Parser extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_unbuffered PARSER_unbuffered}
 	 * 	<li><b>Name:</b>  <js>"Parser.unbuffered.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Parser.unbuffered</c>
+	 * 	<li><b>Environment variable:</b>  <c>PARSER_UNBUFFERED</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig#unbuffered()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link ParserBuilder#unbuffered(boolean)}
-	 * 			<li class='jm'>{@link ParserBuilder#unbuffered()}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#unbuffered(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#unbuffered()}
 	 * 		</ul>
 	 * </ul>
 	 *

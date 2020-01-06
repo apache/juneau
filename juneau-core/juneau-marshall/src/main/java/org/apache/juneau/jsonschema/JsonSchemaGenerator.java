@@ -39,13 +39,20 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo JSONSCHEMA_addDescriptionsTo}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.addDescriptionsTo.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.addDescriptionsTo</c>
+	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_ADDDESCRIPTIONSTO</c>
 	 * 	<li><b>Default:</b>  Empty string.
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#addDescriptionsTo()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#addDescriptionsTo(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#addDescriptionsTo(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -76,13 +83,20 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.addExamplesTo.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
+	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.addExamplesTo</c>
+	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_ADDEXAMPLESTO</c>
 	 * 	<li><b>Default:</b>  Empty string.
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#addExamplesTo()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#addExamplesTo(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#addExamplesTo(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -119,13 +133,20 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions JSONSCHEMA_allowNestedDescriptions}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.allowNestedDescriptions.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.allowNestedDescriptions</c>
+	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_ALLOWNESTEDDESCRIPTIONS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#allowNestedDescriptions()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#allowNestedDescriptions()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#allowNestedDescriptions()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -140,13 +161,20 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.allowNestedExamples.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.allowNestedExamples</c>
+	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_ALLOWNESTEDEXAMPLES</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#allowNestedExamples()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#allowNestedExamples()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#allowNestedExamples()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -161,14 +189,19 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_beanDefMapper JSONSCHEMA_beanDefMapper}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.beanDefMapper.o"</js>
-	 * 	<li><b>Data type:</b>  {@link BeanDefMapper}
-	 * 	<li><b>Default:</b>  {@link BasicBeanDefMapper}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.jsonschema.BeanDefMapper}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#beanDefMapper()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#beanDefMapper(Class)}
-	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#beanDefMapper(BeanDefMapper)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#beanDefMapper(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#beanDefMapper(BeanDefMapper)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -187,13 +220,20 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_defaultSchemas JSONSCHEMA_defaultSchemas}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.defaultSchema.smo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,ObjectMap&gt;</c>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,{@link org.apache.juneau.ObjectMap}&gt;</c>
+	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.defaultSchema</c>
+	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_DEFAULTSCHEMA</c>
 	 * 	<li><b>Default:</b>  Empty map.
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#defaultSchemas()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#defaultSchema(Class,ObjectMap)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#defaultSchema(Class,ObjectMap)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -210,10 +250,17 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_ignoreTypes JSONSCHEMA_ignoreTypes}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.ignoreTypes.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
+	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.ignoreTypes</c>
+	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_IGNORETYPES</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>.
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#ignoreTypes()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -238,12 +285,19 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_useBeanDefs JSONSCHEMA_useBeanDefs}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.useBeanDefs.b"</js>
-	 * 	<li><b>Data type:</b>  <c>Boolean</c>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.useBeanDefs</c>
+	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_USEBEANDEFS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#useBeanDefs()}
+	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#useBeanDefs()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#useBeanDefs()}
 	 * 		</ul>
 	 * </ul>
 	 *
