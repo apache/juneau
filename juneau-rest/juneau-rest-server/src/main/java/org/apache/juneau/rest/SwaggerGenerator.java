@@ -61,7 +61,7 @@ import org.apache.juneau.utils.*;
  */
 final class SwaggerGenerator {
 
-	private final RestRequest req;
+//	private final RestRequest req;
 	private final VarResolverSession vr;
 	private final Locale locale;
 	private final RestContext context;
@@ -73,14 +73,16 @@ final class SwaggerGenerator {
 
 	/**
 	 * Constructor.
-	 * @param req The HTTP request.
+	 *
+	 * @param context The REST class context.
+	 * @param vr The variable resolver.
+	 * @param locale The locale.
 	 */
-	public SwaggerGenerator(RestRequest req) {
-		this.req = req;
-		this.vr = req.getVarResolverSession();
-		this.locale = req.getLocale();
-		this.context = req.getContext();
-		this.js = req.getJsonSchemaGenerator().createSession();
+	public SwaggerGenerator(RestContext context, VarResolverSession vr, Locale locale) {
+		this.vr = vr;
+		this.locale = locale;
+		this.context = context;
+		this.js = context.getJsonSchemaGenerator().createSession();
 		this.c = context.getResource().getClass();
 		this.resource = context.getResource();
 		this.mb = context.getMessages();
@@ -272,10 +274,6 @@ final class SwaggerGenerator {
 
 		// Iterate through all the @RestMethod methods.
 		for (RestMethodContext sm : context.getCallMethods().values()) {
-
-			// Skip it if user doesn't have access.
-			if (! sm.isRequestAllowed(req))
-				continue;
 
 			BeanSession bs = sm.createBeanSession();
 
@@ -862,13 +860,10 @@ final class SwaggerGenerator {
 					SerializerSessionArgs args =
 						SerializerSessionArgs
 							.create()
-							.javaMethod(req.getJavaMethod())
-							.locale(req.getLocale())
+							.locale(locale)
 							.mediaType(mt)
-							.debug(req.isDebug() ? true : null)
-							.uriContext(req.getUriContext())
 							.useWhitespace(true)
-							.resolver(req.getVarResolverSession());
+						;
 					try {
 						String eVal = s2.createSession(args).serializeToString(example);
 						examples.put(s2.getPrimaryMediaType().toString(), eVal);

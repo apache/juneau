@@ -472,6 +472,7 @@ public @interface RestResource {
 	 * 			navlinks={
 	 * 				<js>"up: request:/.."</js>,
 	 * 				<js>"options: servlet:/?method=OPTIONS"</js>,
+	 * 				<js>"stats: servlet:/stats"</js>,
 	 * 				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"</js>,
 	 * 			},
 	 * 			aside={

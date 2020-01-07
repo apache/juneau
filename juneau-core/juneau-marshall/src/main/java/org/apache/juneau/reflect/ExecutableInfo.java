@@ -740,13 +740,9 @@ public abstract class ExecutableInfo {
 	}
 
 	/**
-	 * Returns the simple name of the underlying class.
+	 * Returns the simple name of the underlying method.
 	 *
-	 * <p>
-	 * Returns either {@link Class#getSimpleName()} or {@link Type#getTypeName()} depending on whether
-	 * this is a class or type.
-	 *
-	 * @return The simple name of the underlying class;
+	 * @return The simple name of the underlying method;
 	 */
 	public final String getSimpleName() {
 		return isConstructor ? e.getDeclaringClass().getSimpleName() : e.getName();

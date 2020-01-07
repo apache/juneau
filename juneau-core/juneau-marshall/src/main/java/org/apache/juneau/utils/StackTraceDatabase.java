@@ -12,7 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.utils.StackTraceUtils.*;
+
+import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.*;
 
 /**
  * An in-memory cache of stack traces.
@@ -24,56 +28,49 @@ public class StackTraceDatabase {
 
 	private final ConcurrentHashMap<Integer,StackTraceInfo> db = new ConcurrentHashMap<>();
 	private final String stopClass;
+	private final long cacheTimeout;
 
 	/**
 	 * Constructor.
 	 */
 	public StackTraceDatabase() {
-		this.stopClass = null;
+		this(-1, null);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param stopClass When this class is encountered in a stack trace, stop calculating the hash.
+	 * @param cacheTimeout
+	 * 	The amount of time in milliseconds to cache stack trace info in this database before discarding.
+	 * 	<br>If <c>-1</c>, never discard.
+	 * @param stopClass
+	 * 	When this class is encountered in a stack trace, stop calculating the hash.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public StackTraceDatabase(Class<?> stopClass) {
+	public StackTraceDatabase(long cacheTimeout, Class<?> stopClass) {
 		this.stopClass = stopClass == null ? "" : stopClass.getName();
+		this.cacheTimeout = cacheTimeout;
+	}
+
+	/**
+	 * Adds the specified throwable to this database.
+	 *
+	 * @param e The exception to add.
+	 * @return This object (for method chaining).
+	 */
+	public StackTraceDatabase add(Throwable e) {
+		find(e).increment();
+		return this;
 	}
 
 	/**
 	 * Retrieves the stack trace information for the specified exception.
 	 *
 	 * @param e The exception.
-	 * @param timeout The timeout in milliseconds to cache the hash for this stack trace.
-	 * @return The stack trace info, never <jk>null</jk>.
+	 * @return A clone of the stack trace info, never <jk>null</jk>.
 	 */
-	public StackTraceInfo getStackTraceInfo(Throwable e, int timeout) {
-		int hash = hash(e);
-		StackTraceInfo stc = db.get(hash);
-		if (stc != null && stc.timeout > System.currentTimeMillis()) {
-			stc.incrementAndClone();
-			return stc.clone();
-		}
-		synchronized (db) {
-			stc = new StackTraceInfo(timeout, hash);
-			db.put(hash, stc);
-			return stc.clone();
-		}
-	}
-
-	private int hash(Throwable t) {
-		int i = 0;
-		while (t != null) {
-			for (StackTraceElement e : t.getStackTrace()) {
-				if (e.getClassName().equals(stopClass))
-					break;
-				if (e.getClassName().indexOf('$') == -1)
-					i ^= e.hashCode();
-			}
-			t = t.getCause();
-		}
-		return i;
+	public StackTraceInfo getStackTraceInfo(Throwable e) {
+		return find(e).clone();
 	}
 
 	/**
@@ -81,5 +78,32 @@ public class StackTraceDatabase {
 	 */
 	public void reset() {
 		db.clear();
+	}
+
+	/**
+	 * Returns the list of all stack traces in this database.
+	 *
+	 * @return The list of all stack traces in this database, cloned and sorted by count descending.
+	 */
+	public List<StackTraceInfo> getClonedStackTraceInfos() {
+		return db.values().stream().map(x -> x.clone()).sorted().collect(Collectors.toList());
+	}
+
+	private StackTraceInfo find(Throwable e) {
+		int hash = hash(e, stopClass);
+		StackTraceInfo stc = db.get(hash);
+		long time = System.currentTimeMillis();
+
+		if (stc != null && stc.timeout > time) {
+			return stc;
+		}
+
+		String n = e == null ? null : e.getClass().getSimpleName();
+		long t = cacheTimeout == -1 ? Long.MAX_VALUE : time + cacheTimeout;
+		stc = new StackTraceInfo(n, t, hash);
+
+		db.put(hash, stc);
+
+		return db.get(hash);
 	}
 }

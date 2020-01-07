@@ -23,9 +23,11 @@ import static org.apache.juneau.FormattedIllegalArgumentException.*;
 import java.io.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.stream.*;
 
 import javax.activation.*;
 import javax.servlet.*;
@@ -3447,6 +3449,7 @@ public final class RestContext extends BeanContext {
 	@SuppressWarnings("deprecation") private final RestLogger logger;
 	private final RestCallLogger callLogger;
 	private final RestCallLoggerConfig callLoggerConfig;
+	private final StackTraceDatabase stackTraceDb;
 	private final RestCallHandler callHandler;
 	private final RestInfoProvider infoProvider;
 	private final HttpException initException;
@@ -3454,9 +3457,11 @@ public final class RestContext extends BeanContext {
 	private final RestResourceResolver resourceResolver;
 	private final UriResolution uriResolution;
 	private final UriRelativity uriRelativity;
+	private final ConcurrentHashMap<String,MethodExecStats> methodExecStats = new ConcurrentHashMap<>();
+	private final Instant startTime;
 
 	// Lifecycle methods
-	private final Method[]
+	private final MethodInvoker[]
 		postInitMethods,
 		postInitChildFirstMethods,
 		preCallMethods,
@@ -3516,6 +3521,8 @@ public final class RestContext extends BeanContext {
 	@SuppressWarnings("deprecation")
 	RestContext(RestContextBuilder builder) throws Exception {
 		super(builder.getPropertyStore());
+
+		startTime = Instant.now();
 
 		HttpException _initException = null;
 
@@ -3585,7 +3592,6 @@ public final class RestContext extends BeanContext {
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);
 
 			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, NoOpRestLogger.class, resourceResolver, this);
-			callLogger = getInstanceProperty(REST_callLogger, resource, RestCallLogger.class, BasicRestCallLogger.class, resourceResolver, this);
 
 			if (debug == Enablement.TRUE) {
 				this.callLoggerConfig = RestCallLoggerConfig.DEFAULT_DEBUG;
@@ -3598,6 +3604,10 @@ public final class RestContext extends BeanContext {
 				else
 					this.callLoggerConfig = RestCallLoggerConfig.DEFAULT;
 			}
+
+			this.stackTraceDb = new StackTraceDatabase(callLoggerConfig.getStackTraceHashingTimeout(), RestMethodContext.class);
+
+			callLogger = getInstanceProperty(REST_callLogger, resource, RestCallLogger.class, BasicRestCallLogger.class, resourceResolver, this);
 
 			properties = builder.properties;
 			serializers =
@@ -3852,13 +3862,13 @@ public final class RestContext extends BeanContext {
 			}
 
 			this.callMethods = unmodifiableMap(_javaRestMethods);
-			this.preCallMethods = _preCallMethods.values().toArray(new Method[_preCallMethods.size()]);
-			this.postCallMethods = _postCallMethods.values().toArray(new Method[_postCallMethods.size()]);
-			this.startCallMethods = _startCallMethods.values().toArray(new Method[_startCallMethods.size()]);
-			this.endCallMethods = _endCallMethods.values().toArray(new Method[_endCallMethods.size()]);
-			this.postInitMethods = _postInitMethods.values().toArray(new Method[_postInitMethods.size()]);
-			this.postInitChildFirstMethods = _postInitChildFirstMethods.values().toArray(new Method[_postInitChildFirstMethods.size()]);
-			this.destroyMethods = _destroyMethods.values().toArray(new Method[_destroyMethods.size()]);
+			this.preCallMethods = _preCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_preCallMethods.size()]);
+			this.postCallMethods = _postCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_postCallMethods.size()]);
+			this.startCallMethods = _startCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_startCallMethods.size()]);
+			this.endCallMethods = _endCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_endCallMethods.size()]);
+			this.postInitMethods = _postInitMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_postInitMethods.size()]);
+			this.postInitChildFirstMethods = _postInitChildFirstMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_postInitChildFirstMethods.size()]);
+			this.destroyMethods = _destroyMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_destroyMethods.size()]);
 			this.preCallMethodParams = _preCallMethodParams.toArray(new RestMethodParam[_preCallMethodParams.size()][]);
 			this.postCallMethodParams = _postCallMethodParams.toArray(new RestMethodParam[_postCallMethodParams.size()][]);
 			this.startCallMethodParams = _startCallMethodParams.toArray(new Class[_startCallMethodParams.size()][]);
@@ -3949,6 +3959,22 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
+	 * Returns the time statistics gatherer for the specified method.
+	 *
+	 * @param m The method to get statistics for.
+	 * @return The cached time-stats object.
+	 */
+	protected MethodExecStats getMethodExecStats(Method m) {
+		String n = MethodInfo.of(m).getSimpleName();
+		MethodExecStats ts = methodExecStats.get(n);
+		if (ts == null) {
+			methodExecStats.putIfAbsent(n, new MethodExecStats(m));
+			ts = methodExecStats.get(n);
+		}
+		return ts;
+	}
+
+	/**
 	 * Returns the variable resolver for this servlet.
 	 *
 	 * <p>
@@ -3982,6 +4008,7 @@ public final class RestContext extends BeanContext {
 	 * 		navlinks={
 	 * 			<js>"up: $R{requestParentURI}"</js>,
 	 * 			<js>"options: servlet:/?method=OPTIONS"</js>,
+	 * 			<js>"stats: servlet:/stats"</js>,
 	 * 			<js>"editLevel: servlet:/editLevel?logger=$A{attribute.name, OFF}"</js>
 	 * 		}
 	 * 		header={
@@ -4940,6 +4967,52 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
+	 * Gives access to the internal stack trace database.
+	 *
+	 * @return The stack trace database.
+	 */
+	public StackTraceDatabase getStackTraceDb() {
+		return stackTraceDb;
+	}
+
+	/**
+	 * Returns timing information on all method executions on this class.
+	 *
+	 * <p>
+	 * Timing information is maintained for any <ja>@RestResource</ja>-annotated and hook methods.
+	 *
+	 * @return A list of timing statistics ordered by average execution time descending.
+	 */
+	public List<MethodExecStats> getMethodExecStats() {
+		return methodExecStats.values().stream().sorted().collect(Collectors.toList());
+	}
+
+	/**
+	 * Gives access to the internal stack trace database.
+	 *
+	 * @return The stack trace database.
+	 */
+	public RestContextStats getStats() {
+		return new RestContextStats(startTime, getMethodExecStats());
+	}
+
+	/**
+	 * Returns the timing information returned by {@link #getMethodExecStats()} in a readable format.
+	 *
+	 * @return A report of all method execution times ordered by .
+	 */
+	public String getMethodExecStatsReport() {
+		StringBuilder sb = new StringBuilder()
+			.append(" Method                         Runs      Running   Errors   Avg          Total     \n")
+			.append("------------------------------ --------- --------- -------- ------------ -----------\n");
+		getMethodExecStats()
+			.stream()
+			.sorted(Comparator.comparingDouble(MethodExecStats::getTotalTime).reversed())
+			.forEach(x -> sb.append(String.format("%30s %9d %9d %9d %10dms %10dms\n", x.getMethod(), x.getRuns(), x.getRunning(), x.getErrors(), x.getAvgTime(), x.getTotalTime())));
+		return sb.toString();
+	}
+
+	/**
 	 * Finds the {@link RestMethodParam} instances to handle resolving objects on the calls to the specified Java method.
 	 *
 	 * @param mi The Java method being called.
@@ -5017,7 +5090,7 @@ public final class RestContext extends BeanContext {
 			preOrPost(resource, postCallMethods[i], postCallMethodParams[i], req, res);
 	}
 
-	private static void preOrPost(Object resource, Method m, RestMethodParam[] mp, RestRequest req, RestResponse res) throws HttpException {
+	private static void preOrPost(Object resource, MethodInvoker m, RestMethodParam[] mp, RestRequest req, RestResponse res) throws HttpException {
 		if (m != null) {
 			Object[] args = new Object[mp.length];
 			for (int i = 0; i < mp.length; i++) {
@@ -5051,7 +5124,7 @@ public final class RestContext extends BeanContext {
 			startOrFinish(resource, endCallMethods[i], endCallMethodParams[i], call.getRequest(), call.getResponse());
 	}
 
-	private static void startOrFinish(Object resource, Method m, Class<?>[] p, HttpServletRequest req, HttpServletResponse res) throws HttpException, InternalServerError {
+	private static void startOrFinish(Object resource, MethodInvoker m, Class<?>[] p, HttpServletRequest req, HttpServletResponse res) throws HttpException, InternalServerError {
 		if (m != null) {
 			Object[] args = new Object[p.length];
 			for (int i = 0; i < p.length; i++) {
@@ -5096,7 +5169,7 @@ public final class RestContext extends BeanContext {
 		return this;
 	}
 
-	private void postInitOrDestroy(Object r, Method m, Class<?>[] p) {
+	private void postInitOrDestroy(Object r, MethodInvoker m, Class<?>[] p) {
 		if (m != null) {
 			Object[] args = new Object[p.length];
 			for (int i = 0; i < p.length; i++) {

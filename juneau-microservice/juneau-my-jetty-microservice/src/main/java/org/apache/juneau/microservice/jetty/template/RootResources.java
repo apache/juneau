@@ -41,7 +41,8 @@ import org.apache.juneau.rest.widget.ThemeMenuItem;
 		ThemeMenuItem.class
 	},
 	navlinks={
-		"options: servlet:/?method=OPTIONS"
+		"options: servlet:/?method=OPTIONS",
+		"stats: servlet:/stats"
 	}
 )
 public class RootResources extends BasicRestServletGroup {

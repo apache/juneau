@@ -52,6 +52,7 @@ import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
@@ -552,6 +553,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	private final Integer priority;
 	private final RestContext context;
 	final java.lang.reflect.Method method;
+	final MethodInvoker methodInvoker;
 	final MethodInfo mi;
 	final SerializerGroup serializers;
 	final ParserGroup parsers;
@@ -585,6 +587,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.context = b.context;
 		this.method = b.method;
+		this.methodInvoker = new MethodInvoker(method, context.getMethodExecStats(method));
 		this.mi = MethodInfo.of(method);
 
 		// Need this to access methods in anonymous inner classes.
@@ -901,7 +904,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			Object output;
 			try {
-				output = method.invoke(context.getResource(), args);
+				output = methodInvoker.invoke(context.getResource(), args);
 				if (res.getStatus() == 0)
 					res.setStatus(200);
 				if (! method.getReturnType().equals(Void.TYPE)) {

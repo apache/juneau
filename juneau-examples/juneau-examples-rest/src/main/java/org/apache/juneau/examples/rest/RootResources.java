@@ -45,7 +45,8 @@ import org.apache.juneau.serializer.annotation.*;
 		ThemeMenuItem.class
 	},
 	navlinks={
-		"options: ?method=OPTIONS",
+		"options: servlet:/?method=OPTIONS",
+		"stats: servlet:/stats",
 		"$W{ContentTypeMenuItem}",
 		"$W{ThemeMenuItem}",
 		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"

@@ -38,10 +38,10 @@ import org.apache.juneau.utils.*;
  */
 public class BasicRestCallLogger implements RestCallLogger {
 
-	private final StackTraceDatabase stackTraceDb = new StackTraceDatabase(RestMethodContext.class);
-
+	private final String loggerName;
 	private final Logger logger;
 	private final RestContext context;
+	private final StackTraceDatabase stackTraceDb;
 
 	/**
 	 * Constructor.
@@ -50,18 +50,22 @@ public class BasicRestCallLogger implements RestCallLogger {
 	 */
 	public BasicRestCallLogger(RestContext context) {
 		this.context = context;
+		this.loggerName = context.getResource().getClass().getName();
 		this.logger = Logger.getLogger(getLoggerName());
+		this.stackTraceDb = context.getStackTraceDb();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param context The context of the resource object.
 	 * @param logger The logger to use for logging.
+	 * @param stackTraceDb The stack trace database for maintaining stack traces.
 	 */
-	public BasicRestCallLogger(RestContext context, Logger logger) {
-		this.context = context;
+	protected BasicRestCallLogger(Logger logger, StackTraceDatabase stackTraceDb) {
+		this.context = null;
+		this.loggerName = getClass().getName();
 		this.logger = logger;
+		this.stackTraceDb = stackTraceDb;
 	}
 
 	/**
@@ -76,7 +80,7 @@ public class BasicRestCallLogger implements RestCallLogger {
 	 * @return The logger name.
 	 */
 	protected String getLoggerName() {
-		return context == null ? getClass().getName() : context.getResource().getClass().getName();
+		return loggerName;
 	}
 
 	/**
@@ -243,6 +247,7 @@ public class BasicRestCallLogger implements RestCallLogger {
 	private StackTraceInfo getStackTraceInfo(RestCallLoggerConfig config, Throwable e) {
 		if (e == null || ! config.isUseStackTraceHashing())
 			return null;
-		return stackTraceDb.getStackTraceInfo(e, config.getStackTraceHashingTimeout());
+		stackTraceDb.add(e);
+		return stackTraceDb.getStackTraceInfo(e);
 	}
 }

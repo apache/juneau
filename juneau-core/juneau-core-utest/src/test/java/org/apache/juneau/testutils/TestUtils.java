@@ -385,6 +385,18 @@ public class TestUtils {
 		Assert.assertEquals(s, ws.toString(o));
 	}
 
+	public static final void assertObjectMatches(String s, Object o) {
+		assertObjectMatches(s, o, js2);
+	}
+
+	public static final void assertObjectMatches(String s, Object o, WriterSerializer ws) {
+		if ("xxx".equals(s))
+			System.err.println(ws.toString(o).replaceAll("\\\\", "\\\\\\\\")); // NOT DEBUG
+		String o2 =  ws.toString(o);
+		if (! StringUtils.getMatchPattern(s).matcher(o2).matches())
+			throw new ComparisonFailure(null, s, o2);
+	}
+
 	/**
 	 * Replaces all newlines with pipes, then compares the strings.
 	 */

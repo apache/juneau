@@ -38,7 +38,8 @@ import org.apache.juneau.http.exception.*;
 	// Basic page navigation links.
 	navlinks={
 		"up: request:/..",
-		"options: servlet:/?method=OPTIONS"
+		"options: servlet:/?method=OPTIONS",
+		"stats: servlet:/stats"
 	}
 )
 public abstract class BasicRest implements BasicRestConfig {
@@ -82,6 +83,18 @@ public abstract class BasicRest implements BasicRestConfig {
 	@Override /* BasicRestConfig */
 	public void error() {}
 
+	/**
+	 * [GET /stats] - Timing statistics.
+	 *
+	 * <p>
+	 * Timing statistics for method invocations on this resource.
+	 *
+	 * @return A collection of timing statistics for each annotated method on this resource.
+	 */
+	@Override /* BasicRestConfig */
+	public RestContextStats getStats(RestRequest req) {
+		return req.getContext().getStats();
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Context methods.

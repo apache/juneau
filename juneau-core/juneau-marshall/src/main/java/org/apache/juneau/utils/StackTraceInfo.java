@@ -14,29 +14,37 @@ package org.apache.juneau.utils;
 
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.annotation.*;
+
 /**
  * Represents an entry in {@link StackTraceDatabase}.
  */
-public class StackTraceInfo {
-	AtomicInteger count;
-	long timeout;
-	String hash;
+@Bean(bpi="exception,hash,count")
+public class StackTraceInfo implements Comparable<StackTraceInfo> {
+	final AtomicInteger count;
+	final long timeout;
+	final String hash;
+	final String exception;
 
-	StackTraceInfo(long timeout, int hash) {
-		this.count = new AtomicInteger(1);
-		this.timeout = System.currentTimeMillis() + timeout;
+	/**
+	 * Constructor.
+	 *
+	 * @param exception The simple name of the exception class.  Can be <jk>null</jk>.
+	 * @param timeout The time in UTC milliseconds at which point this stack trace info should be discarded from caches.
+	 * @param hash The hash id of this stack trace.
+	 */
+	public StackTraceInfo(String exception, long timeout, int hash) {
+		this.count = new AtomicInteger(0);
+		this.timeout = timeout;
 		this.hash = Integer.toHexString(hash);
+		this.exception = exception;
 	}
 
-	private StackTraceInfo(int count, long timeout, String hash) {
+	private StackTraceInfo(String exception, int count, long timeout, String hash) {
 		this.count = new AtomicInteger(count);
 		this.timeout = timeout;
 		this.hash = hash;
-	}
-
-	@Override
-	public StackTraceInfo clone() {
-		return new StackTraceInfo(count.intValue(), timeout, hash);
+		this.exception = exception;
 	}
 
 	/**
@@ -57,7 +65,32 @@ public class StackTraceInfo {
 		return hash;
 	}
 
-	StackTraceInfo incrementAndClone() {
-		return new StackTraceInfo(count.incrementAndGet(), timeout, hash);
+	/**
+	 * Returns the simple class name of the exception.
+	 *
+	 * @return The simple class name of the exception, or <jk>null</jk> if not specified.
+	 */
+	public String getException() {
+		return exception;
+	}
+
+	/**
+	 * Increments the occurrence count of this exception.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public StackTraceInfo increment() {
+		count.incrementAndGet();
+		return this;
+	}
+
+	@Override /* Comparable */
+	public int compareTo(StackTraceInfo o) {
+		return Integer.compare(o.getCount(), getCount());
+	}
+
+	@Override /* Object */
+	public StackTraceInfo clone() {
+		return new StackTraceInfo(exception, count.intValue(), timeout, hash);
 	}
 }

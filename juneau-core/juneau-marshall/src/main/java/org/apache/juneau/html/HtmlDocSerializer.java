@@ -45,7 +45,7 @@ import org.apache.juneau.svl.*;
  * 		properties={
  * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_title</jsf>, value=<js>"$L{title}"</js>),
  * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_description</jsf>, value=<js>"$L{description}"</js>),
- * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
+ * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{options:'servlet:/?method=OPTIONS',doc:'doc'}"</js>)
  * 		}
  * 	)
  * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
@@ -60,7 +60,7 @@ import org.apache.juneau.svl.*;
  * 		description=<js>"$L{description}"</js>,
  * 		htmldoc=<ja>@HtmlDoc</ja>(
  * 			navlinks={
- * 				<js>"options: ?method=OPTIONS"</js>,
+ * 				<js>"options: servlet:/?method=OPTIONS"</js>,
  * 				<js>"doc: doc"</js>
  * 			}
  * 		)
@@ -333,7 +333,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<ja>@Rest</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>,
-	 * 				value=<js>"['options: ?method=OPTIONS', 'doc: doc']"</js>)
+	 * 				value=<js>"['options: servlet:/?method=OPTIONS', 'doc: doc']"</js>)
 	 * 		}
 	 * 	)
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
@@ -345,7 +345,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<ja>@Rest</ja>(
 	 * 		htmldoc=@HtmlDoc(
 	 * 			navlinks={
-	 * 				<js>"options: ?method=OPTIONS"</js>,
+	 * 				<js>"options: servlet:/?method=OPTIONS"</js>,
 	 * 				<js>"doc: doc"</js>
 	 * 			}
 	 * 		)

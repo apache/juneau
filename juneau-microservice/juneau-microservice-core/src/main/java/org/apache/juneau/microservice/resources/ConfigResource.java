@@ -42,6 +42,7 @@ import org.apache.juneau.http.exception.*;
 	navlinks={
 		"up: request:/..",
 		"options: servlet:/?method=OPTIONS",
+		"stats: servlet:/stats",
 		"edit: servlet:/edit"
 	}
 )

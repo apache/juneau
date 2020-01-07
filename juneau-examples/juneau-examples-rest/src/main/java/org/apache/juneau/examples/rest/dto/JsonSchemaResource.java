@@ -50,6 +50,7 @@ import org.apache.juneau.rest.widget.*;
 	navlinks={
 		"up: request:/..",
 		"options: servlet:/?method=OPTIONS",
+		"stats: servlet:/stats",
 		"$W{ContentTypeMenuItem}",
 		"$W{ThemeMenuItem}",
 		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/$R{servletClassSimple}.java"

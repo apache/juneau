@@ -34,7 +34,7 @@ import org.apache.juneau.rest.widget.*;
  * 	<jc>// Defined via properties.</jc>
  * 	<ja>@RestResource</ja>(
  * 		properties={
- * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
+ * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{options:'servlet:/?method=OPTIONS',stats:'servlet:/stats',doc:'doc'}"</js>)
  * 		}
  * 	)
  *
@@ -42,7 +42,8 @@ import org.apache.juneau.rest.widget.*;
  * 	<ja>@RestResource</ja>(
  * 		htmldoc=<ja>@HtmlDoc</ja>(
  * 			navlinks={
- * 				<js>"options: ?method=OPTIONS"</js>,
+ * 				<js>"options: servlet:/?method=OPTIONS"</js>,
+ * 				<js>"stats: servlet:/stats"</js>,
  * 				<js>"doc: doc"</js>
  * 			}
  * 		)

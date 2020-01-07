@@ -120,7 +120,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			return swagger;
 
 		// Wasn't cached...need to create one.
-		swagger = new SwaggerGenerator(req).getSwagger();
+		swagger = new SwaggerGenerator(req.getContext(), req.getVarResolverSession(), req.getLocale()).getSwagger();
 
 		swaggers.get(locale).put(hashCode, swagger);
 

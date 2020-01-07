@@ -21,6 +21,7 @@ import java.util.regex.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -74,8 +75,12 @@ public class BasicRestCallLoggerTest {
 		return RestCallLoggerConfig.create().parent(config).build();
 	}
 
+	private BasicRestCallLogger logger(Logger l, StackTraceDatabase std) {
+		return new BasicRestCallLogger(l, std);
+	}
+
 	private BasicRestCallLogger logger(Logger l) {
-		return new BasicRestCallLogger(null, l);
+		return new BasicRestCallLogger(l, new StackTraceDatabase());
 	}
 
 	private RestCallLoggerRule.Builder rule() {
@@ -349,12 +354,11 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").req(SHORT).res(SHORT).build()
 			)
 			.useStackTraceHashing()
-			.stackTraceHashingTimeout(100000)
 			.build();
 		RestCallLoggerConfig lcw = wrapped(lc);
 
 		TestLogger tc = new TestLogger();
-		BasicRestCallLogger cl = logger(tc).resetStackTraces();
+		BasicRestCallLogger cl = logger(tc, new StackTraceDatabase(100000, null)).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
 		MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
 		MockServletResponse res = res(200);
@@ -380,27 +384,26 @@ public class BasicRestCallLoggerTest {
 				rule().codes("*").req(SHORT).res(SHORT).build()
 			)
 			.useStackTraceHashing()
-			.stackTraceHashingTimeout(-1)
 			.build();
 		RestCallLoggerConfig lcw = wrapped(lc);
 
 		TestLogger tc = new TestLogger();
-		BasicRestCallLogger cl = logger(tc).resetStackTraces();
+		BasicRestCallLogger cl = logger(tc, new StackTraceDatabase(-2, null)).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
 		MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
-		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
+		tc.check(INFO, "[200,*.0] HTTP GET /foo", true);
 		cl.log(lc, req, res);
-		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
+		tc.check(INFO, "[200,*.0] HTTP GET /foo", true);
 
 		cl.resetStackTraces();
 
 		cl.log(lcw, req, res);
-		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
+		tc.check(INFO, "[200,*.0] HTTP GET /foo", true);
 		cl.log(lcw, req, res);
-		tc.check(INFO, "[200,*.1] HTTP GET /foo", true);
+		tc.check(INFO, "[200,*.0] HTTP GET /foo", true);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
