@@ -24,10 +24,12 @@ import org.apache.juneau.marshall.*;
  *
  * Keeps track of number of starts/finishes on tasks and keeps an average run time.
  */
-@Bean(bpi="method,runs,running,errors,avgTime,totalTime,exceptions")
+@Bean(bpi="method,runs,running,errors,minTime,maxTime,avgTime,totalTime,exceptions")
 public class MethodExecStats implements Comparable<MethodExecStats> {
+
 	private String method;
 	private WeightedAverage avgTime = new WeightedAverage();
+	private volatile int minTime = -1, maxTime;
 
 	private AtomicInteger
 		starts = new AtomicInteger(),
@@ -68,12 +70,15 @@ public class MethodExecStats implements Comparable<MethodExecStats> {
 
 	/**
 	 * Call when task is finished.
-	 * @param time The execution time of the task.
+	 * @param nanoTime The execution time of the task in nanoseconds.
 	 */
-	public void finished(long time) {
+	public void finished(long nanoTime) {
 		finishes.incrementAndGet();
-		totalTime.addAndGet(time);
-		avgTime.add(1, time);
+		int milliTime = (int)(nanoTime/1_000_000);
+		totalTime.addAndGet(nanoTime);
+		avgTime.add(1, nanoTime);
+		minTime = minTime == -1 ? milliTime : Math.min(minTime, milliTime);
+		maxTime = Math.max(maxTime, milliTime);
 	}
 
 	/**
@@ -122,12 +127,30 @@ public class MethodExecStats implements Comparable<MethodExecStats> {
 	}
 
 	/**
+	 * Returns the max execution time.
+	 *
+	 * @return The average execution time in milliseconds.
+	 */
+	public int getMinTime() {
+		return minTime == -1 ? 0 : minTime;
+	}
+
+	/**
+	 * Returns the max execution time.
+	 *
+	 * @return The average execution time in milliseconds.
+	 */
+	public int getMaxTime() {
+		return maxTime;
+	}
+
+	/**
 	 * Returns the average execution time.
 	 *
 	 * @return The average execution time in milliseconds.
 	 */
 	public int getAvgTime() {
-		return (int)avgTime.getValue();
+		return (int)avgTime.getValue() / 1_000_000;
 	}
 
 	/**
@@ -136,7 +159,7 @@ public class MethodExecStats implements Comparable<MethodExecStats> {
 	 * @return The total execution time in milliseconds.
 	 */
 	public long getTotalTime() {
-		return totalTime.get();
+		return totalTime.get() / 1_000_000;
 	}
 
 	/**

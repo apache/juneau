@@ -39,7 +39,7 @@ public class MethodInvokerTest {
 		mi.invoke(a);
 		mi.invoke(a);
 
-		assertObjectMatches("{method:'A.foo',runs:3,running:0,errors:0,avgTime:*,totalTime:*,exceptions:[]}", mes);
+		assertObjectMatches("{method:'A.foo',runs:3,running:0,errors:0,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[]}", mes);
 	}
 
 	@Test
@@ -60,7 +60,7 @@ public class MethodInvokerTest {
 			mi.invoke(a);
 		} catch (Exception e) {}
 
-		assertObjectMatches("{method:'A.bar',runs:3,running:0,errors:3,avgTime:0,totalTime:*,exceptions:[{exception:'RuntimeException',hash:'*',count:3}]}", mes);
+		assertObjectMatches("{method:'A.bar',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{exception:'RuntimeException',hash:'*',count:3}]}", mes);
 	}
 
 	@Test
@@ -81,7 +81,7 @@ public class MethodInvokerTest {
 			mi.invoke(a, 1, "x");
 		} catch (Exception e) {}
 
-		assertObjectMatches("{method:'A.baz',runs:3,running:0,errors:3,avgTime:0,totalTime:*,exceptions:[{exception:'IllegalArgumentException',hash:'*',count:3}]}", mes);
+		assertObjectMatches("{method:'A.baz',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{exception:'IllegalArgumentException',hash:'*',count:3}]}", mes);
 	}
 
 	@Test

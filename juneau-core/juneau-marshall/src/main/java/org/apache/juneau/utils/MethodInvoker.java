@@ -52,7 +52,7 @@ public class MethodInvoker {
 	 * @throws InvocationTargetException Thrown from underlying method.
 	 */
 	public Object invoke(Object o, Object...args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		long startTime = System.currentTimeMillis();
+		long startTime = System.nanoTime();
 		stats.started();
 		try {
 			return m.invoke(o, args);
@@ -63,7 +63,7 @@ public class MethodInvoker {
 			stats.error(e.getTargetException());
 			throw e;
 		} finally {
-			stats.finished(System.currentTimeMillis() - startTime);
+			stats.finished(System.nanoTime() - startTime);
 		}
 	}
 
