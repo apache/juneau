@@ -44,12 +44,12 @@ public class ReflectionMapTest {
 	static ReflectionMap<Number>
 		A1_SIMPLE = create().append("A1", 1).build(),
 		A1b_SIMPLE = create().append("ReflectionMapTest$A1", 1).build(),
-		A1_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$A1", 1).build();
+		A1_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$A1", 1).build();  // Note this could be a static field.
 
 	@Test
 	public void a01_classNames_checkEntries() {
 		checkEntries(A1_SIMPLE, true, false, false, false);
-		checkEntries(A1_FULL, true, false, false, false);
+		checkEntries(A1_FULL, true, false, true, false);
 	}
 
 	private void checkA(Class<?> c, boolean match_A1_SIMPLE, boolean match_A1b_SIMPLE, boolean match_A1_FULL) {

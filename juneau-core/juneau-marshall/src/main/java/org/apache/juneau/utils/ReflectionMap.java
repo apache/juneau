@@ -133,8 +133,11 @@ public class ReflectionMap<V> {
 						}
 					} else {
 						int i = k.lastIndexOf('.');
-						if (i == -1 || isUpperCase(k.charAt(i+1))) {
+						if (i == -1) {
 							classEntries.add(new ClassEntry<>(k, value));
+						} else if (isUpperCase(k.charAt(i+1))) {
+							classEntries.add(new ClassEntry<>(k, value));
+							fieldEntries.add(new FieldEntry<>(k, value));
 						} else {
 							methodEntries.add(new MethodEntry<>(k, value));
 							fieldEntries.add(new FieldEntry<>(k, value));

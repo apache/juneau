@@ -61,6 +61,24 @@ public class PojoExamplesTest {
 		}
 	}
 
+	@Test
+	public void testExampleField_usingConfig() throws Exception {
+		BeanSession bs = BeanContext.create().applyAnnotations(B1c.class).build().createSession();
+		assertObjectEquals("{f1:'f1b'}", bs.getClassMeta(B1c.class).getExample(bs));
+	}
+
+	@BeanConfig(applyExample=@Example(on="B1c.EXAMPLE"))
+	public static class B1c {
+		public String f1;
+
+		public static B1c EXAMPLE = new B1c().init();
+
+		public B1c init() {
+			this.f1 = "f1b";
+			return this;
+		}
+	}
+
 	//====================================================================================================
 	// test @Example on private field
 	//====================================================================================================
@@ -77,6 +95,25 @@ public class PojoExamplesTest {
 		private static B2 EXAMPLE = new B2().init();
 
 		public B2 init() {
+			this.f1 = "f1b";
+			return this;
+		}
+	}
+
+	@Test
+	public void testExampleFieldPrivate_usingConfig() throws Exception {
+		BeanSession bs = BeanContext.create().applyAnnotations(B2c.class).build().createSession();
+		assertObjectEquals("{f1:'f1b'}", bs.getClassMeta(B2c.class).getExample(bs));
+	}
+
+	@BeanConfig(applyExample=@Example(on="B2c.EXAMPLE"))
+	public static class B2c {
+		public String f1;
+
+		@SuppressWarnings("unused")
+		private static B2c EXAMPLE = new B2c().init();
+
+		public B2c init() {
 			this.f1 = "f1b";
 			return this;
 		}
@@ -105,6 +142,26 @@ public class PojoExamplesTest {
 		}
 	}
 
+	@Test
+	public void testExampleOnPublicNoArgMethod_usingConfig() throws Exception {
+		BeanSession bs = BeanContext.create().applyAnnotations(C1c.class).build().createSession();
+		assertObjectEquals("{f1:'f1c'}", bs.getClassMeta(C1c.class).getExample(bs));
+	}
+
+	@BeanConfig(applyExample=@Example(on="C1c.x"))
+	public static class C1c {
+		public String f1;
+
+		public C1c init() {
+			this.f1 = "f1c";
+			return this;
+		}
+
+		public static C1c x() {
+			return new C1c().init();
+		}
+	}
+
 	//====================================================================================================
 	// test @Example on private no-arg method.
 	//====================================================================================================
@@ -128,6 +185,27 @@ public class PojoExamplesTest {
 		}
 	}
 
+	@Test
+	public void testExampleOnPrivateNoArgMethod_usingConfig() throws Exception {
+		BeanSession bs = BeanContext.create().applyAnnotations(C2c.class).build().createSession();
+		assertObjectEquals("{f1:'f1c'}", bs.getClassMeta(C2c.class).getExample(bs));
+	}
+
+	@BeanConfig(applyExample=@Example(on="C2c.x"))
+	public static class C2c {
+		public String f1;
+
+		public C2c init() {
+			this.f1 = "f1c";
+			return this;
+		}
+
+		@SuppressWarnings("unused")
+		private static C2c x() {
+			return new C2c().init();
+		}
+	}
+
 	//====================================================================================================
 	// test @Example on public 1-arg method
 	//====================================================================================================
@@ -148,6 +226,26 @@ public class PojoExamplesTest {
 		@Example
 		public static D1 x(BeanSession bs) {
 			return new D1().init();
+		}
+	}
+
+	@Test
+	public void testExampleOnPublicOneArgMethod_usingConfig() throws Exception {
+		BeanSession bs = BeanContext.create().applyAnnotations(D1c.class).build().createSession();
+		assertObjectEquals("{f1:'f1d'}", bs.getClassMeta(D1c.class).getExample(bs));
+	}
+
+	@BeanConfig(applyExample=@Example(on="D1c.x(BeanSession)"))
+	public static class D1c {
+		public String f1;
+
+		public D1c init() {
+			this.f1 = "f1d";
+			return this;
+		}
+
+		public static D1c x(BeanSession bs) {
+			return new D1c().init();
 		}
 	}
 
