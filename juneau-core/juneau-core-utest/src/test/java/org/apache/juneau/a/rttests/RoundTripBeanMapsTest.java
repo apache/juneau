@@ -939,7 +939,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		roundTrip(m, LinkedHashMap.class, String.class, L2.class);
 	}
 
-	@JsonConfig(annotateJson=@Json(on="L2",wrapperAttr="foo"))
+	@JsonConfig(applyJson=@Json(on="L2",wrapperAttr="foo"))
 	public static class L2 {
 		public int f1;
 
@@ -995,7 +995,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		roundTrip(m, LinkedHashMap.class, String.class, M2.class);
 	}
 
-	@JsonConfig(annotateJson=@Json(on="M2",wrapperAttr="foo"))
+	@JsonConfig(applyJson=@Json(on="M2",wrapperAttr="foo"))
 	public static class M2 {
 		int f1;
 

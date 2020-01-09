@@ -230,7 +230,7 @@ public @interface Bean {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link BeanConfig#annotateBean()}.
+	 * Used in conjunction with the {@link BeanConfig#applyBean()}.
 	 * It is ignored when the annotation is applied directly to classes.
 	 *
 	 * <p>
@@ -246,7 +246,7 @@ public @interface Bean {
 	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<ja>@BeanConfig</ja>(
-	 * 		annotateBean={
+	 * 		applyBean={
 	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, bpi=<jk>"street,city,state"</js>)
 	 * 		}
 	 * 	)

@@ -37,7 +37,7 @@ public class JsoConfigApply extends ConfigApply<JsoConfig> {
 	public void apply(AnnotationInfo<JsoConfig> ai, PropertyStoreBuilder psb) {
 		JsoConfig a = ai.getAnnotation();
 
-		if (a.annotateJso().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateJso());
+		if (a.applyJso().length > 0)
+			psb.addTo(BEAN_annotations, a.applyJso());
 	}
 }

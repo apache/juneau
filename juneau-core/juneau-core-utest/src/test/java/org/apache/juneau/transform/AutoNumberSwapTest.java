@@ -602,7 +602,7 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 	}
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="D01c"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="D01c"))
 	public static class D01c {
 		public Integer toInteger() {
 			return 1;
@@ -653,7 +653,7 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 	}
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="E01c.toInteger"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="E01c.toInteger"))
 	public static class E01c {
 		public Integer toInteger() {
 			return 1;
@@ -724,7 +724,7 @@ public class AutoNumberSwapTest {
 			return null;
 		}
 	}
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="F01c.create(java.lang.Integer)"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="F01c.create(java.lang.Integer)"))
 	public static class F01c {
 		public Integer toInteger() {
 			return 1;
@@ -822,7 +822,7 @@ public class AutoNumberSwapTest {
 		}
 	}
 
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="G01c(java.lang.Integer)"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="G01c(java.lang.Integer)"))
 	public static class G01c {
 		public G01c(Integer o) {}
 		public Integer toInteger() {

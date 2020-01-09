@@ -253,7 +253,7 @@ public class HtmlTest {
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><f1></td></tr></table>", r);
 	}
 
-	@HtmlConfig(annotateHtml=@Html(on="B3", format=PLAIN_TEXT))
+	@HtmlConfig(applyHtml=@Html(on="B3", format=PLAIN_TEXT))
 	public static class B3 {
 		public String f1 = "<f1>";
 		@Override /* Object */
@@ -262,7 +262,7 @@ public class HtmlTest {
 		}
 	}
 
-	@HtmlConfig(annotateHtml=@Html(on="B4.f1", format=PLAIN_TEXT))
+	@HtmlConfig(applyHtml=@Html(on="B4.f1", format=PLAIN_TEXT))
 	public static class B4 {
 		public String f1 = "<f1>";
 	}
@@ -310,7 +310,7 @@ public class HtmlTest {
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td>&lt;f1&gt;</td></tr></table>", r);
 	}
 
-	@HtmlConfig(annotateHtml=@Html(on="C3,C4.f1",format=XML))
+	@HtmlConfig(applyHtml=@Html(on="C3,C4.f1",format=XML))
 	public static class C3 {
 		public String f1 = "<f1>";
 	}
@@ -351,6 +351,6 @@ public class HtmlTest {
 		assertEquals("<ul><li><table><tr><td>foo</td><td>bar</td></tr></table></li></ul>", r);
 	}
 
-	@HtmlConfig(annotateHtml=@Html(on="org.apache.juneau.html.HtmlTest$MyMap2", noTables=true, noTableHeaders=true))
+	@HtmlConfig(applyHtml=@Html(on="org.apache.juneau.html.HtmlTest$MyMap2", noTables=true, noTableHeaders=true))
 	public static class MyMap2 extends LinkedHashMap<String,String> {}
 }

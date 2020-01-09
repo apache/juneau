@@ -206,7 +206,7 @@ public @interface Beanp {
 	 * Defines which classes/methods this annotation applies to.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link BeanConfig#annotateBeanp()}.
+	 * Used in conjunction with the {@link BeanConfig#applyBeanp()}.
 	 * It is ignored when the annotation is applied directly to classes and methods.
 	 *
 	 * The format can be any of the following:

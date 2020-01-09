@@ -75,7 +75,7 @@ public class AnnotationsTest {
 	}
 
 	/** Class with explicitly specified properties */
-	@BeanConfig(annotateBean=@Bean(on="Person1a",bpi="age,name"))
+	@BeanConfig(applyBean=@Bean(on="Person1a",bpi="age,name"))
 	public static class Person1a {
 		public int age;
 		private String name;

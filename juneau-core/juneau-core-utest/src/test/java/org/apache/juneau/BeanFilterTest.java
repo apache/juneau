@@ -111,7 +111,7 @@ public class BeanFilterTest {
 	}
 
 	@BeanConfig(
-		annotateBean={
+		applyBean={
 			@Bean(on="E", dictionary={E1.class, E2.class}),
 			@Bean(on="E1", typeName="E1"),
 			@Bean(on="E2", typeName="E2"),

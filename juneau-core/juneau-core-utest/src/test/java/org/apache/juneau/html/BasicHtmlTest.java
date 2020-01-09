@@ -3369,8 +3369,8 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@HtmlConfig(annotateHtml={@Html(on="BeanWithWhitespaceTextFields2",format=XML)})
-	@XmlConfig(annotateXml={@Xml(on="BeanWithWhitespaceTextFields2.a",format=XmlFormat.TEXT)})
+	@HtmlConfig(applyHtml={@Html(on="BeanWithWhitespaceTextFields2",format=XML)})
+	@XmlConfig(applyXml={@Xml(on="BeanWithWhitespaceTextFields2.a",format=XmlFormat.TEXT)})
 	public static class BeanWithWhitespaceTextFields2 {
 		public String a;
 
@@ -3380,8 +3380,8 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@HtmlConfig(annotateHtml={@Html(on="BeanWithWhitespaceTextPwsFields2",format=XML)})
-	@XmlConfig(annotateXml={@Xml(on="BeanWithWhitespaceTextPwsFields2.a",format=XmlFormat.TEXT_PWS)})
+	@HtmlConfig(applyHtml={@Html(on="BeanWithWhitespaceTextPwsFields2",format=XML)})
+	@XmlConfig(applyXml={@Xml(on="BeanWithWhitespaceTextPwsFields2.a",format=XmlFormat.TEXT_PWS)})
 	public static class BeanWithWhitespaceTextPwsFields2 {
 		public String a;
 
@@ -3391,8 +3391,8 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@HtmlConfig(annotateHtml={@Html(on="BeanWithWhitespaceMixedFields2",format=XML)})
-	@XmlConfig(annotateXml={@Xml(on="BeanWithWhitespaceMixedFields2.a",format=XmlFormat.MIXED)})
+	@HtmlConfig(applyHtml={@Html(on="BeanWithWhitespaceMixedFields2",format=XML)})
+	@XmlConfig(applyXml={@Xml(on="BeanWithWhitespaceMixedFields2.a",format=XmlFormat.MIXED)})
 	public static class BeanWithWhitespaceMixedFields2 {
 		public String[] a;
 
@@ -3402,8 +3402,8 @@ public class BasicHtmlTest {
 		}
 	}
 
-	@HtmlConfig(annotateHtml={@Html(on="BeanWithWhitespaceMixedPwsFields2",format=XML)})
-	@XmlConfig(annotateXml={@Xml(on="BeanWithWhitespaceMixedPwsFields2.a",format=XmlFormat.MIXED_PWS)})
+	@HtmlConfig(applyHtml={@Html(on="BeanWithWhitespaceMixedPwsFields2",format=XML)})
+	@XmlConfig(applyXml={@Xml(on="BeanWithWhitespaceMixedPwsFields2.a",format=XmlFormat.MIXED_PWS)})
 	@Html(format=XML)
 	public static class BeanWithWhitespaceMixedPwsFields2 {
 		public String[] a;

@@ -46,17 +46,17 @@ public @interface OpenApiConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Indirectly applies {@link OpenApi @OpenApi} annotations to classes/methods.
+	 * Dynamically applies {@link OpenApi @OpenApi} annotations to specified classes/methods/fields.
 	 *
 	 * <p>
-	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link OpenApi#on() @OpenApi.on}
-	 * annotation to specify the class/method names to apply the annotation to.
+	 * Provides an alternate approach for applying annotations using {@link OpenApi#on() @OpenApi.on} to specify the names
+	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	OpenApi[] annotateOpenApi() default {};
+	OpenApi[] applyOpenApi() default {};
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// OpenApiSerializer

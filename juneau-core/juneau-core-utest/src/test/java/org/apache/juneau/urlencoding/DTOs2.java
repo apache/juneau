@@ -20,8 +20,8 @@ import org.apache.juneau.utils.*;
 
 public class DTOs2 {
 
-	@BeanConfig(annotateBean={@Bean(on="A,B,C",sort=true)})
-	@UrlEncodingConfig(annotateUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
+	@BeanConfig(applyBean={@Bean(on="A,B,C",sort=true)})
+	@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
 	public static class Annotations {}
 
 	public static class A {

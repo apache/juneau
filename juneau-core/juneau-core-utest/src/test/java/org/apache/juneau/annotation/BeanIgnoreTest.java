@@ -44,7 +44,7 @@ public class BeanIgnoreTest {
 	}
 
 	@BeanConfig(
-		annotateBeanIgnore={
+		applyBeanIgnore={
 			@BeanIgnore(on="Ac.getB"),
 			@BeanIgnore(on="Ac.d")
 		}
@@ -96,7 +96,7 @@ public class BeanIgnoreTest {
 		assertObjectEquals("{f2:2,f3:'xxx',f4:'xxx'}", new B());
 	}
 
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="B1c"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="B1c"))
 	public static class B1c {
 		public int f = 1;
 

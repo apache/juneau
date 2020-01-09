@@ -47,17 +47,17 @@ public @interface JsonConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Indirectly applies {@link Json @Json} annotations to classes/methods.
+	 * Dynamically applies {@link Json @Json} annotations to specified classes.
 	 *
 	 * <p>
-	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Json#on() @Json.on}
-	 * annotation to specify the class/method names to apply the annotation to.
+	 * Provides an alternate approach for applying annotations using {@link Json#on() @Json.on} to specify the names
+	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	Json[] annotateJson() default {};
+	Json[] applyJson() default {};
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// JsonParser

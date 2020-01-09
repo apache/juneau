@@ -44,7 +44,7 @@ public @interface BeanIgnore {
 	 * Dynamically apply this annotation to the specified classes/methods/fields/constructors.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link BeanConfig#annotateBeanIgnore()}.
+	 * Used in conjunction with the {@link BeanConfig#applyBeanIgnore()}.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields/constructors.
 	 *
 	 * The valid pattern matches are:

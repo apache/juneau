@@ -162,8 +162,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Default:</b>  Empty list.
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#annotateBean()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#annotateBeanp()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#applyBean()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#applyBeanp()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>

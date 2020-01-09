@@ -35,7 +35,7 @@ public @interface Jso {
 	 * Defines which classes/methods this annotation applies to.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link JsoConfig#annotateJso()}.
+	 * Used in conjunction with the {@link JsoConfig#applyJso()}.
 	 * It is ignored when the annotation is applied directly to classes and methods.
 	 *
 	 * The format can be any of the following:

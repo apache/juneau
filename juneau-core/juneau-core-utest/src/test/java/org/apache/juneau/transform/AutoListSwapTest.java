@@ -194,7 +194,7 @@ public class AutoListSwapTest {
 		assertNull(find(D02.D02A.class));
 	}
 
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="D01c"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="D01c"))
 	public static class D01c {
 		public List<String> toList() {
 			return STRINGLIST;
@@ -228,7 +228,7 @@ public class AutoListSwapTest {
 			return STRINGLIST;
 		}
 	}
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="E01c.toList"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="E01c.toList"))
 	public static class E01c {
 		public List<String> toList() {
 			return STRINGLIST;
@@ -299,7 +299,7 @@ public class AutoListSwapTest {
 			return null;
 		}
 	}
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="F01c.create"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="F01c.create"))
 	public static class F01c {
 		public List<String> toList() {
 			return STRINGLIST;
@@ -397,7 +397,7 @@ public class AutoListSwapTest {
 		}
 	}
 
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="G01c(List)"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="G01c(List)"))
 	public static class G01c {
 		public G01c(List<String> o) {}
 		public List<String> toList() {

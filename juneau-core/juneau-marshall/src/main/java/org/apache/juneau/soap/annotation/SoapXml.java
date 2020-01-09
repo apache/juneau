@@ -35,7 +35,7 @@ public @interface SoapXml {
 	 * Defines which classes/methods this annotation applies to.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link SoapXmlConfig#annotateSoapXml()}.
+	 * Used in conjunction with the {@link SoapXmlConfig#applySoapXml()}.
 	 * It is ignored when the annotation is applied directly to classes and methods.
 	 *
 	 * The format can be any of the following:

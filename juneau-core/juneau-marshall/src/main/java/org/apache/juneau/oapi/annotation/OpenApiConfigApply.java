@@ -37,7 +37,7 @@ public class OpenApiConfigApply extends ConfigApply<OpenApiConfig> {
 	public void apply(AnnotationInfo<OpenApiConfig> ai, PropertyStoreBuilder psb) {
 		OpenApiConfig a = ai.getAnnotation();
 
-		if (a.annotateOpenApi().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateOpenApi());
+		if (a.applyOpenApi().length > 0)
+			psb.addTo(BEAN_annotations, a.applyOpenApi());
 	}
 }

@@ -166,26 +166,26 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		if (! a.maxDepth().isEmpty())
 			psb.set(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));
 
-		if (a.annotateBean().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateBean());
-		if (a.annotateBeanp().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateBeanp());
-		if (a.annotateBeanc().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateBeanc());
-		if (a.annotateBeanIgnore().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateBeanIgnore());
-		if (a.annotateExample().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateExample());
-		if (a.annotateName().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateName());
-		if (a.annotateNameProperty().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateNameProperty());
-		if (a.annotateParentProperty().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateParentProperty());
-		if (a.annotateURI().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateURI());
-		if (a.annotateSwap().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateSwap());
+		if (a.applyBean().length > 0)
+			psb.addTo(BEAN_annotations, a.applyBean());
+		if (a.applyBeanp().length > 0)
+			psb.addTo(BEAN_annotations, a.applyBeanp());
+		if (a.applyBeanc().length > 0)
+			psb.addTo(BEAN_annotations, a.applyBeanc());
+		if (a.applyBeanIgnore().length > 0)
+			psb.addTo(BEAN_annotations, a.applyBeanIgnore());
+		if (a.applyExample().length > 0)
+			psb.addTo(BEAN_annotations, a.applyExample());
+		if (a.applyName().length > 0)
+			psb.addTo(BEAN_annotations, a.applyName());
+		if (a.applyNameProperty().length > 0)
+			psb.addTo(BEAN_annotations, a.applyNameProperty());
+		if (a.applyParentProperty().length > 0)
+			psb.addTo(BEAN_annotations, a.applyParentProperty());
+		if (a.applyURI().length > 0)
+			psb.addTo(BEAN_annotations, a.applyURI());
+		if (a.applySwap().length > 0)
+			psb.addTo(BEAN_annotations, a.applySwap());
 	}
 
 	private Locale locale(String in) {

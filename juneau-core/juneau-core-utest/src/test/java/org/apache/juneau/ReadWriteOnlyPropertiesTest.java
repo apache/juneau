@@ -90,8 +90,8 @@ public class ReadWriteOnlyPropertiesTest {
 	}
 
 	@BeanConfig(
-		annotateBean=@Bean(on="Bc", bpro="f1", bpwo="f2"),
-		annotateBeanp={
+		applyBean=@Bean(on="Bc", bpro="f1", bpwo="f2"),
+		applyBeanp={
 			@Beanp(on="Bc.f1", ro="true"),
 			@Beanp(on="Bc.f2", wo="true")
 		}
@@ -246,7 +246,7 @@ public class ReadWriteOnlyPropertiesTest {
 		assertEquals(0, x.f2);
 	}
 
-	@BeanConfig(annotateBean=@Bean(on="Dc",bpro="*"))
+	@BeanConfig(applyBean=@Bean(on="Dc",bpro="*"))
 	public static class Dc {
 		public int f1;
 		public int f2;
@@ -300,7 +300,7 @@ public class ReadWriteOnlyPropertiesTest {
 		assertEquals(2, x.f2);
 	}
 
-	@BeanConfig(annotateBean=@Bean(on="Ec", bpwo="*"))
+	@BeanConfig(applyBean=@Bean(on="Ec", bpwo="*"))
 	public static class Ec {
 		public int f1;
 		public int f2;

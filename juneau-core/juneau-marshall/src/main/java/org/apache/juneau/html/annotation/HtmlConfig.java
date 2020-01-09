@@ -47,17 +47,30 @@ public @interface HtmlConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Indirectly applies {@link Html @Html} annotations to classes/methods.
+	 * Dynamically applies {@link Html @Html} annotations to specified classes/methods/fields.
 	 *
 	 * <p>
-	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Html#on() @Html.on}
-	 * annotation to specify the class/method names to apply the annotation to.
+	 * Provides an alternate approach for applying annotations using {@link Html#on() @Html.on} to specify the names
+	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	Html[] annotateHtml() default {};
+	Html[] applyHtml() default {};
+
+	/**
+	 * Dynamically applies {@link HtmlLink @HtmlLink} annotations to specified classes.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations using {@link HtmlLink#on() @HtmlLink.on} to specify the names
+	 * to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	HtmlLink[] applyHtmlLink() default {};
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// HtmlSerializer

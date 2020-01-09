@@ -60,7 +60,7 @@ public @interface BeanConfig {
 	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	Bean[] annotateBean() default {};
+	Bean[] applyBean() default {};
 
 	/**
 	 * Dynamically applies {@link Beanc @Beanc} annotations to specified constructors.
@@ -73,7 +73,7 @@ public @interface BeanConfig {
 	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	Beanc[] annotateBeanc() default {};
+	Beanc[] applyBeanc() default {};
 
 	/**
 	 * Dynamically applies {@link Beanp @Beanp} annotations to specified methods.
@@ -86,7 +86,7 @@ public @interface BeanConfig {
 	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	Beanp[] annotateBeanp() default {};
+	Beanp[] applyBeanp() default {};
 
 	/**
 	 * Dynamically applies {@link BeanIgnore @BeanIgnore} annotations to specified classes/methods/fields/constructors.
@@ -99,7 +99,7 @@ public @interface BeanConfig {
 	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	BeanIgnore[] annotateBeanIgnore() default {};
+	BeanIgnore[] applyBeanIgnore() default {};
 
 	/**
 	 * Dynamically applies {@link Example @Example} annotations to specified classes/methods/fields.
@@ -112,7 +112,7 @@ public @interface BeanConfig {
 	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	Example[] annotateExample() default {};
+	Example[] applyExample() default {};
 
 	/**
 	 * Dynamically applies {@link Name @Name} annotations to specified methods/fields.
@@ -125,7 +125,7 @@ public @interface BeanConfig {
 	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	Name[] annotateName() default {};
+	Name[] applyName() default {};
 
 	/**
 	 * Dynamically applies {@link NameProperty @NameProperty} annotations to specified methods/fields.
@@ -138,7 +138,7 @@ public @interface BeanConfig {
 	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	NameProperty[] annotateNameProperty() default {};
+	NameProperty[] applyNameProperty() default {};
 
 	/**
 	 * Dynamically applies {@link ParentProperty @ParentProperty} annotations to specified methods/fields.
@@ -151,7 +151,7 @@ public @interface BeanConfig {
 	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	ParentProperty[] annotateParentProperty() default {};
+	ParentProperty[] applyParentProperty() default {};
 
 	/**
 	 * Dynamically applies {@link Swap @Swap} annotations to specified classes/methods/fields.
@@ -164,7 +164,7 @@ public @interface BeanConfig {
 	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	Swap[] annotateSwap() default {};
+	Swap[] applySwap() default {};
 
 	/**
 	 * Dynamically applies {@link URI @URI} annotations to specified classes/methods/fields.
@@ -177,7 +177,7 @@ public @interface BeanConfig {
 	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	URI[] annotateURI() default {};
+	URI[] applyURI() default {};
 
 	/**
 	 * Configuration property:  Minimum bean class visibility.

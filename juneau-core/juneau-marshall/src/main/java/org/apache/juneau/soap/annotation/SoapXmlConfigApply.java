@@ -39,7 +39,7 @@ public class SoapXmlConfigApply extends ConfigApply<SoapXmlConfig> {
 		if (! a.soapAction().isEmpty())
 			psb.set(SOAPXML_SOAPAction, string(a.soapAction()));
 
-		if (a.annotateSoapXml().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateSoapXml());
+		if (a.applySoapXml().length > 0)
+			psb.addTo(BEAN_annotations, a.applySoapXml());
 	}
 }

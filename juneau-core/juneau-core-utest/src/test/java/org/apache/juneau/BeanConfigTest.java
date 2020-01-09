@@ -446,7 +446,7 @@ public class BeanConfigTest {
 	}
 
 
-	@BeanConfig(annotateBean=@Bean(on="ReadOnlyPerson2",bpi="name,age"),annotateBeanc=@Beanc(on="ReadOnlyPerson2(String,int)",properties="name,age"))
+	@BeanConfig(applyBean=@Bean(on="ReadOnlyPerson2",bpi="name,age"),applyBeanc=@Beanc(on="ReadOnlyPerson2(String,int)",properties="name,age"))
 	public static class ReadOnlyPerson2 {
 		private final String name;
 		private final int age;

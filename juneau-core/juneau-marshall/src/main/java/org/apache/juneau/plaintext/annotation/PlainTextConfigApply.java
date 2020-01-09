@@ -37,7 +37,7 @@ public class PlainTextConfigApply extends ConfigApply<PlainTextConfig> {
 	public void apply(AnnotationInfo<PlainTextConfig> ai, PropertyStoreBuilder psb) {
 		PlainTextConfig a = ai.getAnnotation();
 
-		if (a.annotatePlainText().length > 0)
-			psb.addTo(BEAN_annotations, a.annotatePlainText());
+		if (a.applyPlainText().length > 0)
+			psb.addTo(BEAN_annotations, a.applyPlainText());
 	}
 }

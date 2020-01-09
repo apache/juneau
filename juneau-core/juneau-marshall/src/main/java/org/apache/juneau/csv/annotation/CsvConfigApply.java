@@ -37,7 +37,7 @@ public class CsvConfigApply extends ConfigApply<CsvConfig> {
 	public void apply(AnnotationInfo<CsvConfig> ai, PropertyStoreBuilder psb) {
 		CsvConfig a = ai.getAnnotation();
 
-		if (a.annotateCsv().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateCsv());
+		if (a.applyCsv().length > 0)
+			psb.addTo(BEAN_annotations, a.applyCsv());
 	}
 }

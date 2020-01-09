@@ -60,10 +60,10 @@ public class BeanMapErrorsTest {
 	}
 
 	@BeanConfig(
-		annotateBean={
+		applyBean={
 			@Bean(on="B1", bpi="f1"),
 		},
-		annotateBeanp={
+		applyBeanp={
 			@Beanp(on="B1.f2", value="f2")
 		}
 	)
@@ -110,10 +110,10 @@ public class BeanMapErrorsTest {
 	}
 
 	@BeanConfig(
-		annotateBean={
+		applyBean={
 			@Bean(on="B2", bpi="f1")
 		},
-		annotateBeanp={
+		applyBeanp={
 			@Beanp(on="B2.f2", value="f2")
 		}
 	)

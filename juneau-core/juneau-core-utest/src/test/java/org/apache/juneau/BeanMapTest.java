@@ -553,7 +553,7 @@ public class BeanMapTest {
 	}
 
 	@BeanConfig(
-		annotateBean={
+		applyBean={
 			@Bean(on="D2c", typeName="D2")
 		}
 	)
@@ -1140,7 +1140,7 @@ public class BeanMapTest {
 		assertEquals(6, b.bingBooURL);
 	}
 
-	@BeanConfig(annotateBean=@Bean(on="P1c", propertyNamer=PropertyNamerDLC.class))
+	@BeanConfig(applyBean=@Bean(on="P1c", propertyNamer=PropertyNamerDLC.class))
 	public static class P1c {
 		public int foo, barBaz, bingBooURL;
 	}
@@ -1878,7 +1878,7 @@ public class BeanMapTest {
 		assertEquals("b(setter)", t.b);
 	}
 
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="Uc.getB,Uc.c,Uc.getD,Uc.setD"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="Uc.getB,Uc.c,Uc.getD,Uc.setD"))
 	public static class Uc {
 		public String a, b;
 
@@ -1941,7 +1941,7 @@ public class BeanMapTest {
 		assertEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", ws.toString(new V3c()));
 	}
 
-	@BeanConfig(annotateBean=@Bean(on="V3c", stopClass=Vc.class))
+	@BeanConfig(applyBean=@Bean(on="V3c", stopClass=Vc.class))
 	public static class Vc {
 		public String a1="1", a2="2";
 	}

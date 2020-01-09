@@ -1148,7 +1148,7 @@ public class JsonSchemaGeneratorTest {
 		assertObjectEquals("{description:'baz',format:'bar',type:'foo','x-example':'{f1:123}',properties:{f1:{type:'integer',format:'int32'}}}", s.getSchema(A1a.class));
 	}
 
-	@JsonSchemaConfig(annotateSchema=@Schema(on="A1a",type="foo",format="bar",description="baz",example="{f1:123}"))
+	@JsonSchemaConfig(applySchema=@Schema(on="A1a",type="foo",format="bar",description="baz",example="{f1:123}"))
 	public static class A1a {
 		public int f1;
 	}
@@ -1170,7 +1170,7 @@ public class JsonSchemaGeneratorTest {
 		assertObjectEquals("{type:'object',properties:{f1:{description:'baz',format:'bar',type:'foo','x-example':'123'}}}", s.getSchema(A2a.class));
 	}
 
-	@JsonSchemaConfig(annotateSchema=@Schema(on="A2a.f1",type="foo",format="bar",description="baz",example="123"))
+	@JsonSchemaConfig(applySchema=@Schema(on="A2a.f1",type="foo",format="bar",description="baz",example="123"))
 	public static class A2a {
 		public int f1;
 	}
@@ -1194,7 +1194,7 @@ public class JsonSchemaGeneratorTest {
 		assertObjectEquals("{type:'object',properties:{f1:{description:'baz',format:'bar',type:'foo','x-example':'123'}}}", s.getSchema(A3a.class));
 	}
 
-	@JsonSchemaConfig(annotateSchema=@Schema(on="A3a.getF1",type="foo",format="bar",description="baz",example="123"))
+	@JsonSchemaConfig(applySchema=@Schema(on="A3a.getF1",type="foo",format="bar",description="baz",example="123"))
 	public static class A3a {
 		public int getF1() {
 			return 123;
@@ -1222,7 +1222,7 @@ public class JsonSchemaGeneratorTest {
 		assertObjectEquals("{type:'object',properties:{f1:{description:'baz',format:'bar',type:'foo','x-example':'123'}}}", s.getSchema(A4a.class));
 	}
 
-	@JsonSchemaConfig(annotateSchema=@Schema(on="A4a.setF1",type="foo",format="bar",description="baz",example="123"))
+	@JsonSchemaConfig(applySchema=@Schema(on="A4a.setF1",type="foo",format="bar",description="baz",example="123"))
 	public static class A4a {
 		public int getF1() {
 			return 123;
@@ -1258,6 +1258,6 @@ public class JsonSchemaGeneratorTest {
 		assertObjectEquals("{type:'array',items:{type:'array',items:{description:'baz',format:'bar',type:'foo','x-example':'123'}}}", s.getSchema(SimpleBean[][].class));
 	}
 
-	@JsonSchemaConfig(annotateSchema=@Schema(on="SwapWithAnnotation2", type="foo",format="bar",description="baz",example="123"))
+	@JsonSchemaConfig(applySchema=@Schema(on="SwapWithAnnotation2", type="foo",format="bar",description="baz",example="123"))
 	public static class SwapWithAnnotation2 extends PojoSwap<SimpleBean,Integer> {}
 }

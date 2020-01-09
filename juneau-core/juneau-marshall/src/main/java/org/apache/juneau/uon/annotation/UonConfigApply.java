@@ -48,7 +48,7 @@ public class UonConfigApply extends ConfigApply<UonConfig> {
 		if (! a.validateEnd().isEmpty())
 			psb.set(UON_validateEnd, bool(a.validateEnd()));
 
-		if (a.annotateUon().length > 0)
-			psb.addTo(BEAN_annotations, a.annotateUon());
+		if (a.applyUon().length > 0)
+			psb.addTo(BEAN_annotations, a.applyUon());
 	}
 }

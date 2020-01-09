@@ -176,7 +176,7 @@ public class AutoMapSwapTest {
 			return STRINGMAP;
 		}
 	}
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="D01c"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="D01c"))
 	public static class D01c {
 		public Map<String,String> toMap() {
 			return STRINGMAP;
@@ -215,7 +215,7 @@ public class AutoMapSwapTest {
 			return STRINGMAP;
 		}
 	}
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="E01c.toMap"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="E01c.toMap"))
 	public static class E01c {
 		public Map<String,String> toMap() {
 			return STRINGMAP;
@@ -286,7 +286,7 @@ public class AutoMapSwapTest {
 			return null;
 		}
 	}
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="F01c.create(Map)"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="F01c.create(Map)"))
 	public static class F01c {
 		public Map<String,String> toMap() {
 			return STRINGMAP;
@@ -384,7 +384,7 @@ public class AutoMapSwapTest {
 		}
 	}
 
-	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="G01c(Map)"))
+	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="G01c(Map)"))
 	public static class G01c {
 		public G01c(Map<String,String> o) {}
 		public Map<String,String> toMap() {

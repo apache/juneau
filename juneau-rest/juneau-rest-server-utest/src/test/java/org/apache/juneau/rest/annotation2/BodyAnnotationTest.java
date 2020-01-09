@@ -654,8 +654,8 @@ public class BodyAnnotationTest {
 	}
 
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
-	@BeanConfig(annotateBean={@Bean(on="A,B,C",sort=true)})
-	@UrlEncodingConfig(annotateUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
+	@BeanConfig(applyBean={@Bean(on="A,B,C",sort=true)})
+	@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
 	public static class E2 {
 		@RestMethod(name=PUT, path="/B")
 		public DTOs2.B testPojo1(@Body DTOs2.B b) {
@@ -805,8 +805,8 @@ public class BodyAnnotationTest {
 	}
 
 	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
-	@BeanConfig(annotateBean={@Bean(on="A,B,C",sort=true)})
-	@UrlEncodingConfig(annotateUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
+	@BeanConfig(applyBean={@Bean(on="A,B,C",sort=true)})
+	@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
 	public static class H2 {
 		@RestMethod(name=POST,path="/",
 			properties={
@@ -868,8 +868,8 @@ public class BodyAnnotationTest {
 	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class I2 {
 		@RestMethod(name=POST,path="/")
-		@BeanConfig(annotateBean={@Bean(on="A,B,C",sort=true)})
-		@UrlEncodingConfig(annotateUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
+		@BeanConfig(applyBean={@Bean(on="A,B,C",sort=true)})
+		@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
 		public DTOs2.B g(@Body(required=true) DTOs2.B content) throws Exception {
 			return content;
 		}

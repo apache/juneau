@@ -46,17 +46,17 @@ public @interface PlainTextConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Indirectly applies {@link PlainText @PlainText} annotations to classes/methods.
+	 * Dynamically applies {@link PlainText @PlainText} annotations to specified classes/methods/fields.
 	 *
 	 * <p>
-	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link PlainText#on() @PlainText.on}
-	 * annotation to specify the class/method names to apply the annotation to.
+	 * Provides an alternate approach for applying annotations using {@link PlainText#on() @PlainText.on} to specify the names
+	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	PlainText[] annotatePlainText() default {};
+	PlainText[] applyPlainText() default {};
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// PlainTextSerializer

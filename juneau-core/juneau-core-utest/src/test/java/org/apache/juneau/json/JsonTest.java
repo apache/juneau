@@ -245,7 +245,7 @@ public class JsonTest {
 		assertEquals(1, m.get("bar").f1);
 	}
 
-	@JsonConfig(annotateJson=@Json(on="A2",wrapperAttr="foo"))
+	@JsonConfig(applyJson=@Json(on="A2",wrapperAttr="foo"))
 	public static class A2 {
 		public int f1;
 
@@ -323,7 +323,7 @@ public class JsonTest {
 		assertEquals(1, m.get("bar").f1);
 	}
 
-	@JsonConfig(annotateJson=@Json(on="B2",wrapperAttr="foo"))
+	@JsonConfig(applyJson=@Json(on="B2",wrapperAttr="foo"))
 	public static class B2 {
 		int f1;
 

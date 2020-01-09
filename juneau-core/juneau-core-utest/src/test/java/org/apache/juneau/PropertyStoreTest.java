@@ -1874,9 +1874,9 @@ public class PropertyStoreTest {
 		assertTrue(s2.getPropertyStore().equals(s3.getPropertyStore()));
 	}
 
-	@HtmlConfig(annotateHtml={@Html(on="B1", format=HtmlFormat.XML)})
+	@HtmlConfig(applyHtml={@Html(on="B1", format=HtmlFormat.XML)})
 	public static class B1 {}
-	@HtmlConfig(annotateHtml={@Html(on="B2", format=HtmlFormat.HTML)})
+	@HtmlConfig(applyHtml={@Html(on="B2", format=HtmlFormat.HTML)})
 	public static class B2 {}
 
 	//-------------------------------------------------------------------------------------------------------------------

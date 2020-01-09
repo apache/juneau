@@ -48,17 +48,17 @@ public @interface UonConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Indirectly applies {@link Uon @Uon} annotations to classes/methods.
+	 * Dynamically applies {@link Uon @Uon} annotations to specified classes/methods/fields.
 	 *
 	 * <p>
-	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Uon#on() @Uon.on}
-	 * annotation to specify the class/method names to apply the annotation to.
+	 * Provides an alternate approach for applying annotations using {@link Uon#on() @Uon.on} to specify the names
+	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	Uon[] annotateUon() default {};
+	Uon[] applyUon() default {};
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// UonParser

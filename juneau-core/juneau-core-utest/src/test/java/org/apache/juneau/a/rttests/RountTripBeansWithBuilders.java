@@ -81,7 +81,7 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 		assertObjectEquals("{f1:1}", a);
 	}
 
-	@BeanConfig(annotateBean=@Bean(on="Builder", fluentSetters=true))
+	@BeanConfig(applyBean=@Bean(on="Builder", fluentSetters=true))
 	public static class Ac {
 		private final int f1;
 

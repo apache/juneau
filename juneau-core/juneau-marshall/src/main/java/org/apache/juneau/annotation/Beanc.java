@@ -56,7 +56,7 @@ public @interface Beanc {
 	 * Dynamically apply this annotation to the specified constructors.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link BeanConfig#annotateBeanc()}.
+	 * Used in conjunction with the {@link BeanConfig#applyBeanc()}.
 	 * It is ignored when the annotation is applied directly to constructors.
 	 *
 	 * <p>
@@ -84,7 +84,7 @@ public @interface Beanc {
 	 *			}
 	 *		}
 	 *
-	 *		<ja>@BeanConfig</ja>(annotateBeanc=<ja>@Beanc</ja>(on="Person(String,int)", properties=<js>"name,age"</js>))
+	 *		<ja>@BeanConfig</ja>(applyBeanc=<ja>@Beanc</ja>(on="Person(String,int)", properties=<js>"name,age"</js>))
 	 *		public static class X {}
 	 * </p>
 	 * <p class='bpcode w800'>

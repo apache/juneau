@@ -105,7 +105,7 @@ public @interface Html {
 	 * Defines which classes/methods this annotation applies to.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link HtmlConfig#annotateHtml()}.
+	 * Used in conjunction with the {@link HtmlConfig#applyHtml()}.
 	 * It is ignored when the annotation is applied directly to classes and methods.
 	 *
 	 * The format can be any of the following:
