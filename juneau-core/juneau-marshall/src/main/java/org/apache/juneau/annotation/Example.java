@@ -61,6 +61,8 @@ import java.lang.annotation.*;
 @Inherited
 public @interface Example {
 
+	String on() default "";
+
 	/**
 	 * An example of a POJO class.
 	 *

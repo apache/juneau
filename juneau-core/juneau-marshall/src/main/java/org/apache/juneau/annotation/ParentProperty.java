@@ -35,4 +35,8 @@ import java.lang.annotation.*;
 @Target({METHOD,FIELD})
 @Retention(RUNTIME)
 @Inherited
-public @interface ParentProperty {}
+public @interface ParentProperty {
+
+	String on() default "";
+
+}

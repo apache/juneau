@@ -431,6 +431,46 @@ public class BeanConfigTest {
 		}
 	}
 
+	@Test
+	public void testReadOnlyProperties_usingConfig() throws Exception {
+		BeanSession session = BeanContext.DEFAULT.builder().applyAnnotations(ReadOnlyPerson2.class).build().createSession();
+		Object o;
+
+		// Bean to String
+		o = new ReadOnlyPerson2("x", 123);
+		assertEquals("{name:'x',age:123}", session.convertToType(o, String.class));
+
+		// List of Maps to array of beans.
+		o = new ObjectList(new ObjectMap("{name:'x',age:1}"), new ObjectMap("{name:'y',age:2}"));
+		assertEquals(1, session.convertToType(o, ReadOnlyPerson2[].class)[0].getAge());
+	}
+
+
+	@BeanConfig(annotateBean=@Bean(on="ReadOnlyPerson2",bpi="name,age"),annotateBeanc=@Beanc(on="ReadOnlyPerson2(String,int)",properties="name,age"))
+	public static class ReadOnlyPerson2 {
+		private final String name;
+		private final int age;
+
+
+		public ReadOnlyPerson2(String name, int age) {
+			this.name = name;
+			this.age = age;
+		}
+
+		public String getName() {
+			return this.name;
+		}
+
+		public int getAge() {
+			return this.age;
+		}
+
+		@Override /* Object */
+		public String toString() {
+			return "toString():name=" + name + ",age=" + age;
+		}
+	}
+
 	//====================================================================================================
 	// testEnums
 	//====================================================================================================

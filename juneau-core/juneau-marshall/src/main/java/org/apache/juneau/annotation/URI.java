@@ -31,4 +31,8 @@ import java.lang.annotation.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-public @interface URI {}
+public @interface URI {
+
+	String on() default "";
+
+}

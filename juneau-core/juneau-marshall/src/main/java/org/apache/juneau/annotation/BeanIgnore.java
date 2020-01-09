@@ -39,5 +39,7 @@ import java.lang.annotation.*;
 @Target({FIELD,METHOD,TYPE,CONSTRUCTOR})
 @Retention(RUNTIME)
 @Inherited
-public @interface BeanIgnore {}
+public @interface BeanIgnore {
+	String on() default "";
+}
 

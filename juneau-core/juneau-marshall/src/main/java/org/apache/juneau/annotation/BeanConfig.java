@@ -63,6 +63,19 @@ public @interface BeanConfig {
 	Bean[] annotateBean() default {};
 
 	/**
+	 * Indirectly applies {@link Beanc @Beanc} annotations to constructors.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations to constructor annotations using the {@link Beanc#on() @Beanc.on}
+	 * annotation to specify the constructor names to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * </ul>
+	 */
+	Beanc[] annotateBeanc() default {};
+
+	/**
 	 * Indirectly applies {@link Beanp @Beanp} annotations to classes/methods.
 	 *
 	 * <p>

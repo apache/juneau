@@ -170,6 +170,8 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.addTo(BEAN_annotations, a.annotateBean());
 		if (a.annotateBeanp().length > 0)
 			psb.addTo(BEAN_annotations, a.annotateBeanp());
+		if (a.annotateBeanc().length > 0)
+			psb.addTo(BEAN_annotations, a.annotateBeanc());
 	}
 
 	private Locale locale(String in) {

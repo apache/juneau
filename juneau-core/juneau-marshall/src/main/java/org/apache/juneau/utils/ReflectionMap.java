@@ -13,21 +13,57 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.lang.Character.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.stream.*;
+
+import org.apache.juneau.*;
 
 /**
  * Allows arbitrary objects to be mapped to classes and methods base on class/method name keys.
+ *
+ * The valid pattern matches are:
+ * <ul>
+ * 	<li>Classes:
+ * 		<ul>
+ * 			<li>Fully qualified: <js>"com.foo.MyClass"</js>
+ * 			<li>Fully qualified inner class: <js>"com.foo.MyClass$Inner1$Inner2"</js>
+ * 			<li>Simple: <js>"MyClass"</js>
+ * 			<li>Simple inner: <js>"MyClass$Inner1$Inner2"</js> or <js>"Inner1$Inner2"</js> or <js>"Inner2"</js>
+ * 		</ul>
+ * 	<li>Methods:
+ * 		<ul>
+ * 			<li>Fully qualified with args: <js>"com.foo.MyClass.myMethod(String,int)"</js> or <js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js> or <js>"com.foo.MyClass.myMethod()"</js>
+ * 			<li>Fully qualified: <js>"com.foo.MyClass.myMethod"</js>
+ * 			<li>Simple with args: <js>"MyClass.myMethod(String,int)"</js> or <js>"MyClass.myMethod(java.lang.String,int)"</js> or <js>"MyClass.myMethod()"</js>
+ * 			<li>Simple: <js>"MyClass.myMethod"</js>
+ * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2.myMethod"</js> or <js>"Inner1$Inner2.myMethod"</js> or <js>"Inner2.myMethod"</js>
+ * 		</ul>
+ * 	<li>Fields:
+ * 		<ul>
+ * 			<li>Fully qualified: <js>"com.foo.MyClass.myField"</js>
+ * 			<li>Simple: <js>"MyClass.muyField"</js>
+ * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2.myField"</js> or <js>"Inner1$Inner2.myField"</js> or <js>"Inner2.myField"</js>
+ * 		</ul>
+ * 	<li>Constructors:
+ * 		<ul>
+ * 			<li>Fully qualified with args: <js>"com.foo.MyClass(String,int)"</js> or <js>"com.foo.MyClass(java.lang.String,int)"</js> or <js>"com.foo.MyClass()"</js>
+ * 			<li>Simple with args: <js>"MyClass(String,int)"</js> or <js>"MyClass(java.lang.String,int)"</js> or <js>"MyClass()"</js>
+ * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2()"</js> or <js>"Inner1$Inner2()"</js> or <js>"Inner2()"</js>
+ * 		</ul>
+ * </ul>
+ *
  *
  * @param <V> The type of object in this map.
  */
 public class ReflectionMap<V> {
 
 	private final List<ClassEntry<V>> classEntries;
-	private final List<MemberEntry<V>> memberEntries;
-	private final boolean noClassEntries, noMemberEntries;
+	private final List<MethodEntry<V>> methodEntries;
+	private final List<FieldEntry<V>> fieldEntries;
+	private final List<ConstructorEntry<V>> constructorEntries;
+	final boolean noClassEntries, noMethodEntries, noFieldEntries, noConstructorEntries;
 
 	/**
 	 * Constructor.
@@ -36,9 +72,13 @@ public class ReflectionMap<V> {
 	 */
 	ReflectionMap(Builder<V> b) {
 		this.classEntries = Collections.unmodifiableList(new ArrayList<>(b.classEntries));
-		this.memberEntries = Collections.unmodifiableList(new ArrayList<>(b.memberEntries));
+		this.methodEntries = Collections.unmodifiableList(new ArrayList<>(b.methodEntries));
+		this.fieldEntries = Collections.unmodifiableList(new ArrayList<>(b.fieldEntries));
+		this.constructorEntries = Collections.unmodifiableList(new ArrayList<>(b.constructorEntries));
 		this.noClassEntries = classEntries.isEmpty();
-		this.noMemberEntries = memberEntries.isEmpty();
+		this.noMethodEntries = methodEntries.isEmpty();
+		this.noFieldEntries = fieldEntries.isEmpty();
+		this.noConstructorEntries = constructorEntries.isEmpty();
 	}
 
 	/**
@@ -59,7 +99,9 @@ public class ReflectionMap<V> {
 	 */
 	public static class Builder<V> {
 		List<ClassEntry<V>> classEntries = new ArrayList<>();
-		List<MemberEntry<V>> memberEntries = new ArrayList<>();
+		List<MethodEntry<V>> methodEntries = new ArrayList<>();
+		List<FieldEntry<V>> fieldEntries = new ArrayList<>();
+		List<ConstructorEntry<V>> constructorEntries = new ArrayList<>();
 
 		/**
 		 * Adds a mapping to this builder.
@@ -80,20 +122,27 @@ public class ReflectionMap<V> {
 		public Builder<V> append(String key, V value) {
 			if (isEmpty(key))
 				throw new RuntimeException("Invalid reflection signature: [" + key + "]");
-			for (String s : split(key)) {
-				if (s.endsWith("."))
-					throw new RuntimeException("Invalid reflection signature: [" + key + "]");
-				int i = s.lastIndexOf('.');
-				if (i == -1) {
-					classEntries.add(new ClassEntry<>(s, value));
-				} else {
-					String s1 = s.substring(0, i), s2 = s.substring(i+1);
-					if (Character.isUpperCase(s2.charAt(0))) {
-						classEntries.add(new ClassEntry<>(s, value));
+			try {
+				for (String k : splitNames(key)) {
+					if (k.endsWith(")")) {
+						int i = k.substring(0, k.indexOf('(')).lastIndexOf('.');
+						if (i == -1 || isUpperCase(k.charAt(i+1))) {
+							constructorEntries.add(new ConstructorEntry<>(k, value));
+						} else {
+							methodEntries.add(new MethodEntry<>(k, value));
+						}
 					} else {
-						memberEntries.add(new MemberEntry<>(s1, s2, value));
+						int i = k.lastIndexOf('.');
+						if (i == -1 || isUpperCase(k.charAt(i+1))) {
+							classEntries.add(new ClassEntry<>(k, value));
+						} else {
+							methodEntries.add(new MethodEntry<>(k, value));
+							fieldEntries.add(new FieldEntry<>(k, value));
+						}
 					}
 				}
+			} catch (IndexOutOfBoundsException e) {
+				throw new RuntimeException("Invalid reflection signature: [" + key + "]");
 			}
 
 			return this;
@@ -109,119 +158,288 @@ public class ReflectionMap<V> {
 		}
 	}
 
-	/**
-	 * Finds all entries in this map that matches the specified class.
-	 *
-	 * @param c The class to test for.
-	 * @return All matching objects.  Never <jk>null</jk>.
-	 */
-	public List<V> find(Class<?> c) {
-		return noClassEntries ? Collections.emptyList() : classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value).collect(Collectors.toList());
+	static List<String> splitNames(String key) {
+		if (key.indexOf(',') == -1)
+			return Collections.singletonList(key.trim());
+		List<String> l = new ArrayList<>();
+
+		int m = 0;
+		boolean escaped = false;
+		for (int i = 0; i < key.length(); i++) {
+			char c = key.charAt(i);
+			if (c == '(')
+				escaped = true;
+			else if (c == ')')
+				escaped = false;
+			else if (c == ',' && ! escaped) {
+				l.add(key.substring(m, i).trim());
+				m = i+1;
+			}
+		}
+		l.add(key.substring(m).trim());
+
+		return l;
 	}
 
 	/**
-	 * Finds first in this map that matches the specified class.
-	 *
-	 * @param c The class to test for.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> findFirst(Class<?> c) {
-		return noClassEntries ? Optional.empty() : classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value).findFirst();
-	}
-
-	/**
-	 * Finds all entries in this map that matches the specified class.
-	 *
-	 * @param c The class to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return All matching objects.  Never <jk>null</jk>.
-	 */
-	public List<V> find(Class<?> c, Class<? extends V> ofType) {
-		return noClassEntries ? Collections.emptyList() : classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value).filter(x -> ofType.isInstance(x)).collect(Collectors.toList());
-	}
-
-	/**
-	 * Finds first in this map that matches the specified class.
+	 * Finds first value in this map that matches the specified class.
 	 *
 	 * @param c The class to test for.
 	 * @param ofType Only return objects of the specified type.
 	 * @return The matching object.  Never <jk>null</jk>.
 	 */
-	public Optional<V> findFirst(Class<?> c, Class<? extends V> ofType) {
-		return noClassEntries ? Optional.empty() : classEntries.stream().filter(x -> x.matches(c)).map(x -> x.value).filter(x -> ofType.isInstance(x)).findFirst();
+	public Optional<V> find(Class<?> c, Class<? extends V> ofType) {
+		if (! noClassEntries)
+			for (ClassEntry<V> e : classEntries)
+				if (e.matches(c))
+					if (ofType == null || ofType.isInstance(e.value))
+						return Optional.of(e.value);
+		return Optional.empty();
 	}
 
 	/**
-	 * Finds all entries in this map that matches the specified method.
-	 *
-	 * @param m The method to test for.
-	 * @return All matching objects.  Never <jk>null</jk>.
-	 */
-	public List<V> find(Member m) {
-		return noMemberEntries ? Collections.emptyList() : memberEntries.stream().filter(x -> x.matches(m)).map(x -> x.value).collect(Collectors.toList());
-	}
-
-	/**
-	 * Finds first entry in this map that matches the specified method.
-	 *
-	 * @param m The method to test for.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> findFirst(Member m) {
-		return noMemberEntries ? Optional.empty() : memberEntries.stream().filter(x -> x.matches(m)).map(x -> x.value).findFirst();
-	}
-
-	/**
-	 * Finds all entries in this map that matches the specified method.
-	 *
-	 * @param m The method to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return All matching objects.  Never <jk>null</jk>.
-	 */
-	public List<V> find(Member m, Class<? extends V> ofType) {
-		return noMemberEntries ? Collections.emptyList() : memberEntries.stream().filter(x -> x.matches(m)).map(x -> x.value).filter(x -> ofType.isInstance(x)).collect(Collectors.toList());
-	}
-
-	/**
-	 * Finds first entries in this map that matches the specified method.
+	 * Finds first value in this map that matches the specified method.
 	 *
 	 * @param m The method to test for.
 	 * @param ofType Only return objects of the specified type.
 	 * @return The matching object.  Never <jk>null</jk>.
 	 */
-	public Optional<V> findFirst(Member m, Class<? extends V> ofType) {
-		return noMemberEntries ? Optional.empty() : memberEntries.stream().filter(x -> x.matches(m)).map(x -> x.value).filter(x -> ofType.isInstance(x)).findFirst();
+	public Optional<V> find(Method m, Class<? extends V> ofType) {
+		if (! noMethodEntries)
+			for (MethodEntry<V> e : methodEntries)
+				if (e.matches(m))
+					if (ofType == null || ofType.isInstance(e.value))
+						return Optional.of(e.value);
+		return Optional.empty();
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Field f, Class<? extends V> ofType) {
+		if (! noFieldEntries)
+			for (FieldEntry<V> e : fieldEntries)
+				if (e.matches(f))
+					if (ofType == null || ofType.isInstance(e.value))
+						return Optional.of(e.value);
+		return Optional.empty();
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Constructor<?> c, Class<? extends V> ofType) {
+		if (! noConstructorEntries)
+			for (ConstructorEntry<V> e : constructorEntries)
+				if (e.matches(c))
+					if (ofType == null || ofType.isInstance(e.value))
+						return Optional.of(e.value);
+		return Optional.empty();
 	}
 
 	static class ClassEntry<V> {
-		String className;
-		V value;
+		final String simpleName, fullName;
+		final V value;
 
-		ClassEntry(String className, V value) {
-			this.className = className;
+		ClassEntry(String name, V value) {
+			this.simpleName = simpleClassName(name);
+			this.fullName = name;
 			this.value = value;
 		}
 
 		public boolean matches(Class<?> c) {
-			return c != null && (className.equals(c.getName()) || className.equals(c.getSimpleName()));
+			if (c == null)
+				return false;
+			return classMatches(simpleName, fullName, c);
+		}
+
+		public ObjectMap asMap() {
+			return new ObjectMap()
+				.append("simpleName", simpleName)
+				.append("fullName", fullName)
+				.append("value", value);
+		}
+
+		@Override
+		public String toString() {
+			return asMap().toString();
 		}
 	}
 
-	static class MemberEntry<V> {
-		String className, methodName;
+	static class MethodEntry<V> {
+		String simpleClassName, fullClassName, methodName, args[];
 		V value;
 
-		MemberEntry(String className, String methodName, V value) {
-			this.className = className;
-			this.methodName = methodName;
+		MethodEntry(String name, V value) {
+			int i = name.indexOf('(');
+			this.args = i == -1 ? null : split(name.substring(i+1, name.length()-1));
+			name = i == -1 ? name : name.substring(0, i);
+			i = name.lastIndexOf('.');
+			String s1 = name.substring(0, i).trim(), s2 = name.substring(i+1).trim();
+			this.simpleClassName = simpleClassName(s1);
+			this.fullClassName = s1;
+			this.methodName = s2;
 			this.value = value;
 		}
 
-		public boolean matches(Member m) {
+		public boolean matches(Method m) {
 			if (m == null)
 				return false;
 			Class<?> c = m.getDeclaringClass();
-			return m.getName().equals(methodName) && (c.getName().equals(className) || c.getSimpleName().equals(className));
+			return
+				classMatches(simpleClassName, fullClassName, c)
+				&& (isEquals(m.getName(), methodName))
+				&& (argsMatch(args, m.getParameterTypes()));
 		}
+
+		public ObjectMap asMap() {
+			return new ObjectMap()
+				.append("simpleClassName", simpleClassName)
+				.append("fullClassName", fullClassName)
+				.append("methodName", methodName)
+				.append("args", args)
+				.append("value", value);
+		}
+
+		@Override
+		public String toString() {
+			return asMap().toString();
+		}
+	}
+
+	static class ConstructorEntry<V> {
+		String simpleClassName, fullClassName, args[];
+		V value;
+
+		ConstructorEntry(String name, V value) {
+			int i = name.indexOf('(');
+			this.args = split(name.substring(i+1, name.length()-1));
+			name = name.substring(0, i).trim();
+			this.simpleClassName = simpleClassName(name);
+			this.fullClassName = name;
+			this.value = value;
+		}
+
+		public boolean matches(Constructor<?> m) {
+			if (m == null)
+				return false;
+			Class<?> c = m.getDeclaringClass();
+			return
+				classMatches(simpleClassName, fullClassName, c)
+				&& (argsMatch(args, m.getParameterTypes()));
+		}
+
+		public ObjectMap asMap() {
+			return new ObjectMap()
+				.append("simpleClassName", simpleClassName)
+				.append("fullClassName", fullClassName)
+				.append("args", args)
+				.append("value", value);
+		}
+
+		@Override
+		public String toString() {
+			return asMap().toString();
+		}
+	}
+
+	static class FieldEntry<V> {
+		String simpleClassName, fullClassName, fieldName;
+		V value;
+
+		FieldEntry(String name, V value) {
+			int i = name.lastIndexOf('.');
+			String s1 = name.substring(0, i), s2 = name.substring(i+1);
+			this.simpleClassName = simpleClassName(s1);
+			this.fullClassName = s1;
+			this.fieldName = s2;
+			this.value = value;
+		}
+
+		public boolean matches(Field f) {
+			if (f == null)
+				return false;
+			Class<?> c = f.getDeclaringClass();
+			return
+				classMatches(simpleClassName, fullClassName, c)
+				&& (isEquals(f.getName(), fieldName));
+		}
+
+		public ObjectMap asMap() {
+			return new ObjectMap()
+				.append("simpleClassName", simpleClassName)
+				.append("fullClassName", fullClassName)
+				.append("fieldName", fieldName)
+				.append("value", value);
+		}
+
+		@Override
+		public String toString() {
+			return asMap().toString();
+		}
+	}
+
+	static boolean argsMatch(String[] names, Class<?>[] args) {
+		if (names == null)
+			return true;
+		if (names.length != args.length)
+			return false;
+		for (int i = 0; i < args.length; i++) {
+			String n = names[i];
+			Class<?> a = args[i];
+			if (! (isEquals(n, a.getSimpleName()) || isEquals(n, a.getName())))
+				return false;
+		}
+		return true;
+	}
+
+	static String simpleClassName(String name) {
+		int i = name.indexOf('.');
+		if (i == -1)
+			return name;
+		return null;
+	}
+
+	static boolean classMatches(String simpleName, String fullName, Class<?> c) {
+		// For class org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder
+		// c.getSimpleName() == "Builder"
+		// c.getFullName() == "org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder"
+		// c.getPackage() == "org.apache.juneau.a.rttests"
+		String cSimple = c.getSimpleName(), cFull = c.getName();
+		if (isEquals(simpleName, cSimple) || isEquals(fullName, cFull))
+			return true;
+		if (cFull.indexOf('$') != -1) {
+			Package p = c.getPackage();
+			if (p != null)
+				cFull = cFull.substring(p.getName().length() + 1);
+			if (isEquals(simpleName, cFull))
+				return true;
+			int i = cFull.indexOf('$');
+			while (i != -1) {
+				cFull = cFull.substring(i+1);
+				if (isEquals(simpleName, cFull))
+					return true;
+				i = cFull.indexOf('$');
+			}
+		}
+		return false;
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return new ObjectMap()
+			.append("classEntries", classEntries)
+			.append("methodEntries", methodEntries)
+			.append("fieldEntries", fieldEntries)
+			.append("constructorEntries", constructorEntries)
+			.toString();
 	}
 }

@@ -2356,6 +2356,7 @@ public class BeanContext extends Context implements MetaProvider {
 	private final ClassMeta<String> cmString;  // Reusable ClassMeta that represents general Strings.
 	private final ClassMeta<Class> cmClass;  // Reusable ClassMeta that represents general Classes.
 
+	private volatile WriterSerializer beanToStringSerializer;
 
 	/**
 	 * Constructor.
@@ -2378,8 +2379,10 @@ public class BeanContext extends Context implements MetaProvider {
 				Method m = a.getClass().getMethod("on");
 				String on = (String)m.invoke(a);
 				rmb.append(on, a);
-			} catch (Exception e) {
+			} catch (NoSuchMethodException e) {
 				throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method.", a.getClass().getSimpleName());
+			} catch (Exception e) {
+				throw new ConfigException(e, "Invalid annotation @{0} used in BEAN_annotations property.");
 			}
 		}
 		this.annotations = rmb.build();
@@ -2432,7 +2435,7 @@ public class BeanContext extends Context implements MetaProvider {
 			else if (ci.isChildOf(BeanFilterBuilder.class))
 				lbf.add(castOrCreate(BeanFilterBuilder.class, c).build());
 			else
-				lbf.add(new InterfaceBeanFilterBuilder(c).build());
+				lbf.add(new InterfaceBeanFilterBuilder(c, this).build());
 		}
 		beanFilters = lbf.toArray(new BeanFilter[0]);
 
@@ -3237,10 +3240,10 @@ public class BeanContext extends Context implements MetaProvider {
 		if (a == null || c == null)
 			return null;
 		if (DISABLE_ANNOTATION_CACHING)
-			return (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+			return (A)annotations.find(c, a).orElse(c.getAnnotation(a));
 		Optional<Annotation> aa = classAnnotationCache.get(c, a);
 		if (aa == null) {
-			aa = Optional.ofNullable((A)annotations.findFirst(c, a).orElse(c.getAnnotation(a)));
+			aa = Optional.ofNullable((A)annotations.find(c, a).orElse(c.getAnnotation(a)));
 			classAnnotationCache.put(c, a, aa);
 		}
 		return (A)aa.orElse(null);
@@ -3263,10 +3266,10 @@ public class BeanContext extends Context implements MetaProvider {
 		if (a == null || c == null)
 			return null;
 		if (DISABLE_ANNOTATION_CACHING)
-			return (A)annotations.findFirst(c, a).orElse(c.getDeclaredAnnotation(a));
+			return (A)annotations.find(c, a).orElse(c.getDeclaredAnnotation(a));
 		Optional<Annotation> aa = declaredClassAnnotationCache.get(c, a);
 		if (aa == null) {
-			aa =  Optional.ofNullable((A)annotations.findFirst(c, a).orElse(c.getDeclaredAnnotation(a)));
+			aa =  Optional.ofNullable((A)annotations.find(c, a).orElse(c.getDeclaredAnnotation(a)));
 			declaredClassAnnotationCache.put(c, a, aa);
 		}
 		return (A)aa.orElse(null);
@@ -3289,10 +3292,10 @@ public class BeanContext extends Context implements MetaProvider {
 		if (a == null || m == null)
 			return null;
 		if (DISABLE_ANNOTATION_CACHING)
-			return (A)annotations.findFirst(m, a).orElse(m.getAnnotation(a));
+			return (A)annotations.find(m, a).orElse(m.getAnnotation(a));
 		Optional<Annotation> aa = methodAnnotationCache.get(m, a);
 		if (aa == null) {
-			aa =  Optional.ofNullable((A)annotations.findFirst(m, a).orElse(m.getAnnotation(a)));
+			aa =  Optional.ofNullable((A)annotations.find(m, a).orElse(m.getAnnotation(a)));
 			methodAnnotationCache.put(m, a, aa);
 		}
 		return (A)aa.orElse(null);
@@ -3315,10 +3318,10 @@ public class BeanContext extends Context implements MetaProvider {
 		if (a == null || f == null)
 			return null;
 		if (DISABLE_ANNOTATION_CACHING)
-			return (A)annotations.findFirst(f, a).orElse(f.getAnnotation(a));
+			return (A)annotations.find(f, a).orElse(f.getAnnotation(a));
 		Optional<Annotation> aa = fieldAnnotationCache.get(f, a);
 		if (aa == null) {
-			aa =  Optional.ofNullable((A)annotations.findFirst(f, a).orElse(f.getAnnotation(a)));
+			aa =  Optional.ofNullable((A)annotations.find(f, a).orElse(f.getAnnotation(a)));
 			fieldAnnotationCache.put(f, a, aa);
 		}
 		return (A)aa.orElse(null);
@@ -3341,10 +3344,10 @@ public class BeanContext extends Context implements MetaProvider {
 		if (a == null || c == null)
 			return null;
 		if (DISABLE_ANNOTATION_CACHING)
-			return (A)annotations.findFirst(c, a).orElse(c.getAnnotation(a));
+			return (A)annotations.find(c, a).orElse(c.getAnnotation(a));
 		Optional<Annotation> aa = constructorAnnotationCache.get(c, a);
 		if (aa == null) {
-			aa =  Optional.ofNullable((A)annotations.findFirst(c, a).orElse(c.getAnnotation(a)));
+			aa =  Optional.ofNullable((A)annotations.find(c, a).orElse(c.getAnnotation(a)));
 			constructorAnnotationCache.put(c, a, aa);
 		}
 		return (A)aa.orElse(null);
@@ -3983,6 +3986,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 */
 	protected final boolean isUseJavaBeanIntrospector() {
 		return useJavaBeanIntrospector;
+	}
+
+	/**
+	 * Returns the serializer to use for serializing beans when using the {@link BeanSession#convertToType(Object, Class)}
+	 * and related methods.
+	 *
+	 * @return The serializer.  May be <jk>null</jk> if all initialization has occurred.
+	 */
+	protected WriterSerializer getBeanToStringSerializer() {
+		if (beanToStringSerializer == null) {
+			if (JsonSerializer.DEFAULT == null)
+				return null;
+			this.beanToStringSerializer = JsonSerializer.create().apply(this.getPropertyStore()).sq().simple().build();
+		}
+		return beanToStringSerializer;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

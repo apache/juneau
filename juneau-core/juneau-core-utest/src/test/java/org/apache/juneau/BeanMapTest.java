@@ -21,6 +21,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
@@ -509,6 +510,62 @@ public class BeanMapTest {
 
 	@Bean(typeName="D2")
 	public static class D2 {
+		public String s = "default";
+	}
+
+	@Test
+	public void testArrayProperties_usingConfig() throws Exception {
+		D1c t = new D1c();
+		Map m = session.toBeanMap(t);
+		m.put("b", new ObjectMap("{s:'foo'}"));
+		assertNotNull(t.b);
+		assertEquals("foo", t.b.s);
+
+		Map m2 = new TreeMap();
+		m2.put("s", "bar");
+		m.put("b", m2);
+		assertNotNull(t.b);
+		assertEquals("bar", t.b.s);
+
+		m.put("b", new D2c());
+		assertEquals("default", t.b.s);
+
+		JsonParser p = JsonParser.create().dictionary(D2c.class).applyAnnotations(D1c.class).build();
+		m.put("lb1", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
+		assertEquals(ObjectList.class.getName(), t.lb1.getClass().getName());
+		assertEquals(D2c.class.getName(), t.lb1.get(0).getClass().getName());
+		assertEquals("foobar", (t.lb1.get(0)).s);
+
+		m.put("lb2", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
+		assertEquals(ArrayList.class.getName(), t.lb2.getClass().getName());
+		assertEquals(D2c.class.getName(), t.lb2.get(0).getClass().getName());
+		assertEquals("foobar", (t.lb2.get(0)).s);
+
+		m.put("ab1", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
+		assertEquals("[L"+D2c.class.getName()+";", t.ab1.getClass().getName());
+		assertEquals(D2c.class.getName(), t.ab1[0].getClass().getName());
+		assertEquals("foobar", t.ab1[0].s);
+
+		m.put("ab2", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
+		assertEquals("[L"+D2c.class.getName()+";", t.ab2.getClass().getName());
+		assertEquals(D2c.class.getName(), t.ab2[0].getClass().getName());
+		assertEquals("foobar", t.ab2[0].s);
+	}
+
+	@BeanConfig(
+		annotateBean={
+			@Bean(on="D2c", typeName="D2")
+		}
+	)
+	public static class D1c {
+		public D2c b;
+		public List<D2c> lb1;
+		public List<D2c> lb2 = new ArrayList<>();
+		public D2c[] ab1;
+		public D2c[] ab2 = new D2c[0];
+	}
+
+	public static class D2c {
 		public String s = "default";
 	}
 
@@ -1064,6 +1121,30 @@ public class BeanMapTest {
 	public static class P1 {
 		public int foo, barBaz, bingBooURL;
 	}
+
+	@Test
+	public void testPropertyNameFactoryDashedLC1_usingConfig() throws Exception {
+		BeanMap<P1c> m = bc.builder().applyAnnotations(P1c.class).build().createSession().newBeanMap(P1c.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
+		assertEquals(1, m.get("foo"));
+		assertEquals(2, m.get("bar-baz"));
+		assertEquals(3, m.get("bing-boo-url"));
+		P1c b = m.getBean();
+		assertEquals(1, b.foo);
+		assertEquals(2, b.barBaz);
+		assertEquals(3, b.bingBooURL);
+		m.put("foo", 4);
+		m.put("bar-baz", 5);
+		m.put("bing-boo-url", 6);
+		assertEquals(4, b.foo);
+		assertEquals(5, b.barBaz);
+		assertEquals(6, b.bingBooURL);
+	}
+
+	@BeanConfig(annotateBean=@Bean(on="P1c", propertyNamer=PropertyNamerDLC.class))
+	public static class P1c {
+		public int foo, barBaz, bingBooURL;
+	}
+
 
 	//====================================================================================================
 	// testPropertyNameFactoryDashedLC2
@@ -1796,6 +1877,27 @@ public class BeanMapTest {
 
 	@Bean(stopClass=V.class)
 	public static class V3 extends V2 {
+		public String a5="5", a6="6";
+	}
+
+	@Test
+	public void testBeanPropertyOrder_usingConfig() throws Exception {
+		WriterSerializer ws = JsonSerializer.create().simple().sq().applyAnnotations(Vc.class).build();
+		assertEquals("{a1:'1',a2:'2',a3:'3',a4:'4'}", ws.toString(new V2c()));
+		assertEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", ws.toString(new V3c()));
+	}
+
+	@BeanConfig(annotateBean=@Bean(on="V3c", stopClass=Vc.class))
+	public static class Vc {
+		public String a1="1", a2="2";
+	}
+
+	public static class V2c extends Vc {
+		public String a3="3", a4="4";
+	}
+
+
+	public static class V3c extends V2c {
 		public String a5="5", a6="6";
 	}
 

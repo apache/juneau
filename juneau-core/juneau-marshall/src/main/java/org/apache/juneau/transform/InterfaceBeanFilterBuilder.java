@@ -38,23 +38,24 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 	 * Interface class is determined through reflection.
 	 */
 	protected InterfaceBeanFilterBuilder() {
-		init(beanClass);
+		init(beanClass, BeanContext.DEFAULT);
 	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param interfaceClass The class to use as an interface on all child classes.
+	 * @param bc The bean context to use for looking up annotations.
 	 */
-	public InterfaceBeanFilterBuilder(Class<T> interfaceClass) {
+	public InterfaceBeanFilterBuilder(Class<T> interfaceClass, BeanContext bc) {
 		super(interfaceClass);
-		init(interfaceClass);
+		init(interfaceClass, bc);
 	}
 
 	@SuppressWarnings("deprecation")
-	private void init(Class<?> interfaceClass) {
+	private void init(Class<?> interfaceClass, BeanContext bc) {
 		interfaceClass(interfaceClass);
-		List<Bean> annotations = ClassInfo.of(interfaceClass).getAnnotations(Bean.class);
+		List<Bean> annotations = ClassInfo.of(interfaceClass).getAnnotations(Bean.class, bc);
 
 		ListIterator<Bean> li = annotations.listIterator(annotations.size());
 		while (li.hasPrevious()) {

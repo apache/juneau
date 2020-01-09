@@ -84,6 +84,37 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void b02_beanAnnotationParser() throws Exception {
+		Bc x = JsonParser.DEFAULT.builder().applyAnnotations(Bc.class).build().parse("{f1:1,f2:2}", Bc.class);
+		assertEquals(0, x.f1);
+		assertEquals(2, x.f2);
+	}
+
+	@BeanConfig(
+		annotateBean=@Bean(on="Bc", bpro="f1", bpwo="f2"),
+		annotateBeanp={
+			@Beanp(on="Bc.f1", ro="true"),
+			@Beanp(on="Bc.f2", wo="true")
+		}
+	)
+	public static class Bc {
+		public int f1;
+		public int f2;
+
+		static Bc create() {
+			Bc x = new Bc();
+			x.f1 = 1;
+			x.f2 = 2;
+			return x;
+		}
+	}
+
+	@Test
+	public void b01_beanAnnotation_serializer_usingConfig() throws Exception {
+		assertObjectEquals("{f1:1}", B.create());
+	}
+
+	@Test
+	public void b02_beanAnnotationParser_usingConfig() throws Exception {
 		B x = SimpleJson.DEFAULT.read("{f1:1,f2:2}", B.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
@@ -209,8 +240,33 @@ public class ReadWriteOnlyPropertiesTest {
 	}
 
 	@Test
-	public void b02_beanAnnotation_bproAll_Parser() throws Exception {
+	public void d02_beanAnnotation_bproAll_Parser() throws Exception {
 		D x = SimpleJson.DEFAULT.read("{f1:1,f2:2}", D.class);
+		assertEquals(0, x.f1);
+		assertEquals(0, x.f2);
+	}
+
+	@BeanConfig(annotateBean=@Bean(on="Dc",bpro="*"))
+	public static class Dc {
+		public int f1;
+		public int f2;
+
+		static Dc create() {
+			Dc x = new Dc();
+			x.f1 = 1;
+			x.f2 = 2;
+			return x;
+		}
+	}
+
+	@Test
+	public void d03_beanAnnotation_bproAll_serializer_usingConfig() throws Exception {
+		assertObjectEquals("{f1:1,f2:2}", Dc.create(), SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Dc.class).build());
+	}
+
+	@Test
+	public void d04_beanAnnotation_bproAll_Parser_usingConfig() throws Exception {
+		Dc x = JsonParser.DEFAULT.builder().applyAnnotations(Dc.class).build().parse("{f1:1,f2:2}", Dc.class);
 		assertEquals(0, x.f1);
 		assertEquals(0, x.f2);
 	}
@@ -240,6 +296,31 @@ public class ReadWriteOnlyPropertiesTest {
 	@Test
 	public void e02_beanAnnotation_bpwoAll_Parser() throws Exception {
 		E x = SimpleJson.DEFAULT.read("{f1:1,f2:2}", E.class);
+		assertEquals(1, x.f1);
+		assertEquals(2, x.f2);
+	}
+
+	@BeanConfig(annotateBean=@Bean(on="Ec", bpwo="*"))
+	public static class Ec {
+		public int f1;
+		public int f2;
+
+		static Ec create() {
+			Ec x = new Ec();
+			x.f1 = 1;
+			x.f2 = 2;
+			return x;
+		}
+	}
+
+	@Test
+	public void e03_beanAnnotation_bpwoAll_serializer_usingConfig() throws Exception {
+		assertObjectEquals("{}", E.create(), SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Ec.class).build());
+	}
+
+	@Test
+	public void e04_beanAnnotation_bpwoAll_Parser_usingConfig() throws Exception {
+		Ec x = JsonParser.DEFAULT.builder().applyAnnotations(Ec.class).build().parse("{f1:1,f2:2}", Ec.class);
 		assertEquals(1, x.f1);
 		assertEquals(2, x.f2);
 	}

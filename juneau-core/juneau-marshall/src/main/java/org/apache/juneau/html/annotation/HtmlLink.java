@@ -41,6 +41,8 @@ import org.apache.juneau.html.*;
 @Inherited
 public @interface HtmlLink {
 
+	String on() default "";
+
 	/**
 	 * The bean property whose value becomes the name in the hyperlink.
 	 */

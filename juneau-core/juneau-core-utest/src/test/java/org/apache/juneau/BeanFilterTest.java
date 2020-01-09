@@ -83,6 +83,70 @@ public class BeanFilterTest {
 		public String f2;
 	}
 
+	@Test
+	public void testSubTypes_usingConfig() throws Exception {
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().applyAnnotations(E.class).build();
+		JsonParser p = JsonParser.create().applyAnnotations(E1.class).build();
+
+		E1 e1 = new E1();
+		e1.f1 = "f1";
+		e1.fb = new F2();
+		((F2)e1.fb).f2 = "f2";
+		String r = s.serialize(e1);
+		assertEquals("{_type:'E1',f0:'f0',fb:{_type:'F2',f0b:'f0b',f2:'f2'},f1:'f1'}", r);
+
+		E e = p.parse(r, E.class);
+		assertTrue(e instanceof E1);
+		assertTrue(e.fb instanceof F2);
+		assertEquals("f1", ((E1)e).f1);
+		assertEquals("f2", ((F2)e.fb).f2);
+
+		// Try out-of-order creation.
+		r = "{f0:'f0',f1:'f1',_type:'E1',fb:{f0b:'f0b',f2:'f2',_type:'F2'}}";
+		e = p.parse(r, E.class);
+		assertTrue(e instanceof E1);
+		assertTrue(e.fb instanceof F2);
+		assertEquals("f1", ((E1)e).f1);
+		assertEquals("f2", ((F2)e.fb).f2);
+	}
+
+	@BeanConfig(
+		annotateBean={
+			@Bean(on="E", dictionary={E1.class, E2.class}),
+			@Bean(on="E1", typeName="E1"),
+			@Bean(on="E2", typeName="E2"),
+			@Bean(on="F", dictionary={F1.class,F2.class}),
+			@Bean(on="F1", typeName="F1"),
+			@Bean(on="F2", typeName="F2")
+		}
+	)
+	public static abstract class E {
+		public String f0 = "f0";
+		public F fb;
+	}
+
+	public static class E1 extends E {
+		public String f1;
+	}
+
+	public static class E2 extends E {
+		public String f2;
+	}
+
+	public static abstract class F {
+		public String f0b = "f0b";
+	}
+
+	public static class F1 extends F {
+		public String f1;
+	}
+
+	public static class F2 extends F {
+		public String f2;
+	}
+
+
+
 	//====================================================================================================
 	// Test parent class used as filter
 	//====================================================================================================

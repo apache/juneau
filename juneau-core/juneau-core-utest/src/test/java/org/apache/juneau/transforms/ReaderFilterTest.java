@@ -88,7 +88,7 @@ public class ReaderFilterTest {
 		r = new StringReader("{foo:'bar',baz:'quz'}");
 		m = new HashMap<>();
 		m.put("X", r);
-		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.serialize(m));
+		assertEquals("{X:'{foo:\\'bar\\',baz:\\'quz\\'}'}", s.serialize(m));
 	}
 
 	//====================================================================================================

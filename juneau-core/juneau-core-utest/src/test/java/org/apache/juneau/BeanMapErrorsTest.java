@@ -47,6 +47,34 @@ public class BeanMapErrorsTest {
 		};
 	}
 
+	@Test
+	public void beanPropertyMethodNotInBeanProperties_usingConfig() {
+		BeanContext bc = BeanContext.create().applyAnnotations(B1.class).build();
+
+		try {
+			bc.getClassMeta(B1.class);
+			fail();
+		} catch (Exception e) {
+			assertEquals("org.apache.juneau.BeanMapErrorsTest$B1: Found @Beanp(\"f2\") but name was not found in @Bean(properties)", e.getMessage());
+		}
+	}
+
+	@BeanConfig(
+		annotateBean={
+			@Bean(on="B1", bpi="f1"),
+		},
+		annotateBeanp={
+			@Beanp(on="B1.f2", value="f2")
+		}
+	)
+	public static class B1 {
+		public int f1;
+
+		public int f2() {
+			return -1;
+		};
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Beanp(name) on field not in @Bean(properties)
 	//-----------------------------------------------------------------------------------------------------------------
@@ -66,6 +94,32 @@ public class BeanMapErrorsTest {
 		public int f1;
 
 		@Beanp("f2")
+		public int f2;
+	}
+
+	@Test
+	public void beanPropertyFieldNotInBeanProperties_usingBeanConfig() {
+		BeanContext bc = BeanContext.create().applyAnnotations(B2.class).build();
+
+		try {
+			bc.getClassMeta(B2.class);
+			fail();
+		} catch (Exception e) {
+			assertEquals("org.apache.juneau.BeanMapErrorsTest$B2: Found @Beanp(\"f2\") but name was not found in @Bean(properties)", e.getMessage());
+		}
+	}
+
+	@BeanConfig(
+		annotateBean={
+			@Bean(on="B2", bpi="f1")
+		},
+		annotateBeanp={
+			@Beanp(on="B2.f2", value="f2")
+		}
+	)
+	public static class B2 {
+		public int f1;
+
 		public int f2;
 	}
 }

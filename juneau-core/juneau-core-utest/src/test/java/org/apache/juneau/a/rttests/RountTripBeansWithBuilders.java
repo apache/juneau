@@ -30,6 +30,7 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 
 	public RountTripBeansWithBuilders(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
+		applyAnnotations(Ac.class);
 	}
 
 	//====================================================================================================
@@ -65,6 +66,43 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 
 			public A build() {
 				return new A(this);
+			}
+		}
+
+		public int getF1() {
+			return f1;
+		}
+	}
+
+	@Test
+	public void simple_usingConfig() throws Exception {
+		Ac a = Ac.create().f1(1).build();
+		a = roundTrip(a, Ac.class);
+		assertObjectEquals("{f1:1}", a);
+	}
+
+	@BeanConfig(annotateBean=@Bean(on="Builder", fluentSetters=true))
+	public static class Ac {
+		private final int f1;
+
+		public Ac(Builder b) {
+			this.f1 = b.f1;
+		}
+
+		public static Builder create() {
+			return new Builder();
+		}
+
+		public static class Builder {
+			private int f1;
+
+			public Builder f1(int f1) {
+				this.f1 = f1;
+				return this;
+			}
+
+			public Ac build() {
+				return new Ac(this);
 			}
 		}
 

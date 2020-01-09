@@ -52,6 +52,8 @@ import org.apache.juneau.*;
 @Inherited
 public @interface Beanc {
 
+	String on() default "";
+
 	/**
 	 * The names of the properties of the constructor arguments.
 	 * <p>

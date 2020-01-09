@@ -32,4 +32,7 @@ import java.lang.annotation.*;
 @Target({METHOD,FIELD})
 @Retention(RUNTIME)
 @Inherited
-public @interface NameProperty {}
+public @interface NameProperty {
+	String on() default "";
+
+}

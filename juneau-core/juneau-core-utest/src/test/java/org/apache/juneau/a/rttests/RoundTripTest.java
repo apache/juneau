@@ -279,6 +279,12 @@ public abstract class RoundTripTest {
 			p = p.builder().dictionary(c).build();
 	}
 
+	protected void applyAnnotations(Class<?>...fromClasses) {
+		s = s.builder().applyAnnotations(fromClasses).build();
+		if (p != null)
+			p = p.builder().applyAnnotations(fromClasses).build();
+	}
+
 	public boolean isValidationOnly() {
 		return returnOriginalObject;
 	}

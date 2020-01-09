@@ -26,7 +26,6 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -577,8 +576,9 @@ public class BeanSession extends Session {
 				if (from.isByteArray()) {
 					return (T) new String((byte[])value);
 				} else if (from.isMapOrBean() || from.isCollectionOrArrayOrOptional()) {
-					if (SimpleJsonSerializer.DEFAULT != null)
-						return (T)SimpleJsonSerializer.DEFAULT.serialize(value);
+					WriterSerializer ws = ctx.getBeanToStringSerializer();
+					if (ws != null)
+						return (T)ws.serialize(value);
 				} else if (from.isClass()) {
 					return (T)((Class<?>)value).getName();
 				}
