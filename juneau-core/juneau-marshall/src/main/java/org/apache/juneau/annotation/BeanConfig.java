@@ -50,43 +50,134 @@ public @interface BeanConfig {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Indirectly applies {@link Bean @Bean} annotations to classes/methods.
+	 * Dynamically applies {@link Bean @Bean} annotations to specified classes.
 	 *
 	 * <p>
-	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Bean#on() @Bean.on}
-	 * annotation to specify the class/method names to apply the annotation to.
+	 * Provides an alternate approach for applying annotations using {@link Bean#on() @Bean.on} to specify the names
+	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Bean[] annotateBean() default {};
 
 	/**
-	 * Indirectly applies {@link Beanc @Beanc} annotations to constructors.
+	 * Dynamically applies {@link Beanc @Beanc} annotations to specified constructors.
 	 *
 	 * <p>
-	 * Provides an alternate approach for applying annotations to constructor annotations using the {@link Beanc#on() @Beanc.on}
-	 * annotation to specify the constructor names to apply the annotation to.
+	 * Provides an alternate approach for applying annotations using {@link Beanc#on() @Beanc.on} to specify the names
+	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Beanc[] annotateBeanc() default {};
 
 	/**
-	 * Indirectly applies {@link Beanp @Beanp} annotations to classes/methods.
+	 * Dynamically applies {@link Beanp @Beanp} annotations to specified methods.
 	 *
 	 * <p>
-	 * Provides an alternate approach for applying annotations to classes/methods annotations using the {@link Beanp#on() @Beanp.on}
-	 * annotation to specify the class/method names to apply the annotation to.
+	 * Provides an alternate approach for applying annotations using {@link Beanp#on() @Beanp.on} to specify the names
+	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Beanp[] annotateBeanp() default {};
+
+	/**
+	 * Dynamically applies {@link BeanIgnore @BeanIgnore} annotations to specified classes/methods/fields/constructors.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations using {@link BeanIgnore#on() @BeanIgnore.on} to specify the names
+	 * to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	BeanIgnore[] annotateBeanIgnore() default {};
+
+	/**
+	 * Dynamically applies {@link Example @Example} annotations to specified classes/methods/fields.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations using {@link Example#on() @Example.on} to specify the names
+	 * to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	Example[] annotateExample() default {};
+
+	/**
+	 * Dynamically applies {@link Name @Name} annotations to specified methods/fields.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations using {@link Name#on() @Name.on} to specify the names
+	 * to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	Name[] annotateName() default {};
+
+	/**
+	 * Dynamically applies {@link NameProperty @NameProperty} annotations to specified methods/fields.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations using {@link NameProperty#on() @NameProperty.on} to specify the names
+	 * to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	NameProperty[] annotateNameProperty() default {};
+
+	/**
+	 * Dynamically applies {@link ParentProperty @ParentProperty} annotations to specified methods/fields.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations using {@link ParentProperty#on() @ParentProperty.on} to specify the names
+	 * to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	ParentProperty[] annotateParentProperty() default {};
+
+	/**
+	 * Dynamically applies {@link Swap @Swap} annotations to specified classes/methods/fields.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations using {@link Swap#on() @Swap.on} to specify the names
+	 * to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	Swap[] annotateSwap() default {};
+
+	/**
+	 * Dynamically applies {@link URI @URI} annotations to specified classes/methods/fields.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations using {@link URI#on() @URI.on} to specify the names
+	 * to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	URI[] annotateURI() default {};
 
 	/**
 	 * Configuration property:  Minimum bean class visibility.

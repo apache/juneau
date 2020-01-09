@@ -40,6 +40,8 @@ import org.apache.juneau.transform.*;
 @Inherited
 public @interface Swap {
 
+	String on() default "";
+
 	/**
 	 * The {@link PojoSwap} and {@link Surrogate} class.
 	 *

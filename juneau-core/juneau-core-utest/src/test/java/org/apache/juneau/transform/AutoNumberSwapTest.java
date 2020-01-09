@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
@@ -29,7 +30,15 @@ import org.junit.runners.*;
 public class AutoNumberSwapTest {
 
 	private static PojoSwap find(Class<?> c) {
-		return AutoNumberSwap.find(ClassInfo.of(c));
+		return AutoNumberSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));
+	}
+
+	private static PojoSwap find(BeanContext bc, Class<?> c) {
+		return AutoNumberSwap.find(bc, ClassInfo.of(c));
+	}
+
+	private static BeanContext bc(Class<?> applyAnnotations) {
+		return BeanContext.DEFAULT.builder().applyAnnotations(applyAnnotations).build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -593,6 +602,12 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 	}
+	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="D01c"))
+	public static class D01c {
+		public Integer toInteger() {
+			return 1;
+		}
+	}
 	public static class D02 {
 		public class D02A {
 			public Integer toInteger() {
@@ -604,6 +619,11 @@ public class AutoNumberSwapTest {
 	@Test
 	public void d01_ignoreClass_beanIgnore() throws Exception {
 		assertNull(find(D01.class));
+	}
+
+	@Test
+	public void d01c_ignoreClass_beanIgnore_usingConfig() throws Exception {
+		assertNull(find(bc(D01c.class), D01c.class));
 	}
 
 	@Test
@@ -629,6 +649,12 @@ public class AutoNumberSwapTest {
 
 	public static class E01 {
 		@BeanIgnore
+		public Integer toInteger() {
+			return 1;
+		}
+	}
+	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="E01c.toInteger"))
+	public static class E01c {
 		public Integer toInteger() {
 			return 1;
 		}
@@ -661,6 +687,11 @@ public class AutoNumberSwapTest {
 	}
 
 	@Test
+	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() throws Exception {
+		assertNull(find(bc(E01c.class), E01c.class));
+	}
+
+	@Test
 	public void e02_ignoreSwapMethod_deprecated() throws Exception {
 		assertNull(find(E02.class));
 	}
@@ -689,6 +720,15 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 		@BeanIgnore
+		public static F01 create(Integer o) {
+			return null;
+		}
+	}
+	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="F01c.create(java.lang.Integer)"))
+	public static class F01c {
+		public Integer toInteger() {
+			return 1;
+		}
 		public static F01 create(Integer o) {
 			return null;
 		}
@@ -741,6 +781,11 @@ public class AutoNumberSwapTest {
 	}
 
 	@Test(expected = ParseException.class)
+	public void f01c_ignoreUnswapMethod_beanIgnore_usingConfig() throws Exception {
+		find(bc(F01c.class), F01c.class).unswap(null, null, null);
+	}
+
+	@Test(expected = ParseException.class)
 	public void f02_ignoreUnswapMethod_deprecated() throws Exception {
 		find(F02.class).unswap(null, null, null);
 	}
@@ -777,6 +822,14 @@ public class AutoNumberSwapTest {
 		}
 	}
 
+	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="G01c(java.lang.Integer)"))
+	public static class G01c {
+		public G01c(Integer o) {}
+		public Integer toInteger() {
+			return 1;
+		}
+	}
+
 	public static class G02 {
 		@Deprecated
 		public G02(Integer o) {}
@@ -788,6 +841,11 @@ public class AutoNumberSwapTest {
 	@Test(expected = ParseException.class)
 	public void g01_ignoreUnswapConstructor_beanIgnore() throws Exception {
 		find(G01.class).unswap(null, null, null);
+	}
+
+	@Test(expected = ParseException.class)
+	public void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() throws Exception {
+		find(bc(G01c.class), G01c.class).unswap(null, null, null);
 	}
 
 	@Test(expected = ParseException.class)

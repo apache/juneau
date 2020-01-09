@@ -122,6 +122,17 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 		return f.isAnnotationPresent(a);
 	}
 
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is present.
+	 *
+	 * @param a The annotation to check for.
+	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
+	 * @return <jk>true</jk> if the specified annotation is present.
+	 */
+	public boolean hasAnnotation(Class<? extends Annotation> a, MetaProvider mp) {
+		return mp.getAnnotation(a, f) != null;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Characteristics
 	//-----------------------------------------------------------------------------------------------------------------

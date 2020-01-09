@@ -52,20 +52,78 @@ import org.apache.juneau.*;
 @Inherited
 public @interface Beanc {
 
+	/**
+	 * Dynamically apply this annotation to the specified constructors.
+	 *
+	 * <p>
+	 * Used in conjunction with the {@link BeanConfig#annotateBeanc()}.
+	 * It is ignored when the annotation is applied directly to constructors.
+	 *
+	 * <p>
+	 * The following example shows this annotation in use:
+	 * <p class='bpcode w800'>
+	 *		<jc>// Our read-only bean.</jc>
+	 *		<jk>public class</jk> Person {
+	 *			<jk>private final</jk> String <jf>name</jf>;
+	 *			<jk>private final int</jk> <jf>age</jf>;
+	 *
+	 *			<jk>public</jk> Person(String name, <jk>int</jk> age) {
+	 *				<jk>this</jk>.<jf>name</jf> = name;
+	 *				<jk>this</jk>.<jf>age</jf> = age;
+	 *			}
+	 *
+	 *			<jc>// Read only properties.</jc>
+	 *			<jc>// Getters, but no setters.</jc>
+	 *
+	 *			<jk>public</jk> String getName() {
+	 *				<jk>return</jk> <jf>name</jf>;
+	 *			}
+	 *
+	 *			<jk>public int</jk> getAge() {
+	 *				<jk>return</jk> <jf>age</jf>;
+	 *			}
+	 *		}
+	 *
+	 *		<ja>@BeanConfig</ja>(annotateBeanc=<ja>@Beanc</ja>(on="Person(String,int)", properties=<js>"name,age"</js>))
+	 *		public static class X {}
+	 * </p>
+	 * <p class='bpcode w800'>
+	 *		<jc>// Parsing into a read-only bean.</jc>
+	 *		String json = <js>"{name:'John Smith',age:45}"</js>;
+	 *		Person p = JsonParser.<jsf>DEFAULT</jsf>.builder().applyAnnotations(X.<jk>class</jk>).build().parse(json);
+	 *		String name = p.getName();  <jc>// "John Smith"</jc>
+	 *		<jk>int</jk> age = p.getAge();   <jc>// 45</jc>
+	 * </p>
+	 *
+	 * The valid pattern matches are:
+	 * <ul>
+	 * 	<li>Constructors:
+	 * 		<ul>
+	 * 			<li>Fully qualified with args: <js>"com.foo.MyClass(String,int)"</js> or <js>"com.foo.MyClass(java.lang.String,int)"</js> or <js>"com.foo.MyClass()"</js>
+	 * 			<li>Simple with args: <js>"MyClass(String,int)"</js> or <js>"MyClass(java.lang.String,int)"</js> or <js>"MyClass()"</js>
+	 * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2()"</js> or <js>"Inner1$Inner2()"</js> or <js>"Inner2()"</js>
+	 * 		</ul>
+	 * 	<li>A comma-delimited list of anything on this list.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
 	String on() default "";
 
 	/**
 	 * The names of the properties of the constructor arguments.
+	 *
 	 * <p>
-	 *	The {@link org.apache.juneau.annotation.Beanc @Beanc} annotation is used to
-	 *	map constructor arguments to property names on bean with read-only properties.
-	 * 	<br>Since method parameter names are lost during compilation, this annotation essentially redefines
-	 *	them so that they are available at runtime.
-	 *	</p>
-	 * 	<p>
-	 *	The definition of a read-only bean is a bean with properties with only getters, like shown below:
-	 *	</p>
-	 *	<p class='bpcode w800'>
+	 * The {@link org.apache.juneau.annotation.Beanc @Beanc} annotation is used to map constructor arguments to property
+	 * names on bean with read-only properties.
+	 * <br>Since method parameter names are lost during compilation, this annotation essentially redefines them so that
+	 * they are available at runtime.
+	 *
+	 * <p>
+	 * The definition of a read-only bean is a bean with properties with only getters, like shown below:
+	 * <p class='bpcode w800'>
 	 *		<jc>// Our read-only bean.</jc>
 	 *		<jk>public class</jk> Person {
 	 *			<jk>private final</jk> String <jf>name</jf>;
@@ -88,14 +146,14 @@ public @interface Beanc {
 	 *				<jk>return</jk> <jf>age</jf>;
 	 *			}
 	 *		}
-	 *	</p>
-	 *	<p class='bpcode w800'>
+	 * </p>
+	 * <p class='bpcode w800'>
 	 *		<jc>// Parsing into a read-only bean.</jc>
 	 *		String json = <js>"{name:'John Smith',age:45}"</js>;
 	 *		Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(json);
 	 *		String name = p.getName();  <jc>// "John Smith"</jc>
 	 *		<jk>int</jk> age = p.getAge();   <jc>// 45</jc>
-	 *	</p>
+	 * </p>
 	 * <p>
 	 * 	Note that the {@link Name @Name} annotation can also be used to identify bean property names on constructor
 	 * 	arguments.  If neither this annotation or {@link Name @Name} is used, then we try to get the property names

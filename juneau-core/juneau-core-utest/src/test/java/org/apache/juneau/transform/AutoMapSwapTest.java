@@ -34,7 +34,15 @@ public class AutoMapSwapTest {
 	private static final ObjectMap OBJECTMAP = new ObjectMap().append("foo","bar");
 
 	private static PojoSwap find(Class<?> c) {
-		return AutoMapSwap.find(ClassInfo.of(c));
+		return AutoMapSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));
+	}
+
+	private static PojoSwap find(BeanContext bc, Class<?> c) {
+		return AutoMapSwap.find(bc, ClassInfo.of(c));
+	}
+
+	private static BeanContext bc(Class<?> applyAnnotations) {
+		return BeanContext.DEFAULT.builder().applyAnnotations(applyAnnotations).build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -168,6 +176,12 @@ public class AutoMapSwapTest {
 			return STRINGMAP;
 		}
 	}
+	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="D01c"))
+	public static class D01c {
+		public Map<String,String> toMap() {
+			return STRINGMAP;
+		}
+	}
 	public static class D02 {
 		public class D02A {
 			public Map<String,String> toMap() {
@@ -182,6 +196,11 @@ public class AutoMapSwapTest {
 	}
 
 	@Test
+	public void d01c_ignoreClass_beanIgnore_usingConfig() throws Exception {
+		assertNull(find(bc(D01c.class), D01c.class));
+	}
+
+	@Test
 	public void d02_ignoreClass_memberClass() throws Exception {
 		assertNull(find(D02.D02A.class));
 	}
@@ -192,6 +211,12 @@ public class AutoMapSwapTest {
 
 	public static class E01 {
 		@BeanIgnore
+		public Map<String,String> toMap() {
+			return STRINGMAP;
+		}
+	}
+	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="E01c.toMap"))
+	public static class E01c {
 		public Map<String,String> toMap() {
 			return STRINGMAP;
 		}
@@ -224,6 +249,11 @@ public class AutoMapSwapTest {
 	}
 
 	@Test
+	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() throws Exception {
+		assertNull(find(bc(E01c.class), E01c.class));
+	}
+
+	@Test
 	public void e02_ignoreSwapMethod_deprecated() throws Exception {
 		assertNull(find(E02.class));
 	}
@@ -253,6 +283,15 @@ public class AutoMapSwapTest {
 		}
 		@BeanIgnore
 		public static F01 create(Map<String,String> o) {
+			return null;
+		}
+	}
+	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="F01c.create(Map)"))
+	public static class F01c {
+		public Map<String,String> toMap() {
+			return STRINGMAP;
+		}
+		public static F01c create(Map<String,String> o) {
 			return null;
 		}
 	}
@@ -304,6 +343,11 @@ public class AutoMapSwapTest {
 	}
 
 	@Test(expected = ParseException.class)
+	public void f01c_ignoreUnswapMethod_beanIgnore_usingConfig() throws Exception {
+		find(bc(F01c.class), F01c.class).unswap(null, null, null);
+	}
+
+	@Test(expected = ParseException.class)
 	public void f02_ignoreUnswapMethod_deprecated() throws Exception {
 		find(F02.class).unswap(null, null, null);
 	}
@@ -340,6 +384,14 @@ public class AutoMapSwapTest {
 		}
 	}
 
+	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="G01c(Map)"))
+	public static class G01c {
+		public G01c(Map<String,String> o) {}
+		public Map<String,String> toMap() {
+			return STRINGMAP;
+		}
+	}
+
 	public static class G02 {
 		@Deprecated
 		public G02(Map<String,String> o) {}
@@ -351,6 +403,11 @@ public class AutoMapSwapTest {
 	@Test(expected = ParseException.class)
 	public void g01_ignoreUnswapConstructor_beanIgnore() throws Exception {
 		find(G01.class).unswap(null, null, null);
+	}
+
+	@Test(expected = ParseException.class)
+	public void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() throws Exception {
+		find(bc(G01c.class), G01c.class).unswap(null, null, null);
 	}
 
 	@Test(expected = ParseException.class)

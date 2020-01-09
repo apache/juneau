@@ -52,8 +52,8 @@ import org.apache.juneau.*;
  * 			<li>Simple with args: <js>"MyClass(String,int)"</js> or <js>"MyClass(java.lang.String,int)"</js> or <js>"MyClass()"</js>
  * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2()"</js> or <js>"Inner1$Inner2()"</js> or <js>"Inner2()"</js>
  * 		</ul>
+ * 	<li>A comma-delimited list of anything on this list.
  * </ul>
- *
  *
  * @param <V> The type of object in this map.
  */

@@ -14,9 +14,14 @@ package org.apache.juneau.annotation;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 
+import org.apache.juneau.json.*;
 import org.junit.*;
 
 public class BeanIgnoreTest {
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Test @BeanIgnore on properties
+	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A {
 		public String getA() {
@@ -34,14 +39,38 @@ public class BeanIgnoreTest {
 	}
 
 	@Test
-	public void test() throws Exception {
+	public void testBeanIgnoreOnProperties() throws Exception {
 		assertObjectEquals("{c:'c',a:'a'}", new A());
 	}
 
-	@Test
-	public void testBeanIgnoreOnBean() throws Exception {
-		assertObjectEquals("{f2:2,f3:'xxx',f4:'xxx'}", new B());
+	@BeanConfig(
+		annotateBeanIgnore={
+			@BeanIgnore(on="Ac.getB"),
+			@BeanIgnore(on="Ac.d")
+		}
+	)
+	public static class Ac {
+		public String getA() {
+			return "a";
+		}
+
+		public String getB() {
+			return "b";
+		}
+
+		public String c = "c";
+
+		public String d = "d";
 	}
+
+	@Test
+	public void testBeanIgnoreOnProperties_usingConfig() throws Exception {
+		assertObjectEquals("{c:'c',a:'a'}", new Ac(), SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Ac.class).build());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Test @BeanIgnore on classes
+	//------------------------------------------------------------------------------------------------------------------
 
 	@BeanIgnore
 	public static class B1 {
@@ -60,6 +89,35 @@ public class BeanIgnoreTest {
 		public B1 getF4() {
 			return new B1();
 		}
+	}
+
+	@Test
+	public void testBeanIgnoreOnBean() throws Exception {
+		assertObjectEquals("{f2:2,f3:'xxx',f4:'xxx'}", new B());
+	}
+
+	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="B1c"))
+	public static class B1c {
+		public int f = 1;
+
+		@Override
+		public String toString() {
+			return "xxx";
+		}
+	}
+
+	public static class Bc {
+		public int f2 = 2;
+		public B1c f3 = new B1c();
+
+		public B1c getF4() {
+			return new B1c();
+		}
+	}
+
+	@Test
+	public void testBeanIgnoreOnBean_usingConfig() throws Exception {
+		assertObjectEquals("{f2:2,f3:'xxx',f4:'xxx'}", new Bc(), SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(B1c.class).build());
 	}
 }
 

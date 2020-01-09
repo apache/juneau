@@ -205,7 +205,7 @@ public class BeanMeta<T> {
 				if (! (cVis.isVisible(c.getModifiers()) || c.isAnonymousClass()))
 					return "Class is not public";
 
-				if (c.isAnnotationPresent(BeanIgnore.class))
+				if (ctx.hasAnnotation(BeanIgnore.class, c))
 					return "Class is annotated with @BeanIgnore";
 
 				// Make sure it's serializable.
@@ -383,7 +383,7 @@ public class BeanMeta<T> {
 					BeanPropertyMeta.Builder p = i.next();
 					try {
 						if (p.field == null)
-							p.setInnerField(findInnerBeanField(c, stopClass, p.name));
+							p.setInnerField(findInnerBeanField(ctx, c, stopClass, p.name));
 
 						if (p.validate(ctx, beanRegistry, typeVarImpls, bpro, bpwo)) {
 
@@ -752,7 +752,7 @@ public class BeanMeta<T> {
 			for (FieldInfo f : c2.getDeclaredFields()) {
 				if (f.isAny(STATIC, TRANSIENT))
 					continue;
-				if (f.hasAnnotation(BeanIgnore.class))
+				if (ctx.hasAnnotation(BeanIgnore.class, f))
 					continue;
 
 				@SuppressWarnings("deprecation")
@@ -773,12 +773,12 @@ public class BeanMeta<T> {
 		return l;
 	}
 
-	static final Field findInnerBeanField(Class<?> c, Class<?> stopClass, String name) {
+	static final Field findInnerBeanField(BeanContext bc, Class<?> c, Class<?> stopClass, String name) {
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
 			for (FieldInfo f : c2.getDeclaredFields()) {
 				if (f.isAny(STATIC, TRANSIENT))
 					continue;
-				if (f.hasAnnotation(BeanIgnore.class))
+				if (f.hasAnnotation(BeanIgnore.class, bc))
 					continue;
 				if (f.hasName(name))
 					return f.inner();

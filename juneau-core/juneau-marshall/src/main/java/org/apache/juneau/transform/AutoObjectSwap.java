@@ -84,27 +84,28 @@ public class AutoObjectSwap<T> extends PojoSwap<T,Object> {
 	/**
 	 * Inspects the specified class and returns a swap of this type if possible.
 	 *
+	 * @param bc The bean context to use for looking up annotations.
 	 * @param ci The class to return a swap on.
 	 * @return A POJO swap instance, or <jk>null</jk> if one could not be created.
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	public static PojoSwap<?,?> find(ClassInfo ci) {
+	public static PojoSwap<?,?> find(BeanContext bc, ClassInfo ci) {
 
-		if (shouldIgnore(ci))
+		if (shouldIgnore(bc, ci))
 			return null;
 
 		// Find swap() method if present.
 		for (MethodInfo m : ci.getPublicMethods()) {
-			if (isSwapMethod(m)) {
+			if (isSwapMethod(bc, m)) {
 
 				ClassInfo rt = m.getReturnType();
 
 				for (MethodInfo m2 : ci.getPublicMethods())
-					if (isUnswapMethod(m2, ci, rt))
+					if (isUnswapMethod(bc, m2, ci, rt))
 						return new AutoObjectSwap(ci, m, m2, null);
 
 				for (ConstructorInfo cs : ci.getPublicConstructors())
-					if (isUnswapConstructor(cs, rt))
+					if (isUnswapConstructor(bc, cs, rt))
 						return new AutoObjectSwap(ci, m, null, cs);
 
 				return new AutoObjectSwap(ci, m, null, null);
@@ -114,36 +115,36 @@ public class AutoObjectSwap<T> extends PojoSwap<T,Object> {
 		return null;
 	}
 
-	private static boolean shouldIgnore(ClassInfo ci) {
+	private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {
 		return
-			ci.hasAnnotation(BeanIgnore.class)
+			bc.hasAnnotation(BeanIgnore.class, ci)
 			|| ci.isNonStaticMemberClass();
 	}
 
-	private static boolean isSwapMethod(MethodInfo mi) {
+	private static boolean isSwapMethod(BeanContext bc, MethodInfo mi) {
 		return
 			mi.isNotDeprecated()
 			&& mi.isNotStatic()
 			&& mi.hasName(SWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParamTypes(BeanSession.class)
-			&& ! mi.hasAnnotation(BeanIgnore.class);
+			&& ! bc.hasAnnotation(BeanIgnore.class, mi);
 	}
 
-	private static boolean isUnswapMethod(MethodInfo mi, ClassInfo ci, ClassInfo rt) {
+	private static boolean isUnswapMethod(BeanContext bc, MethodInfo mi, ClassInfo ci, ClassInfo rt) {
 		return
 			mi.isNotDeprecated()
 			&& mi.isStatic()
 			&& mi.hasName(UNSWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParamTypes(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
-			&& ! mi.hasAnnotation(BeanIgnore.class);
+			&& ! bc.hasAnnotation(BeanIgnore.class, mi);
 	}
 
-	private static boolean isUnswapConstructor(ConstructorInfo cs, ClassInfo rt) {
+	private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {
 		return
 			cs.isNotDeprecated()
 			&& cs.hasParamTypeParents(rt)
-			&& ! cs.hasAnnotation(BeanIgnore.class);
+			&& ! bc.hasAnnotation(BeanIgnore.class, cs);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

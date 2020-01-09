@@ -1858,6 +1858,60 @@ public class BeanMapTest {
 		}
 	}
 
+	@Test
+	public void testHiddenProperties_usingConfig() throws Exception {
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Uc.class).build();
+		BeanMeta bm = s.getBeanMeta(U.class);
+		assertNotNull(bm.getPropertyMeta("a"));
+		assertNotNull(bm.getPropertyMeta("b"));
+		assertNull(bm.getPropertyMeta("c"));
+		assertNull(bm.getPropertyMeta("d"));
+
+		Uc t = new Uc();
+		t.a = "a";
+		t.b = "b";
+		String r = s.serialize(t);
+		assertEquals("{a:'a',b:'b'}", r);
+
+		// Make sure setters are used if present.
+		t = JsonParser.DEFAULT.builder().applyAnnotations(Uc.class).build().parse(r, Uc.class);
+		assertEquals("b(setter)", t.b);
+	}
+
+	@BeanConfig(annotateBeanIgnore=@BeanIgnore(on="Uc.getB,Uc.c,Uc.getD,Uc.setD"))
+	public static class Uc {
+		public String a, b;
+
+		public String getA() {
+			return a;
+		}
+
+		public void setA(String a) {
+			this.a = a;
+		}
+
+		@BeanIgnore
+		public String getB() {
+			return b;
+		}
+
+		public void setB(String b) {
+			this.b = b+"(setter)";
+		}
+
+		@BeanIgnore
+		public String c;
+
+		@BeanIgnore
+		public String getD() {
+			return null;
+		}
+
+		@BeanIgnore
+		public void setD(String d) {
+		}
+	}
+
 	//====================================================================================================
 	// testBeanPropertyOrder
 	//====================================================================================================

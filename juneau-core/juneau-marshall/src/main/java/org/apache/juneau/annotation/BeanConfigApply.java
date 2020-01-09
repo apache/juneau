@@ -172,6 +172,20 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.addTo(BEAN_annotations, a.annotateBeanp());
 		if (a.annotateBeanc().length > 0)
 			psb.addTo(BEAN_annotations, a.annotateBeanc());
+		if (a.annotateBeanIgnore().length > 0)
+			psb.addTo(BEAN_annotations, a.annotateBeanIgnore());
+		if (a.annotateExample().length > 0)
+			psb.addTo(BEAN_annotations, a.annotateExample());
+		if (a.annotateName().length > 0)
+			psb.addTo(BEAN_annotations, a.annotateName());
+		if (a.annotateNameProperty().length > 0)
+			psb.addTo(BEAN_annotations, a.annotateNameProperty());
+		if (a.annotateParentProperty().length > 0)
+			psb.addTo(BEAN_annotations, a.annotateParentProperty());
+		if (a.annotateURI().length > 0)
+			psb.addTo(BEAN_annotations, a.annotateURI());
+		if (a.annotateSwap().length > 0)
+			psb.addTo(BEAN_annotations, a.annotateSwap());
 	}
 
 	private Locale locale(String in) {

@@ -175,19 +175,20 @@ public class BuilderSwap<T,B> {
 	/**
 	 * Creates a BuilderSwap from the specified POJO class if it has one.
 	 *
+	 * @param bc The bean context to use to look up annotations.
 	 * @param pojoClass The POJO class to check.
 	 * @param cVis Minimum constructor visibility.
 	 * @param mVis Minimum method visibility.
 	 * @return A new swap instance, or <jk>null</jk> if class didn't have a builder class.
 	 */
 	@SuppressWarnings("rawtypes")
-	public static BuilderSwap<?,?> findSwapFromPojoClass(Class<?> pojoClass, Visibility cVis, Visibility mVis) {
+	public static BuilderSwap<?,?> findSwapFromPojoClass(BeanContext bc, Class<?> pojoClass, Visibility cVis, Visibility mVis) {
 		Class<?> builderClass = null;
 		MethodInfo pojoCreateMethod, builderCreateMethod;
 		ConstructorInfo pojoConstructor = null;
 		ConstructorInfo builderConstructor;
 
-		org.apache.juneau.annotation.Builder b = pojoClass.getAnnotation(org.apache.juneau.annotation.Builder.class);
+		org.apache.juneau.annotation.Builder b = bc.getAnnotation(org.apache.juneau.annotation.Builder.class, pojoClass);
 
 		if (b != null && b.value() != Null.class)
 			builderClass = b.value();
