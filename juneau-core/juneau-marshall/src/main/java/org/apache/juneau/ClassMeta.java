@@ -111,8 +111,8 @@ public final class ClassMeta<T> implements Type {
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final Mutater<String,T> stringMutater;
 
-	private ReadWriteLock lock = new ReentrantReadWriteLock(false);
-	private Lock rLock = lock.readLock(), wLock = lock.writeLock();
+	private final ReadWriteLock lock = new ReentrantReadWriteLock(false);
+	private final Lock rLock = lock.readLock(), wLock = lock.writeLock();
 
 	/**
 	 * Construct a new {@code ClassMeta} based on the specified {@link Class}.
