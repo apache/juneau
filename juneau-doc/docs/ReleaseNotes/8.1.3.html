@@ -28,9 +28,14 @@
 	<li>
 		Configurable properties such as {@link oaj.BeanContext#BEAN_debug} can now be set globally by either
 		system properties or environment variables.
-		<br>For <jsf>BEAN_debug</jsf> which resolves to <js>"BEAN_debug"</js>, you can use either the system
-		property <js>"BeanContext.debug.b"</js> or environment variables <js>"BeanContext_debug_b"</js> or 
-		<js>"BEANCONTEXT_DEBUG_B"</js>.
+		<br>For <jsf>BEAN_debug</jsf> you can use either the system
+		property <js>"BeanContext.debug"</js> or environment variables <js>"BEANCONTEXT_DEBUG"</js>.
+	<li>
+		Fixed an initialization time race condition that can cause initial parse errors when concurrently parsing into
+		array types like so: 
+		<p class='bpcode w800'>
+	JsonParser.<jsf>DEFAULT</jsf>.parse(input, MyBean[].<jk>class</jk>);
+		</p>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
