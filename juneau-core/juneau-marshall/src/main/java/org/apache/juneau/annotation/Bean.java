@@ -253,6 +253,7 @@ public @interface Bean {
 	 * 	<jk>public void</jk> doFoo() {...}
 	 * </p>
 	 *
+	 * <p>
 	 * The valid pattern matches are:
 	 * <ul>
 	 * 	<li>Classes:

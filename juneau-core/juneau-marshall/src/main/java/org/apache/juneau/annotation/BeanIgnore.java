@@ -47,6 +47,7 @@ public @interface BeanIgnore {
 	 * Used in conjunction with the {@link BeanConfig#applyBeanIgnore()}.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields/constructors.
 	 *
+	 * <p>
 	 * The valid pattern matches are:
 	 * <ul>
 	 * 	<li>Classes:

@@ -721,7 +721,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		if (cm == null || ! cm.isMapOrBean())
 			return null;
-		if (cm.getInnerClass().isAnnotationPresent(HtmlLink.class))
+		if (cm.hasAnnotation(HtmlLink.class))
 			return null;
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(cm);
@@ -788,7 +788,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				continue;
 			if (cm == null || ! (cm.isMap() || cm.isBean()))
 				return null;
-			if (cm.getInnerClass().isAnnotationPresent(HtmlLink.class))
+			if (cm.hasAnnotation(HtmlLink.class))
 				return null;
 			if (canIgnoreValue(cm, null, o))
 				return null;

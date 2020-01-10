@@ -37,6 +37,36 @@ import java.lang.annotation.*;
 @Inherited
 public @interface ParentProperty {
 
+	/**
+	 * Dynamically apply this annotation to the specified methods/fields.
+	 *
+	 * <p>
+	 * Used in conjunction with the {@link BeanConfig#applyParentProperty()}.
+	 * It is ignored when the annotation is applied directly to methods/fields.
+	 *
+	 * <p>
+	 * The valid pattern matches are:
+	 * <ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>Fully qualified with args: <js>"com.foo.MyClass.myMethod(String,int)"</js> or <js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js> or <js>"com.foo.MyClass.myMethod()"</js>
+	 * 			<li>Fully qualified: <js>"com.foo.MyClass.myMethod"</js>
+	 * 			<li>Simple with args: <js>"MyClass.myMethod(String,int)"</js> or <js>"MyClass.myMethod(java.lang.String,int)"</js> or <js>"MyClass.myMethod()"</js>
+	 * 			<li>Simple: <js>"MyClass.myMethod"</js>
+	 * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2.myMethod"</js> or <js>"Inner1$Inner2.myMethod"</js> or <js>"Inner2.myMethod"</js>
+	 * 		</ul>
+	 * 	<li>Fields:
+	 * 		<ul>
+	 * 			<li>Fully qualified: <js>"com.foo.MyClass.myField"</js>
+	 * 			<li>Simple: <js>"MyClass.muyField"</js>
+	 * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2.myField"</js> or <js>"Inner1$Inner2.myField"</js> or <js>"Inner2.myField"</js>
+	 * 		</ul>
+	 * 	<li>A comma-delimited list of anything on this list.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
 	String on() default "";
-
 }

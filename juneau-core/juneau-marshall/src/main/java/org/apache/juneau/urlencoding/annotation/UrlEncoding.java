@@ -24,7 +24,7 @@ import org.apache.juneau.urlencoding.*;
  * {@link UrlEncodingSerializer} and {@link UrlEncodingParser}.
  */
 @Documented
-@Target({TYPE})
+@Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
 public @interface UrlEncoding {
@@ -39,23 +39,41 @@ public @interface UrlEncoding {
 	boolean expandedParams() default false;
 
 	/**
-	 * Defines which classes/methods this annotation applies to.
+	 * Dynamically apply this annotation to the specified classes/methods/fields.
 	 *
 	 * <p>
 	 * Used in conjunction with the {@link UrlEncodingConfig#applyUrlEncoding()}.
-	 * It is ignored when the annotation is applied directly to classes and methods.
+	 * It is ignored when the annotation is applied directly to classes/methods/fields.
 	 *
-	 * The format can be any of the following:
+	 * <p>
+	 * The valid pattern matches are:
 	 * <ul>
-	 * 	<li>Full class name (e.g. <js>"com.foo.MyClass"</js>).
-	 * 	<li>Simple class name (e.g. <js>"MyClass"</js>).
-	 * 	<li>Full method name (e.g. <js>"com.foo.MyClass.myMethod"</js>).
-	 * 	<li>Simple method name (e.g. <js>"MyClass.myMethod"</js>).
+	 * 	<li>Classes:
+	 * 		<ul>
+	 * 			<li>Fully qualified: <js>"com.foo.MyClass"</js>
+	 * 			<li>Fully qualified inner class: <js>"com.foo.MyClass$Inner1$Inner2"</js>
+	 * 			<li>Simple: <js>"MyClass"</js>
+	 * 			<li>Simple inner: <js>"MyClass$Inner1$Inner2"</js> or <js>"Inner1$Inner2"</js> or <js>"Inner2"</js>
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>Fully qualified with args: <js>"com.foo.MyClass.myMethod(String,int)"</js> or <js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js> or <js>"com.foo.MyClass.myMethod()"</js>
+	 * 			<li>Fully qualified: <js>"com.foo.MyClass.myMethod"</js>
+	 * 			<li>Simple with args: <js>"MyClass.myMethod(String,int)"</js> or <js>"MyClass.myMethod(java.lang.String,int)"</js> or <js>"MyClass.myMethod()"</js>
+	 * 			<li>Simple: <js>"MyClass.myMethod"</js>
+	 * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2.myMethod"</js> or <js>"Inner1$Inner2.myMethod"</js> or <js>"Inner2.myMethod"</js>
+	 * 		</ul>
+	 * 	<li>Fields:
+	 * 		<ul>
+	 * 			<li>Fully qualified: <js>"com.foo.MyClass.myField"</js>
+	 * 			<li>Simple: <js>"MyClass.muyField"</js>
+	 * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2.myField"</js> or <js>"Inner1$Inner2.myField"</js> or <js>"Inner2.myField"</js>
+	 * 		</ul>
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.ClassMethodAnnotations}
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String on() default "";

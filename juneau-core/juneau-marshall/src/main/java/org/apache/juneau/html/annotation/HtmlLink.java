@@ -41,12 +41,36 @@ import org.apache.juneau.html.*;
 @Inherited
 public @interface HtmlLink {
 
-	String on() default "";
-
 	/**
 	 * The bean property whose value becomes the name in the hyperlink.
 	 */
 	String nameProperty() default "name";
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <p>
+	 * Used in conjunction with the {@link HtmlConfig#applyHtmlLink()}.
+	 * It is ignored when the annotation is applied directly to classes.
+	 *
+	 * <p>
+	 * The valid pattern matches are:
+	 * <ul>
+	 * 	<li>Classes:
+	 * 		<ul>
+	 * 			<li>Fully qualified: <js>"com.foo.MyClass"</js>
+	 * 			<li>Fully qualified inner class: <js>"com.foo.MyClass$Inner1$Inner2"</js>
+	 * 			<li>Simple: <js>"MyClass"</js>
+	 * 			<li>Simple inner: <js>"MyClass$Inner1$Inner2"</js> or <js>"Inner1$Inner2"</js> or <js>"Inner2"</js>
+	 * 		</ul>
+	 * 	<li>A comma-delimited list of anything on this list.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	String on() default "";
 
 	/**
 	 * The bean property whose value becomes the url in the hyperlink.

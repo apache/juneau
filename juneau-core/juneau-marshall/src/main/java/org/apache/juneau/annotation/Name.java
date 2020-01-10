@@ -23,7 +23,6 @@ import java.lang.annotation.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>In place of <code><ja>@Beanp</ja>(name=<js>"foo"</js>)</code> when just the name is specified.
  * 	<li>On constructor and method arguments when the parameter names are not in the compiled bytecode.
  * </ul>
  *
@@ -33,24 +32,15 @@ import java.lang.annotation.*;
  * 	// The field name can be anything.</jc>
  * 	<jk>public class</jk> MyBean {
  *
- * 		<jc>// Same as @Beanp(bpi="bar")</jc>
- * 		<jk>public</jk> MyBean(@Name("bar") <jk>int</jk> foo) {}
- *
- * 		<ja>@Name</ja>(<js>"bar"</js>) <jc>// Same as @Beanp(name="bar")</jc>
- * 		<jk>public int</jk> foo;
- *
- * 		<ja>@Name</ja>(<js>"*"</js>) <jc>// Same as @Beanp(name="*")</jc>
- * 		<jk>public</jk> Map&lt;String,Object&gt; extraStuff = <jk>new</jk> LinkedHashMap&lt;String,Object&gt;();
+ * 		<jk>public</jk> MyBean(<ja>@Name</ja>("bar") <jk>int</jk> foo) {}
  * 	}
  * </p>
  */
 @Documented
-@Target({PARAMETER,METHOD,FIELD})
+@Target({PARAMETER})
 @Retention(RUNTIME)
 @Inherited
 public @interface Name {
-
-	String on() default "";
 
 	/**
 	 * The bean property or parameter name.

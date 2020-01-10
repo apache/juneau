@@ -115,19 +115,6 @@ public @interface BeanConfig {
 	Example[] applyExample() default {};
 
 	/**
-	 * Dynamically applies {@link Name @Name} annotations to specified methods/fields.
-	 *
-	 * <p>
-	 * Provides an alternate approach for applying annotations using {@link Name#on() @Name.on} to specify the names
-	 * to apply the annotation to.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
-	 * </ul>
-	 */
-	Name[] applyName() default {};
-
-	/**
 	 * Dynamically applies {@link NameProperty @NameProperty} annotations to specified methods/fields.
 	 *
 	 * <p>

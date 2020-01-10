@@ -23,6 +23,7 @@ import org.apache.juneau.*;
 /**
  * Allows arbitrary objects to be mapped to classes and methods base on class/method name keys.
  *
+ * <p>
  * The valid pattern matches are:
  * <ul>
  * 	<li>Classes:

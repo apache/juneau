@@ -62,13 +62,14 @@ import java.lang.annotation.*;
 public @interface Example {
 
 	/**
-	 * Defines which classes/methods/fields this annotation applies to.
+	 * Dynamically apply this annotation to the specified classes/methods/fields.
 	 *
 	 * <p>
 	 * Used in conjunction with the {@link BeanConfig#applyExample()}.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields.
 	 *
-	 * The format can be any of the following:
+	 * <p>
+	 * The valid pattern matches are:
 	 * <ul>
 	 * 	<li>Classes:
 	 * 		<ul>
@@ -90,12 +91,6 @@ public @interface Example {
 	 * 			<li>Fully qualified: <js>"com.foo.MyClass.myField"</js>
 	 * 			<li>Simple: <js>"MyClass.muyField"</js>
 	 * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2.myField"</js> or <js>"Inner1$Inner2.myField"</js> or <js>"Inner2.myField"</js>
-	 * 		</ul>
-	 * 	<li>Constructors:
-	 * 		<ul>
-	 * 			<li>Fully qualified with args: <js>"com.foo.MyClass(String,int)"</js> or <js>"com.foo.MyClass(java.lang.String,int)"</js> or <js>"com.foo.MyClass()"</js>
-	 * 			<li>Simple with args: <js>"MyClass(String,int)"</js> or <js>"MyClass(java.lang.String,int)"</js> or <js>"MyClass()"</js>
-	 * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2()"</js> or <js>"Inner1$Inner2()"</js> or <js>"Inner2()"</js>
 	 * 		</ul>
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>

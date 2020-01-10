@@ -188,8 +188,8 @@ public final class BeanPropertyMeta {
 					bdClasses.addAll(Arrays.asList(px.beanDictionary()));
 				}
 				if (p != null) {
-					if (! p.bpi().isEmpty())
-						properties = split(p.bpi());
+					if (! p.properties().isEmpty())
+						properties = split(p.properties());
 					bdClasses.addAll(Arrays.asList(p.dictionary()));
 					if (! p.ro().isEmpty())
 						readOnly = Boolean.valueOf(p.ro());
@@ -215,8 +215,8 @@ public final class BeanPropertyMeta {
 					bdClasses.addAll(Arrays.asList(px.beanDictionary()));
 				}
 				if (p != null) {
-					if (properties != null && ! p.bpi().isEmpty())
-						properties = split(p.bpi());
+					if (properties != null && ! p.properties().isEmpty())
+						properties = split(p.properties());
 					bdClasses.addAll(Arrays.asList(p.dictionary()));
 					if (! p.ro().isEmpty())
 						readOnly = Boolean.valueOf(p.ro());
@@ -234,7 +234,7 @@ public final class BeanPropertyMeta {
 				Beanp p = bc.getAnnotation(Beanp.class, setter);
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(px, p, setter.getGenericParameterTypes()[0], typeVarImpls);
-				isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
+				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(org.apache.juneau.annotation.URI.class, setter));
 				if (px != null) {
 					if (swap == null)
 						swap = getPropertyPojoSwap(px);
@@ -245,8 +245,8 @@ public final class BeanPropertyMeta {
 				if (p != null) {
 					if (swap == null)
 						swap = getPropertyPojoSwap(p);
-					if (properties != null && ! p.bpi().isEmpty())
-						properties = split(p.bpi());
+					if (properties != null && ! p.properties().isEmpty())
+						properties = split(p.properties());
 					bdClasses.addAll(Arrays.asList(p.dictionary()));
 					if (! p.ro().isEmpty())
 						readOnly = Boolean.valueOf(p.ro());
@@ -550,7 +550,7 @@ public final class BeanPropertyMeta {
 	}
 
 	/**
-	 * Returns the override list of properties defined through a {@link Beanp#bpi() @Beanp(bpi)} annotation
+	 * Returns the override list of properties defined through a {@link Beanp#properties() @Beanp(bpi)} annotation
 	 * on this property.
 	 *
 	 * @return The list of override properties, or <jk>null</jk> if annotation not specified.

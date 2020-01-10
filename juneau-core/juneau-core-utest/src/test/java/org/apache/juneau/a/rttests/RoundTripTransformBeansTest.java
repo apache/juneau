@@ -40,7 +40,8 @@ import org.junit.*;
 public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	public RoundTripTransformBeansTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
-		super(label, s, p, flags);
+		super(label, s == null ? null : s.applyAnnotations(Bc.class, E1c.class, F1c.class, F2ac.class), p == null ? null : p.applyAnnotations(Bc.class, E1c.class, F1c.class, F2ac.class), flags);
+
 	}
 
 	//====================================================================================================
@@ -241,6 +242,33 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		}
 	}
 
+	@Test
+	public void testSwaps_usingConfig() throws Exception {
+		Bc t = new Bc();
+		t.f1 = "bar";
+		t = roundTrip(t, Bc.class);
+
+		assertEquals("bar", t.f1);
+	}
+
+	@BeanConfig(applySwap=@Swap(on="Bc",value=BcSwap.class))
+	public static class Bc {
+		public String f1;
+	}
+
+	public static class BcSwap extends StringSwap<Bc> {
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Bc o) throws SerializeException {
+			return o.f1;
+		}
+		@Override /* PojoSwap */
+		public Bc unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
+			Bc b1 = new Bc();
+			b1.f1 = f;
+			return b1;
+		}
+	}
+
 	//====================================================================================================
 	// testXMLGregorianCalendar - Test XMLGregorianCalendarSwap class.
 	//====================================================================================================
@@ -412,6 +440,48 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		}
 	}
 
+	@Test
+	public void testSurrogatesThroughAnnotation_usingConfig() throws Exception {
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(E1c.class).build();
+		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(E1c.class).build();
+		Object r;
+		E1c x = E1c.create();
+
+		r = s.serialize(x);
+		assertEquals("{f2:'f1'}", r);
+
+		x = p.parse(r, E1c.class);
+		assertEquals("f1", x.f1);
+
+		r = getSerializer().serialize(x);
+		assertTrue(TestUtils.toString(r).contains("f2"));
+
+		x = roundTrip(x, E1c.class);
+	}
+
+	@BeanConfig(applySwap=@Swap(on="E1c",value=E2c.class))
+	public static class E1c {
+		public String f1;
+
+		public static E1c create() {
+			E1c x = new E1c();
+			x.f1 = "f1";
+			return x;
+		}
+	}
+
+	public static class E2c implements Surrogate {
+		public String f2;
+		public E2c(E1c x) {
+			f2 = x.f1;
+		}
+		public E2c() {}
+		public E1c create() {
+			E1c x = new E1c();
+			x.f1 = this.f2;
+			return x;
+		}
+	}
 
 	//====================================================================================================
 	// Transforms on private fields.
@@ -454,6 +524,43 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		x = roundTrip(x, F1.class);
 	}
 
+	@BeanConfig(applySwap=@Swap(on="F1c.c", value=TemporalCalendarSwap.IsoLocalDateTime.class))
+	public static class F1c {
+
+		private Calendar c;
+
+		public void setC(Calendar c) {
+			this.c = c;
+		}
+
+		public Calendar getC() {
+			return c;
+		}
+
+		public static F1c create() {
+			F1c x = new F1c();
+			x.setC(parseISO8601Calendar("2018-12-12T05:12:00"));
+			return x;
+		}
+	}
+
+	@Test
+	public void testSwapOnPrivateField_usingConfig() throws Exception {
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(F1c.class).build();
+		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(F1c.class).build();
+
+		F1c x = F1c.create();
+		String r = null;
+
+		r = s.serialize(x);
+		assertEquals("{c:'2018-12-12T05:12:00'}", r);
+
+		x = p.parse(r, F1c.class);
+		assertObjectEquals("{c:'2018-12-12T05:12:00'}", x, s);
+
+		x = roundTrip(x, F1c.class);
+	}
+
 	public static class F2a {
 
 		@Swap(TemporalCalendarSwap.IsoLocalDateTime.class)
@@ -494,4 +601,44 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 		x = roundTrip(x, F2.class);
 	}
+
+	@BeanConfig(applySwap=@Swap(on="F2ac.c", value=TemporalCalendarSwap.IsoLocalDateTime.class))
+	public static class F2ac {
+		protected Calendar c;
+	}
+
+	public static class F2c extends F2ac {
+
+		public void setC(Calendar c) {
+			this.c = c;
+		}
+
+		public Calendar getC() {
+			return c;
+		}
+
+		public static F2c create() {
+			F2c x = new F2c();
+			x.setC(parseISO8601Calendar("2018-12-12T05:12:00"));
+			return x;
+		}
+	}
+
+	@Test
+	public void testSwapOnPrivateField_Inherited_usingConfig() throws Exception {
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(F2ac.class).build();
+		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(F2ac.class).build();
+
+		F2 x = F2.create();
+		String r = null;
+
+		r = s.serialize(x);
+		assertEquals("{c:'2018-12-12T05:12:00'}", r);
+
+		x = p.parse(r, F2.class);
+		assertObjectEquals("{c:'2018-12-12T05:12:00'}", x, s);
+
+		x = roundTrip(x, F2.class);
+	}
+
 }

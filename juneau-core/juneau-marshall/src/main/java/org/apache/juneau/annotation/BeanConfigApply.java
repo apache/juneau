@@ -176,8 +176,6 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.addTo(BEAN_annotations, a.applyBeanIgnore());
 		if (a.applyExample().length > 0)
 			psb.addTo(BEAN_annotations, a.applyExample());
-		if (a.applyName().length > 0)
-			psb.addTo(BEAN_annotations, a.applyName());
 		if (a.applyNameProperty().length > 0)
 			psb.addTo(BEAN_annotations, a.applyNameProperty());
 		if (a.applyParentProperty().length > 0)

@@ -32,7 +32,7 @@ import org.junit.runners.*;
 public class BasicHtmlTest {
 
 	private static final Class<?>[] ANNOTATED_CLASSES = {
-		BeanWithWhitespaceTextFields2.class, BeanWithWhitespaceTextPwsFields2.class, BeanWithWhitespaceMixedFields2.class, BeanWithWhitespaceMixedPwsFields2.class
+		BeanWithWhitespaceTextFields2.class, BeanWithWhitespaceTextPwsFields2.class, BeanWithWhitespaceMixedFields2.class, BeanWithWhitespaceMixedPwsFields2.class, LinkBeanC.class
 	};
 	private static final HtmlSerializer
 		s1 = HtmlSerializer.DEFAULT_SQ.builder().addRootType().applyAnnotations(ANNOTATED_CLASSES).build(),
@@ -1477,6 +1477,146 @@ public class BasicHtmlTest {
 				}
 			},
 			{	/* 28 */
+				new Input<LinkBeanC>(
+					"LinkBeanC-1",
+					LinkBeanC.class,
+					new LinkBeanC().init(),
+					"<a href='http://apache.org'>foo</a>",
+					"<a href='http://apache.org'>foo</a>",
+					"<a href='http://apache.org'>foo</a>"
+				)
+				{
+					@Override
+					public void verify(LinkBeanC o) {
+						assertInstanceOf(LinkBeanC.class, o);
+					}
+				}
+			},
+			{	/* 29 */
+				new Input<LinkBeanC[]>(
+					"LinkBeanC-2",
+					LinkBeanC[].class,
+					new LinkBeanC[]{new LinkBeanC().init(),new LinkBeanC().init()},
+					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
+					"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
+					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>"
+				)
+				{
+					@Override
+					public void verify(LinkBeanC[] o) {
+						assertInstanceOf(LinkBeanC.class, o[0]);
+					}
+				}
+			},
+			{	/* 30 */
+				new Input<List<LinkBeanC>>(
+					"ListWithLinkBeansC",
+					ListWithLinkBeansC.class,
+					new ListWithLinkBeansC().append(new LinkBeanC().init()).append(new LinkBeanC().init()),
+					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
+					"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
+					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>"
+				)
+				{
+					@Override
+					public void verify(List<LinkBeanC> o) {
+						assertInstanceOf(LinkBeanC.class, o.get(0));
+					}
+				}
+			},
+			{	/* 31 */
+				new Input<BeanWithLinkBeanPropertiesC>(
+					"BeanWithLinkBeanPropertiesC",
+					BeanWithLinkBeanPropertiesC.class,
+					new BeanWithLinkBeanPropertiesC().init(),
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td><a href='http://apache.org'>foo</a></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li><a href='http://apache.org'>foo</a></li>"
+								+"</ul>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>c</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>c1</td>"
+										+"<td><a href='http://apache.org'>foo</a></td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>",
+
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>a</td>\n"
+							+"\t\t<td><a href='http://apache.org'>foo</a></td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<ul>\n"
+									+"\t\t\t\t<li><a href='http://apache.org'>foo</a></li>\n"
+								+"\t\t\t</ul>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>c</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>c1</td>\n"
+										+"\t\t\t\t\t<td><a href='http://apache.org'>foo</a></td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td><a href='http://apache.org'>foo</a></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li><a href='http://apache.org'>foo</a></li>"
+								+"</ul>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>c</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>c1</td>"
+										+"<td><a href='http://apache.org'>foo</a></td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					@Override
+					public void verify(BeanWithLinkBeanPropertiesC o) {
+						assertInstanceOf(LinkBeanC.class, o.a);
+						assertInstanceOf(LinkBeanC.class, o.b.get(0));
+						assertInstanceOf(LinkBeanC.class, o.c.get("c1"));
+					}
+				}
+			},
+			{	/* 32 */
 				new Input<BeanWithSpecialCharacters>(
 					"BeanWithSpecialCharacters",
 					BeanWithSpecialCharacters.class,
@@ -1492,7 +1632,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 29 */
+			{	/* 33 */
 				new Input<BeanWithSpecialCharacters>(
 					"BeanWithSpecialCharacters-2",
 					BeanWithSpecialCharacters.class,
@@ -1515,7 +1655,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 30 */
+			{	/* 34 */
 				new Input<BeanWithNullProperties>(
 					"BeanWithNullProperties",
 					BeanWithNullProperties.class,
@@ -1531,7 +1671,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 31 */
+			{	/* 35 */
 				new Input<BeanWithAbstractFields>(
 					"BeanWithAbstractFields",
 					BeanWithAbstractFields.class,
@@ -1687,7 +1827,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 32 */
+			{	/* 36 */
 				new Input<BeanWithAbstractArrayFields>(
 					"BeanWithAbstractArrayFields",
 					BeanWithAbstractArrayFields.class,
@@ -1987,7 +2127,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 33 */
+			{	/* 37 */
 				new Input<BeanWithAbstractMapFields>(
 					"BeanWithAbstractMapFields",
 					BeanWithAbstractMapFields.class,
@@ -2172,7 +2312,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 34 */
+			{	/* 38 */
 				new Input<BeanWithWhitespaceTextFields>(
 					"BeanWithWhitespaceTextFields-1",
 					BeanWithWhitespaceTextFields.class,
@@ -2188,7 +2328,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 35 */
+			{	/* 39 */
 				new Input<BeanWithWhitespaceTextFields>(
 					"BeanWithWhitespaceTextFields-2",
 					BeanWithWhitespaceTextFields.class,
@@ -2204,7 +2344,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 36 */
+			{	/* 40 */
 				new Input<BeanWithWhitespaceTextFields>(
 					"BeanWithWhitespaceTextFields-3",
 					BeanWithWhitespaceTextFields.class,
@@ -2220,7 +2360,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 37 */
+			{	/* 41 */
 				new Input<BeanWithWhitespaceTextFields>(
 					"BeanWithWhitespaceTextFields-4",
 					BeanWithWhitespaceTextFields.class,
@@ -2236,7 +2376,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 38 */
+			{	/* 42 */
 				new Input<BeanWithWhitespaceTextFields>(
 					"BeanWithWhitespaceTextFields-5",
 					BeanWithWhitespaceTextFields.class,
@@ -2252,7 +2392,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 39 */
+			{	/* 43 */
 				new Input<BeanWithWhitespaceTextPwsFields>(
 					"BeanWithWhitespaceTextPwsFields-1",
 					BeanWithWhitespaceTextPwsFields.class,
@@ -2268,7 +2408,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 40 */
+			{	/* 44 */
 				new Input<BeanWithWhitespaceTextPwsFields>(
 					"BeanWithWhitespaceTextPwsFields-2",
 					BeanWithWhitespaceTextPwsFields.class,
@@ -2284,7 +2424,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 41 */
+			{	/* 45 */
 				new Input<BeanWithWhitespaceTextPwsFields>(
 					"BeanWithWhitespaceTextPwsFields-3",
 					BeanWithWhitespaceTextPwsFields.class,
@@ -2300,7 +2440,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 42 */
+			{	/* 46 */
 				new Input<BeanWithWhitespaceTextPwsFields>(
 					"BeanWithWhitespaceTextPwsFields-4",
 					BeanWithWhitespaceTextPwsFields.class,
@@ -2316,7 +2456,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 43 */
+			{	/* 47 */
 				new Input<BeanWithWhitespaceTextPwsFields>(
 					"BeanWithWhitespaceTextPwsFields-5",
 					BeanWithWhitespaceTextPwsFields.class,
@@ -2332,7 +2472,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 44 */
+			{	/* 48 */
 				new Input<BeanWithWhitespaceMixedFields>(
 					"BeanWithWhitespaceMixedFields-1",
 					BeanWithWhitespaceMixedFields.class,
@@ -2348,7 +2488,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 45 */
+			{	/* 49 */
 				new Input<BeanWithWhitespaceMixedFields>(
 					"BeanWithWhitespaceMixedFields-2",
 					BeanWithWhitespaceMixedFields.class,
@@ -2364,7 +2504,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 46 */
+			{	/* 50 */
 				new Input<BeanWithWhitespaceMixedFields>(
 					"BeanWithWhitespaceMixedFields-3",
 					BeanWithWhitespaceMixedFields.class,
@@ -2380,7 +2520,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 47 */
+			{	/* 51 */
 				new Input<BeanWithWhitespaceMixedFields>(
 					"BeanWithWhitespaceMixedFields-4",
 					BeanWithWhitespaceMixedFields.class,
@@ -2396,7 +2536,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 48 */
+			{	/* 52 */
 				new Input<BeanWithWhitespaceMixedFields>(
 					"BeanWithWhitespaceMixedFields-5",
 					BeanWithWhitespaceMixedFields.class,
@@ -2412,7 +2552,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 49 */
+			{	/* 53 */
 				new Input<BeanWithWhitespaceMixedFields>(
 					"BeanWithWhitespaceMixedFields-6",
 					BeanWithWhitespaceMixedFields.class,
@@ -2428,7 +2568,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 50 */
+			{	/* 54 */
 				new Input<BeanWithWhitespaceMixedPwsFields>(
 					"BeanWithWhitespaceMixedPwsFields-1",
 					BeanWithWhitespaceMixedPwsFields.class,
@@ -2444,7 +2584,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 51 */
+			{	/* 55 */
 				new Input<BeanWithWhitespaceMixedPwsFields>(
 					"BeanWithWhitespaceMixedPwsFields-2",
 					BeanWithWhitespaceMixedPwsFields.class,
@@ -2460,7 +2600,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 52 */
+			{	/* 56 */
 				new Input<BeanWithWhitespaceMixedPwsFields>(
 					"BeanWithWhitespaceMixedPwsFields-3",
 					BeanWithWhitespaceMixedPwsFields.class,
@@ -2476,7 +2616,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 53 */
+			{	/* 57 */
 				new Input<BeanWithWhitespaceMixedPwsFields>(
 					"BeanWithWhitespaceMixedPwsFields-4",
 					BeanWithWhitespaceMixedPwsFields.class,
@@ -2492,7 +2632,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 54 */
+			{	/* 58 */
 				new Input<BeanWithWhitespaceMixedPwsFields>(
 					"BeanWithWhitespaceMixedPwsFields-5",
 					BeanWithWhitespaceMixedPwsFields.class,
@@ -2508,7 +2648,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 55 */
+			{	/* 59 */
 				new Input<BeanWithWhitespaceMixedPwsFields>(
 					"BeanWithWhitespaceMixedPwsFields-6",
 					BeanWithWhitespaceMixedPwsFields.class,
@@ -2524,7 +2664,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 56 */
+			{	/* 60 */
 				new Input<BeanWithWhitespaceTextFields2>(
 					"BeanWithWhitespaceTextFields2-1",
 					BeanWithWhitespaceTextFields2.class,
@@ -2540,7 +2680,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 57 */
+			{	/* 61 */
 				new Input<BeanWithWhitespaceTextFields2>(
 					"BeanWithWhitespaceTextFields2-2",
 					BeanWithWhitespaceTextFields2.class,
@@ -2556,7 +2696,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 58 */
+			{	/* 62 */
 				new Input<BeanWithWhitespaceTextFields2>(
 					"BeanWithWhitespaceTextFields2-3",
 					BeanWithWhitespaceTextFields2.class,
@@ -2572,7 +2712,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 59 */
+			{	/* 63 */
 				new Input<BeanWithWhitespaceTextFields2>(
 					"BeanWithWhitespaceTextFields2-4",
 					BeanWithWhitespaceTextFields2.class,
@@ -2588,7 +2728,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 60 */
+			{	/* 64 */
 				new Input<BeanWithWhitespaceTextFields2>(
 					"BeanWithWhitespaceTextFields2-5",
 					BeanWithWhitespaceTextFields2.class,
@@ -2604,7 +2744,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 61 */
+			{	/* 65 */
 				new Input<BeanWithWhitespaceTextPwsFields2>(
 					"BeanWithWhitespaceTextPwsFields2-1",
 					BeanWithWhitespaceTextPwsFields2.class,
@@ -2620,7 +2760,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 62 */
+			{	/* 66 */
 				new Input<BeanWithWhitespaceTextPwsFields2>(
 					"BeanWithWhitespaceTextPwsFields2-2",
 					BeanWithWhitespaceTextPwsFields2.class,
@@ -2636,7 +2776,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 63 */
+			{	/* 67 */
 				new Input<BeanWithWhitespaceTextPwsFields2>(
 					"BeanWithWhitespaceTextPwsFields2-3",
 					BeanWithWhitespaceTextPwsFields2.class,
@@ -2652,7 +2792,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 64 */
+			{	/* 68 */
 				new Input<BeanWithWhitespaceTextPwsFields2>(
 					"BeanWithWhitespaceTextPwsFields2-4",
 					BeanWithWhitespaceTextPwsFields2.class,
@@ -2668,7 +2808,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 65 */
+			{	/* 69 */
 				new Input<BeanWithWhitespaceTextPwsFields2>(
 					"BeanWithWhitespaceTextPwsFields2-5",
 					BeanWithWhitespaceTextPwsFields2.class,
@@ -2684,7 +2824,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 66 */
+			{	/* 70 */
 				new Input<BeanWithWhitespaceMixedFields2>(
 					"BeanWithWhitespaceMixedFields2-1",
 					BeanWithWhitespaceMixedFields2.class,
@@ -2700,7 +2840,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 67 */
+			{	/* 71 */
 				new Input<BeanWithWhitespaceMixedFields2>(
 					"BeanWithWhitespaceMixedFields2-2",
 					BeanWithWhitespaceMixedFields2.class,
@@ -2716,7 +2856,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 68 */
+			{	/* 72 */
 				new Input<BeanWithWhitespaceMixedFields2>(
 					"BeanWithWhitespaceMixedFields2-3",
 					BeanWithWhitespaceMixedFields2.class,
@@ -2732,7 +2872,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 69 */
+			{	/* 73 */
 				new Input<BeanWithWhitespaceMixedFields2>(
 					"BeanWithWhitespaceMixedFields2-4",
 					BeanWithWhitespaceMixedFields2.class,
@@ -2748,7 +2888,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 70 */
+			{	/* 74 */
 				new Input<BeanWithWhitespaceMixedFields2>(
 					"BeanWithWhitespaceMixedFields2-5",
 					BeanWithWhitespaceMixedFields2.class,
@@ -2764,7 +2904,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 71 */
+			{	/* 75 */
 				new Input<BeanWithWhitespaceMixedFields2>(
 					"BeanWithWhitespaceMixedFields2-6",
 					BeanWithWhitespaceMixedFields2.class,
@@ -2780,7 +2920,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 72 */
+			{	/* 76 */
 				new Input<BeanWithWhitespaceMixedPwsFields2>(
 					"BeanWithWhitespaceMixedPwsFields2-1",
 					BeanWithWhitespaceMixedPwsFields2.class,
@@ -2796,7 +2936,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 73 */
+			{	/* 77 */
 				new Input<BeanWithWhitespaceMixedPwsFields2>(
 					"BeanWithWhitespaceMixedPwsFields2-2",
 					BeanWithWhitespaceMixedPwsFields2.class,
@@ -2812,7 +2952,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 74 */
+			{	/* 78 */
 				new Input<BeanWithWhitespaceMixedPwsFields2>(
 					"BeanWithWhitespaceMixedPwsFields2-3",
 					BeanWithWhitespaceMixedPwsFields2.class,
@@ -2828,7 +2968,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 75 */
+			{	/* 79 */
 				new Input<BeanWithWhitespaceMixedPwsFields2>(
 					"BeanWithWhitespaceMixedPwsFields2-4",
 					BeanWithWhitespaceMixedPwsFields2.class,
@@ -2844,7 +2984,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 76 */
+			{	/* 80 */
 				new Input<BeanWithWhitespaceMixedPwsFields2>(
 					"BeanWithWhitespaceMixedPwsFields2-5",
 					BeanWithWhitespaceMixedPwsFields2.class,
@@ -2860,7 +3000,7 @@ public class BasicHtmlTest {
 					}
 				}
 			},
-			{	/* 77 */
+			{	/* 81 */
 				new Input<BeanWithWhitespaceMixedPwsFields2>(
 					"BeanWithWhitespaceMixedPwsFields2-6",
 					BeanWithWhitespaceMixedPwsFields2.class,
@@ -3216,6 +3356,39 @@ public class BasicHtmlTest {
 			b = new ListWithLinkBeans().append(new LinkBean().init());
 			c = new LinkedHashMap<>();
 			c.put("c1", new LinkBean().init());
+			return this;
+		}
+	}
+
+	@HtmlConfig(applyHtmlLink=@HtmlLink(on="LinkBeanC", nameProperty="a", uriProperty="b"))
+	public static class LinkBeanC {
+		public String a;
+		public String b;
+
+		LinkBeanC init() {
+			a = "foo";
+			b = "http://apache.org";
+			return this;
+		}
+	}
+
+	public static class ListWithLinkBeansC extends ArrayList<LinkBeanC> {
+		public ListWithLinkBeansC append(LinkBeanC value) {
+			this.add(value);
+			return this;
+		}
+	}
+
+	public static class BeanWithLinkBeanPropertiesC {
+		public LinkBeanC a;
+		public List<LinkBeanC> b;
+		public Map<String,LinkBeanC> c;
+
+		BeanWithLinkBeanPropertiesC init() {
+			a = new LinkBeanC().init();
+			b = new ListWithLinkBeansC().append(new LinkBeanC().init());
+			c = new LinkedHashMap<>();
+			c.put("c1", new LinkBeanC().init());
 			return this;
 		}
 	}

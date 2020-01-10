@@ -55,8 +55,16 @@ public class DefaultSwapsTest {
 		assertEquals(expected, SERIALIZER.serialize(o));
 	}
 
+	private void test(String expected, Object o, Class<?> configClass) throws Exception {
+		assertEquals(expected, SERIALIZER.builder().applyAnnotations(configClass).build().serialize(o));
+	}
+
 	private void test(String expected, Object o, PojoSwap<?,?> swap) throws Exception {
 		assertEquals(expected, SERIALIZER.builder().pojoSwaps(swap).build().serializeToString(o));
+	}
+
+	private void test(String expected, Object o, PojoSwap<?,?> swap, Class<?> configClass) throws Exception {
+		assertEquals(expected, SERIALIZER.builder().pojoSwaps(swap).applyAnnotations(configClass).build().serializeToString(o));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -96,6 +104,41 @@ public class DefaultSwapsTest {
 		test("{f1:['foo','bar'],f2:'FOO'}", new ABean());
 	}
 
+	private static Vector<String> Ac = new Vector<>();
+	static {
+		Ac.add("foo");
+		Ac.add("bar");
+	}
+
+	public static class AcSwap extends StringSwap<Enumeration<?>> {
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Enumeration<?> o) throws Exception {
+			return "FOO";
+		}
+	}
+
+	@BeanConfig(applySwap=@Swap(on="AcBean.f2", value=AcSwap.class))
+	public static class AcBean {
+		public Enumeration<String> f1 = A.elements();
+
+		public Enumeration<String> f2 = A.elements();
+	}
+
+	@Test
+	public void a01c_Enumeration_usingConfig() throws Exception {
+		test("['foo','bar']", Ac.elements(), AcBean.class);
+	}
+
+	@Test
+	public void a02c_Enumeration_overrideSwap_usingConfig() throws Exception {
+		test("'FOO'", Ac.elements(), new AcSwap(), AcBean.class);
+	}
+
+	@Test
+	public void a03c_Enumeration_overrideAnnotation_usingConfig() throws Exception {
+		test("{f1:['foo','bar'],f2:'FOO'}", new AcBean(), AcBean.class);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(Iterator.class, new IteratorSwap());
 	//------------------------------------------------------------------------------------------------------------------
@@ -127,6 +170,36 @@ public class DefaultSwapsTest {
 	@Test
 	public void b03_Iterator_overrideAnnotation() throws Exception {
 		test("{f1:['foo','bar'],f2:'FOO'}", new BBean());
+	}
+
+	private static List<String> Bc = new AList<String>().appendAll("foo","bar");
+
+	public static class BcSwap extends StringSwap<Iterator<?>> {
+		@Override /* PojoSwap */
+		public String swap(BeanSession session, Iterator<?> o) throws Exception {
+			return "FOO";
+		}
+	}
+
+	@BeanConfig(applySwap=@Swap(on="BcBean.f2", value=BcSwap.class))
+	public static class BcBean {
+		public Iterator<?> f1 = B.iterator();
+		public Iterator<?> f2 = B.iterator();
+	}
+
+	@Test
+	public void b01c_Iterator_usingConfig() throws Exception {
+		test("['foo','bar']", Bc.iterator(), BcBean.class);
+	}
+
+	@Test
+	public void b02c_Iterator_overrideSwap_usingConfig() throws Exception {
+		test("'FOO'", Bc.iterator(), new BcSwap(), BcBean.class);
+	}
+
+	@Test
+	public void b03c_Iterator_overrideAnnotation_usingConfig() throws Exception {
+		test("{f1:['foo','bar'],f2:'FOO'}", new BcBean(), BcBean.class);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -213,12 +213,12 @@ public class CommonTest {
 	}
 
 	public static class E1 {
-		@Beanp(bpi="f1") public E2 x1;
-		@Beanp(bpi="f1") public Map<String,Integer> x2;
-		@Beanp(bpi="f1") public E2[] x3;
-		@Beanp(bpi="f1") public List<E2> x4;
-		@Beanp(bpi="f1") public ObjectMap[] x5;
-		@Beanp(bpi="f1") public List<ObjectMap> x6;
+		@Beanp(properties="f1") public E2 x1;
+		@Beanp(properties="f1") public Map<String,Integer> x2;
+		@Beanp(properties="f1") public E2[] x3;
+		@Beanp(properties="f1") public List<E2> x4;
+		@Beanp(properties="f1") public ObjectMap[] x5;
+		@Beanp(properties="f1") public List<ObjectMap> x6;
 
 		public static E1 create() {
 			E1 t = new E1();
@@ -256,7 +256,7 @@ public class CommonTest {
 	}
 
 	public static class F {
-		@Beanp(bpi="x2") public List<F> x1;
+		@Beanp(properties="x2") public List<F> x1;
 		public int x2;
 
 		public static F create() {

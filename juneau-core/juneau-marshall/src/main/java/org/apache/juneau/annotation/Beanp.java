@@ -203,18 +203,29 @@ public @interface Beanp {
 	Class<?> type() default Object.class;
 
 	/**
-	 * Defines which classes/methods this annotation applies to.
+	 * Dynamically apply this annotation to the specified fields/methods.
 	 *
 	 * <p>
 	 * Used in conjunction with the {@link BeanConfig#applyBeanp()}.
-	 * It is ignored when the annotation is applied directly to classes and methods.
+	 * It is ignored when the annotation is applied directly to fields/methods.
 	 *
-	 * The format can be any of the following:
+	 * <p>
+	 * The valid pattern matches are:
 	 * <ul>
-	 * 	<li>Full class name (e.g. <js>"com.foo.MyClass"</js>).
-	 * 	<li>Simple class name (e.g. <js>"MyClass"</js>).
-	 * 	<li>Full method name (e.g. <js>"com.foo.MyClass.myMethod"</js>).
-	 * 	<li>Simple method name (e.g. <js>"MyClass.myMethod"</js>).
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>Fully qualified with args: <js>"com.foo.MyClass.myMethod(String,int)"</js> or <js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js> or <js>"com.foo.MyClass.myMethod()"</js>
+	 * 			<li>Fully qualified: <js>"com.foo.MyClass.myMethod"</js>
+	 * 			<li>Simple with args: <js>"MyClass.myMethod(String,int)"</js> or <js>"MyClass.myMethod(java.lang.String,int)"</js> or <js>"MyClass.myMethod()"</js>
+	 * 			<li>Simple: <js>"MyClass.myMethod"</js>
+	 * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2.myMethod"</js> or <js>"Inner1$Inner2.myMethod"</js> or <js>"Inner2.myMethod"</js>
+	 * 		</ul>
+	 * 	<li>Fields:
+	 * 		<ul>
+	 * 			<li>Fully qualified: <js>"com.foo.MyClass.myField"</js>
+	 * 			<li>Simple: <js>"MyClass.muyField"</js>
+	 * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2.myField"</js> or <js>"Inner1$Inner2.myField"</js> or <js>"Inner2.myField"</js>
+	 * 		</ul>
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
@@ -273,7 +284,7 @@ public @interface Beanp {
 	 * 	<jk>public class</jk> MyClass {
 	 *
 	 * 		<jc>// Only render 'f1' when serializing this bean property.</jc>
-	 * 		<ja>@Beanp</ja>(bpi=<js>"f1"</js>)
+	 * 		<ja>@Beanp</ja>(properties=<js>"f1"</js>)
 	 * 		<jk>public</jk> MyChildClass x1 = <jk>new</jk> MyChildClass();
 	 * 	}
 	 *
@@ -293,7 +304,7 @@ public @interface Beanp {
 	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
-	 * 		<ja>@Beanp</ja>(bpi=<js>"f1"</js>)
+	 * 		<ja>@Beanp</ja>(properties=<js>"f1"</js>)
 	 * 		<jk>private</jk> MyChildClass <jf>x1</jf>;
 	 *
 	 * 		<jk>public</jk> MyChildClass getX1() {
@@ -302,7 +313,7 @@ public @interface Beanp {
 	 * 	}
 	 * </p>
 	 */
-	String bpi() default "";
+	String properties() default "";
 
 	/**
 	 * Bean dictionary.
