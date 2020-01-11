@@ -100,9 +100,24 @@ public @interface Beanc {
 	 * <ul>
 	 * 	<li>Constructors:
 	 * 		<ul>
-	 * 			<li>Fully qualified with args: <js>"com.foo.MyClass(String,int)"</js> or <js>"com.foo.MyClass(java.lang.String,int)"</js> or <js>"com.foo.MyClass()"</js>
-	 * 			<li>Simple with args: <js>"MyClass(String,int)"</js> or <js>"MyClass(java.lang.String,int)"</js> or <js>"MyClass()"</js>
-	 * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2()"</js> or <js>"Inner1$Inner2()"</js> or <js>"Inner2()"</js>
+	 * 			<li>Fully qualified with args:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass(String,int)"</js>
+	 * 					<li><js>"com.foo.MyClass(java.lang.String,int)"</js>
+	 * 					<li><js>"com.foo.MyClass()"</js>
+	 * 				</ul>
+	 * 			<li>Simple with args:
+	 * 				<ul>
+	 * 					<li><js>"MyClass(String,int)"</js>
+	 * 					<li><js>"MyClass(java.lang.String,int)"</js>
+	 * 					<li><js>"MyClass()"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner class:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2()"</js>
+	 * 					<li><js>"Inner1$Inner2()"</js>
+	 * 					<li><js>"Inner2()"</js>
+	 * 				</ul>
 	 * 		</ul>
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>

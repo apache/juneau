@@ -161,10 +161,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <ul>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_debug RESTMETHOD_debug}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.debug.s"</js>
-	 * 	<li><b>Data type:</b>  {@link Enablement}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.Enablement}
 	 * 	<li><b>System property:</b>  <c>RestMethodContext.debug</c>
 	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_DEBUG</c>
-	 * 	<li><b>Default:</b>  {@link Enablement#FALSE}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.Enablement#FALSE}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>

@@ -241,7 +241,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	public static final String HTML_addKeyValueTableHeaders = PREFIX + ".addKeyValueTableHeaders.b";
 
 	/**
-	 * Configuration property:  Look for URLs in {@link String Strings}.
+	 * Configuration property:  Look for URLs in {@link java.lang.String Strings}.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>

@@ -46,17 +46,49 @@ public @interface NameProperty {
 	 * <ul>
 	 * 	<li>Methods:
 	 * 		<ul>
-	 * 			<li>Fully qualified with args: <js>"com.foo.MyClass.myMethod(String,int)"</js> or <js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js> or <js>"com.foo.MyClass.myMethod()"</js>
-	 * 			<li>Fully qualified: <js>"com.foo.MyClass.myMethod"</js>
-	 * 			<li>Simple with args: <js>"MyClass.myMethod(String,int)"</js> or <js>"MyClass.myMethod(java.lang.String,int)"</js> or <js>"MyClass.myMethod()"</js>
-	 * 			<li>Simple: <js>"MyClass.myMethod"</js>
-	 * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2.myMethod"</js> or <js>"Inner1$Inner2.myMethod"</js> or <js>"Inner2.myMethod"</js>
+	 * 			<li>Fully qualified with args:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass.myMethod(String,int)"</js>
+	 * 					<li><js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js>
+	 * 					<li><js>"com.foo.MyClass.myMethod()"</js>
+	 * 				</ul>
+	 * 			<li>Fully qualified:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass.myMethod"</js>
+	 * 				</ul>
+	 * 			<li>Simple with args:
+	 * 				<ul>
+	 * 					<li><js>"MyClass.myMethod(String,int)"</js>
+	 * 					<li><js>"MyClass.myMethod(java.lang.String,int)"</js>
+	 * 					<li><js>"MyClass.myMethod()"</js>
+	 * 				</ul>
+	 * 			<li>Simple:
+	 * 				<ul>
+	 * 					<li><js>"MyClass.myMethod"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner class:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2.myMethod"</js>
+	 * 					<li><js>"Inner1$Inner2.myMethod"</js>
+	 * 					<li><js>"Inner2.myMethod"</js>
+	 * 				</ul>
 	 * 		</ul>
 	 * 	<li>Fields:
 	 * 		<ul>
-	 * 			<li>Fully qualified: <js>"com.foo.MyClass.myField"</js>
-	 * 			<li>Simple: <js>"MyClass.muyField"</js>
-	 * 			<li>Simple inner class: <js>"MyClass$Inner1$Inner2.myField"</js> or <js>"Inner1$Inner2.myField"</js> or <js>"Inner2.myField"</js>
+	 * 			<li>Fully qualified:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass.myField"</js>
+	 * 				</ul>
+	 * 			<li>Simple:
+	 * 				<ul>
+	 * 					<li><js>"MyClass.myField"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner class:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2.myField"</js>
+	 * 					<li><js>"Inner1$Inner2.myField"</js>
+	 * 					<li><js>"Inner2.myField"</js>
+	 * 				</ul>
 	 * 		</ul>
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>

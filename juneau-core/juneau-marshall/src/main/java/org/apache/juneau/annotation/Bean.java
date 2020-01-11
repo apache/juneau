@@ -256,12 +256,26 @@ public @interface Bean {
 	 * <p>
 	 * The valid pattern matches are:
 	 * <ul>
-	 * 	<li>Classes:
+	 *  <li>Classes:
 	 * 		<ul>
-	 * 			<li>Fully qualified: <js>"com.foo.MyClass"</js>
-	 * 			<li>Fully qualified inner class: <js>"com.foo.MyClass$Inner1$Inner2"</js>
-	 * 			<li>Simple: <js>"MyClass"</js>
-	 * 			<li>Simple inner: <js>"MyClass$Inner1$Inner2"</js> or <js>"Inner1$Inner2"</js> or <js>"Inner2"</js>
+	 * 			<li>Fully qualified:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass"</js>
+	 * 				</ul>
+	 * 			<li>Fully qualified inner class:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
+	 * 				</ul>
+	 * 			<li>Simple:
+	 * 				<ul>
+	 * 					<li><js>"MyClass"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2"</js>
+	 * 					<li><js>"Inner1$Inner2"</js>
+	 * 					<li><js>"Inner2"</js>
+	 * 				</ul>
 	 * 		</ul>
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>

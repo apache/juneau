@@ -58,6 +58,8 @@ public class DocGenerator {
 
 			String template = IOUtils.readFile("docs/overview_template.html");
 
+			String configProps = ConfigPropsGenerator.run();
+
 			DocStore ds = new DocStore(new File("docs/docs.txt"));
 
 			File top = new File("docs/Topics");
@@ -148,7 +150,13 @@ public class DocGenerator {
 			toc.append("</ol>\n");
 			tocRn.append("</ul>\n");
 
-			template = template.replace("{TOC-CONTENTS}", toc.toString().replace("{OVERVIEW_URL}","")).replace("{CONTENTS}", contents.toString()).replace("{TOC-RELEASE-NOTES}", tocRn).replace("{RELEASE-NOTES}", rn);
+			template = template
+				.replace("{TOC-CONTENTS}", toc.toString())
+				.replace("{CONTENTS}", contents.toString())
+				.replace("{TOC-RELEASE-NOTES}", tocRn)
+				.replace("{RELEASE-NOTES}", rn)
+				.replace("{CONFIG-PROPS}", configProps)
+				.replace("{OVERVIEW_URL}", "");
 
 			IOUtils.writeFile("src/main/javadoc/overview.html", template);
 

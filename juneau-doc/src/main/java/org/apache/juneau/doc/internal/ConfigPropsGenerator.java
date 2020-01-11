@@ -27,11 +27,20 @@ public class ConfigPropsGenerator {
 	 * @param args Not used
 	 */
 	public static void main(String[] args) {
+		run(System.out);
+	}
+
+	/**
+	 * Entry point.
+	 *
+	 * @param out Output.
+	 */
+	public static void run(PrintStream out) {
 		try {
-			System.out.println("<table class='styled w1000'>");
-			System.out.println("\t<tr>");
-			System.out.println("\t\t<th>Context</th><th>ID</th><th style='min-width:250px'>Description</th><th>Data type</th>");
-			System.out.println("\t</tr>");
+			out.println("<table class='styled w1000'>");
+			out.println("\t<tr>");
+			out.println("\t\t<th>Context</th><th>ID</th><th style='min-width:250px'>Description</th><th>Data type</th>");
+			out.println("\t</tr>");
 			for (String s : "juneau-core/juneau-config,juneau-core/juneau-dto,juneau-core/juneau-marshall,juneau-core/juneau-marshall-rdf,juneau-rest/juneau-rest-client,juneau-rest/juneau-rest-server".split(","))
 				process(new File("../" + s + "/src/main/java"));
 			String processing = "xxx";
@@ -40,10 +49,28 @@ public class ConfigPropsGenerator {
 					pi.context = "";
 				processing = pi.file;
 			}
-			ENTRIES.values().stream().forEach(x->x.out());
-			System.out.println("</table>");
+			ENTRIES.values().stream().forEach(x->x.out(out));
+			out.println("</table>");
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Convert contents to a string.
+	 *
+	 * @return Output.
+	 */
+	public static String run() {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		run(ps);
+		ps.flush();
+		try {
+			return os.toString("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return e.getLocalizedMessage();
 		}
 	}
 
@@ -177,13 +204,13 @@ public class ConfigPropsGenerator {
 		public void annotations(String s) {
 			this.annotations += s;
 		}
-		public void out() {
-			System.out.println("\t<tr>");
-			System.out.println("\t\t<td>" + context + "</td>");
-			System.out.println("\t\t<td>" + id + "</td>");
-			System.out.println("\t\t<td>" + description + "</td>");
-			System.out.println("\t\t<td style='max-width:250px;overflow:hidden'>" + dataType + "</td>");
-			System.out.println("\t</tr>");
+		public void out(PrintStream out) {
+			out.println("\t<tr>");
+			out.println("\t\t<td>" + context + "</td>");
+			out.println("\t\t<td>" + id + "</td>");
+			out.println("\t\t<td>" + description + "</td>");
+			out.println("\t\t<td style='max-width:250px;overflow:hidden'>" + dataType + "</td>");
+			out.println("\t</tr>");
 		}
 	}
 }

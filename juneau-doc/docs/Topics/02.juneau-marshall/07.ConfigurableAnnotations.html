@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-Configurable Annotations
+{updated} Configurable Annotations
 
 <p>
 	All configurable properties described in the previous section have annotation equivalents that can be applied on
@@ -86,7 +86,18 @@ Configurable Annotations
 <ul class='javatree'>
 	<li class='jc'>{@link oaj.BeanContextBuilder}
 	<ul>
-		<li class='jm'>{@link oaj.BeanContextBuilder#applyAnnotations(Class) applyAnnotations(Class)} - Apply annotations from class and all parent classes.
-		<li class='jm'>{@link oaj.BeanContextBuilder#applyAnnotations(Method) applyAnnotations(Method)} - Apply annotations from method and parent methods.
+		<li class='jm'>{@link oaj.BeanContextBuilder#applyAnnotations(Class...) applyAnnotations(Class...)} - Apply annotations from class and all parent classes.
+		<li class='jm'>{@link oaj.BeanContextBuilder#applyAnnotations(Method...) applyAnnotations(Method...)} - Apply annotations from method and parent methods.
 	</ul>
 </ul>
+<p>
+	The following example shows how annotations defined on a dummy class can be applied to a serializer:
+</p>
+<p class='bpcode w800'>
+	<ja>@SerializerConfig</ja>(quoteChar=<js>"'"</js>)
+	<ja>@BeanConfig</ja>(bpi=<js>"AddressBean: street,city,state"</js>)
+	<jk>public static class</jk> DummyClass {}
+	
+	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().applyAnnotations(DummyClass.<jk>class</jk>).build();
+	String json = ws.toString(addressBean);
+</p>

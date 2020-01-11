@@ -22,6 +22,8 @@
 <h5 class='topic w800'>juneau-marshall</h5>
 <ul class='spaced-list'>
 	<li>
+		Dynamically applied annotations: {@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	<li>
 		Better representation of nulls for XML and HTML content properties.
 		<br>Old:  <js>"&lt;myBean&gt;&lt;null&gt;&lt;/myBean&gt;"</js>
 		<br>New:  <js>"&lt;myBean nil='true'&gt;&lt;/myBean&gt;"</js>
@@ -33,7 +35,7 @@
 	<li>
 		Fixed an initialization time race condition that can cause initial parse errors when concurrently parsing into
 		array types like so: 
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	JsonParser.<jsf>DEFAULT</jsf>.parse(input, MyBean[].<jk>class</jk>);
 		</p>
 </ul>
@@ -42,7 +44,7 @@
 <ul class='spaced-list'>
 	<li> 
 		Fixed bug in {@link oajr.BasicRestCallHandler} where if you have the following REST methods...
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo"</js>)
 	<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/bar"</js>)
 		</p>
@@ -52,7 +54,7 @@
 		request, it sets the URL on the request to <js>"/error"</js> with a 401 status.  When Juneau then processes
 		this request, it cannot find that mapping and changes the status to 404 which messes with HTTP clients.
 		<br>Solution was to add a default no-op error method to the {@link oajr.BasicRestConfig} (and implementers):
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/error"</js>)
 	<jk>public void</jk> error() {}
 		</p>

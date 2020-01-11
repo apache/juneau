@@ -59,7 +59,7 @@
 		information.  
 		<br>In the following example, the <c>beans</c> parameter would resolve as an unparameterized <c>List</c>
 		which would typically result in getting a <c>List&lt;ObjectMap&gt;<c> and subsequent <c>ClassCastExceptions</c>.   
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<ja>@RestMethod</ja>
 	<jk>public void</jk> doFoo(<ja>@Body</ja> List&lt;MyBean&gt; beans) {...}
 		</p>
@@ -82,7 +82,7 @@
 		</ul>
 	<li>
 		The <dc>@RestResource(staticFiles)</dc> annotation now supports absolute path locations and multiple mappings:
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<jc>// Resolves static files in root package "htdocs" or working directory "htdocs", and then relative package "htdocs".</jc>
 	<ja>@RestResource</ja>(staticFiles=<js>"htdocs:/htdocsfolder,htdocs:htdocs.package"</js>)
 		</p>

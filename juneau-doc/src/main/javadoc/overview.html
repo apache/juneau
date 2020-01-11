@@ -181,8 +181,7 @@
 			<li><p class=''><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a></p>
 			<li><p class='update'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonParser'>Common Parser Properties</a></p>
 		</ol>
-		<li><p class=''><a class='doclink' href='#juneau-marshall.ConfigurableAnnotations'>Configurable Annotations</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-marshall.ClassMethodAnnotations'>Class/Method Annotations</a></p>
+		<li><p class='updated'><a class='doclink' href='#juneau-marshall.ConfigurableAnnotations'>Configurable Annotations</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-marshall.ObjectMap'>ObjectMap and ObjectList</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-marshall.Groups'>SerializerGroups and ParserGroups</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-marshall.ContextsBuildersSessionsPropertyStores'>Contexts, Builders, Sessions, and PropertyStores</a></p>
@@ -208,6 +207,7 @@
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.StopClasses'>Stop Classes</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.Transforms.BypassSerialization'>Bypass Serialization using Readers and InputStreams</a></p>
 		</ol>
+		<li><p class='new'><a class='doclink' href='#juneau-marshall.DynamicallyAppliedAnnotations'>Dynamically Applied Annotations</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-marshall.BeanDictionaries'>Bean Names and Dictionaries</a></p>
 		<ol>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.BeanDictionaries.BeanSubTypes'>Bean Subtypes</a></p>
@@ -438,6 +438,7 @@
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.Swagger.Models'>Models</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.Swagger.Stylesheet'>SwaggerUI.css</a></p>
 		</ol>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-server.ExecutionStatistics'>REST method execution statistics</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation'>@HtmlDocConfig</a></p>
 		<ol>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation.UIvsDI'>User Interfaces (UI) vs. Developer Interfaces (DI)</a></p>
@@ -1640,7 +1641,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableAnnotations' id='juneau-marshall.ConfigurableAnnotations'>2.7 - Configurable Annotations</a></h3>
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableAnnotations' id='juneau-marshall.ConfigurableAnnotations'>2.7 - Configurable Annotations</a></h3>
 <div class='topic'><!-- START: 2.7 - juneau-marshall.ConfigurableAnnotations -->
 <p>
 	All configurable properties described in the previous section have annotation equivalents that can be applied on
@@ -1713,25 +1714,27 @@
 <ul class='javatree'>
 	<li class='jc'>{@link org.apache.juneau.BeanContextBuilder}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#applyAnnotations(Class) applyAnnotations(Class)} - Apply annotations from class and all parent classes.
-		<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#applyAnnotations(Method) applyAnnotations(Method)} - Apply annotations from method and parent methods.
+		<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#applyAnnotations(Class...) applyAnnotations(Class...)} - Apply annotations from class and all parent classes.
+		<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#applyAnnotations(Method...) applyAnnotations(Method...)} - Apply annotations from method and parent methods.
 	</ul>
 </ul>
+<p>
+	The following example shows how annotations defined on a dummy class can be applied to a serializer:
+</p>
+<p class='bpcode w800'>
+	<ja>@SerializerConfig</ja>(quoteChar=<js>"'"</js>)
+	<ja>@BeanConfig</ja>(bpi=<js>"AddressBean: street,city,state"</js>)
+	<jk>public static class</jk> DummyClass {}
+	
+	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().applyAnnotations(DummyClass.<jk>class</jk>).build();
+	String json = ws.toString(addressBean);
+</p>
 </div><!-- END: 2.7 - juneau-marshall.ConfigurableAnnotations -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-marshall.ClassMethodAnnotations' id='juneau-marshall.ClassMethodAnnotations'>2.8 - Class/Method Annotations</a></h3>
-<div class='topic'><!-- START: 2.8 - juneau-marshall.ClassMethodAnnotations -->
-<p>
-	TODO
-</p>
-</div><!-- END: 2.8 - juneau-marshall.ClassMethodAnnotations -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.ObjectMap' id='juneau-marshall.ObjectMap'>2.9 - ObjectMap and ObjectList</a></h3>
-<div class='topic'><!-- START: 2.9 - juneau-marshall.ObjectMap -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.ObjectMap' id='juneau-marshall.ObjectMap'>2.8 - ObjectMap and ObjectList</a></h3>
+<div class='topic'><!-- START: 2.8 - juneau-marshall.ObjectMap -->
 <p>
 	The {@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} classes are generic Java 
 	representations of JSON objects and arrays.  
@@ -1838,12 +1841,12 @@
 	As a general rule, if you do not specify a target type during parsing, or if the target type cannot be 
 	determined through reflection, the parsers automatically generate <l>ObjectMaps</l> and <l>ObjectLists</l>.
 </div>
-</div><!-- END: 2.9 - juneau-marshall.ObjectMap -->
+</div><!-- END: 2.8 - juneau-marshall.ObjectMap -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Groups' id='juneau-marshall.Groups'>2.10 - SerializerGroups and ParserGroups</a></h3>
-<div class='topic'><!-- START: 2.10 - juneau-marshall.Groups -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Groups' id='juneau-marshall.Groups'>2.9 - SerializerGroups and ParserGroups</a></h3>
+<div class='topic'><!-- START: 2.9 - juneau-marshall.Groups -->
 <p>
 	Above the serializers and parsers are the {@link org.apache.juneau.serializer.SerializerGroup} and 
 	{@link org.apache.juneau.parser.ParserGroup} classes.
@@ -1875,12 +1878,12 @@
 	to provide annotated REST servlets that automatically negotiate the HTTP media types and allow the developer
 	to work with requests and responses as POJOs.
 </p>
-</div><!-- END: 2.10 - juneau-marshall.Groups -->
+</div><!-- END: 2.9 - juneau-marshall.Groups -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.ContextsBuildersSessionsPropertyStores' id='juneau-marshall.ContextsBuildersSessionsPropertyStores'>2.11 - Contexts, Builders, Sessions, and PropertyStores</a></h3>
-<div class='topic'><!-- START: 2.11 - juneau-marshall.ContextsBuildersSessionsPropertyStores -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.ContextsBuildersSessionsPropertyStores' id='juneau-marshall.ContextsBuildersSessionsPropertyStores'>2.10 - Contexts, Builders, Sessions, and PropertyStores</a></h3>
+<div class='topic'><!-- START: 2.10 - juneau-marshall.ContextsBuildersSessionsPropertyStores -->
 <p>
 	All the serializers, parsers, and REST server/client classes use the following design pattern:
 </p>
@@ -2015,12 +2018,12 @@
 	Refer to the {@link org.apache.juneau.PropertyStore} javadoc for a detailed explaination on how
 	property stores work.
 </p>
-</div><!-- END: 2.11 - juneau-marshall.ContextsBuildersSessionsPropertyStores -->
+</div><!-- END: 2.10 - juneau-marshall.ContextsBuildersSessionsPropertyStores -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms' id='juneau-marshall.Transforms'>2.12 - Transforms</a></h3>
-<div class='topic'><!-- START: 2.12 - juneau-marshall.Transforms -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms' id='juneau-marshall.Transforms'>2.11 - Transforms</a></h3>
+<div class='topic'><!-- START: 2.11 - juneau-marshall.Transforms -->
 <p>
 	By default, the Juneau framework can serialize and parse a wide variety of POJOs out-of-the-box.  
 	However, two special classes are provided tailor how certain Java objects are handled by the framework.
@@ -2080,8 +2083,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PojoSwaps' id='juneau-marshall.Transforms.PojoSwaps'>2.12.1 - PojoSwaps</a></h4>
-<div class='topic'><!-- START: 2.12.1 - juneau-marshall.Transforms.PojoSwaps -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PojoSwaps' id='juneau-marshall.Transforms.PojoSwaps'>2.11.1 - PojoSwaps</a></h4>
+<div class='topic'><!-- START: 2.11.1 - juneau-marshall.Transforms.PojoSwaps -->
 <p>
 	{@link org.apache.juneau.transform.PojoSwap PojoSwaps} are a critical component of Juneau.
 	They allow the serializers and parsers to handle Java objects that wouldn't normally be serializable.
@@ -2175,12 +2178,12 @@
 	json = s.serialize(bytes2d);		<jc>// Produces "['AQID','BAUG',null]"</jc>
 	bytes2d = p.parse(json, <jk>byte</jk>[][].<jk>class</jk>);		<jc>// Reproduces {{1,2,3},{4,5,6},null}</jc>
 </p>
-</div><!-- END: 2.12.1 - juneau-marshall.Transforms.PojoSwaps -->
+</div><!-- END: 2.11.1 - juneau-marshall.Transforms.PojoSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.DefaultPojoSwaps' id='juneau-marshall.Transforms.DefaultPojoSwaps'>2.12.2 - Default PojoSwaps</a></h4>
-<div class='topic'><!-- START: 2.12.2 - juneau-marshall.Transforms.DefaultPojoSwaps -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.DefaultPojoSwaps' id='juneau-marshall.Transforms.DefaultPojoSwaps'>2.11.2 - Default PojoSwaps</a></h4>
+<div class='topic'><!-- START: 2.11.2 - juneau-marshall.Transforms.DefaultPojoSwaps -->
 <p>
 	By default, all serializers and parsers have built in <c>PojoSwaps</c> defined for the following common data types:
 </p>
@@ -2283,12 +2286,12 @@
 		</ul>
 	</li>
 </ul>
-</div><!-- END: 2.12.2 - juneau-marshall.Transforms.DefaultPojoSwaps -->
+</div><!-- END: 2.11.2 - juneau-marshall.Transforms.DefaultPojoSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.AutoPojoSwaps' id='juneau-marshall.Transforms.AutoPojoSwaps'>2.12.3 - Auto-detected POJO swaps</a></h4>
-<div class='topic'><!-- START: 2.12.3 - juneau-marshall.Transforms.AutoPojoSwaps -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.AutoPojoSwaps' id='juneau-marshall.Transforms.AutoPojoSwaps'>2.11.3 - Auto-detected POJO swaps</a></h4>
+<div class='topic'><!-- START: 2.11.3 - juneau-marshall.Transforms.AutoPojoSwaps -->
 <p>
 	Various methods can be defined on a class directly to affect how it gets serialized.
 	This can often be simpler than using <c>PojoSwaps</c>.
@@ -2442,12 +2445,12 @@
 		}
 	}
 </p>
-</div><!-- END: 2.12.3 - juneau-marshall.Transforms.AutoPojoSwaps -->
+</div><!-- END: 2.11.3 - juneau-marshall.Transforms.AutoPojoSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PerMediaTypePojoSwaps' id='juneau-marshall.Transforms.PerMediaTypePojoSwaps'>2.12.4 - Per-media-type PojoSwaps</a></h4>
-<div class='topic'><!-- START: 2.12.4 - juneau-marshall.Transforms.PerMediaTypePojoSwaps -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PerMediaTypePojoSwaps' id='juneau-marshall.Transforms.PerMediaTypePojoSwaps'>2.11.4 - Per-media-type PojoSwaps</a></h4>
+<div class='topic'><!-- START: 2.11.4 - juneau-marshall.Transforms.PerMediaTypePojoSwaps -->
 <p>
 	Swaps can also be defined per-media-type.		
 </p>
@@ -2542,12 +2545,12 @@
 	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/*"</js>)
 	<jk>public static class</jk> MyOtherSwap <jk>extends</jk> PojoSwap&lt;MyPojo,String&gt; {...}
 </p>
-</div><!-- END: 2.12.4 - juneau-marshall.Transforms.PerMediaTypePojoSwaps -->
+</div><!-- END: 2.11.4 - juneau-marshall.Transforms.PerMediaTypePojoSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.OneWayPojoSwaps' id='juneau-marshall.Transforms.OneWayPojoSwaps'>2.12.5 - One-way PojoSwaps</a></h4>
-<div class='topic'><!-- START: 2.12.5 - juneau-marshall.Transforms.OneWayPojoSwaps -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.OneWayPojoSwaps' id='juneau-marshall.Transforms.OneWayPojoSwaps'>2.11.5 - One-way PojoSwaps</a></h4>
+<div class='topic'><!-- START: 2.11.5 - juneau-marshall.Transforms.OneWayPojoSwaps -->
 <p>
 	In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be 
 	reconstructing during parsing. 
@@ -2594,12 +2597,12 @@
 	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
 	i = p.parse(s, Iterator.<jk>class</jk>);		<jc>// Throws ParseException!!!</jc>
 </p>
-</div><!-- END: 2.12.5 - juneau-marshall.Transforms.OneWayPojoSwaps -->
+</div><!-- END: 2.11.5 - juneau-marshall.Transforms.OneWayPojoSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.SwapAnnotation' id='juneau-marshall.Transforms.SwapAnnotation'>2.12.6 - @Swap Annotation</a></h4>
-<div class='topic'><!-- START: 2.12.6 - juneau-marshall.Transforms.SwapAnnotation -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.SwapAnnotation' id='juneau-marshall.Transforms.SwapAnnotation'>2.11.6 - @Swap Annotation</a></h4>
+<div class='topic'><!-- START: 2.11.6 - juneau-marshall.Transforms.SwapAnnotation -->
 <p>
 	{@link org.apache.juneau.annotation.Swap @Swap} can be used to associate a swap class using an 
 	annotation.
@@ -2687,12 +2690,12 @@
 		}
 	}
 </p>
-</div><!-- END: 2.12.6 - juneau-marshall.Transforms.SwapAnnotation -->
+</div><!-- END: 2.11.6 - juneau-marshall.Transforms.SwapAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.TemplatedSwaps' id='juneau-marshall.Transforms.TemplatedSwaps'>2.12.7 - Templated Swaps</a></h4>
-<div class='topic'><!-- START: 2.12.7 - juneau-marshall.Transforms.TemplatedSwaps -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.TemplatedSwaps' id='juneau-marshall.Transforms.TemplatedSwaps'>2.11.7 - Templated Swaps</a></h4>
+<div class='topic'><!-- START: 2.11.7 - juneau-marshall.Transforms.TemplatedSwaps -->
 <p>
 	The {@link org.apache.juneau.annotation.Swap#template() @Swap(template)} annotation allows you to associate
 	arbitrary contextual strings with swaps.
@@ -2726,12 +2729,12 @@
 		}
 	}
 </p>
-</div><!-- END: 2.12.7 - juneau-marshall.Transforms.TemplatedSwaps -->
+</div><!-- END: 2.11.7 - juneau-marshall.Transforms.TemplatedSwaps -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.SurrogateClasses' id='juneau-marshall.Transforms.SurrogateClasses'>2.12.8 - Surrogate Classes</a></h4>
-<div class='topic'><!-- START: 2.12.8 - juneau-marshall.Transforms.SurrogateClasses -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.SurrogateClasses' id='juneau-marshall.Transforms.SurrogateClasses'>2.11.8 - Surrogate Classes</a></h4>
+<div class='topic'><!-- START: 2.11.8 - juneau-marshall.Transforms.SurrogateClasses -->
 <p>
 <p>
 	Surrogate classes are very similar in concept to <c>PojoSwaps</c> except they're simpler to define.
@@ -2795,12 +2798,12 @@
 <ul class='seealso'>
 	<li class='jic'>{@link org.apache.juneau.transform.Surrogate}
 </ul>
-</div><!-- END: 2.12.8 - juneau-marshall.Transforms.SurrogateClasses -->
+</div><!-- END: 2.11.8 - juneau-marshall.Transforms.SurrogateClasses -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BeanAnnotation' id='juneau-marshall.Transforms.BeanAnnotation'>2.12.9 - @Bean Annotation</a></h4>
-<div class='topic'><!-- START: 2.12.9 - juneau-marshall.Transforms.BeanAnnotation -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BeanAnnotation' id='juneau-marshall.Transforms.BeanAnnotation'>2.11.9 - @Bean Annotation</a></h4>
+<div class='topic'><!-- START: 2.11.9 - juneau-marshall.Transforms.BeanAnnotation -->
 <p>
 	The {@link org.apache.juneau.annotation.Bean @Bean} annotation is used to tailor how beans are 
 	interpreted by the framework.
@@ -2933,12 +2936,12 @@
 		}
 	}	
 </p>
-</div><!-- END: 2.12.9 - juneau-marshall.Transforms.BeanAnnotation -->
+</div><!-- END: 2.11.9 - juneau-marshall.Transforms.BeanAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BeanpAnnotation' id='juneau-marshall.Transforms.BeanpAnnotation'>2.12.10 - @Beanp Annotation</a></h4>
-<div class='topic'><!-- START: 2.12.10 - juneau-marshall.Transforms.BeanpAnnotation -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BeanpAnnotation' id='juneau-marshall.Transforms.BeanpAnnotation'>2.11.10 - @Beanp Annotation</a></h4>
+<div class='topic'><!-- START: 2.11.10 - juneau-marshall.Transforms.BeanpAnnotation -->
 <p>
 	The {@link org.apache.juneau.annotation.Beanp @Beanp} annotation is used to tailor how 
 	individual bean properties are interpreted by the framework.
@@ -3095,7 +3098,7 @@
 	}
 </p>
 <p>
-	The {@link org.apache.juneau.annotation.Beanp#bpi() @Beanp(bpi)} 
+	The {@link org.apache.juneau.annotation.Beanp#properties() @Beanp(properties)} 
 	annotation is used to limit which child properties are rendered by the serializers.
 	It can be used on any of the following bean property types:
 </p>
@@ -3130,12 +3133,12 @@
 	<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
 	<jk>public float</jk> <jf>price</jf>;
 </p>
-</div><!-- END: 2.12.10 - juneau-marshall.Transforms.BeanpAnnotation -->
+</div><!-- END: 2.11.10 - juneau-marshall.Transforms.BeanpAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BeancAnnotation' id='juneau-marshall.Transforms.BeancAnnotation'>2.12.11 - @Beanc Annotation</a></h4>
-<div class='topic'><!-- START: 2.12.11 - juneau-marshall.Transforms.BeancAnnotation -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BeancAnnotation' id='juneau-marshall.Transforms.BeancAnnotation'>2.11.11 - @Beanc Annotation</a></h4>
+<div class='topic'><!-- START: 2.11.11 - juneau-marshall.Transforms.BeancAnnotation -->
 <p>
 	The {@link org.apache.juneau.annotation.Beanc @Beanc} annotation is used to 
 	map constructor arguments to property names on bean with read-only properties.
@@ -3193,12 +3196,12 @@
 	If neither <c><ja>@Beanc</ja>(properties)</c> or <ja>@Name</ja> is used to identify the bean property names, 
 	we will try to use the parameter names if they are available in the bytecode.
 </p>
-</div><!-- END: 2.12.11 - juneau-marshall.Transforms.BeancAnnotation -->
+</div><!-- END: 2.11.11 - juneau-marshall.Transforms.BeancAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BeanIgnoreAnnotation' id='juneau-marshall.Transforms.BeanIgnoreAnnotation'>2.12.12 - @BeanIgnore Annotation</a></h4>
-<div class='topic'><!-- START: 2.12.12 - juneau-marshall.Transforms.BeanIgnoreAnnotation -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BeanIgnoreAnnotation' id='juneau-marshall.Transforms.BeanIgnoreAnnotation'>2.11.12 - @BeanIgnore Annotation</a></h4>
+<div class='topic'><!-- START: 2.11.12 - juneau-marshall.Transforms.BeanIgnoreAnnotation -->
 <p>
 	The {@link org.apache.juneau.annotation.BeanIgnore @BeanIgnore} annotation is used to
 	ignore classes, fields, and methods from being interpreted as beans or bean components.
@@ -3226,12 +3229,12 @@
 		<jk>public</jk> String getBar() {...}
 	}
 </p>
-</div><!-- END: 2.12.12 - juneau-marshall.Transforms.BeanIgnoreAnnotation -->
+</div><!-- END: 2.11.12 - juneau-marshall.Transforms.BeanIgnoreAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.NamePropertyAnnotation' id='juneau-marshall.Transforms.NamePropertyAnnotation'>2.12.13 - @NameProperty Annotation</a></h4>
-<div class='topic'><!-- START: 2.12.13 - juneau-marshall.Transforms.NamePropertyAnnotation -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.NamePropertyAnnotation' id='juneau-marshall.Transforms.NamePropertyAnnotation'>2.11.13 - @NameProperty Annotation</a></h4>
+<div class='topic'><!-- START: 2.11.13 - juneau-marshall.Transforms.NamePropertyAnnotation -->
 <p>
 	The {@link org.apache.juneau.annotation.NameProperty @NameProperty} annotation is used to
 	identify a setter as a method for setting the name of a POJO as it's known by its parent object.
@@ -3258,12 +3261,12 @@
 		<jk>public char</jk> <jf>sex</jf>;
 	}
 </p>
-</div><!-- END: 2.12.13 - juneau-marshall.Transforms.NamePropertyAnnotation -->
+</div><!-- END: 2.11.13 - juneau-marshall.Transforms.NamePropertyAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.ParentPropertyAnnotation' id='juneau-marshall.Transforms.ParentPropertyAnnotation'>2.12.14 - @ParentProperty Annotation</a></h4>
-<div class='topic'><!-- START: 2.12.14 - juneau-marshall.Transforms.ParentPropertyAnnotation -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.ParentPropertyAnnotation' id='juneau-marshall.Transforms.ParentPropertyAnnotation'>2.11.14 - @ParentProperty Annotation</a></h4>
+<div class='topic'><!-- START: 2.11.14 - juneau-marshall.Transforms.ParentPropertyAnnotation -->
 <p>
 	The {@link org.apache.juneau.annotation.ParentProperty @ParentProperty} annotation is used to
 	identify a setter as a method for adding a parent reference to a child object.
@@ -3289,12 +3292,12 @@
 <p>
 	Parsers will automatically set this field for you in the child beans.
 </p>
-</div><!-- END: 2.12.14 - juneau-marshall.Transforms.ParentPropertyAnnotation -->
+</div><!-- END: 2.11.14 - juneau-marshall.Transforms.ParentPropertyAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PojoBuilders' id='juneau-marshall.Transforms.PojoBuilders'>2.12.15 - POJO Builders</a></h4>
-<div class='topic'><!-- START: 2.12.15 - juneau-marshall.Transforms.PojoBuilders -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PojoBuilders' id='juneau-marshall.Transforms.PojoBuilders'>2.11.15 - POJO Builders</a></h4>
+<div class='topic'><!-- START: 2.11.15 - juneau-marshall.Transforms.PojoBuilders -->
 <p>
 	Juneau parsers can use builders to instantiate POJOs.
 	This is useful in cases where you want to create beans with read-only properties.
@@ -3403,12 +3406,12 @@
 	<li class='ja'>{@link org.apache.juneau.annotation.Builder}
 	<li class='jic'>{@link org.apache.juneau.transform.Builder}
 </ul>
-</div><!-- END: 2.12.15 - juneau-marshall.Transforms.PojoBuilders -->
+</div><!-- END: 2.11.15 - juneau-marshall.Transforms.PojoBuilders -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BeanFilters' id='juneau-marshall.Transforms.BeanFilters'>2.12.16 - BeanFilter Class</a></h4>
-<div class='topic'><!-- START: 2.12.16 - juneau-marshall.Transforms.BeanFilters -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BeanFilters' id='juneau-marshall.Transforms.BeanFilters'>2.11.16 - BeanFilter Class</a></h4>
+<div class='topic'><!-- START: 2.11.16 - juneau-marshall.Transforms.BeanFilters -->
 <p>
 	The {@link org.apache.juneau.transform.BeanFilter} class is the programmatic equivalent to the
 	{@link org.apache.juneau.annotation.Bean @Bean} annotation.
@@ -3492,12 +3495,12 @@
 		.beanFilters(AddressInterface.<jk>class</jk>)
 		.build();
 </p>
-</div><!-- END: 2.12.16 - juneau-marshall.Transforms.BeanFilters -->
+</div><!-- END: 2.11.16 - juneau-marshall.Transforms.BeanFilters -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.InterfaceFilters' id='juneau-marshall.Transforms.InterfaceFilters'>2.12.17 - Interface Filters</a></h4>
-<div class='topic'><!-- START: 2.12.17 - juneau-marshall.Transforms.InterfaceFilters -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.InterfaceFilters' id='juneau-marshall.Transforms.InterfaceFilters'>2.11.17 - Interface Filters</a></h4>
+<div class='topic'><!-- START: 2.11.17 - juneau-marshall.Transforms.InterfaceFilters -->
 <p>
 	Occasionally, you may want to limit bean properties to only those defined on a parent class or interface.  
 	This is accomplished through interface filters.
@@ -3596,12 +3599,12 @@
 		<jk>public</jk> String getFoo() {...};
 	}
 </p>
-</div><!-- END: 2.12.17 - juneau-marshall.Transforms.InterfaceFilters -->
+</div><!-- END: 2.11.17 - juneau-marshall.Transforms.InterfaceFilters -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.StopClasses' id='juneau-marshall.Transforms.StopClasses'>2.12.18 - Stop Classes</a></h4>
-<div class='topic'><!-- START: 2.12.18 - juneau-marshall.Transforms.StopClasses -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.StopClasses' id='juneau-marshall.Transforms.StopClasses'>2.11.18 - Stop Classes</a></h4>
+<div class='topic'><!-- START: 2.11.18 - juneau-marshall.Transforms.StopClasses -->
 <p>
 	Whereas interface filters limit properties defined on child classes, stop filters 
 	do the opposite and limit properties defined on parent classes.
@@ -3638,12 +3641,12 @@
 	<jc>// Serializes property 'p3', but NOT 'p1' or 'p2'.</jc>
 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> C3());
 </p>
-</div><!-- END: 2.12.18 - juneau-marshall.Transforms.StopClasses -->
+</div><!-- END: 2.11.18 - juneau-marshall.Transforms.StopClasses -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BypassSerialization' id='juneau-marshall.Transforms.BypassSerialization'>2.12.19 - Bypass Serialization using Readers and InputStreams</a></h4>
-<div class='topic'><!-- START: 2.12.19 - juneau-marshall.Transforms.BypassSerialization -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.BypassSerialization' id='juneau-marshall.Transforms.BypassSerialization'>2.11.19 - Bypass Serialization using Readers and InputStreams</a></h4>
+<div class='topic'><!-- START: 2.11.19 - juneau-marshall.Transforms.BypassSerialization -->
 <p>
 	Juneau serializers treat instances of <c>Readers</c> and <c>InputStreams</c> special by 
 	simply serializing their contents directly to the output stream or writer.
@@ -3690,8 +3693,182 @@
 	This is due to the fact that the RDF serializers use a DOM for serialization, so we don't have
 	access to the underlying stream.
 </div>
-</div><!-- END: 2.12.19 - juneau-marshall.Transforms.BypassSerialization -->
-</div><!-- END: 2.12 - juneau-marshall.Transforms -->
+</div><!-- END: 2.11.19 - juneau-marshall.Transforms.BypassSerialization -->
+</div><!-- END: 2.11 - juneau-marshall.Transforms -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.DynamicallyAppliedAnnotations' id='juneau-marshall.DynamicallyAppliedAnnotations'>2.12 - Dynamically Applied Annotations</a></h3>
+<div class='topic'><!-- START: 2.12 - juneau-marshall.DynamicallyAppliedAnnotations -->
+<p>
+	In the section {@doc juneau-marshall.Transforms}, you were introduced to annotations that can be applied to bean
+	classes, methods, fields, and constructors such as {@link org.apache.juneau.annotation.Bean @Bean}:
+</p>
+<p class='bpcode w800'>
+	<jc>// Address class with only street/city/state properties (in that order).</jc>
+	<jc>// All other properties are ignored.</jc>
+	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
+	<jk>public class</jk> Address { ... }
+</p>
+<p>
+	An alternate way of applying these annotations is using the <ja>@XConfig</ja> annotations introduced in section
+	{@doc juneau-marshall.ConfigurableAnnotations}.  
+</p>
+<p class='bpcode w800'>
+	<jc>// Unannotated class.</jc>
+	<jk>public class</jk> Address { ... }
+
+	<ja>@BeanConfig</ja>(
+		applyBean={
+			<ja>@Bean</ja>(on=<js>"Address"</js>, bpi=<js>"AddressBean: street,city,state"</js>)
+		}
+	}
+	<jk>public static class</jk> DummyClass {}
+
+	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().applyAnnotations(DummyClass.<jk>class</jk>).build();
+	String json = ws.toString(addressBean);
+</p>
+<p>
+	The advantage to this approach is it allows you to use Juneau annotations on classes/methods/fields/constructors
+	where you might not have access to the source code, or when you only want to selectively apply the annotation 
+	under certain scenarios instead of globally.
+</p>
+<p>
+	For example, the following shows the <ja>@Bean</ja> annotation being selectively applied on a single REST method 
+	(described later in {@doc juneau-rest-server}): 
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja> 
+	<ja>@BeanConfig</ja>(
+		applyBean={
+			<ja>@Bean</ja>(on=<js>"Address"</js>, bpi=<js>"AddressBean: street,city,state"</js>)
+		}
+	}
+	<jk>public</jk> List&lt;Address&gt; getAddresses() {}
+</p>
+<p>
+	Any Juneau annotation that has an <c>on()</c> method can be applied dynamically this way.
+	These include:
+</p>
+<ul>
+	<li class='ja'>{@link org.apache.juneau.annotation.Bean}
+	<li class='ja'>{@link org.apache.juneau.annotation.Beanc}
+	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnore}
+	<li class='ja'>{@link org.apache.juneau.annotation.Beanp}
+	<li class='ja'>{@link org.apache.juneau.annotation.Example}
+	<li class='ja'>{@link org.apache.juneau.annotation.NameProperty}
+	<li class='ja'>{@link org.apache.juneau.annotation.ParentProperty}
+	<li class='ja'>{@link org.apache.juneau.annotation.Swap}
+	<li class='ja'>{@link org.apache.juneau.annotation.URI}
+	<li class='ja'>{@link org.apache.juneau.csv.annotation.Csv}
+	<li class='ja'>{@link org.apache.juneau.html.annotation.Html}
+	<li class='ja'>{@link org.apache.juneau.jso.annotation.Jso}
+	<li class='ja'>{@link org.apache.juneau.json.annotation.Json}
+	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.Schema}
+	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPack}
+	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApi}
+	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainText}
+	<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXml}
+	<li class='ja'>{@link org.apache.juneau.uon.annotation.Uon}
+	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncoding}
+	<li class='ja'>{@link org.apache.juneau.xml.annotation.Xml}
+	<li class='ja'>{@link org.apache.juneau.jena.annotation.Rdf}
+</ul>
+<p>
+	The valid pattern matches are:
+</p>
+<ul class='spaced-list'>
+	<li>Classes:
+		<ul>
+			<li>Fully qualified: 
+				<ul>
+					<li><js>"com.foo.MyClass"</js>
+				</ul>
+			<li>Fully qualified inner class: 
+				<ul>
+					<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
+				</ul>
+			<li>Simple: 
+				<ul>
+					<li><js>"MyClass"</js>
+				</ul>
+			<li>Simple inner: 
+				<ul>
+					<li><js>"MyClass$Inner1$Inner2"</js>
+					<li><js>"Inner1$Inner2"</js>
+					<li><js>"Inner2"</js>
+				</ul>
+		</ul>
+	<li>Methods:
+		<ul>
+			<li>Fully qualified with args: 
+				<ul>
+					<li><js>"com.foo.MyClass.myMethod(String,int)"</js> 
+					<li><js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js> 
+					<li><js>"com.foo.MyClass.myMethod()"</js>
+				</ul>
+			<li>Fully qualified: 
+				<ul>
+					<li><js>"com.foo.MyClass.myMethod"</js>
+				</ul>
+			<li>Simple with args: 
+				<ul>
+					<li><js>"MyClass.myMethod(String,int)"</js>
+					<li><js>"MyClass.myMethod(java.lang.String,int)"</js>
+					<li><js>"MyClass.myMethod()"</js>
+				</ul>
+			<li>Simple: 
+				<ul>
+					<li><js>"MyClass.myMethod"</js>
+				</ul>
+			<li>Simple inner class: 
+				<ul>
+					<li><js>"MyClass$Inner1$Inner2.myMethod"</js>
+					<li><js>"Inner1$Inner2.myMethod"</js>
+					<li><js>"Inner2.myMethod"</js>
+				</ul>
+		</ul>
+	<li>Fields:
+		<ul>
+			<li>Fully qualified: 
+				<ul>
+					<li><js>"com.foo.MyClass.myField"</js>
+				</ul>
+			<li>Simple: 
+				<ul>
+					<li><js>"MyClass.myField"</js>
+				</ul>
+			<li>Simple inner class: 
+				<ul>
+					<li><js>"MyClass$Inner1$Inner2.myField"</js>
+					<li><js>"Inner1$Inner2.myField"</js>
+					<li><js>"Inner2.myField"</js>
+				</ul>
+		</ul>
+	<li>Constructors:
+		<ul>
+			<li>Fully qualified with args: 
+				<ul>
+					<li><js>"com.foo.MyClass(String,int)"</js>
+					<li><js>"com.foo.MyClass(java.lang.String,int)"</js>
+					<li><js>"com.foo.MyClass()"</js>
+				</ul>
+			<li>Simple with args: 
+				<ul>
+					<li><js>"MyClass(String,int)"</js>
+					<li><js>"MyClass(java.lang.String,int)"</js>
+					<li><js>"MyClass()"</js>
+				</ul>
+			<li>Simple inner class: 
+				<ul>
+					<li><js>"MyClass$Inner1$Inner2()"</js>
+					<li><js>"Inner1$Inner2()"</js>
+					<li><js>"Inner2()"</js>
+				</ul>
+		</ul>
+	<li>A comma-delimited list of anything on this list.
+</ul>
+</div><!-- END: 2.12 - juneau-marshall.DynamicallyAppliedAnnotations -->
 
 <!-- ==================================================================================================== -->
 
@@ -20580,8 +20757,41 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation' id='juneau-rest-server.HtmlDocAnnotation'>6.30 - @HtmlDocConfig</a></h3>
-<div class='topic'><!-- START: 6.30 - juneau-rest-server.HtmlDocAnnotation -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.ExecutionStatistics' id='juneau-rest-server.ExecutionStatistics'>6.30 - REST method execution statistics</a></h3>
+<div class='topic'><!-- START: 6.30 - juneau-rest-server.ExecutionStatistics -->
+<p>
+	<ja>@RestResource</ja> annotated classes get automated timing and error statistic information for all <ja>@RestMethod</ja>
+	and <ja>@RestHook</ja> annotated methods on the class.
+</p>
+<p>
+	The statistics are made available via the subpath <c>/stats</c> as shown below in the <c>HelloWorldResource</c> example:
+</p>
+<img class='bordered w900' src='doc-files/juneau-rest-server.ExecutionStatistics.1.png'>
+<p>
+	The default REST configuration provides a link to the stats in the navlinks section of the page:
+</p>
+<img class='bordered w900' src='doc-files/juneau-rest-server.ExecutionStatistics.2.png'>
+<p>
+	The exception hash shown is the same hash that is shown in the log file and provides a quick way of locating
+	the exception in the logs.
+</p>
+<p>
+	Programmatic access to the statistics are provided via the following methods:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.RestContext}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.RestContext#getStats() getStats()}
+		<li class='jm'>{@link org.apache.juneau.rest.RestContext#getMethodExecStats() getMethodExecStats()}
+		<li class='jm'>{@link org.apache.juneau.rest.RestContext#getMethodExecStatsReport() getMethodExecStatsReport()}
+	</ul>
+</ul>
+</div><!-- END: 6.30 - juneau-rest-server.ExecutionStatistics -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation' id='juneau-rest-server.HtmlDocAnnotation'>6.31 - @HtmlDocConfig</a></h3>
+<div class='topic'><!-- START: 6.31 - juneau-rest-server.HtmlDocAnnotation -->
 <p>
 	The {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig} annotation is used to customize the HTML 
 	view of your serialized POJOs.
@@ -20697,8 +20907,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.UIvsDI' id='juneau-rest-server.HtmlDocAnnotation.UIvsDI'>6.30.1 - User Interfaces (UI) vs. Developer Interfaces (DI)</a></h4>
-<div class='topic'><!-- START: 6.30.1 - juneau-rest-server.HtmlDocAnnotation.UIvsDI -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.UIvsDI' id='juneau-rest-server.HtmlDocAnnotation.UIvsDI'>6.31.1 - User Interfaces (UI) vs. Developer Interfaces (DI)</a></h4>
+<div class='topic'><!-- START: 6.31.1 - juneau-rest-server.HtmlDocAnnotation.UIvsDI -->
 <p>
 	An important distinction needs to be made about the HTML representations produced by the REST
 	API.  These should not be considered User Interfaces, but rather Developer Interfaces.
@@ -20739,12 +20949,12 @@
 		The architecture is flexible enough that you could in theory pull in and use jQuery, React, 
 		Angular, or any number of sophisticated Javascript UI frameworks.  Resist the urge to do so.
 </ul>
-</div><!-- END: 6.30.1 - juneau-rest-server.HtmlDocAnnotation.UIvsDI -->
+</div><!-- END: 6.31.1 - juneau-rest-server.HtmlDocAnnotation.UIvsDI -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.Widgets' id='juneau-rest-server.HtmlDocAnnotation.Widgets'>6.30.2 - Widgets</a></h4>
-<div class='topic'><!-- START: 6.30.2 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.Widgets' id='juneau-rest-server.HtmlDocAnnotation.Widgets'>6.31.2 - Widgets</a></h4>
+<div class='topic'><!-- START: 6.31.2 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
 <p>
 	The {@link org.apache.juneau.rest.widget.Widget} class allows you to add arbitrary HTML, CSS, and Javascript
 	to HTML pages.
@@ -20858,12 +21068,12 @@
 <ul class='seealso'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_widgets}
 </ul>
-</div><!-- END: 6.30.2 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
+</div><!-- END: 6.31.2 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets' id='juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets'>6.30.3 - Predefined Widgets</a></h4>
-<div class='topic'><!-- START: 6.30.3 - juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets' id='juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets'>6.31.3 - Predefined Widgets</a></h4>
+<div class='topic'><!-- START: 6.31.3 - juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets -->
 <p>
 	The {@link org.apache.juneau.rest.widget} package contains predefined reusable widgets.
 </p>
@@ -21101,12 +21311,12 @@
 		}
 	}
 </p>
-</div><!-- END: 6.30.3 - juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets -->
+</div><!-- END: 6.31.3 - juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.UiCustomization' id='juneau-rest-server.HtmlDocAnnotation.UiCustomization'>6.30.4 - UI Customization</a></h4>
-<div class='topic'><!-- START: 6.30.4 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.UiCustomization' id='juneau-rest-server.HtmlDocAnnotation.UiCustomization'>6.31.4 - UI Customization</a></h4>
+<div class='topic'><!-- START: 6.31.4 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
 <p>
 	The HTML views of POJOs can somewhat be considered a rudimentary User Interface.
 	In reality, a better term for them would be a Developer Interface as they're meant to be used 
@@ -21250,12 +21460,12 @@
 <ul class='seealso'>
 	<li class='link'>{@doc juneau-microservice-jetty.UiCustomization}
 </ul>
-</div><!-- END: 6.30.4 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
+</div><!-- END: 6.31.4 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.Stylesheets' id='juneau-rest-server.HtmlDocAnnotation.Stylesheets'>6.30.5 - Stylesheets</a></h4>
-<div class='topic'><!-- START: 6.30.5 - juneau-rest-server.HtmlDocAnnotation.Stylesheets -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.Stylesheets' id='juneau-rest-server.HtmlDocAnnotation.Stylesheets'>6.31.5 - Stylesheets</a></h4>
+<div class='topic'><!-- START: 6.31.5 - juneau-rest-server.HtmlDocAnnotation.Stylesheets -->
 <p>
 	The sample root page renders in the default "devops" look-and-feel:
 </p>
@@ -21365,13 +21575,13 @@
 		}
 	}
 </p>
-</div><!-- END: 6.30.5 - juneau-rest-server.HtmlDocAnnotation.Stylesheets -->
-</div><!-- END: 6.30 - juneau-rest-server.HtmlDocAnnotation -->
+</div><!-- END: 6.31.5 - juneau-rest-server.HtmlDocAnnotation.Stylesheets -->
+</div><!-- END: 6.31 - juneau-rest-server.HtmlDocAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.DefaultHeaders' id='juneau-rest-server.DefaultHeaders'>6.31 - Default Headers</a></h3>
-<div class='topic'><!-- START: 6.31 - juneau-rest-server.DefaultHeaders -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.DefaultHeaders' id='juneau-rest-server.DefaultHeaders'>6.32 - Default Headers</a></h3>
+<div class='topic'><!-- START: 6.32 - juneau-rest-server.DefaultHeaders -->
 <p>
 	The following annotations are provided for specifying default header values for requests and responses:
 </p>
@@ -21413,12 +21623,12 @@
 		</ul>
 	</li>
 </ul>
-</div><!-- END: 6.31 - juneau-rest-server.DefaultHeaders -->
+</div><!-- END: 6.32 - juneau-rest-server.DefaultHeaders -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.LoggingAndDebugging' id='juneau-rest-server.LoggingAndDebugging'>6.32 - Logging / Debugging</a></h3>
-<div class='topic'><!-- START: 6.32 - juneau-rest-server.LoggingAndDebugging -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.LoggingAndDebugging' id='juneau-rest-server.LoggingAndDebugging'>6.33 - Logging / Debugging</a></h3>
+<div class='topic'><!-- START: 6.33 - juneau-rest-server.LoggingAndDebugging -->
 <p>
 	The REST APIs provides support for fine-tuned control of logging for HTTP requests and responses.
 </p>
@@ -21742,12 +21952,12 @@
 	The {@link org.apache.juneau.rest.annotation.Logging#stackTraceHashingTimeout() @Logging(stackTraceHashingTimeout)} setting can be used to periodically log the stacktrace
 	to the log file again.
 </p>
-</div><!-- END: 6.32 - juneau-rest-server.LoggingAndDebugging -->
+</div><!-- END: 6.33 - juneau-rest-server.LoggingAndDebugging -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HttpStatusCodes' id='juneau-rest-server.HttpStatusCodes'>6.33 - HTTP Status Codes</a></h3>
-<div class='topic'><!-- START: 6.33 - juneau-rest-server.HttpStatusCodes -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HttpStatusCodes' id='juneau-rest-server.HttpStatusCodes'>6.34 - HTTP Status Codes</a></h3>
+<div class='topic'><!-- START: 6.34 - juneau-rest-server.HttpStatusCodes -->
 <p>
 	By default, a 200 (OK) status is automatically set as the HTTP status when a Java method executes 
 	successfully.
@@ -21810,12 +22020,12 @@
 		<td>The Java method threw an exception other than {@link org.apache.juneau.rest.RestException}</td>
 	</tr>
 </table>
-</div><!-- END: 6.33 - juneau-rest-server.HttpStatusCodes -->
+</div><!-- END: 6.34 - juneau-rest-server.HttpStatusCodes -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.OverloadingHttpMethods' id='juneau-rest-server.OverloadingHttpMethods'>6.34 - Overloading HTTP Methods</a></h3>
-<div class='topic'><!-- START: 6.34 - juneau-rest-server.OverloadingHttpMethods -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.OverloadingHttpMethods' id='juneau-rest-server.OverloadingHttpMethods'>6.35 - Overloading HTTP Methods</a></h3>
+<div class='topic'><!-- START: 6.35 - juneau-rest-server.OverloadingHttpMethods -->
 <p>
 	Through the use of the built-in <l>"method"</l> GET parameter, you can implement requests beyond the basic 
 	REST http method types.
@@ -21839,12 +22049,12 @@
 		allowedMethodParams=<js>"BAR"</js>
 	)
 </p>
-</div><!-- END: 6.34 - juneau-rest-server.OverloadingHttpMethods -->
+</div><!-- END: 6.35 - juneau-rest-server.OverloadingHttpMethods -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.BuiltInParameters' id='juneau-rest-server.BuiltInParameters'>6.35 - Built-in Parameters</a></h3>
-<div class='topic'><!-- START: 6.35 - juneau-rest-server.BuiltInParameters -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.BuiltInParameters' id='juneau-rest-server.BuiltInParameters'>6.36 - Built-in Parameters</a></h3>
+<div class='topic'><!-- START: 6.36 - juneau-rest-server.BuiltInParameters -->
 <p>
 	The following URL parameters have special meaning and can be passed in through the URL of the request:
 </p>
@@ -21904,12 +22114,12 @@
 		</td>
 	</tr>
 </table>
-</div><!-- END: 6.35 - juneau-rest-server.BuiltInParameters -->
+</div><!-- END: 6.36 - juneau-rest-server.BuiltInParameters -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.CustomSerializersAndParsers' id='juneau-rest-server.CustomSerializersAndParsers'>6.36 - Custom Serializers and Parsers</a></h3>
-<div class='topic'><!-- START: 6.36 - juneau-rest-server.CustomSerializersAndParsers -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.CustomSerializersAndParsers' id='juneau-rest-server.CustomSerializersAndParsers'>6.37 - Custom Serializers and Parsers</a></h3>
+<div class='topic'><!-- START: 6.37 - juneau-rest-server.CustomSerializersAndParsers -->
 <p>
 	A very easy-to-use API is provided for defining your own serializers and parsers at both the servlet and 
 	method levels.
@@ -22030,12 +22240,12 @@
 		}
 	}
 </p>
-</div><!-- END: 6.36 - juneau-rest-server.CustomSerializersAndParsers -->
+</div><!-- END: 6.37 - juneau-rest-server.CustomSerializersAndParsers -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.UsingWithOsgi' id='juneau-rest-server.UsingWithOsgi'>6.37 - Using with OSGi</a></h3>
-<div class='topic'><!-- START: 6.37 - juneau-rest-server.UsingWithOsgi -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.UsingWithOsgi' id='juneau-rest-server.UsingWithOsgi'>6.38 - Using with OSGi</a></h3>
+<div class='topic'><!-- START: 6.38 - juneau-rest-server.UsingWithOsgi -->
 <p>
 	Since REST servlets are basically just <l>HttpServlets</l>, incorporating them into an OSGi environment
 	is pretty straightforward.
@@ -22097,12 +22307,12 @@
 		}
 	}
 </p>
-</div><!-- END: 6.37 - juneau-rest-server.UsingWithOsgi -->
+</div><!-- END: 6.38 - juneau-rest-server.UsingWithOsgi -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Injection' id='juneau-rest-server.Injection'>6.38 - Using with Spring and Injection frameworks</a></h3>
-<div class='topic'><!-- START: 6.38 - juneau-rest-server.Injection -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Injection' id='juneau-rest-server.Injection'>6.39 - Using with Spring and Injection frameworks</a></h3>
+<div class='topic'><!-- START: 6.39 - juneau-rest-server.Injection -->
 <p>
 	The Juneau REST server API is compatible with dependency injection frameworks such as Spring.
 </p>
@@ -22204,24 +22414,24 @@
 			<jk>this</jk>.<jf>bean3</jf> = bean3;
 		}
 </p>
-</div><!-- END: 6.38 - juneau-rest-server.Injection -->
+</div><!-- END: 6.39 - juneau-rest-server.Injection -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HTTP2' id='juneau-rest-server.HTTP2'>6.39 - Using HTTP/2 features</a></h3>
-<div class='topic'><!-- START: 6.39 - juneau-rest-server.HTTP2 -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HTTP2' id='juneau-rest-server.HTTP2'>6.40 - Using HTTP/2 features</a></h3>
+<div class='topic'><!-- START: 6.40 - juneau-rest-server.HTTP2 -->
 <p>
 	Juneau is built as a veneer on top of the Servlet API, allowing you to use low-level Servlet APIs
 	whenever needed.
 	This allows you to take advantage of the newest HTTP/2 features implemented in the new Servlet 4.0 
 	specification.
 </p>
-</div><!-- END: 6.39 - juneau-rest-server.HTTP2 -->
+</div><!-- END: 6.40 - juneau-rest-server.HTTP2 -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.OtherNotes' id='juneau-rest-server.OtherNotes'>6.40 - Other Notes</a></h3>
-<div class='topic'><!-- START: 6.40 - juneau-rest-server.OtherNotes -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.OtherNotes' id='juneau-rest-server.OtherNotes'>6.41 - Other Notes</a></h3>
+<div class='topic'><!-- START: 6.41 - juneau-rest-server.OtherNotes -->
 <ul class='spaced-list'>
 	<li>
 		Subclasses can use either {@link javax.servlet.http.HttpServlet#init(ServletConfig)} 
@@ -22232,7 +22442,7 @@
 		For example, to add a <l>"Refresh: 1"</l> header to the response to auto-refresh a page, the following 
 		parameter can be specified:  <l>"/sample?X-Response-Headers={Refresh=1}"</l>
 </ul>
-</div><!-- END: 6.40 - juneau-rest-server.OtherNotes -->
+</div><!-- END: 6.41 - juneau-rest-server.OtherNotes -->
 </div><!-- END: 6 - juneau-rest-server -->
 
 <!-- ==================================================================================================== -->
@@ -29008,7 +29218,7 @@
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.html.HtmlSerializer#HTML_detectLinksInStrings HTML_detectLinksInStrings}</td>
-		<td>Look for URLs in {@link String Strings}.</td>
+		<td>Look for URLs in {@link java.lang.String Strings}.</td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
@@ -29747,7 +29957,7 @@
 		<td></td>
 		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_debug RESTMETHOD_debug}</td>
 		<td>Debug mode.</td>
-		<td style='max-width:250px;overflow:hidden'>{@link Enablement}</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.rest.Enablement}</td>
 	</tr>
 	<tr>
 		<td></td>
@@ -30026,6 +30236,7 @@
 		<td style='max-width:250px;overflow:hidden'><c>String</c> ({@link org.apache.juneau.xml.Namespace})</td>
 	</tr>
 </table>
+
 </div><!-- END: 19.1 - Glossaries.ConfigurablePropertiesGlossary -->
 </div><!-- END: 19 - Glossaries -->
 
@@ -30193,84 +30404,84 @@
 	
 	<h5 class='toc'>Release Notes</h5>
 	<ul class='toc'>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.0'>5.0.0.0 (Jun 11, 2012)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.1'>5.0.0.1 (Jun 14, 2012)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.2'>5.0.0.2 (Sept 28, 2012)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.3'>5.0.0.3 (Oct 3, 2012)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.4'>5.0.0.4 (Oct 7, 2012)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.5'>5.0.0.5 (Oct 29, 2012)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.6'>5.0.0.6 (Oct 30, 2012)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.7'>5.0.0.7 (Jan 20, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.8'>5.0.0.8 (Jan 30, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.9'>5.0.0.9 (Feb 26, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.10'>5.0.0.10 (Mar 7, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.11'>5.0.0.11 (Mar 8, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.12'>5.0.0.12 (Mar 10, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.13'>5.0.0.13 (Mar 14, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.14'>5.0.0.14 (Mar 23, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.15'>5.0.0.15 (Mar 24, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.16'>5.0.0.16 (Mar 25, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.17'>5.0.0.17 (Mar 25, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.18'>5.0.0.18 (Mar 27, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.19'>5.0.0.19 (Apr 1, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.20'>5.0.0.20 (Apr 7, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.21'>5.0.0.21 (Apr 9, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.22'>5.0.0.22 (Apr 12, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.23'>5.0.0.23 (Apr 14, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.24'>5.0.0.24 (May 9, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.25'>5.0.0.25 (May 11, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.26'>5.0.0.26 (Jun 5, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.27'>5.0.0.27 (July 7, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.28'>5.0.0.28 (July 9, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.29'>5.0.0.29 (Aug 2, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.30'>5.0.0.30 (Aug 8, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.31'>5.0.0.31 (Aug 9, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.32'>5.0.0.32 (Oct 5, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.33'>5.0.0.33 (Oct 20, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.34'>5.0.0.34 (Nov 10, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.35'>5.0.0.35 (Nov 26, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.0.0.36'>5.0.0.36 (Dec 18, 2013)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.0'>5.1.0.0 (Jan 18, 2014)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.1'>5.1.0.1 (Jan 25, 2014)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.2'>5.1.0.2 (Apr 27, 2014)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.3'>5.1.0.3 (Jun 28, 2014)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.4'>5.1.0.4 (Aug 25, 2014)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.5'>5.1.0.5 (Sept 1, 2014)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.6'>5.1.0.6 (Sept 21, 2014)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.7'>5.1.0.7 (Oct 5, 2014)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.8'>5.1.0.8 (Oct 25, 2014)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.9'>5.1.0.9 (Dec 1, 2014)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.10'>5.1.0.10 (Dec 23, 2014)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.11'>5.1.0.11 (Feb 14, 2015)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.12'>5.1.0.12 (Mar 28, 2015)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.13'>5.1.0.13 (Apr 24, 2015)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.14'>5.1.0.14 (May 10, 2015)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.15'>5.1.0.15 (May 24, 2015)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.16'>5.1.0.16 (June 28, 2015)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.17'>5.1.0.17 (Aug 3, 2015)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.18'>5.1.0.18 (Aug 5, 2015)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.19'>5.1.0.19 (Aug 15, 2015)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.1.0.20'>5.1.0.20 (Sept 5, 2015)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.2.0.0'>5.2.0.0 (Dec 30, 2015)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#5.2.0.1'>5.2.0.1 (Mar 23, 2016)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#6.0.0'>6.0.0 (Oct 3, 2016)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#6.0.1'>6.0.1 (Jan 3, 2017)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#6.1.0'>6.1.0 (Feb 25, 2017)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#6.2.0'>6.2.0 (Apr 28, 2017)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#6.3.0'>6.3.0 (Jun 30, 2017)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#6.3.1'>6.3.1 (Aug 1, 2017)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#6.4.0'>6.4.0 (Oct 5, 2017)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#7.0.0'>7.0.0 (Oct 25, 2017)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#7.0.1'>7.0.1 (Dec 24, 2017)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#7.1.0'>7.1.0 (Mar 08, 2018)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#7.2.0'>7.2.1 (Sept 25, 2018)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#7.2.1'>7.2.1 (Oct 23, 2018)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#7.2.2'>7.2.2 (Nov 7, 2018)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#8.0.0'>8.0.0 (Jan 01, 2019)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#8.1.0'>8.1.0 (Aug 21, 2019)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#8.1.1'>8.1.1 (Sept 20, 2019)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#8.1.2'>8.1.2 (TBD)</a></p>
-<li><p><a class='doclink' href='{OVERVIEW_URL}#8.1.3'>8.1.3 (TBD)</a></p>
+<li><p><a class='doclink' href='#5.0.0.0'>5.0.0.0 (Jun 11, 2012)</a></p>
+<li><p><a class='doclink' href='#5.0.0.1'>5.0.0.1 (Jun 14, 2012)</a></p>
+<li><p><a class='doclink' href='#5.0.0.2'>5.0.0.2 (Sept 28, 2012)</a></p>
+<li><p><a class='doclink' href='#5.0.0.3'>5.0.0.3 (Oct 3, 2012)</a></p>
+<li><p><a class='doclink' href='#5.0.0.4'>5.0.0.4 (Oct 7, 2012)</a></p>
+<li><p><a class='doclink' href='#5.0.0.5'>5.0.0.5 (Oct 29, 2012)</a></p>
+<li><p><a class='doclink' href='#5.0.0.6'>5.0.0.6 (Oct 30, 2012)</a></p>
+<li><p><a class='doclink' href='#5.0.0.7'>5.0.0.7 (Jan 20, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.8'>5.0.0.8 (Jan 30, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.9'>5.0.0.9 (Feb 26, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.10'>5.0.0.10 (Mar 7, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.11'>5.0.0.11 (Mar 8, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.12'>5.0.0.12 (Mar 10, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.13'>5.0.0.13 (Mar 14, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.14'>5.0.0.14 (Mar 23, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.15'>5.0.0.15 (Mar 24, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.16'>5.0.0.16 (Mar 25, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.17'>5.0.0.17 (Mar 25, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.18'>5.0.0.18 (Mar 27, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.19'>5.0.0.19 (Apr 1, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.20'>5.0.0.20 (Apr 7, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.21'>5.0.0.21 (Apr 9, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.22'>5.0.0.22 (Apr 12, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.23'>5.0.0.23 (Apr 14, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.24'>5.0.0.24 (May 9, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.25'>5.0.0.25 (May 11, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.26'>5.0.0.26 (Jun 5, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.27'>5.0.0.27 (July 7, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.28'>5.0.0.28 (July 9, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.29'>5.0.0.29 (Aug 2, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.30'>5.0.0.30 (Aug 8, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.31'>5.0.0.31 (Aug 9, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.32'>5.0.0.32 (Oct 5, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.33'>5.0.0.33 (Oct 20, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.34'>5.0.0.34 (Nov 10, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.35'>5.0.0.35 (Nov 26, 2013)</a></p>
+<li><p><a class='doclink' href='#5.0.0.36'>5.0.0.36 (Dec 18, 2013)</a></p>
+<li><p><a class='doclink' href='#5.1.0.0'>5.1.0.0 (Jan 18, 2014)</a></p>
+<li><p><a class='doclink' href='#5.1.0.1'>5.1.0.1 (Jan 25, 2014)</a></p>
+<li><p><a class='doclink' href='#5.1.0.2'>5.1.0.2 (Apr 27, 2014)</a></p>
+<li><p><a class='doclink' href='#5.1.0.3'>5.1.0.3 (Jun 28, 2014)</a></p>
+<li><p><a class='doclink' href='#5.1.0.4'>5.1.0.4 (Aug 25, 2014)</a></p>
+<li><p><a class='doclink' href='#5.1.0.5'>5.1.0.5 (Sept 1, 2014)</a></p>
+<li><p><a class='doclink' href='#5.1.0.6'>5.1.0.6 (Sept 21, 2014)</a></p>
+<li><p><a class='doclink' href='#5.1.0.7'>5.1.0.7 (Oct 5, 2014)</a></p>
+<li><p><a class='doclink' href='#5.1.0.8'>5.1.0.8 (Oct 25, 2014)</a></p>
+<li><p><a class='doclink' href='#5.1.0.9'>5.1.0.9 (Dec 1, 2014)</a></p>
+<li><p><a class='doclink' href='#5.1.0.10'>5.1.0.10 (Dec 23, 2014)</a></p>
+<li><p><a class='doclink' href='#5.1.0.11'>5.1.0.11 (Feb 14, 2015)</a></p>
+<li><p><a class='doclink' href='#5.1.0.12'>5.1.0.12 (Mar 28, 2015)</a></p>
+<li><p><a class='doclink' href='#5.1.0.13'>5.1.0.13 (Apr 24, 2015)</a></p>
+<li><p><a class='doclink' href='#5.1.0.14'>5.1.0.14 (May 10, 2015)</a></p>
+<li><p><a class='doclink' href='#5.1.0.15'>5.1.0.15 (May 24, 2015)</a></p>
+<li><p><a class='doclink' href='#5.1.0.16'>5.1.0.16 (June 28, 2015)</a></p>
+<li><p><a class='doclink' href='#5.1.0.17'>5.1.0.17 (Aug 3, 2015)</a></p>
+<li><p><a class='doclink' href='#5.1.0.18'>5.1.0.18 (Aug 5, 2015)</a></p>
+<li><p><a class='doclink' href='#5.1.0.19'>5.1.0.19 (Aug 15, 2015)</a></p>
+<li><p><a class='doclink' href='#5.1.0.20'>5.1.0.20 (Sept 5, 2015)</a></p>
+<li><p><a class='doclink' href='#5.2.0.0'>5.2.0.0 (Dec 30, 2015)</a></p>
+<li><p><a class='doclink' href='#5.2.0.1'>5.2.0.1 (Mar 23, 2016)</a></p>
+<li><p><a class='doclink' href='#6.0.0'>6.0.0 (Oct 3, 2016)</a></p>
+<li><p><a class='doclink' href='#6.0.1'>6.0.1 (Jan 3, 2017)</a></p>
+<li><p><a class='doclink' href='#6.1.0'>6.1.0 (Feb 25, 2017)</a></p>
+<li><p><a class='doclink' href='#6.2.0'>6.2.0 (Apr 28, 2017)</a></p>
+<li><p><a class='doclink' href='#6.3.0'>6.3.0 (Jun 30, 2017)</a></p>
+<li><p><a class='doclink' href='#6.3.1'>6.3.1 (Aug 1, 2017)</a></p>
+<li><p><a class='doclink' href='#6.4.0'>6.4.0 (Oct 5, 2017)</a></p>
+<li><p><a class='doclink' href='#7.0.0'>7.0.0 (Oct 25, 2017)</a></p>
+<li><p><a class='doclink' href='#7.0.1'>7.0.1 (Dec 24, 2017)</a></p>
+<li><p><a class='doclink' href='#7.1.0'>7.1.0 (Mar 08, 2018)</a></p>
+<li><p><a class='doclink' href='#7.2.0'>7.2.1 (Sept 25, 2018)</a></p>
+<li><p><a class='doclink' href='#7.2.1'>7.2.1 (Oct 23, 2018)</a></p>
+<li><p><a class='doclink' href='#7.2.2'>7.2.2 (Nov 7, 2018)</a></p>
+<li><p><a class='doclink' href='#8.0.0'>8.0.0 (Jan 01, 2019)</a></p>
+<li><p><a class='doclink' href='#8.1.0'>8.1.0 (Aug 21, 2019)</a></p>
+<li><p><a class='doclink' href='#8.1.1'>8.1.1 (Sept 20, 2019)</a></p>
+<li><p><a class='doclink' href='#8.1.2'>8.1.2 (Dec 01, 2019)</a></p>
+<li><p><a class='doclink' href='#8.1.3'>8.1.3 (TBD)</a></p>
 </ul>
 
 	
@@ -33226,9 +33437,9 @@
 	<li>Removed generics from {@link org.apache.juneau.BeanPropertyMeta}.
 	<li>Introduced new classes to eliminate the references to language-specific metadata in the core metadata classes:
 		<ul>
-			<li>{@link org.apache.juneau.ClassMetaExtended} / {@link org.apache.juneau.ClassMeta#getExtendedMeta(Class)} 
-			<li>{@link org.apache.juneau.BeanMetaExtended} / {@link org.apache.juneau.BeanMeta#getExtendedMeta(Class)} 
-			<li>{@link org.apache.juneau.BeanPropertyMetaExtended} / {@link org.apache.juneau.BeanPropertyMeta#getExtendedMeta(Class)} 
+			<li><dc>ClassMetaExtended</dc> / <dc>ClassMeta.getExtendedMeta(Class)</dc> 
+			<li><dc>BeanMetaExtended</dc> /<dc>BeanMeta.getExtendedMeta(Class)</dc> 
+			<li><dc>BeanPropertyMetaExtended</dc> / <dc>BeanPropertyMeta.getExtendedMeta(Class)</dc> 
 		</ul>
 	</li>
 	<li>Renamed <c>@Transform</c> annotation to <dc>@Pojo</dc> so that it can be used for various POJO-related behavior, not just associating transforms.  
@@ -35471,9 +35682,9 @@
 			<li>New method {@link org.apache.juneau.rest.RestContext#getClasspathResource(Class,String,Locale) getClasspathResource(Class,String,Locale)}.
 			<li>New method {@link org.apache.juneau.rest.RestContext#getClasspathResourceAsString(Class,String,Locale) getClasspathResourceAsString(Class,String,Locale)}.
 			<li>New method {@link org.apache.juneau.rest.RestContext#getClasspathResource(Class,Class,MediaType,String,Locale) getClasspathResource(Class,Class,MediaType,String,Locale)}.
-			<li>{@link org.apache.juneau.rest.RestContext#getDefaultRequestHeaders() getDefaultRequestHeaders} returns a 
+			<li><dc>RestContext.getDefaultRequestHeaders()</dc> returns a 
 				<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
-			<li>{@link org.apache.juneau.rest.RestContext#getDefaultResponseHeaders() getDefaultRequestHeaders} returns a 
+			<li><dc>RestContext.getDefaultResponseHeaders()</dc> returns a 
 				<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
 		</ul>
 	<li>
@@ -36849,7 +37060,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#8.1.2' id='8.1.2'>8.1.2 (TBD)</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#8.1.2' id='8.1.2'>8.1.2 (Dec 01, 2019)</a></h3>
 <div class='topic'><!-- START: 8.1.2 -->
 <p>
 	Juneau 8.1.2 is a moderate release.
@@ -36920,15 +37131,22 @@
 <h5 class='topic w800'>juneau-marshall</h5>
 <ul class='spaced-list'>
 	<li>
+		Dynamically applied annotations: {@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	<li>
 		Better representation of nulls for XML and HTML content properties.
 		<br>Old:  <js>"&lt;myBean&gt;&lt;null&gt;&lt;/myBean&gt;"</js>
 		<br>New:  <js>"&lt;myBean nil='true'&gt;&lt;/myBean&gt;"</js>
 	<li>
 		Configurable properties such as {@link org.apache.juneau.BeanContext#BEAN_debug} can now be set globally by either
 		system properties or environment variables.
-		<br>For <jsf>BEAN_debug</jsf> which resolves to <js>"BEAN_debug"</js>, you can use either the system
-		property <js>"BeanContext.debug.b"</js> or environment variables <js>"BeanContext_debug_b"</js> or 
-		<js>"BEANCONTEXT_DEBUG_B"</js>.
+		<br>For <jsf>BEAN_debug</jsf> you can use either the system
+		property <js>"BeanContext.debug"</js> or environment variables <js>"BEANCONTEXT_DEBUG"</js>.
+	<li>
+		Fixed an initialization time race condition that can cause initial parse errors when concurrently parsing into
+		array types like so: 
+		<p class='bpcode w800'>
+	JsonParser.<jsf>DEFAULT</jsf>.parse(input, MyBean[].<jk>class</jk>);
+		</p>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
@@ -36961,7 +37179,8 @@
 			<li><ja>@RestMethod(attrs)</ja> --&gt; {@link org.apache.juneau.rest.annotation.RestMethod#reqAttrs() @RestMethod(reqAttrs)}
 			<li><ja>@RestMethod(defaultRequestHeaders)</ja> --&gt; {@link org.apache.juneau.rest.annotation.RestMethod#reqHeaders() @RestMethod(reqHeaders)}
 		</ul>
-		
+	<li>
+		New auto-generated REST method execution statistics: {@doc juneau-rest-server.ExecutionStatistics}
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>
@@ -36969,6 +37188,12 @@
 	<li>
 		Several convenience methods defined in {@link org.apache.juneau.rest.client.RestClientBuilder} that were deprecated in 8.1.2 have been
 		undeprecated in this release due to user feedback.
+</ul>
+
+<h5 class='topic w800'>juneau-doc</h5>
+<ul class='spaced-list'>
+	<li>
+		New auto-generated glossary of all configurable properties: {@doc Glossaries.ConfigurablePropertiesGlossary}
 </ul>
 </div><!-- END: 8.1.3 -->
 

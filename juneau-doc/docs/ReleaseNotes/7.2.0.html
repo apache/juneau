@@ -13,10 +13,10 @@
  ***************************************************************************************************************************/
  -->
 
-7.2.1 (Sept 25, 2018)
+7.2.0 (Sept 25, 2018)
 
 <p>
-	7.2.1 is a major release that introduces several significant new features:
+	7.2.0 is a major release that introduces several significant new features:
 </p>
 <ul class='spaced-list'>
 	<li>OpenAPI part serializing and parsing with full support for OpenAPI validation of input and output in the REST servlet and client APIs.
@@ -200,13 +200,13 @@
 	<li>
 		New API for pairing serializers and parsers for simplified syntax:
 		<h5 class='figure'>Examples:</h5>
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<jc>// Using instance.</jc>
 	Json json = <jk>new</jk> Json();
 	MyPojo myPojo = json.read(string, MyPojo.<jk>class</jk>);
 	String string = json.write(myPojo);
 		</p>
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<jc>// Using DEFAULT instance.</jc>
 	MyPojo myPojo = Json.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
 	String string = Json.<jsf>DEFAULT</jsf>.write(myPojo);
