@@ -3936,7 +3936,7 @@ public final class RestContext extends BeanContext {
 		}
 	}
 
-	private static void addToRouter(Map<String, RestCallRouter.Builder> routers, String httpMethodName, RestMethodContext cm) throws RestServletException {
+	private static void addToRouter(Map<String, RestCallRouter.Builder> routers, String httpMethodName, RestMethodContext cm) {
 		if (! routers.containsKey(httpMethodName))
 			routers.put(httpMethodName, new RestCallRouter.Builder(httpMethodName));
 		routers.get(httpMethodName).add(cm);

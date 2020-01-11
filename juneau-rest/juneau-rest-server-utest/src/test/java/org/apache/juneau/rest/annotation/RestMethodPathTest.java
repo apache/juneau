@@ -84,4 +84,30 @@ public class RestMethodPathTest {
 		a.get("/x/foo").execute().assertBody("g");
 		a.get("/x/foo/x").execute().assertBody("h");
 	}
+
+	//=================================================================================================================
+	// Overridden URL patterns
+	//=================================================================================================================
+
+	@Rest
+	public static class B1 {
+		@RestMethod(name=GET, path="/foo")
+		public String b01a() {
+			return "a";
+		}
+	}
+
+	@Rest
+	public static class B2 extends B1 {
+		@RestMethod(name=GET, path="/foo")
+		public String b02a() {  // Overrides method on parent.
+			return "b";
+		}
+	}
+	static MockRest b2 = MockRest.build(B2.class, null);
+
+	@Test
+	public void b01_pathOverriddenByChild() throws Exception {
+		b2.get("/foo").execute().assertBody("b");
+	}
 }

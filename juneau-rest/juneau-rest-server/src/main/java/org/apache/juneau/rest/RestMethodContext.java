@@ -580,6 +580,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final ResponseBeanMeta responseMeta;
 
 	final Enablement debug;
+	final int hierarchyDepth;
 
 	@SuppressWarnings("deprecation")
 	RestMethodContext(RestMethodContextBuilder b) throws ServletException {
@@ -592,6 +593,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		// Need this to access methods in anonymous inner classes.
 		mi.setAccessible();
+
+		int hd = 0;
+		Class<?> sc = b.method.getDeclaringClass().getSuperclass();
+		while (sc != null) {
+			hd++;
+			sc = sc.getSuperclass();
+		}
+		hierarchyDepth = hd;
 
 		PropertyStore ps = getPropertyStore();
 		ResourceResolver rr = context.getResourceResolver();
@@ -960,6 +969,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		if (c != 0)
 			return c;
 
+		c = compare(o.hierarchyDepth, hierarchyDepth);
+		if (c != 0)
+			return c;
+
 		c = compare(o.requiredMatchers.length, requiredMatchers.length);
 		if (c != 0)
 			return c;
@@ -969,6 +982,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			return c;
 
 		c = compare(o.guards.length, guards.length);
+		if (c != 0)
+			return c;
+
+		c = compare(method.getName(), o.method.getName());
 		if (c != 0)
 			return c;
 

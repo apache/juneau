@@ -40,7 +40,6 @@ public class RestCallRouter {
 	 */
 	static final class Builder {
 		private List<RestMethodContext> childMethods = new ArrayList<>();
-		private Set<String> collisions = new HashSet<>();
 		private String httpMethodName;
 
 		Builder(String httpMethodName) {
@@ -51,13 +50,7 @@ public class RestCallRouter {
 			return httpMethodName;
 		}
 
-		Builder add(RestMethodContext m) throws RestServletException {
-			if (! m.hasGuardsOrMatchers()) {
-				String p = m.getHttpMethod() + ":" + m.getPathPattern();
-				if (collisions.contains(p))
-					throw new RestServletException("Duplicate Java methods assigned to the same method/pattern:  ''{0}''", p);
-				collisions.add(p);
-			}
+		Builder add(RestMethodContext m) {
 			childMethods.add(m);
 			return this;
 		}
