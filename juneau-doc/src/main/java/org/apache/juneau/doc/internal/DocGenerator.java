@@ -40,6 +40,9 @@ public class DocGenerator {
 		+ "\n ***************************************************************************************************************************/"
 	;
 
+	static String juneauVersion = System.getProperty("juneauVersion");
+	static String juneauTagPattern = juneauVersion.replace(".", "\\.") + "\\-\\w+";
+
 	/**
 	 * Entry point.
 	 *
@@ -74,13 +77,13 @@ public class DocGenerator {
 
 			for (PageFile pf1 : topics.pageFiles) {
 				toc
-					.append("\t<li><p class='").append(pf1.tags.isEmpty() ? "toc2" : pf1.tags).append("'><a class='doclink' href='{OVERVIEW_URL}#").append(pf1.fullId).append("'>").append(pf1.title).append("</a></p>\n");
+					.append("\t<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#").append(pf1.fullId).append("'>").append(pf1.title).append("</a>").append(pf1.tags.isEmpty() ? "" : ("<span class='update'>"+pf1.tags+"</span>")).append("</p>\n");
 				ds
 					.addLink(pf1.fullId, "#" + pf1.fullId, "Overview > " + pf1.title);
 				contents
 					.append("\n")
 					.append("<!-- ==================================================================================================== -->\n\n")
-					.append("<h2 class='topic ").append(pf1.tags).append("' onclick='toggle(this)'><a href='#").append(pf1.fullId).append("' id='").append(pf1.fullId).append("'>").append(pf1.fullNumber).append(" - ").append(pf1.title).append("</a></h2>\n")
+					.append("<h2 class='topic' onclick='toggle(this)'><a href='#").append(pf1.fullId).append("' id='").append(pf1.fullId).append("'>").append(pf1.fullNumber).append(" - ").append(pf1.title).append("</a>").append(pf1.tags.isEmpty() ? "" : ("<span class='update'>"+pf1.tags+"</span>")).append("</h2>\n")
 					.append("<div class='topic'>").append("<!-- START: ").append(pf1.fullNumber).append(" - " ).append(pf1.fullId).append(" -->\n")
 					.append(pf1.contents).append("\n");
 
@@ -91,13 +94,13 @@ public class DocGenerator {
 					for (PageFile pf2 : pf1.pageFiles) {
 
 						toc
-							.append("\t\t<li><p class='").append(pf2.tags).append("'><a class='doclink' href='{OVERVIEW_URL}#").append(pf2.fullId).append("'>").append(pf2.title).append("</a></p>\n");
+							.append("\t\t<li><p><a class='doclink' href='{OVERVIEW_URL}#").append(pf2.fullId).append("'>").append(pf2.title).append("</a>").append(pf2.tags.isEmpty() ? "" : ("<span class='update'>"+pf2.tags+"</span>")).append("</p>\n");
 						ds
 							.addLink(pf2.fullId, "#" + pf2.fullId, "Overview > " + pf1.title + " > " + pf2.title);
 						contents
 							.append("\n")
 							.append("<!-- ==================================================================================================== -->\n\n")
-							.append("<h3 class='topic ").append(pf2.tags).append("' onclick='toggle(this)'><a href='#").append(pf2.fullId).append("' id='").append(pf2.fullId).append("'>").append(pf2.fullNumber).append(" - ").append(pf2.title).append("</a></h3>\n")
+							.append("<h3 class='topic' onclick='toggle(this)'><a href='#").append(pf2.fullId).append("' id='").append(pf2.fullId).append("'>").append(pf2.fullNumber).append(" - ").append(pf2.title).append("</a>").append(pf2.tags.isEmpty() ? "" : ("<span class='update'>"+pf2.tags+"</span>")).append("</h3>\n")
 							.append("<div class='topic'>").append("<!-- START: ").append(pf2.fullNumber).append(" - " ).append(pf2.fullId).append(" -->\n")
 							.append(pf2.contents).append("\n");
 
@@ -107,13 +110,13 @@ public class DocGenerator {
 							for (PageFile pf3 : pf2.pageFiles) {
 
 								toc
-									.append("\t\t\t<li><p class='").append(pf3.tags).append("'><a class='doclink' href='{OVERVIEW_URL}#").append(pf3.fullId).append("'>").append(pf3.title).append("</a></p>\n");
+									.append("\t\t\t<li><p><a class='doclink' href='{OVERVIEW_URL}#").append(pf3.fullId).append("'>").append(pf3.title).append("</a>").append(pf3.tags.isEmpty() ? "" : ("<span class='update'>"+pf3.tags+"</span>")).append("</p>\n");
 								ds
 									.addLink(pf3.fullId, "#" + pf3.fullId, "Overview > " + pf1.title + " > " + pf2.title + " > " + pf3.title);
 								contents
 									.append("\n")
 									.append("<!-- ==================================================================================================== -->\n\n")
-									.append("<h4 class='topic ").append(pf3.tags).append("' onclick='toggle(this)'><a href='#").append(pf3.fullId).append("' id='").append(pf3.fullId).append("'>").append(pf3.fullNumber).append(" - ").append(pf3.title).append("</a></h4>\n")
+									.append("<h4 class='topic' onclick='toggle(this)'><a href='#").append(pf3.fullId).append("' id='").append(pf3.fullId).append("'>").append(pf3.fullNumber).append(" - ").append(pf3.title).append("</a>").append(pf3.tags.isEmpty() ? "" : ("<span class='update'>"+pf3.tags+"</span>")).append("</h4>\n")
 									.append("<div class='topic'>").append("<!-- START: ").append(pf3.fullNumber).append(" - " ).append(pf3.fullId).append(" -->\n")
 									.append(pf3.contents).append("\n")
 									.append("</div>").append("<!-- END: ").append(pf3.fullNumber).append(" - ").append(pf3.fullId).append(" -->\n");
@@ -258,7 +261,11 @@ public class DocGenerator {
 				title = s.substring(0, i);
 				if (title.startsWith("{")) {
 					tags = title.substring(1, title.indexOf('}'));
-					title = title.substring(tags.length()+2).trim();
+					if (juneauTagPattern != null)
+						tags = tags.replaceAll(juneauTagPattern, "<b>$0</b>");
+					s = s.substring(i+1);
+					i = s.indexOf("\n");
+					title = s.substring(0, i);
 				}
 				if (s.contains("{@link org.apache.juneau."))
 					WARNINGS.add("Found {@link org.apache.juneau...} in file " + f.getAbsolutePath());

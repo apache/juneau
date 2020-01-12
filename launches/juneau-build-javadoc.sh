@@ -14,7 +14,7 @@
 . launches/juneau-env.sh
 
 cd juneau-doc
-java -cp juneau-doc.jar org.apache.juneau.doc.internal.DocGenerator
+java -DjuneauVersion=$JUNEAU_VERSION -cp juneau-doc.jar org.apache.juneau.doc.internal.DocGenerator 
 cd .. 
 
 mvn javadoc:aggregate

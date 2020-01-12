@@ -217,7 +217,13 @@ ul.toc div,
 
 p.toc2 {
     background-color: #dee3e950;
-    border-radius: 0px 10px 10px 0px;
+}
+
+span.update {
+	display:block;
+	float:right;
+	font-size:9pt;
+	color:green;
 }
 
 /* Linear gradients */
