@@ -14,13 +14,14 @@
 . launches/juneau-env.sh
 
 cd juneau-doc
-java -DjuneauVersion=$JUNEAU_VERSION -cp juneau-doc.jar org.apache.juneau.doc.internal.DocGenerator 
+mvn install
+java -DjuneauVersion=$JUNEAU_VERSION -cp target/juneau-doc-${JUNEAU_VERSION}-SNAPSHOT.jar org.apache.juneau.doc.internal.DocGenerator 
 cd .. 
 
 mvn javadoc:aggregate
 
 cd juneau-doc
-java -cp juneau-doc.jar org.apache.juneau.doc.internal.DocLinkTester
+java -cp target/juneau-doc-${JUNEAU_VERSION}-SNAPSHOT.jar org.apache.juneau.doc.internal.DocLinkTester
 cd .. 
 
 rm -rf ../juneau-website/content/site/apidocs-$JUNEAU_VERSION

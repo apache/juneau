@@ -256,7 +256,7 @@
 							<!--org.apache.juneau.doc.internal.DocTag</taglet-->
 							<!-- taglet>org.apache.juneau.doc.internal.PropertyTag</taglet-->
 						</taglets>
-						<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
+						<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
 					</configuration>
 					<executions>
 						<execution>
