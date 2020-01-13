@@ -19,7 +19,7 @@
 
 	<groupId>org.apache.juneau</groupId>
 	<artifactId>juneau</artifactId>
-	<version>8.1.4-SNAPSHOT</version>
+	<version>8.1.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>juneau</name>
 	<description>Apache Juneau</description>
@@ -45,7 +45,7 @@
 		<juneau.compare.version>8.0.0</juneau.compare.version>
 		<javadoc.juneau.version>8.1.3</javadoc.juneau.version>
 		<juneauVersion>8.1.3</juneauVersion>
-		<juneauVersionNext>8.1.4</juneauVersionNext>
+		<juneauVersionNext>8.1.3</juneauVersionNext>
 		<derby.version>10.10.2.0</derby.version>
 		<hibernate.version>5.0.9.Final</hibernate.version>
 		<javax.inject.version>1</javax.inject.version>
