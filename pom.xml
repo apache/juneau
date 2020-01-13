@@ -217,7 +217,7 @@
 							<additionalJOption>-J-DjuneauVersionNext=${juneauVersionNext}</additionalJOption>
 						</additionalJOptions>
 						<show>protected</show>
-						<windowtitle>${project.name} ${project.version}</windowtitle>
+						<windowtitle>Apache Juneau ${project.version}</windowtitle>
 						<author>true</author>
 						<linksource>true</linksource>
 						<source>1.8</source>
@@ -238,19 +238,19 @@
 						<taglets>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.DocTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
+								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
 							</taglet>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.PropertyTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
+								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
 							</taglet>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.FragmentTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
+								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
 							</taglet>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.SourceTag</tagletClass>
-								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
+								<tagletpath>${basedir}/juneau-doc/target/juneau-doc-${project.version}.jar</tagletpath>
 							</taglet>
 							
 							<!--org.apache.juneau.doc.internal.DocTag</taglet-->
