@@ -48,33 +48,8 @@ Marshalls
 	MyPojo myPojo = Json.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
 	String string = Json.<jsf>DEFAULT</jsf>.write(myPojo);
 </p>
-<p>
-	Marshalls exist for all supported languages:
-</p>
-<ul class='javatree'>
-	<li class='jac'>{@link oaj.marshall.Marshall}
-	<ul>
-		<li class='jac'>{@link oaj.marshall.CharMarshall}
-		<ul>
-			<li class='jc'>{@link oaj.marshall.Html}
-			<li class='jc'>{@link oaj.marshall.Json}
-			<li class='jc'>{@link oaj.marshall.PlainText}
-			<li class='jc'>{@link oaj.marshall.SimpleJson}
-			<li class='jc'>{@link oaj.marshall.Uon}
-			<li class='jc'>{@link oaj.marshall.UrlEncoding}
-			<li class='jc'>{@link oaj.marshall.Xml}
-			<li class='jc'>{@link oaj.marshall.N3}
-			<li class='jc'>{@link oaj.marshall.NTriple}
-			<li class='jc'>{@link oaj.marshall.RdfXml}
-			<li class='jc'>{@link oaj.marshall.RdfXmlAbbrev}
-			<li class='jc'>{@link oaj.marshall.Turtle}	
-		</ul>
-		<li class='jac'>{@link oaj.marshall.StreamMarshall}
-		<ul>
-			<li class='jc'>{@link oaj.marshall.Jso}
-			<li class='jc'>{@link oaj.marshall.MsgPack}
-		</ul>
-	</ul>
-</ul>
 
+<ul class='seealso'>
+	<li class='doclink'>{@doc Glossaries.LanguageSupport link} - Glossary of all supported languages.
+</ul>
 

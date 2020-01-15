@@ -171,12 +171,7 @@
 		<li><p><a class='doclink' href='#juneau-marshall.Marshalls'>Marshalls</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.HttpPartSerializers'>HTTP Part Serializers</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.HttpPartParsers'>HTTP Part Parsers</a></p>
-		<li><p><a class='doclink' href='#juneau-marshall.ConfigurableProperties'></a><span class='update'><b>8.1.3-updated</b></span></p>
-		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Serializer Properties</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a><span class='update'>8.1.0-updated</span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonParser'>Common Parser Properties</a><span class='update'><b>8.1.3-updated</b></span></p>
-		</ol>
+		<li><p><a class='doclink' href='#juneau-marshall.ConfigurableProperties'>Configurable Properties</a><span class='update'><b>8.1.3-updated</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ConfigurableAnnotations'>Configurable Annotations</a><span class='update'>8.1.0-new, <b>8.1.3-updated</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ObjectMap'>ObjectMap and ObjectList</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.Groups'>SerializerGroups and ParserGroups</a></p>
@@ -561,7 +556,9 @@
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#Glossaries'>Glossaries</a><span class='update'><b>8.1.3-new</b></span></p>
 	<ol>
-		<li><p><a class='doclink' href='#Glossaries.ConfigurablePropertiesGlossary'>Configurable Properties Glossary</a><span class='update'><b>8.1.3-new</b></span></p>
+		<li><p><a class='doclink' href='#Glossaries.LanguageSupport'>Language Support</a><span class='update'><b>8.1.3-new</b></span></p>
+		<li><p><a class='doclink' href='#Glossaries.Annotations'>Annotations</a><span class='update'><b>8.1.3-new</b></span></p>
+		<li><p><a class='doclink' href='#Glossaries.ConfigurableProperties'>Configurable Properties</a><span class='update'><b>8.1.3-new</b></span></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#Security'>Security Best-Practices</a></p>
 	<ol>
@@ -1105,60 +1102,9 @@
 	Extensible support for other data types such as <c>Calendars</c>, <c>Dates</c>, 
 	<c>Iterators</c> is available through the use of POJO swaps (described later).
 </p>
-<p>
-	The class hierarchy for the serializers (excluding specialized subclasses) are:
-</p>
-<ul class='javatree'>
-	<li class='jac'>{@link org.apache.juneau.serializer.Serializer}
-	<ul>
-		<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializer}
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
-			<ul>
-			<li class='jc'>{@link org.apache.juneau.json.JsonSchemaSerializer}
-			<li class='jc'>{@link org.apache.juneau.json.SimpleJsonSerializer}
-			</ul>
-			<li class='jc'>{@link org.apache.juneau.plaintext.PlainTextSerializer}
-			<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
-			<ul>
-				<li class='jc'>{@link org.apache.juneau.jena.N3Serializer}
-				<li class='jc'>{@link org.apache.juneau.jena.NTripleSerializer}
-				<li class='jc'>{@link org.apache.juneau.jena.RdfXmlSerializer}
-				<li class='jc'>{@link org.apache.juneau.jena.RdfXmlAbbrevSerializer}
-				<li class='jc'>{@link org.apache.juneau.jena.TurtleSerializer}
-			</ul>
-			<li class='jc'>{@link org.apache.juneau.uon.UonSerializer}
-			<ul>
-				<li class='jc'>{@link org.apache.juneau.oapi.OpenApiSerializer}
-				<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}
-			</ul>
-			<li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}
-			<ul>
-				<li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}
-				<ul>
-					<li class='jc'>{@link org.apache.juneau.html.HtmlSchemaSerializer}
-					<li class='jc'>{@link org.apache.juneau.html.HtmlStrippedDocSerializer}
-					<ul>
-						<li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}
-						<ul>
-							<li class='jc'>{@link org.apache.juneau.html.HtmlSchemaDocSerializer}
-						</ul>
-					</ul>
-				</ul>
-				<li class='jc'>{@link org.apache.juneau.soap.SoapXmlSerializer}
-				<li class='jc'>{@link org.apache.juneau.xml.XmlDocSerializer}
-				<li class='jc'>{@link org.apache.juneau.xmlschema.XmlSchemaSerializer}
-				<ul>
-					<li class='jc'>{@link org.apache.juneau.xmlschema.XmlSchemaDocSerializer}
-				</ul>
-			</ul>
-		</ul>
-		<li class='jac'>{@link org.apache.juneau.serializer.OutputStreamSerializer}
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.jso.JsoSerializer}
-			<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackSerializer}
-		</ul>
-	</ul>
+
+<ul class='seealso'>
+	<li class='doclink'>{@doc Glossaries.LanguageSupport link} - Glossary of all supported languages.
 </ul>
 </div><!-- END: 2.1 - juneau-marshall.Serializers -->
 
@@ -1240,39 +1186,8 @@
 	with escapes.  
 </div>
 
-<p>
-	The class hierarchy for the parsers (excluding specialized subclasses) are:
-</p>
-<ul class='javatree'>
-	<li class='jac'>{@link org.apache.juneau.parser.Parser}
-	<ul>
-		<li class='jac'>{@link org.apache.juneau.parser.ReaderParser}
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.json.JsonParser}
-			<li class='jc'>{@link org.apache.juneau.plaintext.PlainTextParser}
-			<li class='jc'>{@link org.apache.juneau.jena.RdfParser}
-			<ul>
-				<li class='jc'>{@link org.apache.juneau.jena.RdfXmlParser}
-				<li class='jc'>{@link org.apache.juneau.jena.N3Parser}
-				<li class='jc'>{@link org.apache.juneau.jena.NTripleParser}
-				<li class='jc'>{@link org.apache.juneau.jena.TurtleParser}
-			</ul>
-			<li class='jc'>{@link org.apache.juneau.uon.UonParser}
-			<ul>
-				<li class='jc'>{@link org.apache.juneau.oapi.OpenApiParser}
-				<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingParser}
-			</ul>
-			<li class='jc'>{@link org.apache.juneau.xml.XmlParser}
-			<ul>
-				<li class='jc'>{@link org.apache.juneau.html.HtmlParser}
-			</ul>
-		</ul>
-		<li class='jac'>{@link org.apache.juneau.parser.InputStreamParser}
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.jso.JsoParser}
-			<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackParser}
-		</ul>
-	</ul>
+<ul class='seealso'>
+	<li class='doclink'>{@doc Glossaries.LanguageSupport link} - Glossary of all supported languages.
 </ul>
 </div><!-- END: 2.2 - juneau-marshall.Parsers -->
 
@@ -1313,33 +1228,9 @@
 	MyPojo myPojo = Json.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
 	String string = Json.<jsf>DEFAULT</jsf>.write(myPojo);
 </p>
-<p>
-	Marshalls exist for all supported languages:
-</p>
-<ul class='javatree'>
-	<li class='jac'>{@link org.apache.juneau.marshall.Marshall}
-	<ul>
-		<li class='jac'>{@link org.apache.juneau.marshall.CharMarshall}
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.marshall.Html}
-			<li class='jc'>{@link org.apache.juneau.marshall.Json}
-			<li class='jc'>{@link org.apache.juneau.marshall.PlainText}
-			<li class='jc'>{@link org.apache.juneau.marshall.SimpleJson}
-			<li class='jc'>{@link org.apache.juneau.marshall.Uon}
-			<li class='jc'>{@link org.apache.juneau.marshall.UrlEncoding}
-			<li class='jc'>{@link org.apache.juneau.marshall.Xml}
-			<li class='jc'>{@link org.apache.juneau.marshall.N3}
-			<li class='jc'>{@link org.apache.juneau.marshall.NTriple}
-			<li class='jc'>{@link org.apache.juneau.marshall.RdfXml}
-			<li class='jc'>{@link org.apache.juneau.marshall.RdfXmlAbbrev}
-			<li class='jc'>{@link org.apache.juneau.marshall.Turtle}	
-		</ul>
-		<li class='jac'>{@link org.apache.juneau.marshall.StreamMarshall}
-		<ul>
-			<li class='jc'>{@link org.apache.juneau.marshall.Jso}
-			<li class='jc'>{@link org.apache.juneau.marshall.MsgPack}
-		</ul>
-	</ul>
+
+<ul class='seealso'>
+	<li class='doclink'>{@doc Glossaries.LanguageSupport link} - Glossary of all supported languages.
 </ul>
 </div><!-- END: 2.3 - juneau-marshall.Marshalls -->
 
@@ -1435,7 +1326,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableProperties' id='juneau-marshall.ConfigurableProperties'>2.6 - </a><span class='update'><b>8.1.3-updated</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableProperties' id='juneau-marshall.ConfigurableProperties'>2.6 - Configurable Properties</a><span class='update'><b>8.1.3-updated</b></span></h3>
 <div class='topic'><!-- START: 2.6 - juneau-marshall.ConfigurableProperties -->
 <p>
 	Serializers and parsers have a wide variety of configurable properties.  They all extend from the 
@@ -1511,128 +1402,9 @@
 	variables <js>"WriterSerializer_useWhitespace"</js> or <js>"WRITERSERIALIZER_USEWHITESPACE"</js> to <js>"true"</js>.
 </p>
 
-<!-- ==================================================================================================== -->
-
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableProperties.Common' id='juneau-marshall.ConfigurableProperties.Common'>2.6.1 - Common Serializer Properties</a></h4>
-<div class='topic'><!-- START: 2.6.1 - juneau-marshall.ConfigurableProperties.Common -->
-<p>
-	All serializers and parsers extend from the {@link org.apache.juneau.BeanContext} class.
-	Therefore, the following properties are common to all serializers and parsers:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link org.apache.juneau.BeanContext}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanClassVisibility BEAN_beanClassVisibility}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanConstructorVisibility BEAN_beanConstructorVisibility}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanDictionary BEAN_beanDictionary}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility BEAN_beanFieldVisibility}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFilters BEAN_beanFilters}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanMapPutReturnsOldValue BEAN_beanMapPutReturnsOldValue}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanMethodVisibility BEAN_beanMethodVisibility}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beansRequireDefaultConstructor BEAN_beansRequireDefaultConstructor}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beansRequireSerializable BEAN_beansRequireSerializable}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beansRequireSettersForGetters BEAN_beansRequireSettersForGetters}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beansRequireSomeProperties BEAN_beansRequireSomeProperties}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName BEAN_beanTypePropertyName}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_bpi BEAN_bpi}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_bpx BEAN_bpx}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_debug BEAN_debug}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_examples BEAN_examples}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_fluentSetters BEAN_fluentSetters}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnGetters BEAN_ignoreInvocationExceptionsOnGetters}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnSetters BEAN_ignoreInvocationExceptionsOnSetters}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignorePropertiesWithoutSetters BEAN_ignorePropertiesWithoutSetters}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties BEAN_ignoreUnknownBeanProperties}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownNullBeanProperties BEAN_ignoreUnknownNullBeanProperties}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_implClasses BEAN_implClasses}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_locale BEAN_locale}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_mediaType BEAN_mediaType}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_notBeanClasses BEAN_notBeanClasses}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_notBeanPackages BEAN_notBeanPackages}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_pojoSwaps BEAN_pojoSwaps}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_propertyNamer BEAN_propertyNamer}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_sortProperties BEAN_sortProperties}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_timeZone BEAN_timeZone}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_useEnumNames BEAN_useEnumNames}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_useInterfaceProxies BEAN_useInterfaceProxies}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_useJavaBeanIntrospector BEAN_useJavaBeanIntrospector}
-	</ul>
+<ul class='seealso'>
+	<li class='doclink'>{@doc Glossaries.ConfigurableProperties link} - Glossary of all configurable properties.
 </ul>
-</div><!-- END: 2.6.1 - juneau-marshall.ConfigurableProperties.Common -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableProperties.CommonSerializer' id='juneau-marshall.ConfigurableProperties.CommonSerializer'>2.6.2 - Common Serializer Properties</a><span class='update'>8.1.0-updated</span></h4>
-<div class='topic'><!-- START: 2.6.2 - juneau-marshall.ConfigurableProperties.CommonSerializer -->
-<p>
-	In addition to the common properties above, the following properties are common to all serializers:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link org.apache.juneau.BeanTraverseContext}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions BEANTRAVERSE_detectRecursions}
-		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_ignoreRecursions BEANTRAVERSE_ignoreRecursions}
-		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_initialDepth BEANTRAVERSE_initialDepth}
-		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_maxDepth BEANTRAVERSE_maxDepth}
-		<li class='jc'>{@link org.apache.juneau.serializer.Serializer}
-		<ul>
-			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
-			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
-			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_listener SERIALIZER_listener}
-			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortCollections SERIALIZER_sortCollections}
-			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortMaps SERIALIZER_sortMaps}
-			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyCollections SERIALIZER_trimEmptyCollections}
-			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyMaps SERIALIZER_trimEmptyMaps}
-			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimNullProperties SERIALIZER_trimNullProperties}
-			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimStrings SERIALIZER_trimStrings}
-			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext SERIALIZER_uriContext}
-			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity SERIALIZER_uriRelativity}
-			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution SERIALIZER_uriResolution}
-			<li class='jc'>{@link org.apache.juneau.serializer.WriterSerializer}
-			<ul>
-				<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_fileCharset WSERIALIZER_fileCharset}
-				<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_maxIndent WSERIALIZER_maxIndent}
-				<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_quoteChar WSERIALIZER_quoteChar}
-				<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_streamCharset WSERIALIZER_streamCharset}
-				<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_useWhitespace WSERIALIZER_useWhitespace}
-			</ul>
-			<li class='jc'>{@link org.apache.juneau.serializer.OutputStreamSerializer}
-			<ul>
-				<li class='jf'>{@link org.apache.juneau.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat OSSERIALIZER_binaryFormat}
-			</ul>
-		</ul>
-	</ul>
-</ul>
-</div><!-- END: 2.6.2 - juneau-marshall.ConfigurableProperties.CommonSerializer -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableProperties.CommonParser' id='juneau-marshall.ConfigurableProperties.CommonParser'>2.6.3 - Common Parser Properties</a><span class='update'><b>8.1.3-updated</b></span></h4>
-<div class='topic'><!-- START: 2.6.3 - juneau-marshall.ConfigurableProperties.CommonParser -->
-<p>
-	In addition to the common properties above, the following properties are common to all parsers:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link org.apache.juneau.parser.Parser}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams PARSER_autoCloseStreams}
-		<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_debugOutputLines PARSER_debugOutputLines}
-		<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_listener PARSER_listener}
-		<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_strict PARSER_strict}
-		<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_trimStrings PARSER_trimStrings}
-		<li class='jf'>{@link org.apache.juneau.parser.Parser#PARSER_unbuffered PARSER_unbuffered}
-		<li class='jc'>{@link org.apache.juneau.parser.ReaderParser}
-		<ul>
-			<li class='jf'>{@link org.apache.juneau.parser.ReaderParser#RPARSER_fileCharset RPARSER_fileCharset}
-			<li class='jf'>{@link org.apache.juneau.parser.ReaderParser#RPARSER_streamCharset RPARSER_streamCharset}
-		</ul>
-		<li class='jc'>{@link org.apache.juneau.parser.InputStreamParser}
-		<ul>
-			<li class='jf'>{@link org.apache.juneau.parser.InputStreamParser#ISPARSER_binaryFormat ISPARSER_binaryFormat}
-		</ul>
-	</ul>
-</ul>
-</div><!-- END: 2.6.3 - juneau-marshall.ConfigurableProperties.CommonParser -->
 </div><!-- END: 2.6 - juneau-marshall.ConfigurableProperties -->
 
 <!-- ==================================================================================================== -->
@@ -1725,6 +1497,10 @@
 	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().applyAnnotations(DummyClass.<jk>class</jk>).build();
 	String json = ws.toString(addressBean);
 </p>
+
+<ul class='seealso'>
+	<li class='doclink'>{@doc Glossaries.Annotations link} - Glossary of all annotations.
+</ul>
 </div><!-- END: 2.7 - juneau-marshall.ConfigurableAnnotations -->
 
 <!-- ==================================================================================================== -->
@@ -28764,11 +28540,508 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#Glossaries.ConfigurablePropertiesGlossary' id='Glossaries.ConfigurablePropertiesGlossary'>19.1 - Configurable Properties Glossary</a><span class='update'><b>8.1.3-new</b></span></h3>
-<div class='topic'><!-- START: 19.1 - Glossaries.ConfigurablePropertiesGlossary -->
-<p>
-	The following is a list of all properties defined throughout Juneau:
-</p>
+<h3 class='topic' onclick='toggle(this)'><a href='#Glossaries.LanguageSupport' id='Glossaries.LanguageSupport'>19.1 - Language Support</a><span class='update'><b>8.1.3-new</b></span></h3>
+<div class='topic'><!-- START: 19.1 - Glossaries.LanguageSupport -->
+<h5 class='figure'>All serializers/parsers defined in Juneau</h5>
+<table class='styled w1000'>
+	<tr>
+		<th>Language</th><th>Serializers</th><th>Parsers</th><th>Marshalls</th><th>Documentation</th>
+	</tr>
+	<tr>
+		<td><c>text/csv</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.csv.CsvSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.csv.CsvParser}</ul></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td><c>text/html</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}<li class='jc'>{@link org.apache.juneau.html.HtmlStrippedDocSerializer}<li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.html.HtmlParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.Html}</ul></td>
+		<td>{@doc juneau-marshall.HtmlDetails HTML Details}</td>
+	</tr>
+	<tr>
+		<td><c>text/html+schema</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.html.HtmlSchemaSerializer}<li class='jc'>{@link org.apache.juneau.html.HtmlSchemaDocSerializer}</ul></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>{@doc juneau-marshall.HtmlDetails HTML Details}</td>
+	</tr>
+	<tr>
+		<td><c>application/x-java-serialized-object</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jso.JsoSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jso.JsoParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.Jso}</ul></td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td><c>application/json</c><br><c>text/json</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.json.JsonSerializer}<li class='jc'>{@link org.apache.juneau.json.JsonSerializer.Readable}<li class='jc'>{@link org.apache.juneau.json.JsonSerializer.ReadableSafe}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.json.JsonParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.Json}</ul></td>
+		<td>{@doc juneau-marshall.JsonDetails JSON Details}</td>
+	</tr>
+	<tr>
+		<td><c>application/json+simple</c><br><c>text/json+simple</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.json.SimpleJsonSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.json.JsonParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.SimpleJson}</ul></td>
+		<td>{@doc juneau-marshall.JsonDetails.SimplifiedJson Simplified JSON}</td>
+	</tr>
+	<tr>
+		<td><c>application/json+schema</c><br><c>text/json+schema</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.json.JsonSchemaSerializer}</ul></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>{@doc juneau-marshall.JsonDetails.JsonSchema JSON-Schema Support}</td>
+	</tr>
+	<tr>
+		<td><c>octal/msgpack</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.msgpack.MsgPackSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.msgpack.MsgPackParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.MsgPack}</ul></td>
+		<td>{@doc juneau-marshall.MsgPackDetails MessagePack Details}</td>
+	</tr>
+	<tr>
+		<td><c>text/n3</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jena.N3Serializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jena.N3Parser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.N3}</ul></td>
+		<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
+	</tr>
+	<tr>
+		<td><c>text/n-triple</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jena.NTripleSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jena.NTripleParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.NTriple}</ul></td>
+		<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
+	</tr>
+	<tr>
+		<td><c>text/openapi</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.oapi.OpenApiSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.oapi.OpenApiParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.OpenApi}</ul></td>
+		<td>{@doc juneau-marshall.OpenApiDetails OpenAPI Details}</td>
+	</tr>
+	<tr>
+		<td><c>text/plain</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.plaintext.PlainTextSerializer}</ul></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td><c>text/xml+rdf<c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jena.RdfXmlSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jena.RdfXmlParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.RdfXml}</ul></td>
+		<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
+	</tr>
+	<tr>
+		<td><c>text/xml+rdf+abbrev</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jena.RdfXmlAbbrevSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jena.RdfXmlParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.RdfXmlAbbrev}</ul></td>
+		<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
+	</tr>
+	<tr>
+		<td><c>text/xml+soap</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.soap.SoapXmlSerializer}</ul></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td><c>text/turtle</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jena.TurtleSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jena.TurtleParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.Turtle}</ul></td>
+		<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
+	</tr>
+	<tr>
+		<td><c>text/uon</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.uon.UonSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.uon.UonParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.Uon}</ul></td>
+		<td>{@doc juneau-marshall.UonDetails UON Details}</td>
+	</tr>
+	<tr>
+		<td><c>application/x-www-form-urlencoded</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.UrlEncoding}</ul></td>
+		<td>{@doc juneau-marshall.UrlEncodingDetails URL-Encoding Details}</td>
+	</tr>
+	<tr>
+		<td><c>text/xml</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}<li class='jc'>{@link org.apache.juneau.xml.XmlDocSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.xml.XmlParser}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.marshall.Xml}</ul></td>
+		<td>{@doc juneau-marshall.XmlDetails XML Details}</td>
+	</tr>
+	<tr>
+		<td><c>text/xml+schema</c></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.xmlschema.XmlSchemaSerializer}<li class='jc'>{@link org.apache.juneau.xmlschema.XmlSchemaDocSerializer}</ul></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>{@doc juneau-marshall.XmlDetails.XmlSchema XML-Schema Support}</td>
+	</tr>
+</table>
+</div><!-- END: 19.1 - Glossaries.LanguageSupport -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#Glossaries.Annotations' id='Glossaries.Annotations'>19.2 - Annotations</a><span class='update'><b>8.1.3-new</b></span></h3>
+<div class='topic'><!-- START: 19.2 - Glossaries.Annotations -->
+<h5 class='figure'>Serialization Annotations (used to modify how artifacts are marshalled)</h5>
+<table class='styled w1000'>
+	<tr>
+		<th>Annotation</th><th>Description</th><th>Used On</th><th>Used By</th>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.Bean}</ul></td>
+		<td><ul><li>Classes</ul></td>
+		<td>All serializers and parsers</td>
+		<td>Tailors how beans get marshalled.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.Beanc}</ul></td>
+		<td><ul><li>Bean constructors</ul></td>
+		<td>All serializers and parsers</td>
+		<td>Identifies bean constructors and property args.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.BeanIgnore}</ul></td>
+		<td><ul><li>Classes<li>Fields<li>Methods</ul></td>
+		<td>All serializers and parsers</td>
+		<td>Prevents artifacts from being interpreted as beans/bean components.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.Beanp}</ul></td>
+		<td><ul><li>Methods<li>Fields<li>Constructor args</ul></td>
+		<td>All serializers and parsers</td>
+		<td>Tailors how bean properties get marshalled.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.Builder}</ul></td>
+		<td><ul><li>Classes</ul></td>
+		<td>All parsers</td>
+		<td>Identifies a class as a builder for a POJO class.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.csv.annotation.Csv}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.csv.CsvSerializer}<li class='jc'>{@link org.apache.juneau.csv.CsvParser}</ul></td>
+		<td>CSV-specific tweaks.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.Example}</ul></td>
+		<td><ul><li>Static methods<li>Static fields<li>Classes</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.json.JsonSchemaSerializer}</ul></td>
+		<td>Identifies examples for POJOs.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.html.annotation.Html}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}<li class='jc'>{@link org.apache.juneau.html.HtmlParser}</ul></td>
+		<td>HTML-specific tweaks.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.html.annotation.HtmlLink}</ul></td>
+		<td><ul><li>Classes</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}</ul></td>
+		<td>Defines how to construct hyperlinks on objects.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.jso.annotation.Jso}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jso.JsoSerializer}<li class='jc'>{@link org.apache.juneau.jso.JsoParser}</ul></td>
+		<td>JSO-specific tweaks.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.json.annotation.Json}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.json.JsonSerializer}<li class='jc'>{@link org.apache.juneau.json.JsonParser}</ul></td>
+		<td>JSON-specific tweaks.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPack}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.msgpack.MsgPackSerializer}<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackParser}</ul></td>
+		<td>MessagePack-specific tweaks.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.Name}</ul></td>
+		<td><ul><li>Constructor args</ul></td>
+		<td>All parsers</td>
+		<td>Maps constructor args to property names.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.NameProperty}</ul></td>
+		<td><ul><li>Methods<li>Fields</ul></td>
+		<td>All parsers</td>
+		<td>Identifies a 'name' property.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApi}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.oapi.OpenApiSerializer}<li class='jc'>{@link org.apache.juneau.oapi.OpenApiParser}</ul></td>
+		<td>OpenAPI-specific tweaks.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.ParentProperty}</ul></td>
+		<td><ul><li>Methods<li>Fields</ul></td>
+		<td>All parsers</td>
+		<td>Identifies a 'parent' property.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainText}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.plaintext.PlainTextSerializer}<li class='jc'>{@link org.apache.juneau.plaintext.PlainTextParser}</ul></td>
+		<td>PlainText-specific tweaks.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.jena.annotation.Rdf}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td>All RDF serializers and parsers</td>
+		<td>RDF-specific tweaks.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.jena.annotation.RdfSchema}</ul></td>
+		<td><ul><li>Packages</ul></td>
+		<td>All RDF serializers and parsers</td>
+		<td>Identifies the default RDF namespaces at the package level.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXml}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.soap.SoapXmlSerializer}</ul></td>
+		<td>SOAP/XML-specific tweaks.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.Swap}</ul></td>
+		<td><ul><li>Classes<li>Bean getters/setters<li>Fields</ul></td>
+		<td>All serializers and parsers</td>
+		<td>Associates swaps and surrogates with POJOs and bean properties.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.Swaps}</ul></td>
+		<td><ul><li>Classes</ul></td>
+		<td>All serializers and parsers</td>
+		<td>Associates multiple swaps with the same POJO class.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.uon.annotation.Uon}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.uon.UonSerializer}<li class='jc'>{@link org.apache.juneau.uon.UonParser}</ul></td>
+		<td>UON-specific tweaks.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.URI}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td>HTML and XML serializers</td>
+		<td>Identifies a class or bean property as a URI.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncoding}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingParser}</ul></td>
+		<td>URL-Encoding-specific tweaks.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.xml.annotation.Xml}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}<li class='jc'>{@link org.apache.juneau.xml.XmlParser}</ul></td>
+		<td>XML-specific tweaks.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.xml.annotation.XmlSchema}</ul></td>
+		<td><ul><li>Packages</ul></td>
+		<td>XML serializers and parsers</td>
+		<td>Identifies the default XML namespaces at the package level.</td>
+	</tr>
+</table>
+<br><br>
+
+<h5 class='figure'>Configuration Annotations (used to modify how serializers/parsers behave)</h5>
+<table class='styled w800'>
+	<tr>
+		<th>Annotation</th><th>Configures</th>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.annotation.BeanConfig}</ul></td>
+		<td>All serializers and parsers</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.csv.annotation.CsvConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.csv.CsvSerializer}<li class='jc'>{@link org.apache.juneau.csv.CsvParser}</ul></td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}<li class='jc'>{@link org.apache.juneau.html.HtmlParser}</ul></td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}</ul></td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.jso.annotation.JsoConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.jso.JsoSerializer}<li class='jc'>{@link org.apache.juneau.jso.JsoParser}</ul></td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.json.annotation.JsonConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.json.JsonSerializer}<li class='jc'>{@link org.apache.juneau.json.JsonParser}</ul></td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.json.JsonSchemaSerializer}</ul></td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.msgpack.MsgPackSerializer}<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackParser}</ul></td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.oapi.OpenApiSerializer}<li class='jc'>{@link org.apache.juneau.oapi.OpenApiParser}</ul></td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.parser.annotation.ParserConfig}</ul></td>
+		<td>All parsers</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.plaintext.PlainTextSerializer}</ul></td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig}</ul></td>
+		<td>All RDF serializers and parsers</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig}</ul></td>
+		<td>All serializers</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.soap.SoapXmlSerializer}</ul></td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.uon.annotation.UonConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.uon.UonSerializer}<li class='jc'>{@link org.apache.juneau.uon.UonParser}</ul></td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingParser}</ul></td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig}</ul></td>
+		<td><ul><li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}<li class='jc'>{@link org.apache.juneau.xml.XmlParser}</ul></td>
+	</tr>
+</table>
+<br><br>
+
+<h5 class='figure'>Common REST Annotations (used on both client-side and server-side)</h5>
+<table class='styled w800'>
+	<tr>
+		<th>Annotation</th><th>Used On</th><th>Description</th>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.Body}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields<li>Parameters</ul></td>
+		<td>HTTP request/response body.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.FormData}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields<li>Parameters</ul></td>
+		<td>HTTP form data parameter.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields<li>Parameters</ul></td>
+		<td>HTTP form data parameter is present.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields<li>Parameters</ul></td>
+		<td>HTTP query parameter is present.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.Header}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields<li>Parameters</ul></td>
+		<td>HTTP header.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.Path}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields<li>Parameters</ul></td>
+		<td>HTTP path part.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.Query}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Fields<li>Parameters</ul></td>
+		<td>HTTP query parameter.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.Request}</ul></td>
+		<td><ul><li>Classes<li>Parameters</ul></td>
+		<td>Identifies an interface to use to interact with HTTP parts of an HTTP request through a bean.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.Response}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Parameters</ul></td>
+		<td>Identifies an interface to use to interact with HTTP parts of an HTTP response through a bean.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody}</ul></td>
+		<td><ul><li>Methods</ul></td>
+		<td>Denotes a method as an HTTP response body on a <ja>@Response</ja>-annotated bean.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}</ul></td>
+		<td><ul><li>Classes<li>Methods<li>Parameters</ul></td>
+		<td>Denotes a method as an HTTP response header on a <ja>@Response</ja>-annotated bean.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}</ul></td>
+		<td><ul><li>Methods<li>Parameters</ul></td>
+		<td>Denotes a method as an HTTP response status code on a <ja>@Response</ja>-annotated bean.</td>
+	</tr>
+</table>
+<br><br>
+
+<h5 class='figure'>REST Server-only Annotations</h5>
+<table class='styled w800'>
+	<tr>
+		<th>Annotation</th><th>Used On</th><th>Description</th>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.rest.annotation.Attr}</ul></td>
+		<td><ul><li>Parameters</ul></td>
+		<td>Request attribute.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.rest.annotation.Rest}</ul></td>
+		<td><ul><li>Classes</ul></td>
+		<td>Identifies and configures REST resource classes.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.rest.annotation.RestHook}</ul></td>
+		<td><ul><li>Methods</ul></td>
+		<td>Identifies REST lifecycle hook methods.</td>
+	</tr>
+	<tr>
+		<td><ul style='margin-left:20px'><li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod}</ul></td>
+		<td><ul><li>Methods</ul></td>
+		<td>Identifies and configures REST resource class methods.</td>
+	</tr>
+</table>
+<br><br>
+</div><!-- END: 19.2 - Glossaries.Annotations -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#Glossaries.ConfigurableProperties' id='Glossaries.ConfigurableProperties'>19.3 - Configurable Properties</a><span class='update'><b>8.1.3-new</b></span></h3>
+<div class='topic'><!-- START: 19.3 - Glossaries.ConfigurableProperties -->
+<h5 class='figure'>All properties defined in Juneau</h5>
 <table class='styled w1000'>
 	<tr>
 		<th>Context</th><th>ID</th><th style='min-width:250px'>Description</th><th>Data type</th>
@@ -30233,7 +30506,7 @@
 	</tr>
 </table>
 
-</div><!-- END: 19.1 - Glossaries.ConfigurablePropertiesGlossary -->
+</div><!-- END: 19.3 - Glossaries.ConfigurableProperties -->
 </div><!-- END: 19 - Glossaries -->
 
 <!-- ==================================================================================================== -->
@@ -37189,7 +37462,7 @@
 <h5 class='topic w800'>juneau-doc</h5>
 <ul class='spaced-list'>
 	<li>
-		New auto-generated glossary of all configurable properties: {@doc Glossaries.ConfigurablePropertiesGlossary}
+		New auto-generated glossary of all configurable properties: {@doc Glossaries.ConfigurableProperties}
 </ul>
 </div><!-- END: 8.1.3 -->
 

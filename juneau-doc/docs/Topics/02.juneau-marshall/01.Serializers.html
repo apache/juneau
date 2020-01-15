@@ -98,59 +98,8 @@ Serializers
 	Extensible support for other data types such as <c>Calendars</c>, <c>Dates</c>, 
 	<c>Iterators</c> is available through the use of POJO swaps (described later).
 </p>
-<p>
-	The class hierarchy for the serializers (excluding specialized subclasses) are:
-</p>
-<ul class='javatree'>
-	<li class='jac'>{@link oaj.serializer.Serializer}
-	<ul>
-		<li class='jac'>{@link oaj.serializer.WriterSerializer}
-		<ul>
-			<li class='jc'>{@link oaj.json.JsonSerializer}
-			<ul>
-			<li class='jc'>{@link oaj.json.JsonSchemaSerializer}
-			<li class='jc'>{@link oaj.json.SimpleJsonSerializer}
-			</ul>
-			<li class='jc'>{@link oaj.plaintext.PlainTextSerializer}
-			<li class='jc'>{@link oaj.jena.RdfSerializer}
-			<ul>
-				<li class='jc'>{@link oaj.jena.N3Serializer}
-				<li class='jc'>{@link oaj.jena.NTripleSerializer}
-				<li class='jc'>{@link oaj.jena.RdfXmlSerializer}
-				<li class='jc'>{@link oaj.jena.RdfXmlAbbrevSerializer}
-				<li class='jc'>{@link oaj.jena.TurtleSerializer}
-			</ul>
-			<li class='jc'>{@link oaj.uon.UonSerializer}
-			<ul>
-				<li class='jc'>{@link oaj.oapi.OpenApiSerializer}
-				<li class='jc'>{@link oaj.urlencoding.UrlEncodingSerializer}
-			</ul>
-			<li class='jc'>{@link oaj.xml.XmlSerializer}
-			<ul>
-				<li class='jc'>{@link oaj.html.HtmlSerializer}
-				<ul>
-					<li class='jc'>{@link oaj.html.HtmlSchemaSerializer}
-					<li class='jc'>{@link oaj.html.HtmlStrippedDocSerializer}
-					<ul>
-						<li class='jc'>{@link oaj.html.HtmlDocSerializer}
-						<ul>
-							<li class='jc'>{@link oaj.html.HtmlSchemaDocSerializer}
-						</ul>
-					</ul>
-				</ul>
-				<li class='jc'>{@link oaj.soap.SoapXmlSerializer}
-				<li class='jc'>{@link oaj.xml.XmlDocSerializer}
-				<li class='jc'>{@link oaj.xmlschema.XmlSchemaSerializer}
-				<ul>
-					<li class='jc'>{@link oaj.xmlschema.XmlSchemaDocSerializer}
-				</ul>
-			</ul>
-		</ul>
-		<li class='jac'>{@link oaj.serializer.OutputStreamSerializer}
-		<ul>
-			<li class='jc'>{@link oaj.jso.JsoSerializer}
-			<li class='jc'>{@link oaj.msgpack.MsgPackSerializer}
-		</ul>
-	</ul>
+
+<ul class='seealso'>
+	<li class='doclink'>{@doc Glossaries.LanguageSupport link} - Glossary of all supported languages.
 </ul>
 
