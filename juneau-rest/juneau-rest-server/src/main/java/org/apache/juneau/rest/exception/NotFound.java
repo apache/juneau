@@ -22,11 +22,13 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 404 (Not Found).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.NotFound}
+ * </div>
+ *
  * <p>
  * The requested resource could not be found but may be available in the future.
  * <br>Subsequent requests by the client are permissible.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.NotFound}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

@@ -41,9 +41,8 @@ public @interface NameProperty {
 	 * Used in conjunction with the {@link BeanConfig#applyNameProperty()}.
 	 * It is ignored when the annotation is applied directly to methods/fields.
 	 *
-	 * <p>
-	 * The valid pattern matches are:
-	 * <ul>
+	 * <h5 class='section'>Valid patterns:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>Methods:
 	 * 		<ul>
 	 * 			<li>Fully qualified with args:

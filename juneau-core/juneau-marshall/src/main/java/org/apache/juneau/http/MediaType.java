@@ -239,8 +239,8 @@ public class MediaType implements Comparable<MediaType> {
 	 * <br>The comparison media type must not.
 	 *
 	 * <ul>
-	 * 	<li>Exact matches (e.g. <js>"text/json"<js>/</js>"text/json"</js>) should match
-	 * 		better than meta-character matches (e.g. <js>"text/*"<js>/</js>"text/json"</js>)
+	 * 	<li>Exact matches (e.g. <js>"text/json"</js>/</js>"text/json"</js>) should match
+	 * 		better than meta-character matches (e.g. <js>"text/*"</js>/</js>"text/json"</js>)
 	 * 	<li>The comparison media type can have additional subtype tokens (e.g. <js>"text/json+foo"</js>)
 	 * 		that will not prevent a match if the <c>allowExtraSubTypes</c> flag is set.
 	 * 		The reverse is not true, e.g. the comparison media type must contain all subtype tokens found in the

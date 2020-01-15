@@ -33,7 +33,7 @@ import org.apache.juneau.utils.*;
  * 			<jsm>schemaInfo</jsm>
  * 				.type(<js>"array"</js>)
  * 				.items(
- * 					<jsm>items<jsm>()
+ * 					<jsm>items</jsm>()
  * 						.set(<js>"$ref"</js>, <js>"#/definitions/VeryComplexType"</js>)
  * 				)
  * 		);
@@ -235,8 +235,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link SchemaInfo}
 	 * 		<li><c>String</c> - JSON object representation of {@link SchemaInfo}
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -309,8 +309,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Map&lt;String,{@link HeaderInfo}|String&gt;</c>
 	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link HeaderInfo}&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	headers(<js>"{headerName:{description:'description',...}}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -430,8 +430,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Map&lt;String,Object&gt;</c>
 	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,Object&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	examples(<js>"{'text/json':{foo:'bar'}}"</js>);
 	 * 			</p>
 	 * 	</ul>

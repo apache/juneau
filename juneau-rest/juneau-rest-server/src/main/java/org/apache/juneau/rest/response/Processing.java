@@ -19,12 +19,14 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Represents an <c>HTTP 102 Processing</c> response.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.response.Processing}
+ * </div>
+ *
  * <p>
  * A WebDAV request may contain many sub-requests involving file operations, requiring a long time to complete the request.
  * This code indicates that the server has received and is processing the request, but no response is available yet.
  * This prevents the client from timing out and assuming the request was lost.
- *
- * @deprecated Use {@link org.apache.juneau.http.response.Processing}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

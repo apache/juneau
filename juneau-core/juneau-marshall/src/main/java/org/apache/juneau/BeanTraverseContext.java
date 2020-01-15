@@ -36,7 +36,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * Configuration property:  Automatically detect POJO recursions.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions BEANTRAVERSE_detectRecursions}
 	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.detectRecursions.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -113,7 +113,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * Configuration property:  Ignore recursion errors.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_ignoreRecursions BEANTRAVERSE_ignoreRecursions}
 	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.ignoreRecursions.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -147,7 +147,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * Configuration property:  Initial depth.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_initialDepth BEANTRAVERSE_initialDepth}
 	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.initialDepth.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -196,7 +196,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * Configuration property:  Max traversal depth.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_maxDepth BEANTRAVERSE_maxDepth}
 	 * 	<li><b>Name:</b>  <js>"BeanTraverseContext.maxDepth.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>

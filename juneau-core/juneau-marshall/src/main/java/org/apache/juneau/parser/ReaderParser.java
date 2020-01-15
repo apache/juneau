@@ -42,7 +42,7 @@ public abstract class ReaderParser extends Parser {
 	 * Configuration property:  File charset.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.ReaderParser#RPARSER_fileCharset RPARSER_fileCharset}
 	 * 	<li><b>Name:</b>  <js>"ReaderParser.fileCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -94,7 +94,7 @@ public abstract class ReaderParser extends Parser {
 	 * Configuration property:  Input stream charset.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.ReaderParser#RPARSER_streamCharset RPARSER_streamCharset}
 	 * 	<li><b>Name:</b>  <js>"ReaderParser.streamCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>

@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 426 (Upgrade Required).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.UpgradeRequired}
+ * </div>
+ *
  * <p>
  * The client should switch to a different protocol such as TLS/1.0, given in the Upgrade header field.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.UpgradeRequired}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

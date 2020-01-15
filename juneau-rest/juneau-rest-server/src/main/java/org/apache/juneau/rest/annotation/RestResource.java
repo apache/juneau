@@ -21,17 +21,18 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.utils.*;
 
 /**
  * Used to denote that a class is a REST resource and to associate metadata on it.
+ *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link Rest}
+ * </div>
  *
  * <p>
  * Usually used on a subclass of {@link RestServlet}, but can be used to annotate any class that you want to expose as
@@ -40,9 +41,8 @@ import org.apache.juneau.utils.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Rest}
  * </ul>
- *
- * @deprecated Use {@link Rest}
  */
+@SuppressWarnings("deprecation")
 @Documented
 @Target(TYPE)
 @Retention(RUNTIME)
@@ -178,9 +178,7 @@ public @interface RestResource {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
 	 * </ul>
-	 * @deprecated Use {@link #allowedHeaderParams()}
 	 */
-	@Deprecated
 	String allowHeaderParams() default "";
 
 	/**
@@ -210,10 +208,7 @@ public @interface RestResource {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
-	 *
-	 * @deprecated Use {@link BeanConfig#beanFilters()}
 	 */
-	@Deprecated
 	Class<?>[] beanFilters() default {};
 
 	/**
@@ -496,10 +491,7 @@ public @interface RestResource {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
 	 * </ul>
-	 *
-	 * @deprecated Use {@link HtmlDocConfig}
 	 */
-	@Deprecated
 	HtmlDoc htmldoc() default @HtmlDoc;
 
 	/**
@@ -523,9 +515,7 @@ public @interface RestResource {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_logger}
 	 * </ul>
-	 * @deprecated Use {@link #callLogger()}
 	 */
-	@SuppressWarnings("dep-ann")
 	Class<? extends RestLogger> logger() default RestLogger.Null.class;
 
 	/**
@@ -625,10 +615,7 @@ public @interface RestResource {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
 	 * </ul>
-	 *
-	 * @deprecated Use {@link ParserConfig#listener()}
 	 */
-	@Deprecated
 	Class<? extends ParserListener> parserListener() default ParserListener.Null.class;
 
 	/**
@@ -814,10 +801,7 @@ public @interface RestResource {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
-	 *
-	 * @deprecated {@link BeanConfig#pojoSwaps()}
 	 */
-	@Deprecated
 	Class<?>[] pojoSwaps() default {};
 
 	/**
@@ -972,10 +956,7 @@ public @interface RestResource {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
 	 * </ul>
-	 *
-	 * @deprecated Use {@link SerializerConfig#listener()}
 	 */
-	@Deprecated
 	Class<? extends SerializerListener> serializerListener() default SerializerListener.Null.class;
 
 	/**
@@ -1389,10 +1370,7 @@ public @interface RestResource {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
 	 * </ul>
-	 *
-	 * @deprecated Use {@link Logging#useStackTraceHashing()}
 	 */
-	@Deprecated
 	String useStackTraceHashes() default "";
 
 	/**

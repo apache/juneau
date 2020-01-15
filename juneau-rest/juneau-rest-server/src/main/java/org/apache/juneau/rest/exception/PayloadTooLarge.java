@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 413 (Payload Too Large).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.PayloadTooLarge}
+ * </div>
+ *
  * <p>
  * The request is larger than the server is willing or able to process.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.PayloadTooLarge}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

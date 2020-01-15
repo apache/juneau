@@ -60,7 +60,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 * Configuration property:  Trim whitespace from text elements.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfParser#RDF_trimWhitespace RDF_trimWhitespace}
 	 * 	<li><b>Name:</b>  <js>"RdfParser.trimWhitespace.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>

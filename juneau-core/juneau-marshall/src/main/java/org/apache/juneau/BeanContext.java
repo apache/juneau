@@ -155,7 +155,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Annotations.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_annotations BEAN_annotations}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.annotations.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link java.lang.annotation.Annotation}&gt;</c>
@@ -187,7 +187,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation:
 	 * <p class='bpcode w800'>
 	 * 	<jc>// Class with explicit annotation.</jc>
-	 * 	<ja>@Bean</ja>(bpi=<jk>"street,city,state"</js>)
+	 * 	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
 	 * 	<jk>public class</jk> A {...}
 	 *
 	 * 	<jc>// Class with annotation applied via @BeanConfig</jc>
@@ -197,7 +197,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<ja>@BeanConfig</ja>(
 	 * 		annotations={
-	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, bpi=<jk>"street,city,state"</js>)
+	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, bpi=<js>"street,city,state"</js>)
 	 * 		}
 	 * 	)
 	 * 	<jk>public void</jk> doFoo() {...}
@@ -209,7 +209,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Minimum bean class visibility.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanClassVisibility BEAN_beanClassVisibility}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanClassVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
@@ -257,7 +257,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Minimum bean constructor visibility.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanConstructorVisibility BEAN_beanConstructorVisibility}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanConstructorVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
@@ -305,7 +305,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Bean dictionary.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanDictionary BEAN_beanDictionary}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanDictionary.lc"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;Class&gt;</c>
@@ -399,7 +399,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Minimum bean field visibility.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility BEAN_beanFieldVisibility}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFieldVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
@@ -453,7 +453,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Bean filters.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanFilters BEAN_beanFilters}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFilters.lc"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;Class&gt;</c>
@@ -537,7 +537,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  BeanMap.put() returns old property value.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanMapPutReturnsOldValue BEAN_beanMapPutReturnsOldValue}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMapPutReturnsOldValue.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -590,7 +590,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Minimum bean method visibility.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanMethodVisibility BEAN_beanMethodVisibility}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMethodVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
@@ -638,7 +638,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Beans require no-arg constructors.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beansRequireDefaultConstructor BEAN_beansRequireDefaultConstructor}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireDefaultConstructor.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -686,7 +686,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Beans require Serializable interface.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beansRequireSerializable BEAN_beansRequireSerializable}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSerializable.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -734,7 +734,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Beans require setters for getters.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beansRequireSettersForGetters BEAN_beansRequireSettersForGetters}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSettersForGetters.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -779,7 +779,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Beans require at least one property.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beansRequireSomeProperties BEAN_beansRequireSomeProperties}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSomeProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -826,7 +826,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Bean type property name.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName BEAN_beanTypePropertyName}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanTypePropertyName.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -874,7 +874,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Bean property includes.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_bpi BEAN_bpi}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.bpi.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
@@ -940,7 +940,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Bean property excludes.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_bpx BEAN_bpx}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.bpx.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
@@ -1009,7 +1009,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Read-only bean properties.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_bpro BEAN_bpro}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.bpro.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
@@ -1076,7 +1076,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Write-only bean properties.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_bpwo BEAN_bpwo}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.bpwo.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
@@ -1143,7 +1143,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Debug mode.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_debug BEAN_debug}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.debug.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -1203,7 +1203,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  POJO examples.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_examples BEAN_examples}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.examples.smo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
@@ -1259,7 +1259,9 @@ public class BeanContext extends Context implements MetaProvider {
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * @deprecated Use {@link #BEAN_bpx}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #BEAN_bpx}
+	 * </div>
 	 */
 	@Deprecated public static final String BEAN_excludeProperties = BEAN_bpx;
 
@@ -1267,7 +1269,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Find fluent setters.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_fluentSetters BEAN_fluentSetters}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.fluentSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -1323,7 +1325,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Ignore invocation errors on getters.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnGetters BEAN_ignoreInvocationExceptionsOnGetters}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreInvocationExceptionsOnGetters.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -1368,7 +1370,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Ignore invocation errors on setters.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnSetters BEAN_ignoreInvocationExceptionsOnSetters}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreInvocationExceptionsOnSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -1413,7 +1415,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Ignore properties without setters.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignorePropertiesWithoutSetters BEAN_ignorePropertiesWithoutSetters}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignorePropertiesWithoutSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -1457,7 +1459,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Ignore unknown properties.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties BEAN_ignoreUnknownBeanProperties}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownBeanProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -1502,7 +1504,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Ignore unknown properties with null values.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownNullBeanProperties BEAN_ignoreUnknownNullBeanProperties}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownNullBeanProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -1546,7 +1548,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Implementation classes.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_implClasses BEAN_implClasses}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.implClasses.smc"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Class&gt;</c>
@@ -1589,7 +1591,9 @@ public class BeanContext extends Context implements MetaProvider {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * @deprecated Use {@link #BEAN_bpi}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #BEAN_bpi}
+	 * </div>
 	 */
 	@Deprecated public static final String BEAN_includeProperties = BEAN_bpi;
 
@@ -1597,7 +1601,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Locale.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_locale BEAN_locale}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.locale.s"</js>
 	 * 	<li><b>Data type:</b>  {@link java.util.Locale}
@@ -1647,7 +1651,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Media type.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_mediaType BEAN_mediaType}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.mediaType.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.http.MediaType}
@@ -1697,7 +1701,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Bean class exclusions.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_notBeanClasses BEAN_notBeanClasses}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanClasses.sc"</js>
 	 * 	<li><b>Data type:</b>  <c>Set&lt;Class&gt;</c>
@@ -1762,7 +1766,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Bean package exclusions.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_notBeanPackages BEAN_notBeanPackages}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanPackages.ss"</js>
 	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
@@ -1844,7 +1848,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  POJO swaps.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_pojoSwaps BEAN_pojoSwaps}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.pojoSwaps.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;Object&gt;</c>
@@ -1962,7 +1966,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Bean property namer.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_propertyNamer BEAN_propertyNamer}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.propertyNamer.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link org.apache.juneau.PropertyNamer}&gt;</code>
@@ -2014,7 +2018,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Sort bean properties.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_sortProperties BEAN_sortProperties}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.sortProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -2069,7 +2073,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Time zone.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_timeZone BEAN_timeZone}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.timeZone.s"</js>
 	 * 	<li><b>Data type:</b>  {@link java.util.TimeZone}
@@ -2119,7 +2123,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Use enum names.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_useEnumNames BEAN_useEnumNames}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useEnumNames.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -2156,7 +2160,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.build();
 	 *
 	 * 	<jc>// Enum with overridden toString().</jc>
-	 * 	<jc>// Will be serialized as ONE/TWO/THREE even though there's a toString() method..
+	 * 	<jc>// Will be serialized as ONE/TWO/THREE even though there's a toString() method.</jc>
 	 * 	<jk>public enum</jk> Option {
 	 * 		<jsf>ONE</jsf>(1),
 	 * 		<jsf>TWO</jsf>(2),
@@ -2180,7 +2184,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Use interface proxies.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_useInterfaceProxies BEAN_useInterfaceProxies}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useInterfaceProxies.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -2225,7 +2229,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * Configuration property:  Use Java Introspector.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_useJavaBeanIntrospector BEAN_useJavaBeanIntrospector}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useJavaBeanIntrospector.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>

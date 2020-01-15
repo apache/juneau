@@ -99,8 +99,6 @@ public @interface RdfConfig {
 	 *		 </ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.language.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -115,8 +113,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.juneauNs.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -131,8 +127,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.juneauBpNs.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -164,8 +158,6 @@ public @interface RdfConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.iri-rules.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -194,8 +186,6 @@ public @interface RdfConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.error-mode.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -221,8 +211,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.embedding.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -242,8 +230,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.xmlbase.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -262,8 +248,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.longId.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -281,8 +265,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.allowBadURIs.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -322,8 +304,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.relativeURIs.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -350,8 +330,6 @@ public @interface RdfConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.showXmlDeclaration.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -372,8 +350,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.showDoctypeDeclaration"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -391,8 +367,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.tab.i"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -410,8 +384,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.attributeQuoteChar.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -431,8 +403,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.rdfXml.blockRules.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -450,8 +420,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.minGap.i"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -469,8 +437,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.objectLists.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -488,8 +454,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.subjectColumn.i"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -507,8 +471,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.propertyColumn.i"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -526,8 +488,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.indentProperty.i"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -546,8 +506,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.widePropertyLen.i"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -565,8 +523,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.abbrevBaseURI.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -584,8 +540,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.usePropertySymbols.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -603,8 +557,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.useTripleQuotedStrings.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -622,8 +574,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.jena.n3.useDoubles.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -655,8 +605,6 @@ public @interface RdfConfig {
 	 * 		lost.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.collectionFormat.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -684,8 +632,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.looseCollections.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -707,8 +653,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"RdfParser.trimWhitespace.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -734,8 +678,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"RdfSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -750,8 +692,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"RdfSerializer.addLiteralTypes.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -775,8 +715,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"RdfSerializer.addRootProperty.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -798,8 +736,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"RdfSerializer.autoDetectNamespaces.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -817,8 +753,6 @@ public @interface RdfConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"RdfSerializer.namespaces.ls"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -843,8 +777,6 @@ public @interface RdfConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Rdf.useXmlNamespaces.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

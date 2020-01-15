@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 500 (Internal Server Error).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.InternalServerError}
+ * </div>
+ *
  * <p>
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.InternalServerError}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

@@ -273,8 +273,8 @@ public class Info extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link Contact}
 	 * 		<li><c>String</c> - JSON object representation of {@link Contact}
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	contact(<js>"{name:'name',url:'url',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -322,8 +322,8 @@ public class Info extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link License}
 	 * 		<li><c>String</c> - JSON object representation of {@link License}
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	license(<js>"{name:'name',url:'url',...}"</js>);
 	 * 			</p>
 	 * 	</ul>

@@ -1795,15 +1795,15 @@ public final class ClassInfo {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <ul>
-	 * 	<li><js>"com.foo.MyClass"<js> - Normal class
-	 * 	<li><js>"com.foo.MyClass[][]"<js> - Array.
-	 * 	<li><js>"com.foo.MyClass$InnerClass"<js> - Inner class.
-	 * 	<li><js>"com.foo.MyClass$InnerClass[][]"<js> - Inner class array.
-	 * 	<li><js>"int"<js> - Primitive class.
-	 * 	<li><js>"int[][]"<js> - Primitive class class.
-	 * 	<li><js>"java.util.Map&lt;java.lang.String,java.lang.Object&gt;"<js> - Parameterized type.
-	 * 	<li><js>"java.util.AbstractMap&lt;K,V&gt;"<js> - Parameterized generic type.
-	 * 	<li><js>"V"<js> - Parameterized generic type argument.
+	 * 	<li><js>"com.foo.MyClass"</js> - Normal class
+	 * 	<li><js>"com.foo.MyClass[][]"</js> - Array.
+	 * 	<li><js>"com.foo.MyClass$InnerClass"</js> - Inner class.
+	 * 	<li><js>"com.foo.MyClass$InnerClass[][]"</js> - Inner class array.
+	 * 	<li><js>"int"</js> - Primitive class.
+	 * 	<li><js>"int[][]"</js> - Primitive class class.
+	 * 	<li><js>"java.util.Map&lt;java.lang.String,java.lang.Object&gt;"</js> - Parameterized type.
+	 * 	<li><js>"java.util.AbstractMap&lt;K,V&gt;"</js> - Parameterized generic type.
+	 * 	<li><js>"V"</js> - Parameterized generic type argument.
 	 * </ul>
 	 *
 	 * @return The underlying class name.

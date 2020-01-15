@@ -19,11 +19,13 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Represents an <c>HTTP 205 Reset Content</c> response.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.response.ResetContent}
+ * </div>
+ *
  * <p>
  * The server successfully processed the request, but is not returning any content.
  * Unlike a 204 response, this response requires that the requester reset the document view.
- *
- * @deprecated Use {@link org.apache.juneau.http.response.ResetContent}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

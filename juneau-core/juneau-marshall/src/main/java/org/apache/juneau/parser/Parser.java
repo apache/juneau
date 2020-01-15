@@ -129,7 +129,7 @@ public abstract class Parser extends BeanContext {
 	 * Configuration property:  Auto-close streams.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams PARSER_autoCloseStreams}
 	 * 	<li><b>Name:</b>  <js>"Parser.autoCloseStreams.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -179,7 +179,7 @@ public abstract class Parser extends BeanContext {
 	 * Configuration property:  Debug output lines.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_debugOutputLines PARSER_debugOutputLines}
 	 * 	<li><b>Name:</b>  <js>"Parser.debugOutputLines.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -232,7 +232,7 @@ public abstract class Parser extends BeanContext {
 	 * Configuration property:  Parser listener.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_listener PARSER_listener}
 	 * 	<li><b>Name:</b>  <js>"Parser.listener.c"</js>
 	 * 	<li><b>Data type:</b>  <c>Class&lt;{@link org.apache.juneau.parser.ParserListener}&gt;</c>
@@ -300,7 +300,7 @@ public abstract class Parser extends BeanContext {
 	 * Configuration property:  Strict mode.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_strict PARSER_strict}
 	 * 	<li><b>Name:</b>  <js>"Parser.strict.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -380,7 +380,7 @@ public abstract class Parser extends BeanContext {
 	 * Configuration property:  Trim parsed strings.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_trimStrings PARSER_trimStrings}
 	 * 	<li><b>Name:</b>  <js>"Parser.trimStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -430,7 +430,7 @@ public abstract class Parser extends BeanContext {
 	 * Configuration property:  Unbuffered.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.Parser#PARSER_unbuffered PARSER_unbuffered}
 	 * 	<li><b>Name:</b>  <js>"Parser.unbuffered.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>

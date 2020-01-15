@@ -41,7 +41,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.msgpack.MsgPackSerializer#MSGPACK_addBeanTypes MSGPACK_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"MsgPackSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>

@@ -23,11 +23,13 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Annotation applied to Java methods on REST proxy.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.remote.RemoteMethod}
+ * </div>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
- *
- * @deprecated Use {@link org.apache.juneau.http.remote.RemoteMethod}
  */
 @Documented
 @Target(METHOD)

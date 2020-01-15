@@ -51,7 +51,7 @@ import java.lang.annotation.*;
  * 	}
  *
  * 	<jc>// On a class.</jc>
- * 	<ja>@Example</js>(<js>"{foo:'bar',baz:123}"</js>)
+ * 	<ja>@Example</ja>(<js>"{foo:'bar',baz:123}"</js>)
  * 	<jk>public class</jk> C {...}
  * </p>
  */
@@ -68,9 +68,8 @@ public @interface Example {
 	 * Used in conjunction with the {@link BeanConfig#applyExample()}.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields.
 	 *
-	 * <p>
-	 * The valid pattern matches are:
-	 * <ul>
+	 * <h5 class='section'>Valid patterns:</h5>
+	 * <ul class='spaced-list'>
 	 *  <li>Classes:
 	 * 		<ul>
 	 * 			<li>Fully qualified:

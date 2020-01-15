@@ -69,7 +69,9 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	/**
 	 * Configuration property:  Default request attributes.
 	 *
-	 * @deprecated Use {@link #RESTMETHOD_reqAttrs}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #RESTMETHOD_reqAttrs}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String RESTMETHOD_attrs = PREFIX + ".reqAttrs.smo";
@@ -78,7 +80,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Configuration property:  Client version pattern matcher.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_clientVersion RESTMETHOD_clientVersion}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.clientVersion.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -158,7 +160,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Configuration property:  Debug mode.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_debug RESTMETHOD_debug}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.debug.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.Enablement}
@@ -186,7 +188,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Configuration property:  Default form data.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_defaultFormData RESTMETHOD_defaultFormData}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultFormData.omo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
@@ -222,7 +224,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Configuration property:  Default query parameters.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_defaultQuery RESTMETHOD_defaultQuery}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.defaultQuery.omo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
@@ -256,7 +258,9 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	/**
 	 * Configuration property:  Default request headers.
 	 *
-	 * @deprecated Use {@link #RESTMETHOD_defaultRequestHeaders}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #RESTMETHOD_defaultRequestHeaders}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String RESTMETHOD_defaultRequestHeaders = PREFIX + ".reqHeaders.smo";
@@ -265,7 +269,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Configuration property:  HTTP method name.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_httpMethod RESTMETHOD_httpMethod}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.httpMethod.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -330,7 +334,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Configuration property:  Logging rules.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_callLoggerConfig RESTMETHOD_callLoggerConfig}
 	 * 	<li><b>Name:</b>  <js>"RestContext.logRules.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>{@link org.apache.juneau.rest.RestCallLoggerConfig}</c>
@@ -356,7 +360,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Configuration property:  Method-level matchers.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_matchers RESTMETHOD_matchers}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.matchers.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.RestMatcher}|Class&lt;{@link org.apache.juneau.rest.RestMatcher}&gt;&gt;</c>
@@ -391,7 +395,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Configuration property:  Resource method path.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_path RESTMETHOD_path}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.path.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -424,7 +428,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Configuration property:  Priority.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_priority RESTMETHOD_priority}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.priority.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -453,7 +457,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Configuration property:  Default request attributes.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_reqAttrs RESTMETHOD_reqAttrs}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.reqAttrs.smo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
@@ -496,7 +500,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Configuration property:  Default request headers.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_reqHeaders RESTMETHOD_reqHeaders}
 	 * 	<li><b>Name:</b>  <js>"RestMethodContext.reqHeaders.smo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>

@@ -17,10 +17,12 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Superclass of all predefined responses in this package.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.response.HttpResponse}
+ * </div>
+ *
  * <p>
  * Consists simply of a simple string message.
- *
- * @deprecated Use {@link org.apache.juneau.http.response.HttpResponse}
  */
 @Response
 @Deprecated

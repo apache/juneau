@@ -207,8 +207,8 @@ public class Tag extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link ExternalDocumentation}
 	 * 		<li><c>String</c> - JSON object representation of {@link ExternalDocumentation}
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
 	 * 			</p>
 	 * 	</ul>

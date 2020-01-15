@@ -501,8 +501,8 @@ public class SecurityScheme extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Map&lt;String,{@link HeaderInfo}|String&gt;</c>
 	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link HeaderInfo}&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	scopes(<js>"{name:'value'}"</js>);
 	 * 			</p>
 	 * 	</ul>

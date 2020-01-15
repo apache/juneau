@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 506 (Variant Also Negotiate).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.VariantAlsoNegotiates}
+ * </div>
+ *
  * <p>
  * Transparent content negotiation for the request results in a circular reference.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.VariantAlsoNegotiates}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

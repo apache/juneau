@@ -127,7 +127,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#URLENC_expandedParams URLENC_expandedParams}
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingSerializer.expandedParams.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -175,7 +175,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	 * 	<jc>// Expanded-params serializer.</jc>
 	 * 	WriterSerializer s2 = UrlEncodingSerializer.<jsm>create</jsm>().expandedParams().build();
 	 *
-	 * <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
+	 *  <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
 	 * 	String ss1 = s1.serialize(<jk>new</jk> A());
 	 *
 	 * 	<jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>

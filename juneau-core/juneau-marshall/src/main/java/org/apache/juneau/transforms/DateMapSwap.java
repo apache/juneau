@@ -21,7 +21,9 @@ import org.apache.juneau.transform.*;
 /**
  * Transforms {@link Date Dates} to {@link Map Maps} of the format <tt>{value:long}</tt>.
  *
- * @deprecated Use {@link TemporalDateSwap}
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link TemporalDateSwap}
+ * </div>
  */
 @Deprecated
 @SuppressWarnings("rawtypes")

@@ -95,9 +95,8 @@ public @interface Beanc {
 	 *		<jk>int</jk> age = p.getAge();   <jc>// 45</jc>
 	 * </p>
 	 *
-	 * <p>
-	 * The valid pattern matches are:
-	 * <ul>
+	 * <h5 class='section'>Valid patterns:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>Constructors:
 	 * 		<ul>
 	 * 			<li>Fully qualified with args:

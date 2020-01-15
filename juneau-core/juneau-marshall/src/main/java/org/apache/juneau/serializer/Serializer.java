@@ -51,7 +51,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"Serializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -118,7 +118,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Configuration property:  Add type attribute to root nodes.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
 	 * 	<li><b>Name:</b>  <js>"Serializer.addRootType.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -181,7 +181,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Configuration property:  Serializer listener.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_listener SERIALIZER_listener}
 	 * 	<li><b>Name:</b>  <js>"Serializer.listener.c"</js>
 	 * 	<li><b>Data type:</b>  <c>Class&lt;{@link org.apache.juneau.serializer.SerializerListener}&gt;</c>
@@ -249,7 +249,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortCollections SERIALIZER_sortCollections}
 	 * 	<li><b>Name:</b>  <js>"Serializer.sortCollections.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -297,7 +297,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Configuration property:  Sort maps alphabetically.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortMaps SERIALIZER_sortMaps}
 	 * 	<li><b>Name:</b>  <js>"Serializer.sortMaps.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -345,7 +345,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Configuration property:  Trim empty lists and arrays.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyCollections SERIALIZER_trimEmptyCollections}
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyCollections.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -399,7 +399,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Configuration property:  Trim empty maps.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyMaps SERIALIZER_trimEmptyMaps}
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyMaps.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -450,7 +450,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Configuration property:  Trim null bean property values.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimNullProperties SERIALIZER_trimNullProperties}
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimNullProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -500,7 +500,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Configuration property:  Trim strings.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimStrings SERIALIZER_trimStrings}
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -550,7 +550,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Configuration property:  URI context bean.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext SERIALIZER_uriContext}
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriContext.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.UriContext}
@@ -615,7 +615,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Configuration property:  URI relativity.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity SERIALIZER_uriRelativity}
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriRelativity.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.UriRelativity}
@@ -673,7 +673,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Configuration property:  URI resolution.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution SERIALIZER_uriResolution}
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriResolution.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.UriResolution}

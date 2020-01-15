@@ -151,8 +151,10 @@ public @interface Rest {
 
 	/**
 	 * Default request attributes.
-	 * 
-	 * @deprecated Use {@link #reqAttrs()}
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #reqAttrs()}
+	 * </div>
 	 */
 	@Deprecated
 	String[] attrs() default {};
@@ -298,16 +300,20 @@ public @interface Rest {
 
 	/**
 	 * Default request headers.
-	 * 
-	 * @deprecated Use {@link #reqHeaders()}
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #reqHeaders()}
+	 * </div>
 	 */
 	@Deprecated
 	String[] defaultRequestHeaders() default {};
 
 	/**
 	 * Default response headers.
-	 * 
-	 * @deprecated Use {@link #resHeaders()}
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #resHeaders()}
+	 * </div>
 	 */
 	@Deprecated
 	String[] defaultResponseHeaders() default {};
@@ -874,7 +880,7 @@ public @interface Rest {
 	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
 	 * common parent class like so:
 	 * <p class='bcode w800'>
-	 * 	htmldoc=<ja>@HtmlDoc</ja>(
+	 *  <ja>@HtmlDocConfig</ja>(
 	 * 		header={
 	 * 			<js>"&lt;h1&gt;$R{siteName}&lt;/h1&gt;"</js>,
 	 * 			<js>"&lt;h2&gt;$R{resourceTitle}&lt;/h2&gt;"</js>

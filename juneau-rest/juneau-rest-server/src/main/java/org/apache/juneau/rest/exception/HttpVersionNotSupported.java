@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 505 ().
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.HttpVersionNotSupported}
+ * </div>
+ *
  * <p>
  * The server does not support the HTTP protocol version used in the request.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.HttpVersionNotSupported}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

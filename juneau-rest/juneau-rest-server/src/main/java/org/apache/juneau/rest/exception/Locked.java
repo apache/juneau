@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 423 (Locked).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.Locked}
+ * </div>
+ *
  * <p>
  * The resource that is being accessed is locked.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.Locked}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

@@ -205,21 +205,23 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Returns a programmatic interface for setting properties for the HTML doc view.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link HtmlDocConfig}
+	 * </div>
+	 *
 	 * <p>
 	 * This is the programmatic equivalent to the {@link RestMethod#htmldoc() @RestMethod(htmldoc)} annotation.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Declarative approach.</jc>
-	 * 	<ja>@RestMethod</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			header={
-	 * 				<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>
-	 * 			},
-	 * 			aside={
-	 * 				<js>"&lt;p&gt;Custom aside content&lt;/p&gt;"</js>
-	 * 			}
-	 * 		)
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		header={
+	 * 			<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>
+	 * 		},
+	 * 		aside={
+	 * 			<js>"&lt;p&gt;Custom aside content&lt;/p&gt;"</js>
+	 * 		}
 	 * 	)
 	 * 	<jk>public</jk> Object doGet(RestResponse res) {
 	 *
@@ -236,8 +238,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * </ul>
 	 *
 	 * @return A new programmatic interface for setting properties for the HTML doc view.
-	 *
-	 * @deprecated Use {@link HtmlDocConfig}
 	 */
 	@Deprecated
 	public HtmlDocBuilder getHtmlDocBuilder() {
@@ -248,6 +248,10 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	/**
 	 * Retrieve the properties active for this request.
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link RestResponse#getAttributes()}
+	 * </div>
 	 *
 	 * <p>
 	 * This contains all resource and method level properties from the following:
@@ -285,7 +289,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * </ul>
 	 *
 	 * @return The properties active for this request.
-	 * @deprecated Use {@link RestResponse#getAttributes()}.
 	 */
 	@Deprecated
 	public RequestProperties getProperties() {
@@ -295,10 +298,13 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Shortcut for calling <c>getProperties().append(name, value);</c> fluently.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #attr(String,Object)}
+	 * </div>
+	 *
 	 * @param name The property name.
 	 * @param value The property value.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #attr(String,Object)}.
 	 */
 	@Deprecated
 	public RestResponse prop(String name, Object value) {

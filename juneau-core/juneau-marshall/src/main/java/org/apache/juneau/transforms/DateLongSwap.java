@@ -21,7 +21,9 @@ import org.apache.juneau.transform.*;
 /**
  * Transforms {@link Date Dates} to {@link Long Longs}.
  *
- * @deprecated Use {@link TemporalDateSwap}
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link TemporalDateSwap}
+ * </div>
  */
 @Deprecated
 public class DateLongSwap extends PojoSwap<Date,Long> {

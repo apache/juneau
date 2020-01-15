@@ -19,10 +19,12 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Represents an <c>HTTP 226 IM Used</c> response.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.response.IMUsed}
+ * </div>
+ *
  * <p>
  * The server has fulfilled a request for the resource, and the response is a representation of the result of one or more instance-manipulations applied to the current instance.
- *
- * @deprecated Use {@link org.apache.juneau.http.response.IMUsed}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

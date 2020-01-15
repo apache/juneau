@@ -38,7 +38,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * Configuration property:  Add descriptions to types.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo JSONSCHEMA_addDescriptionsTo}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.addDescriptionsTo.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -82,7 +82,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * Configuration property:  Add examples.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.addExamplesTo.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -132,7 +132,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * Configuration property:  Allow nested descriptions.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions JSONSCHEMA_allowNestedDescriptions}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.allowNestedDescriptions.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -160,7 +160,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * Configuration property:  Allow nested examples.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.allowNestedExamples.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -188,7 +188,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * Configuration property:  Bean schema definition mapper.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_beanDefMapper JSONSCHEMA_beanDefMapper}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.beanDefMapper.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.jsonschema.BeanDefMapper}
@@ -219,7 +219,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * Configuration property:  Default schemas.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_defaultSchemas JSONSCHEMA_defaultSchemas}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.defaultSchema.smo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,{@link org.apache.juneau.ObjectMap}&gt;</c>
@@ -249,7 +249,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * Configuration property:  Ignore types from schema definitions.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_ignoreTypes JSONSCHEMA_ignoreTypes}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.ignoreTypes.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
@@ -270,7 +270,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.
+	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 			properties={
 	 * 				<ja>@Property</ja>(name=<jsf>JSONSCHEMA_ignoreTypes</jsf>, value=<js>"Swagger,*.proto.*"</js>)
@@ -284,7 +284,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * Configuration property:  Use bean definitions.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_useBeanDefs JSONSCHEMA_useBeanDefs}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.useBeanDefs.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>

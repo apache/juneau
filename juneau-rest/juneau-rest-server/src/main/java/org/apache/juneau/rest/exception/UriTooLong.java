@@ -22,11 +22,13 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 414 (URI Too Long).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.UriTooLong}
+ * </div>
+ *
  * <p>
  * The URI provided was too long for the server to process.
  * <br>Often the result of too much data being encoded as a query-string of a GET request, in which case it should be converted to a POST request.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.UriTooLong}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

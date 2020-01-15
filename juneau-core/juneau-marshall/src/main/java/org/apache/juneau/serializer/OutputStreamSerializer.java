@@ -31,7 +31,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 * Configuration property:  Binary output format.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat OSSERIALIZER_binaryFormat}
 	 * 	<li><b>Name:</b>  <js>"OutputStreamSerializer.binaryFormat.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.BinaryFormat}

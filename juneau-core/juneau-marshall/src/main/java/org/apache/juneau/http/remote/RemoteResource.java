@@ -20,10 +20,13 @@ import java.lang.annotation.*;
 /**
  * Identifies a proxy against a REST interface.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link Remote}
+ * </div>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
- * @deprecated Use {@link Remote}
  */
 @Documented
 @Target({TYPE})

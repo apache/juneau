@@ -19,11 +19,13 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Represents an <c>HTTP 206 Partial Content</c> response.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.response.PartialContent}
+ * </div>
+ *
  * <p>
  * The server is delivering only part of the resource (byte serving) due to a range header sent by the client.
  * The range header is used by HTTP clients to enable resuming of interrupted downloads, or split a download into multiple simultaneous streams.
- *
- * @deprecated Use {@link org.apache.juneau.http.response.PartialContent}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

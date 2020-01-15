@@ -25,6 +25,10 @@ import org.apache.juneau.json.*;
 /**
  * Logging utility class.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link BasicRestCallLogger}
+ * </div>
+ *
  * <p>
  * Subclasses can override these methods to tailor logging of HTTP requests.
  * <br>Subclasses MUST implement a no-arg public constructor.
@@ -32,8 +36,6 @@ import org.apache.juneau.json.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
  * </ul>
- *
- * @deprecated Use {@link BasicRestCallLogger}
  */
 @Deprecated
 public class BasicRestLogger implements RestLogger {

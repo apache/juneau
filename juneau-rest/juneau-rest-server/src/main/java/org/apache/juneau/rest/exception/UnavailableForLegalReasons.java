@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 451 (Unavailable For Legal Reasons).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.UnavailableForLegalReasons}
+ * </div>
+ *
  * <p>
  * A server operator has received a legal demand to deny access to a resource or to a set of resources that includes the requested resource.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.UnavailableForLegalReasons}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

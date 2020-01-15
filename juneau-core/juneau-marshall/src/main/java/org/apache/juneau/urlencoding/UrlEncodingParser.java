@@ -50,7 +50,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.urlencoding.UrlEncodingParser#URLENC_expandedParams URLENC_expandedParams}
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingParser.expandedParams.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>

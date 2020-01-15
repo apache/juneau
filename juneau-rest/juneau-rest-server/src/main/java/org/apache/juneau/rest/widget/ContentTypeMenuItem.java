@@ -35,20 +35,20 @@ import org.apache.juneau.utils.*;
  * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(
  * 		name=<jsf>GET</jsf>,
- * 		path=<js>"/"</js>,
+ * 		path=<js>"/"</js>
+ * 	)
+ *  <ja>@HtmlDocConfig</ja>(
  * 		widgets={
  * 			ContentTypeMenuItem.<jk>class</jk>,
  * 		},
- * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			navlinks={
- * 				<js>"up: ..."</js>,
- * 				<js>"options: ..."</js>,
- * 				<js>"$W{QueryMenuItem}"</js>,
- * 				<js>"$W{ContentTypeMenuItem}"</js>,
- * 				<js>"$W{ThemeMenuItem}"</js>,
- * 				<js>"source: ..."</js>
- * 			}
- * 		)
+ * 		navlinks={
+ * 			<js>"up: ..."</js>,
+ * 			<js>"options: ..."</js>,
+ * 			<js>"$W{QueryMenuItem}"</js>,
+ * 			<js>"$W{ContentTypeMenuItem}"</js>,
+ * 			<js>"$W{ThemeMenuItem}"</js>,
+ * 			<js>"source: ..."</js>
+ * 		}
  * 	)
  * 	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
  * </p>

@@ -96,8 +96,6 @@ public @interface XmlConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"XmlParser.preserveRootElement.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -153,8 +151,6 @@ public @interface XmlConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"XmlParser.validating.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -187,8 +183,6 @@ public @interface XmlConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"XmlSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -214,8 +208,6 @@ public @interface XmlConfig {
 	 * 		This setting is ignored if {@link XmlSerializer#XML_enableNamespaces} is not enabled.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"XmlSerializer.addNamespaceUrisToRoot.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -255,8 +247,6 @@ public @interface XmlConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"XmlSerializer.autoDetectNamespaces.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -275,8 +265,6 @@ public @interface XmlConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"XmlSerializer.defaultNamespace.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -301,8 +289,6 @@ public @interface XmlConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"XmlSerializer.enableNamespaces.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -321,8 +307,6 @@ public @interface XmlConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"XmlSerializer.namespaces.ls"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -342,8 +326,6 @@ public @interface XmlConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"XmlSerializer.xsNamespace.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

@@ -15,7 +15,9 @@ package org.apache.juneau.rest.client.remote;
 /**
  * Possible values for the {@link RemoteMethod#returns() @RemoteMethod(returns)} annotation.
  *
- * @deprecated Use {@link org.apache.juneau.http.remote.RemoteReturn}
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.remote.RemoteReturn}
+ * </div>
  */
 @Deprecated
 public enum RemoteReturn {

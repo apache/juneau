@@ -46,7 +46,10 @@ public @interface Bean {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
-	 * @deprecated Use {@link #dictionary()}.
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - {@link #dictionary()}.
+	 * </div>
 	 */
 	@Deprecated
 	Class<?>[] beanDictionary() default {};
@@ -156,7 +159,9 @@ public @interface Bean {
 	/**
 	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
 	 *
-	 * @deprecated Use {@link #bpx()}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - {@link #bpx()}.
+	 * </div>
 	 */
 	@Deprecated String excludeProperties() default "";
 
@@ -237,7 +242,7 @@ public @interface Bean {
 	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation to REST methods:
 	 * <p class='bpcode w800'>
 	 * 	<jc>// Class with explicit annotation.</jc>
-	 * 	<ja>@Bean</ja>(bpi=<jk>"street,city,state"</js>)
+	 * 	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
 	 * 	<jk>public class</jk> A {...}
 	 *
 	 * 	<jc>// Class with annotation applied via @BeanConfig</jc>
@@ -247,15 +252,14 @@ public @interface Bean {
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<ja>@BeanConfig</ja>(
 	 * 		applyBean={
-	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, bpi=<jk>"street,city,state"</js>)
+	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, bpi=<js>"street,city,state"</js>)
 	 * 		}
 	 * 	)
 	 * 	<jk>public void</jk> doFoo() {...}
 	 * </p>
 	 *
-	 * <p>
-	 * The valid pattern matches are:
-	 * <ul>
+	 * <h5 class='section'>Valid patterns:</h5>
+	 * <ul class='spaced-list'>
 	 *  <li>Classes:
 	 * 		<ul>
 	 * 			<li>Fully qualified:
@@ -289,7 +293,9 @@ public @interface Bean {
 	/**
 	 * The set and order of names of properties associated with a bean class.
 	 *
-	 * @deprecated Use {@link #bpi()}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - {@link #bpi()}.
+	 * </div>
 	 */
 	@Deprecated String properties() default "";
 

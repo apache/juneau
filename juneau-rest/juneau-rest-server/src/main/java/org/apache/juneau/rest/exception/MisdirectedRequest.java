@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 421 (Misdirected Request).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.MisdirectedRequest}
+ * </div>
+ *
  * <p>
  * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.MisdirectedRequest}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

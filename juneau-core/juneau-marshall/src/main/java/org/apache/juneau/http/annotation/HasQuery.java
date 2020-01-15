@@ -60,10 +60,10 @@ public @interface HasQuery {
 	 * <p>
 	 * The following are completely equivalent ways of defining the existence of a query entry:
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<jk>@HasQuery</jk>(name=<js>"petId"</js>) <jk>boolean</jk> hasPetId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@HasQuery</ja>(name=<js>"petId"</js>) <jk>boolean</jk> hasPetId) {...}
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<jk>@HasQuery</jk>(<js>"petId"</js>) <jk>boolean</jk> hasPetId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@HasQuery</ja>(<js>"petId"</js>) <jk>boolean</jk> hasPetId) {...}
 	 * </p>
 	 */
 	String value() default "";

@@ -24,9 +24,11 @@ import org.apache.juneau.utils.*;
 /**
  * An implementation of {@link HttpClientConnectionManager} specifically for use in mocked connections using the {@link MockHttpConnection} class.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use <c>org.apache.juneau.restmock2</c>
+ * </div>
+ *
  * This implementation is NOT thread safe.
- * 
- * @deprecated Use <c>org.apache.juneau.rest.mock2</c>
  */
 @Deprecated
 public class MockHttpClientConnectionManager implements HttpClientConnectionManager {

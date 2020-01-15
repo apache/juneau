@@ -37,9 +37,9 @@ public @interface SoapXml {
 	 * <p>
 	 * Used in conjunction with the {@link SoapXmlConfig#applySoapXml()}.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields.
-	 * <p>
-	 * The valid pattern matches are:
-	 * <ul>
+	 *
+	 * <h5 class='section'>Valid patterns:</h5>
+	 * <ul class='spaced-list'>
 	 *  <li>Classes:
 	 * 		<ul>
 	 * 			<li>Fully qualified:

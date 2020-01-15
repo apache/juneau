@@ -63,8 +63,6 @@ public @interface SerializerConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"OutputStreamSerializer.binaryFormat.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -105,8 +103,6 @@ public @interface SerializerConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -142,8 +138,6 @@ public @interface SerializerConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.addRootType.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -182,8 +176,6 @@ public @interface SerializerConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.sortCollections.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -210,8 +202,6 @@ public @interface SerializerConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.sortMaps.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -244,8 +234,6 @@ public @interface SerializerConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.trimEmptyCollections.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -276,8 +264,6 @@ public @interface SerializerConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.trimEmptyMaps.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -308,8 +294,6 @@ public @interface SerializerConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.trimNullProperties.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -333,8 +317,6 @@ public @interface SerializerConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.trimStrings.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -355,8 +337,6 @@ public @interface SerializerConfig {
 	 * 		Format: JSON object representing a {@link UriContext}
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.uriContext.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -385,8 +365,6 @@ public @interface SerializerConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.uriRelativity.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -417,8 +395,6 @@ public @interface SerializerConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.uriResolution.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -451,8 +427,6 @@ public @interface SerializerConfig {
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"WriterSerializer.fileCharset.s"</js>.
-	 * 	<li>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
@@ -476,8 +450,6 @@ public @interface SerializerConfig {
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"WriterSerializer.maxIndent.i"</js>.
-	 * 	<li>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
@@ -495,11 +467,9 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Default: "
+	 * 		Default: <c>"</c>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"WriterSerializer.quoteChar.s"</js>.
 	 * 	<li>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
@@ -527,8 +497,6 @@ public @interface SerializerConfig {
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"WriterSerializer.streamCharset.s"</js>.
-	 * 	<li>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
@@ -553,8 +521,6 @@ public @interface SerializerConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Serializer.useWhitespace.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

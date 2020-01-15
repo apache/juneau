@@ -53,9 +53,8 @@ public @interface HtmlLink {
 	 * Used in conjunction with the {@link HtmlConfig#applyHtmlLink()}.
 	 * It is ignored when the annotation is applied directly to classes.
 	 *
-	 * <p>
-	 * The valid pattern matches are:
-	 * <ul>
+	 * <h5 class='section'>Valid patterns:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>Classes:
 	 * 		<ul>
 	 * 			<li>Fully qualified: <js>"com.foo.MyClass"</js>

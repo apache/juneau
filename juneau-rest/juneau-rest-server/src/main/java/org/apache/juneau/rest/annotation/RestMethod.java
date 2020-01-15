@@ -39,14 +39,20 @@ public @interface RestMethod {
 
 	/**
 	 * Default request attributes.
-	 * 
-	 * @deprecated Use {@link #reqAttrs()}
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #reqAttrs()}
+	 * </div>
 	 */
 	@Deprecated
 	String[] attrs() default {};
 
 	/**
 	 * Sets the bean filters for the serializers and parsers defined on this method.
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#beanFilters()}
+	 * </div>
 	 *
 	 * <p>
 	 * If no value is specified, the bean filters are inherited from the class.
@@ -61,22 +67,24 @@ public @interface RestMethod {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
-	 *
-	 * @deprecated Use {@link BeanConfig#beanFilters()}
 	 */
 	@Deprecated Class<?>[] beanFilters() default {};
 
 	/**
 	 * Shortcut for specifying the {@link BeanContext#BEAN_bpi} property on all serializers.
 	 *
-	 * @deprecated Use {@link BeanConfig#bpi()}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#bpi()}
+	 * </div>
 	 */
 	@Deprecated String[] bpi() default {};
 
 	/**
 	 * Shortcut for specifying the {@link BeanContext#BEAN_bpx} property on all serializers.
 	 *
-	 * @deprecated Use {@link BeanConfig#bpx()}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#bpx()}
+	 * </div>
 	 */
 	@Deprecated String[] bpx() default {};
 
@@ -275,8 +283,10 @@ public @interface RestMethod {
 
 	/**
 	 * Default request headers.
-	 * 
-	 * @deprecated Use {@link #reqHeaders()}
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #reqHeaders()}
+	 * </div>
 	 */
 	@Deprecated
 	String[] defaultRequestHeaders() default {};
@@ -353,14 +363,16 @@ public @interface RestMethod {
 	/**
 	 * Provides HTML-doc-specific metadata on this method.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link HtmlDocConfig}
+	 * </div>
+	 *
 	 * <p>
 	 * Information provided here overrides information provided in the servlet-level annotation.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
 	 * </ul>
-	 *
-	 * @deprecated Use {@link HtmlDocConfig}
 	 */
 	@Deprecated
 	HtmlDoc htmldoc() default @HtmlDoc;
@@ -567,6 +579,10 @@ public @interface RestMethod {
 	/**
 	 * Sets the POJO swaps for the serializers and parsers defined on this method.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#pojoSwaps()}
+	 * </div>
+	 *
 	 * <p>
 	 * If no value is specified, the POJO swaps are inherited from the class.
 	 * <br>Otherwise, this value overrides the POJO swaps defined on the class.
@@ -580,8 +596,6 @@ public @interface RestMethod {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
-	 *
-	 * @deprecated Use {@link BeanConfig#pojoSwaps()}
 	 */
 	@Deprecated
 	Class<?>[] pojoSwaps() default {};

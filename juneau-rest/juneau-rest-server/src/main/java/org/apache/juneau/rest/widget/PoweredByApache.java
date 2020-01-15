@@ -29,13 +29,14 @@ import org.apache.juneau.rest.*;
  * 	<ja>@Rest</ja>(
  * 		path=<js>"/"</js>,
  * 		title=<js>"Root resources"</js>,
- * 		description=<js>"Example of a router resource page."</js>,
+ * 		description=<js>"Example of a router resource page."</js>
+ * 	)
+ *  <ja>@HtmlDocConfig</ja>(
  * 		widgets={
  * 			PoweredByApache.<jk>class</jk>
  * 		},
- * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			footer=<js>"$W{PoweredByApache}"</js>
- * 		)
+ * 		footer=<js>"$W{PoweredByApache}"</js>
+ * 	)
  * </p>
  *
  * <p>

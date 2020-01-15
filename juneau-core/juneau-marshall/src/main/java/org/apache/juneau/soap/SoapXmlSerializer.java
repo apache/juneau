@@ -46,7 +46,7 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMet
 	 * Configuration property:  The <c>SOAPAction</c> HTTP header value to set on responses.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.soap.SoapXmlSerializer#SOAPXML_SOAPAction SOAPXML_SOAPAction}
 	 * 	<li><b>Name:</b>  <js>"SoapXmlSerializer.SOAPAction.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>

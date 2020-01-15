@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 507 ().
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.InsufficientStorage}
+ * </div>
+ *
  * <p>
  * The server is unable to store the representation needed to complete the request.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.InsufficientStorage}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

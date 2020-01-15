@@ -115,10 +115,10 @@ public abstract class Var {
 	 * The default implementation of this method always returns <jk>true</jk>.
 	 * <br>Subclasses can override this method to override the default behavior.
 	 *
-	 * <h5 class='topic'>Important Note</h5>
-	 * <p>
+	 * <div class='warn'>
 	 * As a general rule, variables that resolve user-entered data should not be recursively resolved as this may
 	 * cause a security hole.
+	 * </div>
 	 *
 	 * @return <jk>true</jk> if resolved variables should be recursively resolved.
 	 */

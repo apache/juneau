@@ -125,7 +125,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		This method returns the raw unparsed value, and differs from calling
-	 * 		<code>get(name, String.<jk>class</js>)</code> which will convert the value from UON
+	 * 		<code>get(name, String.<jk>class</jk>)</code> which will convert the value from UON
 	 * 		notation:
 	 * 		<ul>
 	 * 			<li><js>"null"</js> =&gt; <jk>null</jk>

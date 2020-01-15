@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 431 (Request Header Fields Too Large).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.RequestHeaderFieldsTooLarge}
+ * </div>
+ *
  * <p>
  * The server is unwilling to process the request because either an individual header field, or all the header fields collectively, are too large.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.RequestHeaderFieldsTooLarge}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

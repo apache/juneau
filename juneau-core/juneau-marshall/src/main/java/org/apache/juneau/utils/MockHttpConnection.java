@@ -19,7 +19,9 @@ package org.apache.juneau.utils;
  * Used as a shim between the server and client APIs that allow the <c>RestClient</c>
  * class to send and receive mocked requests using the <c>MockRest</c> interface.
  *
- * @deprecated Use <c>org.apache.juneau.rest.mock2</c>
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use <c>org.apache.juneau.rest.mock2</c>
+ * </div>
  */
 @Deprecated
 public interface MockHttpConnection {

@@ -22,11 +22,13 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 429 (Too Many Requests).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.TooManyRequests}
+ * </div>
+ *
  * <p>
  * The user has sent too many requests in a given amount of time.
  * <br>Intended for use with rate-limiting schemes.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.TooManyRequests}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

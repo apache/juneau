@@ -49,7 +49,7 @@ import org.apache.juneau.serializer.*;
  *  <ja>@Test</ja>
  *  <jk>public void</jk> testEcho() <jk>throws</jk> Exception {
  *  	MockRest
- *  		.<jsf>create</jsf>(MyRest.<jk>class</jk>)
+ *  		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
  *  		.put(<js>"/String"</js>, <js>"'foo'"</js>)
  *  		.execute()
  *  		.assertStatus(200)

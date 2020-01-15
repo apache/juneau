@@ -32,7 +32,7 @@ import org.apache.juneau.jsonschema.annotation.ExternalDocs;
  * <p class='bcode w800'>
  * 	<jc>// A response object thats a hex-encoded string</jc>
  * 	<ja>@Rest</ja>(
- * 		swagger={
+ * 		swagger=<ja>@ResourceSwagger</ja>{
  * 			tags={
  * 				<ja>@Tag</ja>(
  * 					name=<js>"utility"</js>,
@@ -45,7 +45,7 @@ import org.apache.juneau.jsonschema.annotation.ExternalDocs;
  * <p class='bcode w800'>
  * 	<jc>// Free-form</jc>
  * 	<ja>@Rest</ja>(
- * 		swagger={
+ * 		swagger=<ja>@ResourceSwagger</ja>{
  * 			tags={
  * 				<ja>@Tag</ja>({
  * 					<js>"name:'utility',"</js>,
@@ -113,7 +113,7 @@ public @interface Tag {
 	 * The following are completely equivalent ways of defining the swagger description of the resource tags:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
-	 * 	<ja>@Rest</ja>(
+	 * 	<ja>@ResourceSwagger</ja>(
 	 * 		tags={
 	 * 			<ja>@Tag</ja>(
 	 * 				name=<js>"pet"</js>,
@@ -128,7 +128,7 @@ public @interface Tag {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@Rest</ja>(
+	 * 	<ja>@ResourceSwagger</ja>(
 	 * 		tags={
 	 * 			<ja>@Tag</ja>(
 	 * 				name=<js>"pet"</js>,
@@ -146,7 +146,7 @@ public @interface Tag {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
-	 * 	<ja>@Rest</ja>(
+	 * 	<ja>@ResourceSwagger</ja>(
 	 * 		tags={
 	 * 			<ja>@Tag</ja>(
 	 * 				name=<js>"pet"</js>,

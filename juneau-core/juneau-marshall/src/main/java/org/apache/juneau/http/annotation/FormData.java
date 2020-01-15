@@ -223,7 +223,7 @@ public @interface FormData {
 	 * <p>
 	 * The following are completely equivalent ways of defining a form post entry:
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@FormData</ja>(name=<js>"petId"</jk>) <jk>long</jk> petId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@FormData</ja>(name=<js>"petId"</js>) <jk>long</jk> petId) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@FormData</ja>(<js>"petId"</js>) <jk>long</jk> petId) {...}

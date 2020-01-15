@@ -59,10 +59,10 @@ public @interface HasFormData {
 	 * <p>
 	 * The following are completely equivalent ways of defining the existence of a form post entry:
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<jk>@HasFormData</jk>(name=<js>"petId"</js>) <jk>boolean</jk> hasPetId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@HasFormData</ja>(name=<js>"petId"</js>) <jk>boolean</jk> hasPetId) {...}
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<jk>@HasFormData</jk>(<js>"petId"</js>) <jk>boolean</jk> hasPetId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@HasFormData</ja>(<js>"petId"</js>) <jk>boolean</jk> hasPetId) {...}
 	 * </p>
 	 */
 	String value() default "";

@@ -22,10 +22,12 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Represents an <c>HTTP 301 Moved Permanently</c> response.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.response.MovedPermanently}
+ * </div>
+ *
  * <p>
  * This and all future requests should be directed to the given URI.
- *
- * @deprecated Use {@link org.apache.juneau.http.response.MovedPermanently}
  */
 @Response(code=CODE, description=MESSAGE)
 @BeanIgnore

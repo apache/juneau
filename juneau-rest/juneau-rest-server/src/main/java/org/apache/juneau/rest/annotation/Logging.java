@@ -67,9 +67,9 @@ public @interface Logging {
 	 * <p>
 	 * The possible values are (case-insensitive):
 	 * <ul>
-	 * 	<li><js>"true</jk> - Disable logging.
-	 * 	<li><js>"false"</jk> (default) - Don't disable logging.
-	 * 	<li><js>"per-request"</jk> - Disable logging if No-Trace is set on the request.
+	 * 	<li><js>"true</js> - Disable logging.
+	 * 	<li><js>"false"</js> (default) - Don't disable logging.
+	 * 	<li><js>"per-request"</js> - Disable logging if No-Trace is set on the request.
 	 * </ul>
 	 *
 	 * <p>
@@ -160,8 +160,8 @@ public @interface Logging {
 	 * <p>
 	 * The possible values are (case-insensitive):
 	 * <ul>
-	 * 	<li><js>"true</jk> - Use stack trace hashing.
-	 * 	<li><js>"false"</jk> (default) - Don't use stack trace hashing.
+	 * 	<li><js>"true</js> - Use stack trace hashing.
+	 * 	<li><js>"false"</js> (default) - Don't use stack trace hashing.
 	 * </ul>
 	 *
 	 * <ul class='notes'>

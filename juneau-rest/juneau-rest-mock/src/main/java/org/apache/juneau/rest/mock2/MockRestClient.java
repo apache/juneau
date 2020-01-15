@@ -92,7 +92,7 @@ public class MockRestClient extends RestClientBuilder {
 	 *
 	 * <p>
 	 * Equivalent to calling:
-	 * <p class='bpcode w800'>
+	 * <p class='bcode w800'>
 	 * 	MockRestClient.create(impl, m).build();
 	 * </p>
 	 *
@@ -113,7 +113,7 @@ public class MockRestClient extends RestClientBuilder {
 	 *
 	 * <p>
 	 * Equivalent to calling:
-	 * <p class='bpcode w800'>
+	 * <p class='bcode w800'>
 	 * 	MockRestClient.create(impl, s, p).build();
 	 * </p>
 	 *

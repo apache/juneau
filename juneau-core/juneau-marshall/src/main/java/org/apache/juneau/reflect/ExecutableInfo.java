@@ -689,8 +689,8 @@ public abstract class ExecutableInfo {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <ul>
-	 * 	<li><js>"com.foo.MyClass.get(java.util.String)"<js> - Method.
-	 * 	<li><js>"com.foo.MyClass(java.util.String)"<js> - Constructor.
+	 * 	<li><js>"com.foo.MyClass.get(java.util.String)"</js> - Method.
+	 * 	<li><js>"com.foo.MyClass(java.util.String)"</js> - Constructor.
 	 * </ul>
 	 *
 	 * @return The underlying executable name.
@@ -720,8 +720,8 @@ public abstract class ExecutableInfo {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <ul>
-	 * 	<li><js>"MyClass.get(String)"<js> - Method.
-	 * 	<li><js>"MyClass(String)"<js> - Constructor.
+	 * 	<li><js>"MyClass.get(String)"</js> - Method.
+	 * 	<li><js>"MyClass(String)"</js> - Constructor.
 	 * </ul>
 	 *
 	 * @return The underlying executable name.

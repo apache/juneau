@@ -19,10 +19,12 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Represents an <c>HTTP 103 Early Hints</c> response.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.response.EarlyHints}
+ * </div>
+ *
  * <p>
  * Used to return some response headers before final HTTP message.
- *
- * @deprecated Use {@link org.apache.juneau.http.response.EarlyHints}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

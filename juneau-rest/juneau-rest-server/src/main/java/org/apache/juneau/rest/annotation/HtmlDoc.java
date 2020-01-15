@@ -20,6 +20,10 @@ import org.apache.juneau.rest.widget.*;
 /**
  * Contains all the configurable annotations for the {@link HtmlDocSerializer}.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link HtmlDocConfig}
+ * </div>
+ *
  * <p>
  * Used with {@link RestResource#htmldoc() @RestResource(htmldoc)} and {@link RestMethod#htmldoc() @RestMethod(htmldoc)}
  * to customize the HTML view of serialized POJOs.
@@ -83,8 +87,6 @@ import org.apache.juneau.rest.widget.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
  * </ul>
- *
- * @deprecated Use {@link HtmlDocConfig}
  */
 @Deprecated
 public @interface HtmlDoc {

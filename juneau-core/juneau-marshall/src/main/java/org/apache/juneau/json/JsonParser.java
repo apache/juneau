@@ -115,7 +115,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	 * Configuration property:  Validate end.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonParser#JSON_validateEnd JSON_validateEnd}
 	 * 	<li><b>Name:</b>  <js>"JsonParser.validateEnd.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>

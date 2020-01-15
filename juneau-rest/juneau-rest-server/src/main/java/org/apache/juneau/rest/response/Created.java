@@ -19,10 +19,12 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Represents an <c>HTTP 201 Created</c> response.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.response.Created}
+ * </div>
+ *
  * <p>
  * The request has been fulfilled, resulting in the creation of a new resource.
- *
- * @deprecated Use {@link org.apache.juneau.http.response.Created}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

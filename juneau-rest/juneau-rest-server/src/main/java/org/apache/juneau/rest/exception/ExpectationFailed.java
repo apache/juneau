@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 417 (Expectation Failed).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.ExpectationFailed}
+ * </div>
+ *
  * <p>
  * The server cannot meet the requirements of the Expect request-header field.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.ExpectationFailed}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 510 (Not Extended).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.NotExtended}
+ * </div>
+ *
  * <p>
  * Further extensions to the request are required for the server to fulfill it.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.NotExtended}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

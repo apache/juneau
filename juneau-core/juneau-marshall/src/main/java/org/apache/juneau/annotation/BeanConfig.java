@@ -188,8 +188,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.beanClassVisibility.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -220,8 +218,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.beanConstructorVisibility.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -250,7 +246,10 @@ public @interface BeanConfig {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
 	 * </ul>
-	 * @deprecated Use {@link #dictionary()}
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - {@link #dictionary()}.
+	 * </div>
 	 */
 	@Deprecated
 	Class<?>[] beanDictionary() default {};
@@ -261,7 +260,10 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
-	 * @deprecated Use {@link #dictionary_replace()}
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - {@link #dictionary_replace()}.
+	 * </div>
 	 */
 	@Deprecated
 	Class<?>[] beanDictionary_replace() default {};
@@ -272,7 +274,10 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary_remove}
 	 * </ul>
-	 * @deprecated Use {@link #dictionary_remove()}
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - {@link #dictionary_remove()}.
+	 * </div>
 	 */
 	@Deprecated
 	Class<?>[] beanDictionary_remove() default {};
@@ -299,8 +304,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.beanFieldVisibility.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -373,8 +376,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.beanMapPutReturnsOldValue.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -405,8 +406,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.beanMethodVisibility.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -433,8 +432,6 @@ public @interface BeanConfig {
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.beansRequireDefaultConstructor.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -461,8 +458,6 @@ public @interface BeanConfig {
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.beansRequireSerializable.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -487,8 +482,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.beansRequireSettersForGetters.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -513,8 +506,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.beansRequireSomeProperties.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -535,8 +526,6 @@ public @interface BeanConfig {
 	 * 		Default value: <js>"_type"</js>.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.beanTypePropertyName.s"</js>.
 	 * </ul>
 
 	 * <ul class='seealso'>
@@ -598,8 +587,6 @@ public @interface BeanConfig {
 	 * 		</p>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.properties.sms"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -631,8 +618,6 @@ public @interface BeanConfig {
 	 * 		Setting applies to specified class and all subclasses.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.properties.sms"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -674,7 +659,7 @@ public @interface BeanConfig {
 	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id) {...}
 	 * </p>
 	 *
-	 * <ul class=''>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
 	 * 	<li>
@@ -692,8 +677,6 @@ public @interface BeanConfig {
 	 * 		</p>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.bpx.sms"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -725,8 +708,6 @@ public @interface BeanConfig {
 	 * 		Setting applies to specified class and all subclasses.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.bpx.sms"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -752,7 +733,7 @@ public @interface BeanConfig {
 	 * 	<jk>public void</jk> postMyBeans(List&lt;MyBean&gt; l) {...}
 	 * </p>
 	 *
-	 * <ul class=''>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
 	 * 	<li>
@@ -770,8 +751,6 @@ public @interface BeanConfig {
 	 * 		</p>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.bpro.sms"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -797,15 +776,13 @@ public @interface BeanConfig {
 	 * 	<jk>public void</jk> postMyBeans(List&lt;MyBean&gt; l) {...}
 	 * </p>
 	 *
-	 * <ul class=''>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Values are comma-delimited lists of bean property names.
 	 * 	<li>
 	 * 		Properties apply to specified class and all subclasses.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.bpro.sms"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -831,7 +808,7 @@ public @interface BeanConfig {
 	 * 	<jk>public</jk> List&lt;MyBean&gt; getMyBeans() {...}
 	 * </p>
 	 *
-	 * <ul class=''>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
 	 * 	<li>
@@ -849,8 +826,6 @@ public @interface BeanConfig {
 	 * 		</p>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.bpro.sms"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -876,15 +851,13 @@ public @interface BeanConfig {
 	 * 	<jk>public void</jk> List&lt;MyBean&gt; getMyBeans() {...}
 	 * </p>
 	 *
-	 * <ul class=''>
+	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Values are comma-delimited lists of bean property names.
 	 * 	<li>
 	 * 		Properties apply to specified class and all subclasses.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.bpro.sms"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -923,8 +896,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.debug.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1007,8 +978,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.examples.smo"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1041,8 +1010,6 @@ public @interface BeanConfig {
 	 * 		<br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.examples.smo"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1054,7 +1021,9 @@ public @interface BeanConfig {
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * @deprecated Use {@link #bpxMap()}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - {@link #bpxMap()}.
+	 * </div>
 	 */
 	@Deprecated CS[] excludeProperties() default {};
 
@@ -1082,8 +1051,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.fluentSetters.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1108,8 +1075,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.ignoreInvocationExceptionsOnGetters.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1134,8 +1099,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.ignoreInvocationExceptionsOnSetters.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1160,8 +1123,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.ignorePropertiesWithoutSetters.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1186,8 +1147,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.ignoreUnknownBeanProperties.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1212,8 +1171,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.ignoreUnknownNullBeanProperties.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1234,7 +1191,7 @@ public @interface BeanConfig {
 	 * <p class='bcode w800'>
 	 * 	<ja>@BeanConfig</ja>(
 	 * 		implClasses={
-	 * 			<ja>@CCEntry</ja>(key=MyInterface.<jk>class</jk>, value=MyInterfaceImpl.<jk>class</jk>)
+	 * 			<ja>@CC</ja>(key=MyInterface.<jk>class</jk>, value=MyInterfaceImpl.<jk>class</jk>)
 	 * 		}
 	 * 	)
 	 * <p>
@@ -1248,7 +1205,9 @@ public @interface BeanConfig {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * @deprecated Use {@link #bpiMap()}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - {@link #bpiMap()}.
+	 * </div>
 	 */
 	@Deprecated CS[] includeProperties() default {};
 
@@ -1261,8 +1220,6 @@ public @interface BeanConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.locale.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1280,8 +1237,6 @@ public @interface BeanConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.mediaType.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1300,8 +1255,6 @@ public @interface BeanConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.notBeanClasses.sc"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1355,8 +1308,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.notBeanPackages.ss"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1471,8 +1422,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.sortProperties.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1490,8 +1439,6 @@ public @interface BeanConfig {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.timeZone.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1515,8 +1462,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.useEnumNames.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1542,8 +1487,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.useInterfaceProxies.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1568,8 +1511,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanContext.useJavaBeanIntrospector.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1615,8 +1556,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanTraverseContext.detectRecursions.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1645,8 +1584,6 @@ public @interface BeanConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanTraverseContext.ignoreRecursions.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1669,8 +1606,6 @@ public @interface BeanConfig {
 	 * 		Default value: <js>"0"</js>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanTraverseContext.initialDepth.i"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1693,8 +1628,6 @@ public @interface BeanConfig {
 	 * 		Default value: <js>"100"</js>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"BeanTraverseContext.maxDepth.i"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

@@ -157,7 +157,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Configuration property:  Configuration name.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_name CONFIG_name}
 	 * 	<li><b>Name:</b>  <js>"Config.name.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -182,7 +182,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Configuration property:  Configuration store.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_store CONFIG_store}
 	 * 	<li><b>Name:</b>  <js>"Config.store.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.config.store.ConfigStore}
@@ -203,7 +203,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Configuration property:  POJO serializer.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_serializer CONFIG_serializer}
 	 * 	<li><b>Name:</b>  <js>"Config.serializer.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.serializer.WriterSerializer}
@@ -225,7 +225,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Configuration property:  POJO parser.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_parser CONFIG_parser}
 	 * 	<li><b>Name:</b>  <js>"Config.parser.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.parser.ReaderParser}
@@ -247,7 +247,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Configuration property:  Value encoder.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_encoder CONFIG_encoder}
 	 * 	<li><b>Name:</b>  <js>"Config.encoder.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.config.encode.ConfigEncoder}
@@ -269,7 +269,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Configuration property:  SVL variable resolver.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_varResolver CONFIG_varResolver}
 	 * 	<li><b>Name:</b>  <js>"Config.varResolver.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.svl.VarResolver}
@@ -291,7 +291,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Configuration property:  Binary value line length.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_binaryLineLength CONFIG_binaryLineLength}
 	 * 	<li><b>Name:</b>  <js>"Config.binaryLineLength.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -315,7 +315,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Configuration property:  Binary value format.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_binaryFormat CONFIG_binaryFormat}
 	 * 	<li><b>Name:</b>  <js>"Config.binaryFormat.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.BinaryFormat}
@@ -346,7 +346,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Configuration property:  Multi-line values should always be on separate lines.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_multiLineValuesOnSeparateLines CONFIG_multiLineValuesOnSeparateLines}
 	 * 	<li><b>Name:</b>  <js>"Config.multiLineValuesOnSeparateLines.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -369,7 +369,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Configuration property:  Read-only.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.Config#CONFIG_readOnly CONFIG_readOnly}
 	 * 	<li><b>Name:</b>  <js>"Config.readOnly.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -998,6 +998,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<jk>byte</jk>[] b = config.getObject(key, <jk>byte</jk>[].<jk>class</jk>);
 	 * </p>
 	 *
+	 * <p>
 	 * Byte arrays are stored as encoded strings, typically BASE64, but dependent on the {@link #CONFIG_binaryFormat} setting.
 	 *
 	 * @param key The key.

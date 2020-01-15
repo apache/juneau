@@ -21,6 +21,10 @@ import org.apache.juneau.utils.*;
 /**
  * Creates a mocked interface against a REST resource class.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use <c>org.apache.juneau.restmock2</c>
+ * </div>
+ *
  * <p>
  * Allows you to test your REST resource classes without a running servlet container.
  *
@@ -41,15 +45,13 @@ import org.apache.juneau.utils.*;
  *  <ja>@Test</ja>
  *  <jk>public void</jk> testEcho() <jk>throws</jk> Exception {
  *  	MockRest
- *  		.<jsf>create</jsf>(MyRest.<jk>class</jk>)
+ *  		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
  *  		.put(<js>"/String"</js>, <js>"'foo'"</js>)
  *  		.execute()
  *  		.assertStatus(200)
  *  		.assertBody(<js>"'foo'"</js>);
  *  }
  * </p>
- *
- * @deprecated Use <c>org.apache.juneau.rest.mock2</c>
  */
 @Deprecated
 public class MockRest implements MockHttpConnection {

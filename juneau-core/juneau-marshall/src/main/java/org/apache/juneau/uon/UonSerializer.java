@@ -130,7 +130,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonSerializer#UON_addBeanTypes UON_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -163,7 +163,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * Configuration property:  Encode non-valid URI characters.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonSerializer#UON_encoding UON_encoding}
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.encoding.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -219,7 +219,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * Configuration property:  Format to use for query/form-data/header values.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonSerializer#UON_paramFormat UON_paramFormat}
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.paramFormat.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.uon.ParamFormat}

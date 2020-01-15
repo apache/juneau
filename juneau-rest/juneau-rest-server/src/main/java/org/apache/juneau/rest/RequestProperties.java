@@ -17,6 +17,10 @@ import org.apache.juneau.svl.*;
 /**
  * Encapsulates request-level properties.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link RequestAttributes}
+ * </div>
+ *
  * <p>
  * These are properties specified for a single HTTP request that extends the properties defined on {@link RestMethodProperties}
  * and are accessible and modifiable through the following:
@@ -30,7 +34,6 @@ import org.apache.juneau.svl.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
  * </ul>
- * @deprecated Use {@link RequestAttributes}
  */
 @SuppressWarnings("serial")
 @Deprecated

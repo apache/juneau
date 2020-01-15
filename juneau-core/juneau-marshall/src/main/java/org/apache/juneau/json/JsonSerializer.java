@@ -101,7 +101,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonSerializer#JSON_addBeanTypes JSON_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"JsonSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -134,7 +134,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonSerializer#JSON_escapeSolidus JSON_escapeSolidus}
 	 * 	<li><b>Name:</b>  <js>"JsonSerializer.escapeSolidus.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -186,7 +186,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * Configuration property:  Simple JSON mode.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.json.JsonSerializer#JSON_simpleMode JSON_simpleMode}
 	 * 	<li><b>Name:</b>  <js>"JsonSerializer.simpleMode.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>

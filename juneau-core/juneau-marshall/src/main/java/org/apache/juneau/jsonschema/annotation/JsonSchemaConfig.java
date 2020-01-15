@@ -71,8 +71,6 @@ public @interface JsonSchemaConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.addDescriptionsTo.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -110,8 +108,6 @@ public @interface JsonSchemaConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.addDescriptionsTo.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -135,8 +131,6 @@ public @interface JsonSchemaConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.allowNestedDescriptions.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -160,8 +154,6 @@ public @interface JsonSchemaConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.allowNestedExamples.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -215,8 +207,6 @@ public @interface JsonSchemaConfig {
 	 * 		<br>Values are Simple-JSON objects.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.defaultSchema.smo"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -237,8 +227,6 @@ public @interface JsonSchemaConfig {
 	 * 		Format: Comma-delimited list of patterns
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.ignoreTypes.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -274,8 +262,6 @@ public @interface JsonSchemaConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.useBeanDefs.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

@@ -19,10 +19,12 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Represents an <c>HTTP 101 Switching Protocols</c> response.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.response.SwitchingProtocols}
+ * </div>
+ *
  * <p>
  * The requester has asked the server to switch protocols and the server has agreed to do so.
- *
- * @deprecated Use {@link org.apache.juneau.http.response.SwitchingProtocols}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

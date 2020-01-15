@@ -22,11 +22,13 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 511 (Network Authentication Required).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.NetworkAuthenticationRequired}
+ * </div>
+ *
  * <p>
  * The client needs to authenticate to gain network access.
  * <br>Intended for use by intercepting proxies used to control access to the network (e.g., "captive portals" used to require agreement to Terms of Service before granting full Internet access via a Wi-Fi hotspot).
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.NetworkAuthenticationRequired}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

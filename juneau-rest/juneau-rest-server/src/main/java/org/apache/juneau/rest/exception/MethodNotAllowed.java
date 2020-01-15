@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 405 (Method Not Allowed).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.MethodNotAllowed}
+ * </div>
+ *
  * <p>
  * A request method is not supported for the requested resource; for example, a GET request on a form that requires data to be presented via POST, or a PUT request on a read-only resource.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.MethodNotAllowed}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

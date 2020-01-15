@@ -22,11 +22,13 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 415 (Unsupported Media Type).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.UnsupportedMediaType}
+ * </div>
+ *
  * <p>
  * The request entity has a media type which the server or resource does not support.
  * <br>For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.UnsupportedMediaType}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

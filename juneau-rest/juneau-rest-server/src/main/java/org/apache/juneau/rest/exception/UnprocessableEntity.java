@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 422 (Unprocessable Entity).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.UnprocessableEntity}
+ * </div>
+ *
  * <p>
  * The request was well-formed but was unable to be followed due to semantic errors.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.UnprocessableEntity}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 411 ().
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.LengthRequired}
+ * </div>
+ *
  * <p>
  * The request did not specify the length of its content, which is required by the requested resource.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.LengthRequired}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

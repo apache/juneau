@@ -40,7 +40,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	 * Configuration property:  Resolve <c>$ref</c> references in schema up to the specified depth.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.dto.swagger.ui.SwaggerUI#SWAGGERUI_resolveRefsMaxDepth SWAGGERUI_resolveRefsMaxDepth}
 	 * 	<li><b>Name:</b>  <js>"SwaggerUI.resolveRefsMaxDepth.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -58,7 +58,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Resolve schema references up to 5 levels deep.
+	 * 	<jc>// Resolve schema references up to 5 levels deep.</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 			properties={
 	 * 				<ja>@Property</ja>(name=<jsf>SWAGGERUI_resolveRefsMaxDepth</jsf>, value=<js>"5"</js>)

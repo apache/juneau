@@ -19,10 +19,12 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Represents an <c>HTTP 204 No Content</c> response.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.response.NoContent}
+ * </div>
+ *
  * <p>
  * The server successfully processed the request and is not returning any content.
- *
- * @deprecated Use {@link org.apache.juneau.http.response.NoContent}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

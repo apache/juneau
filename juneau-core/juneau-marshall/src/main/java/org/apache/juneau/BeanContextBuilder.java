@@ -160,6 +160,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean dictionary.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
+	 * </div>
+	 *
 	 * <p>
 	 * Adds to the list of classes that make up the bean dictionary in this bean context.
 	 *
@@ -170,7 +174,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #dictionary(Object...)}
 	 */
 	@Deprecated
 	public BeanContextBuilder beanDictionary(Object...values) {
@@ -179,6 +182,10 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * Configuration property:  Bean dictionary.
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dictionary(Class...)}
+	 * </div>
 	 *
 	 * <p>
 	 * Same as {@link #beanDictionary(Object...)} but takes in an array of classes.
@@ -190,7 +197,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #dictionary(Class...)}
 	 */
 	@Deprecated
 	public BeanContextBuilder beanDictionary(Class<?>...values) {
@@ -200,6 +206,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean dictionary.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dictionaryReplace(Class...)}
+	 * </div>
+	 *
 	 * <p>
 	 * Same as {@link #beanDictionary(Object...)} but replaces the existing value.
 	 *
@@ -210,7 +220,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The new values for this property.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #dictionaryReplace(Class...)}
 	 */
 	@Deprecated
 	public BeanContextBuilder beanDictionaryReplace(Class<?>...values) {
@@ -220,6 +229,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean dictionary.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dictionaryReplace(Object...)}
+	 * </div>
+	 *
 	 * <p>
 	 * Same as {@link #beanDictionary(Object...)} but replaces the existing value.
 	 *
@@ -230,7 +243,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The new values for this property.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #dictionaryReplace(Object...)}
 	 */
 	@Deprecated
 	public BeanContextBuilder beanDictionaryReplace(Object...values) {
@@ -240,6 +252,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean dictionary.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dictionaryRemove(Class...)}
+	 * </div>
+	 *
 	 * <p>
 	 * Removes from the list of classes that make up the bean dictionary in this bean context.
 	 *
@@ -250,7 +266,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to remove from this property.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #dictionaryRemove(Class...)}
 	 */
 	@Deprecated
 	public BeanContextBuilder beanDictionaryRemove(Class<?>...values) {
@@ -260,6 +275,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean dictionary.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dictionaryRemove(Object...)}
+	 * </div>
+	 *
 	 * <p>
 	 * Removes from the list of classes that make up the bean dictionary in this bean context.
 	 *
@@ -270,7 +289,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to remove from this property.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #dictionaryRemove(Object...)}
 	 */
 	@Deprecated
 	public BeanContextBuilder beanDictionaryRemove(Object...values) {
@@ -1080,7 +1098,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * @deprecated Use {@link #bpx(Class, String)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #bpx(Class, String)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanContextBuilder excludeProperties(Class<?> beanClass, String properties) {
@@ -1090,7 +1110,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * @deprecated Use {@link #bpx(Map)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #bpx(Map)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanContextBuilder excludeProperties(Map<String,String> values) {
@@ -1100,7 +1122,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * @deprecated Use {@link #bpx(String, String)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #bpx(String, String)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanContextBuilder excludeProperties(String beanClassName, String value) {
@@ -1336,7 +1360,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * @deprecated Use {@link #bpi(Class, String)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #bpi(Class, String)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanContextBuilder includeProperties(Class<?> beanClass, String value) {
@@ -1346,7 +1372,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * @deprecated Use {@link #bpi(Map)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #bpi(Map)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanContextBuilder includeProperties(Map<String,String> values) {
@@ -1356,7 +1384,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * @deprecated Use {@link #bpi(String, String)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #bpi(String, String)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanContextBuilder includeProperties(String beanClassName, String value) {

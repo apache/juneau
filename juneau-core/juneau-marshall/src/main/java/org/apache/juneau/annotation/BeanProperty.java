@@ -29,7 +29,9 @@ import org.apache.juneau.*;
  * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanpAnnotation}
  * </ul>
  *
- * @deprecated Use {@link Beanp}
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - {@link Beanp}.
+ * </div>
  */
 @Documented
 @Target({FIELD,METHOD,PARAMETER})

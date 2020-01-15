@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 406 (Not Acceptable).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.NotAcceptable}
+ * </div>
+ *
  * <br>
  * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.NotAcceptable}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

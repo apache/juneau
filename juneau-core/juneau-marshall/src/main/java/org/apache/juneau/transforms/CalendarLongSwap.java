@@ -20,7 +20,9 @@ import org.apache.juneau.transform.*;
 /**
  * Transforms {@link Calendar Calendars} to {@link Long Longs} using {@code Calender.getTime().getTime()}.
  *
- * @deprecated Use {@link TemporalCalendarSwap}
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link TemporalCalendarSwap}
+ * </div>
  */
 @Deprecated
 public class CalendarLongSwap extends PojoSwap<Calendar,Long> {

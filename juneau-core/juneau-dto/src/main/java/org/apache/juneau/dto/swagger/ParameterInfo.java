@@ -514,8 +514,8 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link SchemaInfo}
 	 * 		<li><c>String</c> - JSON object representation of {@link SchemaInfo}
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -735,8 +735,8 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link Items}
 	 * 		<li><c>String</c> - JSON object representation of {@link Items}
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1330,13 +1330,13 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		<li><c>Object</c>
 	 * 		<li><c>Collection&lt;Object&gt;</c>
 	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;Object&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	_enum(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><c>String</c> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1484,8 +1484,8 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Map&lt;String,String&gt;</c>
 	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,Object&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	examples(<js>"{'text/json':'{foo:\\'bar\\'}'}"</js>);
 	 * 			</p>
 	 * 	</ul>

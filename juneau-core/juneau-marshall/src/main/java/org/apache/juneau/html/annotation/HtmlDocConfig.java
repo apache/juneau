@@ -85,8 +85,6 @@ public @interface HtmlDocConfig {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.aside.ls"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -127,8 +125,6 @@ public @interface HtmlDocConfig {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.footer.ls"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -167,8 +163,6 @@ public @interface HtmlDocConfig {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.head.ls"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -210,8 +204,6 @@ public @interface HtmlDocConfig {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class if not overridden.
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.header.ls"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -255,8 +247,6 @@ public @interface HtmlDocConfig {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.nav.ls"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -319,8 +309,6 @@ public @interface HtmlDocConfig {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.navlinks.ls"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -350,8 +338,6 @@ public @interface HtmlDocConfig {
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.noResultsMessage.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -376,8 +362,6 @@ public @interface HtmlDocConfig {
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.nowrap.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -394,7 +378,7 @@ public @interface HtmlDocConfig {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bpcode w800'>
-	 * 	htmldoc=<ja>@HtmlDocConfig</ja>(
+	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		script={
 	 * 			<js>"alert('hello!');"</js>
 	 * 		}
@@ -418,8 +402,6 @@ public @interface HtmlDocConfig {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.script.ls"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -461,8 +443,6 @@ public @interface HtmlDocConfig {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.style.ls"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -491,8 +471,6 @@ public @interface HtmlDocConfig {
 	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.stylesheet.ls"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -513,7 +491,7 @@ public @interface HtmlDocConfig {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	htmldoc=<ja>@HtmlDocConfig</ja>(
+	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		template=MySpecialDocTemplate.<jk>class</jk>
 	 * 	)
 	 * </p>

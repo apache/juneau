@@ -22,11 +22,13 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 501 (Not Implemented).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.NotImplemented}
+ * </div>
+ *
  * <p>
  * The server either does not recognize the request method, or it lacks the ability to fulfill the request.
  * <br>Usually this implies future availability (e.g., a new feature of a web-service API).
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.NotImplemented}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

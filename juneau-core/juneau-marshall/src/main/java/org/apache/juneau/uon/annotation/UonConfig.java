@@ -82,8 +82,6 @@ public @interface UonConfig {
 	 * 		The default is <js>"false"</js> for {@link UonParser}, <js>"true"</js> for {@link UrlEncodingParser}.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"UonParser.decoding.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -108,8 +106,6 @@ public @interface UonConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"UonParser.validateEnd.b"</js>.
 	 * </ul>
 
 	 * <ul class='seealso'>
@@ -142,8 +138,6 @@ public @interface UonConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"UonSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -181,8 +175,6 @@ public @interface UonConfig {
 	 * 		The default is <js>"false"</js> for {@link UonSerializer}, <js>"true"</js> for {@link UrlEncodingSerializer}.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"UonSerializer.encoding.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -206,8 +198,6 @@ public @interface UonConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"UonSerializer.paramFormat.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

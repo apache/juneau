@@ -22,11 +22,13 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Represents an <c>HTTP 308 Permanent Redirect</c> response.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.response.PermanentRedirect}
+ * </div>
+ *
  * <p>
  * The request and all future requests should be repeated using another URI. 307 and 308 parallel the behaviors of 302 and 301, but do not allow the HTTP method to change.
  * So, for example, submitting a form to a permanently redirected resource may continue smoothly.
- *
- * @deprecated Use {@link org.apache.juneau.http.response.PermanentRedirect}
  */
 @Response(code=CODE, description=MESSAGE)
 @BeanIgnore

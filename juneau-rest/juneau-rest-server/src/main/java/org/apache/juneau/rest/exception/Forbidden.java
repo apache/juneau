@@ -22,11 +22,13 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 403 (Forbidden).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.Forbidden}
+ * </div>
+ *
  * <p>
  * The request was valid, but the server is refusing action.
  * <br>The user might not have the necessary permissions for a resource, or may need an account of some sort.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.Forbidden}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

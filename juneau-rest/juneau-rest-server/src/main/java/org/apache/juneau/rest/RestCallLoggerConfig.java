@@ -259,7 +259,7 @@ public class RestCallLoggerConfig {
 	 *
 	 * @param req The servlet request.
 	 * @param res The servlet response.
-	 * @return The applicable logging rule, or <jk>null<jk> if a match could not be found.
+	 * @return The applicable logging rule, or <jk>null</jk> if a match could not be found.
 	 */
 	public RestCallLoggerRule getRule(HttpServletRequest req, HttpServletResponse res) {
 

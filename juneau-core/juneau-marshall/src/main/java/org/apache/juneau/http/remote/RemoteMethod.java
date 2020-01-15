@@ -50,7 +50,7 @@ public @interface RemoteMethod {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// POST /pet</jc>
-	 * 	<ja>@RestMethod</ja>
+	 * 	<ja>@RemoteMethod</ja>
 	 * 	<jk>public void</jk> postPet(...) {...}
 	 * </p>
 	 */
@@ -65,7 +65,7 @@ public @interface RemoteMethod {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// POST /pet</jc>
-	 * 	<ja>@RestMethod</ja>
+	 * 	<ja>@RemoteMethod</ja>
 	 * 	<jk>public void</jk> postPet(...) {...}
 	 * </p>
 	 *

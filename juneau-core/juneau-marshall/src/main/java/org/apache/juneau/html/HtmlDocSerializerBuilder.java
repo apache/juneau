@@ -124,7 +124,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@HtmlDoc</ja>(
+	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		head={
 	 * 			<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>
 	 * 		}
@@ -219,7 +219,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * <js>"servlet:/..."</js>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p>
+	 * <p class='bcode w800'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		navlinks={
 	 * 			<js>"options: servlet:/?method=OPTIONS"</js>,

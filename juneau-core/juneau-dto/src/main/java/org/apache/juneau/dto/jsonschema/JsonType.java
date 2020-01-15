@@ -22,8 +22,8 @@ package org.apache.juneau.dto.jsonschema;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	// Produces 'number', not 'NUMBER'.
- * 	String json = JsonSerializer.DEFAULT.serialize(JsonType.NUMBER);
+ * 	<jc>// Produces 'number', not 'NUMBER'.</jc>
+ * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(JsonType.<jsf>NUMBER</jsf>);
  * </p>
  *
  * <ul class='seealso'>

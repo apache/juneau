@@ -91,7 +91,7 @@ public final class ClasspathResourceManager {
 	 *
 	 * @param baseClass
 	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null<jk>, uses the base class passed in through the constructor of this class.
+	 * 	<br>If <jk>null</jk>, uses the base class passed in through the constructor of this class.
 	 * @param name Name of the desired resource.
 	 * @param locale The locale.  Can be <jk>null</jk>.
 	 * @return An input stream to the object, or <jk>null</jk> if the resource could not be found.
@@ -135,7 +135,7 @@ public final class ClasspathResourceManager {
 	 *
 	 * @param baseClass
 	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null<jk>, uses the base class passed in through the constructor of this class.
+	 * 	<br>If <jk>null</jk>, uses the base class passed in through the constructor of this class.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException Thrown by underlying stream.
@@ -161,7 +161,7 @@ public final class ClasspathResourceManager {
 	 *
 	 * @param baseClass
 	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null<jk>, uses the base class passed in through the constructor of this class.
+	 * 	<br>If <jk>null</jk>, uses the base class passed in through the constructor of this class.
 	 * @param name Name of the desired resource.
 	 * @param locale The locale.  Can be <jk>null</jk>.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.

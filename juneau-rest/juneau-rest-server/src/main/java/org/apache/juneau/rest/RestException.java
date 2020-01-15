@@ -23,11 +23,13 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Exception thrown to trigger an error HTTP status.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link HttpException}
+ * </div>
+ *
  * <p>
  * REST methods on subclasses of {@link RestServlet} can throw this exception to trigger an HTTP status other than the
  * automatically-generated <c>404</c>, <c>405</c>, and <c>500</c> statuses.
- *
- * @deprecated Use {@link HttpException}.
  */
 @Deprecated
 public class RestException extends RuntimeException {
@@ -158,7 +160,6 @@ public class RestException extends RuntimeException {
 	 *
 	 * @param occurrence The number of times this exception has occurred.
 	 * @return This object (for method chaining).
-	 * @deprecated Not used by new logging API.
 	 */
 	@Deprecated
 	protected RestException setOccurrence(int occurrence) {
@@ -182,7 +183,6 @@ public class RestException extends RuntimeException {
 	 *
 	 * @return
 	 * 	The occurrence number if {@link RestResource#useStackTraceHashes() @RestResource(useStackTraceHashes)} is enabled, or <c>0</c> otherwise.
-	 * @deprecated Not used by new logging API.
 	 */
 	@Deprecated
 	public int getOccurrence() {

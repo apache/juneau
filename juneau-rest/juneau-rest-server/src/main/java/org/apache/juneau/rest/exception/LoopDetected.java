@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 508 (Loop Detected).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.LoopDetected}
+ * </div>
+ *
  * <p>
  * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.LoopDetected}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

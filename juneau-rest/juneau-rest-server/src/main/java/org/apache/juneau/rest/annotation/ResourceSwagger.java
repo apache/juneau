@@ -48,7 +48,6 @@ public @interface ResourceSwagger {
 	 * 			<li>{@link ResourceSwagger#title()} on this class, then any parent classes.
 	 * 			<li>Value defined in Swagger JSON file.
 	 * 			<li>{@link Rest#title()} on this class, then any parent classes.
-	 * 			<li>
 	 * 		</ol>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -65,7 +64,7 @@ public @interface ResourceSwagger {
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			description={
-	 * 				<js>"This is a sample server Petstore server based on the Petstore sample at Swagger.io."<js>,
+	 * 				<js>"This is a sample server Petstore server based on the Petstore sample at Swagger.io."</js>,
 	 * 				<js>"You can find out more about Swagger at &lt;a class='link' href='http://swagger.io'&gt;http://swagger.io&lt;/a&gt;."</js>
 	 * 			}
 	 * 		)
@@ -83,7 +82,6 @@ public @interface ResourceSwagger {
 	 * 			<li>{@link ResourceSwagger#description()} on this class, then any parent classes.
 	 * 			<li>Value defined in Swagger JSON file.
 	 * 			<li>{@link Rest#description()} on this class, then any parent classes.
-	 * 			<li>
 	 * 		</ol>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -118,23 +116,6 @@ public @interface ResourceSwagger {
 	 * 		)
 	 * 	)
 	 * </p>
-	swagger={
-		"info: {",
-			"contact:{name:'Juneau Developer',email:'dev@juneau.apache.org'},",
-			"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},",
-			"version:'2.0',",
-			"termsOfService:'You are on your own.'",
-		"},",
-		"externalDocs:{description:'Apache Juneau',url:'http://juneau.apache.org'}"
-	}
-	swagger=@ResourceSwagger(
-		contact="name:'Juneau Developer',email:'dev@juneau.apache.org'",
-		license="name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'",
-		version="2.0",
-		termsOfService="You are on your own.",
-		externalDocs="description:'Apache Juneau',url:'http://juneau.apache.org'}"
-	)
-	swagger=@ResourceSwagger("$F{PetStoreResource.json}"),
 	 *
 	 * <ul class='notes'>
 	 * 	<li>

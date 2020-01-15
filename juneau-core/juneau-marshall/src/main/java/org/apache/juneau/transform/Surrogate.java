@@ -60,6 +60,7 @@ import org.apache.juneau.annotation.*;
  * 		.build();
  * </p>
  *
+ * <p>
  * Surrogates can also be associated using the {@link Swap @Swap} annotation.
  * <p class='bcode w800'>
  * 	<ja>@Swap</ja>(MySurrogate.<jk>class</jk>)

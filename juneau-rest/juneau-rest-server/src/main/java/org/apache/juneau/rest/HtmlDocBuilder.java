@@ -27,6 +27,10 @@ import org.apache.juneau.utils.*;
 /**
  * Programmatic interface for setting properties used by the HtmlDoc serializer.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link HtmlDocConfig}
+ * </div>
+ *
  * <p>
  * Basically just a convenience wrapper around the servlet or method level properties for setting properties defined
  * by the {@link HtmlDocSerializer} class.
@@ -40,8 +44,6 @@ import org.apache.juneau.utils.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
  * </ul>
- *
- * @deprecated Use {@link HtmlDocConfig}
  */
 @Deprecated
 public class HtmlDocBuilder {

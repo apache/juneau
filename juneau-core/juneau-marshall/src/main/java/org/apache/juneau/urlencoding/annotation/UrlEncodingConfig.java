@@ -87,8 +87,6 @@ public @interface UrlEncodingConfig {
 	 * 		This option only applies to beans.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"UrlEncodingSerializer.expandedParams.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

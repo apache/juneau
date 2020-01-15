@@ -67,8 +67,6 @@ public @interface ParserConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"InputStreamParser.binaryFormat.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -97,8 +95,6 @@ public @interface ParserConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Parser.autoCloseStreams.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -121,8 +117,6 @@ public @interface ParserConfig {
 	 * 		Default: 5
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Parser.debugOutputLines.i"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -186,8 +180,6 @@ public @interface ParserConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Parser.strict.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -212,8 +204,6 @@ public @interface ParserConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Parser.trimStrings.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -254,8 +244,6 @@ public @interface ParserConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"Parser.unbuffered.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -282,8 +270,6 @@ public @interface ParserConfig {
 	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"ReaderParser.fileCharset.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -306,8 +292,6 @@ public @interface ParserConfig {
 	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"ReaderParser.inputStreamCharset.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

@@ -285,8 +285,8 @@ public class Items extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link Items}
 	 * 		<li><c>String</c> - JSON object representation of {@link Items}
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -905,13 +905,13 @@ public class Items extends SwaggerElement {
 	 * 		<li><c>Object</c>
 	 * 		<li><c>Collection&lt;Object&gt;</c>
 	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;Object&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	_enum(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><c>String</c> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>

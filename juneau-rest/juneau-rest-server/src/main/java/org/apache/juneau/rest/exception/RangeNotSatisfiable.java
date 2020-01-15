@@ -22,11 +22,13 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 416 (Range Not Satisfiable).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.RangeNotSatisfiable}
+ * </div>
+ *
  * <p>
  * The client has asked for a portion of the file (byte serving), but the server cannot supply that portion.
  * <br>For example, if the client asked for a part of the file that lies beyond the end of the file.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.RangeNotSatisfiable}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

@@ -78,6 +78,7 @@ import org.apache.juneau.xmlschema.XmlSchemaSerializer;
  * <p>
  * An additional "add-json-properties" mode is also provided to prevent loss of JSON data types...
  * <p class='bcode w800'>
+ * 	<xt>&lt;object&gt;</xt>
  * 		<xt>&lt;name</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
  * 		<xt>&lt;address</xt> <xa>_type</xa>=<xs>'object'</xs><xt>&gt;</xt>
  * 			<xt>&lt;streetAddress</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt>21 2nd Street<xt>&lt;/streetAddress&gt;</xt>
@@ -126,7 +127,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_addBeanTypes XML_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -159,7 +160,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * Configuration property:  Add namespace URLs to the root element.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_addNamespaceUrisToRoot XML_addNamespaceUrisToRoot}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.addNamespaceUrisToRoot.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -195,7 +196,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * Configuration property:  Auto-detect namespace usage.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_autoDetectNamespaces XML_autoDetectNamespaces}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.autoDetectNamespaces.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -245,7 +246,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * Configuration property:  Default namespace.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_defaultNamespace XML_defaultNamespace}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.defaultNamespace.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.xml.Namespace}
@@ -277,7 +278,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * Configuration property:  Enable support for XML namespaces.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_enableNamespaces XML_enableNamespaces}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.enableNamespaces.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -309,7 +310,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * Configuration property:  Default namespaces.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_namespaces XML_namespaces}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.namespaces.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>Set&lt;{@link org.apache.juneau.xml.Namespace}&gt;</c>
@@ -341,7 +342,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * Configuration property:  XMLSchema namespace.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_xsNamespace XML_xsNamespace}
 	 * 	<li><b>Name:</b>  <js>"XmlSerializer.xsNamespace.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c> ({@link org.apache.juneau.xml.Namespace})

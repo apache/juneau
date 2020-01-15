@@ -96,8 +96,6 @@ public @interface HtmlConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -146,8 +144,6 @@ public @interface HtmlConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -196,8 +192,6 @@ public @interface HtmlConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlSerializer.detectLinksInStrings.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -217,8 +211,6 @@ public @interface HtmlConfig {
 	 * 		Default value: <js>"label"</js>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlSerializer.labelParameter.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -270,8 +262,6 @@ public @interface HtmlConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlSerializer.detectLabelParameters.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -302,8 +292,6 @@ public @interface HtmlConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"HtmlSerializer.uriAnchorText.s"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

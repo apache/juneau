@@ -57,13 +57,13 @@ import org.apache.juneau.svl.*;
  * 	<ja>@Rest</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
  * 		title=<js>"$L{title}"</js>,
- * 		description=<js>"$L{description}"</js>,
- * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			navlinks={
- * 				<js>"options: servlet:/?method=OPTIONS"</js>,
- * 				<js>"doc: doc"</js>
- * 			}
- * 		)
+ * 		description=<js>"$L{description}"</js>
+ * 	)
+ * 	<ja>@HtmlDocConfig</ja>(
+ * 		navlinks={
+ * 			<js>"options: servlet:/?method=OPTIONS"</js>,
+ * 			<js>"doc: doc"</js>
+ * 		}
  * 	)
  * </p>
  *
@@ -86,7 +86,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  Aside section contents.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_aside HTMLDOC_aside}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.aside.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
@@ -111,16 +111,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			aside={
-	 * 				<js>"&lt;ul&gt;"</js>,
-	 * 				<js>"	&lt;li&gt;Item 1"</js>,
-	 * 				<js>"	&lt;li&gt;Item 2"</js>,
-	 * 				<js>"	&lt;li&gt;Item 3"</js>,
-	 * 				<js>"&lt;/ul&gt;"</js>
-	 * 			}
-	 * 		)
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		aside={
+	 * 			<js>"&lt;ul&gt;"</js>,
+	 * 			<js>"	&lt;li&gt;Item 1"</js>,
+	 * 			<js>"	&lt;li&gt;Item 2"</js>,
+	 * 			<js>"	&lt;li&gt;Item 3"</js>,
+	 * 			<js>"&lt;/ul&gt;"</js>
+	 * 		}
 	 * 	)
 	 * </p>
 	 */
@@ -130,7 +128,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  Footer section contents.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_footer HTMLDOC_footer}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.footer.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
@@ -153,12 +151,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			footer={
-	 * 				<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
-	 * 			}
-	 * 		)
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		footer={
+	 * 			<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
+	 * 		}
 	 * 	)
 	 * </p>
 	 */
@@ -168,7 +164,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  Additional head section content.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_head HTMLDOC_head}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.head.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
@@ -199,12 +195,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * A shortcut on <ja>@Rest</ja> is also provided for this setting:
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		htmldoc=@HtmlDoc(
-	 * 			head={
-	 * 				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>
-	 * 			}
-	 * 		)
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		head={
+	 * 			<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>
+	 * 		}
 	 * 	)
 	 * </p>
 	 */
@@ -214,7 +208,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  Header section contents.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_header HTMLDOC_header}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.header.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
@@ -235,12 +229,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			header={
-	 * 				<js>"&lt;h1&gt;My own header&lt;/h1&gt;"</js>
-	 * 			}
-	 * 		)
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		header={
+	 * 			<js>"&lt;h1&gt;My own header&lt;/h1&gt;"</js>
+	 * 		}
 	 * 	)
 	 * </p>
 	 */
@@ -250,7 +242,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  Nav section contents.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nav HTMLDOC_nav}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nav.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
@@ -271,12 +263,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			nav={
-	 * 				<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
-	 * 			}
-	 * 		)
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		nav={
+	 * 			<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
+	 * 		}
 	 * 	)
 	 * </p>
 	 *
@@ -289,7 +279,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  Page navigation links.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_navlinks HTMLDOC_navlinks}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.navlinks.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
@@ -342,13 +332,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * A shortcut on <ja>@Rest</ja> is also provided for this setting:
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		htmldoc=@HtmlDoc(
-	 * 			navlinks={
-	 * 				<js>"options: servlet:/?method=OPTIONS"</js>,
-	 * 				<js>"doc: doc"</js>
-	 * 			}
-	 * 		)
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		navlinks={
+	 * 			<js>"options: servlet:/?method=OPTIONS"</js>,
+	 * 			<js>"doc: doc"</js>
+	 * 		}
 	 * 	)
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
 	 * </p>
@@ -364,7 +352,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  No-results message.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_noResultsMessage HTMLDOC_noResultsMessage}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.noResultsMessage.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -384,10 +372,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			noResultsMessage=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
-	 * 		)
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		noResultsMessage=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
 	 * 	)
 	 * </p>
 	 *
@@ -400,7 +386,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  Prevent word wrap on page.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nowrap HTMLDOC_nowrap}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nowrap.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -424,7 +410,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  Javascript code.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_script HTMLDOC_script}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.script.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
@@ -455,12 +441,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * A shortcut on <ja>@Rest</ja> is also provided for this setting:
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		htmldoc=@HtmlDoc(
-	 * 			script={
-	 * 				<js>"alert('hello!');"</js>
-	 * 			}
-	 * 		)
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		script={
+	 * 			<js>"alert('hello!');"</js>
+	 * 		}
 	 * 	)
 	 * </p>
 	 */
@@ -475,7 +459,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  CSS style code.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_style HTMLDOC_style}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.style.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
@@ -506,13 +490,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <p>
 	 * A shortcut on <ja>@Rest</ja> is also provided for this setting:
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		htmldoc=@HtmlDoc(
-	 * 			style={
-	 * 				<js>"h3 { color: red; }"</js>,
-	 * 				<js>"h5 { font-weight: bold; }"</js>
-	 * 			}
-	 * 		)
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		style={
+	 * 			<js>"h3 { color: red; }"</js>,
+	 * 			<js>"h5 { font-weight: bold; }"</js>
+	 * 		}
 	 * 	)
 	 * </p>
 	 */
@@ -527,7 +509,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  Stylesheet import URLs.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_stylesheet HTMLDOC_stylesheet}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.stylesheet.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
@@ -559,7 +541,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  HTML document template.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.template.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link org.apache.juneau.html.HtmlDocTemplate}&gt;</code>
@@ -581,10 +563,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		htmldoc=@HtmlDoc(
-	 * 			template=MySpecialDocTemplate.<jk>class</jk>
-	 * 		)
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		template=MySpecialDocTemplate.<jk>class</jk>
 	 * 	)
 	 * </p>
 	 */
@@ -594,7 +574,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Configuration property:  HTML Widgets.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_widgets HTMLDOC_widgets}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.widgets.lo"</js>
 	 * 	<li><b>Data type:</b><c>List&lt;{@link org.apache.juneau.html.HtmlWidget}|Class&lt;{@link org.apache.juneau.html.HtmlWidget}&gt;&gt;</c>
@@ -635,7 +615,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * and aside section of the page:
 	 *
 	 * <p class='bcode w800'>
-	 * 	<ja>@HtmlDocSerializer</ja>(
+	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		widgets={
 	 * 			MyWidget.<jk>class</jk>
 	 * 		},

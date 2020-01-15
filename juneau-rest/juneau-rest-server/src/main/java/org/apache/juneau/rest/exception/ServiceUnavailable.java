@@ -22,11 +22,13 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 503 (Service Unavailable).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.ServiceUnavailable}
+ * </div>
+ *
  * <p>
  * The server is currently unavailable (because it is overloaded or down for maintenance).
  * <br>Generally, this is a temporary state.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.ServiceUnavailable}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

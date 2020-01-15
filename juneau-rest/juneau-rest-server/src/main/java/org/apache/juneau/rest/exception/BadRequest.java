@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 400 (Bad Request).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.BadRequest}
+ * </div>
+ *
  * <p>
  * The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.BadRequest}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

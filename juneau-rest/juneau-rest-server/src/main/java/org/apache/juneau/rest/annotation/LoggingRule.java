@@ -62,8 +62,8 @@ public @interface LoggingRule {
 	 * <p>
 	 * The possible values are (case-insensitive):
 	 * <ul>
-	 * 	<li><js>"true</jk> - Match debug requests only.
-	 * 	<li><js>"false"</jk> - Match any requests.
+	 * 	<li><js>"true</js> - Match debug requests only.
+	 * 	<li><js>"false"</js> - Match any requests.
 	 * </ul>
 	 *
 	 * <ul class='notes'>
@@ -84,9 +84,9 @@ public @interface LoggingRule {
 	 * <p>
 	 * The possible values are (case-insensitive):
 	 * <ul>
-	 * 	<li><js>"true</jk> - Disable logging.
-	 * 	<li><js>"false"</jk> (default) - Don't disable logging.
-	 * 	<li><js>"per-request"</jk> - Disable logging if No-Trace is set on the request.
+	 * 	<li><js>"true</js> - Disable logging.
+	 * 	<li><js>"false"</js> (default) - Don't disable logging.
+	 * 	<li><js>"per-request"</js> - Disable logging if No-Trace is set on the request.
 	 * </ul>
 	 *
 	 * <p>
@@ -166,9 +166,9 @@ public @interface LoggingRule {
 	 * <p>
 	 * The possible values are (case-insensitive):
 	 * <ul>
-	 * 	<li><js>"short</jk> (default) - Just the HTTP method and URL.
-	 * 	<li><js>"medium"</jk> (default) - Also the URL parameters, body size, and request headers.
-	 * 	<li><js>"long"</jk> - Also the request body as UTF-8 and spaced-hex text (debug must be enabled).
+	 * 	<li><js>"short</js> (default) - Just the HTTP method and URL.
+	 * 	<li><js>"medium"</js> (default) - Also the URL parameters, body size, and request headers.
+	 * 	<li><js>"long"</js> - Also the request body as UTF-8 and spaced-hex text (debug must be enabled).
 	 * </ul>
 	 *
 	 * <ul class='notes'>
@@ -189,9 +189,9 @@ public @interface LoggingRule {
 	 * <p>
 	 * The possible values are (case-insensitive):
 	 * <ul>
-	 * 	<li><js>"short</jk> (default) - Just the response code.
-	 * 	<li><js>"medium"</jk> (default) - Also the body size, response headers, and execution time.
-	 * 	<li><js>"long"</jk> - Also the response body as UTF-8 and spaced-hex text (debug must be enabled).
+	 * 	<li><js>"short</js> (default) - Just the response code.
+	 * 	<li><js>"medium"</js> (default) - Also the body size, response headers, and execution time.
+	 * 	<li><js>"long"</js> - Also the response body as UTF-8 and spaced-hex text (debug must be enabled).
 	 * </ul>
 	 *
 	 * <ul class='notes'>

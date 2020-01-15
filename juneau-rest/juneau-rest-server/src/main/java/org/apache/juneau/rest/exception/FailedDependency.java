@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 424 (Failed Dependency).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.FailedDependency}
+ * </div>
+ *
  * <p>
  * The request failed because it depended on another request and that request failed (e.g., a PROPPATCH).
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.FailedDependency}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

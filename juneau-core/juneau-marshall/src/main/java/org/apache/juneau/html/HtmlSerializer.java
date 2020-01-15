@@ -137,7 +137,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_addBeanTypes HTML_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -170,7 +170,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * Configuration property:  Add key/value headers on bean/map tables.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_addKeyValueTableHeaders HTML_addKeyValueTableHeaders}
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -244,7 +244,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * Configuration property:  Look for URLs in {@link java.lang.String Strings}.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_detectLinksInStrings HTML_detectLinksInStrings}
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLinksInStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -321,7 +321,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * Configuration property:  Link label parameter name.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_labelParameter HTML_labelParameter}
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.labelParameter.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -352,7 +352,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * Configuration property:  Look for link labels in URIs.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_detectLabelParameters HTML_detectLabelParameters}
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLabelParameters.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -432,7 +432,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * Configuration property:  Anchor text source.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_uriAnchorText HTML_uriAnchorText}
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.uriAnchorText.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.html.AnchorText}

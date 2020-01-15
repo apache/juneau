@@ -28,7 +28,7 @@ import org.apache.juneau.internal.*;
  * <p class='bcode w800'>
  * 	InputStream in = getInputStream();
  * 	Writer out = getWriter();
- * 	IOPipe.create(in, out).closeOut().run();
+ * 	IOPipe.<jsm>create</jsm>(in, out).closeOut().run();
  * </p>
  *
  * <p>

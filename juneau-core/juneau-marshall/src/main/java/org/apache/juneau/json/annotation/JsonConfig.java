@@ -79,8 +79,6 @@ public @interface JsonConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"JsonParser.validateEnd.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -113,8 +111,6 @@ public @interface JsonConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"JsonSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -141,8 +137,6 @@ public @interface JsonConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"JsonSerializer.escapeSolidus.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -182,8 +176,6 @@ public @interface JsonConfig {
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
-	 * 		A default global value can be set via the system property <js>"JsonSerializer.simpleMode.b"</js>.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

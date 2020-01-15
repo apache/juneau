@@ -84,7 +84,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Debug.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_debug RESTCLIENT_debug}
 	 * 	<li><b>Name:</b>  <js>"RestClient.debug.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -107,7 +107,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Executor service.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_executorService RESTCLIENT_executorService}
 	 * 	<li><b>Name:</b>  <js>"RestClient.executorService.o"</js>
 	 * 	<li><b>Data type:</b>
@@ -145,7 +145,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Shut down executor service on close.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_executorServiceShutdownOnClose RESTCLIENT_executorServiceShutdownOnClose}
 	 * 	<li><b>Name:</b>  <js>"RestClient.executorServiceShutdownOnClose.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -168,7 +168,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Request headers.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_headers RESTCLIENT_headers}
 	 * 	<li><b>Name:</b>  <js>"RestClient.requestHeaders.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
@@ -191,7 +191,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Call interceptors.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_interceptors RESTCLIENT_interceptors}
 	 * 	<li><b>Name:</b>  <js>"RestClient.interceptors.lo"</js>
 	 * 	<li><b>Data type:</b><c>List&lt;Class&lt;{@link org.apache.juneau.rest.client.RestCallInterceptor}&gt;|{@link org.apache.juneau.rest.client.RestCallInterceptor}&gt;</c>
@@ -217,7 +217,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Keep HttpClient open.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_keepHttpClientOpen RESTCLIENT_keepHttpClientOpen}
 	 * 	<li><b>Name:</b>  <js>"RestClient.keepHttpClientOpen.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -240,7 +240,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Parser.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_parser RESTCLIENT_parser}
 	 * 	<li><b>Name:</b>  <js>"RestClient.parser.o"</js>
 	 * 	<li><b>Data type:</b>
@@ -266,7 +266,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Part parser.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_partParser RESTCLIENT_partParser}
 	 * 	<li><b>Name:</b>  <js>"RestClient.partParser.o"</js>
 	 * 	<li><b>Data type:</b>
@@ -292,7 +292,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Part serializer.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_partSerializer RESTCLIENT_partSerializer}
 	 * 	<li><b>Name:</b>  <js>"RestClient.partSerializer.o"</js>
 	 * 	<li><b>Data type:</b>
@@ -318,7 +318,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Request query parameters.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_query RESTCLIENT_query}
 	 * 	<li><b>Name:</b>  <js>"RestClient.query.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
@@ -341,7 +341,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Number of retries to attempt.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_retries RESTCLIENT_retries}
 	 * 	<li><b>Name:</b>  <js>"RestClient.retries.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -364,7 +364,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  The time in milliseconds between retry attempts.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_retryInterval RESTCLIENT_retryInterval}
 	 * 	<li><b>Name:</b>  <js>"RestClient.retryInterval.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -388,7 +388,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Retry-on determination object.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_retryOn RESTCLIENT_retryOn}
 	 * 	<li><b>Name:</b>  <js>"RestClient.retryOn.o"</js>
 	 * 	<li><b>Data type:</b>
@@ -413,7 +413,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Root URI.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_rootUri RESTCLIENT_rootUri}
 	 * 	<li><b>Name:</b>  <js>"RestClient.rootUri.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -439,7 +439,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Configuration property:  Serializer.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_serializer RESTCLIENT_serializer}
 	 * 	<li><b>Name:</b>  <js>"RestClient.serializer.o"</js>
 	 * 	<li><b>Data type:</b>

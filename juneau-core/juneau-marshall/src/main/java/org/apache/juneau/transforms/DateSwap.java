@@ -54,7 +54,9 @@ import org.apache.juneau.utils.*;
  * 	<li>{@link DateTimeShort} - To {@link DateFormat#SHORT} date-time strings.
  * </ul>
  *
- * @deprecated Use {@link TemporalDateSwap}
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link TemporalDateSwap}
+ * </div>
  */
 @Deprecated
 public class DateSwap extends StringSwap<Date> {

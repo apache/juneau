@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 412 (Precondition Failed).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.PreconditionFailed}
+ * </div>
+ *
  * <p>
  * The server does not meet one of the preconditions that the requester put on the request.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.PreconditionFailed}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

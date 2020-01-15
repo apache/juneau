@@ -18,6 +18,10 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Encapsulates java-method-level properties.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link RequestAttributes}
+ * </div>
+ *
  * <p>
  * These are properties specified on a REST resource method that extends the properties defined on {@link RestContextProperties}
  * and adds the following:
@@ -28,7 +32,6 @@ import org.apache.juneau.rest.annotation.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
  * </ul>
- * @deprecated Use {@link RequestAttributes}
  */
 @SuppressWarnings("serial")
 @Deprecated

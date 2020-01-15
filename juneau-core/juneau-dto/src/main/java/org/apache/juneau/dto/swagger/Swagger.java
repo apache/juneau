@@ -250,8 +250,8 @@ public class Swagger extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link Info}
 	 * 		<li><c>String</c> - JSON object representation of {@link Info}
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	info(<js>"{title:'title',description:'description',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -438,13 +438,13 @@ public class Swagger extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Collection&lt;String&gt;</c>
 	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;String&gt;</c>
-	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode w800'>
+	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	schemes(<js>"['scheme1','scheme2']"</js>);
 	 * 		</p>
 	 * 		<li><c>String</c> - Individual values
-	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode w800'>
+	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	schemes(<js>"scheme1"</js>, <js>"scheme2"</js>);
 	 * 		</p>
 	 * 	</ul>
@@ -520,13 +520,13 @@ public class Swagger extends SwaggerElement {
 	 * 		<li>{@link MediaType}
 	 * 		<li><c>Collection&lt;{@link MediaType}|String&gt;</c>
 	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link MediaType}&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	consumes(<js>"['text/json']"</js>);
 	 * 			</p>
 	 * 		<li><c>String</c> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	consumes(<js>"text/json"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -603,13 +603,13 @@ public class Swagger extends SwaggerElement {
 	 * 		<li>{@link MediaType}
 	 * 		<li><c>Collection&lt;{@link MediaType}|String&gt;</c>
 	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link MediaType}&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	consumes(<js>"['text/json']"</js>);
 	 * 			</p>
 	 * 		<li><c>String</c> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	consumes(<js>"text/json"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -739,8 +739,8 @@ public class Swagger extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Map&lt;String,Map&lt;String,{@link Operation}&gt;|String&gt;</c>
 	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,Map&lt;String,{@link Operation}&gt;&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	paths(<js>"{'foo':{'get':{operationId:'operationId',...}}}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -820,8 +820,8 @@ public class Swagger extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Map&lt;String,Map&lt;String,{@link SchemaInfo}&gt;|String&gt;</c>
 	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,Map&lt;String,{@link SchemaInfo}&gt;&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	definitions(<js>"{'foo':{'bar':{format:'format',...}}}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -916,8 +916,8 @@ public class Swagger extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Map&lt;String,{@link ParameterInfo}|String&gt;</c>
 	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link ParameterInfo}&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	parameters(<js>"{'foo':{name:'name',...}}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1023,8 +1023,8 @@ public class Swagger extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Map&lt;String,{@link ResponseInfo}|String&gt;</c>
 	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link ResponseInfo}&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	responses(<js>"{'foo':{description:'description',...}}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1101,8 +1101,8 @@ public class Swagger extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Map&lt;String,{@link SecurityScheme}|String&gt;</c>
 	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,{@link SecurityScheme}&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	securityDefinitions(<js>"{'foo':{name:'name',...}}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1197,13 +1197,13 @@ public class Swagger extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt;</c>
 	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	securities(<js>"[{...}]"</js>);
 	 * 			</p>
 	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;String,List&lt;String&gt;&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	securities(<js>"{...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1280,13 +1280,13 @@ public class Swagger extends SwaggerElement {
 	 * 		<li><c>Collection&lt;{@link Tag}|String&gt;</c>
 	 * 		<li><c>{@link Tag}[]</c>
 	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link Tag}&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	tags(<js>"[{name:'name',description:'description',...}]"</js>);
 	 * 			</p>
 	 * 		<li><c>String</c> - JSON object representation of <c>{@link Tag}</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	tags(<js>"{name:'name',description:'description',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1344,8 +1344,8 @@ public class Swagger extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link ExternalDocumentation}
 	 * 		<li><c>String</c> - JSON object representation of {@link ExternalDocumentation}
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
 	 * 			</p>
 	 * 	</ul>

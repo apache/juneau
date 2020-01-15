@@ -22,14 +22,16 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 410 ().
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.Gone}
+ * </div>
+ *
  * <p>
  * Indicates that the resource requested is no longer available and will not be available again.
  * <br>This should be used when a resource has been intentionally removed and the resource should be purged.
  * <br>Upon receiving a 410 status code, the client should not request the resource in the future.
  * <br>Clients such as search engines should remove the resource from their indices.
  * <br>Most use cases do not require clients and search engines to purge the resource, and a <js>"404 Not Found"</js> may be used instead.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.Gone}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

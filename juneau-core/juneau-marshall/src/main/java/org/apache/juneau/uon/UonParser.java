@@ -45,7 +45,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * Configuration property: Decode <js>"%xx"</js> sequences.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonParser#UON_decoding UON_decoding}
 	 * 	<li><b>Name:</b>  <js>"UonParser.decoding.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -83,7 +83,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * 		.set(<jsf>UON_decoding</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
-	 * <jc>// Produces: ["foo bar", "baz quz"].</jc>
+	 *  <jc>// Produces: ["foo bar", "baz quz"].</jc>
 	 * 	String[] foo = p.parse(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
 	 * </p>
 	 */
@@ -93,7 +93,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * Configuration property:  Validate end.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.uon.UonParser#UON_validateEnd UON_validateEnd}
 	 * 	<li><b>Name:</b>  <js>"UonParser.validateEnd.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>

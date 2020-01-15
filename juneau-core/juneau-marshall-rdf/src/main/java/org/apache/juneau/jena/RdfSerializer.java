@@ -59,7 +59,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_addBeanTypes RDF_addBeanTypes}
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -92,7 +92,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * Configuration property:  Add XSI data types to non-<c>String</c> literals.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_addLiteralTypes RDF_addLiteralTypes}
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addLiteralTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -117,7 +117,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * Configuration property:  Add RDF root identifier property to root node.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_addRootProperty RDF_addRootProperty}
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.addRootProperty.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -152,7 +152,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * Configuration property:  Auto-detect namespace usage.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_autoDetectNamespaces RDF_autoDetectNamespaces}
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.autoDetectNamespaces.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -184,7 +184,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * Configuration property:  Default namespaces.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_namespaces RDF_namespaces}
 	 * 	<li><b>Name:</b>  <js>"RdfSerializer.namespaces.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.xml.Namespace}&gt;</c>
@@ -213,7 +213,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_useXmlNamespaces RDF_useXmlNamespaces}
 	 * 	<li><b>Name:</b>  <js>"Rdf.useXmlNamespaces.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>

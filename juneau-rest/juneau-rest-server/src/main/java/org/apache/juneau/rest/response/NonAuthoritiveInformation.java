@@ -19,10 +19,12 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Represents an <c>HTTP 203 Non-Authoritative Information</c> response.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.response.NonAuthoritiveInformation}
+ * </div>
+ *
  * <p>
  * The server is a transforming proxy (e.g. a Web accelerator) that received a 200 OK from its origin, but is returning a modified version of the origin's response.
- *
- * @deprecated Use {@link org.apache.juneau.http.response.NonAuthoritiveInformation}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

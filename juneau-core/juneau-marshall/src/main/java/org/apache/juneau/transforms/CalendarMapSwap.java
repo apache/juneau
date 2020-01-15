@@ -20,7 +20,9 @@ import org.apache.juneau.transform.*;
 /**
  * Transforms {@link Calendar Calendars} to {@link Map Maps} of the format <c>{time:long,timeZone:string}</c>.
  *
- * @deprecated Use {@link TemporalCalendarSwap}
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link TemporalCalendarSwap}
+ * </div>
  */
 @Deprecated
 @SuppressWarnings("rawtypes")

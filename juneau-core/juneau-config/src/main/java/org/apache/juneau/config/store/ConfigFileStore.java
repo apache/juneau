@@ -46,7 +46,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * Configuration property:  Local file system directory.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_directory FILESTORE_directory}
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.directory.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -70,7 +70,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * Configuration property:  Charset.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_charset FILESTORE_charset}
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.charset.s"</js>
 	 * 	<li><b>Data type:</b>  {@link java.nio.charset.Charset}
@@ -94,7 +94,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * Configuration property:  Use watcher.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_useWatcher FILESTORE_useWatcher}
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.useWatcher.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -121,7 +121,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * Configuration property:  Watcher sensitivity.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_watcherSensitivity FILESTORE_watcherSensitivity}
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.watcherSensitivity.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.config.store.WatcherSensitivity}
@@ -149,7 +149,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * Configuration property:  Update-on-write.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_updateOnWrite FILESTORE_updateOnWrite}
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.updateOnWrite.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -176,7 +176,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * Configuration property:  File extensions.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_extensions FILESTORE_extensions}
 	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.extensions.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)

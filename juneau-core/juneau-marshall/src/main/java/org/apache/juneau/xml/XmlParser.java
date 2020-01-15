@@ -46,7 +46,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 * Configuration property:  XML event allocator.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_eventAllocator XML_eventAllocator}
 	 * 	<li><b>Name:</b>  <js>"XmlParser.eventAllocator.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link javax.xml.stream.util.XMLEventAllocator}&gt;</code>
@@ -72,7 +72,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 * Configuration property:  Preserve root element during generalized parsing.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_preserveRootElement XML_preserveRootElement}
 	 * 	<li><b>Name:</b>  <js>"XmlParser.preserveRootElement.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -125,7 +125,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 * Configuration property:  XML reporter.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_reporter XML_reporter}
 	 * 	<li><b>Name:</b>  <js>"XmlParser.reporter.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link javax.xml.stream.XMLReporter}&gt;</code>
@@ -156,7 +156,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 * Configuration property:  XML resolver.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_resolver XML_resolver}
 	 * 	<li><b>Name:</b>  <js>"XmlParser.resolver.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link javax.xml.stream.XMLResolver}&gt;</code>
@@ -182,7 +182,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 * Configuration property:  Enable validation.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlParser#XML_validating XML_validating}
 	 * 	<li><b>Name:</b>  <js>"XmlParser.validating.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>

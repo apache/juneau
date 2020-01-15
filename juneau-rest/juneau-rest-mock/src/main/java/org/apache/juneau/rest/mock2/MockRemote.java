@@ -130,7 +130,7 @@ public class MockRemote<T> {
 	 * <p>
 	 * Equivalent to calling the following:
 	 * <p class='bcode w800'>
-	 * 	MockRemoteResource.<jsf>create</jsf>(intf, impl).build();
+	 * 	MockRemoteResource.<jsm>create</jsm>(intf, impl).build();
 	 * </p>
 	 *
 	 * @param intf
@@ -153,7 +153,7 @@ public class MockRemote<T> {
 	 * <p>
 	 * Equivalent to calling the following:
 	 * <p class='bcode w800'>
-	 * 	MockRemoteResource.<jsf>create</jsf>(intf, impl).marshall(m).build();
+	 * 	MockRemoteResource.<jsm>create</jsm>(intf, impl).marshall(m).build();
 	 * </p>
 	 *
 	 * @param intf
@@ -179,7 +179,7 @@ public class MockRemote<T> {
 	 * <p>
 	 * Equivalent to calling the following:
 	 * <p class='bcode w800'>
-	 * 	MockRemoteResource.<jsf>create</jsf>(intf, impl).serializer(s).parser(p).build();
+	 * 	MockRemoteResource.<jsm>create</jsm>(intf, impl).serializer(s).parser(p).build();
 	 * </p>
 	 *
 	 * @param intf

@@ -243,6 +243,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Retrieve the properties active for this request.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #getAttributes()}
+	 * </div>
+	 *
 	 * <p>
 	 * This contains all resource and method level properties from the following:
 	 * <ul class='javatree'>
@@ -279,7 +283,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * @return The properties active for this request.
-	 * @deprecated Use {@link #getAttributes()}
 	 */
 	@Deprecated
 	public RequestProperties getProperties() {
@@ -289,10 +292,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Shortcut for calling <c>getProperties().append(name, value);</c> fluently.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - {@link RequestAttributes#put(String, Object)} or {@link #setAttribute(String, Object)}
+	 * </div>
+	 *
 	 * @param name The property name.
 	 * @param value The property value.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link RequestAttributes#put(String, Object)} or {@link #setAttribute(String, Object)}.
 	 */
 	@Deprecated
 	public RestRequest prop(String name, Object value) {
@@ -675,7 +681,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Shortcut for calling <c>getFormData().getString(name)</c>.
 	 *
 	 * @param name The form data parameter name.
-	 * @return The form data parameter value, or <jk>null<jk> if not found.
+	 * @return The form data parameter value, or <jk>null</jk> if not found.
 	 */
 	public String getFormData(String name) {
 		return getFormData().getString(name);
@@ -1030,7 +1036,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
 	 * common parent class like so:
 	 * <p class='bcode w800'>
-	 * 	htmldoc=<ja>@HtmlDoc</ja>(
+	 *  <ja>@HtmlDocConfig</ja>(
 	 * 		header={
 	 * 			<js>"&lt;h1&gt;$R{siteName}&lt;/h1&gt;"</js>,
 	 * 			<js>"&lt;h2&gt;$R{resourceTitle}&lt;/h2&gt;"</js>
@@ -1581,11 +1587,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the widgets used for resolving <js>"$W{...}"</js> string variables.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - No replacement.
+	 * </div>
+	 *
 	 * @return
 	 * 	The widgets used for resolving <js>"$W{...}"</js> string variables.
 	 * 	Never <jk>null</jk>.
-	 *
-	 * @deprecated No replacement.
 	 */
 	@Deprecated
 	public Map<String,Widget> getWidgets() {
@@ -1748,6 +1756,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Logger.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use standard logging APIs
+	 * </div>
+	 *
 	 * <p>
 	 * Shortcut for calling <c>getContext().getLogger()</c>.
 	 *
@@ -1776,8 +1788,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return
 	 * 	The logger associated with the resource context.
 	 * 	<br>Never <jk>null</jk>.
-	 *
-	 * @deprecated Use standard logging APIs.
 	 */
 	@Deprecated
 	public RestCallLogger getLogger() {

@@ -39,7 +39,7 @@ public abstract class InputStreamParser extends Parser {
 	 * Configuration property:  Binary input format.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.parser.InputStreamParser#ISPARSER_binaryFormat ISPARSER_binaryFormat}
 	 * 	<li><b>Name:</b>  <js>"InputStreamParser.binaryFormat.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.BinaryFormat}

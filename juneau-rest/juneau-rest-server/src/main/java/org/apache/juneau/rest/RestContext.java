@@ -95,7 +95,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Allow body URL parameter.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_allowBodyParam REST_allowBodyParam}
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowBodyParam.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -160,7 +160,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Allowed header URL parameters.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_allowedHeaderParams REST_allowedHeaderParams}
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowedHeaderParams.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
@@ -230,7 +230,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Allowed method headers.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_allowedMethodHeaders REST_allowedMethodHeaders}
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowedMethodHeaders.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
@@ -297,7 +297,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Allowed method URL parameters.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_allowedMethodParams REST_allowedMethodParams}
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowedMethodParams.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
@@ -374,7 +374,9 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Allow header URL parameters.
 	 *
-	 * @deprecated Use {@link #REST_allowedHeaderParams}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #REST_allowedHeaderParams}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String REST_allowHeaderParams = PREFIX + ".allowHeaderParams.b";
@@ -383,7 +385,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  REST call handler.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_callHandler REST_callHandler}
 	 * 	<li><b>Name:</b>  <js>"RestContext.callHandler.o"</js>
 	 * 	<li><b>Data type:</b>
@@ -477,7 +479,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  REST call logger.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_callLogger REST_callLogger}
 	 * 	<li><b>Name:</b>  <js>"RestContext.callLogger.o"</js>
 	 * 	<li><b>Data type:</b>
@@ -545,7 +547,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  REST call logging rules.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_callLoggerConfig REST_callLoggerConfig}
 	 * 	<li><b>Name:</b>  <js>"RestContext.callLoggerConfig.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.RestCallLoggerConfig}
@@ -622,7 +624,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Children.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_children REST_children}
 	 * 	<li><b>Name:</b>  <js>"RestContext.children.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;Class|Object|{@link org.apache.juneau.rest.RestChild}&gt;</c>
@@ -712,6 +714,7 @@ public final class RestContext extends BeanContext {
 	 * 			builder.children(MyChildResource.<jk>class</jk>);
 	 * 		}
 	 * 	}
+	 * </p>
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -734,7 +737,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Classpath resource finder.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}
 	 * 	<li><b>Name:</b>  <js>"RestContext.classpathResourceFinder.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.utils.ClasspathResourceFinder}
@@ -812,6 +815,7 @@ public final class RestContext extends BeanContext {
 	 * 			builder.classpathResourceFinder(MyClasspathResourceFinder.<jk>class</jk>);
 	 * 		}
 	 * 	}
+	 * </p>
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -836,7 +840,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Client version header.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_clientVersionHeader REST_clientVersionHeader}
 	 * 	<li><b>Name:</b>  <js>"RestContext.clientVersionHeader.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -912,7 +916,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Class-level response converters.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_converters REST_converters}
 	 * 	<li><b>Name:</b>  <js>"RestContext.converters.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.RestConverter}|Class&lt;{@link org.apache.juneau.rest.RestConverter}&gt;&gt;</c>
@@ -1005,7 +1009,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Debug mode.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_debug REST_debug}
 	 * 	<li><b>Name:</b>  <js>"RestContext.debug.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.Enablement}
@@ -1037,7 +1041,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Default character encoding.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_defaultCharset REST_defaultCharset}
 	 * 	<li><b>Name:</b>  <js>"RestContext.defaultCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -1094,7 +1098,9 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Default request attributes.
 	 *
-	 * @deprecated Use {@link #REST_reqAttrs}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #REST_reqAttrs}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String REST_attrs = PREFIX + ".reqAttrs.smo";
@@ -1102,7 +1108,9 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Default request headers.
 	 *
-	 * @deprecated Use {@link #REST_reqHeaders}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #REST_reqHeaders}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String REST_defaultRequestHeaders = PREFIX + ".reqHeaders.smo";
@@ -1110,7 +1118,9 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Default response headers.
 	 *
-	 * @deprecated Use {@link #REST_resHeaders}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #REST_resHeaders}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String REST_defaultResponseHeaders = PREFIX + ".resHeaders.omo";
@@ -1119,7 +1129,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Compression encoders.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_encoders REST_encoders}
 	 * 	<li><b>Name:</b>  <js>"RestContext.encoders.o"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.encoders.Encoder}|Class&lt;{@link org.apache.juneau.encoders.Encoder}&gt;&gt;</c>
@@ -1190,7 +1200,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Class-level guards.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_guards REST_guards}
 	 * 	<li><b>Name:</b>  <js>"RestContext.guards.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.RestGuard}|Class&lt;{@link org.apache.juneau.rest.RestGuard}&gt;&gt;</c>
@@ -1274,7 +1284,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  REST info provider.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_infoProvider REST_infoProvider}
 	 * 	<li><b>Name:</b>  <js>"RestContext.infoProvider.o"</js>
 	 * 	<li><b>Data type:</b>
@@ -1366,7 +1376,9 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  REST logger.
 	 *
-	 * @deprecated Use {@link #REST_callLogger}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #REST_callLogger}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String REST_logger = PREFIX + ".logger.o";
@@ -1375,7 +1387,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  The maximum allowed input size (in bytes) on HTTP requests.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_maxInput REST_maxInput}
 	 * 	<li><b>Name:</b>  <js>"RestContext.maxInput.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -1443,7 +1455,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Messages.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_messages REST_messages}
 	 * 	<li><b>Name:</b>  <js>"RestContext.messages.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.MessageBundleLocation}&gt;</c>
@@ -1529,7 +1541,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  MIME types.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_mimeTypes REST_mimeTypes}
 	 * 	<li><b>Name:</b>  <js>"RestContext.mimeTypes.ss"</js>
 	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
@@ -1599,7 +1611,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Java method parameter resolvers.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_paramResolvers REST_paramResolvers}
 	 * 	<li><b>Name:</b>  <js>"RestContext.paramResolvers.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.RestMethodParam}|Class&lt;{@link org.apache.juneau.rest.RestMethodParam}&gt;&gt;</c>
@@ -1689,7 +1701,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Parsers.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_parsers REST_parsers}
 	 * 	<li><b>Name:</b>  <js>"RestContext.parsers.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.parser.Parser}|Class&lt;{@link org.apache.juneau.parser.Parser}&gt;&gt;</c>
@@ -1783,7 +1795,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  HTTP part parser.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser}
 	 * 	<li><b>Name:</b>  <js>"RestContext.partParser.o"</js>
 	 * 	<li><b>Data type:</b>  <c>{@link org.apache.juneau.httppart.HttpPartParser}|Class&lt;{@link org.apache.juneau.httppart.HttpPartParser}&gt;</c>
@@ -1851,7 +1863,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  HTTP part serializer.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_partSerializer REST_partSerializer}
 	 * 	<li><b>Name:</b>  <js>"RestContext.partSerializer.o"</js>
 	 * 	<li><b>Data type:</b>
@@ -1928,7 +1940,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Resource path.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_path REST_path}
 	 * 	<li><b>Name:</b>  <js>"RestContext.path.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -2002,7 +2014,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Render response stack traces in responses.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_renderResponseStackTraces REST_renderResponseStackTraces}
 	 * 	<li><b>Name:</b>  <js>"RestContext.renderResponseStackTraces.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -2067,7 +2079,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Default request attributes.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_reqAttrs REST_reqAttrs}
 	 * 	<li><b>Name:</b>  <js>"RestContext.reqAttrs.smo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
@@ -2138,7 +2150,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Default request headers.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_reqHeaders REST_reqHeaders}
 	 * 	<li><b>Name:</b>  <js>"RestContext.reqHeaders.smo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
@@ -2208,7 +2220,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Default response headers.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_resHeaders REST_resHeaders}
 	 * 	<li><b>Name:</b>  <js>"RestContext.resHeaders.omo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
@@ -2275,7 +2287,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  REST resource resolver.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_resourceResolver REST_resourceResolver}
 	 * 	<li><b>Name:</b>  <js>"RestContext.resourceResolver.o"</js>
 	 * 	<li><b>Data type:</b>
@@ -2366,7 +2378,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Response handlers.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_responseHandlers REST_responseHandlers}
 	 * 	<li><b>Name:</b>  <js>"RestContext.responseHandlers.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.ResponseHandler}|Class&lt;{@link org.apache.juneau.rest.ResponseHandler}&gt;&gt;</c>
@@ -2460,7 +2472,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Declared roles.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_rolesDeclared REST_rolesDeclared}
 	 * 	<li><b>Name:</b>  <js>"RestContext.rolesDeclared.ss"</js>
 	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
@@ -2507,7 +2519,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Role guard.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_roleGuard REST_roleGuard}
 	 * 	<li><b>Name:</b>  <js>"RestContext.roleGuard.ss"</js>
 	 * 	<li><b>Data type:</b>  <c>Set&lt;String&gt;</c>
@@ -2579,7 +2591,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Serializers.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_serializers REST_serializers}
 	 * 	<li><b>Name:</b>  <js>"RestContext.serializers.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.serializer.Serializer}|Class&lt;{@link org.apache.juneau.serializer.Serializer}&gt;&gt;</c>
@@ -2682,7 +2694,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Static file response headers.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}
 	 * 	<li><b>Name:</b>  <js>"RestContext.staticFileResponseHeaders.omo"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
@@ -2760,7 +2772,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Static file mappings.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_staticFiles REST_staticFiles}
 	 * 	<li><b>Name:</b>  <js>"RestContext.staticFiles.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.StaticFileMapping}&gt;</c>
@@ -2881,7 +2893,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Supported accept media types.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_produces REST_produces}
 	 * 	<li><b>Name:</b>  <js>"RestContext.produces.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
@@ -2947,7 +2959,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Properties.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_properties REST_properties}
 	 * 	<li><b>Name:</b>  <js>"RestContext.properties.sms"</js>
 	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
@@ -2996,7 +3008,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Supported content media types.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_consumes REST_consumes}
 	 * 	<li><b>Name:</b>  <js>"RestContext.consumes.ls"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;String&gt;</c>
@@ -3062,7 +3074,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Use classpath resource caching.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_useClasspathResourceCaching REST_useClasspathResourceCaching}
 	 * 	<li><b>Name:</b>  <js>"RestContext.useClasspathResourceCaching.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -3118,7 +3130,9 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  Use stack trace hashes.
 	 *
-	 * @deprecated Use {@link Logging#useStackTraceHashing}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link Logging#useStackTraceHashing}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String REST_useStackTraceHashes = PREFIX + ".useStackTraceHashes.b";
@@ -3127,7 +3141,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Resource URI authority path.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_uriAuthority REST_uriAuthority}
 	 * 	<li><b>Name:</b>  <js>"RestContext.uriAuthority.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -3200,7 +3214,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  Resource URI context path.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_uriContext REST_uriContext}
 	 * 	<li><b>Name:</b>  <js>"RestContext.uriContext.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -3266,7 +3280,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  URI resolution relativity.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_uriRelativity REST_uriRelativity}
 	 * 	<li><b>Name:</b>  <js>"RestContext.uriRelativity.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -3330,7 +3344,7 @@ public final class RestContext extends BeanContext {
 	 * Configuration property:  URI resolution.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_uriResolution REST_uriResolution}
 	 * 	<li><b>Name:</b>  <js>"RestContext.uriResolution.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -3393,7 +3407,9 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  HTML Widgets.
 	 *
-	 * @deprecated Use {@link HtmlDocSerializer#HTMLDOC_widgets}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializer#HTMLDOC_widgets}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String REST_widgets = PREFIX + ".widgets.lo";
@@ -4294,7 +4310,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @param baseClass
 	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null<jk>, uses the REST resource class.
+	 * 	<br>If <jk>null</jk>, uses the REST resource class.
 	 * @param c The class type of the POJO to create.
 	 * @param mediaType The media type of the data in the stream (e.g. <js>"text/json"</js>)
 	 * @param name The resource name (e.g. "htdocs/styles.css").
@@ -4360,6 +4376,10 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the logger to use for this resource.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #getCallLogger()}
+	 * </div>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link #REST_logger}
 	 * </ul>
@@ -4367,7 +4387,6 @@ public final class RestContext extends BeanContext {
 	 * @return
 	 * 	The logger to use for this resource.
 	 * 	<br>Never <jk>null</jk>.
-	 * @deprecated Use {@link #getCallLogger()}
 	 */
 	@Deprecated
 	public RestLogger getLogger() {
@@ -4554,6 +4573,10 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns the number of times this exception was thrown based on a hash of its stacktrace.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Not used by new logging API.
+	 * </div>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
 	 * </ul>
@@ -4562,7 +4585,6 @@ public final class RestContext extends BeanContext {
 	 * @return
 	 * 	The number of times this exception was thrown, or <c>0</c> if {@link #REST_useStackTraceHashes}
 	 * 	setting is not enabled.
-	 * @deprecated Not used by new logging API.
 	 */
 	@Deprecated
 	public int getStackTraceOccurrence(Throwable e) {
@@ -4647,12 +4669,15 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Returns <jk>true</jk> if debug mode is enabled on this resource.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #getDebug()}
+	 * </div>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_debug}
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
-	 * @deprecated Use {@link #getDebug()}.
 	 */
 	@Deprecated
 	@Override
@@ -4891,7 +4916,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @return
 	 * 	The URI-resolution relativity setting value.
-	 * 	<br>Never <jk>null<jk>.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public UriRelativity getUriRelativity() {
 		return uriRelativity;
@@ -4906,7 +4931,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @return
 	 * 	The URI-resolution setting value.
-	 * 	<br>Never <jk>null<jk>.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public UriResolution getUriResolution() {
 		return uriResolution;

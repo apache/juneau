@@ -22,10 +22,12 @@ import org.apache.juneau.rest.*;
 /**
  * Exception representing an HTTP 409 (Conflict).
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.exception.Conflict}
+ * </div>
+ *
  * <p>
  * Indicates that the request could not be processed because of conflict in the request, such as an edit conflict between multiple simultaneous updates.
- *
- * @deprecated Use {@link org.apache.juneau.http.exception.Conflict}
  */
 @Response(code=CODE, description=MESSAGE)
 @Deprecated

@@ -19,13 +19,16 @@ import java.util.logging.*;
 /**
  * Logging utility class.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link RestCallLogger}
+ * </div>
+ *
  * <p>
  * Disables logging entirely.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
  * </ul>
- * @deprecated Use {@link RestCallLogger}
  */
 @Deprecated
 public class NoOpRestLogger extends BasicRestLogger {

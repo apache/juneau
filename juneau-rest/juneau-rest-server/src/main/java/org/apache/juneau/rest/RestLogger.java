@@ -22,12 +22,14 @@ import org.apache.juneau.json.*;
 /**
  * Logging utility class.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link RestCallLogger}
+ * </div>
+ *
  * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_logger}
  * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
  * </ul>
- *
- * @deprecated Use {@link RestCallLogger}
  */
 @Deprecated
 public interface RestLogger {

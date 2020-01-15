@@ -131,7 +131,9 @@ public class BeanFilterBuilder<T> {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * @deprecated Use {@link #bpi(String...)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #bpi(String...)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanFilterBuilder<T> properties(String...value) {
@@ -144,7 +146,9 @@ public class BeanFilterBuilder<T> {
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * @deprecated Use {@link #bpx(String...)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #bpx(String...)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanFilterBuilder<T> excludeProperties(String...value) {
@@ -430,6 +434,10 @@ public class BeanFilterBuilder<T> {
 	/**
 	 * Configuration property:  Bean dictionary.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dictionary(Class...)}
+	 * </div>
+	 *
 	 * <p>
 	 * Adds to the list of classes that make up the bean dictionary for this bean.
 	 *
@@ -461,7 +469,6 @@ public class BeanFilterBuilder<T> {
 	 * @param values
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #dictionary(Class...)}.
 	 */
 	@Deprecated
 	public BeanFilterBuilder<T> beanDictionary(Class<?>...values) {

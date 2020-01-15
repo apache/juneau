@@ -45,7 +45,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF language.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_language RDF_language}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.language.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -111,7 +111,7 @@ public interface RdfCommon {
 	 * Configuration property:  XML namespace for Juneau properties.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_juneauNs RDF_juneauNs}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.juneauNs.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.xml.Namespace}
@@ -135,7 +135,7 @@ public interface RdfCommon {
 	 * Configuration property:  Default XML namespace for bean properties.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_juneauBpNs RDF_juneauBpNs}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.juneauBpNs.s"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.xml.Namespace}
@@ -159,7 +159,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML property: <c>iri_rules</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_iriRules RDF_arp_iriRules}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.iri-rules.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -197,7 +197,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML ARP property: <c>error-mode</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_errorMode RDF_arp_errorMode}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.error-mode.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -243,7 +243,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML ARP property: <c>embedding</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_embedding RDF_arp_embedding}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.embedding.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -271,7 +271,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML ARP property: <c>ERR_xxx</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_err_ RDF_arp_err_}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.ERR_"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -305,7 +305,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML ARP property: <c>WARN_xxx</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_warn_ RDF_arp_warn_}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.WARN_"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -323,7 +323,7 @@ public interface RdfCommon {
 	 * RDF/XML ARP property: <c>IGN_xxx</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_arp_ign_ RDF_arp_ign_}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.IGN_"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -341,7 +341,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML property: <c>xmlbase</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_xmlBase RDF_rdfxml_xmlBase}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.xmlbase.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -364,7 +364,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML property: <c>longId</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_longId RDF_rdfxml_longId}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.longId.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -388,7 +388,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML property: <c>allowBadURIs</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_allowBadUris RDF_rdfxml_allowBadUris}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.allowBadURIs.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -411,7 +411,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML property: <c>relativeURIs</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_relativeUris RDF_rdfxml_relativeUris}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.relativeURIs.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -456,7 +456,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML property: <c>showXmlDeclaration</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showXmlDeclaration RDF_rdfxml_showXmlDeclaration}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.showXmlDeclaration.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -489,7 +489,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML property: <c>showDoctypeDeclaration</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showDoctypeDeclaration RDF_rdfxml_showDoctypeDeclaration}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.showDoctypeDeclaration.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -515,7 +515,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML property: <c>tab</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_tab RDF_rdfxml_tab}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.tab.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -538,7 +538,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML property: <c>attributeQuoteChar</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_attributeQuoteChar RDF_rdfxml_attributeQuoteChar}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.attributeQuoteChar.s"</js>
 	 * 	<li><b>Data type:</b>  <c>Character</c>
@@ -561,7 +561,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF/XML property: <c>blockRules</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_blockRules RDF_rdfxml_blockRules}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.blockRules.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -586,7 +586,7 @@ public interface RdfCommon {
 	 * Configuration property:  N3/Turtle property: <c>minGap</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_minGap RDF_n3_minGap}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.minGap.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -609,7 +609,7 @@ public interface RdfCommon {
 	 * Configuration property:  N3/Turtle property: <c>objectLists</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_objectLists RDF_n3_objectLists}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.objectLists.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -632,7 +632,7 @@ public interface RdfCommon {
 	 * Configuration property:  N3/Turtle property: <c>subjectColumn</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_subjectColumn RDF_n3_subjectColumn}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.subjectColumn.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -655,7 +655,7 @@ public interface RdfCommon {
 	 * Configuration property:  N3/Turtle property: <c>propertyColumn</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_propertyColumn RDF_n3_propertyColumn}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.propertyColumn.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -678,7 +678,7 @@ public interface RdfCommon {
 	 * Configuration property:  N3/Turtle property: <c>indentProperty</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_indentProperty RDF_n3_indentProperty}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.indentProperty.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -701,7 +701,7 @@ public interface RdfCommon {
 	 * Configuration property:  N3/Turtle property: <c>widePropertyLen</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_widePropertyLen RDF_n3_widePropertyLen}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.widePropertyLen.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -725,7 +725,7 @@ public interface RdfCommon {
 	 * Configuration property:  N3/Turtle property: <c>abbrevBaseURI</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_abbrevBaseUri RDF_n3_abbrevBaseUri}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.abbrevBaseURI.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -748,7 +748,7 @@ public interface RdfCommon {
 	 * Configuration property:  N3/Turtle property: <c>usePropertySymbols</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_usePropertySymbols RDF_n3_usePropertySymbols}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.usePropertySymbols.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -771,7 +771,7 @@ public interface RdfCommon {
 	 * Configuration property:  N3/Turtle property: <c>useTripleQuotedStrings</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_useTripleQuotedStrings RDF_n3_useTripleQuotedStrings}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.useTripleQuotedStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -794,7 +794,7 @@ public interface RdfCommon {
 	 * Configuration property:  N3/Turtle property: <c>useDoubles</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_useDoubles RDF_n3_useDoubles}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.useDoubles.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
@@ -817,7 +817,7 @@ public interface RdfCommon {
 	 * Configuration property:  RDF format for representing collections and arrays.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_collectionFormat RDF_collectionFormat}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.collectionFormat.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -863,7 +863,7 @@ public interface RdfCommon {
 	 * Configuration property:  Collections should be serialized and parsed as loose collections.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_looseCollections RDF_looseCollections}
 	 * 	<li><b>Name:</b>  <js>"RdfCommon.looseCollections.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>

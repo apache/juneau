@@ -23,6 +23,10 @@ import org.apache.juneau.svl.*;
 /**
  * HTML widget variable resolver.
  *
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link HtmlWidgetVar}
+ * </div>
+ *
  * <p>
  * The format for this var is <js>"$W{widgetName}"</js>.
  *
@@ -38,8 +42,6 @@ import org.apache.juneau.svl.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
  * </ul>
- *
- * @deprecated Use {@link HtmlWidgetVar}
  */
 @Deprecated
 public class WidgetVar extends SimpleVar {

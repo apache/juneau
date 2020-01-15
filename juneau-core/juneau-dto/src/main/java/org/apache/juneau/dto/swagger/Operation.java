@@ -264,13 +264,13 @@ public class Operation extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Collection&lt;String&gt;</c>
 	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;String&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	tags(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><c>String</c> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	tags(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -402,8 +402,8 @@ public class Operation extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li>{@link ExternalDocumentation}
 	 * 		<li><c>String</c> - JSON object representation of {@link ExternalDocumentation}
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -530,13 +530,13 @@ public class Operation extends SwaggerElement {
 	 * 		<li><c>Collection&lt;{@link MediaType}|String&gt;</c>
 	 * 		<li><c>{@link MediaType}[]</c>
 	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link MediaType}&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	consumes(<js>"['text/json']"</js>);
 	 * 			</p>
 	 * 		<li><c>String</c> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	consumes(<js>"text/json"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -616,13 +616,13 @@ public class Operation extends SwaggerElement {
 	 * 		<li><c>Collection&lt;{@link MediaType}|String&gt;</c>
 	 * 		<li><c>{@link MediaType}[]</c>
 	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link MediaType}&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	produces(<js>"['text/json']"</js>);
 	 * 			</p>
 	 * 		<li><c>String</c> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	produces(<js>"text/json"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -749,13 +749,13 @@ public class Operation extends SwaggerElement {
 	 * 		<li>{@link ParameterInfo}
 	 * 		<li><c>Collection&lt;{@link ParameterInfo}|String&gt;</c>
 	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;{@link ParameterInfo}&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	parameters(<js>"[{path:'path',id:'id'}]"</js>);
 	 * 			</p>
 	 * 		<li><c>String</c> - JSON object representation of {@link ParameterInfo}
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	parameters(<js>"{path:'path',id:'id'}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -844,8 +844,8 @@ public class Operation extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Map&lt;Integer,{@link ResponseInfo}|String&gt;</c>
 	 * 		<li><c>String</c> - JSON object representation of <c>Map&lt;Integer,{@link ResponseInfo}&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	responses(<js>"{'404':{description:'description',...}}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -919,13 +919,13 @@ public class Operation extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Collection&lt;String&gt;</c>
 	 * 		<li><c>String</c> - JSON array representation of <c>Collection&lt;String&gt;</c>
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	schemes(<js>"['scheme1','scheme2']"</js>);
 	 * 			</p>
 	 * 		<li><c>String</c> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
 	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	schemes(<js>"scheme1</js>, <js>"scheme2"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1076,8 +1076,8 @@ public class Operation extends SwaggerElement {
 	 * 	<ul>
 	 * 		<li><c>Map&lt;String,List&lt;String&gt;&gt;</c>
 	 * 		<li><c>String</c> - JSON object representation of a <c>Map&lt;String,List&lt;String&gt;&gt;</c>
-	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode w800'>
+	 * 			<p class='bcode w800'>
+	 * 	<jc>// Example </jc>
 	 * 	securities(<js>"{key:['val1','val2']}"</js>);
 	 * 		</p>
 	 * 	</ul>

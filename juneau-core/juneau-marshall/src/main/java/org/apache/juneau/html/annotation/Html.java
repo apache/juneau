@@ -46,6 +46,7 @@ public @interface Html {
 	 * 	<jk>public</jk> String getDrive() {...}
 	 * </p>
 	 *
+	 * <p>
 	 * This overrides the behavior specified by {@link HtmlSerializer#HTML_uriAnchorText}.
 	 */
 	String anchorText() default "";
@@ -108,9 +109,8 @@ public @interface Html {
 	 * Used in conjunction with the {@link HtmlConfig#applyHtml()}.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields.
 	 *
-	 * <p>
-	 * The valid pattern matches are:
-	 * <ul>
+	 * <h5 class='section'>Valid patterns:</h5>
+	 * <ul class='spaced-list'>
 	 *  <li>Classes:
 	 * 		<ul>
 	 * 			<li>Fully qualified:

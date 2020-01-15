@@ -510,6 +510,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  Allow header URL parameters.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #allowedHeaderParams(String)}
+	 * </div>
+	 *
 	 * <p>
 	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
 	 * parameters.
@@ -527,7 +531,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	The new value for this setting.
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #allowedHeaderParams(String)}
 	 */
 	@Deprecated
 	public RestContextBuilder allowHeaderParams(boolean value) {
@@ -870,7 +873,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  Default request attributes.
 	 *
-	 * @deprecated Use {@link #reqAttrs(String...)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #reqAttrs(String...)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
@@ -881,7 +886,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  Default request headers.
 	 *
-	 * @deprecated Use {@link #reqHeaders(String...)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #reqHeaders(String...)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
@@ -920,7 +927,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  Default request attribute.
 	 *
-	 * @deprecated Use {@link #reqAttr(String, Object)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #reqAttr(String, Object)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
@@ -931,7 +940,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  Default request headers.
 	 *
-	 * @deprecated Use {@link #reqHeader(String,Object)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #reqHeader(String,Object)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
@@ -942,7 +953,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  Default response headers.
 	 *
-	 * @deprecated Use {@link #resHeaders(String...)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #resHeaders(String...)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
@@ -953,7 +966,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  Default response headers.
 	 *
-	 * @deprecated Use {@link #resHeader(String, Object)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #resHeader(String, Object)}
+	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
@@ -1070,6 +1085,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  REST logger.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #callLogger(Class)}
+	 * </div>
+	 *
 	 * <p>
 	 * Specifies the logger to use for logging.
 	 *
@@ -1082,7 +1101,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<br>The default is {@link BasicRestCallLogger}.
 	 * 	<br>Can be <jk>null</jk> to disable logging.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #callLogger(Class)}
 	 */
 	@Deprecated
 	public RestContextBuilder logger(Class<? extends RestLogger> value) {
@@ -1091,6 +1109,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  REST logger.
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #callLogger(RestCallLogger)}
+	 * </div>
 	 *
 	 * <p>
 	 * Same as {@link #logger(Class)} except input is a pre-constructed instance.
@@ -1104,7 +1126,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<br>The default is {@link BasicRestLogger}.
 	 * 	<br>Can be <jk>null</jk> to disable logging.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #callLogger(RestCallLogger)}
 	 */
 	@Deprecated
 	public RestContextBuilder logger(RestLogger value) {
@@ -1966,7 +1987,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param baseClass
 	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null<jk>, uses the REST resource class.
+	 * 	<br>If <jk>null</jk>, uses the REST resource class.
 	 * @param mappingString The static file mapping string.
 	 * @return This object (for method chaining).
 	 * @throws ParseException If mapping string is malformed.
@@ -2011,7 +2032,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param baseClass
 	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null<jk>, uses the REST resource class.
+	 * 	<br>If <jk>null</jk>, uses the REST resource class.
 	 * @param path
 	 * 	The mapped URI path.
 	 * 	<br>Leading and trailing slashes are trimmed.
@@ -2319,6 +2340,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  Use stack trace hashes.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #callLoggerConfig(RestCallLoggerConfig)}
+	 * </div>
+	 *
 	 * <p>
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
 	 * made available through the {@link RestException#getOccurrence()} method.
@@ -2331,7 +2356,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	The new value for this setting.
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #callLoggerConfig(RestCallLoggerConfig)}
 	 */
 	@Deprecated
 	public RestContextBuilder useStackTraceHashes(boolean value) {
@@ -2340,6 +2364,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  HTML Widgets.
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializerBuilder#widgets(Class[])}
+	 * </div>
 	 *
 	 * <p>
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
@@ -2352,7 +2380,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 *
-	 * @deprecated Use {@link HtmlDocSerializerBuilder#widgets(Class[])}
 	 */
 	@SuppressWarnings("unchecked")
 	@Deprecated
@@ -2363,6 +2390,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  HTML Widgets.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializerBuilder#widgetsReplace(Class[])}
+	 * </div>
+	 *
 	 * <p>
 	 * Same as {@link #widgets(Class...)} but replaces any previous values.
 	 *
@@ -2372,8 +2403,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param values The values to set on this setting.
 	 * @return This object (for method chaining).
-	 *
-	 * @deprecated Use {@link HtmlDocSerializerBuilder#widgetsReplace(Class[])}
 	 */
 	@SuppressWarnings("unchecked")
 	@Deprecated
@@ -2384,6 +2413,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  HTML Widgets.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializerBuilder#widgets(HtmlWidget[])}
+	 * </div>
+	 *
 	 * <p>
 	 * Same as {@link #widgets(Class...)} except input is pre-constructed instances.
 	 *
@@ -2393,8 +2426,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
-	 *
-	 * @deprecated Use {@link HtmlDocSerializerBuilder#widgets(HtmlWidget[])}
 	 */
 	@Deprecated
 	public RestContextBuilder widgets(Widget...values) {
@@ -2403,6 +2434,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 	/**
 	 * Configuration property:  HTML Widgets.
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializerBuilder#widgetsReplace(HtmlWidget[])}
+	 * </div>
 	 *
 	 * <p>
 	 * Same as {@link #widgets(Widget...)} except allows you to overwrite the previous value.
@@ -2413,8 +2448,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
-	 *
-	 * @deprecated Use {@link HtmlDocSerializerBuilder#widgetsReplace(HtmlWidget[])}
 	 */
 	@Deprecated
 	public RestContextBuilder widgetsReplace(Widget...values) {

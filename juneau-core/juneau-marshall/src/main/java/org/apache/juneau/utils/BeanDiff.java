@@ -22,7 +22,9 @@ import org.apache.juneau.marshall.SimpleJson;
 /**
  * Utility class for comparing two versions of a POJO.
  *
- * <p class='bpcode w800'>
+ * <p>
+ *
+ * <p class='bcode w800'>
  * 	<jc>// Two beans to compare.</jc>
  * 	MyBean bean1, bean2;
  *

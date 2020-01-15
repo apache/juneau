@@ -35,7 +35,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * Configuration property:  File charset.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_fileCharset WSERIALIZER_fileCharset}
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.fileCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -87,7 +87,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * Configuration property:  Maximum indentation.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_maxIndent WSERIALIZER_maxIndent}
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.maxIndent.i"</js>
 	 * 	<li><b>Data type:</b>  <jk>int</jk>
@@ -133,7 +133,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * Configuration property:  Quote character.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_quoteChar WSERIALIZER_quoteChar}
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.quoteChar.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -180,7 +180,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * Configuration property:  Output stream charset.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_streamCharset WSERIALIZER_streamCharset}
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.streamCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
@@ -229,7 +229,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * Configuration property:  Use whitespace.
 	 *
 	 * <h5 class='section'>Property:</h5>
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_useWhitespace WSERIALIZER_useWhitespace}
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.useWhitespace.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
