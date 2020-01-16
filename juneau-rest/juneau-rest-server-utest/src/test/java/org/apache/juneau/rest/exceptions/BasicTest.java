@@ -17,6 +17,7 @@ import static org.apache.juneau.rest.testutils.TestUtils.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.mock2.*;
@@ -974,5 +975,24 @@ public class BasicTest {
 	@Test
 	public void g01_thrownObjectDoesntMatchReturnType() throws Exception {
 		g.get("/thrownObjectDoesntMatchReturnType").execute().assertStatus(404);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// ParseException should produce BadRequest
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Rest
+	public static class H {
+		@RestMethod
+		public void getFoo() throws Exception {
+			throw new ParseException("Test");
+		}
+	}
+
+	static MockRest h = MockRest.create(H.class).build();
+
+	@Test
+	public void h01_parseExceptionCausesBadRequest() throws Exception {
+		h.get("/foo").execute().assertStatus(400);
 	}
 }

@@ -949,10 +949,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 				mi.toString(), mi.getFullName()
 			);
 		} catch (InvocationTargetException e) {
-			Throwable e2 = e.getTargetException();		// Get the throwable thrown from the doX() method.
-			if (e2 instanceof ParseException || e2 instanceof InvalidDataConversionException)
-				throw new BadRequest(e2);
-			throw toHttpException(e, InternalServerError.class);
+			throw e.getTargetException();
 		}
 		return SC_OK;
 	}

@@ -18,15 +18,18 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.Enablement.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.RestContext.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.util.*;
 
@@ -263,16 +266,32 @@ public class BasicRestCallHandler implements RestCallHandler {
 	@SuppressWarnings("deprecation")
 	@Override
 	public Throwable convertThrowable(Throwable t) {
+
 		ClassInfo ci = ClassInfo.ofc(t);
-		if (ci.is(HttpRuntimeException.class))
+		if (ci.is(InvocationTargetException.class)) {
+			t = ((InvocationTargetException)t).getTargetException();
+			ci = ClassInfo.ofc(t);
+		}
+
+		if (ci.is(HttpRuntimeException.class)) {
 			t = ((HttpRuntimeException)t).getInner();
+			ci = ClassInfo.ofc(t);
+		}
+
 		if (ci.isChildOf(RestException.class) || ci.hasAnnotation(Response.class))
 			return t;
+
+		if (t instanceof ParseException || t instanceof InvalidDataConversionException)
+			return new BadRequest(t);
+
 		String n = t.getClass().getName();
-		if (n.contains("AccessDenied"))
+
+		if (n.contains("AccessDenied") || n.contains("Unauthorized"))
 			return new Unauthorized(t);
+
 		if (n.contains("Empty") || n.contains("NotFound"))
 			return new NotFound(t);
+
 		return t;
 	}
 
