@@ -3574,7 +3574,7 @@ public final class RestContext extends BeanContext {
 			VarResolverSession vrs = this.varResolver.createSession();
 			config = builder.config.resolving(vrs);
 
-			ClassInfo rci = ClassInfo.of(resource);
+			ClassInfo rci = ClassInfo.of(resource).resolved();
 
 			PropertyStore ps = getPropertyStore();
 
@@ -3664,7 +3664,7 @@ public final class RestContext extends BeanContext {
 
 			ClasspathResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ClasspathResourceFinder.class, ClasspathResourceFinderBasic.class, resourceResolver, this);
 			useClasspathResourceCaching = getProperty(REST_useClasspathResourceCaching, boolean.class, true);
-			staticResourceManager = new ClasspathResourceManager(rci.getProxiedClass(), rf, useClasspathResourceCaching);
+			staticResourceManager = new ClasspathResourceManager(rci.inner(), rf, useClasspathResourceCaching);
 
 			consumes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 			produces = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
@@ -3681,11 +3681,11 @@ public final class RestContext extends BeanContext {
 
 			MessageBundleLocation[] mbl = getInstanceArrayProperty(REST_messages, MessageBundleLocation.class, new MessageBundleLocation[0]);
 			if (mbl.length == 0)
-				msgs = new MessageBundle(rci.getProxiedClass(), "");
+				msgs = new MessageBundle(rci.inner(), "");
 			else {
-				msgs = new MessageBundle(mbl[0] != null ? mbl[0].baseClass : rci.getProxiedClass(), mbl[0].bundlePath);
+				msgs = new MessageBundle(mbl[0] != null ? mbl[0].baseClass : rci.inner(), mbl[0].bundlePath);
 				for (int i = 1; i < mbl.length; i++)
-					msgs.addSearchPath(mbl[i] != null ? mbl[i].baseClass : rci.getProxiedClass(), mbl[i].bundlePath);
+					msgs.addSearchPath(mbl[i] != null ? mbl[i].baseClass : rci.inner(), mbl[i].bundlePath);
 			}
 
 			this.fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
@@ -3728,7 +3728,7 @@ public final class RestContext extends BeanContext {
 					methodsFound.add(mi.getSimpleName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
 					try {
 						if (mi.isNotPublic())
-							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", rci.getProxiedClass().getName(), mi.getSimpleName());
+							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
 
 						RestMethodContextBuilder rmcb = new RestMethodContextBuilder(resource, mi.inner(), this);
 						RestMethodContext sm = new RestMethodContext(rmcb);
@@ -3801,7 +3801,7 @@ public final class RestContext extends BeanContext {
 							addToRouter(routers, httpMethod, sm);
 						}
 					} catch (Throwable e) {
-						throw new RestServletException("Problem occurred trying to serialize methods on class {0}, methods={1}", rci.getProxiedClass().getName(), SimpleJsonSerializer.DEFAULT.serialize(methodsFound)).initCause(e);
+						throw new RestServletException("Problem occurred trying to serialize methods on class {0}, methods={1}", rci.inner().getName(), SimpleJsonSerializer.DEFAULT.serialize(methodsFound)).initCause(e);
 					}
 				}
 			}

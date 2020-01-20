@@ -216,28 +216,12 @@ public final class ClassInfo {
 	 */
 	public ClassInfo resolved() {
 		if (Value.isType(t))
-			return of(Value.getParameterType(t));
-		return this;
+			return of(Value.getParameterType(t)).getProxiedClassInfo();
+		return getProxiedClassInfo();
 	}
 
-	/**
-	 * Identifies the inner target class when this class info represents a CGLIB proxy class.
-	 *
-	 * @param proxyFor The inner non-proxied class.
-	 * @return This object (for method chaining).
-	 */
-	public ClassInfo proxyFor(Class<?> proxyFor) {
-		this.proxyFor = ClassInfo.of(proxyFor);
-		return this;
-	}
-
-	/**
-	 * Returns the non-proxied inner class of a CGLIB proxy class.
-	 *
-	 * @return The non-proxied inner class of a CGLIB proxy class, or the inner class if it's not a proxy.
-	 */
-	public Class<?> getProxiedClass() {
-		return proxyFor == null ? c : proxyFor.inner();
+	private ClassInfo getProxiedClassInfo() {
+		return proxyFor == null ? this : proxyFor;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2090,6 +2074,24 @@ public final class ClassInfo {
 	 */
 	public boolean hasPackage() {
 		return getPackage() != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a proxy for another class.
+	 *
+	 * @return <jk>true</jk> if this class is a proxy for another class.
+	 */
+	public boolean isProxy() {
+		return proxyFor != null;
+	}
+
+	/**
+	 * Returns the class info of the proxied class.
+	 *
+	 * @return The class info of the proxied class, or <jk>null</jk> if this class is not proxied.
+	 */
+	public ClassInfo getProxyFor() {
+		return proxyFor;
 	}
 
 	/**

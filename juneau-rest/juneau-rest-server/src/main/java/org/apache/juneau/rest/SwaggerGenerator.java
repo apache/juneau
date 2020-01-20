@@ -102,7 +102,7 @@ final class SwaggerGenerator {
 	@SuppressWarnings("deprecation")
 	public Swagger getSwagger() throws Exception {
 
-		ClassInfo rci = ClassInfo.of(resource.getClass());
+		ClassInfo rci = ClassInfo.of(resource).resolved();
 
 		rci.getSimpleName();
 
