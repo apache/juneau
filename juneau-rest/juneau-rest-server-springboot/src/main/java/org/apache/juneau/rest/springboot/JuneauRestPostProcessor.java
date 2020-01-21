@@ -40,7 +40,7 @@ public class JuneauRestPostProcessor implements BeanDefinitionRegistryPostProces
 	 * Constructor.
 	 *
 	 * @param ctx The spring application context.
-	 * @param appClass The spring application class.
+	 * @param appClass The spring application class.  Can be <jk>null</jk>.
 	 */
 	public JuneauRestPostProcessor(ConfigurableApplicationContext ctx, Class<?> appClass) {
 		this.appClass = appClass;

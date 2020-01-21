@@ -2503,6 +2503,8 @@ public final class StringUtils {
 		final int digits = String.valueOf(lines.length).length();
 		if (start < 1)
 			start = 1;
+		if (end < 0)
+			end = Integer.MAX_VALUE;
 		if (end > lines.length)
 			end = lines.length;
 		StringBuilder sb = new StringBuilder();

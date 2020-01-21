@@ -30,10 +30,17 @@ public class JuneauRestInitializer implements ApplicationContextInitializer<Conf
 	/**
 	 * Constructor.
 	 *
-	 * @param appClass The Spring application class.
+	 * @param appClass The Spring application class.  Can be <jk>null</jk>.
 	 */
 	public JuneauRestInitializer(Class<?> appClass) {
 		this.appClass = appClass;
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public JuneauRestInitializer() {
+		this.appClass = null;
 	}
 
 	@Override /* ApplicationContextInitializer */
