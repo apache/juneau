@@ -81,6 +81,28 @@ public class RestClient extends BeanContext implements Closeable {
 	private static final String PREFIX = "RestClient.";
 
 	/**
+	 * Configuration property:  REST call handler.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_callHandler RESTCLIENT_callHandler}
+	 * 	<li><b>Name:</b>  <js>"RestClient.callHandler.o"</js>
+	 * 	<li><b>Data type:</b>  {@link RestCallHandler}
+	 * 	<li><b>Default:</b>  <c><jk>null</jk></c>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#callHandler(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#callHandler(RestCallHandler)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to provide a custom handler for making HTTP calls.
+	 */
+	public static final String RESTCLIENT_callHandler = PREFIX + "callHandler.o";
+
+	/**
 	 * Configuration property:  Debug.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -467,11 +489,12 @@ public class RestClient extends BeanContext implements Closeable {
 
 	private final Map<String,String> headers, query;
 	private final HttpClientBuilder httpClientBuilder;
-	private final CloseableHttpClient httpClient;
+	final CloseableHttpClient httpClient;
 	private final boolean keepHttpClientOpen, debug;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
+	private final RestCallHandler callHandler;
 	private final String rootUrl;
 	private volatile boolean isClosed = false;
 	private final StackTraceElement[] creationStack;
@@ -575,6 +598,22 @@ public class RestClient extends BeanContext implements Closeable {
 		this.partParser = getInstanceProperty(RESTCLIENT_partParser, HttpPartParser.class, OpenApiParser.class, ResourceResolver.FUZZY, ps);
 		this.executorService = getInstanceProperty(RESTCLIENT_executorService, ExecutorService.class, null);
 
+		RestCallHandler callHandler = getInstanceProperty(RESTCLIENT_callHandler, RestCallHandler.class, null);
+		if (callHandler == null) {
+			callHandler = new RestCallHandler() {
+				@Override
+				public HttpResponse execute(HttpEntityEnclosingRequestBase req) throws ClientProtocolException, IOException {
+					return RestClient.this.httpClient.execute(req);
+				}
+
+				@Override
+				public HttpResponse execute(HttpRequestBase req) throws ClientProtocolException, IOException {
+					return RestClient.this.httpClient.execute(req);
+				}
+			};
+		}
+		this.callHandler = callHandler;
+
 		RestCallInterceptor[] rci = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class, new RestCallInterceptor[0]);
 		if (debug)
 			rci = ArrayUtils.append(rci, RestCallLogger.DEFAULT);
@@ -641,10 +680,10 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @param req The HTTP request.
 	 * @return The HTTP response.
 	 * @throws IOException Stream exception occurred.
-	 * @throws ClientProtocolException ignals an error in the HTTP protocol.
+	 * @throws ClientProtocolException Signals an error in the HTTP protocol.
 	 */
 	protected HttpResponse execute(HttpRequestBase req) throws ClientProtocolException, IOException {
-		return httpClient.execute(req);
+		return callHandler.execute(req);
 	}
 
 	/**
@@ -656,10 +695,10 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @param req The HTTP request.
 	 * @return The HTTP response.
 	 * @throws IOException Stream exception occurred.
-	 * @throws ClientProtocolException ignals an error in the HTTP protocol.
+	 * @throws ClientProtocolException Signals an error in the HTTP protocol.
 	 */
 	protected HttpResponse execute(HttpEntityEnclosingRequestBase req) throws ClientProtocolException, IOException {
-		return httpClient.execute(req);
+		return callHandler.execute(req);
 	}
 
 	/**

@@ -1137,6 +1137,44 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Configuration property:  REST call handler.
+	 *
+	 * <p>
+	 * Allows you to provide a custom handler for making HTTP calls.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_callHandler}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder callHandler(Class<? extends RestCallHandler> value) {
+		return set(RESTCLIENT_callHandler, value);
+	}
+
+	/**
+	 * Configuration property:  REST call handler.
+	 *
+	 * <p>
+	 * Allows you to provide a custom handler for making HTTP calls.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_callHandler}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder callHandler(RestCallHandler value) {
+		return set(RESTCLIENT_callHandler, value);
+	}
+
+	/**
 	 * Configuration property:  Executor service.
 	 *
 	 * <p>
