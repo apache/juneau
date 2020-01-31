@@ -16,7 +16,7 @@ package org.apache.juneau.utils;
  * A simple weighted average of numbers.
  */
 public class WeightedAverage {
-	private Float value = 0f;
+	private Double value = 0d;
 	private int weight = 0;
 
 	/**
@@ -29,7 +29,7 @@ public class WeightedAverage {
 	public WeightedAverage add(int w, Number v) {
 		if (v != null) {
 			try {
-				float w1 = weight, w2 = w;
+				double w1 = weight, w2 = w;
 				weight = Math.addExact(weight, w);
 				if (weight != 0) {
 					value = (value * (w1/weight)) + (v.floatValue() * (w2/weight));
@@ -46,7 +46,7 @@ public class WeightedAverage {
 	 *
 	 * @return The weighted average of all numbers.
 	 */
-	public float getValue() {
+	public double getValue() {
 		return value;
 	}
 }

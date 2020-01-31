@@ -28,7 +28,6 @@ import org.apache.juneau.marshall.*;
 public class MethodExecStats implements Comparable<MethodExecStats> {
 
 	private String method;
-	private WeightedAverage avgTime = new WeightedAverage();
 	private volatile int minTime = -1, maxTime;
 
 	private AtomicInteger
@@ -76,7 +75,6 @@ public class MethodExecStats implements Comparable<MethodExecStats> {
 		finishes.incrementAndGet();
 		int milliTime = (int)(nanoTime/1_000_000);
 		totalTime.addAndGet(nanoTime);
-		avgTime.add(1, nanoTime);
 		minTime = minTime == -1 ? milliTime : Math.min(minTime, milliTime);
 		maxTime = Math.max(maxTime, milliTime);
 	}
@@ -150,7 +148,7 @@ public class MethodExecStats implements Comparable<MethodExecStats> {
 	 * @return The average execution time in milliseconds.
 	 */
 	public int getAvgTime() {
-		return (int)avgTime.getValue() / 1_000_000;
+		return (int)(getTotalTime() / getRuns());
 	}
 
 	/**

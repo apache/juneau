@@ -74,6 +74,8 @@ public class MockRest implements MockHttpConnection {
 
 	final String contextPath, servletPath;
 
+	private final String[] roles;
+
 	/**
 	 * Constructor.
 	 *
@@ -104,6 +106,7 @@ public class MockRest implements MockHttpConnection {
 			headers = new LinkedHashMap<>(b.headers);
 			contextPath = b.contextPath;
 			servletPath = b.servletPath;
+			roles = b.roles;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -211,6 +214,7 @@ public class MockRest implements MockHttpConnection {
 		boolean debug;
 		Map<String,Object> headers = new LinkedHashMap<>();
 		String contextPath, servletPath;
+		String[] roles = new String[0];
 
 		Builder(Object impl) {
 			this.impl = impl;
@@ -451,6 +455,28 @@ public class MockRest implements MockHttpConnection {
 		}
 
 		/**
+		 * Adds the specified security roles for all requests.
+		 *
+		 * @param values The role names to add to all requests (e.g. <js>"ROLE_ADMIN"</js>).
+		 * @return This object (for method chaining).
+		 */
+		public Builder roles(String...values) {
+			this.roles = values;
+			return this;
+		}
+
+		/**
+		 * Adds the specified security role for all requests.
+		 *
+		 * @param value The role name to add to all requests (e.g. <js>"ROLE_ADMIN"</js>).
+		 * @return This object (for method chaining).
+		 */
+		public Builder role(String value) {
+			this.roles = new String[]{value};
+			return this;
+		}
+
+		/**
 		 * Create a new {@link MockRest} object based on the settings on this builder.
 		 *
 		 * @return A new {@link MockRest} object.
@@ -481,7 +507,7 @@ public class MockRest implements MockHttpConnection {
 	@Override /* MockHttpConnection */
 	public MockServletRequest request(String method, String path, Map<String,Object> headers, Object body) {
 		String p = RestUtils.trimContextPath(ctx.getPath(), path);
-		return MockServletRequest.create(method, p).contextPath(emptyIfNull(contextPath)).servletPath(emptyIfNull(servletPath)).body(body).headers(this.headers).headers(headers).debug(debug).restContext(ctx);
+		return MockServletRequest.create(method, p).roles(roles).contextPath(emptyIfNull(contextPath)).servletPath(emptyIfNull(servletPath)).body(body).headers(this.headers).headers(headers).debug(debug).restContext(ctx);
 	}
 
 	/**

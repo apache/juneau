@@ -249,11 +249,25 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	/**
 	 * Adds the specified roles on this request.
 	 *
-	 * @param roles The roles to add to this request.
+	 * @param roles The roles to add to this request (e.g. <js>"ROLE_ADMIN"</js>).
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest roles(String...roles) {
-		this.roles.addAll(Arrays.asList(roles));
+		this.roles = ASet.create(roles);
+		return this;
+	}
+
+	/**
+	 * Adds the specified role on this request.
+	 *
+	 * <p>
+	 * Note that {@link MockRest.Builder#roles(String...)} can be used to set the roles for all requests.
+	 *
+	 * @param role The role to add to this request (e.g. <js>"ROLE_ADMIN"</js>).
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest role(String role) {
+		this.roles = ASet.create(role);
 		return this;
 	}
 
