@@ -1,0 +1,62 @@
+{8.1.4-new}
+About Petstore App <br>
+<div style="width: 70%;">
+    <h3 style="color: blue;">
+        What is the Petstore app?
+    </h3>
+    <p>
+
+        Petstore is a simple CRUD (Create, Read, Update and Delete) application,
+        which is meant to demonstrate the advantages of the Apache Juneau library.
+        It is a live example showing how any JAVA back-end developer can use Juneau for parsing,
+        POJO serialization and sending different types of serialized POJOs over REST.
+
+    </p>
+    <h3>What's the project layout?</h3>
+    <p> Petstore application consists of three main parts, which are connected over REST:
+        <ul>
+            <li>Database: Apache Derby.</li>
+            <li>Server: Java Spring Boot. </li>
+            <li>Client: Java Spring Boot or React.</li>
+        </ul>
+    </p>
+
+    <p> Java back-end and front-end runs on: http://localhost:5000;
+        <br>React front-end runs on: http://localhost:3000.
+    </p>
+
+    <p> Project is based on a standard Spring Boot project structure. There are Models, Repositories, Services.
+        <br>The main difference here - no Controller classes or @RestController annotations.
+        Instead of it, we use PetStore.java interface class where REST calls are mapped with different methods.
+    </p>
+    <p>Petstore has three types of DTO objects (database entities): Pets, Orders and Users. </p>
+    <p>All methods for creating, reading, updating or deleting database entities (pets, orders or users) are provided in
+        PetStoreService.java class. </p>
+    <p> Example Pet, Order and User objects are created at program
+        startup and saved in the database using JPA (Java Persistence API) and PetStoreService methods.</p>
+
+    <h3>How does it work ?</h3>
+    <p>
+        <ul>
+
+            <li>To get the data which should be displayed, Petstore app client
+                sends http request GET to the back-end server. The response data goes
+                over the REST connection where POJOs get serialized.
+                Petstore client can get and display different types of the same POJO:
+                simple (standard) json format and other (not standard) formats.
+
+            <li>Response data (array of objects) in standard JSON format here is used to generate table content
+                (for example, all Pets in Store).</li>
+
+            <li>Other types of these objects are displayed in the page section "Content types".
+                Here you can get the same POJOs displayed in different formats: json simple, json schema,
+                www form urlencoded, octal/msg, html, html schema, html stripped, openapi, plain text, uon, xml, xml
+                schema, xml soap.
+            </li>
+            <li>All readable table content and visual representation of the different content types are generated from
+                the response data.</li>
+        </ul>
+
+    </p>
+
+</div>
