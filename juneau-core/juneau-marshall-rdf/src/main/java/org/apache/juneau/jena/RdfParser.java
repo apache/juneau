@@ -149,7 +149,22 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public RdfParser(PropertyStore ps) {
-		this(ps, "text/xml+rdf");
+		this(ps, getConsumes(ps));
+	}
+
+	private static String getConsumes(PropertyStore ps) {
+		String rdfLanguage = ps.getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
+		switch(rdfLanguage) {
+			case "RDF/XML":
+			case "RDF/XML-ABBREV": return "text/xml+rdf";
+			case "N-TRIPLE": return "text/n-triple";
+			case "N3": return "text/n3";
+			case "N3-PP": return "text/n3-pp";
+			case "N3-PLAIN": return "text/n3-plain";
+			case "N3-TRIPLES": return "text/n3-triples";
+			case "TURTLE": return "text/turtle";
+			default: return "text/xml+rdf";
+		}
 	}
 
 	@Override /* Context */

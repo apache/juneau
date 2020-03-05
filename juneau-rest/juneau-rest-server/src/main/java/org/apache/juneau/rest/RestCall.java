@@ -29,6 +29,7 @@ public class RestCall {
 	private HttpServletResponse res;
 	private RestRequest rreq;
 	private RestResponse rres;
+	private RestMethodContext rmethod;
 	private UrlPathInfo urlPathInfo;
 	private String pathInfoUndecoded;
 	private long startTime = System.currentTimeMillis();
@@ -70,6 +71,19 @@ public class RestCall {
 	 */
 	public RestCall response(HttpServletResponse res) {
 		this.res = res;
+		return this;
+	}
+
+	/**
+	 * Sets the method context on this call.
+	 * 
+	 * Used for logging statistics on the method. 
+	 * 
+	 * @param value The new value. 
+	 * @return This object (for method chaining).
+	 */
+	public RestCall restMethodContext(RestMethodContext value) {
+		this.rmethod = value;
 		return this;
 	}
 
@@ -132,6 +146,15 @@ public class RestCall {
 	 */
 	public RestResponse getRestResponse() {
 		return rres;
+	}
+
+	/**
+	 * Returns the method context of this call.
+	 * 
+	 * @return The method context of this call.
+	 */
+	public RestMethodContext getRestMethodContext() {
+		return rmethod;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

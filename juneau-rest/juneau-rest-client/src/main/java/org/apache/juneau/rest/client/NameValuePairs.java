@@ -38,7 +38,10 @@ import org.apache.juneau.urlencoding.*;
  * 		.append(<js>"j_password"</js>, pw);
  * 	restClient.doPost(url, params).run();
  * </p>
+ *
+ * @deprecated Use {@link org.apache.juneau.rest.client2.ext.NameValuePairs}
  */
+@Deprecated
 public final class NameValuePairs extends LinkedList<NameValuePair> {
 
 	private static final long serialVersionUID = 1L;

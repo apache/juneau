@@ -1306,6 +1306,16 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Shortcut for calling generateUUID(int).
+	 *
+	 * @param numchars The number of characters in the generated UUID.
+	 * @return A new random UUID.
+	 */
+	public static String random(int numchars) {
+		return generateUUID(numchars);
+	}
+
+	/**
 	 * Same as {@link String#trim()} but prevents <c>NullPointerExceptions</c>.
 	 *
 	 * @param s The string to trim.
@@ -2729,5 +2739,18 @@ public final class StringUtils {
 		if (in == null || in.length() <= length || in.length() <= 3)
 			return in;
 		return in.substring(0, length-3) + "...";
+	}
+
+	/**
+	 * Truncates a string.
+	 *
+	 * @param in The input string.
+	 * @param length The max length of the resulting string.
+	 * @return The truncated string.
+	 */
+	public static String truncate(String in, int length) {
+		if (in == null || in.length() <= length)
+			return in;
+		return in.substring(0, length);
 	}
 }

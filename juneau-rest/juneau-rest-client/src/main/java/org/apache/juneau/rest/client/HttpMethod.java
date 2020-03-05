@@ -14,7 +14,10 @@ package org.apache.juneau.rest.client;
 
 /**
  * Enumeration of HTTP methods.
+ *
+ * @deprecated Use {@link org.apache.juneau.http.HttpMethod}
  */
+@Deprecated
 public enum HttpMethod {
 
 	/** HTTP GET */

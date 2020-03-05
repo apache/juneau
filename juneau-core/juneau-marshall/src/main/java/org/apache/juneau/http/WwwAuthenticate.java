@@ -46,7 +46,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("WWW-Authenticate")
-public final class WwwAuthenticate extends HeaderString {
+public final class WwwAuthenticate extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>WWW-Authenticate</c> header.
@@ -61,6 +61,6 @@ public final class WwwAuthenticate extends HeaderString {
 	}
 
 	private WwwAuthenticate(String value) {
-		super(value);
+		super("WWW-Authenticate", value);
 	}
 }

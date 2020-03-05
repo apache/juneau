@@ -26,7 +26,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
@@ -95,11 +95,10 @@ public class ContentComboTestBase extends RestTestcase {
 		this.comboInput = comboInput;
 	}
 
-	@SuppressWarnings("resource")
 	@Test
 	public void doTest() throws Exception {
 		RestClient rc = getClient(comboInput.mediaType);
-		String s = rc.doGet(comboInput.url).getResponseAsString();
+		String s = rc.get(comboInput.url).run().getBody().asString();
 		assertContains(s, comboInput.expectedResults);
 	}
 }

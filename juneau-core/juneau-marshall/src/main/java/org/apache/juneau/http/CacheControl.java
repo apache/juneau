@@ -94,7 +94,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Cache-Control")
-public final class CacheControl extends HeaderString {
+public final class CacheControl extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Cache-Control</c> header.
@@ -109,6 +109,6 @@ public final class CacheControl extends HeaderString {
 	}
 
 	private CacheControl(String value) {
-		super(value);
+		super("Cache-Control", value);
 	}
 }

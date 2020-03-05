@@ -71,7 +71,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept-Charset")
-public final class AcceptCharset extends HeaderRangeArray {
+public final class AcceptCharset extends ComplexRangeArrayHeader {
 
 	private static final Cache<String,AcceptCharset> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
@@ -90,7 +90,12 @@ public final class AcceptCharset extends HeaderRangeArray {
 		return a;
 	}
 
-	private AcceptCharset(String value) {
-		super(value);
+	/**
+	 * Constructor
+	 *
+	 * @param value HTTP header value.
+	 */
+	public AcceptCharset(String value) {
+		super("Accept-Charset", value);
 	}
 }

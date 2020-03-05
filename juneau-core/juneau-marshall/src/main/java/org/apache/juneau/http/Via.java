@@ -116,7 +116,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Via")
-public final class Via extends HeaderStringArray {
+public final class Via extends BasicStringArrayHeader {
 
 	/**
 	 * Constructor.
@@ -124,7 +124,7 @@ public final class Via extends HeaderStringArray {
 	 * @param value The value for this header.
 	 */
 	public Via(String[] value) {
-		super(value);
+		super("Via", value);
 	}
 
 	/**
@@ -140,6 +140,6 @@ public final class Via extends HeaderStringArray {
 	}
 
 	private Via(String value) {
-		super(value);
+		super("Via", value);
 	}
 }

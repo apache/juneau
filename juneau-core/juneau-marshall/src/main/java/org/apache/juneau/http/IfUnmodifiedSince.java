@@ -61,7 +61,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("If-Unmodified-Since")
-public final class IfUnmodifiedSince extends HeaderDate {
+public final class IfUnmodifiedSince extends BasicDateHeader {
 
 	/**
 	 * Returns a parsed <c>If-Unmodified-Since</c> header.
@@ -76,6 +76,6 @@ public final class IfUnmodifiedSince extends HeaderDate {
 	}
 
 	private IfUnmodifiedSince(String value) {
-		super(value);
+		super("If-Unmodified-Since", value);
 	}
 }

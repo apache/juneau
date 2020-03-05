@@ -56,7 +56,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Age")
-public final class Age extends HeaderInteger {
+public final class Age extends BasicIntegerHeader {
 
 	/**
 	 * Constructor.
@@ -64,7 +64,7 @@ public final class Age extends HeaderInteger {
 	 * @param value The value for this header.
 	 */
 	public Age(Integer value) {
-		super(value);
+		super("Age", value);
 	}
 
 	/**
@@ -79,7 +79,12 @@ public final class Age extends HeaderInteger {
 		return new Age(value);
 	}
 
-	private Age(String value) {
-		super(value);
+	/**
+	 * Constructor
+	 *
+	 * @param value HTTP header value.
+	 */
+	public Age(Object value) {
+		super("Age", value);
 	}
 }

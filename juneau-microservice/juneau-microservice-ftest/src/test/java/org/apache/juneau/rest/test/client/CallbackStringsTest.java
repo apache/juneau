@@ -18,9 +18,9 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -56,22 +56,22 @@ public class CallbackStringsTest {
 	public void a01() throws Exception {
 		String r;
 
-		r = a.doCallback("GET /testCallback").getResponseAsString();
+		r = a.callback("GET /testCallback").run().getBody().asString();
 		assertEquals("{method:'GET',headers:{},content:''}", r);
 
-		r = a.doCallback("GET /testCallback some sample content").getResponseAsString();
+		r = a.callback("GET /testCallback some sample content").run().getBody().asString();
 		assertEquals("{method:'GET',headers:{},content:'some sample content'}", r);
 
-		r = a.doCallback("GET {Foo-X:123,Foo-Y:'abc'} /testCallback").getResponseAsString();
+		r = a.callback("GET {Foo-X:123,Foo-Y:'abc'} /testCallback").run().getBody().asString();
 		assertEquals("{method:'GET',headers:{'Foo-X':'123','Foo-Y':'abc'},content:''}", r);
 
-		r = a.doCallback("GET  { Foo-X : 123, Foo-Y : 'abc' } /testCallback").getResponseAsString();
+		r = a.callback("GET  { Foo-X : 123, Foo-Y : 'abc' } /testCallback").run().getBody().asString();
 		assertEquals("{method:'GET',headers:{'Foo-X':'123','Foo-Y':'abc'},content:''}", r);
 
-		r = a.doCallback("GET {Foo-X:123,Foo-Y:'abc'} /testCallback   some sample content  ").getResponseAsString();
+		r = a.callback("GET {Foo-X:123,Foo-Y:'abc'} /testCallback   some sample content  ").run().getBody().asString();
 		assertEquals("{method:'GET',headers:{'Foo-X':'123','Foo-Y':'abc'},content:'some sample content'}", r);
 
-		r = a.doCallback("PUT {Foo-X:123,Foo-Y:'abc'} /testCallback   some sample content  ").getResponseAsString();
+		r = a.callback("PUT {Foo-X:123,Foo-Y:'abc'} /testCallback   some sample content  ").run().getBody().asString();
 		assertEquals("{method:'PUT',headers:{'Foo-X':'123','Foo-Y':'abc'},content:'some sample content'}", r);
 	}
 }

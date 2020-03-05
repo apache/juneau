@@ -62,7 +62,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("If-Range")
-public final class IfRange extends HeaderString {
+public final class IfRange extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>If-Range</c> header.
@@ -77,7 +77,7 @@ public final class IfRange extends HeaderString {
 	}
 
 	private IfRange(String value) {
-		super(value);
+		super("If-Range", value);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public final class IfRange extends HeaderString {
 	 * @return This header value as a {@link java.util.Date} object, or <jk>null</jk> if the value is not a date.
 	 */
 	public java.util.Date asDate() {
-		char c0 = charAt(value, 0), c1 = charAt(value, 1);
+		char c0 = charAt(asString(), 0), c1 = charAt(asString(), 1);
 		if (c0 == '*' || c0 == '"' || (c0 == 'W' && c1 == '/'))
 			return null;
 		return DateUtils.parseDate(toString());
@@ -100,9 +100,9 @@ public final class IfRange extends HeaderString {
 	 * 	validator.
 	 */
 	public EntityValidator asValidator() {
-		char c0 = charAt(value, 0), c1 = charAt(value, 1);
+		char c0 = charAt(asString(), 0), c1 = charAt(asString(), 1);
 		if (c0 == '*' || c0 == '"' || (c0 == 'W' && c1 == '/'))
-			return new EntityValidator(value);
+			return new EntityValidator(asString());
 		return null;
 	}
 }

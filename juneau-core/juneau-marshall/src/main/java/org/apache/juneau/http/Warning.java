@@ -124,7 +124,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Warning")
-public final class Warning extends HeaderString {
+public final class Warning extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Warning</c> header.
@@ -139,6 +139,6 @@ public final class Warning extends HeaderString {
 	}
 
 	private Warning(String value) {
-		super(value);
+		super("Warning", value);
 	}
 }

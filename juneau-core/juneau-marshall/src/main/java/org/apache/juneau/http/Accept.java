@@ -144,7 +144,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept")
-public final class Accept {
+public final class Accept extends ComplexHeader {
 
 	private static final Cache<String,Accept> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
@@ -167,7 +167,13 @@ public final class Accept {
 	private final MediaTypeRange[] mediaRanges;
 	private final List<MediaTypeRange> mediaRangesList;
 
-	private Accept(String value) {
+	/**
+	 * Constructor
+	 *
+	 * @param value HTTP header value.
+	 */
+	public Accept(String value) {
+		super("Accept");
 		this.mediaRanges = MediaTypeRange.parse(value);
 		this.mediaRangesList = immutableList(mediaRanges);
 	}
@@ -293,5 +299,10 @@ public final class Accept {
 	@Override /* Object */
 	public String toString() {
 		return join(mediaRanges, ',');
+	}
+
+	@Override /* HttpHeader */
+	public Object getValue() {
+		return toString();
 	}
 }

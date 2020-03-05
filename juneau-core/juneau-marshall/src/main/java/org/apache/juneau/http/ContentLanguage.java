@@ -71,7 +71,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Content-Language")
-public final class ContentLanguage extends HeaderStringArray {
+public final class ContentLanguage extends BasicStringArrayHeader {
 
 	/**
 	 * Constructor.
@@ -79,7 +79,7 @@ public final class ContentLanguage extends HeaderStringArray {
 	 * @param value The value for this header.
 	 */
 	public ContentLanguage(String[] value) {
-		super(value);
+		super("Allow", value);
 	}
 
 	/**
@@ -95,6 +95,6 @@ public final class ContentLanguage extends HeaderStringArray {
 	}
 
 	private ContentLanguage(String value) {
-		super(value);
+		super("Allow", value);
 	}
 }

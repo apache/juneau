@@ -80,6 +80,6 @@ public final class ContentLocation extends HeaderUri {
 	}
 
 	private ContentLocation(String value) {
-		super(value);
+		super("Content-Location", value);
 	}
 }

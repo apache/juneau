@@ -48,7 +48,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Content-Type")
-public class ContentType extends MediaType {
+public class ContentType extends MediaType implements HttpHeader {
 
 	private static Cache<String,ContentType> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
@@ -99,5 +99,16 @@ public class ContentType extends MediaType {
 			}
 		}
 		return matchIndex;
+	}
+
+	@Override /* HttpHeader */
+	public String getName() {
+		return "Content-Type";
+	}
+
+
+	@Override /* HttpHeader */
+	public Object getValue() {
+		return toString();
 	}
 }

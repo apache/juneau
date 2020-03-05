@@ -54,8 +54,8 @@ MockRemote
 	It looks simple, but there's a lot going on here.   
 </p>
 <p>
-	Remote resource interfaces are normally created through the {@link oajrc.RestClient#getRemote(Class)} method.
-	The {@link oajr.mock2.MockRemote} will create a {@link oajrc.RestClient} using a specialized <c>HttpClientConnectionManager</c>
+	Remote resource interfaces are normally created through the {@link oajr.client2.RestClient#getRemote(Class)} method.
+	The {@link oajr.mock2.MockRemote} will create a {@link oajr.client2.RestClient} using a specialized <c>HttpClientConnectionManager</c>
 	designed to transform client-side <c>HttpRequest</c>/<c>HttpResponse</c> objects into server-side 
 	{@link oajr.mock2.MockServletRequest}/{@link oajr.mock2.MockServletResponse} objects and then pass those to the {@link oajr.mock2.MockRest} 
 	object described in the previous section.

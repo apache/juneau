@@ -26,9 +26,9 @@ import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
@@ -199,12 +199,12 @@ public class RequestBeanProxyTest {
 	@Test
 	public void a03b_query_nameValuePairs_on() throws Exception {
 		String r = a03b.normal(new A03_Bean());
-		assertEquals("{a1:'v1',a2:'\\'123\\'',a4:'',b1:'\\'true\\'',b2:'\\'123\\'',b3:'\\'null\\'',c1:'v1',c2:'\\'123\\'',c4:''}", r);
+		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
 	}
 	@Test
 	public void a03c_query_nameValuePairs_x() throws Exception {
 		String r = a03b.serialized(new A03_Bean());
-		assertEquals("{a1:'xv1x',a2:'x123x',a4:'xx',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}", r);
+		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
 	}
 
 	//=================================================================================================================
@@ -804,12 +804,12 @@ public class RequestBeanProxyTest {
 	@Test
 	public void e03b_header_nameValuePairs_uon() throws Exception {
 		String r = e03b.normal(new E03_Bean());
-		assertEquals("{a1:'v1',a2:'\\'123\\'',a4:'',b1:'\\'true\\'',b2:'\\'123\\'',b3:'\\'null\\'',c1:'v1',c2:'\\'123\\'',c4:''}", r);
+		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
 	}
 	@Test
 	public void e03c_header_nameValuePairs_x() throws Exception {
 		String r = e03b.serialized(new E03_Bean());
-		assertEquals("{a1:'xv1x',a2:'x123x',a4:'xx',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}", r);
+		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
 	}
 
 	//=================================================================================================================
@@ -1005,7 +1005,7 @@ public class RequestBeanProxyTest {
 	@Test
 	public void g02c_path_maps_x() throws Exception {
 		String r = g02b.serialized(new G02_Bean());
-		assertEquals("echoPath/xv1x/x123x/NULL/xx/xtruex/x123x/xnullx/xv1x/x123x/NULL/xx", r);
+		assertEquals("echoPath/xv1x/x123x/null/xx/xtruex/x123x/xnullx/xv1x/x123x/null/xx", r);
 	}
 
 	//=================================================================================================================
@@ -1052,12 +1052,12 @@ public class RequestBeanProxyTest {
 	@Test
 	public void g03b_path_nameValuePairs_uon() throws Exception {
 		String r = g03b.normal(new G03_Bean());
-		assertEquals("echoPath/v1/'123'/null//'true'/'123'/'null'/v1/'123'/null/", r);
+		assertEquals("echoPath/v1/123/null//true/123/null/v1/123/null/", r);
 	}
 	@Test
 	public void g03c_path_nameValuePairs_x() throws Exception {
 		String r = g03b.serialized(new G03_Bean());
-		assertEquals("echoPath/xv1x/x123x/NULL/xx/xtruex/x123x/xnullx/xv1x/x123x/NULL/xx", r);
+		assertEquals("echoPath/v1/123/null//true/123/null/v1/123/null/", r);
 	}
 
 	//=================================================================================================================

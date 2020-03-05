@@ -61,7 +61,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Accept-Ranges")
-public final class AcceptRanges extends HeaderString {
+public final class AcceptRanges extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Accept-Ranges</c> header.
@@ -75,7 +75,12 @@ public final class AcceptRanges extends HeaderString {
 		return new AcceptRanges(value);
 	}
 
-	private AcceptRanges(String value) {
-		super(value);
+	/**
+	 * Constructor
+	 *
+	 * @param value HTTP header value.
+	 */
+	public AcceptRanges(Object value) {
+		super("Accept-Ranges", value);
 	}
 }

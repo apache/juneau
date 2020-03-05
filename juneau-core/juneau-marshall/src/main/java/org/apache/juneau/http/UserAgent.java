@@ -50,7 +50,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("User-Agent")
-public final class UserAgent extends HeaderString {
+public final class UserAgent extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>User-Agent</c> header.
@@ -65,6 +65,6 @@ public final class UserAgent extends HeaderString {
 	}
 
 	private UserAgent(String value) {
-		super(value);
+		super("User-Agent", value);
 	}
 }

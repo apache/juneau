@@ -14,20 +14,16 @@ package org.apache.juneau.rest.test;
 
 import java.io.*;
 import java.net.*;
-import java.security.*;
 import java.util.*;
-
-import javax.net.ssl.*;
 
 import org.apache.http.*;
 import org.apache.http.client.*;
-import org.apache.http.conn.ssl.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -152,17 +148,9 @@ public class TestMicroservice {
 		return client().serializer(s).parser(p);
 	}
 
-	// TODO - Why is this needed?
-	static SSLConnectionSocketFactory getSSLSocketFactory() throws Exception {
-		SSLContext sslContext = SSLContext.getInstance("SSL");
-		TrustManager tm = new SimpleX509TrustManager(true);
-		sslContext.init(null, new TrustManager[]{tm}, new SecureRandom());
-		return new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
-	}
-
 	public static CloseableHttpClient createHttpClient() {
 		try {
-			return HttpClients.custom().setSSLSocketFactory(getSSLSocketFactory()).setRedirectStrategy(new LaxRedirectStrategy()).build();
+			return HttpClients.custom().setRedirectStrategy(new LaxRedirectStrategy()).build();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

@@ -31,7 +31,10 @@ import org.apache.http.util.*;
  * <p>
  * Use the {@link RestClientBuilder#logTo(Level, Logger)} and {@link RestCall#logTo(Level, Logger)} methods to create
  * instances of this class.
+ *
+ * @deprecated Use {@link org.apache.juneau.rest.client2.logging.RestCallLogger}
  */
+@Deprecated
 public class RestCallLogger extends RestCallInterceptor {
 
 	/**

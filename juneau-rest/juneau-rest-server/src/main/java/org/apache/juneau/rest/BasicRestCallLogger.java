@@ -137,7 +137,7 @@ public class BasicRestCallLogger implements RestCallLogger {
 		StringBuilder sb = new StringBuilder();
 
 		if (reqd != SHORT || resd != SHORT)
-			sb.append("\n=== HTTP Request (incoming) ===================================================\n");
+			sb.append("\n=== HTTP Call (incoming) ======================================================\n");
 
 		StackTraceInfo sti = getStackTraceInfo(config, e);
 
@@ -226,7 +226,7 @@ public class BasicRestCallLogger implements RestCallLogger {
 					sb.append(e1.getLocalizedMessage());
 				}
 			}
-			sb.append("\n=== END ===================================================================");
+			sb.append("\n=== END ======================================================================");
 		}
 
 		getLogger().log(level, sb.toString(), e);

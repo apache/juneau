@@ -69,6 +69,6 @@ public final class Location extends HeaderUri {
 	}
 
 	private Location(String value) {
-		super(value);
+		super("Location", value);
 	}
 }

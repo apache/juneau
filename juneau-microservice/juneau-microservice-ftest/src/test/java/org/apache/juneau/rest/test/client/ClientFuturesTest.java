@@ -18,9 +18,10 @@ import static org.junit.Assert.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client2.RestResponse;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -43,13 +44,15 @@ public class ClientFuturesTest {
 
 	@Test
 	public void a01() throws Exception {
-		Future<Integer> f = a.doGet("").runFuture();
-		assertEquals(200, f.get().intValue());
+		Future<RestResponse> f = a.get("").runFuture();
+		assertEquals(200, f.get().getStatusCode());
 
-		Future<ObjectMap> f2 = a.doGet("").getResponseFuture(ObjectMap.class);
-		assertObjectEquals("{foo:'bar'}", f2.get());
+		Future<RestResponse> f2 = a.get("").runFuture();
+		Future<ObjectMap> m = f2.get().getBody().asFuture(ObjectMap.class);
+		assertObjectEquals("{foo:'bar'}", m.get());
 
-		Future<String> f3 = a.doGet("").getResponseAsStringFuture();
-		assertObjectEquals("'{foo:\\'bar\\'}'", f3.get());
+		Future<RestResponse> f3 = a.get("").runFuture();
+		Future<String> s = f3.get().getBody().asStringFuture();
+		assertObjectEquals("'{foo:\\'bar\\'}'", s.get());
 	}
 }

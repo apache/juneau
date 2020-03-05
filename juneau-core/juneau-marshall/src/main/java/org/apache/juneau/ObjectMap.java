@@ -200,6 +200,24 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		parseReader(r, JsonParser.DEFAULT);
 	}
 
+	/**
+	 * Construct a JSON map and fill it with the specified freeform key-value pairs.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	ObjectMap m = <jk>new</jk> ObjectMap(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
+	 * </p>
+	 *
+	 * @param o A list of key/value pairs to add to this map.
+	 */
+	public ObjectMap(Object... o) {
+		if (o.length % 2 != 0)
+			throw new RuntimeException("Odd number of parameters passed into ObjectMap(Object...)");
+		for (int i = 0; i < o.length; i+=2)
+			put(stringify(o[i]), o[i+1]);
+	}
+
+
 	private void parseReader(Reader r, Parser p) throws ParseException {
 		if (p == null)
 			p = JsonParser.DEFAULT;

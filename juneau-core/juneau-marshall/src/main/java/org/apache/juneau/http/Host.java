@@ -67,7 +67,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Host")
-public final class Host extends HeaderString {
+public final class Host extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Host</c> header.
@@ -82,6 +82,6 @@ public final class Host extends HeaderString {
 	}
 
 	private Host(String value) {
-		super(value);
+		super("Host", value);
 	}
 }

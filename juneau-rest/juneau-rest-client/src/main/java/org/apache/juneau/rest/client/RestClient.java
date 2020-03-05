@@ -69,9 +69,12 @@ import org.apache.juneau.utils.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
+ *
+ * @deprecated Use {@link org.apache.juneau.rest.client2.RestClient}
  */
 @SuppressWarnings("rawtypes")
 @ConfigurableContext(nocache=true)
+@Deprecated
 public class RestClient extends BeanContext implements Closeable {
 
 	//-------------------------------------------------------------------------------------------------------------------

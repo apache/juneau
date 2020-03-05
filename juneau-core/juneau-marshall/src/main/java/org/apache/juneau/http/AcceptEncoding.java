@@ -91,7 +91,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept-Encoding")
-public final class AcceptEncoding extends HeaderRangeArray {
+public final class AcceptEncoding extends ComplexRangeArrayHeader {
 
 	private static final Cache<String,AcceptEncoding> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
@@ -110,7 +110,12 @@ public final class AcceptEncoding extends HeaderRangeArray {
 		return a;
 	}
 
-	private AcceptEncoding(String value) {
-		super(value);
+	/**
+	 * Constructor
+	 *
+	 * @param value HTTP header value.
+	 */
+	public AcceptEncoding(String value) {
+		super("Accept-Encoding", value);
 	}
 }

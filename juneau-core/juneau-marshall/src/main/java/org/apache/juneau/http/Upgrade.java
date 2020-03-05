@@ -80,7 +80,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Upgrade")
-public final class Upgrade extends HeaderStringArray {
+public final class Upgrade extends BasicStringArrayHeader {
 
 	/**
 	 * Constructor.
@@ -88,7 +88,7 @@ public final class Upgrade extends HeaderStringArray {
 	 * @param value The value for this header.
 	 */
 	public Upgrade(String[] value) {
-		super(value);
+		super("Upgrade", value);
 	}
 
 	/**
@@ -104,6 +104,6 @@ public final class Upgrade extends HeaderStringArray {
 	}
 
 	private Upgrade(String value) {
-		super(value);
+		super("Upgrade", value);
 	}
 }

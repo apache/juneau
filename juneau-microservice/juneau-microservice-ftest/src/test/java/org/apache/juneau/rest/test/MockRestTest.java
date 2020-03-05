@@ -19,7 +19,7 @@ import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -47,13 +47,13 @@ public class MockRestTest {
 	@Test
 	public void a01() throws Exception {
 		RestClient rc = MockRestClient.build(A.class, null);
-		assertEquals("OK", rc.doPut("/a01", "OK").getResponseAsString());
+		assertEquals("OK", rc.put("/a01", "OK").run().getBody().asString());
 	}
 
 	@Test
 	public void a02() throws Exception {
 		RestClient rc = MockRestClient.build(A.class, Json.DEFAULT);
-		assertEquals("OK", rc.doPut("/a02", "OK").getResponse(String.class));
+		assertEquals("OK", rc.put("/a02", "OK").run().getBody().as(String.class));
 	}
 }
 

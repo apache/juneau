@@ -65,7 +65,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("From")
-public final class From extends HeaderString {
+public final class From extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>From</c> header.
@@ -80,6 +80,6 @@ public final class From extends HeaderString {
 	}
 
 	private From(String value) {
-		super(value);
+		super("From", value);
 	}
 }

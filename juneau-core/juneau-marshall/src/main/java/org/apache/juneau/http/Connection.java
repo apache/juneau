@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -76,8 +75,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Connection")
-@BeanIgnore
-public final class Connection extends HeaderString {
+public final class Connection extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Connection</c> header.
@@ -93,7 +91,7 @@ public final class Connection extends HeaderString {
 
 
 	private Connection(String value) {
-		super(value);
+		super("Connection", value);
 	}
 
 	/**

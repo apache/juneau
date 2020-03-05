@@ -1,0 +1,114 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Interceptors
+
+<p>
+	The {@link oajr.client2.RestClientBuilder#interceptors(RestCallInterceptor...)} method can be used to 
+	intercept responses during specific connection lifecycle events.
+</p>
+<p>
+	The {@link oajrc.RestCallLogger} class is an example of an interceptor that uses 
+	the various lifecycle methods to log HTTP requests.
+</p>
+<p class='bpcode w800'>
+	<jd>/**
+	 * Specialized interceptor for logging calls to a log file.
+	 */</jd>
+	<jk>public class</jk> RestCallLogger <jk>extends</jk> RestCallInterceptor {
+	
+		<jk>private</jk> Level <jf>level</jf>;
+		<jk>private</jk> Logger <jf>log</jf>;
+	
+		<jd>/**
+		 * Constructor.
+		 *
+		 * <ja>@param</ja> level The log level to log messages at.
+		 * <ja>@param</ja> log The logger to log to.
+		 */</jd>
+		<jk>protected</jk> RestCallLogger(Level level, Logger log) {
+			<jk>this</jk>.<jf>level</jf> = level;
+			<jk>this</jk>.<jf>log</jf> = log;
+		}
+	
+		<ja>@Override</ja> <jc>/* RestCallInterceptor */</jc>
+		<jk>public void</jk> onInit(RestCall restCall) {
+			<jk>if</jk> (<jf>log</jf>.isLoggable(<jf>level</jf>))
+				restCall.captureResponse();
+		}
+	
+		<ja>@Override</ja> <jc>/* RestCallInterceptor */</jc>
+		<jk>public void</jk> onConnect(RestCall restCall, <jk>int</jk> statusCode, HttpRequest req, HttpResponse res) {
+			<jc>// Do nothing.</jc>
+		}
+	
+		<ja>@Override</ja> <jc>/* RestCallInterceptor */</jc>
+		<jk>public void</jk> onRetry(RestCall restCall, <jk>int</jk> statusCode, HttpRequest req, HttpResponse res) {
+			<jk>if</jk> (<jf>log</jf>.isLoggable(<jf>level</jf>))
+				<jf>log</jf>.log(level, MessageFormat.<jsm>format</jsm>(<js>"Call to {0} returned {1}.  Will retry."</js>, req.getRequestLine().getUri(), statusCode)); 
+		}
+	
+		<ja>@Override</ja> <jc>/* RestCallInterceptor */</jc>
+		<jk>public void</jk> onClose(RestCall restCall) <jk>throws</jk> RestCallException {
+			<jk>try</jk> {
+				<jk>if</jk> (<jf>log</jf>.isLoggable(<jf>level</jf>)) {
+					String output = restCall.getCapturedResponse();
+					StringBuilder sb = <jk>new</jk> StringBuilder();
+					HttpUriRequest req = restCall.getRequest();
+					HttpResponse res = restCall.getResponse();
+					<jk>if</jk> (req != <jk>null</jk>) {
+						sb.append(<js>"\n=== HTTP Call (outgoing) ========================================================="</js>);
+	
+						sb.append(<js>"\n=== REQUEST ===\n"</js>).append(req);
+						sb.append(<js>"\n---request headers---"</js>);
+						<jk>for</jk> (Header h : req.getAllHeaders())
+							sb.append(<js>"\n"</js>).append(h);
+						<jk>if</jk> (req <jk>instanceof</jk> HttpEntityEnclosingRequestBase) {
+							sb.append(<js>"\n---request entity---"</js>);
+							HttpEntityEnclosingRequestBase req2 = (HttpEntityEnclosingRequestBase)req;
+							HttpEntity e = req2.getEntity();
+							<jk>if</jk> (e == <jk>null</jk>)
+								sb.append(<js>"\nEntity is null"</js>);
+							<jk>else</jk> {
+								<jk>if</jk> (e.getContentType() != <jk>null</jk>)
+									sb.append(<js>"\n"</js>).append(e.getContentType());
+								<jk>if</jk> (e.getContentEncoding() != <jk>null</jk>)
+									sb.append(<js>"\n"</js>).append(e.getContentEncoding());
+								<jk>if</jk> (e.isRepeatable()) {
+									<jk>try</jk> {
+										sb.append(<js>"\n---request content---\n"</js>).append(EntityUtils.<jsm>toString</jsm>(e));
+									} <jk>catch</jk> (Exception ex) {
+										<jk>throw new</jk> RuntimeException(ex);
+									}
+								}
+							}
+						}
+					}
+					<jk>if</jk> (res != <jk>null</jk>) {
+						sb.append(<js>"\n=== RESPONSE ===\n"</js>).append(res.getStatusLine());
+						sb.append(<js>"\n---response headers---"</js>);
+						<jk>for</jk> (Header h : res.getAllHeaders())
+							sb.append(<js>"\n"</js>).append(h);
+						sb.append(<js>"\n---response content---\n"</js>).append(output);
+						sb.append(<js>"\n=== END ========================================================================"</js>);
+					}
+					<jf>log</jf>.log(<jf>level</jf>, sb.toString());
+				}
+			} <jk>catch</jk> (IOException e) {
+				<jf>log</jf>.log(Level.<jsf>SEVERE</jsf>, e.getLocalizedMessage(), e);
+			}
+		}
+	}
+</p>

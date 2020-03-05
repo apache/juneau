@@ -74,7 +74,10 @@ import org.apache.juneau.utils.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
+ *
+ * @deprecated Use {@link org.apache.juneau.rest.client2.RestRequest} class.
  */
+@Deprecated
 @SuppressWarnings({ "unchecked" })
 public final class RestCall extends BeanSession implements Closeable {
 

@@ -19,9 +19,10 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.test.*;
 import org.apache.juneau.utils.*;
@@ -46,17 +47,17 @@ public class FormDataTest extends RestTestcase {
 
 	@Test
 	public void a01_formDataMethod() throws Exception {
-		String r = a.doPost("")
+		String r = a.post("")
 			.formData("foo", 123)
 			.formData("bar", "baz")
-			.getResponseAsString();
+			.run()
+			.getBody().asString();
 		assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=123&bar=baz]", r);
 	}
 
 	@Test
 	public void a02_nameValuePairs() throws Exception {
-		String r = a.doPost("", new NameValuePairs().append("foo",123).append("bar","baz"))
-			.getResponseAsString();
+		String r = a.post("", new NameValuePairs().append("foo",123).append("bar","baz")).run().getBody().asString();
 		assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=123&bar=baz]", r);
 	}
 
@@ -72,11 +73,11 @@ public class FormDataTest extends RestTestcase {
 				.append("(foo)", "(foo)")
 				.append("@(foo)", "@(foo)");
 
-			r = c.doPost("", m).getResponseAsString();
+			r = c.post("", m).run().getBody().asString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)]", r);
 
 			List<String> l = new AList<String>().appendAll("foo", "'foo'", "(foo)", "@(foo)");
-			r = c.doPost("", l).getResponseAsString();
+			r = c.post("", l).run().getBody().asString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[0=foo&1='foo'&2=(foo)&3=@(foo)]", r);
 
 			NameValuePairs nvp = new NameValuePairs()
@@ -84,15 +85,16 @@ public class FormDataTest extends RestTestcase {
 				.append("'foo'", "'foo'")
 				.append("(foo)", "(foo)")
 				.append("@(foo)", "@(foo)");
-			r = c.doPost("", nvp).getResponseAsString();
+			r = c.post("", nvp).run().getBody().asString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&%27foo%27=%27foo%27&%28foo%29=%28foo%29&%40%28foo%29=%40%28foo%29]", r);
 
-			r = c.doPost("")
+			r = c.post("")
 				.formData("foo", "foo")
 				.formData("'foo'", "'foo'")
 				.formData("(foo)", "(foo)")
 				.formData("@(foo)", "@(foo)")
-				.getResponseAsString();
+				.run()
+				.getBody().asString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&%27foo%27=%27foo%27&%28foo%29=%28foo%29&%40%28foo%29=%40%28foo%29]", r);
 		} finally {
 			c.close();

@@ -67,7 +67,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header(name="Content-Encoding",_enum={"gzip","compress","deflate","identity","other"})
-public final class ContentEncoding extends HeaderEnum<ContentEncodingEnum> {
+public final class ContentEncoding extends BasicEnumHeader<ContentEncodingEnum> {
 
 	/**
 	 * Returns a parsed <c>Content-Encoding</c> header.
@@ -82,6 +82,6 @@ public final class ContentEncoding extends HeaderEnum<ContentEncodingEnum> {
 	}
 
 	private ContentEncoding(String value) {
-		super(value, ContentEncodingEnum.class, ContentEncodingEnum.OTHER);
+		super("Content-Encoding", value, ContentEncodingEnum.class, ContentEncodingEnum.OTHER);
 	}
 }

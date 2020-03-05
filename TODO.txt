@@ -1,0 +1,43 @@
+	// TODO - Add a new RestCallLogger that sends the result to the console.
+	TODO: wrapper for httpClient.getState();
+	TODO: header() and query() should persist objects that can be converted to strings at runtime.
+	
+	ContentDisposition header bean.
+	StreamResource/ReaderResource classes should take in header beans.
+	
+	Need the ability to turn on debug in REST via environment variables (e.g. debug=MyServlet.myMethod)
+	$Contains{} variable.
+	
+	
+	TODO:  @BeanConfig(bpi) doesn't override @Bean(bpi)?
+	
+
+TODO - This isn't working.	
+	    public static class InstanceMetrics {
+    	public List<SimpleMetric> instance = new ArrayList<>();
+    	public Map<Integer,List<SimpleMetric>> racNode = new TreeMap<>();
+    	public Map<Integer,List<SimpleMetric>> partition = new TreeMap<>();
+    }
+
+    @Bean(bpi="name,value,received")
+    @Html(noTableHeaders=true)
+    public static class SimpleMetric {
+    	public String name;
+    	public Long value;
+    	public Calendar received;
+
+    	public SimpleMetric(Metric m) {
+    		this.name = m.getMetric();
+    		this.value = m.getValue();
+    		this.received = m.getReceived();
+    	}
+    }
+    
+TODO @Beanp(*) isn't working?
+    public static class InstanceCopySummary {
+    	public String instance;
+    	public int total;
+    	@Beanp(name="*")
+    	public Map<String,Integer> perPartition = new TreeMap<>();
+
+TODO:  Need a SimpleLink(name, uri) again.

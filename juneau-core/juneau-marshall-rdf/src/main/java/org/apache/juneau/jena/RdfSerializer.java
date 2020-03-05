@@ -317,9 +317,23 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * 	The property store containing all the settings for this object.
 	 */
 	public RdfSerializer(PropertyStore ps) {
-		this(ps, "text/xml+rdf", (String)null);
+		this(ps, getProduces(ps), (String)null);
 	}
 
+	private static String getProduces(PropertyStore ps) {
+		String rdfLanguage = ps.getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
+		switch(rdfLanguage) {
+			case "RDF/XML": return "text/xml+rdf+abbrev";
+			case "RDF/XML-ABBREV": return "text/xml+rdf";
+			case "N-TRIPLE": return "text/n-triple";
+			case "N3": return "text/n3";
+			case "N3-PP": return "text/n3-pp";
+			case "N3-PLAIN": return "text/n3-plain";
+			case "N3-TRIPLES": return "text/n3-triples";
+			case "TURTLE": return "text/turtle";
+			default: return "text/xml+rdf";
+		}
+	}
 
 	@Override /* Context */
 	public RdfSerializerBuilder builder() {

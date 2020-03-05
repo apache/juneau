@@ -66,7 +66,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Allow")
-public final class Allow extends HeaderStringArray {
+public final class Allow extends BasicStringArrayHeader {
 
 	/**
 	 * Constructor.
@@ -74,7 +74,7 @@ public final class Allow extends HeaderStringArray {
 	 * @param value The value for this header.
 	 */
 	public Allow(String[] value) {
-		super(value);
+		super("Allow", value);
 	}
 
 	/**
@@ -90,6 +90,6 @@ public final class Allow extends HeaderStringArray {
 	}
 
 	private Allow(String value) {
-		super(value);
+		super("Allow", value);
 	}
 }

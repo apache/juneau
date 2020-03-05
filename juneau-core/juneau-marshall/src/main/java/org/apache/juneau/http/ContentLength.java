@@ -59,7 +59,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Content-Length")
-public final class ContentLength extends HeaderLong {
+public final class ContentLength extends BasicLongHeader {
 
 	/**
 	 * Constructor.
@@ -67,7 +67,7 @@ public final class ContentLength extends HeaderLong {
 	 * @param value The value for this header.
 	 */
 	public ContentLength(Long value) {
-		super(value);
+		super("Content-Length", value);
 	}
 
 	/**
@@ -83,6 +83,6 @@ public final class ContentLength extends HeaderLong {
 	}
 
 	private ContentLength(String value) {
-		super(value);
+		super("Content-Length", value);
 	}
 }

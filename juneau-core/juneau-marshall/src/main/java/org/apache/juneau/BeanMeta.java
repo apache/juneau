@@ -205,7 +205,7 @@ public class BeanMeta<T> {
 				if (! (cVis.isVisible(c.getModifiers()) || c.isAnonymousClass()))
 					return "Class is not public";
 
-				if (ctx.hasAnnotation(BeanIgnore.class, c))
+				if (isIgnored(c))
 					return "Class is annotated with @BeanIgnore";
 
 				// Make sure it's serializable.
@@ -480,6 +480,22 @@ public class BeanMeta<T> {
 			}
 
 			return null;
+		}
+
+		private boolean isIgnored(Class<?> c) {
+			if (c == null)
+				return false;
+			if (ctx.hasDeclaredAnnotation(BeanIgnore.class, c))
+				return true;
+			if (ctx.hasDeclaredAnnotation(Bean.class, c))
+				return false;
+			for (Class<?> ci : c.getInterfaces()) {
+				if (ctx.hasDeclaredAnnotation(BeanIgnore.class, ci))
+					return true;
+				if (ctx.hasDeclaredAnnotation(Bean.class, ci))
+					return false;
+			}
+			return isIgnored(c.getSuperclass());
 		}
 
 		private String findDictionaryName(ClassMeta<?> cm) {

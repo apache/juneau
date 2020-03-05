@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import org.apache.http.*;
+import org.apache.http.client.*;
 
 /**
  * Used to determine whether a request should be retried based on the HTTP response code.
@@ -20,7 +21,10 @@ import org.apache.http.*;
  * <p>
  * Subclasses should override either the {@link #onCode(int)} method (if you only care about the HTTP status code)
  * or {@link #onResponse(HttpResponse)} (if you want full access to the HTTP response object.
+ *
+ * @deprecated Use {@link org.apache.juneau.rest.client2.RestClientBuilder#retryHandler(HttpRequestRetryHandler)}.
  */
+@Deprecated
 public abstract class RetryOn {
 
 	/**

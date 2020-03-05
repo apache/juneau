@@ -91,58 +91,49 @@ public class RootContentTest extends ContentComboTestBase {
 					"'description':'Hello World'"
 				)
 			},
-			{ 	/* 9 */
+			{ 	/* 10 */
 				new ComboInput("HTML-content-octal/msgpack", "/", MediaType.MSGPACK,
-					"",
-					""
+					"95 82 A4"
 				)
 			},
-			{ 	/* 9 */
+			{ 	/* 11 */
 				new ComboInput("HTML-content-text/plain", "/", MediaType.PLAIN,
-					"",
-					""
+					"Hello World"
 				)
 			},
-			{ 	/* 9 */
+			{ 	/* 12 */
 				new ComboInput("HTML-content-text/uon", "/", MediaType.UON,
-					"",
-					""
+					"(name=helloWorld,description='Hello World')"
 				)
 			},
-			{ 	/* 9 */
+			{ 	/* 13 */
 				new ComboInput("HTML-content-application/x-www-form-urlencoded", "/", MediaType.URLENCODING,
-					"",
-					""
+					"0=(name=helloWorld,description='Hello+World')"
 				)
 			},
-			{ 	/* 9 */
+			{ 	/* 14 */
 				new ComboInput("HTML-content-text/xml", "/", MediaType.XML,
-					"",
-					""
+					"<name>helloWorld</name><description>Hello World</description>"
 				)
 			},
-			{ 	/* 9 */
+			{ 	/* 15 */
 				new ComboInput("HTML-content-text/xml+rdf", "/", MediaType.RDF,
-					"",
-					""
+					"<jp:name>helloWorld</jp:name>"
 				)
 			},
-			{ 	/* 9 */
+			{ 	/* 16 */
 				new ComboInput("HTML-content-text/n-triple", "/", MediaType.NTRIPLE,
-					"",
-					""
+					"\"helloWorld\"^^<"
 				)
 			},
-			{ 	/* 9 */
+			{ 	/* 17 */
 				new ComboInput("HTML-content-text/turtle", "/", MediaType.TURTLE,
-					"",
-					""
+					"jp:description \"Hello World\""
 				)
 			},
-			{ 	/* 9 */
+			{ 	/* 18 */
 				new ComboInput("HTML-content-text/n3", "/", MediaType.N3,
-					"",
-					""
+					"jp:description \"Hello World\""
 				)
 			}
 

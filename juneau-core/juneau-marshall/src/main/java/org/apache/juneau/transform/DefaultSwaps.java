@@ -16,6 +16,7 @@ import java.time.*;
 import java.time.temporal.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.regex.*;
 
 import javax.xml.datatype.*;
 
@@ -42,12 +43,14 @@ public class DefaultSwaps {
 		POJO_SWAPS.put(LocalTime.class, new TemporalSwap.IsoLocalTime());
 		POJO_SWAPS.put(OffsetDateTime.class, new TemporalSwap.IsoOffsetDateTime());
 		POJO_SWAPS.put(OffsetTime.class, new TemporalSwap.IsoOffsetTime());
+		POJO_SWAPS.put(StackTraceElement.class, new StackTraceElementSwap());
 		POJO_SWAPS.put(Year.class, new TemporalSwap.IsoYear());
 		POJO_SWAPS.put(YearMonth.class, new TemporalSwap.IsoYearMonth());
 		POJO_SWAPS.put(Temporal.class, new TemporalSwap.IsoInstant());
 		POJO_SWAPS.put(TimeZone.class, new TimeZoneSwap());
 		POJO_SWAPS.put(XMLGregorianCalendar.class, new XMLGregorianCalendarSwap());
 		POJO_SWAPS.put(ZoneId.class, new ZoneIdSwap());
+		POJO_SWAPS.put(MatchResult.class, new MatchResultSwap());
 	}
 
 	/**

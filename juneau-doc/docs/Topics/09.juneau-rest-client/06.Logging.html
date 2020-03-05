@@ -1,0 +1,35 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Logging
+
+<p>
+	Use the {@link oajr.client2.RestClientBuilder#logTo(Level,Logger)} and 
+	{@link oajr.client2.RestRequest#logTo(Level,Logger)} methods to log HTTP calls.
+	These methods will cause the HTTP request and response headers and body to be logged to the specified logger.  
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Log the HTTP request/response to the specified logger.</jc>
+	<jk>int</jk> rc = restClient.get(<jsf>URL</jsf>).logTo(<jsf>INFO</jsf>, getLogger()).run().getStatusCode();
+</p>
+<p>
+	The method call is ignored if the logger level is below the specified level.
+</p>
+<p>
+	Customized logging can be handled by sub-classing the {@link oajrc.RestCallLogger} 
+	class and using the  {@link oajrc.RestCall#interceptor(RestCallInterceptor)} method.
+</p>

@@ -76,8 +76,8 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
-@Header(name="Date")
-public final class Date extends HeaderDate {
+@Header("Date")
+public final class Date extends BasicDateHeader {
 
 	/**
 	 * Returns a parsed <c>Date</c> header.
@@ -92,6 +92,6 @@ public final class Date extends HeaderDate {
 	}
 
 	private Date(String value) {
-		super(value);
+		super("Date", value);
 	}
 }

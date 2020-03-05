@@ -32,7 +32,7 @@ import org.apache.juneau.json.*;
  * </ul>
  */
 @BeanIgnore
-public class MediaType implements Comparable<MediaType> {
+public class MediaType implements Comparable<MediaType>  {
 
 	private static final boolean NOCACHE = Boolean.getBoolean("juneau.nocache");
 	private static final ConcurrentHashMap<String,MediaType> CACHE = new ConcurrentHashMap<>();

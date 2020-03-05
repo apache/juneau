@@ -3416,6 +3416,50 @@ public final class RestContext extends BeanContext {
 
 
 	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final Map<Class<?>, RestContext> REGISTRY = new ConcurrentHashMap<>();
+
+	/**
+	 * Returns a registry of all created {@link RestContext} objects.
+	 *
+	 * @return An unmodifiable map of resource classes to {@link RestContext} objects.
+	 */
+	public static final Map<Class<?>, RestContext> getGlobalRegistry() {
+		return Collections.unmodifiableMap(REGISTRY);
+	}
+
+	public static final Set<MethodExecStats> getGlobalExecStats() {
+		Set<MethodExecStats> s = new TreeSet<>();
+		for (RestContext rc : REGISTRY.values())
+			s.addAll(rc.getMethodExecStats());
+		return s;
+	}
+
+//	public static final Set<ExceptionStats> getGlobalExceptions() {
+//		Set<ExceptionStats> s = new TreeSet<>();
+//		for (RestContext rc : REGISTRY.values())
+//			s.addAll(rc.getStackTraceDb().getClonedStackTraceInfos());
+//		return s;
+//	}
+
+	public static final Set<StatusStats> getGlobalStatusStats() {
+		Set<StatusStats> s = new TreeSet<>();
+		for (RestContext rc : REGISTRY.values()) {
+			StatusStats ss = StatusStats.create(rc.getResource().getClass());
+			s.add(ss);
+			for (RestMethodContext rmc : rc.getCallMethods().values()) {
+				StatusStats.Method ssm = ss.getMethod(rmc.method);
+				for (Map.Entry<Integer,Integer> e : rmc.getStatusCodes().entrySet()) {
+					ssm.status(e.getKey(), e.getValue());
+				}
+			}
+		}
+		return s;
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
@@ -3539,6 +3583,8 @@ public final class RestContext extends BeanContext {
 		super(builder.getPropertyStore());
 
 		startTime = Instant.now();
+
+		REGISTRY.put(builder.resourceClass, this);
 
 		HttpException _initException = null;
 

@@ -25,7 +25,10 @@ import org.apache.juneau.utils.*;
 
 /**
  * HttpEntity for serializing POJOs as the body of HTTP requests.
+ *
+ * @deprecated Use {@link org.apache.juneau.rest.client2.ext.SerializedHttpEntity}.
  */
+@Deprecated
 public final class RestRequestEntity extends BasicHttpEntity {
 	final Object output;
 	final Serializer serializer;

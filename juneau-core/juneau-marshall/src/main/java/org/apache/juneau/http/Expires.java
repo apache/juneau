@@ -78,7 +78,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Expires")
-public final class Expires extends HeaderDate {
+public final class Expires extends BasicDateHeader {
 
 	/**
 	 * Returns a parsed <c>Expires</c> header.
@@ -93,6 +93,6 @@ public final class Expires extends HeaderDate {
 	}
 
 	private Expires(String value) {
-		super(value);
+		super("Expires", value);
 	}
 }

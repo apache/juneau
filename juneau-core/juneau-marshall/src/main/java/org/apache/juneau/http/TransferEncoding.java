@@ -57,7 +57,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Transfer-Encoding")
-public final class TransferEncoding extends HeaderString {
+public final class TransferEncoding extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Transfer-Encoding</c> header.
@@ -72,6 +72,6 @@ public final class TransferEncoding extends HeaderString {
 	}
 
 	private TransferEncoding(String value) {
-		super(value);
+		super("Transfer-Encoding", value);
 	}
 }

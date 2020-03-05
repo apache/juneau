@@ -89,7 +89,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("If-Modified-Since")
-public final class IfModifiedSince extends HeaderDate {
+public final class IfModifiedSince extends BasicDateHeader {
 
 	/**
 	 * Returns a parsed <c>If-Modified-Since</c> header.
@@ -104,6 +104,6 @@ public final class IfModifiedSince extends HeaderDate {
 	}
 
 	private IfModifiedSince(String value) {
-		super(value);
+		super("If-Modified-Since", value);
 	}
 }

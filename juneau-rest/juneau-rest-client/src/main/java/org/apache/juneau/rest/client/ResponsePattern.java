@@ -72,7 +72,10 @@ import java.util.regex.*;
  * 	<li>
  * 		{@link ResponsePattern} objects are reusable and thread-safe.
  * </ul>
+ *
+ * @deprecated Use new methods provided on {@link org.apache.juneau.rest.client2.RestResponse} class.
  */
+@Deprecated
 public abstract class ResponsePattern {
 
 	private Pattern pattern;

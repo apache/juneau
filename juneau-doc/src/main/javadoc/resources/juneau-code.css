@@ -84,7 +84,9 @@ bc {
 
 /*--- Bordered code ---*/
 p.bcode,
-p.bpcode {
+p.bpcode,
+div.bcode,
+div.bpcode {
 	border: 1px solid black;
 	margin: 0px 20px;
 	border-radius: 10px;
@@ -94,23 +96,24 @@ p.bpcode {
 	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.5);
 }
 
-p.bpcode {
+p.bpcode,
+div.bpcode {
 	padding-bottom: 15px;
 }
 
 /*--- Bordered code in a section of a method doc ---*/
-dd p.bcode {
+dd p.bcode, dd div.bcode {
 	margin-left:0px;
 	margin-right:20px;
 }
 
 /* Override padding bottom in javadoc comments. */
-.blockList p.bcode {
+.blockList p.bcode, .blocklist div.bcode {
 	padding-bottom: 0px !important;
 }
 
 /*--- Unbordered code ---*/
-p.code {
+p.code, div.code {
 	padding-bottom: 15px;
 	margin: -15px;
 }

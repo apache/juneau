@@ -20,7 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client2.*;
 import org.junit.*;
 
 public class ConfigTest extends RestTestcase {
@@ -34,23 +34,23 @@ public class ConfigTest extends RestTestcase {
 	public void test() throws Exception {
 		RestClient c = TestMicroservice.client().accept("text/json+simple").build();
 
-		Map<String,Map<String,Object>> m = c.doGet(URL).getResponse(Map.class, String.class, ObjectMap.class);
+		Map<String,Map<String,Object>> m = c.get(URL).run().getBody().as(Map.class, String.class, ObjectMap.class);
 
 		Config cf = Config.create().memStore().build().load(m);
 
 		assertObjectEquals("{int1:'1',int2:'[1,2,3]',int3:'1',int4:'1',int5:'-1',boolean1:'true',boolean2:'[true,true]',testManifestEntry:'test-value'}", cf.getSectionAsMap("Test"));
 
-		assertEquals("'1'", c.doGet(URL + "/Test%2Fint1/" + getName(String.class)).getResponseAsString());
-		assertEquals("'[1,2,3]'", c.doGet(URL + "/Test%2Fint2/" + getName(String.class)).getResponseAsString());
-		assertEquals("['1','2','3']", c.doGet(URL + "/Test%2Fint2/" + getName(String[].class)).getResponseAsString());
-		assertEquals("[1,2,3]", c.doGet(URL + "/Test%2Fint2/" + getName(int[].class)).getResponseAsString());
-		assertEquals("[1,2,3]", c.doGet(URL + "/Test%2Fint2/" + getName(Integer[].class)).getResponseAsString());
-		assertEquals("1", c.doGet(URL + "/Test%2Fint3/" + getName(Integer.class)).getResponseAsString());
-		assertEquals("1", c.doGet(URL + "/Test%2Fint4/" + getName(Integer.class)).getResponseAsString());
-		assertEquals("-1", c.doGet(URL + "/Test%2Fint5/" + getName(Integer.class)).getResponseAsString());
-		assertEquals("true", c.doGet(URL + "/Test%2Fboolean1/" + getName(Boolean.class)).getResponseAsString());
-		assertEquals("[true,true]", c.doGet(URL + "/Test%2Fboolean2/" + getName(Boolean[].class)).getResponseAsString());
-		assertEquals("'test-value'", c.doGet(URL + "/Test%2FtestManifestEntry/" + getName(String.class)).getResponseAsString());
+		assertEquals("'1'", c.get(URL + "/Test%2Fint1/" + getName(String.class)).run().getBody().asString());
+		assertEquals("'[1,2,3]'", c.get(URL + "/Test%2Fint2/" + getName(String.class)).run().getBody().asString());
+		assertEquals("['1','2','3']", c.get(URL + "/Test%2Fint2/" + getName(String[].class)).run().getBody().asString());
+		assertEquals("[1,2,3]", c.get(URL + "/Test%2Fint2/" + getName(int[].class)).run().getBody().asString());
+		assertEquals("[1,2,3]", c.get(URL + "/Test%2Fint2/" + getName(Integer[].class)).run().getBody().asString());
+		assertEquals("1", c.get(URL + "/Test%2Fint3/" + getName(Integer.class)).run().getBody().asString());
+		assertEquals("1", c.get(URL + "/Test%2Fint4/" + getName(Integer.class)).run().getBody().asString());
+		assertEquals("-1", c.get(URL + "/Test%2Fint5/" + getName(Integer.class)).run().getBody().asString());
+		assertEquals("true", c.get(URL + "/Test%2Fboolean1/" + getName(Boolean.class)).run().getBody().asString());
+		assertEquals("[true,true]", c.get(URL + "/Test%2Fboolean2/" + getName(Boolean[].class)).run().getBody().asString());
+		assertEquals("'test-value'", c.get(URL + "/Test%2FtestManifestEntry/" + getName(String.class)).run().getBody().asString());
 
 		cf.close();
 		c.closeQuietly();

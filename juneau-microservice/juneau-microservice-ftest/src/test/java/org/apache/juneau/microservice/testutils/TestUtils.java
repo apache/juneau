@@ -14,7 +14,7 @@ package org.apache.juneau.microservice.testutils;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client2.*;
 
 import junit.framework.*;
 

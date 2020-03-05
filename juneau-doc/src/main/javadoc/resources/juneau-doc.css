@@ -376,14 +376,25 @@ ul.seealso:before {
 ul.notes:before {
 	content: 'Notes:';
 }
-ul.seealso:before, ul.notes:before {
+div.description ul.seealso:before, 
+div.description ul.notes:before {
 	white-space: pre;
 	font-size: 1.1em;
 	font-weight: bold;
 	color: #4e4e4e;
 	margin-left: -40px;
 	padding-bottom: 20px;
-    line-height: 30px;
+	line-height: 30px;
+}
+div.details ul.seealso:before, 
+div.details ul.notes:before {
+	white-space: pre;
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #4e4e4e;
+	margin-left: -40px;
+	padding-bottom: 20px;
+	line-height: 30px;
 }
 ul.seealso, ul.notes {
 	margin-top:20px;

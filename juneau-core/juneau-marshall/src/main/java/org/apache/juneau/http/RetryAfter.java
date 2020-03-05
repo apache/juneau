@@ -58,7 +58,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Retry-After")
-public final class RetryAfter extends HeaderString {
+public final class RetryAfter extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Retry-After</c> header.
@@ -73,7 +73,7 @@ public final class RetryAfter extends HeaderString {
 	}
 
 	private RetryAfter(String value) {
-		super(value);
+		super("Retry-After", value);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public final class RetryAfter extends HeaderString {
 	 * @return This header value as a {@link java.util.Date} object, or <jk>null</jk> if the value is not a date.
 	 */
 	public java.util.Date asDate() {
-		char c0 = charAt(value, 0);
+		char c0 = charAt(asString(), 0);
 		if (c0 >= '0' && c0 <= '9')
 			return null;
 		return DateUtils.parseDate(toString());
@@ -94,10 +94,10 @@ public final class RetryAfter extends HeaderString {
 	 * @return This header value as a integer, or <c>-1</c> if the value is not an integer.
 	 */
 	public int asInt() {
-		char c0 = charAt(value, 0);
+		char c0 = charAt(asString(), 0);
 		if (c0 >= '0' && c0 <= '9') {
 			try {
-				return Integer.parseInt(value);
+				return Integer.parseInt(asString());
 			} catch (NumberFormatException e) {
 				return -1;
 			}

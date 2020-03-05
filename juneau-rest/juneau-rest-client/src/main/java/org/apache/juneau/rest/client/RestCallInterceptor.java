@@ -20,7 +20,10 @@ import org.apache.http.*;
  *
  * <p>
  * Useful if you want to prevent {@link RestCallException RestCallExceptions} from being thrown on error conditions.
+ *
+ * @deprecated Use {@link org.apache.juneau.rest.client2.RestCallInterceptor} class.
  */
+@Deprecated
 public abstract class RestCallInterceptor {
 
 	/**

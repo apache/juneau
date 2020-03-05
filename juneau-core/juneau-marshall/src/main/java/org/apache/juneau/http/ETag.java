@@ -48,7 +48,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("ETag")
-public final class ETag extends HeaderString {
+public final class ETag extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>ETag</c> header.
@@ -63,6 +63,6 @@ public final class ETag extends HeaderString {
 	}
 
 	private ETag(String value) {
-		super(value);
+		super("ETag", value);
 	}
 }

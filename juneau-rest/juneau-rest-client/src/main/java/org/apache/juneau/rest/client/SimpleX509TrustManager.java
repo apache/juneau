@@ -19,7 +19,10 @@ import javax.net.ssl.*;
 
 /**
  * A trust manager that optionally allows for self-signed certificates.
+ *
+ * @deprecated No replacement.
  */
+@Deprecated
 public final class SimpleX509TrustManager implements X509TrustManager {
 
 	private X509TrustManager baseTrustManager;  // The JRE-provided trust manager used to validate certificates presented by a server.

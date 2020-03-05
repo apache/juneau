@@ -48,7 +48,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Proxy-Authenticate")
-public final class ProxyAuthenticate extends HeaderString {
+public final class ProxyAuthenticate extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Proxy-Authenticate</c> header.
@@ -63,6 +63,6 @@ public final class ProxyAuthenticate extends HeaderString {
 	}
 
 	private ProxyAuthenticate(String value) {
-		super(value);
+		super("Proxy-Authenticate", value);
 	}
 }

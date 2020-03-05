@@ -81,7 +81,10 @@ import org.apache.juneau.xml.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
+ *
+ * @deprecated Use {@link org.apache.juneau.rest.client2.RestClientBuilder}
  */
+@Deprecated
 public class RestClientBuilder extends BeanContextBuilder {
 
 	private HttpClientBuilder httpClientBuilder;
@@ -2586,12 +2589,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public RestClientBuilder debug() {
 		super.debug();
+		interceptors(RestCallLogger.DEFAULT);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
 	public RestClientBuilder debug(boolean value) {
 		super.debug(value);
+		if (value)
+			interceptors(RestCallLogger.DEFAULT);
 		return this;
 	}
 

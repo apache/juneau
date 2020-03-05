@@ -68,7 +68,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Last-Modified")
-public final class LastModified extends HeaderDate {
+public final class LastModified extends BasicDateHeader {
 
 	/**
 	 * Returns a parsed <c>Last-Modified</c> header.
@@ -83,6 +83,6 @@ public final class LastModified extends HeaderDate {
 	}
 
 	private LastModified(String value) {
-		super(value);
+		super("Last-Modified", value);
 	}
 }

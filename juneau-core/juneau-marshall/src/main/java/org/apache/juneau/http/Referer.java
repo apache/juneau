@@ -71,6 +71,6 @@ public final class Referer extends HeaderUri {
 	}
 
 	private Referer(String value) {
-		super(value);
+		super("Referer", value);
 	}
 }

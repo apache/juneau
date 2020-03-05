@@ -27,6 +27,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -583,6 +584,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final Map<Class<?>,ResponsePartMeta> bodyPartMetas = new ConcurrentHashMap<>();
 	final ResponseBeanMeta responseMeta;
 
+	final Map<Integer,AtomicInteger> statusCodes = new ConcurrentHashMap<>();
+
 	final Enablement debug;
 	final int hierarchyDepth;
 
@@ -952,6 +955,25 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			throw e.getTargetException();
 		}
 		return SC_OK;
+	}
+
+	protected void addStatusCode(int code) {
+		AtomicInteger ai = statusCodes.get(code);
+		if (ai == null) {
+			synchronized(statusCodes) {
+				ai = new AtomicInteger();
+				statusCodes.putIfAbsent(code, ai);
+				ai = statusCodes.get(code);
+			}
+		}
+		ai.incrementAndGet();
+	}
+
+	protected Map<Integer,Integer> getStatusCodes() {
+		Map<Integer,Integer> m = new TreeMap<>();
+		for (Map.Entry<Integer,AtomicInteger> e : statusCodes.entrySet())
+			m.put(e.getKey(), e.getValue().get());
+		return m;
 	}
 
 	/*

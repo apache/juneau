@@ -88,7 +88,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("TE")
-public final class TE extends HeaderRangeArray {
+public final class TE extends ComplexRangeArrayHeader {
 
 	private static final Cache<String,TE> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
@@ -108,6 +108,6 @@ public final class TE extends HeaderRangeArray {
 	}
 
 	private TE(String value) {
-		super(value);
+		super("TE", value);
 	}
 }

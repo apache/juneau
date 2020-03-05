@@ -29,16 +29,18 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
-public class HeaderUri{
+public class HeaderUri extends BasicHeader {
 
 	final String value;
 
 	/**
 	 * Constructor.
 	 *
+	 * @param name The HTTP header name.
 	 * @param value The raw header value.
 	 */
-	protected HeaderUri(String value) {
+	protected HeaderUri(String name, String value) {
+		super(name, value);
 		this.value = StringUtils.trim(value);
 	}
 
@@ -59,6 +61,7 @@ public class HeaderUri{
 	 *
 	 * @return This header as a simple string.
 	 */
+	@Override
 	public String asString() {
 		return value;
 	}

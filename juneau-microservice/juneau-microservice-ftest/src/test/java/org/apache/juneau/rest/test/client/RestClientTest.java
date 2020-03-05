@@ -15,12 +15,12 @@ package org.apache.juneau.rest.test.client;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
-import java.util.*;
 import java.util.regex.*;
 
 import org.apache.http.entity.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.test.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 public class RestClientTest extends RestTestcase {
@@ -33,19 +33,18 @@ public class RestClientTest extends RestTestcase {
 	@Test
 	public void testSuccessPattern() throws Exception {
 		RestClient c = TestMicroservice.DEFAULT_CLIENT;
-		String r;
-		int rc;
 
-		r = c.doPost(URL, new StringEntity("xxxSUCCESSxxx")).successPattern("SUCCESS").getResponseAsString();
-		assertEquals("xxxSUCCESSxxx", r);
-		rc = c.doPost(URL, new StringEntity("xxxSUCCESSxxx")).successPattern("SUCCESS").run();
-		assertEquals(200, rc);
+		Mutable<Integer> rc = new Mutable<>();
+		Mutable<String> r = new Mutable<>();
+		c.post(URL, new StringEntity("xxxSUCCESSxxx")).run().getStatusCode(rc).getBody().cache().assertValueContains("SUCCESS").getBody().asString(r);
+		assertEquals("xxxSUCCESSxxx", r.get());
+		assertEquals(200, rc.get().intValue());
 
 		try {
-			r = c.doPost(URL, new StringEntity("xxxFAILURExxx")).successPattern("SUCCESS").getResponseAsString();
+			c.post(URL, new StringEntity("xxxFAILURExxx")).run().getBody().assertValueContains("SUCCESS");
 			fail();
 		} catch (RestCallException e) {
-			assertEquals("Success pattern not detected.", e.getLocalizedMessage());
+			assertTrue(e.getLocalizedMessage().contains("Response did not have the expected substring for body."));
 		}
 	}
 
@@ -55,26 +54,18 @@ public class RestClientTest extends RestTestcase {
 	@Test
 	public void testFailurePattern() throws Exception {
 		RestClient c = TestMicroservice.DEFAULT_CLIENT;
-		String r;
-		int rc;
 
-		r = c.doPost(URL, new StringEntity("xxxSUCCESSxxx")).failurePattern("FAILURE").getResponseAsString();
-		assertEquals("xxxSUCCESSxxx", r);
-		rc = c.doPost(URL, new StringEntity("xxxSUCCESSxxx")).failurePattern("FAILURE").run();
-		assertEquals(200, rc);
-
-		try {
-			r = c.doPost(URL, new StringEntity("xxxFAILURExxx")).failurePattern("FAILURE").getResponseAsString();
-			fail();
-		} catch (RestCallException e) {
-			assertEquals("Failure pattern detected.", e.getLocalizedMessage());
-		}
+		Mutable<Integer> rc = new Mutable<>();
+		Mutable<String> r = new Mutable<>();
+		c.post(URL, new StringEntity("xxxSUCCESSxxx")).run().getStatusCode(rc).getBody().cache().assertValue(x -> ! x.contains("FAILURE")).getBody().asString(r);
+		assertEquals("xxxSUCCESSxxx", r.get());
+		assertEquals(200, rc.get().intValue());
 
 		try {
-			r = c.doPost(URL, new StringEntity("xxxERRORxxx")).failurePattern("FAILURE|ERROR").getResponseAsString();
+			c.post(URL, new StringEntity("xxxFAILURExxx")).run().getBody().assertValue(x -> ! x.contains("FAILURE"));
 			fail();
 		} catch (RestCallException e) {
-			assertEquals("Failure pattern detected.", e.getLocalizedMessage());
+			assertTrue(e.getLocalizedMessage().contains("Response did not have the expected value for body."));
 		}
 	}
 
@@ -84,25 +75,16 @@ public class RestClientTest extends RestTestcase {
 	@Test
 	public void testCaptureResponse() throws Exception {
 		RestClient c = TestMicroservice.DEFAULT_CLIENT;
-		RestCall rc = c.doPost(URL, new StringEntity("xxx")).captureResponse();
+		RestResponse r = c.post(URL, new StringEntity("xxx")).run().getBody().cache().toResponse();
+
+		assertEquals("xxx", r.getBody().asString());
+		assertEquals("xxx", r.getBody().asString());
+
+		r = c.post(URL, new StringEntity("xxx")).run();
+		assertEquals("xxx", r.getBody().asString());
 
 		try {
-			rc.getCapturedResponse();
-			fail();
-		} catch (IllegalStateException e) {
-			assertEquals("This method cannot be called until the response has been consumed.", e.getLocalizedMessage());
-		}
-		rc.run();
-		assertEquals("xxx", rc.getCapturedResponse());
-		assertEquals("xxx", rc.getCapturedResponse());
-
-		rc = c.doPost(URL, new StringEntity("xxx")).captureResponse();
-		assertEquals("xxx", rc.getResponseAsString());
-		assertEquals("xxx", rc.getCapturedResponse());
-		assertEquals("xxx", rc.getCapturedResponse());
-
-		try {
-			rc.getResponseAsString();
+			r.getBody().asString();
 			fail();
 		} catch (IllegalStateException e) {
 			assertEquals("Method cannot be called.  Response has already been consumed.", e.getLocalizedMessage());
@@ -117,75 +99,27 @@ public class RestClientTest extends RestTestcase {
 		RestClient c = TestMicroservice.DEFAULT_CLIENT;
 		String r;
 
-		final List<String> l = new ArrayList<>();
-		ResponsePattern p = new ResponsePattern("x=(\\d+),y=(\\S+)") {
-			@Override
-			public void onMatch(RestCall restCall, Matcher m) throws RestCallException {
-				l.add(m.group(1)+'/'+m.group(2));
-			}
-			@Override
-			public void onNoMatch(RestCall restCall) throws RestCallException {
-				throw new RestCallException("Pattern not found!");
-			}
-		};
-
-		r = c.doPost(URL, new StringEntity("x=1,y=2")).responsePattern(p).getResponseAsString();
+		Mutable<Matcher> m = Mutable.create();
+		r = c.post(URL, new StringEntity("x=1,y=2")).run().getBody().cache().asMatcher(m, "x=(\\d+),y=(\\S+)").getBody().asString();
 		assertEquals("x=1,y=2", r);
-		assertObjectEquals("['1/2']", l);
+		assertTrue(m.get().matches());
+		assertObjectEquals("['x=1,y=2','1','2']", m.get().toMatchResult());
 
-		l.clear();
-
-		r = c.doPost(URL, new StringEntity("x=1,y=2\nx=3,y=4")).responsePattern(p).getResponseAsString();
+		r = c.post(URL, new StringEntity("x=1,y=2\nx=3,y=4")).run().getBody().cache().asMatcher(m, "x=(\\d+),y=(\\S+)").getBody().asString();
 		assertEquals("x=1,y=2\nx=3,y=4", r);
-		assertObjectEquals("['1/2','3/4']", l);
+		assertTrue(m.get().find());
+		assertObjectEquals("['x=1,y=2','1','2']", m.get().toMatchResult());
+		assertTrue(m.get().find());
+		assertObjectEquals("['x=3,y=4','3','4']", m.get().toMatchResult());
 
-		try {
-			c.doPost(URL, new StringEntity("x=1")).responsePattern(p).run();
-			fail();
-		} catch (RestCallException e) {
-			assertEquals("Pattern not found!", e.getLocalizedMessage());
-			assertEquals(0, e.getResponseCode());
-		}
+		c.post(URL, new StringEntity("x=1")).run().getBody().asMatcher("x=(\\d+),y=(\\S+)");
+		assertFalse(m.get().find());
 
-		// Two patterns!
-		ResponsePattern p1 = new ResponsePattern("x=(\\d+)") {
-			@Override
-			public void onMatch(RestCall restCall, Matcher m) throws RestCallException {
-				l.add("x="+m.group(1));
-			}
-			@Override
-			public void onNoMatch(RestCall restCall) throws RestCallException {
-				throw new RestCallException("Pattern x not found!");
-			}
-		};
-		ResponsePattern p2 = new ResponsePattern("y=(\\S+)") {
-			@Override
-			public void onMatch(RestCall restCall, Matcher m) throws RestCallException {
-				l.add("y="+m.group(1));
-			}
-			@Override
-			public void onNoMatch(RestCall restCall) throws RestCallException {
-				throw new RestCallException("Pattern y not found!");
-			}
-		};
-
-		l.clear();
-		r = c.doPost(URL, new StringEntity("x=1,y=2\nx=3,y=4")).responsePattern(p1).responsePattern(p2).getResponseAsString();
-		assertEquals("x=1,y=2\nx=3,y=4", r);
-		assertObjectEquals("['x=1','x=3','y=2','y=4']", l);
-
-		try {
-			c.doPost(URL, new StringEntity("x=1\nx=3")).responsePattern(p1).responsePattern(p2).getResponseAsString();
-		} catch (RestCallException e) {
-			assertEquals("Pattern y not found!", e.getLocalizedMessage());
-			assertEquals(0, e.getResponseCode());
-		}
-
-		try {
-			c.doPost(URL, new StringEntity("y=1\ny=3")).responsePattern(p1).responsePattern(p2).getResponseAsString();
-		} catch (RestCallException e) {
-			assertEquals("Pattern x not found!", e.getLocalizedMessage());
-			assertEquals(0, e.getResponseCode());
-		}
+		Mutable<Matcher> m2 = Mutable.create();
+		c.post(URL, new StringEntity("x=1,y=2")).run().getBody().cache().asMatcher(m, "x=(\\d+),y=(\\S+)").getBody().asMatcher(m2, "x=(\\d+),y=(\\S+)");
+		assertTrue(m.get().matches());
+		assertTrue(m2.get().matches());
+		assertObjectEquals("['x=1,y=2','1','2']", m.get().toMatchResult());
+		assertObjectEquals("['x=1,y=2','1','2']", m2.get().toMatchResult());
 	}
 }

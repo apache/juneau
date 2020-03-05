@@ -24,31 +24,43 @@ import java.util.*;
 public enum HttpMethod {
 
 	/** {@doc RFC2616.section9#sec9.2 OPTIONS} */
-	OPTIONS,
+	OPTIONS(false),
 
 	/** {@doc RFC2616.section9#sec9.3 GET} */
-	GET,
+	GET(false),
 
 	/** {@doc RFC2616.section9#sec9.4 HEAD} */
-	HEAD,
+	HEAD(false),
 
 	/** {@doc RFC2616.section9#sec9.5 POST} */
-	POST,
+	POST(true),
 
 	/** {@doc RFC2616.section9#sec9.6 PUT} */
-	PUT,
+	PUT(true),
+
+	/** PATH */
+	PATCH(true),
 
 	/** {@doc RFC2616.section9#sec9.7 DELETE} */
-	DELETE,
+	DELETE(false),
 
 	/** {@doc RFC2616.section9#sec9.8 TRACE} */
-	TRACE,
+	TRACE(false),
 
 	/** {@doc RFC2616.section9#sec9.9 CONNECT} */
-	CONNECT,
+	CONNECT(false),
+
+	/** HTTP MOVE */
+	MOVE(false),
 
 	/** A non-standard value. */
-	OTHER;
+	OTHER(true);
+
+	private boolean hasContent;
+
+	HttpMethod(boolean hasContent) {
+		this.hasContent = hasContent;
+	}
 
 	private static final Map<String,HttpMethod> cache = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 	static {
@@ -60,6 +72,15 @@ public enum HttpMethod {
 		cache.put("DELETE", DELETE);
 		cache.put("TRACE", TRACE);
 		cache.put("CONNECT", CONNECT);
+	}
+
+	/**
+	 * Returns whether this HTTP method normally has content.
+	 *
+	 * @return <jk>true</jk> if this HTTP method normally has content.
+	 */
+	public boolean hasContent() {
+		return hasContent;
 	}
 
 	/**

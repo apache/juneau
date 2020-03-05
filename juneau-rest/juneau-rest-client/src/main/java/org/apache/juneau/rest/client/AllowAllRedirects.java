@@ -22,7 +22,10 @@ import org.apache.http.impl.client.*;
  * 		This class is similar to <c>org.apache.http.impl.client.LaxRedirectStrategy</c>
  * 		in Apache HttpClient 4.2, but also allows for redirects on <c>PUTs</c> and <c>DELETEs</c>.
  * </ul>
+ *
+ * @deprecated Use {@link org.apache.juneau.rest.client2.ext.AllRedirectsStrategy}
  */
+@Deprecated
 public class AllowAllRedirects extends DefaultRedirectStrategy {
 
 	@Override /* DefaultRedirectStrategy */

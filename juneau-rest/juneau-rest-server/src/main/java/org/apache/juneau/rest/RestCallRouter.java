@@ -79,14 +79,18 @@ public class RestCallRouter {
 	 * @return The HTTP response code.
 	 */
 	int invoke(RestCall call) throws Throwable {
-		if (restJavaMethods.length == 1)
+		if (restJavaMethods.length == 1) {
+			call.restMethodContext(restJavaMethods[0]);
 			return restJavaMethods[0].invoke(call);
+		}
 
 		int maxRc = 0;
 		for (RestMethodContext m : restJavaMethods) {
 			int rc = m.invoke(call);
-			if (rc == SC_OK)
+			if (rc == SC_OK) {
+				call.restMethodContext(m);
 				return SC_OK;
+			}
 			maxRc = Math.max(maxRc, rc);
 		}
 		return maxRc;

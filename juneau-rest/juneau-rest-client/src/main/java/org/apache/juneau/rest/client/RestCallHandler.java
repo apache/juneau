@@ -34,7 +34,10 @@ import org.apache.http.client.methods.*;
  * 	<li class='jf'>{@link RestClientBuilder#callHandler(Class)}
  * 	<li class='jf'>{@link RestClientBuilder#callHandler(RestCallHandler)}
  * </ul>
+ *
+ * @deprecated Use {@link org.apache.juneau.rest.client2.RestCallHandler} class.
  */
+@Deprecated
 public interface RestCallHandler {
 
 	/**

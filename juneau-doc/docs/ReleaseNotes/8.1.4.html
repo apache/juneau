@@ -20,6 +20,17 @@
 
 <h5 class='topic w800'>juneau-marshall</h5>
 <ul class='spaced-list'>
+	<li>
+		<ja>@BeanIgnore</ja> and <ja>@Bean</ja> annotations can alternately occur in parent class hierarchy.
+		The first one found dictates whether a class is ignored as a bean or not.
+	<li>
+		New {@link oaj.ObjectMap(Object...)} constructor.
+	<li>
+		New swaps auto-added to all serializers/parsers:
+		<ul>
+			<li class='jc'>{@link oaj.transforms.MatchResultSwap} 
+			<li class='jc'>{@link oaj.transforms.StackTraceElementSwap} 
+		</ul>		
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
@@ -37,7 +48,12 @@
 <h5 class='topic w800'>juneau-rest-client</h5>
 <ul class='spaced-list'>
 	<li>
-		New {@link oajrc.RestCallHandler} interface for custom handling of HTTP requests.
+		Completely revamped RestClient API.
+		<ul>
+			<li>All APIs now extend from HttpClient interfaces.
+			<li>Better integration with HttpClient.
+			<li>New fluent-style methods with many new convenience methods.
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-doc</h5>

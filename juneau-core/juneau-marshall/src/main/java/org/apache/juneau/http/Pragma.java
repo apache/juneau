@@ -65,7 +65,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Pragma")
-public final class Pragma extends HeaderString {
+public final class Pragma extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Pragma</c> header.
@@ -80,6 +80,6 @@ public final class Pragma extends HeaderString {
 	}
 
 	private Pragma(String value) {
-		super(value);
+		super("Pragma", value);
 	}
 }

@@ -103,7 +103,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept-Language")
-public final class AcceptLanguage extends HeaderRangeArray {
+public final class AcceptLanguage extends ComplexRangeArrayHeader {
 
 	private static final Cache<String,AcceptLanguage> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
@@ -122,7 +122,12 @@ public final class AcceptLanguage extends HeaderRangeArray {
 		return a;
 	}
 
-	private AcceptLanguage(String raw) {
-		super(raw);
+	/**
+	 * Constructor
+	 *
+	 * @param value HTTP header value.
+	 */
+	public AcceptLanguage(String value) {
+		super("Accept-Language", value);
 	}
 }

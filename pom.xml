@@ -162,6 +162,7 @@
 						<exclude>**/DEPENDENCIES</exclude>
 						<exclude>**/target/**</exclude>
 						<exclude>**/empty.txt</exclude>
+						<exclude>**/TODO.txt</exclude>
 						
 						
 						<!-- Eclipse metadata files -->
@@ -229,9 +230,11 @@
 						<verbose>false</verbose>
 						<excludePackageNames>*proto*:*test*:org.apache.juneau.doc.internal</excludePackageNames>
 						<linksource>true</linksource>
-						<links>
+ 						<links>
 							<link>https://docs.oracle.com/javase/8/docs/api/</link>
 							<link>https://docs.oracle.com/javaee/5/api/</link>
+							<link>https://hc.apache.org/httpcomponents-client-4.5.x/httpclient/apidocs/</link>
+							<link>https://hc.apache.org/httpcomponents-core-4.4.x/httpcore/apidocs/</link>
 						</links>
 						<docfilessubdirs>true</docfilessubdirs>
 						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>

@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import java.util.*;
+import java.util.Date;
 
 import org.apache.http.client.utils.*;
-import org.apache.http.message.*;
+import org.apache.http.message.BasicHeader;
+import org.apache.juneau.http.*;
 
 /**
  * Convenience class for setting date headers in RFC2616 format.
@@ -25,7 +26,10 @@ import org.apache.http.message.*;
  * <p class='bcode w800'>
  * 	Header h = <jk>new</jk> Header(name, DateUtils.<jsm>formatDate</jsm>(value));
  * </p>
+ *
+ * @deprecated Use {@link HttpHeader HttpHeaders}
  */
+@Deprecated
 public final class DateHeader extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;

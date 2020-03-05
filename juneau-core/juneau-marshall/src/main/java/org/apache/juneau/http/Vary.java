@@ -70,7 +70,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Vary")
-public final class Vary extends HeaderString {
+public final class Vary extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Vary</c> header.
@@ -85,6 +85,6 @@ public final class Vary extends HeaderString {
 	}
 
 	private Vary(String value) {
-		super(value);
+		super("Vary", value);
 	}
 }

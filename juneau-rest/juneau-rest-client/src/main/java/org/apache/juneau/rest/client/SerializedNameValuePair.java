@@ -30,7 +30,10 @@ import org.apache.juneau.urlencoding.*;
  * 		.append(<jk>new</jk> BasicNameValuePair(<js>"someOtherParam"</js>, <js>"foobar"</js>));
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
+ *
+ * @deprecated Use {@link org.apache.juneau.rest.client2.ext.SerializedNameValuePair}.
  */
+@Deprecated
 public final class SerializedNameValuePair implements NameValuePair {
 	private String name;
 	private Object value;

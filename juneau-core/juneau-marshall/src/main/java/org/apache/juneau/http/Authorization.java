@@ -70,7 +70,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Authorization")
-public final class Authorization extends HeaderString {
+public final class Authorization extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Authorization</c> header.
@@ -85,6 +85,6 @@ public final class Authorization extends HeaderString {
 	}
 
 	private Authorization(String value) {
-		super(value);
+		super("Authorization", value);
 	}
 }

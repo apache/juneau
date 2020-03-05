@@ -67,7 +67,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Expect")
-public final class Expect extends HeaderString {
+public final class Expect extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Expect</c> header.
@@ -82,6 +82,6 @@ public final class Expect extends HeaderString {
 	}
 
 	private Expect(String value) {
-		super(value);
+		super("Expect", value);
 	}
 }

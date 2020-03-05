@@ -57,7 +57,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Trailer")
-public final class Trailer extends HeaderString {
+public final class Trailer extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Trailer</c> header.
@@ -72,6 +72,6 @@ public final class Trailer extends HeaderString {
 	}
 
 	private Trailer(String value) {
-		super(value);
+		super("Trailer", value);
 	}
 }

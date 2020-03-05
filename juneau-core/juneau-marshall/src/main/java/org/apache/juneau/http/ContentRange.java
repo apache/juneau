@@ -127,7 +127,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Content-Range")
-public final class ContentRange extends HeaderString {
+public final class ContentRange extends BasicStringHeader {
 
 	/**
 	 * Returns a parsed <c>Content-Range</c> header.
@@ -142,6 +142,6 @@ public final class ContentRange extends HeaderString {
 	}
 
 	private ContentRange(String value) {
-		super(value);
+		super("Content-Range", value);
 	}
 }

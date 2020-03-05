@@ -89,7 +89,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("If-Match")
-public final class IfMatch extends HeaderEntityValidatorArray {
+public final class IfMatch extends ComplexEntityValidatorArrayHeader {
 
 	/**
 	 * Returns a parsed <c>If-Match</c> header.
@@ -104,6 +104,6 @@ public final class IfMatch extends HeaderEntityValidatorArray {
 	}
 
 	private IfMatch(String value) {
-		super(value);
+		super("If-Match", value);
 	}
 }

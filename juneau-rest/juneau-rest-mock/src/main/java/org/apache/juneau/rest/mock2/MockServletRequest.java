@@ -295,7 +295,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 
 	private void log(MockServletRequest req, MockServletResponse res) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\n=== HTTP Call =================================================================");
+		sb.append("\n=== HTTP Call (mock/incoming/outgoing) ========================================");
 
 		sb.append("\n=== REQUEST ===");
 		sb.append("\n---request headers---");
@@ -312,7 +312,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 				sb.append("\n").append(h.getKey()).append(": ").append(h2);
 		sb.append("\n---response content---\n");
 		sb.append(res.getBodyAsString());
-		sb.append("\n=== END ========================================================================");
+		sb.append("\n=== END =======================================================================");
 
 		System.err.println(sb);  // NOT DEBUG
 	}

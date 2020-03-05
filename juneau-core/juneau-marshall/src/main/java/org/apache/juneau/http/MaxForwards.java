@@ -57,7 +57,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Max-Forwards")
-public final class MaxForwards extends HeaderInteger {
+public final class MaxForwards extends BasicIntegerHeader {
 
 	/**
 	 * Constructor.
@@ -65,7 +65,7 @@ public final class MaxForwards extends HeaderInteger {
 	 * @param value The value for this header.
 	 */
 	public MaxForwards(Integer value) {
-		super(value);
+		super("Max-Forwards", value);
 	}
 
 	/**
@@ -81,6 +81,6 @@ public final class MaxForwards extends HeaderInteger {
 	}
 
 	private MaxForwards(String value) {
-		super(value);
+		super("Max-Forwards", value);
 	}
 }
