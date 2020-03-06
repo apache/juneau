@@ -116,7 +116,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Via")
-public final class Via extends BasicStringArrayHeader {
+public final class Via extends BasicCsvArrayHeader {
 
 	/**
 	 * Constructor.

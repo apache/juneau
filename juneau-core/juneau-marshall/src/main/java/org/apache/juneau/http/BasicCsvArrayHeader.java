@@ -30,7 +30,7 @@ import org.apache.juneau.jsonschema.annotation.Items;
  * </ul>
  */
 @Header(type="array",collectionFormat="csv",items=@Items(type="string"))
-public class BasicStringArrayHeader extends BasicHeader {
+public class BasicCsvArrayHeader extends BasicHeader {
 
 	private final String[] value;
 
@@ -40,7 +40,7 @@ public class BasicStringArrayHeader extends BasicHeader {
 	 * @param name The HTTP header name.
 	 * @param value The raw header value.
 	 */
-	protected BasicStringArrayHeader(String name, String[] value) {
+	protected BasicCsvArrayHeader(String name, String[] value) {
 		super(name, StringUtils.joine(value, ','));
 		this.value = value;
 	}
@@ -51,7 +51,7 @@ public class BasicStringArrayHeader extends BasicHeader {
 	 * @param name The HTTP header name.
 	 * @param value The raw header value.
 	 */
-	protected BasicStringArrayHeader(String name, String value) {
+	protected BasicCsvArrayHeader(String name, String value) {
 		super(name, value);
 		this.value = split(value);
 	}

@@ -71,7 +71,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Content-Language")
-public final class ContentLanguage extends BasicStringArrayHeader {
+public final class ContentLanguage extends BasicCsvArrayHeader {
 
 	/**
 	 * Constructor.

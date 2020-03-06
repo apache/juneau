@@ -15,78 +15,48 @@ package org.apache.juneau.http;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents a parsed <l>Allow</l> HTTP response header.
+ * Represents a parsed <l>Content-Disposition</l> HTTP request header.
  *
  * <p>
- * Valid methods for a specified resource. To be used for a 405 Method not allowed.
+ * In a regular HTTP response, the Content-Disposition response header is a header indicating if the content is expected
+ * to be displayed inline in the browser, that is, as a Web page or as part of a Web page, or as an attachment, that is
+ * downloaded and saved locally.
  *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode w800'>
- * 	Allow: GET, HEAD
+ * 	Content-Disposition: form-data; name="fieldName"; filename="filename.jpg"
  * </p>
  *
  * <h5 class='topic'>RFC2616 Specification</h5>
  *
- * The Allow entity-header field lists the set of methods supported by the resource identified by the Request-URI.
- * The purpose of this field is strictly to inform the recipient of valid methods associated with the resource.
- * An Allow header field MUST be present in a 405 (Method Not Allowed) response.
- *
+ * The Expect request-header field is used to indicate that particular server behaviors are required by the client.
  * <p class='bcode w800'>
- * 	Allow   = "Allow" ":" #Method
+ *	content-disposition = "Content-Disposition" ":"
+ *  	disposition-type *( ";" disposition-parm )
+ * 	disposition-type = "attachment" | disp-extension-token
+ * 	disposition-parm = filename-parm | disp-extension-parm
+ * 	filename-parm = "filename" "=" quoted-string
+ *	disp-extension-token = token
+ * 	disp-extension-parm = token "=" ( token | quoted-string )
  * </p>
- *
- * <p>
- * Example of use:
- * <p class='bcode w800'>
- * 	Allow: GET, HEAD, PUT
- * </p>
- *
- * <p>
- * This field cannot prevent a client from trying other methods.
- * However, the indications given by the Allow header field value SHOULD be followed.
- *
- * <p>
- * The actual set of allowed methods is defined by the origin server at the time of each request.
- *
- * <p>
- * The Allow header field MAY be provided with a PUT request to recommend the methods to be supported by the new or
- * modified resource.
- *
- * <p>
- * The server is not required to support these methods and SHOULD include an Allow header in the response giving the
- * actual supported methods.
- *
- * <p>
- * A proxy MUST NOT modify the Allow header field even if it does not understand all the methods specified, since the
- * user agent might
- * have other means of communicating with the origin server.
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
-@Header("Allow")
-public final class Allow extends BasicCsvArrayHeader {
+@Header("Content-Disposition")
+public final class ContentDisposition extends BasicStringHeader {
 
 	/**
-	 * Constructor.
+	 * Returns a parsed <c>Content-Disposition</c> header.
 	 *
-	 * @param value The value for this header.
+	 * @param value The <c>Content-Disposition</c> header string.
+	 * @return The parsed <c>Content-Disposition</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public Allow(String[] value) {
-		super("Allow", value);
-	}
-
-	/**
-	 * Returns a parsed <c>Allow</c> header.
-	 *
-	 * @param value The <c>Allow</c> header string.
-	 * @return The parsed <c>Allow</c> header, or <jk>null</jk> if the string was null.
-	 */
-	public static Allow forString(String value) {
+	public static ContentDisposition forString(String value) {
 		if (value == null)
 			return null;
-		return new Allow(value);
+		return new ContentDisposition(value);
 	}
 
 	/**
@@ -94,7 +64,7 @@ public final class Allow extends BasicCsvArrayHeader {
 	 *
 	 * @param value The value for this header.
 	 */
-	public Allow(String value) {
-		super("Allow", value);
+	public ContentDisposition(String value) {
+		super("Expect", value);
 	}
 }
