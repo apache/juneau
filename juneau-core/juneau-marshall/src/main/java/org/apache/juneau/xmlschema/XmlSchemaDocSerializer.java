@@ -31,6 +31,7 @@ import org.apache.juneau.serializer.*;
  * <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt></code> to the response to make it a valid XML document.
  */
 @ConfigurableContext
+@Deprecated
 public class XmlSchemaDocSerializer extends XmlSchemaSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------

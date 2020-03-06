@@ -29,7 +29,6 @@ import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xmlschema.XmlSchemaSerializer;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
@@ -176,12 +175,6 @@ public abstract class RoundTripTest {
 				JsonSchemaSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
 				null,
 				RETURN_ORIGINAL_OBJECT
-			},
-			{ /* 21 */
-				"Xml schema",
-				XmlSchemaSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
-				XmlValidatorParser.create(),
-				RETURN_ORIGINAL_OBJECT | CHECK_XML_WHITESPACE
 			},
 		});
 	}

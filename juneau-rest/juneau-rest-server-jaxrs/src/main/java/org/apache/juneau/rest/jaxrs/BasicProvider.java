@@ -76,5 +76,6 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 		UrlEncodingParser.class,
 	}
 )
+@SuppressWarnings("deprecation")
 public final class BasicProvider extends BaseProvider {}
 

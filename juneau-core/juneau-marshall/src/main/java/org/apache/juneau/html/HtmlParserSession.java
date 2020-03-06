@@ -357,7 +357,9 @@ public final class HtmlParserSession extends XmlParserSession {
 				setName(valueType, value, key);
 				m.put(key, value);
 			}
-			nextTag(r, xTR);
+			tag = nextTag(r, xTD, xTR);
+			if (tag == xTD)
+				nextTag(r, xTR);
 		}
 
 		return m;
@@ -372,7 +374,9 @@ public final class HtmlParserSession extends XmlParserSession {
 			ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int argIndex = 0;
 		while (true) {
-			HtmlTag tag = nextTag(r, LI, xUL);
+			HtmlTag tag = nextTag(r, LI, xUL, xLI);
+			if (tag == xLI)
+				tag = nextTag(r, LI, xUL, xLI);
 			if (tag == xUL)
 				break;
 			ClassMeta<?> elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
@@ -424,7 +428,9 @@ public final class HtmlParserSession extends XmlParserSession {
 					: newBeanMap(l, elementType.getInnerClass())
 				;
 				for (int i = 0; i < keys.size(); i++) {
-					tag = nextTag(r, TD, NULL);
+					tag = nextTag(r, xTD, TD, NULL);
+					if (tag == xTD)
+						tag = nextTag(r, TD, NULL);
 					if (tag == NULL) {
 						m = null;
 						nextTag(r, xNULL);

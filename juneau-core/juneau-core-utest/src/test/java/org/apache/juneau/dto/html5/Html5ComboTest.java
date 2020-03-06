@@ -14,10 +14,12 @@ package org.apache.juneau.dto.html5;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.testutils.TestUtils.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.utils.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
@@ -35,7 +37,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 		return Arrays.asList(new Object[][] {
 			{	/* 0 */
 				new ComboInput<A>(
-					"A-1",
+					"A",
 					A.class,
 					a("http://foo", "bar"),
 					/* Json */		"{_type:'a',a:{href:'http://foo'},c:['bar']}",
@@ -68,6 +70,321 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				}
 			},
 			{	/* 1 */
+				new ComboInput<A[]>(
+					"A[]",
+					A[].class,
+					new A[]{a("http://foo", "bar"),a("http://baz", "qux")},
+					/* Json */		"[{_type:'a',a:{href:'http://foo'},c:['bar']},{_type:'a',a:{href:'http://baz'},c:['qux']}]",
+					/* JsonT */		"[{t:'a',a:{href:'http://foo'},c:['bar']},{t:'a',a:{href:'http://baz'},c:['qux']}]",
+					/* JsonR */		"[\n\t{\n\t\t_type: 'a',\n\t\ta: {\n\t\t\thref: 'http://foo'\n\t\t},\n\t\tc: [\n\t\t\t'bar'\n\t\t]\n\t},\n\t{\n\t\t_type: 'a',\n\t\ta: {\n\t\t\thref: 'http://baz'\n\t\t},\n\t\tc: [\n\t\t\t'qux'\n\t\t]\n\t}\n]",
+					/* Xml */		"<array><a href='http://foo'>bar</a><a href='http://baz'>qux</a></array>",
+					/* XmlT */		"<array><a href='http://foo'>bar</a><a href='http://baz'>qux</a></array>",
+					/* XmlR */		"<array>\n\t<a href='http://foo'>bar</a>\n\t<a href='http://baz'>qux</a>\n</array>\n",
+					/* XmlNs */		"<array><a href='http://foo'>bar</a><a href='http://baz'>qux</a></array>",
+					/* Html */		"<ul><li><a href='http://foo'>bar</a></li><li><a href='http://baz'>qux</a></li></ul>",
+					/* HtmlT */		"<ul><li><a href='http://foo'>bar</a></li><li><a href='http://baz'>qux</a></li></ul>",
+					/* HtmlR */		"<ul>\n\t<li>\n\t\t<a href='http://foo'>bar</a>\n\t</li>\n\t<li>\n\t\t<a href='http://baz'>qux</a>\n\t</li>\n</ul>\n",
+					/* Uon */		"@((_type=a,a=(href=http://foo),c=@(bar)),(_type=a,a=(href=http://baz),c=@(qux)))",
+					/* UonT */		"@((t=a,a=(href=http://foo),c=@(bar)),(t=a,a=(href=http://baz),c=@(qux)))",
+					/* UonR */		"@(\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://foo\n\t\t),\n\t\tc=@(\n\t\t\tbar\n\t\t)\n\t),\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://baz\n\t\t),\n\t\tc=@(\n\t\t\tqux\n\t\t)\n\t)\n)",
+					/* UrlEnc */	"0=(_type=a,a=(href=http://foo),c=@(bar))&1=(_type=a,a=(href=http://baz),c=@(qux))",
+					/* UrlEncT */	"0=(t=a,a=(href=http://foo),c=@(bar))&1=(t=a,a=(href=http://baz),c=@(qux))",
+					/* UrlEncR */	"0=(\n\t_type=a,\n\ta=(\n\t\thref=http://foo\n\t),\n\tc=@(\n\t\tbar\n\t)\n)\n&1=(\n\t_type=a,\n\ta=(\n\t\thref=http://baz\n\t),\n\tc=@(\n\t\tqux\n\t)\n)",
+					/* MsgPack */	"9283A55F74797065A161A16181A468726566AA687474703A2F2F666F6FA16391A362617283A55F74797065A161A16181A468726566AA687474703A2F2F62617AA16391A3717578",
+					/* MsgPackT */	"9283A174A161A16181A468726566AA687474703A2F2F666F6FA16391A362617283A174A161A16181A468726566AA687474703A2F2F62617AA16391A3717578",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://baz'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>qux</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://baz'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>qux</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:_type>a</jp:_type>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://foo'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>bar</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </rdf:li>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:_type>a</jp:_type>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://baz'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>qux</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
+				)
+				{
+					@Override
+					public void verify(A[] o) {
+						assertInstanceOf(A[].class, o);
+						assertEquals(2, o.length);
+					}
+				}
+			},
+			{	/* 2 */
+				new ComboInput<List<A>>(
+					"List<A>",
+					getType(List.class, A.class),
+					AList.<A>create(a("http://foo", "bar"),a("http://baz", "qux")),
+					/* Json */		"[{_type:'a',a:{href:'http://foo'},c:['bar']},{_type:'a',a:{href:'http://baz'},c:['qux']}]",
+					/* JsonT */		"[{t:'a',a:{href:'http://foo'},c:['bar']},{t:'a',a:{href:'http://baz'},c:['qux']}]",
+					/* JsonR */		"[\n\t{\n\t\t_type: 'a',\n\t\ta: {\n\t\t\thref: 'http://foo'\n\t\t},\n\t\tc: [\n\t\t\t'bar'\n\t\t]\n\t},\n\t{\n\t\t_type: 'a',\n\t\ta: {\n\t\t\thref: 'http://baz'\n\t\t},\n\t\tc: [\n\t\t\t'qux'\n\t\t]\n\t}\n]",
+					/* Xml */		"<array><a href='http://foo'>bar</a><a href='http://baz'>qux</a></array>",
+					/* XmlT */		"<array><a href='http://foo'>bar</a><a href='http://baz'>qux</a></array>",
+					/* XmlR */		"<array>\n\t<a href='http://foo'>bar</a>\n\t<a href='http://baz'>qux</a>\n</array>\n",
+					/* XmlNs */		"<array><a href='http://foo'>bar</a><a href='http://baz'>qux</a></array>",
+					/* Html */		"<ul><li><a href='http://foo'>bar</a></li><li><a href='http://baz'>qux</a></li></ul>",
+					/* HtmlT */		"<ul><li><a href='http://foo'>bar</a></li><li><a href='http://baz'>qux</a></li></ul>",
+					/* HtmlR */		"<ul>\n\t<li>\n\t\t<a href='http://foo'>bar</a>\n\t</li>\n\t<li>\n\t\t<a href='http://baz'>qux</a>\n\t</li>\n</ul>\n",
+					/* Uon */		"@((_type=a,a=(href=http://foo),c=@(bar)),(_type=a,a=(href=http://baz),c=@(qux)))",
+					/* UonT */		"@((t=a,a=(href=http://foo),c=@(bar)),(t=a,a=(href=http://baz),c=@(qux)))",
+					/* UonR */		"@(\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://foo\n\t\t),\n\t\tc=@(\n\t\t\tbar\n\t\t)\n\t),\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://baz\n\t\t),\n\t\tc=@(\n\t\t\tqux\n\t\t)\n\t)\n)",
+					/* UrlEnc */	"0=(_type=a,a=(href=http://foo),c=@(bar))&1=(_type=a,a=(href=http://baz),c=@(qux))",
+					/* UrlEncT */	"0=(t=a,a=(href=http://foo),c=@(bar))&1=(t=a,a=(href=http://baz),c=@(qux))",
+					/* UrlEncR */	"0=(\n\t_type=a,\n\ta=(\n\t\thref=http://foo\n\t),\n\tc=@(\n\t\tbar\n\t)\n)\n&1=(\n\t_type=a,\n\ta=(\n\t\thref=http://baz\n\t),\n\tc=@(\n\t\tqux\n\t)\n)",
+					/* MsgPack */	"9283A55F74797065A161A16181A468726566AA687474703A2F2F666F6FA16391A362617283A55F74797065A161A16181A468726566AA687474703A2F2F62617AA16391A3717578",
+					/* MsgPackT */	"9283A174A161A16181A468726566AA687474703A2F2F666F6FA16391A362617283A174A161A16181A468726566AA687474703A2F2F62617AA16391A3717578",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://baz'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>qux</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://baz'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>qux</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:_type>a</jp:_type>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://foo'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>bar</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </rdf:li>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:_type>a</jp:_type>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://baz'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>qux</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
+				)
+				{
+					@Override
+					public void verify(List<A> o) {
+						assertEquals(2, o.size());
+						assertInstanceOf(A.class, o.get(0));
+						assertInstanceOf(A.class, o.get(1));
+					}
+				}
+			},
+			{	/* 3 */
+				new ComboInput<A[][]>(
+					"A[][]",
+					A[][].class,
+					new A[][]{{a("http://a", "b"),a("http://c", "d")},{},{a("http://e", "f")}},
+					/* Json */		"[[{_type:'a',a:{href:'http://a'},c:['b']},{_type:'a',a:{href:'http://c'},c:['d']}],[],[{_type:'a',a:{href:'http://e'},c:['f']}]]",
+					/* JsonT */		"[[{t:'a',a:{href:'http://a'},c:['b']},{t:'a',a:{href:'http://c'},c:['d']}],[],[{t:'a',a:{href:'http://e'},c:['f']}]]",
+					/* JsonR */		"[\n\t[\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://a'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'b'\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://c'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'd'\n\t\t\t]\n\t\t}\n\t],\n\t[\n\t],\n\t[\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://e'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'f'\n\t\t\t]\n\t\t}\n\t]\n]",
+					/* Xml */		"<array><array><a href='http://a'>b</a><a href='http://c'>d</a></array><array></array><array><a href='http://e'>f</a></array></array>",
+					/* XmlT */		"<array><array><a href='http://a'>b</a><a href='http://c'>d</a></array><array></array><array><a href='http://e'>f</a></array></array>",
+					/* XmlR */		"<array>\n\t<array>\n\t\t<a href='http://a'>b</a>\n\t\t<a href='http://c'>d</a>\n\t</array>\n\t<array>\n\t</array>\n\t<array>\n\t\t<a href='http://e'>f</a>\n\t</array>\n</array>\n",
+					/* XmlNs */		"<array><array><a href='http://a'>b</a><a href='http://c'>d</a></array><array></array><array><a href='http://e'>f</a></array></array>",
+					/* Html */		"<ul><li><ul><li><a href='http://a'>b</a></li><li><a href='http://c'>d</a></li></ul></li><li><ul></ul></li><li><ul><li><a href='http://e'>f</a></li></ul></li></ul>",
+					/* HtmlT */		"<ul><li><ul><li><a href='http://a'>b</a></li><li><a href='http://c'>d</a></li></ul></li><li><ul></ul></li><li><ul><li><a href='http://e'>f</a></li></ul></li></ul>",
+					/* HtmlR */		"<ul>\n\t<li>\n\t\t<ul>\n\t\t\t<li>\n\t\t\t\t<a href='http://a'>b</a>\n\t\t\t</li>\n\t\t\t<li>\n\t\t\t\t<a href='http://c'>d</a>\n\t\t\t</li>\n\t\t</ul>\n\t</li>\n\t<li>\n\t\t<ul></ul>\n\t</li>\n\t<li>\n\t\t<ul>\n\t\t\t<li>\n\t\t\t\t<a href='http://e'>f</a>\n\t\t\t</li>\n\t\t</ul>\n\t</li>\n</ul>\n",
+					/* Uon */		"@(@((_type=a,a=(href=http://a),c=@(b)),(_type=a,a=(href=http://c),c=@(d))),@(),@((_type=a,a=(href=http://e),c=@(f))))",
+					/* UonT */		"@(@((t=a,a=(href=http://a),c=@(b)),(t=a,a=(href=http://c),c=@(d))),@(),@((t=a,a=(href=http://e),c=@(f))))",
+					/* UonR */		"@(\n\t@(\n\t\t(\n\t\t\t_type=a,\n\t\t\ta=(\n\t\t\t\thref=http://a\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tb\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\t_type=a,\n\t\t\ta=(\n\t\t\t\thref=http://c\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\td\n\t\t\t)\n\t\t)\n\t),\n\t@(),\n\t@(\n\t\t(\n\t\t\t_type=a,\n\t\t\ta=(\n\t\t\t\thref=http://e\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tf\n\t\t\t)\n\t\t)\n\t)\n)",
+					/* UrlEnc */	"0=@((_type=a,a=(href=http://a),c=@(b)),(_type=a,a=(href=http://c),c=@(d)))&1=@()&2=@((_type=a,a=(href=http://e),c=@(f)))",
+					/* UrlEncT */	"0=@((t=a,a=(href=http://a),c=@(b)),(t=a,a=(href=http://c),c=@(d)))&1=@()&2=@((t=a,a=(href=http://e),c=@(f)))",
+					/* UrlEncR */	"0=@(\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://a\n\t\t),\n\t\tc=@(\n\t\t\tb\n\t\t)\n\t),\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://c\n\t\t),\n\t\tc=@(\n\t\t\td\n\t\t)\n\t)\n)\n&1=@()\n&2=@(\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://e\n\t\t),\n\t\tc=@(\n\t\t\tf\n\t\t)\n\t)\n)",
+					/* MsgPack */	"939283A55F74797065A161A16181A468726566A8687474703A2F2F61A16391A16283A55F74797065A161A16181A468726566A8687474703A2F2F63A16391A164909183A55F74797065A161A16181A468726566A8687474703A2F2F65A16391A166",
+					/* MsgPackT */	"939283A174A161A16181A468726566A8687474703A2F2F61A16391A16283A174A161A16181A468726566A8687474703A2F2F63A16391A164909183A174A161A16181A468726566A8687474703A2F2F65A16391A166",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://a'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://c'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>d</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://e'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://a'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://c'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>d</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://e'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://a'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>b</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://c'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>d</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq/>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://e'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>f</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
+				)
+				{
+					@Override
+					public void verify(A[][] o) {
+						assertInstanceOf(A[][].class, o);
+						assertEquals(3, o.length);
+						assertEquals(2, o[0].length);
+						assertEquals(0, o[1].length);
+						assertEquals(1, o[2].length);
+					}
+				}
+			},
+			{	/* 4 */
+				new ComboInput<List<List<A>>>(
+					"List<List<A>>",
+					getType(List.class, List.class, A.class),
+					AList.<List<A>>create(AList.<A>create(a("http://a", "b"),a("http://c", "d")),AList.<A>create(a("http://e", "f"))),
+					/* Json */		"[[{_type:'a',a:{href:'http://a'},c:['b']},{_type:'a',a:{href:'http://c'},c:['d']}],[{_type:'a',a:{href:'http://e'},c:['f']}]]",
+					/* JsonT */		"[[{t:'a',a:{href:'http://a'},c:['b']},{t:'a',a:{href:'http://c'},c:['d']}],[{t:'a',a:{href:'http://e'},c:['f']}]]",
+					/* JsonR */		"[\n\t[\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://a'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'b'\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://c'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'd'\n\t\t\t]\n\t\t}\n\t],\n\t[\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://e'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'f'\n\t\t\t]\n\t\t}\n\t]\n]",
+					/* Xml */		"<array><array><a href='http://a'>b</a><a href='http://c'>d</a></array><array><a href='http://e'>f</a></array></array>",
+					/* XmlT */		"<array><array><a href='http://a'>b</a><a href='http://c'>d</a></array><array><a href='http://e'>f</a></array></array>",
+					/* XmlR */		"<array>\n\t<array>\n\t\t<a href='http://a'>b</a>\n\t\t<a href='http://c'>d</a>\n\t</array>\n\t<array>\n\t\t<a href='http://e'>f</a>\n\t</array>\n</array>\n",
+					/* XmlNs */		"<array><array><a href='http://a'>b</a><a href='http://c'>d</a></array><array><a href='http://e'>f</a></array></array>",
+					/* Html */		"<ul><li><ul><li><a href='http://a'>b</a></li><li><a href='http://c'>d</a></li></ul></li><li><ul><li><a href='http://e'>f</a></li></ul></li></ul>",
+					/* HtmlT */		"<ul><li><ul><li><a href='http://a'>b</a></li><li><a href='http://c'>d</a></li></ul></li><li><ul><li><a href='http://e'>f</a></li></ul></li></ul>",
+					/* HtmlR */		"<ul>\n\t<li>\n\t\t<ul>\n\t\t\t<li>\n\t\t\t\t<a href='http://a'>b</a>\n\t\t\t</li>\n\t\t\t<li>\n\t\t\t\t<a href='http://c'>d</a>\n\t\t\t</li>\n\t\t</ul>\n\t</li>\n\t<li>\n\t\t<ul>\n\t\t\t<li>\n\t\t\t\t<a href='http://e'>f</a>\n\t\t\t</li>\n\t\t</ul>\n\t</li>\n</ul>\n",
+					/* Uon */		"@(@((_type=a,a=(href=http://a),c=@(b)),(_type=a,a=(href=http://c),c=@(d))),@((_type=a,a=(href=http://e),c=@(f))))",
+					/* UonT */		"@(@((t=a,a=(href=http://a),c=@(b)),(t=a,a=(href=http://c),c=@(d))),@((t=a,a=(href=http://e),c=@(f))))",
+					/* UonR */		"@(\n\t@(\n\t\t(\n\t\t\t_type=a,\n\t\t\ta=(\n\t\t\t\thref=http://a\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tb\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\t_type=a,\n\t\t\ta=(\n\t\t\t\thref=http://c\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\td\n\t\t\t)\n\t\t)\n\t),\n\t@(\n\t\t(\n\t\t\t_type=a,\n\t\t\ta=(\n\t\t\t\thref=http://e\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tf\n\t\t\t)\n\t\t)\n\t)\n)",
+					/* UrlEnc */	"0=@((_type=a,a=(href=http://a),c=@(b)),(_type=a,a=(href=http://c),c=@(d)))&1=@((_type=a,a=(href=http://e),c=@(f)))",
+					/* UrlEncT */	"0=@((t=a,a=(href=http://a),c=@(b)),(t=a,a=(href=http://c),c=@(d)))&1=@((t=a,a=(href=http://e),c=@(f)))",
+					/* UrlEncR */	"0=@(\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://a\n\t\t),\n\t\tc=@(\n\t\t\tb\n\t\t)\n\t),\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://c\n\t\t),\n\t\tc=@(\n\t\t\td\n\t\t)\n\t)\n)\n&1=@(\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://e\n\t\t),\n\t\tc=@(\n\t\t\tf\n\t\t)\n\t)\n)",
+					/* MsgPack */	"929283A55F74797065A161A16181A468726566A8687474703A2F2F61A16391A16283A55F74797065A161A16181A468726566A8687474703A2F2F63A16391A1649183A55F74797065A161A16181A468726566A8687474703A2F2F65A16391A166",
+					/* MsgPackT */	"929283A174A161A16181A468726566A8687474703A2F2F61A16391A16283A174A161A16181A468726566A8687474703A2F2F63A16391A1649183A174A161A16181A468726566A8687474703A2F2F65A16391A166",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://a'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://c'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>d</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://e'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://a'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://c'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>d</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://e'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://a'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>b</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://c'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>d</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://e'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>f</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
+				)
+				{
+					@Override
+					public void verify(List<List<A>> o) {
+						assertInstanceOf(A.class, o.get(0).get(0));
+					}
+				}
+			},
+			{	/* 5 */
+				new ComboInput<java.util.Map<String,A>>(
+					"Map<String,A>",
+					getType(java.util.Map.class, String.class, A.class),
+					AMap.<String,A>create("a", a("http://b", "c")).append("d", a("http://e", "f")),
+					/* Json */		"{a:{_type:'a',a:{href:'http://b'},c:['c']},d:{_type:'a',a:{href:'http://e'},c:['f']}}",
+					/* JsonT */		"{a:{t:'a',a:{href:'http://b'},c:['c']},d:{t:'a',a:{href:'http://e'},c:['f']}}",
+					/* JsonR */		"{\n\ta: {\n\t\t_type: 'a',\n\t\ta: {\n\t\t\thref: 'http://b'\n\t\t},\n\t\tc: [\n\t\t\t'c'\n\t\t]\n\t},\n\td: {\n\t\t_type: 'a',\n\t\ta: {\n\t\t\thref: 'http://e'\n\t\t},\n\t\tc: [\n\t\t\t'f'\n\t\t]\n\t}\n}",
+					/* Xml */		"<object><a href='http://b'>c</a><a _name='d' href='http://e'>f</a></object>",
+					/* XmlT */		"<object><a href='http://b'>c</a><a _name='d' href='http://e'>f</a></object>",
+					/* XmlR */		"<object>\n\t<a href='http://b'>c</a>\n\t<a _name='d' href='http://e'>f</a>\n</object>\n",
+					/* XmlNs */		"<object><a href='http://b'>c</a><a _name='d' href='http://e'>f</a></object>",
+					/* Html */		"<table><tr><td>a</td><td><a href='http://b'>c</a></td></tr><tr><td>d</td><td><a href='http://e'>f</a></td></tr></table>",
+					/* HtmlT */		"<table><tr><td>a</td><td><a href='http://b'>c</a></td></tr><tr><td>d</td><td><a href='http://e'>f</a></td></tr></table>",
+					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>\n\t\t\t<a href='http://b'>c</a>\n\t\t</td>\n\t</tr>\n\t<tr>\n\t\t<td>d</td>\n\t\t<td>\n\t\t\t<a href='http://e'>f</a>\n\t\t</td>\n\t</tr>\n</table>\n",
+					/* Uon */		"(a=(_type=a,a=(href=http://b),c=@(c)),d=(_type=a,a=(href=http://e),c=@(f)))",
+					/* UonT */		"(a=(t=a,a=(href=http://b),c=@(c)),d=(t=a,a=(href=http://e),c=@(f)))",
+					/* UonR */		"(\n\ta=(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://b\n\t\t),\n\t\tc=@(\n\t\t\tc\n\t\t)\n\t),\n\td=(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://e\n\t\t),\n\t\tc=@(\n\t\t\tf\n\t\t)\n\t)\n)",
+					/* UrlEnc */	"a=(_type=a,a=(href=http://b),c=@(c))&d=(_type=a,a=(href=http://e),c=@(f))",
+					/* UrlEncT */	"a=(t=a,a=(href=http://b),c=@(c))&d=(t=a,a=(href=http://e),c=@(f))",
+					/* UrlEncR */	"a=(\n\t_type=a,\n\ta=(\n\t\thref=http://b\n\t),\n\tc=@(\n\t\tc\n\t)\n)\n&d=(\n\t_type=a,\n\ta=(\n\t\thref=http://e\n\t),\n\tc=@(\n\t\tf\n\t)\n)",
+					/* MsgPack */	"82A16183A55F74797065A161A16181A468726566A8687474703A2F2F62A16391A163A16483A55F74797065A161A16181A468726566A8687474703A2F2F65A16391A166",
+					/* MsgPackT */	"82A16183A174A161A16181A468726566A8687474703A2F2F62A16391A163A16483A174A161A16181A468726566A8687474703A2F2F65A16391A166",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:a rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:a>\n<jp:d rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://e'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:d>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:a rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:a>\n<jp:d rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://e'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:d>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:a rdf:parseType='Resource'>\n      <jp:_type>a</jp:_type>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://b'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>c</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </jp:a>\n    <jp:d rdf:parseType='Resource'>\n      <jp:_type>a</jp:_type>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://e'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>f</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </jp:d>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+				{
+					@Override
+					public void verify(java.util.Map<String,A> o) {
+						assertInstanceOf(A.class, o.get("a"));
+						assertInstanceOf(A.class, o.get("d"));
+					}
+				}
+			},
+			{	/* 6 */
+				new ComboInput<java.util.Map<String,A[][]>>(
+					"Map<String,A[][]>",
+					getType(java.util.Map.class, String.class, A[][].class),
+					AMap.<String,A[][]>create("a", new A[][]{{a("http://b", "c"),a("http://d", "e")},{}}).append("f", new A[][]{{a("http://g", "h")}}),
+					/* Json */		"{a:[[{_type:'a',a:{href:'http://b'},c:['c']},{_type:'a',a:{href:'http://d'},c:['e']}],[]],f:[[{_type:'a',a:{href:'http://g'},c:['h']}]]}",
+					/* JsonT */		"{a:[[{t:'a',a:{href:'http://b'},c:['c']},{t:'a',a:{href:'http://d'},c:['e']}],[]],f:[[{t:'a',a:{href:'http://g'},c:['h']}]]}",
+					/* JsonR */		"{\n\ta: [\n\t\t[\n\t\t\t{\n\t\t\t\t_type: 'a',\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t_type: 'a',\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://d'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'e'\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t[\n\t\t]\n\t],\n\tf: [\n\t\t[\n\t\t\t{\n\t\t\t\t_type: 'a',\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://g'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'h'\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t]\n}",
+					/* Xml */		"<object><a _type='array'><array><a href='http://b'>c</a><a href='http://d'>e</a></array><array></array></a><f _type='array'><array><a href='http://g'>h</a></array></f></object>",
+					/* XmlT */		"<object><a t='array'><array><a href='http://b'>c</a><a href='http://d'>e</a></array><array></array></a><f t='array'><array><a href='http://g'>h</a></array></f></object>",
+					/* XmlR */		"<object>\n\t<a _type='array'>\n\t\t<array>\n\t\t\t<a href='http://b'>c</a>\n\t\t\t<a href='http://d'>e</a>\n\t\t</array>\n\t\t<array>\n\t\t</array>\n\t</a>\n\t<f _type='array'>\n\t\t<array>\n\t\t\t<a href='http://g'>h</a>\n\t\t</array>\n\t</f>\n</object>\n",
+					/* XmlNs */		"<object><a _type='array'><array><a href='http://b'>c</a><a href='http://d'>e</a></array><array></array></a><f _type='array'><array><a href='http://g'>h</a></array></f></object>",
+					/* Html */		"<table><tr><td>a</td><td><ul><li><ul><li><a href='http://b'>c</a></li><li><a href='http://d'>e</a></li></ul></li><li><ul></ul></li></ul></td></tr><tr><td>f</td><td><ul><li><ul><li><a href='http://g'>h</a></li></ul></li></ul></td></tr></table>",
+					/* HtmlT */		"<table><tr><td>a</td><td><ul><li><ul><li><a href='http://b'>c</a></li><li><a href='http://d'>e</a></li></ul></li><li><ul></ul></li></ul></td></tr><tr><td>f</td><td><ul><li><ul><li><a href='http://g'>h</a></li></ul></li></ul></td></tr></table>",
+					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>\n\t\t\t<ul>\n\t\t\t\t<li>\n\t\t\t\t\t<ul>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<a href='http://d'>e</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<ul></ul>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</td>\n\t</tr>\n\t<tr>\n\t\t<td>f</td>\n\t\t<td>\n\t\t\t<ul>\n\t\t\t\t<li>\n\t\t\t\t\t<ul>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<a href='http://g'>h</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</td>\n\t</tr>\n</table>\n",
+					/* Uon */		"(a=@(@((_type=a,a=(href=http://b),c=@(c)),(_type=a,a=(href=http://d),c=@(e))),@()),f=@(@((_type=a,a=(href=http://g),c=@(h)))))",
+					/* UonT */		"(a=@(@((t=a,a=(href=http://b),c=@(c)),(t=a,a=(href=http://d),c=@(e))),@()),f=@(@((t=a,a=(href=http://g),c=@(h)))))",
+					/* UonR */		"(\n\ta=@(\n\t\t@(\n\t\t\t(\n\t\t\t\t_type=a,\n\t\t\t\ta=(\n\t\t\t\t\thref=http://b\n\t\t\t\t),\n\t\t\t\tc=@(\n\t\t\t\t\tc\n\t\t\t\t)\n\t\t\t),\n\t\t\t(\n\t\t\t\t_type=a,\n\t\t\t\ta=(\n\t\t\t\t\thref=http://d\n\t\t\t\t),\n\t\t\t\tc=@(\n\t\t\t\t\te\n\t\t\t\t)\n\t\t\t)\n\t\t),\n\t\t@()\n\t),\n\tf=@(\n\t\t@(\n\t\t\t(\n\t\t\t\t_type=a,\n\t\t\t\ta=(\n\t\t\t\t\thref=http://g\n\t\t\t\t),\n\t\t\t\tc=@(\n\t\t\t\t\th\n\t\t\t\t)\n\t\t\t)\n\t\t)\n\t)\n)",
+					/* UrlEnc */	"a=@(@((_type=a,a=(href=http://b),c=@(c)),(_type=a,a=(href=http://d),c=@(e))),@())&f=@(@((_type=a,a=(href=http://g),c=@(h))))",
+					/* UrlEncT */	"a=@(@((t=a,a=(href=http://b),c=@(c)),(t=a,a=(href=http://d),c=@(e))),@())&f=@(@((t=a,a=(href=http://g),c=@(h))))",
+					/* UrlEncR */	"a=@(\n\t@(\n\t\t(\n\t\t\t_type=a,\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\t_type=a,\n\t\t\ta=(\n\t\t\t\thref=http://d\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\te\n\t\t\t)\n\t\t)\n\t),\n\t@()\n)\n&f=@(\n\t@(\n\t\t(\n\t\t\t_type=a,\n\t\t\ta=(\n\t\t\t\thref=http://g\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\th\n\t\t\t)\n\t\t)\n\t)\n)",
+					/* MsgPack */	"82A161929283A55F74797065A161A16181A468726566A8687474703A2F2F62A16391A16383A55F74797065A161A16181A468726566A8687474703A2F2F64A16391A16590A166919183A55F74797065A161A16181A468726566A8687474703A2F2F67A16391A168",
+					/* MsgPackT */	"82A161929283A174A161A16181A468726566A8687474703A2F2F62A16391A16383A174A161A16181A468726566A8687474703A2F2F64A16391A16590A166919183A174A161A16181A468726566A8687474703A2F2F67A16391A168",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:a>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://d'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>e</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n</rdf:Seq>\n</jp:a>\n<jp:f>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://g'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>h</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:a>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://d'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>e</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n</rdf:Seq>\n</jp:a>\n<jp:f>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://g'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>h</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:a>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li rdf:parseType='Resource'>\n              <jp:_type>a</jp:_type>\n              <jp:a rdf:parseType='Resource'>\n                <jp:href rdf:resource='http://b'/>\n              </jp:a>\n              <jp:c>\n                <rdf:Seq>\n                  <rdf:li>c</rdf:li>\n                </rdf:Seq>\n              </jp:c>\n            </rdf:li>\n            <rdf:li rdf:parseType='Resource'>\n              <jp:_type>a</jp:_type>\n              <jp:a rdf:parseType='Resource'>\n                <jp:href rdf:resource='http://d'/>\n              </jp:a>\n              <jp:c>\n                <rdf:Seq>\n                  <rdf:li>e</rdf:li>\n                </rdf:Seq>\n              </jp:c>\n            </rdf:li>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li>\n          <rdf:Seq/>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:a>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li rdf:parseType='Resource'>\n              <jp:_type>a</jp:_type>\n              <jp:a rdf:parseType='Resource'>\n                <jp:href rdf:resource='http://g'/>\n              </jp:a>\n              <jp:c>\n                <rdf:Seq>\n                  <rdf:li>h</rdf:li>\n                </rdf:Seq>\n              </jp:c>\n            </rdf:li>\n          </rdf:Seq>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+				{
+					@Override
+					public void verify(java.util.Map<String,A[][]> o) {
+						assertInstanceOf(A.class, o.get("a")[0][0]);
+						assertInstanceOf(A.class, o.get("f")[0][0]);
+					}
+				}
+			},
+			{	/* 7 */
+				new ComboInput<BeanWithAField>(
+					"BeanWithAField",
+					BeanWithAField.class,
+					BeanWithAField.create(a("http://b", "c")),
+					/* Json */		"{f1:{a:{href:'http://b'},c:['c']},f2:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}],f3:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}]}",
+					/* JsonT */		"{f1:{a:{href:'http://b'},c:['c']},f2:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}],f3:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}]}",
+					/* JsonR */		"{\n\tf1: {\n\t\ta: {\n\t\t\thref: 'http://b'\n\t\t},\n\t\tc: [\n\t\t\t'c'\n\t\t]\n\t},\n\tf2: [\n\t\t{\n\t\t\ta: {\n\t\t\t\thref: 'http://b'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'c'\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\ta: {\n\t\t\t\thref: 'http://b'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'c'\n\t\t\t]\n\t\t}\n\t],\n\tf3: [\n\t\t{\n\t\t\ta: {\n\t\t\t\thref: 'http://b'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'c'\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\ta: {\n\t\t\t\thref: 'http://b'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'c'\n\t\t\t]\n\t\t}\n\t]\n}",
+					/* Xml */		"<object><a _name='f1' href='http://b'>c</a><f2><a href='http://b'>c</a><a href='http://b'>c</a></f2><f3><a href='http://b'>c</a><a href='http://b'>c</a></f3></object>",
+					/* XmlT */		"<object><a _name='f1' href='http://b'>c</a><f2><a href='http://b'>c</a><a href='http://b'>c</a></f2><f3><a href='http://b'>c</a><a href='http://b'>c</a></f3></object>",
+					/* XmlR */		"<object>\n\t<a _name='f1' href='http://b'>c</a>\n\t<f2>\n\t\t<a href='http://b'>c</a>\n\t\t<a href='http://b'>c</a>\n\t</f2>\n\t<f3>\n\t\t<a href='http://b'>c</a>\n\t\t<a href='http://b'>c</a>\n\t</f3>\n</object>\n",
+					/* XmlNs */		"<object><a _name='f1' href='http://b'>c</a><f2><a href='http://b'>c</a><a href='http://b'>c</a></f2><f3><a href='http://b'>c</a><a href='http://b'>c</a></f3></object>",
+					/* Html */		"<table><tr><td>f1</td><td><a href='http://b'>c</a></td></tr><tr><td>f2</td><td><ul><li><a href='http://b'>c</a></li><li><a href='http://b'>c</a></li></ul></td></tr><tr><td>f3</td><td><ul><li><a href='http://b'>c</a></li><li><a href='http://b'>c</a></li></ul></td></tr></table>",
+					/* HtmlT */		"<table><tr><td>f1</td><td><a href='http://b'>c</a></td></tr><tr><td>f2</td><td><ul><li><a href='http://b'>c</a></li><li><a href='http://b'>c</a></li></ul></td></tr><tr><td>f3</td><td><ul><li><a href='http://b'>c</a></li><li><a href='http://b'>c</a></li></ul></td></tr></table>",
+					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>f1</td>\n\t\t<td>\n\t\t\t<a href='http://b'>c</a>\n\t\t</td>\n\t</tr>\n\t<tr>\n\t\t<td>f2</td>\n\t\t<td>\n\t\t\t<ul>\n\t\t\t\t<li>\n\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</td>\n\t</tr>\n\t<tr>\n\t\t<td>f3</td>\n\t\t<td>\n\t\t\t<ul>\n\t\t\t\t<li>\n\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</td>\n\t</tr>\n</table>\n",
+					/* Uon */		"(f1=(a=(href=http://b),c=@(c)),f2=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))),f3=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))))",
+					/* UonT */		"(f1=(a=(href=http://b),c=@(c)),f2=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))),f3=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))))",
+					/* UonR */		"(\n\tf1=(\n\t\ta=(\n\t\t\thref=http://b\n\t\t),\n\t\tc=@(\n\t\t\tc\n\t\t)\n\t),\n\tf2=@(\n\t\t(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t)\n\t),\n\tf3=@(\n\t\t(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t)\n\t)\n)",
+					/* UrlEnc */	"f1=(a=(href=http://b),c=@(c))&f2=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c)))&f3=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c)))",
+					/* UrlEncT */	"f1=(a=(href=http://b),c=@(c))&f2=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c)))&f3=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c)))",
+					/* UrlEncR */	"f1=(\n\ta=(\n\t\thref=http://b\n\t),\n\tc=@(\n\t\tc\n\t)\n)\n&f2=@(\n\t(\n\t\ta=(\n\t\t\thref=http://b\n\t\t),\n\t\tc=@(\n\t\t\tc\n\t\t)\n\t),\n\t(\n\t\ta=(\n\t\t\thref=http://b\n\t\t),\n\t\tc=@(\n\t\t\tc\n\t\t)\n\t)\n)\n&f3=@(\n\t(\n\t\ta=(\n\t\t\thref=http://b\n\t\t),\n\t\tc=@(\n\t\t\tc\n\t\t)\n\t),\n\t(\n\t\ta=(\n\t\t\thref=http://b\n\t\t),\n\t\tc=@(\n\t\t\tc\n\t\t)\n\t)\n)",
+					/* MsgPack */	"83A2663182A16181A468726566A8687474703A2F2F62A16391A163A266329282A16181A468726566A8687474703A2F2F62A16391A16382A16181A468726566A8687474703A2F2F62A16391A163A266339282A16181A468726566A8687474703A2F2F62A16391A16382A16181A468726566A8687474703A2F2F62A16391A163",
+					/* MsgPackT */	"83A2663182A16181A468726566A8687474703A2F2F62A16391A163A266329282A16181A468726566A8687474703A2F2F62A16391A16382A16181A468726566A8687474703A2F2F62A16391A163A266339282A16181A468726566A8687474703A2F2F62A16391A16382A16181A468726566A8687474703A2F2F62A16391A163",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f1 rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f2>\n<jp:f3>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f1 rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f2>\n<jp:f3>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f1 rdf:parseType='Resource'>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://b'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>c</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </jp:f1>\n    <jp:f2>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://b'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://b'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:f2>\n    <jp:f3>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://b'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://b'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:f3>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+				{
+					@Override
+					public void verify(BeanWithAField o) {
+						assertInstanceOf(BeanWithAField.class, o);
+					}
+				}
+			},
+			{	/* 8 */
+				new ComboInput<BeanWithAField[]>(
+					"BeanWithAField[]",
+					BeanWithAField[].class,
+					new BeanWithAField[]{BeanWithAField.create(a("http://b", "c"))},
+					/* Json */		"[{f1:{a:{href:'http://b'},c:['c']},f2:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}],f3:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}]}]",
+					/* JsonT */		"[{f1:{a:{href:'http://b'},c:['c']},f2:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}],f3:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}]}]",
+					/* JsonR */		"[\n\t{\n\t\tf1: {\n\t\t\ta: {\n\t\t\t\thref: 'http://b'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'c'\n\t\t\t]\n\t\t},\n\t\tf2: [\n\t\t\t{\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\tf3: [\n\t\t\t{\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t}\n]",
+					/* Xml */		"<array><object><a _name='f1' href='http://b'>c</a><f2><a href='http://b'>c</a><a href='http://b'>c</a></f2><f3><a href='http://b'>c</a><a href='http://b'>c</a></f3></object></array>",
+					/* XmlT */		"<array><object><a _name='f1' href='http://b'>c</a><f2><a href='http://b'>c</a><a href='http://b'>c</a></f2><f3><a href='http://b'>c</a><a href='http://b'>c</a></f3></object></array>",
+					/* XmlR */		"<array>\n\t<object>\n\t\t<a _name='f1' href='http://b'>c</a>\n\t\t<f2>\n\t\t\t<a href='http://b'>c</a>\n\t\t\t<a href='http://b'>c</a>\n\t\t</f2>\n\t\t<f3>\n\t\t\t<a href='http://b'>c</a>\n\t\t\t<a href='http://b'>c</a>\n\t\t</f3>\n\t</object>\n</array>\n",
+					/* XmlNs */		"<array><object><a _name='f1' href='http://b'>c</a><f2><a href='http://b'>c</a><a href='http://b'>c</a></f2><f3><a href='http://b'>c</a><a href='http://b'>c</a></f3></object></array>",
+					/* Html */		"<table _type='array'><tr><th>f1</th><th>f2</th><th>f3</th></tr><tr><td><a href='http://b'>c</a></td><td><ul><li><a href='http://b'>c</a></li><li><a href='http://b'>c</a></li></ul></td><td><ul><li><a href='http://b'>c</a></li><li><a href='http://b'>c</a></li></ul></td></tr></table>",
+					/* HtmlT */		"<table t='array'><tr><th>f1</th><th>f2</th><th>f3</th></tr><tr><td><a href='http://b'>c</a></td><td><ul><li><a href='http://b'>c</a></li><li><a href='http://b'>c</a></li></ul></td><td><ul><li><a href='http://b'>c</a></li><li><a href='http://b'>c</a></li></ul></td></tr></table>",
+					/* HtmlR */		"<table _type='array'>\n\t<tr>\n\t\t<th>f1</th>\n\t\t<th>f2</th>\n\t\t<th>f3</th>\n\t</tr>\n\t<tr>\n\t\t<td>\n\t\t\t<a href='http://b'>c</a>\n\t\t</td>\n\t\t<td>\n\t\t\t<ul>\n\t\t\t\t<li>\n\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</td>\n\t\t<td>\n\t\t\t<ul>\n\t\t\t\t<li>\n\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</td>\n\t</tr>\n</table>\n",
+					/* Uon */		"@((f1=(a=(href=http://b),c=@(c)),f2=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))),f3=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c)))))",
+					/* UonT */		"@((f1=(a=(href=http://b),c=@(c)),f2=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))),f3=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c)))))",
+					/* UonR */		"@(\n\t(\n\t\tf1=(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t),\n\t\tf2=@(\n\t\t\t(\n\t\t\t\ta=(\n\t\t\t\t\thref=http://b\n\t\t\t\t),\n\t\t\t\tc=@(\n\t\t\t\t\tc\n\t\t\t\t)\n\t\t\t),\n\t\t\t(\n\t\t\t\ta=(\n\t\t\t\t\thref=http://b\n\t\t\t\t),\n\t\t\t\tc=@(\n\t\t\t\t\tc\n\t\t\t\t)\n\t\t\t)\n\t\t),\n\t\tf3=@(\n\t\t\t(\n\t\t\t\ta=(\n\t\t\t\t\thref=http://b\n\t\t\t\t),\n\t\t\t\tc=@(\n\t\t\t\t\tc\n\t\t\t\t)\n\t\t\t),\n\t\t\t(\n\t\t\t\ta=(\n\t\t\t\t\thref=http://b\n\t\t\t\t),\n\t\t\t\tc=@(\n\t\t\t\t\tc\n\t\t\t\t)\n\t\t\t)\n\t\t)\n\t)\n)",
+					/* UrlEnc */	"0=(f1=(a=(href=http://b),c=@(c)),f2=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))),f3=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))))",
+					/* UrlEncT */	"0=(f1=(a=(href=http://b),c=@(c)),f2=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))),f3=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))))",
+					/* UrlEncR */	"0=(\n\tf1=(\n\t\ta=(\n\t\t\thref=http://b\n\t\t),\n\t\tc=@(\n\t\t\tc\n\t\t)\n\t),\n\tf2=@(\n\t\t(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t)\n\t),\n\tf3=@(\n\t\t(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t)\n\t)\n)",
+					/* MsgPack */	"9183A2663182A16181A468726566A8687474703A2F2F62A16391A163A266329282A16181A468726566A8687474703A2F2F62A16391A16382A16181A468726566A8687474703A2F2F62A16391A163A266339282A16181A468726566A8687474703A2F2F62A16391A16382A16181A468726566A8687474703A2F2F62A16391A163",
+					/* MsgPackT */	"9183A2663182A16181A468726566A8687474703A2F2F62A16391A163A266329282A16181A468726566A8687474703A2F2F62A16391A16382A16181A468726566A8687474703A2F2F62A16391A163A266339282A16181A468726566A8687474703A2F2F62A16391A16382A16181A468726566A8687474703A2F2F62A16391A163",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1 rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f2>\n<jp:f3>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f3>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1 rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f2>\n<jp:f3>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f3>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:f1 rdf:parseType='Resource'>\n        <jp:a rdf:parseType='Resource'>\n          <jp:href rdf:resource='http://b'/>\n        </jp:a>\n        <jp:c>\n          <rdf:Seq>\n            <rdf:li>c</rdf:li>\n          </rdf:Seq>\n        </jp:c>\n      </jp:f1>\n      <jp:f2>\n        <rdf:Seq>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n        </rdf:Seq>\n      </jp:f2>\n      <jp:f3>\n        <rdf:Seq>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n        </rdf:Seq>\n      </jp:f3>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
+				)
+				{
+					@Override
+					public void verify(BeanWithAField[] o) {
+						assertInstanceOf(BeanWithAField[].class, o);
+					}
+				}
+			},
+			{	/* 9 */
+				new ComboInput<List<BeanWithAField>>(
+					"List<BeanWithAField>",
+					getType(List.class, BeanWithAField.class),
+					AList.<BeanWithAField>create(BeanWithAField.create(a("http://b", "c"))),
+					/* Json */		"[{f1:{a:{href:'http://b'},c:['c']},f2:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}],f3:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}]}]",
+					/* JsonT */		"[{f1:{a:{href:'http://b'},c:['c']},f2:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}],f3:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}]}]",
+					/* JsonR */		"[\n\t{\n\t\tf1: {\n\t\t\ta: {\n\t\t\t\thref: 'http://b'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'c'\n\t\t\t]\n\t\t},\n\t\tf2: [\n\t\t\t{\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\tf3: [\n\t\t\t{\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t}\n]",
+					/* Xml */		"<array><object><a _name='f1' href='http://b'>c</a><f2><a href='http://b'>c</a><a href='http://b'>c</a></f2><f3><a href='http://b'>c</a><a href='http://b'>c</a></f3></object></array>",
+					/* XmlT */		"<array><object><a _name='f1' href='http://b'>c</a><f2><a href='http://b'>c</a><a href='http://b'>c</a></f2><f3><a href='http://b'>c</a><a href='http://b'>c</a></f3></object></array>",
+					/* XmlR */		"<array>\n\t<object>\n\t\t<a _name='f1' href='http://b'>c</a>\n\t\t<f2>\n\t\t\t<a href='http://b'>c</a>\n\t\t\t<a href='http://b'>c</a>\n\t\t</f2>\n\t\t<f3>\n\t\t\t<a href='http://b'>c</a>\n\t\t\t<a href='http://b'>c</a>\n\t\t</f3>\n\t</object>\n</array>\n",
+					/* XmlNs */		"<array><object><a _name='f1' href='http://b'>c</a><f2><a href='http://b'>c</a><a href='http://b'>c</a></f2><f3><a href='http://b'>c</a><a href='http://b'>c</a></f3></object></array>",
+					/* Html */		"<table _type='array'><tr><th>f1</th><th>f2</th><th>f3</th></tr><tr><td><a href='http://b'>c</a></td><td><ul><li><a href='http://b'>c</a></li><li><a href='http://b'>c</a></li></ul></td><td><ul><li><a href='http://b'>c</a></li><li><a href='http://b'>c</a></li></ul></td></tr></table>",
+					/* HtmlT */		"<table t='array'><tr><th>f1</th><th>f2</th><th>f3</th></tr><tr><td><a href='http://b'>c</a></td><td><ul><li><a href='http://b'>c</a></li><li><a href='http://b'>c</a></li></ul></td><td><ul><li><a href='http://b'>c</a></li><li><a href='http://b'>c</a></li></ul></td></tr></table>",
+					/* HtmlR */		"<table _type='array'>\n\t<tr>\n\t\t<th>f1</th>\n\t\t<th>f2</th>\n\t\t<th>f3</th>\n\t</tr>\n\t<tr>\n\t\t<td>\n\t\t\t<a href='http://b'>c</a>\n\t\t</td>\n\t\t<td>\n\t\t\t<ul>\n\t\t\t\t<li>\n\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</td>\n\t\t<td>\n\t\t\t<ul>\n\t\t\t\t<li>\n\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<a href='http://b'>c</a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</td>\n\t</tr>\n</table>\n",
+					/* Uon */		"@((f1=(a=(href=http://b),c=@(c)),f2=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))),f3=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c)))))",
+					/* UonT */		"@((f1=(a=(href=http://b),c=@(c)),f2=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))),f3=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c)))))",
+					/* UonR */		"@(\n\t(\n\t\tf1=(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t),\n\t\tf2=@(\n\t\t\t(\n\t\t\t\ta=(\n\t\t\t\t\thref=http://b\n\t\t\t\t),\n\t\t\t\tc=@(\n\t\t\t\t\tc\n\t\t\t\t)\n\t\t\t),\n\t\t\t(\n\t\t\t\ta=(\n\t\t\t\t\thref=http://b\n\t\t\t\t),\n\t\t\t\tc=@(\n\t\t\t\t\tc\n\t\t\t\t)\n\t\t\t)\n\t\t),\n\t\tf3=@(\n\t\t\t(\n\t\t\t\ta=(\n\t\t\t\t\thref=http://b\n\t\t\t\t),\n\t\t\t\tc=@(\n\t\t\t\t\tc\n\t\t\t\t)\n\t\t\t),\n\t\t\t(\n\t\t\t\ta=(\n\t\t\t\t\thref=http://b\n\t\t\t\t),\n\t\t\t\tc=@(\n\t\t\t\t\tc\n\t\t\t\t)\n\t\t\t)\n\t\t)\n\t)\n)",
+					/* UrlEnc */	"0=(f1=(a=(href=http://b),c=@(c)),f2=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))),f3=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))))",
+					/* UrlEncT */	"0=(f1=(a=(href=http://b),c=@(c)),f2=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))),f3=@((a=(href=http://b),c=@(c)),(a=(href=http://b),c=@(c))))",
+					/* UrlEncR */	"0=(\n\tf1=(\n\t\ta=(\n\t\t\thref=http://b\n\t\t),\n\t\tc=@(\n\t\t\tc\n\t\t)\n\t),\n\tf2=@(\n\t\t(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t)\n\t),\n\tf3=@(\n\t\t(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\ta=(\n\t\t\t\thref=http://b\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t)\n\t)\n)",
+					/* MsgPack */	"9183A2663182A16181A468726566A8687474703A2F2F62A16391A163A266329282A16181A468726566A8687474703A2F2F62A16391A16382A16181A468726566A8687474703A2F2F62A16391A163A266339282A16181A468726566A8687474703A2F2F62A16391A16382A16181A468726566A8687474703A2F2F62A16391A163",
+					/* MsgPackT */	"9183A2663182A16181A468726566A8687474703A2F2F62A16391A163A266329282A16181A468726566A8687474703A2F2F62A16391A16382A16181A468726566A8687474703A2F2F62A16391A163A266339282A16181A468726566A8687474703A2F2F62A16391A16382A16181A468726566A8687474703A2F2F62A16391A163",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1 rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f2>\n<jp:f3>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f3>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1 rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f2>\n<jp:f3>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f3>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:f1 rdf:parseType='Resource'>\n        <jp:a rdf:parseType='Resource'>\n          <jp:href rdf:resource='http://b'/>\n        </jp:a>\n        <jp:c>\n          <rdf:Seq>\n            <rdf:li>c</rdf:li>\n          </rdf:Seq>\n        </jp:c>\n      </jp:f1>\n      <jp:f2>\n        <rdf:Seq>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n        </rdf:Seq>\n      </jp:f2>\n      <jp:f3>\n        <rdf:Seq>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n        </rdf:Seq>\n      </jp:f3>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
+				)
+				{
+					@Override
+					public void verify(List<BeanWithAField> o) {
+						assertInstanceOf(BeanWithAField.class, o.get(0));
+					}
+				}
+			},
+			{	/* 10 */
 				new ComboInput<A>(
 					"A-2",
 					A.class,
@@ -101,7 +418,41 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 2 */
+			{	/* 11 */
+				new ComboInput<A[][]>(
+					"A[][]-2",
+					A[][].class,
+					new A[][]{{a("http://a", "b", btag, "c"),a("http://d", "e", btag, "f")},{},{a("http://g", "h", btag, "i")}},
+					/* Json */		"[[{_type:'a',a:{href:'http://a'},c:['b',{_type:'b',c:['bbb']},'c']},{_type:'a',a:{href:'http://d'},c:['e',{_type:'b',c:['bbb']},'f']}],[],[{_type:'a',a:{href:'http://g'},c:['h',{_type:'b',c:['bbb']},'i']}]]",
+					/* JsonT */		"[[{t:'a',a:{href:'http://a'},c:['b',{t:'b',c:['bbb']},'c']},{t:'a',a:{href:'http://d'},c:['e',{t:'b',c:['bbb']},'f']}],[],[{t:'a',a:{href:'http://g'},c:['h',{t:'b',c:['bbb']},'i']}]]",
+					/* JsonR */		"[\n\t[\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://a'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'b',\n\t\t\t\t{\n\t\t\t\t\t_type: 'b',\n\t\t\t\t\tc: [\n\t\t\t\t\t\t'bbb'\n\t\t\t\t\t]\n\t\t\t\t},\n\t\t\t\t'c'\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://d'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'e',\n\t\t\t\t{\n\t\t\t\t\t_type: 'b',\n\t\t\t\t\tc: [\n\t\t\t\t\t\t'bbb'\n\t\t\t\t\t]\n\t\t\t\t},\n\t\t\t\t'f'\n\t\t\t]\n\t\t}\n\t],\n\t[\n\t],\n\t[\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://g'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'h',\n\t\t\t\t{\n\t\t\t\t\t_type: 'b',\n\t\t\t\t\tc: [\n\t\t\t\t\t\t'bbb'\n\t\t\t\t\t]\n\t\t\t\t},\n\t\t\t\t'i'\n\t\t\t]\n\t\t}\n\t]\n]",
+					/* Xml */		"<array><array><a href='http://a'>b<b>bbb</b>c</a><a href='http://d'>e<b>bbb</b>f</a></array><array></array><array><a href='http://g'>h<b>bbb</b>i</a></array></array>",
+					/* XmlT */		"<array><array><a href='http://a'>b<b>bbb</b>c</a><a href='http://d'>e<b>bbb</b>f</a></array><array></array><array><a href='http://g'>h<b>bbb</b>i</a></array></array>",
+					/* XmlR */		"<array>\n\t<array>\n\t\t<a href='http://a'>b<b>bbb</b>c</a>\n\t\t<a href='http://d'>e<b>bbb</b>f</a>\n\t</array>\n\t<array>\n\t</array>\n\t<array>\n\t\t<a href='http://g'>h<b>bbb</b>i</a>\n\t</array>\n</array>\n",
+					/* XmlNs */		"<array><array><a href='http://a'>b<b>bbb</b>c</a><a href='http://d'>e<b>bbb</b>f</a></array><array></array><array><a href='http://g'>h<b>bbb</b>i</a></array></array>",
+					/* Html */		"<ul><li><ul><li><a href='http://a'>b<b>bbb</b>c</a></li><li><a href='http://d'>e<b>bbb</b>f</a></li></ul></li><li><ul></ul></li><li><ul><li><a href='http://g'>h<b>bbb</b>i</a></li></ul></li></ul>",
+					/* HtmlT */		"<ul><li><ul><li><a href='http://a'>b<b>bbb</b>c</a></li><li><a href='http://d'>e<b>bbb</b>f</a></li></ul></li><li><ul></ul></li><li><ul><li><a href='http://g'>h<b>bbb</b>i</a></li></ul></li></ul>",
+					/* HtmlR */		"<ul>\n\t<li>\n\t\t<ul>\n\t\t\t<li>\n\t\t\t\t<a href='http://a'>b<b>bbb</b>c</a>\n\t\t\t</li>\n\t\t\t<li>\n\t\t\t\t<a href='http://d'>e<b>bbb</b>f</a>\n\t\t\t</li>\n\t\t</ul>\n\t</li>\n\t<li>\n\t\t<ul></ul>\n\t</li>\n\t<li>\n\t\t<ul>\n\t\t\t<li>\n\t\t\t\t<a href='http://g'>h<b>bbb</b>i</a>\n\t\t\t</li>\n\t\t</ul>\n\t</li>\n</ul>\n",
+					/* Uon */		"@(@((_type=a,a=(href=http://a),c=@(b,(_type=b,c=@(bbb)),c)),(_type=a,a=(href=http://d),c=@(e,(_type=b,c=@(bbb)),f))),@(),@((_type=a,a=(href=http://g),c=@(h,(_type=b,c=@(bbb)),i))))",
+					/* UonT */		"@(@((t=a,a=(href=http://a),c=@(b,(t=b,c=@(bbb)),c)),(t=a,a=(href=http://d),c=@(e,(t=b,c=@(bbb)),f))),@(),@((t=a,a=(href=http://g),c=@(h,(t=b,c=@(bbb)),i))))",
+					/* UonR */		"@(\n\t@(\n\t\t(\n\t\t\t_type=a,\n\t\t\ta=(\n\t\t\t\thref=http://a\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\tb,\n\t\t\t\t(\n\t\t\t\t\t_type=b,\n\t\t\t\t\tc=@(\n\t\t\t\t\t\tbbb\n\t\t\t\t\t)\n\t\t\t\t),\n\t\t\t\tc\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\t_type=a,\n\t\t\ta=(\n\t\t\t\thref=http://d\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\te,\n\t\t\t\t(\n\t\t\t\t\t_type=b,\n\t\t\t\t\tc=@(\n\t\t\t\t\t\tbbb\n\t\t\t\t\t)\n\t\t\t\t),\n\t\t\t\tf\n\t\t\t)\n\t\t)\n\t),\n\t@(),\n\t@(\n\t\t(\n\t\t\t_type=a,\n\t\t\ta=(\n\t\t\t\thref=http://g\n\t\t\t),\n\t\t\tc=@(\n\t\t\t\th,\n\t\t\t\t(\n\t\t\t\t\t_type=b,\n\t\t\t\t\tc=@(\n\t\t\t\t\t\tbbb\n\t\t\t\t\t)\n\t\t\t\t),\n\t\t\t\ti\n\t\t\t)\n\t\t)\n\t)\n)",
+					/* UrlEnc */	"0=@((_type=a,a=(href=http://a),c=@(b,(_type=b,c=@(bbb)),c)),(_type=a,a=(href=http://d),c=@(e,(_type=b,c=@(bbb)),f)))&1=@()&2=@((_type=a,a=(href=http://g),c=@(h,(_type=b,c=@(bbb)),i)))",
+					/* UrlEncT */	"0=@((t=a,a=(href=http://a),c=@(b,(t=b,c=@(bbb)),c)),(t=a,a=(href=http://d),c=@(e,(t=b,c=@(bbb)),f)))&1=@()&2=@((t=a,a=(href=http://g),c=@(h,(t=b,c=@(bbb)),i)))",
+					/* UrlEncR */	"0=@(\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://a\n\t\t),\n\t\tc=@(\n\t\t\tb,\n\t\t\t(\n\t\t\t\t_type=b,\n\t\t\t\tc=@(\n\t\t\t\t\tbbb\n\t\t\t\t)\n\t\t\t),\n\t\t\tc\n\t\t)\n\t),\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://d\n\t\t),\n\t\tc=@(\n\t\t\te,\n\t\t\t(\n\t\t\t\t_type=b,\n\t\t\t\tc=@(\n\t\t\t\t\tbbb\n\t\t\t\t)\n\t\t\t),\n\t\t\tf\n\t\t)\n\t)\n)\n&1=@()\n&2=@(\n\t(\n\t\t_type=a,\n\t\ta=(\n\t\t\thref=http://g\n\t\t),\n\t\tc=@(\n\t\t\th,\n\t\t\t(\n\t\t\t\t_type=b,\n\t\t\t\tc=@(\n\t\t\t\t\tbbb\n\t\t\t\t)\n\t\t\t),\n\t\t\ti\n\t\t)\n\t)\n)",
+					/* MsgPack */	"939283A55F74797065A161A16181A468726566A8687474703A2F2F61A16393A16282A55F74797065A162A16391A3626262A16383A55F74797065A161A16181A468726566A8687474703A2F2F64A16393A16582A55F74797065A162A16391A3626262A166909183A55F74797065A161A16181A468726566A8687474703A2F2F67A16393A16882A55F74797065A162A16391A3626262A169",
+					/* MsgPackT */	"939283A174A161A16181A468726566A8687474703A2F2F61A16393A16282A174A162A16391A3626262A16383A174A161A16181A468726566A8687474703A2F2F64A16393A16582A174A162A16391A3626262A166909183A174A161A16181A468726566A8687474703A2F2F67A16393A16882A174A162A16391A3626262A169",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://a'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>b</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://d'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>e</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>b</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://g'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>h</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>b</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>i</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://a'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>b</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://d'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>e</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>b</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://g'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>h</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>b</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>i</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://a'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>b</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>b</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>bbb</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://d'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>e</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>b</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>bbb</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li>f</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq/>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://g'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>h</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>b</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>bbb</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li>i</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
+				)
+				{
+					@Override
+					public void verify(A[][] o) {
+						assertInstanceOf(A[][].class, o);
+					}
+				}
+			},
+			{	/* 12 */
 				new ComboInput<A>(
 					"A-3",
 					A.class,
@@ -135,7 +486,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 3 */
+			{	/* 13 */
 				new ComboInput<A>(
 					"A-4",
 					A.class,
@@ -169,7 +520,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 4 */
+			{	/* 14 */
 				new ComboInput<A>(
 					"A-5",
 					A.class,
@@ -203,7 +554,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 5 */
+			{	/* 15 */
 				new ComboInput<Abbr>(
 					"Abbr-1",
 					Abbr.class,
@@ -237,7 +588,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 6 */
+			{	/* 16 */
 				new ComboInput<Abbr>(
 					"Abbr-2",
 					Abbr.class,
@@ -271,7 +622,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 7 */
+			{	/* 17 */
 				new ComboInput<Address>(
 					"Address-1",
 					Address.class,
@@ -305,7 +656,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 8 */
+			{	/* 18 */
 				new ComboInput<Address>(
 					"Address-2",
 					Address.class,
@@ -339,7 +690,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 9 */
+			{	/* 19 */
 				new ComboInput<Address>(
 					"Address-3",
 					Address.class,
@@ -375,7 +726,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 10 */
+			{	/* 20 */
 				new ComboInput<Aside>(
 					"Aside-1",
 					Aside.class,
@@ -413,7 +764,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 11 */
+			{	/* 21 */
 				new ComboInput<Audio>(
 					"Audio/Source-1",
 					Audio.class,
@@ -452,7 +803,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 12 */
+			{	/* 22 */
 				new ComboInput<P>(
 					"Bdi-1",
 					P.class,
@@ -487,7 +838,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 13 */
+			{	/* 23 */
 				new ComboInput<P>(
 					"Bdo-1",
 					P.class,
@@ -522,7 +873,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 14 */
+			{	/* 24 */
 				new ComboInput<Blockquote>(
 					"Blockquote-1",
 					Blockquote.class,
@@ -556,7 +907,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 15 */
+			{	/* 25 */
 				new ComboInput<Br>(
 					"Br-1",
 					Br.class,
@@ -590,7 +941,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 16 */
+			{	/* 26 */
 				new ComboInput<P>(
 					"Br-2",
 					P.class,
@@ -625,7 +976,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 17 */
+			{	/* 27 */
 				new ComboInput<Button>(
 					"Button-1",
 					Button.class,
@@ -659,7 +1010,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 18 */
+			{	/* 28 */
 				new ComboInput<Canvas>(
 					"Canvas-1",
 					Canvas.class,
@@ -693,7 +1044,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 19 */
+			{	/* 29 */
 				new ComboInput<P>(
 					"Cite-1",
 					P.class,
@@ -728,7 +1079,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 20 */
+			{	/* 30 */
 				new ComboInput<Code>(
 					"Code-1",
 					Code.class,
@@ -762,7 +1113,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 21 */
+			{	/* 31 */
 				new ComboInput<Datalist>(
 					"Datalist-1",
 					Datalist.class,
@@ -801,7 +1152,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 22 */
+			{	/* 32 */
 				new ComboInput<Dl>(
 					"Dl/Dt/Dd",
 					Dl.class,
@@ -840,7 +1191,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 23 */
+			{	/* 33 */
 				new ComboInput<P>(
 					"Del/Ins",
 					P.class,
@@ -877,7 +1228,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 24 */
+			{	/* 34 */
 				new ComboInput<P>(
 					"Dfn",
 					P.class,
@@ -912,7 +1263,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 25 */
+			{	/* 35 */
 				new ComboInput<Div>(
 					"Div",
 					Div.class,
@@ -947,7 +1298,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 26 */
+			{	/* 36 */
 				new ComboInput<P>(
 					"Em",
 					P.class,
@@ -982,7 +1333,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 27 */
+			{	/* 37 */
 				new ComboInput<Embed>(
 					"Embed",
 					Embed.class,
@@ -1016,7 +1367,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 28 */
+			{	/* 38 */
 				new ComboInput<Form>(
 					"Form/Fieldset/Legend/Input/Keygen/Label",
 					Form.class,
@@ -1066,7 +1417,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 29 */
+			{	/* 39 */
 				new ComboInput<Figure>(
 					"Figure/Figcaption/Img",
 					Figure.class,
@@ -1105,7 +1456,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 30 */
+			{	/* 40 */
 				new ComboInput<Div>(
 					"H1/H2/H3/H4/H5/H6",
 					Div.class,
@@ -1147,7 +1498,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 31 */
+			{	/* 41 */
 				new ComboInput<P>(
 					"Hr",
 					P.class,
@@ -1182,7 +1533,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 32 */
+			{	/* 42 */
 				new ComboInput<Html>(
 					"Html/Head/Body/Title/Base/Link/Meta",
 					Html.class,
@@ -1250,7 +1601,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 33 */
+			{	/* 43 */
 				new ComboInput<P>(
 					"I",
 					P.class,
@@ -1285,7 +1636,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 34 */
+			{	/* 44 */
 				new ComboInput<Iframe>(
 					"Iframe",
 					Iframe.class,
@@ -1319,7 +1670,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 35 */
+			{	/* 45 */
 				new ComboInput<P>(
 					"Kbd",
 					P.class,
@@ -1354,7 +1705,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 36 */
+			{	/* 46 */
 				new ComboInput<Main>(
 					"Main/Article/Header/Footer-1",
 					Main.class,
@@ -1402,7 +1753,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 37 */
+			{	/* 47 */
 				new ComboInput<Map>(
 					"Map/Area-1",
 					Map.class,
@@ -1437,7 +1788,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 38 */
+			{	/* 48 */
 				new ComboInput<P>(
 					"Mark",
 					P.class,
@@ -1472,7 +1823,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 39 */
+			{	/* 49 */
 				new ComboInput<Meter>(
 					"Meter",
 					Meter.class,
@@ -1506,7 +1857,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 40 */
+			{	/* 50 */
 				new ComboInput<Nav>(
 					"Nav",
 					Nav.class,
@@ -1541,7 +1892,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 41 */
+			{	/* 51 */
 				new ComboInput<Noscript>(
 					"Noscript",
 					Noscript.class,
@@ -1575,7 +1926,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 42 */
+			{	/* 52 */
 				new ComboInput<Object2>(
 					"Object/Param",
 					Object2.class,
@@ -1610,7 +1961,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 43 */
+			{	/* 53 */
 				new ComboInput<Ol>(
 					"Ol/Li",
 					Ol.class,
@@ -1645,7 +1996,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 44 */
+			{	/* 54 */
 				new ComboInput<Form>(
 					"Output",
 					Form.class,
@@ -1686,7 +2037,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 45 */
+			{	/* 55 */
 				new ComboInput<P>(
 					"p",
 					P.class,
@@ -1720,7 +2071,41 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 46 */
+			{	/* 56 */
+				new ComboInput<P[][]>(
+					"P[][]",
+					P[][].class,
+					new P[][]{{p("a"),p("b")},{},{p("c")}},
+					/* Json */		"[[{_type:'p',c:['a']},{_type:'p',c:['b']}],[],[{_type:'p',c:['c']}]]",
+					/* JsonT */		"[[{t:'p',c:['a']},{t:'p',c:['b']}],[],[{t:'p',c:['c']}]]",
+					/* JsonR */		"[\n\t[\n\t\t{\n\t\t\t_type: 'p',\n\t\t\tc: [\n\t\t\t\t'a'\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t_type: 'p',\n\t\t\tc: [\n\t\t\t\t'b'\n\t\t\t]\n\t\t}\n\t],\n\t[\n\t],\n\t[\n\t\t{\n\t\t\t_type: 'p',\n\t\t\tc: [\n\t\t\t\t'c'\n\t\t\t]\n\t\t}\n\t]\n]",
+					/* Xml */		"<array><array><p>a</p><p>b</p></array><array></array><array><p>c</p></array></array>",
+					/* XmlT */		"<array><array><p>a</p><p>b</p></array><array></array><array><p>c</p></array></array>",
+					/* XmlR */		"<array>\n\t<array>\n\t\t<p>a</p>\n\t\t<p>b</p>\n\t</array>\n\t<array>\n\t</array>\n\t<array>\n\t\t<p>c</p>\n\t</array>\n</array>\n",
+					/* XmlNs */		"<array><array><p>a</p><p>b</p></array><array></array><array><p>c</p></array></array>",
+					/* Html */		"<ul><li><ul><li><p>a</p></li><li><p>b</p></li></ul></li><li><ul></ul></li><li><ul><li><p>c</p></li></ul></li></ul>",
+					/* HtmlT */		"<ul><li><ul><li><p>a</p></li><li><p>b</p></li></ul></li><li><ul></ul></li><li><ul><li><p>c</p></li></ul></li></ul>",
+					/* HtmlR */		"<ul>\n\t<li>\n\t\t<ul>\n\t\t\t<li>\n\t\t\t\t<p>a</p>\n\t\t\t</li>\n\t\t\t<li>\n\t\t\t\t<p>b</p>\n\t\t\t</li>\n\t\t</ul>\n\t</li>\n\t<li>\n\t\t<ul></ul>\n\t</li>\n\t<li>\n\t\t<ul>\n\t\t\t<li>\n\t\t\t\t<p>c</p>\n\t\t\t</li>\n\t\t</ul>\n\t</li>\n</ul>\n",
+					/* Uon */		"@(@((_type=p,c=@(a)),(_type=p,c=@(b))),@(),@((_type=p,c=@(c))))",
+					/* UonT */		"@(@((t=p,c=@(a)),(t=p,c=@(b))),@(),@((t=p,c=@(c))))",
+					/* UonR */		"@(\n\t@(\n\t\t(\n\t\t\t_type=p,\n\t\t\tc=@(\n\t\t\t\ta\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\t_type=p,\n\t\t\tc=@(\n\t\t\t\tb\n\t\t\t)\n\t\t)\n\t),\n\t@(),\n\t@(\n\t\t(\n\t\t\t_type=p,\n\t\t\tc=@(\n\t\t\t\tc\n\t\t\t)\n\t\t)\n\t)\n)",
+					/* UrlEnc */	"0=@((_type=p,c=@(a)),(_type=p,c=@(b)))&1=@()&2=@((_type=p,c=@(c)))",
+					/* UrlEncT */	"0=@((t=p,c=@(a)),(t=p,c=@(b)))&1=@()&2=@((t=p,c=@(c)))",
+					/* UrlEncR */	"0=@(\n\t(\n\t\t_type=p,\n\t\tc=@(\n\t\t\ta\n\t\t)\n\t),\n\t(\n\t\t_type=p,\n\t\tc=@(\n\t\t\tb\n\t\t)\n\t)\n)\n&1=@()\n&2=@(\n\t(\n\t\t_type=p,\n\t\tc=@(\n\t\t\tc\n\t\t)\n\t)\n)",
+					/* MsgPack */	"939282A55F74797065A170A16391A16182A55F74797065A170A16391A162909182A55F74797065A170A16391A163",
+					/* MsgPackT */	"939282A174A170A16391A16182A174A170A16391A162909182A174A170A16391A163",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>p</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>a</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>p</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>b</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq/>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>p</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
+				)
+				{
+					@Override
+					public void verify(P[][] o) {
+						assertInstanceOf(P[][].class, o);
+					}
+				}
+			},
+			{	/* 57 */
 				new ComboInput<Pre>(
 					"Pre",
 					Pre.class,
@@ -1754,7 +2139,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 47 */
+			{	/* 58 */
 				new ComboInput<Progress>(
 					"Progress",
 					Progress.class,
@@ -1788,7 +2173,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 48 */
+			{	/* 59 */
 				new ComboInput<P>(
 					"Q",
 					P.class,
@@ -1823,7 +2208,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 49 */
+			{	/* 60 */
 				new ComboInput<Ruby>(
 					"Ruby/Rb/Rtc/Rp/Rt",
 					Ruby.class,
@@ -1862,7 +2247,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 50 */
+			{	/* 61 */
 				new ComboInput<P>(
 					"S",
 					P.class,
@@ -1897,7 +2282,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 51 */
+			{	/* 62 */
 				new ComboInput<Samp>(
 					"Samp",
 					Samp.class,
@@ -1931,7 +2316,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 52 */
+			{	/* 63 */
 				new ComboInput<Script>(
 					"Script",
 					Script.class,
@@ -1965,7 +2350,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 53 */
+			{	/* 64 */
 				new ComboInput<Section>(
 					"Section",
 					Section.class,
@@ -2001,7 +2386,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 54 */
+			{	/* 65 */
 				new ComboInput<Select>(
 					"Select/Optgroup/Option",
 					Select.class,
@@ -2037,7 +2422,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 55 */
+			{	/* 66 */
 				new ComboInput<P>(
 					"Small",
 					P.class,
@@ -2072,7 +2457,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 56 */
+			{	/* 67 */
 				new ComboInput<P>(
 					"Span",
 					P.class,
@@ -2107,7 +2492,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 57 */
+			{	/* 68 */
 				new ComboInput<P>(
 					"Strong",
 					P.class,
@@ -2142,7 +2527,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 58 */
+			{	/* 69 */
 				new ComboInput<Head>(
 					"Style",
 					Head.class,
@@ -2177,7 +2562,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 59 */
+			{	/* 70 */
 				new ComboInput<P>(
 					"Sub",
 					P.class,
@@ -2212,7 +2597,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 60 */
+			{	/* 71 */
 				new ComboInput<P>(
 					"Sup",
 					P.class,
@@ -2247,7 +2632,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 61 */
+			{	/* 72 */
 				new ComboInput<Table>(
 					"Table/Colgroup/Col/Caption/THead/TBody/TFoot/Tr/Th/Td-1",
 					Table.class,
@@ -2481,7 +2866,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 62 */
+			{	/* 73 */
 				new ComboInput<Template>(
 					"Template",
 					Template.class,
@@ -2516,7 +2901,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 63 */
+			{	/* 74 */
 				new ComboInput<Textarea>(
 					"Textarea",
 					Textarea.class,
@@ -2550,7 +2935,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 64 */
+			{	/* 75 */
 				new ComboInput<P>(
 					"Time",
 					P.class,
@@ -2585,7 +2970,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 65 */
+			{	/* 76 */
 				new ComboInput<P>(
 					"U",
 					P.class,
@@ -2620,7 +3005,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 66 */
+			{	/* 77 */
 				new ComboInput<Ul>(
 					"Ul/Li",
 					Ul.class,
@@ -2655,7 +3040,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 67 */
+			{	/* 78 */
 				new ComboInput<P>(
 					"Var",
 					P.class,
@@ -2690,7 +3075,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 68 */
+			{	/* 79 */
 				new ComboInput<Video>(
 					"Video/Source/Track",
 					Video.class,
@@ -2729,7 +3114,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 					}
 				}
 			},
-			{	/* 69 */
+			{	/* 80 */
 				new ComboInput<P>(
 					"Wbr",
 					P.class,
@@ -2769,5 +3154,19 @@ public class Html5ComboTest extends ComboRoundTripTest {
 
 	public Html5ComboTest(ComboInput<?> comboInput) {
 		super(comboInput);
+	}
+
+	public static class BeanWithAField {
+		public A f1;
+		public A[] f2;
+		public Collection<A> f3;
+
+		public static BeanWithAField create(A a) {
+			BeanWithAField b = new BeanWithAField();
+			b.f1 = a;
+			b.f2 = new A[]{a,a};
+			b.f3 = AList.create(a,a);
+			return b;
+		}
 	}
 }

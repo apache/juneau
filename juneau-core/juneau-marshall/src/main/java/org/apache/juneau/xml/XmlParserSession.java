@@ -97,6 +97,14 @@ public class XmlParserSession extends ReaderParserSession {
 	}
 
 	/*
+	 * Returns the _name attribute value.
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 */
+	private String getNameProperty(XmlReader r) {
+		return decodeString(r.getAttributeValue(null, getNamePropertyName()));
+	}
+
+	/*
 	 * Returns the name of the specified attribute on the current XML element.
 	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
 	 */
@@ -397,7 +405,7 @@ public class XmlParserSession extends ReaderParserSession {
 		for (int i = 0; i < r.getAttributeCount(); i++) {
 			String a = r.getAttributeLocalName(i);
 			// TODO - Need better handling of namespaces here.
-			if (! (a.equals(getBeanTypePropertyName(null)))) {
+			if (! isSpecialAttr(a)) {
 				K key = trim(convertAttrToType(m, a, keyType));
 				V value = trim(convertAttrToType(m, r.getAttributeValue(i), valueType));
 				setName(valueType, value, key);
@@ -409,7 +417,9 @@ public class XmlParserSession extends ReaderParserSession {
 			String currAttr;
 			if (event == START_ELEMENT) {
 				depth++;
-				currAttr = getElementName(r);
+				currAttr = getNameProperty(r);
+				if (currAttr == null)
+					currAttr = getElementName(r);
 				K key = convertAttrToType(m, currAttr, keyType);
 				V value = parseAnything(valueType, currAttr, r, m, false, pMeta);
 				setName(valueType, value, currAttr);
@@ -476,7 +486,7 @@ public class XmlParserSession extends ReaderParserSession {
 
 		for (int i = 0; i < r.getAttributeCount(); i++) {
 			String key = getAttributeName(r, i);
-			if (! "nil".equals(key)) {
+			if (! ("nil".equals(key) || isSpecialAttr(key))) {
 				String val = r.getAttributeValue(i);
 				String ns = r.getAttributeNamespace(i);
 				BeanPropertyMeta bpm = xmlMeta.getPropertyMeta(key);
@@ -560,7 +570,9 @@ public class XmlParserSession extends ReaderParserSession {
 				} else if (cp != null && cpf == ELEMENTS) {
 					cp.add(m, null, parseAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
 				} else {
-					currAttr = getElementName(r);
+					currAttr = getNameProperty(r);
+					if (currAttr == null)
+						currAttr = getElementName(r);
 					BeanPropertyMeta pMeta = xmlMeta.getPropertyMeta(currAttr);
 					if (pMeta == null) {
 						onUnknownProperty(currAttr, m);
@@ -630,6 +642,10 @@ public class XmlParserSession extends ReaderParserSession {
 		} while (depth > 0);
 	}
 
+	private boolean isSpecialAttr(String key) {
+		return key.equals(getBeanTypePropertyName(null)) || key.equals(getNamePropertyName());
+	}
+
 	private Object getUnknown(XmlReader r) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		if (r.getEventType() != START_ELEMENT) {
 			throw new ParseException(this, "Parser must be on START_ELEMENT to read next text.");
@@ -642,7 +658,7 @@ public class XmlParserSession extends ReaderParserSession {
 			for (int i = 0; i < r.getAttributeCount(); i++) {
 				String key = getAttributeName(r, i);
 				String val = r.getAttributeValue(i);
-				if (! key.equals(getBeanTypePropertyName(null)))
+				if (! isSpecialAttr(key))
 					m.put(key, val);
 			}
 		}
@@ -666,7 +682,9 @@ public class XmlParserSession extends ReaderParserSession {
 					String currAttr;
 					if (event == START_ELEMENT) {
 						depth++;
-						currAttr = getElementName(r);
+						currAttr = getNameProperty(r);
+						if (currAttr == null)
+							currAttr = getElementName(r);
 						String key = convertAttrToType(null, currAttr, string());
 						Object value = parseAnything(object(), currAttr, r, null, false, null);
 						if (m.containsKey(key)) {

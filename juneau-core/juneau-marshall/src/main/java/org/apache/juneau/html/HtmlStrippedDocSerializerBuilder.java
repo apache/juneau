@@ -133,6 +133,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* XmlSerializerBuilder */
+	@Deprecated
 	public HtmlStrippedDocSerializerBuilder xsNamespace(Namespace value) {
 		super.xsNamespace(value);
 		return this;

@@ -73,7 +73,6 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 
 /**
  * Contains all the configuration on a REST resource and the entry points for handling REST calls.
@@ -2674,7 +2673,6 @@ public final class RestContext extends BeanContext {
 	 * 			<li class='jc'>{@link SimpleJsonSerializer}
 	 * 			<li class='jc'>{@link JsonSchemaSerializer}
 	 * 			<li class='jc'>{@link XmlDocSerializer}
-	 * 			<li class='jc'>{@link XmlSchemaDocSerializer}
 	 * 			<li class='jc'>{@link UonSerializer}
 	 * 			<li class='jc'>{@link UrlEncodingSerializer}
 	 * 			<li class='jc'>{@link MsgPackSerializer}
@@ -3430,34 +3428,34 @@ public final class RestContext extends BeanContext {
 		return Collections.unmodifiableMap(REGISTRY);
 	}
 
-	public static final Set<MethodExecStats> getGlobalExecStats() {
-		Set<MethodExecStats> s = new TreeSet<>();
-		for (RestContext rc : REGISTRY.values())
-			s.addAll(rc.getMethodExecStats());
-		return s;
-	}
-
-//	public static final Set<ExceptionStats> getGlobalExceptions() {
-//		Set<ExceptionStats> s = new TreeSet<>();
+//	public static final Set<MethodExecStats> getGlobalExecStats() {
+//		Set<MethodExecStats> s = new TreeSet<>();
 //		for (RestContext rc : REGISTRY.values())
-//			s.addAll(rc.getStackTraceDb().getClonedStackTraceInfos());
+//			s.addAll(rc.getMethodExecStats());
 //		return s;
 //	}
-
-	public static final Set<StatusStats> getGlobalStatusStats() {
-		Set<StatusStats> s = new TreeSet<>();
-		for (RestContext rc : REGISTRY.values()) {
-			StatusStats ss = StatusStats.create(rc.getResource().getClass());
-			s.add(ss);
-			for (RestMethodContext rmc : rc.getCallMethods().values()) {
-				StatusStats.Method ssm = ss.getMethod(rmc.method);
-				for (Map.Entry<Integer,Integer> e : rmc.getStatusCodes().entrySet()) {
-					ssm.status(e.getKey(), e.getValue());
-				}
-			}
-		}
-		return s;
-	}
+//
+////	public static final Set<ExceptionStats> getGlobalExceptions() {
+////		Set<ExceptionStats> s = new TreeSet<>();
+////		for (RestContext rc : REGISTRY.values())
+////			s.addAll(rc.getStackTraceDb().getClonedStackTraceInfos());
+////		return s;
+////	}
+//
+//	public static final Set<StatusStats> getGlobalStatusStats() {
+//		Set<StatusStats> s = new TreeSet<>();
+//		for (RestContext rc : REGISTRY.values()) {
+//			StatusStats ss = StatusStats.create(rc.getResource().getClass());
+//			s.add(ss);
+//			for (RestMethodContext rmc : rc.getCallMethods().values()) {
+//				StatusStats.Method ssm = ss.getMethod(rmc.method);
+//				for (Map.Entry<Integer,Integer> e : rmc.getStatusCodes().entrySet()) {
+//					ssm.status(e.getKey(), e.getValue());
+//				}
+//			}
+//		}
+//		return s;
+//	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

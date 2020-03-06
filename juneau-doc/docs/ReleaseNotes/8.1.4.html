@@ -24,6 +24,9 @@
 		<ja>@BeanIgnore</ja> and <ja>@Bean</ja> annotations can alternately occur in parent class hierarchy.
 		The first one found dictates whether a class is ignored as a bean or not.
 	<li>
+		Several bug fixes in the {@link HtmlSerializer} and {@link HtmlParser} classes around the handling of 
+		collections and arrays of beans with <c><ja>@Bean</ja>(typeName)</c> annotations.
+	<li>
 		New {@link oaj.ObjectMap(Object...)} constructor.
 	<li>
 		New swaps auto-added to all serializers/parsers:
@@ -31,6 +34,8 @@
 			<li class='jc'>{@link oaj.transforms.MatchResultSwap} 
 			<li class='jc'>{@link oaj.transforms.StackTraceElementSwap} 
 		</ul>		
+	<li>
+		HTML-Schema support is being deprecated due to low-use and difficulty in maintaining.  It will be removed in 9.0.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>

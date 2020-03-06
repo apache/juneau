@@ -222,6 +222,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* XmlSerializerBuilder */
+	@Deprecated
 	public HtmlSerializerBuilder xsNamespace(Namespace value) {
 		super.xsNamespace(value);
 		return this;

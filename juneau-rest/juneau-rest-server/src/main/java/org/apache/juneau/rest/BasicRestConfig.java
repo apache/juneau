@@ -144,6 +144,7 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 		SwaggerUI.class
 	}
 )
+@SuppressWarnings("deprecation")
 public interface BasicRestConfig {
 
 	/**

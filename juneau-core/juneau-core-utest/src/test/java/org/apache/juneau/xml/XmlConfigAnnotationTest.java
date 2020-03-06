@@ -95,8 +95,7 @@ public class XmlConfigAnnotationTest {
 		preserveRootElement="$X{true}",
 		reporter=AB.class,
 		resolver=AC.class,
-		validating="$X{true}",
-		xsNamespace="$X{foo}"
+		validating="$X{true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
@@ -111,7 +110,6 @@ public class XmlConfigAnnotationTest {
 		check("foo:null", x.getDefaultNamespace());
 		check("true", x.isEnableNamespaces());
 		check("[foo:null]", x.getNamespaces());
-		check("foo:null", x.getXsNamespace());
 	}
 
 	@Test
@@ -143,7 +141,6 @@ public class XmlConfigAnnotationTest {
 		check("juneau:http://www.apache.org/2013/Juneau", x.getDefaultNamespace());
 		check("false", x.isEnableNamespaces());
 		check("[]", x.getNamespaces());
-		check("xs:http://www.w3.org/2001/XMLSchema", x.getXsNamespace());
 	}
 
 	@Test
@@ -174,7 +171,6 @@ public class XmlConfigAnnotationTest {
 		check("juneau:http://www.apache.org/2013/Juneau", x.getDefaultNamespace());
 		check("false", x.isEnableNamespaces());
 		check("[]", x.getNamespaces());
-		check("xs:http://www.w3.org/2001/XMLSchema", x.getXsNamespace());
 	}
 
 	@Test

@@ -229,6 +229,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <js>"xs: http://www.w3.org/2001/XMLSchema"</js>.
 	 * @return This object (for method chaining).
 	 */
+	@Deprecated
 	public XmlSerializerBuilder xsNamespace(Namespace value) {
 		return set(XML_xsNamespace, value);
 	}
@@ -249,6 +250,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <js>"xs: http://www.w3.org/2001/XMLSchema"</js>.
 	 * @return This object (for method chaining).
 	 */
+	@Deprecated
 	public XmlSerializerBuilder xsNamespace(String value) {
 		return set(XML_xsNamespace, Namespace.create(value));
 	}

@@ -1049,6 +1049,18 @@ public class BeanSession extends Session {
 	}
 
 	/**
+	 * Returns the name property name.
+	 *
+	 * <p>
+	 * Currently this always returns <js>"_name"</js>.
+	 *
+	 * @return The name property name.  Never <jk>null</jk>.
+	 */
+	public final String getNamePropertyName() {
+		return "_name";
+	}
+
+	/**
 	 * Returns the bean registry defined in this bean context defined by {@link BeanContext#BEAN_beanDictionary}.
 	 *
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.

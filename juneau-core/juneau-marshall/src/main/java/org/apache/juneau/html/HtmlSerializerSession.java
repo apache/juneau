@@ -174,6 +174,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			XmlWriter out,
 			Object o,
 			ClassMeta<?> eType,
+			String keyName,
 			String elementName,
 			Namespace elementNamespace,
 			boolean addNamespaceUris,
@@ -203,7 +204,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (type.isMapOrBean() && ! cHtml.isXml())
 			return serializeAnything(out, o, eType, elementName, pMeta, 0, false, false);
 
-		return super.serializeAnything(out, o, eType, elementName, elementNamespace, addNamespaceUris, format, isMixed, preserveWhitespace, pMeta);
+		return super.serializeAnything(out, o, eType, keyName, elementName, elementNamespace, addNamespaceUris, format, isMixed, preserveWhitespace, pMeta);
 	}
 	/**
 	 * Serialize the specified object to the specified writer.
@@ -310,7 +311,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				indent++;
 				if (nlIfElement)
 					out.nl(0);
-				super.serializeAnything(out, o, null, null, null, false, XmlFormat.MIXED, false, false, null);
+				super.serializeAnything(out, o, null, null, null, null, false, XmlFormat.MIXED, false, false, null);
 				indent -= xIndent+1;
 				return cr;
 
@@ -433,7 +434,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				out.i(i+2);
 			out.eTag("td").nl(i+2);
 			out.sTag(i+2, "td");
-			cr = serializeAnything(out, value, valueType, (key == null ? "_x0000_" : toString(key)), null, 2, false, false);
+			cr = serializeAnything(out, value, valueType, (key == null ? "_x0000_" : toString(key)), null, 2, false, true);
 			if (cr == CR_ELEMENTS)
 				out.ie(i+2);
 			out.eTag("td").nl(i+2);
@@ -726,7 +727,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(cm);
 
-		if (cHtml.isNoTables() || bpHtml.isNoTables())
+		if (cHtml.isNoTables() || bpHtml.isNoTables() || cHtml.isXml() || bpHtml.isXml())
 			return null;
 		if (cHtml.isNoTableHeaders() || bpHtml.isNoTableHeaders())
 			return new Object[0];

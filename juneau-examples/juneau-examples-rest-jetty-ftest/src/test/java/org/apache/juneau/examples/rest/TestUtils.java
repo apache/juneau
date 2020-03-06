@@ -17,25 +17,19 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
-import java.util.*;
 import java.util.regex.*;
 
-import javax.xml.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
-import javax.xml.validation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 import org.w3c.dom.*;
-import org.w3c.dom.bootstrap.*;
-import org.w3c.dom.ls.*;
 import org.xml.sax.*;
 
 public class TestUtils {
@@ -159,69 +153,6 @@ public class TestUtils {
 			System.err.println(String.format("%4s:" + lines[i], i+1));  // NOT DEBUG
 	}
 
-	/**
-	 * Validates that the specified XML conforms to the specified schema.
-	 */
-	private static void validateXml(String xml, String xmlSchema) throws Exception {
-		// parse an XML document into a DOM tree
-		DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
-		f.setNamespaceAware(true);
-		DocumentBuilder documentBuilder = f.newDocumentBuilder();
-		Document document = documentBuilder.parse(new InputSource(new StringReader(xml)));
-
-		// create a SchemaFactory capable of understanding WXS schemas
-		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-		if (xmlSchema.indexOf('\u0000') != -1) {
-
-			// Break it up into a map of namespaceURI->schema document
-			final Map<String,String> schemas = new HashMap<>();
-			String[] ss = xmlSchema.split("\u0000");
-			xmlSchema = ss[0];
-			for (String s : ss) {
-				Matcher m = pTargetNs.matcher(s);
-				if (m.find())
-					schemas.put(m.group(1), s);
-			}
-
-			// Create a custom resolver
-			factory.setResourceResolver(
-				new LSResourceResolver() {
-
-					@Override /* LSResourceResolver */
-					public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) {
-
-						String schema = schemas.get(namespaceURI);
-						if (schema == null)
-							throw new FormattedRuntimeException("No schema found for namespaceURI ''{0}''", namespaceURI);
-
-						try {
-							DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
-							DOMImplementationLS domImplementationLS = (DOMImplementationLS)registry.getDOMImplementation("LS 3.0");
-							LSInput in = domImplementationLS.createLSInput();
-							in.setCharacterStream(new StringReader(schema));
-							in.setSystemId(systemId);
-							return in;
-
-						} catch (Exception e) {
-							throw new RuntimeException(e);
-						}
-					}
-				}
-			);
-		}
-
-		Schema schema = factory.newSchema(new StreamSource(new StringReader(xmlSchema)));
-
-		// create a Validator instance, which can be used to validate an instance document
-		Validator validator = schema.newValidator();
-
-		// validate the DOM tree
-		validator.validate(new DOMSource(document));
-	}
-
-	private static Pattern pTargetNs = Pattern.compile("targetNamespace=['\"]([^'\"]+)['\"]");
-
 	public static void validateXml(Object o) throws Exception {
 		validateXml(o, XmlSerializer.DEFAULT_NS_SQ);
 	}
@@ -233,17 +164,11 @@ public class TestUtils {
 		s = s.builder().ws().ns().addNamespaceUrisToRoot().build();
 		String xml = s.serialize(o);
 
-		String xmlSchema = null;
 		try {
-			xmlSchema = s.getSchemaSerializer().serialize(o);
 			TestUtils.checkXmlWhitespace(xml);
-			TestUtils.checkXmlWhitespace(xmlSchema);
-			TestUtils.validateXml(xml, xmlSchema);
 		} catch (Exception e) {
 			System.err.println("---XML---");  // NOT DEBUG
 			System.err.println(xml);  // NOT DEBUG
-			System.err.println("---XMLSchema---");  // NOT DEBUG
-			System.err.println(xmlSchema);  // NOT DEBUG
 			throw e;
 		}
 	}

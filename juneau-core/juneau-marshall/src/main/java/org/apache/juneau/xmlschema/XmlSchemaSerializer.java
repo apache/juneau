@@ -31,6 +31,7 @@ import org.apache.juneau.xml.*;
  * Produces the XML-schema representation of the XML produced by the {@link XmlSerializer} class with the same properties.
  */
 @ConfigurableContext
+@Deprecated
 public class XmlSchemaSerializer extends XmlSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------

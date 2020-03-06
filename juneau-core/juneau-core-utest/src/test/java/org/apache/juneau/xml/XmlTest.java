@@ -268,7 +268,7 @@ public class XmlTest {
 		G t = new G();
 		t.f1.add("bar");
 		String r = s.serialize(t);
-		assertEquals("<bar><f1><string>bar</string></f1></bar>", r);
+		assertEquals("<bar><foo _name='f1'><string>bar</string></foo></bar>", r);
 		t = p.parse(r, G.class);
 		validateXml(t);
 	}

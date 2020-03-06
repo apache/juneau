@@ -41,3 +41,35 @@ TODO @Beanp(*) isn't working?
     	public Map<String,Integer> perPartition = new TreeMap<>();
 
 TODO:  Need a SimpleLink(name, uri) again.
+
+TODO:  RestClient should support all languages by default.
+
+TODO:  HTML elements need constructors or create methods.
+
+TODO: Can't serialize a list of A elements correctly.
+
+TODO: Need ability to have <aside> float left/right/top/bottom around contents.
+
+TODO:  Need ability to define action for unauthorized requests (e.g. redirect instead of just return 401).
+
+TODO:  @RestMethod(debug="true") doesn't appear to log messages.
+
+TODO:  @Bean on private class should be treated as bean.
+
+TODO:  HtmlRender should not require no-arg constructor.
+
+TODO:  Tables of this aren't ordered correctly if p is null on first row.
+@Bean(bpi="i,p,s,d")
+public class BidData {
+
+	public String i;  // Instance name.
+	public Integer p; // Partition number.
+	public Score s;   // Score.
+	public String d;  // Discard reason.
+
+	public BidData(Bid b) {
+		this.s = b.getScore();
+
+REST classes should allow themselves to implement helper classes such as call hander etc...
+
+TODO:   ResourceDescriptions needs an append(url, label, description) so you can add params on url.

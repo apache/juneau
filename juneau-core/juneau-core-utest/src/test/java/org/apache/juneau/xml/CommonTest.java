@@ -303,9 +303,6 @@ public class CommonTest {
 
 		s.ignoreRecursions();
 		assertEquals("<object><name>foo</name><r2><name>bar</name><r3><name>baz</name></r3></r2></object>", s.build().serialize(r1));
-
-		// Make sure this doesn't blow up.
-		s.build().getSchemaSerializer().serialize(r1);
 	}
 
 	public static class R1 {

@@ -56,11 +56,6 @@ import org.apache.juneau.xml.*;
  * 		<td>{@link XmlDocSerializer}</td>
  * 	</tr>
  * 	<tr>
- * 		<td class='code'>text/xml+schema</td>
- * 		<td class='code'>text/xml</td>
- * 		<td>{@link org.apache.juneau.xmlschema.XmlSchemaDocSerializer}</td>
- * 	</tr>
- * 	<tr>
  * 		<td class='code'>text/html</td>
  * 		<td class='code'>text/html</td>
  * 		<td>{@link HtmlDocSerializer}</td>

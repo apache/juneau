@@ -37,6 +37,7 @@ import org.w3c.dom.ls.*;
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
  */
+@Deprecated
 public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 	/**
@@ -333,6 +334,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 			if (! (cm.isMapOrBean() || cm.isCollectionOrArray() || (cm.isAbstract() && ! cm.isNumber()) || cm.isObject())) {
 				w.oTag(i+1, "attribute").attr("name", getBeanTypePropertyName(cm)).attr("type", "string").ceTag().nl(i+1);
+				w.oTag(i+1, "attribute").attr("name", getNamePropertyName()).attr("type", "string").ceTag().nl(i+1);
 
 			} else {
 
@@ -493,10 +495,8 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 				}
 
 				if (! hasAnyAttrs) {
-					w.oTag(i+1, "attribute")
-					.attr("name", getBeanTypePropertyName(null))
-					.attr("type", "string")
-					.ceTag().nl(i+1);
+					w.oTag(i+1, "attribute").attr("name", getBeanTypePropertyName(null)).attr("type", "string").ceTag().nl(i+1);
+					w.oTag(i+1, "attribute").attr("name", getNamePropertyName()).attr("type", "string").ceTag().nl(i+1);
 				}
 			}
 

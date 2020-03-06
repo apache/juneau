@@ -132,7 +132,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		if (isEnableNamespaces() && isAutoDetectNamespaces())
 			findNsfMappings(o);
-		serializeAnything(getXmlWriter(out), o, getExpectedRootType(o), null, null, isEnableNamespaces() && isAddNamespaceUrisToRoot(), XmlFormat.DEFAULT, false, false, null);
+		serializeAnything(getXmlWriter(out), o, getExpectedRootType(o), null, null, null, isEnableNamespaces() && isAddNamespaceUrisToRoot(), XmlFormat.DEFAULT, false, false, null);
 	}
 
 	/**
@@ -230,6 +230,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @param out The writer to send the output to.
 	 * @param o The object to serialize.
 	 * @param eType The expected type if this is a bean property value being serialized.
+	 * @param keyName The property name or map key name.
 	 * @param elementName The root element name.
 	 * @param elementNamespace The namespace of the element.
 	 * @param addNamespaceUris Flag indicating that namespace URIs need to be added.
@@ -246,6 +247,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			XmlWriter out,
 			Object o,
 			ClassMeta<?> eType,
+			String keyName,
 			String elementName,
 			Namespace elementNamespace,
 			boolean addNamespaceUris,
@@ -260,7 +262,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		ClassMeta<?> wType = null;     // The wrapped type (delegate)
 		ClassMeta<?> sType = object(); // The serialized type
 
-		aType = push2(elementName, o, eType);
+		aType = push2(keyName, o, eType);
 
 		if (eType == null)
 			eType = object();
@@ -353,10 +355,20 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			isCollapsed = true;
 
 		// Is there a name associated with this bean?
+
+		String name = keyName;
 		if (elementName == null && dictionaryName != null) {
 			elementName = dictionaryName;
-			isExpectedType = true;
+			isExpectedType = o != null;  // preserve type='null' when it's null.
 		}
+
+		if (elementName == null) {
+			elementName = name;
+			name = null;
+		}
+
+		if (StringUtils.isEquals(name, elementName))
+			name = null;
 
 		if (isEnableNamespaces()) {
 			if (elementNamespace == null)
@@ -379,6 +391,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			en = type.toString();
 			type = null;
 		}
+
 		boolean encodeEn = elementName != null;
 		String ns = (elementNamespace == null ? null : elementNamespace.name);
 		String dns = null, elementNs = null;
@@ -405,6 +418,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					else if (type != null && type != STRING)
 						out.attr(dns, getBeanTypePropertyName(eType), type);
 				}
+				if (name != null)
+					out.attr(getNamePropertyName(), name);
 			} else {
 				out.i(i);
 			}
@@ -521,7 +536,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				hasChildren = true;
 				out.append('>').nlIf(! isMixed, indent);
 			}
-			serializeAnything(out, value, valueType, toString(k), null, false, XmlFormat.DEFAULT, isMixed, false, null);
+			serializeAnything(out, value, valueType, toString(k), null, null, false, XmlFormat.DEFAULT, isMixed, false, null);
 		}
 		return hasChildren ? CR_ELEMENTS : CR_EMPTY;
 	}
@@ -632,7 +647,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					}
 
 					XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(pMeta);
-					serializeAnything(out, value, cMeta, key, bpXml.getNamespace(), false, bpXml.getXmlFormat(), isMixedOrText, false, pMeta);
+					serializeAnything(out, value, cMeta, key, null, bpXml.getNamespace(), false, bpXml.getXmlFormat(), isMixedOrText, false, pMeta);
 				}
 			}
 		}
@@ -647,16 +662,16 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				Collection c = (Collection)content;
 				for (Iterator i = c.iterator(); i.hasNext();) {
 					Object value = i.next();
-					serializeAnything(out, value, contentType.getElementType(), null, null, false, cf, isMixedOrText, preserveWhitespace, null);
+					serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 				}
 			} else if (contentType.isArray()) {
 				Collection c = toList(Object[].class, content);
 				for (Iterator i = c.iterator(); i.hasNext();) {
 					Object value = i.next();
-					serializeAnything(out, value, contentType.getElementType(), null, null, false, cf, isMixedOrText, preserveWhitespace, null);
+					serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 				}
 			} else {
-				serializeAnything(out, content, contentType, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
+				serializeAnything(out, content, contentType, null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 			}
 		} else {
 			out.attr("nil", "true").append('>').nlIf(! isMixedOrText, indent);
@@ -686,7 +701,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		for (Iterator i = c.iterator(); i.hasNext();) {
 			Object value = i.next();
-			serializeAnything(out, value, eeType, eName, eNs, false, XmlFormat.DEFAULT, isMixed, false, null);
+			serializeAnything(out, value, eeType, null, eName, eNs, false, XmlFormat.DEFAULT, isMixed, false, null);
 		}
 		return out;
 	}
@@ -803,6 +818,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * 	The namespace for the <c>XMLSchema</c> namespace, used by the schema generated by the
 	 * 	{@link org.apache.juneau.xmlschema.XmlSchemaSerializer} class.
 	 */
+	@Deprecated
 	protected final Namespace getXsNamespace() {
 		return ctx.getXsNamespace();
 	}

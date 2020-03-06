@@ -558,6 +558,7 @@
 		<li><p><a class='doclink' href='#juneau-petstore.Installing'>Installing in Eclipse</a><span class='update'><b>8.1.4-new</b></span></p>
 		<li><p><a class='doclink' href='#juneau-petstore.Running'>Running Petstore manually</a><span class='update'><b>8.1.4-new</b></span></p>
 		<li><p><a class='doclink' href='#juneau-petstore.Building'>Building and Running from Command-Line (Using Dockerfiles)</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-petstore.PetstoreApp'>About Petstore App <br></a><span class='update'><b>8.1.4-new</b></span></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#Glossaries'>Glossaries</a><span class='update'>8.1.3-new</span></p>
 	<ol>
@@ -24176,7 +24177,7 @@
 	server side as well.
 </p>
 <p class='bpcode w800 console'>
-	=== HTTP Request (incoming) ====================================================
+	=== HTTP Call (incoming) =======================================================
 	HTTP POST /testUrl
 	---Headers---
 		Host: localhost:10000
@@ -28553,6 +28554,72 @@
 	</ol>
 	</p>
 </div><!-- END: 19.3 - juneau-petstore.Building -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-petstore.PetstoreApp' id='juneau-petstore.PetstoreApp'>19.4 - About Petstore App <br></a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 19.4 - juneau-petstore.PetstoreApp -->
+<div style="width: 70%;">
+    <h3 style="color: blue;">
+        What is the Petstore app?
+    </h3>
+    <p>
+
+        Petstore is a simple CRUD (Create, Read, Update and Delete) application,
+        which is meant to demonstrate the advantages of the Apache Juneau library.
+        It is a live example showing how any JAVA back-end developer can use Juneau for parsing,
+        POJO serialization and sending different types of serialized POJOs over REST.
+
+    </p>
+    <h3>What's the project layout?</h3>
+    <p> Petstore application consists of three main parts, which are connected over REST:
+        <ul>
+            <li>Database: Apache Derby.</li>
+            <li>Server: Java Spring Boot. </li>
+            <li>Client: Java Spring Boot or React.</li>
+        </ul>
+    </p>
+
+    <p> Java back-end and front-end runs on: http://localhost:5000;
+        <br>React front-end runs on: http://localhost:3000.
+    </p>
+
+    <p> Project is based on a standard Spring Boot project structure. There are Models, Repositories, Services.
+        <br>The main difference here - no Controller classes or @RestController annotations.
+        Instead of it, we use PetStore.java interface class where REST calls are mapped with different methods.
+    </p>
+    <p>Petstore has three types of DTO objects (database entities): Pets, Orders and Users. </p>
+    <p>All methods for creating, reading, updating or deleting database entities (pets, orders or users) are provided in
+        PetStoreService.java class. </p>
+    <p> Example Pet, Order and User objects are created at program
+        startup and saved in the database using JPA (Java Persistence API) and PetStoreService methods.</p>
+
+    <h3>How does it work ?</h3>
+    <p>
+        <ul>
+
+            <li>To get the data which should be displayed, Petstore app client
+                sends http request GET to the back-end server. The response data goes
+                over the REST connection where POJOs get serialized.
+                Petstore client can get and display different types of the same POJO:
+                simple (standard) json format and other (not standard) formats.
+
+            <li>Response data (array of objects) in standard JSON format here is used to generate table content
+                (for example, all Pets in Store).</li>
+
+            <li>Other types of these objects are displayed in the page section "Content types".
+                Here you can get the same POJOs displayed in different formats: json simple, json schema,
+                www form urlencoded, octal/msg, html, html schema, html stripped, openapi, plain text, uon, xml, xml
+                schema, xml soap.
+            </li>
+            <li>All readable table content and visual representation of the different content types are generated from
+                the response data.</li>
+        </ul>
+
+    </p>
+
+</div>
+</div><!-- END: 19.4 - juneau-petstore.PetstoreApp -->
 </div><!-- END: 19 - juneau-petstore -->
 
 <!-- ==================================================================================================== -->
@@ -37536,6 +37603,17 @@
 
 <h5 class='topic w800'>juneau-marshall</h5>
 <ul class='spaced-list'>
+	<li>
+		<ja>@BeanIgnore</ja> and <ja>@Bean</ja> annotations can alternately occur in parent class hierarchy.
+		The first one found dictates whether a class is ignored as a bean or not.
+	<li>
+		New {@link org.apache.juneau.ObjectMap(Object...)} constructor.
+	<li>
+		New swaps auto-added to all serializers/parsers:
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.transforms.MatchResultSwap} 
+			<li class='jc'>{@link org.apache.juneau.transforms.StackTraceElementSwap} 
+		</ul>		
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
@@ -37553,7 +37631,12 @@
 <h5 class='topic w800'>juneau-rest-client</h5>
 <ul class='spaced-list'>
 	<li>
-		New {@link org.apache.juneau.rest.client.RestCallHandler} interface for custom handling of HTTP requests.
+		Completely revamped RestClient API.
+		<ul>
+			<li>All APIs now extend from HttpClient interfaces.
+			<li>Better integration with HttpClient.
+			<li>New fluent-style methods with many new convenience methods.
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-doc</h5>

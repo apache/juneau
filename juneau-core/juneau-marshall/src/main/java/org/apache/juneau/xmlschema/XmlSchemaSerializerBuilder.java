@@ -27,6 +27,7 @@ import org.apache.juneau.xml.*;
 /**
  * Builder class for building instances of XML Schema serializers.
  */
+@Deprecated
 public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 
 	/**

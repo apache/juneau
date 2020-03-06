@@ -34,6 +34,7 @@ public class XmlConfigApply extends ConfigApply<XmlConfig> {
 		super(c, r);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void apply(AnnotationInfo<XmlConfig> ai, PropertyStoreBuilder psb) {
 		XmlConfig a = ai.getAnnotation();

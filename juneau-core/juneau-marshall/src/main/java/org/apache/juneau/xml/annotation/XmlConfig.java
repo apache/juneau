@@ -333,5 +333,6 @@ public @interface XmlConfig {
 	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
 	 * </ul>
 	 */
+	@Deprecated
 	String xsNamespace() default "";
 }

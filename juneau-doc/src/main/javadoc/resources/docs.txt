@@ -241,6 +241,7 @@ juneau-microservice-jetty.UiCustomization = #juneau-microservice-jetty.UiCustomi
 juneau-petstore = #juneau-petstore, Overview > juneau-pestore
 juneau-petstore.Building = #juneau-petstore.Building, Overview > juneau-pestore > Building and Running from Command-Line (Using Dockerfiles)
 juneau-petstore.Installing = #juneau-petstore.Installing, Overview > juneau-pestore > Installing in Eclipse
+juneau-petstore.PetstoreApp = #juneau-petstore.PetstoreApp, Overview > juneau-pestore > About Petstore App <br>
 juneau-petstore.Running = #juneau-petstore.Running, Overview > juneau-pestore > Running Petstore manually
 juneau-rest-client = #juneau-rest-client, Overview > juneau-rest-client
 juneau-rest-client.Authentication = #juneau-rest-client.Authentication, Overview > juneau-rest-client > Authentication
