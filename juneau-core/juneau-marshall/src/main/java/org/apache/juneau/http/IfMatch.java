@@ -103,7 +103,12 @@ public final class IfMatch extends ComplexEntityValidatorArrayHeader {
 		return new IfMatch(value);
 	}
 
-	private IfMatch(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public IfMatch(String value) {
 		super("If-Match", value);
 	}
 }

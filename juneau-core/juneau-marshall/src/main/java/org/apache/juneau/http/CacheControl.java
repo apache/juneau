@@ -108,7 +108,12 @@ public final class CacheControl extends BasicStringHeader {
 		return new CacheControl(value);
 	}
 
-	private CacheControl(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public CacheControl(String value) {
 		super("Cache-Control", value);
 	}
 }

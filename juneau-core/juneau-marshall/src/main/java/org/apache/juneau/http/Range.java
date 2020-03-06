@@ -154,7 +154,12 @@ public final class Range extends BasicStringHeader {
 		return new Range(value);
 	}
 
-	private Range(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Range(String value) {
 		super("Range", value);
 	}
 }

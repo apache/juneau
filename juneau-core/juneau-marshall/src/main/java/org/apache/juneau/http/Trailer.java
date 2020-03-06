@@ -71,7 +71,12 @@ public final class Trailer extends BasicStringHeader {
 		return new Trailer(value);
 	}
 
-	private Trailer(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Trailer(String value) {
 		super("Trailer", value);
 	}
 }

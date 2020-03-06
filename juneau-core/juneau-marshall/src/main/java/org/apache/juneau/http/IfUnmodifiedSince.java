@@ -75,7 +75,12 @@ public final class IfUnmodifiedSince extends BasicDateHeader {
 		return new IfUnmodifiedSince(value);
 	}
 
-	private IfUnmodifiedSince(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public IfUnmodifiedSince(String value) {
 		super("If-Unmodified-Since", value);
 	}
 }

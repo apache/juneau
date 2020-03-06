@@ -68,8 +68,13 @@ public class ContentType extends MediaType implements HttpHeader {
 	}
 
 
-	private ContentType(String s) {
-		super(s);
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public ContentType(String value) {
+		super(value);
 	}
 
 	/**

@@ -107,7 +107,12 @@ public final class TE extends ComplexRangeArrayHeader {
 		return te;
 	}
 
-	private TE(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public TE(String value) {
 		super("TE", value);
 	}
 }

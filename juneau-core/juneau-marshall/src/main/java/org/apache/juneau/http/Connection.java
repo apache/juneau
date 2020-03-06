@@ -89,8 +89,12 @@ public final class Connection extends BasicStringHeader {
 		return new Connection(value);
 	}
 
-
-	private Connection(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Connection(String value) {
 		super("Connection", value);
 	}
 

@@ -81,7 +81,12 @@ public final class Expect extends BasicStringHeader {
 		return new Expect(value);
 	}
 
-	private Expect(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Expect(String value) {
 		super("Expect", value);
 	}
 }

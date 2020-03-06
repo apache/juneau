@@ -62,7 +62,12 @@ public final class ProxyAuthenticate extends BasicStringHeader {
 		return new ProxyAuthenticate(value);
 	}
 
-	private ProxyAuthenticate(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public ProxyAuthenticate(String value) {
 		super("Proxy-Authenticate", value);
 	}
 }

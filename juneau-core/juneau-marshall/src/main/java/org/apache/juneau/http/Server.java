@@ -71,7 +71,12 @@ public final class Server extends BasicStringHeader {
 		return new Server(value);
 	}
 
-	private Server(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Server(String value) {
 		super("Server", value);
 	}
 }

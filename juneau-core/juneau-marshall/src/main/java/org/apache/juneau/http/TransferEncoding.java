@@ -71,7 +71,12 @@ public final class TransferEncoding extends BasicStringHeader {
 		return new TransferEncoding(value);
 	}
 
-	private TransferEncoding(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public TransferEncoding(String value) {
 		super("Transfer-Encoding", value);
 	}
 }

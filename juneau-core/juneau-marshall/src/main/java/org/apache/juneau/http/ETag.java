@@ -62,7 +62,12 @@ public final class ETag extends BasicStringHeader {
 		return new ETag(value);
 	}
 
-	private ETag(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public ETag(String value) {
 		super("ETag", value);
 	}
 }

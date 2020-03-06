@@ -60,7 +60,12 @@ public final class WwwAuthenticate extends BasicStringHeader {
 		return new WwwAuthenticate(value);
 	}
 
-	private WwwAuthenticate(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public WwwAuthenticate(String value) {
 		super("WWW-Authenticate", value);
 	}
 }

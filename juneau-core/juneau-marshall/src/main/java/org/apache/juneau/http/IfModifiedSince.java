@@ -103,7 +103,12 @@ public final class IfModifiedSince extends BasicDateHeader {
 		return new IfModifiedSince(value);
 	}
 
-	private IfModifiedSince(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public IfModifiedSince(String value) {
 		super("If-Modified-Since", value);
 	}
 }

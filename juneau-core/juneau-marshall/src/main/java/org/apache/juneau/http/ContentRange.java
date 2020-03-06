@@ -141,7 +141,12 @@ public final class ContentRange extends BasicStringHeader {
 		return new ContentRange(value);
 	}
 
-	private ContentRange(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public ContentRange(String value) {
 		super("Content-Range", value);
 	}
 }

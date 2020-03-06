@@ -139,7 +139,12 @@ public final class Via extends BasicStringArrayHeader {
 		return new Via(value);
 	}
 
-	private Via(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Via(String value) {
 		super("Via", value);
 	}
 }

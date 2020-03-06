@@ -72,7 +72,12 @@ public final class RetryAfter extends BasicStringHeader {
 		return new RetryAfter(value);
 	}
 
-	private RetryAfter(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public RetryAfter(String value) {
 		super("Retry-After", value);
 	}
 

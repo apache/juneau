@@ -79,7 +79,12 @@ public final class From extends BasicStringHeader {
 		return new From(value);
 	}
 
-	private From(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public From(String value) {
 		super("From", value);
 	}
 }

@@ -82,7 +82,12 @@ public final class LastModified extends BasicDateHeader {
 		return new LastModified(value);
 	}
 
-	private LastModified(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public LastModified(String value) {
 		super("Last-Modified", value);
 	}
 }

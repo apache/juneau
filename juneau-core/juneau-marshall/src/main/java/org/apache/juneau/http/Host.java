@@ -81,7 +81,12 @@ public final class Host extends BasicStringHeader {
 		return new Host(value);
 	}
 
-	private Host(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Host(String value) {
 		super("Host", value);
 	}
 }

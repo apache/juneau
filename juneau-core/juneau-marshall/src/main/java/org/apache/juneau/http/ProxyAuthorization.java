@@ -64,7 +64,12 @@ public final class ProxyAuthorization extends BasicStringHeader {
 		return new ProxyAuthorization(value);
 	}
 
-	private ProxyAuthorization(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public ProxyAuthorization(String value) {
 		super("Proxy-Authorization", value);
 	}
 }

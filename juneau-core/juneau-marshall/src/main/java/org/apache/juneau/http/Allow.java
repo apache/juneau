@@ -89,7 +89,12 @@ public final class Allow extends BasicStringArrayHeader {
 		return new Allow(value);
 	}
 
-	private Allow(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Allow(String value) {
 		super("Allow", value);
 	}
 }

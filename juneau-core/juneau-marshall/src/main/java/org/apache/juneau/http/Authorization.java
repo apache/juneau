@@ -84,7 +84,12 @@ public final class Authorization extends BasicStringHeader {
 		return new Authorization(value);
 	}
 
-	private Authorization(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Authorization(String value) {
 		super("Authorization", value);
 	}
 }

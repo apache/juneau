@@ -84,7 +84,12 @@ public final class Vary extends BasicStringHeader {
 		return new Vary(value);
 	}
 
-	private Vary(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Vary(String value) {
 		super("Vary", value);
 	}
 }

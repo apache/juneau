@@ -64,7 +64,12 @@ public final class UserAgent extends BasicStringHeader {
 		return new UserAgent(value);
 	}
 
-	private UserAgent(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public UserAgent(String value) {
 		super("User-Agent", value);
 	}
 }

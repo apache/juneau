@@ -70,7 +70,12 @@ public final class Referer extends HeaderUri {
 		return new Referer(value);
 	}
 
-	private Referer(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Referer(String value) {
 		super("Referer", value);
 	}
 }

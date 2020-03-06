@@ -81,7 +81,12 @@ public final class ContentEncoding extends BasicEnumHeader<ContentEncodingEnum> 
 		return new ContentEncoding(value);
 	}
 
-	private ContentEncoding(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public ContentEncoding(String value) {
 		super("Content-Encoding", value, ContentEncodingEnum.class, ContentEncodingEnum.OTHER);
 	}
 }

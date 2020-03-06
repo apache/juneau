@@ -138,7 +138,12 @@ public final class Warning extends BasicStringHeader {
 		return new Warning(value);
 	}
 
-	private Warning(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Warning(String value) {
 		super("Warning", value);
 	}
 }

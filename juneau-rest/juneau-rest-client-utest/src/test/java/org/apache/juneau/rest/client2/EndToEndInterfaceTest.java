@@ -17,8 +17,7 @@ import static org.junit.Assert.*;
 
 import java.io.*;
 
-import org.apache.juneau.http.ReaderResource;
-import org.apache.juneau.http.StreamResource;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Query;
@@ -316,12 +315,12 @@ public class EndToEndInterfaceTest {
 
 		@Override
 		public StreamResource streamResource() throws IOException {
-			return StreamResource.create().mediaType("text/foo").contents("foo".getBytes()).header("Foo", "foo").build();
+			return StreamResource.create().mediaType("text/foo").contents("foo".getBytes()).header("Foo", "foo").headers(ETag.forString("bar")).build();
 		}
 
 		@Override
 		public ReaderResource readerResource() throws IOException {
-			return ReaderResource.create().mediaType("text/foo").contents("foo").header("Foo", "foo").build();
+			return ReaderResource.create().mediaType("text/foo").contents("foo").header("Foo", "foo").headers(ETag.forString("bar")).build();
 		}
 	}
 
@@ -332,6 +331,7 @@ public class EndToEndInterfaceTest {
 		StreamResource r = id.streamResource();
 		assertEquals("foo", IOUtils.read(r.getContents()));
 		assertEquals("foo", r.getHeaders().get("Foo"));
+		assertEquals("bar", r.getHeaders().get("ETag"));
 		assertEquals("text/foo", r.getMediaType().toString());
 	}
 
@@ -340,6 +340,7 @@ public class EndToEndInterfaceTest {
 		ReaderResource r = id.readerResource();
 		assertEquals("foo", IOUtils.read(r.getContents()));
 		assertEquals("foo", r.getHeaders().get("Foo"));
+		assertEquals("bar", r.getHeaders().get("ETag"));
 		assertEquals("text/foo", r.getMediaType().toString());
 	}
 

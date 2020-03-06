@@ -106,7 +106,12 @@ public final class IfNoneMatch extends ComplexEntityValidatorArrayHeader {
 		return new IfNoneMatch(value);
 	}
 
-	private IfNoneMatch(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public IfNoneMatch(String value) {
 		super("If-None-Match", value);
 	}
 }

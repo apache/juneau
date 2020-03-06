@@ -68,7 +68,12 @@ public final class Location extends HeaderUri {
 		return new Location(value);
 	}
 
-	private Location(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Location(String value) {
 		super("Location", value);
 	}
 }

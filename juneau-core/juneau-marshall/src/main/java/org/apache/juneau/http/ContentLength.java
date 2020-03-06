@@ -82,7 +82,12 @@ public final class ContentLength extends BasicLongHeader {
 		return new ContentLength(value);
 	}
 
-	private ContentLength(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public ContentLength(String value) {
 		super("Content-Length", value);
 	}
 }

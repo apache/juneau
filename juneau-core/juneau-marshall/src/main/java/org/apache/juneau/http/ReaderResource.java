@@ -185,6 +185,20 @@ public class ReaderResource implements Writable {
 		}
 
 		/**
+		 * Specifies HTTP response header values.
+		 *
+		 * @param headers
+		 * 	The HTTP headers.
+		 * 	<br>Values will be converted to <c>Strings</c> using {@link Object#toString()}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder headers(HttpHeader...headers) {
+			for (HttpHeader h : headers)
+				this.headers.put(h.getName(), h.getValue());
+			return this;
+		}
+
+		/**
 		 * Specifies that this resource is intended to be cached.
 		 *
 		 * <p>

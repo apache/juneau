@@ -103,7 +103,12 @@ public final class Upgrade extends BasicStringArrayHeader {
 		return new Upgrade(value);
 	}
 
-	private Upgrade(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Upgrade(String value) {
 		super("Upgrade", value);
 	}
 }

@@ -79,7 +79,12 @@ public final class Pragma extends BasicStringHeader {
 		return new Pragma(value);
 	}
 
-	private Pragma(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Pragma(String value) {
 		super("Pragma", value);
 	}
 }

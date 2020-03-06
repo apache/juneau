@@ -76,7 +76,12 @@ public final class IfRange extends BasicStringHeader {
 		return new IfRange(value);
 	}
 
-	private IfRange(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public IfRange(String value) {
 		super("If-Range", value);
 	}
 

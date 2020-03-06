@@ -79,7 +79,12 @@ public final class ContentLocation extends HeaderUri {
 		return new ContentLocation(value);
 	}
 
-	private ContentLocation(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public ContentLocation(String value) {
 		super("Content-Location", value);
 	}
 }

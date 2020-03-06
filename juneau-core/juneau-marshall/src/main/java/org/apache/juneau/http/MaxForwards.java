@@ -80,7 +80,12 @@ public final class MaxForwards extends BasicIntegerHeader {
 		return new MaxForwards(value);
 	}
 
-	private MaxForwards(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public MaxForwards(String value) {
 		super("Max-Forwards", value);
 	}
 }

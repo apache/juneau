@@ -92,7 +92,12 @@ public final class Expires extends BasicDateHeader {
 		return new Expires(value);
 	}
 
-	private Expires(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Expires(String value) {
 		super("Expires", value);
 	}
 }

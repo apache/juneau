@@ -94,7 +94,12 @@ public final class ContentLanguage extends BasicStringArrayHeader {
 		return new ContentLanguage(value);
 	}
 
-	private ContentLanguage(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public ContentLanguage(String value) {
 		super("Allow", value);
 	}
 }
