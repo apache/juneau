@@ -21,6 +21,7 @@ import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.*;
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -198,21 +199,25 @@ public class BeanMeta<T> {
 
 				Map<String,BeanPropertyMeta.Builder> normalProps = new LinkedHashMap<>();
 
+				Annotation ba = ci.findFirstAnnotation(ctx, Bean.class, BeanIgnore.class);
+				boolean hasBean = ba != null && ba.annotationType() == Bean.class;
+				boolean hasBeanIgnore = ba != null && ba.annotationType() == BeanIgnore.class;
+
 				/// See if this class matches one the patterns in the exclude-class list.
 				if (ctx.isNotABean(c))
 					return "Class matches exclude-class list";
 
-				if (! (cVis.isVisible(c.getModifiers()) || c.isAnonymousClass()))
+				if (! hasBean && ! (cVis.isVisible(c.getModifiers()) || c.isAnonymousClass()))
 					return "Class is not public";
 
-				if (isIgnored(c))
+				if (hasBeanIgnore)
 					return "Class is annotated with @BeanIgnore";
 
 				// Make sure it's serializable.
 				if (beanFilter == null && ctx.isBeansRequireSerializable() && ! ci.isChildOf(Serializable.class))
 					return "Class is not serializable";
 
-				// Look for @BeanConstructor constructor.
+				// Look for @Beanc constructor on public constructors.
 				for (ConstructorInfo x : ci.getPublicConstructors()) {
 					if (x.hasAnnotation(BeanConstructor.class)) {
 						if (constructor != null)
@@ -254,12 +259,38 @@ public class BeanMeta<T> {
 					}
 				}
 
+				// Look for @Beanc on all other constructors.
+				if (constructor == null) {
+					for (ConstructorInfo x : ci.getDeclaredConstructors()) {
+						if (ctx.hasAnnotation(Beanc.class, x)) {
+							if (constructor != null)
+								throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
+							constructor = x;
+							constructorArgs = split(ctx.getAnnotation(Beanc.class, x).properties());
+							if (constructorArgs.length != x.getParamCount()) {
+								if (constructorArgs.length != 0)
+									throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
+								constructorArgs = new String[x.getParamCount()];
+								int i = 0;
+								for (ParamInfo pi : x.getParams()) {
+									String pn = pi.getName();
+									if (pn == null)
+										throw new BeanRuntimeException(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
+									constructorArgs[i++] = pn;
+								}
+							}
+							constructor.setAccessible();
+						}
+					}
+				}
+
+
 				// If this is an interface, look for impl classes defined in the context.
 				if (constructor == null)
 					constructor = ctx.getImplClassConstructor(c, conVis);
 
 				if (constructor == null)
-					constructor = ci.getNoArgConstructor(conVis);
+					constructor = ci.getNoArgConstructor(hasBean ? Visibility.PRIVATE : conVis);
 
 				if (constructor == null && beanFilter == null && ctx.isBeansRequireDefaultConstructor())
 					return "Class does not have the required no-arg constructor";
@@ -480,22 +511,6 @@ public class BeanMeta<T> {
 			}
 
 			return null;
-		}
-
-		private boolean isIgnored(Class<?> c) {
-			if (c == null)
-				return false;
-			if (ctx.hasDeclaredAnnotation(BeanIgnore.class, c))
-				return true;
-			if (ctx.hasDeclaredAnnotation(Bean.class, c))
-				return false;
-			for (Class<?> ci : c.getInterfaces()) {
-				if (ctx.hasDeclaredAnnotation(BeanIgnore.class, ci))
-					return true;
-				if (ctx.hasDeclaredAnnotation(Bean.class, ci))
-					return false;
-			}
-			return isIgnored(c.getSuperclass());
 		}
 
 		private String findDictionaryName(ClassMeta<?> cm) {

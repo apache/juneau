@@ -21,8 +21,16 @@
 <h5 class='topic w800'>juneau-marshall</h5>
 <ul class='spaced-list'>
 	<li>
-		<ja>@BeanIgnore</ja> and <ja>@Bean</ja> annotations can alternately occur in parent class hierarchy.
+		{@link oaj.annotation.Bean @Bean} and {@link oaj.annotation.BeanIgnore @BeanIgnore} annotations can alternately occur in parent class hierarchy.
 		The first one found dictates whether a class is ignored as a bean or not.
+	<li>
+		Applying the {@link oaj.annotation.Bean @Bean} annotation on a class will now force non-public classes to be interpreted as beans.
+		For example, applying {@link oaj.annotation.Bean @Bean} to a <jk>private</jk> class will force it to be treated as a bean.
+		<br>
+		Also, if a public bean constructor cannot be found, the default constructor will be used 
+		regardless of it's visibility if the {@link oaj.annotation.Bean @Bean} annotation is on the class.
+	<li>
+		The <ja>@Beanc</ja> annotation can now be recognized and used on non-public constructors.
 	<li>
 		Several bug fixes in the {@link HtmlSerializer} and {@link HtmlParser} classes around the handling of 
 		collections and arrays of beans with <c><ja>@Bean</ja>(typeName)</c> annotations.

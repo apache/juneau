@@ -1285,6 +1285,32 @@ public final class ClassInfo {
 		return l;
 	}
 
+	/**
+	 * Searches up the parent hierarchy of this class for the first annotation in the list it finds.
+	 *
+	 * @param mp Metadata provider.
+	 * @param annotations The annotations to search for.
+	 * @return The first annotation found, or <jk>null</jk> if not found.
+	 */
+	@SafeVarargs
+	public final Annotation findFirstAnnotation(MetaProvider mp, Class<? extends Annotation>...annotations) {
+		for (Class<? extends Annotation> ca : annotations) {
+			Annotation x = getAnnotation(ca, mp);
+			if (x != null)
+				return x;
+		}
+		for (ClassInfo ci : getInterfaces()) {
+			for (Class<? extends Annotation> ca : annotations) {
+				Annotation x = ci.getAnnotation(ca, mp);
+				if (x != null)
+					return x;
+			}
+		}
+		ClassInfo ci = getParent();
+		return ci == null ? null : ci.findFirstAnnotation(mp, annotations);
+	}
+
+
 	AnnotationList appendAnnotationList(AnnotationList m) {
 		for (ClassInfo ci : getParents())
 			for (Annotation a : ci.c.getDeclaredAnnotations())
