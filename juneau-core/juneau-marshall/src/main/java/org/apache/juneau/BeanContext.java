@@ -2381,12 +2381,13 @@ public class BeanContext extends Context implements MetaProvider {
 		for (Annotation a : ps.getListProperty(BEAN_annotations, Annotation.class)) {
 			try {
 				Method m = a.getClass().getMethod("on");
+				m.setAccessible(true);
 				String on = (String)m.invoke(a);
 				rmb.append(on, a);
 			} catch (NoSuchMethodException e) {
 				throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method.", a.getClass().getSimpleName());
 			} catch (Exception e) {
-				throw new ConfigException(e, "Invalid annotation @{0} used in BEAN_annotations property.");
+				throw new ConfigException(e, "Invalid annotation @{0} used in BEAN_annotations property.", a.getClass().getName());
 			}
 		}
 		this.annotations = rmb.build();
@@ -3227,11 +3228,11 @@ public class BeanContext extends Context implements MetaProvider {
 
 	private static final boolean DISABLE_ANNOTATION_CACHING = ! Boolean.getBoolean("juneau.disableAnnotationCaching");
 
-	private TwoKeyConcurrentHashMap<Class<?>,Class<? extends Annotation>,Optional<Annotation>> classAnnotationCache = new TwoKeyConcurrentHashMap<>();
-	private TwoKeyConcurrentHashMap<Class<?>,Class<? extends Annotation>,Optional<Annotation>> declaredClassAnnotationCache = new TwoKeyConcurrentHashMap<>();
-	private TwoKeyConcurrentHashMap<Method,Class<? extends Annotation>,Optional<Annotation>> methodAnnotationCache = new TwoKeyConcurrentHashMap<>();
-	private TwoKeyConcurrentHashMap<Field,Class<? extends Annotation>,Optional<Annotation>> fieldAnnotationCache = new TwoKeyConcurrentHashMap<>();
-	private TwoKeyConcurrentHashMap<Constructor<?>,Class<? extends Annotation>,Optional<Annotation>> constructorAnnotationCache = new TwoKeyConcurrentHashMap<>();
+	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Optional<Annotation>> classAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Optional<Annotation>> declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Method,Class<? extends Annotation>,Optional<Annotation>> methodAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Field,Class<? extends Annotation>,Optional<Annotation>> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,Optional<Annotation>> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
 
 	@Override /* MetaProvider */
 	public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c) {

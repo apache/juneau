@@ -308,4 +308,47 @@ public class BeanConfigAnnotationTest {
 		check("true", bc.isUseInterfaceProxies());
 		check("false", bc.isUseJavaBeanIntrospector());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @BeanConfig(bpi/bpx) should override @Bean(bpi/bpx)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@BeanConfig(bpi="b,c,d", bpx="c")
+	@Bean(bpi="a,b,c", bpx="b")
+	static class D {
+		public int a, b, c, d;
+
+		public static D create() {
+			D d = new D();
+			d.a = 1;
+			d.b = 2;
+			d.c = 3;
+			d.d = 4;
+			return d;
+		}
+	}
+
+	private static ClassInfo d = ClassInfo.of(D.class);
+
+//	@Test
+//	public void beanBpiBpxCombined_noBeanConfig() throws Exception {
+//		String json = SimpleJson.DEFAULT.toString(D.create());
+//		assertEquals("{a:1,c:3}", json);
+//		D d = SimpleJson.DEFAULT.read(json, D.class);
+//		json = SimpleJson.DEFAULT.toString(d);
+//		assertEquals("{a:1,c:3}", json);
+//	}
+//
+//	@Test
+//	public void beanBpiBpxCombined_beanConfigOverride() throws Exception {
+//		AnnotationList al = c.getAnnotationListChildFirst(null);
+//		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, sr).build();
+//		JsonParser jp = JsonParser.create().applyAnnotations(al, sr).build();
+//
+//		String json = js.serialize(D.create());
+//		assertEquals("{b:2,d:4}", json);
+//		D d = jp.parse(json, D.class);
+//		json = js.serialize(d);
+//		assertEquals("{b:2,d:4}", json);
+//	}
 }

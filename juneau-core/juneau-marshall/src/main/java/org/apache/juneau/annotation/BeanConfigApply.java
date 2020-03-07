@@ -14,7 +14,9 @@ package org.apache.juneau.annotation;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.BeanTraverseContext.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
+import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -23,6 +25,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.transform.*;
 
 /**
  * Applies {@link BeanConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -184,6 +187,125 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.addTo(BEAN_annotations, a.applyURI());
 		if (a.applySwap().length > 0)
 			psb.addTo(BEAN_annotations, a.applySwap());
+
+//		if (a.bpi().length > 0)
+//			for (Map.Entry<String,String> e : stringsMap(a.bpi(), "bpi").entrySet())
+//				psb.addTo(BEAN_annotations, bean(e.getKey(), e.getValue(), null, null, null));
+//		for (CS e : a.bpiMap())
+//			psb.addTo(BEAN_annotations, bean(e.k().getName(), e.v(), null, null, null));
+//
+//		if (a.bpx().length > 0)
+//			for (Map.Entry<String,String> e : stringsMap(a.bpx(), "bpx").entrySet())
+//				psb.addTo(BEAN_annotations, bean(e.getKey(), null, e.getValue(), null, null));
+//		for (CS e : a.bpxMap())
+//			psb.addTo(BEAN_annotations, bean(e.k().getName(), null, e.v(), null, null));
+//
+//		if (a.bpro().length > 0)
+//			for (Map.Entry<String,String> e : stringsMap(a.bpro(), "bpro").entrySet())
+//				psb.addTo(BEAN_annotations, bean(e.getKey(), null, null, e.getValue(), null));
+//		for (CS e : a.bproMap())
+//			psb.addTo(BEAN_annotations, bean(e.k().getName(), null, null, e.v(), null));
+//
+//		if (a.bpwo().length > 0)
+//			for (Map.Entry<String,String> e : stringsMap(a.bpwo(), "bpwo").entrySet())
+//				psb.addTo(BEAN_annotations, bean(e.getKey(), null, null, null, e.getValue()));
+//		for (CS e : a.bpwoMap())
+//			psb.addTo(BEAN_annotations, bean(e.k().getName(), null, null, null, e.v()));
+	}
+
+	private static Bean bean(final String on, final String bpi, final String bpx, final String bpro, final String bpwo) {
+		return new Bean() {
+
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return Bean.class;
+			}
+
+			@Override
+			public Class<?>[] beanDictionary() {
+				return new Class[0];
+			}
+
+			@Override
+			public String bpi() {
+				return emptyIfNull(bpi);
+			}
+
+			@Override
+			public String bpx() {
+				return emptyIfNull(bpx);
+			}
+
+			@Override
+			public String bpro() {
+				return emptyIfNull(bpro);
+			}
+
+			@Override
+			public String bpwo() {
+				return emptyIfNull(bpwo);
+			}
+
+			@Override
+			public Class<?>[] dictionary() {
+				return new Class[0];
+			}
+
+			@Override
+			public String excludeProperties() {
+				return "";
+			}
+
+			@Override
+			public boolean fluentSetters() {
+				return false;
+			}
+
+			@Override
+			public Class<?> interfaceClass() {
+				return Object.class;
+			}
+
+			@Override
+			public String on() {
+				return on;
+			}
+
+			@Override
+			public String properties() {
+				return "";
+			}
+
+			@Override
+			public Class<? extends PropertyFilter> propertyFilter() {
+				return PropertyFilter.class;
+			}
+
+			@Override
+			public Class<? extends PropertyNamer> propertyNamer() {
+				return PropertyNamerDefault.class;
+			}
+
+			@Override
+			public boolean sort() {
+				return false;
+			}
+
+			@Override
+			public Class<?> stopClass() {
+				return Object.class;
+			}
+
+			@Override
+			public String typeName() {
+				return "";
+			}
+
+			@Override
+			public String typePropertyName() {
+				return "";
+			}
+		};
 	}
 
 	private Locale locale(String in) {

@@ -21,8 +21,25 @@ import java.util.concurrent.*;
  * @param <K2> Key part 2 type.
  * @param <V> Value type.
  */
-public class TwoKeyConcurrentHashMap<K1,K2,V> extends ConcurrentHashMap<TwoKeyConcurrentHashMap.Key<K1,K2>,V> {
+public class TwoKeyConcurrentCache<K1,K2,V> extends ConcurrentHashMap<TwoKeyConcurrentCache.Key<K1,K2>,V> {
 	private static final long serialVersionUID = 1L;
+
+	private final boolean disabled;
+
+	/**
+	 * Constructor.
+	 */
+	public TwoKeyConcurrentCache() {
+		this.disabled = false;
+	}
+
+	/**
+	 * Constructor.
+	 * @param disabled If <jk>true</jk>, get/put operations are no-ops.
+	 */
+	public TwoKeyConcurrentCache(boolean disabled) {
+		this.disabled = disabled;
+	}
 
 	/**
 	 * Adds an entry to this map.
@@ -33,6 +50,8 @@ public class TwoKeyConcurrentHashMap<K1,K2,V> extends ConcurrentHashMap<TwoKeyCo
 	 * @return The previous value if there was one.
 	 */
 	public V put(K1 key1, K2 key2, V value) {
+		if (disabled)
+			return null;
 		Key<K1,K2> key = new Key<>(key1, key2);
 		return super.put(key, value);
 	}
@@ -45,6 +64,8 @@ public class TwoKeyConcurrentHashMap<K1,K2,V> extends ConcurrentHashMap<TwoKeyCo
 	 * @return The previous value if there was one.
 	 */
 	public V get(K1 key1, K2 key2) {
+		if (disabled)
+			return null;
 		Key<K1,K2> key = new Key<>(key1, key2);
 		return super.get(key);
 	}
