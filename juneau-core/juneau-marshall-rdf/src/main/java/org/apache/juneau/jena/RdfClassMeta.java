@@ -42,8 +42,8 @@ public class RdfClassMeta extends ExtendedClassMeta {
 		} else {
 			collectionFormat = RdfCollectionFormat.DEFAULT;
 		}
-		List<Rdf> rdfs = cm.getAnnotations(Rdf.class);
-		List<RdfSchema> schemas = cm.getAnnotations(RdfSchema.class);
+		List<Rdf> rdfs = cm.getAnnotationsParentFirst(Rdf.class);
+		List<RdfSchema> schemas = cm.getAnnotationsParentFirst(RdfSchema.class);
 		this.namespace = RdfUtils.findNamespace(rdfs, schemas);
 	}
 

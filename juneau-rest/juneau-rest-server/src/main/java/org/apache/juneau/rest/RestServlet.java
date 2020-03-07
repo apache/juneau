@@ -116,12 +116,15 @@ public abstract class RestServlet extends HttpServlet {
 		if (context != null)
 			return context.getPath();
 		ClassInfo ci = ClassInfo.of(getClass());
-		for (Rest rr : ci.getAnnotations(Rest.class))
+		String path = "";
+		for (Rest rr : ci.getAnnotationsParentFirst(Rest.class))
 			if (! rr.path().isEmpty())
-				return trimSlashes(rr.path());
-		for (RestResource rr : ci.getAnnotations(RestResource.class))
+				path = trimSlashes(rr.path());
+		if (! path.isEmpty())
+			return path;
+		for (RestResource rr : ci.getAnnotationsParentFirst(RestResource.class))
 			if (! rr.path().isEmpty())
-				return trimSlashes(rr.path());
+				path = trimSlashes(rr.path());
 		return "";
 	}
 

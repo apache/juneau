@@ -341,7 +341,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 		int code = 500;
 
 		ClassInfo ci = ClassInfo.ofc(e);
-		Response r = ci.getAnnotation(Response.class);
+		Response r = ci.getLastAnnotation(Response.class);
 		if (r != null)
 			if (r.code().length > 0)
 				code = r.code()[0];

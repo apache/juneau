@@ -158,14 +158,14 @@ public final class ParamInfo {
 			for (Annotation a2 : eInfo.getParameterAnnotations(index))
 				if (a.isInstance(a2))
 					return (T)a2;
-			return eInfo.getParamType(index).resolved().getAnnotation(a);
+			return eInfo.getParamType(index).resolved().getLastAnnotation(a);
 		}
 		MethodInfo mi = (MethodInfo)eInfo;
 		for (Method m2 : mi.getMatching())
 			for (Annotation a2 :  m2.getParameterAnnotations()[index])
 				if (a.isInstance(a2))
 					return (T)a2;
-		return eInfo.getParamType(index).resolved().getAnnotation(a);
+		return eInfo.getParamType(index).resolved().getLastAnnotation(a);
 	}
 
 	/**

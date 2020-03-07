@@ -446,7 +446,7 @@ final class SwaggerGenerator {
 					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {
 						ResponseHeader a = ecmi.getAnnotation(ResponseHeader.class);
 						if (a == null)
-							a = ecmi.getResolvedReturnType().getAnnotation(ResponseHeader.class);
+							a = ecmi.getResolvedReturnType().getLastAnnotation(ResponseHeader.class);
 						if (a != null) {
 							String ha = a.name();
 							for (Integer code : codes) {

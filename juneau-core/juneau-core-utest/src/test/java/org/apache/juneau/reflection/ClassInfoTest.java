@@ -831,29 +831,29 @@ public class ClassInfoTest {
 
 	@Test
 	public void getAnnotation() {
-		check("@A(7)", g3.getAnnotation(A.class));
-		check(null, g3.getAnnotation(B.class));
-		check(null, g3.getAnnotation(null));
+		check("@A(7)", g3.getLastAnnotation(A.class));
+		check(null, g3.getLastAnnotation(B.class));
+		check(null, g3.getLastAnnotation(null));
 	}
 
 	@Test
 	public void getAnnotation_twice() {
-		check("@A(7)", g3.getAnnotation(A.class));
-		check("@A(7)", g3.getAnnotation(A.class));
+		check("@A(7)", g3.getLastAnnotation(A.class));
+		check("@A(7)", g3.getLastAnnotation(A.class));
 	}
 
 	@Test
 	public void getAnnotation_onParent() {
-		check("@A(7)", g4.getAnnotation(A.class));
-		check(null, g4.getAnnotation(B.class));
-		check(null, g4.getAnnotation(null));
+		check("@A(7)", g4.getLastAnnotation(A.class));
+		check(null, g4.getLastAnnotation(B.class));
+		check(null, g4.getLastAnnotation(null));
 	}
 
 	@Test
 	public void getAnnotation_onInterface() {
-		check("@A(3)", g5.getAnnotation(A.class));
-		check(null, g5.getAnnotation(B.class));
-		check(null, g5.getAnnotation(null));
+		check("@A(3)", g5.getLastAnnotation(A.class));
+		check(null, g5.getLastAnnotation(B.class));
+		check(null, g5.getLastAnnotation(null));
 	}
 
 	@Test
@@ -861,11 +861,6 @@ public class ClassInfoTest {
 		assertTrue(g3.hasAnnotation(A.class));
 		assertFalse(g3.hasAnnotation(B.class));
 		assertFalse(g3.hasAnnotation(null));
-	}
-
-	@Test
-	public void getAnnotations() {
-		check("@A(7),@A(6),@A(5),@A(3),@A(1),@A(2)", g3.getAnnotations(A.class));
 	}
 
 	@Test
@@ -905,11 +900,6 @@ public class ClassInfoTest {
 	public void getDeclaredAnnotationInfo_twice() {
 		check("@A(7)", g3.getDeclaredAnnotationInfo(A.class));
 		check("@A(7)", g3.getDeclaredAnnotationInfo(A.class));
-	}
-
-	@Test
-	public void getAnnotationInfos() {
-		check("@A(7),@A(6),@A(5),@A(3),@A(1),@A(2)", g3.getAnnotationInfos(A.class));
 	}
 
 	@Test

@@ -917,8 +917,8 @@ public final class ClassInfo {
 	 * @return
 	 * 	The annotation if found, or <jk>null</jk> if not.
 	 */
-	public <T extends Annotation> T getAnnotation(Class<T> a) {
-		return getAnnotation(a, MetaProvider.DEFAULT);
+	public <T extends Annotation> T getLastAnnotation(Class<T> a) {
+		return getLastAnnotation(a, MetaProvider.DEFAULT);
 	}
 
 	/**
@@ -935,7 +935,7 @@ public final class ClassInfo {
 	 * @return
 	 * 	The annotation if found, or <jk>null</jk> if not.
 	 */
-	public <T extends Annotation> T getAnnotation(Class<T> a, MetaProvider mp) {
+	public <T extends Annotation> T getLastAnnotation(Class<T> a, MetaProvider mp) {
 		return findAnnotation(a, mp);
 	}
 
@@ -948,7 +948,7 @@ public final class ClassInfo {
 	 * 	The <jk>true</jk> if annotation if found.
 	 */
 	public boolean hasAnnotation(Class<? extends Annotation> a) {
-		return getAnnotation(a) != null;
+		return getLastAnnotation(a) != null;
 	}
 
 	/**
@@ -1017,32 +1017,7 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces.
-	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
-	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return appendAnnotations(new ArrayList<>(), a);
-	}
-
-	/**
-	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces.
-	 *
-	 * @param <T> The annotation to search for.
-	 * @param a The annotation to search for.
-	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
-	 * @return
-	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
-	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a, MetaProvider mp) {
-		return appendAnnotations(new ArrayList<>(), a, mp);
-	}
-
-	/**
-	 * Identical to {@link #getAnnotations(Class)} but optionally returns the list in reverse (parent-to-child) order.
+	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
@@ -1054,7 +1029,10 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Identical to {@link #getAnnotations(Class,MetaProvider)} but optionally returns the list in reverse (parent-to-child) order.
+	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces.
+	 *
+	 * <p>
+	 * Returns the list in reverse (parent-to-child) order.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
@@ -1064,20 +1042,6 @@ public final class ClassInfo {
 	 */
 	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a, MetaProvider mp) {
 		return appendAnnotationsParentFirst(new ArrayList<>(), a, mp);
-	}
-
-	/**
-	 * Same as getAnnotations(Class) except returns the annotations with the accompanying class.
-	 *
-	 * <p>
-	 * Results are ordered child-to-parent.
-	 *
-	 * @param <T> The annotation class type.
-	 * @param a The annotation class type.
-	 * @return The found matches, or an empty list if annotation was not found.
-	 */
-	public <T extends Annotation> List<AnnotationInfo<T>> getAnnotationInfos(Class<T> a) {
-		return appendAnnotationInfos(new ArrayList<>(), a);
 	}
 
 	/**
@@ -1112,6 +1076,7 @@ public final class ClassInfo {
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
+//		return getAnnotationListParentFirst(filter);
 		return appendAnnotationList(new AnnotationList(filter));
 	}
 
@@ -1295,13 +1260,13 @@ public final class ClassInfo {
 	@SafeVarargs
 	public final Annotation findFirstAnnotation(MetaProvider mp, Class<? extends Annotation>...annotations) {
 		for (Class<? extends Annotation> ca : annotations) {
-			Annotation x = getAnnotation(ca, mp);
+			Annotation x = getLastAnnotation(ca, mp);
 			if (x != null)
 				return x;
 		}
 		for (ClassInfo ci : getInterfaces()) {
 			for (Class<? extends Annotation> ca : annotations) {
-				Annotation x = ci.getAnnotation(ca, mp);
+				Annotation x = ci.getLastAnnotation(ca, mp);
 				if (x != null)
 					return x;
 			}
@@ -1349,13 +1314,13 @@ public final class ClassInfo {
 
 		ClassInfo sci = getParent();
 		if (sci != null) {
-			t2 = sci.getAnnotation(a, mp);
+			t2 = sci.getLastAnnotation(a, mp);
 			if (t2 != null)
 				return t2;
 		}
 
 		for (ClassInfo c2 : getInterfaces()) {
-			t2 = c2.getAnnotation(a, mp);
+			t2 = c2.getLastAnnotation(a, mp);
 			if (t2 != null)
 				return t2;
 		}

@@ -55,11 +55,9 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 	@SuppressWarnings("deprecation")
 	private void init(Class<?> interfaceClass, BeanContext bc) {
 		interfaceClass(interfaceClass);
-		List<Bean> annotations = ClassInfo.of(interfaceClass).getAnnotations(Bean.class, bc);
+		List<Bean> annotations = ClassInfo.of(interfaceClass).getAnnotationsParentFirst(Bean.class, bc);
 
-		ListIterator<Bean> li = annotations.listIterator(annotations.size());
-		while (li.hasPrevious()) {
-			Bean b = li.previous();
+		for (Bean b : annotations) {
 
 			if (! b.properties().isEmpty())
 				bpi(split(b.properties()));

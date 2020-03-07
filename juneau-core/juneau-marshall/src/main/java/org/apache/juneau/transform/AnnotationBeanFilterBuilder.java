@@ -41,9 +41,7 @@ public final class AnnotationBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 	public AnnotationBeanFilterBuilder(Class<T> annotatedClass, List<Bean> annotations) throws Exception {
 		super(annotatedClass);
 
-		ListIterator<Bean> li = annotations.listIterator(annotations.size());
-		while (li.hasPrevious()) {
-			Bean b = li.previous();
+		for (Bean b : annotations) {
 
 			if (! b.properties().isEmpty())
 				bpi(split(b.properties()));

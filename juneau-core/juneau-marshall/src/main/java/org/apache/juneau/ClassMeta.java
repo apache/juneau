@@ -685,7 +685,7 @@ public final class ClassMeta<T> implements Type {
 
 		private BeanFilter findBeanFilter(BeanContext bc) {
 			try {
-				List<Bean> ba = info.getAnnotations(Bean.class, bc);
+				List<Bean> ba = info.getAnnotationsParentFirst(Bean.class, bc);
 				if (! ba.isEmpty())
 					return new AnnotationBeanFilterBuilder(innerClass, ba).build();
 			} catch (Exception e) {
@@ -2048,7 +2048,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.
 	 */
 	public <A extends Annotation> A getAnnotation(Class<A> a) {
-		return info.getAnnotation(a, beanContext == null ? BeanContext.DEFAULT : beanContext);
+		return info.getLastAnnotation(a, beanContext == null ? BeanContext.DEFAULT : beanContext);
 	}
 
 	/**
@@ -2062,19 +2062,7 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces.
-	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
-	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a) {
-		return info.getAnnotations(a, beanContext == null ? BeanContext.DEFAULT : beanContext);
-	}
-
-	/**
-	 * Identical to {@link #getAnnotations(Class)} but optionally returns the list in reverse (parent-to-child) order.
+	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
 	 * @param a
 	 * 	The annotation to search for.

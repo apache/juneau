@@ -101,8 +101,8 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	private static Namespace findNamespace(ClassMeta<?> cm, MetaProvider mp) {
 		if (cm == null)
 			return null;
-		List<Xml> xmls = cm.getAnnotations(Xml.class);
-		List<XmlSchema> schemas = cm.getAnnotations(XmlSchema.class);
+		List<Xml> xmls = cm.getAnnotationsParentFirst(Xml.class);
+		List<XmlSchema> schemas = cm.getAnnotationsParentFirst(XmlSchema.class);
 		return XmlUtils.findNamespace(xmls, schemas);
 	}
 }
