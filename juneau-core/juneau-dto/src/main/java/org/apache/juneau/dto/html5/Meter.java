@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Meter extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Meter} element.
+	 */
+	public Meter() {}
+
+	/**
+	 * Creates a {@link Meter} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Meter(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.forms#attr-meter-high high} attribute.
 	 *
 	 * <p>

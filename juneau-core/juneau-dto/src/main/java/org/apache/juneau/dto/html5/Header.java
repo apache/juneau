@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="header")
 public class Header extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Header} element.
+	 */
+	public Header() {}
+
+	/**
+	 * Creates a {@link Header} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Header(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

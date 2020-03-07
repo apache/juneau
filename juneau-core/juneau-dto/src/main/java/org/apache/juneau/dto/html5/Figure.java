@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="figure")
 public class Figure extends HtmlElementContainer {
 
+	/**
+	 * Creates an empty {@link Figure} element.
+	 */
+	public Figure() {}
+
+	/**
+	 * Creates a {@link Figure} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Figure(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Blockquote extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Blockquote} element.
+	 */
+	public Blockquote() {}
+
+	/**
+	 * Creates a {@link Blockquote} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Blockquote(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.grouping-content#attr-blockquote-cite cite}
 	 * attribute.
 	 *

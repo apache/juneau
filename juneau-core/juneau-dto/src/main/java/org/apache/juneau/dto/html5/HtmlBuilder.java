@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 /**
  * Various useful static methods for creating HTML elements.
  *
@@ -41,7 +39,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final A a(Object href, Object...children) {
-		return a().href(href).children(children);
+		return new A(href, children);
 	}
 
 	/**
@@ -62,7 +60,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Abbr abbr(String title, Object...children) {
-		return abbr().title(title).children(children);
+		return new Abbr(title, children);
 	}
 
 	/**
@@ -81,7 +79,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Address address(Object...children) {
-		return address().children(children);
+		return new Address(children);
 	}
 
 	/**
@@ -103,7 +101,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Area area(String shape, String coords, Object href) {
-		return area().shape(shape).coords(coords).href(href);
+		return new Area(shape, coords, href);
 	}
 
 	/**
@@ -122,7 +120,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Article article(Object...children) {
-		return article().children(children);
+		return new Article(children);
 	}
 
 	/**
@@ -141,7 +139,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Aside aside(Object...children) {
-		return aside().children(children);
+		return new Aside(children);
 	}
 
 	/**
@@ -160,7 +158,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Audio audio(String src) {
-		return audio().src(src);
+		return new Audio(src);
 	}
 
 	/**
@@ -179,7 +177,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final B b(Object...children) {
-		return b().children(children);
+		return new B(children);
 	}
 
 	/**
@@ -198,7 +196,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Base base(Object href) {
-		return base().href(href);
+		return new Base(href);
 	}
 
 	/**
@@ -217,7 +215,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Bdi bdi(Object text) {
-		return bdi().text(text);
+		return new Bdi(text);
 	}
 
 	/**
@@ -237,7 +235,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Bdo bdo(String dir, Object...children) {
-		return bdo().dir(dir).children(children);
+		return new Bdo(dir, children);
 	}
 
 	/**
@@ -256,7 +254,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Blockquote blockquote(Object...children) {
-		return blockquote().children(children);
+		return new Blockquote(children);
 	}
 
 	/**
@@ -275,7 +273,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Body body(Object...children) {
-		return body().children(children);
+		return new Body(children);
 	}
 
 	/**
@@ -303,7 +301,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Button button(String type) {
-		return button().type(type);
+		return new Button(type);
 	}
 
 	/**
@@ -315,7 +313,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Button button(String type, Object...children) {
-		return button().type(type).children(children);
+		return new Button(type, children);
 	}
 
 	/**
@@ -335,7 +333,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Canvas canvas(Number width, Number height) {
-		return canvas().width(width).height(height);
+		return new Canvas(width, height);
 	}
 
 	/**
@@ -354,7 +352,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Caption caption(Object...children) {
-		return caption().children(children);
+		return new Caption(children);
 	}
 
 	/**
@@ -373,7 +371,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Cite cite(Object...children) {
-		return cite().children(children);
+		return new Cite(children);
 	}
 
 	/**
@@ -392,7 +390,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Code code(Object...children) {
-		return code().children(children);
+		return new Code(children);
 	}
 
 	/**
@@ -412,7 +410,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Col col(Number span) {
-		return col().span(span);
+		return new Col(span);
 	}
 
 	/**
@@ -431,7 +429,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Colgroup colgroup(Object...children) {
-		return colgroup().children(children);
+		return new Colgroup(children);
 	}
 
 	/**
@@ -451,7 +449,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Data data(String value, Object child) {
-		return data().value(value).child(child);
+		return new Data(value, child);
 	}
 
 	/**
@@ -471,7 +469,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Datalist datalist(String id, Option...children) {
-		return datalist().id(id).children((Object[])children);
+		return new Datalist(id, children);
 	}
 
 	/**
@@ -490,7 +488,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Dd dd(Object...children) {
-		return dd().children(children);
+		return new Dd(children);
 	}
 
 	/**
@@ -509,7 +507,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Del del(Object...children) {
-		return del().children(children);
+		return new Del(children);
 	}
 
 	/**
@@ -528,7 +526,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Dfn dfn(Object...children) {
-		return dfn().children(children);
+		return new Dfn(children);
 	}
 
 	/**
@@ -547,7 +545,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Div div(Object...children) {
-		return div().children(children);
+		return new Div(children);
 	}
 
 	/**
@@ -566,7 +564,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Dl dl(Object...children) {
-		return dl().children(children);
+		return new Dl(children);
 	}
 
 	/**
@@ -585,7 +583,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Dt dt(Object...children) {
-		return dt().children(children);
+		return new Dt(children);
 	}
 
 	/**
@@ -604,7 +602,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Em em(Object...children) {
-		return em().children(children);
+		return new Em(children);
 	}
 
 	/**
@@ -623,7 +621,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Embed embed(Object src) {
-		return embed().src(src);
+		return new Embed(src);
 	}
 
 	/**
@@ -642,7 +640,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Fieldset fieldset(Object...children) {
-		return fieldset().children(children);
+		return new Fieldset(children);
 	}
 
 	/**
@@ -661,7 +659,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Figcaption figcaption(Object...children) {
-		return figcaption().children(children);
+		return new Figcaption(children);
 	}
 
 	/**
@@ -680,7 +678,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Figure figure(Object...children) {
-		return figure().children(children);
+		return new Figure(children);
 	}
 
 	/**
@@ -699,7 +697,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Footer footer(Object...children) {
-		return footer().children(children);
+		return new Footer(children);
 	}
 
 	/**
@@ -718,7 +716,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Form form(String action) {
-		return form().action(action);
+		return new Form(action);
 	}
 
 	/**
@@ -729,7 +727,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Form form(String action, Object...children) {
-		return form().action(action).children(children);
+		return new Form(action, children);
 	}
 
 	/**
@@ -748,7 +746,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final H1 h1(Object...children) {
-		return h1().children(children);
+		return new H1(children);
 	}
 
 	/**
@@ -767,7 +765,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final H2 h2(Object...children) {
-		return h2().children(children);
+		return new H2(children);
 	}
 
 	/**
@@ -786,7 +784,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final H3 h3(Object...children) {
-		return h3().children(children);
+		return new H3(children);
 	}
 
 	/**
@@ -805,7 +803,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final H4 h4(Object...children) {
-		return h4().children(children);
+		return new H4(children);
 	}
 
 	/**
@@ -824,7 +822,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final H5 h5(Object...children) {
-		return h5().children(children);
+		return new H5(children);
 	}
 
 	/**
@@ -842,7 +840,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final H6 h6(Object...children) {
-		return h6().children(children);
+		return new H6(children);
 	}
 
 	/**
@@ -861,7 +859,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Head head(Object...children) {
-		return head().children(children);
+		return new Head(children);
 	}
 
 	/**
@@ -880,7 +878,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Header header(Object...children) {
-		return header().children(children);
+		return new Header(children);
 	}
 
 	/**
@@ -908,7 +906,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Html html(Object...children) {
-		return html().children(children);
+		return new Html(children);
 	}
 
 	/**
@@ -927,7 +925,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final I i(Object...children) {
-		return i().children(children);
+		return new I(children);
 	}
 
 	/**
@@ -946,7 +944,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Iframe iframe(Object...children) {
-		return iframe().children(children);
+		return new Iframe(children);
 	}
 
 	/**
@@ -965,7 +963,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Img img(Object src) {
-		return img().src(src);
+		return new Img(src);
 	}
 
 	/**
@@ -984,7 +982,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Input input(String type) {
-		return input().type(type);
+		return new Input(type);
 	}
 
 	/**
@@ -1003,7 +1001,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Ins ins(Object...children) {
-		return ins().children(children);
+		return new Ins(children);
 	}
 
 	/**
@@ -1022,7 +1020,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Kbd kbd(Object...children) {
-		return kbd().children(children);
+		return new Kbd(children);
 	}
 
 	/**
@@ -1050,7 +1048,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Label label(Object...children) {
-		return label().children(children);
+		return new Label(children);
 	}
 
 	/**
@@ -1069,7 +1067,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Legend legend(Object...children) {
-		return legend().children(children);
+		return new Legend(children);
 	}
 
 	/**
@@ -1088,7 +1086,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Li li(Object...children) {
-		return li().children(children);
+		return new Li(children);
 	}
 
 	/**
@@ -1107,7 +1105,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Link link(Object href) {
-		return link().href(href);
+		return new Link(href);
 	}
 
 	/**
@@ -1126,7 +1124,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Main main(Object...children) {
-		return main().children(children);
+		return new Main(children);
 	}
 
 	/**
@@ -1145,7 +1143,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Map map(Object...children) {
-		return map().children(children);
+		return new Map(children);
 	}
 
 	/**
@@ -1164,7 +1162,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Mark mark(Object...children) {
-		return mark().children(children);
+		return new Mark(children);
 	}
 
 	/**
@@ -1192,7 +1190,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Meter meter(Object...children) {
-		return meter().children(children);
+		return new Meter(children);
 	}
 
 	/**
@@ -1211,7 +1209,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Nav nav(Object...children) {
-		return nav().children(children);
+		return new Nav(children);
 	}
 
 	/**
@@ -1230,26 +1228,26 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Noscript noscript(Object...children) {
-		return noscript().children(children);
+		return new Noscript(children);
 	}
 
 	/**
-	 * Creates an empty {@link Object2} element.
+	 * Creates an empty {@link Object_} element.
 	 *
 	 * @return The new element.
 	 */
-	public static final Object2 object() {
-		return new Object2();
+	public static final Object_ object() {
+		return new Object_();
 	}
 
 	/**
-	 * Creates an {@link Object2} element with the specified child nodes.
+	 * Creates an {@link Object_} element with the specified child nodes.
 	 *
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
-	public static final Object2 object(Object...children) {
-		return object().children(children);
+	public static final Object_ object(Object...children) {
+		return new Object_(children);
 	}
 
 	/**
@@ -1268,7 +1266,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Ol ol(Object...children) {
-		return ol().children(children);
+		return new Ol(children);
 	}
 
 	/**
@@ -1287,7 +1285,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Optgroup optgroup(Object...children) {
-		return optgroup().children(children);
+		return new Optgroup(children);
 	}
 
 	/**
@@ -1306,7 +1304,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Option option(Object text) {
-		return option().text(text);
+		return new Option(text);
 	}
 
 	/**
@@ -1318,7 +1316,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Option option(Object value, Object text) {
-		return option().value(value).text(text);
+		return new Option(value, text);
 	}
 
 	/**
@@ -1337,7 +1335,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Output output(String name) {
-		return output().name(name);
+		return new Output(name);
 	}
 
 	/**
@@ -1356,7 +1354,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final P p(Object...children) {
-		return p().children(children);
+		return new P(children);
 	}
 
 	/**
@@ -1377,7 +1375,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Param param(String name, Object value) {
-		return param().name(name).value(value);
+		return new Param(name, value);
 	}
 
 	/**
@@ -1396,7 +1394,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Pre pre(Object...children) {
-		return pre().children(children);
+		return new Pre(children);
 	}
 
 	/**
@@ -1415,7 +1413,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Progress progress(Object...children) {
-		return progress().children(children);
+		return new Progress(children);
 	}
 
 	/**
@@ -1434,7 +1432,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Q q(Object...children) {
-		return q().children(children);
+		return new Q(children);
 	}
 
 	/**
@@ -1453,7 +1451,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Rb rb(Object...children) {
-		return rb().children(children);
+		return new Rb(children);
 	}
 
 	/**
@@ -1472,7 +1470,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Rp rp(Object...children) {
-		return rp().children(children);
+		return new Rp(children);
 	}
 
 	/**
@@ -1491,7 +1489,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Rt rt(Object...children) {
-		return rt().children(children);
+		return new Rt(children);
 	}
 
 	/**
@@ -1510,7 +1508,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Rtc rtc(Object...children) {
-		return rtc().children(children);
+		return new Rtc(children);
 	}
 
 	/**
@@ -1529,7 +1527,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Ruby ruby(Object...children) {
-		return ruby().children(children);
+		return new Ruby(children);
 	}
 
 	/**
@@ -1548,7 +1546,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final S s(Object...children) {
-		return s().children(children);
+		return new S(children);
 	}
 
 	/**
@@ -1567,7 +1565,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Samp samp(Object...children) {
-		return samp().children(children);
+		return new Samp(children);
 	}
 
 	/**
@@ -1588,7 +1586,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Script script(String type, String...text) {
-		return script().type(type).text(joinnl(text));
+		return new Script(type, text);
 	}
 
 	/**
@@ -1607,7 +1605,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Section section(Object...children) {
-		return section().children(children);
+		return new Section(children);
 	}
 
 	/**
@@ -1627,7 +1625,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Select select(String name, Object...children) {
-		return select().name(name).children(children);
+		return new Select(name, children);
 	}
 
 	/**
@@ -1646,7 +1644,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Small small(Object...children) {
-		return small().children(children);
+		return new Small(children);
 	}
 
 	/**
@@ -1667,7 +1665,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Source source(Object src, String type) {
-		return source().src(src).type(type);
+		return new Source(src, type);
 	}
 
 	/**
@@ -1686,7 +1684,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Span span(Object...children) {
-		return span().children(children);
+		return new Span(children);
 	}
 
 	/**
@@ -1705,7 +1703,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Strong strong(Object...children) {
-		return strong().children(children);
+		return new Strong(children);
 	}
 
 	/**
@@ -1724,7 +1722,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Style style(Object text) {
-		return style().text(text);
+		return new Style(text);
 	}
 
 	/**
@@ -1736,7 +1734,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Style style(String...text) {
-		return style().text(joinnl(text));
+		return new Style(text);
 	}
 
 	/**
@@ -1755,7 +1753,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Sub sub(Object...children) {
-		return sub().children(children);
+		return new Sub(children);
 	}
 
 	/**
@@ -1774,7 +1772,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Sup sup(Object...children) {
-		return sup().children(children);
+		return new Sup(children);
 	}
 
 	/**
@@ -1793,7 +1791,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Table table(Object...children) {
-		return table().children(children);
+		return new Table(children);
 	}
 
 	/**
@@ -1812,7 +1810,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Tbody tbody(Object...children) {
-		return tbody().children(children);
+		return new Tbody(children);
 	}
 
 	/**
@@ -1831,7 +1829,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Td td(Object...children) {
-		return td().children(children);
+		return new Td(children);
 	}
 
 	/**
@@ -1851,7 +1849,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Template template(String id, Object...children) {
-		return template().id(id).children(children);
+		return new Template(id, children);
 	}
 
 	/**
@@ -1872,7 +1870,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Textarea textarea(String name, String text) {
-		return textarea().name(name).text(text);
+		return new Textarea(name, text);
 	}
 
 	/**
@@ -1891,7 +1889,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Tfoot tfoot(Object...children) {
-		return tfoot().children(children);
+		return new Tfoot(children);
 	}
 
 	/**
@@ -1910,7 +1908,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Th th(Object...children) {
-		return th().children(children);
+		return new Th(children);
 	}
 
 	/**
@@ -1929,7 +1927,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Thead thead(Object...children) {
-		return thead().children(children);
+		return new Thead(children);
 	}
 
 	/**
@@ -1948,7 +1946,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Time time(Object...children) {
-		return time().children(children);
+		return new Time(children);
 	}
 
 	/**
@@ -1967,7 +1965,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Title title(String text) {
-		return title().text(text);
+		return new Title(text);
 	}
 
 	/**
@@ -1986,7 +1984,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Tr tr(Object...children) {
-		return tr().children(children);
+		return new Tr(children);
 	}
 
 	/**
@@ -2007,7 +2005,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Track track(Object src, String kind) {
-		return track().src(src).kind(kind);
+		return new Track(src, kind);
 	}
 
 	/**
@@ -2026,7 +2024,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final U u(Object...children) {
-		return u().children(children);
+		return new U(children);
 	}
 
 	/**
@@ -2045,7 +2043,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Ul ul(Object...children) {
-		return ul().children(children);
+		return new Ul(children);
 	}
 
 	/**
@@ -2064,7 +2062,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Var var(Object...children) {
-		return var().children(children);
+		return new Var(children);
 	}
 
 	/**
@@ -2083,7 +2081,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Video video(Object src) {
-		return video().src(src);
+		return new Video(src);
 	}
 
 	/**

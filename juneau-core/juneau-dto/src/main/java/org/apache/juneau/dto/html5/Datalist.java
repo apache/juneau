@@ -25,6 +25,21 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="datalist")
 public class Datalist extends HtmlElementContainer {
 
+	/**
+	 * Creates an empty {@link Datalist} element.
+	 */
+	public Datalist() {}
+
+	/**
+	 * Creates a {@link Datalist} element with the specified {@link Datalist#id(String)} attribute and child nodes.
+	 *
+	 * @param id The {@link Datalist#id(String)} attribute.
+	 * @param children The child nodes.
+	 */
+	public Datalist(String id, Option...children) {
+		id(id).children((Object[])children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

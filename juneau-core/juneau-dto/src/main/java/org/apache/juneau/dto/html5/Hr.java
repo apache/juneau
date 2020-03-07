@@ -25,6 +25,11 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="hr")
 public class Hr extends HtmlElementVoid {
 
+	/**
+	 * Creates an empty {@link Hr} element.
+	 */
+	public Hr() {}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

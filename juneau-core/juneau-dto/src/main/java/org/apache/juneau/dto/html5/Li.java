@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="li")
 public class Li extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Li} element.
+	 */
+	public Li() {}
+
+	/**
+	 * Creates an {@link Li} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Li(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

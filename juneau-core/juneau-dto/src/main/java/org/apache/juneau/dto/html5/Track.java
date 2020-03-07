@@ -30,6 +30,22 @@ import org.apache.juneau.annotation.*;
 public class Track extends HtmlElementVoid {
 
 	/**
+	 * Creates an empty {@link Track} element.
+	 */
+	public Track() {}
+
+	/**
+	 * Creates a {@link Track} element with the specified {@link Track#src(Object)} and {@link Track#kind(String)}
+	 * attributes.
+	 *
+	 * @param src The {@link Track#src(Object)} attribute.
+	 * @param kind The {@link Track#kind(String)} attribute.
+	 */
+	public Track(Object src, String kind) {
+		src(src).kind(kind);
+	}
+
+	/**
 	 * {@doc HTML5.embedded-content-0#attr-track-default default}
 	 * attribute.
 	 *

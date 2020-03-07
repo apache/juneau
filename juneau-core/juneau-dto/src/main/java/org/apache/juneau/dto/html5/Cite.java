@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="cite")
 public class Cite extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Cite} element.
+	 */
+	public Cite() {}
+
+	/**
+	 * Creates a {@link Cite} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Cite(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

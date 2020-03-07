@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="ruby")
 public class Ruby extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Ruby} element.
+	 */
+	public Ruby() {}
+
+	/**
+	 * Creates a {@link Ruby} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Ruby(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

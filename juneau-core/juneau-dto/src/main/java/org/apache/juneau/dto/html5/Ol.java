@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Ol extends HtmlElementContainer {
 
 	/**
+	 * Creates an empty {@link Ol} element.
+	 */
+	public Ol() {}
+
+	/**
+	 * Creates an {@link Ol} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Ol(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.grouping-content#attr-ol-reversed reversed}
 	 * attribute.
 	 *

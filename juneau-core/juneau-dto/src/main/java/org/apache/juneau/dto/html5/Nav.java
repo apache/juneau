@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="nav")
 public class Nav extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Nav} element.
+	 */
+	public Nav() {}
+
+	/**
+	 * Creates a {@link Nav} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Nav(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

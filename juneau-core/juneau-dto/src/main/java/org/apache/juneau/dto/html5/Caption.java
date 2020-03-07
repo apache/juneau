@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="caption")
 public class Caption extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Caption} element.
+	 */
+	public Caption() {}
+
+	/**
+	 * Creates a {@link Caption} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Caption(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

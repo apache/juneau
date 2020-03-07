@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="h2")
 public class H2 extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link H2} element.
+	 */
+	public H2() {}
+
+	/**
+	 * Creates an {@link H2} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public H2(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

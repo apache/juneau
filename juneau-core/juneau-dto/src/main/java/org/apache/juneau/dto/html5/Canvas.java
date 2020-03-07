@@ -26,6 +26,22 @@ import org.apache.juneau.annotation.*;
 public class Canvas extends HtmlElementContainer {
 
 	/**
+	 * Creates an empty {@link Canvas} element.
+	 */
+	public Canvas() {}
+
+	/**
+	 * Creates a {@link Canvas} element with the specified {@link Canvas#width(Object)} and
+	 * {@link Canvas#height(Object)} attributes.
+	 *
+	 * @param width The {@link Canvas#width(Object)} attribute.
+	 * @param height The {@link Canvas#height(Object)} attribute.
+	 */
+	public Canvas(Number width, Number height) {
+		width(width).height(height);
+	}
+
+	/**
 	 * {@doc HTML5.scripting-1#attr-canvas-height height} attribute.
 	 *
 	 * <p>

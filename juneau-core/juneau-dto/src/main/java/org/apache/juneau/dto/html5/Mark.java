@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="mark")
 public class Mark extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Mark} element.
+	 */
+	public Mark() {}
+
+	/**
+	 * Creates a {@link Mark} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Mark(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

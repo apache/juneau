@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Col extends HtmlElementVoid {
 
 	/**
+	 * Creates an empty {@link Col} element.
+	 */
+	public Col() {}
+
+	/**
+	 * Creates a {@link Col} element with the specified {@link Col#span(Object)} attribute.
+	 *
+	 * @param span The {@link Col#span(Object)} attribute.
+	 */
+	public Col(Number span) {
+		span(span);
+	}
+
+	/**
 	 * {@doc HTML5.tabular-data#attr-col-span span} attribute.
 	 *
 	 * <p>

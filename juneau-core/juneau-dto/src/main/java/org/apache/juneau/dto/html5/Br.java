@@ -25,6 +25,11 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="br")
 public class Br extends HtmlElementVoid {
 
+	/**
+	 * Creates an empty {@link Br} element.
+	 */
+	public Br() {}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

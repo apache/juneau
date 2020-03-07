@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="rt")
 public class Rt extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Rt} element.
+	 */
+	public Rt() {}
+
+	/**
+	 * Creates a {@link Rt} element with the specified {@link Rt#children(Object[])} nodes.
+	 *
+	 * @param children The {@link Rt#children(Object[])} nodes.
+	 */
+	public Rt(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

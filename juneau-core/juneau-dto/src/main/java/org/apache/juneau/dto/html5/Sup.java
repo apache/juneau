@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="sup")
 public class Sup extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Sup} element.
+	 */
+	public Sup() {}
+
+	/**
+	 * Creates a {@link Sup} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Sup(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Optgroup extends HtmlElementContainer {
 
 	/**
+	 * Creates an empty {@link Optgroup} element.
+	 */
+	public Optgroup() {}
+
+	/**
+	 * Creates an {@link Optgroup} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Optgroup(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.forms#attr-optgroup-disabled disabled} attribute.
 	 *
 	 * <p>

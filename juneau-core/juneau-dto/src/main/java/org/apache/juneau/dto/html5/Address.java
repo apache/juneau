@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="address")
 public class Address extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Address} element.
+	 */
+	public Address() {}
+
+	/**
+	 * Creates an {@link Address} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Address(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

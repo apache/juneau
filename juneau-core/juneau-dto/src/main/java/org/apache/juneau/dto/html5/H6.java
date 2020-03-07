@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="h6")
 public class H6 extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link H6} element.
+	 */
+	public H6() {}
+
+	/**
+	 * Creates an {@link H6} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public H6(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="tbody")
 public class Tbody extends HtmlElementContainer {
 
+	/**
+	 * Creates an empty {@link Tbody} element.
+	 */
+	public Tbody() {}
+
+	/**
+	 * Creates a {@link Tbody} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Tbody(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

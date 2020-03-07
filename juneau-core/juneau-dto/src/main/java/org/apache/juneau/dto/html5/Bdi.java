@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="bdi")
 public class Bdi extends HtmlElementText {
 
+	/**
+	 * Creates an empty {@link Bdi} element.
+	 */
+	public Bdi() {}
+
+	/**
+	 * Creates a {@link Bdi} element with the specified {@link Bdi#text(Object)} node.
+	 *
+	 * @param text The {@link Bdi#text(Object)} node.
+	 */
+	public Bdi(Object text) {
+		text(text);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

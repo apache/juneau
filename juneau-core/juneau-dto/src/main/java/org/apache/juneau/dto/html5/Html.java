@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Html extends HtmlElementContainer {
 
 	/**
+	 * Creates an empty {@link Html} element.
+	 */
+	public Html() {}
+
+	/**
+	 * Creates an {@link Html} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Html(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.semantics#attr-html-manifest manifest} attribute.
 	 *
 	 * <p>

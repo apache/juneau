@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="dfn")
 public class Dfn extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Dfn} element.
+	 */
+	public Dfn() {}
+
+	/**
+	 * Creates a {@link Dfn} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Dfn(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

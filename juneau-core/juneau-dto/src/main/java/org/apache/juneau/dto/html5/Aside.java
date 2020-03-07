@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="aside")
 public class Aside extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Aside} element.
+	 */
+	public Aside() {}
+
+	/**
+	 * Creates an {@link Aside} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Aside(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

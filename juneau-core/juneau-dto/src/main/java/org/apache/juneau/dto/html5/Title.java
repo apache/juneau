@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="title")
 public class Title extends HtmlElementRawText {
 
+	/**
+	 * Creates an empty {@link Title} element.
+	 */
+	public Title() {}
+
+	/**
+	 * Creates a {@link Title} element with the specified {@link Title#text(Object)} node.
+	 *
+	 * @param text The {@link Title#text(Object)} node.
+	 */
+	public Title(String text) {
+		text(text);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="ul")
 public class Ul extends HtmlElementContainer {
 
+	/**
+	 * Creates an empty {@link Ul} element.
+	 */
+	public Ul() {}
+
+	/**
+	 * Creates a {@link Ul} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Ul(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

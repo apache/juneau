@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="dt")
 public class Dt extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Dt} element.
+	 */
+	public Dt() {}
+
+	/**
+	 * Creates a {@link Dt} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Dt(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

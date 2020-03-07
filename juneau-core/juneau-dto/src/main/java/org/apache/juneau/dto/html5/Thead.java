@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="thead")
 public class Thead extends HtmlElementContainer {
 
+	/**
+	 * Creates an empty {@link Thead} element.
+	 */
+	public Thead() {}
+
+	/**
+	 * Creates a {@link Thead} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Thead(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

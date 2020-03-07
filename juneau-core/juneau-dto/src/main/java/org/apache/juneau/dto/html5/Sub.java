@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="sub")
 public class Sub extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Sub} element.
+	 */
+	public Sub() {}
+
+	/**
+	 * Creates a {@link Sub} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Sub(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

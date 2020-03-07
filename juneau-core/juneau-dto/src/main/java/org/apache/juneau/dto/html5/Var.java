@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="var")
 public class Var extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Var} element.
+	 */
+	public Var() {}
+
+	/**
+	 * Creates a {@link Var} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Var(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

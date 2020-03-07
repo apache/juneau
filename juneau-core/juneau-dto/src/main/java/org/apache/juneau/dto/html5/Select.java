@@ -27,6 +27,21 @@ import org.apache.juneau.internal.*;
 public class Select extends HtmlElementContainer {
 
 	/**
+	 * Creates an empty {@link Select} element.
+	 */
+	public Select() {}
+
+	/**
+	 * Creates a {@link Select} element with the specified {@link Select#name(String)} attribute and child nodes.
+	 *
+	 * @param name The {@link Select#name(String)} attribute.
+	 * @param children The child nodes.
+	 */
+	public Select(String name, Object...children) {
+		name(name).children(children);
+	}
+
+	/**
 	 * {@doc HTML5.forms#attr-fe-autofocus autofocus} attribute.
 	 *
 	 * <p>

@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="figcaption")
 public class Figcaption extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Figcaption} element.
+	 */
+	public Figcaption() {}
+
+	/**
+	 * Creates a {@link Figcaption} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Figcaption(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

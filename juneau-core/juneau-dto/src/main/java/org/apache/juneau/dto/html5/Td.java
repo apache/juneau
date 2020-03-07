@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Td extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Td} element.
+	 */
+	public Td() {}
+
+	/**
+	 * Creates a {@link Td} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Td(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.tabular-data#attr-tdth-colspan colspan} attribute.
 	 *
 	 * <p>

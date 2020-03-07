@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Map extends HtmlElementContainer {
 
 	/**
+	 * Creates an empty {@link Map} element.
+	 */
+	public Map() {}
+
+	/**
+	 * Creates a {@link Map} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Map(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.embedded-content-0#attr-map-name name} attribute.
 	 *
 	 * <p>

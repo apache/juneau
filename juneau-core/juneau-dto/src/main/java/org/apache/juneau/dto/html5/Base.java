@@ -30,6 +30,20 @@ import org.apache.juneau.annotation.*;
 public class Base extends HtmlElementVoid {
 
 	/**
+	 * Creates an empty {@link Base} element.
+	 */
+	public Base() {}
+
+	/**
+	 * Creates a {@link Base} element with the specified {@link Base#href(Object)} attribute.
+	 *
+	 * @param href The {@link Base#href(Object)} attribute.
+	 */
+	public Base(Object href) {
+		href(href);
+	}
+
+	/**
 	 * {@doc HTML5.document-metadata#attr-base-href href} attribute.
 	 *
 	 * <p>

@@ -25,6 +25,21 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="bdo")
 public class Bdo extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Bdo} element.
+	 */
+	public Bdo() {}
+
+	/**
+	 * Creates a {@link Bdo} element with the specified {@link Bdo#dir(String)} attribute and child nodes.
+	 *
+	 * @param dir The {@link Bdo#dir(String)} attribute.
+	 * @param children The child nodes.
+	 */
+	public Bdo(String dir, Object...children) {
+		dir(dir).children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Fieldset extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Fieldset} element.
+	 */
+	public Fieldset() {}
+
+	/**
+	 * Creates a {@link Fieldset} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Fieldset(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.forms#attr-fieldset-disabled disabled} attribute.
 	 *
 	 * <p>

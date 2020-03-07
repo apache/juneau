@@ -26,6 +26,11 @@ import org.apache.juneau.annotation.*;
 public class Keygen extends HtmlElementVoid {
 
 	/**
+	 * Creates an empty {@link Keygen} element.
+	 */
+	public Keygen() {}
+
+	/**
 	 * {@doc HTML5.forms#attr-fe-autofocus autofocus} attribute.
 	 *
 	 * <p>

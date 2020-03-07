@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Body extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Body} element.
+	 */
+	public Body() {}
+
+	/**
+	 * Creates a {@link Body} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Body(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.webappapis#handler-window-onafterprint onafterprint}
 	 * attribute.
 	 *

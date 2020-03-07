@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Output extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Output} element.
+	 */
+	public Output() {}
+
+	/**
+	 * Creates an {@link Output} element with the specified {@link Output#name(String)} attribute.
+	 *
+	 * @param name The {@link Output#name(String)} attribute.
+	 */
+	public Output(String name) {
+		name(name);
+	}
+
+	/**
 	 * {@doc HTML5.forms#attr-output-for for} attribute.
 	 *
 	 * <p>

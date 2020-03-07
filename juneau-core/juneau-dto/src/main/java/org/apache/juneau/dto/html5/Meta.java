@@ -26,6 +26,11 @@ import org.apache.juneau.annotation.*;
 public class Meta extends HtmlElementVoid {
 
 	/**
+	 * Creates an empty {@link Meta} element.
+	 */
+	public Meta() {}
+
+	/**
 	 * {@doc HTML5.document-metadata#attr-meta-charset charset}
 	 * attribute.
 	 *

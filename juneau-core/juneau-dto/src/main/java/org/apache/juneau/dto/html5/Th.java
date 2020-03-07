@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Th extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Th} element.
+	 */
+	public Th() {}
+
+	/**
+	 * Creates a {@link Th} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Th(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.tabular-data#attr-th-abbr abbr} attribute.
 	 *
 	 * <p>

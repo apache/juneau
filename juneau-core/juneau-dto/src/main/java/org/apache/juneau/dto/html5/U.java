@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="u")
 public class U extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link U} element.
+	 */
+	public U() {}
+
+	/**
+	 * Creates a {@link U} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public U(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Article extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Article} element.
+	 */
+	public Article() {}
+
+	/**
+	 * Creates an {@link Article} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Article(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * Adds a header node to this element.
 	 *
 	 * @param children The children inside the header node.

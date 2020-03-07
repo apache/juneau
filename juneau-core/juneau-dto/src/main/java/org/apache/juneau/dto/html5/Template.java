@@ -25,6 +25,21 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="template")
 public class Template extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Template} element.
+	 */
+	public Template() {}
+
+	/**
+	 * Creates a {@link Template} element with the specified {@link Template#id(String)} attribute and child nodes.
+	 *
+	 * @param id The {@link Template#id(String)} attribute.
+	 * @param children The child nodes.
+	 */
+	public Template(String id, Object...children) {
+		id(id).children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

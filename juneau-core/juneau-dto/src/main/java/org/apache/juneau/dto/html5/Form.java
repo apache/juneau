@@ -30,6 +30,30 @@ import org.apache.juneau.annotation.*;
 public class Form extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Form} element.
+	 */
+	public Form() {}
+
+	/**
+	 * Creates a {@link Form} element with the specified {@link Form#action(String)} attribute.
+	 *
+	 * @param action The {@link Form#action(String)} attribute.
+	 */
+	public Form(String action) {
+		action(action);
+	}
+
+	/**
+	 * Creates an {@link Form} element with the specified {@link Form#action(String)} attribute and child nodes.
+	 *
+	 * @param action The {@link Form#action(String)} attribute.
+	 * @param children The child nodes.
+	 */
+	public Form(String action, Object...children) {
+		action(action).children(children);
+	}
+
+	/**
 	 * {@doc HTML5.forms#attr-form-accept-charset accept-charset}
 	 * attribute.
 	 *

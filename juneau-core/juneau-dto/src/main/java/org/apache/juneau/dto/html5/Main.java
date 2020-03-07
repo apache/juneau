@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="main")
 public class Main extends HtmlElementContainer {
 
+	/**
+	 * Creates an empty {@link Main} element.
+	 */
+	public Main() {}
+
+	/**
+	 * Creates a {@link Main} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Main(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

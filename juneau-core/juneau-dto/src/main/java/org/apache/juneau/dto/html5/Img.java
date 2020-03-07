@@ -30,6 +30,20 @@ import org.apache.juneau.annotation.*;
 public class Img extends HtmlElementVoid {
 
 	/**
+	 * Creates an empty {@link Img} element.
+	 */
+	public Img() {}
+
+	/**
+	 * Creates an {@link Img} element with the specified {@link Img#src(Object)} attribute.
+	 *
+	 * @param src The {@link Img#src(Object)} attribute.
+	 */
+	public Img(Object src) {
+		src(src);
+	}
+
+	/**
 	 * {@doc HTML5.embedded-content-0#attr-img-alt alt} attribute.
 	 *
 	 * <p>

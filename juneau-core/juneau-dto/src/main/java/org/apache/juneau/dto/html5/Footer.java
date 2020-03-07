@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="footer")
 public class Footer extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Footer} element.
+	 */
+	public Footer() {}
+
+	/**
+	 * Creates a {@link Footer} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Footer(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

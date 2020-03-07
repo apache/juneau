@@ -28,6 +28,20 @@ import org.apache.juneau.annotation.*;
 public class Input extends HtmlElementVoid {
 
 	/**
+	 * Creates an empty {@link Input} element.
+	 */
+	public Input() {}
+
+	/**
+	 * Creates an {@link Input} element with the specified {@link Input#type(String)} attribute.
+	 *
+	 * @param type The {@link Input#type(String)} attribute.
+	 */
+	public Input(String type) {
+		type(type);
+	}
+
+	/**
 	 * {@doc HTML5.forms#attr-input-accept accept} attribute.
 	 *
 	 * <p>

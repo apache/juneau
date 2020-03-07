@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="small")
 public class Small extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Small} element.
+	 */
+	public Small() {}
+
+	/**
+	 * Creates a {@link Small} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Small(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

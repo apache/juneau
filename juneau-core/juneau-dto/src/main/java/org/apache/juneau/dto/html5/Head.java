@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="head")
 public class Head extends HtmlElementContainer {
 
+	/**
+	 * Creates an empty {@link Head} element.
+	 */
+	public Head() {}
+
+	/**
+	 * Creates a {@link Head} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Head(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

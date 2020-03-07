@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="rb")
 public class Rb extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Rb} element.
+	 */
+	public Rb() {}
+
+	/**
+	 * Creates a {@link Rb} element with the specified {@link Rb#children(Object[])} nodes.
+	 *
+	 * @param children The {@link Rb#children(Object[])} nodes.
+	 */
+	public Rb(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

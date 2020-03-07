@@ -30,6 +30,20 @@ import org.apache.juneau.annotation.*;
 public class Video extends HtmlElementContainer {
 
 	/**
+	 * Creates an empty {@link Video} element.
+	 */
+	public Video() {}
+
+	/**
+	 * Creates a {@link Video} element with the specified {@link Video#src(Object)} attribute.
+	 *
+	 * @param src The {@link Video#src(Object)} attribute.
+	 */
+	public Video(Object src) {
+		src(src);
+	}
+
+	/**
 	 * {@doc HTML5.embedded-content-0#attr-media-autoplay autoplay}
 	 * attribute.
 	 *

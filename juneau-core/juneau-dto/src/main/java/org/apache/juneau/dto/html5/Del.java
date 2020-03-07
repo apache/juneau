@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Del extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Del} element.
+	 */
+	public Del() {}
+
+	/**
+	 * Creates a {@link Del} element with the specified {@link Del#children(Object[])} node.
+	 *
+	 * @param children The {@link Del#children(Object[])} node.
+	 */
+	public Del(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.edits#attr-mod-cite cite} attribute.
 	 *
 	 * <p>

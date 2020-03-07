@@ -30,6 +30,20 @@ import org.apache.juneau.annotation.*;
 public class Iframe extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Iframe} element.
+	 */
+	public Iframe() {}
+
+	/**
+	 * Creates an {@link Iframe} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Iframe(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.embedded-content-0#attr-dim-height height}
 	 * attribute.
 	 *

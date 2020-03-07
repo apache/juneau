@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="tfoot")
 public class Tfoot extends HtmlElementContainer {
 
+	/**
+	 * Creates an empty {@link Tfoot} element.
+	 */
+	public Tfoot() {}
+
+	/**
+	 * Creates a {@link Tfoot} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Tfoot(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

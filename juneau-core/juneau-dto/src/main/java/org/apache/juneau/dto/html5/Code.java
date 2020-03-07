@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="code")
 public class Code extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Code} element.
+	 */
+	public Code() {}
+
+	/**
+	 * Creates a {@link Code} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Code(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

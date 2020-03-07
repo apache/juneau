@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="h3")
 public class H3 extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link H3} element.
+	 */
+	public H3() {}
+
+	/**
+	 * Creates an {@link H3} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public H3(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

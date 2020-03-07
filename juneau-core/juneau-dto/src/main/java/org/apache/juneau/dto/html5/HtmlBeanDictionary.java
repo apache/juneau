@@ -93,7 +93,7 @@ public class HtmlBeanDictionary extends BeanDictionaryList {
 			Meter.class,
 			Nav.class,
 			Noscript.class,
-			Object2.class,
+			Object_.class,
 			Ol.class,
 			Optgroup.class,
 			Option.class,

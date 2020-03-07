@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="legend")
 public class Legend extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Legend} element.
+	 */
+	public Legend() {}
+
+	/**
+	 * Creates a {@link Legend} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Legend(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

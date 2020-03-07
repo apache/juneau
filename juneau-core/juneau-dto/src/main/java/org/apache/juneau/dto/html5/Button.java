@@ -30,6 +30,31 @@ import org.apache.juneau.annotation.*;
 public class Button extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Button} element.
+	 */
+	public Button() {}
+
+	/**
+	 * Creates a {@link Button} element with the specified {@link Button#type(String)} attribute.
+	 *
+	 * @param type The {@link Button#type(String)} attribute.
+	 */
+	public Button(String type) {
+		type(type);
+	}
+
+	/**
+	 * Creates a {@link Button} element with the specified {@link Button#type(String)} attribute and
+	 * {@link Button#children(Object[])} nodes.
+	 *
+	 * @param type The {@link Button#type(String)} attribute.
+	 * @param children The {@link Button#children(Object[])} nodes.
+	 */
+	public Button(String type, Object...children) {
+		type(type).children(children);
+	}
+
+	/**
 	 * {@doc HTML5.forms#attr-fe-autofocus autofocus} attribute.
 	 *
 	 * <p>

@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="div")
 public class Div extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Div} element.
+	 */
+	public Div() {}
+
+	/**
+	 * Creates a {@link Div} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Div(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

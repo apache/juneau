@@ -26,6 +26,31 @@ import org.apache.juneau.annotation.*;
 public class Option extends HtmlElementText {
 
 	/**
+	 * Creates an empty {@link Option} element.
+	 */
+	public Option() {}
+
+	/**
+	 * Creates an {@link Option} element with the specified {@link Option#text(Object)} attribute.
+	 *
+	 * @param text The {@link Option#text(Object)} attribute.
+	 */
+	public Option(Object text) {
+		text(text);
+	}
+
+	/**
+	 * Creates an {@link Option} element with the specified {@link Option#value(Object)} attribute and
+	 * {@link Option#text(Object)} node.
+	 *
+	 * @param value The {@link Option#value(Object)} attribute.
+	 * @param text The {@link Option#text(Object)} node.
+	 */
+	public Option(Object value, Object text) {
+		value(value).text(text);
+	}
+
+	/**
 	 * {@doc HTML5.forms#attr-option-disabled disabled} attribute.
 	 *
 	 * <p>

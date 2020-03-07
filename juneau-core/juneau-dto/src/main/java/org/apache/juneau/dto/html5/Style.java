@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
@@ -24,6 +26,31 @@ import org.apache.juneau.annotation.*;
  */
 @Bean(typeName="style")
 public class Style extends HtmlElementRawText {
+
+	/**
+	 * Creates an empty {@link Style} element.
+	 */
+	public Style() {}
+
+	/**
+	 * Creates a {@link Style} element with the specified {@link Style#text(Object)} node.
+	 *
+	 * @param text The {@link Style#text(Object)} node.
+	 */
+	public Style(Object text) {
+		text(text);
+	}
+
+	/**
+	 * Creates a {@link Style} element with the specified inner text.
+	 *
+	 * @param text
+	 * 	The contents of the style element.
+	 * 	<br>Values will be concatenated with newlines.
+	 */
+	public Style(String...text) {
+		text(joinnl(text));
+	}
 
 	/**
 	 * {@doc HTML5.document-metadata#attr-style-media media} attribute.

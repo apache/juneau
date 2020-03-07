@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Ins extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Ins} element.
+	 */
+	public Ins() {}
+
+	/**
+	 * Creates an {@link Ins} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Ins(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.edits#attr-mod-cite cite} attribute.
 	 *
 	 * <p>

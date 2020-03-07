@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Progress extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Progress} element.
+	 */
+	public Progress() {}
+
+	/**
+	 * Creates a {@link Progress} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Progress(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.forms#attr-progress-max max} attribute.
 	 *
 	 * <p>

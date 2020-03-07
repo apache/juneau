@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="strong")
 public class Strong extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Strong} element.
+	 */
+	public Strong() {}
+
+	/**
+	 * Creates a {@link Strong} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Strong(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

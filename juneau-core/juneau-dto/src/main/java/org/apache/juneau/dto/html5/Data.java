@@ -26,6 +26,21 @@ import org.apache.juneau.annotation.*;
 public class Data extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Data} element.
+	 */
+	public Data() {}
+
+	/**
+	 * Creates a {@link Data} element with the specified {@link Data#value(Object)} attribute and child node.
+	 *
+	 * @param value The {@link Data#value(Object)} attribute.
+	 * @param child The child node.
+	 */
+	public Data(String value, Object child) {
+		value(value).child(child);
+	}
+
+	/**
 	 * {@doc HTML5.text-level-semantics#attr-data-value value}
 	 * attribute.
 	 *

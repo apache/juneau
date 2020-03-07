@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Q extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Q} element.
+	 */
+	public Q() {}
+
+	/**
+	 * Creates a {@link Q} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Q(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.text-level-semantics#attr-q-cite cite} attribute.
 	 *
 	 * <p>

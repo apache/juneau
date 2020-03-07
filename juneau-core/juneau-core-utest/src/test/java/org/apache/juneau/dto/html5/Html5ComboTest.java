@@ -1927,9 +1927,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				}
 			},
 			{	/* 52 */
-				new ComboInput<Object2>(
+				new ComboInput<Object_>(
 					"Object/Param",
-					Object2.class,
+					Object_.class,
 					object().width(1).height(2).data("foo.swf").child(param("autoplay",true)),
 					/* Json */		"{_type:'object',a:{width:1,height:2,data:'foo.swf'},c:[{_type:'param',a:{name:'autoplay',value:true}}]}",
 					/* JsonT */		"{t:'object',a:{width:1,height:2,data:'foo.swf'},c:[{t:'param',a:{name:'autoplay',value:true}}]}",
@@ -1955,8 +1955,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				)
 				{
 					@Override
-					public void verify(Object2 o) {
-						assertInstanceOf(Object2.class, o);
+					public void verify(Object_ o) {
+						assertInstanceOf(Object_.class, o);
 						assertInstanceOf(Param.class, o.getChild(0));
 					}
 				}

@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="section")
 public class Section extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Section} element.
+	 */
+	public Section() {}
+
+	/**
+	 * Creates a {@link Section} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Section(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

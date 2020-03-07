@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.net.*;
 import java.net.URI;
 
@@ -28,6 +30,22 @@ import org.apache.juneau.annotation.*;
  */
 @Bean(typeName="script")
 public class Script extends HtmlElementRawText {
+
+	/**
+	 * Creates an empty {@link Script} element.
+	 */
+	public Script() {}
+
+	/**
+	 * Creates a {@link Script} element with the specified {@link Script#type(String)} attribute and
+	 * {@link Script#text(Object)} node.
+	 *
+	 * @param type The {@link Script#type(String)} attribute.
+	 * @param text The child text node.
+	 */
+	public Script(String type, String...text) {
+		type(type).text(joinnl(text));
+	}
 
 	/**
 	 * {@doc HTML5.scripting-1#attr-script-async async} attribute.

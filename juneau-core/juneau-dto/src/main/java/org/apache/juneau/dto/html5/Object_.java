@@ -23,7 +23,21 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(typeName="object")
-public class Object2 extends HtmlElementMixed {
+public class Object_ extends HtmlElementMixed {
+
+	/**
+	 * Creates an empty {@link Object_} element.
+	 */
+	public Object_() {}
+
+	/**
+	 * Creates an {@link Object_} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Object_(Object...children) {
+		children(children);
+	}
 
 	/**
 	 * {@doc HTML5.embedded-content-0#attr-object-data data} attribute.
@@ -34,7 +48,7 @@ public class Object2 extends HtmlElementMixed {
 	 * @param data The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
-	public final Object2 data(String data) {
+	public final Object_ data(String data) {
 		attr("data", data);
 		return this;
 	}
@@ -48,7 +62,7 @@ public class Object2 extends HtmlElementMixed {
 	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
-	public final Object2 form(String form) {
+	public final Object_ form(String form) {
 		attr("form", form);
 		return this;
 	}
@@ -65,7 +79,7 @@ public class Object2 extends HtmlElementMixed {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Object2 height(Object height) {
+	public final Object_ height(Object height) {
 		attr("height", height);
 		return this;
 	}
@@ -79,7 +93,7 @@ public class Object2 extends HtmlElementMixed {
 	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
-	public final Object2 name(String name) {
+	public final Object_ name(String name) {
 		attr("name", name);
 		return this;
 	}
@@ -93,7 +107,7 @@ public class Object2 extends HtmlElementMixed {
 	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
-	public final Object2 type(String type) {
+	public final Object_ type(String type) {
 		attr("type", type);
 		return this;
 	}
@@ -110,7 +124,7 @@ public class Object2 extends HtmlElementMixed {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Object2 typemustmatch(Object typemustmatch) {
+	public final Object_ typemustmatch(Object typemustmatch) {
 		attr("typemustmatch", typemustmatch);
 		return this;
 	}
@@ -125,7 +139,7 @@ public class Object2 extends HtmlElementMixed {
 	 * @param usemap The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
-	public final Object2 usemap(String usemap) {
+	public final Object_ usemap(String usemap) {
 		attr("usemap", usemap);
 		return this;
 	}
@@ -141,7 +155,7 @@ public class Object2 extends HtmlElementMixed {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Object2 width(Object width) {
+	public final Object_ width(Object width) {
 		attr("width", width);
 		return this;
 	}
@@ -152,31 +166,31 @@ public class Object2 extends HtmlElementMixed {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* HtmlElement */
-	public final Object2 _class(String _class) {
+	public final Object_ _class(String _class) {
 		super._class(_class);
 		return this;
 	}
 
 	@Override /* HtmlElement */
-	public final Object2 id(String id) {
+	public final Object_ id(String id) {
 		super.id(id);
 		return this;
 	}
 
 	@Override /* HtmlElement */
-	public final Object2 style(String style) {
+	public final Object_ style(String style) {
 		super.style(style);
 		return this;
 	}
 
 	@Override /* HtmlElementMixed */
-	public Object2 children(Object...children) {
+	public Object_ children(Object...children) {
 		super.children(children);
 		return this;
 	}
 
 	@Override /* HtmlElementMixed */
-	public Object2 child(Object child) {
+	public Object_ child(Object child) {
 		super.child(child);
 		return this;
 	}

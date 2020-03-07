@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="span")
 public class Span extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Span} element.
+	 */
+	public Span() {}
+
+	/**
+	 * Creates a {@link Span} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Span(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

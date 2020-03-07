@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="rtc")
 public class Rtc extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Rtc} element.
+	 */
+	public Rtc() {}
+
+	/**
+	 * Creates an {@link Rtc} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Rtc(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

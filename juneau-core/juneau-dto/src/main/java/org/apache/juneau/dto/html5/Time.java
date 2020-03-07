@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Time extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Time} element.
+	 */
+	public Time() {}
+
+	/**
+	 * Creates a {@link Time} element with the specified {@link Time#children(Object[])} nodes.
+	 *
+	 * @param children The {@link Time#children(Object[])} nodes.
+	 */
+	public Time(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.text-level-semantics#attr-time-datetime datetime}
 	 * attribute.
 	 *

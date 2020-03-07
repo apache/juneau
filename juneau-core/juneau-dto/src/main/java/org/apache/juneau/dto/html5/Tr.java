@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="tr")
 public class Tr extends HtmlElementContainer {
 
+	/**
+	 * Creates an empty {@link Tr} element.
+	 */
+	public Tr() {}
+
+	/**
+	 * Creates a {@link Tr} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Tr(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

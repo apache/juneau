@@ -30,6 +30,22 @@ import org.apache.juneau.annotation.*;
 public class A extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link A} element.
+	 */
+	public A() {}
+
+	/**
+	 * Creates an {@link A} element with the specified {@link A#href(Object)} attribute and {@link A#children(Object[])}
+	 * nodes.
+	 *
+	 * @param href The {@link A#href(Object)} attribute.
+	 * @param children The {@link A#children(Object[])} nodes.
+	 */
+	public A(Object href, Object[] children) {
+		href(href).children(children);
+	}
+
+	/**
 	 * {@doc HTML5.links#attr-hyperlink-download download} attribute.
 	 *
 	 * <p>

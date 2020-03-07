@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="kbd")
 public class Kbd extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Kbd} element.
+	 */
+	public Kbd() {}
+
+	/**
+	 * Creates a {@link Kbd} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Kbd(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

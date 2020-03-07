@@ -30,6 +30,22 @@ import org.apache.juneau.annotation.*;
 public class Source extends HtmlElementVoid {
 
 	/**
+	 * Creates an empty {@link Source} element.
+	 */
+	public Source() {}
+
+	/**
+	 * Creates a {@link Source} element with the specified {@link Source#src(Object)} and {@link Source#type(String)}
+	 * attributes.
+	 *
+	 * @param src The {@link Source#src(Object)} attribute.
+	 * @param type The {@link Source#type(String)} attribute.
+	 */
+	public Source(Object src, String type) {
+		src(src).type(type);
+	}
+
+	/**
 	 * {@doc HTML5.embedded-content-0#attr-source-src src} attribute.
 	 *
 	 * <p>

@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Colgroup extends HtmlElementContainer {
 
 	/**
+	 * Creates an empty {@link Colgroup} element.
+	 */
+	public Colgroup() {}
+
+	/**
+	 * Creates a {@link Colgroup} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Colgroup(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.tabular-data#attr-colgroup-span span} attribute.
 	 *
 	 * <p>

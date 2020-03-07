@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="dl")
 public class Dl extends HtmlElementContainer {
 
+	/**
+	 * Creates an empty {@link Dl} element.
+	 */
+	public Dl() {}
+
+	/**
+	 * Creates a {@link Dl} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Dl(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

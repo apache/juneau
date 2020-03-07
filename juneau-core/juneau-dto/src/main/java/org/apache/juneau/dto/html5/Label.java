@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Label extends HtmlElementMixed {
 
 	/**
+	 * Creates an empty {@link Label} element.
+	 */
+	public Label() {}
+
+	/**
+	 * Creates a {@link Label} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Label(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.forms#attr-label-for for} attribute.
 	 *
 	 * <p>

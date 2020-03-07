@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="noscript")
 public class Noscript extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Noscript} element.
+	 */
+	public Noscript() {}
+
+	/**
+	 * Creates a {@link Noscript} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Noscript(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

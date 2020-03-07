@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="h5")
 public class H5 extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link H5} element.
+	 */
+	public H5() {}
+
+	/**
+	 * Creates an {@link H5} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public H5(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

@@ -30,6 +30,20 @@ import org.apache.juneau.annotation.*;
 public class Embed extends HtmlElementVoid {
 
 	/**
+	 * Creates an empty {@link Embed} element.
+	 */
+	public Embed() {}
+
+	/**
+	 * Creates an {@link Embed} element with the specified {@link Embed#src(Object)} attribute.
+	 *
+	 * @param src The {@link Embed#src(Object)} attribute.
+	 */
+	public Embed(Object src) {
+		src(src);
+	}
+
+	/**
 	 * {@doc HTML5.embedded-content-0#attr-dim-height height}
 	 * attribute.
 	 *

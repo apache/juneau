@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="h4")
 public class H4 extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link H4} element.
+	 */
+	public H4() {}
+
+	/**
+	 * Creates an {@link H4} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public H4(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

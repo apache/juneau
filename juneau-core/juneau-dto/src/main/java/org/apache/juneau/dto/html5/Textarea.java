@@ -26,6 +26,22 @@ import org.apache.juneau.annotation.*;
 public class Textarea extends HtmlElementRawText {
 
 	/**
+	 * Creates an empty {@link Textarea} element.
+	 */
+	public Textarea() {}
+
+	/**
+	 * Creates a {@link Textarea} element with the specified {@link Textarea#name(String)} attribute and
+	 * {@link Textarea#text(Object)} node.
+	 *
+	 * @param name The {@link Textarea#name(String)} attribute.
+	 * @param text The {@link Textarea#text(Object)} node.
+	 */
+	public Textarea(String name, String text) {
+		name(name).text(text);
+	}
+
+	/**
 	 * {@doc HTML5.forms#attr-fe-autocomplete autocomplete} attribute.
 	 *
 	 * <p>

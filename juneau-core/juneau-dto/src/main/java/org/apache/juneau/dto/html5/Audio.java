@@ -30,6 +30,20 @@ import org.apache.juneau.annotation.*;
 public class Audio extends HtmlElementContainer {
 
 	/**
+	 * Creates an empty {@link Audio} element.
+	 */
+	public Audio() {}
+
+	/**
+	 * Creates an {@link Audio} element with the specified {@link Audio#src(Object)} attribute.
+	 *
+	 * @param src The {@link Audio#src(Object)} attribute.
+	 */
+	public Audio(String src) {
+		src(src);
+	}
+
+	/**
 	 * {@doc HTML5.embedded-content-0#attr-media-autoplay autoplay}
 	 * attribute.
 	 *

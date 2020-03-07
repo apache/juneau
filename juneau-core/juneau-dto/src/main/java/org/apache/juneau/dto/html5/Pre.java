@@ -30,6 +30,20 @@ import org.apache.juneau.xml.annotation.*;
 @Bean(typeName="pre")
 public class Pre extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Pre} element.
+	 */
+	public Pre() {}
+
+	/**
+	 * Creates a {@link Pre} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Pre(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

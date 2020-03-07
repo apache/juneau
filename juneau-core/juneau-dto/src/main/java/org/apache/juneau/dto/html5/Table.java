@@ -26,6 +26,20 @@ import org.apache.juneau.annotation.*;
 public class Table extends HtmlElementContainer {
 
 	/**
+	 * Creates an empty {@link Table} element.
+	 */
+	public Table() {}
+
+	/**
+	 * Creates a {@link Table} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Table(Object...children) {
+		children(children);
+	}
+
+	/**
 	 * {@doc HTML5.tabular-data#attr-table-border border} attribute.
 	 *
 	 * @param border

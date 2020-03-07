@@ -30,6 +30,23 @@ import org.apache.juneau.annotation.*;
 public class Area extends HtmlElementVoid {
 
 	/**
+	 * Creates an empty {@link Area} element.
+	 */
+	public Area() {}
+
+	/**
+	 * Creates an {@link Area} element with the specified {@link Area#shape(String)}, {@link Area#coords(String)},
+	 * and {@link Area#href(Object)} attributes.
+	 *
+	 * @param shape The {@link Area#shape(String)} attribute.
+	 * @param coords The {@link Area#coords(String)} attribute.
+	 * @param href The {@link Area#href(Object)} attribute.
+	 */
+	public Area(String shape, String coords, Object href) {
+		shape(shape).coords(coords).href(href);
+	}
+
+	/**
 	 * {@doc HTML5.embedded-content-0#attr-area-alt alt} attribute.
 	 *
 	 * <p>

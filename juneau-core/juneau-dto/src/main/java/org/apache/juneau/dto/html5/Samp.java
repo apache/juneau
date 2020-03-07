@@ -25,6 +25,20 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="samp")
 public class Samp extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Samp} element.
+	 */
+	public Samp() {}
+
+	/**
+	 * Creates a {@link Samp} element with the specified child nodes.
+	 *
+	 * @param children The child nodes.
+	 */
+	public Samp(Object...children) {
+		children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

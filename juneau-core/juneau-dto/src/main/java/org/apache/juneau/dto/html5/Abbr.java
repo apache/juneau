@@ -25,6 +25,22 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="abbr")
 public class Abbr extends HtmlElementMixed {
 
+	/**
+	 * Creates an empty {@link Abbr} element.
+	 */
+	public Abbr() {}
+
+	/**
+	 * Creates an {@link Abbr} element with the specified {@link Abbr#title(String)} attribute and
+	 * {@link Abbr#children(Object[])} nodes.
+	 *
+	 * @param title The {@link Abbr#title(String)} attribute.
+	 * @param children The {@link Abbr#children(Object[])} nodes.
+	 */
+	public Abbr(String title, Object...children) {
+		title(title).children(children);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

@@ -25,6 +25,11 @@ import org.apache.juneau.annotation.*;
 @Bean(typeName="wbr")
 public class Wbr extends HtmlElementVoid {
 
+	/**
+	 * Creates an empty {@link Wbr} element.
+	 */
+	public Wbr() {}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------

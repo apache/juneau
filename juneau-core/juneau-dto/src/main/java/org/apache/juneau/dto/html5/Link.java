@@ -30,6 +30,20 @@ import org.apache.juneau.annotation.*;
 public class Link extends HtmlElementVoid {
 
 	/**
+	 * Creates an empty {@link Link} element.
+	 */
+	public Link() {}
+
+	/**
+	 * Creates a {@link Link} element with the specified {@link Link#href(Object)} attribute.
+	 *
+	 * @param href The {@link Link#href(Object)} attribute.
+	 */
+	public Link(Object href) {
+		href(href);
+	}
+
+	/**
 	 * {@doc HTML5.document-metadata#attr-link-crossorigin crossorigin}
 	 * attribute.
 	 *
