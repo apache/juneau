@@ -1132,23 +1132,23 @@ public final class BeanPropertyMeta {
 		BeanContext bc = beanContext;
 		if (a == null)
 			return l;
-		getBeanMeta().getClassMeta().getInfo().appendAnnotationsParentFirst(l, a, bc);
+		getBeanMeta().getClassMeta().getInfo().appendAnnotations(l, a, bc);
 
 		if (field != null) {
 			addIfNotNull(l, bc.getAnnotation(a, field));
-			ClassInfo.of(field.getType()).appendAnnotationsParentFirst(l, a, bc);
+			ClassInfo.of(field.getType()).appendAnnotations(l, a, bc);
 		}
 		if (getter != null) {
 			addIfNotNull(l, bc.getAnnotation(a, getter));
-			ClassInfo.of(getter.getReturnType()).appendAnnotationsParentFirst(l, a, bc);
+			ClassInfo.of(getter.getReturnType()).appendAnnotations(l, a, bc);
 		}
 		if (setter != null) {
 			addIfNotNull(l, bc.getAnnotation(a, setter));
-			ClassInfo.of(setter.getReturnType()).appendAnnotationsParentFirst(l, a, bc);
+			ClassInfo.of(setter.getReturnType()).appendAnnotations(l, a, bc);
 		}
 		if (extraKeys != null) {
 			addIfNotNull(l, bc.getAnnotation(a, extraKeys));
-			ClassInfo.of(extraKeys.getReturnType()).appendAnnotationsParentFirst(l, a, bc);
+			ClassInfo.of(extraKeys.getReturnType()).appendAnnotations(l, a, bc);
 		}
 
 		return l;

@@ -68,7 +68,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		@SuppressWarnings("deprecation")
 		Builder(RestContext context) {
 			ClassInfo ci = ClassInfo.of(context.getResource()).resolved();
-			for (RestResource r : ci.getAnnotationsParentFirst(RestResource.class)) {
+			for (RestResource r : ci.getAnnotations(RestResource.class)) {
 				if (! r.siteName().isEmpty())
 					siteName = r.siteName();
 				if (r.title().length > 0)
@@ -76,7 +76,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				if (r.description().length > 0)
 					description = joinnl(r.description());
 			}
-			for (Rest r : ci.getAnnotationsParentFirst(Rest.class)) {
+			for (Rest r : ci.getAnnotations(Rest.class)) {
 				if (! r.siteName().isEmpty())
 					siteName = r.siteName();
 				if (r.title().length > 0)

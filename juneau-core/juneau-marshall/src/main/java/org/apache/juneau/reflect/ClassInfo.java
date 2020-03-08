@@ -1024,8 +1024,8 @@ public final class ClassInfo {
 	 * @return
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
-	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
-		return appendAnnotationsParentFirst(new ArrayList<>(), a);
+	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
+		return appendAnnotations(new ArrayList<>(), a);
 	}
 
 	/**
@@ -1040,8 +1040,8 @@ public final class ClassInfo {
 	 * @return
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
-	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a, MetaProvider mp) {
-		return appendAnnotationsParentFirst(new ArrayList<>(), a, mp);
+	public <T extends Annotation> List<T> getAnnotations(Class<T> a, MetaProvider mp) {
+		return appendAnnotations(new ArrayList<>(), a, mp);
 	}
 
 	/**
@@ -1054,8 +1054,8 @@ public final class ClassInfo {
 	 * @param a The annotation class type.
 	 * @return The found matches, or an empty list if annotation was not found.
 	 */
-	public <T extends Annotation> List<AnnotationInfo<T>> getAnnotationInfosParentFirst(Class<T> a) {
-		return appendAnnotationInfosParentFirst(new ArrayList<>(), a);
+	public <T extends Annotation> List<AnnotationInfo<T>> getAnnotationInfos(Class<T> a) {
+		return appendAnnotationInfos(new ArrayList<>(), a);
 	}
 
 	/**
@@ -1072,8 +1072,8 @@ public final class ClassInfo {
 	 *
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationListParentFirst() {
-		return getAnnotationListParentFirst(null);
+	public AnnotationList getAnnotationList() {
+		return getAnnotationList(null);
 	}
 
 	/**
@@ -1093,8 +1093,8 @@ public final class ClassInfo {
 	 * 	<br>Can be <jk>null</jk> for no filtering.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationListParentFirst(Predicate<AnnotationInfo<?>> filter) {
-		return appendAnnotationListParentFirst(new AnnotationList(filter));
+	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
+		return appendAnnotationList(new AnnotationList(filter));
 	}
 
 	/**
@@ -1114,8 +1114,8 @@ public final class ClassInfo {
 	 * @param a The annotation to search for.
 	 * @return The same list.
 	 */
-	public <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a) {
-		return appendAnnotationsParentFirst(l, a, MetaProvider.DEFAULT);
+	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
+		return appendAnnotations(l, a, MetaProvider.DEFAULT);
 	}
 
 	/**
@@ -1136,7 +1136,7 @@ public final class ClassInfo {
 	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @return The same list.
 	 */
-	public <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a, MetaProvider mp) {
+	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, MetaProvider mp) {
 		addIfNotNull(l, getPackageAnnotation(a));
 		for (ClassInfo ci : getInterfacesParentFirst())
 			addIfNotNull(l, mp.getDeclaredAnnotation(a, ci.inner()));
@@ -1162,7 +1162,7 @@ public final class ClassInfo {
 	 * @param a The annotation to search for.
 	 * @return The same list.
 	 */
-	public <T extends Annotation> List<AnnotationInfo<T>> appendAnnotationInfosParentFirst(List<AnnotationInfo<T>> l, Class<T> a) {
+	public <T extends Annotation> List<AnnotationInfo<T>> appendAnnotationInfos(List<AnnotationInfo<T>> l, Class<T> a) {
 		addIfNotNull(l, getPackageAnnotationInfo(a));
 		for (ClassInfo ci : getInterfacesParentFirst())
 			addIfNotNull(l, ci.getDeclaredAnnotationInfo(a));
@@ -1197,7 +1197,7 @@ public final class ClassInfo {
 	}
 
 
-	AnnotationList appendAnnotationListParentFirst(AnnotationList m) {
+	AnnotationList appendAnnotationList(AnnotationList m) {
 		Package p = c.getPackage();
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())

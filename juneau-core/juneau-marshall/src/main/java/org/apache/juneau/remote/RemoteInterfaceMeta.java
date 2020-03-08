@@ -50,7 +50,7 @@ public class RemoteInterfaceMeta {
 		this.c = c;
 		String path = "";
 		ClassInfo ci = ClassInfo.of(c);
-		List<RemoteInterface> rr = ci.getAnnotationsParentFirst(RemoteInterface.class);
+		List<RemoteInterface> rr = ci.getAnnotations(RemoteInterface.class);
 		for (RemoteInterface r : rr)
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());

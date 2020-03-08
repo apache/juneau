@@ -52,14 +52,14 @@ public class MsgPackConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationList al = a.getAnnotationListParentFirst();
+		AnnotationList al = a.getAnnotationList();
 		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAddBeanTypes());
 	}
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationList al = a.getAnnotationListParentFirst();
+		AnnotationList al = a.getAnnotationList();
 		MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 
@@ -73,14 +73,14 @@ public class MsgPackConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationListParentFirst();
+		AnnotationList al = b.getAnnotationList();
 		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 	}
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationList al = b.getAnnotationListParentFirst();
+		AnnotationList al = b.getAnnotationList();
 		MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 
@@ -93,14 +93,14 @@ public class MsgPackConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationListParentFirst();
+		AnnotationList al = c.getAnnotationList();
 		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationListParentFirst();
+		AnnotationList al = c.getAnnotationList();
 		MsgPackParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 }

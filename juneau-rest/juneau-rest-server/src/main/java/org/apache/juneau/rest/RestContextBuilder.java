@@ -138,8 +138,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			VarResolver vr = varResolverBuilder.build();
 
-			List<AnnotationInfo<RestResource>> restResourceAnnotationsParentFirst = rci.getAnnotationInfosParentFirst(RestResource.class);
-			List<AnnotationInfo<Rest>> restAnnotationsParentFirst = rci.getAnnotationInfosParentFirst(Rest.class);
+			List<AnnotationInfo<RestResource>> restResourceAnnotationsParentFirst = rci.getAnnotationInfos(RestResource.class);
+			List<AnnotationInfo<Rest>> restAnnotationsParentFirst = rci.getAnnotationInfos(Rest.class);
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			String configPath = "";
@@ -174,7 +174,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				}
 			}
 
-			applyAnnotations(rci.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), vr.createSession());
+			applyAnnotations(rci.getAnnotationList(ConfigAnnotationFilter.INSTANCE), vr.createSession());
 
 			// Load stuff from parent-to-child order.
 			// This allows child settings to overwrite parent settings.

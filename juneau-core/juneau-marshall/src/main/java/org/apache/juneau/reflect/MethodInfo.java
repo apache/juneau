@@ -215,8 +215,8 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
-	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
-		return appendAnnotationsParentFirst(new ArrayList<>(), a);
+	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
+		return appendAnnotations(new ArrayList<>(), a);
 	}
 
 	/**
@@ -228,13 +228,13 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return The same list.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a) {
-		declaringClass.appendAnnotationsParentFirst(l, a);
+	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
+		declaringClass.appendAnnotations(l, a);
 		for (Method m2 : getMatchingParentFirst())
 			for (Annotation a2 :  m2.getDeclaredAnnotations())
 				if (a.isInstance(a2))
 					l.add((T)a2);
-		getReturnType().resolved().appendAnnotationsParentFirst(l, a);
+		getReturnType().resolved().appendAnnotations(l, a);
 		return l;
 	}
 
@@ -269,8 +269,8 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 *
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationListParentFirst() {
-		return getAnnotationListParentFirst(null);
+	public AnnotationList getAnnotationList() {
+		return getAnnotationList(null);
 	}
 
 	/**
@@ -291,20 +291,20 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<br>Can be <jk>null</jk> for no filtering.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationListParentFirst(Predicate<AnnotationInfo<?>> filter) {
-		return appendAnnotationListParentFirst(new AnnotationList(filter));
+	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
+		return appendAnnotationList(new AnnotationList(filter));
 	}
 
 	/**
-	 * Same as {@link #getAnnotationListParentFirst(Predicate)} except only returns annotations defined on methods.
+	 * Same as {@link #getAnnotationList(Predicate)} except only returns annotations defined on methods.
 	 *
 	 * @param filter
 	 * 	Optional filter to apply to limit which annotations are added to the list.
 	 * 	<br>Can be <jk>null</jk> for no filtering.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationListMethodOnlyParentFirst(Predicate<AnnotationInfo<?>> filter) {
-		return appendAnnotationListMethodOnlyParentFirst(new AnnotationList(filter));
+	public AnnotationList getAnnotationListMethodOnly(Predicate<AnnotationInfo<?>> filter) {
+		return appendAnnotationListMethodOnly(new AnnotationList(filter));
 	}
 
 	/**
@@ -320,7 +320,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		return false;
 	}
 
-	AnnotationList appendAnnotationListParentFirst(AnnotationList al) {
+	AnnotationList appendAnnotationList(AnnotationList al) {
 		ClassInfo c = this.declaringClass;
 		appendDeclaredAnnotations(al, c.getPackage());
 		for (ClassInfo ci : c.getInterfacesParentFirst()) {
@@ -334,7 +334,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		return al;
 	}
 
-	AnnotationList appendAnnotationListMethodOnlyParentFirst(AnnotationList al) {
+	AnnotationList appendAnnotationListMethodOnly(AnnotationList al) {
 		ClassInfo c = this.declaringClass;
 		for (ClassInfo ci : c.getInterfacesParentFirst())
 			appendDeclaredMethodAnnotations(al, ci);

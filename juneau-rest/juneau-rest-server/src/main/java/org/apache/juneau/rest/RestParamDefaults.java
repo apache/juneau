@@ -203,7 +203,7 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi, UrlPathPattern pathPattern) {
 			String p = null;
-			for (Path h : mpi.getAnnotationsParentFirst(Path.class)) {
+			for (Path h : mpi.getAnnotations(Path.class)) {
 				if (! h.name().isEmpty())
 					p = h.name();
 				if (! h.value().isEmpty())
@@ -267,7 +267,7 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (Header h : mpi.getAnnotationsParentFirst(Header.class)) {
+			for (Header h : mpi.getAnnotations(Header.class)) {
 				if (! h.name().isEmpty())
 					n = h.name();
 				if (! h.value().isEmpty())
@@ -292,7 +292,7 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (Attr h : mpi.getAnnotationsParentFirst(Attr.class)) {
+			for (Attr h : mpi.getAnnotations(Attr.class)) {
 				if (! h.name().isEmpty())
 					n = h.name();
 				if (! h.value().isEmpty())
@@ -337,7 +337,7 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (ResponseHeader h : mpi.getAnnotationsParentFirst(ResponseHeader.class)) {
+			for (ResponseHeader h : mpi.getAnnotations(ResponseHeader.class)) {
 				if (! h.name().isEmpty())
 					n = h.name();
 				if (! h.value().isEmpty())
@@ -450,7 +450,7 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (FormData h : mpi.getAnnotationsParentFirst(FormData.class)) {
+			for (FormData h : mpi.getAnnotations(FormData.class)) {
 				if (! h.name().isEmpty())
 					n = h.name();
 				if (! h.value().isEmpty())
@@ -486,7 +486,7 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (Query h : mpi.getAnnotationsParentFirst(Query.class)) {
+			for (Query h : mpi.getAnnotations(Query.class)) {
 				if (! h.name().isEmpty())
 					n = h.name();
 				if (! h.value().isEmpty())
@@ -515,7 +515,7 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (HasFormData h : mpi.getAnnotationsParentFirst(HasFormData.class)) {
+			for (HasFormData h : mpi.getAnnotations(HasFormData.class)) {
 				if (! h.name().isEmpty())
 					n = h.name();
 				if (! h.value().isEmpty())
@@ -543,7 +543,7 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (HasQuery h : mpi.getAnnotationsParentFirst(HasQuery.class)) {
+			for (HasQuery h : mpi.getAnnotations(HasQuery.class)) {
 				if (! h.name().isEmpty())
 					n = h.name();
 				if (! h.value().isEmpty())

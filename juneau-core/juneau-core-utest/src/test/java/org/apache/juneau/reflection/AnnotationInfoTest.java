@@ -66,11 +66,11 @@ public class AnnotationInfoTest {
 
 	@Test
 	public void getClassOn() {
-		check("B", b.getAnnotationInfosParentFirst(A.class).get(0).getClassOn());
+		check("B", b.getAnnotationInfos(A.class).get(0).getClassOn());
 	}
 
 	@Test
 	public void getAnnotation() {
-		check("@A(1)", b.getAnnotationInfosParentFirst(A.class).get(0).getAnnotation());
+		check("@A(1)", b.getAnnotationInfos(A.class).get(0).getAnnotation());
 	}
 }

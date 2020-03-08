@@ -52,7 +52,7 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(ps);
 		b.apply(ci.innerType());
-		for (Response r : ci.getAnnotationsParentFirst(Response.class))
+		for (Response r : ci.getAnnotations(Response.class))
 			b.apply(r);
 		return b.build();
 	}
@@ -71,7 +71,7 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(ps);
 		b.apply(m.getReturnType().resolved().innerType());
-		for (Response r : m.getAnnotationsParentFirst(Response.class))
+		for (Response r : m.getAnnotations(Response.class))
 			b.apply(r);
 		return b.build();
 	}
@@ -90,7 +90,7 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(ps);
 		b.apply(mpi.getParameterType().resolved().innerType());
-		for (Response r : mpi.getAnnotationsParentFirst(Response.class))
+		for (Response r : mpi.getAnnotations(Response.class))
 			b.apply(r);
 		return b.build();
 	}

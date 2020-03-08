@@ -182,17 +182,17 @@ public final class ParamInfo {
 	 * @return
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
-	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
-		return appendAnnotationsParentFirst(new ArrayList<>(), a, true);
+	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
+		return appendAnnotations(new ArrayList<>(), a, true);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a, boolean parentFirst) {
+	private <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
 		if (eInfo.isConstructor) {
 			ClassInfo ci = eInfo.getParamType(index).resolved();
 			Annotation[] annotations = eInfo.getParameterAnnotations(index);
 			if (parentFirst) {
-				ci.appendAnnotationsParentFirst(l, a);
+				ci.appendAnnotations(l, a);
 				for (Annotation a2 : annotations)
 					if (a.isInstance(a2))
 						l.add((T)a2);
@@ -200,13 +200,13 @@ public final class ParamInfo {
 				for (Annotation a2 : annotations)
 					if (a.isInstance(a2))
 						l.add((T)a2);
-				ci.appendAnnotationsParentFirst(l, a);
+				ci.appendAnnotations(l, a);
 			}
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
 			ClassInfo ci = eInfo.getParamType(index).resolved();
 			if (parentFirst) {
-				ci.appendAnnotationsParentFirst(l, a);
+				ci.appendAnnotations(l, a);
 				for (Method m2 : mi.getMatchingParentFirst())
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
 						if (a.isInstance(a2))
@@ -216,7 +216,7 @@ public final class ParamInfo {
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
 						if (a.isInstance(a2))
 							l.add((T)a2);
-				ci.appendAnnotationsParentFirst(l, a);
+				ci.appendAnnotations(l, a);
 			}
 		}
 		return l;

@@ -82,7 +82,7 @@ public class HttpPartSchemaBuilder {
 	HttpPartSchemaBuilder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
 		if (t instanceof Class<?>) {
 			ClassInfo ci = ClassInfo.of((Class<?>)t);
-			for (Annotation a : ci.getAnnotationsParentFirst(c))
+			for (Annotation a : ci.getAnnotations(c))
 				apply(a);
 		} else if (Value.isType(t)) {
 			apply(c, Value.getParameterType(t));

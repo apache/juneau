@@ -59,7 +59,7 @@ public class HtmlConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationList al = a.getAnnotationListParentFirst();
+		AnnotationList al = a.getAnnotationList();
 		HtmlSerializerSession x = HtmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddKeyValueTableHeaders());
@@ -71,7 +71,7 @@ public class HtmlConfigAnnotationTest {
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationList al = a.getAnnotationListParentFirst();
+		AnnotationList al = a.getAnnotationList();
 		HtmlParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 
@@ -85,7 +85,7 @@ public class HtmlConfigAnnotationTest {
 
 	@Test
 	public void defaultsSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationListParentFirst();
+		AnnotationList al = b.getAnnotationList();
 		HtmlSerializerSession x = HtmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
@@ -97,7 +97,7 @@ public class HtmlConfigAnnotationTest {
 
 	@Test
 	public void defaultsParser() throws Exception {
-		AnnotationList al = b.getAnnotationListParentFirst();
+		AnnotationList al = b.getAnnotationList();
 		HtmlParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 
@@ -110,7 +110,7 @@ public class HtmlConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationListParentFirst();
+		AnnotationList al = c.getAnnotationList();
 		HtmlSerializerSession x = HtmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
@@ -122,7 +122,7 @@ public class HtmlConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationListParentFirst();
+		AnnotationList al = c.getAnnotationList();
 		HtmlParser.create().applyAnnotations(al, sr).build().createSession();
 	}
 }

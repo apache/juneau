@@ -31,13 +31,13 @@ public class CsvConfigAnnotationTest {
 
 	@Test
 	public void defaultsSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationListParentFirst();
+		AnnotationList al = b.getAnnotationList();
 		CsvSerializer.create().applyAnnotations(al, null).build();
 	}
 
 	@Test
 	public void defaultsParser() throws Exception {
-		AnnotationList al = b.getAnnotationListParentFirst();
+		AnnotationList al = b.getAnnotationList();
 		CsvParser.create().applyAnnotations(al, null).build();
 	}
 
@@ -50,13 +50,13 @@ public class CsvConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationListParentFirst();
+		AnnotationList al = c.getAnnotationList();
 		CsvSerializer.create().applyAnnotations(al, null).build();
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationListParentFirst();
+		AnnotationList al = c.getAnnotationList();
 		CsvParser.create().applyAnnotations(al, null).build();
 	}
 }

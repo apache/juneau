@@ -865,7 +865,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void getAnnotationsParentFirst() {
-		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationsParentFirst(A.class));
+		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotations(A.class));
 	}
 
 	@Test
@@ -904,7 +904,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void getAnnotationInfosParentFirst() {
-		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationInfosParentFirst(A.class));
+		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationInfos(A.class));
 	}
 
 	@Test
@@ -928,9 +928,9 @@ public class ClassInfoTest {
 
 	@Test
 	public void getAnnotationsMapParentFirst() {
-		check("@PA(10),@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationListParentFirst());
-		check("@PA(10),@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g4.getAnnotationListParentFirst());
-		check("@PA(10),@A(3)", g5.getAnnotationListParentFirst());
+		check("@PA(10),@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationList());
+		check("@PA(10),@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g4.getAnnotationList());
+		check("@PA(10),@A(3)", g5.getAnnotationList());
 	}
 
 	@A(1) @AConfig(1) static interface GBI1 {}
@@ -947,9 +947,9 @@ public class ClassInfoTest {
 
 	@Test
 	public void getConfigAnnotationsMapParentFirst() {
-		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb3.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb4.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(3)", gb5.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb3.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb4.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(3)", gb5.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -44,7 +44,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 			VarResolver vr = context.getVarResolver();
 			VarResolverSession vrs = vr.createSession();
 
-			applyAnnotations(mi.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), vrs);
+			applyAnnotations(mi.getAnnotationList(ConfigAnnotationFilter.INSTANCE), vrs);
 
 			properties = new RestMethodProperties(context.getProperties());
 

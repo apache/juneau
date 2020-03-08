@@ -155,7 +155,7 @@ public abstract class ContextBuilder {
 	 */
 	public ContextBuilder applyAnnotations(Class<?>...fromClasses) {
 		for (Class<?> c : fromClasses)
-			applyAnnotations(ClassInfo.of(c).getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
+			applyAnnotations(ClassInfo.of(c).getAnnotationList(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 
@@ -199,7 +199,7 @@ public abstract class ContextBuilder {
 	 */
 	public ContextBuilder applyAnnotations(Method...fromMethods) {
 		for (Method m : fromMethods)
-			applyAnnotations(MethodInfo.of(m).getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
+			applyAnnotations(MethodInfo.of(m).getAnnotationList(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
 		return this;
 	}
 

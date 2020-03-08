@@ -224,25 +224,25 @@ public class ParamInfoTest {
 
 	@Test
 	public void getAnnotationsParentFirst() throws Exception {
-		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", cb_a1.getAnnotationsParentFirst(CA.class));
-		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", cb_a2.getAnnotationsParentFirst(CA.class));
-		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", cc_a1.getAnnotationsParentFirst(CA.class));
-		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5),@CA(6)", cc_a2.getAnnotationsParentFirst(CA.class));
+		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", cb_a1.getAnnotations(CA.class));
+		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", cb_a2.getAnnotations(CA.class));
+		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", cc_a1.getAnnotations(CA.class));
+		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5),@CA(6)", cc_a2.getAnnotations(CA.class));
 	}
 
 	@Test
 	public void getAnnotationsParentFirst_notFound() throws Exception {
-		check("", cb_a1.getAnnotationsParentFirst(DA.class));
+		check("", cb_a1.getAnnotations(DA.class));
 	}
 
 	@Test
 	public void getAnnotationsParentFirst_constructor() throws Exception {
-		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(9)", cc_cc.getAnnotationsParentFirst(CA.class));
+		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(9)", cc_cc.getAnnotations(CA.class));
 	}
 
 	@Test
 	public void getAnnotationsParentFirst_notFound_constructor() throws Exception {
-		check("", cc_cc.getAnnotationsParentFirst(DA.class));
+		check("", cc_cc.getAnnotations(DA.class));
 	}
 
 	@Test
@@ -323,13 +323,13 @@ public class ParamInfoTest {
 
 	@Test
 	public void getAnnotationsParentFirst_inherited() throws Exception {
-		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0)", db_a1.getAnnotationsParentFirst(DA.class));
-		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0),@DA(5)", dc_a1.getAnnotationsParentFirst(DA.class));
+		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0)", db_a1.getAnnotations(DA.class));
+		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0),@DA(5)", dc_a1.getAnnotations(DA.class));
 	}
 
 	@Test
 	public void getAnnotationsParentFirst_inherited_notFound() throws Exception {
-		check("", db_a1.getAnnotationsParentFirst(CA.class));
+		check("", db_a1.getAnnotations(CA.class));
 	}
 
 	@Test

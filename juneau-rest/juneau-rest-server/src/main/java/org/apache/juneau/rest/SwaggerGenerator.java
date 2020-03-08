@@ -114,7 +114,7 @@ final class SwaggerGenerator {
 			omSwagger = new ObjectMap();
 
 		// Combine it with @RestResource(swagger)
-		for (RestResource rr : rci.getAnnotationsParentFirst(RestResource.class)) {
+		for (RestResource rr : rci.getAnnotations(RestResource.class)) {
 
 			ObjectMap sInfo = omSwagger.getObjectMap("info", true);
 			sInfo.appendSkipEmpty("title",
@@ -169,7 +169,7 @@ final class SwaggerGenerator {
 		}
 
 		// Combine it with @Rest(swagger)
-		for (Rest rr : rci.getAnnotationsParentFirst(Rest.class)) {
+		for (Rest rr : rci.getAnnotations(Rest.class)) {
 
 			ObjectMap sInfo = omSwagger.getObjectMap("info", true);
 			sInfo.appendSkipEmpty("title",
@@ -392,19 +392,19 @@ final class SwaggerGenerator {
 					try {
 						if (mpi != null) {
 							if (in == BODY) {
-								for (Body a : mpi.getAnnotationsParentFirst(Body.class))
+								for (Body a : mpi.getAnnotations(Body.class))
 									merge(param, a);
 							} else if (in == QUERY) {
-								for (Query a : mpi.getAnnotationsParentFirst(Query.class))
+								for (Query a : mpi.getAnnotations(Query.class))
 									merge(param, a);
 							} else if (in == FORM_DATA) {
-								for (FormData a : mpi.getAnnotationsParentFirst(FormData.class))
+								for (FormData a : mpi.getAnnotations(FormData.class))
 									merge(param, a);
 							} else if (in == HEADER) {
-								for (Header a : mpi.getAnnotationsParentFirst(Header.class))
+								for (Header a : mpi.getAnnotations(Header.class))
 									merge(param, a);
 							} else if (in == PATH) {
-								for (Path a : mpi.getAnnotationsParentFirst(Path.class))
+								for (Path a : mpi.getAnnotations(Path.class))
 									merge(param, a);
 							}
 						}
@@ -433,7 +433,7 @@ final class SwaggerGenerator {
 
 			for (ClassInfo eci : mi.getExceptionTypes()) {
 				if (eci.hasAnnotation(Response.class)) {
-					List<Response> la = eci.getAnnotationsParentFirst(Response.class);
+					List<Response> la = eci.getAnnotations(Response.class);
 					Set<Integer> codes = getCodes(la, 500);
 					for (Response a : la) {
 						for (Integer code : codes) {
@@ -460,7 +460,7 @@ final class SwaggerGenerator {
 			}
 
 			if (mi.hasAnnotation(Response.class) || mi.getResolvedReturnType().hasAnnotation(Response.class)) {
-				List<Response> la = mi.getAnnotationsParentFirst(Response.class);
+				List<Response> la = mi.getAnnotations(Response.class);
 				Set<Integer> codes = getCodes(la, 200);
 				for (Response a : la) {
 					for (Integer code : codes) {
@@ -498,7 +498,7 @@ final class SwaggerGenerator {
 				ParamInfo mpi = mp.getMethodParamInfo();
 
 				if (in == RESPONSE_HEADER) {
-					List<ResponseHeader> la = mpi.getAnnotationsParentFirst(ResponseHeader.class);
+					List<ResponseHeader> la = mpi.getAnnotations(ResponseHeader.class);
 					Set<Integer> codes = getCodes2(la, 200);
 					for (ResponseHeader a : la) {
 						for (Integer code : codes) {
@@ -509,7 +509,7 @@ final class SwaggerGenerator {
 					}
 
 				} else if (in == RESPONSE) {
-					List<Response> la = mpi.getAnnotationsParentFirst(Response.class);
+					List<Response> la = mpi.getAnnotations(Response.class);
 					Set<Integer> codes = getCodes(la, 200);
 					for (Response a : la) {
 						for (Integer code : codes) {

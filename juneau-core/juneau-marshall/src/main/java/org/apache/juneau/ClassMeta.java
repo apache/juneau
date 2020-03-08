@@ -685,7 +685,7 @@ public final class ClassMeta<T> implements Type {
 
 		private BeanFilter findBeanFilter(BeanContext bc) {
 			try {
-				List<Bean> ba = info.getAnnotationsParentFirst(Bean.class, bc);
+				List<Bean> ba = info.getAnnotations(Bean.class, bc);
 				if (! ba.isEmpty())
 					return new AnnotationBeanFilterBuilder(innerClass, ba).build();
 			} catch (Exception e) {
@@ -2070,7 +2070,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
 	public <A extends Annotation> List<A> getAnnotationsParentFirst(Class<A> a) {
-		return info.getAnnotationsParentFirst(a, beanContext == null ? BeanContext.DEFAULT : beanContext);
+		return info.getAnnotations(a, beanContext == null ? BeanContext.DEFAULT : beanContext);
 	}
 
 	@Override /* Object */

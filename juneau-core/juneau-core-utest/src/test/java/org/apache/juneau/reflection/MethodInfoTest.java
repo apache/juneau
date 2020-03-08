@@ -205,29 +205,29 @@ public class MethodInfoTest {
 
 	@Test
 	public void getAnnotationsParentFirst() {
-		check("@A(C1),@A(C2),@A(C3),@A(a1)", c_a1.getAnnotationsParentFirst(A.class));
-		check("@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", c_a2.getAnnotationsParentFirst(A.class));
-		check("@A(C1),@A(C2),@A(C3),@A(a3)", c_a3.getAnnotationsParentFirst(A.class));
-		check("@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.getAnnotationsParentFirst(A.class));
-		check("@A(C1),@A(C2),@A(C3)", c_a5.getAnnotationsParentFirst(A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a1)", c_a1.getAnnotations(A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", c_a2.getAnnotations(A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a3)", c_a3.getAnnotations(A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.getAnnotations(A.class));
+		check("@A(C1),@A(C2),@A(C3)", c_a5.getAnnotations(A.class));
 	}
 
 	@Test
 	public void getAnnotationsParentFirst_notExistent() {
-		check("", c_a1.getAnnotationsParentFirst(AX.class));
-		check("", c_a2.getAnnotationsParentFirst(AX.class));
-		check("", c_a3.getAnnotationsParentFirst(AX.class));
-		check("", c_a4.getAnnotationsParentFirst(AX.class));
-		check("", c_a5.getAnnotationsParentFirst(AX.class));
+		check("", c_a1.getAnnotations(AX.class));
+		check("", c_a2.getAnnotations(AX.class));
+		check("", c_a3.getAnnotations(AX.class));
+		check("", c_a4.getAnnotations(AX.class));
+		check("", c_a5.getAnnotations(AX.class));
 	}
 
 	@Test
 	public void appendAnnotationsParentFirst() {
-		check("@A(C1),@A(C2),@A(C3),@A(a1)", c_a1.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
-		check("@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", c_a2.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
-		check("@A(C1),@A(C2),@A(C3),@A(a3)", c_a3.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
-		check("@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
-		check("@A(C1),@A(C2),@A(C3)", c_a5.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a1)", c_a1.appendAnnotations(new ArrayList<>(), A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", c_a2.appendAnnotations(new ArrayList<>(), A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a3)", c_a3.appendAnnotations(new ArrayList<>(), A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.appendAnnotations(new ArrayList<>(), A.class));
+		check("@A(C1),@A(C2),@A(C3)", c_a5.appendAnnotations(new ArrayList<>(), A.class));
 	}
 
 	@Test
@@ -250,11 +250,11 @@ public class MethodInfoTest {
 
 	@Test
 	public void getAnnotationsMapParentFirst() {
-		check("@PA(10),@A(C1),@A(a1),@A(C2),@A(C3)", c_a1.getAnnotationListParentFirst());
-		check("@PA(10),@A(C1),@A(a2a),@A(C2),@A(a2b),@A(C3)", c_a2.getAnnotationListParentFirst());
-		check("@PA(10),@A(C1),@A(a3),@A(C2),@A(C3)", c_a3.getAnnotationListParentFirst());
-		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.getAnnotationListParentFirst());
-		check("@PA(10),@A(C1),@A(C2),@A(C3)", c_a5.getAnnotationListParentFirst());
+		check("@PA(10),@A(C1),@A(a1),@A(C2),@A(C3)", c_a1.getAnnotationList());
+		check("@PA(10),@A(C1),@A(a2a),@A(C2),@A(a2b),@A(C3)", c_a2.getAnnotationList());
+		check("@PA(10),@A(C1),@A(a3),@A(C2),@A(C3)", c_a3.getAnnotationList());
+		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.getAnnotationList());
+		check("@PA(10),@A(C1),@A(C2),@A(C3)", c_a5.getAnnotationList());
 	}
 
 	@A("C1") @AConfig("C1")
@@ -293,11 +293,11 @@ public class MethodInfoTest {
 
 	@Test
 	public void getConfigAnnotationsMapParentFirst() {
-		check("@AConfig(C1),@AConfig(a1),@AConfig(C2),@AConfig(C3)", cb_a1.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(C1),@AConfig(a2a),@AConfig(C2),@AConfig(a2b),@AConfig(C3)", cb_a2.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(C1),@AConfig(a3),@AConfig(C2),@AConfig(C3)", cb_a3.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", cb_a4.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", cb_a5.getAnnotationListParentFirst(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(a1),@AConfig(C2),@AConfig(C3)", cb_a1.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(a2a),@AConfig(C2),@AConfig(a2b),@AConfig(C3)", cb_a2.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(a3),@AConfig(C2),@AConfig(C3)", cb_a3.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", cb_a4.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", cb_a5.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

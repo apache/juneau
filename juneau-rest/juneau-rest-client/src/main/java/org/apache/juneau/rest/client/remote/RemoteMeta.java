@@ -46,13 +46,13 @@ public class RemoteMeta {
 		String path = "";
 
 		ClassInfo ci = ClassInfo.of(c);
-		for (RemoteResource r : ci.getAnnotationsParentFirst(RemoteResource.class))
+		for (RemoteResource r : ci.getAnnotations(RemoteResource.class))
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
-		for (org.apache.juneau.http.remote.RemoteResource r : ci.getAnnotationsParentFirst(org.apache.juneau.http.remote.RemoteResource.class))
+		for (org.apache.juneau.http.remote.RemoteResource r : ci.getAnnotations(org.apache.juneau.http.remote.RemoteResource.class))
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
-		for (Remote r : ci.getAnnotationsParentFirst(Remote.class))
+		for (Remote r : ci.getAnnotations(Remote.class))
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 
