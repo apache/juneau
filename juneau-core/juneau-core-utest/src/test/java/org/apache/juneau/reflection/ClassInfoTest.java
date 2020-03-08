@@ -927,13 +927,6 @@ public class ClassInfoTest {
 	}
 
 	@Test
-	public void getAnnotationsMap() {
-		check("@A(7),@A(6),@A(5),@A(3),@A(1),@A(2),@PA(10)", g3.getAnnotationList(null));
-		check("@A(7),@A(6),@A(5),@A(3),@A(1),@A(2),@PA(10)", g4.getAnnotationList(null));
-		check("@A(3),@PA(10)", g5.getAnnotationList(null));
-	}
-
-	@Test
 	public void getAnnotationsMapParentFirst() {
 		check("@PA(10),@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationListParentFirst(null));
 		check("@PA(10),@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g4.getAnnotationListParentFirst(null));
@@ -951,13 +944,6 @@ public class ClassInfoTest {
 	static class GB5 implements GBI3 {}
 
 	static ClassInfo gb3=of(GB3.class), gb4=of(GB4.class), gb5=of(GB5.class);
-
-	@Test
-	public void getConfigAnnotationsMap() {
-		check("@AConfig(7),@AConfig(6),@AConfig(5),@AConfig(3),@AConfig(1),@AConfig(2)", gb3.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(7),@AConfig(6),@AConfig(5),@AConfig(3),@AConfig(1),@AConfig(2)", gb4.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
-		check("@AConfig(3)", gb5.getAnnotationList(ConfigAnnotationFilter.INSTANCE));
-	}
 
 	@Test
 	public void getConfigAnnotationsMapParentFirst() {

@@ -1076,8 +1076,7 @@ public final class ClassInfo {
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
-//		return getAnnotationListParentFirst(filter);
-		return appendAnnotationList(new AnnotationList(filter));
+		return getAnnotationListParentFirst(filter);
 	}
 
 	/**
