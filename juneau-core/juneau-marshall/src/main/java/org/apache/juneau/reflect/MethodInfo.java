@@ -322,6 +322,25 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<li>On this method and matching methods ordered parent-to-child.
 	 * </ol>
 	 *
+	 * @return A new {@link AnnotationList} object on every call.
+	 */
+	public AnnotationList getAnnotationListParentFirst() {
+		return getAnnotationListParentFirst(null);
+	}
+
+	/**
+	 * Constructs an {@link AnnotationList} of all annotations found on this method.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * 	<li>On this method and matching methods ordered parent-to-child.
+	 * </ol>
+	 *
 	 * @param filter
 	 * 	Optional filter to apply to limit which annotations are added to the list.
 	 * 	<br>Can be <jk>null</jk> for no filtering.

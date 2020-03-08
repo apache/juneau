@@ -52,14 +52,14 @@ public class UrlEncodingConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationList al = a.getAnnotationList(null);
+		AnnotationList al = a.getAnnotationListParentFirst();
 		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isExpandedParams());
 	}
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationList al = a.getAnnotationList(null);
+		AnnotationList al = a.getAnnotationListParentFirst();
 		UrlEncodingParserSession x = UrlEncodingParser.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isExpandedParams());
 	}
@@ -74,14 +74,14 @@ public class UrlEncodingConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationList(null);
+		AnnotationList al = b.getAnnotationListParentFirst();
 		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationList al = b.getAnnotationList(null);
+		AnnotationList al = b.getAnnotationListParentFirst();
 		UrlEncodingParserSession x = UrlEncodingParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isExpandedParams());
 	}
@@ -95,14 +95,14 @@ public class UrlEncodingConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationList(null);
+		AnnotationList al = c.getAnnotationListParentFirst();
 		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationList(null);
+		AnnotationList al = c.getAnnotationListParentFirst();
 		UrlEncodingParserSession x = UrlEncodingParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isExpandedParams());
 	}

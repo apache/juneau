@@ -277,11 +277,11 @@ public class MethodInfoTest {
 
 	@Test
 	public void getAnnotationsMapParentFirst() {
-		check("@PA(10),@A(C1),@A(a1),@A(C2),@A(C3)", c_a1.getAnnotationListParentFirst(null));
-		check("@PA(10),@A(C1),@A(a2a),@A(C2),@A(a2b),@A(C3)", c_a2.getAnnotationListParentFirst(null));
-		check("@PA(10),@A(C1),@A(a3),@A(C2),@A(C3)", c_a3.getAnnotationListParentFirst(null));
-		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.getAnnotationListParentFirst(null));
-		check("@PA(10),@A(C1),@A(C2),@A(C3)", c_a5.getAnnotationListParentFirst(null));
+		check("@PA(10),@A(C1),@A(a1),@A(C2),@A(C3)", c_a1.getAnnotationListParentFirst());
+		check("@PA(10),@A(C1),@A(a2a),@A(C2),@A(a2b),@A(C3)", c_a2.getAnnotationListParentFirst());
+		check("@PA(10),@A(C1),@A(a3),@A(C2),@A(C3)", c_a3.getAnnotationListParentFirst());
+		check("@PA(10),@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.getAnnotationListParentFirst());
+		check("@PA(10),@A(C1),@A(C2),@A(C3)", c_a5.getAnnotationListParentFirst());
 	}
 
 	@A("C1") @AConfig("C1")

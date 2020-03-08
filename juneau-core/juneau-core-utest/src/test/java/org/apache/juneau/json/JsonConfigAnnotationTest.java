@@ -55,7 +55,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationList al = a.getAnnotationList(null);
+		AnnotationList al = a.getAnnotationListParentFirst();
 		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEscapeSolidus());
@@ -64,7 +64,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationList al = a.getAnnotationList(null);
+		AnnotationList al = a.getAnnotationListParentFirst();
 		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isValidateEnd());
 	}
@@ -79,7 +79,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationList(null);
+		AnnotationList al = b.getAnnotationListParentFirst();
 		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
@@ -88,7 +88,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationList al = b.getAnnotationList(null);
+		AnnotationList al = b.getAnnotationListParentFirst();
 		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isValidateEnd());
 	}
@@ -102,7 +102,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationList(null);
+		AnnotationList al = c.getAnnotationListParentFirst();
 		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
@@ -111,7 +111,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationList(null);
+		AnnotationList al = c.getAnnotationListParentFirst();
 		JsonParserSession x = JsonParser.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isValidateEnd());
 	}

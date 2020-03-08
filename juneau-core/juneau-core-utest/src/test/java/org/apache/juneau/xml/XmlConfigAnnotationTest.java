@@ -102,7 +102,7 @@ public class XmlConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationList al = a.getAnnotationList(null);
+		AnnotationList al = a.getAnnotationListParentFirst();
 		XmlSerializerSession x = XmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddNamespaceUrisToRoot());
@@ -114,7 +114,7 @@ public class XmlConfigAnnotationTest {
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationList al = a.getAnnotationList(null);
+		AnnotationList al = a.getAnnotationListParentFirst();
 		XmlParserSession x = XmlParser.create().applyAnnotations(al, sr).build().createSession();
 		check("AA", x.getEventAllocator());
 		check("true", x.isPreserveRootElement());
@@ -133,7 +133,7 @@ public class XmlConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationList al = b.getAnnotationList(null);
+		AnnotationList al = b.getAnnotationListParentFirst();
 		XmlSerializerSession x = XmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddNamespaceUrisToRoot());
@@ -145,7 +145,7 @@ public class XmlConfigAnnotationTest {
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationList al = b.getAnnotationList(null);
+		AnnotationList al = b.getAnnotationListParentFirst();
 		XmlParserSession x = XmlParser.create().applyAnnotations(al, sr).build().createSession();
 		check(null, x.getEventAllocator());
 		check("false", x.isPreserveRootElement());
@@ -163,7 +163,7 @@ public class XmlConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationList al = c.getAnnotationList(null);
+		AnnotationList al = c.getAnnotationListParentFirst();
 		XmlSerializerSession x = XmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddNamespaceUrisToRoot());
@@ -175,7 +175,7 @@ public class XmlConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationList al = c.getAnnotationList(null);
+		AnnotationList al = c.getAnnotationListParentFirst();
 		XmlParserSession x = XmlParser.create().applyAnnotations(al, sr).build().createSession();
 		check(null, x.getEventAllocator());
 		check("false", x.isPreserveRootElement());

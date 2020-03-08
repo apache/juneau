@@ -61,7 +61,7 @@ public class BeanAnnotationTest {
 
 	@Test
 	public void testBeanAnnotationOverridesPrivate_usingConfig() throws Exception {
-		AnnotationList al = a2ci.getAnnotationList(null);
+		AnnotationList al = a2ci.getAnnotationListParentFirst();
 		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, null).build();
 		JsonParser jp = JsonParser.create().applyAnnotations(al, null).build();
 
@@ -142,7 +142,7 @@ public class BeanAnnotationTest {
 
 	@Test
 	public void testBeanxAnnotationOverridesPrivate_usingConfig() throws Exception {
-		AnnotationList al = b2ci.getAnnotationList(null);
+		AnnotationList al = b2ci.getAnnotationListParentFirst();
 		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, null).build();
 		JsonParser jp = JsonParser.create().applyAnnotations(al, null).build();
 

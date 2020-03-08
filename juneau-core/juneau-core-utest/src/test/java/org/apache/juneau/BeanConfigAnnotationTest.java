@@ -159,7 +159,7 @@ public class BeanConfigAnnotationTest {
 
 	@Test
 	public void basic() throws Exception {
-		AnnotationList al = a.getAnnotationList(null);
+		AnnotationList al = a.getAnnotationListParentFirst();
 		BeanTraverseSession bc = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 
 		check("PRIVATE", bc.getBeanClassVisibility());
@@ -214,7 +214,7 @@ public class BeanConfigAnnotationTest {
 
 	@Test
 	public void noValues() throws Exception {
-		AnnotationList al = b.getAnnotationList(null);
+		AnnotationList al = b.getAnnotationListParentFirst();
 		JsonSerializer bc = JsonSerializer.create().applyAnnotations(al, sr).build();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
@@ -266,7 +266,7 @@ public class BeanConfigAnnotationTest {
 
 	@Test
 	public void noAnnotation() throws Exception {
-		AnnotationList al = c.getAnnotationList(null);
+		AnnotationList al = c.getAnnotationListParentFirst();
 		JsonSerializer bc = JsonSerializer.create().applyAnnotations(al, sr).build();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
