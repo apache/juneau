@@ -104,8 +104,8 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		ClassMeta<?> cmBean = bpm.getBeanMeta().getClassMeta();
 		String name = bpm.getName();
 
-		List<Xml> xmls = bpm.getAllAnnotations(Xml.class);
-		List<XmlSchema> schemas = bpm.getAllAnnotations(XmlSchema.class);
+		List<Xml> xmls = bpm.getAllAnnotationsParentFirst(Xml.class);
+		List<XmlSchema> schemas = bpm.getAllAnnotationsParentFirst(XmlSchema.class);
 		namespace = XmlUtils.findNamespace(xmls, schemas);
 
 		if (xmlFormat == XmlFormat.DEFAULT)

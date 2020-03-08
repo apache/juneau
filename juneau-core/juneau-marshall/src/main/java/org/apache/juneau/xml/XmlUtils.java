@@ -482,7 +482,7 @@ public final class XmlUtils {
 	 * Find the namespace given a list of <ja>@Xml</ja> and <ja>@XmlSchema</ja> annotations.
 	 *
 	 * <p>
-	 * The annotations should be a child-to-parent ordering of annotations found on a class or method.
+	 * The annotations should be a parent-to-child ordering of annotations found on a class or method.
 	 *
 	 * @param xmls The list of <ja>@Xml</ja> annotations.
 	 * @param schemas The list of <ja>@XmlSchema</ja> annotations.
@@ -490,13 +490,15 @@ public final class XmlUtils {
 	 */
 	public static Namespace findNamespace(List<Xml> xmls, List<XmlSchema> schemas) {
 
-		for (Xml xml : xmls) {
+		for (int i = xmls.size()-1; i >= 0; i--) {
+			Xml xml = xmls.get(i);
 			Namespace ns = findNamespace(xml.prefix(), xml.namespace(), xmls, schemas);
 			if (ns != null)
 				return ns;
 		}
 
-		for (XmlSchema schema : schemas) {
+		for (int i = schemas.size()-1; i >= 0; i--) {
+			XmlSchema schema = schemas.get(i);
 			Namespace ns = findNamespace(schema.prefix(), schema.namespace(), null, schemas);
 			if (ns != null)
 				return ns;

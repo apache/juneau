@@ -1125,31 +1125,32 @@ public final class BeanPropertyMeta {
 	 *
 	 * @param <A> The class to find annotations for.
 	 * @param a The class to find annotations for.
-	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
+	 * @return A list of annotations ordered in parent-to-child order.  Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> List<A> getAllAnnotations(Class<A> a) {
+	public <A extends Annotation> List<A> getAllAnnotationsParentFirst(Class<A> a) {
 		List<A> l = new LinkedList<>();
 		BeanContext bc = beanContext;
 		if (a == null)
 			return l;
+		getBeanMeta().getClassMeta().getInfo().appendAnnotationsParentFirst(l, a, bc);
+
 		if (field != null) {
 			addIfNotNull(l, bc.getAnnotation(a, field));
-			ClassInfo.of(field.getType()).appendAnnotations(l, a, bc);
+			ClassInfo.of(field.getType()).appendAnnotationsParentFirst(l, a, bc);
 		}
 		if (getter != null) {
 			addIfNotNull(l, bc.getAnnotation(a, getter));
-			ClassInfo.of(getter.getReturnType()).appendAnnotations(l, a, bc);
+			ClassInfo.of(getter.getReturnType()).appendAnnotationsParentFirst(l, a, bc);
 		}
 		if (setter != null) {
 			addIfNotNull(l, bc.getAnnotation(a, setter));
-			ClassInfo.of(setter.getReturnType()).appendAnnotations(l, a, bc);
+			ClassInfo.of(setter.getReturnType()).appendAnnotationsParentFirst(l, a, bc);
 		}
 		if (extraKeys != null) {
 			addIfNotNull(l, bc.getAnnotation(a, extraKeys));
-			ClassInfo.of(extraKeys.getReturnType()).appendAnnotations(l, a, bc);
+			ClassInfo.of(extraKeys.getReturnType()).appendAnnotationsParentFirst(l, a, bc);
 		}
 
-		getBeanMeta().getClassMeta().getInfo().appendAnnotations(l, a, bc);
 		return l;
 	}
 

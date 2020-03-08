@@ -43,11 +43,11 @@ public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	public RdfBeanPropertyMeta(BeanPropertyMeta bpm, RdfMetaProvider mp) {
 		super(bpm);
 
-		List<Rdf> rdfs = bpm.getAllAnnotations(Rdf.class);
-		List<RdfSchema> schemas = bpm.getAllAnnotations(RdfSchema.class);
+		List<Rdf> rdfs = bpm.getAllAnnotationsParentFirst(Rdf.class);
+		List<RdfSchema> schemas = bpm.getAllAnnotationsParentFirst(RdfSchema.class);
 
 		for (Rdf rdf : rdfs) {
-			if (collectionFormat == RdfCollectionFormat.DEFAULT)
+			if (rdf.collectionFormat() != RdfCollectionFormat.DEFAULT)
 				collectionFormat = rdf.collectionFormat();
 			if (rdf.beanUri())
 				isBeanUri = true;
