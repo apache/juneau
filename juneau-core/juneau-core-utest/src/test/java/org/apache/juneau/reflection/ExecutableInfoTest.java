@@ -258,9 +258,9 @@ public class ExecutableInfoTest {
 	@Test
 	public void getRawParameters() {
 		check("", b_c1.getRawParameters());
-		assertTrue(b_c2.getRawParameters()[0].toString().startsWith("java.lang.String "));
+		assertTrue(b_c2.getRawParameters().get(0).toString().startsWith("java.lang.String "));
 		check("", b_m1.getRawParameters());
-		assertTrue(b_m2.getRawParameters()[0].toString().startsWith("java.lang.String "));
+		assertTrue(b_m2.getRawParameters().get(0).toString().startsWith("java.lang.String "));
 	}
 
 	@Test

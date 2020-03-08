@@ -21,12 +21,12 @@ import org.junit.*;
 @SuppressWarnings("unchecked")
 public class ReadOnlyArrayListTest {
 
-	private static <T> ReadOnlyArrayList<T> create(T...t) {
-		return new ReadOnlyArrayList<>(t);
+	private static <T> UnmodifiableArray<T> create(T...t) {
+		return new UnmodifiableArray<>(t);
 	}
 
-	private static <T> ReadOnlyArrayList<T> createReversed(T...t) {
-		return new ReadOnlyArrayList<>(t, true);
+	private static <T> UnmodifiableArray<T> createReversed(T...t) {
+		return new UnmodifiableArray<>(t, true);
 	}
 
 	@Test
@@ -99,7 +99,7 @@ public class ReadOnlyArrayListTest {
 	@Test
 	public void testToArray() {
 		String[] s = new String[]{"a"};
-		List<String> l = new ReadOnlyArrayList<>(s);
+		List<String> l = new UnmodifiableArray<>(s);
 		String[] s2 = (String[])l.toArray();
 		assertEquals("a", s2[0]);
 		s2[0] = "b";
@@ -109,7 +109,7 @@ public class ReadOnlyArrayListTest {
 	@Test
 	public void testToArray2() {
 		String[] s = new String[]{"a"};
-		List<String> l = new ReadOnlyArrayList<>(s);
+		List<String> l = new UnmodifiableArray<>(s);
 		String[] s2 = l.toArray(new String[l.size()]);
 		assertEquals("a", s2[0]);
 		s2[0] = "b";

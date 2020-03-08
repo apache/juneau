@@ -132,7 +132,7 @@ public abstract class ExecutableInfo {
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
 	public final List<ParamInfo> getParams() {
-		return new ReadOnlyArrayList<>(getParamsInternal());
+		return new UnmodifiableArray<>(_getParams());
 	}
 
 	/**
@@ -143,7 +143,7 @@ public abstract class ExecutableInfo {
 	 */
 	public final ParamInfo getParam(int index) {
 		checkIndex(index);
-		return getParamsInternal()[index];
+		return _getParams()[index];
 	}
 
 	/**
@@ -152,7 +152,7 @@ public abstract class ExecutableInfo {
 	 * @return The parameter types on this executable.
 	 */
 	public final List<ClassInfo> getParamTypes() {
-		return new ReadOnlyArrayList<>(getParamTypesInternal());
+		return new UnmodifiableArray<>(_getParamTypes());
 	}
 
 	/**
@@ -163,7 +163,7 @@ public abstract class ExecutableInfo {
 	 */
 	public final ClassInfo getParamType(int index) {
 		checkIndex(index);
-		return getParamTypesInternal()[index];
+		return _getParamTypes()[index];
 	}
 
 	/**
@@ -171,8 +171,8 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return The raw parameter types on this executable.
 	 */
-	public final Class<?>[] getRawParamTypes() {
-		return rawParamTypes().clone();
+	public final List<Class<?>> getRawParamTypes() {
+		return new UnmodifiableArray<>(_getRawParamTypes());
 	}
 
 	/**
@@ -183,7 +183,7 @@ public abstract class ExecutableInfo {
 	 */
 	public final Class<?> getRawParamType(int index) {
 		checkIndex(index);
-		return rawParamTypes()[index];
+		return _getRawParamTypes()[index];
 	}
 
 	/**
@@ -191,8 +191,8 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return The raw generic parameter types on this executable.
 	 */
-	public final Type[] getRawGenericParamTypes() {
-		return rawGenericParamTypes().clone();
+	public final List<Type> getRawGenericParamTypes() {
+		return new UnmodifiableArray<>(_getRawGenericParamTypes());
 	}
 
 	/**
@@ -203,7 +203,7 @@ public abstract class ExecutableInfo {
 	 */
 	public final Type getRawGenericParamType(int index) {
 		checkIndex(index);
-		return rawGenericParamTypes()[index];
+		return _getRawGenericParamTypes()[index];
 	}
 
 	/**
@@ -212,8 +212,8 @@ public abstract class ExecutableInfo {
 	 * @return An array of raw {@link Parameter} objects, or an empty array if executable has no parameters.
 	 * @see Executable#getParameters()
 	 */
-	public final Parameter[] getRawParameters() {
-		return rawParameters().clone();
+	public final List<Parameter> getRawParameters() {
+		return new UnmodifiableArray<>(_getRawParameters());
 	}
 
 	/**
@@ -225,12 +225,12 @@ public abstract class ExecutableInfo {
 	 */
 	public final Parameter getRawParameter(int index) {
 		checkIndex(index);
-		return rawParameters()[index];
+		return _getRawParameters()[index];
 	}
 
-	private ParamInfo[] getParamsInternal() {
+	private ParamInfo[] _getParams() {
 		if (params == null) {
-			Parameter[] rp = rawParameters();
+			Parameter[] rp = _getRawParameters();
 			ParamInfo[] l = new ParamInfo[rp.length];
 			for (int i = 0; i < rp.length; i++)
 				l[i] = new ParamInfo(this, rp[i], i);
@@ -239,12 +239,12 @@ public abstract class ExecutableInfo {
 		return params;
 	}
 
-	private ClassInfo[] getParamTypesInternal() {
+	private ClassInfo[] _getParamTypes() {
 		if (paramTypes == null) {
-			Class<?>[] ptc = rawParamTypes();
+			Class<?>[] ptc = _getRawParamTypes();
 			// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
 			// always return an empty array.  This appears to be fixed in Java 8 b75.
-			Type[] ptt = rawGenericParamTypes();
+			Type[] ptt = _getRawGenericParamTypes();
 			if (ptt.length != ptc.length)
 				ptt = ptc;
 			ClassInfo[] l = new ClassInfo[ptc.length];
@@ -255,19 +255,19 @@ public abstract class ExecutableInfo {
 		return paramTypes;
 	}
 
-	Class<?>[] rawParamTypes() {
+	Class<?>[] _getRawParamTypes() {
 		if (rawParamTypes == null)
 			rawParamTypes = e.getParameterTypes();
 		return rawParamTypes;
 	}
 
-	Type[] rawGenericParamTypes() {
+	private Type[] _getRawGenericParamTypes() {
 		if (rawGenericParamTypes == null)
 			rawGenericParamTypes = re.getGenericParameterTypes();
 		return rawGenericParamTypes;
 	}
 
-	Parameter[] rawParameters() {
+	private Parameter[] _getRawParameters() {
 		if (rawParameters == null)
 			rawParameters = re.getParameters();
 		return rawParameters;
@@ -315,7 +315,7 @@ public abstract class ExecutableInfo {
 	 * @return The exception types on this executable.
 	 */
 	public final List<ClassInfo> getExceptionTypes() {
-		return new ReadOnlyArrayList<>(getExceptionTypesInternal());
+		return new UnmodifiableArray<>(_getExceptionTypes());
 	}
 
 	/**
@@ -324,12 +324,12 @@ public abstract class ExecutableInfo {
 	 * @return The raw exception types on this executable.
 	 */
 	public final Class<?>[] getRawExceptionTypes() {
-		return rawExceptionTypes().clone();
+		return _getRawExceptionTypes().clone();
 	}
 
-	private ClassInfo[] getExceptionTypesInternal() {
+	private ClassInfo[] _getExceptionTypes() {
 		if (exceptionInfos == null) {
-			Class<?>[] exceptionTypes = rawExceptionTypes();
+			Class<?>[] exceptionTypes = _getRawExceptionTypes();
 			ClassInfo[] l = new ClassInfo[exceptionTypes.length];
 			for (int i = 0; i < exceptionTypes.length; i++)
 				l[i] = ClassInfo.of(exceptionTypes[i]);
@@ -338,7 +338,7 @@ public abstract class ExecutableInfo {
 		return exceptionInfos;
 	}
 
-	private Class<?>[] rawExceptionTypes() {
+	private Class<?>[] _getRawExceptionTypes() {
 		if (rawExceptionTypes == null)
 			rawExceptionTypes = e.getExceptionTypes();
 		return rawExceptionTypes;
@@ -467,7 +467,7 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
 	public final boolean hasParamTypes(Class<?>...args) {
-		Class<?>[] pt = rawParamTypes();
+		Class<?>[] pt = _getRawParamTypes();
 		if (pt.length == args.length) {
 			for (int i = 0; i < pt.length; i++)
 				if (! pt[i].equals(args[i]))
@@ -484,7 +484,7 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
 	public final boolean hasParamTypes(ClassInfo...args) {
-		Class<?>[] pt = rawParamTypes();
+		Class<?>[] pt = _getRawParamTypes();
 		if (pt.length == args.length) {
 			for (int i = 0; i < pt.length; i++)
 				if (! pt[i].equals(args[i].inner()))
@@ -501,7 +501,7 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
 	public final boolean hasParamTypeParents(Class<?>...args) {
-		Class<?>[] pt = rawParamTypes();
+		Class<?>[] pt = _getRawParamTypes();
 		if (pt.length == args.length) {
 			for (int i = 0; i < pt.length; i++)
 				if (! args[i].isAssignableFrom(pt[i]))
@@ -518,7 +518,7 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
 	public final boolean hasParamTypeParents(ClassInfo...args) {
-		Class<?>[] pt = rawParamTypes();
+		Class<?>[] pt = _getRawParamTypes();
 		if (pt.length == args.length) {
 			for (int i = 0; i < pt.length; i++)
 				if (! args[i].inner().isAssignableFrom(pt[i]))
@@ -535,7 +535,7 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if this method has at most only this arguments in any order.
 	 */
 	public final boolean hasFuzzyParamTypes(Class<?>...args) {
-		return ClassUtils.fuzzyArgsMatch(rawParamTypes(), args) != -1;
+		return ClassUtils.fuzzyArgsMatch(_getRawParamTypes(), args) != -1;
 	}
 
 	/**
@@ -545,7 +545,7 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if this method has at most only this arguments in any order.
 	 */
 	public boolean hasFuzzyParamTypes(ClassInfo...args) {
-		return ClassUtils.fuzzyArgsMatch(rawParamTypes(), args) != -1;
+		return ClassUtils.fuzzyArgsMatch(_getRawParamTypes(), args) != -1;
 	}
 
 	/**
@@ -737,7 +737,7 @@ public abstract class ExecutableInfo {
 	public final String getShortName() {
 		StringBuilder sb = new StringBuilder(64);
 		sb.append(getSimpleName()).append('(');
-		Class<?>[] pt = rawParamTypes();
+		Class<?>[] pt = _getRawParamTypes();
 		for (int i = 0; i < pt.length; i++) {
 			if (i > 0)
 				sb.append(',');

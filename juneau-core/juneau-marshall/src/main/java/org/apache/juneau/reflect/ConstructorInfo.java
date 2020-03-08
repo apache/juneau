@@ -164,7 +164,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 			i = getParamCount() - o.getParamCount();
 			if (i == 0) {
 				for (int j = 0; j < getParamCount() && i == 0; j++) {
-					Class<?>[] tpt = rawParamTypes(), opt = o.rawParamTypes();
+					Class<?>[] tpt = _getRawParamTypes(), opt = o._getRawParamTypes();
 					i = tpt[j].getName().compareTo(opt[j].getName());
 				}
 			}

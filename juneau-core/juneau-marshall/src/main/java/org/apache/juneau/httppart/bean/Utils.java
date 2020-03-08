@@ -13,6 +13,7 @@
 package org.apache.juneau.httppart.bean;
 
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
@@ -42,10 +43,10 @@ class Utils {
 	}
 
 	static void assertArgType(MethodInfo m, Class<? extends Annotation> a, Class<?>...c) throws InvalidAnnotationException {
-		Class<?>[] ptt = m.getRawParamTypes();
-		if (ptt.length != 1)
+		List<Class<?>> ptt = m.getRawParamTypes();
+		if (ptt.size() != 1)
 			throw new InvalidAnnotationException("Only one parameter can be passed to method with @{0} annotation.  Method=''{0}''", a.getSimpleName(), m);
-		Class<?> rt = ptt[0];
+		Class<?> rt = ptt.get(0);
 		for (Class<?> cc : c)
 			if (rt == cc)
 				return;

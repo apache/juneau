@@ -74,29 +74,13 @@ public final class CollectionUtils {
 	}
 
 	/**
-	 * Returns an iterable over the specified collection.
+	 * Returns an iterable over the specified collection in reverse order.
 	 *
 	 * @param c The collection to iterate over.
-	 * @param reverse If <jk>true</jk>, iterate in reverse order.
 	 * @return An iterable over the collection.
 	 */
-	public static <T> Iterable<T> iterable(final Collection<T> c, boolean reverse) {
-		if (reverse)
-			return new ReverseIterable<>(c instanceof List ? (List<T>)c : new ArrayList<>(c));
-		return c;
-	}
-
-	/**
-	 * Returns an iterable over the specified list.
-	 *
-	 * @param c The collection to iterate over.
-	 * @param reverse If <jk>true</jk>, iterate in reverse order.
-	 * @return An iterable over the collection.
-	 */
-	public static <T> Iterable<T> iterable(final List<T> c, boolean reverse) {
-		if (reverse)
-			return new ReverseIterable<>(c);
-		return c;
+	public static <T> Iterable<T> riterable(final Collection<T> c) {
+		return new ReverseIterable<>(c instanceof List ? (List<T>)c : new ArrayList<>(c));
 	}
 
 	/**
@@ -105,21 +89,8 @@ public final class CollectionUtils {
 	 * @param c The collection to iterate over.
 	 * @return An iterable over the collection.
 	 */
-	public static <T> Iterable<T> reverseIterable(final List<T> c) {
-		return iterable(c, true);
-	}
-
-	/**
-	 * Returns an iterable over the specified array.
-	 *
-	 * @param c The collection to iterate over.
-	 * @param reverse If <jk>true</jk>, iterate in reverse order.
-	 * @return An iterable over the collection.
-	 */
-	public static <T> Iterable<T> iterable(T[] c, boolean reverse) {
-		if (reverse)
-			return new ReverseIterable<>(Arrays.asList(c));
-		return Arrays.asList(c);
+	public static <T> Iterable<T> riterable(final List<T> c) {
+		return new ReverseIterable<>(c);
 	}
 
 	/**
@@ -128,8 +99,8 @@ public final class CollectionUtils {
 	 * @param c The collection to iterate over.
 	 * @return An iterable over the collection.
 	 */
-	public static <T> Iterable<T> reverseIterable(T[] c) {
-		return iterable(c, true);
+	public static <T> Iterable<T> riterable(T[] c) {
+		return new ReverseIterable<>(Arrays.asList(c));
 	}
 
 	/**

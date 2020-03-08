@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.beans.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -32,7 +30,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 
 	private ClassInfo returnType;
 	private final Method m;
-	private List<Method> matching;
+	private Method[] matching;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instantiation.
@@ -111,9 +109,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<br>Methods are ordered from child-to-parent order.
 	 */
 	public List<Method> getMatching() {
-		if (matching == null)
-			matching = Collections.unmodifiableList(findMatching(new ArrayList<>(), m, m.getDeclaringClass()));
-		return matching;
+		return new UnmodifiableArray<>(_getMatching());
 	}
 
 	/**
@@ -123,8 +119,8 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	All matching methods including this method itself.
 	 * 	<br>Methods are ordered from parent-to-child order.
 	 */
-	public Iterable<Method> getMatchingParentFirst() {
-		return iterable(getMatching(), true);
+	public List<Method> getMatchingParentFirst() {
+		return new UnmodifiableArray<>(_getMatching(), true);
 	}
 
 	private static List<Method> findMatching(List<Method> l, Method m, Class<?> c) {
@@ -144,6 +140,14 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 			if (m.getName().equals(m2.getName()) && Arrays.equals(m.getParameterTypes(), m2.getParameterTypes()))
 				return m2;
 		return null;
+	}
+
+	private Method[] _getMatching() {
+		if (matching == null) {
+			List<Method> l = findMatching(new ArrayList<>(), m, m.getDeclaringClass());
+			matching = l.toArray(new Method[l.size()]);
+		}
+		return matching;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -495,7 +499,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	public String getSignature() {
 		StringBuilder sb = new StringBuilder(128);
 		sb.append(m.getName());
-		Class<?>[] pt = rawParamTypes();
+		Class<?>[] pt = _getRawParamTypes();
 		if (pt.length > 0) {
 			sb.append('(');
 			List<ParamInfo> mpi = getParams();
@@ -541,7 +545,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return <jk>true</jk> if the method parameters only consist of the types specified in the list.
 	 */
 	public boolean argsOnlyOfType(Class<?>...args) {
-		for (Class<?> c1 : rawParamTypes()) {
+		for (Class<?> c1 : _getRawParamTypes()) {
 			boolean foundMatch = false;
 			for (Class<?> c2 : args)
 				if (c1 == c2)
@@ -565,10 +569,10 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	public int compareTo(MethodInfo o) {
 		int i = getSimpleName().compareTo(o.getSimpleName());
 		if (i == 0) {
-			i = rawParamTypes().length - o.rawParamTypes().length;
+			i = _getRawParamTypes().length - o._getRawParamTypes().length;
 			if (i == 0) {
-				for (int j = 0; j < rawParamTypes().length && i == 0; j++) {
-					i = rawParamTypes()[j].getName().compareTo(o.rawParamTypes()[j].getName());
+				for (int j = 0; j < _getRawParamTypes().length && i == 0; j++) {
+					i = _getRawParamTypes()[j].getName().compareTo(o._getRawParamTypes()[j].getName());
 				}
 			}
 		}

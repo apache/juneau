@@ -225,7 +225,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		}
 		for (MethodInfo m : map.values()) {
 			assertArgsOnlyOfType(m, RestContextBuilder.class, ServletConfig.class);
-			Class<?>[] pt = m.getRawParamTypes();
+			Class<?>[] pt = (Class<?>[])m.getRawParamTypes().toArray();
 			Object[] args = new Object[pt.length];
 			for (int i = 0; i < args.length; i++) {
 				if (pt[i] == RestContextBuilder.class)
@@ -1963,7 +1963,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder staticFiles(String mappingString) throws ParseException{
-		for (StaticFileMapping sfm : reverseIterable(StaticFileMapping.parse(resourceClass, mappingString)))
+		for (StaticFileMapping sfm : riterable(StaticFileMapping.parse(resourceClass, mappingString)))
 			staticFiles(sfm);
 		return this;
 	}
@@ -1993,7 +1993,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @throws ParseException If mapping string is malformed.
 	 */
 	public RestContextBuilder staticFiles(Class<?> baseClass, String mappingString) throws ParseException {
-		for (StaticFileMapping sfm : reverseIterable(StaticFileMapping.parse(baseClass, mappingString)))
+		for (StaticFileMapping sfm : riterable(StaticFileMapping.parse(baseClass, mappingString)))
 			staticFiles(sfm);
 		return this;
 	}

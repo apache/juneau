@@ -3875,7 +3875,7 @@ public final class RestContext extends BeanContext {
 							if (! _startCallMethods.containsKey(sig)) {
 								m.setAccessible();
 								_startCallMethods.put(sig, m.inner());
-								_startCallMethodParams.add(m.getRawParamTypes());
+								_startCallMethodParams.add((Class<?>[])m.getRawParamTypes().toArray());
 								assertArgsOnlyOfType(m, HttpServletRequest.class, HttpServletResponse.class);
 							}
 							break;
@@ -3884,7 +3884,7 @@ public final class RestContext extends BeanContext {
 							if (! _endCallMethods.containsKey(sig)) {
 								m.setAccessible();
 								_endCallMethods.put(sig, m.inner());
-								_endCallMethodParams.add(m.getRawParamTypes());
+								_endCallMethodParams.add((Class<?>[])m.getRawParamTypes().toArray());
 								assertArgsOnlyOfType(m, HttpServletRequest.class, HttpServletResponse.class);
 							}
 							break;
@@ -3893,7 +3893,7 @@ public final class RestContext extends BeanContext {
 							if (! _postInitMethods.containsKey(sig)) {
 								m.setAccessible();
 								_postInitMethods.put(sig, m.inner());
-								_postInitMethodParams.add(m.getRawParamTypes());
+								_postInitMethodParams.add((Class<?>[])m.getRawParamTypes().toArray());
 								assertArgsOnlyOfType(m, RestContext.class);
 							}
 							break;
@@ -3902,7 +3902,7 @@ public final class RestContext extends BeanContext {
 							if (! _postInitChildFirstMethods.containsKey(sig)) {
 								m.setAccessible();
 								_postInitChildFirstMethods.put(sig, m.inner());
-								_postInitChildFirstMethodParams.add(m.getRawParamTypes());
+								_postInitChildFirstMethodParams.add((Class<?>[])m.getRawParamTypes().toArray());
 								assertArgsOnlyOfType(m, RestContext.class);
 							}
 							break;
@@ -3911,7 +3911,7 @@ public final class RestContext extends BeanContext {
 							if (! _destroyMethods.containsKey(sig)) {
 								m.setAccessible();
 								_destroyMethods.put(sig, m.inner());
-								_destroyMethodParams.add(m.getRawParamTypes());
+								_destroyMethodParams.add((Class<?>[])m.getRawParamTypes().toArray());
 								assertArgsOnlyOfType(m, RestContext.class);
 							}
 							break;

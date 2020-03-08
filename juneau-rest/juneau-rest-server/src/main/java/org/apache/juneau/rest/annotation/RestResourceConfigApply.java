@@ -165,7 +165,7 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 
 		for (String mapping : a.staticFiles()) {
 			try {
-				for (StaticFileMapping sfm : reverseIterable(StaticFileMapping.parse(c.inner(), string(mapping))))
+				for (StaticFileMapping sfm : riterable(StaticFileMapping.parse(c.inner(), string(mapping))))
 					psb.addTo(REST_staticFiles, sfm);
 			} catch (ParseException e) {
 				throw new ConfigException(e, "Invalid @Resource(staticFiles) value on class ''{0}''", c);

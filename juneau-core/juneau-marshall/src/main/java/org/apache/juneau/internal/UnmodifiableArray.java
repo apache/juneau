@@ -24,7 +24,7 @@ import java.util.*;
  *
  * @param <T> Array element type.
  */
-public class ReadOnlyArrayList<T> implements List<T> {
+public class UnmodifiableArray<T> implements List<T> {
 
 	final T[] array;
 	final int length;
@@ -35,7 +35,7 @@ public class ReadOnlyArrayList<T> implements List<T> {
 	 *
 	 * @param array The array being wrapped.
 	 */
-	public ReadOnlyArrayList(T[] array) {
+	public UnmodifiableArray(T[] array) {
 		this(array, false);
 	}
 
@@ -46,7 +46,7 @@ public class ReadOnlyArrayList<T> implements List<T> {
 	 * @param reversed <jk>true</jk> if elements of array should be addressed in reverse.
 	 */
 	@SuppressWarnings("unchecked")
-	public ReadOnlyArrayList(T[] array, boolean reversed) {
+	public UnmodifiableArray(T[] array, boolean reversed) {
 		this.array = array == null ? (T[])new Object[0] : array;
 		this.length = this.array.length;
 		this.reversed = reversed;
@@ -110,6 +110,8 @@ public class ReadOnlyArrayList<T> implements List<T> {
 	@Override
 	@SuppressWarnings({ "unchecked", "hiding" })
 	public <T> T[] toArray(T[] a) {
+		if (a.length < length)
+			return (T[])toArray();
 		for (int i = 0; i < array.length; i++)
 			a[i] = reversed ? (T)array[length-i-1] : (T)array[i];
 		return a;
