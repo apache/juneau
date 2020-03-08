@@ -30,8 +30,8 @@ public abstract class ExecutableInfo {
 	final Executable e, re;
 	final boolean isConstructor;
 
-	private List<ParamInfo> params;
-	private List<ClassInfo> paramTypes, exceptionInfos;
+	private ParamInfo[] params;
+	private ClassInfo[] paramTypes, exceptionInfos;
 	private Class<?>[] rawParamTypes, rawExceptionTypes;
 	private Type[] rawGenericParamTypes;
 	private Parameter[] rawParameters;
@@ -132,14 +132,7 @@ public abstract class ExecutableInfo {
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
 	public final List<ParamInfo> getParams() {
-		if (params == null) {
-			Parameter[] rp = rawParameters();
-			List<ParamInfo> l = new ArrayList<>(rp.length);
-			for (int i = 0; i < rp.length; i++)
-				l.add(new ParamInfo(this, rp[i], i));
-			params = Collections.unmodifiableList(l);
-		}
-		return params;
+		return new ReadOnlyArrayList<>(getParamsInternal());
 	}
 
 	/**
@@ -150,9 +143,7 @@ public abstract class ExecutableInfo {
 	 */
 	public final ParamInfo getParam(int index) {
 		checkIndex(index);
-		if (params != null)
-			return params.get(index);
-		return new ParamInfo(this, rawParameters()[index], index);
+		return getParamsInternal()[index];
 	}
 
 	/**
@@ -161,19 +152,7 @@ public abstract class ExecutableInfo {
 	 * @return The parameter types on this executable.
 	 */
 	public final List<ClassInfo> getParamTypes() {
-		if (paramTypes == null) {
-			Class<?>[] ptc = rawParamTypes();
-			// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
-			// always return an empty array.  This appears to be fixed in Java 8 b75.
-			Type[] ptt = rawGenericParamTypes();
-			if (ptt.length != ptc.length)
-				ptt = ptc;
-			List<ClassInfo> l = new ArrayList<>(ptc.length);
-			for (int i = 0; i < ptc.length; i++)
-				l.add(ClassInfo.of(ptc[i], ptt[i]));
-			paramTypes = Collections.unmodifiableList(l);
-		}
-		return paramTypes;
+		return new ReadOnlyArrayList<>(getParamTypesInternal());
 	}
 
 	/**
@@ -184,9 +163,7 @@ public abstract class ExecutableInfo {
 	 */
 	public final ClassInfo getParamType(int index) {
 		checkIndex(index);
-		if (paramTypes != null)
-			return getParamTypes().get(index);
-		return ClassInfo.of(getRawParamType(index), getRawGenericParamType(index));
+		return getParamTypesInternal()[index];
 	}
 
 	/**
@@ -251,6 +228,33 @@ public abstract class ExecutableInfo {
 		return rawParameters()[index];
 	}
 
+	private ParamInfo[] getParamsInternal() {
+		if (params == null) {
+			Parameter[] rp = rawParameters();
+			ParamInfo[] l = new ParamInfo[rp.length];
+			for (int i = 0; i < rp.length; i++)
+				l[i] = new ParamInfo(this, rp[i], i);
+			params = l;
+		}
+		return params;
+	}
+
+	private ClassInfo[] getParamTypesInternal() {
+		if (paramTypes == null) {
+			Class<?>[] ptc = rawParamTypes();
+			// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
+			// always return an empty array.  This appears to be fixed in Java 8 b75.
+			Type[] ptt = rawGenericParamTypes();
+			if (ptt.length != ptc.length)
+				ptt = ptc;
+			ClassInfo[] l = new ClassInfo[ptc.length];
+			for (int i = 0; i < ptc.length; i++)
+				l[i] = ClassInfo.of(ptc[i], ptt[i]);
+			paramTypes = l;
+		}
+		return paramTypes;
+	}
+
 	Class<?>[] rawParamTypes() {
 		if (rawParamTypes == null)
 			rawParamTypes = e.getParameterTypes();
@@ -311,14 +315,7 @@ public abstract class ExecutableInfo {
 	 * @return The exception types on this executable.
 	 */
 	public final List<ClassInfo> getExceptionTypes() {
-		if (exceptionInfos == null) {
-			Class<?>[] exceptionTypes = rawExceptionTypes();
-			List<ClassInfo> l = new ArrayList<>(exceptionTypes.length);
-			for (Class<?> et : exceptionTypes)
-				l.add(ClassInfo.of(et));
-			exceptionInfos = Collections.unmodifiableList(l);
-		}
-		return exceptionInfos;
+		return new ReadOnlyArrayList<>(getExceptionTypesInternal());
 	}
 
 	/**
@@ -328,6 +325,17 @@ public abstract class ExecutableInfo {
 	 */
 	public final Class<?>[] getRawExceptionTypes() {
 		return rawExceptionTypes().clone();
+	}
+
+	private ClassInfo[] getExceptionTypesInternal() {
+		if (exceptionInfos == null) {
+			Class<?>[] exceptionTypes = rawExceptionTypes();
+			ClassInfo[] l = new ClassInfo[exceptionTypes.length];
+			for (int i = 0; i < exceptionTypes.length; i++)
+				l[i] = ClassInfo.of(exceptionTypes[i]);
+			exceptionInfos = l;
+		}
+		return exceptionInfos;
 	}
 
 	private Class<?>[] rawExceptionTypes() {

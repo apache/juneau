@@ -212,6 +212,11 @@ public class ReadOnlyArrayList<T> implements List<T> {
 
 	@Override
 	public List<T> subList(int fromIndex, int toIndex) {
-		throw new UnsupportedOperationException("Unsupported method on ReadOnlyArrayList class.");
+		if (reversed) {
+			List<T> l = Arrays.asList(array);
+			Collections.reverse(l);
+			return l.subList(fromIndex, toIndex);
+		}
+		return Arrays.asList(array).subList(fromIndex, toIndex);
 	}
 }
