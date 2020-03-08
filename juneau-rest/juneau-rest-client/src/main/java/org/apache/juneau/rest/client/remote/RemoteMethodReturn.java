@@ -38,10 +38,10 @@ public final class RemoteMethodReturn {
 	RemoteMethodReturn(MethodInfo m) {
 		ClassInfo rt = m.getReturnType();
 
-		org.apache.juneau.rest.client.remote.RemoteMethod orm = m.getAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
+		org.apache.juneau.rest.client.remote.RemoteMethod orm = m.getLastAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
 		if (orm == null)
 			orm = m.getResolvedReturnType().getLastAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
-		RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
+		RemoteMethod rm = m.getLastAnnotation(RemoteMethod.class);
 		if (rm == null)
 			rm = m.getResolvedReturnType().getLastAnnotation(RemoteMethod.class);
 

@@ -279,7 +279,7 @@ final class SwaggerGenerator {
 
 			Method m = sm.method;
 			MethodInfo mi = MethodInfo.of(m);
-			RestMethod rm = mi.getAnnotation(RestMethod.class);
+			RestMethod rm = mi.getLastAnnotation(RestMethod.class);
 			String mn = m.getName();
 
 			// Get the operation from the existing swagger so far.
@@ -444,7 +444,7 @@ final class SwaggerGenerator {
 						}
 					}
 					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {
-						ResponseHeader a = ecmi.getAnnotation(ResponseHeader.class);
+						ResponseHeader a = ecmi.getLastAnnotation(ResponseHeader.class);
 						if (a == null)
 							a = ecmi.getResolvedReturnType().getLastAnnotation(ResponseHeader.class);
 						if (a != null) {
@@ -474,7 +474,7 @@ final class SwaggerGenerator {
 				if (mi.getReturnType().hasAnnotation(Response.class)) {
 					for (MethodInfo ecmi : mi.getReturnType().getAllMethodsParentFirst()) {
 						if (ecmi.hasAnnotation(ResponseHeader.class)) {
-							ResponseHeader a = ecmi.getAnnotation(ResponseHeader.class);
+							ResponseHeader a = ecmi.getLastAnnotation(ResponseHeader.class);
 							String ha = a.name();
 							for (Integer code : codes) {
 								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);

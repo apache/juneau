@@ -330,9 +330,9 @@ public class ExecutableInfoTest {
 		check(null, c_c1.getAnnotation(CA.class));
 		check(null, c_c2.getAnnotation(CA.class));
 		check("@CA()", c_c3.getAnnotation(CA.class));
-		check(null, c_m1.getAnnotation(CA.class));
-		check(null, c_m2.getAnnotation(CA.class));
-		check("@CA()", c_m3.getAnnotation(CA.class));
+		check(null, c_m1.getLastAnnotation(CA.class));
+		check(null, c_m2.getLastAnnotation(CA.class));
+		check("@CA()", c_m3.getLastAnnotation(CA.class));
 	}
 
 	@Test

@@ -163,8 +163,8 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return
 	 * 	The annotation if found, or <jk>null</jk> if not.
 	 */
-	public final <T extends Annotation> T getAnnotation(Class<T> a) {
-		return getAnnotation(a, MetaProvider.DEFAULT);
+	public final <T extends Annotation> T getLastAnnotation(Class<T> a) {
+		return getLastAnnotation(a, MetaProvider.DEFAULT);
 	}
 
 	/**
@@ -181,7 +181,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return
 	 * 	The first annotation found, or <jk>null</jk> if it doesn't exist.
 	 */
-	public final <T extends Annotation> T getAnnotation(Class<T> a, MetaProvider mp) {
+	public final <T extends Annotation> T getLastAnnotation(Class<T> a, MetaProvider mp) {
 		if (a == null)
 			return null;
 		for (Method m2 : getMatching()) {
@@ -199,7 +199,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
 	public final boolean hasAnnotation(Class<? extends Annotation> a) {
-		return getAnnotation(a) != null;
+		return getLastAnnotation(a) != null;
 	}
 
 	/**
@@ -208,18 +208,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * <p>
 	 * Searches all methods with the same signature on the parent classes or interfaces
 	 * and the return type on the method.
-	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
-	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return appendAnnotations(new ArrayList<>(), a);
-	}
-
-	/**
-	 * Identical to {@link #getAnnotations(Class)} but returns the list in reverse (parent-to-child) order.
+	 * <br>Results are parent-to-child ordered.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
@@ -228,28 +217,6 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 */
 	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
 		return appendAnnotationsParentFirst(new ArrayList<>(), a);
-	}
-
-	/**
-	 * Finds and appends the specified annotation on the specified method and methods on superclasses/interfaces to the specified
-	 * list.
-	 *
-	 * <p>
-	 * Results are ordered in child-to-parent order.
-	 *
-	 * @param l The list of annotations.
-	 * @param a The annotation.
-	 * @return The same list.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
-		for (Method m2 : getMatching())
-			for (Annotation a2 :  m2.getDeclaredAnnotations())
-				if (a.isInstance(a2))
-					l.add((T)a2);
-		getReturnType().resolved().appendAnnotations(l, a);
-		declaringClass.appendAnnotations(l, a);
-		return l;
 	}
 
 	/**
@@ -278,35 +245,13 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return <jk>true</jk> if this method does not have any of the specified annotations.
 	 */
 	@SafeVarargs
-	public final Annotation getAnyAnnotation(Class<? extends Annotation>...c) {
+	public final Annotation getAnyLastAnnotation(Class<? extends Annotation>...c) {
 		for (Class<? extends Annotation> cc : c) {
-			Annotation a = getAnnotation(cc);
+			Annotation a = getLastAnnotation(cc);
 			if (a != null)
 				return a;
 		}
 		return null;
-	}
-
-	/**
-	 * Constructs an {@link AnnotationList} of all annotations found on this method.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On this method and matching methods ordered child-to-parent.
-	 * 	<li>On this class.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On the package of this class.
-	 * </ol>
-	 *
-	 * @param filter
-	 * 	Optional filter to apply to limit which annotations are added to the list.
-	 * 	<br>Can be <jk>null</jk> for no filtering.
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
-		return appendAnnotationList(new AnnotationList(filter));
 	}
 
 	/**
@@ -373,20 +318,6 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 				if (a2.annotationType().getAnnotation(PropertyStoreApply.class) != null)
 					return true;
 		return false;
-	}
-
-	AnnotationList appendAnnotationList(AnnotationList al) {
-		ClassInfo c = this.declaringClass;
-		for (ClassInfo ci : c.getParents()) {
-			appendMethodAnnotations(al, ci);
-			appendAnnotations(al, ci);
-		}
-		for (ClassInfo ci : c.getInterfaces()) {
-			appendMethodAnnotations(al, ci);
-			appendAnnotations(al, ci);
-		}
-		appendAnnotations(al, c.getPackage());
-		return al;
 	}
 
 	AnnotationList appendAnnotationListParentFirst(AnnotationList al) {

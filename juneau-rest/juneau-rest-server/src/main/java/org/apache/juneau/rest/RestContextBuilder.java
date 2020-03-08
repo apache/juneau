@@ -216,7 +216,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 		Map<String,MethodInfo> map = new LinkedHashMap<>();
 		for (MethodInfo m : rci.getAllMethodsParentFirst()) {
-			if (m.hasAnnotation(RestHook.class) && m.getAnnotation(RestHook.class).value() == HookEvent.INIT) {
+			if (m.hasAnnotation(RestHook.class) && m.getLastAnnotation(RestHook.class).value() == HookEvent.INIT) {
 				m.setAccessible();
 				String sig = m.getSignature();
 				if (! map.containsKey(sig))

@@ -162,7 +162,7 @@ public class ResponseBeanMeta {
 					if (m.hasAnnotation(ResponseHeader.class)) {
 						assertNoArgs(m, ResponseHeader.class);
 						assertReturnNotVoid(m, ResponseHeader.class);
-						HttpPartSchema s = HttpPartSchema.create(m.getAnnotation(ResponseHeader.class), m.getPropertyName());
+						HttpPartSchema s = HttpPartSchema.create(m.getLastAnnotation(ResponseHeader.class), m.getPropertyName());
 						headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, m));
 					} else if (m.hasAnnotation(ResponseStatus.class)) {
 						assertNoArgs(m, ResponseHeader.class);

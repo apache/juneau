@@ -90,10 +90,10 @@ public class RemoteMethodMeta {
 
 			MethodInfo mi = MethodInfo.of(m);
 
-			org.apache.juneau.rest.client.remote.RemoteMethod orm = mi.getAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
+			org.apache.juneau.rest.client.remote.RemoteMethod orm = mi.getLastAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
 			if (orm == null)
 				orm = mi.getResolvedReturnType().getLastAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
-			RemoteMethod rm = mi.getAnnotation(RemoteMethod.class);
+			RemoteMethod rm = mi.getLastAnnotation(RemoteMethod.class);
 			if (rm == null)
 				rm = mi.getResolvedReturnType().getLastAnnotation(RemoteMethod.class);
 

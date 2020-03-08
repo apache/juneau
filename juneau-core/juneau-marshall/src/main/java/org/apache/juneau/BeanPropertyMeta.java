@@ -204,7 +204,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (getter != null) {
-				BeanProperty px = MethodInfo.of(getter).getAnnotation(BeanProperty.class);
+				BeanProperty px = MethodInfo.of(getter).getLastAnnotation(BeanProperty.class);
 				Beanp p = bc.getAnnotation(Beanp.class, getter);
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(px, p, getter.getGenericReturnType(), typeVarImpls);
@@ -230,7 +230,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (setter != null) {
-				BeanProperty px = MethodInfo.of(setter).getAnnotation(BeanProperty.class);
+				BeanProperty px = MethodInfo.of(setter).getLastAnnotation(BeanProperty.class);
 				Beanp p = bc.getAnnotation(Beanp.class, setter);
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(px, p, setter.getGenericParameterTypes()[0], typeVarImpls);

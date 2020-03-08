@@ -40,7 +40,7 @@ public class ClientVersionMatcher extends RestMatcher {
 	 */
 	protected ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {
 		this.clientVersionHeader = isEmpty(clientVersionHeader) ? "X-Client-Version" : clientVersionHeader;
-		RestMethod m = mi.getAnnotation(RestMethod.class);
+		RestMethod m = mi.getLastAnnotation(RestMethod.class);
 		range = new VersionRange(m.clientVersion());
 	}
 

@@ -173,7 +173,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	public String getMethodSummary(Method method, RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 
-		String s = MethodInfo.of(method).getAnnotation(RestMethod.class).summary();
+		String s = MethodInfo.of(method).getLastAnnotation(RestMethod.class).summary();
 		if (s.isEmpty()) {
 			Operation o = getSwaggerOperation(method, req);
 			if (o != null)
@@ -229,7 +229,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	public String getMethodDescription(Method method, RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 
-		String s = joinnl(MethodInfo.of(method).getAnnotation(RestMethod.class).description());
+		String s = joinnl(MethodInfo.of(method).getLastAnnotation(RestMethod.class).description());
 		if (s.isEmpty()) {
 			Operation o = getSwaggerOperation(method, req);
 			if (o != null)
@@ -407,7 +407,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (s != null) {
 			Map<String,OperationMap> sp = s.getPaths();
 			if (sp != null) {
-				Map<String,Operation> spp = sp.get(fixMethodPath(MethodInfo.of(method).getAnnotation(RestMethod.class).path()));
+				Map<String,Operation> spp = sp.get(fixMethodPath(MethodInfo.of(method).getLastAnnotation(RestMethod.class).path()));
 				if (spp != null)
 					return spp.get(req.getMethod());
 			}

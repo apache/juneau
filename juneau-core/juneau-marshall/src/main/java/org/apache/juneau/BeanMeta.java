@@ -681,7 +681,7 @@ public class BeanMeta<T> {
 					continue;
 
 				@SuppressWarnings("deprecation")
-				BeanProperty px = m.getAnnotation(BeanProperty.class);
+				BeanProperty px = m.getLastAnnotation(BeanProperty.class);
 				Beanp p = ctx.getAnnotation(Beanp.class, m);
 				Name n2 = ctx.getAnnotation(Name.class, m);
 				if (! (m.isVisible(v) || px != null || p != null || n2 != null))

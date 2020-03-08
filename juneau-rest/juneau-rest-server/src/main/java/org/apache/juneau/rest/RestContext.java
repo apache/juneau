@@ -3767,7 +3767,7 @@ public final class RestContext extends BeanContext {
 				_destroyMethodParams = new ArrayList<>();
 
 			for (MethodInfo mi : rci.getPublicMethods()) {
-				RestMethod a = mi.getAnnotation(RestMethod.class);
+				RestMethod a = mi.getLastAnnotation(RestMethod.class);
 				if (a != null) {
 					methodsFound.add(mi.getSimpleName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
 					try {
@@ -3852,7 +3852,7 @@ public final class RestContext extends BeanContext {
 
 			for (MethodInfo m : rci.getAllMethodsParentFirst()) {
 				if (m.isPublic() && m.hasAnnotation(RestHook.class)) {
-					HookEvent he = m.getAnnotation(RestHook.class).value();
+					HookEvent he = m.getLastAnnotation(RestHook.class).value();
 					String sig = m.getSignature();
 					switch(he) {
 						case PRE_CALL: {
