@@ -147,7 +147,7 @@ public class Mutaters {
 
 		ClassInfo ici = ClassInfo.of(ic), oci = ClassInfo.of(oc);
 
-		for (ClassInfo pic : ici.getAllParents()) {
+		for (ClassInfo pic : ici.getAllParentsChildFirst()) {
 			Mutater t = m.get(pic.inner());
 			if (t != null)
 				return t;

@@ -215,23 +215,23 @@ public class ClassInfoTest {
 
 	@Test
 	public void getInterfaces() {
-		check("", bi4.getInterfaces());
-		check("BI1,BI2", bc1.getInterfaces());
-		check("BI3,BI1,BI2", bc2.getInterfaces());
-		check("BI3,BI1,BI2", bc3.getInterfaces());
+		check("", bi4.getInterfacesChildFirst());
+		check("BI1,BI2", bc1.getInterfacesChildFirst());
+		check("BI3,BI1,BI2", bc2.getInterfacesChildFirst());
+		check("BI3,BI1,BI2", bc3.getInterfacesChildFirst());
 	}
 
 	@Test
 	public void getInterfaces_tiwce() {
-		check("BI3,BI1,BI2", bc2.getInterfaces());
-		check("BI3,BI1,BI2", bc2.getInterfaces());
+		check("BI3,BI1,BI2", bc2.getInterfacesChildFirst());
+		check("BI3,BI1,BI2", bc2.getInterfacesChildFirst());
 	}
 
 	@Test
 	public void getParents() {
-		check("BC3,BC2,BC1", bc3.getParents());
-		check("", object.getParents());
-		check("BI1", bi1.getParents());
+		check("BC3,BC2,BC1", bc3.getParentsChildFirst());
+		check("", object.getParentsChildFirst());
+		check("BI1", bi1.getParentsChildFirst());
 	}
 
 	@Test
@@ -243,15 +243,15 @@ public class ClassInfoTest {
 
 	@Test
 	public void getAllParents() {
-		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParents());
-		check("", object.getAllParents());
-		check("BI1", bi1.getAllParents());
+		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParentsChildFirst());
+		check("", object.getAllParentsChildFirst());
+		check("BI1", bi1.getAllParentsChildFirst());
 	}
 
 	@Test
 	public void getAllParents_twice() {
-		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParents());
-		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParents());
+		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParentsChildFirst());
+		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParentsChildFirst());
 	}
 
 	@Test

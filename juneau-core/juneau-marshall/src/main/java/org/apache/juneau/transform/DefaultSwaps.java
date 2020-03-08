@@ -60,7 +60,7 @@ public class DefaultSwaps {
 	 * @return The matched swap, or <jk>null</jk> if it couldn't be found.
 	 */
 	public static PojoSwap<?,?> find(ClassInfo ci) {
-		for (ClassInfo ci2 : ci.getAllParents()) {
+		for (ClassInfo ci2 : ci.getAllParentsChildFirst()) {
 			PojoSwap<?,?> ps = POJO_SWAPS.get(ci2.inner());
 			if (ps != null)
 				return ps;

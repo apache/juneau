@@ -3638,7 +3638,7 @@ public class BeanContext extends Context implements MetaProvider {
 		if (bpi.isEmpty())
 			return emptySet();
 		ClassInfo ci = ClassInfo.of(c);
-		for (ClassInfo c2 : ci.getAllParents()) {
+		for (ClassInfo c2 : ci.getAllParentsChildFirst()) {
 			for (String n : c2.getNames()) {
 				Set<String> s = bpi.get(n);
 				if (s != null)
@@ -3671,7 +3671,7 @@ public class BeanContext extends Context implements MetaProvider {
 		if (bpx.isEmpty())
 			return emptySet();
 		ClassInfo ci = ClassInfo.of(c);
-		for (ClassInfo c2 : ci.getAllParents()) {
+		for (ClassInfo c2 : ci.getAllParentsChildFirst()) {
 			for (String n : c2.getNames()) {
 				Set<String> s = bpx.get(n);
 				if (s != null)
@@ -3704,7 +3704,7 @@ public class BeanContext extends Context implements MetaProvider {
 		if (bpro.isEmpty())
 			return emptySet();
 		ClassInfo ci = ClassInfo.of(c);
-		for (ClassInfo c2 : ci.getAllParents()) {
+		for (ClassInfo c2 : ci.getAllParentsChildFirst()) {
 			for (String n : c2.getNames()) {
 				Set<String> s = bpro.get(n);
 				if (s != null)
@@ -3737,7 +3737,7 @@ public class BeanContext extends Context implements MetaProvider {
 		if (bpwo.isEmpty())
 			return emptySet();
 		ClassInfo ci = ClassInfo.of(c);
-		for (ClassInfo c2 : ci.getAllParents()) {
+		for (ClassInfo c2 : ci.getAllParentsChildFirst()) {
 			for (String n : c2.getNames()) {
 				Set<String> s = bpwo.get(n);
 				if (s != null)

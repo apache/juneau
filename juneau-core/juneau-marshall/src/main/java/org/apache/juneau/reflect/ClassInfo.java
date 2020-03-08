@@ -60,10 +60,10 @@ public final class ClassInfo {
 	final Class<?> c;
 	private ClassInfo proxyFor;
 	private final boolean isParameterizedType;
-	private List<ClassInfo> interfaces, declaredInterfaces, parents, allParents;
-	private List<MethodInfo> publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
-	private List<ConstructorInfo> publicConstructors, declaredConstructors;
-	private List<FieldInfo> publicFields, declaredFields, allFields, allFieldsParentFirst;
+	private ClassInfo[] interfaces, declaredInterfaces, parents, allParents;
+	private MethodInfo[] publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
+	private ConstructorInfo[] publicConstructors, declaredConstructors;
+	private FieldInfo[] publicFields, declaredFields, allFields, allFieldsParentFirst;
 	private int dim = -1;
 	private ClassInfo componentType;
 
@@ -249,14 +249,7 @@ public final class ClassInfo {
 	 * 	<br>Results are in the same order as {@link Class#getInterfaces()}.
 	 */
 	public List<ClassInfo> getDeclaredInterfaces() {
-		if (declaredInterfaces == null) {
-			Class<?>[] ii = c == null ? new Class[0] : c.getInterfaces();
-			List<ClassInfo> l = new ArrayList<>(ii.length);
-			for (Class<?> i : ii)
-				l.add(of(i));
-			declaredInterfaces = unmodifiableList(l);
-		}
-		return declaredInterfaces;
+		return new ReadOnlyArrayList<>(getDeclaredInterfacesInternal());
 	}
 
 	/**
@@ -266,18 +259,8 @@ public final class ClassInfo {
 	 * 	An unmodifiable list of interfaces defined on this class and superclasses.
 	 * 	<br>Results are in child-to-parent order.
 	 */
-	public List<ClassInfo> getInterfaces() {
-		if (interfaces == null) {
-			Set<ClassInfo> s = new LinkedHashSet<>();
-			for (ClassInfo ci : getParents())
-				for (ClassInfo ci2 : ci.getDeclaredInterfaces()) {
-					s.add(ci2);
-					for (ClassInfo ci3 : ci2.getInterfaces())
-						s.add(ci3);
-				}
-			interfaces = unmodifiableList(new ArrayList<>(s));
-		}
-		return interfaces;
+	public List<ClassInfo> getInterfacesChildFirst() {
+		return new ReadOnlyArrayList<>(getInterfacesInternal());
 	}
 
 	/**
@@ -287,8 +270,8 @@ public final class ClassInfo {
 	 * 	An unmodifiable list of interfaces defined on this class and superclasses.
 	 * 	<br>Results are in parent-to-child order.
 	 */
-	public Iterable<ClassInfo> getInterfacesParentFirst() {
-		return iterable(getInterfaces(), true);
+	public List<ClassInfo> getInterfacesParentFirst() {
+		return new ReadOnlyArrayList<>(getInterfacesInternal(), true);
 	}
 
 	/**
@@ -300,17 +283,8 @@ public final class ClassInfo {
 	 * @return An unmodifiable list including this class and all parent classes.
 	 * 	<br>Results are in child-to-parent order.
 	 */
-	public List<ClassInfo> getParents() {
-		if (parents == null) {
-			List<ClassInfo> l = new ArrayList<>();
-			Class<?> pc = c;
-			while (pc != null && pc != Object.class) {
-				l.add(of(pc));
-				pc = pc.getSuperclass();
-			}
-			parents = Collections.unmodifiableList(l);
-		}
-		return parents;
+	public List<ClassInfo> getParentsChildFirst() {
+		return new ReadOnlyArrayList<>(getParentsInternal());
 	}
 
 	/**
@@ -322,8 +296,8 @@ public final class ClassInfo {
 	 * @return An unmodifiable list including this class and all parent classes.
 	 * 	<br>Results are in parent-to-child order.
 	 */
-	public Iterable<ClassInfo> getParentsParentFirst() {
-		return iterable(getParents(), true);
+	public List<ClassInfo> getParentsParentFirst() {
+		return new ReadOnlyArrayList<>(getParentsInternal(), true);
 	}
 
 	/**
@@ -332,14 +306,8 @@ public final class ClassInfo {
 	 * @return An unmodifiable list including this class and all parent classes.
 	 * 	<br>Results are ordered child-to-parent order with classes listed before interfaces.
 	 */
-	public List<ClassInfo> getAllParents() {
-		if (allParents == null) {
-			List<ClassInfo> l = new ArrayList<>();
-			l.addAll(getParents());
-			l.addAll(getInterfaces());
-			allParents = Collections.unmodifiableList(l);
-		}
-		return allParents;
+	public List<ClassInfo> getAllParentsChildFirst() {
+		return new ReadOnlyArrayList<>(getAllParentsInternal());
 	}
 
 	/**
@@ -348,8 +316,59 @@ public final class ClassInfo {
 	 * @return An unmodifiable list including this class and all parent classes.
 	 * 	<br>Results are ordered parent-to-child order with interfaces listed before classes.
 	 */
-	public Iterable<ClassInfo> getAllParentsParentFirst() {
-		return iterable(getAllParents(), true);
+	public List<ClassInfo> getAllParentsParentFirst() {
+		return new ReadOnlyArrayList<>(getAllParentsInternal(), true);
+	}
+
+	private ClassInfo[] getInterfacesInternal() {
+		if (interfaces == null) {
+			Set<ClassInfo> s = new LinkedHashSet<>();
+			for (ClassInfo ci : getParentsChildFirst())
+				for (ClassInfo ci2 : ci.getDeclaredInterfaces()) {
+					s.add(ci2);
+					for (ClassInfo ci3 : ci2.getInterfacesChildFirst())
+						s.add(ci3);
+				}
+			interfaces = s.toArray(new ClassInfo[s.size()]);
+		}
+		return interfaces;
+	}
+
+	private ClassInfo[] getDeclaredInterfacesInternal() {
+		if (declaredInterfaces == null) {
+			Class<?>[] ii = c == null ? new Class[0] : c.getInterfaces();
+			ClassInfo[] l = new ClassInfo[ii.length];
+			for (int i = 0; i < ii.length; i++)
+				l[i] = of(ii[i]);
+			declaredInterfaces = l;
+		}
+		return declaredInterfaces;
+	}
+
+	private ClassInfo[] getParentsInternal() {
+		if (parents == null) {
+			List<ClassInfo> l = new ArrayList<>();
+			Class<?> pc = c;
+			while (pc != null && pc != Object.class) {
+				l.add(of(pc));
+				pc = pc.getSuperclass();
+			}
+			parents = l.toArray(new ClassInfo[l.size()]);
+		}
+		return parents;
+	}
+
+	private ClassInfo[] getAllParentsInternal() {
+		if (allParents == null) {
+			ClassInfo[] a1 = getParentsInternal(), a2 = getInterfacesInternal();
+			ClassInfo[] l = new ClassInfo[a1.length + a2.length];
+			for (int i = 0; i < a1.length; i++)
+				l[i] = a1[i];
+			for (int i = 0; i < a2.length; i++)
+				l[i+a1.length] = a2[i];
+			allParents = l;
+		}
+		return allParents;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -367,6 +386,74 @@ public final class ClassInfo {
 	 * 	<br>Results are ordered alphabetically.
 	 */
 	public List<MethodInfo> getPublicMethods() {
+		return new ReadOnlyArrayList<>(getPublicMethodsInternal());
+	}
+
+	/**
+	 * Returns the public method with the specified method name and argument types.
+	 *
+	 * @param name The method name (e.g. <js>"toString"</js>).
+	 * @param args The exact argument types.
+	 * @return
+	 *  The public method with the specified method name and argument types, or <jk>null</jk> if not found.
+	 */
+	public MethodInfo getPublicMethod(String name, Class<?>...args) {
+		for (MethodInfo mi : getPublicMethodsInternal())
+			if (mi.hasName(name) && mi.hasParamTypes(args))
+				return mi;
+		return null;
+	}
+
+	/**
+	 * Returns the method with the specified method name and argument types.
+	 *
+	 * @param name The method name (e.g. <js>"toString"</js>).
+	 * @param args The exact argument types.
+	 * @return
+	 *  The method with the specified method name and argument types, or <jk>null</jk> if not found.
+	 */
+	public MethodInfo getMethod(String name, Class<?>...args) {
+		for (MethodInfo mi : getAllMethodsInternal())
+			if (mi.hasName(name) && mi.hasParamTypes(args))
+				return mi;
+		return null;
+	}
+
+	/**
+	 * Returns all methods declared on this class.
+	 *
+	 * @return
+	 * 	All methods declared on this class.
+	 * 	<br>Results are ordered alphabetically.
+	 */
+	public List<MethodInfo> getDeclaredMethods() {
+		return new ReadOnlyArrayList<>(getDeclaredMethodsInternal());
+	}
+
+	/**
+	 * Returns all declared methods on this class and all parent classes.
+	 *
+	 * @return
+	 * 	All declared methods on this class and all parent classes.
+	 * 	<br>Results are ordered child-to-parent, and then alphabetically per class.
+	 */
+	public List<MethodInfo> getAllMethods() {
+		return new ReadOnlyArrayList<>(getAllMethodsInternal());
+	}
+
+	/**
+	 * Returns all declared methods on this class and all parent classes.
+	 *
+	 *
+	 * @return
+	 * 	All declared methods on this class and all parent classes.
+	 * 	<br>Results are ordered parent-to-child, and then alphabetically per class.
+	 */
+	public List<MethodInfo> getAllMethodsParentFirst() {
+		return new ReadOnlyArrayList<>(getAllMethodsParentFirstInternal());
+	}
+
+	private MethodInfo[] getPublicMethodsInternal() {
 		if (publicMethods == null) {
 			Method[] mm = c == null ? new Method[0] : c.getMethods();
 			List<MethodInfo> l = new ArrayList<>(mm.length);
@@ -374,9 +461,47 @@ public final class ClassInfo {
 				if (m.getDeclaringClass() != Object.class)
 					l.add(MethodInfo.of(this, m, getProxyTarget(m)));
 			l.sort(null);
-			publicMethods = Collections.unmodifiableList(l);
+			publicMethods = l.toArray(new MethodInfo[l.size()]);
 		}
 		return publicMethods;
+	}
+
+	private MethodInfo[] getDeclaredMethodsInternal() {
+		if (declaredMethods == null) {
+			Method[] mm = c == null ? new Method[0] : c.getDeclaredMethods();
+			List<MethodInfo> l = new ArrayList<>(mm.length);
+			for (Method m : mm)
+				if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
+					l.add(MethodInfo.of(this, m, getProxyTarget(m)));
+			l.sort(null);
+			declaredMethods = l.toArray(new MethodInfo[l.size()]);
+		}
+		return declaredMethods;
+	}
+
+	private MethodInfo[] getAllMethodsInternal() {
+		if (allMethods == null) {
+			List<MethodInfo> l = new ArrayList<>();
+			for (ClassInfo c : getAllParentsChildFirst())
+				c.appendDeclaredMethods(l);
+			allMethods = l.toArray(new MethodInfo[l.size()]);
+		}
+		return allMethods;
+	}
+
+	private MethodInfo[] getAllMethodsParentFirstInternal() {
+		if (allMethodsParentFirst == null) {
+			List<MethodInfo> l = new ArrayList<>();
+			for (ClassInfo c : getAllParentsParentFirst())
+				c.appendDeclaredMethods(l);
+			allMethodsParentFirst = l.toArray(new MethodInfo[l.size()]);
+		}
+		return allMethodsParentFirst;
+	}
+
+	private List<MethodInfo> appendDeclaredMethods(List<MethodInfo> l) {
+		l.addAll(getDeclaredMethods());
+		return l;
 	}
 
 	private Method getProxyTarget(Method m) {
@@ -395,96 +520,6 @@ public final class ClassInfo {
 				return c2.inner();
 		}
 		return c;
-	}
-
-	/**
-	 * Returns the public method with the specified method name and argument types.
-	 *
-	 * @param name The method name (e.g. <js>"toString"</js>).
-	 * @param args The exact argument types.
-	 * @return
-	 *  The public method with the specified method name and argument types, or <jk>null</jk> if not found.
-	 */
-	public MethodInfo getPublicMethod(String name, Class<?>...args) {
-		for (MethodInfo mi : getPublicMethods())
-			if (mi.hasName(name) && mi.hasParamTypes(args))
-				return mi;
-		return null;
-	}
-
-	/**
-	 * Returns the method with the specified method name and argument types.
-	 *
-	 * @param name The method name (e.g. <js>"toString"</js>).
-	 * @param args The exact argument types.
-	 * @return
-	 *  The method with the specified method name and argument types, or <jk>null</jk> if not found.
-	 */
-	public MethodInfo getMethod(String name, Class<?>...args) {
-		for (MethodInfo mi : getAllMethods())
-			if (mi.hasName(name) && mi.hasParamTypes(args))
-				return mi;
-		return null;
-	}
-
-	/**
-	 * Returns all methods declared on this class.
-	 *
-	 * @return
-	 * 	All methods declared on this class.
-	 * 	<br>Results are ordered alphabetically.
-	 */
-	public List<MethodInfo> getDeclaredMethods() {
-		if (declaredMethods == null) {
-			Method[] mm = c == null ? new Method[0] : c.getDeclaredMethods();
-			List<MethodInfo> l = new ArrayList<>(mm.length);
-			for (Method m : mm)
-				if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
-					l.add(MethodInfo.of(this, m, getProxyTarget(m)));
-			l.sort(null);
-			declaredMethods = Collections.unmodifiableList(l);
-		}
-		return declaredMethods;
-	}
-
-	/**
-	 * Returns all declared methods on this class and all parent classes.
-	 *
-	 * @return
-	 * 	All declared methods on this class and all parent classes.
-	 * 	<br>Results are ordered child-to-parent, and then alphabetically per class.
-	 */
-	public List<MethodInfo> getAllMethods() {
-		if (allMethods == null) {
-			List<MethodInfo> l = new ArrayList<>();
-			for (ClassInfo c : getAllParents())
-				c.appendDeclaredMethods(l);
-			allMethods = Collections.unmodifiableList(l);
-		}
-		return allMethods;
-	}
-
-	/**
-	 * Returns all declared methods on this class and all parent classes.
-	 *
-	 *
-	 * @return
-	 * 	All declared methods on this class and all parent classes.
-	 * 	<br>Results are ordered parent-to-child, and then alphabetically per class.
-	 */
-	public List<MethodInfo> getAllMethodsParentFirst() {
-		if (allMethodsParentFirst == null) {
-			List<MethodInfo> l = new ArrayList<>();
-			for (ClassInfo c : getAllParentsParentFirst())
-				c.appendDeclaredMethods(l);
-			allMethodsParentFirst = Collections.unmodifiableList(l);
-		}
-		return allMethodsParentFirst;
-	}
-
-	private List<MethodInfo> appendDeclaredMethods(List<MethodInfo> l) {
-		l.addAll(getDeclaredMethods());
-		return l;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -594,15 +629,7 @@ public final class ClassInfo {
 	 * @return All public constructors defined on this class.
 	 */
 	public List<ConstructorInfo> getPublicConstructors() {
-		if (publicConstructors == null) {
-			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
-			List<ConstructorInfo> l = new ArrayList<>(cc.length);
-			for (Constructor<?> ccc : cc)
-				l.add(ConstructorInfo.of(this, ccc, getProxyTarget(ccc)));
-			l.sort(null);
-			publicConstructors = Collections.unmodifiableList(l);
-		}
-		return publicConstructors;
+		return new ReadOnlyArrayList<>(getPublicConstructorsInternal());
 	}
 
 	/**
@@ -613,7 +640,7 @@ public final class ClassInfo {
 	 *  The public constructor with the specified argument types, or <jk>null</jk> if not found.
 	 */
 	public ConstructorInfo getPublicConstructor(Class<?>...args) {
-		for (ConstructorInfo ci : getPublicConstructors())
+		for (ConstructorInfo ci : getPublicConstructorsInternal())
 			if (ci.hasParamTypes(args))
 				return ci;
 		return null;
@@ -627,7 +654,7 @@ public final class ClassInfo {
 	 *  The declared constructor with the specified argument types, or <jk>null</jk> if not found.
 	 */
 	public ConstructorInfo getDeclaredConstructor(Class<?>...args) {
-		for (ConstructorInfo ci : getDeclaredConstructors())
+		for (ConstructorInfo ci : getDeclaredConstructorsInternal())
 			if (ci.hasParamTypes(args))
 				return ci;
 		return null;
@@ -653,15 +680,7 @@ public final class ClassInfo {
 	 * @return All constructors defined on this class.
 	 */
 	public List<ConstructorInfo> getDeclaredConstructors() {
-		if (declaredConstructors == null) {
-			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
-			List<ConstructorInfo> l = new ArrayList<>(cc.length);
-			for (Constructor<?> ccc : cc)
-				l.add(ConstructorInfo.of(this, ccc, getProxyTarget(ccc)));
-			l.sort(null);
-			declaredConstructors = Collections.unmodifiableList(l);
-		}
-		return declaredConstructors;
+		return new ReadOnlyArrayList<>(getDeclaredConstructorsInternal());
 	}
 
 	/**
@@ -701,11 +720,35 @@ public final class ClassInfo {
 		return getConstructor(vis, false, argTypes);
 	}
 
+	private ConstructorInfo[] getPublicConstructorsInternal() {
+		if (publicConstructors == null) {
+			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
+			List<ConstructorInfo> l = new ArrayList<>(cc.length);
+			for (Constructor<?> ccc : cc)
+				l.add(ConstructorInfo.of(this, ccc, getProxyTarget(ccc)));
+			l.sort(null);
+			publicConstructors = l.toArray(new ConstructorInfo[l.size()]);
+		}
+		return publicConstructors;
+	}
+
+	private ConstructorInfo[] getDeclaredConstructorsInternal() {
+		if (declaredConstructors == null) {
+			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
+			List<ConstructorInfo> l = new ArrayList<>(cc.length);
+			for (Constructor<?> ccc : cc)
+				l.add(ConstructorInfo.of(this, ccc, getProxyTarget(ccc)));
+			l.sort(null);
+			declaredConstructors = l.toArray(new ConstructorInfo[l.size()]);
+		}
+		return declaredConstructors;
+	}
+
 	private ConstructorInfo getConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
 		if (fuzzyArgs) {
 			int bestCount = -1;
 			ConstructorInfo bestMatch = null;
-			for (ConstructorInfo n : getDeclaredConstructors()) {
+			for (ConstructorInfo n : getDeclaredConstructorsInternal()) {
 				if (vis.isVisible(n.inner())) {
 					int m = ClassUtils.fuzzyArgsMatch(n.getParamTypes(), argTypes);
 					if (m > bestCount) {
@@ -718,7 +761,7 @@ public final class ClassInfo {
 		}
 
 		boolean isMemberClass = isNonStaticMemberClass();
-		for (ConstructorInfo n : getDeclaredConstructors()) {
+		for (ConstructorInfo n : getDeclaredConstructorsInternal()) {
 			List<ClassInfo> paramTypes = n.getParamTypes();
 			if (isMemberClass)
 				paramTypes = paramTypes.subList(1, paramTypes.size());
@@ -748,7 +791,7 @@ public final class ClassInfo {
 		if (isAbstract())
 			return null;
 		boolean isMemberClass = isNonStaticMemberClass();
-		for (ConstructorInfo cc : getDeclaredConstructors())
+		for (ConstructorInfo cc : getDeclaredConstructorsInternal())
 			if (cc.hasNumParams(isMemberClass ? 1 : 0) && cc.isVisible(v))
 				return cc.makeAccessible(v);
 		return null;
@@ -769,15 +812,7 @@ public final class ClassInfo {
 	 * 	<br>Results are in alphabetical order.
 	 */
 	public List<FieldInfo> getPublicFields() {
-		if (publicFields == null) {
-			Map<String,FieldInfo> m = new LinkedHashMap<>();
-			for (ClassInfo c : getParents())
-				c.appendDeclaredPublicFields(m);
-			List<FieldInfo> l = new ArrayList<>(m.values());
-			l.sort(null);
-			publicFields = Collections.unmodifiableList(l);
-		}
-		return publicFields;
+		return new ReadOnlyArrayList<>(getPublicFieldsInternal());
 	}
 
 	/**
@@ -788,16 +823,7 @@ public final class ClassInfo {
 	 * 	<br>Results are in alphabetical order.
 	 */
 	public List<FieldInfo> getDeclaredFields() {
-		if (declaredFields == null) {
-			Field[] ff = c == null ? new Field[0] : c.getDeclaredFields();
-			List<FieldInfo> l = new ArrayList<>(ff.length);
-			for (Field f : ff)
-				if (! "$jacocoData".equals(f.getName()))
-					l.add(FieldInfo.of(this, f));
-			l.sort(null);
-			declaredFields = Collections.unmodifiableList(l);
-		}
-		return declaredFields;
+		return new ReadOnlyArrayList<>(getDeclaredFieldsInternal());
 	}
 
 	/**
@@ -808,13 +834,7 @@ public final class ClassInfo {
 	 * 	<br>Results are ordered child-to-parent, and then alphabetical per class.
 	 */
 	public List<FieldInfo> getAllFields() {
-		if (allFields == null) {
-			List<FieldInfo> l = new ArrayList<>();
-			for (ClassInfo c : getAllParents())
-				c.appendDeclaredFields(l);
-			allFields = Collections.unmodifiableList(l);
-		}
-		return allFields;
+		return new ReadOnlyArrayList<>(getAllFieldsInternal());
 	}
 
 	/**
@@ -825,27 +845,7 @@ public final class ClassInfo {
 	 * 	<br>Results are ordered parent-to-child, and then alphabetical per class.
 	 */
 	public List<FieldInfo> getAllFieldsParentFirst() {
-		if (allFieldsParentFirst == null) {
-			List<FieldInfo> l = new ArrayList<>();
-			for (ClassInfo c : getAllParentsParentFirst())
-				c.appendDeclaredFields(l);
-			allFieldsParentFirst = Collections.unmodifiableList(l);
-		}
-		return allFieldsParentFirst;
-	}
-
-	private List<FieldInfo> appendDeclaredFields(List<FieldInfo> l) {
-		l.addAll(getDeclaredFields());
-		return l;
-	}
-
-	private Map<String,FieldInfo> appendDeclaredPublicFields(Map<String,FieldInfo> m) {
-		for (FieldInfo f : getDeclaredFields()) {
-			String fn = f.getName();
-			if (f.isPublic() && ! (m.containsKey(fn) || "$jacocoData".equals(fn)))
-					m.put(f.getName(), f);
-		}
-		return m;
+		return new ReadOnlyArrayList<>(getAllFieldsParentFirstInternal());
 	}
 
 	/**
@@ -855,7 +855,7 @@ public final class ClassInfo {
 	 * @return The public field, or <jk>null</jk> if not found.
 	 */
 	public FieldInfo getPublicField(String name) {
-		for (FieldInfo f : getPublicFields())
+		for (FieldInfo f : getPublicFieldsInternal())
 			if (f.getName().equals(name))
 				return f;
 		return null;
@@ -868,7 +868,7 @@ public final class ClassInfo {
 	 * @return The declared field, or <jk>null</jk> if not found.
 	 */
 	public FieldInfo getDeclaredField(String name) {
-		for (FieldInfo f : getDeclaredFields())
+		for (FieldInfo f : getDeclaredFieldsInternal())
 			if (f.getName().equals(name))
 				return f;
 		return null;
@@ -881,7 +881,7 @@ public final class ClassInfo {
 	 * @return The public field, or <jk>null</jk> if not found.
 	 */
 	public FieldInfo getStaticPublicField(String name) {
-		for (FieldInfo f : getPublicFields())
+		for (FieldInfo f : getPublicFieldsInternal())
 			if (f.isStatic() && f.getName().equals(name))
 				return f;
 		return null;
@@ -894,10 +894,70 @@ public final class ClassInfo {
 	 * @return The public field, or <jk>null</jk> if not found.
 	 */
 	public Field getStaticPublicFieldInner(String name) {
-		for (FieldInfo f : getPublicFields())
+		for (FieldInfo f : getPublicFieldsInternal())
 			if (f.isStatic() && f.getName().equals(name))
 				return f.inner();
 		return null;
+	}
+
+	private List<FieldInfo> appendDeclaredFields(List<FieldInfo> l) {
+		for (FieldInfo f : getDeclaredFieldsInternal())
+			l.add(f);
+		return l;
+	}
+
+	private Map<String,FieldInfo> appendDeclaredPublicFields(Map<String,FieldInfo> m) {
+		for (FieldInfo f : getDeclaredFieldsInternal()) {
+			String fn = f.getName();
+			if (f.isPublic() && ! (m.containsKey(fn) || "$jacocoData".equals(fn)))
+					m.put(f.getName(), f);
+		}
+		return m;
+	}
+
+	private FieldInfo[] getPublicFieldsInternal() {
+		if (publicFields == null) {
+			Map<String,FieldInfo> m = new LinkedHashMap<>();
+			for (ClassInfo c : getParentsInternal())
+				c.appendDeclaredPublicFields(m);
+			List<FieldInfo> l = new ArrayList<>(m.values());
+			l.sort(null);
+			publicFields = l.toArray(new FieldInfo[l.size()]);
+		}
+		return publicFields;
+	}
+
+	private FieldInfo[] getDeclaredFieldsInternal() {
+		if (declaredFields == null) {
+			Field[] ff = c == null ? new Field[0] : c.getDeclaredFields();
+			List<FieldInfo> l = new ArrayList<>(ff.length);
+			for (Field f : ff)
+				if (! "$jacocoData".equals(f.getName()))
+					l.add(FieldInfo.of(this, f));
+			l.sort(null);
+			declaredFields = l.toArray(new FieldInfo[l.size()]);
+		}
+		return declaredFields;
+	}
+
+	private FieldInfo[] getAllFieldsInternal() {
+		if (allFields == null) {
+			List<FieldInfo> l = new ArrayList<>();
+			for (ClassInfo c : getAllParentsInternal())
+				c.appendDeclaredFields(l);
+			allFields = l.toArray(new FieldInfo[l.size()]);
+		}
+		return allFields;
+	}
+	
+	private FieldInfo[] getAllFieldsParentFirstInternal() {
+		if (allFieldsParentFirst == null) {
+			List<FieldInfo> l = new ArrayList<>();
+			for (ClassInfo c : getAllParentsParentFirst())
+				c.appendDeclaredFields(l);
+			allFieldsParentFirst = l.toArray(new FieldInfo[l.size()]);
+		}
+		return allFieldsParentFirst;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1185,7 +1245,7 @@ public final class ClassInfo {
 			if (x != null)
 				return x;
 		}
-		for (ClassInfo ci : getInterfaces()) {
+		for (ClassInfo ci : getInterfacesChildFirst()) {
 			for (Class<? extends Annotation> ca : annotations) {
 				Annotation x = ci.getLastAnnotation(ca, mp);
 				if (x != null)
@@ -1226,7 +1286,7 @@ public final class ClassInfo {
 				return t2;
 		}
 
-		for (ClassInfo c2 : getInterfaces()) {
+		for (ClassInfo c2 : getInterfacesChildFirst()) {
 			t2 = c2.getLastAnnotation(a, mp);
 			if (t2 != null)
 				return t2;

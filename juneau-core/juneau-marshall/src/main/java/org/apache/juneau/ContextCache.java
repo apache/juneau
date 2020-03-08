@@ -146,7 +146,7 @@ public class ContextCache {
 		String[] prefixes = prefixCache.get(c);
 		if (prefixes == null) {
 			Set<String> ps = new HashSet<>();
-			for (ClassInfo c2 : ClassInfo.of(c).getAllParents()) {
+			for (ClassInfo c2 : ClassInfo.of(c).getAllParentsChildFirst()) {
 				ConfigurableContext cc = c2.getLastAnnotation(ConfigurableContext.class);
 				if (cc != null) {
 					if (cc.nocache()) {
