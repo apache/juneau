@@ -322,14 +322,14 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 
 	AnnotationList appendAnnotationListParentFirst(AnnotationList al) {
 		ClassInfo c = this.declaringClass;
-		appendAnnotations(al, c.getPackage());
+		appendDeclaredAnnotations(al, c.getPackage());
 		for (ClassInfo ci : c.getInterfacesParentFirst()) {
-			appendAnnotations(al, ci);
-			appendMethodAnnotations(al, ci);
+			appendDeclaredAnnotations(al, ci);
+			appendDeclaredMethodAnnotations(al, ci);
 		}
 		for (ClassInfo ci : c.getParentsParentFirst()) {
-			appendAnnotations(al, ci);
-			appendMethodAnnotations(al, ci);
+			appendDeclaredAnnotations(al, ci);
+			appendDeclaredMethodAnnotations(al, ci);
 		}
 		return al;
 	}
@@ -337,25 +337,25 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	AnnotationList appendAnnotationListMethodOnlyParentFirst(AnnotationList al) {
 		ClassInfo c = this.declaringClass;
 		for (ClassInfo ci : c.getInterfacesParentFirst())
-			appendMethodAnnotations(al, ci);
+			appendDeclaredMethodAnnotations(al, ci);
 		for (ClassInfo ci : c.getParentsParentFirst())
-			appendMethodAnnotations(al, ci);
+			appendDeclaredMethodAnnotations(al, ci);
 		return al;
 	}
 
-	void appendAnnotations(AnnotationList al, Package p) {
+	void appendDeclaredAnnotations(AnnotationList al, Package p) {
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())
 				al.add(AnnotationInfo.of(p, a));
 	}
 
-	void appendAnnotations(AnnotationList al, ClassInfo ci) {
+	void appendDeclaredAnnotations(AnnotationList al, ClassInfo ci) {
 		if (ci != null)
 			for (Annotation a : ci.c.getDeclaredAnnotations())
 				al.add(AnnotationInfo.of(ci, a));
 	}
 
-	void appendMethodAnnotations(AnnotationList al, ClassInfo ci) {
+	void appendDeclaredMethodAnnotations(AnnotationList al, ClassInfo ci) {
 		Method m = findMatchingOnClass(ci);
 		if (m != null)
 			for (Annotation a : m.getDeclaredAnnotations())

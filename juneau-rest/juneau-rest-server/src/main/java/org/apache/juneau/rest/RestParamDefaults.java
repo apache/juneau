@@ -217,7 +217,7 @@ class RestParamDefaults {
 				MethodInfo mi = mpi.getMethod();
 
 				for (int j = 0; j < i; j++)
-					if (mi.getParam(i).getAnnotation(Path.class) != null)
+					if (mi.getParam(i).getLastAnnotation(Path.class) != null)
 						idx++;
 
 				String[] vars = pathPattern.getVars();

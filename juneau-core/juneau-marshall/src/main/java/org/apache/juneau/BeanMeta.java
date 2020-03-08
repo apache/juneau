@@ -199,7 +199,7 @@ public class BeanMeta<T> {
 
 				Map<String,BeanPropertyMeta.Builder> normalProps = new LinkedHashMap<>();
 
-				Annotation ba = ci.findFirstAnnotation(ctx, Bean.class, BeanIgnore.class);
+				Annotation ba = ci.getAnyLastAnnotation(ctx, Bean.class, BeanIgnore.class);
 				boolean hasBean = ba != null && ba.annotationType() == Bean.class;
 				boolean hasBeanIgnore = ba != null && ba.annotationType() == BeanIgnore.class;
 

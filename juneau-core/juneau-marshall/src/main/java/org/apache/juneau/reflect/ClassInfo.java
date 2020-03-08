@@ -1104,55 +1104,6 @@ public final class ClassInfo {
 	 * <p>
 	 * Annotations are appended in the following orders:
 	 * <ol>
-	 * 	<li>On this class.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On the package of this class.
-	 * </ol>
-	 *
-	 * @param l The list of annotations.
-	 * @param a The annotation to search for.
-	 * @return The same list.
-	 */
-	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
-		return appendAnnotations(l, a, MetaProvider.DEFAULT);
-	}
-
-	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * list.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On this class.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On the package of this class.
-	 * </ol>
-	 *
-	 * @param <T> The annotation to search for.
-	 * @param l The list of annotations.
-	 * @param a The annotation to search for.
-	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
-	 * @return The same list.
-	 */
-	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, MetaProvider mp) {
-		for (ClassInfo ci : getParents())
-			addIfNotNull(l, mp.getDeclaredAnnotation(a, ci.inner()));
-		for (ClassInfo ci : getInterfaces())
-			addIfNotNull(l, mp.getDeclaredAnnotation(a, ci.inner()));
-		addIfNotNull(l, getPackageAnnotation(a));
-		return l;
-	}
-
-	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * list.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
 	 * 	<li>On the package of this class.
 	 * 	<li>On interfaces ordered child-to-parent.
 	 * 	<li>On parent classes ordered child-to-parent.
@@ -1201,32 +1152,6 @@ public final class ClassInfo {
 	 * <p>
 	 * Annotations are appended in the following orders:
 	 * <ol>
-	 * 	<li>On this class.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On the package of this class.
-	 * </ol>
-	 *
-	 * @param l The list of annotations.
-	 * @param a The annotation to search for.
-	 * @return The same list.
-	 */
-	public <T extends Annotation> List<AnnotationInfo<T>> appendAnnotationInfos(List<AnnotationInfo<T>> l, Class<T> a) {
-		for (ClassInfo ci : getParents())
-			addIfNotNull(l, ci.getDeclaredAnnotationInfo(a));
-		for (ClassInfo ci : getInterfaces())
-			addIfNotNull(l, ci.getDeclaredAnnotationInfo(a));
-		addIfNotNull(l, getPackageAnnotationInfo(a));
-		return l;
-	}
-
-	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * list.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
 	 * 	<li>On the package of this class.
 	 * 	<li>On interfaces ordered child-to-parent.
 	 * 	<li>On parent classes ordered child-to-parent.
@@ -1254,7 +1179,7 @@ public final class ClassInfo {
 	 * @return The first annotation found, or <jk>null</jk> if not found.
 	 */
 	@SafeVarargs
-	public final Annotation findFirstAnnotation(MetaProvider mp, Class<? extends Annotation>...annotations) {
+	public final Annotation getAnyLastAnnotation(MetaProvider mp, Class<? extends Annotation>...annotations) {
 		for (Class<? extends Annotation> ca : annotations) {
 			Annotation x = getLastAnnotation(ca, mp);
 			if (x != null)
@@ -1268,23 +1193,9 @@ public final class ClassInfo {
 			}
 		}
 		ClassInfo ci = getParent();
-		return ci == null ? null : ci.findFirstAnnotation(mp, annotations);
+		return ci == null ? null : ci.getAnyLastAnnotation(mp, annotations);
 	}
 
-
-	AnnotationList appendAnnotationList(AnnotationList m) {
-		for (ClassInfo ci : getParents())
-			for (Annotation a : ci.c.getDeclaredAnnotations())
-				m.add(AnnotationInfo.of(ci, a));
-		for (ClassInfo ci : getInterfaces())
-			for (Annotation a : ci.c.getDeclaredAnnotations())
-				m.add(AnnotationInfo.of(ci, a));
-		Package p = c.getPackage();
-		if (p != null)
-			for (Annotation a : p.getDeclaredAnnotations())
-				m.add(AnnotationInfo.of(p, a));
-		return m;
-	}
 
 	AnnotationList appendAnnotationListParentFirst(AnnotationList m) {
 		Package p = c.getPackage();

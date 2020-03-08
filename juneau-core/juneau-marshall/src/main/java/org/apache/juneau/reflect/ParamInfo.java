@@ -131,7 +131,7 @@ public final class ParamInfo {
 	 * 	The annotation if found, or <jk>null</jk> if not.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends Annotation> T getAnnotation(Class<T> a) {
+	public <T extends Annotation> T getLastAnnotation(Class<T> a) {
 		Optional<Annotation> o = annotationMap().get(a);
 		if (o == null) {
 			o = Optional.ofNullable(findAnnotation(a));
@@ -149,7 +149,7 @@ public final class ParamInfo {
 	 * 	The <jk>true</jk> if annotation if found.
 	 */
 	public boolean hasAnnotation(Class<? extends Annotation> a) {
-		return getAnnotation(a) != null;
+		return getLastAnnotation(a) != null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -200,7 +200,7 @@ public final class ParamInfo {
 				for (Annotation a2 : annotations)
 					if (a.isInstance(a2))
 						l.add((T)a2);
-				ci.appendAnnotations(l, a);
+				ci.appendAnnotationsParentFirst(l, a);
 			}
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
@@ -216,7 +216,7 @@ public final class ParamInfo {
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
 						if (a.isInstance(a2))
 							l.add((T)a2);
-				ci.appendAnnotations(l, a);
+				ci.appendAnnotationsParentFirst(l, a);
 			}
 		}
 		return l;

@@ -247,37 +247,37 @@ public class ParamInfoTest {
 
 	@Test
 	public void getAnnotation() throws Exception {
-		check("@CA(5)", cb_a1.getAnnotation(CA.class));
-		check("@CA(5)", cb_a2.getAnnotation(CA.class));
-		check("@CA(5)", cc_a1.getAnnotation(CA.class));
-		check("@CA(6)", cc_a2.getAnnotation(CA.class));
+		check("@CA(5)", cb_a1.getLastAnnotation(CA.class));
+		check("@CA(5)", cb_a2.getLastAnnotation(CA.class));
+		check("@CA(5)", cc_a1.getLastAnnotation(CA.class));
+		check("@CA(6)", cc_a2.getLastAnnotation(CA.class));
 	}
 
 	@Test
 	public void getAnnotation_notFound() throws Exception {
-		check(null, cb_a1.getAnnotation(DA.class));
+		check(null, cb_a1.getLastAnnotation(DA.class));
 	}
 
 	@Test
 	public void getAnnotation_constructor() throws Exception {
-		check("@CA(9)", cc_cc.getAnnotation(CA.class));
+		check("@CA(9)", cc_cc.getLastAnnotation(CA.class));
 	}
 
 	@Test
 	public void getAnnotation_notFound_constructor() throws Exception {
-		check(null, cc_cc.getAnnotation(DA.class));
+		check(null, cc_cc.getLastAnnotation(DA.class));
 	}
 
 	@Test
 	public void getAnnotation_twice() throws Exception {
-		check("@CA(5)", cb_a1.getAnnotation(CA.class));
-		check("@CA(5)", cb_a1.getAnnotation(CA.class));
+		check("@CA(5)", cb_a1.getLastAnnotation(CA.class));
+		check("@CA(5)", cb_a1.getLastAnnotation(CA.class));
 	}
 
 	@Test
 	public void getAnnotation_twice_constructor() throws Exception {
-		check("@CA(9)", cc_cc.getAnnotation(CA.class));
-		check("@CA(9)", cc_cc.getAnnotation(CA.class));
+		check("@CA(9)", cc_cc.getLastAnnotation(CA.class));
+		check("@CA(9)", cc_cc.getLastAnnotation(CA.class));
 	}
 
 	@Test
@@ -334,13 +334,13 @@ public class ParamInfoTest {
 
 	@Test
 	public void getAnnotation_inherited() throws Exception {
-		check("@DA(0)", db_a1.getAnnotation(DA.class));
-		check("@DA(5)", dc_a1.getAnnotation(DA.class));
+		check("@DA(0)", db_a1.getLastAnnotation(DA.class));
+		check("@DA(5)", dc_a1.getLastAnnotation(DA.class));
 	}
 
 	@Test
 	public void getAnnotation_inherited_notFound() throws Exception {
-		check(null, db_a1.getAnnotation(CA.class));
+		check(null, db_a1.getLastAnnotation(CA.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
