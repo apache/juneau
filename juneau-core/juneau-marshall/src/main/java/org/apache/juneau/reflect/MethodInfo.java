@@ -234,7 +234,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 			for (Annotation a2 :  m2.getDeclaredAnnotations())
 				if (a.isInstance(a2))
 					l.add((T)a2);
-		getReturnType().resolved().appendAnnotations(l, a);
+		getReturnType().resolved().appendAnnotationsParentFirst(l, a);
 		return l;
 	}
 

@@ -90,7 +90,7 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(ps);
 		b.apply(mpi.getParameterType().resolved().innerType());
-		for (Response r : mpi.getAnnotations(Response.class))
+		for (Response r : mpi.getAnnotationsParentFirst(Response.class))
 			b.apply(r);
 		return b.build();
 	}

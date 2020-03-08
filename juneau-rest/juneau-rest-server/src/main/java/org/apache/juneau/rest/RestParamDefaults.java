@@ -202,12 +202,15 @@ class RestParamDefaults {
 		}
 
 		private static String getName(ParamInfo mpi, UrlPathPattern pathPattern) {
-			for (Path h : mpi.getAnnotations(Path.class)) {
+			String p = null;
+			for (Path h : mpi.getAnnotationsParentFirst(Path.class)) {
 				if (! h.name().isEmpty())
-					return h.name();
+					p = h.name();
 				if (! h.value().isEmpty())
-					return h.value();
+					p = h.value();
 			}
+			if (p != null)
+				return p;
 			if (pathPattern != null) {
 				int idx = 0;
 				int i = mpi.getIndex();
@@ -263,13 +266,16 @@ class RestParamDefaults {
 		}
 
 		private static String getName(ParamInfo mpi) {
-			for (Header h : mpi.getAnnotations(Header.class)) {
+			String n = null;
+			for (Header h : mpi.getAnnotationsParentFirst(Header.class)) {
 				if (! h.name().isEmpty())
-					return h.name();
+					n = h.name();
 				if (! h.value().isEmpty())
-					return h.value();
+					n = h.value();
 			}
-			throw new InternalServerError("@Header used without name or value on method parameter ''{0}''.", mpi);
+			if (n == null)
+				throw new InternalServerError("@Header used without name or value on method parameter ''{0}''.", mpi);
+			return n;
 		}
 
 		@Override /* RestMethodParam */
@@ -285,13 +291,16 @@ class RestParamDefaults {
 		}
 
 		private static String getName(ParamInfo mpi) {
-			for (Attr h : mpi.getAnnotations(Attr.class)) {
+			String n = null;
+			for (Attr h : mpi.getAnnotationsParentFirst(Attr.class)) {
 				if (! h.name().isEmpty())
-					return h.name();
+					n = h.name();
 				if (! h.value().isEmpty())
-					return h.value();
+					n = h.value();
 			}
-			throw new InternalServerError("@Attr used without name or value on method parameter ''{0}''.", mpi);
+			if (n == null)
+				throw new InternalServerError("@Attr used without name or value on method parameter ''{0}''.", mpi);
+			return n;
 		}
 
 		@Override /* RestMethodParam */
@@ -327,13 +336,16 @@ class RestParamDefaults {
 		}
 
 		private static String getName(ParamInfo mpi) {
-			for (ResponseHeader h : mpi.getAnnotations(ResponseHeader.class)) {
+			String n = null;
+			for (ResponseHeader h : mpi.getAnnotationsParentFirst(ResponseHeader.class)) {
 				if (! h.name().isEmpty())
-					return h.name();
+					n = h.name();
 				if (! h.value().isEmpty())
-					return h.value();
+					n = h.value();
 			}
-			throw new InternalServerError("@ResponseHeader used without name or value on method parameter ''{0}''.", mpi);
+			if (n == null)
+				throw new InternalServerError("@ResponseHeader used without name or value on method parameter ''{0}''.", mpi);
+			return n;
 		}
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -437,13 +449,16 @@ class RestParamDefaults {
 		}
 
 		private static String getName(ParamInfo mpi) {
-			for (FormData h : mpi.getAnnotations(FormData.class)) {
+			String n = null;
+			for (FormData h : mpi.getAnnotationsParentFirst(FormData.class)) {
 				if (! h.name().isEmpty())
-					return h.name();
+					n = h.name();
 				if (! h.value().isEmpty())
-					return h.value();
+					n = h.value();
 			}
-			throw new InternalServerError("@FormData used without name or value on method parameter ''{0}''.", mpi);
+			if (n == null)
+				throw new InternalServerError("@FormData used without name or value on method parameter ''{0}''.", mpi);
+			return n;
 		}
 
 		@Override /* RestMethodParam */
@@ -470,13 +485,16 @@ class RestParamDefaults {
 		}
 
 		private static String getName(ParamInfo mpi) {
-			for (Query h : mpi.getAnnotations(Query.class)) {
+			String n = null;
+			for (Query h : mpi.getAnnotationsParentFirst(Query.class)) {
 				if (! h.name().isEmpty())
-					return h.name();
+					n = h.name();
 				if (! h.value().isEmpty())
-					return h.value();
+					n = h.value();
 			}
-			throw new InternalServerError("@Query used without name or value on method param ''{0}''.", mpi);
+			if (n == null)
+				throw new InternalServerError("@Query used without name or value on method param ''{0}''.", mpi);
+			return n;
 		}
 
 		@Override /* RestMethodParam */
@@ -496,13 +514,16 @@ class RestParamDefaults {
 		}
 
 		private static String getName(ParamInfo mpi) {
-			for (HasFormData h : mpi.getAnnotations(HasFormData.class)) {
+			String n = null;
+			for (HasFormData h : mpi.getAnnotationsParentFirst(HasFormData.class)) {
 				if (! h.name().isEmpty())
-					return h.name();
+					n = h.name();
 				if (! h.value().isEmpty())
-					return h.value();
+					n = h.value();
 			}
-			throw new InternalServerError("@HasFormData used without name or value on method parameter ''{o}''.", mpi);
+			if (n == null)
+				throw new InternalServerError("@HasFormData used without name or value on method parameter ''{o}''.", mpi);
+			return n;
 		}
 
 		@Override /* RestMethodParam */
@@ -521,13 +542,16 @@ class RestParamDefaults {
 		}
 
 		private static String getName(ParamInfo mpi) {
-			for (HasQuery h : mpi.getAnnotations(HasQuery.class)) {
+			String n = null;
+			for (HasQuery h : mpi.getAnnotationsParentFirst(HasQuery.class)) {
 				if (! h.name().isEmpty())
-					return h.name();
+					n = h.name();
 				if (! h.value().isEmpty())
-					return h.value();
+					n = h.value();
 			}
-			throw new InternalServerError("@HasQuery used without name or value on method parameter ''{0}''.", mpi);
+			if (n == null)
+				throw new InternalServerError("@HasQuery used without name or value on method parameter ''{0}''.", mpi);
+			return n;
 		}
 
 		@Override /* RestMethodParam */

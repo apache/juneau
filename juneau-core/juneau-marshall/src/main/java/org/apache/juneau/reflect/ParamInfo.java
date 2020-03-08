@@ -174,18 +174,8 @@ public final class ParamInfo {
 	 * <p>
 	 * Searches all methods with the same signature on the parent classes or interfaces
 	 * and the return type on the method.
-	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
-	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return appendAnnotations(new ArrayList<>(), a, false);
-	}
-
-	/**
-	 * Identical to {@link #getAnnotations(Class)} but returns the list in reverse (parent-to-child) order.
+	 * <p>
+	 * Results are in parent-to-child order.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
@@ -193,11 +183,11 @@ public final class ParamInfo {
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
 	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
-		return appendAnnotations(new ArrayList<>(), a, true);
+		return appendAnnotationsParentFirst(new ArrayList<>(), a, true);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
+	private <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a, boolean parentFirst) {
 		if (eInfo.isConstructor) {
 			ClassInfo ci = eInfo.getParamType(index).resolved();
 			Annotation[] annotations = eInfo.getParameterAnnotations(index);

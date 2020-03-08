@@ -223,29 +223,6 @@ public class ParamInfoTest {
 	}
 
 	@Test
-	public void getAnnotations() throws Exception {
-		check("@CA(5),@CA(1),@CA(2),@CA(3),@CA(4)", cb_a1.getAnnotations(CA.class));
-		check("@CA(5),@CA(1),@CA(2),@CA(3),@CA(4)", cb_a2.getAnnotations(CA.class));
-		check("@CA(5),@CA(1),@CA(2),@CA(3),@CA(4)", cc_a1.getAnnotations(CA.class));
-		check("@CA(6),@CA(5),@CA(1),@CA(2),@CA(3),@CA(4)", cc_a2.getAnnotations(CA.class));
-	}
-
-	@Test
-	public void getAnnotations_notFound() throws Exception {
-		check("", cb_a1.getAnnotations(DA.class));
-	}
-
-	@Test
-	public void getAnnotations_constructor() throws Exception {
-		check("@CA(9),@CA(1),@CA(2),@CA(3),@CA(4)", cc_cc.getAnnotations(CA.class));
-	}
-
-	@Test
-	public void getAnnotations_notFound_constructor() throws Exception {
-		check("", cc_cc.getAnnotations(DA.class));
-	}
-
-	@Test
 	public void getAnnotationsParentFirst() throws Exception {
 		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", cb_a1.getAnnotationsParentFirst(CA.class));
 		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", cb_a2.getAnnotationsParentFirst(CA.class));
@@ -343,17 +320,6 @@ public class ParamInfoTest {
 	static ParamInfo
 		db_a1 = db.getMethod("a1", D1.class).getParam(0),
 		dc_a1 = dc.getMethod("a1", D1.class).getParam(0);
-
-	@Test
-	public void getAnnotations_inherited() throws Exception {
-		check("@DA(0),@DA(1),@DA(2),@DA(3),@DA(4)", db_a1.getAnnotations(DA.class));
-		check("@DA(5),@DA(0),@DA(1),@DA(2),@DA(3),@DA(4)", dc_a1.getAnnotations(DA.class));
-	}
-
-	@Test
-	public void getAnnotations_inherited_notFound() throws Exception {
-		check("", db_a1.getAnnotations(CA.class));
-	}
 
 	@Test
 	public void getAnnotationsParentFirst_inherited() throws Exception {
