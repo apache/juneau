@@ -263,6 +263,36 @@ public class ReflectionMap<V> {
 	}
 
 	/**
+	 * Finds all values in this map that matches the specified class.
+	 *
+	 * @param c The class to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Class<?> c, Class<? extends V> ofType) {
+		return appendAll(c, ofType, null);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified class.
+	 *
+	 * @param c The class to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @param l The list to append values to.  Can be <jk>null</jk>.
+	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
+	 */
+	public List<V> appendAll(Class<?> c, Class<? extends V> ofType, List<V> l) {
+		if (l == null)
+			l = AList.create();
+		if (! noClassEntries)
+			for (ClassEntry<V> e : classEntries)
+				if (e.matches(c))
+					if (ofType == null || ofType.isInstance(e.value))
+						l.add(e.value);
+		return l;
+	}
+
+	/**
 	 * Finds first value in this map that matches the specified method.
 	 *
 	 * @param m The method to test for.
@@ -276,6 +306,36 @@ public class ReflectionMap<V> {
 					if (ofType == null || ofType.isInstance(e.value))
 						return Optional.of(e.value);
 		return Optional.empty();
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified method.
+	 *
+	 * @param m The method to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Method m, Class<? extends V> ofType) {
+		return appendAll(m, ofType, null);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified method.
+	 *
+	 * @param m The method to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @param l The list to append values to.  Can be <jk>null</jk>.
+	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
+	 */
+	public List<V> appendAll(Method m, Class<? extends V> ofType, List<V> l) {
+		if (l == null)
+			l = AList.create();
+		if (! noMethodEntries)
+			for (MethodEntry<V> e : methodEntries)
+				if (e.matches(m))
+					if (ofType == null || ofType.isInstance(e.value))
+						l.add(e.value);
+		return l;
 	}
 
 	/**
@@ -295,6 +355,36 @@ public class ReflectionMap<V> {
 	}
 
 	/**
+	 * Finds all values in this map that matches the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Field f, Class<? extends V> ofType) {
+		return appendAll(f, ofType, null);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @param l The list to append values to.  Can be <jk>null</jk>.
+	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
+	 */
+	public List<V> appendAll(Field f, Class<? extends V> ofType, List<V> l) {
+		if (l == null)
+			l = AList.create();
+		if (! noFieldEntries)
+			for (FieldEntry<V> e : fieldEntries)
+				if (e.matches(f))
+					if (ofType == null || ofType.isInstance(e.value))
+						l.add(e.value);
+		return l == null ? new ArrayList<>(0) : l;
+	}
+
+	/**
 	 * Finds first value in this map that matches the specified constructor.
 	 *
 	 * @param c The constructor to test for.
@@ -308,6 +398,36 @@ public class ReflectionMap<V> {
 					if (ofType == null || ofType.isInstance(e.value))
 						return Optional.of(e.value);
 		return Optional.empty();
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Constructor<?> c, Class<? extends V> ofType) {
+		return appendAll(c, ofType, null);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @param l The list to append values to.  Can be <jk>null</jk>.
+	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
+	 */
+	public List<V> appendAll(Constructor<?> c, Class<? extends V> ofType, List<V> l) {
+		if (l == null)
+			l = AList.create();
+		if (! noConstructorEntries)
+			for (ConstructorEntry<V> e : constructorEntries)
+				if (e.matches(c))
+					if (ofType == null || ofType.isInstance(e.value))
+						l.add(e.value);
+		return l;
 	}
 
 	static class ClassEntry<V> {

@@ -3228,24 +3228,33 @@ public class BeanContext extends Context implements MetaProvider {
 
 	private static final boolean DISABLE_ANNOTATION_CACHING = ! Boolean.getBoolean("juneau.disableAnnotationCaching");
 
-	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Optional<Annotation>> classAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Optional<Annotation>> declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Method,Class<? extends Annotation>,Optional<Annotation>> methodAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Field,Class<? extends Annotation>,Optional<Annotation>> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,Optional<Annotation>> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,List<Annotation>> classAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,List<Annotation>> declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Method,Class<? extends Annotation>,List<Annotation>> methodAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Field,Class<? extends Annotation>,List<Annotation>> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,List<Annotation>> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c) {
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Class<?> c) {
 		if (a == null || c == null)
-			return null;
-		if (DISABLE_ANNOTATION_CACHING)
-			return (A)annotations.find(c, a).orElse(c.getAnnotation(a));
-		Optional<Annotation> aa = classAnnotationCache.get(c, a);
+			return emptyList();
+		List<Annotation> aa = classAnnotationCache.get(c, a);
 		if (aa == null) {
-			aa = Optional.ofNullable((A)annotations.find(c, a).orElse(c.getAnnotation(a)));
+			A x = c.getAnnotation(a);
+			List<Annotation> l = new ArrayList<>(x == null ? 0 : 1);
+			if (x != null)
+				l.add(x);
+			annotations.appendAll(c, a, l);
+			aa = unmodifiableList(l);
 			classAnnotationCache.put(c, a, aa);
 		}
-		return (A)aa.orElse(null);
+		return (List<A>)aa;
+	}
+
+	@Override
+	public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c) {
+		List<A> aa = getAnnotations(a, c);
+		return aa.isEmpty() ? null : aa.get(0);
 	}
 
 	/**
@@ -3256,22 +3265,36 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @param c The class to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, ClassInfo c) {
+		return getAnnotations(a, c == null ? null : c.inner());
+	}
+
 	public <A extends Annotation> A getAnnotation(Class<A> a, ClassInfo c) {
-		return getAnnotation(a, c == null ? null : c.inner());
+		List<A> aa = getAnnotations(a, c);
+		return aa.isEmpty() ? null : aa.get(0);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c) {
+	public <A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, Class<?> c) {
 		if (a == null || c == null)
-			return null;
-		if (DISABLE_ANNOTATION_CACHING)
-			return (A)annotations.find(c, a).orElse(c.getDeclaredAnnotation(a));
-		Optional<Annotation> aa = declaredClassAnnotationCache.get(c, a);
+			return emptyList();
+		List<Annotation> aa = declaredClassAnnotationCache.get(c, a);
 		if (aa == null) {
-			aa =  Optional.ofNullable((A)annotations.find(c, a).orElse(c.getDeclaredAnnotation(a)));
+			A x = c.getDeclaredAnnotation(a);
+			List<Annotation> l = new ArrayList<>(x == null ? 0 : 1);
+			if (x != null)
+				l.add(x);
+			annotations.appendAll(c, a, l);
+			aa = unmodifiableList(l);
 			declaredClassAnnotationCache.put(c, a, aa);
 		}
-		return (A)aa.orElse(null);
+		return (List<A>)aa;
+	}
+
+	@Override
+	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c) {
+		List<A> aa = getDeclaredAnnotations(a, c);
+		return aa.isEmpty() ? null : aa.get(0);
 	}
 
 	/**
@@ -3282,22 +3305,36 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @param c The class to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
+	public <A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, ClassInfo c) {
+		return getDeclaredAnnotations(a, c == null ? null : c.inner());
+	}
+
 	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, ClassInfo c) {
-		return getDeclaredAnnotation(a, c == null ? null : c.inner());
+		List<A> aa = getDeclaredAnnotations(a, c);
+		return aa.isEmpty() ? null : aa.get(0);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> a, Method m) {
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Method m) {
 		if (a == null || m == null)
-			return null;
-		if (DISABLE_ANNOTATION_CACHING)
-			return (A)annotations.find(m, a).orElse(m.getAnnotation(a));
-		Optional<Annotation> aa = methodAnnotationCache.get(m, a);
+			return emptyList();
+		List<Annotation> aa = methodAnnotationCache.get(m, a);
 		if (aa == null) {
-			aa =  Optional.ofNullable((A)annotations.find(m, a).orElse(m.getAnnotation(a)));
+			A x = m.getAnnotation(a);
+			List<Annotation> l = new ArrayList<>(x == null ? 0 : 1);
+			if (x != null)
+				l.add(x);
+			annotations.appendAll(m, a, l);
+			aa = unmodifiableList(l);
 			methodAnnotationCache.put(m, a, aa);
 		}
-		return (A)aa.orElse(null);
+		return (List<A>)aa;
+	}
+
+	@Override
+	public <A extends Annotation> A getAnnotation(Class<A> a, Method m) {
+		List<A> aa = getAnnotations(a, m);
+		return aa.isEmpty() ? null : aa.get(0);
 	}
 
 	/**
@@ -3308,22 +3345,36 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @param m The method to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, MethodInfo m) {
+		return getAnnotations(a, m == null ? null : m.inner());
+	}
+
 	public <A extends Annotation> A getAnnotation(Class<A> a, MethodInfo m) {
-		return getAnnotation(a, m == null ? null : m.inner());
+		List<A> aa = getAnnotations(a, m);
+		return aa.isEmpty() ? null : aa.get(0);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> a, Field f) {
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Field f) {
 		if (a == null || f == null)
-			return null;
-		if (DISABLE_ANNOTATION_CACHING)
-			return (A)annotations.find(f, a).orElse(f.getAnnotation(a));
-		Optional<Annotation> aa = fieldAnnotationCache.get(f, a);
+			return emptyList();
+		List<Annotation> aa = fieldAnnotationCache.get(f, a);
 		if (aa == null) {
-			aa =  Optional.ofNullable((A)annotations.find(f, a).orElse(f.getAnnotation(a)));
+			A x = f.getAnnotation(a);
+			List<Annotation> l = new ArrayList<>(x == null ? 0 : 1);
+			if (x != null)
+				l.add(x);
+			annotations.appendAll(f, a, l);
+			aa = unmodifiableList(l);
 			fieldAnnotationCache.put(f, a, aa);
 		}
-		return (A)aa.orElse(null);
+		return (List<A>)aa;
+	}
+
+	@Override
+	public <A extends Annotation> A getAnnotation(Class<A> a, Field f) {
+		List<A> aa = getAnnotations(a, f);
+		return aa.isEmpty() ? null : aa.get(0);
 	}
 
 	/**
@@ -3334,22 +3385,36 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @param f The field to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, FieldInfo f) {
+		return getAnnotations(a, f == null ? null: f.inner());
+	}
+
 	public <A extends Annotation> A getAnnotation(Class<A> a, FieldInfo f) {
-		return getAnnotation(a, f == null ? null: f.inner());
+		List<A> aa = getAnnotations(a, f);
+		return aa.isEmpty() ? null : aa.get(0);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c) {
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Constructor<?> c) {
 		if (a == null || c == null)
-			return null;
-		if (DISABLE_ANNOTATION_CACHING)
-			return (A)annotations.find(c, a).orElse(c.getAnnotation(a));
-		Optional<Annotation> aa = constructorAnnotationCache.get(c, a);
+			return emptyList();
+		List<Annotation> aa = constructorAnnotationCache.get(c, a);
 		if (aa == null) {
-			aa =  Optional.ofNullable((A)annotations.find(c, a).orElse(c.getAnnotation(a)));
+			A x = c.getAnnotation(a);
+			List<Annotation> l = new ArrayList<>(x == null ? 0 : 1);
+			if (x != null)
+				l.add(x);
+			annotations.appendAll(c, a, l);
+			aa = unmodifiableList(l);
 			constructorAnnotationCache.put(c, a, aa);
 		}
-		return (A)aa.orElse(null);
+		return (List<A>)aa;
+	}
+
+	@Override
+	public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c) {
+		List<A> aa = getAnnotations(a, c);
+		return aa.isEmpty() ? null : aa.get(0);
 	}
 
 	/**
@@ -3360,8 +3425,13 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @param c The constructor to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, ConstructorInfo c) {
+		return getAnnotations(a, c == null ? null : c.inner());
+	}
+
 	public <A extends Annotation> A getAnnotation(Class<A> a, ConstructorInfo c) {
-		return getAnnotation(a, c == null ? null : c.inner());
+		List<A> aa = getAnnotations(a, c);
+		return aa.isEmpty() ? null : aa.get(0);
 	}
 
 	/**
@@ -3372,7 +3442,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified class.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Class<?> c) {
-		return getAnnotation(a, c) != null;
+		return getAnnotations(a, c).size() > 0;
 	}
 
 	/**
@@ -3383,7 +3453,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified class.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, ClassInfo c) {
-		return getAnnotation(a, c == null ? null : c.inner()) != null;
+		return getAnnotations(a, c == null ? null : c.inner()).size() > 0;
 	}
 
 	/**
@@ -3394,7 +3464,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified class.
 	 */
 	public <A extends Annotation> boolean hasDeclaredAnnotation(Class<A> a, Class<?> c) {
-		return getDeclaredAnnotation(a, c) != null;
+		return getDeclaredAnnotations(a, c).size() > 0;
 	}
 
 	/**
@@ -3405,7 +3475,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified class.
 	 */
 	public <A extends Annotation> boolean hasDeclaredAnnotation(Class<A> a, ClassInfo c) {
-		return getDeclaredAnnotation(a, c == null ? null : c.inner()) != null;
+		return getDeclaredAnnotations(a, c == null ? null : c.inner()).size() > 0;
 	}
 
 	/**
@@ -3416,7 +3486,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified method.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Method m) {
-		return getAnnotation(a, m) != null;
+		return getAnnotations(a, m).size() > 0;
 	}
 
 	/**
@@ -3427,7 +3497,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified method.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, MethodInfo m) {
-		return getAnnotation(a, m == null ? null : m.inner()) != null;
+		return getAnnotations(a, m == null ? null : m.inner()).size() > 0;
 	}
 
 	/**
@@ -3438,7 +3508,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified field.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Field f) {
-		return getAnnotation(a, f) != null;
+		return getAnnotations(a, f).size() > 0;
 	}
 
 	/**
@@ -3449,7 +3519,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified field.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, FieldInfo f) {
-		return getAnnotation(a, f == null ? null : f.inner()) != null;
+		return getAnnotations(a, f == null ? null : f.inner()).size() > 0;
 	}
 
 	/**
@@ -3460,7 +3530,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified constructor.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Constructor<?> c) {
-		return getAnnotation(a, c) != null;
+		return getAnnotations(a, c).size() > 0;
 	}
 
 	/**
@@ -3471,7 +3541,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified constructor.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, ConstructorInfo c) {
-		return getAnnotation(a, c == null ? null : c.inner()) != null;
+		return getAnnotations(a, c == null ? null : c.inner()).size() > 0;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

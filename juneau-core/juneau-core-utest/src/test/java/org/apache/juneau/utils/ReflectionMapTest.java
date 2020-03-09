@@ -64,6 +64,18 @@ public class ReflectionMapTest {
 		assertFalse(A1_SIMPLE.find(c, Long.class).isPresent());
 		assertFalse(A1b_SIMPLE.find(c, Long.class).isPresent());
 		assertFalse(A1_FULL.find(c, Long.class).isPresent());
+
+		assertEquals(match_A1_SIMPLE, !A1_SIMPLE.findAll(c, null).isEmpty());
+		assertEquals(match_A1b_SIMPLE, !A1b_SIMPLE.findAll(c, null).isEmpty());
+		assertEquals(match_A1_FULL, !A1_FULL.findAll(c, null).isEmpty());
+
+		assertEquals(match_A1_SIMPLE, !A1_SIMPLE.findAll(c, Integer.class).isEmpty());
+		assertEquals(match_A1b_SIMPLE, !A1b_SIMPLE.findAll(c, Integer.class).isEmpty());
+		assertEquals(match_A1_FULL, !A1_FULL.findAll(c, Integer.class).isEmpty());
+
+		assertFalse(A1_SIMPLE.find(c, Long.class).isPresent());
+		assertFalse(A1b_SIMPLE.find(c, Long.class).isPresent());
+		assertFalse(A1_FULL.find(c, Long.class).isPresent());
 	}
 
 	@Test

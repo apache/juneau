@@ -14,6 +14,8 @@ package org.apache.juneau;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.*;
+import static java.util.Collections.*;
 
 /**
  * Parent interface for all class/method language-specific metadata providers.
@@ -26,28 +28,73 @@ public interface MetaProvider {
 	public static MetaProvider DEFAULT = new MetaProvider() {
 
 		@Override /* MetaProvider */
+		public <A extends Annotation> List<A> getAnnotations(Class<A> a, Class<?> c) {
+			if (a == null || c == null)
+				return emptyList();
+			A aa = c.getAnnotation(a);
+			return aa == null ? emptyList() : singletonList(aa);
+		}
+
+		@Override /* MetaProvider */
+		public <A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, Class<?> c) {
+			if (a == null || c == null)
+				return emptyList();
+			A aa = c.getDeclaredAnnotation(a);
+			return aa == null ? emptyList() : singletonList(aa);
+		}
+
+		@Override /* MetaProvider */
+		public <A extends Annotation> List<A> getAnnotations(Class<A> a, Method m) {
+			if (a == null || m == null)
+				return emptyList();
+			A aa = m.getAnnotation(a);
+			return aa == null ? emptyList() : singletonList(aa);
+		}
+
+		@Override /* MetaProvider */
+		public <A extends Annotation> List<A> getAnnotations(Class<A> a, Field f) {
+			if (a == null || f == null)
+				return emptyList();
+			A aa = f.getAnnotation(a);
+			return aa == null ? emptyList() : singletonList(aa);
+		}
+
+		@Override /* MetaProvider */
+		public <A extends Annotation> List<A> getAnnotations(Class<A> a, Constructor<?> c) {
+			if (a == null || c == null)
+				return emptyList();
+			A aa = c.getAnnotation(a);
+			return aa == null ? emptyList() : singletonList(aa);
+		}
+
+		@Override
 		public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c) {
-			return a == null || c == null ? null : c.getAnnotation(a);
+			List<A> l = getAnnotations(a, c);
+			return l.isEmpty() ? null : l.get(0);
 		}
 
-		@Override /* MetaProvider */
+		@Override
 		public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c) {
-			return a == null || c == null ? null : c.getDeclaredAnnotation(a);
+			List<A> l = getAnnotations(a, c);
+			return l.isEmpty() ? null : l.get(0);
 		}
 
-		@Override /* MetaProvider */
+		@Override
 		public <A extends Annotation> A getAnnotation(Class<A> a, Method m) {
-			return a == null || m == null ? null : m.getAnnotation(a);
+			List<A> l = getAnnotations(a, m);
+			return l.isEmpty() ? null : l.get(0);
 		}
 
-		@Override /* MetaProvider */
+		@Override
 		public <A extends Annotation> A getAnnotation(Class<A> a, Field f) {
-			return a == null || f == null ? null : f.getAnnotation(a);
+			List<A> l = getAnnotations(a, f);
+			return l.isEmpty() ? null : l.get(0);
 		}
 
-		@Override /* MetaProvider */
+		@Override
 		public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c) {
-			return a == null || c == null ? null : c.getAnnotation(a);
+			List<A> l = getAnnotations(a, c);
+			return l.isEmpty() ? null : l.get(0);
 		}
 	};
 
@@ -59,6 +106,9 @@ public interface MetaProvider {
 	 * @param c The class to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
+	<A extends Annotation> List<A> getAnnotations(Class<A> a, Class<?> c);
+
+	// TEMPORARY
 	<A extends Annotation> A getAnnotation(Class<A> a, Class<?> c);
 
 	/**
@@ -69,6 +119,9 @@ public interface MetaProvider {
 	 * @param c The class to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
+	<A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, Class<?> c);
+
+	// TEMPORARY
 	<A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c);
 
 	/**
@@ -79,6 +132,9 @@ public interface MetaProvider {
 	 * @param m The method to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
+	<A extends Annotation> List<A> getAnnotations(Class<A> a, Method m);
+
+	// TEMPORARY
 	<A extends Annotation> A getAnnotation(Class<A> a, Method m);
 
 	/**
@@ -89,6 +145,9 @@ public interface MetaProvider {
 	 * @param f The field to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
+	<A extends Annotation> List<A> getAnnotations(Class<A> a, Field f);
+
+	// TEMPORARY
 	<A extends Annotation> A getAnnotation(Class<A> a, Field f);
 
 	/**
@@ -99,5 +158,8 @@ public interface MetaProvider {
 	 * @param c The constructor to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
+	<A extends Annotation> List<A> getAnnotations(Class<A> a, Constructor<?> c);
+
+	// TEMPORARY
 	<A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c);
 }
