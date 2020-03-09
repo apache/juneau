@@ -3409,12 +3409,12 @@ public class BeanContext extends Context implements MetaProvider {
 		return (List<A>)aa;
 	}
 
-	@Override
-	public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c) {
-		List<A> aa = getAnnotations(a, c);
-		return aa.isEmpty() ? null : aa.get(0);
-	}
-
+//	@Override
+//	public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c) {
+//		List<A> aa = getAnnotations(a, c);
+//		return aa.isEmpty() ? null : aa.get(0);
+//	}
+//
 	/**
 	 * Finds the specified annotation on the specified constructor.
 	 *
