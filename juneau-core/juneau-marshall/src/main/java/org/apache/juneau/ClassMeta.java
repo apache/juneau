@@ -611,22 +611,23 @@ public final class ClassMeta<T> implements Type {
 			if (beanMeta != null && bc != null && bc.isUseInterfaceProxies() && innerClass.isInterface())
 				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
 
-			Bean b = bc == null ? null : bc.getAnnotation(Bean.class, c);
-			if (b != null) {
-				if (b.beanDictionary().length != 0)
-					beanRegistry = new BeanRegistry(bc, null, b.beanDictionary());
-				if (b.dictionary().length != 0)
-					beanRegistry = new BeanRegistry(bc, null, b.dictionary());
+			if (bc != null) {
+				for (Bean b : bc.getAnnotations(Bean.class, c)) {
+					if (b.beanDictionary().length != 0)
+						beanRegistry = new BeanRegistry(bc, null, b.beanDictionary());
+					if (b.dictionary().length != 0)
+						beanRegistry = new BeanRegistry(bc, null, b.dictionary());
 
-				// This could be a non-bean POJO with a type name.
-				if (dictionaryName == null && ! b.typeName().isEmpty())
-					dictionaryName = b.typeName();
+					// This could be a non-bean POJO with a type name.
+					if (dictionaryName == null && ! b.typeName().isEmpty())
+						dictionaryName = b.typeName();
+				}
 			}
 
-			Example e = bc == null ? null : bc.getAnnotation(Example.class, c);
-
-			if (example == null && e != null && ! e.value().isEmpty())
-				example = e.value();
+			if (example == null && bc != null)
+				for (Example e : bc.getAnnotations(Example.class, c))
+					if (! e.value().isEmpty())
+						example = e.value();
 
 			if (example == null) {
 				switch(cc) {
@@ -695,13 +696,14 @@ public final class ClassMeta<T> implements Type {
 		}
 
 		private void findPojoSwaps(List<PojoSwap> l, BeanContext bc) {
-			Swap swap = bc == null ? null : bc.getAnnotation(Swap.class, innerClass);
-			if (swap != null)
-				l.add(createPojoSwap(swap));
-			Swaps swaps = bc == null ? null : bc.getAnnotation(Swaps.class, innerClass);
-			if (swaps != null)
-				for (Swap s : swaps.value())
-					l.add(createPojoSwap(s));
+
+			if (bc != null) {
+				for (Swap swap : bc.getAnnotations(Swap.class, innerClass))
+					l.add(createPojoSwap(swap));
+				for (Swaps swaps : bc.getAnnotations(Swaps.class, innerClass))
+					for (Swap swap : swaps.value())
+						l.add(createPojoSwap(swap));
+			}
 
 			PojoSwap defaultSwap = DefaultSwaps.find(ci);
 			if (defaultSwap == null)

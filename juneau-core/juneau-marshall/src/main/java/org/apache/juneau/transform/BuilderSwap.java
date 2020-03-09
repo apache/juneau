@@ -188,10 +188,9 @@ public class BuilderSwap<T,B> {
 		ConstructorInfo pojoConstructor = null;
 		ConstructorInfo builderConstructor;
 
-		org.apache.juneau.annotation.Builder b = bc.getAnnotation(org.apache.juneau.annotation.Builder.class, pojoClass);
-
-		if (b != null && b.value() != Null.class)
-			builderClass = b.value();
+		for (org.apache.juneau.annotation.Builder b : bc.getAnnotations(org.apache.juneau.annotation.Builder.class, pojoClass))
+			if (b.value() != Null.class)
+				builderClass = b.value();
 
 		ClassInfo pci = ClassInfo.of(pojoClass);
 
