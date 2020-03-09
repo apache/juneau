@@ -949,7 +949,7 @@ public final class ClassInfo {
 		}
 		return allFields;
 	}
-	
+
 	private FieldInfo[] _getAllFieldsParentFirst() {
 		if (allFieldsParentFirst == null) {
 			List<FieldInfo> l = new ArrayList<>();
@@ -1038,9 +1038,9 @@ public final class ClassInfo {
 	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a, MetaProvider mp) {
-		return mp.getDeclaredAnnotation(a, c);
-	}
+//	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a, MetaProvider mp) {
+//		return mp.getDeclaredAnnotation(a, c);
+//	}
 
 	/**
 	 * Returns the specified annotation only if it's been declared on the package of this class.
@@ -1199,9 +1199,11 @@ public final class ClassInfo {
 	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, MetaProvider mp) {
 		addIfNotNull(l, getPackageAnnotation(a));
 		for (ClassInfo ci : getInterfacesParentFirst())
-			addIfNotNull(l, mp.getDeclaredAnnotation(a, ci.inner()));
+			for (T t : mp.getDeclaredAnnotations(a, ci.inner()))
+				l.add(t);
 		for (ClassInfo ci : getParentsParentFirst())
-			addIfNotNull(l, mp.getDeclaredAnnotation(a, ci.inner()));
+			for (T t : mp.getDeclaredAnnotations(a, ci.inner()))
+				l.add(t);
 		return l;
 	}
 
@@ -1275,21 +1277,21 @@ public final class ClassInfo {
 		if (a == null)
 			return null;
 
-		T t2 = mp.getDeclaredAnnotation(a, c);
-		if (t2 != null)
-			return t2;
+		for (T t : mp.getDeclaredAnnotations(a, c))
+			return t;
 
+		T t;
 		ClassInfo sci = getParent();
 		if (sci != null) {
-			t2 = sci.getLastAnnotation(a, mp);
-			if (t2 != null)
-				return t2;
+			t = sci.getLastAnnotation(a, mp);
+			if (t != null)
+				return t;
 		}
 
 		for (ClassInfo c2 : getInterfacesChildFirst()) {
-			t2 = c2.getLastAnnotation(a, mp);
-			if (t2 != null)
-				return t2;
+			t = c2.getLastAnnotation(a, mp);
+			if (t != null)
+				return t;
 		}
 
 		return null;

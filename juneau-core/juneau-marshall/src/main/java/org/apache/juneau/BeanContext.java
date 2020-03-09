@@ -3291,11 +3291,11 @@ public class BeanContext extends Context implements MetaProvider {
 		return (List<A>)aa;
 	}
 
-	@Override
-	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c) {
-		List<A> aa = getDeclaredAnnotations(a, c);
-		return aa.isEmpty() ? null : aa.get(0);
-	}
+//	@Override
+//	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c) {
+//		List<A> aa = getDeclaredAnnotations(a, c);
+//		return aa.isEmpty() ? null : aa.get(0);
+//	}
 
 	/**
 	 * Finds the specified declared annotation on the specified class.

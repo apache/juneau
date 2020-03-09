@@ -2059,9 +2059,9 @@ public final class ClassMeta<T> implements Type {
 	 * @param a The annotation to retrieve.
 	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.
 	 */
-	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a) {
-		return info.getDeclaredAnnotation(a, beanContext == null ? BeanContext.DEFAULT : beanContext);
-	}
+//	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a) {
+//		return info.getDeclaredAnnotation(a, beanContext == null ? BeanContext.DEFAULT : beanContext);
+//	}
 
 	/**
 	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
