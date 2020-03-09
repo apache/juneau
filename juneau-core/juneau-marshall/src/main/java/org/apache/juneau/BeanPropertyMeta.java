@@ -205,16 +205,16 @@ public final class BeanPropertyMeta {
 
 			if (getter != null) {
 				BeanProperty px = MethodInfo.of(getter).getLastAnnotation(BeanProperty.class);
-				Beanp p = bc.getAnnotation(Beanp.class, getter);
+				List<Beanp> lp = bc.getAnnotations(Beanp.class, getter);
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(px, p, getter.getGenericReturnType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(px, last(lp), getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(org.apache.juneau.annotation.URI.class, getter));
 				if (px != null) {
 					if (properties != null && ! px.properties().isEmpty())
 						properties = split(px.properties());
 					bdClasses.addAll(Arrays.asList(px.beanDictionary()));
 				}
-				if (p != null) {
+				for (Beanp p : lp) {
 					if (properties != null && ! p.properties().isEmpty())
 						properties = split(p.properties());
 					bdClasses.addAll(Arrays.asList(p.dictionary()));
@@ -223,17 +223,15 @@ public final class BeanPropertyMeta {
 					if (! p.wo().isEmpty())
 						writeOnly = Boolean.valueOf(p.wo());
 				}
-				Swap s = bc.getAnnotation(Swap.class, getter);
-				if (s != null && swap == null) {
+				for (Swap s : bc.getAnnotations(Swap.class, getter))
 					swap = getPropertyPojoSwap(s);
-				}
 			}
 
 			if (setter != null) {
 				BeanProperty px = MethodInfo.of(setter).getLastAnnotation(BeanProperty.class);
-				Beanp p = bc.getAnnotation(Beanp.class, setter);
+				List<Beanp> lp = bc.getAnnotations(Beanp.class, setter);
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(px, p, setter.getGenericParameterTypes()[0], typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(px, last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(org.apache.juneau.annotation.URI.class, setter));
 				if (px != null) {
 					if (swap == null)
@@ -242,7 +240,7 @@ public final class BeanPropertyMeta {
 						properties = split(px.properties());
 					bdClasses.addAll(Arrays.asList(px.beanDictionary()));
 				}
-				if (p != null) {
+				for (Beanp p : lp) {
 					if (swap == null)
 						swap = getPropertyPojoSwap(p);
 					if (properties != null && ! p.properties().isEmpty())
@@ -253,10 +251,8 @@ public final class BeanPropertyMeta {
 					if (! p.wo().isEmpty())
 						writeOnly = Boolean.valueOf(p.wo());
 				}
-				Swap s = bc.getAnnotation(Swap.class, setter);
-				if (s != null && swap == null) {
+				for (Swap s : bc.getAnnotations(Swap.class, setter))
 					swap = getPropertyPojoSwap(s);
-				}
 			}
 
 			if (rawTypeMeta == null)
@@ -1139,15 +1135,15 @@ public final class BeanPropertyMeta {
 			ClassInfo.of(field.getType()).appendAnnotations(l, a, bc);
 		}
 		if (getter != null) {
-			addIfNotNull(l, bc.getAnnotation(a, getter));
+			l.addAll(bc.getAnnotations(a, getter));
 			ClassInfo.of(getter.getReturnType()).appendAnnotations(l, a, bc);
 		}
 		if (setter != null) {
-			addIfNotNull(l, bc.getAnnotation(a, setter));
+			l.addAll(bc.getAnnotations(a, setter));
 			ClassInfo.of(setter.getReturnType()).appendAnnotations(l, a, bc);
 		}
 		if (extraKeys != null) {
-			addIfNotNull(l, bc.getAnnotation(a, extraKeys));
+			l.addAll(bc.getAnnotations(a, extraKeys));
 			ClassInfo.of(extraKeys.getReturnType()).appendAnnotations(l, a, bc);
 		}
 
@@ -1166,9 +1162,9 @@ public final class BeanPropertyMeta {
 		BeanContext bc = beanContext;
 		if (a == null)
 			return l;
-		addIfNotNull(l, bc.getAnnotation(a, field));
-		addIfNotNull(l, bc.getAnnotation(a, getter));
-		addIfNotNull(l, bc.getAnnotation(a, setter));
+		l.addAll(bc.getAnnotations(a, field));
+		l.addAll(bc.getAnnotations(a, getter));
+		l.addAll(bc.getAnnotations(a, setter));
 		return l;
 	}
 

@@ -536,4 +536,17 @@ public final class CollectionUtils {
 	public static <K,V> Map<K,V> emptyMap() {
 		return Collections.emptyMap();
 	}
+
+	/**
+	 * Returns the last entry in a list.
+	 *
+	 * @param <T> The element type.
+	 * @param l The list.
+	 * @return The last element, or <jk>null</jk> if the list is <jk>null</jk> or empty.
+	 */
+	public static <T> T last(List<T> l) {
+		if (l == null || l.isEmpty())
+			return null;
+		return l.get(l.size()-1);
+	}
 }

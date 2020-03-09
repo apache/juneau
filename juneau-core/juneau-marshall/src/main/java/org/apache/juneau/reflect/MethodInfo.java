@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.beans.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -189,7 +191,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		if (a == null)
 			return null;
 		for (Method m2 : getMatching()) {
-			T t = mp.getAnnotation(a, m2);
+			T t = last(mp.getAnnotations(a, m2));
 			if (t != null)
 				return t;
 		}
