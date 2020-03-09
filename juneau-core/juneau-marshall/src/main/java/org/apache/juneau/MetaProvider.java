@@ -69,52 +69,52 @@ public interface MetaProvider {
 	};
 
 	/**
-	 * Finds the specified annotation on the specified class.
+	 * Finds the specified annotations on the specified class.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param c The class to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
 	 */
 	<A extends Annotation> List<A> getAnnotations(Class<A> a, Class<?> c);
 
 	/**
-	 * Finds the specified declared annotation on the specified class.
+	 * Finds the specified declared annotations on the specified class.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param c The class to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
 	 */
 	<A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, Class<?> c);
 
 	/**
-	 * Finds the specified annotation on the specified method.
+	 * Finds the specified annotations on the specified method.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param m The method to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
 	 */
 	<A extends Annotation> List<A> getAnnotations(Class<A> a, Method m);
 
 	/**
-	 * Finds the specified annotation on the specified field.
+	 * Finds the specified annotations on the specified field.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param f The field to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
 	 */
 	<A extends Annotation> List<A> getAnnotations(Class<A> a, Field f);
 
 	/**
-	 * Finds the specified annotation on the specified constructor.
+	 * Finds the specified annotations on the specified constructor.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param c The constructor to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
 	 */
 	<A extends Annotation> List<A> getAnnotations(Class<A> a, Constructor<?> c);
 }

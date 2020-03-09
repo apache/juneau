@@ -242,7 +242,10 @@ public class BeanMeta<T> {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
-						constructorArgs = split(ctx.getAnnotation(Beanc.class, x).properties());
+						constructorArgs = new String[0];
+						for (Beanc bc : ctx.getAnnotations(Beanc.class, x))
+							if (! bc.properties().isEmpty())
+								constructorArgs = split(bc.properties());
 						if (constructorArgs.length != x.getParamCount()) {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -266,7 +269,10 @@ public class BeanMeta<T> {
 							if (constructor != null)
 								throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 							constructor = x;
-							constructorArgs = split(ctx.getAnnotation(Beanc.class, x).properties());
+							constructorArgs = new String[0];
+							for (Beanc bc : ctx.getAnnotations(Beanc.class, x))
+								if (! bc.properties().isEmpty())
+									constructorArgs = split(bc.properties());
 							if (constructorArgs.length != x.getParamCount()) {
 								if (constructorArgs.length != 0)
 									throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -676,7 +682,7 @@ public class BeanMeta<T> {
 				if (m.getParamCount() > 2)
 					continue;
 
-				BeanIgnore bi = ctx.getAnnotation(BeanIgnore.class, m);
+				BeanIgnore bi = ctx.getLastAnnotation(BeanIgnore.class, m);
 				if (bi != null)
 					continue;
 

@@ -3234,6 +3234,14 @@ public class BeanContext extends Context implements MetaProvider {
 	private TwoKeyConcurrentCache<Field,Class<? extends Annotation>,List<Annotation>> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
 	private TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,List<Annotation>> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
 
+	/**
+	 * Finds the specified annotations on the specified class.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param c The class to search on.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
+	 */
 	@Override /* MetaProvider */
 	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Class<?> c) {
 		if (a == null || c == null)
@@ -3251,27 +3259,50 @@ public class BeanContext extends Context implements MetaProvider {
 		return (List<A>)aa;
 	}
 
-	public <A extends Annotation> A getLastAnnotation(Class<A> a, Class<?> c) {
-		return last(getAnnotations(a, c));
+	/**
+	 * Finds the specified annotations on the specified class.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param c The class to search on.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
+	 */
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, ClassInfo c) {
+		return getAnnotations(a, c == null ? null : c.inner());
 	}
 
 	/**
-	 * Finds the specified annotation on the specified class.
+	 * Finds the last specified annotations on the specified class.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param c The class to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, ClassInfo c) {
-		return getAnnotations(a, c == null ? null : c.inner());
+	public <A extends Annotation> A getLastAnnotation(Class<A> a, Class<?> c) {
+		return last(getAnnotations(a, c));
 	}
 
-	public <A extends Annotation> A getAnnotation(Class<A> a, ClassInfo c) {
-		List<A> aa = getAnnotations(a, c);
-		return aa.isEmpty() ? null : aa.get(0);
+	/**
+	 * Finds the last specified annotations on the specified class.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param c The class to search on.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <A extends Annotation> A getLastAnnotation(Class<A> a, ClassInfo c) {
+		return last(getAnnotations(a, c));
 	}
 
+	/**
+	 * Finds the specified declared annotations on the specified class.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param c The class to search on.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
+	 */
 	@Override /* MetaProvider */
 	public <A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, Class<?> c) {
 		if (a == null || c == null)
@@ -3289,29 +3320,51 @@ public class BeanContext extends Context implements MetaProvider {
 		return (List<A>)aa;
 	}
 
-//	@Override
-//	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c) {
-//		List<A> aa = getDeclaredAnnotations(a, c);
-//		return aa.isEmpty() ? null : aa.get(0);
-//	}
-
 	/**
 	 * Finds the specified declared annotation on the specified class.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param c The class to search on.
-	 * @return The annotation, or <jk>null</jk> if not found.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
 	 */
 	public <A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, ClassInfo c) {
 		return getDeclaredAnnotations(a, c == null ? null : c.inner());
 	}
 
-	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, ClassInfo c) {
-		List<A> aa = getDeclaredAnnotations(a, c);
-		return aa.isEmpty() ? null : aa.get(0);
+
+	/**
+	 * Finds the last specified declared annotations on the specified class.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param c The class to search on.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <A extends Annotation> A getLastDeclaredAnnotation(Class<A> a, Class<?> c) {
+		return last(getDeclaredAnnotations(a, c));
 	}
 
+	/**
+	 * Finds the last specified declared annotations on the specified class.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param c The class to search on.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <A extends Annotation> A getLastDeclaredAnnotation(Class<A> a, ClassInfo c) {
+		return last(getDeclaredAnnotations(a, c));
+	}
+
+	/**
+	 * Finds the specified annotations on the specified method.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param m The method to search on.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
+	 */
 	@Override /* MetaProvider */
 	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Method m) {
 		if (a == null || m == null)
@@ -3329,29 +3382,50 @@ public class BeanContext extends Context implements MetaProvider {
 		return (List<A>)aa;
 	}
 
-//	@Override
-//	public <A extends Annotation> A getAnnotation(Class<A> a, Method m) {
-//		List<A> aa = getAnnotations(a, m);
-//		return aa.isEmpty() ? null : aa.get(0);
-//	}
-//
 	/**
-	 * Finds the specified annotation on the specified method.
+	 * Finds the specified annotations on the specified method.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param m The method to search on.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
+	 */
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, MethodInfo m) {
+		return getAnnotations(a, m == null ? null : m.inner());
+	}
+
+	/**
+	 * Finds the last specified annotations on the specified method.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param m The method to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, MethodInfo m) {
-		return getAnnotations(a, m == null ? null : m.inner());
+	public <A extends Annotation> A getLastAnnotation(Class<A> a, Method m) {
+		return last(getAnnotations(a, m));
 	}
 
-	public <A extends Annotation> A getAnnotation(Class<A> a, MethodInfo m) {
-		List<A> aa = getAnnotations(a, m);
-		return aa.isEmpty() ? null : aa.get(0);
+	/**
+	 * Finds the last specified annotations on the specified method.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param m The method to search on.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <A extends Annotation> A getLastAnnotation(Class<A> a, MethodInfo m) {
+		return last(getAnnotations(a, m));
 	}
 
+	/**
+	 * Finds the specified annotations on the specified field.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param f The field to search on.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
+	 */
 	@Override /* MetaProvider */
 	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Field f) {
 		if (a == null || f == null)
@@ -3369,29 +3443,50 @@ public class BeanContext extends Context implements MetaProvider {
 		return (List<A>)aa;
 	}
 
-//	@Override
-//	public <A extends Annotation> A getAnnotation(Class<A> a, Field f) {
-//		List<A> aa = getAnnotations(a, f);
-//		return aa.isEmpty() ? null : aa.get(0);
-//	}
-//
 	/**
-	 * Finds the specified annotation on the specified field.
+	 * Finds the specified annotations on the specified field.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param f The field to search on.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
+	 */
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, FieldInfo f) {
+		return getAnnotations(a, f == null ? null: f.inner());
+	}
+
+	/**
+	 * Finds the last specified annotations on the specified field.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param f The field to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, FieldInfo f) {
-		return getAnnotations(a, f == null ? null: f.inner());
+	public <A extends Annotation> A getLastAnnotation(Class<A> a, Field f) {
+		return last(getAnnotations(a, f));
 	}
 
-	public <A extends Annotation> A getAnnotation(Class<A> a, FieldInfo f) {
-		List<A> aa = getAnnotations(a, f);
-		return aa.isEmpty() ? null : aa.get(0);
+	/**
+	 * Finds the last specified annotations on the specified field.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param f The field to search on.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <A extends Annotation> A getLastAnnotation(Class<A> a, FieldInfo f) {
+		return last(getAnnotations(a, f));
 	}
 
+	/**
+	 * Finds the specified annotations on the specified constructor.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param c The constructor to search on.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
+	 */
 	@Override /* MetaProvider */
 	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Constructor<?> c) {
 		if (a == null || c == null)
@@ -3409,27 +3504,40 @@ public class BeanContext extends Context implements MetaProvider {
 		return (List<A>)aa;
 	}
 
-//	@Override
-//	public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c) {
-//		List<A> aa = getAnnotations(a, c);
-//		return aa.isEmpty() ? null : aa.get(0);
-//	}
-//
 	/**
-	 * Finds the specified annotation on the specified constructor.
+	 * Finds the specified annotations on the specified constructor.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param c The constructor to search on.
+	 * @return The annotations in an unmodifiable list, or an empty list if not found.
+	 */
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a, ConstructorInfo c) {
+		return getAnnotations(a, c == null ? null : c.inner());
+	}
+
+	/**
+	 * Finds the last specified annotations on the specified constructor.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param c The constructor to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, ConstructorInfo c) {
-		return getAnnotations(a, c == null ? null : c.inner());
+	public <A extends Annotation> A getLastAnnotation(Class<A> a, Constructor<?> c) {
+		return last(getAnnotations(a, c));
 	}
 
-	public <A extends Annotation> A getAnnotation(Class<A> a, ConstructorInfo c) {
-		List<A> aa = getAnnotations(a, c);
-		return aa.isEmpty() ? null : aa.get(0);
+	/**
+	 * Finds the last specified annotations on the specified constructor.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param a The annotation type to find.
+	 * @param c The constructor to search on.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <A extends Annotation> A getLastAnnotation(Class<A> a, ConstructorInfo c) {
+		return last(getAnnotations(a, c));
 	}
 
 	/**
