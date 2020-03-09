@@ -3369,12 +3369,12 @@ public class BeanContext extends Context implements MetaProvider {
 		return (List<A>)aa;
 	}
 
-	@Override
-	public <A extends Annotation> A getAnnotation(Class<A> a, Field f) {
-		List<A> aa = getAnnotations(a, f);
-		return aa.isEmpty() ? null : aa.get(0);
-	}
-
+//	@Override
+//	public <A extends Annotation> A getAnnotation(Class<A> a, Field f) {
+//		List<A> aa = getAnnotations(a, f);
+//		return aa.isEmpty() ? null : aa.get(0);
+//	}
+//
 	/**
 	 * Finds the specified annotation on the specified field.
 	 *

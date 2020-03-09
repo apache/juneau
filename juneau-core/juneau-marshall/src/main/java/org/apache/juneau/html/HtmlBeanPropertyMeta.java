@@ -45,7 +45,8 @@ public final class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 		Builder b = new Builder();
 		if (bpm.getInnerField() != null)
-			b.findHtmlInfo(mp.getAnnotation(Html.class, bpm.getInnerField()));
+			for (Html html : mp.getAnnotations(Html.class, bpm.getInnerField()))
+				b.findHtmlInfo(html);
 		if (bpm.getGetter() != null)
 			for (Html html : mp.getAnnotations(Html.class, bpm.getGetter()))
 				b.findHtmlInfo(html);

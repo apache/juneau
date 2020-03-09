@@ -68,12 +68,6 @@ public interface MetaProvider {
 		}
 
 		@Override
-		public <A extends Annotation> A getAnnotation(Class<A> a, Field f) {
-			List<A> l = getAnnotations(a, f);
-			return l.isEmpty() ? null : l.get(0);
-		}
-
-		@Override
 		public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c) {
 			List<A> l = getAnnotations(a, c);
 			return l.isEmpty() ? null : l.get(0);
@@ -119,9 +113,6 @@ public interface MetaProvider {
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
 	<A extends Annotation> List<A> getAnnotations(Class<A> a, Field f);
-
-	// TEMPORARY
-	<A extends Annotation> A getAnnotation(Class<A> a, Field f);
 
 	/**
 	 * Finds the specified annotation on the specified constructor.

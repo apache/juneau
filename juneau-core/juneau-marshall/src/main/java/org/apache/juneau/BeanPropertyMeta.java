@@ -175,11 +175,11 @@ public final class BeanPropertyMeta {
 
 			if (innerField != null) {
 				BeanProperty px = innerField.getAnnotation(BeanProperty.class);
-				Beanp p = bc.getAnnotation(Beanp.class, innerField);
-				if (field != null || px != null || p != null) {
+				List<Beanp> lp = bc.getAnnotations(Beanp.class, innerField);
+				if (field != null || px != null || lp.size() > 0) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
-					rawTypeMeta = bc.resolveClassMeta(px, p, innerField.getGenericType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(px, last(lp), innerField.getGenericType(), typeVarImpls);
 					isUri |= (rawTypeMeta.isUri());
 				}
 				if (px != null) {
@@ -187,7 +187,7 @@ public final class BeanPropertyMeta {
 						properties = split(px.properties());
 					bdClasses.addAll(Arrays.asList(px.beanDictionary()));
 				}
-				if (p != null) {
+				for (Beanp p : lp) {
 					if (! p.properties().isEmpty())
 						properties = split(p.properties());
 					bdClasses.addAll(Arrays.asList(p.dictionary()));
@@ -196,11 +196,9 @@ public final class BeanPropertyMeta {
 					if (! p.wo().isEmpty())
 						writeOnly = Boolean.valueOf(p.wo());
 				}
-				Swap s = bc.getAnnotation(Swap.class, innerField);
-				if (s != null) {
+				for (Swap s : bc.getAnnotations(Swap.class, innerField))
 					swap = getPropertyPojoSwap(s);
-				}
-				isUri |= bc.getAnnotation(org.apache.juneau.annotation.URI.class, innerField) != null;
+				isUri |= last(bc.getAnnotations(org.apache.juneau.annotation.URI.class, innerField)) != null;
 			}
 
 			if (getter != null) {
@@ -1131,7 +1129,7 @@ public final class BeanPropertyMeta {
 		getBeanMeta().getClassMeta().getInfo().appendAnnotations(l, a, bc);
 
 		if (field != null) {
-			addIfNotNull(l, bc.getAnnotation(a, field));
+			l.addAll(bc.getAnnotations(a, field));
 			ClassInfo.of(field.getType()).appendAnnotations(l, a, bc);
 		}
 		if (getter != null) {

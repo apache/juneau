@@ -541,9 +541,9 @@ public class BeanMeta<T> {
 		private String findPropertyName(Field f, Set<String> fixedBeanProps) {
 			@SuppressWarnings("deprecation")
 			BeanProperty px = f.getAnnotation(BeanProperty.class);
-			Beanp p = ctx.getAnnotation(Beanp.class, f);
-			Name n = ctx.getAnnotation(Name.class, f);
-			String name = bpName(px, p, n);
+			List<Beanp> lp = ctx.getAnnotations(Beanp.class, f);
+			List<Name> ln = ctx.getAnnotations(Name.class, f);
+			String name = bpName(px, lp, ln);
 			if (isNotEmpty(name)) {
 				if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
 					return name;
@@ -682,9 +682,9 @@ public class BeanMeta<T> {
 
 				@SuppressWarnings("deprecation")
 				BeanProperty px = m.getLastAnnotation(BeanProperty.class);
-				Beanp p = ctx.getAnnotation(Beanp.class, m);
-				Name n2 = ctx.getAnnotation(Name.class, m);
-				if (! (m.isVisible(v) || px != null || p != null || n2 != null))
+				List<Beanp> lp = ctx.getAnnotations(Beanp.class, m);
+				List<Name> ln = ctx.getAnnotations(Name.class, m);
+				if (! (m.isVisible(v) || px != null || lp.size() > 0 || ln.size() > 0))
 					continue;
 
 				String n = m.getSimpleName();
@@ -692,7 +692,7 @@ public class BeanMeta<T> {
 				List<ClassInfo> pt = m.getParamTypes();
 				ClassInfo rt = m.getReturnType();
 				MethodType methodType = UNKNOWN;
-				String bpName = bpName(px, p, n2);
+				String bpName = bpName(px, lp, ln);
 
 				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
 					throw new BeanRuntimeException(c, "Found @Beanp(\"{0}\") but name was not found in @Bean(properties)", bpName);
@@ -788,11 +788,11 @@ public class BeanMeta<T> {
 
 				@SuppressWarnings("deprecation")
 				BeanProperty px = f.getAnnotation(BeanProperty.class);
-				Beanp p = ctx.getAnnotation(Beanp.class, f);
-				Name n = ctx.getAnnotation(Name.class, f);
-				String bpName = bpName(px, p, n);
+				List<Beanp> lp = ctx.getAnnotations(Beanp.class, f);
+				List<Name> ln = ctx.getAnnotations(Name.class, f);
+				String bpName = bpName(px, lp, ln);
 
-				if (! (v.isVisible(f.inner()) || px != null || p != null))
+				if (! (v.isVisible(f.inner()) || px != null || lp.size() > 0))
 					continue;
 
 				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
@@ -957,16 +957,22 @@ public class BeanMeta<T> {
 	}
 
 	@SuppressWarnings("deprecation")
-	static final String bpName(BeanProperty px, Beanp p, Name n) {
-		if (px == null && p == null && n == null)
+	static final String bpName(BeanProperty px, List<Beanp> p, List<Name> n) {
+		if (px == null && p.isEmpty() && n.isEmpty())
 			return null;
-		if (n != null)
-			return n.value();
-		if (p != null) {
-			if (! p.name().isEmpty())
-				return p.name();
-			return p.value();
+		if (! n.isEmpty())
+			return last(n).value();
+
+		String name = p.isEmpty() ? null : "";
+		for (Beanp pp : p) {
+			if (! pp.value().isEmpty())
+				name = pp.value();
+			if (! pp.name().isEmpty())
+				name = pp.name();
 		}
+		if (name != null)
+			return name;
+
 		if (px != null) {
 			if (! px.name().isEmpty())
 				return px.name();

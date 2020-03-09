@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
@@ -109,7 +111,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
 	public <T extends Annotation> T getAnnotation(Class<T> a, MetaProvider mp) {
-		return mp.getAnnotation(a, f);
+		return last(mp.getAnnotations(a, f));
 	}
 
 	/**
@@ -130,7 +132,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @return <jk>true</jk> if the specified annotation is present.
 	 */
 	public boolean hasAnnotation(Class<? extends Annotation> a, MetaProvider mp) {
-		return mp.getAnnotation(a, f) != null;
+		return ! mp.getAnnotations(a, f).isEmpty();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
