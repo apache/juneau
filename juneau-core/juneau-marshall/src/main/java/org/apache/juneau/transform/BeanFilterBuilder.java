@@ -506,7 +506,9 @@ public class BeanFilterBuilder<T> {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#bpi()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Map)}
 	 * </ul>
 	 *
 	 * @param value
@@ -548,7 +550,9 @@ public class BeanFilterBuilder<T> {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#bpx()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
 	 * </ul>
 	 *
 	 * @param value
@@ -592,7 +596,9 @@ public class BeanFilterBuilder<T> {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#bpro()}
 	 * 	<li class='ja'>{@link Beanp#ro()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Map)}
 	 * </ul>
 	 *
 	 * @param value
@@ -636,7 +642,9 @@ public class BeanFilterBuilder<T> {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#bpwo()}
 	 * 	<li class='ja'>{@link Beanp#wo()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Map)}
 	 * </ul>
 	 *
 	 * @param value

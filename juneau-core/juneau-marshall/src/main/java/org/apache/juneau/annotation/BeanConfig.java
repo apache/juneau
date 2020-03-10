@@ -18,6 +18,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
@@ -537,7 +538,7 @@ public @interface BeanConfig {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * Shortcut for specifying the {@link BeanContext#BEAN_bpi} property on all serializers.
+	 * Shortcut for specifying the {@link Bean#bpi()} annotation for all serializers.
 	 *
 	 * <p>
 	 * The typical use case is when you're rendering summary and details views of the same bean in a resource and
@@ -590,7 +591,9 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Map)}
 	 * </ul>
 	 */
 	String[] bpi() default {};
@@ -621,7 +624,9 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Map)}
 	 * </ul>
 	 */
 	CS[] bpiMap() default {};
@@ -629,7 +634,7 @@ public @interface BeanConfig {
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * Shortcut for specifying the {@link BeanContext#BEAN_bpx} property on all serializers.
+	 * Shortcut for specifying the {@link Bean#bpx()} annotation for all serializers.
 	 *
 	 * <p>
 	 * Same as {@link #bpi()} except you specify a list of bean property names that you want to exclude from
@@ -680,7 +685,9 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
 	 * </ul>
 	 */
 	String[] bpx() default {};
@@ -711,7 +718,9 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
 	 * </ul>
 	 */
 	CS[] bpxMap() default {};
@@ -719,7 +728,7 @@ public @interface BeanConfig {
 	/**
 	 * Configuration property:  Read-only bean properties.
 	 *
-	 * Shortcut for specifying the {@link BeanContext#BEAN_bpro} property on all parsers.
+	 * Shortcut for specifying the {@link Bean#bpwo()} annotation for all parsers.
 	 *
 	 * <p>
 	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
@@ -754,7 +763,9 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Map)}
 	 * </ul>
 	 */
 	String[] bpro() default {};
@@ -762,7 +773,7 @@ public @interface BeanConfig {
 	/**
 	 * Configuration property:  Read-only bean properties.
 	 *
-	 * Shortcut for specifying the {@link BeanContext#BEAN_bpro} property on all parsers.
+	 * Shortcut for specifying the {@link Bean#bpro()} annotation for all parsers.
 	 *
 	 * <p>
 	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
@@ -786,7 +797,9 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Map)}
 	 * </ul>
 	 */
 	CS[] bproMap() default {};
@@ -794,7 +807,7 @@ public @interface BeanConfig {
 	/**
 	 * Configuration property:  Write-only bean properties.
 	 *
-	 * Shortcut for specifying the {@link BeanContext#BEAN_bpwo} property on all serializers.
+	 * Shortcut for specifying the {@link Bean#bpwo()} annotation for all serializers.
 	 *
 	 * <p>
 	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
@@ -829,7 +842,9 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Map)}
 	 * </ul>
 	 */
 	String[] bpwo() default {};
@@ -837,7 +852,7 @@ public @interface BeanConfig {
 	/**
 	 * Configuration property:  Write-only bean properties.
 	 *
-	 * Shortcut for specifying the {@link BeanContext#BEAN_bpwo} property on all serializers.
+	 * Shortcut for specifying the {@link Bean#bpwo()} annotation for all serializers.
 	 *
 	 * <p>
 	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
@@ -861,7 +876,9 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Map)}
 	 * </ul>
 	 */
 	CS[] bpwoMap() default {};

@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.beans.*;
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.transform.*;
@@ -80,7 +81,9 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Map)}
 	 * </ul>
 	 */
 	String bpi() default "";
@@ -99,7 +102,9 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
 	 * </ul>
 	 */
 	String bpx() default "";
@@ -119,7 +124,9 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Map)}
 	 * </ul>
 	 */
 	String bpro() default "";
@@ -139,7 +146,9 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Map)}
 	 * </ul>
 	 */
 	String bpwo() default "";

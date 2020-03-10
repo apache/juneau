@@ -1288,50 +1288,6 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  Bean property includes.
-	 *
-	 * @see BeanContext#BEAN_bpi
-	 * @return
-	 * 	Include properties keyed by class name.
-	 */
-	protected final Map<String,Set<String>> getBpi() {
-		return ctx.getBpi();
-	}
-
-	/**
-	 * Configuration property:  Bean property excludes.
-	 *
-	 * @see BeanContext#BEAN_bpx
-	 * @return
-	 * 	The list of property names to exclude keyed by class name.
-	 */
-	protected final Map<String,Set<String>> getBpx() {
-		return ctx.getBpx();
-	}
-
-	/**
-	 * Configuration property:  Read-only bean properties.
-	 *
-	 * @see BeanContext#BEAN_bpro
-	 * @return
-	 * 	The list of read-only property names keyed by class name.
-	 */
-	protected final Map<String,Set<String>> getBpro() {
-		return ctx.getBpro();
-	}
-
-	/**
-	 * Configuration property:  Write-only bean properties.
-	 *
-	 * @see BeanContext#BEAN_bpwo
-	 * @return
-	 * 	The list of write-only property names keyed by class name.
-	 */
-	protected final Map<String,Set<String>> getBpwo() {
-		return ctx.getBpwo();
-	}
-
-	/**
 	 * Configuration property:  Debug mode.
 	 *
 	 * @see BeanContext#BEAN_debug

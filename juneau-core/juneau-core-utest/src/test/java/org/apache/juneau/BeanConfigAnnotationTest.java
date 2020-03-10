@@ -174,10 +174,6 @@ public class BeanConfigAnnotationTest {
 		check("true", bc.isBeansRequireSettersForGetters());
 		check("true", bc.isBeansRequireSomeProperties());
 		check("foo", bc.getBeanTypePropertyName());
-		check("org.apache.juneau.BeanConfigAnnotationTest$A1=[foo]", bc.getBpi());
-		check("org.apache.juneau.BeanConfigAnnotationTest$A1=[bar]", bc.getBpx());
-		check("org.apache.juneau.BeanConfigAnnotationTest$A1=[baz]", bc.getBpro());
-		check("org.apache.juneau.BeanConfigAnnotationTest$A1=[qux]", bc.getBpwo());
 		check("true", bc.isDebug());
 		check("true", bc.isDetectRecursions());
 		check("A1={foo:1}", bc.getExamples());

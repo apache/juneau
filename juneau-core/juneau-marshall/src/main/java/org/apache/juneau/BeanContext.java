@@ -202,6 +202,42 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	)
 	 * 	<jk>public void</jk> doFoo() {...}
 	 * </p>
+	 *
+	 * <p>
+	 * Concrete implementations of annotations are also provided that can be passed directly into serializer and parser
+	 * builder classes:
+	 * <p class='bpcode w800'>
+	 * 	BeanAnnotation a = <jk>new</jk> BeanAnnotation(<js>"B"</js>).bpi(<js>"street,city,state"</js>);
+	 * 	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().annotations(a).build();
+	 * 	String json = ws.serialize(a);
+	 * </p>
+	 *
+	 * <p>
+	 * The following is the list of concrete annotations provided that can be constructed and passed into the builder
+	 * class:
+	 * <ul class='javatree'>
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.BeanAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.BeancAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.BeanpAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.ExampleAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.NamePropertyAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.SwapAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.UriAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.csv.annotation.CsvAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.jso.annotation.JsoAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.uon.annotation.UonAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.xml.annotation.XmlAnnotation}
+	 * </ul>
 	 */
 	public static final String BEAN_annotations = PREFIX + ".annotations.lo";
 
@@ -933,7 +969,9 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.addTo(<jsf>BEAN_bpi</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
 	 * 		.build();
 	 * </p>
+	 * @deprecated Use {@link Bean#bpi()} and {@link BeanConfig#bpi()}
 	 */
+	@Deprecated
 	public static final String BEAN_bpi = PREFIX + ".bpi.sms";
 
 	/**
@@ -1002,7 +1040,9 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.addTo(<jsf>BEAN_bpx</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
 	 * 		.build();
 	 * </p>
+	 * @deprecated Use {@link Bean#bpx()} and {@link BeanConfig#bpx()}
 	 */
+	@Deprecated
 	public static final String BEAN_bpx = PREFIX + ".bpx.sms";
 
 	/**
@@ -1069,7 +1109,9 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.addTo(<jsf>BEAN_bpro</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
 	 * 		.build();
 	 * </p>
+	 * @deprecated Use {@link Bean#bpro()} and {@link BeanConfig#bpro()}
 	 */
+	@Deprecated
 	public static final String BEAN_bpro = PREFIX + ".bpro.sms";
 
 	/**
@@ -1136,7 +1178,9 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.addTo(<jsf>BEAN_bpwo</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
 	 * 		.build();
 	 * </p>
+	 * @deprecated Use {@link Bean#bpwo()} and {@link BeanConfig#bpwo()}
 	 */
+	@Deprecated
 	public static final String BEAN_bpwo = PREFIX + ".bpwo.sms";
 
 	/**

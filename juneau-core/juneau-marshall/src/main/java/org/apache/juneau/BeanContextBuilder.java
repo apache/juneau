@@ -103,6 +103,65 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Useful in cases where you want to use the functionality of the annotation on beans and bean properties but
 	 * do not have access to the code to do so.
 	 *
+	 * <p>
+	 * As a rule, any Juneau annotation with an <c>on()</c> method can be used with this property.
+	 *
+	 * <p>
+	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation:
+	 * <p class='bpcode w800'>
+	 * 	<jc>// Class with explicit annotation.</jc>
+	 * 	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
+	 * 	<jk>public class</jk> A {...}
+	 *
+	 * 	<jc>// Class with annotation applied via @BeanConfig</jc>
+	 * 	<jk>public class</jk> B {...}
+	 *
+	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
+	 * 	<ja>@RestMethod</ja>(...)
+	 * 	<ja>@BeanConfig</ja>(
+	 * 		annotations={
+	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, bpi=<js>"street,city,state"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public void</jk> doFoo() {...}
+	 * </p>
+	 *
+	 * <p>
+	 * Concrete implementations of annotations are also provided that can be passed directly into serializer and parser
+	 * builder classes:
+	 * <p class='bpcode w800'>
+	 * 	BeanAnnotation a = <jk>new</jk> BeanAnnotation(<js>"B"</js>).bpi(<js>"street,city,state"</js>);
+	 * 	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().annotations(a).build();
+	 * 	String json = ws.serialize(a);
+	 * </p>
+	 *
+	 * <p>
+	 * The following is the list of concrete annotations provided that can be constructed and passed into the builder
+	 * class:
+	 * <ul class='javatree'>
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.BeanAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.BeancAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.BeanpAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.ExampleAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.NamePropertyAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.SwapAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.annotation.UriAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.csv.annotation.CsvAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.jso.annotation.JsoAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.uon.annotation.UonAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation}
+	 * 	<li class'jc'>{@link org.apache.juneau.xml.annotation.XmlAnnotation}
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_annotations}
 	 * </ul>
@@ -662,68 +721,74 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean property includes.
+	 * Bean property includes.
 	 *
 	 * <p>
 	 * Specifies the set and order of names of properties associated with the bean class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
+	 * 	<li class='jm'>{@link BeanConfig#bpi()}
+	 * 	<li class='jm'>{@link Bean#bpi()}
 	 * </ul>
 	 *
 	 * @param beanClass The bean class.
-	 * @param value Comma-delimited list of property names.
+	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder bpi(Class<?> beanClass, String value) {
-		return addTo(BEAN_bpi, beanClass.getName(), value);
+	public BeanContextBuilder bpi(Class<?> beanClass, String properties) {
+		return addTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpi(properties));
 	}
 
 	/**
-	 * Configuration property:  Bean property includes.
+	 * Bean property includes.
 	 *
 	 * <p>
 	 * Specifies the set and order of names of properties associated with the bean class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
+	 * 	<li class='jm'>{@link BeanConfig#bpi()}
+	 * 	<li class='jm'>{@link Bean#bpi()}
 	 * </ul>
 	 *
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpi(Map<String,String> values) {
-		return set(BEAN_bpi, values);
+		for (Map.Entry<String,String> e : values.entrySet())
+			psb.addTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(e.getValue()));
+		return this;
 	}
 
 	/**
-	 * Configuration property:  Bean property includes.
+	 * Bean property includes.
 	 *
 	 * <p>
 	 * Specifies the set and order of names of properties associated with the bean class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpi}
+	 * 	<li class='jm'>{@link BeanConfig#bpi()}
+	 * 	<li class='jm'>{@link Bean#bpi()}
 	 * </ul>
 	 *
 	 * @param beanClassName
 	 * 	The bean class name.
 	 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
-	 * @param value Comma-delimited list of property names.
+	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder bpi(String beanClassName, String value) {
-		return addTo(BEAN_bpi, beanClassName, value);
+	public BeanContextBuilder bpi(String beanClassName, String properties) {
+		return addTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpi(properties));
 	}
 
 	/**
-	 * Configuration property:  Bean property excludes.
+	 * Bean property excludes.
 	 *
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
+	 * 	<li class='jm'>{@link BeanConfig#bpx()}
+	 * 	<li class='jm'>{@link Bean#bpx()}
 	 * </ul>
 	 *
 	 * @param beanClass The bean class.
@@ -731,17 +796,18 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpx(Class<?> beanClass, String properties) {
-		return addTo(BEAN_bpx, beanClass.getName(), properties);
+		return addTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpx(properties));
 	}
 
 	/**
-	 * Configuration property:  Bean property excludes.
+	 * Bean property excludes.
 	 *
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
+	 * 	<li class='jm'>{@link BeanConfig#bpx()}
+	 * 	<li class='jm'>{@link Bean#bpx()}
 	 * </ul>
 	 *
 	 * @param values
@@ -749,34 +815,38 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpx(Map<String,String> values) {
-		return set(BEAN_bpx, values);
+		for (Map.Entry<String,String> e : values.entrySet())
+			psb.addTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(e.getValue()));
+		return this;
 	}
 
 	/**
-	 * Configuration property:  Bean property excludes.
+	 * Bean property excludes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpx}
+	 * 	<li class='jm'>{@link BeanConfig#bpx()}
+	 * 	<li class='jm'>{@link Bean#bpx()}
 	 * </ul>
 	 *
 	 * @param beanClassName
 	 * 	The bean class name.
 	 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all bean classes.
-	 * @param value Comma-delimited list of property names.
+	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder bpx(String beanClassName, String value) {
-		return addTo(BEAN_bpx, beanClassName, value);
+	public BeanContextBuilder bpx(String beanClassName, String properties) {
+		return addTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpx(properties));
 	}
 
 	/**
-	 * Configuration property:  Read-only bean properties.
+	 * Read-only bean properties.
 	 *
 	 * <p>
 	 * Specifies the read-only properties for the specified bean class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * 	<li class='jm'>{@link BeanConfig#bpro()}
+	 * 	<li class='jm'>{@link Bean#bpro()}
 	 * </ul>
 	 *
 	 * @param beanClass The bean class.
@@ -784,17 +854,18 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpro(Class<?> beanClass, String properties) {
-		return addTo(BEAN_bpro, beanClass.getName(), properties);
+		return addTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpro(properties));
 	}
 
 	/**
-	 * Configuration property:  Read-only bean properties.
+	 * Read-only bean properties.
 	 *
 	 * <p>
 	 * Specifies the read-only properties for the specified bean classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * 	<li class='jm'>{@link BeanConfig#bpro()}
+	 * 	<li class='jm'>{@link Bean#bpro()}
 	 * </ul>
 	 *
 	 * @param values
@@ -802,37 +873,41 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpro(Map<String,String> values) {
-		return set(BEAN_bpro, values);
+		for (Map.Entry<String,String> e : values.entrySet())
+			psb.addTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(e.getValue()));
+		return this;
 	}
 
 	/**
-	 * Configuration property:  Read-only bean properties.
+	 * Read-only bean properties.
 	 *
 	 * <p>
 	 * Specifies the read-only properties for the specified bean class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * 	<li class='jm'>{@link BeanConfig#bpro()}
+	 * 	<li class='jm'>{@link Bean#bpro()}
 	 * </ul>
 	 *
 	 * @param beanClassName
 	 * 	The bean class name.
 	 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all bean classes.
-	 * @param value Comma-delimited list of property names.
+	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder bpro(String beanClassName, String value) {
-		return addTo(BEAN_bpro, beanClassName, value);
+	public BeanContextBuilder bpro(String beanClassName, String properties) {
+		return addTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpro(properties));
 	}
 
 	/**
-	 * Configuration property:  Write-only bean properties.
+	 * Write-only bean properties.
 	 *
 	 * <p>
 	 * Specifies the write-only properties for the specified bean class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * 	<li class='jm'>{@link BeanConfig#bpwo()}
+	 * 	<li class='jm'>{@link Bean#bpwo()}
 	 * </ul>
 	 *
 	 * @param beanClass The bean class.
@@ -840,17 +915,18 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpwo(Class<?> beanClass, String properties) {
-		return addTo(BEAN_bpwo, beanClass.getName(), properties);
+		return addTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpwo(properties));
 	}
 
 	/**
-	 * Configuration property:  Write-only bean properties.
+	 * Write-only bean properties.
 	 *
 	 * <p>
 	 * Specifies the write-only properties for the specified bean classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * 	<li class='jm'>{@link BeanConfig#bpwo()}
+	 * 	<li class='jm'>{@link Bean#bpwo()}
 	 * </ul>
 	 *
 	 * @param values
@@ -858,27 +934,30 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder bpwo(Map<String,String> values) {
-		return set(BEAN_bpwo, values);
+		for (Map.Entry<String,String> e : values.entrySet())
+			psb.addTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(e.getValue()));
+		return this;
 	}
 
 	/**
-	 * Configuration property:  Write-only bean properties.
+	 * Write-only bean properties.
 	 *
 	 * <p>
 	 * Specifies the write-only properties for the specified bean class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * 	<li class='jm'>{@link BeanConfig#bpwo()}
+	 * 	<li class='jm'>{@link Bean#bpwo()}
 	 * </ul>
 	 *
 	 * @param beanClassName
 	 * 	The bean class name.
 	 * 	<br>Can be a simple name, fully-qualified name, or <js>"*"</js> for all bean classes.
-	 * @param value Comma-delimited list of property names.
+	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder bpwo(String beanClassName, String value) {
-		return addTo(BEAN_bpwo, beanClassName, value);
+	public BeanContextBuilder bpwo(String beanClassName, String properties) {
+		return addTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpwo(properties));
 	}
 
 	/**

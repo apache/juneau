@@ -16,6 +16,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 
@@ -410,7 +411,9 @@ public @interface Beanp {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpro}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Map)}
 	 * </ul>
 	 */
 	String ro() default "";
@@ -430,7 +433,9 @@ public @interface Beanp {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_bpwo}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Map)}
 	 * </ul>
 	 */
 	String wo() default "";
