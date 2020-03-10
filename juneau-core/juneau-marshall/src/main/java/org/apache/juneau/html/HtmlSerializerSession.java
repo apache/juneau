@@ -553,13 +553,17 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (th != null) {
 
 			out.oTag(i, "table").attr(btpn, type2).append('>').nl(i+1);
-			out.sTag(i+1, "tr").nl(i+2);
-			for (Object key : th) {
-				out.sTag(i+2, "th");
-				out.text(convertToType(key, String.class));
-				out.eTag("th").nl(i+2);
+			if (th.length > 0) {
+				out.sTag(i+1, "tr").nl(i+2);
+				for (Object key : th) {
+					out.sTag(i+2, "th");
+					out.text(convertToType(key, String.class));
+					out.eTag("th").nl(i+2);
+				}
+				out.ie(i+1).eTag("tr").nl(i+1);
+			} else {
+				th = null;
 			}
-			out.ie(i+1).eTag("tr").nl(i+1);
 
 			for (Object o : c) {
 				ClassMeta<?> cm = getClassMetaForObject(o);
@@ -586,6 +590,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				} else if (cm.isMap() && ! (cm.isBeanMap())) {
 					Map m2 = sort((Map)o);
 
+					if (th == null)
+						th = m2.keySet().toArray(new Object[m2.size()]);
+
 					for (Object k : th) {
 						out.sTag(i+2, "td");
 						ContentResult cr = serializeAnything(out, m2.get(k), eType.getElementType(), toString(k), null, 2, false, true);
@@ -599,6 +606,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 						m2 = (BeanMap)o;
 					else
 						m2 = toBeanMap(o);
+
+					if (th == null)
+						th = m2.keySet().toArray(new Object[m2.size()]);
 
 					for (Object k : th) {
 						BeanMapEntry p = m2.getProperty(toString(k));

@@ -353,4 +353,53 @@ public class HtmlTest {
 
 	@HtmlConfig(applyHtml=@Html(on="org.apache.juneau.html.HtmlTest$MyMap2", noTables=true, noTableHeaders=true))
 	public static class MyMap2 extends LinkedHashMap<String,String> {}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test @Html.noTableHeaders on beans
+	//-----------------------------------------------------------------------------------------------------------------
+	@Test
+	public void testNoTableHeadersOnBeans() throws Exception {
+		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
+		Object o = null;
+		String r;
+
+		MyBean b = new MyBean();
+		o = new ObjectList().append(b,b);
+		r = s.serialize(o);
+		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
+	}
+
+	@Html(noTableHeaders=true)
+	public static class MyBean {
+		public int a=1,b=2,c=3;
+	}
+
+	@Test
+	public void testNoTableHeadersOnBeans_usingConfig() throws Exception {
+		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().applyAnnotations(MyBean2.class).build();
+		Object o = null;
+		String r;
+
+		MyBean b = new MyBean();
+		o = new ObjectList().append(b,b);
+		r = s.serialize(o);
+		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
+	}
+
+	@HtmlConfig(applyHtml=@Html(on="MyBean2", noTableHeaders=true))
+	public static class MyBean2 {
+		public int a=1,b=2,c=3;
+	}
+
+	@Test
+	public void testNoTableHeadersOnBeans_usingConcreteAnnotation() throws Exception {
+		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().annotations(new HtmlAnnotation("MyBean2").noTables(true)).build();
+		Object o = null;
+		String r;
+
+		MyBean b = new MyBean();
+		o = new ObjectList().append(b,b);
+		r = s.serialize(o);
+		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
+	}
 }
