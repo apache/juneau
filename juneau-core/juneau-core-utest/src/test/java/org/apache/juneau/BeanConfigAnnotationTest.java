@@ -309,7 +309,7 @@ public class BeanConfigAnnotationTest {
 	// @BeanConfig(bpi/bpx) should override @Bean(bpi/bpx)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@BeanConfig(bpi="b,c,d", bpx="c")
+	@BeanConfig(bpi="D:b,c,d", bpx="D:c")
 	@Bean(bpi="a,b,c", bpx="b")
 	static class D {
 		public int a, b, c, d;
@@ -326,25 +326,98 @@ public class BeanConfigAnnotationTest {
 
 	private static ClassInfo d = ClassInfo.of(D.class);
 
-//	@Test
-//	public void beanBpiBpxCombined_noBeanConfig() throws Exception {
-//		String json = SimpleJson.DEFAULT.toString(D.create());
-//		assertEquals("{a:1,c:3}", json);
-//		D d = SimpleJson.DEFAULT.read(json, D.class);
-//		json = SimpleJson.DEFAULT.toString(d);
-//		assertEquals("{a:1,c:3}", json);
-//	}
-//
-//	@Test
-//	public void beanBpiBpxCombined_beanConfigOverride() throws Exception {
-//		AnnotationList al = c.getAnnotationListChildFirst(null);
-//		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, sr).build();
-//		JsonParser jp = JsonParser.create().applyAnnotations(al, sr).build();
-//
-//		String json = js.serialize(D.create());
-//		assertEquals("{b:2,d:4}", json);
-//		D d = jp.parse(json, D.class);
-//		json = js.serialize(d);
-//		assertEquals("{b:2,d:4}", json);
-//	}
+	@Test
+	public void beanBpiBpxCombined_noBeanConfig() throws Exception {
+		String json = SimpleJson.DEFAULT.toString(D.create());
+		assertEquals("{a:1,c:3}", json);
+		D d = SimpleJson.DEFAULT.read(json, D.class);
+		json = SimpleJson.DEFAULT.toString(d);
+		assertEquals("{a:1,c:3}", json);
+	}
+
+	@Test
+	public void beanBpiBpxCombined_beanConfigOverride() throws Exception {
+		AnnotationList al = d.getAnnotationList();
+		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, sr).build();
+		JsonParser jp = JsonParser.create().applyAnnotations(al, sr).build();
+
+		String json = js.serialize(D.create());
+		assertEquals("{b:2,d:4}", json);
+		D d = jp.parse(json, D.class);
+		json = js.serialize(d);
+		assertEquals("{b:2,d:4}", json);
+	}
+
+	@Test
+	public void beanBpiBpxCombined_beanContextBuilderOverride() throws Exception {
+		Bean ba = new BeanAnnotation("D").bpi("b,c,d").bpx("c");
+		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
+		JsonParser jp = JsonParser.create().annotations(ba).build();
+
+		String json = js.serialize(D.create());
+		assertEquals("{b:2,d:4}", json);
+		D d = jp.parse(json, D.class);
+		json = js.serialize(d);
+		assertEquals("{b:2,d:4}", json);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @BeanConfig(bpi/bpx) should override @Bean(bpi/bpx)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Bean(bpi="a,b,c")
+	static class E1 {
+		public int a, b, c, d;
+	}
+
+	@BeanConfig(bpi="E:b,c,d", bpx="E:c")
+	@Bean(bpx="b")
+	static class E extends E1 {
+
+		public static E create() {
+			E e = new E();
+			e.a = 1;
+			e.b = 2;
+			e.c = 3;
+			e.d = 4;
+			return e;
+		}
+	}
+
+	private static ClassInfo e = ClassInfo.of(E.class);
+
+	@Test
+	public void beanBpiBpxCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
+		String json = SimpleJson.DEFAULT.toString(E.create());
+		assertEquals("{a:1,c:3}", json);
+		E e = SimpleJson.DEFAULT.read(json, E.class);
+		json = SimpleJson.DEFAULT.toString(e);
+		assertEquals("{a:1,c:3}", json);
+	}
+
+	@Test
+	public void beanBpiBpxCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
+		AnnotationList al = e.getAnnotationList();
+		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, sr).build();
+		JsonParser jp = JsonParser.create().applyAnnotations(al, sr).build();
+
+		String json = js.serialize(E.create());
+		assertEquals("{b:2,d:4}", json);
+		E e = jp.parse(json, E.class);
+		json = js.serialize(e);
+		assertEquals("{b:2,d:4}", json);
+	}
+
+	@Test
+	public void beanBpiBpxCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
+		Bean ba = new BeanAnnotation("E").bpi("b,c,d").bpx("c");
+		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
+		JsonParser jp = JsonParser.create().annotations(ba).build();
+
+		String json = js.serialize(E.create());
+		assertEquals("{b:2,d:4}", json);
+		E e = jp.parse(json, E.class);
+		json = js.serialize(e);
+		assertEquals("{b:2,d:4}", json);
+	}
 }

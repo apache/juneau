@@ -178,7 +178,9 @@ public class AnnotationInfo<T extends Annotation> {
 		try {
 			if (configApplyConstructor == null) {
 				PropertyStoreApply psa = a.annotationType().getAnnotation(PropertyStoreApply.class);
-				if (psa != null)
+				if (psa == null)
+					configApplyConstructor = ConfigApply.NoOp.class.getConstructor(Class.class, VarResolverSession.class);
+				else
 					configApplyConstructor = (Constructor<? extends ConfigApply<?>>)psa.value().getConstructor(Class.class, VarResolverSession.class);
 				if (configApplyConstructor == null)
 					throw new NoSuchFieldError("Could not find ConfigApply constructor for annotation:\n" + toString());

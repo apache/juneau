@@ -173,4 +173,23 @@ public abstract class ConfigApply<T extends Annotation> {
 			throw new ConfigException("Invalid syntax for Simple-JSON on annotation @{0}({1}): {2}", c.getSimpleName(), loc, in);
 		}
 	}
+
+	/**
+	 * Represents a no-op configuration apply.
+	 */
+	public static class NoOp extends ConfigApply<Annotation> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param c The annotation class.
+		 * @param r The string resolver to use for resolving strings.
+		 */
+		public NoOp(Class<Annotation> c, VarResolverSession r) {
+			super(c, r);
+		}
+
+		@Override /* ConfigApply */
+		public void apply(AnnotationInfo<Annotation> a, PropertyStoreBuilder ps) {}
+	}
 }

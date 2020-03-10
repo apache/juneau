@@ -32,6 +32,84 @@
 	<li>
 		The <ja>@Beanc</ja> annotation can now be recognized and used on non-public constructors.
 	<li>
+		Annotations are now aggregated across the entire class hierarchy instead of simply being overridden.
+		<br>The following is an example.
+		<p class='bpcode w800'>
+	<jc>// Parent class with properties a,b,c</jc>
+	<ja>@Bean</ja>(bpi=<js>"a,b,c"</js>)
+	<jk>public class</jk> MyClass {
+		<jk>public int</jk> a, b, c, d;
+	}
+	
+	<jc>// New behavior:  Child class with properties a,c because @Beans are aggregated.</jc>
+	<jc>// Old behavior:  Child class with properties a,c,d because @Bean is overridden.</jc>
+	<ja>@Bean</ja>(bpx=<js>"b"</js>)
+	<jk>public class</jk> MyClass {
+		<jk>public int</jk> a, b, c, d;
+	}
+		</p>
+	<li>
+		Include/exclude/read-only/write-only properties defined on the bean context now override those defined on 
+		annotations of the class itself.  For example, the following methods override the {@link oaj.annotation.Bean @Bean} 
+		annotations on classes:
+		<ul class='javatree'>
+			<li class='jc'>{@link oaj.BeanContextBuilder}
+			<ul>
+				<li class='jm'>{@link oaj.BeanContextBuilder#bpi(String) bpi(String)}
+				<li class='jm'>{@link oaj.BeanContextBuilder#bpx(String) bpx(String)}
+				<li class='jm'>{@link oaj.BeanContextBuilder#bpro(String) bpro(String)}
+				<li class='jm'>{@link oaj.BeanContextBuilder#bpwo(String) bpwo(String}
+			</ul>
+		</ul>
+	<li>
+		Config annotations now override class-level annotations.
+		<br>For example, only the 'a' and 'b' properties get serialized on the bean below:
+		<p class='bpcode w800'>
+	<jc>// Parent class with properties a,b,c</jc>
+	<ja>@Bean</ja>(bpi=<js>"a,b,c"</js>)
+	<jk>public class</jk> MyClass {
+		<jk>public int</jk> a, b, c, d;
+	}
+
+	<ja>@RestMethod</ja>
+	<ja>@BeanConfig</ja>(beanApply={<ja>@Bean</ja>(on=<js>"MyClass"</js>,bpi=<js>"a,b"</js>)}
+	<jk>public</jk> MyClass getMyClass() {...}
+		</p>
+	<li>
+		The following concrete annotation implementation classes are now provided that can be used with the {@link oaj.BeanContextBuilder#annotations(Annotation)} method:
+		<ul class='javatree'>
+			<li class'jc'>{@link oaj.annotation.BeanAnnotation} <jk>implements</jk> {@link oaj.annotation.BeanAnnotation}
+			<li class'jc'>{@link oaj.annotation.BeancAnnotation} <jk>implements</jk> {@link oaj.annotation.BeancAnnotation}
+			<li class'jc'>{@link oaj.annotation.BeanIgnoreAnnotation} <jk>implements</jk> {@link oaj.annotation.BeanIgnoreAnnotation}
+			<li class'jc'>{@link oaj.annotation.BeanpAnnotation} <jk>implements</jk> {@link oaj.annotation.BeanpAnnotation}
+			<li class'jc'>{@link oaj.annotation.ExampleAnnotation} <jk>implements</jk> {@link oaj.annotation.ExampleAnnotation}
+			<li class'jc'>{@link oaj.annotation.NamePropertyAnnotation} <jk>implements</jk> {@link oaj.annotation.NamePropertyAnnotation}
+			<li class'jc'>{@link oaj.annotation.ParentPropertyAnnotation} <jk>implements</jk> {@link oaj.annotation.ParentPropertyAnnotation}
+			<li class'jc'>{@link oaj.annotation.SwapAnnotation} <jk>implements</jk> {@link oaj.annotation.SwapAnnotation}
+			<li class'jc'>{@link oaj.annotation.UriAnnotation} <jk>implements</jk> {@link oaj.annotation.UriAnnotation}
+			<li class'jc'>{@link oaj.csv.annotation.CsvAnnotation} <jk>implements</jk> {@link oaj.annotation.CsvAnnotation}
+			<li class'jc'>{@link oaj.html.annotation.HtmlAnnotation} <jk>implements</jk> {@link oaj.annotation.HtmlAnnotation}
+			<li class'jc'>{@link oaj.jso.annotation.JsoAnnotation} <jk>implements</jk> {@link oaj.annotation.JsoAnnotation}
+			<li class'jc'>{@link oaj.json.annotation.JsonAnnotation} <jk>implements</jk> {@link oaj.annotation.JsonAnnotation}
+			<li class'jc'>{@link oaj.jsonschema.annotation.SchemaAnnotation} <jk>implements</jk> {@link oaj.annotation.SchemaAnnotation}
+			<li class'jc'>{@link oaj.msgpack.annotation.MsgPackAnnotation} <jk>implements</jk> {@link oaj.annotation.MsgPackAnnotation}
+			<li class'jc'>{@link oaj.oapi.annotation.OpenApiAnnotation} <jk>implements</jk> {@link oaj.annotation.OpenApiAnnotation}
+			<li class'jc'>{@link oaj.plaintext.annotation.PlainTextAnnotation} <jk>implements</jk> {@link oaj.annotation.PlainTextAnnotation}
+			<li class'jc'>{@link oaj.soap.annotation.SoapXmlAnnotation} <jk>implements</jk> {@link oaj.annotation.SoapXmlAnnotation}
+			<li class'jc'>{@link oaj.uon.annotation.UonAnnotation} <jk>implements</jk> {@link oaj.annotation.UonAnnotation}
+			<li class'jc'>{@link oaj.urlencoding.annotation.UrlEncodingAnnotation} <jk>implements</jk> {@link oaj.annotation.UrlEncodingAnnotation}
+			<li class'jc'>{@link oaj.xml.annotation.XmlAnnotation} <jk>implements</jk> {@link oaj.annotation.XmlAnnotation}
+		</ul>
+		<br>Example:
+		<p class='bpcode w800'>
+	<ja>@Bean</ja>(bpi=<js>"street,city"</js>) <jc>// Will be overridden</jc>
+	<jk>public class</jk> AddressBean {...}
+	
+	<ja>Bean</ja> ba = <jk>new</jk> BeanAnnotation(<js>"AddressBean"</js>).bpi(<js>"street,city,state"</js>);
+	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().annotations(ba).build();
+	String json = ws.toString(addressBean);  <jc>// Will print street,city,state</jc>
+		</p>
+	<li>
 		Several bug fixes in the {@link HtmlSerializer} and {@link HtmlParser} classes around the handling of 
 		collections and arrays of beans with <c><ja>@Bean</ja>(typeName)</c> annotations.
 	<li>
