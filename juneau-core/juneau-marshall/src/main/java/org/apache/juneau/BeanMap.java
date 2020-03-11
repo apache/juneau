@@ -155,6 +155,12 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			if (cm.isOptional() && pMeta.get(this, pMeta.getName()) == null)
 				pMeta.set(this, pMeta.getName(), cm.getOptionalDefault());
 		}
+		// Do the same for hidden fields.
+		for (BeanPropertyMeta pMeta : this.meta.hiddenProperties.values()) {
+			ClassMeta<?> cm = pMeta.getClassMeta();
+			if (cm.isOptional() && pMeta.get(this, pMeta.getName()) == null)
+				pMeta.set(this, pMeta.getName(), cm.getOptionalDefault());
+		}
 
 		return b;
 	}
@@ -237,7 +243,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override /* Map */
 	public Object put(String property, Object value) {
-		BeanPropertyMeta p = meta.properties.get(property);
+		BeanPropertyMeta p = getPropertyMeta(property);
 		if (p == null) {
 			if (meta.ctx.isIgnoreUnknownBeanProperties())
 				return null;
@@ -245,13 +251,20 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			if (property.equals(beanTypePropertyName))
 				return null;
 
-			p = meta.properties.get("*");
+			p = getPropertyMeta("*");
 			if (p == null)
 				throw new BeanRuntimeException(meta.c, "Bean property ''{0}'' not found.", property);
 		}
 		if (meta.beanFilter != null)
 			value = meta.beanFilter.writeProperty(this.bean, property, value);
 		return p.set(this, property, value);
+	}
+
+	@Override /* Map */
+	public boolean containsKey(Object property) {
+		if (getPropertyMeta(emptyIfNull(property)) != null)
+			return true;
+		return super.containsKey(property);
 	}
 
 	/**
@@ -265,7 +278,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param value The value to add to the collection or array.
 	 */
 	public void add(String property, Object value) {
-		BeanPropertyMeta p = meta.properties.get(property);
+		BeanPropertyMeta p = getPropertyMeta(property);
 		if (p == null) {
 			if (meta.ctx.isIgnoreUnknownBeanProperties())
 				return;
@@ -431,10 +444,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return Metadata on the specified property, or <jk>null</jk> if that property does not exist.
 	 */
 	public BeanPropertyMeta getPropertyMeta(String propertyName) {
-		BeanPropertyMeta bpMeta = meta.properties.get(propertyName);
-		if (bpMeta == null)
-			bpMeta = meta.dynaProperty;
-		return bpMeta;
+		return meta.getPropertyMeta(propertyName);
 	}
 
 	/**

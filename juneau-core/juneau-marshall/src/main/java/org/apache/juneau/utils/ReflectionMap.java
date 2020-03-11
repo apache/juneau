@@ -174,6 +174,7 @@ public class ReflectionMap<V> {
 		 * 	<ul>
 		 * 		<li>Full class name (e.g. <js>"com.foo.MyClass"</js>).
 		 * 		<li>Simple class name (e.g. <js>"MyClass"</js>).
+		 * 		<li>All classes (e.g. <js>"*"</js>).
 		 * 		<li>Full method name (e.g. <js>"com.foo.MyClass.myMethod"</js>).
 		 * 		<li>Simple method name (e.g. <js>"MyClass.myMethod"</js>).
 		 * 		<li>A comma-delimited list of anything on this list.
@@ -600,6 +601,8 @@ public class ReflectionMap<V> {
 		// c.getPackage() == "org.apache.juneau.a.rttests"
 		String cSimple = c.getSimpleName(), cFull = c.getName();
 		if (isEquals(simpleName, cSimple) || isEquals(fullName, cFull))
+			return true;
+		if ("*".equals(simpleName))
 			return true;
 		if (cFull.indexOf('$') != -1) {
 			Package p = c.getPackage();

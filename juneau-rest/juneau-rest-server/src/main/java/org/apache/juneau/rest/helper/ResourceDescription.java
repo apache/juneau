@@ -36,16 +36,30 @@ import org.apache.juneau.jsonschema.annotation.Schema;
 @Response(schema=@Schema(ignore=true))
 public final class ResourceDescription implements Comparable<ResourceDescription> {
 
-	private String name, description;
+	private String name, uri, description;
 
 	/**
-	 * Constructor.
+	 * Constructor for when the name and uri are the same.
 	 *
 	 * @param name The name of the child resource.
 	 * @param description The description of the child resource.
 	 */
 	public ResourceDescription(String name, String description) {
 		this.name = name;
+		this.uri = name;
+		this.description = description;
+	}
+
+	/**
+	 * Constructor for when the name and uri are different.
+	 *
+	 * @param name The name of the child resource.
+	 * @param uri The uri of the child resource.
+	 * @param description The description of the child resource.
+	 */
+	public ResourceDescription(String name, String uri, String description) {
+		this.name = name;
+		this.uri = uri;
 		this.description = description;
 	}
 
@@ -57,9 +71,18 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 	 *
 	 * @return The name.
 	 */
-	@Html(link="servlet:/{name}")
+	@Html(link="servlet:/{uri}")
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Returns the uri on this label.
+	 *
+	 * @return The name.
+	 */
+	public String getUri() {
+		return uri == null ? name : uri;
 	}
 
 	/**
@@ -93,6 +116,16 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 		return this;
 	}
 
+	/**
+	 * Sets the uri field on this label to a new value.
+	 *
+	 * @param uri The new uri.
+	 * @return This object (for method chaining).
+	 */
+	public ResourceDescription uri(String uri) {
+		this.uri = uri;
+		return this;
+	}
 
 	@Override /* Comparable */
 	public int compareTo(ResourceDescription o) {

@@ -71,6 +71,9 @@ public class BeanMeta<T> {
 	/** The properties on the target class. */
 	protected final Map<String,BeanPropertyMeta> properties;
 
+	/** The hidden properties on the target class. */
+	protected final Map<String,BeanPropertyMeta> hiddenProperties;
+
 	/** The getter properties on the target class. */
 	protected final Map<Method,String> getterProps;
 
@@ -121,6 +124,7 @@ public class BeanMeta<T> {
 		this.beanFilter = beanFilter;
 		this.dictionaryName = b.dictionaryName;
 		this.properties = unmodifiableMap(b.properties);
+		this.hiddenProperties = unmodifiableMap(b.hiddenProperties);
 		this.getterProps = unmodifiableMap(b.getterProps);
 		this.setterProps = unmodifiableMap(b.setterProps);
 		this.dynaProperty = b.dynaProperty;
@@ -139,7 +143,7 @@ public class BeanMeta<T> {
 		BeanContext ctx;
 		BeanFilter beanFilter;
 		String[] pNames;
-		Map<String,BeanPropertyMeta> properties;
+		Map<String,BeanPropertyMeta> properties, hiddenProperties = new LinkedHashMap<>();
 		Map<Method,String> getterProps = new HashMap<>();
 		Map<Method,String> setterProps = new HashMap<>();
 		BeanPropertyMeta dynaProperty;
@@ -174,11 +178,13 @@ public class BeanMeta<T> {
 				List<Class<?>> bdClasses = new ArrayList<>();
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
 					bdClasses.addAll(Arrays.asList(beanFilter.getBeanDictionary()));
-				Bean bean = classMeta.getAnnotation(Bean.class);
-				if (bean != null) {
-					if (! bean.typeName().isEmpty())
-						bdClasses.add(classMeta.innerClass);
-				}
+
+				boolean hasTypeName = false;
+				for (Bean b : classMeta.getAnnotationsParentFirst(Bean.class))
+					if (! b.typeName().isEmpty())
+						hasTypeName = true;
+				if (hasTypeName)
+					bdClasses.add(classMeta.innerClass);
 				this.beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
 				for (Bean b : classMeta.getAnnotationsParentFirst(Bean.class))
@@ -357,8 +363,8 @@ public class BeanMeta<T> {
 
 				} else /* Use 'better' introspection */ {
 
-					for (Field f : findBeanFields(ctx, c2, stopClass, fVis, filterProps)) {
-						String name = findPropertyName(f, fixedBeanProps);
+					for (Field f : findBeanFields(ctx, c2, stopClass, fVis)) {
+						String name = findPropertyName(f);
 						if (name != null) {
 							if (! normalProps.containsKey(name))
 								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
@@ -366,7 +372,7 @@ public class BeanMeta<T> {
 						}
 					}
 
-					List<BeanMethod> bms = findBeanMethods(ctx, c2, stopClass, mVis, fixedBeanProps, filterProps, propertyNamer, fluentSetters);
+					List<BeanMethod> bms = findBeanMethods(ctx, c2, stopClass, mVis, propertyNamer, fluentSetters);
 
 					// Iterate through all the getters.
 					for (BeanMethod bm : bms) {
@@ -481,31 +487,44 @@ public class BeanMeta<T> {
 					Set<String> bfbpi = beanFilter.getBpi();
 					Set<String> bfbpx = beanFilter.getBpx();
 
-					if (bpx.isEmpty() && ! bfbpx.isEmpty()) {
-
-						for (String k : bfbpx)
-							properties.remove(k);
-
-					// Only include specified properties if BeanFilter.includeKeys is specified.
-					// Note that the order must match includeKeys.
-					} else if (! bfbpi.isEmpty()) {
+					if (bpi.isEmpty() && ! bfbpi.isEmpty()) {
+						// Only include specified properties if BeanFilter.includeKeys is specified.
+						// Note that the order must match includeKeys.
 						Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<>();
 						for (String k : bfbpi) {
 							if (properties.containsKey(k))
-								properties2.put(k, properties.get(k));
+								properties2.put(k, properties.remove(k));
 						}
+						hiddenProperties.putAll(properties);
 						properties = properties2;
+					}
+					if (bpx.isEmpty() && ! bfbpx.isEmpty()) {
+						for (String k : bfbpx) {
+							hiddenProperties.put(k, properties.remove(k));
+						}
 					}
 				}
 
+				if (! bpi.isEmpty()) {
+					Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<>();
+					for (String k : bpi) {
+						if (properties.containsKey(k))
+							properties2.put(k, properties.remove(k));
+					}
+					hiddenProperties.putAll(properties);
+					properties = properties2;
+				}
+
 				for (String ep : bpx)
-					properties.remove(ep);
+					hiddenProperties.put(ep, properties.remove(ep));
 
 				if (pNames != null) {
 					Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<>();
 					for (String k : pNames) {
 						if (properties.containsKey(k))
 							properties2.put(k, properties.get(k));
+						else
+							hiddenProperties.put(k, properties.get(k));
 					}
 					properties = properties2;
 				}
@@ -544,21 +563,15 @@ public class BeanMeta<T> {
 		 * Returns the property name of the specified field if it's a valid property.
 		 * Returns null if the field isn't a valid property.
 		 */
-		private String findPropertyName(Field f, Set<String> fixedBeanProps) {
+		private String findPropertyName(Field f) {
 			@SuppressWarnings("deprecation")
 			BeanProperty px = f.getAnnotation(BeanProperty.class);
 			List<Beanp> lp = ctx.getAnnotations(Beanp.class, f);
 			List<Name> ln = ctx.getAnnotations(Name.class, f);
 			String name = bpName(px, lp, ln);
-			if (isNotEmpty(name)) {
-				if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
-					return name;
-				return null;  // Could happen if filtered via BEAN_bpi/BEAN_bpx.
-			}
-			name = propertyNamer.getPropertyName(f.getName());
-			if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
+			if (isNotEmpty(name))
 				return name;
-			return null;
+			return propertyNamer.getPropertyName(f.getName());
 		}
 	}
 
@@ -670,7 +683,7 @@ public class BeanMeta<T> {
 	 * @param fixedBeanProps Only include methods whose properties are in this list.
 	 * @param pn Use this property namer to determine property names from the method names.
 	 */
-	static final List<BeanMethod> findBeanMethods(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v, Set<String> fixedBeanProps, Set<String> filterProps, PropertyNamer pn, boolean fluentSetters) {
+	static final List<BeanMethod> findBeanMethods(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v, PropertyNamer pn, boolean fluentSetters) {
 		List<BeanMethod> l = new LinkedList<>();
 
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
@@ -699,9 +712,6 @@ public class BeanMeta<T> {
 				ClassInfo rt = m.getReturnType();
 				MethodType methodType = UNKNOWN;
 				String bpName = bpName(px, lp, ln);
-
-				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
-					throw new BeanRuntimeException(c, "Found @Beanp(\"{0}\") but name was not found in @Bean(properties)", bpName);
 
 				if (pt.size() == 0) {
 					if ("*".equals(bpName)) {
@@ -769,12 +779,8 @@ public class BeanMeta<T> {
 					throw new BeanRuntimeException(c, "Found @Beanp(\"*\") but could not determine method type on method ''{0}''.", m.getSimpleName());
 
 				if (methodType != UNKNOWN) {
-					if (bpName != null && ! bpName.isEmpty()) {
+					if (bpName != null && ! bpName.isEmpty())
 						n = bpName;
-						if (! fixedBeanProps.isEmpty())
-							if (! fixedBeanProps.contains(n))
-								n = null;  // Could happen if filtered via BEAN_bpi/BEAN_bpx
-					}
 					if (n != null)
 						l.add(new BeanMethod(n, methodType, m.inner()));
 				}
@@ -783,7 +789,7 @@ public class BeanMeta<T> {
 		return l;
 	}
 
-	static final Collection<Field> findBeanFields(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v, Set<String> filterProps) {
+	static final Collection<Field> findBeanFields(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v) {
 		List<Field> l = new LinkedList<>();
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
 			for (FieldInfo f : c2.getDeclaredFields()) {
@@ -795,14 +801,9 @@ public class BeanMeta<T> {
 				@SuppressWarnings("deprecation")
 				BeanProperty px = f.getAnnotation(BeanProperty.class);
 				List<Beanp> lp = ctx.getAnnotations(Beanp.class, f);
-				List<Name> ln = ctx.getAnnotations(Name.class, f);
-				String bpName = bpName(px, lp, ln);
 
 				if (! (v.isVisible(f.inner()) || px != null || lp.size() > 0))
 					continue;
-
-				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
-					throw new BeanRuntimeException(c, "Found @Beanp(\"{0}\") but name was not found in @Bean(properties)", bpName);
 
 				l.add(f.inner());
 			}
@@ -871,6 +872,8 @@ public class BeanMeta<T> {
 	 */
 	public BeanPropertyMeta getPropertyMeta(String name) {
 		BeanPropertyMeta bpm = properties.get(name);
+		if (bpm == null)
+			bpm = hiddenProperties.get(name);
 		if (bpm == null)
 			bpm = dynaProperty;
 		return bpm;

@@ -43,6 +43,21 @@ public class RestMethodBpiTest {
 		public Object a03() throws Exception {
 			return new MyBeanA().init();
 		}
+		@RestMethod
+		@BeanConfig(bpi="MyBeanA: a,_b")
+		public Object a04() throws Exception {
+			return new MyBeanA().init();
+		}
+		@RestMethod
+		@BeanConfig(bpi="MyBeanA: a")
+		public Object a05() throws Exception {
+			return new MyBeanA().init();
+		}
+		@RestMethod
+		@BeanConfig(bpi="MyBeanA: _b")
+		public Object a06() throws Exception {
+			return new MyBeanA().init();
+		}
 	}
 	static MockRest a = MockRest.build(A.class);
 
@@ -71,6 +86,31 @@ public class RestMethodBpiTest {
 		a.get("/a03").urlEnc().execute().assertBody("_b=foo");
 	}
 
+	@Test
+	public void a04() throws Exception {
+		a.get("/a04").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
+		a.get("/a04").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
+		a.get("/a04").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		a.get("/a04").uon().execute().assertBody("(a=1,_b=foo)");
+		a.get("/a04").urlEnc().execute().assertBody("a=1&_b=foo");
+	}
+	@Test
+	public void a05() throws Exception {
+		a.get("/a05").json().execute().assertBody("{\"a\":1}");
+		a.get("/a05").xml().execute().assertBodyContains("<object><a>1</a></object>");
+		a.get("/a05").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
+		a.get("/a05").uon().execute().assertBody("(a=1)");
+		a.get("/a05").urlEnc().execute().assertBody("a=1");
+	}
+	@Test
+	public void a06() throws Exception {
+		a.get("/a06").json().execute().assertBody("{\"_b\":\"foo\"}");
+		a.get("/a06").xml().execute().assertBodyContains("<object><_b>foo</_b></object>");
+		a.get("/a06").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		a.get("/a06").uon().execute().assertBody("(_b=foo)");
+		a.get("/a06").urlEnc().execute().assertBody("_b=foo");
+	}
+	
 	//=================================================================================================================
 	// BPX on normal bean
 	//=================================================================================================================
@@ -88,6 +128,21 @@ public class RestMethodBpiTest {
 		}
 		@RestMethod(bpx="MyBeanA: _b")
 		public Object b03() throws Exception {
+			return new MyBeanA().init();
+		}
+		@RestMethod
+		@BeanConfig(bpx="MyBeanA: a,_b")
+		public Object b04() throws Exception {
+			return new MyBeanA().init();
+		}
+		@RestMethod
+		@BeanConfig(bpx="MyBeanA: a")
+		public Object b05() throws Exception {
+			return new MyBeanA().init();
+		}
+		@RestMethod
+		@BeanConfig(bpx="MyBeanA: _b")
+		public Object b06() throws Exception {
 			return new MyBeanA().init();
 		}
 	}
@@ -117,6 +172,30 @@ public class RestMethodBpiTest {
 		b.get("/b03").uon().execute().assertBody("(a=1)");
 		b.get("/b03").urlEnc().execute().assertBody("a=1");
 	}
+	@Test
+	public void b04() throws Exception {
+		b.get("/b04").json().execute().assertBody("{}");
+		b.get("/b04").xml().execute().assertBodyContains("<object/>");
+		b.get("/b04").html().execute().assertBodyContains("<table></table>");
+		b.get("/b04").uon().execute().assertBody("()");
+		b.get("/b04").urlEnc().execute().assertBody("");
+	}
+	@Test
+	public void b05() throws Exception {
+		b.get("/b05").json().execute().assertBody("{\"_b\":\"foo\"}");
+		b.get("/b05").xml().execute().assertBodyContains("<object><_b>foo</_b></object>");
+		b.get("/b05").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		b.get("/b05").uon().execute().assertBody("(_b=foo)");
+		b.get("/b05").urlEnc().execute().assertBody("_b=foo");
+	}
+	@Test
+	public void b06() throws Exception {
+		b.get("/b06").json().execute().assertBody("{\"a\":1}");
+		b.get("/b06").xml().execute().assertBodyContains("<object><a>1</a></object>");
+		b.get("/b06").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
+		b.get("/b06").uon().execute().assertBody("(a=1)");
+		b.get("/b06").urlEnc().execute().assertBody("a=1");
+	}
 
 	//=================================================================================================================
 	// BPI on bean using @Bean(properties)
@@ -137,16 +216,31 @@ public class RestMethodBpiTest {
 		public Object c03() throws Exception {
 			return new MyBeanB().init();
 		}
+		@RestMethod
+		@BeanConfig(bpi="MyBeanB: a,_b")
+		public Object c04() throws Exception {
+			return new MyBeanB().init();
+		}
+		@RestMethod
+		@BeanConfig(bpi="MyBeanB: a")
+		public Object c05() throws Exception {
+			return new MyBeanB().init();
+		}
+		@RestMethod
+		@BeanConfig(bpi="MyBeanB: _b")
+		public Object c06() throws Exception {
+			return new MyBeanB().init();
+		}
 	}
 	static MockRest c = MockRest.build(C.class);
 
 	@Test
 	public void c01() throws Exception {
-		c.get("/c01").json().execute().assertBody("{\"_b\":\"foo\",\"a\":1}");
-		c.get("/c01").xml().execute().assertBodyContains("<object><_b>foo</_b><a>1</a></object>");
-		c.get("/c01").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr><tr><td>a</td><td>1</td></tr></table>");
-		c.get("/c01").uon().execute().assertBody("(_b=foo,a=1)");
-		c.get("/c01").urlEnc().execute().assertBody("_b=foo&a=1");
+		c.get("/c01").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
+		c.get("/c01").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
+		c.get("/c01").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		c.get("/c01").uon().execute().assertBody("(a=1,_b=foo)");
+		c.get("/c01").urlEnc().execute().assertBody("a=1&_b=foo");
 	}
 	@Test
 	public void c02() throws Exception {
@@ -163,6 +257,30 @@ public class RestMethodBpiTest {
 		c.get("/c03").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
 		c.get("/c03").uon().execute().assertBody("(_b=foo)");
 		c.get("/c03").urlEnc().execute().assertBody("_b=foo");
+	}
+	@Test
+	public void c04() throws Exception {
+		c.get("/c04").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
+		c.get("/c04").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
+		c.get("/c04").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		c.get("/c04").uon().execute().assertBody("(a=1,_b=foo)");
+		c.get("/c04").urlEnc().execute().assertBody("a=1&_b=foo");
+	}
+	@Test
+	public void c05() throws Exception {
+		c.get("/c05").json().execute().assertBody("{\"a\":1}");
+		c.get("/c05").xml().execute().assertBodyContains("<object><a>1</a></object>");
+		c.get("/c05").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
+		c.get("/c05").uon().execute().assertBody("(a=1)");
+		c.get("/c05").urlEnc().execute().assertBody("a=1");
+	}
+	@Test
+	public void c06() throws Exception {
+		c.get("/c06").json().execute().assertBody("{\"_b\":\"foo\"}");
+		c.get("/c06").xml().execute().assertBodyContains("<object><_b>foo</_b></object>");
+		c.get("/c06").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		c.get("/c06").uon().execute().assertBody("(_b=foo)");
+		c.get("/c06").urlEnc().execute().assertBody("_b=foo");
 	}
 
 	//=================================================================================================================
@@ -182,6 +300,21 @@ public class RestMethodBpiTest {
 		}
 		@RestMethod(bpx="MyBeanB: _b")
 		public Object d03() throws Exception {
+			return new MyBeanB().init();
+		}
+		@RestMethod
+		@BeanConfig(bpx="MyBeanB: a,_b")
+		public Object d04() throws Exception {
+			return new MyBeanB().init();
+		}
+		@RestMethod
+		@BeanConfig(bpx="MyBeanB: a")
+		public Object d05() throws Exception {
+			return new MyBeanB().init();
+		}
+		@RestMethod
+		@BeanConfig(bpx="MyBeanB: _b")
+		public Object d06() throws Exception {
 			return new MyBeanB().init();
 		}
 	}
@@ -211,6 +344,30 @@ public class RestMethodBpiTest {
 		d.get("/d03").uon().execute().assertBody("(a=1)");
 		d.get("/d03").urlEnc().execute().assertBody("a=1");
 	}
+	@Test
+	public void d04() throws Exception {
+		d.get("/d04").json().execute().assertBody("{}");
+		d.get("/d04").xml().execute().assertBodyContains("<object/>");
+		d.get("/d04").html().execute().assertBodyContains("<table></table>");
+		d.get("/d04").uon().execute().assertBody("()");
+		d.get("/d04").urlEnc().execute().assertBody("");
+	}
+	@Test
+	public void d05() throws Exception {
+		d.get("/d05").json().execute().assertBody("{\"_b\":\"foo\"}");
+		d.get("/d05").xml().execute().assertBodyContains("<object><_b>foo</_b></object>");
+		d.get("/d05").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		d.get("/d05").uon().execute().assertBody("(_b=foo)");
+		d.get("/d05").urlEnc().execute().assertBody("_b=foo");
+	}
+	@Test
+	public void d06() throws Exception {
+		d.get("/d06").json().execute().assertBody("{\"a\":1}");
+		d.get("/d06").xml().execute().assertBodyContains("<object><a>1</a></object>");
+		d.get("/d06").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
+		d.get("/d06").uon().execute().assertBody("(a=1)");
+		d.get("/d06").urlEnc().execute().assertBody("a=1");
+	}
 
 	//=================================================================================================================
 	// BPI meta-matching
@@ -221,6 +378,11 @@ public class RestMethodBpiTest {
 
 		@RestMethod(bpi="*: a")
 		public Object e01() throws Exception {
+			return new MyBeanA().init();
+		}
+		@RestMethod
+		@BeanConfig(bpi="*: a")
+		public Object e02() throws Exception {
 			return new MyBeanA().init();
 		}
 	}
@@ -234,6 +396,14 @@ public class RestMethodBpiTest {
 		e.get("/e01").uon().execute().assertBody("(a=1)");
 		e.get("/e01").urlEnc().execute().assertBody("a=1");
 	}
+	@Test
+	public void e02() throws Exception {
+		e.get("/e02").json().execute().assertBody("{\"a\":1}");
+		e.get("/e02").xml().execute().assertBodyContains("<object><a>1</a></object>");
+		e.get("/e02").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
+		e.get("/e02").uon().execute().assertBody("(a=1)");
+		e.get("/e02").urlEnc().execute().assertBody("a=1");
+	}
 
 	//=================================================================================================================
 	// BPI fully-qualified class name
@@ -246,6 +416,11 @@ public class RestMethodBpiTest {
 		public Object f01() throws Exception {
 			return new MyBeanA().init();
 		}
+		@RestMethod
+		@BeanConfig(bpi="org.apache.juneau.rest.annotation.RestMethodBpiTest$MyBeanA: a")
+		public Object f02() throws Exception {
+			return new MyBeanA().init();
+		}
 	}
 	static MockRest f = MockRest.build(F.class);
 
@@ -256,6 +431,14 @@ public class RestMethodBpiTest {
 		f.get("/f01").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
 		f.get("/f01").uon().execute().assertBody("(a=1)");
 		f.get("/f01").urlEnc().execute().assertBody("a=1");
+	}
+	@Test
+	public void f02() throws Exception {
+		f.get("/f02").json().execute().assertBody("{\"a\":1}");
+		f.get("/f02").xml().execute().assertBodyContains("<object><a>1</a></object>");
+		f.get("/f02").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
+		f.get("/f02").uon().execute().assertBody("(a=1)");
+		f.get("/f02").urlEnc().execute().assertBody("a=1");
 	}
 
 	//=================================================================================================================
@@ -272,6 +455,18 @@ public class RestMethodBpiTest {
 		}
 		@RestMethod(bpi="MyBean*: a")
 		public Object g02() throws Exception {
+			// Should not match.  We don't support meta-matches in class names.
+			return new MyBeanA().init();
+		}
+		@RestMethod
+		@BeanConfig(bpi="MyBean: a")
+		public Object g03() throws Exception {
+			// Should not match.
+			return new MyBeanA().init();
+		}
+		@RestMethod
+		@BeanConfig(bpi="MyBean*: a")
+		public Object g04() throws Exception {
 			// Should not match.  We don't support meta-matches in class names.
 			return new MyBeanA().init();
 		}
@@ -293,6 +488,22 @@ public class RestMethodBpiTest {
 		g.get("/g02").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
 		g.get("/g02").uon().execute().assertBody("(a=1,_b=foo)");
 		g.get("/g02").urlEnc().execute().assertBody("a=1&_b=foo");
+	}
+	@Test
+	public void g03() throws Exception {
+		g.get("/g03").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
+		g.get("/g03").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
+		g.get("/g03").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		g.get("/g03").uon().execute().assertBody("(a=1,_b=foo)");
+		g.get("/g03").urlEnc().execute().assertBody("a=1&_b=foo");
+	}
+	@Test
+	public void g04() throws Exception {
+		g.get("/g04").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
+		g.get("/g04").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
+		g.get("/g04").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		g.get("/g04").uon().execute().assertBody("(a=1,_b=foo)");
+		g.get("/g04").urlEnc().execute().assertBody("a=1&_b=foo");
 	}
 
 	//=================================================================================================================

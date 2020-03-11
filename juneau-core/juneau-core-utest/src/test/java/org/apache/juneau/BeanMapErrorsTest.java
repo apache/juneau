@@ -14,6 +14,8 @@ package org.apache.juneau;
 
 import static org.junit.Assert.*;
 
+import java.util.stream.*;
+
 import org.apache.juneau.annotation.*;
 import org.junit.*;
 
@@ -24,39 +26,47 @@ public class BeanMapErrorsTest {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Beanp(name) on method not in @Bean(properties)
+	// Shouldn't be found in keySet()/entrySet() but should be found in containsKey()/get()
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void beanPropertyMethodNotInBeanProperties() {
 		BeanContext bc = BeanContext.DEFAULT;
 
-		try {
-			bc.getClassMeta(A1.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("org.apache.juneau.BeanMapErrorsTest$A1: Found @Beanp(\"f2\") but name was not found in @Bean(properties)", e.getMessage());
-		}
+		BeanMap<A1> bm = bc.createBeanSession().newBeanMap(A1.class);
+		assertTrue(bm.containsKey("f2"));
+		assertEquals(-1, bm.get("f2"));
+		bm.put("f2", -2);
+		assertEquals(-2, bm.get("f2"));
+		assertFalse(bm.keySet().contains("f2"));
+		assertFalse(bm.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList()).contains("f2"));
 	}
 
 	@Bean(bpi="f1")
 	public static class A1 {
 		public int f1;
+		private int f2 = -1;
 
 		@Beanp("f2")
 		public int f2() {
-			return -1;
+			return f2;
 		};
+
+		public void setF2(int f2) {
+			this.f2 = f2;
+		}
 	}
 
 	@Test
 	public void beanPropertyMethodNotInBeanProperties_usingConfig() {
 		BeanContext bc = BeanContext.create().applyAnnotations(B1.class).build();
 
-		try {
-			bc.getClassMeta(B1.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("org.apache.juneau.BeanMapErrorsTest$B1: Found @Beanp(\"f2\") but name was not found in @Bean(properties)", e.getMessage());
-		}
+		BeanMap<B1> bm = bc.createBeanSession().newBeanMap(B1.class);
+		assertTrue(bm.containsKey("f2"));
+		assertEquals(-1, bm.get("f2"));
+		bm.put("f2", -2);
+		assertEquals(-2, bm.get("f2"));
+		assertFalse(bm.keySet().contains("f2"));
+		assertFalse(bm.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList()).contains("f2"));
 	}
 
 	@BeanConfig(
@@ -69,10 +79,16 @@ public class BeanMapErrorsTest {
 	)
 	public static class B1 {
 		public int f1;
+		private int f2 = -1;
 
+		@Beanp("f2")
 		public int f2() {
-			return -1;
+			return f2;
 		};
+
+		public void setF2(int f2) {
+			this.f2 = f2;
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -82,31 +98,34 @@ public class BeanMapErrorsTest {
 	public void beanPropertyFieldNotInBeanProperties() {
 		BeanContext bc = BeanContext.DEFAULT;
 
-		try {
-			bc.getClassMeta(A2.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("org.apache.juneau.BeanMapErrorsTest$A2: Found @Beanp(\"f2\") but name was not found in @Bean(properties)", e.getMessage());
-		}
+		BeanMap<A2> bm = bc.createBeanSession().newBeanMap(A2.class);
+		assertTrue(bm.containsKey("f2"));
+		assertEquals(-1, bm.get("f2"));
+		bm.put("f2", -2);
+		assertEquals(-2, bm.get("f2"));
+		assertFalse(bm.keySet().contains("f2"));
+		assertFalse(bm.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList()).contains("f2"));
 	}
+
 	@Bean(bpi="f1")
 	public static class A2 {
 		public int f1;
 
 		@Beanp("f2")
-		public int f2;
+		public int f2 = -1;
 	}
 
 	@Test
 	public void beanPropertyFieldNotInBeanProperties_usingBeanConfig() {
 		BeanContext bc = BeanContext.create().applyAnnotations(B2.class).build();
 
-		try {
-			bc.getClassMeta(B2.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("org.apache.juneau.BeanMapErrorsTest$B2: Found @Beanp(\"f2\") but name was not found in @Bean(properties)", e.getMessage());
-		}
+		BeanMap<B2> bm = bc.createBeanSession().newBeanMap(B2.class);
+		assertTrue(bm.containsKey("f2"));
+		assertEquals(-1, bm.get("f2"));
+		bm.put("f2", -2);
+		assertEquals(-2, bm.get("f2"));
+		assertFalse(bm.keySet().contains("f2"));
+		assertFalse(bm.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList()).contains("f2"));
 	}
 
 	@BeanConfig(
@@ -120,6 +139,6 @@ public class BeanMapErrorsTest {
 	public static class B2 {
 		public int f1;
 
-		public int f2;
+		public int f2 = -1;
 	}
 }

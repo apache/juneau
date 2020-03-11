@@ -26,10 +26,12 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
+import org.junit.runners.*;
 
 /**
  * Tests the @BeanConfig annotation.
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BeanConfigAnnotationTest {
 
 	private static void check(String expected, Object o) {
@@ -158,7 +160,7 @@ public class BeanConfigAnnotationTest {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test
-	public void basic() throws Exception {
+	public void a01_basic() throws Exception {
 		AnnotationList al = a.getAnnotationList();
 		BeanTraverseSession bc = JsonSerializer.create().applyAnnotations(al, sr).build().createSession();
 
@@ -209,7 +211,7 @@ public class BeanConfigAnnotationTest {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test
-	public void noValues() throws Exception {
+	public void b01_noValues() throws Exception {
 		AnnotationList al = b.getAnnotationList();
 		JsonSerializer bc = JsonSerializer.create().applyAnnotations(al, sr).build();
 		check("PUBLIC", bc.getBeanClassVisibility());
@@ -261,7 +263,7 @@ public class BeanConfigAnnotationTest {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test
-	public void noAnnotation() throws Exception {
+	public void c01_noAnnotation() throws Exception {
 		AnnotationList al = c.getAnnotationList();
 		JsonSerializer bc = JsonSerializer.create().applyAnnotations(al, sr).build();
 		check("PUBLIC", bc.getBeanClassVisibility());
@@ -327,7 +329,7 @@ public class BeanConfigAnnotationTest {
 	private static ClassInfo d = ClassInfo.of(D.class);
 
 	@Test
-	public void beanBpiBpxCombined_noBeanConfig() throws Exception {
+	public void d01_beanBpiBpxCombined_noBeanConfig() throws Exception {
 		String json = SimpleJson.DEFAULT.toString(D.create());
 		assertEquals("{a:1,c:3}", json);
 		D d = SimpleJson.DEFAULT.read(json, D.class);
@@ -336,7 +338,7 @@ public class BeanConfigAnnotationTest {
 	}
 
 	@Test
-	public void beanBpiBpxCombined_beanConfigOverride() throws Exception {
+	public void d02_beanBpiBpxCombined_beanConfigOverride() throws Exception {
 		AnnotationList al = d.getAnnotationList();
 		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, sr).build();
 		JsonParser jp = JsonParser.create().applyAnnotations(al, sr).build();
@@ -349,7 +351,7 @@ public class BeanConfigAnnotationTest {
 	}
 
 	@Test
-	public void beanBpiBpxCombined_beanContextBuilderOverride() throws Exception {
+	public void d03_beanBpiBpxCombined_beanContextBuilderOverride() throws Exception {
 		Bean ba = new BeanAnnotation("D").bpi("b,c,d").bpx("c");
 		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
@@ -387,7 +389,7 @@ public class BeanConfigAnnotationTest {
 	private static ClassInfo e = ClassInfo.of(E.class);
 
 	@Test
-	public void beanBpiBpxCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
+	public void e01_beanBpiBpxCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
 		String json = SimpleJson.DEFAULT.toString(E.create());
 		assertEquals("{a:1,c:3}", json);
 		E e = SimpleJson.DEFAULT.read(json, E.class);
@@ -396,7 +398,7 @@ public class BeanConfigAnnotationTest {
 	}
 
 	@Test
-	public void beanBpiBpxCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
+	public void e02_beanBpiBpxCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
 		AnnotationList al = e.getAnnotationList();
 		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, sr).build();
 		JsonParser jp = JsonParser.create().applyAnnotations(al, sr).build();
@@ -409,7 +411,7 @@ public class BeanConfigAnnotationTest {
 	}
 
 	@Test
-	public void beanBpiBpxCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
+	public void e03_beanBpiBpxCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
 		Bean ba = new BeanAnnotation("E").bpi("b,c,d").bpx("c");
 		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
