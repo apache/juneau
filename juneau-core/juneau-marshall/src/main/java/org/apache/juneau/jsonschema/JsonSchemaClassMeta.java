@@ -22,7 +22,7 @@ import org.apache.juneau.parser.*;
  */
 public class JsonSchemaClassMeta extends ExtendedClassMeta {
 
-	private final ObjectMap schema;
+	private final ObjectMap schema = new ObjectMap();
 
 	/**
 	 * Constructor.
@@ -33,8 +33,8 @@ public class JsonSchemaClassMeta extends ExtendedClassMeta {
 	public JsonSchemaClassMeta(ClassMeta<?> cm, JsonSchemaMetaProvider mp) {
 		super(cm);
 		try {
-			Schema s = cm.getAnnotation(Schema.class);
-			schema = s == null ? ObjectMap.EMPTY_MAP : SchemaUtils.asMap(s);
+			for (Schema a : cm.getAnnotations(Schema.class))
+				schema.appendAll(SchemaUtils.asMap(a));
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}

@@ -347,9 +347,16 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			} else if (sType.isBean()) {
 				BeanMap m = toBeanMap(o);
 				if (aType.hasAnnotation(HtmlLink.class)) {
-					HtmlLink h = aType.getAnnotation(HtmlLink.class);
-					Object urlProp = m.get(h.uriProperty());
-					Object nameProp = m.get(h.nameProperty());
+					String uriProperty = "", nameProperty = "";
+					for (HtmlLink a : aType.getAnnotations(HtmlLink.class)) {
+						if (! a.uriProperty().isEmpty())
+							uriProperty = a.uriProperty();
+						if (! a.nameProperty().isEmpty())
+							nameProperty = a.nameProperty();
+					}
+					Object urlProp = m.get(uriProperty);
+					Object nameProp = m.get(nameProperty);
+
 					out.oTag("a").attrUri("href", urlProp).append('>').text(nameProp).eTag("a");
 					cr = CR_MIXED;
 				} else {

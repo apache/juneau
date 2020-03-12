@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.urlencoding.annotation.*;
 
@@ -20,7 +22,7 @@ import org.apache.juneau.urlencoding.annotation.*;
  */
 public class UrlEncodingClassMeta extends ExtendedClassMeta {
 
-	private final UrlEncoding urlEncoding;
+	private final List<UrlEncoding> urlEncodings;
 	private final boolean expandedParams;
 
 	/**
@@ -31,21 +33,23 @@ public class UrlEncodingClassMeta extends ExtendedClassMeta {
 	 */
 	public UrlEncodingClassMeta(ClassMeta<?> cm, UrlEncodingMetaProvider mp) {
 		super(cm);
-		this.urlEncoding = cm.getAnnotation(UrlEncoding.class);
-		if (urlEncoding != null) {
-			expandedParams = urlEncoding.expandedParams();
-		} else {
-			expandedParams = false;
-		}
+		this.urlEncodings = cm.getAnnotations(UrlEncoding.class);
+
+		boolean _expandedParams = false;
+		for (UrlEncoding a : urlEncodings)
+			if (a.expandedParams())
+				_expandedParams = true;
+
+		this.expandedParams = _expandedParams;
 	}
 
 	/**
-	 * Returns the {@link UrlEncoding} annotation defined on the class.
+	 * Returns the {@link UrlEncoding} annotations defined on the class.
 	 *
-	 * @return The value of the {@link UrlEncoding} annotation, or <jk>null</jk> if annotation is not specified.
+	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
 	 */
-	protected UrlEncoding getAnnotation() {
-		return urlEncoding;
+	protected List<UrlEncoding> getAnnotations() {
+		return urlEncodings;
 	}
 
 	/**

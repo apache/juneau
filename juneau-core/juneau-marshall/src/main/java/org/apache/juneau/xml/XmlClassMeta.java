@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -26,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
 public class XmlClassMeta extends ExtendedClassMeta {
 
 	private final Namespace namespace;
-	private final Xml xml;
+	private final List<Xml> xmls;
 	private final XmlFormat format;
 	private final String childName;
 
@@ -39,25 +37,27 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	public XmlClassMeta(ClassMeta<?> cm, XmlMetaProvider mp) {
 		super(cm);
 		this.namespace = findNamespace(cm, mp);
-		this.xml = cm.getAnnotation(Xml.class);
-		if (xml != null) {
-			this.format = xml.format();
-			this.childName = nullIfEmpty(xml.childName());
+		this.xmls = cm.getAnnotations(Xml.class);
 
-		} else {
-			this.format = XmlFormat.DEFAULT;
-			this.childName = null;
+		String _childName = null;
+		XmlFormat _format = XmlFormat.DEFAULT;
+		for (Xml a : xmls) {
+			if (a.format() != XmlFormat.DEFAULT)
+				_format = a.format();
+			if (! a.childName().isEmpty())
+				_childName = a.childName();
 		}
+		this.format = _format;
+		this.childName = _childName;
 	}
 
 	/**
-	 * Returns the {@link Xml @Xml} annotation defined on the class.
+	 * Returns the {@link Xml @Xml} annotations defined on the class.
 	 *
-	 * @return
-	 * 	The value of the annotation defined on the class, or <jk>null</jk> if annotation is not specified.
+	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
 	 */
-	protected Xml getAnnotation() {
-		return xml;
+	protected List<Xml> getAnnotations() {
+		return xmls;
 	}
 
 	/**
@@ -101,8 +101,8 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	private static Namespace findNamespace(ClassMeta<?> cm, MetaProvider mp) {
 		if (cm == null)
 			return null;
-		List<Xml> xmls = cm.getAnnotationsParentFirst(Xml.class);
-		List<XmlSchema> schemas = cm.getAnnotationsParentFirst(XmlSchema.class);
+		List<Xml> xmls = cm.getAnnotations(Xml.class);
+		List<XmlSchema> schemas = cm.getAnnotations(XmlSchema.class);
 		return XmlUtils.findNamespace(xmls, schemas);
 	}
 }

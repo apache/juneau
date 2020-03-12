@@ -24,7 +24,7 @@ import org.apache.juneau.xml.*;
  */
 public class RdfClassMeta extends ExtendedClassMeta {
 
-	private final Rdf rdf;
+	private final List<Rdf> rdfs;
 	private final RdfCollectionFormat collectionFormat;
 	private final Namespace namespace;
 
@@ -36,24 +36,25 @@ public class RdfClassMeta extends ExtendedClassMeta {
 	 */
 	public RdfClassMeta(ClassMeta<?> cm, RdfMetaProvider mp) {
 		super(cm);
-		this.rdf = cm.getAnnotation(Rdf.class);
-		if (rdf != null) {
-			collectionFormat = rdf.collectionFormat();
-		} else {
-			collectionFormat = RdfCollectionFormat.DEFAULT;
-		}
-		List<Rdf> rdfs = cm.getAnnotationsParentFirst(Rdf.class);
-		List<RdfSchema> schemas = cm.getAnnotationsParentFirst(RdfSchema.class);
+		this.rdfs = cm.getAnnotations(Rdf.class);
+
+		RdfCollectionFormat _collectionFormat = RdfCollectionFormat.DEFAULT;
+		for (Rdf a : rdfs)
+			if (a.collectionFormat() != RdfCollectionFormat.DEFAULT)
+				_collectionFormat = a.collectionFormat();
+		this.collectionFormat = _collectionFormat;
+		
+		List<RdfSchema> schemas = cm.getAnnotations(RdfSchema.class);
 		this.namespace = RdfUtils.findNamespace(rdfs, schemas);
 	}
 
 	/**
-	 * Returns the {@link Rdf @Rdf} annotation defined on the class.
+	 * Returns the {@link Rdf @Rdf} annotations defined on the class.
 	 *
-	 * @return The value of the annotation, or <jk>null</jk> if annotation is not specified.
+	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
 	 */
-	protected Rdf getAnnotation() {
-		return rdf;
+	protected List<Rdf> getAnnotations() {
+		return rdfs;
 	}
 
 	/**

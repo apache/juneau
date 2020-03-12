@@ -2040,7 +2040,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if the inner class has the annotation.
 	 */
 	public boolean hasAnnotation(Class<? extends Annotation> a) {
-		return getAnnotation(a) != null;
+		return getLastAnnotation(a) != null;
 	}
 
 	/**
@@ -2049,19 +2049,9 @@ public final class ClassMeta<T> implements Type {
 	 * @param a The annotation to retrieve.
 	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.
 	 */
-	public <A extends Annotation> A getAnnotation(Class<A> a) {
+	public <A extends Annotation> A getLastAnnotation(Class<A> a) {
 		return info.getLastAnnotation(a, beanContext == null ? BeanContext.DEFAULT : beanContext);
 	}
-
-	/**
-	 * Returns the declared annotation defined on this class.
-	 *
-	 * @param a The annotation to retrieve.
-	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.
-	 */
-//	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a) {
-//		return info.getDeclaredAnnotation(a, beanContext == null ? BeanContext.DEFAULT : beanContext);
-//	}
 
 	/**
 	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
@@ -2071,7 +2061,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
-	public <A extends Annotation> List<A> getAnnotationsParentFirst(Class<A> a) {
+	public <A extends Annotation> List<A> getAnnotations(Class<A> a) {
 		return info.getAnnotations(a, beanContext == null ? BeanContext.DEFAULT : beanContext);
 	}
 

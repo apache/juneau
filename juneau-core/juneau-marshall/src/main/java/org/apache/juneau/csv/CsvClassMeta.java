@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.csv.annotation.*;
 
@@ -21,7 +23,7 @@ import org.apache.juneau.csv.annotation.*;
  */
 public class CsvClassMeta extends ExtendedClassMeta {
 
-	private final Csv csv;
+	private final List<Csv> csvs;
 
 	/**
 	 * Constructor.
@@ -31,15 +33,15 @@ public class CsvClassMeta extends ExtendedClassMeta {
 	 */
 	public CsvClassMeta(ClassMeta<?> cm, CsvMetaProvider mp) {
 		super(cm);
-		this.csv = cm.getAnnotation(Csv.class);
+		this.csvs = cm.getAnnotations(Csv.class);
 	}
 
 	/**
-	 * Returns the {@link Csv @Csv} annotation defined on the class.
+	 * Returns the {@link Csv @Csv} annotations defined on the class.
 	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
+	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
 	 */
-	protected Csv getAnnotation() {
-		return csv;
+	protected List<Csv> getAnnotation() {
+		return csvs;
 	}
 }

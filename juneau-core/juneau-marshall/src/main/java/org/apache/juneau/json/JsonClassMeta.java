@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.annotation.*;
@@ -23,7 +23,7 @@ import org.apache.juneau.json.annotation.*;
  */
 public class JsonClassMeta extends ExtendedClassMeta {
 
-	private final Json json;
+	private final List<Json> jsons;
 	private final String wrapperAttr;
 
 	/**
@@ -34,21 +34,22 @@ public class JsonClassMeta extends ExtendedClassMeta {
 	 */
 	public JsonClassMeta(ClassMeta<?> cm, JsonMetaProvider mp) {
 		super(cm);
-		this.json = cm.getAnnotation(Json.class);
-		if (json != null) {
-			wrapperAttr = nullIfEmpty(json.wrapperAttr());
-		} else {
-			wrapperAttr = null;
-		}
+		this.jsons = cm.getAnnotations(Json.class);
+		
+		String _wrapperAttr = null;
+		for (Json a : this.jsons)
+			if (! a.wrapperAttr().isEmpty())
+				_wrapperAttr = a.wrapperAttr();
+		this.wrapperAttr = _wrapperAttr;
 	}
 
 	/**
-	 * Returns the {@link Json @Json} annotation defined on the class.
+	 * Returns the {@link Json @Json} annotations defined on the class.
 	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
+	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
 	 */
-	protected Json getAnnotation() {
-		return json;
+	protected List<Json> getAnnotations() {
+		return jsons;
 	}
 
 	/**

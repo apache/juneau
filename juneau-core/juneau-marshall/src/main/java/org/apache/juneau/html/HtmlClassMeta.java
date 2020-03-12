@@ -14,6 +14,8 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
 
@@ -23,7 +25,7 @@ import org.apache.juneau.html.annotation.*;
  */
 public class HtmlClassMeta extends ExtendedClassMeta {
 
-	private final Html html;
+	private final List<Html> htmls;
 	private final boolean noTables, noTableHeaders;
 	private final HtmlFormat format;
 	private final HtmlRender<?> render;
@@ -36,27 +38,32 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	 */
 	public HtmlClassMeta(ClassMeta<?> cm, HtmlMetaProvider mp) {
 		super(cm);
-		this.html = cm.getAnnotation(Html.class);
-		if (html != null) {
-			format = html.format();
-			noTables = html.noTables();
-			noTableHeaders = html.noTableHeaders();
-			render = castOrCreate(HtmlRender.class, html.render());
-		} else {
-			format = HtmlFormat.HTML;
-			noTables = false;
-			noTableHeaders = false;
-			render = null;
+		this.htmls = cm.getAnnotations(Html.class);
+
+		boolean _noTables = false, _noTableHeaders = false;
+		HtmlRender<?> _render = null;
+		HtmlFormat _format = HtmlFormat.HTML;
+
+		for (Html a : this.htmls) {
+			_format = a.format();
+			_noTables = a.noTables();
+			_noTableHeaders = a.noTableHeaders();
+			_render = castOrCreate(HtmlRender.class, a.render());
 		}
+
+		this.noTables = _noTables;
+		this.noTableHeaders = _noTableHeaders;
+		this.render = _render;
+		this.format = _format;
 	}
 
 	/**
-	 * Returns the {@link Html @Html} annotation defined on the class.
+	 * Returns the {@link Html @Html} annotations defined on the class.
 	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
+	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
 	 */
-	protected Html getAnnotation() {
-		return html;
+	protected List<Html> getAnnotations() {
+		return htmls;
 	}
 
 	/**

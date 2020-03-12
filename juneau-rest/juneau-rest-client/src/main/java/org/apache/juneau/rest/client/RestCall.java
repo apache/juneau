@@ -1688,7 +1688,7 @@ public final class RestCall extends BeanSession implements Closeable {
 
 			int[] expected = new int[0];
 			if (bodyType != null && bodyType.hasAnnotation(Response.class))
-				expected = bodyType.getAnnotation(Response.class).code();
+				expected = bodyType.getLastAnnotation(Response.class).code();
 
 			if (sc >= 400 && ! ignoreErrors && ! ArrayUtils.contains(sc, expected)) {
 				throw new RestCallException(sc, sl.getReasonPhrase(), method, request.getURI(), getResponseAsString())

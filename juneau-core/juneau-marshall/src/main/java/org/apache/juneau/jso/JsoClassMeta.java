@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jso;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.jso.annotation.*;
 
@@ -21,7 +23,7 @@ import org.apache.juneau.jso.annotation.*;
  */
 public class JsoClassMeta extends ExtendedClassMeta {
 
-	private final Jso jso;
+	private final List<Jso> jsos;
 
 	/**
 	 * Constructor.
@@ -31,15 +33,15 @@ public class JsoClassMeta extends ExtendedClassMeta {
 	 */
 	public JsoClassMeta(ClassMeta<?> cm, JsoMetaProvider mp) {
 		super(cm);
-		this.jso = cm.getAnnotation(Jso.class);
+		this.jsos = cm.getAnnotations(Jso.class);
 	}
 
 	/**
-	 * Returns the {@link Jso @Jso} annotation defined on the class.
+	 * Returns the {@link Jso @Jso} annotations defined on the class.
 	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
+	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
 	 */
-	protected Jso getAnnotation() {
-		return jso;
+	protected List<Jso> getAnnotations() {
+		return jsos;
 	}
 }

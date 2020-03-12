@@ -180,14 +180,14 @@ public class BeanMeta<T> {
 					bdClasses.addAll(Arrays.asList(beanFilter.getBeanDictionary()));
 
 				boolean hasTypeName = false;
-				for (Bean b : classMeta.getAnnotationsParentFirst(Bean.class))
+				for (Bean b : classMeta.getAnnotations(Bean.class))
 					if (! b.typeName().isEmpty())
 						hasTypeName = true;
 				if (hasTypeName)
 					bdClasses.add(classMeta.innerClass);
 				this.beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
-				for (Bean b : classMeta.getAnnotationsParentFirst(Bean.class))
+				for (Bean b : classMeta.getAnnotations(Bean.class))
 					if (! b.typePropertyName().isEmpty())
 						typePropertyName = b.typePropertyName();
 				if (typePropertyName == null)

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.msgpack.annotation.*;
 
@@ -21,7 +23,7 @@ import org.apache.juneau.msgpack.annotation.*;
  */
 public class MsgPackClassMeta extends ExtendedClassMeta {
 
-	private final MsgPack msgPack;
+	private final List<MsgPack> msgPacks;
 
 	/**
 	 * Constructor.
@@ -31,15 +33,15 @@ public class MsgPackClassMeta extends ExtendedClassMeta {
 	 */
 	public MsgPackClassMeta(ClassMeta<?> cm, MsgPackMetaProvider mp) {
 		super(cm);
-		this.msgPack = cm.getAnnotation(MsgPack.class);
+		this.msgPacks = cm.getAnnotations(MsgPack.class);
 	}
 
 	/**
-	 * Returns the {@link MsgPack @MsgPack} annotation defined on the class.
+	 * Returns the {@link MsgPack @MsgPack} annotations defined on the class.
 	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
+	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
 	 */
-	protected MsgPack getAnnotation() {
-		return msgPack;
+	protected List<MsgPack> getAnnotations() {
+		return msgPacks;
 	}
 }
