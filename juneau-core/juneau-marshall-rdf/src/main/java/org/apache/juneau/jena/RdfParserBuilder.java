@@ -774,669 +774,727 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 
-	@Override /* ReaderParserBuilder */
-	public RdfParserBuilder fileCharset(Charset value) {
-		super.fileCharset(value);
-		return this;
-	}
-
-	@Override /* ReaderParserBuilder */
-	public RdfParserBuilder streamCharset(Charset value) {
-		super.streamCharset(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder autoCloseStreams(boolean value) {
-		super.autoCloseStreams(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder autoCloseStreams() {
-		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder debugOutputLines(int value) {
-		super.debugOutputLines(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder trimStrings() {
-		super.trimStrings();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder unbuffered(boolean value) {
-		super.unbuffered(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public RdfParserBuilder unbuffered() {
-		super.unbuffered();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanClassVisibility(Visibility value) {
-		super.beanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanConstructorVisibility(Visibility value) {
-		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public RdfParserBuilder beanDictionary(Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public RdfParserBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public RdfParserBuilder beanDictionaryReplace(Class<?>...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public RdfParserBuilder beanDictionaryReplace(Object...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public RdfParserBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public RdfParserBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFieldVisibility(Visibility value) {
-		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFilters(Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFilters(Object...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFiltersReplace(Class<?>...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFiltersReplace(Object...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFiltersRemove(Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFiltersRemove(Object...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanMapPutReturnsOldValue() {
-		super.beanMapPutReturnsOldValue();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanMethodVisibility(Visibility value) {
-		super.beanMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beansRequireDefaultConstructor(boolean value) {
-		super.beansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beansRequireSerializable(boolean value) {
-		super.beansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beansRequireSettersForGetters(boolean value) {
-		super.beansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beansRequireSomeProperties(boolean value) {
-		super.beansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder bpi(Class<?> beanClass, String value) {
-		super.bpi(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder bpi(Map<String,String> values) {
-		super.bpi(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder bpi(String beanClassName, String value) {
-		super.bpi(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder bpx(Map<String,String> values) {
-		super.bpx(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder bpx(String beanClassName, String value) {
-		super.bpx(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder bpro(Class<?> beanClass, String value) {
-		super.bpro(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder bpro(Map<String,String> values) {
-		super.bpro(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder bpro(String beanClassName, String value) {
-		super.bpro(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder bpwo(Map<String,String> values) {
-		super.bpwo(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder bpwo(String beanClassName, String value) {
-		super.bpwo(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder debug() {
-		super.debug();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder dictionary(Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder dictionary(Object...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder dictionaryReplace(Class<?>...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder dictionaryReplace(Object...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder dictionaryRemove(Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder dictionaryRemove(Object...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> RdfParserBuilder example(Class<T> c, T o) {
-		super.example(c, o);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> RdfParserBuilder exampleJson(Class<T> c, String value) {
-		super.exampleJson(c, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder ignoreInvocationExceptionsOnGetters() {
-		super.ignoreInvocationExceptionsOnGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder ignoreInvocationExceptionsOnSetters() {
-		super.ignoreInvocationExceptionsOnSetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder ignoreTransientFields(boolean value) {
-		super.ignoreTransientFields(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder ignoreUnknownBeanProperties() {
-		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
-		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder implClasses(Map<String,Class<?>> values) {
-		super.implClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanClasses(Object...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanClassesReplace(Class<?>...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanClassesReplace(Object...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanPackages(Object...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanPackagesReplace(Object...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanPackagesRemove(String...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder pojoSwaps(Object...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder pojoSwapsReplace(Class<?>...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder pojoSwapsReplace(Object...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder pojoSwapsRemove(Object...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder sortProperties() {
-		super.sortProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder useEnumNames(boolean value) {
-		super.useEnumNames(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder useEnumNames() {
-		super.useEnumNames();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RdfParserBuilder useJavaBeanIntrospector() {
-		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RdfParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RdfParserBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RdfParserBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RdfParserBuilder add(Map<String,Object> properties) {
+	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder add(Map<String,Object> properties)  {
 		super.add(properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public RdfParserBuilder addTo(String name, Object value) {
+	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder addTo(String name, Object value)  {
 		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public RdfParserBuilder addTo(String name, String key, Object value) {
+	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder addTo(String name, String key, Object value)  {
 		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public RdfParserBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RdfParserBuilder apply(PropertyStore copyFrom) {
+	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder apply(PropertyStore copyFrom)  {
 		super.apply(copyFrom);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public RdfParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
-		super.applyAnnotations(al, vrs);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RdfParserBuilder applyAnnotations(Class<?>...fromClasses) {
+	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public RdfParserBuilder applyAnnotations(Method...fromMethods) {
+	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder applyAnnotations(Method...fromMethods)  {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
+	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder removeFrom(String name, Object value)  {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder set(Map<String,Object> properties)  {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder set(String name, Object value)  {
+		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder annotations(Annotation...values)  {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanClassVisibility(Visibility value)  {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanConstructorVisibility(Visibility value)  {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanDictionary(java.lang.Class<?>...values)  {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanDictionary(Object...values)  {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanDictionaryRemove(java.lang.Class<?>...values)  {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanDictionaryRemove(Object...values)  {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanDictionaryReplace(java.lang.Class<?>...values)  {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanDictionaryReplace(Object...values)  {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanFieldVisibility(Visibility value)  {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanFilters(java.lang.Class<?>...values)  {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanFilters(Object...values)  {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanFiltersRemove(java.lang.Class<?>...values)  {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanFiltersRemove(Object...values)  {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanFiltersReplace(java.lang.Class<?>...values)  {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanFiltersReplace(Object...values)  {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanMapPutReturnsOldValue()  {
+		super.beanMapPutReturnsOldValue();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanMapPutReturnsOldValue(boolean value)  {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanMethodVisibility(Visibility value)  {
+		super.beanMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanTypePropertyName(String value)  {
+		super.beanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beansRequireDefaultConstructor()  {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beansRequireDefaultConstructor(boolean value)  {
+		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beansRequireSerializable()  {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beansRequireSerializable(boolean value)  {
+		super.beansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beansRequireSettersForGetters()  {
+		super.beansRequireSettersForGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beansRequireSettersForGetters(boolean value)  {
+		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beansRequireSomeProperties(boolean value)  {
+		super.beansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder bpi(Map<String,String> values)  {
+		super.bpi(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder bpi(Class<?> beanClass, String properties)  {
+		super.bpi(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder bpi(String beanClassName, String properties)  {
+		super.bpi(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder bpro(Map<String,String> values)  {
+		super.bpro(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder bpro(Class<?> beanClass, String properties)  {
+		super.bpro(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder bpro(String beanClassName, String properties)  {
+		super.bpro(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder bpwo(Map<String,String> values)  {
+		super.bpwo(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder bpwo(Class<?> beanClass, String properties)  {
+		super.bpwo(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder bpwo(String beanClassName, String properties)  {
+		super.bpwo(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder bpx(Map<String,String> values)  {
+		super.bpx(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder bpx(Class<?> beanClass, String properties)  {
+		super.bpx(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder bpx(String beanClassName, String properties)  {
+		super.bpx(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder debug()  {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder debug(boolean value)  {
+		super.debug(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder dictionary(java.lang.Class<?>...values)  {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder dictionary(Object...values)  {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder dictionaryRemove(java.lang.Class<?>...values)  {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder dictionaryRemove(Object...values)  {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder dictionaryReplace(java.lang.Class<?>...values)  {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder dictionaryReplace(Object...values)  {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> RdfParserBuilder example(Class<T> pojoClass, T o)  {
+		super.example(pojoClass, o);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> RdfParserBuilder exampleJson(Class<T> pojoClass, String json)  {
+		super.exampleJson(pojoClass, json);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder examples(String json)  {
+		super.examples(json);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder excludeProperties(Map<String,String> values)  {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder excludeProperties(Class<?> beanClass, String properties)  {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder excludeProperties(String beanClassName, String value)  {
+		super.excludeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder fluentSetters()  {
+		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder fluentSetters(boolean value)  {
+		super.fluentSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder ignoreInvocationExceptionsOnGetters()  {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder ignoreInvocationExceptionsOnGetters(boolean value)  {
+		super.ignoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder ignoreInvocationExceptionsOnSetters()  {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder ignoreInvocationExceptionsOnSetters(boolean value)  {
+		super.ignoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder ignorePropertiesWithoutSetters(boolean value)  {
+		super.ignorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder ignoreTransientFields(boolean value)  {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder ignoreUnknownBeanProperties()  {
+		super.ignoreUnknownBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder ignoreUnknownBeanProperties(boolean value)  {
+		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder ignoreUnknownNullBeanProperties(boolean value)  {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass)  {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder implClasses(Map<String,Class<?>> values)  {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder includeProperties(Map<String,String> values)  {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder includeProperties(Class<?> beanClass, String value)  {
+		super.includeProperties(beanClass, value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder includeProperties(String beanClassName, String value)  {
+		super.includeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder locale(Locale value)  {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder mediaType(MediaType value)  {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder notBeanClasses(java.lang.Class<?>...values)  {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder notBeanClasses(Object...values)  {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder notBeanClassesRemove(java.lang.Class<?>...values)  {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder notBeanClassesRemove(Object...values)  {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder notBeanClassesReplace(java.lang.Class<?>...values)  {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder notBeanClassesReplace(Object...values)  {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder notBeanPackages(Object...values)  {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder notBeanPackages(String...values)  {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder notBeanPackagesRemove(Object...values)  {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder notBeanPackagesRemove(String...values)  {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder notBeanPackagesReplace(Object...values)  {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder notBeanPackagesReplace(String...values)  {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder pojoSwaps(java.lang.Class<?>...values)  {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder pojoSwaps(Object...values)  {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder pojoSwapsRemove(java.lang.Class<?>...values)  {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder pojoSwapsRemove(Object...values)  {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder pojoSwapsReplace(java.lang.Class<?>...values)  {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder pojoSwapsReplace(Object...values)  {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value)  {
+		super.propertyNamer(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder sortProperties()  {
+		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder sortProperties(boolean value)  {
+		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder timeZone(TimeZone value)  {
+		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder useEnumNames()  {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder useEnumNames(boolean value)  {
+		super.useEnumNames(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder useInterfaceProxies(boolean value)  {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder useJavaBeanIntrospector()  {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder useJavaBeanIntrospector(boolean value)  {
+		super.useJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public RdfParserBuilder autoCloseStreams()  {
+		super.autoCloseStreams();
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public RdfParserBuilder autoCloseStreams(boolean value)  {
+		super.autoCloseStreams(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public RdfParserBuilder debugOutputLines(int value)  {
+		super.debugOutputLines(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public RdfParserBuilder listener(Class<? extends org.apache.juneau.parser.ParserListener> value)  {
+		super.listener(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public RdfParserBuilder strict()  {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public RdfParserBuilder strict(boolean value)  {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public RdfParserBuilder trimStrings()  {
+		super.trimStrings();
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public RdfParserBuilder trimStrings(boolean value)  {
+		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public RdfParserBuilder unbuffered()  {
+		super.unbuffered();
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public RdfParserBuilder unbuffered(boolean value)  {
+		super.unbuffered(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ReaderParserBuilder */
+	public RdfParserBuilder fileCharset(Charset value)  {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ReaderParserBuilder */
+	public RdfParserBuilder streamCharset(Charset value)  {
+		super.streamCharset(value);
+		return this;
+	}
+
 	// </CONFIGURATION-PROPERTIES>
 	//------------------------------------------------------------------------------------------------------------------
 }

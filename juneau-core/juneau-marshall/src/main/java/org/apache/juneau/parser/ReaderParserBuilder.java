@@ -92,657 +92,715 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 
-	@Override /* ParserBuilder */
-	public ReaderParserBuilder autoCloseStreams(boolean value) {
-		super.autoCloseStreams(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public ReaderParserBuilder autoCloseStreams() {
-		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public ReaderParserBuilder debugOutputLines(int value) {
-		super.debugOutputLines(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public ReaderParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public ReaderParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public ReaderParserBuilder strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public ReaderParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public ReaderParserBuilder trimStrings() {
-		super.trimStrings();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public ReaderParserBuilder unbuffered(boolean value) {
-		super.unbuffered(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public ReaderParserBuilder unbuffered() {
-		super.unbuffered();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanClassVisibility(Visibility value) {
-		super.beanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanConstructorVisibility(Visibility value) {
-		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public ReaderParserBuilder beanDictionary(Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public ReaderParserBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public ReaderParserBuilder beanDictionaryReplace(Class<?>...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public ReaderParserBuilder beanDictionaryReplace(Object...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public ReaderParserBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public ReaderParserBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanFieldVisibility(Visibility value) {
-		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanFilters(Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanFilters(Object...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanFiltersReplace(Class<?>...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanFiltersReplace(Object...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanFiltersRemove(Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanFiltersRemove(Object...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanMapPutReturnsOldValue() {
-		super.beanMapPutReturnsOldValue();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanMethodVisibility(Visibility value) {
-		super.beanMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beansRequireDefaultConstructor(boolean value) {
-		super.beansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beansRequireSerializable(boolean value) {
-		super.beansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beansRequireSettersForGetters(boolean value) {
-		super.beansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beansRequireSomeProperties(boolean value) {
-		super.beansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder bpi(Class<?> beanClass, String value) {
-		super.bpi(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder bpi(Map<String,String> values) {
-		super.bpi(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder bpi(String beanClassName, String value) {
-		super.bpi(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder bpx(Map<String,String> values) {
-		super.bpx(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder bpx(String beanClassName, String value) {
-		super.bpx(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder bpro(Class<?> beanClass, String value) {
-		super.bpro(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder bpro(Map<String,String> values) {
-		super.bpro(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder bpro(String beanClassName, String value) {
-		super.bpro(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder bpwo(Map<String,String> values) {
-		super.bpwo(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder bpwo(String beanClassName, String value) {
-		super.bpwo(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder debug() {
-		super.debug();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder dictionary(Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder dictionary(Object...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder dictionaryReplace(Class<?>...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder dictionaryReplace(Object...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder dictionaryRemove(Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder dictionaryRemove(Object...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> ReaderParserBuilder example(Class<T> c, T o) {
-		super.example(c, o);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> ReaderParserBuilder exampleJson(Class<T> c, String value) {
-		super.exampleJson(c, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder ignoreInvocationExceptionsOnGetters() {
-		super.ignoreInvocationExceptionsOnGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder ignoreInvocationExceptionsOnSetters() {
-		super.ignoreInvocationExceptionsOnSetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder ignoreTransientFields(boolean value) {
-		super.ignoreTransientFields(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder ignoreUnknownBeanProperties() {
-		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
-		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder implClasses(Map<String,Class<?>> values) {
-		super.implClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanClasses(Object...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanClassesReplace(Class<?>...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanClassesReplace(Object...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanPackages(Object...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanPackagesReplace(Object...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanPackagesRemove(String...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder pojoSwaps(Object...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder pojoSwapsReplace(Class<?>...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder pojoSwapsReplace(Object...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder pojoSwapsRemove(Object...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder sortProperties() {
-		super.sortProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder useEnumNames(boolean value) {
-		super.useEnumNames(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder useEnumNames() {
-		super.useEnumNames();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder useJavaBeanIntrospector() {
-		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public ReaderParserBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public ReaderParserBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public ReaderParserBuilder add(Map<String,Object> properties) {
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder add(Map<String,Object> properties)  {
 		super.add(properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public ReaderParserBuilder addTo(String name, Object value) {
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder addTo(String name, Object value)  {
 		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public ReaderParserBuilder addTo(String name, String key, Object value) {
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder addTo(String name, String key, Object value)  {
 		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public ReaderParserBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public ReaderParserBuilder apply(PropertyStore copyFrom) {
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder apply(PropertyStore copyFrom)  {
 		super.apply(copyFrom);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public ReaderParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
-		super.applyAnnotations(al, vrs);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public ReaderParserBuilder applyAnnotations(Class<?>...fromClasses) {
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public ReaderParserBuilder applyAnnotations(Method...fromMethods) {
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder applyAnnotations(Method...fromMethods)  {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder removeFrom(String name, Object value)  {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder set(Map<String,Object> properties)  {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder set(String name, Object value)  {
+		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder annotations(Annotation...values)  {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanClassVisibility(Visibility value)  {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanConstructorVisibility(Visibility value)  {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanDictionary(java.lang.Class<?>...values)  {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanDictionary(Object...values)  {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanDictionaryRemove(java.lang.Class<?>...values)  {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanDictionaryRemove(Object...values)  {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanDictionaryReplace(java.lang.Class<?>...values)  {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanDictionaryReplace(Object...values)  {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanFieldVisibility(Visibility value)  {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanFilters(java.lang.Class<?>...values)  {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanFilters(Object...values)  {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanFiltersRemove(java.lang.Class<?>...values)  {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanFiltersRemove(Object...values)  {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanFiltersReplace(java.lang.Class<?>...values)  {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanFiltersReplace(Object...values)  {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanMapPutReturnsOldValue()  {
+		super.beanMapPutReturnsOldValue();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanMapPutReturnsOldValue(boolean value)  {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanMethodVisibility(Visibility value)  {
+		super.beanMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanTypePropertyName(String value)  {
+		super.beanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beansRequireDefaultConstructor()  {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beansRequireDefaultConstructor(boolean value)  {
+		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beansRequireSerializable()  {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beansRequireSerializable(boolean value)  {
+		super.beansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beansRequireSettersForGetters()  {
+		super.beansRequireSettersForGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beansRequireSettersForGetters(boolean value)  {
+		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beansRequireSomeProperties(boolean value)  {
+		super.beansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder bpi(Map<String,String> values)  {
+		super.bpi(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder bpi(Class<?> beanClass, String properties)  {
+		super.bpi(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder bpi(String beanClassName, String properties)  {
+		super.bpi(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder bpro(Map<String,String> values)  {
+		super.bpro(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder bpro(Class<?> beanClass, String properties)  {
+		super.bpro(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder bpro(String beanClassName, String properties)  {
+		super.bpro(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder bpwo(Map<String,String> values)  {
+		super.bpwo(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder bpwo(Class<?> beanClass, String properties)  {
+		super.bpwo(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder bpwo(String beanClassName, String properties)  {
+		super.bpwo(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder bpx(Map<String,String> values)  {
+		super.bpx(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder bpx(Class<?> beanClass, String properties)  {
+		super.bpx(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder bpx(String beanClassName, String properties)  {
+		super.bpx(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder debug()  {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder debug(boolean value)  {
+		super.debug(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder dictionary(java.lang.Class<?>...values)  {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder dictionary(Object...values)  {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder dictionaryRemove(java.lang.Class<?>...values)  {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder dictionaryRemove(Object...values)  {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder dictionaryReplace(java.lang.Class<?>...values)  {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder dictionaryReplace(Object...values)  {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> ReaderParserBuilder example(Class<T> pojoClass, T o)  {
+		super.example(pojoClass, o);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> ReaderParserBuilder exampleJson(Class<T> pojoClass, String json)  {
+		super.exampleJson(pojoClass, json);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder examples(String json)  {
+		super.examples(json);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder excludeProperties(Map<String,String> values)  {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder excludeProperties(Class<?> beanClass, String properties)  {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder excludeProperties(String beanClassName, String value)  {
+		super.excludeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder fluentSetters()  {
+		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder fluentSetters(boolean value)  {
+		super.fluentSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder ignoreInvocationExceptionsOnGetters()  {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder ignoreInvocationExceptionsOnGetters(boolean value)  {
+		super.ignoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder ignoreInvocationExceptionsOnSetters()  {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder ignoreInvocationExceptionsOnSetters(boolean value)  {
+		super.ignoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder ignorePropertiesWithoutSetters(boolean value)  {
+		super.ignorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder ignoreTransientFields(boolean value)  {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder ignoreUnknownBeanProperties()  {
+		super.ignoreUnknownBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder ignoreUnknownBeanProperties(boolean value)  {
+		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder ignoreUnknownNullBeanProperties(boolean value)  {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass)  {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder implClasses(Map<String,Class<?>> values)  {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder includeProperties(Map<String,String> values)  {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder includeProperties(Class<?> beanClass, String value)  {
+		super.includeProperties(beanClass, value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder includeProperties(String beanClassName, String value)  {
+		super.includeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder locale(Locale value)  {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder mediaType(MediaType value)  {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder notBeanClasses(java.lang.Class<?>...values)  {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder notBeanClasses(Object...values)  {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder notBeanClassesRemove(java.lang.Class<?>...values)  {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder notBeanClassesRemove(Object...values)  {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder notBeanClassesReplace(java.lang.Class<?>...values)  {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder notBeanClassesReplace(Object...values)  {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder notBeanPackages(Object...values)  {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder notBeanPackages(String...values)  {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder notBeanPackagesRemove(Object...values)  {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder notBeanPackagesRemove(String...values)  {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder notBeanPackagesReplace(Object...values)  {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder notBeanPackagesReplace(String...values)  {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder pojoSwaps(java.lang.Class<?>...values)  {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder pojoSwaps(Object...values)  {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder pojoSwapsRemove(java.lang.Class<?>...values)  {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder pojoSwapsRemove(Object...values)  {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder pojoSwapsReplace(java.lang.Class<?>...values)  {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder pojoSwapsReplace(Object...values)  {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value)  {
+		super.propertyNamer(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder sortProperties()  {
+		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder sortProperties(boolean value)  {
+		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder timeZone(TimeZone value)  {
+		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder useEnumNames()  {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder useEnumNames(boolean value)  {
+		super.useEnumNames(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder useInterfaceProxies(boolean value)  {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder useJavaBeanIntrospector()  {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder useJavaBeanIntrospector(boolean value)  {
+		super.useJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public ReaderParserBuilder autoCloseStreams()  {
+		super.autoCloseStreams();
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public ReaderParserBuilder autoCloseStreams(boolean value)  {
+		super.autoCloseStreams(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public ReaderParserBuilder debugOutputLines(int value)  {
+		super.debugOutputLines(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public ReaderParserBuilder listener(Class<? extends org.apache.juneau.parser.ParserListener> value)  {
+		super.listener(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public ReaderParserBuilder strict()  {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public ReaderParserBuilder strict(boolean value)  {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public ReaderParserBuilder trimStrings()  {
+		super.trimStrings();
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public ReaderParserBuilder trimStrings(boolean value)  {
+		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public ReaderParserBuilder unbuffered()  {
+		super.unbuffered();
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public ReaderParserBuilder unbuffered(boolean value)  {
+		super.unbuffered(value);
+		return this;
+	}
+
 	// </CONFIGURATION-PROPERTIES>
 	//------------------------------------------------------------------------------------------------------------------
 }

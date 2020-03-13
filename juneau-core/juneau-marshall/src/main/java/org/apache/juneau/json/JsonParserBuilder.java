@@ -96,669 +96,727 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 
-	@Override /* ReaderParserBuilder */
-	public JsonParserBuilder fileCharset(Charset value) {
-		super.fileCharset(value);
-		return this;
-	}
-
-	@Override /* ReaderParserBuilder */
-	public JsonParserBuilder streamCharset(Charset value) {
-		super.streamCharset(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder autoCloseStreams(boolean value) {
-		super.autoCloseStreams(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder autoCloseStreams() {
-		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder debugOutputLines(int value) {
-		super.debugOutputLines(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder listener(Class<? extends ParserListener> value) {
-		super.listener(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder trimStrings() {
-		super.trimStrings();
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder unbuffered(boolean value) {
-		super.unbuffered(value);
-		return this;
-	}
-
-	@Override /* ParserBuilder */
-	public JsonParserBuilder unbuffered() {
-		super.unbuffered();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder annotations(Annotation...values) {
-		super.annotations(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanClassVisibility(Visibility value) {
-		super.beanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanConstructorVisibility(Visibility value) {
-		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public JsonParserBuilder beanDictionary(Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public JsonParserBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public JsonParserBuilder beanDictionaryReplace(Class<?>...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public JsonParserBuilder beanDictionaryReplace(Object...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public JsonParserBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public JsonParserBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanFieldVisibility(Visibility value) {
-		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanFilters(Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanFilters(Object...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanFiltersReplace(Class<?>...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanFiltersReplace(Object...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanFiltersRemove(Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanFiltersRemove(Object...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanMapPutReturnsOldValue() {
-		super.beanMapPutReturnsOldValue();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanMethodVisibility(Visibility value) {
-		super.beanMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beansRequireDefaultConstructor(boolean value) {
-		super.beansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beansRequireSerializable(boolean value) {
-		super.beansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beansRequireSettersForGetters(boolean value) {
-		super.beansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beansRequireSomeProperties(boolean value) {
-		super.beansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder bpi(Class<?> beanClass, String value) {
-		super.bpi(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder bpi(Map<String,String> values) {
-		super.bpi(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder bpi(String beanClassName, String value) {
-		super.bpi(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder bpx(Map<String,String> values) {
-		super.bpx(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder bpx(String beanClassName, String value) {
-		super.bpx(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder bpro(Class<?> beanClass, String value) {
-		super.bpro(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder bpro(Map<String,String> values) {
-		super.bpro(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder bpro(String beanClassName, String value) {
-		super.bpro(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder bpwo(Map<String,String> values) {
-		super.bpwo(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder bpwo(String beanClassName, String value) {
-		super.bpwo(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder debug() {
-		super.debug();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder dictionary(Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder dictionary(Object...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder dictionaryReplace(Class<?>...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder dictionaryReplace(Object...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder dictionaryRemove(Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder dictionaryRemove(Object...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> JsonParserBuilder example(Class<T> c, T o) {
-		super.example(c, o);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> JsonParserBuilder exampleJson(Class<T> c, String value) {
-		super.exampleJson(c, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder ignoreInvocationExceptionsOnGetters() {
-		super.ignoreInvocationExceptionsOnGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder ignoreInvocationExceptionsOnSetters() {
-		super.ignoreInvocationExceptionsOnSetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder ignoreTransientFields(boolean value) {
-		super.ignoreTransientFields(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder ignoreUnknownBeanProperties() {
-		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
-		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder implClasses(Map<String,Class<?>> values) {
-		super.implClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder notBeanClasses(Object...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder notBeanClassesReplace(Class<?>...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder notBeanClassesReplace(Object...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder notBeanPackages(Object...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder notBeanPackagesReplace(Object...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder notBeanPackagesRemove(String...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder pojoSwaps(Object...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder pojoSwapsReplace(Class<?>...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder pojoSwapsReplace(Object...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder pojoSwapsRemove(Object...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder sortProperties() {
-		super.sortProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder useEnumNames(boolean value) {
-		super.useEnumNames(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder useEnumNames() {
-		super.useEnumNames();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonParserBuilder useJavaBeanIntrospector() {
-		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public JsonParserBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public JsonParserBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public JsonParserBuilder add(Map<String,Object> properties) {
+	@Override /* GENERATED - ContextBuilder */
+	public JsonParserBuilder add(Map<String,Object> properties)  {
 		super.add(properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public JsonParserBuilder addTo(String name, Object value) {
+	@Override /* GENERATED - ContextBuilder */
+	public JsonParserBuilder addTo(String name, Object value)  {
 		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public JsonParserBuilder addTo(String name, String key, Object value) {
+	@Override /* GENERATED - ContextBuilder */
+	public JsonParserBuilder addTo(String name, String key, Object value)  {
 		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public JsonParserBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public JsonParserBuilder apply(PropertyStore copyFrom) {
+	@Override /* GENERATED - ContextBuilder */
+	public JsonParserBuilder apply(PropertyStore copyFrom)  {
 		super.apply(copyFrom);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public JsonParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
-		super.applyAnnotations(al, vrs);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public JsonParserBuilder applyAnnotations(Class<?>...fromClasses) {
+	@Override /* GENERATED - ContextBuilder */
+	public JsonParserBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public JsonParserBuilder applyAnnotations(Method...fromMethods) {
+	@Override /* GENERATED - ContextBuilder */
+	public JsonParserBuilder applyAnnotations(Method...fromMethods)  {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
+	@Override /* GENERATED - ContextBuilder */
+	public JsonParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonParserBuilder removeFrom(String name, Object value)  {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonParserBuilder set(Map<String,Object> properties)  {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonParserBuilder set(String name, Object value)  {
+		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder annotations(Annotation...values)  {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanClassVisibility(Visibility value)  {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanConstructorVisibility(Visibility value)  {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanDictionary(java.lang.Class<?>...values)  {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanDictionary(Object...values)  {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanDictionaryRemove(java.lang.Class<?>...values)  {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanDictionaryRemove(Object...values)  {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanDictionaryReplace(java.lang.Class<?>...values)  {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanDictionaryReplace(Object...values)  {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanFieldVisibility(Visibility value)  {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanFilters(java.lang.Class<?>...values)  {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanFilters(Object...values)  {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanFiltersRemove(java.lang.Class<?>...values)  {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanFiltersRemove(Object...values)  {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanFiltersReplace(java.lang.Class<?>...values)  {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanFiltersReplace(Object...values)  {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanMapPutReturnsOldValue()  {
+		super.beanMapPutReturnsOldValue();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanMapPutReturnsOldValue(boolean value)  {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanMethodVisibility(Visibility value)  {
+		super.beanMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beanTypePropertyName(String value)  {
+		super.beanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beansRequireDefaultConstructor()  {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beansRequireDefaultConstructor(boolean value)  {
+		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beansRequireSerializable()  {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beansRequireSerializable(boolean value)  {
+		super.beansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beansRequireSettersForGetters()  {
+		super.beansRequireSettersForGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beansRequireSettersForGetters(boolean value)  {
+		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder beansRequireSomeProperties(boolean value)  {
+		super.beansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder bpi(Map<String,String> values)  {
+		super.bpi(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder bpi(Class<?> beanClass, String properties)  {
+		super.bpi(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder bpi(String beanClassName, String properties)  {
+		super.bpi(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder bpro(Map<String,String> values)  {
+		super.bpro(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder bpro(Class<?> beanClass, String properties)  {
+		super.bpro(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder bpro(String beanClassName, String properties)  {
+		super.bpro(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder bpwo(Map<String,String> values)  {
+		super.bpwo(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder bpwo(Class<?> beanClass, String properties)  {
+		super.bpwo(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder bpwo(String beanClassName, String properties)  {
+		super.bpwo(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder bpx(Map<String,String> values)  {
+		super.bpx(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder bpx(Class<?> beanClass, String properties)  {
+		super.bpx(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder bpx(String beanClassName, String properties)  {
+		super.bpx(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder debug()  {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder debug(boolean value)  {
+		super.debug(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder dictionary(java.lang.Class<?>...values)  {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder dictionary(Object...values)  {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder dictionaryRemove(java.lang.Class<?>...values)  {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder dictionaryRemove(Object...values)  {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder dictionaryReplace(java.lang.Class<?>...values)  {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder dictionaryReplace(Object...values)  {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> JsonParserBuilder example(Class<T> pojoClass, T o)  {
+		super.example(pojoClass, o);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> JsonParserBuilder exampleJson(Class<T> pojoClass, String json)  {
+		super.exampleJson(pojoClass, json);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder examples(String json)  {
+		super.examples(json);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder excludeProperties(Map<String,String> values)  {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder excludeProperties(Class<?> beanClass, String properties)  {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder excludeProperties(String beanClassName, String value)  {
+		super.excludeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder fluentSetters()  {
+		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder fluentSetters(boolean value)  {
+		super.fluentSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder ignoreInvocationExceptionsOnGetters()  {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder ignoreInvocationExceptionsOnGetters(boolean value)  {
+		super.ignoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder ignoreInvocationExceptionsOnSetters()  {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder ignoreInvocationExceptionsOnSetters(boolean value)  {
+		super.ignoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder ignorePropertiesWithoutSetters(boolean value)  {
+		super.ignorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder ignoreTransientFields(boolean value)  {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder ignoreUnknownBeanProperties()  {
+		super.ignoreUnknownBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder ignoreUnknownBeanProperties(boolean value)  {
+		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder ignoreUnknownNullBeanProperties(boolean value)  {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass)  {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder implClasses(Map<String,Class<?>> values)  {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder includeProperties(Map<String,String> values)  {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder includeProperties(Class<?> beanClass, String value)  {
+		super.includeProperties(beanClass, value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder includeProperties(String beanClassName, String value)  {
+		super.includeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder locale(Locale value)  {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder mediaType(MediaType value)  {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder notBeanClasses(java.lang.Class<?>...values)  {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder notBeanClasses(Object...values)  {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder notBeanClassesRemove(java.lang.Class<?>...values)  {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder notBeanClassesRemove(Object...values)  {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder notBeanClassesReplace(java.lang.Class<?>...values)  {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder notBeanClassesReplace(Object...values)  {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder notBeanPackages(Object...values)  {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder notBeanPackages(String...values)  {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder notBeanPackagesRemove(Object...values)  {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder notBeanPackagesRemove(String...values)  {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder notBeanPackagesReplace(Object...values)  {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder notBeanPackagesReplace(String...values)  {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder pojoSwaps(java.lang.Class<?>...values)  {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder pojoSwaps(Object...values)  {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder pojoSwapsRemove(java.lang.Class<?>...values)  {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder pojoSwapsRemove(Object...values)  {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder pojoSwapsReplace(java.lang.Class<?>...values)  {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder pojoSwapsReplace(Object...values)  {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value)  {
+		super.propertyNamer(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder sortProperties()  {
+		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder sortProperties(boolean value)  {
+		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder timeZone(TimeZone value)  {
+		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder useEnumNames()  {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder useEnumNames(boolean value)  {
+		super.useEnumNames(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder useInterfaceProxies(boolean value)  {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder useJavaBeanIntrospector()  {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonParserBuilder useJavaBeanIntrospector(boolean value)  {
+		super.useJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public JsonParserBuilder autoCloseStreams()  {
+		super.autoCloseStreams();
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public JsonParserBuilder autoCloseStreams(boolean value)  {
+		super.autoCloseStreams(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public JsonParserBuilder debugOutputLines(int value)  {
+		super.debugOutputLines(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public JsonParserBuilder listener(Class<? extends org.apache.juneau.parser.ParserListener> value)  {
+		super.listener(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public JsonParserBuilder strict()  {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public JsonParserBuilder strict(boolean value)  {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public JsonParserBuilder trimStrings()  {
+		super.trimStrings();
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public JsonParserBuilder trimStrings(boolean value)  {
+		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public JsonParserBuilder unbuffered()  {
+		super.unbuffered();
+		return this;
+	}
+
+	@Override /* GENERATED - ParserBuilder */
+	public JsonParserBuilder unbuffered(boolean value)  {
+		super.unbuffered(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ReaderParserBuilder */
+	public JsonParserBuilder fileCharset(Charset value)  {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ReaderParserBuilder */
+	public JsonParserBuilder streamCharset(Charset value)  {
+		super.streamCharset(value);
+		return this;
+	}
+
 	// </CONFIGURATION-PROPERTIES>
 	//------------------------------------------------------------------------------------------------------------------
 }

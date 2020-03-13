@@ -2129,69 +2129,67 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 
-	@Override /* ContextBuilder */
-	public BeanContextBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public BeanContextBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public BeanContextBuilder add(Map<String,Object> properties) {
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder add(Map<String,Object> properties)  {
 		super.add(properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public BeanContextBuilder addTo(String name, Object value) {
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder addTo(String name, Object value)  {
 		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public BeanContextBuilder addTo(String name, String key, Object value) {
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder addTo(String name, String key, Object value)  {
 		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public BeanContextBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public BeanContextBuilder apply(PropertyStore copyFrom) {
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder apply(PropertyStore copyFrom)  {
 		super.apply(copyFrom);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public BeanContextBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
-		super.applyAnnotations(al, vrs);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public BeanContextBuilder applyAnnotations(Class<?>...fromClasses) {
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public BeanContextBuilder applyAnnotations(Method...fromMethods) {
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder applyAnnotations(Method...fromMethods)  {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder removeFrom(String name, Object value)  {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder set(Map<String,Object> properties)  {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder set(String name, Object value)  {
+		super.set(name, value);
+		return this;
+	}
+
 	// </CONFIGURATION-PROPERTIES>
 	//------------------------------------------------------------------------------------------------------------------
 }

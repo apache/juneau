@@ -23,7 +23,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 
@@ -97,818 +96,901 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 
-	@Override /* UonSerializerBuilder */
-	public UrlEncodingSerializerBuilder encoding(boolean value) {
-		super.encoding(value);
-		return this;
-	}
-
-	@Override /* UonSerializerBuilder */
-	public UrlEncodingSerializerBuilder encoding() {
-		super.encoding();
-		return this;
-	}
-
-	@Override /* UonSerializerBuilder */
-	public UrlEncodingSerializerBuilder paramFormat(ParamFormat paramFormat) {
-		super.paramFormat(paramFormat);
-		return this;
-	}
-
-	@Override /* UonSerializerBuilder */
-	public UrlEncodingSerializerBuilder paramFormatPlain() {
-		super.paramFormatPlain();
-		return this;
-	}
-
-	@Override /* WriterSerializerBuilder */
-	public UrlEncodingSerializerBuilder fileCharset(Charset value) {
-		super.fileCharset(value);
-		return this;
-	}
-
-	@Override /* WriterSerializerBuilder */
-	public UrlEncodingSerializerBuilder maxIndent(int value) {
-		super.maxIndent(value);
-		return this;
-	}
-
-	@Override /* WriterSerializerBuilder */
-	public UrlEncodingSerializerBuilder quoteChar(char value) {
-		super.quoteChar(value);
-		return this;
-	}
-
-	@Override /* WriterSerializerBuilder */
-	public UrlEncodingSerializerBuilder sq() {
-		super.sq();
-		return this;
-	}
-
-	@Override /* WriterSerializerBuilder */
-	public UrlEncodingSerializerBuilder streamCharset(Charset value) {
-		super.streamCharset(value);
-		return this;
-	}
-
-	@Override /* WriterSerializerBuilder */
-	public UrlEncodingSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* WriterSerializerBuilder */
-	public UrlEncodingSerializerBuilder useWhitespace() {
-		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* WriterSerializerBuilder */
-	public UrlEncodingSerializerBuilder ws() {
-		super.ws();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder addBeanTypes(boolean value) {
-		super.addBeanTypes(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder addBeanTypes() {
-		super.addBeanTypes();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder addRootType(boolean value) {
-		super.addRootType(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder addRootType() {
-		super.addRootType();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder detectRecursions(boolean value) {
-		super.detectRecursions(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder detectRecursions() {
-		super.detectRecursions();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder ignoreRecursions(boolean value) {
-		super.ignoreRecursions(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder ignoreRecursions() {
-		super.ignoreRecursions();
-		return this;
-	}
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder initialDepth(int value) {
-		super.initialDepth(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder listener(Class<? extends SerializerListener> value) {
-		super.listener(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder maxDepth(int value) {
-		super.maxDepth(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder sortCollections(boolean value) {
-		super.sortCollections(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder sortCollections() {
-		super.sortCollections();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder sortMaps(boolean value) {
-		super.sortMaps(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder sortMaps() {
-		super.sortMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder trimEmptyCollections(boolean value) {
-		super.trimEmptyCollections(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder trimEmptyCollections() {
-		super.trimEmptyCollections();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder trimEmptyMaps(boolean value) {
-		super.trimEmptyMaps(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder trimEmptyMaps() {
-		super.trimEmptyMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder trimNullProperties(boolean value) {
-		super.trimNullProperties(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder trimStrings() {
-		super.trimStrings();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder uriContext(UriContext value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder uriRelativity(UriRelativity value) {
-		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder uriResolution(UriResolution value) {
-		super.uriResolution(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder annotations(Annotation...values) {
-		super.annotations(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanClassVisibility(Visibility value) {
-		super.beanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanConstructorVisibility(Visibility value) {
-		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public UrlEncodingSerializerBuilder beanDictionary(Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public UrlEncodingSerializerBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public UrlEncodingSerializerBuilder beanDictionaryReplace(Class<?>...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public UrlEncodingSerializerBuilder beanDictionaryReplace(Object...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public UrlEncodingSerializerBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public UrlEncodingSerializerBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanFieldVisibility(Visibility value) {
-		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanFilters(Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanFilters(Object...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanFiltersReplace(Class<?>...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanFiltersReplace(Object...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanFiltersRemove(Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanFiltersRemove(Object...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanMapPutReturnsOldValue() {
-		super.beanMapPutReturnsOldValue();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanMethodVisibility(Visibility value) {
-		super.beanMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beansRequireDefaultConstructor(boolean value) {
-		super.beansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beansRequireSerializable(boolean value) {
-		super.beansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beansRequireSettersForGetters(boolean value) {
-		super.beansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beansRequireSomeProperties(boolean value) {
-		super.beansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder bpi(Class<?> beanClass, String value) {
-		super.bpi(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder bpi(Map<String,String> values) {
-		super.bpi(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder bpi(String beanClassName, String value) {
-		super.bpi(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder bpx(Map<String,String> values) {
-		super.bpx(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder bpx(String beanClassName, String value) {
-		super.bpx(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder bpro(Class<?> beanClass, String value) {
-		super.bpro(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder bpro(Map<String,String> values) {
-		super.bpro(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder bpro(String beanClassName, String value) {
-		super.bpro(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder bpwo(Map<String,String> values) {
-		super.bpwo(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder bpwo(String beanClassName, String value) {
-		super.bpwo(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder debug() {
-		super.debug();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dictionary(Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dictionary(Object...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dictionaryReplace(Class<?>...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dictionaryReplace(Object...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dictionaryRemove(Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dictionaryRemove(Object...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> UrlEncodingSerializerBuilder example(Class<T> c, T o) {
-		super.example(c, o);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> UrlEncodingSerializerBuilder exampleJson(Class<T> c, String value) {
-		super.exampleJson(c, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnGetters() {
-		super.ignoreInvocationExceptionsOnGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnSetters() {
-		super.ignoreInvocationExceptionsOnSetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder ignoreTransientFields(boolean value) {
-		super.ignoreTransientFields(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder ignoreUnknownBeanProperties() {
-		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
-		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder implClasses(Map<String,Class<?>> values) {
-		super.implClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder notBeanClasses(Object...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder notBeanClassesReplace(Class<?>...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder notBeanClassesReplace(Object...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder notBeanPackages(Object...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder notBeanPackagesReplace(Object...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder notBeanPackagesRemove(String...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder pojoSwaps(Object...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder pojoSwapsReplace(Class<?>...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder pojoSwapsReplace(Object...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder pojoSwapsRemove(Object...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder sortProperties() {
-		super.sortProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder useEnumNames(boolean value) {
-		super.useEnumNames(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder useEnumNames() {
-		super.useEnumNames();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public UrlEncodingSerializerBuilder useJavaBeanIntrospector() {
-		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder add(Map<String,Object> properties) {
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingSerializerBuilder add(Map<String,Object> properties)  {
 		super.add(properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder addTo(String name, Object value) {
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingSerializerBuilder addTo(String name, Object value)  {
 		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder addTo(String name, String key, Object value) {
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingSerializerBuilder addTo(String name, String key, Object value)  {
 		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder apply(PropertyStore copyFrom) {
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingSerializerBuilder apply(PropertyStore copyFrom)  {
 		super.apply(copyFrom);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
-		super.applyAnnotations(al, vrs);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder applyAnnotations(Class<?>...fromClasses) {
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingSerializerBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder applyAnnotations(Method...fromMethods) {
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingSerializerBuilder applyAnnotations(Method...fromMethods)  {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingSerializerBuilder removeFrom(String name, Object value)  {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingSerializerBuilder set(Map<String,Object> properties)  {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingSerializerBuilder set(String name, Object value)  {
+		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder annotations(Annotation...values)  {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanClassVisibility(Visibility value)  {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanConstructorVisibility(Visibility value)  {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanDictionary(java.lang.Class<?>...values)  {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanDictionary(Object...values)  {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanDictionaryRemove(java.lang.Class<?>...values)  {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanDictionaryRemove(Object...values)  {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanDictionaryReplace(java.lang.Class<?>...values)  {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanDictionaryReplace(Object...values)  {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanFieldVisibility(Visibility value)  {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanFilters(java.lang.Class<?>...values)  {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanFilters(Object...values)  {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanFiltersRemove(java.lang.Class<?>...values)  {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanFiltersRemove(Object...values)  {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanFiltersReplace(java.lang.Class<?>...values)  {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanFiltersReplace(Object...values)  {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanMapPutReturnsOldValue()  {
+		super.beanMapPutReturnsOldValue();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanMapPutReturnsOldValue(boolean value)  {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanMethodVisibility(Visibility value)  {
+		super.beanMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanTypePropertyName(String value)  {
+		super.beanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beansRequireDefaultConstructor()  {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beansRequireDefaultConstructor(boolean value)  {
+		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beansRequireSerializable()  {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beansRequireSerializable(boolean value)  {
+		super.beansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beansRequireSettersForGetters()  {
+		super.beansRequireSettersForGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beansRequireSettersForGetters(boolean value)  {
+		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beansRequireSomeProperties(boolean value)  {
+		super.beansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpi(Map<String,String> values)  {
+		super.bpi(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpi(Class<?> beanClass, String properties)  {
+		super.bpi(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpi(String beanClassName, String properties)  {
+		super.bpi(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpro(Map<String,String> values)  {
+		super.bpro(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpro(Class<?> beanClass, String properties)  {
+		super.bpro(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpro(String beanClassName, String properties)  {
+		super.bpro(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpwo(Map<String,String> values)  {
+		super.bpwo(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpwo(Class<?> beanClass, String properties)  {
+		super.bpwo(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpwo(String beanClassName, String properties)  {
+		super.bpwo(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpx(Map<String,String> values)  {
+		super.bpx(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpx(Class<?> beanClass, String properties)  {
+		super.bpx(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder bpx(String beanClassName, String properties)  {
+		super.bpx(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder debug()  {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder debug(boolean value)  {
+		super.debug(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder dictionary(java.lang.Class<?>...values)  {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder dictionary(Object...values)  {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder dictionaryRemove(java.lang.Class<?>...values)  {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder dictionaryRemove(Object...values)  {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder dictionaryReplace(java.lang.Class<?>...values)  {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder dictionaryReplace(Object...values)  {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> UrlEncodingSerializerBuilder example(Class<T> pojoClass, T o)  {
+		super.example(pojoClass, o);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> UrlEncodingSerializerBuilder exampleJson(Class<T> pojoClass, String json)  {
+		super.exampleJson(pojoClass, json);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder examples(String json)  {
+		super.examples(json);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder excludeProperties(Map<String,String> values)  {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder excludeProperties(Class<?> beanClass, String properties)  {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder excludeProperties(String beanClassName, String value)  {
+		super.excludeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder fluentSetters()  {
+		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder fluentSetters(boolean value)  {
+		super.fluentSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnGetters()  {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value)  {
+		super.ignoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnSetters()  {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value)  {
+		super.ignoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder ignorePropertiesWithoutSetters(boolean value)  {
+		super.ignorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder ignoreTransientFields(boolean value)  {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder ignoreUnknownBeanProperties()  {
+		super.ignoreUnknownBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder ignoreUnknownBeanProperties(boolean value)  {
+		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder ignoreUnknownNullBeanProperties(boolean value)  {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder implClass(Class<?> interfaceClass, Class<?> implClass)  {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder implClasses(Map<String,Class<?>> values)  {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder includeProperties(Map<String,String> values)  {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder includeProperties(Class<?> beanClass, String value)  {
+		super.includeProperties(beanClass, value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder includeProperties(String beanClassName, String value)  {
+		super.includeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder locale(Locale value)  {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder mediaType(MediaType value)  {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder notBeanClasses(java.lang.Class<?>...values)  {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder notBeanClasses(Object...values)  {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder notBeanClassesRemove(java.lang.Class<?>...values)  {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder notBeanClassesRemove(Object...values)  {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder notBeanClassesReplace(java.lang.Class<?>...values)  {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder notBeanClassesReplace(Object...values)  {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder notBeanPackages(Object...values)  {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder notBeanPackages(String...values)  {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder notBeanPackagesRemove(Object...values)  {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder notBeanPackagesRemove(String...values)  {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder notBeanPackagesReplace(Object...values)  {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder notBeanPackagesReplace(String...values)  {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder pojoSwaps(java.lang.Class<?>...values)  {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder pojoSwaps(Object...values)  {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder pojoSwapsRemove(java.lang.Class<?>...values)  {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder pojoSwapsRemove(Object...values)  {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder pojoSwapsReplace(java.lang.Class<?>...values)  {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder pojoSwapsReplace(Object...values)  {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value)  {
+		super.propertyNamer(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder sortProperties()  {
+		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder sortProperties(boolean value)  {
+		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder timeZone(TimeZone value)  {
+		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder useEnumNames()  {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder useEnumNames(boolean value)  {
+		super.useEnumNames(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder useInterfaceProxies(boolean value)  {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder useJavaBeanIntrospector()  {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder useJavaBeanIntrospector(boolean value)  {
+		super.useJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanTraverseBuilder */
+	public UrlEncodingSerializerBuilder detectRecursions()  {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanTraverseBuilder */
+	public UrlEncodingSerializerBuilder detectRecursions(boolean value)  {
+		super.detectRecursions(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanTraverseBuilder */
+	public UrlEncodingSerializerBuilder ignoreRecursions()  {
+		super.ignoreRecursions();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanTraverseBuilder */
+	public UrlEncodingSerializerBuilder ignoreRecursions(boolean value)  {
+		super.ignoreRecursions(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanTraverseBuilder */
+	public UrlEncodingSerializerBuilder initialDepth(int value)  {
+		super.initialDepth(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanTraverseBuilder */
+	public UrlEncodingSerializerBuilder maxDepth(int value)  {
+		super.maxDepth(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder addBeanTypes()  {
+		super.addBeanTypes();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder addBeanTypes(boolean value)  {
+		super.addBeanTypes(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder addRootType()  {
+		super.addRootType();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder addRootType(boolean value)  {
+		super.addRootType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value)  {
+		super.listener(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder sortCollections()  {
+		super.sortCollections();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder sortCollections(boolean value)  {
+		super.sortCollections(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder sortMaps()  {
+		super.sortMaps();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder sortMaps(boolean value)  {
+		super.sortMaps(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimEmptyCollections()  {
+		super.trimEmptyCollections();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimEmptyCollections(boolean value)  {
+		super.trimEmptyCollections(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimEmptyMaps()  {
+		super.trimEmptyMaps();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimEmptyMaps(boolean value)  {
+		super.trimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimNullProperties(boolean value)  {
+		super.trimNullProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimStrings()  {
+		super.trimStrings();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder trimStrings(boolean value)  {
+		super.trimStrings(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder uriContext(String value)  {
+		super.uriContext(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder uriContext(UriContext value)  {
+		super.uriContext(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder uriRelativity(String value)  {
+		super.uriRelativity(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder uriRelativity(UriRelativity value)  {
+		super.uriRelativity(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder uriResolution(String value)  {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder uriResolution(UriResolution value)  {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* GENERATED - WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder fileCharset(Charset value)  {
+		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* GENERATED - WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder maxIndent(int value)  {
+		super.maxIndent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder quoteChar(char value)  {
+		super.quoteChar(value);
+		return this;
+	}
+
+	@Override /* GENERATED - WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder sq()  {
+		super.sq();
+		return this;
+	}
+
+	@Override /* GENERATED - WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder streamCharset(Charset value)  {
+		super.streamCharset(value);
+		return this;
+	}
+
+	@Override /* GENERATED - WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder useWhitespace()  {
+		super.useWhitespace();
+		return this;
+	}
+
+	@Override /* GENERATED - WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder useWhitespace(boolean value)  {
+		super.useWhitespace(value);
+		return this;
+	}
+
+	@Override /* GENERATED - WriterSerializerBuilder */
+	public UrlEncodingSerializerBuilder ws()  {
+		super.ws();
+		return this;
+	}
+
+	@Override /* GENERATED - UonSerializerBuilder */
+	public UrlEncodingSerializerBuilder encoding()  {
+		super.encoding();
+		return this;
+	}
+
+	@Override /* GENERATED - UonSerializerBuilder */
+	public UrlEncodingSerializerBuilder encoding(boolean value)  {
+		super.encoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - UonSerializerBuilder */
+	public UrlEncodingSerializerBuilder paramFormat(String value)  {
+		super.paramFormat(value);
+		return this;
+	}
+
+	@Override /* GENERATED - UonSerializerBuilder */
+	public UrlEncodingSerializerBuilder paramFormat(ParamFormat value)  {
+		super.paramFormat(value);
+		return this;
+	}
+
+	@Override /* GENERATED - UonSerializerBuilder */
+	public UrlEncodingSerializerBuilder paramFormatPlain()  {
+		super.paramFormatPlain();
+		return this;
+	}
+
 	// </CONFIGURATION-PROPERTIES>
 	//------------------------------------------------------------------------------------------------------------------
 }
