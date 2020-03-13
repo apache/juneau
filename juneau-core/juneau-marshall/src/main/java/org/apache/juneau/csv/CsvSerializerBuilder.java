@@ -575,6 +575,12 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public CsvSerializerBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public CsvSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

@@ -1124,6 +1124,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RdfParserBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

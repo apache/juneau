@@ -1149,6 +1149,29 @@ public @interface BeanConfig {
 	String ignorePropertiesWithoutSetters() default "";
 
 	/**
+	 * Configuration property:  Ignore transient fields.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, methods and fields marked as <jk>transient</jk> will be ignored as bean properties.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js> (default)
+	 * 			<li><js>"false"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreTransientFields}
+	 * </ul>
+	 */
+	String ignoreTransientFields() default "";
+
+	/**
 	 * Configuration property:  Ignore unknown properties.
 	 *
 	 * <p>

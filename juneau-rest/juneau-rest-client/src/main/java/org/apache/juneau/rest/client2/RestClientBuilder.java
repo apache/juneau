@@ -3018,6 +3018,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public RestClientBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

@@ -488,6 +488,12 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsonParserBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsonParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

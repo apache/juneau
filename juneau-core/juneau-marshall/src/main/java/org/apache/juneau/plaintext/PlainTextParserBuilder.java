@@ -450,6 +450,12 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

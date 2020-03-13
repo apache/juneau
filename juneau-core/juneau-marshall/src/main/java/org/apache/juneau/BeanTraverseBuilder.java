@@ -493,6 +493,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

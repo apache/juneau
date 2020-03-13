@@ -696,6 +696,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

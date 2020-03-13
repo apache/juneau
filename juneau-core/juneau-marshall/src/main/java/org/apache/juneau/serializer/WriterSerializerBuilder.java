@@ -522,6 +522,12 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public WriterSerializerBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public WriterSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

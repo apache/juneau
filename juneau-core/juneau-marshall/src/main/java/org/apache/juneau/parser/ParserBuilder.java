@@ -552,6 +552,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ParserBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

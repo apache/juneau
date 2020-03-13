@@ -472,6 +472,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

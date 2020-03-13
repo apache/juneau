@@ -622,6 +622,12 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public XmlParserBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;

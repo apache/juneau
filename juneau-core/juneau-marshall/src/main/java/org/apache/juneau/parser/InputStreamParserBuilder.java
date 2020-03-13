@@ -473,6 +473,12 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public InputStreamParserBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public InputStreamParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

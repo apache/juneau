@@ -472,6 +472,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlParserBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

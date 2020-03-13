@@ -1500,6 +1500,50 @@ public class BeanContext extends Context implements MetaProvider {
 	public static final String BEAN_ignorePropertiesWithoutSetters = PREFIX + ".ignorePropertiesWithoutSetters.b";
 
 	/**
+	 * Configuration property:  Ignore transient fields.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignoreTransientFields BEAN_ignoreTransientFields}
+	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreTransientFields.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.ignoreTransientFields</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_IGNORETRANSIENTFIELDS</c>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreTransientFields()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreTransientFields(boolean)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, methods and fields marked as <jk>transient</jk> or annotated with {@link java.beans.Transient}
+	 * will be ignored as bean properties.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser that doesn't ignore transient fields.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.ignoreTransientFields(<jk>false</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_ignoreTransientFields</jsf>, <jk>false</jk>)
+	 * 		.build();
+	 * </p>
+	 */
+	public static final String BEAN_ignoreTransientFields = PREFIX + ".ignoreTransientFields.b";
+
+	/**
 	 * Configuration property:  Ignore unknown properties.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2368,6 +2412,7 @@ public class BeanContext extends Context implements MetaProvider {
 		ignoreUnknownBeanProperties,
 		ignoreUnknownNullBeanProperties,
 		ignorePropertiesWithoutSetters,
+		ignoreTransientFields,
 		ignoreInvocationExceptionsOnGetters,
 		ignoreInvocationExceptionsOnSetters,
 		useJavaBeanIntrospector,
@@ -2448,6 +2493,7 @@ public class BeanContext extends Context implements MetaProvider {
 		ignoreUnknownBeanProperties = getBooleanProperty(BEAN_ignoreUnknownBeanProperties, false);
 		ignoreUnknownNullBeanProperties = getBooleanProperty(BEAN_ignoreUnknownNullBeanProperties, true);
 		ignorePropertiesWithoutSetters = getBooleanProperty(BEAN_ignorePropertiesWithoutSetters, true);
+		ignoreTransientFields = getBooleanProperty(BEAN_ignoreTransientFields, true);
 		ignoreInvocationExceptionsOnGetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnGetters, false);
 		ignoreInvocationExceptionsOnSetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnSetters, false);
 		useJavaBeanIntrospector = getBooleanProperty(BEAN_useJavaBeanIntrospector, false);
@@ -4030,14 +4076,23 @@ public class BeanContext extends Context implements MetaProvider {
 	/**
 	 * Configuration property:  Ignore properties without setters.
 	 *
-	 * <br>Otherwise, a {@code RuntimeException} is thrown.
-	 *
 	 * @see #BEAN_ignorePropertiesWithoutSetters
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter is silently ignored.
 	 */
 	protected final boolean isIgnorePropertiesWithoutSetters() {
 		return ignorePropertiesWithoutSetters;
+	}
+
+	/**
+	 * Configuration property:  Ignore transient fields.
+	 *
+	 * @see #BEAN_ignoreTransientFields
+	 * @return
+	 * 	<jk>true</jk> if fields and methods marked as transient should be ignored.
+	 */
+	protected final boolean isIgnoreTransientFields() {
+		return ignoreTransientFields;
 	}
 
 	/**
@@ -4247,6 +4302,7 @@ public class BeanContext extends Context implements MetaProvider {
 				.append("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
 				.append("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
 				.append("ignorePropertiesWithoutSetters", ignorePropertiesWithoutSetters)
+				.append("ignoreTransientProperties", ignoreTransientFields)
 				.append("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
 				.append("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
 				.append("implClasses", implClasses)

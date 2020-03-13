@@ -17,9 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.apache.juneau.BeanMeta.MethodType.*;
 
-import java.beans.BeanInfo;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
+import java.beans.*;
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -698,6 +696,9 @@ public class BeanMeta<T> {
 				BeanIgnore bi = ctx.getLastAnnotation(BeanIgnore.class, m);
 				if (bi != null)
 					continue;
+				Transient t = ctx.getLastAnnotation(Transient.class, m);
+				if (t != null && t.value())
+					continue;
 
 				@SuppressWarnings("deprecation")
 				BeanProperty px = m.getLastAnnotation(BeanProperty.class);
@@ -793,7 +794,9 @@ public class BeanMeta<T> {
 		List<Field> l = new LinkedList<>();
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
 			for (FieldInfo f : c2.getDeclaredFields()) {
-				if (f.isAny(STATIC, TRANSIENT))
+				if (f.isAny(STATIC))
+					continue;
+				if (ctx.isIgnoreTransientFields() && (f.isAny(TRANSIENT)))
 					continue;
 				if (ctx.hasAnnotation(BeanIgnore.class, f))
 					continue;
@@ -814,7 +817,9 @@ public class BeanMeta<T> {
 	static final Field findInnerBeanField(BeanContext bc, Class<?> c, Class<?> stopClass, String name) {
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
 			for (FieldInfo f : c2.getDeclaredFields()) {
-				if (f.isAny(STATIC, TRANSIENT))
+				if (f.isAny(STATIC))
+					continue;
+				if (bc.isIgnoreTransientFields() && (f.isAny(TRANSIENT) || f.hasAnnotation(Transient.class)))
 					continue;
 				if (f.hasAnnotation(BeanIgnore.class, bc))
 					continue;

@@ -666,6 +666,12 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

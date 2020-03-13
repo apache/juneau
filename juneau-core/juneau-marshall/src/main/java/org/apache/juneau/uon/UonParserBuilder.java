@@ -525,6 +525,12 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public UonParserBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

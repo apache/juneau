@@ -1347,6 +1347,22 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Ignore transient fields.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreTransientFields}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>true</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder ignoreTransientFields(boolean value) {
+		return set(BEAN_ignoreTransientFields, value);
+	}
+
+	/**
 	 * Configuration property:  Ignore unknown properties.
 	 *
 	 * <p>

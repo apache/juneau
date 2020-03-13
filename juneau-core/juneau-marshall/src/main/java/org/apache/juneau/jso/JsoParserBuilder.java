@@ -442,6 +442,12 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public JsoParserBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsoParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

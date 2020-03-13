@@ -2679,7 +2679,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* BeanContextBuilder */
+	@Override
 	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

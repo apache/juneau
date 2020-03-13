@@ -101,6 +101,8 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.set(BEAN_ignoreInvocationExceptionsOnSetters, bool(a.ignoreInvocationExceptionsOnSetters()));
 		if (! a.ignorePropertiesWithoutSetters().isEmpty())
 			psb.set(BEAN_ignorePropertiesWithoutSetters, bool(a.ignorePropertiesWithoutSetters()));
+		if (! a.ignoreTransientFields().isEmpty())
+			psb.set(BEAN_ignoreTransientFields, bool(a.ignoreTransientFields()));
 		if (! a.ignoreUnknownBeanProperties().isEmpty())
 			psb.set(BEAN_ignoreUnknownBeanProperties, bool(a.ignoreUnknownBeanProperties()));
 		if (! a.ignoreUnknownNullBeanProperties().isEmpty())

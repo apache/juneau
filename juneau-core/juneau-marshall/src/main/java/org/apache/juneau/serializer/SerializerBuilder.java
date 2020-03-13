@@ -827,6 +827,12 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public SerializerBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

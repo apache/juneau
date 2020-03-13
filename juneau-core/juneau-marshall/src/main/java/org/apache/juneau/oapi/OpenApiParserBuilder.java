@@ -425,6 +425,12 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public OpenApiParserBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public OpenApiParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;

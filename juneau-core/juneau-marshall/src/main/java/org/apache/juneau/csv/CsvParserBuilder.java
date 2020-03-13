@@ -456,6 +456,12 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public CsvParserBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public CsvParserBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
