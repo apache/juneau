@@ -236,6 +236,12 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public CsvSerializerBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
@@ -394,6 +400,30 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public CsvSerializerBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public CsvSerializerBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public CsvSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public CsvSerializerBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
 		return this;
 	}
 
@@ -760,6 +790,12 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - SerializerBuilder */
 	public CsvSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public CsvSerializerBuilder dontTrimNullProperties() {
+		super.dontTrimNullProperties();
 		return this;
 	}
 

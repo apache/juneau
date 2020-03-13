@@ -410,6 +410,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSerializerBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
@@ -568,6 +574,30 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSerializerBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSerializerBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSerializerBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
 		return this;
 	}
 
@@ -938,6 +968,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
+	public HtmlSerializerBuilder dontTrimNullProperties() {
+		super.dontTrimNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
 	public HtmlSerializerBuilder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
 		super.listener(value);
 		return this;
@@ -1114,6 +1150,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlSerializerBuilder defaultNamespace(String value) {
 		super.defaultNamespace(value);
+		return this;
+	}
+
+	@Override /* GENERATED - XmlSerializerBuilder */
+	public HtmlSerializerBuilder dontAutoDetectNamespaces() {
+		super.dontAutoDetectNamespaces();
 		return this;
 	}
 

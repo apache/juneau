@@ -332,6 +332,12 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSerializerBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
@@ -490,6 +496,30 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSerializerBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSerializerBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSerializerBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
 		return this;
 	}
 
@@ -856,6 +886,12 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - SerializerBuilder */
 	public JsonSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public JsonSerializerBuilder dontTrimNullProperties() {
+		super.dontTrimNullProperties();
 		return this;
 	}
 

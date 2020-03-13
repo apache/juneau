@@ -274,6 +274,12 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public InputStreamParserBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
@@ -432,6 +438,30 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public InputStreamParserBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public InputStreamParserBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public InputStreamParserBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public InputStreamParserBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
 		return this;
 	}
 

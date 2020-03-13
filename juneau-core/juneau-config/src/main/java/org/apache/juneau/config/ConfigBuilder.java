@@ -14,6 +14,7 @@ package org.apache.juneau.config;
 
 import static org.apache.juneau.config.Config.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -21,6 +22,7 @@ import org.apache.juneau.config.encode.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
@@ -294,45 +296,63 @@ public class ConfigBuilder extends ContextBuilder {
 
 	// <CONFIGURATION-PROPERTIES>
 
-	@Override /* ContextBuilder */
-	public ConfigBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public ConfigBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigBuilder apply(PropertyStore copyFrom) {
+		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public ConfigBuilder apply(PropertyStore copyFrom) {
-		super.apply(copyFrom);
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigBuilder set(Map<String,Object> properties) {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigBuilder set(String name, Object value) {
+		super.set(name, value);
 		return this;
 	}
 

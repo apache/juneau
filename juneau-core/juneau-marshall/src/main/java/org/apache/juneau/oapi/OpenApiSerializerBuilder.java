@@ -236,6 +236,12 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public OpenApiSerializerBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
@@ -394,6 +400,30 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OpenApiSerializerBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OpenApiSerializerBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OpenApiSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OpenApiSerializerBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
 		return this;
 	}
 
@@ -760,6 +790,12 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - SerializerBuilder */
 	public OpenApiSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public OpenApiSerializerBuilder dontTrimNullProperties() {
+		super.dontTrimNullProperties();
 		return this;
 	}
 

@@ -256,6 +256,12 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public SoapXmlSerializerBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
@@ -414,6 +420,30 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SoapXmlSerializerBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SoapXmlSerializerBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SoapXmlSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SoapXmlSerializerBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
 		return this;
 	}
 
@@ -784,6 +814,12 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
+	public SoapXmlSerializerBuilder dontTrimNullProperties() {
+		super.dontTrimNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
 	public SoapXmlSerializerBuilder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
 		super.listener(value);
 		return this;
@@ -960,6 +996,12 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* GENERATED - XmlSerializerBuilder */
 	public SoapXmlSerializerBuilder defaultNamespace(String value) {
 		super.defaultNamespace(value);
+		return this;
+	}
+
+	@Override /* GENERATED - XmlSerializerBuilder */
+	public SoapXmlSerializerBuilder dontAutoDetectNamespaces() {
+		super.dontAutoDetectNamespaces();
 		return this;
 	}
 

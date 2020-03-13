@@ -389,6 +389,12 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public WriterSerializerBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public WriterSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
@@ -547,6 +553,30 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public WriterSerializerBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public WriterSerializerBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public WriterSerializerBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public WriterSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public WriterSerializerBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
 		return this;
 	}
 
@@ -913,6 +943,12 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	@Override /* GENERATED - SerializerBuilder */
 	public WriterSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public WriterSerializerBuilder dontTrimNullProperties() {
+		super.dontTrimNullProperties();
 		return this;
 	}
 

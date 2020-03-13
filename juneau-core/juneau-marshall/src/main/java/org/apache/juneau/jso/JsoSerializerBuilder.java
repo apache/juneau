@@ -235,6 +235,12 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public JsoSerializerBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public JsoSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
@@ -393,6 +399,30 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsoSerializerBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsoSerializerBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsoSerializerBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsoSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsoSerializerBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
 		return this;
 	}
 
@@ -759,6 +789,12 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* GENERATED - SerializerBuilder */
 	public JsoSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public JsoSerializerBuilder dontTrimNullProperties() {
+		super.dontTrimNullProperties();
 		return this;
 	}
 

@@ -642,627 +642,717 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 
 	// <CONFIGURATION-PROPERTIES>
 
-	@Override /* BeanTraverseBuilder */
-	public SerializerGroupBuilder detectRecursions(boolean value) {
-		super.detectRecursions(value);
-		return this;
-	}
-
-	@Override /* BeanTraverseBuilder */
-	public SerializerGroupBuilder detectRecursions() {
-		super.detectRecursions();
-		return this;
-	}
-
-	@Override /* BeanTraverseBuilder */
-	public SerializerGroupBuilder ignoreRecursions(boolean value) {
-		super.ignoreRecursions(value);
-		return this;
-	}
-
-	@Override /* BeanTraverseBuilder */
-	public SerializerGroupBuilder ignoreRecursions() {
-		super.ignoreRecursions();
-		return this;
-	}
-
-	@Override /* BeanTraverseBuilder */
-	public SerializerGroupBuilder initialDepth(int value) {
-		super.initialDepth(value);
-		return this;
-	}
-
-	@Override /* BeanTraverseBuilder */
-	public SerializerGroupBuilder maxDepth(int value) {
-		super.maxDepth(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder annotations(Annotation...values) {
-		super.annotations(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanClassVisibility(Visibility value) {
-		super.beanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanConstructorVisibility(Visibility value) {
-		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public SerializerGroupBuilder beanDictionary(Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public SerializerGroupBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public SerializerGroupBuilder beanDictionaryReplace(Class<?>...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public SerializerGroupBuilder beanDictionaryReplace(Object...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public SerializerGroupBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public SerializerGroupBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanFieldVisibility(Visibility value) {
-		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanFilters(Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanFilters(Object...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanFiltersReplace(Class<?>...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanFiltersReplace(Object...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanFiltersRemove(Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanFiltersRemove(Object...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanMapPutReturnsOldValue() {
-		super.beanMapPutReturnsOldValue();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanMethodVisibility(Visibility value) {
-		super.beanMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beansRequireDefaultConstructor(boolean value) {
-		super.beansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beansRequireSerializable(boolean value) {
-		super.beansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beansRequireSettersForGetters(boolean value) {
-		super.beansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beansRequireSomeProperties(boolean value) {
-		super.beansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder bpi(Class<?> beanClass, String value) {
-		super.bpi(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder bpi(Map<String,String> values) {
-		super.bpi(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder bpi(String beanClassName, String value) {
-		super.bpi(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder bpx(Map<String,String> values) {
-		super.bpx(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder bpx(String beanClassName, String value) {
-		super.bpx(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder bpro(Class<?> beanClass, String value) {
-		super.bpro(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder bpro(Map<String,String> values) {
-		super.bpro(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder bpro(String beanClassName, String value) {
-		super.bpro(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder bpwo(Map<String,String> values) {
-		super.bpwo(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder bpwo(String beanClassName, String value) {
-		super.bpwo(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder debug() {
-		super.debug();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder dictionary(Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder dictionary(Object...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder dictionaryReplace(Class<?>...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder dictionaryReplace(Object...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder dictionaryRemove(Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder dictionaryRemove(Object...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> SerializerGroupBuilder example(Class<T> c, T o) {
-		super.example(c, o);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> SerializerGroupBuilder exampleJson(Class<T> c, String value) {
-		super.exampleJson(c, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder ignoreInvocationExceptionsOnGetters() {
-		super.ignoreInvocationExceptionsOnGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder ignoreInvocationExceptionsOnSetters() {
-		super.ignoreInvocationExceptionsOnSetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder ignoreTransientFields(boolean value) {
-		super.ignoreTransientFields(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder ignoreUnknownBeanProperties() {
-		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
-		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder implClasses(Map<String,Class<?>> values) {
-		super.implClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanClasses(Object...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanClassesReplace(Class<?>...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanClassesReplace(Object...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanPackages(Object...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanPackagesReplace(Object...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanPackagesRemove(String...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder pojoSwaps(Object...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder pojoSwapsReplace(Class<?>...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder pojoSwapsReplace(Object...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder pojoSwapsRemove(Object...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder sortProperties() {
-		super.sortProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder useEnumNames(boolean value) {
-		super.useEnumNames(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder useEnumNames() {
-		super.useEnumNames();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder useJavaBeanIntrospector() {
-		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public SerializerGroupBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public SerializerGroupBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public SerializerGroupBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public SerializerGroupBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public SerializerGroupBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public SerializerGroupBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public SerializerGroupBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public SerializerGroupBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
-		super.applyAnnotations(al, vrs);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public SerializerGroupBuilder applyAnnotations(Class<?>...fromClasses) {
+	@Override /* GENERATED - ContextBuilder */
+	public SerializerGroupBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public SerializerGroupBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SerializerGroupBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SerializerGroupBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SerializerGroupBuilder set(Map<String,Object> properties) {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SerializerGroupBuilder set(String name, Object value) {
+		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanClassVisibility(Visibility value) {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanConstructorVisibility(Visibility value) {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionary(java.lang.Class<?>...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionary(Object...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionaryRemove(Object...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanFieldVisibility(Visibility value) {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanFilters(java.lang.Class<?>...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanFilters(Object...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanFiltersRemove(java.lang.Class<?>...values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanFiltersRemove(Object...values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanFiltersReplace(java.lang.Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanMapPutReturnsOldValue(boolean value) {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanTypePropertyName(String value) {
+		super.beanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireDefaultConstructor(boolean value) {
+		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireSerializable(boolean value) {
+		super.beansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireSettersForGetters(boolean value) {
+		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beansRequireSomeProperties(boolean value) {
+		super.beansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder bpi(Map<String,String> values) {
+		super.bpi(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder bpi(Class<?> beanClass, String properties) {
+		super.bpi(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder bpi(String beanClassName, String properties) {
+		super.bpi(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder bpro(Map<String,String> values) {
+		super.bpro(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder bpro(Class<?> beanClass, String properties) {
+		super.bpro(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder bpro(String beanClassName, String properties) {
+		super.bpro(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder bpwo(Map<String,String> values) {
+		super.bpwo(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder bpwo(Class<?> beanClass, String properties) {
+		super.bpwo(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder bpwo(String beanClassName, String properties) {
+		super.bpwo(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder bpx(Map<String,String> values) {
+		super.bpx(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder bpx(Class<?> beanClass, String properties) {
+		super.bpx(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder bpx(String beanClassName, String properties) {
+		super.bpx(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder debug(boolean value) {
+		super.debug(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder dictionary(java.lang.Class<?>...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder dictionary(Object...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder dictionaryRemove(java.lang.Class<?>...values) {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder dictionaryRemove(Object...values) {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder dictionaryReplace(java.lang.Class<?>...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder dictionaryReplace(Object...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> SerializerGroupBuilder example(Class<T> pojoClass, T o) {
+		super.example(pojoClass, o);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> SerializerGroupBuilder exampleJson(Class<T> pojoClass, String json) {
+		super.exampleJson(pojoClass, json);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder examples(String json) {
+		super.examples(json);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder excludeProperties(Map<String,String> values) {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder excludeProperties(Class<?> beanClass, String properties) {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder excludeProperties(String beanClassName, String value) {
+		super.excludeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder fluentSetters() {
+		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder fluentSetters(boolean value) {
+		super.fluentSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+		super.ignoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+		super.ignoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder ignorePropertiesWithoutSetters(boolean value) {
+		super.ignorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder ignoreUnknownBeanProperties(boolean value) {
+		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder ignoreUnknownNullBeanProperties(boolean value) {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder implClasses(Map<String,Class<?>> values) {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder includeProperties(Map<String,String> values) {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder includeProperties(Class<?> beanClass, String value) {
+		super.includeProperties(beanClass, value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder includeProperties(String beanClassName, String value) {
+		super.includeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder notBeanClasses(java.lang.Class<?>...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder notBeanPackages(Object...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder notBeanPackages(String...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder notBeanPackagesRemove(String...values) {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwaps(java.lang.Class<?>...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwaps(Object...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwapsRemove(Object...values) {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+		super.propertyNamer(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder sortProperties() {
+		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder sortProperties(boolean value) {
+		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder useInterfaceProxies(boolean value) {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder useJavaBeanIntrospector(boolean value) {
+		super.useJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanTraverseBuilder */
+	public SerializerGroupBuilder detectRecursions() {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanTraverseBuilder */
+	public SerializerGroupBuilder detectRecursions(boolean value) {
+		super.detectRecursions(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanTraverseBuilder */
+	public SerializerGroupBuilder ignoreRecursions() {
+		super.ignoreRecursions();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanTraverseBuilder */
+	public SerializerGroupBuilder ignoreRecursions(boolean value) {
+		super.ignoreRecursions(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanTraverseBuilder */
+	public SerializerGroupBuilder initialDepth(int value) {
+		super.initialDepth(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanTraverseBuilder */
+	public SerializerGroupBuilder maxDepth(int value) {
+		super.maxDepth(value);
 		return this;
 	}
 

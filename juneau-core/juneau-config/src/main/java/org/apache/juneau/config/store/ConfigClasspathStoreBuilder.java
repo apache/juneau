@@ -12,7 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
+import java.lang.reflect.*;
+import java.util.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder for {@link ConfigClasspathStore} objects.
@@ -45,6 +50,66 @@ public class ConfigClasspathStoreBuilder extends ConfigStoreBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// <CONFIGURATION-PROPERTIES>
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigClasspathStoreBuilder add(Map<String,Object> properties) {
+		super.add(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigClasspathStoreBuilder addTo(String name, Object value) {
+		super.addTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigClasspathStoreBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigClasspathStoreBuilder apply(PropertyStore copyFrom) {
+		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigClasspathStoreBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigClasspathStoreBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigClasspathStoreBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigClasspathStoreBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigClasspathStoreBuilder set(Map<String,Object> properties) {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigClasspathStoreBuilder set(String name, Object value) {
+		super.set(name, value);
+		return this;
+	}
 
 	// </CONFIGURATION-PROPERTIES>
 }

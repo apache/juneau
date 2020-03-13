@@ -277,6 +277,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
@@ -435,6 +441,30 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
 		return this;
 	}
 
@@ -801,6 +831,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - SerializerBuilder */
 	public UrlEncodingSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public UrlEncodingSerializerBuilder dontTrimNullProperties() {
+		super.dontTrimNullProperties();
 		return this;
 	}
 

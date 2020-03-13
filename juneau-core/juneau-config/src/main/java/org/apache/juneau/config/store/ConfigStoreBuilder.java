@@ -12,7 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
+import java.lang.reflect.*;
+import java.util.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Base builder class for {@link ConfigStore} objects.
@@ -43,6 +48,66 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// <CONFIGURATION-PROPERTIES>
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder add(Map<String,Object> properties) {
+		super.add(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder addTo(String name, Object value) {
+		super.addTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder apply(PropertyStore copyFrom) {
+		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder set(Map<String,Object> properties) {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder set(String name, Object value) {
+		super.set(name, value);
+		return this;
+	}
 
 	// </CONFIGURATION-PROPERTIES>
 }

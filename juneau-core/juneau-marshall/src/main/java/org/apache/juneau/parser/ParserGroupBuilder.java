@@ -373,591 +373,681 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 
 	// <CONFIGURATION-PROPERTIES>
 
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder annotations(Annotation...values) {
-		super.annotations(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanClassVisibility(Visibility value) {
-		super.beanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanConstructorVisibility(Visibility value) {
-		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public ParserGroupBuilder beanDictionary(Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public ParserGroupBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public ParserGroupBuilder beanDictionaryReplace(Class<?>...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public ParserGroupBuilder beanDictionaryReplace(Object...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public ParserGroupBuilder beanDictionaryRemove(Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	@Deprecated
-	public ParserGroupBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanFieldVisibility(Visibility value) {
-		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanFilters(Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanFilters(Object...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanFiltersReplace(Class<?>...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanFiltersReplace(Object...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanFiltersRemove(Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanFiltersRemove(Object...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanMapPutReturnsOldValue() {
-		super.beanMapPutReturnsOldValue();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanMethodVisibility(Visibility value) {
-		super.beanMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beansRequireDefaultConstructor(boolean value) {
-		super.beansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beansRequireSerializable(boolean value) {
-		super.beansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beansRequireSettersForGetters(boolean value) {
-		super.beansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beansRequireSomeProperties(boolean value) {
-		super.beansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder bpi(Class<?> beanClass, String value) {
-		super.bpi(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder bpi(Map<String,String> values) {
-		super.bpi(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder bpi(String beanClassName, String value) {
-		super.bpi(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder bpx(Map<String,String> values) {
-		super.bpx(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder bpx(String beanClassName, String value) {
-		super.bpx(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder bpro(Class<?> beanClass, String value) {
-		super.bpro(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder bpro(Map<String,String> values) {
-		super.bpro(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder bpro(String beanClassName, String value) {
-		super.bpro(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder bpwo(Map<String,String> values) {
-		super.bpwo(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder bpwo(String beanClassName, String value) {
-		super.bpwo(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder debug() {
-		super.debug();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder dictionary(Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder dictionary(Object...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder dictionaryReplace(Class<?>...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder dictionaryReplace(Object...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder dictionaryRemove(Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder dictionaryRemove(Object...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> ParserGroupBuilder example(Class<T> c, T o) {
-		super.example(c, o);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> ParserGroupBuilder exampleJson(Class<T> c, String value) {
-		super.exampleJson(c, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder ignoreInvocationExceptionsOnGetters() {
-		super.ignoreInvocationExceptionsOnGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder ignoreInvocationExceptionsOnSetters() {
-		super.ignoreInvocationExceptionsOnSetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder ignoreTransientFields(boolean value) {
-		super.ignoreTransientFields(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder ignoreUnknownBeanProperties() {
-		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
-		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder implClasses(Map<String,Class<?>> values) {
-		super.implClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanClasses(Object...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanClassesReplace(Class<?>...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanClassesReplace(Object...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanPackages(Object...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanPackagesReplace(Object...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanPackagesRemove(String...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder pojoSwaps(Object...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder pojoSwapsReplace(Class<?>...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder pojoSwapsReplace(Object...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder pojoSwapsRemove(Object...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder sortProperties() {
-		super.sortProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder useEnumNames(boolean value) {
-		super.useEnumNames(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder useEnumNames() {
-		super.useEnumNames();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder useJavaBeanIntrospector() {
-		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public ParserGroupBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public ParserGroupBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public ParserGroupBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public ParserGroupBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public ParserGroupBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public ParserGroupBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public ParserGroupBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public ParserGroupBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
-		super.applyAnnotations(al, vrs);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public ParserGroupBuilder applyAnnotations(Class<?>...fromClasses) {
+	@Override /* GENERATED - ContextBuilder */
+	public ParserGroupBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public ParserGroupBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ParserGroupBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ParserGroupBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ParserGroupBuilder set(Map<String,Object> properties) {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ParserGroupBuilder set(String name, Object value) {
+		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanClassVisibility(Visibility value) {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanConstructorVisibility(Visibility value) {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanDictionary(java.lang.Class<?>...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanDictionary(Object...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanDictionaryRemove(Object...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanFieldVisibility(Visibility value) {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanFilters(java.lang.Class<?>...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanFilters(Object...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanFiltersRemove(java.lang.Class<?>...values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanFiltersRemove(Object...values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanFiltersReplace(java.lang.Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanMapPutReturnsOldValue(boolean value) {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanTypePropertyName(String value) {
+		super.beanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beansRequireDefaultConstructor(boolean value) {
+		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beansRequireSerializable(boolean value) {
+		super.beansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beansRequireSettersForGetters(boolean value) {
+		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beansRequireSomeProperties(boolean value) {
+		super.beansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder bpi(Map<String,String> values) {
+		super.bpi(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder bpi(Class<?> beanClass, String properties) {
+		super.bpi(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder bpi(String beanClassName, String properties) {
+		super.bpi(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder bpro(Map<String,String> values) {
+		super.bpro(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder bpro(Class<?> beanClass, String properties) {
+		super.bpro(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder bpro(String beanClassName, String properties) {
+		super.bpro(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder bpwo(Map<String,String> values) {
+		super.bpwo(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder bpwo(Class<?> beanClass, String properties) {
+		super.bpwo(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder bpwo(String beanClassName, String properties) {
+		super.bpwo(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder bpx(Map<String,String> values) {
+		super.bpx(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder bpx(Class<?> beanClass, String properties) {
+		super.bpx(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder bpx(String beanClassName, String properties) {
+		super.bpx(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder debug(boolean value) {
+		super.debug(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder dictionary(java.lang.Class<?>...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder dictionary(Object...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder dictionaryRemove(java.lang.Class<?>...values) {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder dictionaryRemove(Object...values) {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder dictionaryReplace(java.lang.Class<?>...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder dictionaryReplace(Object...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> ParserGroupBuilder example(Class<T> pojoClass, T o) {
+		super.example(pojoClass, o);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> ParserGroupBuilder exampleJson(Class<T> pojoClass, String json) {
+		super.exampleJson(pojoClass, json);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder examples(String json) {
+		super.examples(json);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder excludeProperties(Map<String,String> values) {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder excludeProperties(Class<?> beanClass, String properties) {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder excludeProperties(String beanClassName, String value) {
+		super.excludeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder fluentSetters() {
+		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder fluentSetters(boolean value) {
+		super.fluentSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+		super.ignoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+		super.ignoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder ignorePropertiesWithoutSetters(boolean value) {
+		super.ignorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder ignoreUnknownBeanProperties(boolean value) {
+		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder ignoreUnknownNullBeanProperties(boolean value) {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder implClasses(Map<String,Class<?>> values) {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder includeProperties(Map<String,String> values) {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder includeProperties(Class<?> beanClass, String value) {
+		super.includeProperties(beanClass, value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder includeProperties(String beanClassName, String value) {
+		super.includeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder notBeanClasses(java.lang.Class<?>...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder notBeanPackages(Object...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder notBeanPackages(String...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder notBeanPackagesRemove(String...values) {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder pojoSwaps(java.lang.Class<?>...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder pojoSwaps(Object...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder pojoSwapsRemove(Object...values) {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+		super.propertyNamer(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder sortProperties() {
+		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder sortProperties(boolean value) {
+		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder useInterfaceProxies(boolean value) {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder useJavaBeanIntrospector(boolean value) {
+		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 

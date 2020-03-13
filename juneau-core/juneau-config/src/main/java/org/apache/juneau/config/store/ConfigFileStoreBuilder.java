@@ -15,9 +15,13 @@ package org.apache.juneau.config.store;
 import static org.apache.juneau.config.store.ConfigFileStore.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.nio.charset.*;
+import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder for {@link ConfigFileStore} objects.
@@ -220,6 +224,66 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	// <CONFIGURATION-PROPERTIES>
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder add(Map<String,Object> properties) {
+		super.add(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder addTo(String name, Object value) {
+		super.addTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder apply(PropertyStore copyFrom) {
+		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
+		super.applyAnnotations(fromClasses);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder applyAnnotations(Method...fromMethods) {
+		super.applyAnnotations(fromMethods);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder set(Map<String,Object> properties) {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder set(String name, Object value) {
+		super.set(name, value);
+		return this;
+	}
 
 	// </CONFIGURATION-PROPERTIES>
 }

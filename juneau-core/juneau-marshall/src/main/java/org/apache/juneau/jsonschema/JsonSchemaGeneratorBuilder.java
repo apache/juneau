@@ -510,6 +510,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
@@ -668,6 +674,30 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
 		return this;
 	}
 

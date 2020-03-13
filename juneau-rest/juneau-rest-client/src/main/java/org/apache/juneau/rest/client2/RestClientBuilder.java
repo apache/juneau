@@ -2737,555 +2737,681 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	// <CONFIGURATION-PROPERTIES>
 
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanClassVisibility(Visibility value) {
-		super.beanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanConstructorVisibility(Visibility value) {
-		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFieldVisibility(Visibility value) {
-		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFilters(Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFilters(Object...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFiltersReplace(Class<?>...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFiltersReplace(Object...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFiltersRemove(Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanFiltersRemove(Object...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanMapPutReturnsOldValue() {
-		super.beanMapPutReturnsOldValue();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanMethodVisibility(Visibility value) {
-		super.beanMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beansRequireDefaultConstructor(boolean value) {
-		super.beansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beansRequireSerializable(boolean value) {
-		super.beansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beansRequireSettersForGetters(boolean value) {
-		super.beansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beansRequireSomeProperties(boolean value) {
-		super.beansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpi(Class<?> beanClass, String value) {
-		super.bpi(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpi(Map<String,String> values) {
-		super.bpi(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpi(String beanClassName, String value) {
-		super.bpi(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpx(Map<String,String> values) {
-		super.bpx(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpx(String beanClassName, String value) {
-		super.bpx(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpro(Class<?> beanClass, String value) {
-		super.bpro(beanClass, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpro(Map<String,String> values) {
-		super.bpro(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpro(String beanClassName, String value) {
-		super.bpro(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpwo(Map<String,String> values) {
-		super.bpwo(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpwo(String beanClassName, String value) {
-		super.bpwo(beanClassName, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder debug() {
-		return debug(true);
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder debug(boolean value) {
-		super.debug(value);
-		set(RESTCLIENT_debug, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder dictionary(Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder dictionary(Object...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder dictionaryReplace(Class<?>...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder dictionaryReplace(Object...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder dictionaryRemove(Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder dictionaryRemove(Object...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> RestClientBuilder example(Class<T> c, T o) {
-		super.example(c, o);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public <T> RestClientBuilder exampleJson(Class<T> c, String value) {
-		super.exampleJson(c, value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreInvocationExceptionsOnGetters() {
-		super.ignoreInvocationExceptionsOnGetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreInvocationExceptionsOnSetters() {
-		super.ignoreInvocationExceptionsOnSetters();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreTransientFields(boolean value) {
-		super.ignoreTransientFields(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreUnknownBeanProperties() {
-		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
-		super.implClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
-		super.implClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClasses(Object...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClassesReplace(Class<?>...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClassesReplace(Object...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackages(Object...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackagesReplace(Object...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackagesRemove(String...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwaps(Object...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwapsReplace(Class<?>...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwapsReplace(Object...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwapsRemove(Object...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder sortProperties() {
-		super.sortProperties();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder useEnumNames(boolean value) {
-		super.useEnumNames(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder useEnumNames() {
-		super.useEnumNames();
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder useJavaBeanIntrospector() {
-		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RestClientBuilder annotations(Annotation...values) {
-		super.annotations(values);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RestClientBuilder set(String name, Object value) {
-		super.set(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RestClientBuilder set(Map<String,Object> properties) {
-		super.set(properties);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public RestClientBuilder removeFrom(String name, Object value) {
-		super.removeFrom(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public RestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {
-		super.applyAnnotations(al, vrs);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RestClientBuilder applyAnnotations(Class<?>...fromClasses) {
+	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
-	@Override /* ContextBuilder */
+	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder removeFrom(String name, Object value) {
+		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder set(Map<String,Object> properties) {
+		super.set(properties);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder set(String name, Object value) {
+		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder annotations(Annotation...values) {
+		super.annotations(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanClassVisibility(Visibility value) {
+		super.beanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanConstructorVisibility(Visibility value) {
+		super.beanConstructorVisibility(value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanDictionary(java.lang.Class<?>...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanDictionary(Object...values) {
+		super.beanDictionary(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanDictionaryRemove(Object...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanFieldVisibility(Visibility value) {
+		super.beanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanFilters(java.lang.Class<?>...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanFilters(Object...values) {
+		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanFiltersRemove(java.lang.Class<?>...values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanFiltersRemove(Object...values) {
+		super.beanFiltersRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanFiltersReplace(java.lang.Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanMapPutReturnsOldValue() {
+		super.beanMapPutReturnsOldValue();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanMapPutReturnsOldValue(boolean value) {
+		super.beanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanMethodVisibility(Visibility value) {
+		super.beanMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanTypePropertyName(String value) {
+		super.beanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beansDontRequireSomeProperties() {
+		super.beansDontRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beansRequireDefaultConstructor(boolean value) {
+		super.beansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beansRequireSerializable(boolean value) {
+		super.beansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beansRequireSettersForGetters(boolean value) {
+		super.beansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beansRequireSomeProperties(boolean value) {
+		super.beansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder bpi(Map<String,String> values) {
+		super.bpi(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder bpi(Class<?> beanClass, String properties) {
+		super.bpi(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder bpi(String beanClassName, String properties) {
+		super.bpi(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder bpro(Map<String,String> values) {
+		super.bpro(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder bpro(Class<?> beanClass, String properties) {
+		super.bpro(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder bpro(String beanClassName, String properties) {
+		super.bpro(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder bpwo(Map<String,String> values) {
+		super.bpwo(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder bpwo(Class<?> beanClass, String properties) {
+		super.bpwo(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder bpwo(String beanClassName, String properties) {
+		super.bpwo(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder bpx(Map<String,String> values) {
+		super.bpx(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder bpx(Class<?> beanClass, String properties) {
+		super.bpx(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder bpx(String beanClassName, String properties) {
+		super.bpx(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder debug(boolean value) {
+		super.debug(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder dictionary(java.lang.Class<?>...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder dictionary(Object...values) {
+		super.dictionary(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder dictionaryRemove(java.lang.Class<?>...values) {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder dictionaryRemove(Object...values) {
+		super.dictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder dictionaryReplace(java.lang.Class<?>...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder dictionaryReplace(Object...values) {
+		super.dictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder dontIgnorePropertiesWithoutSetters() {
+		super.dontIgnorePropertiesWithoutSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder dontIgnoreTransientFields() {
+		super.dontIgnoreTransientFields();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder dontIgnoreUnknownNullBeanProperties() {
+		super.dontIgnoreUnknownNullBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder dontUseInterfaceProxies() {
+		super.dontUseInterfaceProxies();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> RestClientBuilder example(Class<T> pojoClass, T o) {
+		super.example(pojoClass, o);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public <T> RestClientBuilder exampleJson(Class<T> pojoClass, String json) {
+		super.exampleJson(pojoClass, json);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder examples(String json) {
+		super.examples(json);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder excludeProperties(Map<String,String> values) {
+		super.excludeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder excludeProperties(Class<?> beanClass, String properties) {
+		super.excludeProperties(beanClass, properties);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder excludeProperties(String beanClassName, String value) {
+		super.excludeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder fluentSetters() {
+		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder fluentSetters(boolean value) {
+		super.fluentSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder ignoreInvocationExceptionsOnGetters() {
+		super.ignoreInvocationExceptionsOnGetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+		super.ignoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder ignoreInvocationExceptionsOnSetters() {
+		super.ignoreInvocationExceptionsOnSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+		super.ignoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder ignorePropertiesWithoutSetters(boolean value) {
+		super.ignorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder ignoreTransientFields(boolean value) {
+		super.ignoreTransientFields(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder ignoreUnknownBeanProperties() {
+		super.ignoreUnknownBeanProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
+		super.ignoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder ignoreUnknownNullBeanProperties(boolean value) {
+		super.ignoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
+		super.implClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
+		super.implClasses(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder includeProperties(Map<String,String> values) {
+		super.includeProperties(values);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder includeProperties(Class<?> beanClass, String value) {
+		super.includeProperties(beanClass, value);
+		return this;
+	}
+
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder includeProperties(String beanClassName, String value) {
+		super.includeProperties(beanClassName, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder notBeanClasses(java.lang.Class<?>...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder notBeanClasses(Object...values) {
+		super.notBeanClasses(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder notBeanPackages(Object...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder notBeanPackages(String...values) {
+		super.notBeanPackages(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder notBeanPackagesRemove(String...values) {
+		super.notBeanPackagesRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder pojoSwaps(java.lang.Class<?>...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder pojoSwaps(Object...values) {
+		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder pojoSwapsRemove(Object...values) {
+		super.pojoSwapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+		super.propertyNamer(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder sortProperties() {
+		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder sortProperties(boolean value) {
+		super.sortProperties(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder useEnumNames() {
+		super.useEnumNames();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder useInterfaceProxies(boolean value) {
+		super.useInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder useJavaBeanIntrospector() {
+		super.useJavaBeanIntrospector();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
+		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
