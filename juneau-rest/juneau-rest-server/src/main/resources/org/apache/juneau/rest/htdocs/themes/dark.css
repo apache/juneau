@@ -109,7 +109,6 @@ nav a:active, nav a:hover {
 section {
 	display: table;
 	width: 100%;
-	margin-bottom: 50px;
 }
 
 article {
@@ -201,6 +200,7 @@ footer {
 	bottom: 0;
 	position: fixed;
 	background-color: #373a3c;
+	border-top: 2px solid #000000;
 }
 
 /**********************************************************************************************************************/

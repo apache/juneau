@@ -98,6 +98,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#aside()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#aside(String[])}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -125,6 +129,51 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static final String HTMLDOC_aside = PREFIX + ".aside.ls";
 
 	/**
+	 * Configuration property:  Float aside section contents.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_asideFloat HTMLDOC_asideFloat}
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.asideFloat.s"</js>
+	 * 	<li><b>Data type:</b>  {@link AsideFloat}
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.asideFloat</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_ASIDEFLOAT</c>
+	 * 	<li><b>Default:</b>  {@link AsideFloat#DEFAULT}
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#asideFloat()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#asideFloat(Float)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to position the aside contents of the page around the main contents.
+	 *
+	 * <p>
+	 * By default, the aside section is floated to the right.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		aside={
+	 * 			<js>"&lt;ul&gt;"</js>,
+	 * 			<js>"	&lt;li&gt;Item 1"</js>,
+	 * 			<js>"	&lt;li&gt;Item 2"</js>,
+	 * 			<js>"	&lt;li&gt;Item 3"</js>,
+	 * 			<js>"&lt;/ul&gt;"</js>
+	 * 		},
+	 * 		asideFloat=<js>"RIGHT"</js>
+	 * 	)
+	 * </p>
+	 */
+	public static final String HTMLDOC_asideFloat = PREFIX + ".asideFloat.s";
+
+	/**
 	 * Configuration property:  Footer section contents.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -139,6 +188,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#footer()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#footer(String[])}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -175,6 +228,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#head()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#head(String[])}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -220,6 +277,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#header()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#header(String[])}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -253,6 +314,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#nav()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#nav(String[])}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -290,6 +355,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#navlinks()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#navlinks(String[])}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -364,6 +433,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#noResultsMessage()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#noResultsMessage(String)}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -398,6 +471,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#nowrap()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#nowrap(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#nowrap()}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -421,6 +499,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#script()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#script(String[])}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -470,6 +552,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#style()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#style(String[])}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -521,6 +607,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#stylesheet()}
 	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#stylesheet(String[])}
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -550,6 +640,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#template()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#template(Class)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -652,6 +746,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final String[] style, stylesheet, script, navlinks, head, header, nav, aside, footer;
+	private final AsideFloat asideFloat;
 	private final String noResultsMessage;
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
@@ -704,6 +799,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		header = getArrayProperty(HTMLDOC_header, String.class);
 		nav = getArrayProperty(HTMLDOC_nav, String.class);
 		aside = getArrayProperty(HTMLDOC_aside, String.class);
+		asideFloat = getProperty(HTMLDOC_asideFloat, AsideFloat.class, AsideFloat.RIGHT);
 		footer = getArrayProperty(HTMLDOC_footer, String.class);
 		nowrap = getBooleanProperty(HTMLDOC_nowrap, false);
 		navlinks = getArrayProperty(HTMLDOC_navlinks, String.class);
@@ -767,6 +863,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	protected final String[] getAside() {
 		return aside;
+	}
+
+	/**
+	 * Configuration property:  Float side section contents.
+	 *
+	 * @see #HTMLDOC_asideFloat
+	 * @return
+	 * 	How to float the aside contents on the page.
+	 */
+	protected final AsideFloat getAsideFloat() {
+		return asideFloat;
 	}
 
 	/**
@@ -913,6 +1020,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 				.append("nav", nav)
 				.append("navlinks", navlinks)
 				.append("aside", aside)
+				.append("asideFloat", asideFloat)
 				.append("footer", footer)
 				.append("style", style)
 				.append("head", head)

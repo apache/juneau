@@ -91,6 +91,59 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
+	 * Configuration property:  Float aside section contents.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_asideFloat HTMLDOC_asideFloat}
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.asideFloat.s"</js>
+	 * 	<li><b>Data type:</b>  {@link AsideFloat}
+	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.asideFloat</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_ASIDEFLOAT</c>
+	 * 	<li><b>Default:</b>  {@link AsideFloat#DEFAULT}
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#asideFloat()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializerBuilder#asideFloat(Float)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to position the aside contents of the page around the main contents.
+	 *
+	 * <p>
+	 * By default, the aside section is floated to the right.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		aside={
+	 * 			<js>"&lt;ul&gt;"</js>,
+	 * 			<js>"	&lt;li&gt;Item 1"</js>,
+	 * 			<js>"	&lt;li&gt;Item 2"</js>,
+	 * 			<js>"	&lt;li&gt;Item 3"</js>,
+	 * 			<js>"&lt;/ul&gt;"</js>
+	 * 		},
+	 * 		asideFloat=<js>"RIGHT"</js>
+	 * 	)
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public HtmlDocSerializerBuilder asideFloat(Float value) {
+		set(HTMLDOC_asideFloat, value);
+		return this;
+	}
+
+	/**
 	 * Configuration property:  Footer section contents.
 	 *
 	 * <p>

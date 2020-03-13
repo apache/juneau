@@ -43,6 +43,8 @@ public class HtmlDocConfigApply extends ConfigApply<HtmlDocConfig> {
 		HtmlDocConfig a = ai.getAnnotation();
 		if (a.aside().length > 0)
 			psb.set(HTMLDOC_aside, resolveList(a.aside(), psb.peek(String[].class, HTMLDOC_aside)));
+		if (! "DEFAULT".equalsIgnoreCase(a.asideFloat()))
+			psb.set(HTMLDOC_asideFloat, a.asideFloat().toUpperCase());
 		if (a.footer().length > 0)
 			psb.set(HTMLDOC_footer, resolveList(a.footer(), psb.peek(String[].class, HTMLDOC_footer)));
 		if (a.head().length > 0)

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.html.AsideFloat.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -106,6 +108,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 */
 	protected void body(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 
+		AsideFloat asideFloat = session.getAsideFloat();
+		boolean hasAside = hasAside(session);
+
 		if (hasHeader(session)) {
 			w.sTag(2, "header").nl(2);
 			header(session, w, o);
@@ -118,19 +123,41 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 			w.ie(2).eTag("nav").nl(2);
 		}
 
+		if (hasAside && asideFloat.is(TOP)) {
+			w.sTag(2, "section").nl(2);
+			w.sTag(3, "aside").nl(3);
+			aside(session, w, o);
+			w.ie(3).eTag("aside").nl(3);
+			w.ie(2).eTag("section").nl(2);
+		}
+
 		w.sTag(2, "section").nl(2);
+
+		if (hasAside && asideFloat.is(LEFT)) {
+			w.sTag(3, "aside").nl(3);
+			aside(session, w, o);
+			w.ie(3).eTag("aside").nl(3);
+		}
 
 		w.sTag(3, "article").nl(3);
 		article(session, w, o);
 		w.ie(3).eTag("article").nl(3);
 
-		if (hasAside(session)) {
+		if (hasAside && asideFloat.isAny(RIGHT, DEFAULT)) {
 			w.sTag(3, "aside").nl(3);
 			aside(session, w, o);
 			w.ie(3).eTag("aside").nl(3);
 		}
 
 		w.ie(2).eTag("section").nl(2);
+
+		if (hasAside && asideFloat.is(BOTTOM)) {
+			w.sTag(2, "section").nl(2);
+			w.sTag(3, "aside").nl(3);
+			aside(session, w, o);
+			w.ie(3).eTag("aside").nl(3);
+			w.ie(2).eTag("section").nl(2);
+		}
 
 		if (hasFooter(session)) {
 			w.sTag(2, "footer").nl(2);

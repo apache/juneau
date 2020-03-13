@@ -94,6 +94,55 @@ public @interface HtmlDocConfig {
 	String[] aside() default {};
 
 	/**
+	 * Configuration property:  Float aside section contents.
+	 *
+	 * <p>
+	 * Allows you to position the aside contents of the page around the main contents.
+	 *
+	 * <p>
+	 * By default, the aside section is floated to the right.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 *  <ja>@HtmlDocConfig</ja>(
+	 * 		aside={
+	 * 			<js>"&lt;ul&gt;"</js>,
+	 * 			<js>"	&lt;li&gt;Item 1"</js>,
+	 * 			<js>"	&lt;li&gt;Item 2"</js>,
+	 * 			<js>"	&lt;li&gt;Item 3"</js>,
+	 * 			<js>"&lt;/ul&gt;"</js>
+	 * 		},
+	 * 		asideFloat=<js>"TOP"</js>
+	 * 	)
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"RIGHT"</js>
+	 * 			<li><js>"LEFT"</js>
+	 * 			<li><js>"TOP"</js>
+	 * 			<li><js>"BOTTOM"</js>
+	 * 			<li><js>"DEFAULT"</js> (defaults to <js>"RIGHT"</js>)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_asideFloat}
+	 * </ul>
+	 */
+	String asideFloat() default "DEFAULT";
+
+	/**
 	 * Configuration property:  Footer section contents.
 	 *
 	 * <p>

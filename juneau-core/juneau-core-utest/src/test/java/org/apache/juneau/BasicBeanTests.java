@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.testutils.TestUtils.*;
 
 import java.beans.*;
+import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
@@ -83,5 +84,28 @@ public class BasicBeanTests {
 	@Test
 	public void a04_testTransientMethodsIgnored() {
 		assertObjectEquals("{f1:1}", A2.create());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Bean with dyna property
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class B {
+		@Beanp(name="*")
+		public Map<String,Integer> f1 = new TreeMap<>();
+
+		public static B create() {
+			B x = new B();
+			x.f1.put("a", 1);
+			return x;
+		}
+	}
+
+	@Test
+	public void b01_beanWithDynaProperty() throws Exception {
+		assertObjectEquals("{a:1}", B.create());
+
+		B b = JsonParser.DEFAULT.parse("{a:1}", B.class);
+		assertObjectEquals("{a:1}", b);
 	}
 }

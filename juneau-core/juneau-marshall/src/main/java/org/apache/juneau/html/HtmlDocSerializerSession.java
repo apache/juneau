@@ -36,6 +36,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	private final HtmlDocSerializer ctx;
 	private final String[] navlinks, head, header, nav, aside, footer;
+	private final AsideFloat asideFloat;
 	private final Set<String> style, stylesheet, script;
 	private final boolean nowrap;
 
@@ -55,6 +56,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		header = getProperty(HTMLDOC_header, String[].class, ctx.getHeader());
 		nav = getProperty(HTMLDOC_nav, String[].class, ctx.getNav());
 		aside = getProperty(HTMLDOC_aside, String[].class, ctx.getAside());
+		asideFloat = getProperty(HTMLDOC_asideFloat, AsideFloat.class, ctx.getAsideFloat());
 		footer = getProperty(HTMLDOC_footer, String[].class, ctx.getFooter());
 		navlinks = getProperty(HTMLDOC_navlinks, String[].class, ctx.getNavlinks());
 
@@ -124,6 +126,17 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 */
 	protected final String[] getAside() {
 		return aside;
+	}
+
+	/**
+	 * Configuration property:  Aside section contents float.
+	 *
+	 * @see HtmlDocSerializer#HTMLDOC_asideFloat
+	 * @return
+	 * 	The location of where to place the aside section.
+	 */
+	protected final AsideFloat getAsideFloat() {
+		return asideFloat;
 	}
 
 	/**

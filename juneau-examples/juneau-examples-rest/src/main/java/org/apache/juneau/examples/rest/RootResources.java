@@ -52,7 +52,7 @@ import org.apache.juneau.serializer.annotation.*;
 		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 	},
 	aside={
-		"<div style='max-width:400px' class='text'>",
+		"<div class='text'>",
 		"	<p>This is an example of a 'router' page that serves as a jumping-off point to child resources.</p>",
 		"	<p>Resources can be nested arbitrarily deep through router pages.</p>",
 		"	<p>Note the <span class='link'>options</span> link provided that lets you see the generated swagger doc for this page.</p>",
@@ -60,7 +60,8 @@ import org.apache.juneau.serializer.annotation.*;
 		"	<p>All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.</p>",
 		"	<p>Other features (such as this aside) are added through annotations.</p>",
 		"</div>"
-	}
+	},
+	asideFloat="RIGHT"
 )
 @SerializerConfig(
 	// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
