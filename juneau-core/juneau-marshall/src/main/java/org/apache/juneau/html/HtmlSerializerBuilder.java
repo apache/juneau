@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -68,6 +69,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSerializerBuilder addKeyValueTableHeaders(boolean value) {
 		return set(HTML_addKeyValueTableHeaders, value);
 	}
@@ -84,6 +86,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSerializerBuilder addKeyValueTableHeaders() {
 		return set(HTML_addKeyValueTableHeaders, true);
 	}
@@ -104,6 +107,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSerializerBuilder detectLinksInStrings(boolean value) {
 		return set(HTML_detectLinksInStrings, value);
 	}
@@ -123,6 +127,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<br>The default is <js>"label"</js>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSerializerBuilder labelParameter(String value) {
 		return set(HTML_labelParameter, value);
 	}
@@ -142,6 +147,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSerializerBuilder detectLabelParameters(boolean value) {
 		return set(HTML_detectLabelParameters, value);
 	}
@@ -162,6 +168,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<br>The default is {@link AnchorText#TO_STRING}.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSerializerBuilder uriAnchorText(AnchorText value) {
 		return set(HTML_uriAnchorText, value);
 	}
@@ -181,9 +188,14 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<br>The default is {@link AnchorText#TO_STRING}.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSerializerBuilder uriAnchorText(String value) {
 		return set(HTML_uriAnchorText, value);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* XmlSerializerBuilder */
 	public HtmlSerializerBuilder addNamespaceUrisToRoot(boolean value) {
@@ -1012,4 +1024,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

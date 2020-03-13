@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -72,6 +73,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 * 	<br>Default is <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UonParserBuilder decoding(boolean value) {
 		return set(UON_decoding, value);
 	}
@@ -88,6 +90,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UonParserBuilder decoding() {
 		return decoding(true);
 	}
@@ -108,6 +111,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UonParserBuilder validateEnd(boolean value) {
 		return set(UON_validateEnd, value);
 	}
@@ -124,9 +128,14 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UonParserBuilder validateEnd() {
 		return set(UON_validateEnd, true);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* ReaderParserBuilder */
 	public UonParserBuilder fileCharset(Charset value) {
@@ -787,4 +796,8 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

@@ -53,6 +53,10 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 	@Override /* ReaderParserBuilder */
 	public CsvParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
@@ -712,4 +716,8 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

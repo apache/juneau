@@ -54,6 +54,10 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 	@Override /* UonParserBuilder */
 	public OpenApiParserBuilder decoding(boolean value) {
 		return set(UonParser.UON_decoding, value);
@@ -687,4 +691,8 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

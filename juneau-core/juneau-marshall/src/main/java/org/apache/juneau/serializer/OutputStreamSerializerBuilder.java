@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -64,6 +65,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is {@link BinaryFormat#HEX}.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public OutputStreamSerializerBuilder binaryFormat(BinaryFormat value) {
 		return set(OSSERIALIZER_binaryFormat, value);
 	}
@@ -84,9 +86,14 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is {@link BinaryFormat#HEX}.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public OutputStreamSerializerBuilder binaryFormat(String value) {
 		return set(OSSERIALIZER_binaryFormat, BinaryFormat.valueOf(value));
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder annotations(Annotation...values) {
@@ -675,6 +682,11 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 
 	@Override /* Context */
 	public OutputStreamSerializer build() {

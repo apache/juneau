@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -71,6 +72,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder addDescriptionsTo(String value) {
 		return set(JSONSCHEMA_addDescriptionsTo, value);
 	}
@@ -97,6 +99,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder addExamplesTo(String value) {
 		return set(JSONSCHEMA_addExamplesTo, value);
 	}
@@ -115,6 +118,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder allowNestedDescriptions(boolean value) {
 		return set(JSONSCHEMA_allowNestedDescriptions, value);
 	}
@@ -131,6 +135,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder allowNestedDescriptions() {
 		return set(JSONSCHEMA_allowNestedDescriptions, true);
 	}
@@ -149,6 +154,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder allowNestedExamples(boolean value) {
 		return set(JSONSCHEMA_allowNestedExamples, value);
 	}
@@ -165,6 +171,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder allowNestedExamples() {
 		return set(JSONSCHEMA_allowNestedExamples, true);
 	}
@@ -188,6 +195,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder beanDefMapper(Class<? extends BeanDefMapper> value) {
 		return set(JSONSCHEMA_beanDefMapper, value);
 	}
@@ -210,6 +218,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder beanDefMapper(BeanDefMapper value) {
 		return set(JSONSCHEMA_beanDefMapper, value);
 	}
@@ -232,6 +241,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	The schema.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder defaultSchema(Class<?> c, ObjectMap schema) {
 		return addTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
 	}
@@ -258,6 +268,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	A comma-delimited list of types to ignore.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder ignoreTypes(String value) {
 		return set(JSONSCHEMA_ignoreTypes, value);
 	}
@@ -284,6 +295,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder useBeanDefs(boolean value) {
 		return set(JSONSCHEMA_useBeanDefs, value);
 	}
@@ -307,9 +319,14 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder useBeanDefs() {
 		return set(JSONSCHEMA_useBeanDefs, true);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder annotations(Annotation...values) {
@@ -898,4 +915,8 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

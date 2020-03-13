@@ -53,6 +53,10 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 	@Override /* WriterSerializerBuilder */
 	public PlainTextSerializerBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
@@ -837,4 +841,9 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 }

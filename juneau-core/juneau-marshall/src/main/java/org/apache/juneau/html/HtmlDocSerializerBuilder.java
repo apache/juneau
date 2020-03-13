@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -84,6 +85,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder aside(String[] value) {
 		set(HTMLDOC_aside, value);
 		return this;
@@ -111,6 +113,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder footer(String[] value) {
 		set(HTMLDOC_footer, value);
 		return this;
@@ -135,6 +138,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder head(String[] value) {
 		set(HTMLDOC_head, value);
 		return this;
@@ -160,6 +164,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder header(String[] value) {
 		set(HTMLDOC_header, value);
 		return this;
@@ -188,6 +193,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder nav(String[] value) {
 		set(HTMLDOC_nav, value);
 		return this;
@@ -234,6 +240,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder navlinks_replace(String[] value) {
 		set(HTMLDOC_navlinks, value);
 		return this;
@@ -246,6 +253,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The value to add to this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder navlinks(String[] value) {
 		set(HTMLDOC_navlinks_add, value);
 		return this;
@@ -271,6 +279,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder noResultsMessage(String value) {
 		set(HTMLDOC_noResultsMessage, value);
 		return this;
@@ -286,6 +295,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder nowrap(boolean value) {
 		set(HTMLDOC_nowrap, value);
 		return this;
@@ -310,6 +320,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder script_replace(String[] value) {
 		set(HTMLDOC_script, value);
 		return this;
@@ -322,6 +333,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The value to add to this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder script(String[] value) {
 		set(HTMLDOC_script_add, value);
 		return this;
@@ -347,6 +359,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder style_replace(String[] value) {
 		set(HTMLDOC_style, value);
 		return this;
@@ -359,6 +372,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The value to add to this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder style(String[] value) {
 		set(HTMLDOC_style_add, value);
 		return this;
@@ -377,6 +391,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder stylesheet_replace(String[] value) {
 		set(HTMLDOC_stylesheet, value);
 		return this;
@@ -389,6 +404,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The value to add to this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder stylesheet(String[] value) {
 		set(HTMLDOC_stylesheet_add, value);
 		return this;
@@ -415,6 +431,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder template(Class<?> value) {
 		set(HTMLDOC_template, value);
 		return this;
@@ -434,6 +451,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	@SuppressWarnings("unchecked")
 	public HtmlDocSerializerBuilder widgets(Class<? extends HtmlWidget>...values) {
 		return addTo(HTMLDOC_widgets, values);
@@ -452,6 +470,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * @param values The values to set on this setting.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	@SuppressWarnings("unchecked")
 	public HtmlDocSerializerBuilder widgetsReplace(Class<? extends HtmlWidget>...values) {
 		return set(HTMLDOC_widgets, values);
@@ -470,6 +489,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder widgets(HtmlWidget...values) {
 		return addTo(HTMLDOC_widgets, values);
 	}
@@ -487,6 +507,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlDocSerializerBuilder widgetsReplace(HtmlWidget...values) {
 		return set(HTMLDOC_widgets, values);
 	}

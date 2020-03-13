@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -71,6 +72,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 * 	<br>Default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UrlEncodingParserBuilder expandedParams(boolean value) {
 		return set(URLENC_expandedParams, value);
 	}
@@ -87,9 +89,14 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UrlEncodingParserBuilder expandedParams() {
 		return set(URLENC_expandedParams, true);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* UonParserBuilder */
 	public UrlEncodingParserBuilder decoding() {
@@ -732,4 +739,8 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

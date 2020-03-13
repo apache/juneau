@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -67,6 +68,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public BeanTraverseBuilder detectRecursions(boolean value) {
 		return set(BEANTRAVERSE_detectRecursions, value);
 	}
@@ -83,6 +85,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public BeanTraverseBuilder detectRecursions() {
 		return set(BEANTRAVERSE_detectRecursions, true);
 	}
@@ -108,6 +111,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public BeanTraverseBuilder ignoreRecursions(boolean value) {
 		return set(BEANTRAVERSE_ignoreRecursions, value);
 	}
@@ -124,6 +128,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public BeanTraverseBuilder ignoreRecursions() {
 		return set(BEANTRAVERSE_ignoreRecursions, true);
 	}
@@ -143,6 +148,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * 	<br>The default is <c>0</c>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public BeanTraverseBuilder initialDepth(int value) {
 		return set(BEANTRAVERSE_initialDepth, value);
 	}
@@ -164,9 +170,14 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public BeanTraverseBuilder maxDepth(int value) {
 		return set(BEANTRAVERSE_maxDepth, value);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder annotations(Annotation...values) {
@@ -755,6 +766,11 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 
 	@Override /* Context */
 	public BeanTraverseContext build() {

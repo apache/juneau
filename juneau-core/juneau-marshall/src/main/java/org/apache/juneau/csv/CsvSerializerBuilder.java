@@ -53,6 +53,10 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 	@Override /* WriterSerializerBuilder */
 	public CsvSerializerBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
@@ -837,4 +841,8 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

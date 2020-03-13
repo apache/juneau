@@ -22,6 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -66,6 +67,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder juneauNs(String value) {
 		return set(RDF_juneauNs, value);
 	}
@@ -77,6 +79,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder juneauBpNs(String value) {
 		return set(RDF_juneauBpNs, value);
 	}
@@ -106,6 +109,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder arp_iriRules(String value) {
 		return set(RDF_arp_iriRules, value);
 	}
@@ -132,6 +136,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder arp_errorMode(String value) {
 		return set(RDF_arp_errorMode, value);
 	}
@@ -146,6 +151,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder arp_embedding(boolean value) {
 		return set(RDF_arp_embedding, value);
 	}
@@ -160,6 +166,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder rdfxml_xmlBase(String value) {
 		return set(RDF_rdfxml_xmlBase, value);
 	}
@@ -175,6 +182,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder rdfxml_longId(boolean value) {
 		return set(RDF_rdfxml_longId, value);
 	}
@@ -189,6 +197,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder rdfxml_allowBadUris(boolean value) {
 		return set(RDF_rdfxml_allowBadUris, value);
 	}
@@ -225,6 +234,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder rdfxml_relativeUris(String value) {
 		return set(RDF_rdfxml_relativeUris, value);
 	}
@@ -249,6 +259,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder rdfxml_showXmlDeclaration(String value) {
 		return set(RDF_rdfxml_showXmlDeclaration, value);
 	}
@@ -266,6 +277,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder rdfxml_showDoctypeDeclaration(boolean value) {
 		return set(RDF_rdfxml_showDoctypeDeclaration, value);
 	}
@@ -280,6 +292,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder rdfxml_tab(int value) {
 		return set(RDF_rdfxml_tab, value);
 	}
@@ -294,6 +307,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder rdfxml_attributeQuoteChar(String value) {
 		return set(RDF_rdfxml_attributeQuoteChar, value);
 	}
@@ -310,6 +324,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder rdfxml_blockRules(String value) {
 		return set(RDF_rdfxml_blockRules, value);
 	}
@@ -324,6 +339,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder n3_minGap(int value) {
 		return set(RDF_n3_minGap, value);
 	}
@@ -338,6 +354,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder n3_objectLists(boolean value) {
 		return set(RDF_n3_objectLists, value);
 	}
@@ -352,6 +369,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder n3_subjectColumn(int value) {
 		return set(RDF_n3_subjectColumn, value);
 	}
@@ -366,6 +384,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder n3_propertyColumn(int value) {
 		return set(RDF_n3_propertyColumn, value);
 	}
@@ -380,6 +399,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder n3_indentProperty(int value) {
 		return set(RDF_n3_indentProperty, value);
 	}
@@ -395,6 +415,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder n3_widePropertyLen(int value) {
 		return set(RDF_n3_widePropertyLen, value);
 	}
@@ -409,6 +430,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder n3_abbrevBaseUri(boolean value) {
 		return set(RDF_n3_abbrevBaseUri, value);
 	}
@@ -423,6 +445,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder n3_usePropertySymbols(boolean value) {
 		return set(RDF_n3_usePropertySymbols, value);
 	}
@@ -437,6 +460,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder n3_useTripleQuotedStrings(boolean value) {
 		return set(RDF_n3_useTripleQuotedStrings, value);
 	}
@@ -451,6 +475,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder n3_useDoubles(boolean value) {
 		return set(RDF_n3_useDoubles, value);
 	}
@@ -483,6 +508,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder collectionFormat(String value) {
 		return set(RDF_collectionFormat, value);
 	}
@@ -497,6 +523,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder namespaces(String[] value) {
 		return set(RDF_namespaces, value);
 	}
@@ -513,6 +540,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder addLiteralTypes(boolean value) {
 		return set(RDF_addLiteralTypes, value);
 	}
@@ -525,6 +553,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder addLiteralTypes() {
 		return set(RDF_addLiteralTypes, true);
 	}
@@ -550,6 +579,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder addRootProperty(boolean value) {
 		return set(RDF_addRootProperty, value);
 	}
@@ -566,6 +596,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder addRootProperty() {
 		return set(RDF_addRootProperty, true);
 	}
@@ -585,6 +616,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder autoDetectNamespaces(boolean value) {
 		return set(RDF_autoDetectNamespaces, value);
 	}
@@ -616,6 +648,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder collectionFormat(RdfCollectionFormat value) {
 		return set(RDF_collectionFormat, value);
 	}
@@ -632,6 +665,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder juneauBpNs(Namespace value) {
 		return set(RDF_juneauBpNs, value);
 	}
@@ -648,6 +682,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder juneauNs(Namespace value) {
 		return set(RDF_juneauNs, value);
 	}
@@ -693,6 +728,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder language(String value) {
 		return set(RDF_language, value);
 	}
@@ -713,6 +749,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder looseCollections(boolean value) {
 		return set(RDF_looseCollections, value);
 	}
@@ -729,6 +766,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder looseCollections() {
 		return set(RDF_looseCollections, true);
 	}
@@ -745,6 +783,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder n3() {
 		return language(Constants.LANG_N3);
 	}
@@ -762,6 +801,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder namespaces(Namespace...values) {
 		return set(RDF_namespaces, values);
 	}
@@ -778,6 +818,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder ntriple() {
 		return language(Constants.LANG_NTRIPLE);
 	}
@@ -794,6 +835,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder turtle() {
 		return language(Constants.LANG_TURTLE);
 	}
@@ -815,6 +857,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder useXmlNamespaces(boolean value) {
 		return set(RDF_useXmlNamespaces, value);
 	}
@@ -831,6 +874,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder xml() {
 		return language(Constants.LANG_RDF_XML);
 	}
@@ -847,9 +891,14 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public RdfSerializerBuilder xmlabbrev() {
 		return language(Constants.LANG_RDF_XML_ABBREV);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* WriterSerializerBuilder */
 	public RdfSerializerBuilder fileCharset(Charset value) {
@@ -1635,4 +1684,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

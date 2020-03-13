@@ -172,7 +172,7 @@
 		<li><p><a class='doclink' href='#juneau-marshall.HttpPartSerializers'>HTTP Part Serializers</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.HttpPartParsers'>HTTP Part Parsers</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ConfigurableProperties'>Configurable Properties</a><span class='update'>8.1.3-updated</span></p>
-		<li><p><a class='doclink' href='#juneau-marshall.ConfigurableAnnotations'>Configurable Annotations</a><span class='update'>8.1.0-new, 8.1.3-updated</span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.ConfigurableAnnotations'>Configurable Annotations</a><span class='update'>8.1.0-new, 8.1.3-updated, <b>8.1.4-updated</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ObjectMap'>ObjectMap and ObjectList</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.Groups'>SerializerGroups and ParserGroups</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ContextsBuildersSessionsPropertyStores'>Contexts, Builders, Sessions, and PropertyStores</a></p>
@@ -1415,7 +1415,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableAnnotations' id='juneau-marshall.ConfigurableAnnotations'>2.7 - Configurable Annotations</a><span class='update'>8.1.0-new, 8.1.3-updated</span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableAnnotations' id='juneau-marshall.ConfigurableAnnotations'>2.7 - Configurable Annotations</a><span class='update'>8.1.0-new, 8.1.3-updated, <b>8.1.4-updated</b></span></h3>
 <div class='topic'><!-- START: 2.7 - juneau-marshall.ConfigurableAnnotations -->
 <p>
 	All configurable properties described in the previous section have annotation equivalents that can be applied on
@@ -1502,6 +1502,68 @@
 	
 	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().applyAnnotations(DummyClass.<jk>class</jk>).build();
 	String json = ws.toString(addressBean);
+</p>
+
+<p>
+	Annotations can also be applied directly to serializers and parsers using the following method:	
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.BeanContextBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#annotations(Annotation...) annotations(Annotation...)} 
+	</ul>
+</ul>
+<p>
+	The following example shows a concrete implementation of an interface can be applied to a serializer:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> AddressBean {...}
+	
+	<ja>Bean</ja> ba = <jk>new</jk> BeanAnnotation(<js>"AddressBean"</js>).bpi(<js>"street,city,state"</js>);
+	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().annotations(ba).build();
+	String json = ws.toString(addressBean); <jc>// Will print street,city,state</jc>
+</p>
+
+<p>
+	The following concrete annotation implementation are provided:
+</p>
+<ul class='javatree'>
+	<li class'jc'>{@link org.apache.juneau.annotation.BeanAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanAnnotation}
+	<li class'jc'>{@link org.apache.juneau.annotation.BeancAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeancAnnotation}
+	<li class'jc'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
+	<li class'jc'>{@link org.apache.juneau.annotation.BeanpAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanpAnnotation}
+	<li class'jc'>{@link org.apache.juneau.annotation.ExampleAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.ExampleAnnotation}
+	<li class'jc'>{@link org.apache.juneau.annotation.NamePropertyAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.NamePropertyAnnotation}
+	<li class'jc'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.ParentPropertyAnnotation}
+	<li class'jc'>{@link org.apache.juneau.annotation.SwapAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.SwapAnnotation}
+	<li class'jc'>{@link org.apache.juneau.annotation.UriAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.UriAnnotation}
+	<li class'jc'>{@link org.apache.juneau.csv.annotation.CsvAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.CsvAnnotation}
+	<li class'jc'>{@link org.apache.juneau.html.annotation.HtmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.HtmlAnnotation}
+	<li class'jc'>{@link org.apache.juneau.jso.annotation.JsoAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.JsoAnnotation}
+	<li class'jc'>{@link org.apache.juneau.json.annotation.JsonAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.JsonAnnotation}
+	<li class'jc'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.SchemaAnnotation}
+	<li class'jc'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.MsgPackAnnotation}
+	<li class'jc'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.OpenApiAnnotation}
+	<li class'jc'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.PlainTextAnnotation}
+	<li class'jc'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.SoapXmlAnnotation}
+	<li class'jc'>{@link org.apache.juneau.uon.annotation.UonAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.UonAnnotation}
+	<li class'jc'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.UrlEncodingAnnotation}
+	<li class'jc'>{@link org.apache.juneau.xml.annotation.XmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.XmlAnnotation}
+</ul>
+
+<p>
+	Any number of matching config or concrete annotations can be applied.  They are applied in the order they are provided
+	to the context.  Therefore any values can be overridden.  Config and concrete annotations also override any class or method
+	level annotations 
+</p>
+
+<p class='bpcode w800'>
+	<ja>@Bean</ja>(bpi=<js>"street,city"</js>) <jc>// Will be overridden</jc>
+	<jk>public class</jk> AddressBean {...}
+	
+	<ja>Bean</ja> ba = <jk>new</jk> BeanAnnotation(<js>"AddressBean"</js>).bpi(<js>"street,city,state"</js>);
+	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().annotations(ba).build();
+	String json = ws.toString(addressBean);  <jc>// Will print street,city,state</jc>
 </p>
 
 <ul class='seealso'>
@@ -29277,6 +29339,12 @@
 	</tr>
 	<tr>
 		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_ignoreTransientFields BEAN_ignoreTransientFields}</td>
+		<td>Ignore transient fields.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
 		<td>{@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties BEAN_ignoreUnknownBeanProperties}</td>
 		<td>Ignore unknown properties.</td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
@@ -37604,8 +37672,114 @@
 <h5 class='topic w800'>juneau-marshall</h5>
 <ul class='spaced-list'>
 	<li>
-		<ja>@BeanIgnore</ja> and <ja>@Bean</ja> annotations can alternately occur in parent class hierarchy.
+		{@link org.apache.juneau.annotation.Bean @Bean} and {@link org.apache.juneau.annotation.BeanIgnore @BeanIgnore} annotations can alternately occur in parent class hierarchy.
 		The first one found dictates whether a class is ignored as a bean or not.
+	<li>
+		Applying the {@link org.apache.juneau.annotation.Bean @Bean} annotation on a class will now force non-public classes to be interpreted as beans.
+		For example, applying {@link org.apache.juneau.annotation.Bean @Bean} to a <jk>private</jk> class will force it to be treated as a bean.
+		<br>
+		Also, if a public bean constructor cannot be found, the default constructor will be used 
+		regardless of it's visibility if the {@link org.apache.juneau.annotation.Bean @Bean} annotation is on the class.
+	<li>
+		The <ja>@Beanc</ja> annotation can now be recognized and used on non-public constructors.
+	<li>
+		Annotations are now aggregated across the entire class hierarchy instead of simply being overridden.
+		<br>The following is an example.
+		<p class='bpcode w800'>
+	<jc>// Parent class with properties a,b,c</jc>
+	<ja>@Bean</ja>(bpi=<js>"a,b,c"</js>)
+	<jk>public class</jk> MyClass {
+		<jk>public int</jk> a, b, c, d;
+	}
+	
+	<jc>// New behavior:  Child class with properties a,c because @Beans are aggregated.</jc>
+	<jc>// Old behavior:  Child class with properties a,c,d because @Bean is overridden.</jc>
+	<ja>@Bean</ja>(bpx=<js>"b"</js>)
+	<jk>public class</jk> MyClass {
+		<jk>public int</jk> a, b, c, d;
+	}
+		</p>
+	<li>
+		Include/exclude/read-only/write-only properties defined on the bean context now override those defined on 
+		annotations of the class itself.  For example, the following methods override the {@link org.apache.juneau.annotation.Bean @Bean} 
+		annotations on classes:
+		<ul class='javatree'>
+			<li class='jc'>{@link org.apache.juneau.BeanContextBuilder}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpi(String) bpi(String)}
+				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpx(String) bpx(String)}
+				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpro(String) bpro(String)}
+				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpwo(String) bpwo(String}
+			</ul>
+		</ul>
+	<li>
+		Config annotations now override class-level annotations.
+		<br>For example, only the 'a' and 'b' properties get serialized on the bean below:
+		<p class='bpcode w800'>
+	<jc>// Parent class with properties a,b,c</jc>
+	<ja>@Bean</ja>(bpi=<js>"a,b,c"</js>)
+	<jk>public class</jk> MyClass {
+		<jk>public int</jk> a, b, c, d;
+	}
+
+	<ja>@RestMethod</ja>
+	<ja>@BeanConfig</ja>(beanApply={<ja>@Bean</ja>(on=<js>"MyClass"</js>,bpi=<js>"a,b"</js>)}
+	<jk>public</jk> MyClass getMyClass() {...}
+		</p>
+	<li>
+		The following concrete annotation implementation classes are now provided that can be used with the {@link org.apache.juneau.BeanContextBuilder#annotations(Annotation)} method:
+		<ul class='javatree'>
+			<li class'jc'>{@link org.apache.juneau.annotation.BeanAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanAnnotation}
+			<li class'jc'>{@link org.apache.juneau.annotation.BeancAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeancAnnotation}
+			<li class'jc'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
+			<li class'jc'>{@link org.apache.juneau.annotation.BeanpAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanpAnnotation}
+			<li class'jc'>{@link org.apache.juneau.annotation.ExampleAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.ExampleAnnotation}
+			<li class'jc'>{@link org.apache.juneau.annotation.NamePropertyAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.NamePropertyAnnotation}
+			<li class'jc'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.ParentPropertyAnnotation}
+			<li class'jc'>{@link org.apache.juneau.annotation.SwapAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.SwapAnnotation}
+			<li class'jc'>{@link org.apache.juneau.annotation.UriAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.UriAnnotation}
+			<li class'jc'>{@link org.apache.juneau.csv.annotation.CsvAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.CsvAnnotation}
+			<li class'jc'>{@link org.apache.juneau.html.annotation.HtmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.HtmlAnnotation}
+			<li class'jc'>{@link org.apache.juneau.jso.annotation.JsoAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.JsoAnnotation}
+			<li class'jc'>{@link org.apache.juneau.json.annotation.JsonAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.JsonAnnotation}
+			<li class'jc'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.SchemaAnnotation}
+			<li class'jc'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.MsgPackAnnotation}
+			<li class'jc'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.OpenApiAnnotation}
+			<li class'jc'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.PlainTextAnnotation}
+			<li class'jc'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.SoapXmlAnnotation}
+			<li class'jc'>{@link org.apache.juneau.uon.annotation.UonAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.UonAnnotation}
+			<li class'jc'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.UrlEncodingAnnotation}
+			<li class'jc'>{@link org.apache.juneau.xml.annotation.XmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.XmlAnnotation}
+		</ul>
+		<br>Example:
+		<p class='bpcode w800'>
+	<ja>@Bean</ja>(bpi=<js>"street,city"</js>) <jc>// Will be overridden</jc>
+	<jk>public class</jk> AddressBean {...}
+	
+	<ja>Bean</ja> ba = <jk>new</jk> BeanAnnotation(<js>"AddressBean"</js>).bpi(<js>"street,city,state"</js>);
+	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().annotations(ba).build();
+	String json = ws.toString(addressBean);  <jc>// Will print street,city,state</jc>
+		</p>
+	<li>
+		Bean maps now have the concept of "hidden" properties (properties that aren't serialized but otherwise accessible).
+		<br>For example, the {@link org.apache.juneau.html.annotation.Html#link()} can now reference hidden properties:
+		<p class='bpcode w800'>
+	<ja>@Bean</ja>(bpi=<js>"a"</js>) <jc>// Will be overridden</jc>
+	<jk>public class</jk> MyBean {
+		
+		<ja>@Html</ja>(link=<js>"servlet:/{b}"</js>)
+		<jk>public</jk> String <jf>a</jf>;
+		
+		<jk>public</jk> String <jf>b</jf>;  <jc>// Not serialized, but referenced in link on a.</jc>  
+			
+	}
+		</p>
+		<br>
+		The general rule for the {@link org.apache.juneau.BeanMap} class is that <c>get()</c>,<c>put()</c>, and <c>containsKey()</c>
+		will work against hidden properties, but <c>keySet()</c> and <c>entrySet()</c> will skip them.
+	<li>
+		Several bug fixes in the {@link HtmlSerializer} and {@link HtmlParser} classes around the handling of 
+		collections and arrays of beans with <c><ja>@Bean</ja>(typeName)</c> annotations.
 	<li>
 		New {@link org.apache.juneau.ObjectMap(Object...)} constructor.
 	<li>
@@ -37614,6 +37788,10 @@
 			<li class='jc'>{@link org.apache.juneau.transforms.MatchResultSwap} 
 			<li class='jc'>{@link org.apache.juneau.transforms.StackTraceElementSwap} 
 		</ul>		
+	<li>
+		{@link org.apache.juneau.html.annotation.Html#noTableHeaders} now can be applied to collections of beans.
+	<li>
+		HTML-Schema support is being deprecated due to low-use and difficulty in maintaining.  It will be removed in 9.0.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
@@ -37626,6 +37804,10 @@
 		{@link org.apache.juneau.rest.springboot.JuneauRestInitializer} now provides a no-arg constructor so that it can be used in
 		the <c><ja>@ConfigurationContext</ja>(initializers=JuneauRestInitializer.<jk>class</jk>)</c> when unit testing
 		using <ja>@SpringBootTest</ja>.
+	<li>
+		New {@link org.apache.juneau.rest.helper.ResourceDescription(String,String,String)} constructor and {@link org.apache.juneau.rest.helper.ResourceDescriptions#append(String,String,String)} method.
+	<li>
+		New {@link org.apache.juneau.rest.helper.Hyperlink} class.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>

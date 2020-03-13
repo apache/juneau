@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -70,6 +71,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSerializerBuilder escapeSolidus(boolean value) {
 		return set(JSON_escapeSolidus, value);
 	}
@@ -86,6 +88,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSerializerBuilder escapeSolidus() {
 		return set(JSON_escapeSolidus, true);
 	}
@@ -106,6 +109,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSerializerBuilder simple(boolean value) {
 		return set(JSON_simpleMode, value);
 	}
@@ -122,6 +126,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSerializerBuilder simple() {
 		return simple(true);
 	}
@@ -139,9 +144,14 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSerializerBuilder ssq() {
 		return simple().sq();
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* WriterSerializerBuilder */
 	public JsonSerializerBuilder fileCharset(Charset value) {
@@ -927,4 +937,8 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

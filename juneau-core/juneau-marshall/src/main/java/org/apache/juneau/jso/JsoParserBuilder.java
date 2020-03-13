@@ -51,6 +51,10 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 	@Override /* InputStreamParserBuilder */
 	public JsoParserBuilder binaryFormat(BinaryFormat value) {
 		super.binaryFormat(value);
@@ -686,6 +690,10 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override
 	public JsoParserBuilder applyAnnotations(AnnotationList al, VarResolverSession vrs) {

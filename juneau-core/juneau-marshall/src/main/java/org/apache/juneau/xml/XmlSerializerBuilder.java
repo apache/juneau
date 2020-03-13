@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -70,6 +71,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlSerializerBuilder addNamespaceUrisToRoot(boolean value) {
 		return set(XML_addNamespaceUrisToRoot, value);
 	}
@@ -86,6 +88,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlSerializerBuilder addNamespaceUrisToRoot() {
 		return set(XML_addNamespaceUrisToRoot, true);
 	}
@@ -105,6 +108,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlSerializerBuilder autoDetectNamespaces(boolean value) {
 		return set(XML_autoDetectNamespaces, value);
 	}
@@ -124,6 +128,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <js>"juneau: http://www.apache.org/2013/Juneau"</js>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlSerializerBuilder defaultNamespace(String value) {
 		return set(XML_defaultNamespace, value);
 	}
@@ -143,6 +148,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlSerializerBuilder enableNamespaces(boolean value) {
 		return set(XML_enableNamespaces, value);
 	}
@@ -159,6 +165,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlSerializerBuilder enableNamespaces() {
 		return set(XML_enableNamespaces, true);
 	}
@@ -175,6 +182,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlSerializerBuilder ns() {
 		return set(XML_enableNamespaces, true);
 	}
@@ -192,6 +200,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlSerializerBuilder namespaces(Namespace...values) {
 		return set(XML_namespaces, values);
 	}
@@ -209,6 +218,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * @param values The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlSerializerBuilder namespaces(String...values) {
 		return set(XML_namespaces, Namespace.createArray(values));
 	}
@@ -229,6 +239,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <js>"xs: http://www.w3.org/2001/XMLSchema"</js>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	@Deprecated
 	public XmlSerializerBuilder xsNamespace(Namespace value) {
 		return set(XML_xsNamespace, value);
@@ -250,10 +261,15 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default is <js>"xs: http://www.w3.org/2001/XMLSchema"</js>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	@Deprecated
 	public XmlSerializerBuilder xsNamespace(String value) {
 		return set(XML_xsNamespace, Namespace.create(value));
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* WriterSerializerBuilder */
 	public XmlSerializerBuilder fileCharset(Charset value) {
@@ -1039,4 +1055,8 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

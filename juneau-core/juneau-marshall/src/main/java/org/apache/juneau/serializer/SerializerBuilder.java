@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -64,6 +65,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder addBeanTypes(boolean value) {
 		return set(SERIALIZER_addBeanTypes, value);
 	}
@@ -80,6 +82,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder addBeanTypes() {
 		return set(SERIALIZER_addBeanTypes, true);
 	}
@@ -100,6 +103,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder addRootType(boolean value) {
 		return set(SERIALIZER_addRootType, value);
 	}
@@ -116,6 +120,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder addRootType() {
 		return set(SERIALIZER_addRootType, true);
 	}
@@ -134,6 +139,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder listener(Class<? extends SerializerListener> value) {
 		return set(SERIALIZER_listener, value);
 	}
@@ -153,6 +159,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder sortCollections(boolean value) {
 		return set(SERIALIZER_sortCollections, value);
 	}
@@ -169,6 +176,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder sortCollections() {
 		return set(SERIALIZER_sortCollections, true);
 	}
@@ -188,6 +196,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder sortMaps(boolean value) {
 		return set(SERIALIZER_sortMaps, value);
 	}
@@ -204,6 +213,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder sortMaps() {
 		return set(SERIALIZER_sortMaps, true);
 	}
@@ -223,6 +233,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder trimEmptyCollections(boolean value) {
 		return set(SERIALIZER_trimEmptyCollections, value);
 	}
@@ -239,6 +250,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder trimEmptyCollections() {
 		return set(SERIALIZER_trimEmptyCollections, true);
 	}
@@ -258,6 +270,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder trimEmptyMaps(boolean value) {
 		return set(SERIALIZER_trimEmptyMaps, value);
 	}
@@ -274,6 +287,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder trimEmptyMaps() {
 		return set(SERIALIZER_trimEmptyMaps, true);
 	}
@@ -293,6 +307,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder trimNullProperties(boolean value) {
 		return set(SERIALIZER_trimNullProperties, value);
 	}
@@ -312,6 +327,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder trimStrings(boolean value) {
 		return set(SERIALIZER_trimStrings, value);
 	}
@@ -328,6 +344,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder trimStrings() {
 		return set(SERIALIZER_trimStrings, true);
 	}
@@ -345,6 +362,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder uriContext(UriContext value) {
 		return set(SERIALIZER_uriContext, value);
 	}
@@ -370,6 +388,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder uriContext(String value) {
 		return set(SERIALIZER_uriContext, value);
 	}
@@ -389,6 +408,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is {@link UriRelativity#RESOURCE}
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder uriRelativity(UriRelativity value) {
 		return set(SERIALIZER_uriRelativity, value);
 	}
@@ -416,6 +436,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is {@link UriRelativity#RESOURCE}
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder uriRelativity(String value) {
 		return set(SERIALIZER_uriRelativity, value);
 	}
@@ -435,6 +456,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is {@link UriResolution#NONE}
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder uriResolution(UriResolution value) {
 		return set(SERIALIZER_uriResolution, value);
 	}
@@ -462,9 +484,14 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is {@link UriResolution#NONE}
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder uriResolution(String value) {
 		return set(SERIALIZER_uriResolution, value);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* BeanTraverseBuilder */
 	public SerializerBuilder detectRecursions(boolean value) {
@@ -1089,6 +1116,10 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public Serializer build() {

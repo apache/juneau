@@ -53,6 +53,10 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 	@Override /* ReaderParserBuilder */
 	public PlainTextParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
@@ -712,4 +716,8 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

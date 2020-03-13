@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -71,6 +72,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonParserBuilder validateEnd(boolean value) {
 		return set(JSON_validateEnd, value);
 	}
@@ -87,9 +89,14 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonParserBuilder validateEnd() {
 		return set(JSON_validateEnd, true);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* ReaderParserBuilder */
 	public JsonParserBuilder fileCharset(Charset value) {
@@ -750,4 +757,8 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

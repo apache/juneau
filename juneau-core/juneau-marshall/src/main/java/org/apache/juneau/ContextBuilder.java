@@ -18,6 +18,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jso.annotation.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.jsonschema.annotation.*;
@@ -235,6 +236,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see PropertyStoreBuilder#set(String, Object)
 	 */
+	@ConfigurationProperty
 	public ContextBuilder set(String name, Object value) {
 		psb.set(name, value);
 		return this;
@@ -269,6 +271,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see PropertyStoreBuilder#set(java.util.Map)
 	 */
+	@ConfigurationProperty
 	public ContextBuilder set(Map<String,Object> properties) {
 		psb.set(properties);
 		return this;
@@ -281,6 +284,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see PropertyStoreBuilder#add(java.util.Map)
 	 */
+	@ConfigurationProperty
 	public ContextBuilder add(Map<String,Object> properties) {
 		psb.add(properties);
 		return this;
@@ -294,6 +298,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET property.
 	 */
+	@ConfigurationProperty
 	public ContextBuilder addTo(String name, Object value) {
 		psb.addTo(name, value);
 		return this;
@@ -308,6 +313,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a MAP property.
 	 */
+	@ConfigurationProperty
 	public ContextBuilder addTo(String name, String key, Object value) {
 		psb.addTo(name, key, value);
 		return this;
@@ -321,6 +327,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET property.
 	 */
+	@ConfigurationProperty
 	public ContextBuilder removeFrom(String name, Object value) {
 		psb.removeFrom(name, value);
 		return this;

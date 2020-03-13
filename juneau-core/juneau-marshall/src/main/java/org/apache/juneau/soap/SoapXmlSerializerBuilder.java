@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -68,9 +69,14 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<br>The default is <js>"http://www.w3.org/2003/05/soap-envelope"</js>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SoapXmlSerializerBuilder soapAction(String value) {
 		return set(SOAPXML_SOAPAction, value);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* WriterSerializerBuilder */
 	public SoapXmlSerializerBuilder fileCharset(Charset value) {
@@ -856,4 +862,8 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

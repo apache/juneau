@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -64,6 +65,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ReaderParserBuilder fileCharset(Charset value) {
 		return set(RPARSER_fileCharset, value);
 	}
@@ -83,9 +85,14 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * 	<br>The default value is <js>"UTF-8"</js>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ReaderParserBuilder streamCharset(Charset value) {
 		return set(RPARSER_streamCharset, value);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* ParserBuilder */
 	public ReaderParserBuilder autoCloseStreams(boolean value) {
@@ -734,4 +741,8 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

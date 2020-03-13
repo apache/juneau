@@ -54,6 +54,10 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 	@Override /* WriterSerializerBuilder */
 	public OpenApiSerializerBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
@@ -838,4 +842,8 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

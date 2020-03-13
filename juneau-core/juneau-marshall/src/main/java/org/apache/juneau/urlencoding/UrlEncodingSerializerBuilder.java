@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -72,6 +73,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UrlEncodingSerializerBuilder expandedParams(boolean value) {
 		return set(URLENC_expandedParams, value);
 	}
@@ -88,9 +90,14 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UrlEncodingSerializerBuilder expandedParams() {
 		return set(URLENC_expandedParams, true);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* UonSerializerBuilder */
 	public UrlEncodingSerializerBuilder encoding(boolean value) {
@@ -900,4 +907,8 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

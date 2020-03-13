@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -64,6 +65,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ParserBuilder autoCloseStreams(boolean value) {
 		return set(PARSER_autoCloseStreams, value);
 	}
@@ -80,6 +82,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ParserBuilder autoCloseStreams() {
 		return set(PARSER_autoCloseStreams, true);
 	}
@@ -100,6 +103,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is <c>5</c>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ParserBuilder debugOutputLines(int value) {
 		return set(PARSER_debugOutputLines, value);
 	}
@@ -117,6 +121,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ParserBuilder listener(Class<? extends ParserListener> value) {
 		return set(PARSER_listener, value);
 	}
@@ -136,6 +141,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ParserBuilder strict(boolean value) {
 		return set(PARSER_strict, value);
 	}
@@ -152,6 +158,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ParserBuilder strict() {
 		return set(PARSER_strict, true);
 	}
@@ -172,6 +179,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ParserBuilder trimStrings(boolean value) {
 		return set(PARSER_trimStrings, value);
 	}
@@ -188,6 +196,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ParserBuilder trimStrings() {
 		return set(PARSER_trimStrings, true);
 	}
@@ -207,6 +216,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ParserBuilder unbuffered(boolean value) {
 		return set(PARSER_unbuffered, value);
 	}
@@ -223,9 +233,14 @@ public class ParserBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ParserBuilder unbuffered() {
 		return set(PARSER_unbuffered, true);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* BeanContextBuilder */
 	public ParserBuilder annotations(Annotation...values) {
@@ -814,6 +829,10 @@ public class ParserBuilder extends BeanContextBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public Parser build() {

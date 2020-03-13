@@ -51,6 +51,10 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 	@Override /* InputStreamParserBuilder */
 	public MsgPackParserBuilder binaryFormat(BinaryFormat value) {
 		super.binaryFormat(value);
@@ -692,4 +696,9 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 		super.applyAnnotations(al, vrs);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 }

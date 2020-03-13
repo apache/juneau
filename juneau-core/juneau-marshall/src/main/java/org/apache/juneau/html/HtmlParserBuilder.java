@@ -57,6 +57,10 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 	@Override /* XmlParserBuilder */
 	public HtmlParserBuilder validating(boolean value) {
 		super.validating(value);
@@ -734,4 +738,8 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

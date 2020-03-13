@@ -52,6 +52,10 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
+
 	@Override /* OutputStreamSerializerBuilder */
 	public JsoSerializerBuilder binaryFormat(BinaryFormat value) {
 		super.binaryFormat(value);
@@ -794,4 +798,8 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

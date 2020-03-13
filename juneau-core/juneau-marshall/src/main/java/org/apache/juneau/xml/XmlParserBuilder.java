@@ -24,6 +24,7 @@ import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -71,6 +72,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlParserBuilder eventAllocator(XMLEventAllocator value) {
 		return set(XML_eventAllocator, value);
 	}
@@ -88,6 +90,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlParserBuilder eventAllocator(Class<? extends XMLEventAllocator> value) {
 		return set(XML_eventAllocator, value);
 	}
@@ -108,6 +111,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlParserBuilder preserveRootElement(boolean value) {
 		return set(XML_preserveRootElement, value);
 	}
@@ -124,6 +128,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlParserBuilder preserveRootElement() {
 		return set(XML_preserveRootElement, true);
 	}
@@ -141,6 +146,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlParserBuilder reporter(XMLReporter value) {
 		return set(XML_reporter, value);
 	}
@@ -158,6 +164,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlParserBuilder reporter(Class<? extends XMLReporter> value) {
 		return set(XML_reporter, value);
 	}
@@ -175,6 +182,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlParserBuilder resolver(XMLResolver value) {
 		return set(XML_resolver, value);
 	}
@@ -192,6 +200,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlParserBuilder resolver(Class<? extends XMLResolver> value) {
 		return set(XML_resolver, value);
 	}
@@ -211,6 +220,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlParserBuilder validating(boolean value) {
 		return set(XML_validating, value);
 	}
@@ -227,9 +237,14 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public XmlParserBuilder validating() {
 		return set(XML_validating, true);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* ReaderParserBuilder */
 	public XmlParserBuilder fileCharset(Charset value) {
@@ -890,4 +905,8 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

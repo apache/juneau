@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -70,6 +71,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UonSerializerBuilder encoding(boolean value) {
 		return set(UON_encoding, value);
 	}
@@ -86,6 +88,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UonSerializerBuilder encoding() {
 		return set(UON_encoding, true);
 	}
@@ -105,6 +108,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default value is {@link ParamFormat#UON}.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UonSerializerBuilder paramFormat(ParamFormat value) {
 		return set(UON_paramFormat, value);
 	}
@@ -124,6 +128,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default value is {@link ParamFormat#UON}.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UonSerializerBuilder paramFormat(String value) {
 		return set(UON_paramFormat, ParamFormat.valueOf(value));
 	}
@@ -140,9 +145,14 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public UonSerializerBuilder paramFormatPlain() {
 		return set(UON_paramFormat, ParamFormat.PLAINTEXT);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* WriterSerializerBuilder */
 	public UonSerializerBuilder fileCharset(Charset value) {
@@ -928,4 +938,8 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 }

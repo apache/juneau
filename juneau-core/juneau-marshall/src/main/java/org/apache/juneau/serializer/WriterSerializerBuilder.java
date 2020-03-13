@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -67,6 +68,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is the system JVM setting.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public WriterSerializerBuilder fileCharset(Charset value) {
 		return set(WSERIALIZER_fileCharset, value);
 	}
@@ -86,6 +88,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public WriterSerializerBuilder maxIndent(int value) {
 		return set(WSERIALIZER_maxIndent, value);
 	}
@@ -105,6 +108,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is <js>'"'</js>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public WriterSerializerBuilder quoteChar(char value) {
 		return set(WSERIALIZER_quoteChar, value);
 	}
@@ -121,6 +125,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public WriterSerializerBuilder sq() {
 		return quoteChar('\'');
 	}
@@ -143,6 +148,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is the system JVM setting.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public WriterSerializerBuilder streamCharset(Charset value) {
 		return set(WSERIALIZER_streamCharset, value);
 	}
@@ -162,6 +168,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public WriterSerializerBuilder useWhitespace(boolean value) {
 		return set(WSERIALIZER_useWhitespace, value);
 	}
@@ -177,6 +184,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public WriterSerializerBuilder useWhitespace() {
 		return set(WSERIALIZER_useWhitespace, true);
 	}
@@ -193,9 +201,14 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerBuilder ws() {
 		return useWhitespace();
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* BeanContextBuilder */
 	public WriterSerializerBuilder annotations(Annotation...values) {
@@ -784,6 +797,10 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public WriterSerializer build() {

@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -64,6 +65,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	 * 	<br>The default value is {@link BinaryFormat#HEX}.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public InputStreamParserBuilder binaryFormat(BinaryFormat value) {
 		return set(ISPARSER_binaryFormat, value);
 	}
@@ -84,9 +86,14 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	 * 	<br>The default value is {@link BinaryFormat#HEX}.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public InputStreamParserBuilder binaryFormat(String value) {
 		return set(ISPARSER_binaryFormat, BinaryFormat.valueOf(value));
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// <CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* ParserBuilder */
 	public InputStreamParserBuilder autoCloseStreams(boolean value) {
@@ -735,6 +742,10 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// </CONFIGURATION-PROPERTIES>
+	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public InputStreamParser build() {

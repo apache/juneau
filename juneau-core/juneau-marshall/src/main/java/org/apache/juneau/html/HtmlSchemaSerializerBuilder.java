@@ -22,6 +22,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -74,6 +75,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSchemaSerializerBuilder addDescriptionsTo(String value) {
 		return set(JSONSCHEMA_addDescriptionsTo, value);
 	}
@@ -100,6 +102,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSchemaSerializerBuilder addExamplesTo(String value) {
 		return set(JSONSCHEMA_addExamplesTo, value);
 	}
@@ -116,6 +119,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSchemaSerializerBuilder allowNestedDescriptions() {
 		return set(JSONSCHEMA_allowNestedDescriptions, true);
 	}
@@ -132,6 +136,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSchemaSerializerBuilder allowNestedExamples() {
 		return set(JSONSCHEMA_allowNestedExamples, true);
 	}
@@ -155,6 +160,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSchemaSerializerBuilder beanDefMapper(Class<? extends BeanDefMapper> value) {
 		return set(JSONSCHEMA_beanDefMapper, value);
 	}
@@ -178,6 +184,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSchemaSerializerBuilder beanDefMapper(BeanDefMapper value) {
 		return set(JSONSCHEMA_beanDefMapper, value);
 	}
@@ -200,6 +207,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 * 	The schema.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSchemaSerializerBuilder defaultSchema(Class<?> c, ObjectMap schema) {
 		return addTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
 	}
@@ -218,6 +226,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public HtmlSchemaSerializerBuilder useBeanDefs() {
 		return set(JSONSCHEMA_useBeanDefs, true);
 	}
