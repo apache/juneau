@@ -179,12 +179,12 @@ import org.apache.http.client.CookieStore;
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#run() run()}
- * 		<li class='jm'>{@link RestRequest#execute() execute()}
+ * 		<li class='jm'>{@link RestRequest#complete() complete()}
  * 	</ul>
  * </ul>
  *
  * <p class='w900'>
- * The distinction between the two methods is that {@link RestRequest#execute() execute()} automatically consumes the response body and
+ * The distinction between the two methods is that {@link RestRequest#complete() complete()} automatically consumes the response body and
  * {@link RestRequest#run() run()} does not.  Note that you must consume response bodies in order for HTTP connections to be freed up
  * for reuse!  The {@link InputStream InputStreams} returned by the {@link RestResponseBody} object are auto-closing once
  * they are exhausted, so it is often not necessary to explicitly close them.
@@ -196,14 +196,9 @@ import org.apache.http.client.CookieStore;
  * 	<jc>// Consuming the response, so use run().</jc>
  * 	String body = client.get(<jsf>URL</jsf>).run().getBody().asString();
  *
- * 	<jc>// Only interested in response status code, so use execute().</jc>
- *   <jk>int</jk> status = client.get(<jsf>URL</jsf>).execute().getStatusCode();
+ * 	<jc>// Only interested in response status code, so use complete().</jc>
+ *   <jk>int</jk> status = client.get(<jsf>URL</jsf>).complete().getStatusCode();
  * </p>
- *
- * <ul class='notes'>
- * 	<li>Don't confuse the behavior on the {@link RestRequest#execute()} method with the various execute methods defined on
- * 		the {@link RestClient} class.
- * </ul>
  *
  *
  * <h4 class='topic'>POJO Marshalling</h4>
@@ -540,7 +535,7 @@ import org.apache.http.client.CookieStore;
  * <h4 class='topic'>Response Status</h4>
  *
  * <p class='w900'>
- * After execution using {@link RestRequest#run()} or {@link RestRequest#execute()}, the following methods can be used
+ * After execution using {@link RestRequest#run()} or {@link RestRequest#complete()}, the following methods can be used
  * to get the response status:
  *
  * <ul class='javatree'>
@@ -563,17 +558,17 @@ import org.apache.http.client.CookieStore;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Only interested in status code.</jc>
- * 	<jk>int</jk> statusCode = c.get(<jsf>URL</jsf>).execute().getStatusCode();
+ * 	<jk>int</jk> statusCode = c.get(<jsf>URL</jsf>).complete().getStatusCode();
  *
  *   <jc>// Interested in multiple values.</jc>
  * 	Mutable&lt;Integer&gt; statusCode;
  * 	Mutable&lt;String&gt; reasonPhrase;
- * 	c.get(<jsf>URL</jsf>).execute().getStatusCode(statusCode).getReasonPhrase(reasonPhrase);
+ * 	c.get(<jsf>URL</jsf>).complete().getStatusCode(statusCode).getReasonPhrase(reasonPhrase);
  * 	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+statusCode.get()+<js>", reasonPhrase="</js>+reasonPhrase.get());
  * </p>
  *
  * <ul class='notes'>
- * 	<li>If you are only interested in the response status and not the response body, be sure to use {@link RestRequest#execute()} instead
+ * 	<li>If you are only interested in the response status and not the response body, be sure to use {@link RestRequest#complete()} instead
  * 		of {@link RestRequest#run()} to make sure the response body gets automatically cleaned up.  Otherwise you must
  * 		consume the response yourself.
  * </ul>
@@ -618,7 +613,7 @@ import org.apache.http.client.CookieStore;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// See if response contains Location header.</jc>
- * 	<jk>boolean</jk> hasLocationHeader = c.get(<jsf>URL</jsf>).execute().getHeader(<js>"Location"</js>).exists();
+ * 	<jk>boolean</jk> hasLocationHeader = c.get(<jsf>URL</jsf>).complete().getHeader(<js>"Location"</js>).exists();
  * </p>
  *
  * <p class='w900'>
@@ -2621,11 +2616,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 
 							RemoteMethodReturn rmr = rmm.getReturns();
 							if (rmr.getReturnValue() == RemoteReturn.NONE) {
-								rc.execute();
+								rc.complete();
 								return null;
 							} else if (rmr.getReturnValue() == RemoteReturn.STATUS) {
 								rc.ignoreErrors();
-								int returnCode = rc.execute().getStatusCode();
+								int returnCode = rc.complete().getStatusCode();
 								Class<?> rt = method.getReturnType();
 								if (rt == Integer.class || rt == int.class)
 									return returnCode;

@@ -2159,7 +2159,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 	<li>Calling this method multiple times will return the same original response object.
 	 * 	<li>You must close the returned object if you do not consume the response or execute a method that consumes
 	 * 		the response.
-	 * 	<li>If you are only interested in the response code, use the {@link #execute()} method which will automatically
+	 * 	<li>If you are only interested in the response code, use the {@link #complete()} method which will automatically
 	 * 		consume the response so that you don't need to call {@link InputStream#close()} on the response body.
 	 * </ul>
 	 *
@@ -2299,22 +2299,22 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * <p class='bcode w800'>
 	 *  <jc>// Get the response code.
 	 *  // No need to call close() on the RestResponse object.</jc>
-	 *  <jk>int</jk> rc = client.get(<jsf>URL</jsf>).execute().getResponseCode();
+	 *  <jk>int</jk> rc = client.get(<jsf>URL</jsf>).complete().getResponseCode();
 	 * </p>
 	 *
 	 * @return The response object.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
-	public RestResponse execute() throws RestCallException {
+	public RestResponse complete() throws RestCallException {
 		return run().consume();
 	}
 
 	/**
-	 * Same as {@link #execute()} but allows you to run the call asynchronously.
+	 * Same as {@link #complete()} but allows you to run the call asynchronously.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URL</jsf>).executeFuture();
+	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URL</jsf>).completeFuture();
 	 * 	<jc>// Do some other stuff</jc>
 	 * 	<jk>int</jk> rc = f.get().getResponseStatus();
 	 * </p>
@@ -2328,12 +2328,12 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @return The HTTP status code.
 	 * @throws RestCallException If the executor service was not defined.
 	 */
-	public Future<RestResponse> executeFuture() throws RestCallException {
+	public Future<RestResponse> completeFuture() throws RestCallException {
 		return client.getExecutorService(true).submit(
 			new Callable<RestResponse>() {
 				@Override /* Callable */
 				public RestResponse call() throws Exception {
-					return execute();
+					return complete();
 				}
 			}
 		);
