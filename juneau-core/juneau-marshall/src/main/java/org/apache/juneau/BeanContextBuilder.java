@@ -1213,16 +1213,19 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param json The simple JSON representation of the example.
 	 * @return This object (for method chaining).
-	 * @throws ParseException If parameter is not valid Simple-JSON.
 	 */
 	@ConfigurationProperty
-	public BeanContextBuilder examples(String json) throws ParseException {
+	public BeanContextBuilder examples(String json) {
 		if (! isObjectMap(json, true))
 			json = "{" + json + "}";
-		ObjectMap m = new ObjectMap(json);
-		for (Map.Entry<String,Object> e : m.entrySet())
-			addTo(BEAN_examples, e.getKey(), e.getValue());
-		return this;
+		try {
+			ObjectMap m = new ObjectMap(json);
+			for (Map.Entry<String,Object> e : m.entrySet())
+				addTo(BEAN_examples, e.getKey(), e.getValue());
+			return this;
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

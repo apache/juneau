@@ -100,6 +100,7 @@ public abstract class ContextBuilder {
 	 * @param copyFrom The factory whose settings are being copied.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ContextBuilder apply(PropertyStore copyFrom) {
 		this.psb.apply(copyFrom);
 		return this;
@@ -112,6 +113,7 @@ public abstract class ContextBuilder {
 	 * @param r The string resolver for resolving variables in annotation values.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		this.psb.applyAnnotations(al, r);
 		return this;
@@ -154,6 +156,7 @@ public abstract class ContextBuilder {
 	 * @param fromClasses The classes on which the annotations are defined.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ContextBuilder applyAnnotations(Class<?>...fromClasses) {
 		for (Class<?> c : fromClasses)
 			applyAnnotations(ClassInfo.of(c).getAnnotationList(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
@@ -198,6 +201,7 @@ public abstract class ContextBuilder {
 	 * @param fromMethods The methods on which the annotations are defined.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public ContextBuilder applyAnnotations(Method...fromMethods) {
 		for (Method m : fromMethods)
 			applyAnnotations(MethodInfo.of(m).getAnnotationList(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
