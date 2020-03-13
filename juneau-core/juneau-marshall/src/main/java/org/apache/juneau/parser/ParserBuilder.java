@@ -238,7 +238,6 @@ public class ParserBuilder extends BeanContextBuilder {
 		return set(PARSER_unbuffered, true);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -890,7 +889,6 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public Parser build() {

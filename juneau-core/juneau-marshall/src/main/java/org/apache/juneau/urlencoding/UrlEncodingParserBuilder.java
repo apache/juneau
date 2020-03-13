@@ -93,7 +93,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return set(URLENC_expandedParams, true);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -841,5 +840,4 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

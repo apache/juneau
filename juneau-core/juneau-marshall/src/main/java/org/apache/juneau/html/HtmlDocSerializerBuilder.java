@@ -293,11 +293,26 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>The default ios <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
 	public HtmlDocSerializerBuilder nowrap(boolean value) {
 		set(HTMLDOC_nowrap, value);
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Prevent word wrap on page.
+	 *
+	 * <p>
+	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public HtmlDocSerializerBuilder nowrap() {
+		set(HTMLDOC_nowrap, true);
 		return this;
 	}
 
@@ -511,6 +526,8 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	public HtmlDocSerializerBuilder widgetsReplace(HtmlWidget...values) {
 		return set(HTMLDOC_widgets, values);
 	}
+
+	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* HtmlSerializerBuilder */
 	public HtmlDocSerializerBuilder addKeyValueTableHeaders(boolean value) {
@@ -1381,4 +1398,6 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

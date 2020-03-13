@@ -150,7 +150,6 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 		return set(UON_paramFormat, ParamFormat.PLAINTEXT);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -1018,5 +1017,4 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

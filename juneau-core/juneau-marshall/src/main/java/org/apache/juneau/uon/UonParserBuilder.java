@@ -133,7 +133,6 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return set(UON_validateEnd, true);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -857,5 +856,4 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

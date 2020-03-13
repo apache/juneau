@@ -622,6 +622,23 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
+	 * Configuration property:  Auto-detect namespace usage.
+	 *
+	 * <p>
+	 * Detect namespace usage before serialization.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_autoDetectNamespaces}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RdfSerializerBuilder dontAutoDetectNamespaces() {
+		return set(RDF_autoDetectNamespaces, false);
+	}
+
+	/**
 	 * Configuration property:  RDF format for representing collections and arrays.
 	 *
 	 * <p>
@@ -863,6 +880,25 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
+	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
+	 *
+	 * <p>
+	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will be
+	 * inherited by the RDF serializers.
+	 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_useXmlNamespaces}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RdfSerializerBuilder dontUseXmlNamespaces() {
+		return set(RDF_useXmlNamespaces, false);
+	}
+
+	/**
 	 * Configuration property:  RDF language.
 	 *
 	 * <p>
@@ -896,7 +932,6 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 		return language(Constants.LANG_RDF_XML_ABBREV);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -1764,5 +1799,4 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

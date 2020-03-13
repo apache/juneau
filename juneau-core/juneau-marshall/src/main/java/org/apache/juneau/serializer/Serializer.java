@@ -465,6 +465,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimNullProperties(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#dontTrimNullProperties()}
 	 * 		</ul>
 	 * </ul>
 	 *

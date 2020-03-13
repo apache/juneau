@@ -69,7 +69,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
+	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -96,7 +96,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
+	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -116,6 +116,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -152,6 +153,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -192,7 +194,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
+	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -216,6 +218,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -324,7 +327,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		return set(JSONSCHEMA_useBeanDefs, true);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -1012,5 +1014,4 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

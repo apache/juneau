@@ -114,6 +114,23 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
+	 * Configuration property:  Auto-detect namespace usage.
+	 *
+	 * <p>
+	 * Detect namespace usage before serialization.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link XmlSerializer#XML_autoDetectNamespaces}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public XmlSerializerBuilder dontAutoDetectNamespaces() {
+		return set(XML_autoDetectNamespaces, false);
+	}
+
+	/**
 	 * Configuration property:  Default namespace.
 	 *
 	 * <p>
@@ -267,7 +284,6 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return set(XML_xsNamespace, Namespace.create(value));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -1135,5 +1151,4 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

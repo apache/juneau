@@ -39,4 +39,12 @@ public class ConfigClasspathStoreBuilder extends ConfigStoreBuilder {
 	public ConfigClasspathStore build() {
 		return new ConfigClasspathStore(getPropertyStore());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// <CONFIGURATION-PROPERTIES>
+
+	// </CONFIGURATION-PROPERTIES>
 }

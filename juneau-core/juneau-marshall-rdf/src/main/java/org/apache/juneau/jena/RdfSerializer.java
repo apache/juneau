@@ -167,6 +167,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#autoDetectNamespaces(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#dontAutoDetectNamespaces()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -227,6 +228,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#useXmlNamespaces(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#dontUseXmlNamespaces()}
 	 * 		</ul>
 	 * </ul>
 	 *

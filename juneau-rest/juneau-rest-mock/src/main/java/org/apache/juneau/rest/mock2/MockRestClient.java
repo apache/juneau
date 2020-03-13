@@ -269,4 +269,8 @@ public class MockRestClient extends RestClientBuilder {
 		mrb.parser(value);
 		return this;
 	}
+
+	// <CONFIGURATION-PROPERTIES>
+
+	// </CONFIGURATION-PROPERTIES>
 }

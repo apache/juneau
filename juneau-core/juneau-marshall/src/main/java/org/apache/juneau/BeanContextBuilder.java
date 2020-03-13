@@ -728,6 +728,24 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Beans require at least one property.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
+	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSomeProperties}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder beansDontRequireSomeProperties() {
+		return set(BEAN_beansRequireSomeProperties, false);
+	}
+
+	/**
 	 * Configuration property:  Bean type property name.
 	 *
 	 * <p>
@@ -1028,6 +1046,23 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Debug mode.
+	 *
+	 * <p>
+	 * Shortcut for calling <code>debug(<jk>true</jk>)</code>.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_debug}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder debug() {
+		return set(BEAN_debug, true);
+	}
+
+	/**
 	 * Configuration property:  Bean dictionary.
 	 *
 	 * <p>
@@ -1139,23 +1174,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder dictionaryRemove(Object...values) {
 		return removeFrom(BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * Configuration property:  Debug mode.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>debug(<jk>true</jk>)</code>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_debug}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder debug() {
-		return set(BEAN_debug, true);
 	}
 
 	/**
@@ -1411,6 +1429,24 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Ignore properties without setters.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
+	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_ignorePropertiesWithoutSetters}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder dontIgnorePropertiesWithoutSetters() {
+		return set(BEAN_ignorePropertiesWithoutSetters, false);
+	}
+
+	/**
 	 * Configuration property:  Ignore transient fields.
 	 *
 	 * <ul class='seealso'>
@@ -1425,6 +1461,20 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder ignoreTransientFields(boolean value) {
 		return set(BEAN_ignoreTransientFields, value);
+	}
+
+	/**
+	 * Configuration property:  Ignore transient fields.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreTransientFields}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder dontIgnoreTransientFields() {
+		return set(BEAN_ignoreTransientFields, false);
 	}
 
 	/**
@@ -1484,6 +1534,24 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		return set(BEAN_ignoreUnknownNullBeanProperties, value);
+	}
+
+	/**
+	 * Configuration property:  Ignore unknown properties with null values.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
+	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownNullBeanProperties}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder dontIgnoreUnknownNullBeanProperties() {
+		return set(BEAN_ignoreUnknownNullBeanProperties, false);
 	}
 
 	/**
@@ -2040,7 +2108,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_useEnumNames}
 	 * </ul>
 	 *
-	 * @param value The property value.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -2084,6 +2154,24 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder useInterfaceProxies(boolean value) {
 		return set(BEAN_useInterfaceProxies, value);
+	}
+
+	/**
+	 * Configuration property:  Use interface proxies.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
+	 * {@link InvocationHandler} if there is no other way of instantiating them.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_useInterfaceProxies}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder dontUseInterfaceProxies() {
+		return set(BEAN_useInterfaceProxies, false);
 	}
 
 	/**

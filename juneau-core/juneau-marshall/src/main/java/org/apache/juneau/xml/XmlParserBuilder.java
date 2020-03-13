@@ -242,7 +242,6 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 		return set(XML_validating, true);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -966,5 +965,4 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

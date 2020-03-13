@@ -55,6 +55,8 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	// <CONFIGURATION-PROPERTIES>
+
 	@Override /* XmlSerializerBuilder */
 	public XmlSchemaSerializerBuilder addNamespaceUrisToRoot(boolean value) {
 		super.addNamespaceUrisToRoot(value);
@@ -875,4 +877,6 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

@@ -149,7 +149,6 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return simple().sq();
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -1017,5 +1016,4 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

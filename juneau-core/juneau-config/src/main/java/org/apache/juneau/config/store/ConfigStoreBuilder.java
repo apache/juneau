@@ -37,4 +37,12 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 
 	@Override
 	public abstract ConfigStore build();
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// <CONFIGURATION-PROPERTIES>
+
+	// </CONFIGURATION-PROPERTIES>
 }

@@ -90,7 +90,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return set(RPARSER_streamCharset, value);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -802,5 +801,4 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

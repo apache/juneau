@@ -313,6 +313,23 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
+	 * Configuration property:  Trim null bean property values.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, null bean values will not be serialized to the output.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public SerializerBuilder dontTrimNullProperties() {
+		return set(SERIALIZER_trimNullProperties, false);
+	}
+
+	/**
 	 * Configuration property:  Trim strings.
 	 *
 	 * <p>
@@ -489,7 +506,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return set(SERIALIZER_uriResolution, value);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -1177,7 +1193,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public Serializer build() {

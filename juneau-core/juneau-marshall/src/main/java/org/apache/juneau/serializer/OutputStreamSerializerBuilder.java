@@ -91,7 +91,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return set(OSSERIALIZER_binaryFormat, BinaryFormat.valueOf(value));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -911,8 +910,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
-
 
 	@Override /* Context */
 	public OutputStreamSerializer build() {

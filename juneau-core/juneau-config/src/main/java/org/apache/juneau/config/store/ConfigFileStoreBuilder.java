@@ -40,6 +40,10 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 		super(ps);
 	}
 
+	@Override /* ContextBuilder */
+	public ConfigFileStore build() {
+		return new ConfigFileStore(getPropertyStore());
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -215,8 +219,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 		return this;
 	}
 
-	@Override /* ContextBuilder */
-	public ConfigFileStore build() {
-		return new ConfigFileStore(getPropertyStore());
-	}
+	// <CONFIGURATION-PROPERTIES>
+
+	// </CONFIGURATION-PROPERTIES>
 }

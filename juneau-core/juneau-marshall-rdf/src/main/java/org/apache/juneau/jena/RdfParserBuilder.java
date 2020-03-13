@@ -772,7 +772,6 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return language(Constants.LANG_RDF_XML_ABBREV);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -1496,5 +1495,4 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

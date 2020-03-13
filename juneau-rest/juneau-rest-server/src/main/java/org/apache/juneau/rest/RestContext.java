@@ -109,6 +109,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#allowBodyParam(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#dontAllowBodyParam()}
 	 * 		</ul>
 	 * </ul>
 	 *

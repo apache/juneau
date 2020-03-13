@@ -259,6 +259,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#detectLinksInStrings(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#dontDetectLinksInStrings()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -367,6 +368,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#detectLabelParameters(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#dontDetectLabelParameters()}
 	 * 		</ul>
 	 * </ul>
 	 *

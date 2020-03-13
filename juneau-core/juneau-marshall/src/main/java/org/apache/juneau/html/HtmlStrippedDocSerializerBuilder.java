@@ -54,6 +54,8 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	// <CONFIGURATION-PROPERTIES>
+
 	@Override /* HtmlSerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder addKeyValueTableHeaders(boolean value) {
 		super.addKeyValueTableHeaders(value);
@@ -923,4 +925,6 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

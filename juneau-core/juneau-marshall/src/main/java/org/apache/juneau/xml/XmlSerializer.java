@@ -211,6 +211,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#autoDetectNamespaces(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#dontAutoDetectNamespaces()}
 	 * 		</ul>
 	 * </ul>
 	 *

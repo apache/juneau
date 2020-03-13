@@ -91,7 +91,6 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return set(ISPARSER_binaryFormat, BinaryFormat.valueOf(value));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -803,7 +802,6 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public InputStreamParser build() {

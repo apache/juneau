@@ -436,6 +436,29 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Configuration property:  Allow body URL parameter.
+	 *
+	 * <p>
+	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
+	 * URL parameter.
+	 * <br>
+	 * For example:
+	 * <p class='bcode w800'>
+	 *  ?body=(name='John%20Smith',age=45)
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_allowBodyParam}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RestContextBuilder dontAllowBodyParam() {
+		return set(REST_allowBodyParam, false);
+	}
+
+	/**
 	 * Configuration property:  Allowed header URL parameters.
 	 *
 	 * <p>
@@ -2583,7 +2606,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -3211,7 +3233,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 
 	//----------------------------------------------------------------------------------------------------
 	// Methods inherited from ServletConfig

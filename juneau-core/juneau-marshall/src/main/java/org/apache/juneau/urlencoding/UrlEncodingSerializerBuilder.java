@@ -94,7 +94,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return set(URLENC_expandedParams, true);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -992,5 +991,4 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

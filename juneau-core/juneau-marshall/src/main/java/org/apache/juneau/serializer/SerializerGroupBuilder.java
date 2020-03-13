@@ -640,6 +640,8 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return useWhitespace();
 	}
 
+	// <CONFIGURATION-PROPERTIES>
+
 	@Override /* BeanTraverseBuilder */
 	public SerializerGroupBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
@@ -1263,4 +1265,6 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

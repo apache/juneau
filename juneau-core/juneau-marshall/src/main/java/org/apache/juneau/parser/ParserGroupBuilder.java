@@ -371,6 +371,8 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 		return set(ISPARSER_binaryFormat, value);
 	}
 
+	// <CONFIGURATION-PROPERTIES>
+
 	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder annotations(Annotation...values) {
 		super.annotations(values);
@@ -958,4 +960,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

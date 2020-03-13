@@ -39,4 +39,12 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 	public ConfigMemoryStore build() {
 		return new ConfigMemoryStore(getPropertyStore());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// <CONFIGURATION-PROPERTIES>
+
+	// </CONFIGURATION-PROPERTIES>
 }

@@ -292,6 +292,8 @@ public class ConfigBuilder extends ContextBuilder {
 		return set(CONFIG_readOnly, true);
 	}
 
+	// <CONFIGURATION-PROPERTIES>
+
 	@Override /* ContextBuilder */
 	public ConfigBuilder set(String name, Object value) {
 		super.set(name, value);
@@ -333,4 +335,6 @@ public class ConfigBuilder extends ContextBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

@@ -52,7 +52,6 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -884,5 +883,4 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

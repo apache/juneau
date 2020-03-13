@@ -53,7 +53,6 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -777,5 +776,4 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

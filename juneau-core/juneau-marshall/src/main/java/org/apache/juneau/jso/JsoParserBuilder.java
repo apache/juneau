@@ -52,7 +52,6 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -776,5 +775,4 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

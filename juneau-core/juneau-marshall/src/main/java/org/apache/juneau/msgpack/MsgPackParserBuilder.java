@@ -52,7 +52,6 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -776,6 +775,4 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
-
 }

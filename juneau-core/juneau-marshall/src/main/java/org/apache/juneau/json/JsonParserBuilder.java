@@ -94,7 +94,6 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return set(JSON_validateEnd, true);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -818,5 +817,4 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

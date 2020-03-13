@@ -830,6 +830,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSomeProperties(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansDontRequireSomeProperties()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1474,6 +1475,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignorePropertiesWithoutSetters(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontIgnorePropertiesWithoutSetters()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1518,6 +1520,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreTransientFields(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontIgnoreTransientFields()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1607,6 +1610,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreUnknownNullBeanProperties(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontIgnoreUnknownNullBeanProperties()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2287,6 +2291,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#useInterfaceProxies(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontUseInterfaceProxies()}
 	 * 		</ul>
 	 * </ul>
 	 *

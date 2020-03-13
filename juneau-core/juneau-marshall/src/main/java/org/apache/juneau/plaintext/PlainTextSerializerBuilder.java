@@ -53,7 +53,6 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -921,6 +920,4 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
-
 }

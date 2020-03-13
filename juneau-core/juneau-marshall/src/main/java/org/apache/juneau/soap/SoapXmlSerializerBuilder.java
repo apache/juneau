@@ -73,7 +73,6 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return set(SOAPXML_SOAPAction, value);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -1007,5 +1006,4 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

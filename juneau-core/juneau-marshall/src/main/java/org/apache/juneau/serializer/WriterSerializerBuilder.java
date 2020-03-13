@@ -206,7 +206,6 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 		return useWhitespace();
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
@@ -1026,7 +1025,6 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public WriterSerializer build() {

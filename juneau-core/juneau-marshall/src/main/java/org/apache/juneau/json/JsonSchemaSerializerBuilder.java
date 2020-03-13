@@ -71,7 +71,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
+	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchemaSerializerBuilder addDescriptionsTo(String value) {
@@ -97,7 +97,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
+	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchemaSerializerBuilder addExamplesTo(String value) {
@@ -114,10 +114,48 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
 	 * </ul>
 	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchemaSerializerBuilder allowNestedDescriptions(boolean value) {
+		return set(JSONSCHEMA_allowNestedDescriptions, value);
+	}
+
+	/**
+	 * Configuration property:  Allow nested descriptions.
+	 *
+	 * <p>
+	 * Identifies whether nested descriptions are allowed in schema definitions.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
+	 * </ul>
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchemaSerializerBuilder allowNestedDescriptions() {
 		return set(JSONSCHEMA_allowNestedDescriptions, true);
+	}
+
+	/**
+	 * Configuration property:  Allow nested examples.
+	 *
+	 * <p>
+	 * Identifies whether nested examples are allowed in schema definitions.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchemaSerializerBuilder allowNestedExamples(boolean value) {
+		return set(JSONSCHEMA_allowNestedExamples, value);
 	}
 
 	/**
@@ -152,7 +190,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
+	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchemaSerializerBuilder beanDefMapper(Class<? extends BeanDefMapper> value) {
@@ -175,7 +213,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
+	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchemaSerializerBuilder beanDefMapper(BeanDefMapper value) {
@@ -202,6 +240,27 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 */
 	public JsonSchemaSerializerBuilder defaultSchema(Class<?> c, ObjectMap schema) {
 		return addTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
+	}
+
+	/**
+	 * Configuration property:  Use bean definitions.
+	 *
+	 * <p>
+	 * When enabled, schemas on beans will be serialized as the following:
+	 * <p class='bcode w800'>
+	 * 	{
+	 * 		type: <js>'object'</js>,
+	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
+	 * 	}
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchemaSerializerBuilder useBeanDefs(boolean value) {
+		return set(JSONSCHEMA_useBeanDefs, value);
 	}
 
 	/**

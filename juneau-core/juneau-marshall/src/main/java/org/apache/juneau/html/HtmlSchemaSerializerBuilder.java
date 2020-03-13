@@ -72,7 +72,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
+	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -99,7 +99,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
+	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -117,11 +117,51 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
 	 * </ul>
 	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public HtmlSchemaSerializerBuilder allowNestedDescriptions(boolean value) {
+		return set(JSONSCHEMA_allowNestedDescriptions, value);
+	}
+
+	/**
+	 * Configuration property:  Allow nested descriptions.
+	 *
+	 * <p>
+	 * Identifies whether nested descriptions are allowed in schema definitions.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
+	 * </ul>
+	 *
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
 	public HtmlSchemaSerializerBuilder allowNestedDescriptions() {
 		return set(JSONSCHEMA_allowNestedDescriptions, true);
+	}
+
+	/**
+	 * Configuration property:  Allow nested examples.
+	 *
+	 * <p>
+	 * Identifies whether nested examples are allowed in schema definitions.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public HtmlSchemaSerializerBuilder allowNestedExamples(boolean value) {
+		return set(JSONSCHEMA_allowNestedExamples, value);
 	}
 
 	/**
@@ -157,7 +197,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
+	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -181,7 +221,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
+	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -224,12 +264,36 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 * 	}
 	 * </p>
 	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public HtmlSchemaSerializerBuilder useBeanDefs(boolean value) {
+		return set(JSONSCHEMA_useBeanDefs, value);
+	}
+
+	/**
+	 * Configuration property:  Use bean definitions.
+	 *
+	 * <p>
+	 * When enabled, schemas on beans will be serialized as the following:
+	 * <p class='bcode w800'>
+	 * 	{
+	 * 		type: <js>'object'</js>,
+	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
+	 * 	}
+	 * </p>
+	 *
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
 	public HtmlSchemaSerializerBuilder useBeanDefs() {
 		return set(JSONSCHEMA_useBeanDefs, true);
 	}
+
+	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* WriterSerializerBuilder */
 	public HtmlSchemaSerializerBuilder fileCharset(Charset value) {
@@ -979,4 +1043,6 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	// </CONFIGURATION-PROPERTIES>
 }
