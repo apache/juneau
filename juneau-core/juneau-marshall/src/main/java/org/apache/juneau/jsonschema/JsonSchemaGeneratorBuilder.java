@@ -328,685 +328,685 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder add(Map<String,Object> properties)  {
+	public JsonSchemaGeneratorBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder addTo(String name, Object value)  {
+	public JsonSchemaGeneratorBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder addTo(String name, String key, Object value)  {
+	public JsonSchemaGeneratorBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder apply(PropertyStore copyFrom)  {
+	public JsonSchemaGeneratorBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
+	public JsonSchemaGeneratorBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder applyAnnotations(Method...fromMethods)  {
+	public JsonSchemaGeneratorBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+	public JsonSchemaGeneratorBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder removeFrom(String name, Object value)  {
+	public JsonSchemaGeneratorBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder set(Map<String,Object> properties)  {
+	public JsonSchemaGeneratorBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder set(String name, Object value)  {
+	public JsonSchemaGeneratorBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder annotations(Annotation...values)  {
+	public JsonSchemaGeneratorBuilder annotations(Annotation...values) {
 		super.annotations(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanClassVisibility(Visibility value)  {
+	public JsonSchemaGeneratorBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanConstructorVisibility(Visibility value)  {
+	public JsonSchemaGeneratorBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanDictionary(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder beanDictionary(java.lang.Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanDictionary(Object...values)  {
+	public JsonSchemaGeneratorBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanDictionaryRemove(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanDictionaryRemove(Object...values)  {
+	public JsonSchemaGeneratorBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanDictionaryReplace(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanDictionaryReplace(Object...values)  {
+	public JsonSchemaGeneratorBuilder beanDictionaryReplace(Object...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanFieldVisibility(Visibility value)  {
+	public JsonSchemaGeneratorBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanFilters(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder beanFilters(java.lang.Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanFilters(Object...values)  {
+	public JsonSchemaGeneratorBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanFiltersRemove(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder beanFiltersRemove(java.lang.Class<?>...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanFiltersRemove(Object...values)  {
+	public JsonSchemaGeneratorBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanFiltersReplace(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder beanFiltersReplace(java.lang.Class<?>...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanFiltersReplace(Object...values)  {
+	public JsonSchemaGeneratorBuilder beanFiltersReplace(Object...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanMapPutReturnsOldValue()  {
+	public JsonSchemaGeneratorBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanMapPutReturnsOldValue(boolean value)  {
+	public JsonSchemaGeneratorBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanMethodVisibility(Visibility value)  {
+	public JsonSchemaGeneratorBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanTypePropertyName(String value)  {
+	public JsonSchemaGeneratorBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beansRequireDefaultConstructor()  {
+	public JsonSchemaGeneratorBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beansRequireDefaultConstructor(boolean value)  {
+	public JsonSchemaGeneratorBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beansRequireSerializable()  {
+	public JsonSchemaGeneratorBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beansRequireSerializable(boolean value)  {
+	public JsonSchemaGeneratorBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beansRequireSettersForGetters()  {
+	public JsonSchemaGeneratorBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beansRequireSettersForGetters(boolean value)  {
+	public JsonSchemaGeneratorBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beansRequireSomeProperties(boolean value)  {
+	public JsonSchemaGeneratorBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpi(Map<String,String> values)  {
+	public JsonSchemaGeneratorBuilder bpi(Map<String,String> values) {
 		super.bpi(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpi(Class<?> beanClass, String properties)  {
+	public JsonSchemaGeneratorBuilder bpi(Class<?> beanClass, String properties) {
 		super.bpi(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpi(String beanClassName, String properties)  {
+	public JsonSchemaGeneratorBuilder bpi(String beanClassName, String properties) {
 		super.bpi(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpro(Map<String,String> values)  {
+	public JsonSchemaGeneratorBuilder bpro(Map<String,String> values) {
 		super.bpro(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpro(Class<?> beanClass, String properties)  {
+	public JsonSchemaGeneratorBuilder bpro(Class<?> beanClass, String properties) {
 		super.bpro(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpro(String beanClassName, String properties)  {
+	public JsonSchemaGeneratorBuilder bpro(String beanClassName, String properties) {
 		super.bpro(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpwo(Map<String,String> values)  {
+	public JsonSchemaGeneratorBuilder bpwo(Map<String,String> values) {
 		super.bpwo(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpwo(Class<?> beanClass, String properties)  {
+	public JsonSchemaGeneratorBuilder bpwo(Class<?> beanClass, String properties) {
 		super.bpwo(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpwo(String beanClassName, String properties)  {
+	public JsonSchemaGeneratorBuilder bpwo(String beanClassName, String properties) {
 		super.bpwo(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpx(Map<String,String> values)  {
+	public JsonSchemaGeneratorBuilder bpx(Map<String,String> values) {
 		super.bpx(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpx(Class<?> beanClass, String properties)  {
+	public JsonSchemaGeneratorBuilder bpx(Class<?> beanClass, String properties) {
 		super.bpx(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpx(String beanClassName, String properties)  {
+	public JsonSchemaGeneratorBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder debug()  {
+	public JsonSchemaGeneratorBuilder debug() {
 		super.debug();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder debug(boolean value)  {
+	public JsonSchemaGeneratorBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder dictionary(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder dictionary(Object...values)  {
+	public JsonSchemaGeneratorBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder dictionaryRemove(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder dictionaryRemove(java.lang.Class<?>...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder dictionaryRemove(Object...values)  {
+	public JsonSchemaGeneratorBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder dictionaryReplace(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder dictionaryReplace(java.lang.Class<?>...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder dictionaryReplace(Object...values)  {
+	public JsonSchemaGeneratorBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> JsonSchemaGeneratorBuilder example(Class<T> pojoClass, T o)  {
+	public <T> JsonSchemaGeneratorBuilder example(Class<T> pojoClass, T o) {
 		super.example(pojoClass, o);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> JsonSchemaGeneratorBuilder exampleJson(Class<T> pojoClass, String json)  {
+	public <T> JsonSchemaGeneratorBuilder exampleJson(Class<T> pojoClass, String json) {
 		super.exampleJson(pojoClass, json);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder examples(String json)  {
+	public JsonSchemaGeneratorBuilder examples(String json) {
 		super.examples(json);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder excludeProperties(Map<String,String> values)  {
+	public JsonSchemaGeneratorBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder excludeProperties(Class<?> beanClass, String properties)  {
+	public JsonSchemaGeneratorBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder excludeProperties(String beanClassName, String value)  {
+	public JsonSchemaGeneratorBuilder excludeProperties(String beanClassName, String value) {
 		super.excludeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder fluentSetters()  {
+	public JsonSchemaGeneratorBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder fluentSetters(boolean value)  {
+	public JsonSchemaGeneratorBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder ignoreInvocationExceptionsOnGetters()  {
+	public JsonSchemaGeneratorBuilder ignoreInvocationExceptionsOnGetters() {
 		super.ignoreInvocationExceptionsOnGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder ignoreInvocationExceptionsOnGetters(boolean value)  {
+	public JsonSchemaGeneratorBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder ignoreInvocationExceptionsOnSetters()  {
+	public JsonSchemaGeneratorBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder ignoreInvocationExceptionsOnSetters(boolean value)  {
+	public JsonSchemaGeneratorBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder ignorePropertiesWithoutSetters(boolean value)  {
+	public JsonSchemaGeneratorBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder ignoreTransientFields(boolean value)  {
+	public JsonSchemaGeneratorBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder ignoreUnknownBeanProperties()  {
+	public JsonSchemaGeneratorBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder ignoreUnknownBeanProperties(boolean value)  {
+	public JsonSchemaGeneratorBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder ignoreUnknownNullBeanProperties(boolean value)  {
+	public JsonSchemaGeneratorBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder implClass(Class<?> interfaceClass, Class<?> implClass)  {
+	public JsonSchemaGeneratorBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder implClasses(Map<String,Class<?>> values)  {
+	public JsonSchemaGeneratorBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder includeProperties(Map<String,String> values)  {
+	public JsonSchemaGeneratorBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder includeProperties(Class<?> beanClass, String value)  {
+	public JsonSchemaGeneratorBuilder includeProperties(Class<?> beanClass, String value) {
 		super.includeProperties(beanClass, value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder includeProperties(String beanClassName, String value)  {
+	public JsonSchemaGeneratorBuilder includeProperties(String beanClassName, String value) {
 		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder locale(Locale value)  {
+	public JsonSchemaGeneratorBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder mediaType(MediaType value)  {
+	public JsonSchemaGeneratorBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanClasses(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder notBeanClasses(java.lang.Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanClasses(Object...values)  {
+	public JsonSchemaGeneratorBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanClassesRemove(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanClassesRemove(Object...values)  {
+	public JsonSchemaGeneratorBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanClassesReplace(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanClassesReplace(Object...values)  {
+	public JsonSchemaGeneratorBuilder notBeanClassesReplace(Object...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanPackages(Object...values)  {
+	public JsonSchemaGeneratorBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanPackages(String...values)  {
+	public JsonSchemaGeneratorBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanPackagesRemove(Object...values)  {
+	public JsonSchemaGeneratorBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanPackagesRemove(String...values)  {
+	public JsonSchemaGeneratorBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanPackagesReplace(Object...values)  {
+	public JsonSchemaGeneratorBuilder notBeanPackagesReplace(Object...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanPackagesReplace(String...values)  {
+	public JsonSchemaGeneratorBuilder notBeanPackagesReplace(String...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder pojoSwaps(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder pojoSwaps(java.lang.Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder pojoSwaps(Object...values)  {
+	public JsonSchemaGeneratorBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder pojoSwapsRemove(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder pojoSwapsRemove(Object...values)  {
+	public JsonSchemaGeneratorBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder pojoSwapsReplace(java.lang.Class<?>...values)  {
+	public JsonSchemaGeneratorBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder pojoSwapsReplace(Object...values)  {
+	public JsonSchemaGeneratorBuilder pojoSwapsReplace(Object...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value)  {
+	public JsonSchemaGeneratorBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder sortProperties()  {
+	public JsonSchemaGeneratorBuilder sortProperties() {
 		super.sortProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder sortProperties(boolean value)  {
+	public JsonSchemaGeneratorBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder timeZone(TimeZone value)  {
+	public JsonSchemaGeneratorBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder useEnumNames()  {
+	public JsonSchemaGeneratorBuilder useEnumNames() {
 		super.useEnumNames();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder useEnumNames(boolean value)  {
+	public JsonSchemaGeneratorBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder useInterfaceProxies(boolean value)  {
+	public JsonSchemaGeneratorBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder useJavaBeanIntrospector()  {
+	public JsonSchemaGeneratorBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder useJavaBeanIntrospector(boolean value)  {
+	public JsonSchemaGeneratorBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public JsonSchemaGeneratorBuilder detectRecursions()  {
+	public JsonSchemaGeneratorBuilder detectRecursions() {
 		super.detectRecursions();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public JsonSchemaGeneratorBuilder detectRecursions(boolean value)  {
+	public JsonSchemaGeneratorBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public JsonSchemaGeneratorBuilder ignoreRecursions()  {
+	public JsonSchemaGeneratorBuilder ignoreRecursions() {
 		super.ignoreRecursions();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public JsonSchemaGeneratorBuilder ignoreRecursions(boolean value)  {
+	public JsonSchemaGeneratorBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public JsonSchemaGeneratorBuilder initialDepth(int value)  {
+	public JsonSchemaGeneratorBuilder initialDepth(int value) {
 		super.initialDepth(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public JsonSchemaGeneratorBuilder maxDepth(int value)  {
+	public JsonSchemaGeneratorBuilder maxDepth(int value) {
 		super.maxDepth(value);
 		return this;
 	}

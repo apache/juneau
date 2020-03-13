@@ -2127,69 +2127,67 @@ public class BeanContextBuilder extends ContextBuilder {
 		return set(BEAN_useJavaBeanIntrospector, true);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder add(Map<String,Object> properties)  {
+	public BeanContextBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder addTo(String name, Object value)  {
+	public BeanContextBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder addTo(String name, String key, Object value)  {
+	public BeanContextBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder apply(PropertyStore copyFrom)  {
+	public BeanContextBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
+	public BeanContextBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder applyAnnotations(Method...fromMethods)  {
+	public BeanContextBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+	public BeanContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder removeFrom(String name, Object value)  {
+	public BeanContextBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder set(Map<String,Object> properties)  {
+	public BeanContextBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder set(String name, Object value)  {
+	public BeanContextBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

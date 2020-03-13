@@ -53,729 +53,727 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	//------------------------------------------------------------------------------------------------------------------
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvParserBuilder add(Map<String,Object> properties)  {
+	public CsvParserBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvParserBuilder addTo(String name, Object value)  {
+	public CsvParserBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvParserBuilder addTo(String name, String key, Object value)  {
+	public CsvParserBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvParserBuilder apply(PropertyStore copyFrom)  {
+	public CsvParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvParserBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
+	public CsvParserBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvParserBuilder applyAnnotations(Method...fromMethods)  {
+	public CsvParserBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+	public CsvParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvParserBuilder removeFrom(String name, Object value)  {
+	public CsvParserBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvParserBuilder set(Map<String,Object> properties)  {
+	public CsvParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public CsvParserBuilder set(String name, Object value)  {
+	public CsvParserBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder annotations(Annotation...values)  {
+	public CsvParserBuilder annotations(Annotation...values) {
 		super.annotations(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanClassVisibility(Visibility value)  {
+	public CsvParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanConstructorVisibility(Visibility value)  {
+	public CsvParserBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanDictionary(java.lang.Class<?>...values)  {
+	public CsvParserBuilder beanDictionary(java.lang.Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanDictionary(Object...values)  {
+	public CsvParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanDictionaryRemove(java.lang.Class<?>...values)  {
+	public CsvParserBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanDictionaryRemove(Object...values)  {
+	public CsvParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanDictionaryReplace(java.lang.Class<?>...values)  {
+	public CsvParserBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanDictionaryReplace(Object...values)  {
+	public CsvParserBuilder beanDictionaryReplace(Object...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanFieldVisibility(Visibility value)  {
+	public CsvParserBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanFilters(java.lang.Class<?>...values)  {
+	public CsvParserBuilder beanFilters(java.lang.Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanFilters(Object...values)  {
+	public CsvParserBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanFiltersRemove(java.lang.Class<?>...values)  {
+	public CsvParserBuilder beanFiltersRemove(java.lang.Class<?>...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanFiltersRemove(Object...values)  {
+	public CsvParserBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanFiltersReplace(java.lang.Class<?>...values)  {
+	public CsvParserBuilder beanFiltersReplace(java.lang.Class<?>...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanFiltersReplace(Object...values)  {
+	public CsvParserBuilder beanFiltersReplace(Object...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanMapPutReturnsOldValue()  {
+	public CsvParserBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanMapPutReturnsOldValue(boolean value)  {
+	public CsvParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanMethodVisibility(Visibility value)  {
+	public CsvParserBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beanTypePropertyName(String value)  {
+	public CsvParserBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beansRequireDefaultConstructor()  {
+	public CsvParserBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beansRequireDefaultConstructor(boolean value)  {
+	public CsvParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beansRequireSerializable()  {
+	public CsvParserBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beansRequireSerializable(boolean value)  {
+	public CsvParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beansRequireSettersForGetters()  {
+	public CsvParserBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beansRequireSettersForGetters(boolean value)  {
+	public CsvParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder beansRequireSomeProperties(boolean value)  {
+	public CsvParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder bpi(Map<String,String> values)  {
+	public CsvParserBuilder bpi(Map<String,String> values) {
 		super.bpi(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder bpi(Class<?> beanClass, String properties)  {
+	public CsvParserBuilder bpi(Class<?> beanClass, String properties) {
 		super.bpi(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder bpi(String beanClassName, String properties)  {
+	public CsvParserBuilder bpi(String beanClassName, String properties) {
 		super.bpi(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder bpro(Map<String,String> values)  {
+	public CsvParserBuilder bpro(Map<String,String> values) {
 		super.bpro(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder bpro(Class<?> beanClass, String properties)  {
+	public CsvParserBuilder bpro(Class<?> beanClass, String properties) {
 		super.bpro(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder bpro(String beanClassName, String properties)  {
+	public CsvParserBuilder bpro(String beanClassName, String properties) {
 		super.bpro(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder bpwo(Map<String,String> values)  {
+	public CsvParserBuilder bpwo(Map<String,String> values) {
 		super.bpwo(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder bpwo(Class<?> beanClass, String properties)  {
+	public CsvParserBuilder bpwo(Class<?> beanClass, String properties) {
 		super.bpwo(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder bpwo(String beanClassName, String properties)  {
+	public CsvParserBuilder bpwo(String beanClassName, String properties) {
 		super.bpwo(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder bpx(Map<String,String> values)  {
+	public CsvParserBuilder bpx(Map<String,String> values) {
 		super.bpx(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder bpx(Class<?> beanClass, String properties)  {
+	public CsvParserBuilder bpx(Class<?> beanClass, String properties) {
 		super.bpx(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder bpx(String beanClassName, String properties)  {
+	public CsvParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder debug()  {
+	public CsvParserBuilder debug() {
 		super.debug();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder debug(boolean value)  {
+	public CsvParserBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder dictionary(java.lang.Class<?>...values)  {
+	public CsvParserBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder dictionary(Object...values)  {
+	public CsvParserBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder dictionaryRemove(java.lang.Class<?>...values)  {
+	public CsvParserBuilder dictionaryRemove(java.lang.Class<?>...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder dictionaryRemove(Object...values)  {
+	public CsvParserBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder dictionaryReplace(java.lang.Class<?>...values)  {
+	public CsvParserBuilder dictionaryReplace(java.lang.Class<?>...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder dictionaryReplace(Object...values)  {
+	public CsvParserBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> CsvParserBuilder example(Class<T> pojoClass, T o)  {
+	public <T> CsvParserBuilder example(Class<T> pojoClass, T o) {
 		super.example(pojoClass, o);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> CsvParserBuilder exampleJson(Class<T> pojoClass, String json)  {
+	public <T> CsvParserBuilder exampleJson(Class<T> pojoClass, String json) {
 		super.exampleJson(pojoClass, json);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder examples(String json)  {
+	public CsvParserBuilder examples(String json) {
 		super.examples(json);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder excludeProperties(Map<String,String> values)  {
+	public CsvParserBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder excludeProperties(Class<?> beanClass, String properties)  {
+	public CsvParserBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder excludeProperties(String beanClassName, String value)  {
+	public CsvParserBuilder excludeProperties(String beanClassName, String value) {
 		super.excludeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder fluentSetters()  {
+	public CsvParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder fluentSetters(boolean value)  {
+	public CsvParserBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder ignoreInvocationExceptionsOnGetters()  {
+	public CsvParserBuilder ignoreInvocationExceptionsOnGetters() {
 		super.ignoreInvocationExceptionsOnGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder ignoreInvocationExceptionsOnGetters(boolean value)  {
+	public CsvParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder ignoreInvocationExceptionsOnSetters()  {
+	public CsvParserBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder ignoreInvocationExceptionsOnSetters(boolean value)  {
+	public CsvParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder ignorePropertiesWithoutSetters(boolean value)  {
+	public CsvParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder ignoreTransientFields(boolean value)  {
+	public CsvParserBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder ignoreUnknownBeanProperties()  {
+	public CsvParserBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder ignoreUnknownBeanProperties(boolean value)  {
+	public CsvParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder ignoreUnknownNullBeanProperties(boolean value)  {
+	public CsvParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass)  {
+	public CsvParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder implClasses(Map<String,Class<?>> values)  {
+	public CsvParserBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder includeProperties(Map<String,String> values)  {
+	public CsvParserBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder includeProperties(Class<?> beanClass, String value)  {
+	public CsvParserBuilder includeProperties(Class<?> beanClass, String value) {
 		super.includeProperties(beanClass, value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder includeProperties(String beanClassName, String value)  {
+	public CsvParserBuilder includeProperties(String beanClassName, String value) {
 		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder locale(Locale value)  {
+	public CsvParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder mediaType(MediaType value)  {
+	public CsvParserBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder notBeanClasses(java.lang.Class<?>...values)  {
+	public CsvParserBuilder notBeanClasses(java.lang.Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder notBeanClasses(Object...values)  {
+	public CsvParserBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder notBeanClassesRemove(java.lang.Class<?>...values)  {
+	public CsvParserBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder notBeanClassesRemove(Object...values)  {
+	public CsvParserBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder notBeanClassesReplace(java.lang.Class<?>...values)  {
+	public CsvParserBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder notBeanClassesReplace(Object...values)  {
+	public CsvParserBuilder notBeanClassesReplace(Object...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder notBeanPackages(Object...values)  {
+	public CsvParserBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder notBeanPackages(String...values)  {
+	public CsvParserBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder notBeanPackagesRemove(Object...values)  {
+	public CsvParserBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder notBeanPackagesRemove(String...values)  {
+	public CsvParserBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder notBeanPackagesReplace(Object...values)  {
+	public CsvParserBuilder notBeanPackagesReplace(Object...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder notBeanPackagesReplace(String...values)  {
+	public CsvParserBuilder notBeanPackagesReplace(String...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder pojoSwaps(java.lang.Class<?>...values)  {
+	public CsvParserBuilder pojoSwaps(java.lang.Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder pojoSwaps(Object...values)  {
+	public CsvParserBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder pojoSwapsRemove(java.lang.Class<?>...values)  {
+	public CsvParserBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder pojoSwapsRemove(Object...values)  {
+	public CsvParserBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder pojoSwapsReplace(java.lang.Class<?>...values)  {
+	public CsvParserBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder pojoSwapsReplace(Object...values)  {
+	public CsvParserBuilder pojoSwapsReplace(Object...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value)  {
+	public CsvParserBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder sortProperties()  {
+	public CsvParserBuilder sortProperties() {
 		super.sortProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder sortProperties(boolean value)  {
+	public CsvParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder timeZone(TimeZone value)  {
+	public CsvParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder useEnumNames()  {
+	public CsvParserBuilder useEnumNames() {
 		super.useEnumNames();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder useEnumNames(boolean value)  {
+	public CsvParserBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder useInterfaceProxies(boolean value)  {
+	public CsvParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder useJavaBeanIntrospector()  {
+	public CsvParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder useJavaBeanIntrospector(boolean value)  {
+	public CsvParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public CsvParserBuilder autoCloseStreams()  {
+	public CsvParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public CsvParserBuilder autoCloseStreams(boolean value)  {
+	public CsvParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public CsvParserBuilder debugOutputLines(int value)  {
+	public CsvParserBuilder debugOutputLines(int value) {
 		super.debugOutputLines(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public CsvParserBuilder listener(Class<? extends org.apache.juneau.parser.ParserListener> value)  {
+	public CsvParserBuilder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
 		super.listener(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public CsvParserBuilder strict()  {
+	public CsvParserBuilder strict() {
 		super.strict();
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public CsvParserBuilder strict(boolean value)  {
+	public CsvParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public CsvParserBuilder trimStrings()  {
+	public CsvParserBuilder trimStrings() {
 		super.trimStrings();
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public CsvParserBuilder trimStrings(boolean value)  {
+	public CsvParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public CsvParserBuilder unbuffered()  {
+	public CsvParserBuilder unbuffered() {
 		super.unbuffered();
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public CsvParserBuilder unbuffered(boolean value)  {
+	public CsvParserBuilder unbuffered(boolean value) {
 		super.unbuffered(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ReaderParserBuilder */
-	public CsvParserBuilder fileCharset(Charset value)  {
+	public CsvParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ReaderParserBuilder */
-	public CsvParserBuilder streamCharset(Charset value)  {
+	public CsvParserBuilder streamCharset(Charset value) {
 		super.streamCharset(value);
 		return this;
 	}
 
 	// </CONFIGURATION-PROPERTIES>
-	//------------------------------------------------------------------------------------------------------------------
 }

@@ -271,865 +271,865 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlSerializerBuilder add(Map<String,Object> properties)  {
+	public XmlSerializerBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlSerializerBuilder addTo(String name, Object value)  {
+	public XmlSerializerBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlSerializerBuilder addTo(String name, String key, Object value)  {
+	public XmlSerializerBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlSerializerBuilder apply(PropertyStore copyFrom)  {
+	public XmlSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlSerializerBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
+	public XmlSerializerBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlSerializerBuilder applyAnnotations(Method...fromMethods)  {
+	public XmlSerializerBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+	public XmlSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlSerializerBuilder removeFrom(String name, Object value)  {
+	public XmlSerializerBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlSerializerBuilder set(Map<String,Object> properties)  {
+	public XmlSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlSerializerBuilder set(String name, Object value)  {
+	public XmlSerializerBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder annotations(Annotation...values)  {
+	public XmlSerializerBuilder annotations(Annotation...values) {
 		super.annotations(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanClassVisibility(Visibility value)  {
+	public XmlSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanConstructorVisibility(Visibility value)  {
+	public XmlSerializerBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanDictionary(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder beanDictionary(java.lang.Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanDictionary(Object...values)  {
+	public XmlSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanDictionaryRemove(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanDictionaryRemove(Object...values)  {
+	public XmlSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanDictionaryReplace(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanDictionaryReplace(Object...values)  {
+	public XmlSerializerBuilder beanDictionaryReplace(Object...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanFieldVisibility(Visibility value)  {
+	public XmlSerializerBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanFilters(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder beanFilters(java.lang.Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanFilters(Object...values)  {
+	public XmlSerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanFiltersRemove(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder beanFiltersRemove(java.lang.Class<?>...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanFiltersRemove(Object...values)  {
+	public XmlSerializerBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanFiltersReplace(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder beanFiltersReplace(java.lang.Class<?>...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanFiltersReplace(Object...values)  {
+	public XmlSerializerBuilder beanFiltersReplace(Object...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanMapPutReturnsOldValue()  {
+	public XmlSerializerBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanMapPutReturnsOldValue(boolean value)  {
+	public XmlSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanMethodVisibility(Visibility value)  {
+	public XmlSerializerBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanTypePropertyName(String value)  {
+	public XmlSerializerBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beansRequireDefaultConstructor()  {
+	public XmlSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beansRequireDefaultConstructor(boolean value)  {
+	public XmlSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beansRequireSerializable()  {
+	public XmlSerializerBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beansRequireSerializable(boolean value)  {
+	public XmlSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beansRequireSettersForGetters()  {
+	public XmlSerializerBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beansRequireSettersForGetters(boolean value)  {
+	public XmlSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beansRequireSomeProperties(boolean value)  {
+	public XmlSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder bpi(Map<String,String> values)  {
+	public XmlSerializerBuilder bpi(Map<String,String> values) {
 		super.bpi(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder bpi(Class<?> beanClass, String properties)  {
+	public XmlSerializerBuilder bpi(Class<?> beanClass, String properties) {
 		super.bpi(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder bpi(String beanClassName, String properties)  {
+	public XmlSerializerBuilder bpi(String beanClassName, String properties) {
 		super.bpi(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder bpro(Map<String,String> values)  {
+	public XmlSerializerBuilder bpro(Map<String,String> values) {
 		super.bpro(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder bpro(Class<?> beanClass, String properties)  {
+	public XmlSerializerBuilder bpro(Class<?> beanClass, String properties) {
 		super.bpro(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder bpro(String beanClassName, String properties)  {
+	public XmlSerializerBuilder bpro(String beanClassName, String properties) {
 		super.bpro(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder bpwo(Map<String,String> values)  {
+	public XmlSerializerBuilder bpwo(Map<String,String> values) {
 		super.bpwo(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder bpwo(Class<?> beanClass, String properties)  {
+	public XmlSerializerBuilder bpwo(Class<?> beanClass, String properties) {
 		super.bpwo(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder bpwo(String beanClassName, String properties)  {
+	public XmlSerializerBuilder bpwo(String beanClassName, String properties) {
 		super.bpwo(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder bpx(Map<String,String> values)  {
+	public XmlSerializerBuilder bpx(Map<String,String> values) {
 		super.bpx(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder bpx(Class<?> beanClass, String properties)  {
+	public XmlSerializerBuilder bpx(Class<?> beanClass, String properties) {
 		super.bpx(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder bpx(String beanClassName, String properties)  {
+	public XmlSerializerBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder debug()  {
+	public XmlSerializerBuilder debug() {
 		super.debug();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder debug(boolean value)  {
+	public XmlSerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder dictionary(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder dictionary(Object...values)  {
+	public XmlSerializerBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder dictionaryRemove(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder dictionaryRemove(java.lang.Class<?>...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder dictionaryRemove(Object...values)  {
+	public XmlSerializerBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder dictionaryReplace(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder dictionaryReplace(java.lang.Class<?>...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder dictionaryReplace(Object...values)  {
+	public XmlSerializerBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> XmlSerializerBuilder example(Class<T> pojoClass, T o)  {
+	public <T> XmlSerializerBuilder example(Class<T> pojoClass, T o) {
 		super.example(pojoClass, o);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> XmlSerializerBuilder exampleJson(Class<T> pojoClass, String json)  {
+	public <T> XmlSerializerBuilder exampleJson(Class<T> pojoClass, String json) {
 		super.exampleJson(pojoClass, json);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder examples(String json)  {
+	public XmlSerializerBuilder examples(String json) {
 		super.examples(json);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder excludeProperties(Map<String,String> values)  {
+	public XmlSerializerBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder excludeProperties(Class<?> beanClass, String properties)  {
+	public XmlSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder excludeProperties(String beanClassName, String value)  {
+	public XmlSerializerBuilder excludeProperties(String beanClassName, String value) {
 		super.excludeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder fluentSetters()  {
+	public XmlSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder fluentSetters(boolean value)  {
+	public XmlSerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder ignoreInvocationExceptionsOnGetters()  {
+	public XmlSerializerBuilder ignoreInvocationExceptionsOnGetters() {
 		super.ignoreInvocationExceptionsOnGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value)  {
+	public XmlSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder ignoreInvocationExceptionsOnSetters()  {
+	public XmlSerializerBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value)  {
+	public XmlSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder ignorePropertiesWithoutSetters(boolean value)  {
+	public XmlSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder ignoreTransientFields(boolean value)  {
+	public XmlSerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder ignoreUnknownBeanProperties()  {
+	public XmlSerializerBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder ignoreUnknownBeanProperties(boolean value)  {
+	public XmlSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder ignoreUnknownNullBeanProperties(boolean value)  {
+	public XmlSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder implClass(Class<?> interfaceClass, Class<?> implClass)  {
+	public XmlSerializerBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder implClasses(Map<String,Class<?>> values)  {
+	public XmlSerializerBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder includeProperties(Map<String,String> values)  {
+	public XmlSerializerBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder includeProperties(Class<?> beanClass, String value)  {
+	public XmlSerializerBuilder includeProperties(Class<?> beanClass, String value) {
 		super.includeProperties(beanClass, value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder includeProperties(String beanClassName, String value)  {
+	public XmlSerializerBuilder includeProperties(String beanClassName, String value) {
 		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder locale(Locale value)  {
+	public XmlSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder mediaType(MediaType value)  {
+	public XmlSerializerBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder notBeanClasses(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder notBeanClasses(java.lang.Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder notBeanClasses(Object...values)  {
+	public XmlSerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder notBeanClassesRemove(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder notBeanClassesRemove(Object...values)  {
+	public XmlSerializerBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder notBeanClassesReplace(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder notBeanClassesReplace(Object...values)  {
+	public XmlSerializerBuilder notBeanClassesReplace(Object...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder notBeanPackages(Object...values)  {
+	public XmlSerializerBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder notBeanPackages(String...values)  {
+	public XmlSerializerBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder notBeanPackagesRemove(Object...values)  {
+	public XmlSerializerBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder notBeanPackagesRemove(String...values)  {
+	public XmlSerializerBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder notBeanPackagesReplace(Object...values)  {
+	public XmlSerializerBuilder notBeanPackagesReplace(Object...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder notBeanPackagesReplace(String...values)  {
+	public XmlSerializerBuilder notBeanPackagesReplace(String...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder pojoSwaps(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder pojoSwaps(java.lang.Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder pojoSwaps(Object...values)  {
+	public XmlSerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder pojoSwapsRemove(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder pojoSwapsRemove(Object...values)  {
+	public XmlSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder pojoSwapsReplace(java.lang.Class<?>...values)  {
+	public XmlSerializerBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder pojoSwapsReplace(Object...values)  {
+	public XmlSerializerBuilder pojoSwapsReplace(Object...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value)  {
+	public XmlSerializerBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder sortProperties()  {
+	public XmlSerializerBuilder sortProperties() {
 		super.sortProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder sortProperties(boolean value)  {
+	public XmlSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder timeZone(TimeZone value)  {
+	public XmlSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder useEnumNames()  {
+	public XmlSerializerBuilder useEnumNames() {
 		super.useEnumNames();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder useEnumNames(boolean value)  {
+	public XmlSerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder useInterfaceProxies(boolean value)  {
+	public XmlSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder useJavaBeanIntrospector()  {
+	public XmlSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder useJavaBeanIntrospector(boolean value)  {
+	public XmlSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public XmlSerializerBuilder detectRecursions()  {
+	public XmlSerializerBuilder detectRecursions() {
 		super.detectRecursions();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public XmlSerializerBuilder detectRecursions(boolean value)  {
+	public XmlSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public XmlSerializerBuilder ignoreRecursions()  {
+	public XmlSerializerBuilder ignoreRecursions() {
 		super.ignoreRecursions();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public XmlSerializerBuilder ignoreRecursions(boolean value)  {
+	public XmlSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public XmlSerializerBuilder initialDepth(int value)  {
+	public XmlSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public XmlSerializerBuilder maxDepth(int value)  {
+	public XmlSerializerBuilder maxDepth(int value) {
 		super.maxDepth(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder addBeanTypes()  {
+	public XmlSerializerBuilder addBeanTypes() {
 		super.addBeanTypes();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder addBeanTypes(boolean value)  {
+	public XmlSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder addRootType()  {
+	public XmlSerializerBuilder addRootType() {
 		super.addRootType();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder addRootType(boolean value)  {
+	public XmlSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value)  {
+	public XmlSerializerBuilder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
 		super.listener(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder sortCollections()  {
+	public XmlSerializerBuilder sortCollections() {
 		super.sortCollections();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder sortCollections(boolean value)  {
+	public XmlSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder sortMaps()  {
+	public XmlSerializerBuilder sortMaps() {
 		super.sortMaps();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder sortMaps(boolean value)  {
+	public XmlSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder trimEmptyCollections()  {
+	public XmlSerializerBuilder trimEmptyCollections() {
 		super.trimEmptyCollections();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder trimEmptyCollections(boolean value)  {
+	public XmlSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder trimEmptyMaps()  {
+	public XmlSerializerBuilder trimEmptyMaps() {
 		super.trimEmptyMaps();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder trimEmptyMaps(boolean value)  {
+	public XmlSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder trimNullProperties(boolean value)  {
+	public XmlSerializerBuilder trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder trimStrings()  {
+	public XmlSerializerBuilder trimStrings() {
 		super.trimStrings();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder trimStrings(boolean value)  {
+	public XmlSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder uriContext(String value)  {
+	public XmlSerializerBuilder uriContext(String value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder uriContext(UriContext value)  {
+	public XmlSerializerBuilder uriContext(UriContext value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder uriRelativity(String value)  {
+	public XmlSerializerBuilder uriRelativity(String value) {
 		super.uriRelativity(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder uriRelativity(UriRelativity value)  {
+	public XmlSerializerBuilder uriRelativity(UriRelativity value) {
 		super.uriRelativity(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder uriResolution(String value)  {
+	public XmlSerializerBuilder uriResolution(String value) {
 		super.uriResolution(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public XmlSerializerBuilder uriResolution(UriResolution value)  {
+	public XmlSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public XmlSerializerBuilder fileCharset(Charset value)  {
+	public XmlSerializerBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public XmlSerializerBuilder maxIndent(int value)  {
+	public XmlSerializerBuilder maxIndent(int value) {
 		super.maxIndent(value);
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public XmlSerializerBuilder quoteChar(char value)  {
+	public XmlSerializerBuilder quoteChar(char value) {
 		super.quoteChar(value);
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public XmlSerializerBuilder sq()  {
+	public XmlSerializerBuilder sq() {
 		super.sq();
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public XmlSerializerBuilder streamCharset(Charset value)  {
+	public XmlSerializerBuilder streamCharset(Charset value) {
 		super.streamCharset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public XmlSerializerBuilder useWhitespace()  {
+	public XmlSerializerBuilder useWhitespace() {
 		super.useWhitespace();
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public XmlSerializerBuilder useWhitespace(boolean value)  {
+	public XmlSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public XmlSerializerBuilder ws()  {
+	public XmlSerializerBuilder ws() {
 		super.ws();
 		return this;
 	}

@@ -95,817 +95,817 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
-	public OutputStreamSerializerBuilder add(Map<String,Object> properties)  {
+	public OutputStreamSerializerBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OutputStreamSerializerBuilder addTo(String name, Object value)  {
+	public OutputStreamSerializerBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OutputStreamSerializerBuilder addTo(String name, String key, Object value)  {
+	public OutputStreamSerializerBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OutputStreamSerializerBuilder apply(PropertyStore copyFrom)  {
+	public OutputStreamSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OutputStreamSerializerBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
+	public OutputStreamSerializerBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OutputStreamSerializerBuilder applyAnnotations(Method...fromMethods)  {
+	public OutputStreamSerializerBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OutputStreamSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+	public OutputStreamSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OutputStreamSerializerBuilder removeFrom(String name, Object value)  {
+	public OutputStreamSerializerBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OutputStreamSerializerBuilder set(Map<String,Object> properties)  {
+	public OutputStreamSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public OutputStreamSerializerBuilder set(String name, Object value)  {
+	public OutputStreamSerializerBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder annotations(Annotation...values)  {
+	public OutputStreamSerializerBuilder annotations(Annotation...values) {
 		super.annotations(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanClassVisibility(Visibility value)  {
+	public OutputStreamSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanConstructorVisibility(Visibility value)  {
+	public OutputStreamSerializerBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionary(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder beanDictionary(java.lang.Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionary(Object...values)  {
+	public OutputStreamSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionaryRemove(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionaryRemove(Object...values)  {
+	public OutputStreamSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionaryReplace(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionaryReplace(Object...values)  {
+	public OutputStreamSerializerBuilder beanDictionaryReplace(Object...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanFieldVisibility(Visibility value)  {
+	public OutputStreamSerializerBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanFilters(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder beanFilters(java.lang.Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanFilters(Object...values)  {
+	public OutputStreamSerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanFiltersRemove(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder beanFiltersRemove(java.lang.Class<?>...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanFiltersRemove(Object...values)  {
+	public OutputStreamSerializerBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanFiltersReplace(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder beanFiltersReplace(java.lang.Class<?>...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanFiltersReplace(Object...values)  {
+	public OutputStreamSerializerBuilder beanFiltersReplace(Object...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanMapPutReturnsOldValue()  {
+	public OutputStreamSerializerBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanMapPutReturnsOldValue(boolean value)  {
+	public OutputStreamSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanMethodVisibility(Visibility value)  {
+	public OutputStreamSerializerBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanTypePropertyName(String value)  {
+	public OutputStreamSerializerBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beansRequireDefaultConstructor()  {
+	public OutputStreamSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beansRequireDefaultConstructor(boolean value)  {
+	public OutputStreamSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beansRequireSerializable()  {
+	public OutputStreamSerializerBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beansRequireSerializable(boolean value)  {
+	public OutputStreamSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beansRequireSettersForGetters()  {
+	public OutputStreamSerializerBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beansRequireSettersForGetters(boolean value)  {
+	public OutputStreamSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beansRequireSomeProperties(boolean value)  {
+	public OutputStreamSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpi(Map<String,String> values)  {
+	public OutputStreamSerializerBuilder bpi(Map<String,String> values) {
 		super.bpi(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpi(Class<?> beanClass, String properties)  {
+	public OutputStreamSerializerBuilder bpi(Class<?> beanClass, String properties) {
 		super.bpi(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpi(String beanClassName, String properties)  {
+	public OutputStreamSerializerBuilder bpi(String beanClassName, String properties) {
 		super.bpi(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpro(Map<String,String> values)  {
+	public OutputStreamSerializerBuilder bpro(Map<String,String> values) {
 		super.bpro(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpro(Class<?> beanClass, String properties)  {
+	public OutputStreamSerializerBuilder bpro(Class<?> beanClass, String properties) {
 		super.bpro(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpro(String beanClassName, String properties)  {
+	public OutputStreamSerializerBuilder bpro(String beanClassName, String properties) {
 		super.bpro(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpwo(Map<String,String> values)  {
+	public OutputStreamSerializerBuilder bpwo(Map<String,String> values) {
 		super.bpwo(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpwo(Class<?> beanClass, String properties)  {
+	public OutputStreamSerializerBuilder bpwo(Class<?> beanClass, String properties) {
 		super.bpwo(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpwo(String beanClassName, String properties)  {
+	public OutputStreamSerializerBuilder bpwo(String beanClassName, String properties) {
 		super.bpwo(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpx(Map<String,String> values)  {
+	public OutputStreamSerializerBuilder bpx(Map<String,String> values) {
 		super.bpx(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpx(Class<?> beanClass, String properties)  {
+	public OutputStreamSerializerBuilder bpx(Class<?> beanClass, String properties) {
 		super.bpx(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpx(String beanClassName, String properties)  {
+	public OutputStreamSerializerBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder debug()  {
+	public OutputStreamSerializerBuilder debug() {
 		super.debug();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder debug(boolean value)  {
+	public OutputStreamSerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder dictionary(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder dictionary(Object...values)  {
+	public OutputStreamSerializerBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder dictionaryRemove(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder dictionaryRemove(java.lang.Class<?>...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder dictionaryRemove(Object...values)  {
+	public OutputStreamSerializerBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder dictionaryReplace(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder dictionaryReplace(java.lang.Class<?>...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder dictionaryReplace(Object...values)  {
+	public OutputStreamSerializerBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> OutputStreamSerializerBuilder example(Class<T> pojoClass, T o)  {
+	public <T> OutputStreamSerializerBuilder example(Class<T> pojoClass, T o) {
 		super.example(pojoClass, o);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> OutputStreamSerializerBuilder exampleJson(Class<T> pojoClass, String json)  {
+	public <T> OutputStreamSerializerBuilder exampleJson(Class<T> pojoClass, String json) {
 		super.exampleJson(pojoClass, json);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder examples(String json)  {
+	public OutputStreamSerializerBuilder examples(String json) {
 		super.examples(json);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder excludeProperties(Map<String,String> values)  {
+	public OutputStreamSerializerBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder excludeProperties(Class<?> beanClass, String properties)  {
+	public OutputStreamSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder excludeProperties(String beanClassName, String value)  {
+	public OutputStreamSerializerBuilder excludeProperties(String beanClassName, String value) {
 		super.excludeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder fluentSetters()  {
+	public OutputStreamSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder fluentSetters(boolean value)  {
+	public OutputStreamSerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreInvocationExceptionsOnGetters()  {
+	public OutputStreamSerializerBuilder ignoreInvocationExceptionsOnGetters() {
 		super.ignoreInvocationExceptionsOnGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value)  {
+	public OutputStreamSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreInvocationExceptionsOnSetters()  {
+	public OutputStreamSerializerBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value)  {
+	public OutputStreamSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignorePropertiesWithoutSetters(boolean value)  {
+	public OutputStreamSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreTransientFields(boolean value)  {
+	public OutputStreamSerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreUnknownBeanProperties()  {
+	public OutputStreamSerializerBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreUnknownBeanProperties(boolean value)  {
+	public OutputStreamSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreUnknownNullBeanProperties(boolean value)  {
+	public OutputStreamSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder implClass(Class<?> interfaceClass, Class<?> implClass)  {
+	public OutputStreamSerializerBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder implClasses(Map<String,Class<?>> values)  {
+	public OutputStreamSerializerBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder includeProperties(Map<String,String> values)  {
+	public OutputStreamSerializerBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder includeProperties(Class<?> beanClass, String value)  {
+	public OutputStreamSerializerBuilder includeProperties(Class<?> beanClass, String value) {
 		super.includeProperties(beanClass, value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder includeProperties(String beanClassName, String value)  {
+	public OutputStreamSerializerBuilder includeProperties(String beanClassName, String value) {
 		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder locale(Locale value)  {
+	public OutputStreamSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder mediaType(MediaType value)  {
+	public OutputStreamSerializerBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanClasses(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder notBeanClasses(java.lang.Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanClasses(Object...values)  {
+	public OutputStreamSerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanClassesRemove(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanClassesRemove(Object...values)  {
+	public OutputStreamSerializerBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanClassesReplace(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanClassesReplace(Object...values)  {
+	public OutputStreamSerializerBuilder notBeanClassesReplace(Object...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanPackages(Object...values)  {
+	public OutputStreamSerializerBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanPackages(String...values)  {
+	public OutputStreamSerializerBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanPackagesRemove(Object...values)  {
+	public OutputStreamSerializerBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanPackagesRemove(String...values)  {
+	public OutputStreamSerializerBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanPackagesReplace(Object...values)  {
+	public OutputStreamSerializerBuilder notBeanPackagesReplace(Object...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanPackagesReplace(String...values)  {
+	public OutputStreamSerializerBuilder notBeanPackagesReplace(String...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder pojoSwaps(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder pojoSwaps(java.lang.Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder pojoSwaps(Object...values)  {
+	public OutputStreamSerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder pojoSwapsRemove(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder pojoSwapsRemove(Object...values)  {
+	public OutputStreamSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder pojoSwapsReplace(java.lang.Class<?>...values)  {
+	public OutputStreamSerializerBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder pojoSwapsReplace(Object...values)  {
+	public OutputStreamSerializerBuilder pojoSwapsReplace(Object...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value)  {
+	public OutputStreamSerializerBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder sortProperties()  {
+	public OutputStreamSerializerBuilder sortProperties() {
 		super.sortProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder sortProperties(boolean value)  {
+	public OutputStreamSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder timeZone(TimeZone value)  {
+	public OutputStreamSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder useEnumNames()  {
+	public OutputStreamSerializerBuilder useEnumNames() {
 		super.useEnumNames();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder useEnumNames(boolean value)  {
+	public OutputStreamSerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder useInterfaceProxies(boolean value)  {
+	public OutputStreamSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder useJavaBeanIntrospector()  {
+	public OutputStreamSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder useJavaBeanIntrospector(boolean value)  {
+	public OutputStreamSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public OutputStreamSerializerBuilder detectRecursions()  {
+	public OutputStreamSerializerBuilder detectRecursions() {
 		super.detectRecursions();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public OutputStreamSerializerBuilder detectRecursions(boolean value)  {
+	public OutputStreamSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public OutputStreamSerializerBuilder ignoreRecursions()  {
+	public OutputStreamSerializerBuilder ignoreRecursions() {
 		super.ignoreRecursions();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public OutputStreamSerializerBuilder ignoreRecursions(boolean value)  {
+	public OutputStreamSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public OutputStreamSerializerBuilder initialDepth(int value)  {
+	public OutputStreamSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public OutputStreamSerializerBuilder maxDepth(int value)  {
+	public OutputStreamSerializerBuilder maxDepth(int value) {
 		super.maxDepth(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder addBeanTypes()  {
+	public OutputStreamSerializerBuilder addBeanTypes() {
 		super.addBeanTypes();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder addBeanTypes(boolean value)  {
+	public OutputStreamSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder addRootType()  {
+	public OutputStreamSerializerBuilder addRootType() {
 		super.addRootType();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder addRootType(boolean value)  {
+	public OutputStreamSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value)  {
+	public OutputStreamSerializerBuilder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
 		super.listener(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder sortCollections()  {
+	public OutputStreamSerializerBuilder sortCollections() {
 		super.sortCollections();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder sortCollections(boolean value)  {
+	public OutputStreamSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder sortMaps()  {
+	public OutputStreamSerializerBuilder sortMaps() {
 		super.sortMaps();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder sortMaps(boolean value)  {
+	public OutputStreamSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder trimEmptyCollections()  {
+	public OutputStreamSerializerBuilder trimEmptyCollections() {
 		super.trimEmptyCollections();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder trimEmptyCollections(boolean value)  {
+	public OutputStreamSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder trimEmptyMaps()  {
+	public OutputStreamSerializerBuilder trimEmptyMaps() {
 		super.trimEmptyMaps();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder trimEmptyMaps(boolean value)  {
+	public OutputStreamSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder trimNullProperties(boolean value)  {
+	public OutputStreamSerializerBuilder trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder trimStrings()  {
+	public OutputStreamSerializerBuilder trimStrings() {
 		super.trimStrings();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder trimStrings(boolean value)  {
+	public OutputStreamSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder uriContext(String value)  {
+	public OutputStreamSerializerBuilder uriContext(String value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder uriContext(UriContext value)  {
+	public OutputStreamSerializerBuilder uriContext(UriContext value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder uriRelativity(String value)  {
+	public OutputStreamSerializerBuilder uriRelativity(String value) {
 		super.uriRelativity(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder uriRelativity(UriRelativity value)  {
+	public OutputStreamSerializerBuilder uriRelativity(UriRelativity value) {
 		super.uriRelativity(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder uriResolution(String value)  {
+	public OutputStreamSerializerBuilder uriResolution(String value) {
 		super.uriResolution(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder uriResolution(UriResolution value)  {
+	public OutputStreamSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
 		return this;
 	}

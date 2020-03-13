@@ -142,7 +142,7 @@ public class ConfigurablePropertyCodeGenerator {
 							sb.append(c.getSimpleName()).append(" ").append(m.getName()).append("(").append(getArgs(m)).append(") ");
 							if ( m.getExceptionTypes().length > 0)
 								sb.append("throws ").append(Arrays.asList(m.getExceptionTypes()).stream().map(x -> x.getSimpleName()).collect(Collectors.joining(", ")));
-							sb.append(" {");
+							sb.append("{");
 
 							// Body
 							sb.append("\n\t\tsuper.").append(m.getName()).append("(").append(getArgVals(m)).append(");");

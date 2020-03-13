@@ -900,865 +900,865 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder add(Map<String,Object> properties)  {
+	public RdfSerializerBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder addTo(String name, Object value)  {
+	public RdfSerializerBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder addTo(String name, String key, Object value)  {
+	public RdfSerializerBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder apply(PropertyStore copyFrom)  {
+	public RdfSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
+	public RdfSerializerBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder applyAnnotations(Method...fromMethods)  {
+	public RdfSerializerBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+	public RdfSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder removeFrom(String name, Object value)  {
+	public RdfSerializerBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder set(Map<String,Object> properties)  {
+	public RdfSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RdfSerializerBuilder set(String name, Object value)  {
+	public RdfSerializerBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder annotations(Annotation...values)  {
+	public RdfSerializerBuilder annotations(Annotation...values) {
 		super.annotations(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanClassVisibility(Visibility value)  {
+	public RdfSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanConstructorVisibility(Visibility value)  {
+	public RdfSerializerBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanDictionary(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder beanDictionary(java.lang.Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanDictionary(Object...values)  {
+	public RdfSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanDictionaryRemove(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanDictionaryRemove(Object...values)  {
+	public RdfSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanDictionaryReplace(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanDictionaryReplace(Object...values)  {
+	public RdfSerializerBuilder beanDictionaryReplace(Object...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanFieldVisibility(Visibility value)  {
+	public RdfSerializerBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanFilters(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder beanFilters(java.lang.Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanFilters(Object...values)  {
+	public RdfSerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanFiltersRemove(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder beanFiltersRemove(java.lang.Class<?>...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanFiltersRemove(Object...values)  {
+	public RdfSerializerBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanFiltersReplace(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder beanFiltersReplace(java.lang.Class<?>...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanFiltersReplace(Object...values)  {
+	public RdfSerializerBuilder beanFiltersReplace(Object...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanMapPutReturnsOldValue()  {
+	public RdfSerializerBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanMapPutReturnsOldValue(boolean value)  {
+	public RdfSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanMethodVisibility(Visibility value)  {
+	public RdfSerializerBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanTypePropertyName(String value)  {
+	public RdfSerializerBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beansRequireDefaultConstructor()  {
+	public RdfSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beansRequireDefaultConstructor(boolean value)  {
+	public RdfSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beansRequireSerializable()  {
+	public RdfSerializerBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beansRequireSerializable(boolean value)  {
+	public RdfSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beansRequireSettersForGetters()  {
+	public RdfSerializerBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beansRequireSettersForGetters(boolean value)  {
+	public RdfSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beansRequireSomeProperties(boolean value)  {
+	public RdfSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpi(Map<String,String> values)  {
+	public RdfSerializerBuilder bpi(Map<String,String> values) {
 		super.bpi(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpi(Class<?> beanClass, String properties)  {
+	public RdfSerializerBuilder bpi(Class<?> beanClass, String properties) {
 		super.bpi(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpi(String beanClassName, String properties)  {
+	public RdfSerializerBuilder bpi(String beanClassName, String properties) {
 		super.bpi(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpro(Map<String,String> values)  {
+	public RdfSerializerBuilder bpro(Map<String,String> values) {
 		super.bpro(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpro(Class<?> beanClass, String properties)  {
+	public RdfSerializerBuilder bpro(Class<?> beanClass, String properties) {
 		super.bpro(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpro(String beanClassName, String properties)  {
+	public RdfSerializerBuilder bpro(String beanClassName, String properties) {
 		super.bpro(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpwo(Map<String,String> values)  {
+	public RdfSerializerBuilder bpwo(Map<String,String> values) {
 		super.bpwo(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpwo(Class<?> beanClass, String properties)  {
+	public RdfSerializerBuilder bpwo(Class<?> beanClass, String properties) {
 		super.bpwo(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpwo(String beanClassName, String properties)  {
+	public RdfSerializerBuilder bpwo(String beanClassName, String properties) {
 		super.bpwo(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpx(Map<String,String> values)  {
+	public RdfSerializerBuilder bpx(Map<String,String> values) {
 		super.bpx(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpx(Class<?> beanClass, String properties)  {
+	public RdfSerializerBuilder bpx(Class<?> beanClass, String properties) {
 		super.bpx(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpx(String beanClassName, String properties)  {
+	public RdfSerializerBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder debug()  {
+	public RdfSerializerBuilder debug() {
 		super.debug();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder debug(boolean value)  {
+	public RdfSerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder dictionary(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder dictionary(Object...values)  {
+	public RdfSerializerBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder dictionaryRemove(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder dictionaryRemove(java.lang.Class<?>...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder dictionaryRemove(Object...values)  {
+	public RdfSerializerBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder dictionaryReplace(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder dictionaryReplace(java.lang.Class<?>...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder dictionaryReplace(Object...values)  {
+	public RdfSerializerBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> RdfSerializerBuilder example(Class<T> pojoClass, T o)  {
+	public <T> RdfSerializerBuilder example(Class<T> pojoClass, T o) {
 		super.example(pojoClass, o);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> RdfSerializerBuilder exampleJson(Class<T> pojoClass, String json)  {
+	public <T> RdfSerializerBuilder exampleJson(Class<T> pojoClass, String json) {
 		super.exampleJson(pojoClass, json);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder examples(String json)  {
+	public RdfSerializerBuilder examples(String json) {
 		super.examples(json);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder excludeProperties(Map<String,String> values)  {
+	public RdfSerializerBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder excludeProperties(Class<?> beanClass, String properties)  {
+	public RdfSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder excludeProperties(String beanClassName, String value)  {
+	public RdfSerializerBuilder excludeProperties(String beanClassName, String value) {
 		super.excludeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder fluentSetters()  {
+	public RdfSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder fluentSetters(boolean value)  {
+	public RdfSerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder ignoreInvocationExceptionsOnGetters()  {
+	public RdfSerializerBuilder ignoreInvocationExceptionsOnGetters() {
 		super.ignoreInvocationExceptionsOnGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value)  {
+	public RdfSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder ignoreInvocationExceptionsOnSetters()  {
+	public RdfSerializerBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value)  {
+	public RdfSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder ignorePropertiesWithoutSetters(boolean value)  {
+	public RdfSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder ignoreTransientFields(boolean value)  {
+	public RdfSerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder ignoreUnknownBeanProperties()  {
+	public RdfSerializerBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder ignoreUnknownBeanProperties(boolean value)  {
+	public RdfSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder ignoreUnknownNullBeanProperties(boolean value)  {
+	public RdfSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder implClass(Class<?> interfaceClass, Class<?> implClass)  {
+	public RdfSerializerBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder implClasses(Map<String,Class<?>> values)  {
+	public RdfSerializerBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder includeProperties(Map<String,String> values)  {
+	public RdfSerializerBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder includeProperties(Class<?> beanClass, String value)  {
+	public RdfSerializerBuilder includeProperties(Class<?> beanClass, String value) {
 		super.includeProperties(beanClass, value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder includeProperties(String beanClassName, String value)  {
+	public RdfSerializerBuilder includeProperties(String beanClassName, String value) {
 		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder locale(Locale value)  {
+	public RdfSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder mediaType(MediaType value)  {
+	public RdfSerializerBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder notBeanClasses(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder notBeanClasses(java.lang.Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder notBeanClasses(Object...values)  {
+	public RdfSerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder notBeanClassesRemove(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder notBeanClassesRemove(Object...values)  {
+	public RdfSerializerBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder notBeanClassesReplace(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder notBeanClassesReplace(Object...values)  {
+	public RdfSerializerBuilder notBeanClassesReplace(Object...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder notBeanPackages(Object...values)  {
+	public RdfSerializerBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder notBeanPackages(String...values)  {
+	public RdfSerializerBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder notBeanPackagesRemove(Object...values)  {
+	public RdfSerializerBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder notBeanPackagesRemove(String...values)  {
+	public RdfSerializerBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder notBeanPackagesReplace(Object...values)  {
+	public RdfSerializerBuilder notBeanPackagesReplace(Object...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder notBeanPackagesReplace(String...values)  {
+	public RdfSerializerBuilder notBeanPackagesReplace(String...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder pojoSwaps(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder pojoSwaps(java.lang.Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder pojoSwaps(Object...values)  {
+	public RdfSerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder pojoSwapsRemove(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder pojoSwapsRemove(Object...values)  {
+	public RdfSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder pojoSwapsReplace(java.lang.Class<?>...values)  {
+	public RdfSerializerBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder pojoSwapsReplace(Object...values)  {
+	public RdfSerializerBuilder pojoSwapsReplace(Object...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value)  {
+	public RdfSerializerBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder sortProperties()  {
+	public RdfSerializerBuilder sortProperties() {
 		super.sortProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder sortProperties(boolean value)  {
+	public RdfSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder timeZone(TimeZone value)  {
+	public RdfSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder useEnumNames()  {
+	public RdfSerializerBuilder useEnumNames() {
 		super.useEnumNames();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder useEnumNames(boolean value)  {
+	public RdfSerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder useInterfaceProxies(boolean value)  {
+	public RdfSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder useJavaBeanIntrospector()  {
+	public RdfSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder useJavaBeanIntrospector(boolean value)  {
+	public RdfSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public RdfSerializerBuilder detectRecursions()  {
+	public RdfSerializerBuilder detectRecursions() {
 		super.detectRecursions();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public RdfSerializerBuilder detectRecursions(boolean value)  {
+	public RdfSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public RdfSerializerBuilder ignoreRecursions()  {
+	public RdfSerializerBuilder ignoreRecursions() {
 		super.ignoreRecursions();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public RdfSerializerBuilder ignoreRecursions(boolean value)  {
+	public RdfSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public RdfSerializerBuilder initialDepth(int value)  {
+	public RdfSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanTraverseBuilder */
-	public RdfSerializerBuilder maxDepth(int value)  {
+	public RdfSerializerBuilder maxDepth(int value) {
 		super.maxDepth(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder addBeanTypes()  {
+	public RdfSerializerBuilder addBeanTypes() {
 		super.addBeanTypes();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder addBeanTypes(boolean value)  {
+	public RdfSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder addRootType()  {
+	public RdfSerializerBuilder addRootType() {
 		super.addRootType();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder addRootType(boolean value)  {
+	public RdfSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value)  {
+	public RdfSerializerBuilder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
 		super.listener(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder sortCollections()  {
+	public RdfSerializerBuilder sortCollections() {
 		super.sortCollections();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder sortCollections(boolean value)  {
+	public RdfSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder sortMaps()  {
+	public RdfSerializerBuilder sortMaps() {
 		super.sortMaps();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder sortMaps(boolean value)  {
+	public RdfSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder trimEmptyCollections()  {
+	public RdfSerializerBuilder trimEmptyCollections() {
 		super.trimEmptyCollections();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder trimEmptyCollections(boolean value)  {
+	public RdfSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder trimEmptyMaps()  {
+	public RdfSerializerBuilder trimEmptyMaps() {
 		super.trimEmptyMaps();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder trimEmptyMaps(boolean value)  {
+	public RdfSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder trimNullProperties(boolean value)  {
+	public RdfSerializerBuilder trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder trimStrings()  {
+	public RdfSerializerBuilder trimStrings() {
 		super.trimStrings();
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder trimStrings(boolean value)  {
+	public RdfSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder uriContext(String value)  {
+	public RdfSerializerBuilder uriContext(String value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder uriContext(UriContext value)  {
+	public RdfSerializerBuilder uriContext(UriContext value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder uriRelativity(String value)  {
+	public RdfSerializerBuilder uriRelativity(String value) {
 		super.uriRelativity(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder uriRelativity(UriRelativity value)  {
+	public RdfSerializerBuilder uriRelativity(UriRelativity value) {
 		super.uriRelativity(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder uriResolution(String value)  {
+	public RdfSerializerBuilder uriResolution(String value) {
 		super.uriResolution(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public RdfSerializerBuilder uriResolution(UriResolution value)  {
+	public RdfSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public RdfSerializerBuilder fileCharset(Charset value)  {
+	public RdfSerializerBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public RdfSerializerBuilder maxIndent(int value)  {
+	public RdfSerializerBuilder maxIndent(int value) {
 		super.maxIndent(value);
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public RdfSerializerBuilder quoteChar(char value)  {
+	public RdfSerializerBuilder quoteChar(char value) {
 		super.quoteChar(value);
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public RdfSerializerBuilder sq()  {
+	public RdfSerializerBuilder sq() {
 		super.sq();
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public RdfSerializerBuilder streamCharset(Charset value)  {
+	public RdfSerializerBuilder streamCharset(Charset value) {
 		super.streamCharset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public RdfSerializerBuilder useWhitespace()  {
+	public RdfSerializerBuilder useWhitespace() {
 		super.useWhitespace();
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public RdfSerializerBuilder useWhitespace(boolean value)  {
+	public RdfSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;
 	}
 
 	@Override /* GENERATED - WriterSerializerBuilder */
-	public RdfSerializerBuilder ws()  {
+	public RdfSerializerBuilder ws() {
 		super.ws();
 		return this;
 	}

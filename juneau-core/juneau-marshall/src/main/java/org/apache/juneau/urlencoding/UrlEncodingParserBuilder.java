@@ -97,745 +97,745 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingParserBuilder add(Map<String,Object> properties)  {
+	public UrlEncodingParserBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingParserBuilder addTo(String name, Object value)  {
+	public UrlEncodingParserBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingParserBuilder addTo(String name, String key, Object value)  {
+	public UrlEncodingParserBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingParserBuilder apply(PropertyStore copyFrom)  {
+	public UrlEncodingParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingParserBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
+	public UrlEncodingParserBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingParserBuilder applyAnnotations(Method...fromMethods)  {
+	public UrlEncodingParserBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+	public UrlEncodingParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingParserBuilder removeFrom(String name, Object value)  {
+	public UrlEncodingParserBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingParserBuilder set(Map<String,Object> properties)  {
+	public UrlEncodingParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UrlEncodingParserBuilder set(String name, Object value)  {
+	public UrlEncodingParserBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder annotations(Annotation...values)  {
+	public UrlEncodingParserBuilder annotations(Annotation...values) {
 		super.annotations(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanClassVisibility(Visibility value)  {
+	public UrlEncodingParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanConstructorVisibility(Visibility value)  {
+	public UrlEncodingParserBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionary(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder beanDictionary(java.lang.Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionary(Object...values)  {
+	public UrlEncodingParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionaryRemove(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionaryRemove(Object...values)  {
+	public UrlEncodingParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionaryReplace(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionaryReplace(Object...values)  {
+	public UrlEncodingParserBuilder beanDictionaryReplace(Object...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanFieldVisibility(Visibility value)  {
+	public UrlEncodingParserBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanFilters(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder beanFilters(java.lang.Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanFilters(Object...values)  {
+	public UrlEncodingParserBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanFiltersRemove(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder beanFiltersRemove(java.lang.Class<?>...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanFiltersRemove(Object...values)  {
+	public UrlEncodingParserBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanFiltersReplace(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder beanFiltersReplace(java.lang.Class<?>...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanFiltersReplace(Object...values)  {
+	public UrlEncodingParserBuilder beanFiltersReplace(Object...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanMapPutReturnsOldValue()  {
+	public UrlEncodingParserBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanMapPutReturnsOldValue(boolean value)  {
+	public UrlEncodingParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanMethodVisibility(Visibility value)  {
+	public UrlEncodingParserBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanTypePropertyName(String value)  {
+	public UrlEncodingParserBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beansRequireDefaultConstructor()  {
+	public UrlEncodingParserBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beansRequireDefaultConstructor(boolean value)  {
+	public UrlEncodingParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beansRequireSerializable()  {
+	public UrlEncodingParserBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beansRequireSerializable(boolean value)  {
+	public UrlEncodingParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beansRequireSettersForGetters()  {
+	public UrlEncodingParserBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beansRequireSettersForGetters(boolean value)  {
+	public UrlEncodingParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beansRequireSomeProperties(boolean value)  {
+	public UrlEncodingParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder bpi(Map<String,String> values)  {
+	public UrlEncodingParserBuilder bpi(Map<String,String> values) {
 		super.bpi(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder bpi(Class<?> beanClass, String properties)  {
+	public UrlEncodingParserBuilder bpi(Class<?> beanClass, String properties) {
 		super.bpi(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder bpi(String beanClassName, String properties)  {
+	public UrlEncodingParserBuilder bpi(String beanClassName, String properties) {
 		super.bpi(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder bpro(Map<String,String> values)  {
+	public UrlEncodingParserBuilder bpro(Map<String,String> values) {
 		super.bpro(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder bpro(Class<?> beanClass, String properties)  {
+	public UrlEncodingParserBuilder bpro(Class<?> beanClass, String properties) {
 		super.bpro(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder bpro(String beanClassName, String properties)  {
+	public UrlEncodingParserBuilder bpro(String beanClassName, String properties) {
 		super.bpro(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder bpwo(Map<String,String> values)  {
+	public UrlEncodingParserBuilder bpwo(Map<String,String> values) {
 		super.bpwo(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder bpwo(Class<?> beanClass, String properties)  {
+	public UrlEncodingParserBuilder bpwo(Class<?> beanClass, String properties) {
 		super.bpwo(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder bpwo(String beanClassName, String properties)  {
+	public UrlEncodingParserBuilder bpwo(String beanClassName, String properties) {
 		super.bpwo(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder bpx(Map<String,String> values)  {
+	public UrlEncodingParserBuilder bpx(Map<String,String> values) {
 		super.bpx(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder bpx(Class<?> beanClass, String properties)  {
+	public UrlEncodingParserBuilder bpx(Class<?> beanClass, String properties) {
 		super.bpx(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder bpx(String beanClassName, String properties)  {
+	public UrlEncodingParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder debug()  {
+	public UrlEncodingParserBuilder debug() {
 		super.debug();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder debug(boolean value)  {
+	public UrlEncodingParserBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder dictionary(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder dictionary(Object...values)  {
+	public UrlEncodingParserBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder dictionaryRemove(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder dictionaryRemove(java.lang.Class<?>...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder dictionaryRemove(Object...values)  {
+	public UrlEncodingParserBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder dictionaryReplace(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder dictionaryReplace(java.lang.Class<?>...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder dictionaryReplace(Object...values)  {
+	public UrlEncodingParserBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> UrlEncodingParserBuilder example(Class<T> pojoClass, T o)  {
+	public <T> UrlEncodingParserBuilder example(Class<T> pojoClass, T o) {
 		super.example(pojoClass, o);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> UrlEncodingParserBuilder exampleJson(Class<T> pojoClass, String json)  {
+	public <T> UrlEncodingParserBuilder exampleJson(Class<T> pojoClass, String json) {
 		super.exampleJson(pojoClass, json);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder examples(String json)  {
+	public UrlEncodingParserBuilder examples(String json) {
 		super.examples(json);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder excludeProperties(Map<String,String> values)  {
+	public UrlEncodingParserBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder excludeProperties(Class<?> beanClass, String properties)  {
+	public UrlEncodingParserBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder excludeProperties(String beanClassName, String value)  {
+	public UrlEncodingParserBuilder excludeProperties(String beanClassName, String value) {
 		super.excludeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder fluentSetters()  {
+	public UrlEncodingParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder fluentSetters(boolean value)  {
+	public UrlEncodingParserBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnGetters()  {
+	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnGetters() {
 		super.ignoreInvocationExceptionsOnGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnGetters(boolean value)  {
+	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnSetters()  {
+	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnSetters(boolean value)  {
+	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignorePropertiesWithoutSetters(boolean value)  {
+	public UrlEncodingParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreTransientFields(boolean value)  {
+	public UrlEncodingParserBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreUnknownBeanProperties()  {
+	public UrlEncodingParserBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreUnknownBeanProperties(boolean value)  {
+	public UrlEncodingParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreUnknownNullBeanProperties(boolean value)  {
+	public UrlEncodingParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass)  {
+	public UrlEncodingParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder implClasses(Map<String,Class<?>> values)  {
+	public UrlEncodingParserBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder includeProperties(Map<String,String> values)  {
+	public UrlEncodingParserBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder includeProperties(Class<?> beanClass, String value)  {
+	public UrlEncodingParserBuilder includeProperties(Class<?> beanClass, String value) {
 		super.includeProperties(beanClass, value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder includeProperties(String beanClassName, String value)  {
+	public UrlEncodingParserBuilder includeProperties(String beanClassName, String value) {
 		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder locale(Locale value)  {
+	public UrlEncodingParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder mediaType(MediaType value)  {
+	public UrlEncodingParserBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder notBeanClasses(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder notBeanClasses(java.lang.Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder notBeanClasses(Object...values)  {
+	public UrlEncodingParserBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder notBeanClassesRemove(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder notBeanClassesRemove(Object...values)  {
+	public UrlEncodingParserBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder notBeanClassesReplace(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder notBeanClassesReplace(Object...values)  {
+	public UrlEncodingParserBuilder notBeanClassesReplace(Object...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder notBeanPackages(Object...values)  {
+	public UrlEncodingParserBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder notBeanPackages(String...values)  {
+	public UrlEncodingParserBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder notBeanPackagesRemove(Object...values)  {
+	public UrlEncodingParserBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder notBeanPackagesRemove(String...values)  {
+	public UrlEncodingParserBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder notBeanPackagesReplace(Object...values)  {
+	public UrlEncodingParserBuilder notBeanPackagesReplace(Object...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder notBeanPackagesReplace(String...values)  {
+	public UrlEncodingParserBuilder notBeanPackagesReplace(String...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder pojoSwaps(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder pojoSwaps(java.lang.Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder pojoSwaps(Object...values)  {
+	public UrlEncodingParserBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder pojoSwapsRemove(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder pojoSwapsRemove(Object...values)  {
+	public UrlEncodingParserBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder pojoSwapsReplace(java.lang.Class<?>...values)  {
+	public UrlEncodingParserBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder pojoSwapsReplace(Object...values)  {
+	public UrlEncodingParserBuilder pojoSwapsReplace(Object...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value)  {
+	public UrlEncodingParserBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder sortProperties()  {
+	public UrlEncodingParserBuilder sortProperties() {
 		super.sortProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder sortProperties(boolean value)  {
+	public UrlEncodingParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder timeZone(TimeZone value)  {
+	public UrlEncodingParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder useEnumNames()  {
+	public UrlEncodingParserBuilder useEnumNames() {
 		super.useEnumNames();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder useEnumNames(boolean value)  {
+	public UrlEncodingParserBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder useInterfaceProxies(boolean value)  {
+	public UrlEncodingParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder useJavaBeanIntrospector()  {
+	public UrlEncodingParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder useJavaBeanIntrospector(boolean value)  {
+	public UrlEncodingParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder autoCloseStreams()  {
+	public UrlEncodingParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder autoCloseStreams(boolean value)  {
+	public UrlEncodingParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder debugOutputLines(int value)  {
+	public UrlEncodingParserBuilder debugOutputLines(int value) {
 		super.debugOutputLines(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder listener(Class<? extends org.apache.juneau.parser.ParserListener> value)  {
+	public UrlEncodingParserBuilder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
 		super.listener(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder strict()  {
+	public UrlEncodingParserBuilder strict() {
 		super.strict();
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder strict(boolean value)  {
+	public UrlEncodingParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder trimStrings()  {
+	public UrlEncodingParserBuilder trimStrings() {
 		super.trimStrings();
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder trimStrings(boolean value)  {
+	public UrlEncodingParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder unbuffered()  {
+	public UrlEncodingParserBuilder unbuffered() {
 		super.unbuffered();
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder unbuffered(boolean value)  {
+	public UrlEncodingParserBuilder unbuffered(boolean value) {
 		super.unbuffered(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ReaderParserBuilder */
-	public UrlEncodingParserBuilder fileCharset(Charset value)  {
+	public UrlEncodingParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ReaderParserBuilder */
-	public UrlEncodingParserBuilder streamCharset(Charset value)  {
+	public UrlEncodingParserBuilder streamCharset(Charset value) {
 		super.streamCharset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - UonParserBuilder */
-	public UrlEncodingParserBuilder decoding()  {
+	public UrlEncodingParserBuilder decoding() {
 		super.decoding();
 		return this;
 	}
 
 	@Override /* GENERATED - UonParserBuilder */
-	public UrlEncodingParserBuilder decoding(boolean value)  {
+	public UrlEncodingParserBuilder decoding(boolean value) {
 		super.decoding(value);
 		return this;
 	}
 
 	@Override /* GENERATED - UonParserBuilder */
-	public UrlEncodingParserBuilder validateEnd()  {
+	public UrlEncodingParserBuilder validateEnd() {
 		super.validateEnd();
 		return this;
 	}
 
 	@Override /* GENERATED - UonParserBuilder */
-	public UrlEncodingParserBuilder validateEnd(boolean value)  {
+	public UrlEncodingParserBuilder validateEnd(boolean value) {
 		super.validateEnd(value);
 		return this;
 	}

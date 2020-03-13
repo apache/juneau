@@ -246,721 +246,721 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlParserBuilder add(Map<String,Object> properties)  {
+	public XmlParserBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlParserBuilder addTo(String name, Object value)  {
+	public XmlParserBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlParserBuilder addTo(String name, String key, Object value)  {
+	public XmlParserBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlParserBuilder apply(PropertyStore copyFrom)  {
+	public XmlParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlParserBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
+	public XmlParserBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlParserBuilder applyAnnotations(Method...fromMethods)  {
+	public XmlParserBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+	public XmlParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlParserBuilder removeFrom(String name, Object value)  {
+	public XmlParserBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlParserBuilder set(Map<String,Object> properties)  {
+	public XmlParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public XmlParserBuilder set(String name, Object value)  {
+	public XmlParserBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder annotations(Annotation...values)  {
+	public XmlParserBuilder annotations(Annotation...values) {
 		super.annotations(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanClassVisibility(Visibility value)  {
+	public XmlParserBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanConstructorVisibility(Visibility value)  {
+	public XmlParserBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanDictionary(java.lang.Class<?>...values)  {
+	public XmlParserBuilder beanDictionary(java.lang.Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanDictionary(Object...values)  {
+	public XmlParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanDictionaryRemove(java.lang.Class<?>...values)  {
+	public XmlParserBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanDictionaryRemove(Object...values)  {
+	public XmlParserBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanDictionaryReplace(java.lang.Class<?>...values)  {
+	public XmlParserBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanDictionaryReplace(Object...values)  {
+	public XmlParserBuilder beanDictionaryReplace(Object...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanFieldVisibility(Visibility value)  {
+	public XmlParserBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanFilters(java.lang.Class<?>...values)  {
+	public XmlParserBuilder beanFilters(java.lang.Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanFilters(Object...values)  {
+	public XmlParserBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanFiltersRemove(java.lang.Class<?>...values)  {
+	public XmlParserBuilder beanFiltersRemove(java.lang.Class<?>...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanFiltersRemove(Object...values)  {
+	public XmlParserBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanFiltersReplace(java.lang.Class<?>...values)  {
+	public XmlParserBuilder beanFiltersReplace(java.lang.Class<?>...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanFiltersReplace(Object...values)  {
+	public XmlParserBuilder beanFiltersReplace(Object...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanMapPutReturnsOldValue()  {
+	public XmlParserBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanMapPutReturnsOldValue(boolean value)  {
+	public XmlParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanMethodVisibility(Visibility value)  {
+	public XmlParserBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beanTypePropertyName(String value)  {
+	public XmlParserBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beansRequireDefaultConstructor()  {
+	public XmlParserBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beansRequireDefaultConstructor(boolean value)  {
+	public XmlParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beansRequireSerializable()  {
+	public XmlParserBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beansRequireSerializable(boolean value)  {
+	public XmlParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beansRequireSettersForGetters()  {
+	public XmlParserBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beansRequireSettersForGetters(boolean value)  {
+	public XmlParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder beansRequireSomeProperties(boolean value)  {
+	public XmlParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder bpi(Map<String,String> values)  {
+	public XmlParserBuilder bpi(Map<String,String> values) {
 		super.bpi(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder bpi(Class<?> beanClass, String properties)  {
+	public XmlParserBuilder bpi(Class<?> beanClass, String properties) {
 		super.bpi(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder bpi(String beanClassName, String properties)  {
+	public XmlParserBuilder bpi(String beanClassName, String properties) {
 		super.bpi(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder bpro(Map<String,String> values)  {
+	public XmlParserBuilder bpro(Map<String,String> values) {
 		super.bpro(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder bpro(Class<?> beanClass, String properties)  {
+	public XmlParserBuilder bpro(Class<?> beanClass, String properties) {
 		super.bpro(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder bpro(String beanClassName, String properties)  {
+	public XmlParserBuilder bpro(String beanClassName, String properties) {
 		super.bpro(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder bpwo(Map<String,String> values)  {
+	public XmlParserBuilder bpwo(Map<String,String> values) {
 		super.bpwo(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder bpwo(Class<?> beanClass, String properties)  {
+	public XmlParserBuilder bpwo(Class<?> beanClass, String properties) {
 		super.bpwo(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder bpwo(String beanClassName, String properties)  {
+	public XmlParserBuilder bpwo(String beanClassName, String properties) {
 		super.bpwo(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder bpx(Map<String,String> values)  {
+	public XmlParserBuilder bpx(Map<String,String> values) {
 		super.bpx(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder bpx(Class<?> beanClass, String properties)  {
+	public XmlParserBuilder bpx(Class<?> beanClass, String properties) {
 		super.bpx(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder bpx(String beanClassName, String properties)  {
+	public XmlParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder debug()  {
+	public XmlParserBuilder debug() {
 		super.debug();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder debug(boolean value)  {
+	public XmlParserBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder dictionary(java.lang.Class<?>...values)  {
+	public XmlParserBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder dictionary(Object...values)  {
+	public XmlParserBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder dictionaryRemove(java.lang.Class<?>...values)  {
+	public XmlParserBuilder dictionaryRemove(java.lang.Class<?>...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder dictionaryRemove(Object...values)  {
+	public XmlParserBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder dictionaryReplace(java.lang.Class<?>...values)  {
+	public XmlParserBuilder dictionaryReplace(java.lang.Class<?>...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder dictionaryReplace(Object...values)  {
+	public XmlParserBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> XmlParserBuilder example(Class<T> pojoClass, T o)  {
+	public <T> XmlParserBuilder example(Class<T> pojoClass, T o) {
 		super.example(pojoClass, o);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> XmlParserBuilder exampleJson(Class<T> pojoClass, String json)  {
+	public <T> XmlParserBuilder exampleJson(Class<T> pojoClass, String json) {
 		super.exampleJson(pojoClass, json);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder examples(String json)  {
+	public XmlParserBuilder examples(String json) {
 		super.examples(json);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder excludeProperties(Map<String,String> values)  {
+	public XmlParserBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder excludeProperties(Class<?> beanClass, String properties)  {
+	public XmlParserBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder excludeProperties(String beanClassName, String value)  {
+	public XmlParserBuilder excludeProperties(String beanClassName, String value) {
 		super.excludeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder fluentSetters()  {
+	public XmlParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder fluentSetters(boolean value)  {
+	public XmlParserBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder ignoreInvocationExceptionsOnGetters()  {
+	public XmlParserBuilder ignoreInvocationExceptionsOnGetters() {
 		super.ignoreInvocationExceptionsOnGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder ignoreInvocationExceptionsOnGetters(boolean value)  {
+	public XmlParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder ignoreInvocationExceptionsOnSetters()  {
+	public XmlParserBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder ignoreInvocationExceptionsOnSetters(boolean value)  {
+	public XmlParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder ignorePropertiesWithoutSetters(boolean value)  {
+	public XmlParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder ignoreTransientFields(boolean value)  {
+	public XmlParserBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder ignoreUnknownBeanProperties()  {
+	public XmlParserBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder ignoreUnknownBeanProperties(boolean value)  {
+	public XmlParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder ignoreUnknownNullBeanProperties(boolean value)  {
+	public XmlParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass)  {
+	public XmlParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder implClasses(Map<String,Class<?>> values)  {
+	public XmlParserBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder includeProperties(Map<String,String> values)  {
+	public XmlParserBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder includeProperties(Class<?> beanClass, String value)  {
+	public XmlParserBuilder includeProperties(Class<?> beanClass, String value) {
 		super.includeProperties(beanClass, value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder includeProperties(String beanClassName, String value)  {
+	public XmlParserBuilder includeProperties(String beanClassName, String value) {
 		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder locale(Locale value)  {
+	public XmlParserBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder mediaType(MediaType value)  {
+	public XmlParserBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder notBeanClasses(java.lang.Class<?>...values)  {
+	public XmlParserBuilder notBeanClasses(java.lang.Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder notBeanClasses(Object...values)  {
+	public XmlParserBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder notBeanClassesRemove(java.lang.Class<?>...values)  {
+	public XmlParserBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder notBeanClassesRemove(Object...values)  {
+	public XmlParserBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder notBeanClassesReplace(java.lang.Class<?>...values)  {
+	public XmlParserBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder notBeanClassesReplace(Object...values)  {
+	public XmlParserBuilder notBeanClassesReplace(Object...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder notBeanPackages(Object...values)  {
+	public XmlParserBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder notBeanPackages(String...values)  {
+	public XmlParserBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder notBeanPackagesRemove(Object...values)  {
+	public XmlParserBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder notBeanPackagesRemove(String...values)  {
+	public XmlParserBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder notBeanPackagesReplace(Object...values)  {
+	public XmlParserBuilder notBeanPackagesReplace(Object...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder notBeanPackagesReplace(String...values)  {
+	public XmlParserBuilder notBeanPackagesReplace(String...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder pojoSwaps(java.lang.Class<?>...values)  {
+	public XmlParserBuilder pojoSwaps(java.lang.Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder pojoSwaps(Object...values)  {
+	public XmlParserBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder pojoSwapsRemove(java.lang.Class<?>...values)  {
+	public XmlParserBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder pojoSwapsRemove(Object...values)  {
+	public XmlParserBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder pojoSwapsReplace(java.lang.Class<?>...values)  {
+	public XmlParserBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder pojoSwapsReplace(Object...values)  {
+	public XmlParserBuilder pojoSwapsReplace(Object...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value)  {
+	public XmlParserBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder sortProperties()  {
+	public XmlParserBuilder sortProperties() {
 		super.sortProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder sortProperties(boolean value)  {
+	public XmlParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder timeZone(TimeZone value)  {
+	public XmlParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder useEnumNames()  {
+	public XmlParserBuilder useEnumNames() {
 		super.useEnumNames();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder useEnumNames(boolean value)  {
+	public XmlParserBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder useInterfaceProxies(boolean value)  {
+	public XmlParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder useJavaBeanIntrospector()  {
+	public XmlParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder useJavaBeanIntrospector(boolean value)  {
+	public XmlParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public XmlParserBuilder autoCloseStreams()  {
+	public XmlParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public XmlParserBuilder autoCloseStreams(boolean value)  {
+	public XmlParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public XmlParserBuilder debugOutputLines(int value)  {
+	public XmlParserBuilder debugOutputLines(int value) {
 		super.debugOutputLines(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public XmlParserBuilder listener(Class<? extends org.apache.juneau.parser.ParserListener> value)  {
+	public XmlParserBuilder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
 		super.listener(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public XmlParserBuilder strict()  {
+	public XmlParserBuilder strict() {
 		super.strict();
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public XmlParserBuilder strict(boolean value)  {
+	public XmlParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public XmlParserBuilder trimStrings()  {
+	public XmlParserBuilder trimStrings() {
 		super.trimStrings();
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public XmlParserBuilder trimStrings(boolean value)  {
+	public XmlParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public XmlParserBuilder unbuffered()  {
+	public XmlParserBuilder unbuffered() {
 		super.unbuffered();
 		return this;
 	}
 
 	@Override /* GENERATED - ParserBuilder */
-	public XmlParserBuilder unbuffered(boolean value)  {
+	public XmlParserBuilder unbuffered(boolean value) {
 		super.unbuffered(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ReaderParserBuilder */
-	public XmlParserBuilder fileCharset(Charset value)  {
+	public XmlParserBuilder fileCharset(Charset value) {
 		super.fileCharset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - ReaderParserBuilder */
-	public XmlParserBuilder streamCharset(Charset value)  {
+	public XmlParserBuilder streamCharset(Charset value) {
 		super.streamCharset(value);
 		return this;
 	}

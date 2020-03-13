@@ -20,6 +20,7 @@ import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -2586,625 +2587,625 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	// <CONFIGURATION-PROPERTIES>
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder add(Map<String,Object> properties)  {
+	public RestContextBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder addTo(String name, Object value)  {
+	public RestContextBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder addTo(String name, String key, Object value)  {
+	public RestContextBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder apply(PropertyStore copyFrom)  {
+	public RestContextBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder applyAnnotations(java.lang.Class<?>...fromClasses)  {
+	public RestContextBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
 		super.applyAnnotations(fromClasses);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder applyAnnotations(java.lang.reflect.Method...fromMethods)  {
+	public RestContextBuilder applyAnnotations(Method...fromMethods) {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r)  {
+	public RestContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder removeFrom(String name, Object value)  {
+	public RestContextBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder annotations(Annotation...values)  {
+	public RestContextBuilder annotations(Annotation...values) {
 		super.annotations(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanClassVisibility(Visibility value)  {
+	public RestContextBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanConstructorVisibility(Visibility value)  {
+	public RestContextBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanDictionary(java.lang.Class<?>...values)  {
+	public RestContextBuilder beanDictionary(java.lang.Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanDictionary(Object...values)  {
+	public RestContextBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanDictionaryRemove(java.lang.Class<?>...values)  {
+	public RestContextBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanDictionaryRemove(Object...values)  {
+	public RestContextBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanDictionaryReplace(java.lang.Class<?>...values)  {
+	public RestContextBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanDictionaryReplace(Object...values)  {
+	public RestContextBuilder beanDictionaryReplace(Object...values) {
 		super.beanDictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanFieldVisibility(Visibility value)  {
+	public RestContextBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanFilters(java.lang.Class<?>...values)  {
+	public RestContextBuilder beanFilters(java.lang.Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanFilters(Object...values)  {
+	public RestContextBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanFiltersRemove(java.lang.Class<?>...values)  {
+	public RestContextBuilder beanFiltersRemove(java.lang.Class<?>...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanFiltersRemove(Object...values)  {
+	public RestContextBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanFiltersReplace(java.lang.Class<?>...values)  {
+	public RestContextBuilder beanFiltersReplace(java.lang.Class<?>...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanFiltersReplace(Object...values)  {
+	public RestContextBuilder beanFiltersReplace(Object...values) {
 		super.beanFiltersReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanMapPutReturnsOldValue()  {
+	public RestContextBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanMapPutReturnsOldValue(boolean value)  {
+	public RestContextBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanMethodVisibility(Visibility value)  {
+	public RestContextBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanTypePropertyName(String value)  {
+	public RestContextBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireDefaultConstructor()  {
+	public RestContextBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireDefaultConstructor(boolean value)  {
+	public RestContextBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireSerializable()  {
+	public RestContextBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireSerializable(boolean value)  {
+	public RestContextBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireSettersForGetters()  {
+	public RestContextBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireSettersForGetters(boolean value)  {
+	public RestContextBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireSomeProperties(boolean value)  {
+	public RestContextBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpi(Map<String,String> values)  {
+	public RestContextBuilder bpi(Map<String,String> values) {
 		super.bpi(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpi(Class<?> beanClass, String properties)  {
+	public RestContextBuilder bpi(Class<?> beanClass, String properties) {
 		super.bpi(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpi(String beanClassName, String properties)  {
+	public RestContextBuilder bpi(String beanClassName, String properties) {
 		super.bpi(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpro(Map<String,String> values)  {
+	public RestContextBuilder bpro(Map<String,String> values) {
 		super.bpro(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpro(Class<?> beanClass, String properties)  {
+	public RestContextBuilder bpro(Class<?> beanClass, String properties) {
 		super.bpro(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpro(String beanClassName, String properties)  {
+	public RestContextBuilder bpro(String beanClassName, String properties) {
 		super.bpro(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpwo(Map<String,String> values)  {
+	public RestContextBuilder bpwo(Map<String,String> values) {
 		super.bpwo(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpwo(Class<?> beanClass, String properties)  {
+	public RestContextBuilder bpwo(Class<?> beanClass, String properties) {
 		super.bpwo(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpwo(String beanClassName, String properties)  {
+	public RestContextBuilder bpwo(String beanClassName, String properties) {
 		super.bpwo(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpx(Map<String,String> values)  {
+	public RestContextBuilder bpx(Map<String,String> values) {
 		super.bpx(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpx(Class<?> beanClass, String properties)  {
+	public RestContextBuilder bpx(Class<?> beanClass, String properties) {
 		super.bpx(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpx(String beanClassName, String properties)  {
+	public RestContextBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder dictionary(java.lang.Class<?>...values)  {
+	public RestContextBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder dictionary(Object...values)  {
+	public RestContextBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder dictionaryRemove(java.lang.Class<?>...values)  {
+	public RestContextBuilder dictionaryRemove(java.lang.Class<?>...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder dictionaryRemove(Object...values)  {
+	public RestContextBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder dictionaryReplace(java.lang.Class<?>...values)  {
+	public RestContextBuilder dictionaryReplace(java.lang.Class<?>...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder dictionaryReplace(Object...values)  {
+	public RestContextBuilder dictionaryReplace(Object...values) {
 		super.dictionaryReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> RestContextBuilder example(Class<T> pojoClass, T o)  {
+	public <T> RestContextBuilder example(Class<T> pojoClass, T o) {
 		super.example(pojoClass, o);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> RestContextBuilder exampleJson(Class<T> pojoClass, String json)  {
+	public <T> RestContextBuilder exampleJson(Class<T> pojoClass, String json) {
 		super.exampleJson(pojoClass, json);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder examples(String json)  {
+	public RestContextBuilder examples(String json) {
 		super.examples(json);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder excludeProperties(Map<String,String> values)  {
+	public RestContextBuilder excludeProperties(Map<String,String> values) {
 		super.excludeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder excludeProperties(Class<?> beanClass, String properties)  {
+	public RestContextBuilder excludeProperties(Class<?> beanClass, String properties) {
 		super.excludeProperties(beanClass, properties);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder excludeProperties(String beanClassName, String value)  {
+	public RestContextBuilder excludeProperties(String beanClassName, String value) {
 		super.excludeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder fluentSetters()  {
+	public RestContextBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder fluentSetters(boolean value)  {
+	public RestContextBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreInvocationExceptionsOnGetters()  {
+	public RestContextBuilder ignoreInvocationExceptionsOnGetters() {
 		super.ignoreInvocationExceptionsOnGetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreInvocationExceptionsOnGetters(boolean value)  {
+	public RestContextBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreInvocationExceptionsOnSetters()  {
+	public RestContextBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreInvocationExceptionsOnSetters(boolean value)  {
+	public RestContextBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignorePropertiesWithoutSetters(boolean value)  {
+	public RestContextBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreTransientFields(boolean value)  {
+	public RestContextBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreUnknownBeanProperties()  {
+	public RestContextBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreUnknownBeanProperties(boolean value)  {
+	public RestContextBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreUnknownNullBeanProperties(boolean value)  {
+	public RestContextBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder implClass(Class<?> interfaceClass, Class<?> implClass)  {
+	public RestContextBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder implClasses(Map<String,Class<?>> values)  {
+	public RestContextBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder includeProperties(Map<String,String> values)  {
+	public RestContextBuilder includeProperties(Map<String,String> values) {
 		super.includeProperties(values);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder includeProperties(Class<?> beanClass, String value)  {
+	public RestContextBuilder includeProperties(Class<?> beanClass, String value) {
 		super.includeProperties(beanClass, value);
 		return this;
 	}
 
 	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder includeProperties(String beanClassName, String value)  {
+	public RestContextBuilder includeProperties(String beanClassName, String value) {
 		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder locale(Locale value)  {
+	public RestContextBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder mediaType(MediaType value)  {
+	public RestContextBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder notBeanClasses(java.lang.Class<?>...values)  {
+	public RestContextBuilder notBeanClasses(java.lang.Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder notBeanClasses(Object...values)  {
+	public RestContextBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder notBeanClassesRemove(java.lang.Class<?>...values)  {
+	public RestContextBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder notBeanClassesRemove(Object...values)  {
+	public RestContextBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder notBeanClassesReplace(java.lang.Class<?>...values)  {
+	public RestContextBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder notBeanClassesReplace(Object...values)  {
+	public RestContextBuilder notBeanClassesReplace(Object...values) {
 		super.notBeanClassesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder notBeanPackages(Object...values)  {
+	public RestContextBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder notBeanPackages(String...values)  {
+	public RestContextBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder notBeanPackagesRemove(Object...values)  {
+	public RestContextBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder notBeanPackagesRemove(String...values)  {
+	public RestContextBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder notBeanPackagesReplace(Object...values)  {
+	public RestContextBuilder notBeanPackagesReplace(Object...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder notBeanPackagesReplace(String...values)  {
+	public RestContextBuilder notBeanPackagesReplace(String...values) {
 		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder pojoSwaps(java.lang.Class<?>...values)  {
+	public RestContextBuilder pojoSwaps(java.lang.Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder pojoSwaps(Object...values)  {
+	public RestContextBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder pojoSwapsRemove(java.lang.Class<?>...values)  {
+	public RestContextBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder pojoSwapsRemove(Object...values)  {
+	public RestContextBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder pojoSwapsReplace(java.lang.Class<?>...values)  {
+	public RestContextBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder pojoSwapsReplace(Object...values)  {
+	public RestContextBuilder pojoSwapsReplace(Object...values) {
 		super.pojoSwapsReplace(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value)  {
+	public RestContextBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder sortProperties()  {
+	public RestContextBuilder sortProperties() {
 		super.sortProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder sortProperties(boolean value)  {
+	public RestContextBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder timeZone(TimeZone value)  {
+	public RestContextBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder useEnumNames()  {
+	public RestContextBuilder useEnumNames() {
 		super.useEnumNames();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder useEnumNames(boolean value)  {
+	public RestContextBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder useInterfaceProxies(boolean value)  {
+	public RestContextBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder useJavaBeanIntrospector()  {
+	public RestContextBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder useJavaBeanIntrospector(boolean value)  {
+	public RestContextBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
