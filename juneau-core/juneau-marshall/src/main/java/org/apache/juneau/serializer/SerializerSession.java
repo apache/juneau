@@ -653,9 +653,9 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Invokes the specified swap on the specified object.
+	 * Invokes the specified swap on the specified object if the swap is not null.
 	 *
-	 * @param swap The swap to invoke.
+	 * @param swap The swap to invoke.  Can be <jk>null</jk>.
 	 * @param o The input object.
 	 * @return The swapped object.
 	 * @throws SerializeException If swap method threw an exception.
@@ -663,6 +663,8 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Object swap(PojoSwap swap, Object o) throws SerializeException {
 		try {
+			if (swap == null)
+				return o;
 			return swap.swap(this, o);
 		} catch (Exception e) {
 			throw new SerializeException(e);

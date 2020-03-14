@@ -142,6 +142,12 @@
 	<li>
 		New {@link oaj.html.annotation.HtmlDoc#asideFloat} setting so that you can position the contents of the aside section on the page.
 	<li>
+		Various minor fixes surrounding HTML serialization.
+		<ul>
+			<li>Collections of beans that were supposed to be serialized as tables were being serialized as lists.
+			<li>Collections of beans with <c><ja>@Bean</ja>(bpi)</c> were not being serialized in the correct column order.			
+		</ul>
+	<li>
 		HTML-Schema support is being deprecated due to low-use and difficulty in maintaining.  It will be removed in 9.0.
 </ul>
 

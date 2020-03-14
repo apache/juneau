@@ -608,11 +608,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 						out.eTag("td").nl(i+2);
 					}
 				} else {
-					BeanMap m2 = null;
-					if (o instanceof BeanMap)
-						m2 = (BeanMap)o;
-					else
-						m2 = toBeanMap(o);
+					BeanMap m2 = toBeanMap(o);
 
 					if (th == null)
 						th = m2.keySet().toArray(new Object[m2.size()]);
@@ -712,15 +708,17 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/*
 	 * Returns the table column headers for the specified collection of objects.
 	 * Returns null if collection should not be serialized as a 2-dimensional table.
+	 * Returns an empty array if it should be treated as a table but without headers.
 	 * 2-dimensional tables are used for collections of objects that all have the same set of property names.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Object[] getTableHeaders(Collection c, HtmlBeanPropertyMeta bpHtml) throws SerializeException  {
+
 		if (c.size() == 0)
 			return null;
+
 		c = sort(c);
-		Object[] th;
-		Set<ClassMeta> prevC = new HashSet<>();
+
 		Object o1 = null;
 		for (Object o : c)
 			if (o != null) {
@@ -729,107 +727,55 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			}
 		if (o1 == null)
 			return null;
-		ClassMeta<?> cm = getClassMetaForObject(o1);
 
-		PojoSwap swap = cm.getPojoSwap(this);
-		if (swap != null) {
-			o1 = swap(swap, o1);
-			cm = swap.getSwapClassMeta(this);
-		}
+		ClassMeta<?> cm1 = getClassMetaForObject(o1);
 
-		if (cm == null || ! cm.isMapOrBean())
-			return null;
-		if (cm.hasAnnotation(HtmlLink.class))
+		PojoSwap swap = cm1.getPojoSwap(this);
+		o1 = swap(swap, o1);
+		if (swap != null)
+			cm1 = swap.getSwapClassMeta(this);
+
+		if (cm1 == null || ! cm1.isMapOrBean() || cm1.hasAnnotation(HtmlLink.class))
 			return null;
 
-		HtmlClassMeta cHtml = getHtmlClassMeta(cm);
+		HtmlClassMeta cHtml = getHtmlClassMeta(cm1);
 
-		if (cHtml.isNoTables() || bpHtml.isNoTables() || cHtml.isXml() || bpHtml.isXml())
+		if (cHtml.isNoTables() || bpHtml.isNoTables() || cHtml.isXml() || bpHtml.isXml() || canIgnoreValue(cm1, null, o1))
 			return null;
+
 		if (cHtml.isNoTableHeaders() || bpHtml.isNoTableHeaders())
 			return new Object[0];
-		if (canIgnoreValue(cm, null, o1))
-			return null;
-		if (cm.isMap() && ! cm.isBeanMap()) {
+
+		// If it's a non-bean map, only use table if all entries are also maps.
+		if (cm1.isMap() && ! cm1.isBeanMap()) {
+
 			Set<Object> set = new LinkedHashSet<>();
 			for (Object o : c) {
-				if (! canIgnoreValue(cm, null, o)) {
-					if (! cm.isInstance(o))
+				o = swap(swap, o);
+				if (! canIgnoreValue(cm1, null, o)) {
+					if (! cm1.isInstance(o))
 						return null;
 					Map m = sort((Map)o);
-					for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
-						if (e.getValue() != null)
-							set.add(e.getKey() == null ? null : e.getKey());
-					}
+					for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
+						if (! set.contains(e.getKey()))
+							set.add(e.getKey());
 				}
 			}
-			th = set.toArray(new Object[set.size()]);
-		} else {
-			Map<String,Boolean> m = new LinkedHashMap<>();
-			for (Object o : c) {
-				if (! canIgnoreValue(cm, null, o)) {
-					if (! cm.isInstance(o))
-						return null;
-					BeanMap<?> bm = (o instanceof BeanMap ? (BeanMap)o : toBeanMap(o));
-					for (Map.Entry<String,Object> e : bm.entrySet()) {
-						String key = e.getKey();
-						if (e.getValue() != null)
-							m.put(key, true);
-						else if (! m.containsKey(key))
-							m.put(key, false);
-					}
-				}
-			}
-			for (Iterator<Boolean> i = m.values().iterator(); i.hasNext();)
-				if (! i.next())
-					i.remove();
-			th = m.keySet().toArray(new Object[m.size()]);
-		}
-		prevC.add(cm);
-		boolean isSortable = true;
-		for (Object o : th)
-			isSortable &= (o instanceof Comparable);
-		Set<Object> s = (isSortable ? new TreeSet<>() : new LinkedHashSet<>());
-		s.addAll(Arrays.asList(th));
+			return set.toArray(new Object[set.size()]);
 
+		}
+
+		// Must be a bean or BeanMap.
 		for (Object o : c) {
-			if (o == null)
-				continue;
-			cm = getClassMetaForObject(o);
-
-			PojoSwap ps = cm == null ? null : cm.getPojoSwap(this);
-			if (ps != null) {
-				o = swap(ps, o);
-				cm = ps.getSwapClassMeta(this);
-			}
-			if (prevC.contains(cm))
-				continue;
-			if (cm == null || ! (cm.isMap() || cm.isBean()))
-				return null;
-			if (cm.hasAnnotation(HtmlLink.class))
-				return null;
-			if (canIgnoreValue(cm, null, o))
-				return null;
-			if (cm.isMap() && ! cm.isBeanMap()) {
-				Map m = (Map)o;
-				if (th.length != m.keySet().size())
-					return null;
-				for (Object k : m.keySet())
-					if (! s.contains(k.toString()))
-						return null;
-			} else {
-				BeanMap<?> bm = (o instanceof BeanMap ? (BeanMap)o : toBeanMap(o));
-				int l = 0;
-				for (String k : bm.keySet()) {
-					if (! s.contains(k))
-						return null;
-					l++;
-				}
-				if (s.size() != l)
+			o = swap(swap, o);
+			if (! canIgnoreValue(cm1, null, o)) {
+				if (! cm1.isInstance(o))
 					return null;
 			}
 		}
-		return th;
+		
+		BeanMap<?> bm = toBeanMap(o1);
+		return bm.keySet().toArray(new String[bm.size()]);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

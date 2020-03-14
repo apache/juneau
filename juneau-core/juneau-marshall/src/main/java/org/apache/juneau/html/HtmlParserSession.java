@@ -486,7 +486,10 @@ public final class HtmlParserSession extends XmlParserSession {
 					m2.put(getBeanTypePropertyName(type.getElementType()), c);
 					l.add((E)cast(m2, pMeta, elementType));
 				} else {
-					l.add((E)m);
+					if (m instanceof ObjectMap)
+						l.add((E)convertToType(m, elementType));
+					else
+						l.add((E)m);
 				}
 			}
 			nextTag(r, xTR);

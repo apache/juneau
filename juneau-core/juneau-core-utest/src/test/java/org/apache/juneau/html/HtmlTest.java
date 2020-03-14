@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
@@ -29,7 +30,7 @@ public class HtmlTest {
 	// Verifies that lists of maps/beans are converted to tables correctly.
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void testTables1() throws Exception {
+	public void a01_testTables1() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
 		Object[] t;
 		String html;
@@ -48,7 +49,7 @@ public class HtmlTest {
 	// Test URI_ANCHOR_SET options
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void testAnchorTextOptions() throws Exception {
+	public void a02_testAnchorTextOptions() throws Exception {
 		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().uriResolution(UriResolution.NONE);
 		TestURI t = new TestURI();
 		String r;
@@ -209,7 +210,7 @@ public class HtmlTest {
 	// Test @Html.asPlainText annotation on classes and fields
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void testHtmlAnnotationAsPlainText() throws Exception {
+	public void b01_testHtmlAnnotationAsPlainText() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 		Object o = null;
 		String r;
@@ -238,7 +239,7 @@ public class HtmlTest {
 	}
 
 	@Test
-	public void testHtmlAnnotationAsPlainText_usingConfig() throws Exception {
+	public void b02_testHtmlAnnotationAsPlainText_usingConfig() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(B3.class).applyAnnotations(B4.class).build();
 
 		Object o = null;
@@ -271,7 +272,7 @@ public class HtmlTest {
 	// Test @Html.asXml annotation on classes and fields
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void testHtmlAnnotationAsXml() throws Exception {
+	public void c01_testHtmlAnnotationAsXml() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 		Object o = null;
 		String r;
@@ -296,7 +297,7 @@ public class HtmlTest {
 	}
 
 	@Test
-	public void testHtmlAnnotationAsXml_usingConfig() throws Exception {
+	public void c02_testHtmlAnnotationAsXml_usingConfig() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(C3.class).build();
 		Object o = null;
 		String r;
@@ -323,7 +324,7 @@ public class HtmlTest {
 	// Test @Html.noTableHeaders
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void testNoTableHeaders() throws Exception {
+	public void d01_testNoTableHeaders() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
 		Object o = null;
 		String r;
@@ -339,7 +340,7 @@ public class HtmlTest {
 	public static class MyMap extends LinkedHashMap<String,String> {}
 
 	@Test
-	public void testNoTableHeaders_usingConfig() throws Exception {
+	public void d02_testNoTableHeaders_usingConfig() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().applyAnnotations(MyMap2.class).build();
 		Object o = null;
 		String r;
@@ -358,7 +359,7 @@ public class HtmlTest {
 	// Test @Html.noTableHeaders on beans
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void testNoTableHeadersOnBeans() throws Exception {
+	public void d03_testNoTableHeadersOnBeans() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
 		Object o = null;
 		String r;
@@ -375,7 +376,7 @@ public class HtmlTest {
 	}
 
 	@Test
-	public void testNoTableHeadersOnBeans_usingConfig() throws Exception {
+	public void d04_testNoTableHeadersOnBeans_usingConfig() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().applyAnnotations(MyBean2.class).build();
 		Object o = null;
 		String r;
@@ -392,7 +393,7 @@ public class HtmlTest {
 	}
 
 	@Test
-	public void testNoTableHeadersOnBeans_usingConcreteAnnotation() throws Exception {
+	public void d05_testNoTableHeadersOnBeans_usingConcreteAnnotation() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().annotations(new HtmlAnnotation("MyBean2").noTables(true)).build();
 		Object o = null;
 		String r;
@@ -401,5 +402,36 @@ public class HtmlTest {
 		o = new ObjectList().append(b,b);
 		r = s.serialize(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @Bean(bpi) on collections of beans
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Bean(bpi="f3,f2,f1")
+	public static class E {
+		public Integer f1, f2, f3;
+
+		public E(Integer f1, Integer f2, Integer f3) {
+			this.f1 = f1;
+			this.f2 = f2;
+			this.f3 = f3;
+		}
+	}
+
+	@Test
+	public void e01_collectionOfBeansWithBpi() throws Exception {
+		E[] ee = new E[]{
+			new E(null, 2, 3),
+			new E(4, 5, 6)
+		};
+		assertEquals("<table _type='array'><tr><th>f3</th><th>f2</th><th>f1</th></tr><tr><td>3</td><td>2</td><td><null/></td></tr><tr><td>6</td><td>5</td><td>4</td></tr></table>", HtmlSerializer.DEFAULT_SQ.toString(ee));
+		assertEquals("<table _type='array'><tr><th>f3</th><th>f2</th><th>f1</th></tr><tr><td>3</td><td>2</td><td><null/></td></tr><tr><td>6</td><td>5</td><td>4</td></tr></table>", HtmlSerializer.DEFAULT_SQ.toString(Arrays.asList(ee)));
+
+		ee = new E[] {
+			new E(null, null, null),
+			new E(null, null, null)
+		};
+		assertEquals("<table _type='array'><tr><th>f3</th><th>f2</th><th>f1</th></tr><tr><td><null/></td><td><null/></td><td><null/></td></tr><tr><td><null/></td><td><null/></td><td><null/></td></tr></table>", HtmlSerializer.DEFAULT_SQ.toString(ee));
 	}
 }

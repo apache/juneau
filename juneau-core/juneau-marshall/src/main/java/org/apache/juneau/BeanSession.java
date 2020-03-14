@@ -756,6 +756,9 @@ public class BeanSession extends Session {
 	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a
 	 * bean.
 	 *
+	 * <p>
+	 * If object is already a {@link BeanMap}, simply returns the same object.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
@@ -767,6 +770,8 @@ public class BeanSession extends Session {
 	 * @return The wrapped object.
 	 */
 	public final <T> BeanMap<T> toBeanMap(T o) {
+		if (o instanceof BeanMap)
+			return (BeanMap<T>)o;
 		return this.toBeanMap(o, (Class<T>)o.getClass());
 	}
 
