@@ -153,6 +153,67 @@
 
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
+	<li>
+		{@link oajr.annotation.Rest}-annotated classes can now implement the following interfaces directly instead of having
+		to define secondary classes and hook them up through annotations:
+		<ul>
+			<li class='jic'>{@link oajr.RestCallHandler} - Normally defined through {@link oajr.annotation.Rest#callHandler() @Rest.callHandler()}.
+			<li class='jic'>{@link oajr.RestInfoProvider} - Normally defined through {@link oajr.annotation.Rest#infoProvider() @Rest.infoProvider()}.
+			<li class='jic'>{@link oajr.RestCallLogger} - Normally defined through {@link oajr.annotation.Rest#callLogger() @Rest.callLogger()}.
+		</ul>
+	<li>
+		{@link oajr.RestServlet} now implements the {@link oajr.RestCallHandler}, {@link oajr.RestInfoProvider}, and {@link oajr.RestCallLogger}
+		interfaces directly and provides the same functionality as {@link oajr.BasicRestCallHandler}, {@link oajr.BasicRestInfoProvider}, and
+		{@link oajr.BasicRestCallLogger}.  This makes it easier to tweak these methods without having to implement your own classes.
+		<br>The methods added for {@link oajr.RestCallHandler} are:
+		<ul>
+			<li class='jac'>{@link oaj.RestServlet}
+			<ul>
+				<li class='jm'>{@link oaj.RestServlet#execute(HttpServletRequest, HttpServletResponse) execute(HttpServletRequest, HttpServletResponse)}
+				<li class='jm'>{@link oaj.RestServlet#createCall(HttpServletRequest, HttpServletResponse) createCall(HttpServletRequest, HttpServletResponse)}
+				<li class='jm'>{@link oaj.RestServlet#createRequest(RestCall) createRequest(RestCall)}
+				<li class='jm'>{@link oaj.RestServlet#createResponse(RestCall) createResponse(RestCall)}
+				<li class='jm'>{@link oaj.RestServlet#handleResponse(RestCall) handleResponse(RestCall)}
+				<li class='jm'>{@link oaj.RestServlet#handleNotFound(RestCall) handleNotFound(RestCall)}
+				<li class='jm'>{@link oaj.RestServlet#handleError(RestCall,Throwable) handleError(RestCall,Throwable)}
+				<li class='jm'>{@link oaj.RestServlet#convertThrowable(Throwable) throwable(Throwable)}
+				<li class='jm'>{@link oaj.RestServlet#getSessionObjects(RestRequest req, RestResponse res) getSessionObjects(RestRequest,RestResponse)}
+			</ul>
+		</ul>
+		<br>The methods added for {@link oajr.RestInfoProvider} are:
+		<ul>
+			<li class='jac'>{@link oaj.RestServlet}
+			<ul>
+				<li class='jm'>{@link oaj.RestServlet#getSwagger(RestRequest) getSwagger(RestRequest)}
+				<li class='jm'>{@link oaj.RestServlet#getSiteName(RestRequest) getSiteName(RestRequest)}
+				<li class='jm'>{@link oaj.RestServlet#getTitle(RestRequest) getTitle(RestRequest)}
+				<li class='jm'>{@link oaj.RestServlet#getDescription(RestRequest) getDescription(RestRequest)}
+				<li class='jm'>{@link oaj.RestServlet#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
+				<li class='jm'>{@link oaj.RestServlet#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
+			</ul>
+		</ul>
+		<br>The methods added for {@link oajr.RestCallLogger} are:
+		<ul>
+			<li class='jac'>{@link oaj.RestServlet}
+			<ul>
+				<li class='jm'>{@link oaj.RestServlet#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
+			</ul>
+		</ul>
+	<li>
+		Added the following convenience hook methods on the {@link RestServlet} class:
+		<ul>
+			<li class='jac'>{@link oaj.RestServlet}
+			<ul>
+				<li class='jm'>{@link oaj.RestServlet#onInit(RestContextBuilder) onInit(RestContextBuilder)}
+				<li class='jm'>{@link oaj.RestServlet#onPostInit(RestContext) onPostInit(RestContext)}
+				<li class='jm'>{@link oaj.RestServlet#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
+				<li class='jm'>{@link oaj.RestServlet#onDestroy(RestContext) onDestroy(RestContext)}
+				<li class='jm'>{@link oaj.RestServlet#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)}
+				<li class='jm'>{@link oaj.RestServlet#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)}
+				<li class='jm'>{@link oaj.RestServlet#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
+				<li class='jm'>{@link oaj.RestServlet#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
+			</ul>
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server-springboot</h5>

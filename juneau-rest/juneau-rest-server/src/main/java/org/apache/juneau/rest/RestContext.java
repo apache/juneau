@@ -3668,7 +3668,8 @@ public final class RestContext extends BeanContext {
 
 			this.stackTraceDb = new StackTraceDatabase(callLoggerConfig.getStackTraceHashingTimeout(), RestMethodContext.class);
 
-			callLogger = getInstanceProperty(REST_callLogger, resource, RestCallLogger.class, BasicRestCallLogger.class, resourceResolver, this);
+			Object defaultRestCallLogger = resource instanceof RestCallLogger ? resource : BasicRestCallLogger.class;
+			callLogger = getInstanceProperty(REST_callLogger, resource, RestCallLogger.class, defaultRestCallLogger, resourceResolver, this);
 
 			properties = builder.properties;
 			serializers =
@@ -3983,8 +3984,11 @@ public final class RestContext extends BeanContext {
 				childResources.put(path, rc2);
 			}
 
-			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, BasicRestCallHandler.class, resourceResolver, this);
-			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, BasicRestInfoProvider.class, resourceResolver, this);
+			Object defaultRestCallHandler = resource instanceof RestCallHandler ? resource : BasicRestCallHandler.class;
+			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, defaultRestCallHandler, resourceResolver, this);
+
+			Object defaultRestInfoProvider = resource instanceof RestInfoProvider ? resource : BasicRestInfoProvider.class;
+			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, defaultRestInfoProvider, resourceResolver, this);
 
 		} catch (HttpException e) {
 			_initException = e;

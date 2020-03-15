@@ -45,7 +45,7 @@ public interface RestCallHandler {
 	 * @throws ServletException Error occurred.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException;
+	public void execute(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException;
 
 	/**
 	 * Wraps an incoming servlet request/response pair into a single {@link RestCall} object.

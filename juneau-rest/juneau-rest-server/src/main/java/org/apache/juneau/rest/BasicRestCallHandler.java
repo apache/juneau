@@ -86,7 +86,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	@Override /* RestCallHandler */
-	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
+	public void execute(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
 
 		RestCall call = createCall(r1, r2);
 
@@ -127,7 +127,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 							HttpServletRequest childRequest = new OverrideableHttpServletRequest(call.getRequest())
 								.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
 								.servletPath(call.getServletPath() + uppm.getPrefix());
-							rc.getCallHandler().service(childRequest, call.getResponse());
+							rc.getCallHandler().execute(childRequest, call.getResponse());
 						} else {
 							call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
 						}

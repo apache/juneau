@@ -16,9 +16,12 @@ import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.io.*;
+import java.lang.reflect.Method;
 import java.text.*;
+import java.util.*;
 import java.util.logging.*;
 
 import javax.servlet.*;
@@ -27,6 +30,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.exception.*;
 
 /**
@@ -36,7 +40,7 @@ import org.apache.juneau.http.exception.*;
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.RestServlet}
  * </ul>
  */
-public abstract class RestServlet extends HttpServlet {
+public abstract class RestServlet extends HttpServlet implements RestCallHandler, RestInfoProvider, RestCallLogger {
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,7 +50,9 @@ public abstract class RestServlet extends HttpServlet {
 	private boolean isInitialized = false;  // Should not be volatile.
 	private volatile RestResourceResolver resourceResolver;
 	private JuneauLogger logger = JuneauLogger.getLogger(getClass());
-
+	private RestCallHandler callHandler;
+	private RestInfoProvider infoProvider;
+	private RestCallLogger callLogger;
 
 	@Override /* Servlet */
 	public final synchronized void init(ServletConfig servletConfig) throws ServletException {
@@ -89,6 +95,9 @@ public abstract class RestServlet extends HttpServlet {
 		this.builder = context.builder;
 		this.context = context;
 		isInitialized = true;
+		callHandler = new BasicRestCallHandler(context);
+		infoProvider = new BasicRestInfoProvider(context);
+		callLogger = new BasicRestCallLogger(context);
 		context.postInit();
 	}
 
@@ -176,12 +185,33 @@ public abstract class RestServlet extends HttpServlet {
 
 	@Override /* GenericServlet */
 	public void log(String msg) {
-		logger.info(msg);
+		super.log(msg);
 	}
 
 	@Override /* GenericServlet */
 	public void log(String msg, Throwable cause) {
-		logger.info(cause, msg);
+		super.log(msg, cause);
+	}
+
+	/**
+	 * Convenience method for calling {@link #log(String)} with message arguments.
+	 *
+	 * @param msg The message containing {@link MessageFormat}-style arguments.
+	 * @param args The arguments.
+	 */
+	public void log(String msg, Object...args) {
+		super.log(args.length == 0 ? msg : MessageFormat.format(msg, args));
+	}
+
+	/**
+	 * Convenience method for calling {@link #log(String)} with message arguments.
+	 *
+	 * @param msg The message containing {@link MessageFormat}-style arguments.
+	 * @param cause The cause.
+	 * @param args The arguments.
+	 */
+	public void log(String msg, Throwable cause, Object...args) {
+		super.log(args.length == 0 ? msg : MessageFormat.format(msg, args), cause);
 	}
 
 	/**
@@ -240,7 +270,7 @@ public abstract class RestServlet extends HttpServlet {
 				isInitialized = true;
 			}
 
-			context.getCallHandler().service(r1, r2);
+			context.getCallHandler().execute(r1, r2);
 
 		} catch (Throwable e) {
 			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
@@ -255,7 +285,280 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Request-time methods.
+	// Hook events
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Method that gets called during servlet initialization.
+	 *
+	 * <p>
+	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContextBuilder}
+	 * object has been created and initialized with the annotations defined on the class, but before the
+	 * {@link RestContext} object has been created.
+	 *
+	 * <p>
+	 * An example of this is the <c>PetStoreResource</c> class that uses an init method to perform initialization
+	 * of an internal data structure.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>(...)
+	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
+	 *
+	 * 		<jc>// Our database.</jc>
+	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
+	 *
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public void</jk> onInit(RestContextBuilder builder) <jk>throws</jk> Exception {
+	 * 			<jc>// Load our database from a local JSON file.</jc>
+	 * 			<jf>petDB</jf> = JsonParser.<jsf>DEFAULT</jsf>.parse(getClass().getResourceAsStream(<js>"PetStore.json"</js>), LinkedHashMap.<jk>class</jk>, Integer.<jk>class</jk>, Pet.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default implementation of this method is a no-op.
+	 * 	<li>
+	 * 		Multiple INIT methods can be defined on a class.
+	 * 		<br>INIT methods on parent classes are invoked before INIT methods on child classes.
+	 * 		<br>The order of INIT method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 	<li>
+	 * 		The method can throw any exception causing initialization of the servlet to fail.
+	 * </ul>
+	 *
+	 * @param builder Context builder which can be used to configure the servlet.
+	 * @throws Exception Any exception thrown will cause servlet to fail startup.
+	 */
+	@RestHook(INIT)
+	public void onInit(RestContextBuilder builder) throws Exception {}
+
+	/**
+	 * Method that gets called immediately after servlet initialization.
+	 *
+	 * <p>
+	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContext}
+	 * object has been created.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default implementation of this method is a no-op.
+	 * 	<li>
+	 * 		Multiple POST_INIT methods can be defined on a class.
+	 * 		<br>POST_INIT methods on parent classes are invoked before POST_INIT methods on child classes.
+	 * 		<br>The order of POST_INIT method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 	<li>
+	 * 		The method can throw any exception causing initialization of the servlet to fail.
+	 * </ul>
+	 *
+	 * @param context The initialized context object.
+	 * @throws Exception Any exception thrown will cause servlet to fail startup.
+	 */
+	@RestHook(POST_INIT)
+	public void onPostInit(RestContext context) throws Exception {}
+
+	/**
+	 * Identical to {@link #onPostInit(RestContext)} except the order of execution is child-resources first.
+	 *
+	 * <p>
+	 * Use this method if you need to perform any kind of initialization on child resources before the parent resource.
+	 *
+	 * <p>
+	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContext}
+	 * object has been created and after the {@link #POST_INIT} methods have been called.
+	 *
+	 * <p>
+	 * The only valid parameter type for this method is {@link RestContext} which can be used to retrieve information
+	 * about the servlet.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default implementation of this method is a no-op.
+	 * 	<li>
+	 * 		Multiple POST_INIT_CHILD_FIRST methods can be defined on a class.
+	 * 		<br>POST_INIT_CHILD_FIRST methods on parent classes are invoked before POST_INIT_CHILD_FIRST methods on child classes.
+	 * 		<br>The order of POST_INIT_CHILD_FIRST method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 	<li>
+	 * 		The method can throw any exception causing initialization of the servlet to fail.
+	 * </ul>
+	 *
+	 * @param context The initialized context object.
+	 * @throws Exception Any exception thrown will cause servlet to fail startup.
+	 */
+	@RestHook(POST_INIT_CHILD_FIRST)
+	public void onPostInitChildFirst(RestContext context) throws Exception {}
+
+	/**
+	 * Method that gets called during servlet destroy.
+	 *
+	 * <p>
+	 * This method is called from within the {@link Servlet#destroy()}.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>(...)
+	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
+	 *
+	 * 		<jc>// Our database.</jc>
+	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
+	 *
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public void</jk> onDestroy(RestContext context) {
+	 * 			<jf>petDB</jf> = <jk>null</jk>;
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default implementation of this method is a no-op.
+	 * 	<li>
+	 * 		Multiple DESTROY methods can be defined on a class.
+	 * 		<br>DESTROY methods on child classes are invoked before DESTROY methods on parent classes.
+	 * 		<br>The order of DESTROY method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 	<li>
+	 * 		In general, destroy methods should not throw any exceptions, although if any are thrown, the stack trace will be
+	 * 		printed to <c>System.err</c>.
+	 * </ul>
+	 *
+	 * @param context The initialized context object.
+	 * @throws Exception Any exception thrown will cause stack trace to be printed to <c>System.err</c>.
+	 */
+	@RestHook(DESTROY)
+	public void onDestroy(RestContext context) throws Exception {}
+
+	/**
+	 * A method that is called immediately after the <c>HttpServlet.service(HttpServletRequest, HttpServletResponse)</c>
+	 * method is called.
+	 *
+	 * <p>
+	 * Note that you only have access to the raw request and response objects at this point.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>(...)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 *
+	 * 		<jc>// Add a request attribute to all incoming requests.</jc>
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public void</jk> onStartCall(HttpServletRequest req, HttpServletResponse res) {
+	 * 			req.setAttribute(<js>"foobar"</js>, <jk>new</jk> FooBar());
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default implementation of this method is a no-op.
+	 * 	<li>
+	 * 		Multiple START_CALL methods can be defined on a class.
+	 * 		<br>START_CALL methods on parent classes are invoked before START_CALL methods on child classes.
+	 * 		<br>The order of START_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 	<li>
+	 * 		The method can throw any exception.
+	 * 		<br>{@link HttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
+	 * 		<br>All other exceptions cause an HTTP 500 error status code.
+	 * </ul>
+	 *
+	 * @param req The HTTP servlet request object.
+	 * @param res The HTTP servlet response object.
+	 * @throws Exception Any exception.
+	 */
+	@RestHook(START_CALL)
+	public void onStartCall(HttpServletRequest req, HttpServletResponse res) throws Exception {}
+
+	/**
+	 * Method that gets called immediately before the <ja>@RestMethod</ja> annotated method gets called.
+	 *
+	 * <p>
+	 * At this point, the {@link RestRequest} object has been fully initialized, and all {@link RestGuard} and
+	 * {@link RestMatcher} objects have been called.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default implementation of this method is a no-op.
+	 * 	<li>
+	 * 		Multiple PRE_CALL methods can be defined on a class.
+	 * 		<br>PRE_CALL methods on parent classes are invoked before PRE_CALL methods on child classes.
+	 * 		<br>The order of PRE_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 	<li>
+	 * 		The method can throw any exception.
+	 * 		<br>{@link HttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
+	 * 		<br>All other exceptions cause an HTTP 500 error status code.
+	 * 	<li>
+	 * 		It's advisable not to mess around with the HTTP body itself since you may end up consuming the body
+	 * 		before the actual REST method has a chance to use it.
+	 * </ul>
+	 *
+	 * @param req The request object.
+	 * @param res The response object.
+	 * @throws Exception Any exception.
+	 */
+	@RestHook(PRE_CALL)
+	public void onPreCall(RestRequest req, RestResponse res) throws Exception {}
+
+	/**
+	 * Method that gets called immediately after the <ja>@RestMethod</ja> annotated method gets called.
+	 *
+	 * <p>
+	 * At this point, the output object returned by the method call has been set on the response, but
+	 * {@link RestConverter RestConverters} have not yet been executed and the response has not yet been written.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default implementation of this method is a no-op.
+	 * 	<li>
+	 * 		Multiple POST_CALL methods can be defined on a class.
+	 * 		<br>POST_CALL methods on parent classes are invoked before POST_CALL methods on child classes.
+	 * 		<br>The order of POST_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 	<li>
+	 * 		The method can throw any exception, although at this point it is too late to set an HTTP error status code.
+	 * </ul>
+	 *
+	 * @param req The request object.
+	 * @param res The response object.
+	 * @throws Exception Any exception.
+	 */
+	@RestHook(POST_CALL)
+	public void onPostCall(RestRequest req, RestResponse res) throws Exception {}
+
+	/**
+	 * Method that gets called right before we exit the servlet service method.
+	 *
+	 * <p>
+	 * At this point, the output has been written and flushed.
+	 *
+	 * <p>
+	 * The following attributes are set on the {@link HttpServletRequest} object that can be useful for logging purposes:
+	 * <ul>
+	 * 	<li><js>"Exception"</js> - Any exceptions thrown during the request.
+	 * 	<li><js>"ExecTime"</js> - Execution time of the request.
+	 * </ul>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default implementation of this method is a no-op.
+	 * 	<li>
+	 * 		Multiple END_CALL methods can be defined on a class.
+	 * 		<br>END_CALL methods on parent classes are invoked before END_CALL methods on child classes.
+	 * 		<br>The order of END_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 	<li>
+	 * 		The method can throw any exception, although at this point it is too late to set an HTTP error status code.
+	 * 	<li>
+	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
+	 * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
+	 * 		overridden by the child class.
+	 * </ul>
+	 *
+	 * @param req The HTTP servlet request object.
+	 * @param res The HTTP servlet response object.
+	 * @throws Exception Any exception.
+	 */
+	@RestHook(END_CALL)
+	public void onEndCall(HttpServletRequest req, HttpServletResponse res) throws Exception {}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -274,5 +577,97 @@ public abstract class RestServlet extends HttpServlet {
 	 */
 	public synchronized RestResponse getResponse() {
 		return getContext().getResponse();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RestCallHandler
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* RestCallHandler */
+	public void execute(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		callHandler.execute(req, res);
+	}
+
+	@Override /* RestCallHandler */
+	public RestCall createCall(HttpServletRequest req, HttpServletResponse res) {
+		return callHandler.createCall(req, res);
+	}
+
+	@Override /* RestCallHandler */
+	public RestRequest createRequest(RestCall call) throws ServletException {
+		return callHandler.createRequest(call);
+	}
+
+	@Override /* RestCallHandler */
+	public RestResponse createResponse(RestCall call) throws ServletException {
+		return callHandler.createResponse(call);
+	}
+
+	@Override /* RestCallHandler */
+	public void handleResponse(RestCall call) throws Exception {
+		callHandler.handleResponse(call);
+	}
+
+	@Override /* RestCallHandler */
+	public void handleNotFound(RestCall call) throws Exception {
+		callHandler.handleNotFound(call);
+	}
+
+	@Override /* RestCallHandler */
+	public void handleError(RestCall call, Throwable e) throws Exception {
+		callHandler.handleError(call, e);
+	}
+
+	@Override /* RestCallHandler */
+	public Throwable convertThrowable(Throwable t) {
+		return callHandler.convertThrowable(t);
+	}
+
+	@Override /* RestCallHandler */
+	public Map<String,Object> getSessionObjects(RestRequest req, RestResponse res) {
+		return callHandler.getSessionObjects(req, res);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RestInfoProvider
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* RestInfoProvider */
+	public Swagger getSwagger(RestRequest req) throws Exception {
+		return infoProvider.getSwagger(req);
+	}
+
+	@Override /* RestInfoProvider */
+	public String getSiteName(RestRequest req) throws Exception {
+		return infoProvider.getSiteName(req);
+	}
+
+	@Override /* RestInfoProvider */
+	public String getTitle(RestRequest req) throws Exception {
+		return infoProvider.getTitle(req);
+	}
+
+	@Override /* RestInfoProvider */
+	public String getDescription(RestRequest req) throws Exception {
+		return infoProvider.getDescription(req);
+	}
+
+	@Override /* RestInfoProvider */
+	public String getMethodSummary(Method method, RestRequest req) throws Exception {
+		return infoProvider.getMethodSummary(method, req);
+	}
+
+	@Override /* RestInfoProvider */
+	public String getMethodDescription(Method method, RestRequest req) throws Exception {
+		return infoProvider.getMethodDescription(method, req);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RestCallLogger
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* RestCallLogger */
+	public void log(RestCallLoggerConfig config, HttpServletRequest req, HttpServletResponse res) {
+		callLogger.log(config, req, res);
 	}
 }

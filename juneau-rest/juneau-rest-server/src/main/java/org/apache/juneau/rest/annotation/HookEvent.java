@@ -39,7 +39,7 @@ import org.apache.juneau.utils.*;
 public enum HookEvent {
 
 	/**
-	 * Identifies a method that should be called immediately after the <c>HttpServlet.service(HttpServletRequest, HttpServletResponse)</c>
+	 * Identifies a method that is called immediately after the <c>HttpServlet.service(HttpServletRequest, HttpServletResponse)</c>
 	 * method is called.
 	 *
 	 * <p>

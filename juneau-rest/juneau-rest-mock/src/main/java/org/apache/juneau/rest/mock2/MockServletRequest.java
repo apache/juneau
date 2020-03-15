@@ -281,7 +281,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	@Override /* MockHttpRequest */
 	public MockServletResponse execute() throws ServletException, IOException {
 		MockServletResponse res = MockServletResponse.create();
-		restContext.getCallHandler().service(this, res);
+		restContext.getCallHandler().execute(this, res);
 
 		// If the status isn't set, something's broken.
 		if (res.getStatus() == 0)
