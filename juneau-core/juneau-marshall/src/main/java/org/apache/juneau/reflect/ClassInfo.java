@@ -602,7 +602,7 @@ public final class ClassInfo {
 	 */
 	public MethodInfo getBuilderCreateMethod() {
 		for (MethodInfo m : getDeclaredMethods())
-			if (m.isAll(PUBLIC, STATIC) && m.hasName("create") && (!m.hasReturnType(void.class)))
+			if (m.isAll(PUBLIC, STATIC) && m.hasName("create") && (!m.hasReturnType(void.class)) && (!m.hasReturnType(c)))
 				return m;
 		return null;
 	}

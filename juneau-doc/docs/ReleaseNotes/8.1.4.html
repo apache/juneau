@@ -148,6 +148,9 @@
 			<li>Collections of beans with <c><ja>@Bean</ja>(bpi)</c> were not being serialized in the correct column order.			
 		</ul>
 	<li>
+		Fixed a bug where a copy constructor can erroneously be recognised as a builder constructor if the class also
+		has a static <c>create</c> method.  Net effect was that the copy constructor would needlessly be called during parsing.
+	<li>
 		HTML-Schema support is being deprecated due to low-use and difficulty in maintaining.  It will be removed in 9.0.
 </ul>
 

@@ -641,4 +641,35 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		x = roundTrip(x, F2.class);
 	}
 
+	//==================================================================================================================
+	// testBeanWithIncompleteCopyConstructor
+	//==================================================================================================================
+
+	public static class F {
+		public int f1, f2;
+
+		public F() {}
+
+		public F(F c) {
+			this.f1 = c.f1;
+		}
+
+		public static F create() {
+			F f = new F();
+			f.f1 = 1;
+			f.f2 = 2;
+			return f;
+		}
+	}
+
+	/**
+	 * The create() method and copy constructor should not be confused as the classes Builder class.
+	 */
+	@Test
+	public void testBeanWithIncompleteCopyConstructor() throws Exception {
+		F f = F.create();
+		f = roundTrip(f);
+		assertObjectEquals("{f1:1,f2:2}", f);
+	}
+
 }
