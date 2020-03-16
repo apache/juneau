@@ -165,6 +165,15 @@ public @interface Rest {
 	 * <p>
 	 * This class handles the basic lifecycle of an HTTP REST call.
 	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default call handler if not specified is {@link BasicRestCallHandler}.
+	 * 	<li>
+	 * 		The {@link RestServlet} class itself implements the {@link RestCallHandler} interface with the same
+	 * 		functionality as {@link BasicRestCallHandler} that gets used if not overridden by this annotation.
+	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
 	 * </ul>
@@ -188,6 +197,15 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * Used to retrieve localized files from the classpath.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default resource finder if not specified is {@link ClasspathResourceFinderBasic}.
+	 * 	<li>
+	 * 		The {@link RestServlet} class itself implements the {@link ClasspathResourceFinder} interface with the same
+	 * 		functionality as {@link ClasspathResourceFinderBasic} that gets used if not overridden by this annotation.
+	 * 		<br>Subclasses can also alter the behavior by overriding this method.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
@@ -383,6 +401,15 @@ public @interface Rest {
 	 * <p>
 	 * Class used to retrieve title/description/swagger information about a resource.
 	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default info provider if not specified is {@link BasicRestInfoProvider}.
+	 * 	<li>
+	 * 		The {@link RestServlet} class itself implements the {@link RestInfoProvider} interface with the same
+	 * 		functionality as {@link BasicRestInfoProvider} that gets used if not overridden by this annotation.
+	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_infoProvider}
 	 * </ul>
@@ -391,6 +418,15 @@ public @interface Rest {
 
 	/**
 	 * Specifies the logger to use for logging of HTTP requests and responses.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default call logger if not specified is {@link BasicRestCallLogger}.
+	 * 	<li>
+	 * 		The {@link RestServlet} class itself implements the {@link RestCallLogger} interface with the same
+	 * 		functionality as {@link BasicRestCallLogger} that gets used if not overridden by this annotation.
+	 * 		<br>Subclasses can also alter the behavior by overriding this method.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_callLogger}

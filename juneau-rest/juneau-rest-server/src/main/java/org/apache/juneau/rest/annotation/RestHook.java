@@ -17,6 +17,10 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import javax.servlet.http.*;
+
+import org.apache.juneau.rest.*;
+
 /**
  * Identifies Java methods on a resource/servlet class that get invoked during particular lifecycle events of
  * the servlet or REST call.
@@ -69,6 +73,26 @@ import java.lang.annotation.*;
  * 			<li>{@link HookEvent#END_CALL END_CALL} - At the end of the REST call after the response has been flushed.
  * 		</ul>
  * </ul>
+ *
+ * <ul class='notes'>
+ * 	<li>
+ * 		The {@link RestServlet} class itself implements several convenience methods annotated with this annotation
+ * 		that can be overridden directly:
+ * 		<ul class='javatree'>
+ * 			<li class='jac'>{@link RestServlet}
+ * 			<ul>
+ * 				<li class='jm'>{@link RestServlet#onInit(RestContextBuilder) onInit(RestContextBuilder)}
+ * 				<li class='jm'>{@link RestServlet#onPostInit(RestContext) onPostInit(RestContext)}
+ * 				<li class='jm'>{@link RestServlet#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
+ * 				<li class='jm'>{@link RestServlet#onDestroy(RestContext) onDestroy(RestContext)}
+ * 				<li class='jm'>{@link RestServlet#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)}
+ * 				<li class='jm'>{@link RestServlet#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)}
+ * 				<li class='jm'>{@link RestServlet#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
+ * 				<li class='jm'>{@link RestServlet#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
+ * 			</ul>
+ * 		</ul>
+ * </ul>
+ *
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.LifecycleHooks}

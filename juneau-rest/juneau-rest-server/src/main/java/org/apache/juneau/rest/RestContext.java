@@ -3708,7 +3708,9 @@ public final class RestContext extends BeanContext {
 			for (String mimeType : getArrayProperty(REST_mimeTypes, String.class))
 				mimetypesFileTypeMap.addMimeTypes(mimeType);
 
-			ClasspathResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ClasspathResourceFinder.class, ClasspathResourceFinderBasic.class, resourceResolver, this);
+			Object defaultResourceFinder = resource instanceof ClasspathResourceFinder ? resource : ClasspathResourceFinderBasic.class;
+			ClasspathResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ClasspathResourceFinder.class, defaultResourceFinder, resourceResolver, this);
+
 			useClasspathResourceCaching = getProperty(REST_useClasspathResourceCaching, boolean.class, true);
 			staticResourceManager = new ClasspathResourceManager(rci.inner(), rf, useClasspathResourceCaching);
 

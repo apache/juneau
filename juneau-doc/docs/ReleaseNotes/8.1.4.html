@@ -163,6 +163,7 @@
 			<li class='jic'>{@link oajr.RestCallHandler} - Normally defined through {@link oajr.annotation.Rest#callHandler() @Rest.callHandler()}.
 			<li class='jic'>{@link oajr.RestInfoProvider} - Normally defined through {@link oajr.annotation.Rest#infoProvider() @Rest.infoProvider()}.
 			<li class='jic'>{@link oajr.RestCallLogger} - Normally defined through {@link oajr.annotation.Rest#callLogger() @Rest.callLogger()}.
+			<li class='jic'>{@link oaj.utils.ClasspathResourceFinder} - Normally defined through {@link oajr.annotation.Rest#classpathResourceFinder() @Rest.classpathResourceFinder()}.
 		</ul>
 	<li>
 		{@link oajr.RestServlet} now implements the {@link oajr.RestCallHandler}, {@link oajr.RestInfoProvider}, and {@link oajr.RestCallLogger}
@@ -200,6 +201,13 @@
 			<li class='jac'>{@link oaj.RestServlet}
 			<ul>
 				<li class='jm'>{@link oaj.RestServlet#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
+			</ul>
+		</ul>
+		<br>The methods added for {@link oaj.utils.ClassspathResourceFinder} are:
+		<ul>
+			<li class='jac'>{@link oaj.RestServlet}
+			<ul>
+				<li class='jm'>{@link oaj.RestServlet#findResource(Class,String,Locale) findResource(Class,String,Locale)}
 			</ul>
 		</ul>
 	<li>
