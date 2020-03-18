@@ -12,54 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import org.apache.juneau.internal.*;
+import javax.servlet.http.*;
 
 /**
- * Represents the enablement settings of a feature.
+ * Can be used to force call logging to be disabled.
  */
-public enum Enablement {
+public class NoOpRestCallLogger implements RestCallLogger {
 
-	/**
-	 * Feature is always enabled.
-	 */
-	TRUE,
-
-	/**
-	 * Feature is enabled per HTTP request.
-	 */
-	PER_REQUEST,
-
-	/**
-	 * Feature is disabled.
-	 */
-	FALSE;
-
-	/**
-	 * Retrieves this enum using case-insensitive matching.
-	 *
-	 * @param s The enum name to resolve.
-	 * @return The resolved value.
-	 */
-	public static Enablement fromString(String s) {
-		if (! StringUtils.isEmpty(s)) {
-			try {
-				return valueOf(s.replace('-', '_').toUpperCase());
-			} catch (IllegalArgumentException  e) {}
-		}
-		return null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this enum is one of the specified values.
-	 *
-	 * @param values The values to check against.
-	 * @return <jk>true</jk> if this enum is one of the specified values.
-	 */
-	public boolean isOneOf(Enablement...values) {
-		for (Enablement v : values)
-			 if (this == v)
-				 return true;
-		return false;
+	@Override
+	public void log(RestCallLoggerConfig config, HttpServletRequest req, HttpServletResponse res) {
+		// Do nothing.
 	}
 }
-

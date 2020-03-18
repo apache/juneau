@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import javax.servlet.http.*;
@@ -76,10 +77,10 @@ public class RestCall {
 
 	/**
 	 * Sets the method context on this call.
-	 * 
-	 * Used for logging statistics on the method. 
-	 * 
-	 * @param value The new value. 
+	 *
+	 * Used for logging statistics on the method.
+	 *
+	 * @param value The new value.
 	 * @return This object (for method chaining).
 	 */
 	public RestCall restMethodContext(RestMethodContext value) {
@@ -150,11 +151,20 @@ public class RestCall {
 
 	/**
 	 * Returns the method context of this call.
-	 * 
+	 *
 	 * @return The method context of this call.
 	 */
 	public RestMethodContext getRestMethodContext() {
 		return rmethod;
+	}
+
+	/**
+	 * Returns the Java method of this call.
+	 *
+	 * @return The java method of this call, or <jk>null</jk> if it hasn't been determined yet.
+	 */
+	public Method getJavaMethod() {
+		return rmethod == null ? null : rmethod.method;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -194,8 +204,10 @@ public class RestCall {
 		if (b) {
 			req = CachingHttpServletRequest.wrap(req);
 			res = CachingHttpServletResponse.wrap(res);
+			req.setAttribute("Debug", true);
+		} else {
+			req.removeAttribute("Debug");
 		}
-		req.setAttribute("Debug", b);
 		return this;
 	}
 

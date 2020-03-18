@@ -14,9 +14,7 @@ package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
-import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -50,28 +48,5 @@ public class HelloWorldResource implements BasicRestConfig {
 	@RestMethod(name=GET, path="/*", summary="Responds with \"Hello world!\"")
 	public String sayHello() {
 		return "Hello world!";
-	}
-
-	/**
-	 * Make a request to /helloWorld/badRequest to trigger a 400 Bad Request.
-	 *
-	 * @throws BadRequest A bad request.
-	 */
-	@RestMethod
-	public void getBadRequest() throws BadRequest {
-		throw new BadRequest("example");
-	}
-
-	@Override /* BasicRestConfig */
-	public Swagger getOptions(RestRequest req) {
-		return req.getSwagger();
-	}
-
-	@Override /* BasicRestConfig */
-	public void error() {}
-
-	@Override /* BasicRestConfig */
-	public RestContextStats getStats(RestRequest req) {
-		return req.getContext().getStats();
 	}
 }

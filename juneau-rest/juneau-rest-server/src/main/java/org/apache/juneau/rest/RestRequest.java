@@ -209,7 +209,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.maxInput(rjm.maxInput);
 
 		if (isDebug()) {
-			setDebug();
+			inner = CachingHttpServletRequest.wrap(inner);
 		}
 
 		String stylesheet = getQuery().getString("stylesheet");
@@ -1314,14 +1314,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public boolean isDebug() {
 		Boolean b = ObjectUtils.castOrNull(getAttribute("Debug"), Boolean.class);
-		if (b != null)
-			return b;
-		Enablement e = restJavaMethod != null ? restJavaMethod.getDebug() : context.getDebug();
-		if (e == TRUE)
-			return true;
-		if (e == FALSE)
-			return false;
-		return "true".equalsIgnoreCase(getHeader("X-Debug"));
+		return b == null ? false : b;
 	}
 
 	/**
@@ -1802,7 +1795,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public RestCallLoggerConfig getCallLoggerConfig() {
 		if (restJavaMethod != null)
 			return restJavaMethod.getCallLoggerConfig();
-		return RestCallLoggerConfig.DEFAULT;
+		return RestCallLoggerConfig.DEFAULT_NOOP;
 	}
 
 	void close() {

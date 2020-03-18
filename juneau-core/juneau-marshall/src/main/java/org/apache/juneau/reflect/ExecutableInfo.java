@@ -500,15 +500,19 @@ public abstract class ExecutableInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
-	public final boolean hasParamTypeParents(Class<?>...args) {
-		Class<?>[] pt = _getRawParamTypes();
-		if (pt.length == args.length) {
-			for (int i = 0; i < pt.length; i++)
-				if (! args[i].isAssignableFrom(pt[i]))
-					return false;
-			return true;
+	public final boolean hasMatchingParamTypes(Class<?>...args) {
+		ClassInfo[] pt = _getParamTypes();
+		if (pt.length != args.length)
+			return false;
+		for (int i = 0; i < pt.length; i++) {
+			boolean matched = false;
+			for (int j = 0; j < args.length; j++)
+				if (pt[i].isParentOfFuzzyPrimitives(args[j]))
+					matched = true;
+			if (! matched)
+				return false;
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -517,15 +521,19 @@ public abstract class ExecutableInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
-	public final boolean hasParamTypeParents(ClassInfo...args) {
-		Class<?>[] pt = _getRawParamTypes();
-		if (pt.length == args.length) {
-			for (int i = 0; i < pt.length; i++)
-				if (! args[i].inner().isAssignableFrom(pt[i]))
-					return false;
-			return true;
+	public final boolean hasMatchingParamTypes(ClassInfo...args) {
+		ClassInfo[] pt = _getParamTypes();
+		if (pt.length != args.length)
+			return false;
+		for (int i = 0; i < pt.length; i++) {
+			boolean matched = false;
+			for (int j = 0; j < args.length; j++)
+				if (pt[i].isParentOfFuzzyPrimitives(args[j].inner()))
+					matched = true;
+			if (! matched)
+				return false;
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -535,8 +543,33 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if this method has at most only this arguments in any order.
 	 */
 	public final boolean hasFuzzyParamTypes(Class<?>...args) {
-		return ClassUtils.fuzzyArgsMatch(_getRawParamTypes(), args) != -1;
+		return fuzzyArgsMatch(args) != -1;
 	}
+
+	/**
+	 * Returns how well this method matches the specified arg types.
+	 *
+	 * <p>
+	 * The number returned is the number of method arguments that match the passed in arg types.
+	 * <br>Returns <c>-1</c> if the method cannot take in one or more of the specified arguments.
+	 *
+	 * @param argTypes The arg types to check against.
+	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
+	 */
+	public int fuzzyArgsMatch(Class<?>... argTypes) {
+		int matches = 0;
+		outer: for (ClassInfo pi : getParamTypes()) {
+			for (Class<?> a : argTypes) {
+				if (pi.isParentOfFuzzyPrimitives(a)) {
+					matches++;
+					continue outer;
+				}
+			}
+			return -1;
+		}
+		return matches;
+	}
+
 
 	/**
 	 * Returns <jk>true</jk> if this method has at most only this arguments in any order.
@@ -545,7 +578,31 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if this method has at most only this arguments in any order.
 	 */
 	public boolean hasFuzzyParamTypes(ClassInfo...args) {
-		return ClassUtils.fuzzyArgsMatch(_getRawParamTypes(), args) != -1;
+		return fuzzyArgsMatch(args) != -1;
+	}
+
+	/**
+	 * Returns how well this method matches the specified arg types.
+	 *
+	 * <p>
+	 * The number returned is the number of method arguments that match the passed in arg types.
+	 * <br>Returns <c>-1</c> if the method cannot take in one or more of the specified arguments.
+	 *
+	 * @param argTypes The arg types to check against.
+	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
+	 */
+	public int fuzzyArgsMatch(ClassInfo... argTypes) {
+		int matches = 0;
+		outer: for (ClassInfo pi : getParamTypes()) {
+			for (ClassInfo a : argTypes) {
+				if (pi.isParentOfFuzzyPrimitives(a)) {
+					matches++;
+					continue outer;
+				}
+			}
+			return -1;
+		}
+		return matches;
 	}
 
 	/**

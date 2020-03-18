@@ -38,108 +38,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified argument types are valid for the specified parameter types.
-	 *
-	 * @param paramTypes The parameters types specified on a method.
-	 * @param argTypes The class types of the arguments being passed to the method.
-	 * @return <jk>true</jk> if the arguments match the parameters.
-	 */
-	public static boolean argsMatch(Class<?>[] paramTypes, Class<?>[] argTypes) {
-		if (paramTypes.length == argTypes.length) {
-			for (int i = 0; i < paramTypes.length; i++)
-				if (! ClassInfo.of(paramTypes[i]).isParentOf(argTypes[i]))
-					return false;
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified argument types are valid for the specified parameter types.
-	 *
-	 * @param paramTypes The parameters types specified on a method.
-	 * @param argTypes The class types of the arguments being passed to the method.
-	 * @return <jk>true</jk> if the arguments match the parameters.
-	 */
-	public static boolean argsMatch(List<ClassInfo> paramTypes, Class<?>[] argTypes) {
-		if (paramTypes.size() == argTypes.length) {
-			for (int i = 0; i < paramTypes.size(); i++)
-				if (! paramTypes.get(i).isParentOf(argTypes[i]))
-					return false;
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Returns a number representing the number of arguments that match the specified parameters.
-	 *
-	 * @param paramTypes The parameters types specified on a method.
-	 * @param argTypes The class types of the arguments being passed to the method.
-	 * @return The number of matching arguments, or <c>-1</c> a parameter was found that isn't in the list of args.
-	 */
-	public static int fuzzyArgsMatch(Class<?>[] paramTypes, Class<?>... argTypes) {
-		int matches = 0;
-		outer: for (Class<?> p : paramTypes) {
-			ClassInfo pi = ClassInfo.of(p).getWrapperInfoIfPrimitive();
-			for (Class<?> a : argTypes) {
-				ClassInfo ai = ClassInfo.of(a).getWrapperInfoIfPrimitive();
-				if (pi.isParentOf(ai.inner())) {
-					matches++;
-					continue outer;
-				}
-			}
-			return -1;
-		}
-		return matches;
-	}
-
-	/**
-	 * Returns a number representing the number of arguments that match the specified parameters.
-	 *
-	 * @param paramTypes The parameters types specified on a method.
-	 * @param argTypes The class types of the arguments being passed to the method.
-	 * @return The number of matching arguments, or <c>-1</c> a parameter was found that isn't in the list of args.
-	 */
-	public static int fuzzyArgsMatch(Class<?>[] paramTypes, ClassInfo... argTypes) {
-		int matches = 0;
-		outer: for (Class<?> p : paramTypes) {
-			ClassInfo pi = ClassInfo.of(p).getWrapperInfoIfPrimitive();
-			for (ClassInfo a : argTypes) {
-				ClassInfo ai = a.getWrapperInfoIfPrimitive();
-				if (pi.isParentOf(ai.inner())) {
-					matches++;
-					continue outer;
-				}
-			}
-			return -1;
-		}
-		return matches;
-	}
-
-	/**
-	 * Returns a number representing the number of arguments that match the specified parameters.
-	 *
-	 * @param paramTypes The parameters types specified on a method.
-	 * @param argTypes The class types of the arguments being passed to the method.
-	 * @return The number of matching arguments, or <c>-1</c> a parameter was found that isn't in the list of args.
-	 */
-	public static int fuzzyArgsMatch(List<ClassInfo> paramTypes, Class<?>... argTypes) {
-		int matches = 0;
-		outer: for (ClassInfo p : paramTypes) {
-			p = p.getWrapperInfoIfPrimitive();
-			for (Class<?> a : argTypes) {
-				if (p.isParentOf(a)) {
-					matches++;
-					continue outer;
-				}
-			}
-			return -1;
-		}
-		return matches;
-	}
-
-	/**
 	 * Returns the class types for the specified arguments.
 	 *
 	 * @param args The objects we're getting the classes of.
@@ -221,6 +119,11 @@ public final class ClassUtils {
 		if (c2 instanceof Class) {
 			try {
 				ClassInfo c3 = ClassInfo.of((Class<?>)c2);
+
+				MethodInfo mi = c3.getStaticCreator(args);
+				if (mi != null)
+					return mi.invoke(null, args);
+
 				if (c3.isInterface() || c3.isAbstract())
 					return null;
 
@@ -239,6 +142,10 @@ public final class ClassUtils {
 
 				// Finally use fuzzy matching.
 				if (fuzzyArgs) {
+					mi = c3.getStaticCreatorFuzzy(args);
+					if (mi != null)
+						return mi.invoke(null, getMatchingArgs(mi.getParamTypes(), args));
+
 					con = c3.getPublicConstructorFuzzy(args);
 					if (con != null)
 						return con.<T>invoke(getMatchingArgs(con.getParamTypes(), args));

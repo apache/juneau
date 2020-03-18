@@ -12,15 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.dto.swagger.ui.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.plaintext.*;
@@ -103,9 +98,7 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 
 	// Basic page navigation links.
 	navlinks={
-		"up: request:/..",
-		"options: servlet:/?method=OPTIONS",
-		"stats: servlet:/stats"
+		"up: request:/.."
 	},
 
 	// Default stylesheet to use for the page.
@@ -124,92 +117,9 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 	// By default, table cell contents should not wrap.
 	nowrap="true"
 )
-@JsonSchemaConfig(
-	// Add descriptions to the following types when not specified:
-	addDescriptionsTo="bean,collection,array,map,enum",
-	// Add x-example to the following types:
-	addExamplesTo="bean,collection,array,map",
-	// Don't generate schema information on the Swagger bean itself or HTML beans.
-	ignoreTypes="Swagger,org.apache.juneau.dto.html5.*",
-	// Use $ref references for bean definitions to reduce duplication in Swagger.
-	useBeanDefs="true"
-)
 @BeanConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
-	ignoreUnknownBeanProperties="true",
-	// POJO swaps to apply to all serializers/parsers on this method.
-	pojoSwaps={
-		// Use the SwaggerUI swap when rendering Swagger beans.
-		// This is a per-media-type swap that only applies to text/html requests.
-		SwaggerUI.class
-	}
+	ignoreUnknownBeanProperties="true"
 )
 @SuppressWarnings("deprecation")
-public interface BasicRestConfig {
-
-	/**
-	 * [OPTIONS /*] - Show resource options.
-	 *
-	 * @param req The HTTP request.
-	 * @return A bean containing the contents for the OPTIONS page.
-	 */
-	@RestMethod(name=OPTIONS, path="/*",
-		summary="Swagger documentation",
-		description="Swagger documentation for this resource."
-	)
-	@HtmlDocConfig(
-		// Should override config annotations defined on class.
-		rank=10,
-		// Override the nav links for the swagger page.
-		navlinks={
-			"back: servlet:/",
-			"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"
-		},
-		// Never show aside contents of page inherited from class.
-		aside="NONE"
-	)
-	public Swagger getOptions(RestRequest req);
-
-	/**
-	 * [* /error] - Error occurred.
-	 *
-	 * <p>
-	 * Servlet chains will often automatically redirect to <js>"/error"</js> when any sort of error condition occurs
-	 * (such as failed authentication) and will set appropriate response parameters (such as an <c>WWW-Authenticate</c>
-	 * response header).
-	 *
-	 * <p>
-	 * These responses should be left as-is without any additional processing.
-	 */
-	@RestMethod(name=ANY, path="/error",
-		summary="Error occurred",
-		description="An error occurred during handling of the request."
-	)
-	public void error();
-
-	/**
-	 * [GET /stats] - Timing statistics.
-	 *
-	 * <p>
-	 * Timing statistics for method invocations on this resource.
-	 *
-	 * @param req The HTTP request.
-	 * @return A collection of timing statistics for each annotated method on this resource.
-	 */
-	@RestMethod(name=GET, path="/stats",
-		summary="Timing statistics",
-		description="Timing statistics for method invocations on this resource."
-	)
-	@HtmlDocConfig(
-		// Should override config annotations defined on class.
-		rank=10,
-		// Override the nav links for the swagger page.
-		navlinks={
-			"back: servlet:/",
-			"json: servlet:/stats?Accept=text/json&plainText=true"
-		},
-		// Never show aside contents of page inherited from class.
-		aside="NONE"
-	)
-	public RestContextStats getStats(RestRequest req);
-}
+public interface BasicRestConfig {}

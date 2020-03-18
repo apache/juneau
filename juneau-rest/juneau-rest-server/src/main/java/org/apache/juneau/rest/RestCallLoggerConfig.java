@@ -30,7 +30,7 @@ public class RestCallLoggerConfig {
 	/**
 	 * Default empty logging config.
 	 */
-	public static final RestCallLoggerConfig DEFAULT = RestCallLoggerConfig.create().build();
+	public static final RestCallLoggerConfig DEFAULT_NOOP = RestCallLoggerConfig.create().build();
 
 	/**
 	 * Default debug logging config.

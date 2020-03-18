@@ -166,64 +166,134 @@
 			<li class='jic'>{@link oaj.utils.ClasspathResourceFinder} - Normally defined through {@link oajr.annotation.Rest#classpathResourceFinder() @Rest.classpathResourceFinder()}.
 		</ul>
 	<li>
-		{@link oajr.RestServlet} now implements the {@link oajr.RestCallHandler}, {@link oajr.RestInfoProvider}, and {@link oajr.RestCallLogger}
-		interfaces directly and provides the same functionality as {@link oajr.BasicRestCallHandler}, {@link oajr.BasicRestInfoProvider}, and
-		{@link oajr.BasicRestCallLogger}.  This makes it easier to tweak these methods without having to implement your own classes.
+		{@link oajr.RestServlet} and {@link oajr.BasicRest} now implement the {@link oajr.RestCallHandler}, {@link oajr.RestInfoProvider}, {@link oajr.RestCallLogger}, 
+		and {@link oaj.utils.ClasspathResourceFinder} interfaces directly and provides the same functionality as {@link oajr.BasicRestCallHandler}, 
+		{@link oajr.BasicRestInfoProvider}, {@link oajr.BasicRestCallLogger}, and {@link oaj.utils.ClasspathResourceFinderBasic}.  
+		
+		This makes it easier to tweak these methods without having to implement your own classes.
 		<br>The methods added for {@link oajr.RestCallHandler} are:
 		<ul>
-			<li class='jac'>{@link oaj.RestServlet}
+			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
-				<li class='jm'>{@link oaj.RestServlet#execute(HttpServletRequest, HttpServletResponse) execute(HttpServletRequest, HttpServletResponse)}
-				<li class='jm'>{@link oaj.RestServlet#createCall(HttpServletRequest, HttpServletResponse) createCall(HttpServletRequest, HttpServletResponse)}
-				<li class='jm'>{@link oaj.RestServlet#createRequest(RestCall) createRequest(RestCall)}
-				<li class='jm'>{@link oaj.RestServlet#createResponse(RestCall) createResponse(RestCall)}
-				<li class='jm'>{@link oaj.RestServlet#handleResponse(RestCall) handleResponse(RestCall)}
-				<li class='jm'>{@link oaj.RestServlet#handleNotFound(RestCall) handleNotFound(RestCall)}
-				<li class='jm'>{@link oaj.RestServlet#handleError(RestCall,Throwable) handleError(RestCall,Throwable)}
-				<li class='jm'>{@link oaj.RestServlet#convertThrowable(Throwable) throwable(Throwable)}
-				<li class='jm'>{@link oaj.RestServlet#getSessionObjects(RestRequest req, RestResponse res) getSessionObjects(RestRequest,RestResponse)}
+				<li class='jm'>{@link oajr.RestServlet#execute(HttpServletRequest, HttpServletResponse) execute(HttpServletRequest, HttpServletResponse)}
+				<li class='jm'>{@link oajr.RestServlet#createCall(HttpServletRequest, HttpServletResponse) createCall(HttpServletRequest, HttpServletResponse)}
+				<li class='jm'>{@link oajr.RestServlet#createRequest(RestCall) createRequest(RestCall)}
+				<li class='jm'>{@link oajr.RestServlet#createResponse(RestCall) createResponse(RestCall)}
+				<li class='jm'>{@link oajr.RestServlet#handleResponse(RestCall) handleResponse(RestCall)}
+				<li class='jm'>{@link oajr.RestServlet#handleNotFound(RestCall) handleNotFound(RestCall)}
+				<li class='jm'>{@link oajr.RestServlet#handleError(RestCall,Throwable) handleError(RestCall,Throwable)}
+				<li class='jm'>{@link oajr.RestServlet#convertThrowable(Throwable) throwable(Throwable)}
+				<li class='jm'>{@link oajr.RestServlet#getSessionObjects(RestRequest req, RestResponse res) getSessionObjects(RestRequest,RestResponse)}
+			</ul>
+			<li class='jac'>{@link oajr.BasicRest}
+			<ul>
+				<li class='jm'>{@link oajr.BasicRest#execute(HttpServletRequest, HttpServletResponse) execute(HttpServletRequest, HttpServletResponse)}
+				<li class='jm'>{@link oajr.BasicRest#createCall(HttpServletRequest, HttpServletResponse) createCall(HttpServletRequest, HttpServletResponse)}
+				<li class='jm'>{@link oajr.BasicRest#createRequest(RestCall) createRequest(RestCall)}
+				<li class='jm'>{@link oajr.BasicRest#createResponse(RestCall) createResponse(RestCall)}
+				<li class='jm'>{@link oajr.BasicRest#handleResponse(RestCall) handleResponse(RestCall)}
+				<li class='jm'>{@link oajr.BasicRest#handleNotFound(RestCall) handleNotFound(RestCall)}
+				<li class='jm'>{@link oajr.BasicRest#handleError(RestCall,Throwable) handleError(RestCall,Throwable)}
+				<li class='jm'>{@link oajr.BasicRest#convertThrowable(Throwable) throwable(Throwable)}
+				<li class='jm'>{@link oajr.BasicRest#getSessionObjects(RestRequest req, RestResponse res) getSessionObjects(RestRequest,RestResponse)}
 			</ul>
 		</ul>
 		<br>The methods added for {@link oajr.RestInfoProvider} are:
 		<ul>
-			<li class='jac'>{@link oaj.RestServlet}
+			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
-				<li class='jm'>{@link oaj.RestServlet#getSwagger(RestRequest) getSwagger(RestRequest)}
-				<li class='jm'>{@link oaj.RestServlet#getSiteName(RestRequest) getSiteName(RestRequest)}
-				<li class='jm'>{@link oaj.RestServlet#getTitle(RestRequest) getTitle(RestRequest)}
-				<li class='jm'>{@link oaj.RestServlet#getDescription(RestRequest) getDescription(RestRequest)}
-				<li class='jm'>{@link oaj.RestServlet#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
-				<li class='jm'>{@link oaj.RestServlet#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
+				<li class='jm'>{@link oajr.RestServlet#getSwagger(RestRequest) getSwagger(RestRequest)}
+				<li class='jm'>{@link oajr.RestServlet#getSiteName(RestRequest) getSiteName(RestRequest)}
+				<li class='jm'>{@link oajr.RestServlet#getTitle(RestRequest) getTitle(RestRequest)}
+				<li class='jm'>{@link oajr.RestServlet#getDescription(RestRequest) getDescription(RestRequest)}
+				<li class='jm'>{@link oajr.RestServlet#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
+				<li class='jm'>{@link oajr.RestServlet#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
+			</ul>
+			<li class='jac'>{@link oajr.BasicRest}
+			<ul>
+				<li class='jm'>{@link oajr.BasicRest#getSwagger(RestRequest) getSwagger(RestRequest)}
+				<li class='jm'>{@link oajr.BasicRest#getSiteName(RestRequest) getSiteName(RestRequest)}
+				<li class='jm'>{@link oajr.BasicRest#getTitle(RestRequest) getTitle(RestRequest)}
+				<li class='jm'>{@link oajr.BasicRest#getDescription(RestRequest) getDescription(RestRequest)}
+				<li class='jm'>{@link oajr.BasicRest#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
+				<li class='jm'>{@link oajr.BasicRest#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
 			</ul>
 		</ul>
 		<br>The methods added for {@link oajr.RestCallLogger} are:
 		<ul>
-			<li class='jac'>{@link oaj.RestServlet}
+			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
-				<li class='jm'>{@link oaj.RestServlet#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
+				<li class='jm'>{@link oajr.RestServlet#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
+			</ul>
+			<li class='jac'>{@link oajr.BasicRest}
+			<ul>
+				<li class='jm'>{@link oajr.BasicRest#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
 			</ul>
 		</ul>
 		<br>The methods added for {@link oaj.utils.ClassspathResourceFinder} are:
 		<ul>
-			<li class='jac'>{@link oaj.RestServlet}
+			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
-				<li class='jm'>{@link oaj.RestServlet#findResource(Class,String,Locale) findResource(Class,String,Locale)}
+				<li class='jm'>{@link oajr.RestServlet#findResource(Class,String,Locale) findResource(Class,String,Locale)}
+			</ul>
+			<li class='jac'>{@link oajr.BasicRest}
+			<ul>
+				<li class='jm'>{@link oajr.BasicRest#findResource(Class,String,Locale) findResource(Class,String,Locale)}
 			</ul>
 		</ul>
 	<li>
-		Added the following convenience hook methods on the {@link RestServlet} class:
+		Added the following convenience hook methods on the {@link oajr.RestServlet} and {@link oajr.BasicRest} classes:
 		<ul>
-			<li class='jac'>{@link oaj.RestServlet}
+			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
-				<li class='jm'>{@link oaj.RestServlet#onInit(RestContextBuilder) onInit(RestContextBuilder)}
-				<li class='jm'>{@link oaj.RestServlet#onPostInit(RestContext) onPostInit(RestContext)}
-				<li class='jm'>{@link oaj.RestServlet#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
-				<li class='jm'>{@link oaj.RestServlet#onDestroy(RestContext) onDestroy(RestContext)}
-				<li class='jm'>{@link oaj.RestServlet#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)}
-				<li class='jm'>{@link oaj.RestServlet#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)}
-				<li class='jm'>{@link oaj.RestServlet#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
-				<li class='jm'>{@link oaj.RestServlet#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
+				<li class='jm'>{@link oajr.RestServlet#onInit(RestContextBuilder) onInit(RestContextBuilder)}
+				<li class='jm'>{@link oajr.RestServlet#onPostInit(RestContext) onPostInit(RestContext)}
+				<li class='jm'>{@link oajr.RestServlet#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
+				<li class='jm'>{@link oajr.RestServlet#onDestroy(RestContext) onDestroy(RestContext)}
+				<li class='jm'>{@link oajr.RestServlet#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)}
+				<li class='jm'>{@link oajr.RestServlet#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)}
+				<li class='jm'>{@link oajr.RestServlet#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
+				<li class='jm'>{@link oajr.RestServlet#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
 			</ul>
+			<li class='jac'>{@link oajr.BasicRest}
+			<ul>
+				<li class='jm'>{@link oajr.BasicRest#onInit(RestContextBuilder) onInit(RestContextBuilder)}
+				<li class='jm'>{@link oajr.BasicRest#onPostInit(RestContext) onPostInit(RestContext)}
+				<li class='jm'>{@link oajr.BasicRest#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
+				<li class='jm'>{@link oajr.BasicRest#onDestroy(RestContext) onDestroy(RestContext)}
+				<li class='jm'>{@link oajr.BasicRest#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)}
+				<li class='jm'>{@link oajr.BasicRest#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)}
+				<li class='jm'>{@link oajr.BasicRest#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
+				<li class='jm'>{@link oajr.BasicRest#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
+			</ul>
+		</ul>
+	<li>
+		New {@link Rest#debugOn() @Rest(debugOn)} annotation for turning on debug mode using class/method identifiers:
+		
+		<h5 class='figure'>Example:</h5>
+		<p class='bcode w800'>
+	<jc>// Turn on debug per-request on the class and always on the doX() method</jc>.
+	<ja>@Rest</ja>(
+		debugOn=<js>"MyResource=per-request,Mysource.doX=true"</js>  <jc>// Typically defined via system or env property</jc>.
+	)
+	<jk>public class</jk> MyResource {
+
+		<ja>@RestMethod</ja>
+		<jk>public void</jk> String doX() {
+			...
+		}
+		 </p>
+	<li>
+		{@link oajr.BasicRestConfig} has been broken up into {@link oajr.BasicRestConfig} and {@link oajr.BasicRestMethods} so that
+		you're not forced to implement methods such as <c>getOptions()</c> and <c>getStats()</c> if you're implementing the interface
+		to configure your REST class.
+	<li>
+		Any of the following classes can now be instantiated with <c><jk>public static</jk> <jsm>create</jsm>()</c> methods:
+		<ul>
+			<li class='jc'>{@link oajr.RestCallHandler}
+			<li class='jc'>{@link oajr.RestCallLogger}
+			<li class='jc'>{@link oajr.RestInfoProvider}
+			<li class='jc'>{@link oaj.utils.ClasspathResourceFinder}
 		</ul>
 </ul>
 

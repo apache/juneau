@@ -464,10 +464,21 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
+	 * 		The default call handler if not specified is {@link BasicRestCallHandler}.
+	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link RestCallHandler} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
+	 * 		The {@link RestServlet} class itself implements the {@link RestCallHandler} interface with the same
+	 * 		functionality as {@link BasicRestCallHandler} that gets used if not overridden by this annotation.
+	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
+	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -537,6 +548,28 @@ public final class RestContext extends BeanContext {
 	 * 	}
 	 * </p>
 	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default call logger if not specified is {@link BasicRestCallLogger}.
+	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link RestCallLogger} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
+	 * 		The {@link RestServlet} class itself implements the {@link RestCallLogger} interface with the same
+	 * 		functionality as {@link BasicRestCallLogger} that gets used if not overridden by this annotation.
+	 * 		<br>Subclasses can also alter the behavior by overriding this method.
+	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
@@ -551,7 +584,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_callLoggerConfig REST_callLoggerConfig}
 	 * 	<li><b>Name:</b>  <js>"RestContext.callLoggerConfig.o"</js>
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.RestCallLoggerConfig}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestCallLoggerConfig#DEFAULT}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestCallLoggerConfig#DEFAULT_NOOP}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -1033,9 +1066,45 @@ public final class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		Request/response messages are automatically logged always or per request.
 	 * </ul>
 	 */
 	public static final String REST_debug = PREFIX + ".debug.s";
+
+	/**
+	 * Configuration property:  Debug mode on specified classes/methods.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_debugOn REST_debugOn}
+	 * 	<li><b>Name:</b>  <js>"RestContext.debugOn.s"</js>
+	 * 	<li><b>Data type:</b>  <c>String</c> (comma-delimited)
+	 * 	<li><b>System property:</b>  <c>RestContext.debugOn</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DEBUGON</c>
+	 * 	<li><b>Default:</b>  Empty string
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#debugOn()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debugOn(String)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Enables the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		Request/response messages are automatically logged always or per request.
+	 * </ul>
+	 */
+	public static final String REST_debugOn = PREFIX + ".debugOn.s";
 
 	/**
 	 * Configuration property:  Default character encoding.
@@ -1362,10 +1431,21 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
+	 * 		The default info provider if not specified is {@link BasicRestInfoProvider}.
+	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link RestInfoProvider} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
+	 * 		The {@link RestServlet} class itself implements the {@link RestInfoProvider} interface with the same
+	 * 		functionality as {@link BasicRestInfoProvider} that gets used if not overridden by this annotation.
+	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
+	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -2362,6 +2442,8 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -3547,6 +3629,8 @@ public final class RestContext extends BeanContext {
 	private final ThreadLocal<RestRequest> req = new ThreadLocal<>();
 	private final ThreadLocal<RestResponse> res = new ThreadLocal<>();
 
+	private final ReflectionMap<Enablement> debugEnablement;
+
 	/**
 	 * Constructor.
 	 *
@@ -3634,8 +3718,31 @@ public final class RestContext extends BeanContext {
 			allowedMethodHeaders = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodHeaders, ""));
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces, false);
 			useStackTraceHashes = getBooleanProperty(REST_useStackTraceHashes, true);
-			debug = getInstanceProperty(REST_debug, Enablement.class, Enablement.FALSE);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
+
+			ReflectionMap.Builder<Enablement> deb = ReflectionMap.create(Enablement.class);
+			for (String s : split(getStringProperty(REST_debugOn, ""))) {
+				s = s.trim();
+				if (! s.isEmpty()) {
+					int i = s.indexOf('=');
+					if (i == -1)
+						deb.append(s.trim(), Enablement.TRUE);
+					else
+						deb.append(s.substring(0, i).trim(), Enablement.fromString(s.substring(i+1).trim()));
+				}
+			}
+
+			Enablement de = getInstanceProperty(REST_debug, Enablement.class, Enablement.FALSE);
+			if (de != null)
+				deb.append(rci.getFullName(), de);
+			for (MethodInfo mi : rci.getPublicMethods())
+				for (RestMethod a : mi.getAnnotations(RestMethod.class))
+					if (a != null && ! a.debug().isEmpty())
+						deb.append(mi.getFullName(), Enablement.fromString(a.debug()));
+
+			this.debugEnablement = deb.build();
+
+			this.debug = debugEnablement.find(rci.inner(), Enablement.class).orElse(Enablement.FALSE);
 
 			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], resourceResolver, this);
 
@@ -3654,17 +3761,13 @@ public final class RestContext extends BeanContext {
 
 			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, NoOpRestLogger.class, resourceResolver, this);
 
-			if (debug == Enablement.TRUE) {
-				this.callLoggerConfig = RestCallLoggerConfig.DEFAULT_DEBUG;
-			} else {
-				Object clc = getProperty(REST_callLoggerConfig);
-				if (clc instanceof RestCallLoggerConfig)
-					this.callLoggerConfig = (RestCallLoggerConfig)clc;
-				else if (clc instanceof ObjectMap)
-					this.callLoggerConfig = RestCallLoggerConfig.create().apply((ObjectMap)clc).build();
-				else
-					this.callLoggerConfig = RestCallLoggerConfig.DEFAULT;
-			}
+			Object clc = getProperty(REST_callLoggerConfig);
+			if (clc instanceof RestCallLoggerConfig)
+				this.callLoggerConfig = (RestCallLoggerConfig)clc;
+			else if (clc instanceof ObjectMap)
+				this.callLoggerConfig = RestCallLoggerConfig.create().apply((ObjectMap)clc).build();
+			else
+				this.callLoggerConfig = RestCallLoggerConfig.DEFAULT_NOOP;
 
 			this.stackTraceDb = new StackTraceDatabase(callLoggerConfig.getStackTraceHashingTimeout(), RestMethodContext.class);
 
@@ -4721,7 +4824,7 @@ public final class RestContext extends BeanContext {
 	 * Returns <jk>true</jk> if debug mode is enabled on this resource.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #getDebug()}
+	 * 	<b>Deprecated</b> - Use {@link #getDebug(Method)}
 	 * </div>
 	 *
 	 * <ul class='seealso'>
@@ -4737,12 +4840,15 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the debug setting on this context.
+	 * Returns the debug setting on this context for the specified method.
 	 *
-	 * @return The debug setting on this context.
+	 * @param method The java method.
+	 * @return The debug setting on this context or <jk>null</jk> not specified for this method.
 	 */
-	public Enablement getDebug() {
-		return debug;
+	public Enablement getDebug(Method method) {
+		if (method == null)
+			return null;
+		return debugEnablement.find(method).orElse(null);
 	}
 
 	/**
@@ -5315,6 +5421,10 @@ public final class RestContext extends BeanContext {
 		if (this.res.get() != null)
 			System.err.println("WARNING:  Thread-local response object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
 		this.res.set(res);
+	}
+
+	Enablement getDebug() {
+		return debug;
 	}
 
 	/**

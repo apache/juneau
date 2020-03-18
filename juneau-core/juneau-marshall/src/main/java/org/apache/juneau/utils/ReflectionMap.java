@@ -259,8 +259,18 @@ public class ReflectionMap<V> {
 			for (ClassEntry<V> e : classEntries)
 				if (e.matches(c))
 					if (ofType == null || ofType.isInstance(e.value))
-						return Optional.of(e.value);
+						return Optional.ofNullable(e.value);
 		return Optional.empty();
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified class.
+	 *
+	 * @param c The class to test for.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Class<?> c) {
+		return find(c, null);
 	}
 
 	/**
@@ -278,6 +288,16 @@ public class ReflectionMap<V> {
 	 * Finds all values in this map that matches the specified class.
 	 *
 	 * @param c The class to test for.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Class<?> c) {
+		return appendAll(c, null, null);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified class.
+	 *
+	 * @param c The class to test for.
 	 * @param ofType Only return objects of the specified type.
 	 * @param l The list to append values to.  Can be <jk>null</jk>.
 	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
@@ -287,7 +307,7 @@ public class ReflectionMap<V> {
 			l = AList.create();
 		if (! noClassEntries)
 			for (ClassEntry<V> e : classEntries)
-				if (e.matches(c))
+				if (e.matches(c) && e.value != null)
 					if (ofType == null || ofType.isInstance(e.value))
 						l.add(e.value);
 		return l;
@@ -305,8 +325,18 @@ public class ReflectionMap<V> {
 			for (MethodEntry<V> e : methodEntries)
 				if (e.matches(m))
 					if (ofType == null || ofType.isInstance(e.value))
-						return Optional.of(e.value);
+						return Optional.ofNullable(e.value);
 		return Optional.empty();
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified method.
+	 *
+	 * @param m The method to test for.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Method m) {
+		return find(m, null);
 	}
 
 	/**
@@ -324,6 +354,16 @@ public class ReflectionMap<V> {
 	 * Finds all values in this map that matches the specified method.
 	 *
 	 * @param m The method to test for.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Method m) {
+		return appendAll(m, null, null);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified method.
+	 *
+	 * @param m The method to test for.
 	 * @param ofType Only return objects of the specified type.
 	 * @param l The list to append values to.  Can be <jk>null</jk>.
 	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
@@ -333,7 +373,7 @@ public class ReflectionMap<V> {
 			l = AList.create();
 		if (! noMethodEntries)
 			for (MethodEntry<V> e : methodEntries)
-				if (e.matches(m))
+				if (e.matches(m) && e.value != null)
 					if (ofType == null || ofType.isInstance(e.value))
 						l.add(e.value);
 		return l;
@@ -351,8 +391,18 @@ public class ReflectionMap<V> {
 			for (FieldEntry<V> e : fieldEntries)
 				if (e.matches(f))
 					if (ofType == null || ofType.isInstance(e.value))
-						return Optional.of(e.value);
+						return Optional.ofNullable(e.value);
 		return Optional.empty();
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Field f) {
+		return find(f, null);
 	}
 
 	/**
@@ -370,6 +420,16 @@ public class ReflectionMap<V> {
 	 * Finds all values in this map that matches the specified field.
 	 *
 	 * @param f The field to test for.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Field f) {
+		return appendAll(f, null, null);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified field.
+	 *
+	 * @param f The field to test for.
 	 * @param ofType Only return objects of the specified type.
 	 * @param l The list to append values to.  Can be <jk>null</jk>.
 	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
@@ -379,7 +439,7 @@ public class ReflectionMap<V> {
 			l = AList.create();
 		if (! noFieldEntries)
 			for (FieldEntry<V> e : fieldEntries)
-				if (e.matches(f))
+				if (e.matches(f) && e.value != null)
 					if (ofType == null || ofType.isInstance(e.value))
 						l.add(e.value);
 		return l == null ? new ArrayList<>(0) : l;
@@ -397,8 +457,18 @@ public class ReflectionMap<V> {
 			for (ConstructorEntry<V> e : constructorEntries)
 				if (e.matches(c))
 					if (ofType == null || ofType.isInstance(e.value))
-						return Optional.of(e.value);
+						return Optional.ofNullable(e.value);
 		return Optional.empty();
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Constructor<?> c) {
+		return find(c, null);
 	}
 
 	/**
@@ -416,6 +486,16 @@ public class ReflectionMap<V> {
 	 * Finds all values in this map that matches the specified constructor.
 	 *
 	 * @param c The constructor to test for.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Constructor<?> c) {
+		return appendAll(c, null, null);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified constructor.
+	 *
+	 * @param c The constructor to test for.
 	 * @param ofType Only return objects of the specified type.
 	 * @param l The list to append values to.  Can be <jk>null</jk>.
 	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
@@ -425,7 +505,7 @@ public class ReflectionMap<V> {
 			l = AList.create();
 		if (! noConstructorEntries)
 			for (ConstructorEntry<V> e : constructorEntries)
-				if (e.matches(c))
+				if (e.matches(c) && e.value != null)
 					if (ofType == null || ofType.isInstance(e.value))
 						l.add(e.value);
 		return l;

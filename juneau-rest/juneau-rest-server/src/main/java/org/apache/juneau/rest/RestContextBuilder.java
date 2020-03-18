@@ -664,7 +664,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link RestCallLoggerConfig#DEFAULT}.
+	 * 	<br>The default is {@link RestCallLoggerConfig#DEFAULT_NOOP}.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -868,6 +868,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		Request/response messages are automatically logged always or per request.
 	 * </ul>
 	 *
 	 * @param value The new value for this setting.
@@ -876,6 +878,29 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@ConfigurationProperty
 	public RestContextBuilder debug(Enablement value) {
 		return set(REST_debug, value);
+	}
+
+	/**
+	 * Configuration property:  Debug mode on specified classes/methods.
+	 *
+	 * Enables the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		Request/response messages are automatically logged.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_debugOn}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RestContextBuilder debugOn(String value) {
+		return set(REST_debugOn, value);
 	}
 
 	/**

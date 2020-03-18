@@ -21,6 +21,7 @@ import org.apache.juneau.annotation.*;
  *
  */
 @Bean(bpi="resource,methods")
+@SuppressWarnings("javadoc")
 public class StatusStats implements Comparable<StatusStats> {
 
 	private final Class<?> resource;

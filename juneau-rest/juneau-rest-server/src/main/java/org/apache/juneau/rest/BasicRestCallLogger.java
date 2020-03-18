@@ -50,9 +50,9 @@ public class BasicRestCallLogger implements RestCallLogger {
 	 */
 	public BasicRestCallLogger(RestContext context) {
 		this.context = context;
-		this.loggerName = context.getResource().getClass().getName();
+		this.loggerName = context == null ? getClass().getName() : context.getResource().getClass().getName();
 		this.logger = Logger.getLogger(getLoggerName());
-		this.stackTraceDb = context.getStackTraceDb();
+		this.stackTraceDb = context == null ? null : context.getStackTraceDb();
 	}
 
 	/**
@@ -102,7 +102,8 @@ public class BasicRestCallLogger implements RestCallLogger {
 	 * @return This object (for method chaining).
 	 */
 	public BasicRestCallLogger resetStackTraces() {
-		stackTraceDb.reset();
+		if (stackTraceDb != null)
+			stackTraceDb.reset();
 		return this;
 	}
 
@@ -229,7 +230,21 @@ public class BasicRestCallLogger implements RestCallLogger {
 			sb.append("\n=== END ======================================================================");
 		}
 
-		getLogger().log(level, sb.toString(), e);
+		log(level, sb.toString(), e);
+	}
+
+	/**
+	 * Logs the specified message to the logger.
+	 *
+	 * <p>
+	 * Subclasses can override this method to capture messages being sent to the logger.
+	 *
+	 * @param level The log level.
+	 * @param msg The log message.
+	 * @param e The exception.
+	 */
+	protected void log(Level level, String msg, Throwable e) {
+		getLogger().log(level, msg, e);
 	}
 
 	private byte[] getRequestBody(HttpServletRequest req) {
@@ -245,7 +260,7 @@ public class BasicRestCallLogger implements RestCallLogger {
 	}
 
 	private StackTraceInfo getStackTraceInfo(RestCallLoggerConfig config, Throwable e) {
-		if (e == null || ! config.isUseStackTraceHashing())
+		if (e == null || stackTraceDb == null || ! config.isUseStackTraceHashing())
 			return null;
 		stackTraceDb.add(e);
 		return stackTraceDb.getStackTraceInfo(e);

@@ -222,16 +222,16 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		}
 
 		if (! a.method().isEmpty())
-			psb.set(RESTMETHOD_httpMethod, a.method());
+			psb.set(RESTMETHOD_httpMethod, string(a.method()));
 
 		if (! a.name().isEmpty())
-			psb.set(RESTMETHOD_httpMethod, a.name());
+			psb.set(RESTMETHOD_httpMethod, string(a.name()));
 
 		if (a.priority() != 0)
 			psb.set(RESTMETHOD_priority, a.priority());
 
 		if (! a.debug().isEmpty())
-			psb.set(RESTMETHOD_debug, a.debug());
+			psb.set(RESTMETHOD_debug, string(a.debug()));
 
 		if (! AnnotationUtils.empty(a.logging())) {
 			Logging al = a.logging();

@@ -169,9 +169,22 @@ public @interface Rest {
 	 * 	<li>
 	 * 		The default call handler if not specified is {@link BasicRestCallHandler}.
 	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link RestCallHandler} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
 	 * 		The {@link RestServlet} class itself implements the {@link RestCallHandler} interface with the same
 	 * 		functionality as {@link BasicRestCallHandler} that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
+	 * 	<li>
+	 * 		The implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -202,9 +215,22 @@ public @interface Rest {
 	 * 	<li>
 	 * 		The default resource finder if not specified is {@link ClasspathResourceFinderBasic}.
 	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link ClasspathResourceFinder} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
 	 * 		The {@link RestServlet} class itself implements the {@link ClasspathResourceFinder} interface with the same
 	 * 		functionality as {@link ClasspathResourceFinderBasic} that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding this method.
+	 * 	<li>
+	 * 		The implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -405,9 +431,22 @@ public @interface Rest {
 	 * 	<li>
 	 * 		The default info provider if not specified is {@link BasicRestInfoProvider}.
 	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link RestInfoProvider} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
 	 * 		The {@link RestServlet} class itself implements the {@link RestInfoProvider} interface with the same
 	 * 		functionality as {@link BasicRestInfoProvider} that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
+	 * 	<li>
+	 * 		The implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -423,9 +462,22 @@ public @interface Rest {
 	 * 	<li>
 	 * 		The default call logger if not specified is {@link BasicRestCallLogger}.
 	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link RestCallLogger} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
 	 * 		The {@link RestServlet} class itself implements the {@link RestCallLogger} interface with the same
 	 * 		functionality as {@link BasicRestCallLogger} that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding this method.
+	 * 	<li>
+	 * 		The implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -574,7 +626,7 @@ public @interface Rest {
 	 * The typical usage is to define a path to a child resource relative to the parent resource.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bpcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@Rest</ja>(
 	 * 		children={ChildResource.<jk>class</jk>}
 	 * 	)
@@ -612,7 +664,7 @@ public @interface Rest {
 	 * Spring Boot initializer class:
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bpcode'>
+	 * <p class='bcode'>
 	 * 	<ja>@SpringBootApplication</ja>
 	 * 	<ja>@Controller</ja>
 	 * 	<jk>public class</jk> App {
@@ -647,7 +699,7 @@ public @interface Rest {
 	 * or access through the {@link RestRequest#getPathMatch()} method.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bpcode'>
+	 * <p class='bcode'>
 	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/myResource/{foo}/{bar}"</js>
 	 * 	)
@@ -789,6 +841,21 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * The resolver used for resolving child resources.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Unless overridden, resource resolvers are inherited from ascendant resources.
+	 * 	<li>
+	 * 		The implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_resourceResolver}
@@ -1287,6 +1354,8 @@ public @interface Rest {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		HTTP request/response bodies are cached in memory for logging purposes.
+	 * 	<li>
+	 * 		HTTP requests/responses are logged to the registered {@link RestCallLogger}.
 	 * </ul>
 	 *
 	 * <p>
@@ -1301,6 +1370,9 @@ public @interface Rest {
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		These debug settings can be overridden by the {@link Rest#debugOn()} annotation or at runtime by directly
+	 * 		calling {@link RestRequest#setDebug()}.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1308,4 +1380,121 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String debug() default "";
+
+	/**
+	 * Enable debug mode on specified classes/methods.
+	 *
+	 * <p>
+	 * Enables the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		HTTP request/response bodies are cached in memory for logging purposes on matching classes and methods.
+	 * 	<li>
+	 * 		HTTP requests/responses are logged to the registered {@link RestCallLogger}.
+	 * </ul>
+	 *
+	 * <p>
+	 * Consists of a comma-delimited list of strings of the following forms:
+	 * <ul>
+	 * 	<li><js>"class-identifier"</js> - Enable debug on the specified class.
+	 * 	<li><js>"class-identifier=[true|false|per-request]"</js> - Explicitly enable debug on the specified class.
+	 * 	<li><js>"method-identifier"</js> - Enable debug on the specified class.
+	 * 	<li><js>"method-identifier=[true|false|per-request]"</js> - Explicitly enable debug on the specified class.
+	 * </ul>
+	 *
+	 * <p>
+	 * Class identifiers can be any of the following forms:
+	 * <ul>
+	 * 	<li>Fully qualified:
+	 * 		<ul>
+	 * 			<li><js>"com.foo.MyClass"</js>
+	 * 		</ul>
+	 * 	<li>Fully qualified inner class:
+	 * 		<ul>
+	 * 			<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
+	 * 		</ul>
+	 * 	<li>Simple:
+	 * 		<ul>
+	 * 			<li><js>"MyClass"</js>
+	 * 		</ul>
+	 * 	<li>Simple inner:
+	 * 		<ul>
+	 * 			<li><js>"MyClass$Inner1$Inner2"</js>
+	 * 			<li><js>"Inner1$Inner2"</js>
+	 * 			<li><js>"Inner2"</js>
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <p>
+	 * Method identifiers can be any of the following forms:
+	 * <ul>
+	 * 	<li>Fully qualified with args:
+	 * 		<ul>
+	 * 			<li><js>"com.foo.MyClass.myMethod(String,int)"</js>
+	 * 			<li><js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js>
+	 * 			<li><js>"com.foo.MyClass.myMethod()"</js>
+	 * 		</ul>
+	 * 	<li>Fully qualified:
+	 * 		<ul>
+	 * 			<li><js>"com.foo.MyClass.myMethod"</js>
+	 * 		</ul>
+	 * 	<li>Simple with args:
+	 * 		<ul>
+	 * 			<li><js>"MyClass.myMethod(String,int)"</js>
+	 * 			<li><js>"MyClass.myMethod(java.lang.String,int)"</js>
+	 * 			<li><js>"MyClass.myMethod()"</js>
+	 * 		</ul>
+	 * 	<li>Simple:
+	 * 		<ul>
+	 * 			<li><js>"MyClass.myMethod"</js>
+	 * 		</ul>
+	 * 	<li>Simple inner class:
+	 * 		<ul>
+	 * 			<li><js>"MyClass$Inner1$Inner2.myMethod"</js>
+	 * 			<li><js>"Inner1$Inner2.myMethod"</js>
+	 * 			<li><js>"Inner2.myMethod"</js>
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Turn on debug per-request on the class and always on the doX() method</jc>.
+	 * 	<ja>@Rest</ja>(
+	 * 		debugOn=<js>"MyResource=per-request,Mysource.doX=true"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 *		<ja>@RestMethod</ja>
+	 *		<jk>public void</jk> String doX() {
+	 *			...
+	 *		}
+	 * </p>
+	 *
+	 * <p>
+	 * A more-typical scenario is to pull this setting from an external source such as system property or environment
+	 * variable:
+	 *
+	 * <h5 class='figure'>Example:</h5
+	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>(
+	 * 		debugOn=<js>"$E{DEBUG_ON_SETTINGS}"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		These debug settings override the settings define via {@link Rest#debug()} and {@link RestMethod#debug()}.
+	 * 	<li>
+	 * 		These debug settings can be overridden at runtime by directly calling {@link RestRequest#setDebug()}.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_debugOn}
+	 * </ul>
+	 */
+	String debugOn() default "";
 }

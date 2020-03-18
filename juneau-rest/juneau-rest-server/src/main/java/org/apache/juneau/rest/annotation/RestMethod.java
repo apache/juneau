@@ -174,6 +174,15 @@ public @interface RestMethod {
 	 * 		Request/response messages are automatically logged.
 	 * </ul>
 	 *
+	 * <p>
+	 * Possible values (case insensitive):
+	 * <ul>
+	 * 	<li><js>"true"</js> - Debug is enabled for all requests.
+	 * 	<li><js>"false"</js> - Debug is disabled for all requests.
+	 * 	<li><js>"per-request"</js> - Debug is enabled only for requests that have a <c class='snippet'>X-Debug: true</c> header.
+	 * 	<li><js>""</js> (or anything else) - Debug mode is inherited from class.
+	 * </ul>
+	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
@@ -181,7 +190,7 @@ public @interface RestMethod {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_debug}
+	 * 	<li class='jf'>{@link RestContext#REST_debug}
 	 * </ul>
 	 */
 	String debug() default "";

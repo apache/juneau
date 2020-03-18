@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.rest.Enablement.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -750,19 +751,15 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
 		this.supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 
-		this.debug = getInstanceProperty(RESTMETHOD_debug, Enablement.class, context.getDebug());
+		this.debug = context.getDebug(method);
 
-		if (debug == Enablement.TRUE) {
-			this.callLoggerConfig = RestCallLoggerConfig.DEFAULT_DEBUG;
-		} else {
-			Object clc = getProperty(RESTMETHOD_callLoggerConfig);
-			if (clc instanceof RestCallLoggerConfig)
-				this.callLoggerConfig = (RestCallLoggerConfig)clc;
-			else if (clc instanceof ObjectMap)
-				this.callLoggerConfig = RestCallLoggerConfig.create().parent(context.getCallLoggerConfig()).apply((ObjectMap)clc).build();
-			else
-				this.callLoggerConfig = context.getCallLoggerConfig();
-		}
+		Object clc = getProperty(RESTMETHOD_callLoggerConfig);
+		if (clc instanceof RestCallLoggerConfig)
+			this.callLoggerConfig = (RestCallLoggerConfig)clc;
+		else if (clc instanceof ObjectMap)
+			this.callLoggerConfig = RestCallLoggerConfig.create().parent(context.getCallLoggerConfig()).apply((ObjectMap)clc).build();
+		else
+			this.callLoggerConfig = context.getCallLoggerConfig();
 	}
 
 	ResponseBeanMeta getResponseBeanMeta(Object o) {
@@ -901,7 +898,24 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		context.preCall(req, res);
 
-		call.debug(req.isDebug()).loggerConfig(req.getCallLoggerConfig());
+		call.loggerConfig(callLoggerConfig);
+
+		if (debug == TRUE) {
+			call.debug(true);
+			call.loggerConfig(RestCallLoggerConfig.DEFAULT_DEBUG);
+		} else if (debug == FALSE) {
+			call.debug(false);
+			call.loggerConfig(RestCallLoggerConfig.DEFAULT_NOOP);
+		} else if (debug == PER_REQUEST) {
+			boolean b = "true".equalsIgnoreCase(req.getHeader("X-Debug"));
+			if (b) {
+				call.debug(true);
+				call.loggerConfig(RestCallLoggerConfig.DEFAULT_DEBUG);
+			} else {
+				call.debug(false);
+				call.loggerConfig(RestCallLoggerConfig.DEFAULT_NOOP);
+			}
+		}
 
 		Object[] args = new Object[methodParams.length];
 		for (int i = 0; i < methodParams.length; i++) {
@@ -921,6 +935,17 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			Object output;
 			try {
 				output = methodInvoker.invoke(context.getResource(), args);
+
+				// Handle manual call to req.setDebug().
+				Boolean debug = ObjectUtils.castOrNull(req.getAttribute("Debug"), Boolean.class);
+				if (debug == Boolean.TRUE) {
+					call.debug(true);
+					call.loggerConfig(RestCallLoggerConfig.DEFAULT_DEBUG);
+				} else if (debug == Boolean.FALSE) {
+					call.debug(false);
+					call.loggerConfig(RestCallLoggerConfig.DEFAULT_NOOP);
+				}
+
 				if (res.getStatus() == 0)
 					res.setStatus(200);
 				if (! method.getReturnType().equals(Void.TYPE)) {
@@ -956,26 +981,26 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		}
 		return SC_OK;
 	}
-
-	protected void addStatusCode(int code) {
-		AtomicInteger ai = statusCodes.get(code);
-		if (ai == null) {
-			synchronized(statusCodes) {
-				ai = new AtomicInteger();
-				statusCodes.putIfAbsent(code, ai);
-				ai = statusCodes.get(code);
-			}
-		}
-		ai.incrementAndGet();
-	}
-
-	protected Map<Integer,Integer> getStatusCodes() {
-		Map<Integer,Integer> m = new TreeMap<>();
-		for (Map.Entry<Integer,AtomicInteger> e : statusCodes.entrySet())
-			m.put(e.getKey(), e.getValue().get());
-		return m;
-	}
-
+//
+//	protected void addStatusCode(int code) {
+//		AtomicInteger ai = statusCodes.get(code);
+//		if (ai == null) {
+//			synchronized(statusCodes) {
+//				ai = new AtomicInteger();
+//				statusCodes.putIfAbsent(code, ai);
+//				ai = statusCodes.get(code);
+//			}
+//		}
+//		ai.incrementAndGet();
+//	}
+//
+//	protected Map<Integer,Integer> getStatusCodes() {
+//		Map<Integer,Integer> m = new TreeMap<>();
+//		for (Map.Entry<Integer,AtomicInteger> e : statusCodes.entrySet())
+//			m.put(e.getKey(), e.getValue().get());
+//		return m;
+//	}
+//
 	/*
 	 * compareTo() method is used to keep SimpleMethods ordered in the RestCallRouter list.
 	 * It maintains the order in which matches are made during requests.
@@ -1061,19 +1086,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	}
 
 	/**
-	 * Returns whether debug is enabled on this method.
-	 *
-	 * @return <jk>true</jk> if debug is enabled on this method.
-	 */
-	protected Enablement getDebug() {
-		return debug;
-	}
-
-	/**
 	 * @return The REST call logger config for this method.
 	 */
 	protected RestCallLoggerConfig getCallLoggerConfig() {
 		return callLoggerConfig;
+	}
+
+	Enablement getDebug() {
+		return debug;
 	}
 
 	@Override /* Object */

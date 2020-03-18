@@ -483,12 +483,12 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void hasArgParents() {
-		assertTrue(e_hasStringParam.hasParamTypeParents(String.class));
-		assertTrue(e_hasStringParam.hasParamTypeParents(CharSequence.class));
-		assertFalse(e_hasStringParam.hasParamTypeParents(StringBuilder.class));
-		assertFalse(e_hasStringParam.hasParamTypeParents(new Class[0]));
-		assertFalse(e_hasStringParam.hasParamTypeParents(String.class, String.class));
-		assertFalse(e_hasStringParam.hasParamTypeParents(long.class));
+		assertTrue(e_hasStringParam.hasMatchingParamTypes(String.class));
+		assertFalse(e_hasStringParam.hasMatchingParamTypes(CharSequence.class));
+		assertFalse(e_hasStringParam.hasMatchingParamTypes(StringBuilder.class));
+		assertFalse(e_hasStringParam.hasMatchingParamTypes(new Class[0]));
+		assertFalse(e_hasStringParam.hasMatchingParamTypes(String.class, String.class));
+		assertFalse(e_hasStringParam.hasMatchingParamTypes(long.class));
 	}
 
 	@Test

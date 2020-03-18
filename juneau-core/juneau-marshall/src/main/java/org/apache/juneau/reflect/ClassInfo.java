@@ -567,6 +567,66 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Find the public static creator method on this class.
+	 *
+	 * <p>
+	 * Must have the following signature where T is the exact outer class.
+	 * <p class='bcode w800'>
+	 * 	public static T create(...);
+	 * </p>
+	 *
+	 * <p>
+	 * Must be able to take in all arguments specified in any order.
+	 *
+	 * @param args The arguments to pass to the create method.
+	 * @return The static method, or <jk>null</jk> if it couldn't be found.
+	 */
+	public MethodInfo getStaticCreator(Object...args) {
+		if (c != null) {
+			Class<?>[] argTypes = ClassUtils.getClasses(args);
+			for (MethodInfo m : getPublicMethods()) {
+				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.getSimpleName().equals("create") && m.hasMatchingParamTypes(argTypes))
+					return m;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Find the public static creator method on this class.
+	 *
+	 * <p>
+	 * Must have the following signature where T is the exact outer class.
+	 * <p class='bcode w800'>
+	 * 	public static T create(...);
+	 * </p>
+	 *
+	 * <p>
+	 * Returned method can take in arguments in any order if they match.  The method is guaranteed to not require additional
+	 * arguments not specified.
+	 *
+	 * @param args The arguments to pass to the create method.
+	 * @return The static method, or <jk>null</jk> if it couldn't be found.
+	 */
+	public MethodInfo getStaticCreatorFuzzy(Object...args) {
+		int bestCount = -1;
+		MethodInfo bestMatch = null;
+		if (c != null) {
+			Class<?>[] argTypes = ClassUtils.getClasses(args);
+			for (MethodInfo m : getPublicMethods()) {
+				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.getSimpleName().equals("create")) {
+					int mn = m.fuzzyArgsMatch(argTypes);
+					if (mn > bestCount) {
+						bestCount = mn;
+						bestMatch = m;
+					}
+				}
+			}
+		}
+		return bestMatch;
+	}
+
+	/**
 	 * Find the public static method with the specified name and args.
 	 *
 	 * @param name The method name.
@@ -750,7 +810,7 @@ public final class ClassInfo {
 			ConstructorInfo bestMatch = null;
 			for (ConstructorInfo n : _getDeclaredConstructors()) {
 				if (vis.isVisible(n.inner())) {
-					int m = ClassUtils.fuzzyArgsMatch(n.getParamTypes(), argTypes);
+					int m = n.fuzzyArgsMatch(argTypes);
 					if (m > bestCount) {
 						bestCount = m;
 						bestMatch = n;
@@ -765,7 +825,7 @@ public final class ClassInfo {
 			List<ClassInfo> paramTypes = n.getParamTypes();
 			if (isMemberClass)
 				paramTypes = paramTypes.subList(1, paramTypes.size());
-			if (ClassUtils.argsMatch(paramTypes, argTypes) && vis.isVisible(n.inner()))
+			if (n.hasMatchingParamTypes(argTypes) && vis.isVisible(n.inner()))
 				return n;
 		}
 
@@ -1919,12 +1979,73 @@ public final class ClassInfo {
 	/**
 	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 *
+	 * <p>
+	 * Primitive classes are converted to wrapper classes and compared.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 		ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>).isParentOfFuzzyPrimitives(String.<jk>class</jk>);  <jc>// true</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(CharSequence.<jk>class</jk>).isParentOfFuzzyPrimitives(String.<jk>class</jk>);  <jc>// true</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>).isParentOfFuzzyPrimitives(CharSequence.<jk>class</jk>);  <jc>// false</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(<jk>int</jk>.<jk>class</jk>).isParentOfFuzzyPrimitives(Integer.<jk>class</jk>);  <jc>// true</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(Integer.<jk>class</jk>).isParentOfFuzzyPrimitives(<jk>int</jk>.<jk>class</jk>);  <jc>// true</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(Number.<jk>class</jk>).isParentOfFuzzyPrimitives(<jk>int</jk>.<jk>class</jk>);  <jc>// true</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(<jk>int</jk>.<jk>class</jk>).isParentOfFuzzyPrimitives(Number.<jk>class</jk>);  <jc>// false</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(<jk>int</jk>.<jk>class</jk>).isParentOfFuzzyPrimitives(<jk>long</jk>.<jk>class</jk>);  <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param child The child class.
+	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
+	 */
+	public boolean isParentOfFuzzyPrimitives(Class<?> child) {
+		if (c == null || child == null)
+			return false;
+		if (c.isAssignableFrom(child))
+			return true;
+		if (this.isPrimitive() || child.isPrimitive()) {
+			return this.getWrapperIfPrimitive().isAssignableFrom(of(child).getWrapperIfPrimitive());
+		}
+		return false;
+	}
+
+	/**
+	 * Same as {@link #isParentOfFuzzyPrimitives(Class)} but takes in a {@link ClassInfo}.
+	 *
+	 * @param child The child class.
+	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
+	 */
+	public boolean isParentOfFuzzyPrimitives(ClassInfo child) {
+		if (c == null || child == null)
+			return false;
+		if (c.isAssignableFrom(child.inner()))
+			return true;
+		if (this.isPrimitive() || child.isPrimitive()) {
+			return this.getWrapperIfPrimitive().isAssignableFrom(child.getWrapperIfPrimitive());
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
+	 *
 	 * @param child The child class.
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
 	public boolean isParentOf(Type child) {
 		if (child instanceof Class)
 			return isParentOf((Class<?>)child);
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
+	 *
+	 * @param child The child class.
+	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
+	 */
+	public boolean isParentOfFuzzyPrimitives(Type child) {
+		if (child instanceof Class)
+			return isParentOfFuzzyPrimitives((Class<?>)child);
 		return false;
 	}
 

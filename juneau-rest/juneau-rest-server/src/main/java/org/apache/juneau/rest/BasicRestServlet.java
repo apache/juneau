@@ -164,7 +164,7 @@ import org.apache.juneau.xml.*;
 		"stats: servlet:/stats"
 	}
 )
-public abstract class BasicRestServlet extends RestServlet implements BasicRestConfig {
+public abstract class BasicRestServlet extends RestServlet implements BasicRestConfig, BasicRestMethods {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -175,6 +175,18 @@ public abstract class BasicRestServlet extends RestServlet implements BasicRestC
 	 */
 	@Override /* BasicRestConfig */
 	public Swagger getOptions(RestRequest req) {
+		// Localized Swagger for this resource is available through the RestRequest object.
+		return req.getSwagger();
+	}
+
+	/**
+	 * [GET /options] - Show resource options.
+	 *
+	 * @param req The HTTP request.
+	 * @return A bean containing the contents for the OPTIONS page.
+	 */
+	@Override /* BasicRestConfig */
+	public Swagger getOptions2(RestRequest req) {
 		// Localized Swagger for this resource is available through the RestRequest object.
 		return req.getSwagger();
 	}

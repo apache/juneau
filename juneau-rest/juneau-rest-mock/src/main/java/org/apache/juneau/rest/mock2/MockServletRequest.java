@@ -1471,7 +1471,8 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 */
 	public MockServletRequest debug(boolean value) {
 		this.debug = value;
-		header("X-Debug", value ? true : null);
+		if (value)
+			header("X-Debug", true);
 		return this;
 	}
 

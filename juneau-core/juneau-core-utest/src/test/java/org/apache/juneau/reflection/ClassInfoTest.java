@@ -699,7 +699,7 @@ public class ClassInfoTest {
 		check("E1(int)", e1.getConstructor(Visibility.PRIVATE, int.class));
 		check(null, e1.getConstructor(Visibility.PUBLIC, int.class));
 		check("E3()", e3.getConstructor(Visibility.PUBLIC));
-		check("E4(ClassInfoTest)", e4.getConstructor(Visibility.PUBLIC));
+		check(null, e4.getConstructor(Visibility.PUBLIC));
 		check("E5()", e5.getConstructor(Visibility.PUBLIC));
 	}
 
@@ -2257,6 +2257,66 @@ public class ClassInfoTest {
 	@Test
 	public void getParameterType_nestedType() {
 		check("MM", mn.getParameterType(1, HashMap.class));
+	}
+
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// ClassInfo.getStaticCreator(Object...)
+	// ClassInfo.getStaticCreatorFuzzy(Object...)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class N1 {}
+	public static ClassInfo n1 = ClassInfo.of(N1.class);
+
+	@Test
+	public void n01_noCreators() {
+		assertNull(n1.getStaticCreator());
+		assertNull(n1.getStaticCreatorFuzzy());
+	}
+
+	public static class N2 {
+		public static N2 create() {return null;}
+	}
+	public static ClassInfo n2 = ClassInfo.of(N2.class);
+
+	@Test
+	public void n02_noArgCreator() {
+		assertNotNull(n2.getStaticCreator());
+		assertNotNull(n2.getStaticCreatorFuzzy());
+	}
+
+	public static class N3 {
+		public static N3 create(String foo, int bar) {return null;}
+	}
+	public static ClassInfo n3 = ClassInfo.of(N3.class);
+
+	@Test
+	public void n03_withArgCreators() {
+		assertNull(n3.getStaticCreator());
+		assertNull(n3.getStaticCreatorFuzzy());
+		assertNotNull(n3.getStaticCreator("foo", 123));
+		assertNotNull(n3.getStaticCreatorFuzzy("foo", 123));
+		assertNotNull(n3.getStaticCreator(123, "foo"));
+		assertNotNull(n3.getStaticCreatorFuzzy(123, "foo"));
+		assertNull(n3.getStaticCreator("foo", 123, new File(".")));
+		assertNotNull(n3.getStaticCreatorFuzzy("foo", 123, new File(".")));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// ClassInfo.isParentOfFuzzyPrimitives(Class)
+	// ClassInfo.isParentOfFuzzyPrimitives(Type)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	public void o01_isParentOfFuzzyPrimitives() {
+		assertTrue(ClassInfo.of(String.class).isParentOfFuzzyPrimitives(String.class));
+		assertTrue(ClassInfo.of(CharSequence.class).isParentOfFuzzyPrimitives(String.class));
+		assertFalse(ClassInfo.of(String.class).isParentOfFuzzyPrimitives(CharSequence.class));
+		assertTrue(ClassInfo.of(int.class).isParentOfFuzzyPrimitives(Integer.class));
+		assertTrue(ClassInfo.of(Integer.class).isParentOfFuzzyPrimitives(int.class));
+		assertTrue(ClassInfo.of(Number.class).isParentOfFuzzyPrimitives(int.class));
+		assertFalse(ClassInfo.of(int.class).isParentOfFuzzyPrimitives(Number.class));
+		assertFalse(ClassInfo.of(int.class).isParentOfFuzzyPrimitives(long.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

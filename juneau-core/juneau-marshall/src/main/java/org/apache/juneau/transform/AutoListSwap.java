@@ -142,7 +142,7 @@ public class AutoListSwap<T> extends PojoSwap<T,List<?>> {
 	private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {
 		return
 			cs.isNotDeprecated()
-			&& cs.hasParamTypeParents(rt)
+			&& cs.hasMatchingParamTypes(rt)
 			&& ! bc.hasAnnotation(BeanIgnore.class, cs);
 	}
 

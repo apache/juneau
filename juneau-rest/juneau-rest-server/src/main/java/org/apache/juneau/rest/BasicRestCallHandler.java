@@ -136,7 +136,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 				}
 			}
 
-			call.debug(isDebug(call));
+			if (isDebug(call))
+				call.debug(true);
 
 			context.startCall(call);
 
@@ -209,12 +210,19 @@ public class BasicRestCallHandler implements RestCallHandler {
 	}
 
 	private boolean isDebug(RestCall call) {
-		Enablement e = context.getDebug();
+		Enablement e = null;
+		RestMethodContext mc = call.getRestMethodContext();
+		if (mc != null)
+			e = mc.getDebug();
+		if (e == null)
+			e = context.getDebug();
 		if (e == TRUE)
 			return true;
 		if (e == FALSE)
 			return false;
-		return "true".equalsIgnoreCase(call.getRequest().getHeader("X-Debug"));
+		if (e == PER_REQUEST)
+			return "true".equalsIgnoreCase(call.getRequest().getHeader("X-Debug"));
+		return false;
 	}
 
 	/**

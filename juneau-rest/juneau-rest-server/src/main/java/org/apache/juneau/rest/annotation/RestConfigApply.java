@@ -290,9 +290,11 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		if (! a.maxInput().isEmpty())
 			psb.set(REST_maxInput, string(a.maxInput()));
 
-		if (! a.debug().isEmpty()) {
-			psb.set(REST_debug, a.debug());
-		}
+		if (! a.debug().isEmpty())
+			psb.set(REST_debug, string(a.debug()));
+
+		if (! a.debugOn().isEmpty())
+			psb.set(REST_debugOn, string(a.debugOn()));
 
 		psb.addTo(REST_mimeTypes, strings(a.mimeTypes()));
 
