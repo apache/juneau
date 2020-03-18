@@ -469,7 +469,7 @@ public final class RestContext extends BeanContext {
 	 * 		The resource class itself will be used if it implements the {@link RestCallHandler} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
-	 * 		The {@link RestServlet} class itself implements the {@link RestCallHandler} interface with the same
+	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestCallHandler} interface with the same
 	 * 		functionality as {@link BasicRestCallHandler} that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
 	 * 	<li>
@@ -477,8 +477,8 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -555,16 +555,16 @@ public final class RestContext extends BeanContext {
 	 * 		The resource class itself will be used if it implements the {@link RestCallLogger} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
-	 * 		The {@link RestServlet} class itself implements the {@link RestCallLogger} interface with the same
-	 * 		functionality as {@link BasicRestCallLogger} that gets used if not overridden by this annotation.
-	 * 		<br>Subclasses can also alter the behavior by overriding this method.
+	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestCallLogger} interface with the same
+	 * 		functionality as {@link BasicRestCallHandler} that gets used if not overridden by this annotation.
+	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
 	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -858,10 +858,19 @@ public final class RestContext extends BeanContext {
 	 * 		up the class-hierarchy.
 	 * 		<br>Each of these classes can be extended to provide customized handling of resource retrieval.
 	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link ClasspathResourceFinder} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
+	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link ClasspathResourceFinder} interface with the same
+	 * 		functionality as {@link ClasspathResourceFinderBasic} that gets used if not overridden by this annotation.
+	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
+	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -1031,6 +1040,8 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -1254,6 +1265,8 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -1338,6 +1351,8 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -1436,7 +1451,7 @@ public final class RestContext extends BeanContext {
 	 * 		The resource class itself will be used if it implements the {@link RestInfoProvider} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
-	 * 		The {@link RestServlet} class itself implements the {@link RestInfoProvider} interface with the same
+	 * 		The{@link RestServlet} and {@link BasicRest} classes implement the {@link RestInfoProvider} interface with the same
 	 * 		functionality as {@link BasicRestInfoProvider} that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
 	 * 	<li>
@@ -1444,8 +1459,8 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -1768,6 +1783,8 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(BeanContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -2438,12 +2455,19 @@ public final class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		Unless overridden, resource resolvers are inherited from ascendant resources.
 	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link RestResourceResolver} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
+	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestResourceResolver} interface with the same
+	 * 		functionality as {@link BasicRestResourceResolver} that gets used if not overridden by this annotation.
+	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
+	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> <jsm>create</jsm>()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -2543,6 +2567,8 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
 	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 	 * 		</ul>
 	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
@@ -3677,7 +3703,9 @@ public final class RestContext extends BeanContext {
 			this.resource = builder.resource;
 			this.builder = builder;
 			this.parentContext = builder.parentContext;
-			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? BasicRestResourceResolver.class : parentContext.resourceResolver, ResourceResolver.FUZZY, this);
+
+			Object defaultResourceResolver = parentContext == null ? (resource instanceof RestResourceResolver ? resource : BasicRestResourceResolver.class) : parentContext.resourceResolver;
+			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, defaultResourceResolver, ResourceResolver.FUZZY, this);
 
 			varResolver = builder.varResolverBuilder
 				.vars(

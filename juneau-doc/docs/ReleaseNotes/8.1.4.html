@@ -166,9 +166,9 @@
 			<li class='jic'>{@link oaj.utils.ClasspathResourceFinder} - Normally defined through {@link oajr.annotation.Rest#classpathResourceFinder() @Rest.classpathResourceFinder()}.
 		</ul>
 	<li>
-		{@link oajr.RestServlet} and {@link oajr.BasicRest} now implement the {@link oajr.RestCallHandler}, {@link oajr.RestInfoProvider}, {@link oajr.RestCallLogger}, 
+		{@link oajr.RestServlet} and {@link oajr.BasicRest} now implement the {@link oajr.RestCallHandler}, {@link oajr.RestInfoProvider}, {@link oajr.RestCallLogger}, {@link RestResourceResolver},
 		and {@link oaj.utils.ClasspathResourceFinder} interfaces directly and provides the same functionality as {@link oajr.BasicRestCallHandler}, 
-		{@link oajr.BasicRestInfoProvider}, {@link oajr.BasicRestCallLogger}, and {@link oaj.utils.ClasspathResourceFinderBasic}.  
+		{@link oajr.BasicRestInfoProvider}, {@link oajr.BasicRestCallLogger}, {@link BasicRestResourceResolver}, and {@link oaj.utils.ClasspathResourceFinderBasic}.  
 		
 		This makes it easier to tweak these methods without having to implement your own classes.
 		<br>The methods added for {@link oajr.RestCallHandler} are:
@@ -241,6 +241,17 @@
 				<li class='jm'>{@link oajr.BasicRest#findResource(Class,String,Locale) findResource(Class,String,Locale)}
 			</ul>
 		</ul>
+		<br>The methods added for {@link oajr.RestResourceResolver} are:
+		<ul>
+			<li class='jac'>{@link oajr.RestServlet}
+			<ul>
+				<li class='jm'>{@link oajr.RestServlet#resolve(Object,Class,RestContextBuilder,Object...) resolve(Object,Class&lt;T&gt;,RestContextBuilder,Object...)}
+			</ul>
+			<li class='jac'>{@link oajr.BasicRest}
+			<ul>
+				<li class='jm'>{@link oajr.BasicRest#resolve(Object,Class,RestContextBuilder,Object...) resolve(Object,Class&lt;T&gt;,RestContextBuilder,Object...)}
+			</ul>
+		</ul>
 	<li>
 		Added the following convenience hook methods on the {@link oajr.RestServlet} and {@link oajr.BasicRest} classes:
 		<ul>
@@ -294,6 +305,9 @@
 			<li class='jc'>{@link oajr.RestCallLogger}
 			<li class='jc'>{@link oajr.RestInfoProvider}
 			<li class='jc'>{@link oaj.utils.ClasspathResourceFinder}
+			<li class='jc'>{@link oajr.RestResourceResolver}
+			<li class='jc'>{@link oajr.RestGuard}
+			<li class='jc'>{@link oajr.ResponseHandler}
 		</ul>
 </ul>
 

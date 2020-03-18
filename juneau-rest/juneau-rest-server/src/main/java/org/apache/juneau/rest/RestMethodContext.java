@@ -384,6 +384,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
+	 * 		When defined as a class, the implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 *

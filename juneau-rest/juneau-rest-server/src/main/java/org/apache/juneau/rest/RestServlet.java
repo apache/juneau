@@ -41,7 +41,7 @@ import org.apache.juneau.http.exception.*;
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.RestServlet}
  * </ul>
  */
-public abstract class RestServlet extends HttpServlet implements RestCallHandler, RestInfoProvider, RestCallLogger, ClasspathResourceFinder {
+public abstract class RestServlet extends HttpServlet implements RestCallHandler, RestInfoProvider, RestCallLogger, RestResourceResolver, ClasspathResourceFinder {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,7 +49,7 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 	private volatile RestContext context;
 	private volatile Exception initException;
 	private boolean isInitialized = false;  // Should not be volatile.
-	private volatile RestResourceResolver resourceResolver;
+	private volatile RestResourceResolver resourceResolver = new BasicRestResourceResolver();
 	private JuneauLogger logger = JuneauLogger.getLogger(getClass());
 	private RestCallHandler callHandler;
 	private RestInfoProvider infoProvider;
@@ -681,5 +681,19 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 	@Override /* ClasspathResourceFinder */
 	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
 		return resourceFinder.findResource(baseClass, name, locale);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RestResourceResolver
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* RestResourceResolver */
+	public <T> T resolve(Object parent, Class<T> c, Object... args) {
+		return resourceResolver.resolve(parent, c, args);
+	}
+
+	@Override /* RestResourceResolver */
+	public <T> T resolve(Object parent, Class<T> c, RestContextBuilder builder, Object... args) throws Exception {
+		return resourceResolver.resolve(parent, c, builder, args);
 	}
 }

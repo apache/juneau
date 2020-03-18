@@ -49,7 +49,7 @@ import org.apache.juneau.http.exception.*;
 		"stats: servlet:/stats"
 	}
 )
-public abstract class BasicRest implements BasicRestConfig, BasicRestMethods, RestCallHandler, RestInfoProvider, RestCallLogger, ClasspathResourceFinder {
+public abstract class BasicRest implements BasicRestConfig, BasicRestMethods, RestCallHandler, RestInfoProvider, RestCallLogger, RestResourceResolver, ClasspathResourceFinder {
 
 	private JuneauLogger logger = JuneauLogger.getLogger(getClass());
 	private volatile RestContext context;
@@ -57,6 +57,7 @@ public abstract class BasicRest implements BasicRestConfig, BasicRestMethods, Re
 	private RestInfoProvider infoProvider;
 	private RestCallLogger callLogger;
 	private ClasspathResourceFinder resourceFinder;
+	private RestResourceResolver resourceResolver = new BasicRestResourceResolver();
 
 	/**
 	 * [OPTIONS /*] - Show resource options.
@@ -581,5 +582,19 @@ public abstract class BasicRest implements BasicRestConfig, BasicRestMethods, Re
 	@Override /* ClasspathResourceFinder */
 	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
 		return resourceFinder.findResource(baseClass, name, locale);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RestResourceResolver
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* RestResourceResolver */
+	public <T> T resolve(Object parent, Class<T> c, Object... args) {
+		return resourceResolver.resolve(parent, c, args);
+	}
+
+	@Override /* RestResourceResolver */
+	public <T> T resolve(Object parent, Class<T> c, RestContextBuilder builder, Object... args) throws Exception {
+		return resourceResolver.resolve(parent, c, builder, args);
 	}
 }
