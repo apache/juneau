@@ -263,10 +263,12 @@ public class HttpPartSchemaBuilder {
 		serializer(a.serializer());
 
 		// Path remainder always allows empty value.
-		if (startsWith(name, '/'))
+		if (startsWith(name, '/')) {
 			allowEmptyValue();
-		else
-			required(true);
+			required(false);
+		} else {
+			required(a.required());
+		}
 
 		return this;
 	}

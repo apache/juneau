@@ -1103,4 +1103,36 @@ public class PathAnnotationTest {
 		ParameterInfo x = tc.getParameterInfo("/example/{P}","get","path","P");
 		assertEquals("{f1:'b'}", x.getExample());
 	}
+
+
+	//=================================================================================================================
+	// Basic tests
+	//=================================================================================================================
+
+	@Rest(path="/u1/{u1}",children=U2.class)
+	public static class U1 {
+	}
+	@Rest(path="/u2")
+	public static class U2 {
+		@RestMethod(path="/")
+		public String doGet(@Path(name="u1",required=false) String u1) {
+			return u1 == null ? "nil" : u1;
+		}
+		@RestMethod(path="/foo/{bar}")
+		public String doGetFoo(@Path(name="u1", required=false) String u1, @Path(name="bar",required=false) String bar) {
+			return (u1 == null ? "nil" : u1) + "," + (bar == null ? "nil" : bar);
+		}
+	}
+
+	static MockRest u1 = MockRest.build(U1.class, null);
+	static MockRest u2 = MockRest.build(U2.class, null);
+
+	@Test
+	public void u01_nonRequiredPath() throws Exception {
+		u1.get("/u1/foo/u2").execute().assertStatus(200).assertBody("foo");
+		u1.get("/u1/foo/u2/foo/xxx").execute().assertStatus(200).assertBody("foo,xxx");
+		u2.get("/").execute().assertStatus(200).assertBody("nil");
+		u2.get("/foo/xxx").execute().assertStatus(200).assertBody("nil,xxx");
+	}
+
 }

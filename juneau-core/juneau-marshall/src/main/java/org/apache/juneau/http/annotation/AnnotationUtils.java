@@ -227,6 +227,7 @@ public class AnnotationUtils {
 			allEmpty(a.description(), a._enum(), a.example(), a.api())
 			&& allEmpty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.maximum(), a.minimum(), a.multipleOf())
 			&& allFalse(a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems())
+			&& allTrue(a.required())
 			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
 			&& empty(a.items());
 	}
@@ -267,6 +268,19 @@ public class AnnotationUtils {
 	protected static boolean allFalse(boolean...booleans) {
 		for (boolean b : booleans)
 			if (b)
+				return false;
+		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if all the specified booleans are true.
+	 *
+	 * @param booleans The booleans to test.
+	 * @return <jk>true</jk> if all the specified booleans are true.
+	 */
+	protected static boolean allTrue(boolean...booleans) {
+		for (boolean b : booleans)
+			if (! b)
 				return false;
 		return true;
 	}

@@ -221,6 +221,53 @@ public @interface Path {
 	 */
 	String[] description() default {};
 
+	/**
+	 * <mk>required</mk> field of the {@doc SwaggerParameterObject}.
+	 *
+	 * <p>
+	 * Determines whether the parameter is mandatory.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <p>
+	 * A path can be marked as not-required when the path variable is resolved by a parent resource like so:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>(path=<js>"/parent/{p1}"</js>,children=Child.<jk>class</jk>)
+	 * 	<jk>public class</jk> Parent {
+	 * 		...
+	 * 	}
+	 *
+	 * 	<ja>@Rest</ja>(path="/child")
+	 * 	<jk>public class</jk> Child {
+	 *
+	 * 		<ja>@RestMethod</ja>(path="/")
+	 * 		<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"p1"</js>,required=<jk>false</jk>) String p1) {
+	 * 			<jc>// p1 will be null when accessed via "/child"</jc>
+	 *			<jc>// p1 will be non-null when accessed via "/parent/p1/child".</jc>
+	 * 		}
+	 * 		...
+	 * 	}
+	 * </p>
+	 * 
+	 * <p>
+	 * This allows the child resource to be mapped to multiple parents that may resolve various different path variables.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
+	 */
+	boolean required() default true;
+
 	//=================================================================================================================
 	// Attributes specific to parameters other than body
 	//=================================================================================================================
