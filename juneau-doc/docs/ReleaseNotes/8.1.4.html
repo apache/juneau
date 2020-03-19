@@ -333,7 +333,20 @@
 			<li>New fluent-style methods with many new convenience methods.
 		</ul>
 	<li>
-		<ja>@RemoteMethod</ja>-annotated methods can now return {@link java.util.concurrent.Future Futures} for concurrent processing of requests.
+		<ja>@RemoteMethod</ja>-annotated methods can now return {@link java.util.concurrent.Future Futures} and 
+		{@link java.util.concurrent.CompletableFuture CompletableFutures} for concurrent processing of requests.
+		<br>Example:
+		<p class='bpcode w800'>
+	<ja>@Remote</ja>
+	<jk>public interface</jk> MyInterface {
+		<jk>public</jk> Future&lt;String&gt; doGet();
+	}
+		
+	MyInterface i = client.getRemote(MyInterface.<jk>class</jk>, <js>"http://localhost:12345/myInterface"</js>);
+	Future&lt;String&gt; f = i.doGet();
+	<jc>// Do other stuff.</jc>
+	String result = f.get();	
+		</li>p>
 </ul>
 
 <h5 class='topic w800'>juneau-doc</h5>

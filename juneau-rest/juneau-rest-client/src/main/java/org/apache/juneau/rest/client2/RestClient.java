@@ -2622,6 +2622,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 										return executeRemote(rc, method, rmr);
 									}
 								});
+							} else if (rmr.isCompletableFuture()) {
+								CompletableFuture<Object> cf = new CompletableFuture<>();
+								getExecutorService(true).submit(new Callable<Object>() {
+									@Override
+									public Object call() throws Exception {
+										cf.complete(executeRemote(rc, method, rmr));
+										return null;
+									}
+								});
+								return cf;
 							}
 
 							return executeRemote(rc, method, rmr);

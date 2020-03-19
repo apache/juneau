@@ -34,7 +34,7 @@ public final class RemoteMethodReturn {
 	private final Type returnType;
 	private final RemoteReturn returnValue;
 	private final ResponseBeanMeta meta;
-	private boolean isFuture;
+	private boolean isFuture, isCompletableFuture;
 
 	@SuppressWarnings("deprecation")
 	RemoteMethodReturn(MethodInfo m) {
@@ -51,8 +51,10 @@ public final class RemoteMethodReturn {
 
 		if (rt.is(Future.class)) {
 			isFuture = true;
-			Type t = ((ParameterizedType)rt.innerType()).getActualTypeArguments()[0];
-			rt = ClassInfo.of(t);
+			rt = ClassInfo.of(((ParameterizedType)rt.innerType()).getActualTypeArguments()[0]);
+		} else if (rt.is(CompletableFuture.class)) {
+			isCompletableFuture = true;
+			rt = ClassInfo.of(((ParameterizedType)rt.innerType()).getActualTypeArguments()[0]);
 		}
 		if (rt.is(void.class) || rt.is(Void.class))
 			rv = RemoteReturn.NONE;
@@ -104,6 +106,15 @@ public final class RemoteMethodReturn {
 	 */
 	public boolean isFuture() {
 		return isFuture;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the return is wrapped in a {@link CompletableFuture}.
+	 *
+	 * @return <jk>true</jk> if the return is wrapped in a {@link CompletableFuture}.
+	 */
+	public boolean isCompletableFuture() {
+		return isCompletableFuture;
 	}
 
 	/**
