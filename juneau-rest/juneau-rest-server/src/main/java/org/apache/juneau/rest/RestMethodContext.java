@@ -431,8 +431,44 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 		Slashes are trimmed from the path ends.
 	 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
 	 * </ul>
+	 * @deprecated Use {@link #RESTMETHOD_paths}
 	 */
+	@Deprecated
 	public static final String RESTMETHOD_path = PREFIX + ".path.s";
+
+	/**
+	 * Configuration property:  Resource method paths.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_paths RESTMETHOD_paths}
+	 * 	<li><b>Name:</b>  <js>"RestMethodContext.path.ls"</js>
+	 * 	<li><b>Data type:</b>  <c>String[]</c>
+	 * 	<li><b>System property:</b>  <c>RestMethodContext.paths</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_PATHS</c>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#path()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#paths()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Identifies the URL subpath relative to the servlet class.
+	 *
+	 * <p>
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		This method is only applicable for Java methods.
+	 * 	<li>
+	 * 		Slashes are trimmed from the path ends.
+	 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
+	 * </ul>
+	 */
+	public static final String RESTMETHOD_paths = PREFIX + ".paths.ls";
 
 	/**
 	 * Configuration property:  Priority.
@@ -556,7 +592,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final String httpMethod;
-	private final UrlPathPattern pathPattern;
+	private final UrlPathPattern[] pathPatterns;
 	final RestMethodParam[] methodParams;
 	private final RestGuard[] guards;
 	private final RestMatcher[] optionalMatchers;
@@ -656,9 +692,15 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.responseMeta = ResponseBeanMeta.create(mi, ps);
 
-		this.pathPattern = new UrlPathPattern(getProperty(RESTMETHOD_path, String.class, HttpUtils.detectHttpPath(method, true)));
+		List<UrlPathPattern> pathPatterns = new ArrayList<>();
+		for (String p : getArrayProperty(RESTMETHOD_paths, String.class))
+			pathPatterns.add(new UrlPathPattern(p));
+		if (pathPatterns.isEmpty())
+			pathPatterns.add(new UrlPathPattern(HttpUtils.detectHttpPath(method, true)));
 
-		this.methodParams = context.findParams(mi, false, pathPattern);
+		this.pathPatterns = pathPatterns.toArray(new UrlPathPattern[pathPatterns.size()]);
+
+		this.methodParams = context.findParams(mi, false, this.pathPatterns[this.pathPatterns.length-1]);
 
 		this.converters = getInstanceArrayProperty(REST_converters, RestConverter.class, new RestConverter[0], rr, r, this);
 
@@ -846,7 +888,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Returns the path pattern for this method.
 	 */
 	String getPathPattern() {
-		return pathPattern.toString();
+		return pathPatterns[0].toString();
 	}
 
 	/**
@@ -862,7 +904,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	}
 
 	boolean matches(UrlPathInfo pathInfo) {
-		return pathPattern.match(pathInfo) != null;
+		for (UrlPathPattern p : pathPatterns)
+			if (p.match(pathInfo) != null)
+				return true;
+		return false;
 	}
 
 	/**
@@ -873,7 +918,12 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 */
 	int invoke(RestCall call) throws Throwable {
 
-		UrlPathPatternMatch pm = pathPattern.match(call.getUrlPathInfo());
+		UrlPathPatternMatch pm = null;
+
+		for (UrlPathPattern pp : pathPatterns)
+			if (pm == null)
+				pm = pp.match(call.getUrlPathInfo());
+
 		if (pm == null)
 			return SC_NOT_FOUND;
 
@@ -1021,9 +1071,11 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		if (c != 0)
 			return c;
 
-		c = pathPattern.compareTo(o.pathPattern);
-		if (c != 0)
-			return c;
+		for (int i = 0; i < Math.min(pathPatterns.length, o.pathPatterns.length); i++) {
+			c = pathPatterns[i].compareTo(o.pathPatterns[i]);
+			if (c != 0)
+				return c;
+		}
 
 		c = compare(o.hierarchyDepth, hierarchyDepth);
 		if (c != 0)

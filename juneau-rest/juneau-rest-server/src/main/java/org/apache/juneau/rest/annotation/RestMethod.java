@@ -22,6 +22,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.http.annotation.*;
 
 /**
  * Identifies a REST Java method on a {@link RestServlet} implementation class.
@@ -584,6 +585,29 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	String path() default "";
+
+	/**
+	 * Same as {@link #path()} but allows you to specify multiple path patterns for the same method.
+	 *
+	 * <p>
+	 * The path can contain variables that get resolved to {@link org.apache.juneau.http.annotation.Path @Path} parameters.
+	 * <br>When variables are not defined on all paths, the {@link Path#required @Path(required)} annotation can be set
+	 * to <jk>false</jk> to make it optional.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		name=<jsf>GET</jsf>,
+	 * 		paths={<js>"/"</js>,<js>"/{foo}"</js>}
+	 * 	)
+	 * 	<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"foo"</js>,required=<jk>false</jk>) String foo) {...}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+	 * </ul>
+	 */
+	String[] paths() default {};
 
 	/**
 	 * Sets the POJO swaps for the serializers and parsers defined on this method.

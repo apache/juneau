@@ -311,6 +311,36 @@
 		</ul>
 	<li>
 		New {@link oaj.http.annotation.Path#required() @Path(required)} annotation support.
+		<br>A path can be marked as not-required when the path variable is resolved by a parent resource like so:
+		<p class='bpcode w800'>
+	<ja>@Rest</ja>(path=<js>"/parent/{p1}"</js>,children=Child.<jk>class</jk>)
+	<jk>public class</jk> Parent {
+		...
+	}
+
+	<ja>@Rest</ja>(path="/child")
+	<jk>public class</jk> Child {
+
+		<ja>@RestMethod</ja>(path="/")
+		<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"p1"</js>,required=<jk>false</jk>) String p1) {
+			<jc>// p1 will be null when accessed via "/child"</jc>
+			<jc>// p1 will be non-null when accessed via "/parent/p1/child".</jc>
+		}
+		...
+	}
+		</p>
+		<br>This allows the child resource to be mapped to multiple parents that may resolve various different path variables.
+	<li>
+		New {@link oajr.annotation.RestMethod#paths() @RestMethod(paths)} annotation that allows you to map multiple
+		paths to the same Java method.
+		<br>Example:
+		<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		name=<jsf>GET</jsf>,
+		paths={<js>"/"</js>,<js>"/{foo}"</js>}
+	)
+	<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"foo"</js>,required=<jk>false</jk>) String foo) {...}
+		</p>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server-springboot</h5>

@@ -159,7 +159,9 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			psb.set(REST_maxInput, string(a.maxInput()));
 
 		if (! a.path().isEmpty())
-			psb.set(RESTMETHOD_path, string(a.path()));
+			psb.addTo(RESTMETHOD_paths, string(a.path()));
+		for (String p : a.paths())
+			psb.addTo(RESTMETHOD_paths, string(p));
 
 		if (! a.rolesDeclared().isEmpty())
 			psb.addTo(REST_rolesDeclared, strings(a.rolesDeclared()));

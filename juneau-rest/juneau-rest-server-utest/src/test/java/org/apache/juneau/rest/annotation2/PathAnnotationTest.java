@@ -1135,4 +1135,37 @@ public class PathAnnotationTest {
 		u2.get("/foo/xxx").execute().assertStatus(200).assertBody("nil,xxx");
 	}
 
+	//=================================================================================================================
+	// Multiple paths
+	//=================================================================================================================
+
+	@Rest(path="/v1/{v1}",children=V2.class)
+	public static class V1 {
+	}
+	@Rest(path="/v2")
+	public static class V2 {
+		@RestMethod(paths={"/","/{foo}"})
+		public String doGet(@Path(name="v1",required=false) String v1, @Path(name="foo",required=false) String foo) {
+			return "1," + (v1 == null ? "nil" : v1) + "," + (foo == null ? "nil" : foo);
+		}
+		@RestMethod(paths={"/foo","/foo/{foo}"})
+		public String doGet2(@Path(name="v1",required=false) String v1, @Path(name="foo",required=false) String foo) {
+			return "2," + (v1 == null ? "nil" : v1) + "," + (foo == null ? "nil" : foo);
+		}
+	}
+
+	static MockRest v1 = MockRest.build(V1.class, null);
+	static MockRest v2 = MockRest.build(V2.class, null);
+
+	@Test
+	public void v01_multiplePaths() throws Exception {
+		v1.get("/v1/v1foo/v2").execute().assertStatus(200).assertBody("1,v1foo,nil");
+		v1.get("/v1/v1foo/v2/v2foo").execute().assertStatus(200).assertBody("1,v1foo,v2foo");
+		v1.get("/v1/v1foo/v2/foo").execute().assertStatus(200).assertBody("2,v1foo,nil");
+		v1.get("/v1/v1foo/v2/foo/v2foo").execute().assertStatus(200).assertBody("2,v1foo,v2foo");
+		v2.get("/v2").execute().assertStatus(200).assertBody("1,nil,nil");
+		v2.get("/v2/v2foo").execute().assertStatus(200).assertBody("1,nil,v2foo");
+		v2.get("/v2/foo").execute().assertStatus(200).assertBody("2,nil,nil");
+		v2.get("/v2/foo/v2foo").execute().assertStatus(200).assertBody("2,nil,v2foo");
+	}
 }
