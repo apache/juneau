@@ -13,6 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
+{8.1.4-updated}
 @RemoteMethod
 
 <p>
@@ -125,7 +126,7 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		<jk>void</jk> 
+		<jk>void</jk>/{@link java.lang.Void}
 		- Don't parse any response.  
 		<br>Note that the method will still throw a runtime exception if an error HTTP status is returned.
 	<li>
@@ -143,6 +144,8 @@
 	<li>
 		{@link java.io.InputStream} 
 		- Returns access to the raw input stream of the response.
+	<li>
+		A {@link java.util.concurrent.Future} of anything on this list. 
 </ul>
 
 <p>

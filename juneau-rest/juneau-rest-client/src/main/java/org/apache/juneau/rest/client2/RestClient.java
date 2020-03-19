@@ -2615,28 +2615,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 							}
 
 							RemoteMethodReturn rmr = rmm.getReturns();
-							if (rmr.getReturnValue() == RemoteReturn.NONE) {
-								rc.complete();
-								return null;
-							} else if (rmr.getReturnValue() == RemoteReturn.STATUS) {
-								rc.ignoreErrors();
-								int returnCode = rc.complete().getStatusCode();
-								Class<?> rt = method.getReturnType();
-								if (rt == Integer.class || rt == int.class)
-									return returnCode;
-								if (rt == Boolean.class || rt == boolean.class)
-									return returnCode < 400;
-								throw new RestCallException("Invalid return type on method annotated with @RemoteMethod(returns=HTTP_STATUS).  Only integer and booleans types are valid.");
-							} else if (rmr.getReturnValue() == RemoteReturn.BEAN) {
-								rc.ignoreErrors();
-								return rc.run().as(rmr.getResponseBeanMeta());
-							} else {
-								rc.ignoreErrors();
-								Object v = rc.run().getBody().as(rmr.getReturnType());
-								if (v == null && method.getReturnType().isPrimitive())
-									v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
-								return v;
+							if (rmr.isFuture()) {
+								return getExecutorService(true).submit(new Callable<Object>() {
+									@Override
+									public Object call() throws Exception {
+										return executeRemote(rc, method, rmr);
+									}
+								});
 							}
+
+							return executeRemote(rc, method, rmr);
 
 						} catch (RestCallException e) {
 							// Try to throw original exception if possible.
@@ -2649,6 +2637,31 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 			});
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	Object executeRemote(RestRequest rc, Method method, RemoteMethodReturn rmr) throws RestCallException {
+		if (rmr.getReturnValue() == RemoteReturn.NONE) {
+			rc.complete();
+			return null;
+		} else if (rmr.getReturnValue() == RemoteReturn.STATUS) {
+			rc.ignoreErrors();
+			int returnCode = rc.complete().getStatusCode();
+			Class<?> rt = method.getReturnType();
+			if (rt == Integer.class || rt == int.class)
+				return returnCode;
+			if (rt == Boolean.class || rt == boolean.class)
+				return returnCode < 400;
+			throw new RestCallException("Invalid return type on method annotated with @RemoteMethod(returns=HTTP_STATUS).  Only integer and booleans types are valid.");
+		} else if (rmr.getReturnValue() == RemoteReturn.BEAN) {
+			rc.ignoreErrors();
+			return rc.run().as(rmr.getResponseBeanMeta());
+		} else {
+			rc.ignoreErrors();
+			Object v = rc.run().getBody().as(rmr.getReturnType());
+			if (v == null && method.getReturnType().isPrimitive())
+				v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
+			return v;
 		}
 	}
 

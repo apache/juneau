@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client.remote;
 
 import java.lang.reflect.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.remote.RemoteMethod;
@@ -33,6 +34,7 @@ public final class RemoteMethodReturn {
 	private final Type returnType;
 	private final RemoteReturn returnValue;
 	private final ResponseBeanMeta meta;
+	private boolean isFuture;
 
 	@SuppressWarnings("deprecation")
 	RemoteMethodReturn(MethodInfo m) {
@@ -46,7 +48,13 @@ public final class RemoteMethodReturn {
 			rm = m.getResolvedReturnType().getLastAnnotation(RemoteMethod.class);
 
 		RemoteReturn rv = null;
-		if (rt.is(void.class))
+
+		if (rt.is(Future.class)) {
+			isFuture = true;
+			Type t = ((ParameterizedType)rt.innerType()).getActualTypeArguments()[0];
+			rt = ClassInfo.of(t);
+		}
+		if (rt.is(void.class) || rt.is(Void.class))
 			rv = RemoteReturn.NONE;
 		else if (orm != null)
 			switch (orm.returns()) {
@@ -67,7 +75,7 @@ public final class RemoteMethodReturn {
 			this.meta = null;
 		}
 
-		this.returnType = m.getReturnType().innerType();
+		this.returnType = rt.innerType();
 		this.returnValue = rv;
 	}
 
@@ -87,6 +95,15 @@ public final class RemoteMethodReturn {
 	 */
 	public Type getReturnType() {
 		return returnType;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the return is wrapped in a {@link Future}.
+	 *
+	 * @return <jk>true</jk> if the return is wrapped in a {@link Future}.
+	 */
+	public boolean isFuture() {
+		return isFuture;
 	}
 
 	/**

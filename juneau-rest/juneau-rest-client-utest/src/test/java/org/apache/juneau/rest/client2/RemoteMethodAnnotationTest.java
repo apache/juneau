@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client2;
 import static org.junit.Assert.*;
 
 import java.io.*;
+import java.util.concurrent.*;
 
 import org.apache.http.*;
 import org.apache.juneau.http.annotation.Body;
@@ -71,6 +72,15 @@ public class RemoteMethodAnnotationTest {
 		public String postA02();
 	}
 
+	@Remote
+	public static interface A02 {
+		public Future<String> doGet();
+		public Future<String> doGET();
+		public Future<String> doFoo();
+		public Future<String> getA01();
+		public Future<String> postA02();
+	}
+
 	@Test
 	public void a01_inferredMethodsAndPaths() throws Exception {
 		A01 t = MockRemote.build(A01.class, A.class, null);
@@ -79,6 +89,16 @@ public class RemoteMethodAnnotationTest {
 		assertEquals("qux", t.doFoo());
 		assertEquals("bar", t.getA01());
 		assertEquals("baz", t.postA02());
+	}
+
+	@Test
+	public void a02_inferredMethodsAndPaths_futures() throws Exception {
+		A02 t = MockRemote.build(A02.class, A.class, null);
+		assertEquals("foo", t.doGet().get());
+		assertEquals("foo", t.doGET().get());
+		assertEquals("qux", t.doFoo().get());
+		assertEquals("bar", t.getA01().get());
+		assertEquals("baz", t.postA02().get());
 	}
 
 	//=================================================================================================================
@@ -113,11 +133,19 @@ public class RemoteMethodAnnotationTest {
 	@Remote
 	public static interface B01 {
 		public void b01();
-
 		public String b02();
 		public HttpResponse b02a();
 		public Reader b02b();
 		public InputStream b02c();
+	}
+
+	@Remote
+	public static interface B02 {
+		public Future<Void> b01();
+		public Future<String> b02();
+		public Future<HttpResponse> b02a();
+		public Future<Reader> b02b();
+		public Future<InputStream> b02c();
 	}
 
 	@Test
@@ -128,6 +156,16 @@ public class RemoteMethodAnnotationTest {
 		assertEquals("bar", IOUtils.read(t.b02a().getEntity().getContent()));
 		assertEquals("baz", IOUtils.read(t.b02b()));
 		assertEquals("qux", IOUtils.read(t.b02c()));
+	}
+
+	@Test
+	public void b02_returnTypes_futures() throws Exception {
+		B02 t = MockRemote.build(B02.class, B.class, null);
+		t.b01().get();
+		assertEquals("foo", t.b02().get());
+		assertEquals("bar", IOUtils.read(t.b02a().get().getEntity().getContent()));
+		assertEquals("baz", IOUtils.read(t.b02b().get()));
+		assertEquals("qux", IOUtils.read(t.b02c().get()));
 	}
 
 	//=================================================================================================================
@@ -159,6 +197,22 @@ public class RemoteMethodAnnotationTest {
 		public InputStream c01d(@Body String foo);
 	}
 
+	@Remote
+	public static interface C02 {
+
+		@RemoteMethod(method="POST",path="c01")
+		public Future<String> c01a(@Body String foo);
+
+		@RemoteMethod(method="POST",path="c01")
+		public Future<HttpResponse> c01b(@Body String foo);
+
+		@RemoteMethod(method="POST",path="c01")
+		public Future<Reader> c01c(@Body String foo);
+
+		@RemoteMethod(method="POST",path="c01")
+		public Future<InputStream> c01d(@Body String foo);
+	}
+
 	@Test
 	public void c01_returnTypes_json() throws Exception {
 		C01 t = MockRemote.build(C01.class, C.class, Json.DEFAULT);
@@ -166,6 +220,15 @@ public class RemoteMethodAnnotationTest {
 		assertEquals("'foo'", IOUtils.read(t.c01b("foo").getEntity().getContent()));
 		assertEquals("'foo'", IOUtils.read(t.c01c("foo")));
 		assertEquals("'foo'", IOUtils.read(t.c01d("foo")));
+	}
+
+	@Test
+	public void c02_returnTypes_json_futures() throws Exception {
+		C02 t = MockRemote.build(C02.class, C.class, Json.DEFAULT);
+		assertEquals("foo", t.c01a("foo").get());
+		assertEquals("'foo'", IOUtils.read(t.c01b("foo").get().getEntity().getContent()));
+		assertEquals("'foo'", IOUtils.read(t.c01c("foo").get()));
+		assertEquals("'foo'", IOUtils.read(t.c01d("foo").get()));
 	}
 
 	//=================================================================================================================
@@ -198,6 +261,22 @@ public class RemoteMethodAnnotationTest {
 		public InputStream d01d(@Body String foo);
 	}
 
+	@Remote
+	public static interface D02 {
+
+		@RemoteMethod(method="POST",path="d01")
+		public Future<String> d01a(@Body String foo);
+
+		@RemoteMethod(method="POST",path="d01")
+		public Future<HttpResponse> d01b(@Body String foo);
+
+		@RemoteMethod(method="POST",path="d01")
+		public Future<Reader> d01c(@Body String foo);
+
+		@RemoteMethod(method="POST",path="d01")
+		public Future<InputStream> d01d(@Body String foo);
+	}
+
 	@Test
 	public void d01_returnTypes_partSerialization() throws Exception {
 		D01 t = MockRemote.build(D01.class, D.class, OpenApi.DEFAULT);
@@ -205,5 +284,14 @@ public class RemoteMethodAnnotationTest {
 		assertEquals("foo", IOUtils.read(t.d01b("foo").getEntity().getContent()));
 		assertEquals("foo", IOUtils.read(t.d01c("foo")));
 		assertEquals("foo", IOUtils.read(t.d01d("foo")));
+	}
+
+	@Test
+	public void d02_returnTypes_partSerialization_futures() throws Exception {
+		D02 t = MockRemote.build(D02.class, D.class, OpenApi.DEFAULT);
+		assertEquals("foo", t.d01a("foo").get());
+		assertEquals("foo", IOUtils.read(t.d01b("foo").get().getEntity().getContent()));
+		assertEquals("foo", IOUtils.read(t.d01c("foo").get()));
+		assertEquals("foo", IOUtils.read(t.d01d("foo").get()));
 	}
 }
