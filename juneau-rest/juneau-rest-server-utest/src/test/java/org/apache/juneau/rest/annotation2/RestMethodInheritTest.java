@@ -154,7 +154,7 @@ public class RestMethodInheritTest {
 			return new ObjectList(res.getSupportedMediaTypes());
 		}
 	}
-	static MockRest a = MockRest.build(A02.class, null);
+	static MockRest a = MockRest.build(A02.class);
 
 	@Test
 	public void a01_serializers_default() throws Exception {
@@ -197,7 +197,7 @@ public class RestMethodInheritTest {
 			return new ObjectList(req.getConsumes());
 		}
 	}
-	static MockRest b = MockRest.build(B02.class, null);
+	static MockRest b = MockRest.build(B02.class);
 
 	@Test
 	public void b01_parsers_default() throws Exception {
@@ -307,7 +307,7 @@ public class RestMethodInheritTest {
 			return m;
 		}
 	}
-	static MockRest e = MockRest.build(E02.class, null);
+	static MockRest e = MockRest.build(E02.class);
 
 	@Test
 	public void e01_properties_default() throws Exception {

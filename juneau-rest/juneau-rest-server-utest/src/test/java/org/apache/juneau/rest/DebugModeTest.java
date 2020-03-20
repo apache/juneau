@@ -113,7 +113,7 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest a1 = MockRest.build(A1.class);
+	static MockRest a1 = MockRest.buildSimpleJson(A1.class);
 	static MockRest a1d = MockRest.create(A1.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
@@ -188,7 +188,7 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest a1a = MockRest.build(A1a.class);
+	static MockRest a1a = MockRest.buildSimpleJson(A1a.class);
 	static MockRest a1ad = MockRest.create(A1a.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
@@ -267,7 +267,7 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest a2 = MockRest.build(A2.class);
+	static MockRest a2 = MockRest.buildSimpleJson(A2.class);
 	static MockRest a2d = MockRest.create(A2.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
@@ -346,7 +346,7 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest a3 = MockRest.build(A3.class);
+	static MockRest a3 = MockRest.buildSimpleJson(A3.class);
 	static MockRest a3d = MockRest.create(A3.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
@@ -425,7 +425,7 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest a4 = MockRest.build(A4.class);
+	static MockRest a4 = MockRest.buildSimpleJson(A4.class);
 	static MockRest a4d = MockRest.create(A4.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
@@ -486,7 +486,7 @@ public class DebugModeTest {
 			LOGGER.log(config, req, res);
 		}
 	}
-	static MockRest b1 = MockRest.build(B1.class);
+	static MockRest b1 = MockRest.buildSimpleJson(B1.class);
 
 	@Test
 	public void b01_debugDefault() throws Exception {
@@ -512,7 +512,7 @@ public class DebugModeTest {
 			LOGGER.log(config, req, res);
 		}
 	}
-	static MockRest b2 = MockRest.build(B2.class);
+	static MockRest b2 = MockRest.buildSimpleJson(B2.class);
 
 	@Test
 	public void b02_debugDefault() throws Exception {
@@ -700,7 +700,7 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest c1 = MockRest.build(C1.class);
+	static MockRest c1 = MockRest.buildSimpleJson(C1.class);
 	static MockRest c1d = MockRest.create(C1.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
@@ -1034,7 +1034,7 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest c2 = MockRest.build(C2.class);
+	static MockRest c2 = MockRest.buildSimpleJson(C2.class);
 	static MockRest c2d = MockRest.create(C2.class).simpleJson().header("X-Debug", true).build();
 
 	@Test

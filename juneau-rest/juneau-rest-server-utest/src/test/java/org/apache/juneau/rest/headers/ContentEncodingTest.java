@@ -51,7 +51,7 @@ public class ContentEncodingTest {
 			return in;
 		}
 	}
-	static MockRest a = MockRest.build(A.class, null);
+	static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01_noCompression() throws Exception {
@@ -80,7 +80,7 @@ public class ContentEncodingTest {
 			return in;
 		}
 	}
-	static MockRest b = MockRest.build(B.class, null);
+	static MockRest b = MockRest.build(B.class);
 
 	@Test
 	public void b01_withCompression_identity() throws Exception {

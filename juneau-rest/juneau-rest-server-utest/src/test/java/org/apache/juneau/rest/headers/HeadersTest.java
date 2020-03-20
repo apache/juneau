@@ -421,7 +421,7 @@ public class HeadersTest {
 			return customHeader.toString();
 		}
 	}
-	static MockRest b = MockRest.build(B.class, null);
+	static MockRest b = MockRest.build(B.class);
 
 	public static class CustomHeaderParam extends RestMethodParam {
 		public CustomHeaderParam() {
@@ -467,7 +467,7 @@ public class HeadersTest {
 				.append("h3", headers.getString("H3"));
 		}
 	}
-	static MockRest c = MockRest.build(C.class, null);
+	static MockRest c = MockRest.build(C.class);
 
 	@Test
 	public void c01_reqHeaders_default() throws Exception {
@@ -496,7 +496,7 @@ public class HeadersTest {
 				.append("h3", headers.getString("h3"));
 		}
 	}
-	static MockRest d = MockRest.build(D.class, null);
+	static MockRest d = MockRest.build(D.class);
 
 	@Test
 	public void d01_reqHeadersCaseInsensitive_default() throws Exception {
@@ -525,7 +525,7 @@ public class HeadersTest {
 				.append("h3", h3);
 		}
 	}
-	static MockRest e = MockRest.build(E.class, null);
+	static MockRest e = MockRest.build(E.class);
 
 	@Test
 	public void e01_annotatedHeaders_default() throws Exception {
@@ -554,7 +554,7 @@ public class HeadersTest {
 				.append("h3", h3);
 		}
 	}
-	static MockRest f = MockRest.build(F.class, null);
+	static MockRest f = MockRest.build(F.class);
 
 	@Test
 	public void f01_annotatedHeadersCaseInsensitive_default() throws Exception {
@@ -583,7 +583,7 @@ public class HeadersTest {
 				.append("h3", h3);
 		}
 	}
-	static MockRest g = MockRest.build(G.class, null);
+	static MockRest g = MockRest.build(G.class);
 
 	@Test
 	public void g01_annotatedHeadersDefault_default() throws Exception {
@@ -608,7 +608,7 @@ public class HeadersTest {
 				.append("h3", h3);
 		}
 	}
-	static MockRest gb = MockRest.build(GB.class, null);
+	static MockRest gb = MockRest.build(GB.class);
 
 	@Test
 	public void gb01_annotatedHeadersDefault_default() throws Exception {
@@ -637,7 +637,7 @@ public class HeadersTest {
 				.append("h3", h3);
 		}
 	}
-	static MockRest h = MockRest.build(H.class, null);
+	static MockRest h = MockRest.build(H.class);
 
 	@Test
 	public void h01_annotatedAndDefaultHeaders_default() throws Exception {

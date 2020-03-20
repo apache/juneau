@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client2;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 
@@ -45,6 +46,7 @@ public final class RestResponse implements HttpResponse {
 	private final RestClient client;
 	private final RestRequest request;
 	private final HttpResponse response;
+	private final Parser parser;
 	private HttpPartParser partParser;
 	private RestResponseBody responseBody;
 	private boolean isClosed;
@@ -54,12 +56,14 @@ public final class RestResponse implements HttpResponse {
 	 * @param client The RestClient that created this response.
 	 * @param request The REST request.
 	 * @param response The HTTP response.  Can be <jk>null</jk>.
+	 * @param parser The overridden parser passed into {@link RestRequest#parser(Parser)}.
 	 */
-	protected RestResponse(RestClient client, RestRequest request, HttpResponse response) {
+	protected RestResponse(RestClient client, RestRequest request, HttpResponse response, Parser parser) {
 		this.client = client;
 		this.request = request;
+		this.parser = parser;
 		this.response = response == null ? new BasicHttpResponse(null, 0, null) : response;
-		this.responseBody = new RestResponseBody(client, request, this);
+		this.responseBody = new RestResponseBody(client, request, this, parser);
 		this.partParser = client.getPartParser();
 	}
 
@@ -370,7 +374,7 @@ public final class RestResponse implements HttpResponse {
 	@Override /* HttpResponse */
 	public void setEntity(HttpEntity entity) {
 		response.setEntity(entity);
-		this.responseBody = new RestResponseBody(client, request, this);
+		this.responseBody = new RestResponseBody(client, request, this, parser);
 	}
 
 	/**

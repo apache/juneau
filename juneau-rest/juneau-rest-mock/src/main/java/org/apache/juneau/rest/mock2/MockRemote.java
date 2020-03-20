@@ -16,11 +16,18 @@ import java.util.*;
 
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.msgpack.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Creates a mocked interface against a REST resource class to use for creating test remote resource interfaces.
@@ -34,7 +41,7 @@ import org.apache.juneau.serializer.*;
 public class MockRemote<T> {
 
 	private MockRest.Builder mrb;
-	private RestClientBuilder rcb = RestClient.create().json();
+	private RestClientBuilder rcb = RestClient.create();
 	private final Class<T> intf;
 
 	/**
@@ -265,92 +272,331 @@ public class MockRemote<T> {
 	}
 
 	/**
-	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/json"</js>.
+	 * Adds JSON support for the request and response bodies.
+	 *
+	 * <p>
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to <js>"application/json"</js> unless explicitly set.
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public MockRemote<T> json() {
-		marshall(Json.DEFAULT);
+		return jsonSerializer().jsonParser();
+	}
+
+	/**
+	 * Adds JSON support for the request body only.
+	 *
+	 * <p>
+	 * <c>Content-Type</c> header is set to <js>"application/json"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> jsonSerializer() {
+		serializer(JsonSerializer.class);
 		return this;
 	}
 
 	/**
-	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/json+simple"</js>.
+	 * Adds JSON support for the response body only.
+	 *
+	 * <p>
+	 * <c>Accept</c> header is set to <js>"application/json"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> jsonParser() {
+		parser(JsonParser.class);
+		return this;
+	}
+
+	/**
+	 * Adds Simplified JSON support for the request and response bodies.
+	 *
+	 * <p>
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to <js>"application/json+simple"</js> unless explicitly set.
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public MockRemote<T> simpleJson() {
-		marshall(SimpleJson.DEFAULT);
+		return simpleJsonSerializer().jsonParser();
+	}
+
+	/**
+	 * Adds Simplified JSON support for the request body only.
+	 *
+	 * <p>
+	 * <c>Content-Type</c> header is set to <js>"application/json+simple"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> simpleJsonSerializer() {
+		serializer(SimpleJsonSerializer.class);
 		return this;
 	}
 
 	/**
-	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/xml"</js>.
+	 * Adds XML support for the request and response bodies.
+	 *
+	 * <p>
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to <js>"text/xml"</js> unless explicitly set.
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public MockRemote<T> xml() {
-		marshall(Xml.DEFAULT);
+		return xmlSerializer().xmlParser();
+	}
+
+	/**
+	 * Adds XML support for the request body only.
+	 *
+	 * <p>
+	 * <c>Content-Type</c> header is set to <js>"text/xml"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> xmlSerializer() {
+		serializer(XmlSerializer.class);
 		return this;
 	}
 
 	/**
-	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/html"</js>.
+	 * Adds XML support for the response body only.
+	 *
+	 * <p>
+	 * <c>Accept</c> header is set to <js>"text/xml"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> xmlParser() {
+		parser(XmlParser.class);
+		return this;
+	}
+
+	/**
+	 * Adds HTML support for the request and response bodies.
+	 *
+	 * <p>
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to <js>"text/html"</js> unless explicitly set.
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public MockRemote<T> html() {
-		marshall(Html.DEFAULT);
+		return htmlSerializer().htmlParser();
+	}
+
+	/**
+	 * Adds HTML support for the request body only.
+	 *
+	 * <p>
+	 * <c>Content-Type</c> header is set to <js>"text/html"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> htmlSerializer() {
+		serializer(HtmlSerializer.class);
 		return this;
 	}
 
 	/**
-	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/plain"</js>.
+	 * Adds HTML support for the response body only.
+	 *
+	 * <p>
+	 * <c>Accept</c> header is set to <js>"text/html"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> htmlParser() {
+		parser(HtmlParser.class);
+		return this;
+	}
+
+	/**
+	 * Adds Plain-Text support for the request and response bodies.
+	 *
+	 * <p>
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to <js>"text/plain"</js> unless explicitly set.
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public MockRemote<T> plainText() {
-		marshall(PlainText.DEFAULT);
-		return this;
+		return plainTextSerializer().plainTextParser();
 	}
 
 	/**
-	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"octal/msgpack"</js>.
+	 * Adds Plain-Text support for the request body only.
+	 *
+	 * <p>
+	 * <c>Content-Type</c> header is set to <js>"text/plain"</js> unless explicitly set.
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public MockRemote<T> msgpack() {
-		marshall(MsgPack.DEFAULT);
+	public MockRemote<T> plainTextSerializer() {
+		serializer(PlainTextSerializer.class);
 		return this;
 	}
 
 	/**
-	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/uon"</js>.
+	 * Adds Plain-Text support for the response body only.
+	 *
+	 * <p>
+	 * <c>Accept</c> header is set to <js>"text/plain"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> plainTextParser() {
+		parser(PlainTextParser.class);
+		return this;
+	}
+
+	/**
+	 * Adds MessagePack support for the request and response bodies.
+	 *
+	 * <p>
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to <js>"octal/msgpack"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> msgPack() {
+		return msgPackSerializer().msgPackParser();
+	}
+
+	/**
+	 * Adds MessagePack support for the request body only.
+	 *
+	 * <p>
+	 * <c>Content-Type</c> header is set to <js>"octal/msgpack"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> msgPackSerializer() {
+		serializer(MsgPackSerializer.class);
+		return this;
+	}
+
+	/**
+	 * Adds MessagePack support for the response body only.
+	 *
+	 * <p>
+	 * <c>Accept</c> header is set to <js>"octal/msgpack"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> msgPackParser() {
+		parser(MsgPackParser.class);
+		return this;
+	}
+
+	/**
+	 * Adds UON support for the request and response bodies.
+	 *
+	 * <p>
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to <js>"text/uon"</js> unless explicitly set.
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public MockRemote<T> uon() {
-		marshall(Uon.DEFAULT);
+		return uonSerializer().uonParser();
+	}
+
+	/**
+	 * Adds UON support for the request body only.
+	 *
+	 * <p>
+	 * <c>Content-Type</c> header is set to <js>"text/uon"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> uonSerializer() {
+		serializer(UonSerializer.class);
 		return this;
 	}
 
 	/**
-	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"application/x-www-form-urlencoded"</js>.
+	 * Adds UON support for the response body only.
+	 *
+	 * <p>
+	 * <c>Accept</c> header is set to <js>"text/uon"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> uonParser() {
+		parser(UonParser.class);
+		return this;
+	}
+
+	/**
+	 * Adds URL-Encoding support for the request and response bodies.
+	 *
+	 * <p>
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to <js>"application/x-www-form-urlencoded"</js> unless explicitly set.
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public MockRemote<T> urlEnc() {
-		marshall(UrlEncoding.DEFAULT);
+		return urlEncSerializer().urlEncParser();
+	}
+
+	/**
+	 * Adds URL-Encoding support for the request body only.
+	 *
+	 * <p>
+	 * <c>Content-Type</c> header is set to <js>"application/x-www-form-urlencoded"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> urlEncSerializer() {
+		serializer(UrlEncodingSerializer.class);
 		return this;
 	}
 
 	/**
-	 * Convenience method for setting <c>Accept</c> and <c>Content-Type</c> headers to <js>"text/openapi"</js>.
+	 * Adds URL-Encoding support for the response body only.
+	 *
+	 * <p>
+	 * <c>Accept</c> header is set to <js>"application/x-www-form-urlencoded"</js> unless explicitly set.
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public MockRemote<T> openapi() {
-		marshall(OpenApi.DEFAULT);
+	public MockRemote<T> urlEncParser() {
+		parser(UrlEncodingParser.class);
+		return this;
+	}
+
+	/**
+	 * Adds OpenAPI support for the request and response bodies.
+	 *
+	 * <p>
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to <js>"text/openapi"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> openApi() {
+		return openApiSerializer().openApiParser();
+	}
+
+	/**
+	 * Adds OpenAPI support for the request body only.
+	 *
+	 * <p>
+	 * <c>Content-Type</c> header is set to <js>"text/openapi"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> openApiSerializer() {
+		serializer(OpenApiSerializer.class);
+		return this;
+	}
+
+	/**
+	 * Adds OpenAPI support for the response body only.
+	 *
+	 * <p>
+	 * <c>Accept</c> header is set to <js>"text/openapi"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> openApiParser() {
+		parser(OpenApiParser.class);
 		return this;
 	}
 
@@ -369,36 +615,157 @@ public class MockRemote<T> {
 	public MockRemote<T> marshall(Marshall value) {
 		if (value != null)
 			serializer(value.getSerializer()).parser(value.getParser());
-		else
-			serializer(null).parser(null);
 		return this;
 	}
 
 	/**
-	 * Associates the specified {@link Serializer} with this client.
+	 * Associates the specified {@link Marshall Marshalls} with this client.
+	 *
+	 * <p>
+	 * This is shorthand for calling <c>serializer(x)</c> and <c>parser(x)</c> using the inner
+	 * serializer and parser of the marshall object.
+	 *
+	 * @param values
+	 * 	The marshalls to use for serializing and parsing HTTP bodies.
+	 * 	<br>Can be <jk>null</jk> (will remote the existing serializer/parser).
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> marshalls(Marshall...values) {
+		rcb.marshalls(values);
+		return this;
+	}
+
+	/**
+	 * Associates the specified {@link Serializer} with the HTTP client.
+	 *
+	 * <p>
+	 * If the <c>Content-Type</c> header is not specified, it will be set to the media type of this serializer.
 	 *
 	 * @param value
 	 * 	The serializer to use for serializing HTTP bodies.
-	 * 	<br>Can be <jk>null</jk> (will remote the existing serializer).
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public MockRemote<T> serializer(Serializer value) {
 		rcb.serializer(value);
-		contentType(value == null ? null : value.getPrimaryMediaType().toString());
 		return this;
 	}
 
 	/**
-	 * Associates the specified {@link Parser} with this client.
+	 * Associates the specified {@link Serializer} with the HTTP client.
+	 *
+	 * <p>
+	 * If the <c>Content-Type</c> header is not specified, it will be set to the media type of this serializer.
+	 *
+	 * @param value
+	 * 	The serializer to use for serializing HTTP bodies.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> serializer(Class<? extends Serializer> value) {
+		rcb.serializer(value);
+		return this;
+	}
+
+	/**
+	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
+	 *
+	 * <p>
+	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
+	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
+	 *
+	 * @param values
+	 * 	The serializer to use for serializing HTTP bodies.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> serializers(Serializer...values) {
+		rcb.serializers(values);
+		return this;
+	}
+
+	/**
+	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
+	 *
+	 * <p>
+	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
+	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
+	 *
+	 * @param values
+	 * 	The serializer to use for serializing HTTP bodies.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@SafeVarargs
+	public final MockRemote<T> serializers(Class<? extends Serializer>...values) {
+		rcb.serializers(values);
+		return this;
+	}
+
+	/**
+	 * Associates the specified {@link Parser} with the HTTP client.
+	 *
+	 * <p>
+	 * If the <c>Accept</c> header is not specified, it will be set to the media type of this parser.
 	 *
 	 * @param value
 	 * 	The parser to use for parsing HTTP bodies.
-	 * 	<br>Can be <jk>null</jk> (will remote the existing parser).
+	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public MockRemote<T> parser(Parser value) {
 		rcb.parser(value);
-		accept(value == null ? null : value.getPrimaryMediaType().toString());
+		return this;
+	}
+
+	/**
+	 * Associates the specified {@link Parser} with the HTTP client.
+	 *
+	 * <p>
+	 * If the <c>Accept</c> header is not specified, it will be set to the media type of this parser.
+	 *
+	 * @param value
+	 * 	The parser to use for parsing HTTP bodies.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> parser(Class<? extends Parser> value) {
+		rcb.parser(value);
+		return this;
+	}
+
+	/**
+	 * Associates the specified {@link Parser Parsers} with the HTTP client.
+	 *
+	 * <p>
+	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
+	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
+	 *
+	 * @param values
+	 * 	The parsers to use for parsing HTTP bodies.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> parsers(Parser...values) {
+		rcb.parsers(values);
+		return this;
+	}
+
+	/**
+	 * Associates the specified {@link Parser Parsers} with the HTTP client.
+	 *
+	 * <p>
+	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
+	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
+	 *
+	 * @param values
+	 * 	The parsers to use for parsing HTTP bodies.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@SafeVarargs
+	public final MockRemote<T> parsers(Class<? extends Parser>...values) {
+		rcb.parsers(values);
 		return this;
 	}
 }

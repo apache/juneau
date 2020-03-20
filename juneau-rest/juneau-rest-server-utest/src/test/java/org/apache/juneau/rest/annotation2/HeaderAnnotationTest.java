@@ -60,7 +60,7 @@ public class HeaderAnnotationTest {
 			return f1;
 		}
 	}
-	static MockRest a = MockRest.create(A.class).json().build();
+	static MockRest a = MockRest.buildJson(A.class);
 
 	@Test
 	public void a01_optionalParam_integer() throws Exception {

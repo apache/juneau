@@ -43,7 +43,7 @@ public class PathRemainderAnnotationTest {
 			return remainder;
 		}
 	}
-	static MockRest a = MockRest.build(A.class, null);
+	static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01_withoutRemainder() throws Exception {
@@ -84,7 +84,7 @@ public class PathRemainderAnnotationTest {
 			return f1;
 		}
 	}
-	static MockRest b = MockRest.create(B.class).json().build();
+	static MockRest b = MockRest.buildJson(B.class);
 
 	@Test
 	public void b01_optionalParam_integer() throws Exception {

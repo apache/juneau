@@ -128,7 +128,7 @@ public class RestResourceParsersTest {
 			return in;
 		}
 	}
-	static MockRest a = MockRest.build(A.class, null);
+	static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01_parserOnClass() throws Exception {

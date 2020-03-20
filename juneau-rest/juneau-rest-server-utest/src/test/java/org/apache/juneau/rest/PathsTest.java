@@ -56,7 +56,7 @@ public class PathsTest {
 			return getPaths(req).append("pathRemainder2", r).append("method",1);
 		}
 	}
-	static MockRest a = MockRest.build(A.class, null);
+	static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01() throws Exception {
@@ -204,7 +204,7 @@ public class PathsTest {
 			return getPaths(req).append("pathRemainder2", r).append("method",2);
 		}
 	}
-	static MockRest b = MockRest.build(B.class, null);
+	static MockRest b = MockRest.build(B.class);
 
 	@Test
 	public void b01() throws Exception {
@@ -356,7 +356,7 @@ public class PathsTest {
 			return getPaths(req).append("pathRemainder2", r).append("method",3);
 		}
 	}
-	static MockRest c = MockRest.build(C.class, null);
+	static MockRest c = MockRest.build(C.class);
 
 	@Test
 	public void c01() throws Exception {
@@ -508,7 +508,7 @@ public class PathsTest {
 			return getPaths(req).append("pathRemainder2", r).append("method",4);
 		}
 	}
-	static MockRest d = MockRest.build(D.class, null);
+	static MockRest d = MockRest.build(D.class);
 
 	@Test
 	public void d01() throws Exception {

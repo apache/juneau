@@ -107,12 +107,13 @@ public class RestResponseBody implements HttpEntity {
 	 * @param client The client used to build this request.
 	 * @param request The request object.
 	 * @param response The response object.
+	 * @param parser The parser to use to consume the body.  Can be <jk>null</jk>.
 	 */
-	public RestResponseBody(RestClient client, RestRequest request, RestResponse response) {
+	public RestResponseBody(RestClient client, RestRequest request, RestResponse response, Parser parser) {
 		this.client = client;
 		this.request = request;
 		this.response = response;
-		this.parser = client.getParser();
+		this.parser = parser;
 		this.entity = ObjectUtils.firstNonNull(response.asHttpResponse().getEntity(), NULL_ENTITY);
 	}
 
@@ -772,6 +773,9 @@ public class RestResponseBody implements HttpEntity {
 			}
 
 			String ct = firstNonEmpty(response.getHeader("Content-Type").asStringOrElse("text/plain"));
+
+			if (parser == null)
+				parser = client.getMatchingParser(ct);
 
 			MediaType mt = MediaType.forString(ct);
 

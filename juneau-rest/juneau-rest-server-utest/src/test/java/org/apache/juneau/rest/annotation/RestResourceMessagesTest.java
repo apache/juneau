@@ -48,7 +48,7 @@ public class RestResourceMessagesTest {
 			return convertToMap(rb);
 		}
 	}
-	static MockRest a = MockRest.build(A.class, null);
+	static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01() throws Exception {
@@ -62,7 +62,7 @@ public class RestResourceMessagesTest {
 
 	@Rest(messages="RestResourceMessagesTest2")
 	public static class B extends A {}
-	static MockRest b = MockRest.build(B.class, null);
+	static MockRest b = MockRest.build(B.class);
 
 	@Test
 	public void b01() throws Exception {

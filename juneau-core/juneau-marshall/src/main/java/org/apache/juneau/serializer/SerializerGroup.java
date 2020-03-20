@@ -159,6 +159,8 @@ public final class SerializerGroup extends BeanTraverseContext {
 	 * @return The serializer and media type that matched the accept header, or <jk>null</jk> if no match was made.
 	 */
 	public SerializerMatch getSerializerMatch(String acceptHeader) {
+		if (acceptHeader == null)
+			return null;
 		SerializerMatch sm = cache.get(acceptHeader);
 		if (sm != null)
 			return sm;
@@ -265,5 +267,14 @@ public final class SerializerGroup extends BeanTraverseContext {
 	 */
 	public List<Serializer> getSerializers() {
 		return serializers;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this group contains no serializers.
+	 *
+	 * @return <jk>true</jk> if this group contains no serializers.
+	 */
+	public boolean isEmpty() {
+		return serializers.isEmpty();
 	}
 }

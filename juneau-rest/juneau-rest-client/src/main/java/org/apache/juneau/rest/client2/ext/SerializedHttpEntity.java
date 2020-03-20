@@ -38,13 +38,14 @@ public final class SerializedHttpEntity extends BasicHttpEntity {
 	 * @param input The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
 	 * @param serializer The serializer to use to serialize this response.
 	 * @param schema The optional schema information about the serialized part.
+	 * @param contentType Override the content type defined on the serializer.
 	 */
-	public SerializedHttpEntity(Object input, Serializer serializer, HttpPartSchema schema) {
+	public SerializedHttpEntity(Object input, Serializer serializer, HttpPartSchema schema, String contentType) {
 		this.output = input;
 		this.serializer = serializer;
 		this.schema = schema;
 		if (serializer != null && serializer.getResponseContentType() != null)
-			setContentType(new BasicHeader("Content-Type", serializer.getResponseContentType().toString()));
+			setContentType(new BasicHeader("Content-Type", contentType != null ? contentType : serializer.getResponseContentType().toString()));
 	}
 
 	@Override /* BasicHttpEntity */

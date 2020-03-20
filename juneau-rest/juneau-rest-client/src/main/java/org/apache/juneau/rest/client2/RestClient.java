@@ -1377,30 +1377,32 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	public static final String RESTCLIENT_leakDetection = PREFIX + "leakDetection.b";
 
 	/**
-	 * Configuration property:  Parser.
+	 * Configuration property:  Parsers.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_parser RESTCLIENT_parser}
-	 * 	<li><b>Name:</b>  <js>"RestClient.parser.o"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_parsers RESTCLIENT_parsers}
+	 * 	<li><b>Name:</b>  <js>"RestClient.parsers.lo"</js>
 	 * 	<li><b>Data type:</b>
 	 * 		<ul>
 	 * 			<li><c>Class&lt;? <jk>extends</jk> {@link org.apache.juneau.parser.Parser}&gt;</c>
 	 * 			<li>{@link org.apache.juneau.parser.Parser}
 	 * 		</ul>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.json.JsonParser};
+	 * 	<li><b>Default:</b>  No parsers.
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#parser(Class)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#parser(Parser)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#parsers(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#parsers(Parser...)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * The parser to use for parsing POJOs in response bodies.
+	 * The parsers to use for parsing POJOs in response bodies.
 	 */
-	public static final String RESTCLIENT_parser = PREFIX + "parser.o";
+	public static final String RESTCLIENT_parsers = PREFIX + "parsers.lo";
 
 	/**
 	 * Configuration property:  Part parser.
@@ -1526,30 +1528,32 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	public static final String RESTCLIENT_rootUri = PREFIX + "rootUri.s";
 
 	/**
-	 * Configuration property:  Serializer.
+	 * Configuration property:  Serializers.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_serializer RESTCLIENT_serializer}
-	 * 	<li><b>Name:</b>  <js>"RestClient.serializer.o"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_serializers RESTCLIENT_serializers}
+	 * 	<li><b>Name:</b>  <js>"RestClient.serializers.lo"</js>
 	 * 	<li><b>Data type:</b>
 	 * 		<ul>
 	 * 			<li><c>Class&lt;? <jk>extends</jk> {@link org.apache.juneau.serializer.Serializer}&gt;</c>
 	 * 			<li>{@link org.apache.juneau.serializer.Serializer}
 	 * 		</ul>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.json.JsonSerializer};
+	 * 	<li><b>Default:</b>  No serializers.
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#serializer(Class)}
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#serializer(Serializer)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#serializers(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#serializers(Serializer...)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * The serializer to use for serializing POJOs in request bodies.
+	 * The serializers to use for serializing POJOs in request bodies.
 	 */
-	public static final String RESTCLIENT_serializer = PREFIX + "serializer.o";
+	public static final String RESTCLIENT_serializers = PREFIX + "serializers.lo";
 
 	private static final Set<String> NO_BODY_METHODS = Collections.unmodifiableSet(ASet.<String>create("GET","HEAD","DELETE","CONNECT","OPTIONS","TRACE"));
 
@@ -1567,8 +1571,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	private StackTraceElement[] closedStack;
 
 	// These are read directly by RestCall.
-	final Serializer serializer;
-	final Parser parser;
+	final SerializerGroup serializers;
+	final ParserGroup parsers;
 	Predicate<Integer> errorCodes;
 
 	final RestCallInterceptor[] interceptors;
@@ -1640,23 +1644,25 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		this.rootUrl = StringUtils.nullIfEmpty(getStringProperty(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
 		this.leakDetection = getBooleanProperty(RESTCLIENT_leakDetection, debug);
 
-		Object o = getProperty(RESTCLIENT_serializer, Object.class, null);
-		if (o instanceof Serializer) {
-			this.serializer = ((Serializer)o).builder().apply(ps).build();
-		} else if (o instanceof Class) {
-			this.serializer = ContextCache.INSTANCE.create((Class<? extends Serializer>)o, ps);
-		} else {
-			this.serializer = null;
+		SerializerGroupBuilder sgb = SerializerGroup.create();
+		for (Object o : getArrayProperty(RESTCLIENT_serializers, Object.class)) {
+			if (o instanceof Serializer) {
+				sgb.append(((Serializer)o).builder().apply(ps).build());
+			} else if (o instanceof Class) {
+				sgb.append(ContextCache.INSTANCE.create((Class<? extends Serializer>)o, ps));
+			}
 		}
+		this.serializers = sgb.build();
 
-		o = getProperty(RESTCLIENT_parser, Object.class, null);
-		if (o instanceof Parser) {
-			this.parser = ((Parser)o).builder().apply(ps).build();
-		} else if (o instanceof Class) {
-			this.parser = ContextCache.INSTANCE.create((Class<? extends Parser>)o, ps);
-		} else {
-			this.parser = null;
+		ParserGroupBuilder pgb = ParserGroup.create();
+		for (Object o : getArrayProperty(RESTCLIENT_parsers, Object.class)) {
+			if (o instanceof Parser) {
+				pgb.append(((Parser)o).builder().apply(ps).build());
+			} else if (o instanceof Class) {
+				pgb.append(ContextCache.INSTANCE.create((Class<? extends Parser>)o, ps));
+			}
 		}
+		this.parsers = pgb.build();
 
 		this.urlEncodingSerializer = new SerializerBuilder(ps).build(UrlEncodingSerializer.class);
 		this.partSerializer = getInstanceProperty(RESTCLIENT_partSerializer, HttpPartSerializer.class, OpenApiSerializer.class, ResourceResolver.FUZZY, ps);
@@ -2042,7 +2048,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 */
 	public RestRequest formPost(Object url, Object body) throws RestCallException {
 		return request("POST", url, true)
-			.body(body instanceof HttpEntity ? body : new SerializedHttpEntity(body, urlEncodingSerializer, null));
+			.body(body instanceof HttpEntity ? body : new SerializedHttpEntity(body, urlEncodingSerializer, null, null));
 	}
 
 	/**
@@ -2417,9 +2423,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 				throw new RestCallException("Invalid type {0} for form-data.", o.getClass());
 		}
 
-		if (parser != null && ! req.containsHeader("Accept"))
-			req.setHeader("Accept", parser.getPrimaryMediaType().toString());
-
 		return req;
 	}
 
@@ -2508,7 +2511,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * @return The new proxy interface.
 	 */
 	public <T> T getRemote(final Class<T> interfaceClass, final Object restUrl) {
-		return getRemote(interfaceClass, restUrl, serializer, parser);
+		return getRemote(interfaceClass, restUrl, null, null);
 	}
 
 	/**
@@ -2560,6 +2563,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 							RestRequest rc = request(httpMethod, url, hasContent(httpMethod));
 
 							rc.serializer(serializer);
+							rc.parser(parser);
 
 							for (RemoteMethodArg a : rmm.getPathArgs())
 								rc.path(a.getName(), args[a.getIndex()], a.getSerializer(s), a.getSchema());
@@ -2731,7 +2735,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * @return The new proxy interface.
 	 */
 	public <T> T getRrpcInterface(final Class<T> interfaceClass, final Object restUrl) {
-		return getRrpcInterface(interfaceClass, restUrl, serializer, parser);
+		return getRrpcInterface(interfaceClass, restUrl, null, null);
 	}
 
 	/**
@@ -3087,6 +3091,38 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		}
 	}
 
+	/*
+	 * Returns the serializer that best matches the specified content type.
+	 * If no match found or the content type is null, returns the first serializer in the list.
+	 * Returns null if no serializers are defined.
+	 */
+	Serializer getMatchingSerializer(String mediaType) {
+		if (serializers.isEmpty())
+			return null;
+		if (mediaType != null) {
+			Serializer s = serializers.getSerializer(mediaType);
+			if (s != null)
+				return s;
+		}
+		return serializers.getSerializers().get(0);
+	}
+
+	/*
+	 * Returns the parser that best matches the specified content type.
+	 * If no match found or the content type is null, returns the first parser in the list.
+	 * Returns null if no parsers are defined.
+	 */
+	Parser getMatchingParser(String mediaType) {
+		if (parsers.isEmpty())
+			return null;
+		if (mediaType != null) {
+			Parser p = parsers.getParser(mediaType);
+			if (p != null)
+				return p;
+		}
+		return parsers.getParsers().get(0);
+	}
+
 	@Override /* Context */
 	public ObjectMap toMap() {
 		return super.toMap()
@@ -3098,16 +3134,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 				.append("headers", headers)
 				.append("interceptors", interceptors)
 				.append("keepHttpClientOpen", keepHttpClientOpen)
-				.append("parser", parser)
 				.append("partParser", partParser)
 				.append("partSerializer", partSerializer)
 				.append("query", query)
 				.append("rootUri", rootUrl)
-				.append("serializer", serializer)
 			);
-	}
-
-	Parser getParser() {
-		return parser;
 	}
 }

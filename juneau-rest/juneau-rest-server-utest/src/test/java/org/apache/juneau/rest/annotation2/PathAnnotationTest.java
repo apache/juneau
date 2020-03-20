@@ -64,7 +64,7 @@ public class PathAnnotationTest {
 			return "GET /a "+foo+","+bar+",r="+remainder;
 		}
 	}
-	static MockRest a = MockRest.build(A.class, null);
+	static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a00_nonExistentPath() throws Exception {
@@ -140,7 +140,7 @@ public class PathAnnotationTest {
 			return String.valueOf(x);
 		}
 	}
-	static MockRest b = MockRest.build(B.class, null);
+	static MockRest b = MockRest.build(B.class);
 
 	@Test
 	public void b01_int() throws Exception {
@@ -222,7 +222,7 @@ public class PathAnnotationTest {
 			return String.valueOf(x);
 		}
 	}
-	static MockRest c = MockRest.build(C.class, null);
+	static MockRest c = MockRest.build(C.class);
 
 	@Test
 	public void c01_Integer() throws Exception {
@@ -277,7 +277,7 @@ public class PathAnnotationTest {
 			return uuid;
 		}
 	}
-	static MockRest d = MockRest.build(D.class, null);
+	static MockRest d = MockRest.build(D.class);
 
 	@Test
 	public void d01_uuid() throws Exception {
@@ -312,7 +312,7 @@ public class PathAnnotationTest {
 			return new ObjectMap().append("m","numbers3").append("0", foo).append("1", bar);
 		}
 	}
-	static MockRest e = MockRest.build(E.class, null);
+	static MockRest e = MockRest.build(E.class);
 
 	@Test
 	public void e01_normal1() throws Exception {
@@ -704,7 +704,7 @@ public class PathAnnotationTest {
 			return f1;
 		}
 	}
-	static MockRest j = MockRest.create(J.class).json().build();
+	static MockRest j = MockRest.buildJson(J.class);
 
 	@Test
 	public void j01_optionalParam_integer() throws Exception {
@@ -1124,8 +1124,8 @@ public class PathAnnotationTest {
 		}
 	}
 
-	static MockRest u1 = MockRest.build(U1.class, null);
-	static MockRest u2 = MockRest.build(U2.class, null);
+	static MockRest u1 = MockRest.build(U1.class);
+	static MockRest u2 = MockRest.build(U2.class);
 
 	@Test
 	public void u01_nonRequiredPath() throws Exception {
@@ -1154,8 +1154,8 @@ public class PathAnnotationTest {
 		}
 	}
 
-	static MockRest v1 = MockRest.build(V1.class, null);
-	static MockRest v2 = MockRest.build(V2.class, null);
+	static MockRest v1 = MockRest.build(V1.class);
+	static MockRest v2 = MockRest.build(V2.class);
 
 	@Test
 	public void v01_multiplePaths() throws Exception {

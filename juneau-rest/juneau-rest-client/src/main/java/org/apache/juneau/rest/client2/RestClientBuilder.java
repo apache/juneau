@@ -62,6 +62,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.rest.client2.logging.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.soap.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
@@ -116,6 +117,41 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//------------------------------------------------------------------------------------------------------------------
 	// Convenience marshalling support methods.
 	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Convenience method for specifying all available transmission types.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder universal() {
+		return
+			serializers(
+				JsonSerializer.class,
+				SimpleJsonSerializer.class,
+				HtmlDocSerializer.class,
+				HtmlStrippedDocSerializer.class,
+				HtmlSchemaDocSerializer.class,
+				JsonSchemaSerializer.class,
+				XmlDocSerializer.class,
+				UonSerializer.class,
+				UrlEncodingSerializer.class,
+				OpenApiSerializer.class,
+				MsgPackSerializer.class,
+				SoapXmlSerializer.class,
+				PlainTextSerializer.class
+			)
+			.parsers(
+				JsonParser.class,
+				JsonParser.Simple.class,
+				XmlParser.class,
+				HtmlParser.class,
+				UonParser.class,
+				UrlEncodingParser.class,
+				OpenApiParser.class,
+				MsgPackParser.class,
+				PlainTextParser.class
+			);
+	}
 
 	/**
 	 * Convenience method for specifying JSON as the transmission media type.
@@ -1703,17 +1739,33 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Marshall
 	 *
 	 * <p>
-	 * Shortcut for specifying the {@link RestClient#RESTCLIENT_serializer} and {@link RestClient#RESTCLIENT_parser}
+	 * Shortcut for specifying the {@link RestClient#RESTCLIENT_serializers} and {@link RestClient#RESTCLIENT_parsers}
 	 * using the serializer and parser defined in a marshall.
 	 *
 	 * @param value The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder marshall(Marshall value) {
-		if (value == null)
-			serializer((Serializer)null).parser((Parser)null);
-		else
+		if (value != null)
 			serializer(value.getSerializer()).parser(value.getParser());
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Marshalls
+	 *
+	 * <p>
+	 * Shortcut for specifying the {@link RestClient#RESTCLIENT_serializers} and {@link RestClient#RESTCLIENT_parsers}
+	 * using the serializer and parser defined in a marshall.
+	 *
+	 * @param value The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder marshalls(Marshall...value) {
+		for (Marshall m : value) {
+			if (m != null)
+				serializer(m.getSerializer()).parser(m.getParser());
+		}
 		return this;
 	}
 
@@ -1721,10 +1773,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Parser.
 	 *
 	 * <p>
-	 * The parser to use for parsing POJOs in response bodies.
+	 * Shortcut for calling {@link #parsers(Class...)}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parser}
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
 	 * </ul>
 	 *
 	 * @param value
@@ -1733,17 +1785,17 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder parser(Class<? extends Parser> value) {
-		return set(RESTCLIENT_parser, value);
+		return parsers(value);
 	}
 
 	/**
 	 * Configuration property:  Parser.
 	 *
 	 * <p>
-	 * Same as {@link #parser(Parser)} except takes in a parser instance.
+	 * Shortcut for calling {@link #parsers(Parser...)}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parser}
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
 	 * </ul>
 	 *
 	 * @param value
@@ -1752,7 +1804,50 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder parser(Parser value) {
-		return set(RESTCLIENT_parser, value);
+		return parsers(value);
+	}
+
+	/**
+	 * Configuration property:  Parsers.
+	 *
+	 * <p>
+	 * Associates the specified {@link Parser Parsers} with the HTTP client.
+	 *
+	 * <p>
+	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
+	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
+	 * @return This object (for method chaining).
+	 */
+	@SafeVarargs
+	public final RestClientBuilder parsers(Class<? extends Parser>...value) {
+		return addTo(RESTCLIENT_parsers, value);
+	}
+
+	/**
+	 * Configuration property:  Parsers.
+	 *
+	 * <p>
+	 * Same as {@link #parsers(Class...)} except takes in a parser instance.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder parsers(Parser...value) {
+		return addTo(RESTCLIENT_parsers, value);
 	}
 
 	/**
@@ -1857,10 +1952,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Serializer.
 	 *
 	 * <p>
-	 * The serializer to use for serializing POJOs in request bodies.
+	 * Shortcut for calling {@link #serializers(Class...)}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializer}
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
 	 * </ul>
 	 *
 	 * @param value
@@ -1869,17 +1964,17 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder serializer(Class<? extends Serializer> value) {
-		return set(RESTCLIENT_serializer, value);
+		return serializers(value);
 	}
 
 	/**
 	 * Configuration property:  Serializer.
 	 *
 	 * <p>
-	 * Same as {@link #serializer(Class)} but takes in a serializer instance.
+	 * Shortcut for calling {@link #serializers(Serializer...)}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializer}
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
 	 * </ul>
 	 *
 	 * @param value
@@ -1888,7 +1983,50 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder serializer(Serializer value) {
-		return set(RESTCLIENT_serializer, value);
+		return serializers(value);
+	}
+
+	/**
+	 * Configuration property:  Serializers.
+	 *
+	 * <p>
+	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
+	 *
+	 * <p>
+	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
+	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link JsonSerializer}.
+	 * @return This object (for method chaining).
+	 */
+	@SafeVarargs
+	public final RestClientBuilder serializers(Class<? extends Serializer>...value) {
+		return addTo(RESTCLIENT_serializers, value);
+	}
+
+	/**
+	 * Configuration property:  Serializers.
+	 *
+	 * <p>
+	 * Same as {@link #serializers(Class...)} but takes in serializer instances.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link JsonSerializer}.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder serializers(Serializer...value) {
+		return addTo(RESTCLIENT_serializers, value);
 	}
 
 	/**

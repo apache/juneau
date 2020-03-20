@@ -53,7 +53,7 @@ public class QueryAnnotationTest {
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
 		}
 	}
-	static MockRest a = MockRest.build(A.class, null);
+	static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01_get() throws Exception {
@@ -113,7 +113,7 @@ public class QueryAnnotationTest {
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
 	}
-	static MockRest b = MockRest.build(B.class, null);
+	static MockRest b = MockRest.build(B.class);
 
 	@Test
 	public void b01_get1() throws Exception {
@@ -241,7 +241,7 @@ public class QueryAnnotationTest {
 				.append("f3", f3);
 		}
 	}
-	static MockRest d = MockRest.build(D.class, null);
+	static MockRest d = MockRest.build(D.class);
 
 	@Test
 	public void d01_defaultQuery() throws Exception {
@@ -293,7 +293,7 @@ public class QueryAnnotationTest {
 			return f1;
 		}
 	}
-	static MockRest e = MockRest.create(E.class).json().build();
+	static MockRest e = MockRest.buildJson(E.class);
 
 	@Test
 	public void e01_optionalParam_integer() throws Exception {

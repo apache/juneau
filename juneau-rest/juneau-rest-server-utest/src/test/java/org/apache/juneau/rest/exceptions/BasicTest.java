@@ -70,7 +70,7 @@ public class BasicTest {
 		@RestMethod public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates(); }
 	}
 
-	static MockRest a = MockRest.build(A.class, null);
+	static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01_badRequest() throws Exception {
@@ -246,7 +246,7 @@ public class BasicTest {
 		@RestMethod public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates("foo {0}", "bar"); }
 	}
 
-	static MockRest b = MockRest.build(B.class, null);
+	static MockRest b = MockRest.build(B.class);
 
 	@Test
 	public void b01_badRequest() throws Exception {
@@ -424,7 +424,7 @@ public class BasicTest {
 		@RestMethod public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates(t); }
 	}
 
-	static MockRest c = MockRest.build(C.class, null);
+	static MockRest c = MockRest.build(C.class);
 
 	@Test
 	public void c01_badRequest() throws Exception {
@@ -600,7 +600,7 @@ public class BasicTest {
 		@RestMethod public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates(t, "foo {0}", "bar"); }
 	}
 
-	static MockRest d = MockRest.build(D.class, null);
+	static MockRest d = MockRest.build(D.class);
 
 	@Test
 	public void d01_badRequest() throws Exception {

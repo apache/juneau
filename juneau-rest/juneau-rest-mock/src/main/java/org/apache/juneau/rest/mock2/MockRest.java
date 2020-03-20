@@ -50,6 +50,8 @@ import org.apache.juneau.serializer.*;
  *  <jk>public void</jk> testEcho() <jk>throws</jk> Exception {
  *  	MockRest
  *  		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
+ *  		.json()
+ *  		.build()
  *  		.put(<js>"/String"</js>, <js>"'foo'"</js>)
  *  		.execute()
  *  		.assertStatus(200)
@@ -131,13 +133,12 @@ public class MockRest implements MockHttpConnection {
 	 * Convenience method for creating a MockRest over the specified REST implementation bean or bean class.
 	 *
 	 * <p>
-	 * <c>Accept</c> header is set to <c>"application/json+simple"</c> by default.
-	 * <c>Content-Type</c> header is set to <c>"application/json"</c> by default.
+	 * <c>Accept</c> and <c>Content-Type</c> headers are not added to the request.
 	 *
 	 * <p>
 	 * Equivalent to calling:
 	 * <p class='bpcode w800'>
-	 * 	MockRest.create(impl, SimpleJson.<jsf>DEFAULT</jsf>).build();
+	 * 	MockRest.create(impl, <jk>null</jk>, <jk>null</jk>).build();
 	 * </p>
 	 *
 	 * @param impl
@@ -146,7 +147,7 @@ public class MockRest implements MockHttpConnection {
 	 * @return A new {@link MockRest} object.
 	 */
 	public static MockRest build(Object impl) {
-		return build(impl, SimpleJson.DEFAULT);
+		return build(impl, null, null);
 	}
 
 	/**
@@ -183,12 +184,12 @@ public class MockRest implements MockHttpConnection {
 	 * <c>Accept</c> and <c>Content-Type</c> headers are set to the primary media types on the specified serializer and parser.
 	 *
 	 * <p>
-	 * Note that the marshall itself is not involved in any serialization or parsing.
+	 * Note that the serializer and parsers are not involved in any serialization or parsing.
 	 *
 	 * <p>
 	 * Equivalent to calling:
 	 * <p class='bpcode w800'>
-	 * 	MockRest.create(impl, SimpleJson.<jsf>DEFAULT</jsf>).serializer(s).parser(p).build();
+	 * 	MockRest.create(impl).serializer(s).parser(p).build();
 	 * </p>
 	 *
 	 * @param impl
@@ -204,6 +205,36 @@ public class MockRest implements MockHttpConnection {
 	 */
 	public static MockRest build(Object impl, Serializer s, Parser p) {
 		return create(impl).serializer(s).parser(p).build();
+	}
+
+	/**
+	 * Shortcut builder.
+	 *
+	 * <p>
+	 * Shortcut for calling <c>create(impl).json().build()</c>.
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new {@link MockRest} object.
+	 */
+	public static MockRest buildJson(Object impl) {
+		return create(impl).json().build();
+	}
+
+	/**
+	 * Shortcut builder.
+	 *
+	 * <p>
+	 * Shortcut for calling <c>create(impl).simpleJson().build()</c>.
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new {@link MockRest} object.
+	 */
+	public static MockRest buildSimpleJson(Object impl) {
+		return create(impl).simpleJson().build();
 	}
 
 	/**

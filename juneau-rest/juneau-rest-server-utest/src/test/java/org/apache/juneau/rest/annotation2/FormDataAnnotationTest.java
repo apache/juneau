@@ -48,7 +48,7 @@ public class FormDataAnnotationTest {
 			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"],p2=["+p2+","+req.getFormData().getString("p2")+","+f.get("p2", int.class)+"]";
 		}
 	}
-	static MockRest a = MockRest.build(A.class, null);
+	static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01() throws Exception {
@@ -83,7 +83,7 @@ public class FormDataAnnotationTest {
 			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"]";
 		}
 	}
-	static MockRest b = MockRest.build(B.class, null);
+	static MockRest b = MockRest.build(B.class);
 
 	@Test
 	public void b01() throws Exception {
@@ -131,7 +131,7 @@ public class FormDataAnnotationTest {
 				.append("f3", f3);
 		}
 	}
-	static MockRest c = MockRest.build(C.class, null);
+	static MockRest c = MockRest.build(C.class);
 
 	@Test
 	public void c01_defaultFormData() throws Exception {

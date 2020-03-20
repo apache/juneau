@@ -69,7 +69,7 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testHtmlStripped() throws Exception {
-		try (RestClient client = SamplesMicroservice.client().parser(HtmlParser.DEFAULT).accept("text/html+stripped").build()) {
+		try (RestClient client = SamplesMicroservice.client().parsers(HtmlParser.DEFAULT).accept("text/html+stripped").build()) {
 
 			ResourceDescription[] x = client.get("").run().getBody().as(ResourceDescription[].class);
 			assertEquals("helloWorld", x[0].getName());
@@ -87,7 +87,7 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testJsonSchema() throws Exception {
-		try (RestClient client = SamplesMicroservice.client().parser(JsonParser.DEFAULT).accept("text/json+schema").build()) {
+		try (RestClient client = SamplesMicroservice.client().parsers(JsonParser.DEFAULT).accept("text/json+schema").build()) {
 			ObjectMap m = client.get("").run().getBody().as(ObjectMap.class);
 			if (debug) System.err.println(m);
 			client.closeQuietly();

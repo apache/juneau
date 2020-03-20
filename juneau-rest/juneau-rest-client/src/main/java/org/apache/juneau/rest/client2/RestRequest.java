@@ -38,6 +38,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.client2.ext.NameValuePairs;
 import org.apache.juneau.rest.client2.ext.SerializedNameValuePair;
@@ -71,6 +72,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	private Object input;
 	private boolean hasInput;                              // input() was called, even if it's setting 'null'.
 	private Serializer serializer;
+	private Parser parser;
 	private HttpPartSerializer partSerializer;
 	private HttpPartSchema requestBodySchema;
 	private URIBuilder uriBuilder;
@@ -93,7 +95,6 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 		this.request = request;
 		interceptors(this.client.interceptors);
 		this.errorCodes = client.errorCodes;
-		this.serializer = client.serializer;
 		this.partSerializer = client.getPartSerializer();
 		this.uriBuilder = new URIBuilder(uri);
 	}
@@ -103,16 +104,36 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Specifies the serializer to use on this request body.
+	 * Specifies the serializer to use on the request body.
 	 *
 	 * <p>
-	 * Overrides the serializer specified on the {@link RestClient}.
+	 * Overrides the serializers specified on the {@link RestClient}.
+	 *
+	 * <p>
+	 * If the <c>Content-Type</c> header is not set on the request, it will be set to the media type of this serializer.
 	 *
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
 	 * @return This object (for method chaining).
 	 */
 	public RestRequest serializer(Serializer serializer) {
 		this.serializer = serializer;
+		return this;
+	}
+
+	/**
+	 * Specifies the parser to use on the response body.
+	 *
+	 * <p>
+	 * Overrides the parsers specified on the {@link RestClient}.
+	 *
+	 * <p>
+	 * If the <c>Accept</c> header is not set on the request, it will be set to the media type of this parser.
+	 *
+	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest parser(Parser parser) {
+		this.parser = parser;
 		return this;
 	}
 
@@ -2175,6 +2196,24 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 
 			request.setURI(uriBuilder.build());
 
+			// Pick the serializer if it hasn't been overridden.
+			Header h = getFirstHeader("Content-Type");
+			String contentType = h == null ? null : h.getValue();
+			Serializer serializer = this.serializer;
+			if (serializer == null)
+				serializer = client.getMatchingSerializer(contentType);
+			if (contentType == null && serializer != null)
+				contentType = serializer.getPrimaryMediaType().toString();
+
+			// Pick the parser if it hasn't been overridden.
+			h = getFirstHeader("Accept");
+			String accept = h == null ? null : h.getValue();
+			Parser parser = this.parser;
+			if (parser == null)
+				parser = client.getMatchingParser(accept);
+			if (accept == null && parser != null)
+				setHeader("Accept", parser.getPrimaryMediaType().toString());
+
 			if (hasInput || formData != null) {
 
 				if (hasInput && formData != null)
@@ -2207,7 +2246,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 					entity = new InputStreamEntity(r.getContents(), getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				}
 				else if (serializer != null)
-					entity = new SerializedHttpEntity(input, serializer, requestBodySchema);
+					entity = new SerializedHttpEntity(input, serializer, requestBodySchema, contentType);
 				else if (partSerializer != null)
 					entity = new StringEntity(partSerializer.serialize((HttpPartSchema)null, input), getRequestContentType(TEXT_PLAIN));
 				else
@@ -2218,9 +2257,9 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 
 			try {
 				if (request2 != null)
-					response = new RestResponse(client, this, client.execute(target, request2, context));
+					response = new RestResponse(client, this, client.execute(target, request2, context), parser);
 				else
-					response = new RestResponse(client, this, client.execute(target, this.request, context));
+					response = new RestResponse(client, this, client.execute(target, this.request, context), parser);
 			} catch (Exception e) {
 				throw e;
 			}

@@ -50,10 +50,10 @@ public class RestResourceTest {
 	@Rest(allowBodyParam="true")
 	public static class A4 extends A2 {}
 
-	static MockRest a1 = MockRest.build(A1.class, null);
-	static MockRest a2 = MockRest.build(A2.class, null);
-	static MockRest a3 = MockRest.build(A3.class, null);
-	static MockRest a4 = MockRest.build(A4.class, null);
+	static MockRest a1 = MockRest.build(A1.class);
+	static MockRest a2 = MockRest.build(A2.class);
+	static MockRest a3 = MockRest.build(A3.class);
+	static MockRest a4 = MockRest.build(A4.class);
 
 	@Test
 	public void a01_allowBodyParam_true() throws Exception {
@@ -114,14 +114,14 @@ public class RestResourceTest {
 	@Rest(allowedHeaderParams="None")
 	public static class B8 extends B5 {}
 
-	static MockRest b1 = MockRest.build(B1.class, null);
-	static MockRest b2 = MockRest.build(B2.class, null);
-	static MockRest b3 = MockRest.build(B3.class, null);
-	static MockRest b4 = MockRest.build(B4.class, null);
-	static MockRest b5 = MockRest.build(B5.class, null);
-	static MockRest b6 = MockRest.build(B6.class, null);
-	static MockRest b7 = MockRest.build(B7.class, null);
-	static MockRest b8 = MockRest.build(B8.class, null);
+	static MockRest b1 = MockRest.build(B1.class);
+	static MockRest b2 = MockRest.build(B2.class);
+	static MockRest b3 = MockRest.build(B3.class);
+	static MockRest b4 = MockRest.build(B4.class);
+	static MockRest b5 = MockRest.build(B5.class);
+	static MockRest b6 = MockRest.build(B6.class);
+	static MockRest b7 = MockRest.build(B7.class);
+	static MockRest b8 = MockRest.build(B8.class);
 
 	@Test
 	public void b01_allowedHeaderParams_default() throws Exception {
@@ -222,14 +222,14 @@ public class RestResourceTest {
 	@Rest(allowedMethodHeaders="None")
 	public static class C8 extends C5 {}
 
-	static MockRest c1 = MockRest.build(C1.class, null);
-	static MockRest c2 = MockRest.build(C2.class, null);
-	static MockRest c3 = MockRest.build(C3.class, null);
-	static MockRest c4 = MockRest.build(C4.class, null);
-	static MockRest c5 = MockRest.build(C5.class, null);
-	static MockRest c6 = MockRest.build(C6.class, null);
-	static MockRest c7 = MockRest.build(C7.class, null);
-	static MockRest c8 = MockRest.build(C8.class, null);
+	static MockRest c1 = MockRest.build(C1.class);
+	static MockRest c2 = MockRest.build(C2.class);
+	static MockRest c3 = MockRest.build(C3.class);
+	static MockRest c4 = MockRest.build(C4.class);
+	static MockRest c5 = MockRest.build(C5.class);
+	static MockRest c6 = MockRest.build(C6.class);
+	static MockRest c7 = MockRest.build(C7.class);
+	static MockRest c8 = MockRest.build(C8.class);
 
 	@Test
 	public void c01_allowedMethodHeaders_default() throws Exception {
@@ -366,14 +366,14 @@ public class RestResourceTest {
 	@Rest(allowedMethodParams="None")
 	public static class D8 extends D5 {}
 
-	static MockRest d1 = MockRest.build(D1.class, null);
-	static MockRest d2 = MockRest.build(D2.class, null);
-	static MockRest d3 = MockRest.build(D3.class, null);
-	static MockRest d4 = MockRest.build(D4.class, null);
-	static MockRest d5 = MockRest.build(D5.class, null);
-	static MockRest d6 = MockRest.build(D6.class, null);
-	static MockRest d7 = MockRest.build(D7.class, null);
-	static MockRest d8 = MockRest.build(D8.class, null);
+	static MockRest d1 = MockRest.build(D1.class);
+	static MockRest d2 = MockRest.build(D2.class);
+	static MockRest d3 = MockRest.build(D3.class);
+	static MockRest d4 = MockRest.build(D4.class);
+	static MockRest d5 = MockRest.build(D5.class);
+	static MockRest d6 = MockRest.build(D6.class);
+	static MockRest d7 = MockRest.build(D7.class);
+	static MockRest d8 = MockRest.build(D8.class);
 
 	@Test
 	public void d01_allowedMethodHeaders_default() throws Exception {

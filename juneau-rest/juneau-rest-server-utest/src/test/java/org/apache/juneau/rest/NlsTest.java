@@ -50,7 +50,7 @@ public class NlsTest {
 			return null;
 		}
 	}
-	static MockRest a = MockRest.build(A.class, null);
+	static MockRest a = MockRest.build(A.class);
 
 	public static class A01 extends WriterSerializer {
 		public A01(PropertyStore ps) {
@@ -89,7 +89,7 @@ public class NlsTest {
 			return req.getSwagger();
 		}
 	}
-	static MockRest b = MockRest.build(B.class, null);
+	static MockRest b = MockRest.build(B.class);
 
 	@Test
 	public void b01_optionsPageWithoutNls() throws Exception {
@@ -108,7 +108,7 @@ public class NlsTest {
 			return req.getMessage("bad", 1, 2, 3);
 		}
 	}
-	static MockRest c = MockRest.build(C.class, null);
+	static MockRest c = MockRest.build(C.class);
 
 	@Test
 	public void c01_missingResourceBundle() throws Exception {

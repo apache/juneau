@@ -131,7 +131,7 @@ public class BodyAnnotationTest {
 			@Override public String toString() { return s; }
 		}
 	}
-	private static MockRest a = MockRest.build(A.class, null);
+	private static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01a_onParameter_String() throws Exception {
@@ -321,7 +321,7 @@ public class BodyAnnotationTest {
 			@Override public String toString() { return s; }
 		}
 	}
-	private static MockRest b = MockRest.build(B.class, null);
+	private static MockRest b = MockRest.build(B.class);
 
 	@Test
 	public void b01a_onPojo_StringTransform() throws Exception {
@@ -540,7 +540,7 @@ public class BodyAnnotationTest {
 			@Override public String toString() { return s; }
 		}
 	}
-	private static MockRest d = MockRest.build(D.class, null);
+	private static MockRest d = MockRest.build(D.class);
 
 	@Test
 	public void d01a_noMediaTypes_String() throws Exception {
@@ -908,7 +908,7 @@ public class BodyAnnotationTest {
 			return body;
 		}
 	}
-	static MockRest j = MockRest.create(J.class).json().build();;
+	static MockRest j = MockRest.buildJson(J.class);
 
 	@Test
 	public void j01_optionalParam_integer() throws Exception {

@@ -134,7 +134,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IB ib = MockRemote.build(IB.class, B.class);
+	private static IB ib = MockRemote.create(IB.class, B.class).json().build();
 
 	@Test
 	public void b01_combinedAnnotations_Body() throws Exception {
@@ -1451,7 +1451,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IF ifa = MockRemote.build(IF.class, F.class);
+	private static IF ifa = MockRemote.create(IF.class, F.class).json().build();
 
 	@Test
 	public void fa01_badRequest() {

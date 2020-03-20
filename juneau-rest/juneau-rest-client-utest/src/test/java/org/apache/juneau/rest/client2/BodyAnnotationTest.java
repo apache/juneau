@@ -130,7 +130,7 @@ public class BodyAnnotationTest {
 		String postA10(@Body NameValuePairs b);
 	}
 
-	private static A01 a01 = MockRemote.create(A01.class, A.class).parser(null).build();
+	private static A01 a01 = MockRemote.create(A01.class, A.class).jsonSerializer().build();
 
 	@Test
 	public void a01_int() throws Exception {
@@ -254,7 +254,7 @@ public class BodyAnnotationTest {
 		String postB10(@Body NameValuePairs b);
 	}
 
-	private static B01 b01 = MockRemote.create(B01.class, B.class).marshall(OpenApi.DEFAULT).contentType(null).build();
+	private static B01 b01 = MockRemote.create(B01.class, B.class).openApi().contentType(null).build();
 
 	@Test
 	public void b01_int() throws Exception {
@@ -379,7 +379,7 @@ public class BodyAnnotationTest {
 		String postC10(@Body NameValuePairs b);
 	}
 
-	private static C01 c01 = MockRemote.create(C01.class, C.class).serializer(null).contentType("text/foo").build();
+	private static C01 c01 = MockRemote.create(C01.class, C.class).jsonParser().contentType("text/foo").build();
 
 	@Test
 	public void c01_int() throws Exception {

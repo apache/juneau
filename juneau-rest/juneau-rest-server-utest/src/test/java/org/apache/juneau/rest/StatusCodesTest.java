@@ -43,7 +43,7 @@ public class StatusCodesTest {
 			return new StringReader(b);
 		}
 	}
-	private static MockRest a = MockRest.build(A.class, null);
+	private static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01a_OK() throws Exception {

@@ -216,4 +216,13 @@ public final class ParserGroup extends BeanContext {
 	public List<Parser> getParsers() {
 		return parsers;
 	}
+
+	/**
+	 * Returns <jk>true</jk> if this group contains no parsers.
+	 *
+	 * @return <jk>true</jk> if this group contains no parsers.
+	 */
+	public boolean isEmpty() {
+		return parsers.isEmpty();
+	}
 }
