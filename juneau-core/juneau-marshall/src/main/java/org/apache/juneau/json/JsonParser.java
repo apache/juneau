@@ -165,7 +165,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default parser, all default settings.*/
-	public static final JsonParser DEFAULT = new JsonParser.Simple(PropertyStore.DEFAULT);
+	public static final JsonParser DEFAULT = new JsonParser(PropertyStore.DEFAULT);
 
 	/** Default parser, all default settings.*/
 	public static final JsonParser DEFAULT_STRICT = new JsonParser.Strict(PropertyStore.DEFAULT);
@@ -188,18 +188,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 		}
 	}
 
-	/** Default parser, simple mode. */
-	public static class Simple extends JsonParser {
 
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public Simple(PropertyStore ps) {
-			super(ps, "application/json+simple", "text/json+simple");
-		}
-	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

@@ -47,7 +47,7 @@ public class SimpleJson extends Json {
 	/**
 	 * Default reusable instance, readable format.
 	 */
-	public static final SimpleJson DEFAULT_READABLE = new SimpleJson(SimpleJsonSerializer.DEFAULT_READABLE, JsonParser.DEFAULT);
+	public static final SimpleJson DEFAULT_READABLE = new SimpleJson(SimpleJsonSerializer.DEFAULT_READABLE, SimpleJsonParser.DEFAULT);
 
 	/**
 	 * Constructor.
@@ -59,7 +59,7 @@ public class SimpleJson extends Json {
 	 * 	The parser to use for parsing input.
 	 * 	<br>Must not be <jk>null</jk>.
 	 */
-	public SimpleJson(JsonSerializer s, JsonParser p) {
+	public SimpleJson(SimpleJsonSerializer s, SimpleJsonParser p) {
 		super(s, p);
 	}
 
@@ -67,9 +67,9 @@ public class SimpleJson extends Json {
 	 * Constructor.
 	 *
 	 * <p>
-	 * Uses {@link SimpleJsonSerializer#DEFAULT} and {@link JsonParser#DEFAULT}.
+	 * Uses {@link SimpleJsonSerializer#DEFAULT} and {@link SimpleJsonParser#DEFAULT}.
 	 */
 	public SimpleJson() {
-		this(SimpleJsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		this(SimpleJsonSerializer.DEFAULT, SimpleJsonParser.DEFAULT);
 	}
 }

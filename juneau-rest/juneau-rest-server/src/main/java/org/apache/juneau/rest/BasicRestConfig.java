@@ -57,7 +57,7 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 	// Default parsers for all Java methods in the class.
 	parsers={
 		JsonParser.class,
-		JsonParser.Simple.class,
+		SimpleJsonParser.class,
 		XmlParser.class,
 		HtmlParser.class,
 		UonParser.class,

@@ -62,7 +62,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a01_noPath() throws Exception {
-		A01a t = MockRemote.build(A01a.class, A.class, null);
+		A01a t = MockRemote.build(A01a.class, A.class);
 		assertEquals("foo", t.a01());
 		assertEquals("foo", t.a01a());
 		assertEquals("foo", t.a01b());
@@ -80,7 +80,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a02a_normalPath() throws Exception {
-		A02a t = MockRemote.build(A02a.class, A.class, null);
+		A02a t = MockRemote.build(A02a.class, A.class);
 		assertEquals("foo", t.a02());
 		assertEquals("foo", t.a02a());
 		assertEquals("foo", t.a02b());
@@ -98,7 +98,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a02b_normalPathWithSlashes() throws Exception {
-		A02b t = MockRemote.build(A02b.class, A.class, null);
+		A02b t = MockRemote.build(A02b.class, A.class);
 		assertEquals("foo", t.a02());
 		assertEquals("foo", t.a02a());
 		assertEquals("foo", t.a02b());
@@ -116,7 +116,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a02c_pathOnClient() throws Exception {
-		try (RestClient rc = MockRestClient.create(A.class, null).rootUrl("http://localhost/A").build()) {
+		try (RestClient rc = MockRestClient.create(A.class).rootUrl("http://localhost/A").build()) {
 			A02c t = rc.getRemote(A02c.class);
 			assertEquals("foo", t.a02());
 			assertEquals("foo", t.a02a());
@@ -136,7 +136,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a03a_normalPath() throws Exception {
-		A03a t = MockRemote.build(A03a.class, A.class, null);
+		A03a t = MockRemote.build(A03a.class, A.class);
 		assertEquals("foo", t.a03());
 		assertEquals("foo", t.a03a());
 		assertEquals("foo", t.a03b());
@@ -154,7 +154,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a03b_normalPathWithSlashes() throws Exception {
-		A03b t = MockRemote.build(A03b.class, A.class, null);
+		A03b t = MockRemote.build(A03b.class, A.class);
 		assertEquals("foo", t.a03());
 		assertEquals("foo", t.a03a());
 		assertEquals("foo", t.a03b());
@@ -172,7 +172,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a03c_partialPath() throws Exception {
-		try (RestClient rc = MockRestClient.create(A.class, null).rootUrl("http://localhost/A").build()) {
+		try (RestClient rc = MockRestClient.create(A.class).rootUrl("http://localhost/A").build()) {
 			A03c t = rc.getRemote(A03c.class);
 			assertEquals("foo", t.a03());
 			assertEquals("foo", t.a03a());
@@ -192,7 +192,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a03d_partialPathExtraSlashes() throws Exception {
-		try (RestClient rc = MockRestClient.create(A.class, null).rootUrl("http://localhost/A/").build()) {
+		try (RestClient rc = MockRestClient.create(A.class).rootUrl("http://localhost/A/").build()) {
 			A03d t = rc.getRemote(A03d.class);
 			assertEquals("foo", t.a03());
 			assertEquals("foo", t.a03a());
@@ -222,7 +222,7 @@ public class RemoteResourceAnnotationTest {
 			return "foo";
 		}
 	}
-	private static RestClient rb = MockRestClient.create(B.class, null).rootUrl("http://localhost/B").build();
+	private static RestClient rb = MockRestClient.create(B.class).rootUrl("http://localhost/B").build();
 
 	@Remote
 	public static interface B01 {

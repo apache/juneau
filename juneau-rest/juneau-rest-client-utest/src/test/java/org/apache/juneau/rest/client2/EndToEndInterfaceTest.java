@@ -23,7 +23,6 @@ import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
@@ -80,7 +79,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IA ia = MockRemote.build(IA.class, A.class, Json.DEFAULT);
+	private static IA ia = MockRemote.buildJson(IA.class, A.class);
 
 	@Test
 	public void a01_splitAnnotations_Body() throws Exception {

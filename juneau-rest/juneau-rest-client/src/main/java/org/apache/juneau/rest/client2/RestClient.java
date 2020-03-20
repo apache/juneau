@@ -214,10 +214,10 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'>{@link RestClientBuilder#xml() xml()}
  * 		<li class='jm'>{@link RestClientBuilder#html() html()}
  * 		<li class='jm'>{@link RestClientBuilder#plainText() plainText()}
- * 		<li class='jm'>{@link RestClientBuilder#msgpack() msgpack()}
+ * 		<li class='jm'>{@link RestClientBuilder#msgPack() msgPack()}
  * 		<li class='jm'>{@link RestClientBuilder#uon() uon()}
  * 		<li class='jm'>{@link RestClientBuilder#urlEnc() urlEnc()}
- * 		<li class='jm'>{@link RestClientBuilder#openapi() openapi()}
+ * 		<li class='jm'>{@link RestClientBuilder#openApi() openApi()}
  * 	</ul>
  * </ul>
  *
@@ -1590,34 +1590,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		return new RestClientBuilder(PropertyStore.DEFAULT, null);
 	}
 
-	/**
-	 * Instantiates a new {@link RestClientBuilder} object using the specified serializer and parser.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>RestClient.<jsm>create</jsm>().serializer(s).parser(p);</code>
-	 *
-	 * @param s The serializer to use for output.
-	 * @param p The parser to use for input.
-	 * @return A new {@link RestClientBuilder} object.
-	 */
-	public static RestClientBuilder create(Serializer s, Parser p) {
-		return create().serializer(s).parser(p);
-	}
-
-	/**
-	 * Instantiates a new {@link RestClientBuilder} object using the specified serializer and parser.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>RestClient.<jsm>create</jsm>().serializer(s).parser(p);</code>
-	 *
-	 * @param s The serializer class to use for output.
-	 * @param p The parser class to use for input.
-	 * @return A new {@link RestClientBuilder} object.
-	 */
-	public static RestClientBuilder create(Class<? extends Serializer> s, Class<? extends Parser> p) {
-		return create().serializer(s).parser(p);
-	}
-
 	@Override /* Context */
 	public RestClientBuilder builder() {
 		return new RestClientBuilder(getPropertyStore(), httpClientBuilder);
@@ -1647,7 +1619,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		SerializerGroupBuilder sgb = SerializerGroup.create();
 		for (Object o : getArrayProperty(RESTCLIENT_serializers, Object.class)) {
 			if (o instanceof Serializer) {
-				sgb.append(((Serializer)o).builder().apply(ps).build());
+				sgb.append((Serializer)o);  // Don't apply PropertyStore.
 			} else if (o instanceof Class) {
 				sgb.append(ContextCache.INSTANCE.create((Class<? extends Serializer>)o, ps));
 			}
@@ -1657,7 +1629,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		ParserGroupBuilder pgb = ParserGroup.create();
 		for (Object o : getArrayProperty(RESTCLIENT_parsers, Object.class)) {
 			if (o instanceof Parser) {
-				pgb.append(((Parser)o).builder().apply(ps).build());
+				pgb.append((Parser)o);  // Don't apply PropertyStore.
 			} else if (o instanceof Class) {
 				pgb.append(ContextCache.INSTANCE.create((Class<? extends Parser>)o, ps));
 			}

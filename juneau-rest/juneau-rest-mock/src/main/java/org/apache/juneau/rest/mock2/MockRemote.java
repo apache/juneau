@@ -62,7 +62,7 @@ public class MockRemote<T> {
 	 * Create a new builder using the specified remote resource interface and REST implementation bean or bean class.
 	 *
 	 * <p>
-	 * Uses {@link JsonSerializer#DEFAULT} and {@link JsonParser#DEFAULT} for serializing and parsing by default.
+	 * No <c>Accept</c> or <c>Content-Type</c> headers are set on the request.
 	 *
 	 *
 	 * @param intf
@@ -74,48 +74,6 @@ public class MockRemote<T> {
 	 */
 	public static <T> MockRemote<T> create(Class<T> intf, Object impl) {
 		return new MockRemote<>(intf, impl);
-	}
-
-	/**
-	 * Create a new builder using the specified remote resource interface and REST implementation bean or bean class.
-	 *
-	 * <p>
-	 * Uses the serializer and parser defined on the specified marshall for serializing and parsing by default.
-	 *
-	 * @param intf
-	 * 	The remote interface annotated with {@link Remote @Remote}.
-	 * @param impl
-	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @param m
-	 * 	The marshall to use for serializing and parsing the HTTP bodies.
-	 * @return A new builder.
-	 */
-	public static <T> MockRemote<T> create(Class<T> intf, Object impl, Marshall m) {
-		return new MockRemote<>(intf, impl).marshall(m);
-	}
-
-	/**
-	 * Create a new builder using the specified remote resource interface and REST implementation bean or bean class.
-	 *
-	 * <p>
-	 * Uses the serializer and parser defined on the specified marshall for serializing and parsing by default.
-	 *
-	 * @param intf
-	 * 	The remote interface annotated with {@link Remote @Remote}.
-	 * @param impl
-	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @param s
-	 * 	The serializer to use for serializing request bodies.
-	 * 	<br>Can be <jk>null</jk> to force no serializer to be used and no <c>Content-Type</c> header.
-	 * @param p
-	 * 	The parser to use for parsing response bodies.
-	 * 	<br>Can be <jk>null</jk> to force no parser to be used and no <c>Accept</c> header.
-	 * @return A new builder.
-	 */
-	public static <T> MockRemote<T> create(Class<T> intf, Object impl, Serializer s, Parser p) {
-		return new MockRemote<>(intf, impl).serializer(s).parser(p);
 	}
 
 	/**
@@ -132,12 +90,12 @@ public class MockRemote<T> {
 	 * Convenience method for getting a remote resource interface.
 	 *
 	 * <p>
-	 * Uses {@link JsonSerializer#DEFAULT} and {@link JsonParser#DEFAULT} for serializing and parsing by default.
+	 * No <c>Accept</c> or <c>Content-Type</c> headers are set on the request.
 	 *
 	 * <p>
 	 * Equivalent to calling the following:
 	 * <p class='bcode w800'>
-	 * 	MockRemoteResource.<jsm>create</jsm>(intf, impl).build();
+	 * 	MockRemote.<jsm>create</jsm>(intf, impl).build();
 	 * </p>
 	 *
 	 * @param intf
@@ -155,12 +113,12 @@ public class MockRemote<T> {
 	 * Convenience method for getting a remote resource interface.
 	 *
 	 * <p>
-	 * Uses the serializer and parser defined on the specified marshall for serializing and parsing by default.
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to <js>"application/json"</js> unless explicitly set.
 	 *
 	 * <p>
 	 * Equivalent to calling the following:
 	 * <p class='bcode w800'>
-	 * 	MockRemoteResource.<jsm>create</jsm>(intf, impl).marshall(m).build();
+	 * 	MockRemote.<jsm>create</jsm>(intf, impl).json().build();
 	 * </p>
 	 *
 	 * @param intf
@@ -168,25 +126,22 @@ public class MockRemote<T> {
 	 * @param impl
 	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @param m
-	 * 	The marshall to use for serializing request bodies and parsing response bodies.
-	 * 	<br>Can be <jk>null</jk> to force no serializer or parser to be used and no <c>Accept</c> or <c>Content-Type</c> header.
 	 * @return A new proxy interface.
 	 */
-	public static <T> T build(Class<T> intf, Object impl, Marshall m) {
-		return create(intf, impl).marshall(m).build();
+	public static <T> T buildJson(Class<T> intf, Object impl) {
+		return create(intf, impl).json().build();
 	}
 
 	/**
 	 * Convenience method for getting a remote resource interface.
 	 *
 	 * <p>
-	 * Uses the specified serializer and parser for serializing and parsing by default.
+	 * <c>Accept</c> and <c>Content-Type</c> headers are set to <js>"application/json+simple"</js> unless explicitly set.
 	 *
 	 * <p>
 	 * Equivalent to calling the following:
 	 * <p class='bcode w800'>
-	 * 	MockRemoteResource.<jsm>create</jsm>(intf, impl).serializer(s).parser(p).build();
+	 * 	MockRemote.<jsm>create</jsm>(intf, impl).simpleJson().build();
 	 * </p>
 	 *
 	 * @param intf
@@ -194,16 +149,10 @@ public class MockRemote<T> {
 	 * @param impl
 	 * 	The REST implementation bean or bean class annotated with {@link Rest @Rest}.
 	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @param s
-	 * 	The serializer to use for serializing request bodies.
-	 * 	<br>Can be <jk>null</jk> to force no serializer to be used and no <c>Content-Type</c> header.
-	 * @param p
-	 * 	The parser to use for parsing response bodies.
-	 * 	<br>Can be <jk>null</jk> to force no parser to be used and no <c>Accept</c> header.
 	 * @return A new proxy interface.
 	 */
-	public static <T> T build(Class<T> intf, Object impl, Serializer s, Parser p) {
-		return create(intf, impl).serializer(s).parser(p).build();
+	public static <T> T buildSimpleJson(Class<T> intf, Object impl) {
+		return create(intf, impl).simpleJson().build();
 	}
 
 	/**
@@ -331,6 +280,19 @@ public class MockRemote<T> {
 	 */
 	public MockRemote<T> simpleJsonSerializer() {
 		serializer(SimpleJsonSerializer.class);
+		return this;
+	}
+
+	/**
+	 * Adds XML support for the response body only.
+	 *
+	 * <p>
+	 * <c>Accept</c> header is set to <js>"application/json+simple"</js> unless explicitly set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockRemote<T> simpleJsonParser() {
+		parser(SimpleJsonParser.class);
 		return this;
 	}
 
@@ -619,27 +581,11 @@ public class MockRemote<T> {
 	}
 
 	/**
-	 * Associates the specified {@link Marshall Marshalls} with this client.
-	 *
-	 * <p>
-	 * This is shorthand for calling <c>serializer(x)</c> and <c>parser(x)</c> using the inner
-	 * serializer and parser of the marshall object.
-	 *
-	 * @param values
-	 * 	The marshalls to use for serializing and parsing HTTP bodies.
-	 * 	<br>Can be <jk>null</jk> (will remote the existing serializer/parser).
-	 * @return This object (for method chaining).
-	 */
-	public MockRemote<T> marshalls(Marshall...values) {
-		rcb.marshalls(values);
-		return this;
-	}
-
-	/**
 	 * Associates the specified {@link Serializer} with the HTTP client.
 	 *
 	 * <p>
 	 * If the <c>Content-Type</c> header is not specified, it will be set to the media type of this serializer.
+	 * <br>Note that the serializer is not actually used during serialization.
 	 *
 	 * @param value
 	 * 	The serializer to use for serializing HTTP bodies.
@@ -656,6 +602,7 @@ public class MockRemote<T> {
 	 *
 	 * <p>
 	 * If the <c>Content-Type</c> header is not specified, it will be set to the media type of this serializer.
+	 * <br>Note that the serializer is not actually used during serialization.
 	 *
 	 * @param value
 	 * 	The serializer to use for serializing HTTP bodies.
@@ -668,45 +615,11 @@ public class MockRemote<T> {
 	}
 
 	/**
-	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
-	 *
-	 * <p>
-	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
-	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
-	 *
-	 * @param values
-	 * 	The serializer to use for serializing HTTP bodies.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public MockRemote<T> serializers(Serializer...values) {
-		rcb.serializers(values);
-		return this;
-	}
-
-	/**
-	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
-	 *
-	 * <p>
-	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
-	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
-	 *
-	 * @param values
-	 * 	The serializer to use for serializing HTTP bodies.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@SafeVarargs
-	public final MockRemote<T> serializers(Class<? extends Serializer>...values) {
-		rcb.serializers(values);
-		return this;
-	}
-
-	/**
 	 * Associates the specified {@link Parser} with the HTTP client.
 	 *
 	 * <p>
 	 * If the <c>Accept</c> header is not specified, it will be set to the media type of this parser.
+	 * <br>Note that the parser is not actually used during parsing.
 	 *
 	 * @param value
 	 * 	The parser to use for parsing HTTP bodies.
@@ -723,6 +636,7 @@ public class MockRemote<T> {
 	 *
 	 * <p>
 	 * If the <c>Accept</c> header is not specified, it will be set to the media type of this parser.
+	 * <br>Note that the parser is not actually used during parsing.
 	 *
 	 * @param value
 	 * 	The parser to use for parsing HTTP bodies.
@@ -731,41 +645,6 @@ public class MockRemote<T> {
 	 */
 	public MockRemote<T> parser(Class<? extends Parser> value) {
 		rcb.parser(value);
-		return this;
-	}
-
-	/**
-	 * Associates the specified {@link Parser Parsers} with the HTTP client.
-	 *
-	 * <p>
-	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
-	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
-	 *
-	 * @param values
-	 * 	The parsers to use for parsing HTTP bodies.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public MockRemote<T> parsers(Parser...values) {
-		rcb.parsers(values);
-		return this;
-	}
-
-	/**
-	 * Associates the specified {@link Parser Parsers} with the HTTP client.
-	 *
-	 * <p>
-	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
-	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
-	 *
-	 * @param values
-	 * 	The parsers to use for parsing HTTP bodies.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@SafeVarargs
-	public final MockRemote<T> parsers(Class<? extends Parser>...values) {
-		rcb.parsers(values);
 		return this;
 	}
 }

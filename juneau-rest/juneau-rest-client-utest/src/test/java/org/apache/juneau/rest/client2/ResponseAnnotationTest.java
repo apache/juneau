@@ -74,7 +74,7 @@ public class ResponseAnnotationTest {
 		@RemoteMethod AResponse get();
 	}
 
-	private static AR ar = MockRemote.build(AR.class, A.class, null);
+	private static AR ar = MockRemote.build(AR.class, A.class);
 
 	@Test
 	public void a01_basic() throws Exception {

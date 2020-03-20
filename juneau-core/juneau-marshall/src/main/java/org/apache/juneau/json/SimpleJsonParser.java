@@ -15,91 +15,53 @@ package org.apache.juneau.json;
 import org.apache.juneau.*;
 
 /**
- * Serializes POJO models to Simplified JSON.
+ * Parses any valid JSON text into a POJO model.
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <c>Accept</c> types:  <bc>application/json, text/json</bc>
- * <p>
- * Produces <c>Content-Type</c> types:  <bc>application/json+simple</bc>
+ * Handles <c>Content-Type</c> types:  <bc>application/json+simple, text/json+simple</bc>
  *
  * <h5 class='topic'>Description</h5>
- * <p>
- * 	This is a JSON serializer that uses simplified notation:
- * <ul class='spaced-list'>
- * 	<li>Lax quoting of JSON attribute names.
- * 	<li>Single quotes.
- * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc SimpleJson}
- * </ul>
+ * Identical to {@link JsonParser} but with the media type <bc>application/json+simple</bc>.
  */
-public class SimpleJsonSerializer extends JsonSerializer {
+public class SimpleJsonParser extends JsonParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Default serializer, single quotes, {@link #JSON_simpleMode simple mode}. */
-	public static final SimpleJsonSerializer DEFAULT = new SimpleJsonSerializer(PropertyStore.DEFAULT);
-
-	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final SimpleJsonSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static class Readable extends SimpleJsonSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public Readable(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(JSON_simpleMode, true)
-					.set(WSERIALIZER_quoteChar, '\'')
-					.set(WSERIALIZER_useWhitespace, true)
-					.build()
-			);
-		}
-	}
+	/** Default parser, Accept=application/json+simple. */
+	public static final SimpleJsonParser DEFAULT = new SimpleJsonParser(PropertyStore.DEFAULT);
 
 	/**
 	 * Constructor.
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public SimpleJsonSerializer(PropertyStore ps) {
-		super(
-			ps.builder()
-				.set(JSON_simpleMode, true)
-				.set(WSERIALIZER_quoteChar, '\'')
-				.build(),
-			"application/json", "application/json+simple,text/json+simple,application/json;q=0.9,text/json;q=0.9"
-		);
+	public SimpleJsonParser(PropertyStore ps) {
+		super(ps, "application/json+simple", "text/json+simple");
 	}
 
 	@Override /* Context */
-	public SimpleJsonSerializerBuilder builder() {
-		return new SimpleJsonSerializerBuilder(getPropertyStore());
+	public SimpleJsonParserBuilder builder() {
+		return new SimpleJsonParserBuilder(getPropertyStore());
 	}
 
 	/**
-	 * Instantiates a new clean-slate {@link SimpleJsonSerializerBuilder} object.
+	 * Instantiates a new clean-slate {@link SimpleJsonParserBuilder} object.
 	 *
 	 * <p>
-	 * This is equivalent to simply calling <code><jk>new</jk> SimpleJsonSerializerBuilder()</code>.
+	 * This is equivalent to simply calling <code><jk>new</jk> SimpleJsonParserBuilder()</code>.
 	 *
-	 * @return A new {@link SimpleJsonSerializerBuilder} object.
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * the settings of the object called on.
+	 *
+	 * @return A new {@link SimpleJsonParserBuilder} object.
 	 */
-	public static SimpleJsonSerializerBuilder create() {
-		return new SimpleJsonSerializerBuilder();
+	public static SimpleJsonParserBuilder create() {
+		return new SimpleJsonParserBuilder();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

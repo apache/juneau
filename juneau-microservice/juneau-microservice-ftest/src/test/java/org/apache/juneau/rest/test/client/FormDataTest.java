@@ -18,7 +18,6 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.*;
@@ -43,7 +42,7 @@ public class FormDataTest extends RestTestcase {
 			return new StringReader("Content-Type=["+req.getContentType()+"], contents=["+read(req.getReader())+"]");
 		}
 	}
-	static RestClient a = MockRestClient.build(A.class, SimpleJson.DEFAULT);
+	static RestClient a = MockRestClient.buildSimpleJson(A.class);
 
 	@Test
 	public void a01_formDataMethod() throws Exception {
@@ -63,7 +62,7 @@ public class FormDataTest extends RestTestcase {
 
 	@Test
 	public void a03_plainTextParams() throws Exception {
-		RestClient c = MockRestClient.create(A.class, UrlEncoding.DEFAULT).paramFormatPlain().build();
+		RestClient c = MockRestClient.create(A.class).urlEnc().paramFormatPlain().build();
 		try {
 			String r;
 

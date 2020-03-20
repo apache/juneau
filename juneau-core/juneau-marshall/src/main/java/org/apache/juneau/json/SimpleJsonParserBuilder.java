@@ -10,49 +10,40 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.json;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-import static org.junit.Assert.*;
+import org.apache.juneau.*;
 
-import org.apache.juneau.http.annotation.Body;
-import org.apache.juneau.json.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client2.*;
-import org.apache.juneau.rest.mock2.*;
-import org.junit.*;
-import org.junit.runners.*;
+/**
+ * Builder class for building instances of Simplified-JSON parsers.
+ */
+public class SimpleJsonParserBuilder extends JsonParserBuilder {
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class MockRestTest {
-
-	//=================================================================================================================
-	// Basic tests
-	//=================================================================================================================
-
-	@Rest
-	public static class A {
-		@RestMethod(name=PUT, path="/a01")
-		public String a01(@Body String body) {
-			return body;
-		}
-
-		@RestMethod(name=PUT, path="/a02", serializers=JsonSerializer.class, parsers=JsonParser.class)
-		public String a02(@Body String body) {
-			return body;
-		}
+	/**
+	 * Constructor, default settings.
+	 */
+	public SimpleJsonParserBuilder() {
+		super();
 	}
 
-	@Test
-	public void a01() throws Exception {
-		RestClient rc = MockRestClient.build(A.class);
-		assertEquals("OK", rc.put("/a01", "OK").run().getBody().asString());
+	/**
+	 * Constructor.
+	 *
+	 * @param ps The initial configuration settings for this builder.
+	 */
+	public SimpleJsonParserBuilder(PropertyStore ps) {
+		super(ps);
 	}
 
-	@Test
-	public void a02() throws Exception {
-		RestClient rc = MockRestClient.buildJson(A.class);
-		assertEquals("OK", rc.put("/a02", "OK").run().getBody().as(String.class));
+	@Override /* ContextBuilder */
+	public SimpleJsonParser build() {
+		return build(SimpleJsonParser.class);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// <CONFIGURATION-PROPERTIES>
+	// </CONFIGURATION-PROPERTIES>
 }
-

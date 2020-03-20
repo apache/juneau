@@ -50,7 +50,7 @@ public class CallbackStringsTest {
 			return m;
 		}
 	}
-	static RestClient a = MockRestClient.build(A.class, null);
+	static RestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01() throws Exception {
