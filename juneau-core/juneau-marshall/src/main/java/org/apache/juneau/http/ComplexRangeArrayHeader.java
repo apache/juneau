@@ -12,11 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Category of headers that consist of simple comma-delimited lists of strings with q-values.
@@ -45,7 +44,7 @@ public class ComplexRangeArrayHeader extends ComplexHeader {
 	protected ComplexRangeArrayHeader(String name, String value) {
 		super(name);
 		this.typeRanges = StringRange.parse(value);
-		this.typeRangesList = immutableList(typeRanges);
+		this.typeRangesList = AList.createUnmodifiable(typeRanges);
 	}
 
 	/**

@@ -12,12 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.encoders;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.http.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents the group of {@link Encoder encoders} keyed by codings.
@@ -96,10 +95,10 @@ public final class EncoderGroup {
 	 * @param encoders The encoders to add to this group.
 	 */
 	public EncoderGroup(Encoder[] encoders) {
-		this.encoders = immutableList(encoders);
+		this.encoders = AList.createUnmodifiable(encoders);
 
-		List<String> lc = new ArrayList<>();
-		List<Encoder> l = new ArrayList<>();
+		AList<String> lc = AList.create();
+		AList<Encoder> l = AList.create();
 		for (Encoder e : encoders) {
 			for (String c: e.getCodings()) {
 				lc.add(c);
@@ -107,9 +106,9 @@ public final class EncoderGroup {
 			}
 		}
 
-		this.encodings = lc.toArray(new String[lc.size()]);
-		this.encodingsList = unmodifiableList(lc);
-		this.encodingsEncoders = l.toArray(new Encoder[l.size()]);
+		this.encodings = lc.asArrayOf(String.class);
+		this.encodingsList = lc.unmodifiable();
+		this.encodingsEncoders = l.asArrayOf(Encoder.class);
 	}
 
 	/**

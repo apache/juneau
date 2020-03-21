@@ -18,19 +18,19 @@ import java.lang.reflect.*;
 import java.util.*;
 
 /**
- * An extension of {@link LinkedHashSet} with a convenience {@link #append(Object)} method.
+ * An extension of {@link TreeSet} with a convenience {@link #append(Object)} method.
  *
  * <p>
  * Primarily used for testing purposes for quickly creating populated sets.
  * <p class='bcode w800'>
  * 	<jc>// Example:</jc>
- * 	Set&lt;String&gt; s = <jk>new</jk> ASet&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
+ * 	TreeSet&lt;String&gt; s = <jk>new</jk> ATreeSet&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
  * </p>
  *
  * @param <T> The entry type.
  */
 @SuppressWarnings({"unchecked"})
-public final class ASet<T> extends LinkedHashSet<T> {
+public final class ASortedSet<T> extends TreeSet<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -41,31 +41,8 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 * @return A new list.
 	 */
 	@SafeVarargs
-	public static <T> ASet<T> create(T...t) {
-		return new ASet<T>().appendAll(t);
-	}
-
-	/**
-	 * Convenience method for creating an unmodifiable set of objects.
-	 *
-	 * @param t The initial values.
-	 * @return A new list.
-	 */
-	public static <T> Set<T> createUnmodifiable(T...t) {
-		return t.length == 0 ? emptySet() : create(t).unmodifiable();
-	}
-
-	/**
-	 * Convenience method for creating an unmodifiable sert out of the specified collection.
-	 *
-	 * @param c The collection to add.
-	 * @param <T> The element type.
-	 * @return An unmodifiable set, never <jk>null</jk>.
-	 */
-	public static <T> Set<T> createUnmodifiable(Collection<T> c) {
-		if (c == null || c.isEmpty())
-			return Collections.emptySet();
-		return new ASet<T>().appendAll(c).unmodifiable();
+	public static <T> ASortedSet<T> create(T...t) {
+		return new ASortedSet<T>().appendAll(t);
 	}
 
 	/**
@@ -78,8 +55,8 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 * @return A new list.
 	 */
 	@SafeVarargs
-	public static <T> ASet<T> of(T...t) {
-		return new ASet<T>().appendAll(t);
+	public static <T> ASortedSet<T> of(T...t) {
+		return new ASortedSet<T>().appendAll(t);
 	}
 
 	/**
@@ -88,7 +65,7 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 * @param t The entry to add to this set.
 	 * @return This object (for method chaining).
 	 */
-	public ASet<T> append(T t) {
+	public ASortedSet<T> append(T t) {
 		add(t);
 		return this;
 	}
@@ -99,19 +76,8 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 * @param t The entries to add to this set.
 	 * @return This object (for method chaining).
 	 */
-	public ASet<T> appendAll(T...t) {
+	public ASortedSet<T> appendAll(T...t) {
 		Collections.addAll(this, t);
-		return this;
-	}
-
-	/**
-	 * Adds multiple entries to this set.
-	 *
-	 * @param c The entries to add to this set.
-	 * @return This object (for method chaining).
-	 */
-	public ASet<T> appendAll(Collection<T> c) {
-		addAll(c);
 		return this;
 	}
 
@@ -122,7 +88,7 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 * @param t The value to add.
 	 * @return This object (for method chaining).
 	 */
-	public ASet<T> appendIf(boolean b, T t) {
+	public ASortedSet<T> appendIf(boolean b, T t) {
 		if (b)
 			append(t);
 		return this;
@@ -133,8 +99,8 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 *
 	 * @return An unmodifiable view of this set.
 	 */
-	public Set<T> unmodifiable() {
-		return isEmpty() ? emptySet() : unmodifiableSet(this);
+	public SortedSet<T> unmodifiable() {
+		return isEmpty() ? emptySortedSet() : unmodifiableSortedSet(this);
 	}
 
 	/**

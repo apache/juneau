@@ -13,12 +13,11 @@
 package org.apache.juneau.svl;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Configurable properties on the {@link VarResolver} class.
@@ -55,8 +54,8 @@ public class VarResolverContext {
 			m.put(v.getName(), v);
 		}
 
-		this.varMap = unmodifiableMap(m);
-		this.contextObjects = immutableMap(contextObjects);
+		this.varMap = AMap.createUnmodifiable(m);
+		this.contextObjects = AMap.createUnmodifiable(contextObjects);
 	}
 
 	/**

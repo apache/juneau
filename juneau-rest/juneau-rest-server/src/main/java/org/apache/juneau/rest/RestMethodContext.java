@@ -15,7 +15,6 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.rest.Enablement.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.StringUtils.firstNonEmpty;
@@ -704,8 +703,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.converters = getInstanceArrayProperty(REST_converters, RestConverter.class, new RestConverter[0], rr, r, this);
 
-		List<RestGuard> _guards = new ArrayList<>();
-		_guards.addAll(Arrays.asList(getInstanceArrayProperty(REST_guards, RestGuard.class, new RestGuard[0], rr, r, this)));
+		AList<RestGuard> _guards = AList.create();
+		_guards.appendAll(getInstanceArrayProperty(REST_guards, RestGuard.class, new RestGuard[0], rr, r, this));
 		Set<String> rolesDeclared = getSetProperty(REST_rolesDeclared, String.class, null);
 		Set<String> roleGuard = getSetProperty(REST_roleGuard, String.class, Collections.emptySet());
 
@@ -791,10 +790,10 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.priority = getIntegerProperty(RESTMETHOD_priority, 0);
 
-		Map<String,Widget> _widgets = new HashMap<>();
+		AMap<String,Widget> _widgets = AMap.create();
 		for (Widget w : getInstanceArrayProperty(REST_widgets, Widget.class, new Widget[0]))
 			_widgets.put(w.getName(), w);
-		this.widgets = unmodifiableMap(_widgets);
+		this.widgets = _widgets.unmodifiable();
 
 		this.properties = b.properties;
 

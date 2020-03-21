@@ -13,8 +13,6 @@
 package org.apache.juneau.transform;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -23,6 +21,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
  * A dynamic POJO swap based on reflection of a Java class that converts POJOs to serializable Maps.
@@ -76,8 +75,8 @@ import org.apache.juneau.serializer.*;
 public class AutoMapSwap<T> extends PojoSwap<T,Map<?,?>> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = newUnmodifiableHashSet("toMap", "toObjectMap"),
-		UNSWAP_METHOD_NAMES = newUnmodifiableHashSet("fromMap", "fromObjectMap", "create", "valueOf");
+		SWAP_METHOD_NAMES = ASet.createUnmodifiable("toMap", "toObjectMap"),
+		UNSWAP_METHOD_NAMES = ASet.createUnmodifiable("fromMap", "fromObjectMap", "create", "valueOf");
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

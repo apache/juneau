@@ -26,6 +26,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).
@@ -121,12 +122,12 @@ public class BeanMeta<T> {
 
 		this.beanFilter = beanFilter;
 		this.dictionaryName = b.dictionaryName;
-		this.properties = unmodifiableMap(b.properties);
-		this.hiddenProperties = unmodifiableMap(b.hiddenProperties);
-		this.getterProps = unmodifiableMap(b.getterProps);
-		this.setterProps = unmodifiableMap(b.setterProps);
+		this.properties = AMap.createUnmodifiable(b.properties);
+		this.hiddenProperties = b.hiddenProperties.unmodifiable();
+		this.getterProps = b.getterProps.unmodifiable();
+		this.setterProps = b.setterProps.unmodifiable();
 		this.dynaProperty = b.dynaProperty;
-		this.typeVarImpls = unmodifiableMap(b.typeVarImpls);
+		this.typeVarImpls = AMap.createUnmodifiable(b.typeVarImpls);
 		this.constructor = b.constructor;
 		this.constructorArgs = b.constructorArgs;
 		this.beanRegistry = b.beanRegistry;
@@ -141,12 +142,13 @@ public class BeanMeta<T> {
 		BeanContext ctx;
 		BeanFilter beanFilter;
 		String[] pNames;
-		Map<String,BeanPropertyMeta> properties, hiddenProperties = new LinkedHashMap<>();
-		Map<Method,String> getterProps = new HashMap<>();
-		Map<Method,String> setterProps = new HashMap<>();
+		Map<String,BeanPropertyMeta> properties;
+		AMap<String,BeanPropertyMeta> hiddenProperties = AMap.create();
+		AMap<Method,String> getterProps = AMap.create();
+		AMap<Method,String> setterProps = AMap.create();
 		BeanPropertyMeta dynaProperty;
 
-		Map<Class<?>,Class<?>[]> typeVarImpls;
+		AMap<Class<?>,Class<?>[]> typeVarImpls;
 		ConstructorInfo constructor;
 		String[] constructorArgs = new String[0];
 		PropertyNamer propertyNamer;
@@ -173,9 +175,9 @@ public class BeanMeta<T> {
 					mVis = ctx.getBeanMethodVisibility(),
 					fVis = ctx.getBeanFieldVisibility();
 
-				List<Class<?>> bdClasses = new ArrayList<>();
+				AList<Class<?>> bdClasses = AList.create();
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
-					bdClasses.addAll(Arrays.asList(beanFilter.getBeanDictionary()));
+					bdClasses.appendAll(beanFilter.getBeanDictionary());
 
 				boolean hasTypeName = false;
 				for (Bean b : classMeta.getAnnotations(Bean.class))
@@ -414,7 +416,7 @@ public class BeanMeta<T> {
 					}
 				}
 
-				typeVarImpls = new HashMap<>();
+				typeVarImpls = AMap.create();
 				findTypeVarImpls(c, typeVarImpls);
 				if (typeVarImpls.isEmpty())
 					typeVarImpls = null;

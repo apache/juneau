@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
@@ -92,7 +91,7 @@ public class StaticFileMapping {
 		this.resourceClass = resourceClass;
 		this.path = trimSlashes(path);
 		this.location = trimTrailingSlashes(location);
-		this.responseHeaders = immutableMap(responseHeaders);
+		this.responseHeaders = AMap.createUnmodifiable(responseHeaders);
 	}
 
 	/**

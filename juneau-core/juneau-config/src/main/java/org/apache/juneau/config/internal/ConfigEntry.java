@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.internal;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents a single entry in a configuration.
@@ -64,7 +64,7 @@ public class ConfigEntry {
 
 		this.value = StringUtils.replaceUnicodeSequences(line.trim());
 
-		this.preLines = immutableList(preLines);
+		this.preLines = AList.createUnmodifiable(preLines);
 	}
 
 	ConfigEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
@@ -73,7 +73,7 @@ public class ConfigEntry {
 		this.value = value;
 		this.comment = comment;
 		this.modifiers = modifiers;
-		this.preLines = immutableList(preLines);
+		this.preLines = AList.createUnmodifiable(preLines);
 	}
 
 	/**

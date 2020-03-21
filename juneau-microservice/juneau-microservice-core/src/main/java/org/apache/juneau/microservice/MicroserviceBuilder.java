@@ -327,7 +327,7 @@ public class MicroserviceBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public MicroserviceBuilder consoleCommands(ConsoleCommand...consoleCommands) {
-		this.consoleCommands.addAll(Arrays.asList(consoleCommands));
+		Collections.addAll(this.consoleCommands, consoleCommands);
 		return this;
 	}
 

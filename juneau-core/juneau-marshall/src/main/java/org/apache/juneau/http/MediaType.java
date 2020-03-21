@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -21,6 +20,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.utils.*;
 
 
 /**
@@ -124,8 +124,8 @@ public class MediaType implements Comparable<MediaType>  {
 		this.subType = b.subType;
 		this.subTypes = b.subTypes;
 		this.subTypesSorted = b.subTypesSorted;
-		this.subTypesList = immutableList(subTypes);
-		this.parameters = unmodifiableMap(b.parameters);
+		this.subTypesList = AList.createUnmodifiable(subTypes);
+		this.parameters = AMap.createUnmodifiable(b.parameters);
 		this.hasSubtypeMeta = b.hasSubtypeMeta;
 	}
 

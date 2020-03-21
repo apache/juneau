@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -20,6 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents the contents of a text file with convenience methods for resolving SVL variables and adding
@@ -80,7 +80,7 @@ public class ReaderResource implements Writable {
 	 */
 	public ReaderResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object...contents) throws IOException {
 		this.mediaType = mediaType;
-		this.headers = immutableMap(headers);
+		this.headers = AMap.createUnmodifiable(headers);
 		this.contents = cached ? new Object[]{readAll(contents)} : contents;
 	}
 
@@ -153,7 +153,7 @@ public class ReaderResource implements Writable {
 		 * @return This object (for method chaining).
 		 */
 		public Builder contents(Object...contents) {
-			this.contents.addAll(Arrays.asList(contents));
+			Collections.addAll(this.contents, contents);
 			return this;
 		}
 

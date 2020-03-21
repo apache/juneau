@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 import java.util.Map.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for
@@ -100,7 +99,7 @@ public final class StringRange implements Comparable<StringRange>  {
 		Builder b = new Builder(token);
 		this.type = b.type;
 		this.qValue = b.qValue;
-		this.extensions = unmodifiableMap(b.extensions);
+		this.extensions = AMap.createUnmodifiable(b.extensions);
 	}
 
 	static final class Builder {

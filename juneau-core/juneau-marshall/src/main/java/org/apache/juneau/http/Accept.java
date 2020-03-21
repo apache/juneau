@@ -13,13 +13,13 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.http.Constants.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents a parsed <l>Accept</l> HTTP request header.
@@ -175,7 +175,7 @@ public final class Accept extends ComplexHeader {
 	public Accept(String value) {
 		super("Accept");
 		this.mediaRanges = MediaTypeRange.parse(value);
-		this.mediaRangesList = immutableList(mediaRanges);
+		this.mediaRangesList = AList.createUnmodifiable(mediaRanges);
 	}
 
 	/**

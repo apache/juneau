@@ -15,13 +15,13 @@ package org.apache.juneau.html.annotation;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
-import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Applies {@link HtmlDocConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -79,14 +79,14 @@ public class HtmlDocConfigApply extends ConfigApply<HtmlDocConfig> {
 	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
 
 	private String[] resolveLinks(Object[] value, String[] prev) {
-		List<String> list = new ArrayList<>();
+		AList<String> list = new AList<>();
 		for (Object v : value) {
 			String s = string(stringify(v));
 			if (s == null)
 				return new String[0];
 			if ("INHERIT".equals(s)) {
 				if (prev != null)
-					list.addAll(Arrays.asList(prev));
+					list.appendAll(prev);
 			} else if (s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches()) {
 				Matcher lm = INDEXED_LINK_PATTERN.matcher(s);
 				lm.matches();
@@ -98,22 +98,22 @@ public class HtmlDocConfigApply extends ConfigApply<HtmlDocConfig> {
 				list.add(s);
 			}
 		}
-		return list.toArray(new String[list.size()]);
+		return list.asArrayOf(String.class);
 	}
 
 	private String[] resolveList(Object[] value, String[] prev) {
-		Set<String> set = new LinkedHashSet<>();
+		ASet<String> set = ASet.create();
 		for (Object v : value) {
 			String s = string(stringify(v));
 			if ("INHERIT".equals(s)) {
 				if (prev != null)
-					set.addAll(Arrays.asList(prev));
+					set.appendAll(prev);
 			} else if ("NONE".equals(s)) {
 				return new String[0];
 			} else {
 				set.add(s);
 			}
 		}
-		return set.toArray(new String[set.size()]);
+		return set.asArrayOf(String.class);
 	}
 }

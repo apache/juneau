@@ -13,7 +13,6 @@
 package org.apache.juneau.transform;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Arrays.*;
 
 import java.beans.*;
 import java.util.*;
@@ -21,6 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for {@link BeanFilter} objects.
@@ -61,11 +61,11 @@ public class BeanFilterBuilder<T> {
 
 	Class<?> beanClass;
 	String typeName;
-	Set<String>
-		bpi = new LinkedHashSet<>(),
-		bpx = new LinkedHashSet<>(),
-		bpro = new LinkedHashSet<>(),
-		bpwo = new LinkedHashSet<>();
+	ASet<String>
+		bpi = ASet.create(),
+		bpx = ASet.create(),
+		bpro = ASet.create(),
+		bpwo = ASet.create();
 	Class<?> interfaceClass, stopClass;
 	boolean sortProperties, fluentSetters;
 	Object propertyNamer;
@@ -137,9 +137,9 @@ public class BeanFilterBuilder<T> {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanFilterBuilder<T> properties(String...value) {
-		this.bpi = new LinkedHashSet<>();
+		this.bpi = ASet.create();
 		for (String v : value)
-			bpi.addAll(asList(split(v)));
+			bpi.appendAll(split(v));
 		return this;
 	}
 
@@ -152,9 +152,9 @@ public class BeanFilterBuilder<T> {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanFilterBuilder<T> excludeProperties(String...value) {
-		this.bpx = new LinkedHashSet<>();
+		this.bpx = ASet.create();
 		for (String v : value)
-			bpx.addAll(asList(split(v)));
+			bpi.appendAll(split(v));
 		return this;
 	}
 
@@ -473,7 +473,7 @@ public class BeanFilterBuilder<T> {
 	@Deprecated
 	public BeanFilterBuilder<T> beanDictionary(Class<?>...values) {
 		if (dictionary == null)
-			dictionary = new ArrayList<>(Arrays.asList(values));
+			dictionary = Arrays.asList(values);
 		else for (Class<?> cc : values)
 			dictionary.add(cc);
 		return this;
@@ -517,9 +517,9 @@ public class BeanFilterBuilder<T> {
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> bpi(String...value) {
-		this.bpi = new LinkedHashSet<>();
+		this.bpi = ASet.create();
 		for (String v : value)
-			bpi.addAll(asList(split(v)));
+			bpi.appendAll(split(v));
 		return this;
 	}
 
@@ -561,9 +561,9 @@ public class BeanFilterBuilder<T> {
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> bpx(String...value) {
-		this.bpx = new LinkedHashSet<>();
+		this.bpx = ASet.create();
 		for (String v : value)
-			bpx.addAll(asList(split(v)));
+			bpx.appendAll(split(v));
 		return this;
 	}
 
@@ -607,9 +607,9 @@ public class BeanFilterBuilder<T> {
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> bpro(String...value) {
-		this.bpro = new LinkedHashSet<>();
+		this.bpro = ASet.create();
 		for (String v : value)
-			bpro.addAll(asList(split(v)));
+			bpro.appendAll(split(v));
 		return this;
 	}
 
@@ -653,9 +653,9 @@ public class BeanFilterBuilder<T> {
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> bpwo(String...value) {
-		this.bpwo = new LinkedHashSet<>();
+		this.bpwo = ASet.create();
 		for (String v : value)
-			bpwo.addAll(asList(split(v)));
+			bpwo.appendAll(split(v));
 		return this;
 	}
 
@@ -696,7 +696,7 @@ public class BeanFilterBuilder<T> {
 	 */
 	public BeanFilterBuilder<T> dictionary(Class<?>...values) {
 		if (dictionary == null)
-			dictionary = new ArrayList<>(Arrays.asList(values));
+			dictionary = Arrays.asList(values);
 		else for (Class<?> cc : values)
 			dictionary.add(cc);
 		return this;

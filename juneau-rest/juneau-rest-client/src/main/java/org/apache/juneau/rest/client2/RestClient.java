@@ -3065,7 +3065,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 
 	/*
 	 * Returns the serializer that best matches the specified content type.
-	 * If no match found or the content type is null, returns the first serializer in the list.
+	 * If no match found or the content type is null, returns the serializer in the list if it's a list of one.
 	 * Returns null if no serializers are defined.
 	 */
 	Serializer getMatchingSerializer(String mediaType) {
@@ -3076,12 +3076,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 			if (s != null)
 				return s;
 		}
-		return serializers.getSerializers().get(0);
+		List<Serializer> l = serializers.getSerializers();
+		return l.size() == 1 ? l.get(0) : null;
 	}
 
 	/*
 	 * Returns the parser that best matches the specified content type.
-	 * If no match found or the content type is null, returns the first parser in the list.
+	 * If no match found or the content type is null, returns the parser in the list if it's a list of one.
 	 * Returns null if no parsers are defined.
 	 */
 	Parser getMatchingParser(String mediaType) {
@@ -3092,7 +3093,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 			if (p != null)
 				return p;
 		}
-		return parsers.getParsers().get(0);
+		List<Parser> l = parsers.getParsers();
+		return l.size() == 1 ? l.get(0) : null;
 	}
 
 	@Override /* Context */

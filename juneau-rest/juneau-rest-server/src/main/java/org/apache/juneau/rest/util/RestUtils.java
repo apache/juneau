@@ -213,12 +213,12 @@ public final class RestUtils {
 		if (value.length == 0)
 			return fromParent;
 
-		List<String> l = new ArrayList<>();
+		AList<String> l = AList.create();
 		for (String v : value) {
 			if (! "INHERIT".equals(v))
 				l.add(v);
 			else if (fromParent != null)
-				l.addAll(Arrays.asList(fromParent));
+				l.appendAll(fromParent);
 		}
 		return join(l, '\n');
 	}
@@ -229,39 +229,39 @@ public final class RestUtils {
 		if (links.length == 0)
 			return parentLinks;
 
-		List<String> list = new ArrayList<>();
+		AList<String> list = AList.create();
 		for (String l : links) {
 			if ("INHERIT".equals(l))
-				list.addAll(Arrays.asList(parentLinks));
+				list.appendAll(parentLinks);
 			else if (l.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(l).matches()) {
-					Matcher lm = INDEXED_LINK_PATTERN.matcher(l);
-					lm.matches();
-					String key = lm.group(1);
-					int index = Math.min(list.size(), Integer.parseInt(lm.group(2)));
-					String remainder = lm.group(3);
-					list.add(index, key.isEmpty() ? remainder : key + ":" + remainder);
+				Matcher lm = INDEXED_LINK_PATTERN.matcher(l);
+				lm.matches();
+				String key = lm.group(1);
+				int index = Math.min(list.size(), Integer.parseInt(lm.group(2)));
+				String remainder = lm.group(3);
+				list.add(index, key.isEmpty() ? remainder : key + ":" + remainder);
 			} else {
 				list.add(l);
 			}
 		}
-		return list.toArray(new String[list.size()]);
+		return list.asArrayOf(String.class);
 	}
 
 	static String[] resolveContent(String[] content, String[] parentContent) {
 		if (content.length == 0)
 			return parentContent;
 
-		List<String> list = new ArrayList<>();
+		AList<String> list = AList.create();
 		for (String l : content) {
 			if ("INHERIT".equals(l)) {
-				list.addAll(Arrays.asList(parentContent));
+				list.appendAll(parentContent);
 			} else if ("NONE".equals(l)) {
 				return new String[0];
 			} else {
 				list.add(l);
 			}
 		}
-		return list.toArray(new String[list.size()]);
+		return list.asArrayOf(String.class);
 	}
 
 	/**
@@ -412,14 +412,14 @@ public final class RestUtils {
 		if (! ArrayUtils.contains(Inherit.class, fromChild))
 			return fromChild;
 
-		List<Object> l = new ArrayList<>(fromParent.length + fromChild.length);
+		AList<Object> l = AList.create();
 		for (Object o : fromChild) {
 			if (o == Inherit.class)
-				l.addAll(Arrays.asList(fromParent));
+				l.appendAll(fromParent);
 			else
 				l.add(o);
 		}
-		return l.toArray(new Object[l.size()]);
+		return l.asArrayOf(Object.class);
 	}
 
 	/**

@@ -176,7 +176,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder simpleJson() {
-		return serializer(SimpleJsonSerializer.class).parser(JsonParser.class);
+		return serializer(SimpleJsonSerializer.class).parser(SimpleJsonParser.class);
 	}
 
 	/**

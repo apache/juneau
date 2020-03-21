@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static java.util.Collections.*;
+
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -27,19 +30,79 @@ import java.util.*;
  * @param <T> The entry type.
  */
 @SuppressWarnings({"unchecked"})
-public final class AList<T> extends LinkedList<T> {
+public final class AList<T> extends ArrayList<T> {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * Creates an array list of default size.
+	 * @param capacity Initial capacity.
+	 */
+	public AList(int capacity) {
+		super(capacity);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * Creates an array list of default size.
+	 */
+	public AList() {}
+
+	/**
+	 * Convenience method for creating an empty list of objects.
+	 *
+	 * <p>
+	 * Creates an array list of default size.
+	 *
+	 * @return A new list.
+	 */
+	public static <T> AList<T> create() {
+		return new AList<>();
+	}
+
+	/**
 	 * Convenience method for creating a list of objects.
+	 *
+	 * <p>
+	 * Creates a list with the same capacity as the array.
 	 *
 	 * @param t The initial values.
 	 * @return A new list.
 	 */
 	@SafeVarargs
 	public static <T> AList<T> create(T...t) {
-		return new AList<T>().appendAll(t);
+		return new AList<T>(t.length).appendAll(t);
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable list of objects.
+	 *
+	 * <p>
+	 * Creates a list with the same capacity as the array.
+	 *
+	 * @param t The initial values.
+	 * @return A new list.
+	 */
+	public static <T> List<T> createUnmodifiable(T...t) {
+		return t.length == 0 ? emptyList() : create(t).unmodifiable();
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable list out of the specified collection.
+	 *
+	 * @param c The collection to add.
+	 * @param <T> The element type.
+	 * @return An unmodifiable list, never <jk>null</jk>.
+	 */
+	public static <T> List<T> createUnmodifiable(Collection<T> c) {
+		if (c == null || c.isEmpty())
+			return Collections.emptyList();
+		return new AList<T>(c.size()).appendAll(c).unmodifiable();
 	}
 
 	/**
@@ -53,7 +116,7 @@ public final class AList<T> extends LinkedList<T> {
 	 */
 	@SafeVarargs
 	public static <T> AList<T> of(T...t) {
-		return new AList<T>().appendAll(t);
+		return new AList<T>(t.length).appendAll(t);
 	}
 
 	/**
@@ -74,7 +137,7 @@ public final class AList<T> extends LinkedList<T> {
 	 * @return This object (for method chaining).
 	 */
 	public AList<T> appendAll(T...t) {
-		addAll(Arrays.asList(t));
+		Collections.addAll(this, t);
 		return this;
 	}
 
@@ -89,5 +152,35 @@ public final class AList<T> extends LinkedList<T> {
 		if (b)
 			append(val);
 		return this;
+	}
+
+	/**
+	 * Returns an unmodifiable view of this list.
+	 *
+	 * @return An unmodifiable view of this list.
+	 */
+	public List<T> unmodifiable() {
+		return isEmpty() ? emptyList() : unmodifiableList(this);
+	}
+
+	/**
+	 * Adds all the entries in the specified collection to this list.
+	 *
+	 * @param c The collection to add to this list.
+	 * @return This object (for method chaining).
+	 */
+	public AList<T> appendAll(Collection<T> c) {
+		addAll(c);
+		return this;
+	}
+
+	/**
+	 * Convert the contents of this list into a new array.
+	 *
+	 * @param c The component type of the array.
+	 * @return A new array.
+	 */
+	public <T2> T2[] asArrayOf(Class<T2> c) {
+		return toArray((T2[])Array.newInstance(c, size()));
 	}
 }

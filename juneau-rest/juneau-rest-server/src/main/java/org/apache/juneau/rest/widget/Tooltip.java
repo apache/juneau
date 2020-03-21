@@ -48,7 +48,7 @@ public class Tooltip {
     */
    public Tooltip(String display, Object...content) {
    	this.display = new HtmlText(display);
-   	this.content = new ArrayList<>(Arrays.asList(content));
+   	this.content = Arrays.asList(content);
    }
 
    /**

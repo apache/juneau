@@ -35,6 +35,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Main configuration API class.
@@ -122,7 +123,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 			l.add(cmd + ".cfg");
 		}
 
-		Set<File> files = new TreeSet<>(Arrays.asList(new File(".").listFiles()));
+		Set<File> files = ASortedSet.create(new File(".").listFiles());
 		for (File f : files)
 			if (f.getName().endsWith(".cfg"))
 				l.add(f.getName());

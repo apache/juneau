@@ -12,14 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents a group of {@link Parser Parsers} that can be looked up by media type.
@@ -123,10 +122,10 @@ public final class ParserGroup extends BeanContext {
 	 */
 	public ParserGroup(PropertyStore ps, Parser[] parsers) {
 		super(ps);
-		this.parsers = immutableList(parsers);
+		this.parsers = AList.createUnmodifiable(parsers);
 
-		List<MediaType> lmt = new ArrayList<>();
-		List<Parser> l = new ArrayList<>();
+		AList<MediaType> lmt = AList.create();
+		AList<Parser> l = AList.create();
 		for (Parser p : parsers) {
 			for (MediaType m: p.getMediaTypes()) {
 				lmt.add(m);
@@ -134,9 +133,9 @@ public final class ParserGroup extends BeanContext {
 			}
 		}
 
-		this.mediaTypes = lmt.toArray(new MediaType[lmt.size()]);
-		this.mediaTypesList = unmodifiableList(lmt);
-		this.mediaTypeParsers = l.toArray(new Parser[l.size()]);
+		this.mediaTypes = lmt.asArrayOf(MediaType.class);
+		this.mediaTypesList = lmt.unmodifiable();
+		this.mediaTypeParsers = l.asArrayOf(Parser.class);
 	}
 
 	/**

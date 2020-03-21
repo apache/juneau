@@ -47,6 +47,11 @@ public class BodyAnnotationTest {
 			b.f = 1;
 			return b;
 		}
+
+		@Override
+		public String toString() {
+			return SimpleJson.DEFAULT.toString(this);
+		}
 	}
 
 	//=================================================================================================================
@@ -394,22 +399,17 @@ public class BodyAnnotationTest {
 	@Test
 	public void c03_Bean() throws Exception {
 		String o = c01.postC03(Bean.create());
-		assertEquals("(f=1)", o);
-	}
-	@Test
-	public void c04_BeanArray() throws Exception {
-		String o = c01.postC04(new Bean[]{Bean.create()});
-		assertEquals("(f=1)", o);
+		assertEquals("{f:1}", o);
 	}
 	@Test
 	public void c05_ListOfBeans() throws Exception {
 		String o = c01.postC05(AList.create(Bean.create()));
-		assertEquals("(f=1)", o);
+		assertEquals("[{f:1}]", o);
 	}
 	@Test
 	public void c06_MapOfBeans() throws Exception {
 		String o = c01.postC06(AMap.create("k1",Bean.create()));
-		assertEquals("(k1=(f=1))", o);
+		assertEquals("{k1={f:1}}", o);
 	}
 	@Test
 	public void c07_Reader() throws Exception {

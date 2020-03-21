@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.PropertyType.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
@@ -24,6 +23,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 
 
 /**
@@ -878,14 +878,14 @@ public final class PropertyStore {
 			if (type == LIST_STRING && eType == String.class || type == LIST_INTEGER && eType == Integer.class || type == LIST_CLASS && eType == Class.class || type == LIST_OBJECT) {
 				return (List<T>)value;
 			} else if (type == PropertyType.LIST_STRING) {
-				List<T> l = new ArrayList<>();
+				AList<T> l = AList.create();
 				for (Object o : (List<?>)value) {
 					T t = fromString(eType, o.toString());
 					if (t == null)
 						throw new ConfigException("Invalid property conversion ''{0}'' to ''List<{1}>'' on property ''{2}''", type, eType, name);
 					l.add(t);
 				}
-				return unmodifiableList(l);
+				return l.unmodifiable();
 			} else {
 				throw new ConfigException("Invalid property conversion ''{0}'' to ''List<{1}>'' on property ''{2}''", type, eType, name);
 			}
@@ -907,14 +907,14 @@ public final class PropertyStore {
 				|| (type == SORTED_MAP_OBJECT || type == ORDERED_MAP_OBJECT)) {
 				return (Map<String,T>)value;
 			} else if (type == SORTED_MAP_STRING || type == ORDERED_MAP_STRING) {
-				Map<String,T> m = new LinkedHashMap<>();
+				AMap<String,T> m = AMap.create();
 				for (Map.Entry<String,String> e : ((Map<String,String>)value).entrySet()) {
 					T t = fromString(eType, e.getValue());
 					if (t == null)
 						throw new ConfigException("Invalid property conversion ''{0}'' to ''Map<String,{1}>'' on property ''{2}''", type, eType, name);
 					m.put(e.getKey(), t);
 				}
-				return unmodifiableMap(m);
+				return m.unmodifiable();
 			} else {
 				throw new ConfigException("Invalid property conversion ''{0}'' to ''Map<String,{1}>'' on property ''{2}''", type, eType, name);
 			}

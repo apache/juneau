@@ -12,14 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -136,11 +135,11 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 		juneauBpNs = getInstanceProperty(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
 		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
 
-		Map<String,Object> m = new TreeMap<>();
+		ASortedMap<String,Object> m = ASortedMap.create();
 		for (String k : getPropertyKeys("RdfCommon"))
 			if (k.startsWith("jena."))
 				m.put(k.substring(5), getProperty("RdfCommon." + k));
-		jenaProperties = unmodifiableMap(m);
+		jenaProperties = m.unmodifiable();
 	}
 
 	/**

@@ -140,7 +140,7 @@ public class SearchArgs {
 		 */
 		public Builder view(String columns) {
 			if (columns != null)
-				return view(Arrays.asList(StringUtils.split(columns)));
+				Collections.addAll(this.view, StringUtils.split(columns));
 			return this;
 		}
 

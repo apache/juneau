@@ -1366,6 +1366,10 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	/**
 	 * Sets a header on the request.
 	 *
+	 * <p>
+	 *	Overwrites the first header with the same name.
+	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
+	 *
 	 * @param name The header name.
 	 * @param value The header value.
 	 * 	<ul>
@@ -1413,6 +1417,10 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	/**
 	 * Sets a header on the request.
 	 *
+	 * <p>
+	 *	Overwrites the first header with the same name.
+	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
@@ -1438,6 +1446,10 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	/**
 	 * Sets a header on the request.
 	 *
+	 * <p>
+	 *	Overwrites the first header with the same name.
+	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
@@ -1456,6 +1468,10 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	/**
 	 * Sets a header on the request.
 	 *
+	 * <p>
+	 *	Overwrites the first header with the same name.
+	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
@@ -1471,12 +1487,16 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	public RestRequest header(Header header, boolean skipIfEmpty) {
 		String v = header.getValue();
 		if (! (skipIfEmpty && isEmpty(v)))
-			addHeader(header);
+			setHeader(header);
 		return this;
 	}
 
 	/**
 	 * Sets a header on the request.
+	 *
+	 * <p>
+	 *	Overwrites the first header with the same name.
+	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1496,6 +1516,10 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	/**
 	 * Sets a header on the request.
 	 *
+	 * <p>
+	 *	Overwrites the first header with the same name.
+	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
@@ -1513,12 +1537,16 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	public RestRequest header(NameValuePair header, boolean skipIfEmpty) {
 		String v = header.getValue();
 		if (canAdd(v, skipIfEmpty))
-			addHeader(header.getName(), v);
+			setHeader(header.getName(), v);
 		return this;
 	}
 
 	/**
 	 * Sets a header on the request.
+	 *
+	 * <p>
+	 *	Overwrites the first header with the same names.
+	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1539,6 +1567,10 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	/**
 	 * Adds multiple headers to the request.
 	 *
+	 * <p>
+	 *	Overwrites the first headers with the same name.
+	 *	The new headers will be appended to the end of the list, if no headers with the given namess can be found.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
@@ -1557,7 +1589,11 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	}
 
 	/**
-	 * Adds multiple headers to the request.
+	 * Sets multiple headers to the request.
+	 *
+	 * <p>
+	 *	Overwrites the first headers with the same names.
+	 *	The new headers will be appended to the end of the list, if no headers with the given names can be found.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1582,6 +1618,10 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 
 	/**
 	 * Sets multiple headers on the request.
+	 *
+	 * <p>
+	 *	Overwrites the first header with the same name.
+	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1609,6 +1649,10 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	/**
 	 * Sets multiple headers on the request.
 	 *
+	 * <p>
+	 *	Overwrites the first headers with the same names.
+	 *	The new headers will be appended to the end of the list, if no headers with the given names can be found.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
@@ -1630,6 +1674,10 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	/**
 	 * Sets multiple headers on the request.
 	 *
+	 * <p>
+	 *	Overwrites the first headers with the same names.
+	 *	The new headers will be appended to the end of the list, if no headers with the given names can be found.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
@@ -1650,6 +1698,10 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 
 	/**
 	 * Sets multiple headers on the request using a bean with key/value properties.
+	 *
+	 * <p>
+	 *	Overwrites the first headers with the same names.
+	 *	The new headers will be appended to the end of the list, if no headers with the given names can be found.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1674,6 +1726,10 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 
 	/**
 	 * Sets multiple headers on the request using freeform key/value pairs.
+	 *
+	 * <p>
+	 *	Overwrites the first headers with the same names.
+	 *	The new headers will be appended to the end of the list, if no headers with the given names can be found.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1703,6 +1759,10 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	/**
 	 * Sets multiple headers on the request using header beans.
 	 *
+	 * <p>
+	 *	Overwrites the first headers with the same names.
+	 *	The new headers will be appended to the end of the list, if no headers with the given name can be found.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
@@ -1722,7 +1782,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 */
 	public RestRequest headers(HttpHeader...headers) throws RestCallException {
 		for (HttpHeader h : headers)
-			addHeader(h.getName(), stringify(h.getValue()));
+			setHeader(h.getName(), stringify(h.getValue()));
 		return this;
 	}
 
@@ -2247,8 +2307,6 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 				}
 				else if (serializer != null)
 					entity = new SerializedHttpEntity(input, serializer, requestBodySchema, contentType);
-				else if (partSerializer != null)
-					entity = new StringEntity(partSerializer.serialize((HttpPartSchema)null, input), getRequestContentType(TEXT_PLAIN));
 				else
 					entity = new StringEntity(getBeanContext().getClassMetaForObject(input).toString(input), getRequestContentType(TEXT_PLAIN));
 

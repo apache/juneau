@@ -17,37 +17,46 @@ import static java.util.Collections.*;
 import java.util.*;
 
 /**
- * An extension of {@link LinkedHashMap} with a convenience {@link #append(Object,Object)} method.
+ * An extension of {@link TreeMap} with a convenience {@link #append(Object,Object)} method.
  *
  * <p>
  * Primarily used for testing purposes for quickly creating populated maps.
  * <p class='bcode w800'>
  * 	<jc>// Example:</jc>
- * 	Map&lt;String,Integer&gt; m = <jk>new</jk> AMap&lt;String,Integer&gt;()
+ * 	TreeMap&lt;String,Integer&gt; m = <jk>new</jk> ATreeMap&lt;String,Integer&gt;()
  * 		.append(<js>"foo"</js>,1).append(<js>"bar"</js>,2);
  * </p>
  *
  * @param <K> The key type.
  * @param <V> The value type.
  */
-public final class AMap<K,V> extends LinkedHashMap<K,V> {
+public final class ASortedMap<K,V> extends TreeMap<K,V> {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param c Comparator to use for key comparison.
+	 */
+	public ASortedMap(Comparator<K> c) {
+		super(c);
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public ASortedMap() {
+		super();
+	}
 
 	/**
 	 * Copy constructor.
 	 *
 	 * @param copy The map to copy.
 	 */
-	public AMap(Map<K,V> copy) {
+	public ASortedMap(Map<K,V> copy) {
 		super(copy);
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public AMap() {
-		super();
 	}
 
 	/**
@@ -55,8 +64,8 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	 *
 	 * @return A new empty map.
 	 */
-	public static <K,V> AMap<K,V> create() {
-		return new AMap<>();
+	public static <K,V> ASortedMap<K,V> create() {
+		return new ASortedMap<>();
 	}
 
 	/**
@@ -66,20 +75,20 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	 * @param value Entry value.
 	 * @return A new map with one entry.
 	 */
-	public static <K,V> AMap<K,V> create(K key, V value) {
-		return new AMap<K,V>().append(key, value);
+	public static <K,V> ASortedMap<K,V> create(K key, V value) {
+		return new ASortedMap<K,V>().append(key, value);
 	}
 
 	/**
-	 * Creates an unmodifiable copy of the specified map.
+	 * Convenience method for creating an unmodifiable list out of the specified collection.
 	 *
-	 * @param copy The map to copy.
-	 * @return A new unmodifiable map, never <jk>null</jk>.
+	 * @param c The collection to add.
+	 * @return An unmodifiable list, never <jk>null</jk>.
 	 */
-	public static <K,V> Map<K,V> createUnmodifiable(Map<K,V> copy) {
-		if (copy == null || copy.isEmpty())
-			return emptyMap();
-		return new AMap<>(copy).unmodifiable();
+	public static <K,V> SortedMap<K,V> createUnmodifiable(Map<K,V> c) {
+		if (c == null || c.isEmpty())
+			return Collections.emptySortedMap();
+		return new ASortedMap<>(c).unmodifiable();
 	}
 
 	/**
@@ -89,10 +98,11 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	 * @param v The value.
 	 * @return This object (for method chaining).
 	 */
-	public AMap<K,V> append(K k, V v) {
+	public ASortedMap<K,V> append(K k, V v) {
 		put(k, v);
 		return this;
 	}
+
 
 	/**
 	 * Appends all the entries in the specified map to this map.
@@ -100,17 +110,17 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	 * @param c The map to copy.
 	 * @return This object (for method chaining).
 	 */
-	public AMap<K,V> appendAll(Map<K,V> c) {
+	public ASortedMap<K,V> appendAll(Map<K,V> c) {
 		super.putAll(c);
 		return this;
 	}
 
 	/**
-	 * Returns an unmodifiable view of this map.
+	 * Returns an unmodifiable view of this set.
 	 *
-	 * @return An unmodifiable view of this map.
+	 * @return An unmodifiable view of this set.
 	 */
-	public Map<K,V> unmodifiable() {
-		return this.isEmpty() ? emptyMap() : unmodifiableMap(this);
+	public SortedMap<K,V> unmodifiable() {
+		return isEmpty() ? emptySortedMap() : unmodifiableSortedMap(this);
 	}
 }

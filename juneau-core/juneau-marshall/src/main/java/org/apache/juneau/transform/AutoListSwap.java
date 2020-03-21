@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
@@ -23,6 +22,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
  * A dynamic POJO swap based on reflection of a Java class that converts POJOs to Lists.
@@ -76,8 +76,8 @@ import org.apache.juneau.serializer.*;
 public class AutoListSwap<T> extends PojoSwap<T,List<?>> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = newUnmodifiableHashSet("toList", "toObjectList"),
-		UNSWAP_METHOD_NAMES = newUnmodifiableHashSet("fromList", "fromObjectList", "create", "valueOf");
+		SWAP_METHOD_NAMES = ASet.createUnmodifiable("toList", "toObjectList"),
+		UNSWAP_METHOD_NAMES = ASet.createUnmodifiable("fromList", "fromObjectList", "create", "valueOf");
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

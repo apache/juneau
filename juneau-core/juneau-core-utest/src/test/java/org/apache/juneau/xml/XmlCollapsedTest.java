@@ -238,21 +238,21 @@ public class XmlCollapsedTest {
 	@Bean(bpi="f1,f2")
 	public static class E {
 
-		private LinkedList<String> f1, f2;
+		private ArrayList<String> f1, f2;
 
 		@Xml(format=COLLAPSED)
-		public LinkedList<String> getF1() {
+		public ArrayList<String> getF1() {
 			return f1;
 		}
-		public void setF1(LinkedList<String> f1) {
+		public void setF1(ArrayList<String> f1) {
 			this.f1 = f1;
 		}
 
 		@Xml(format=COLLAPSED,childName="xf2")
-		public LinkedList<String> getF2() {
+		public ArrayList<String> getF2() {
 			return f2;
 		}
-		public void setF2(LinkedList<String> f2) {
+		public void setF2(ArrayList<String> f2) {
 			this.f2 = f2;
 		}
 	}

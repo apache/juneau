@@ -33,6 +33,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.utils.*;
 
 /**
  * A wrapper class around the {@link Class} object that provides cached information about that class.
@@ -334,7 +335,7 @@ public final class ClassMeta<T> implements Type {
 			dictionaryName = null;
 		Throwable initException = null;
 		BeanMeta beanMeta = null;
-		List<PojoSwap> pojoSwaps = new ArrayList<>();
+		AList<PojoSwap> pojoSwaps = AList.create();
 		BuilderSwap builderSwap;
 		InvocationHandler invocationHandler = null;
 		BeanRegistry beanRegistry = null;
@@ -542,7 +543,7 @@ public final class ClassMeta<T> implements Type {
 				beanFilter = findBeanFilter(bc);
 
 			if (pojoSwaps != null)
-				this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
+				this.pojoSwaps.appendAll(pojoSwaps);
 
 			if (bc != null)
 				this.builderSwap = BuilderSwap.findSwapFromPojoClass(bc, c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());

@@ -15,7 +15,6 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
-import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
@@ -473,55 +472,55 @@ public class HtmlDocBuilder {
 	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
 
 	private static String[] resolveLinks(Object[] value, String[] prev) {
-		List<String> list = new ArrayList<>();
+		AList<String> list = AList.create();
 		for (Object v : value) {
 			String s = stringify(v);
 			if ("INHERIT".equals(s)) {
-				list.addAll(Arrays.asList(prev));
+				list.appendAll(prev);
 			} else if (s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches()) {
-					Matcher lm = INDEXED_LINK_PATTERN.matcher(s);
-					lm.matches();
-					String key = lm.group(1);
-					int index = Math.min(list.size(), Integer.parseInt(lm.group(2)));
-					String remainder = lm.group(3);
-					list.add(index, key.isEmpty() ? remainder : key + ":" + remainder);
+				Matcher lm = INDEXED_LINK_PATTERN.matcher(s);
+				lm.matches();
+				String key = lm.group(1);
+				int index = Math.min(list.size(), Integer.parseInt(lm.group(2)));
+				String remainder = lm.group(3);
+				list.add(index, key.isEmpty() ? remainder : key + ":" + remainder);
 			} else {
 				list.add(s);
 			}
 		}
-		return list.toArray(new String[list.size()]);
+		return list.asArrayOf(String.class);
 	}
 
 	private static String[] resolveSet(Object[] value, String[] prev) {
-		Set<String> set = new HashSet<>();
+		ASet<String> set = ASet.create();
 		for (Object v : value) {
 			String s = stringify(v);
 			if ("INHERIT".equals(s)) {
 				if (prev != null)
-					set.addAll(Arrays.asList(prev));
+					set.appendAll(prev);
 			} else if ("NONE".equals(s)) {
 				return new String[0];
 			} else {
 				set.add(s);
 			}
 		}
-		return set.toArray(new String[set.size()]);
+		return set.asArrayOf(String.class);
 	}
 
 	private static String[] resolveList(Object[] value, String[] prev) {
-		Set<String> set = new LinkedHashSet<>();
+		ASet<String> set = ASet.create();
 		for (Object v : value) {
 			String s = stringify(v);
 			if ("INHERIT".equals(s)) {
 				if (prev != null)
-					set.addAll(Arrays.asList(prev));
+					set.appendAll(prev);
 			} else if ("NONE".equals(s)) {
 				return new String[0];
 			} else {
 				set.add(s);
 			}
 		}
-		return set.toArray(new String[set.size()]);
+		return set.asArrayOf(String.class);
 	}
 
 	private HtmlDocBuilder set(String key, Object value) {

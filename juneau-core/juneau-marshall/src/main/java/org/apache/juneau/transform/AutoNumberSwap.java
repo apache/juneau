@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
@@ -24,6 +23,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
  * A dynamic POJO swap based on reflection of a Java class that converts POJOs to Number serializable objects.
@@ -99,8 +99,8 @@ import org.apache.juneau.serializer.*;
 public class AutoNumberSwap<T> extends PojoSwap<T,Number> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = newUnmodifiableHashSet("toNumber", "toInteger", "toInt", "toLong", "toFloat", "toDouble", "toShort", "toByte"),
-		UNSWAP_METHOD_NAMES = newUnmodifiableHashSet("fromInteger", "fromInt", "fromLong", "fromFloat", "fromDouble", "fromShort", "fromByte", "create", "valueOf");
+		SWAP_METHOD_NAMES = ASet.createUnmodifiable("toNumber", "toInteger", "toInt", "toLong", "toFloat", "toDouble", "toShort", "toByte"),
+		UNSWAP_METHOD_NAMES = ASet.createUnmodifiable("fromInteger", "fromInt", "fromLong", "fromFloat", "fromDouble", "fromShort", "fromByte", "create", "valueOf");
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

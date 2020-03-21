@@ -19,6 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.guards.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -45,7 +46,7 @@ public class RoleMatcherTest {
 			return Collections.singleton(input);
 		if (input.isEmpty())
 			return Collections.emptySet();
-		return new TreeSet<>(Arrays.asList(StringUtils.split(input, ',')));
+		return ASortedSet.create(StringUtils.split(input, ','));
 	}
 
 	private RoleMatcher create(String expression, String toString, String expressionRoles) throws Exception {

@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -46,10 +46,10 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 		Class<?> c = beanMeta.getClassMeta().getInnerClass();
 		XmlBeanMetaBuilder b = new XmlBeanMetaBuilder(beanMeta, mp);
 
-		attrs = unmodifiableMap(b.attrs);
-		elements = unmodifiableMap(b.elements);
+		attrs = b.attrs.unmodifiable();
+		elements = b.elements.unmodifiable();
 		attrsProperty = b.attrsProperty;
-		collapsedProperties = unmodifiableMap(b.collapsedProperties);
+		collapsedProperties = b.collapsedProperties.unmodifiable();
 		contentProperty = b.contentProperty;
 		contentFormat = b.contentFormat;
 
@@ -68,10 +68,10 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	}
 
 	private static class XmlBeanMetaBuilder {
-		Map<String,BeanPropertyMeta>
-			attrs = new LinkedHashMap<>(),
-			elements = new LinkedHashMap<>(),
-			collapsedProperties = new LinkedHashMap<>();
+		AMap<String,BeanPropertyMeta>
+			attrs = AMap.create(),
+			elements = AMap.create(),
+			collapsedProperties = AMap.create();
 		BeanPropertyMeta
 			attrsProperty,
 			contentProperty;

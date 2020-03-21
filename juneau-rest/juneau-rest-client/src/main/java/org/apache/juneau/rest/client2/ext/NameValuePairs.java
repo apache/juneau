@@ -52,7 +52,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 * @param parameters Initial list of parameters.
 	 */
 	public NameValuePairs(NameValuePair...parameters) {
-		addAll(Arrays.asList(parameters));
+		Collections.addAll(this, parameters);
 	}
 
 	/**

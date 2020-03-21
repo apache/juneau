@@ -13,7 +13,6 @@
 package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.text.*;
 import java.util.*;
@@ -22,6 +21,8 @@ import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 import java.util.logging.Formatter;
 import java.util.regex.*;
+
+import org.apache.juneau.utils.*;
 
 /**
  * Log entry formatter.
@@ -178,7 +179,7 @@ public class LogEntryFormatter extends Formatter {
 		sre = sre.replaceAll("\\\\%n", "\\\\n");
 
 		rePattern = Pattern.compile(sre);
-		fieldIndexes = unmodifiableMap(fieldIndexes);
+		fieldIndexes = AMap.createUnmodifiable(fieldIndexes);
 	}
 
 	/**

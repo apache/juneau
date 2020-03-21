@@ -18,6 +18,8 @@ import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 
+import org.apache.juneau.utils.*;
+
 /**
  * Utility class for reading log files.
  *
@@ -52,9 +54,9 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 		this.end = end;
 		this.threadFilter = thread;
 		if (loggers != null)
-			this.loggerFilter = new HashSet<>(Arrays.asList(loggers));
+			this.loggerFilter = ASet.create(loggers);
 		if (severity != null)
-			this.severityFilter = new HashSet<>(Arrays.asList(severity));
+			this.severityFilter = ASet.create(severity);
 
 		// Find the first line.
 		String line;

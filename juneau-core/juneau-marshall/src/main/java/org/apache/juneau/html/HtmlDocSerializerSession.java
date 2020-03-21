@@ -20,6 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Context object that lives for the duration of a single serialization of {@link HtmlSerializer} and its subclasses.
@@ -61,9 +62,9 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		navlinks = getProperty(HTMLDOC_navlinks, String[].class, ctx.getNavlinks());
 
 		// These can contain dups after variable resolution, so de-dup them with hashsets.
-		style = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_style, String[].class, ctx.getStyle())));
-		stylesheet = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_stylesheet, String[].class, ctx.getStylesheet())));
-		script = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_script, String[].class, ctx.getScript())));
+		style = ASet.create(getProperty(HTMLDOC_style, String[].class, ctx.getStyle()));
+		stylesheet = ASet.create(getProperty(HTMLDOC_stylesheet, String[].class, ctx.getStylesheet()));
+		script = ASet.create(getProperty(HTMLDOC_script, String[].class, ctx.getScript()));
 
 		head = getProperty(HTMLDOC_head, String[].class, ctx.getHead());
 		nowrap = getProperty(HTMLDOC_nowrap, boolean.class, ctx.isNowrap());

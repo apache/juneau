@@ -30,6 +30,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Contains metadata about a bean property.
@@ -162,7 +163,7 @@ public final class BeanPropertyMeta {
 		@SuppressWarnings("deprecation")
 		boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
-			List<Class<?>> bdClasses = new ArrayList<>();
+			AList<Class<?>> bdClasses = AList.create();
 
 			if (field == null && getter == null && setter == null)
 				return false;
@@ -185,12 +186,12 @@ public final class BeanPropertyMeta {
 				if (px != null) {
 					if (! px.properties().isEmpty())
 						properties = split(px.properties());
-					bdClasses.addAll(Arrays.asList(px.beanDictionary()));
+					bdClasses.appendAll(px.beanDictionary());
 				}
 				for (Beanp p : lp) {
 					if (! p.properties().isEmpty())
 						properties = split(p.properties());
-					bdClasses.addAll(Arrays.asList(p.dictionary()));
+					bdClasses.appendAll(p.dictionary());
 					if (! p.ro().isEmpty())
 						readOnly = Boolean.valueOf(p.ro());
 					if (! p.wo().isEmpty())
@@ -210,12 +211,12 @@ public final class BeanPropertyMeta {
 				if (px != null) {
 					if (properties != null && ! px.properties().isEmpty())
 						properties = split(px.properties());
-					bdClasses.addAll(Arrays.asList(px.beanDictionary()));
+					bdClasses.appendAll(px.beanDictionary());
 				}
 				for (Beanp p : lp) {
 					if (properties != null && ! p.properties().isEmpty())
 						properties = split(p.properties());
-					bdClasses.addAll(Arrays.asList(p.dictionary()));
+					bdClasses.appendAll(p.dictionary());
 					if (! p.ro().isEmpty())
 						readOnly = Boolean.valueOf(p.ro());
 					if (! p.wo().isEmpty())
@@ -236,14 +237,14 @@ public final class BeanPropertyMeta {
 						swap = getPropertyPojoSwap(px);
 					if (properties != null && ! px.properties().isEmpty())
 						properties = split(px.properties());
-					bdClasses.addAll(Arrays.asList(px.beanDictionary()));
+					bdClasses.appendAll(px.beanDictionary());
 				}
 				for (Beanp p : lp) {
 					if (swap == null)
 						swap = getPropertyPojoSwap(p);
 					if (properties != null && ! p.properties().isEmpty())
 						properties = split(p.properties());
-					bdClasses.addAll(Arrays.asList(p.dictionary()));
+					bdClasses.appendAll(p.dictionary());
 					if (! p.ro().isEmpty())
 						readOnly = Boolean.valueOf(p.ro());
 					if (! p.wo().isEmpty())

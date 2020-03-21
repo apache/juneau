@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -38,11 +39,7 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class HtmlParserSession extends XmlParserSession {
 
-	private static final Set<String> whitespaceElements = new HashSet<>(
-		Arrays.asList(
-			new String[]{"br","bs","sp","ff"}
-		)
-	);
+	private static final Set<String> whitespaceElements = ASet.create("br","bs","sp","ff");
 
 	private final HtmlParser ctx;
 

@@ -139,7 +139,7 @@ public class MockRestClient extends RestClientBuilder {
 	@Override
 	public MockRestClient debug() {
 		mrb.debug();
-		debug();
+		super.debug();
 		return this;
 	}
 

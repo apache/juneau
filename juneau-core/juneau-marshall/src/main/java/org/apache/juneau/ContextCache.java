@@ -18,6 +18,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Stores a cache of {@link Context} instances mapped by the property stores used to create them.
@@ -145,7 +146,7 @@ public class ContextCache {
 	private String[] getPrefixes(Class<?> c) {
 		String[] prefixes = prefixCache.get(c);
 		if (prefixes == null) {
-			Set<String> ps = new HashSet<>();
+			ASet<String> ps = ASet.create();
 			for (ClassInfo c2 : ClassInfo.of(c).getAllParentsChildFirst()) {
 				ConfigurableContext cc = c2.getLastAnnotation(ConfigurableContext.class);
 				if (cc != null) {
@@ -156,7 +157,7 @@ public class ContextCache {
 					if (cc.prefixes().length == 0)
 						ps.add(c2.getSimpleName());
 					else
-						ps.addAll(Arrays.asList(cc.prefixes()));
+						ps.appendAll(cc.prefixes());
 				}
 			}
 			prefixes = ps.toArray(new String[ps.size()]);

@@ -2557,30 +2557,30 @@ public class BeanContext extends Context implements MetaProvider {
 
 		examples = getMapProperty(BEAN_examples, Object.class);
 
-		Map<String,ClassInfo> icm = new LinkedHashMap<>();
+		AMap<String,ClassInfo> icm = AMap.create();
 		for (Map.Entry<String,Class<?>> e : getClassMapProperty(BEAN_implClasses).entrySet())
 			icm.put(e.getKey(), ClassInfo.of(e.getValue()));
-		implClasses = unmodifiableMap(icm);
+		implClasses = icm.unmodifiable();
 
-		Map<String,Set<String>> m2 = new HashMap<>();
+		AMap<String,Set<String>> m2 = AMap.create();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpi, String.class).entrySet())
-			m2.put(e.getKey(), newUnmodifiableLinkedHashSet(split(e.getValue())));
-		bpi = unmodifiableMap(m2);
+			m2.put(e.getKey(), ASet.create(split(e.getValue())).unmodifiable());
+		bpi = m2.unmodifiable();
 
-		m2 = new HashMap<>();
+		m2 = AMap.create();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpx, String.class).entrySet())
-			m2.put(e.getKey(), newUnmodifiableLinkedHashSet(split(e.getValue())));
-		bpx = unmodifiableMap(m2);
+			m2.put(e.getKey(), ASet.create(split(e.getValue())).unmodifiable());
+		bpx = m2.unmodifiable();
 
-		m2 = new HashMap<>();
+		m2 = AMap.create();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpro, String.class).entrySet())
-			m2.put(e.getKey(), newUnmodifiableLinkedHashSet(split(e.getValue())));
-		bpro = unmodifiableMap(m2);
+			m2.put(e.getKey(), ASet.create(split(e.getValue())).unmodifiable());
+		bpro = m2.unmodifiable();
 
-		m2 = new HashMap<>();
+		m2 = AMap.create();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpwo, String.class).entrySet())
-			m2.put(e.getKey(), newUnmodifiableLinkedHashSet(split(e.getValue())));
-		bpwo = unmodifiableMap(m2);
+			m2.put(e.getKey(), ASet.create(split(e.getValue())).unmodifiable());
+		bpwo = m2.unmodifiable();
 
 		locale = getInstanceProperty(BEAN_locale, Locale.class, Locale.getDefault());
 		timeZone = getInstanceProperty(BEAN_timeZone, TimeZone.class, null);
@@ -2597,7 +2597,7 @@ public class BeanContext extends Context implements MetaProvider {
 		cmObject = cmCache.get(Object.class);
 		cmClass = cmCache.get(Class.class);
 
-		beanDictionaryClasses = unmodifiableList(Arrays.asList(getClassArrayProperty(BEAN_beanDictionary)));
+		beanDictionaryClasses = AList.createUnmodifiable(getClassArrayProperty(BEAN_beanDictionary));
 		beanRegistry = new BeanRegistry(this, null);
 	}
 
@@ -3344,11 +3344,10 @@ public class BeanContext extends Context implements MetaProvider {
 		List<Annotation> aa = classAnnotationCache.get(c, a);
 		if (aa == null) {
 			A x = c.getAnnotation(a);
-			List<Annotation> l = new ArrayList<>(x == null ? 0 : 1);
-			if (x != null)
-				l.add(x);
+			AList<Annotation> l = new AList<>(x == null ? 0 : 1);
+			l.appendIf(x != null, x);
 			annotations.appendAll(c, a, l);
-			aa = unmodifiableList(l);
+			aa = l.unmodifiable();
 			classAnnotationCache.put(c, a, aa);
 		}
 		return (List<A>)aa;
@@ -3405,11 +3404,10 @@ public class BeanContext extends Context implements MetaProvider {
 		List<Annotation> aa = declaredClassAnnotationCache.get(c, a);
 		if (aa == null) {
 			A x = c.getDeclaredAnnotation(a);
-			List<Annotation> l = new ArrayList<>(x == null ? 0 : 1);
-			if (x != null)
-				l.add(x);
+			AList<Annotation> l = new AList<>(x == null ? 0 : 1);
+			l.appendIf(x != null, x);
 			annotations.appendAll(c, a, l);
-			aa = unmodifiableList(l);
+			aa = l.unmodifiable();
 			declaredClassAnnotationCache.put(c, a, aa);
 		}
 		return (List<A>)aa;
@@ -3467,11 +3465,10 @@ public class BeanContext extends Context implements MetaProvider {
 		List<Annotation> aa = methodAnnotationCache.get(m, a);
 		if (aa == null) {
 			A x = m.getAnnotation(a);
-			List<Annotation> l = new ArrayList<>(x == null ? 0 : 1);
-			if (x != null)
-				l.add(x);
+			AList<Annotation> l = new AList<>(x == null ? 0 : 1);
+			l.appendIf(x != null, x);
 			annotations.appendAll(m, a, l);
-			aa = unmodifiableList(l);
+			aa = l.unmodifiable();
 			methodAnnotationCache.put(m, a, aa);
 		}
 		return (List<A>)aa;
@@ -3528,11 +3525,10 @@ public class BeanContext extends Context implements MetaProvider {
 		List<Annotation> aa = fieldAnnotationCache.get(f, a);
 		if (aa == null) {
 			A x = f.getAnnotation(a);
-			List<Annotation> l = new ArrayList<>(x == null ? 0 : 1);
-			if (x != null)
-				l.add(x);
+			AList<Annotation> l = new AList<>(x == null ? 0 : 1);
+			l.appendIf(x != null, x);
 			annotations.appendAll(f, a, l);
-			aa = unmodifiableList(l);
+			aa = l.unmodifiable();
 			fieldAnnotationCache.put(f, a, aa);
 		}
 		return (List<A>)aa;
@@ -3589,12 +3585,11 @@ public class BeanContext extends Context implements MetaProvider {
 		List<Annotation> aa = constructorAnnotationCache.get(c, a);
 		if (aa == null) {
 			A x = c.getAnnotation(a);
-			List<Annotation> l = new ArrayList<>(x == null ? 0 : 1);
-			if (x != null)
-				l.add(x);
+			AList<Annotation> l = new AList(x == null ? 0 : 1);
+			l.appendIf(x != null, x);
 			annotations.appendAll(c, a, l);
-			aa = unmodifiableList(l);
-			constructorAnnotationCache.put(c, a, aa);
+			aa = l.unmodifiable();
+			constructorAnnotationCache.put(c, a, l);
 		}
 		return (List<A>)aa;
 	}

@@ -3774,14 +3774,14 @@ public final class RestContext extends BeanContext {
 
 			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], resourceResolver, this);
 
-			Map<Class<?>,RestMethodParam> _paramResolvers = new HashMap<>();
+			AMap<Class<?>,RestMethodParam> _paramResolvers = AMap.create();
 			for (RestMethodParam rp : getInstanceArrayProperty(REST_paramResolvers, RestMethodParam.class, new RestMethodParam[0], resourceResolver, this))
 				_paramResolvers.put(rp.forClass(), rp);
-			paramResolvers = unmodifiableMap(_paramResolvers);
+			paramResolvers = _paramResolvers.unmodifiable();
 
 			Map<String,Object> _reqHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 			_reqHeaders.putAll(getMapProperty(REST_reqHeaders, String.class));
-			reqHeaders = unmodifiableMap(new LinkedHashMap<>(_reqHeaders));
+			reqHeaders = AMap.createUnmodifiable(_reqHeaders);
 
 			reqAttrs = new ObjectMap(getMapProperty(REST_reqAttrs, Object.class)).unmodifiable();
 			resHeaders = getMapProperty(REST_resHeaders, Object.class);
@@ -3881,25 +3881,25 @@ public final class RestContext extends BeanContext {
 			// Done after initializing fields above since we pass this object to the child resources.
 			//----------------------------------------------------------------------------------------------------
 			List<String> methodsFound = new LinkedList<>();   // Temporary to help debug transient duplicate method issue.
-			Map<String,RestCallRouter.Builder> routers = new LinkedHashMap<>();
-			Map<String,RestMethodContext> _javaRestMethods = new LinkedHashMap<>();
-			Map<String,Method>
-				_startCallMethods = new LinkedHashMap<>(),
-				_preCallMethods = new LinkedHashMap<>(),
-				_postCallMethods = new LinkedHashMap<>(),
-				_endCallMethods = new LinkedHashMap<>(),
-				_postInitMethods = new LinkedHashMap<>(),
-				_postInitChildFirstMethods = new LinkedHashMap<>(),
-				_destroyMethods = new LinkedHashMap<>();
-			List<RestMethodParam[]>
-				_preCallMethodParams = new ArrayList<>(),
-				_postCallMethodParams = new ArrayList<>();
-			List<Class<?>[]>
-				_startCallMethodParams = new ArrayList<>(),
-				_endCallMethodParams = new ArrayList<>(),
-				_postInitMethodParams = new ArrayList<>(),
-				_postInitChildFirstMethodParams = new ArrayList<>(),
-				_destroyMethodParams = new ArrayList<>();
+			AMap<String,RestCallRouter.Builder> routers = AMap.create();
+			AMap<String,RestMethodContext> _javaRestMethods = AMap.create();
+			AMap<String,Method>
+				_startCallMethods = AMap.create(),
+				_preCallMethods = AMap.create(),
+				_postCallMethods = AMap.create(),
+				_endCallMethods = AMap.create(),
+				_postInitMethods = AMap.create(),
+				_postInitChildFirstMethods = AMap.create(),
+				_destroyMethods = AMap.create();
+			AList<RestMethodParam[]>
+				_preCallMethodParams = AList.create(),
+				_postCallMethodParams = AList.create();
+			AList<Class<?>[]>
+				_startCallMethodParams = AList.create(),
+				_endCallMethodParams = AList.create(),
+				_postInitMethodParams = AList.create(),
+				_postInitChildFirstMethodParams = AList.create(),
+				_destroyMethodParams = AList.create();
 
 			for (MethodInfo mi : rci.getPublicMethods()) {
 				RestMethod a = mi.getLastAnnotation(RestMethod.class);
@@ -4056,7 +4056,7 @@ public final class RestContext extends BeanContext {
 				}
 			}
 
-			this.callMethods = unmodifiableMap(_javaRestMethods);
+			this.callMethods = _javaRestMethods.unmodifiable();
 			this.preCallMethods = _preCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_preCallMethods.size()]);
 			this.postCallMethods = _postCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_postCallMethods.size()]);
 			this.startCallMethods = _startCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_startCallMethods.size()]);
@@ -4072,10 +4072,10 @@ public final class RestContext extends BeanContext {
 			this.postInitChildFirstMethodParams = _postInitChildFirstMethodParams.toArray(new Class[_postInitChildFirstMethodParams.size()][]);
 			this.destroyMethodParams = _destroyMethodParams.toArray(new Class[_destroyMethodParams.size()][]);
 
-			Map<String,RestCallRouter> _callRouters = new LinkedHashMap<>();
+			AMap<String,RestCallRouter> _callRouters = AMap.create();
 			for (RestCallRouter.Builder crb : routers.values())
 				_callRouters.put(crb.getHttpMethodName(), crb.build());
-			this.callRouters = unmodifiableMap(_callRouters);
+			this.callRouters = _callRouters.unmodifiable();
 
 			// Initialize our child resources.
 			for (Object o : getArrayProperty(REST_children, Object.class)) {

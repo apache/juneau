@@ -659,7 +659,7 @@ public final class StringUtils {
 			if (ss == null || ss.indexOf(c) == -1)
 				l.add(ss);
 			else
-				l.addAll(Arrays.asList(split(ss, c)));
+				Collections.addAll(l, split(ss, c));
 		}
 		return l.toArray(new String[l.size()]);
 	}
@@ -2398,7 +2398,7 @@ public final class StringUtils {
 		if (isEmpty(s))
 			return null;
 		if (! isObjectList(s, true))
-			return new ObjectList(Arrays.asList(StringUtils.split(s.trim(), ',')));
+			return new ObjectList((Object[])StringUtils.split(s.trim(), ','));
 		return new ObjectList(s);
 	}
 

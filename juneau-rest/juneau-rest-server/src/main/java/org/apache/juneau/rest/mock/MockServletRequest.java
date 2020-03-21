@@ -1031,7 +1031,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 		if (existing == null)
 			existing = new String[]{s};
 		else
-			existing = new AList<>().appendAll(Arrays.asList(existing)).append(s).toArray(new String[0]);
+			existing = AList.create(existing).append(s).asArrayOf(String.class);
 		formDataMap.put(key, existing);
 		return this;
 	}
@@ -1052,7 +1052,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 		if (existing == null)
 			existing = new String[]{s};
 		else
-			existing = new AList<>().appendAll(Arrays.asList(existing)).append(s).toArray(new String[0]);
+			existing = AList.create(existing).append(s).asArrayOf(String.class);
 		queryData.put(key, existing);
 		return this;
 	}

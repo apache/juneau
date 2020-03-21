@@ -226,7 +226,8 @@ public class ObjectList extends LinkedList<Object> {
 	 * @param o A list of objects to add to this list.
 	 */
 	public ObjectList(Object... o) {
-		super(Arrays.asList(o));
+		super();
+		Collections.addAll(this, o);
 	}
 
 	/**

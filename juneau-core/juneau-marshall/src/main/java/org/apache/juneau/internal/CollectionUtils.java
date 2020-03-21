@@ -134,84 +134,6 @@ public final class CollectionUtils {
 	}
 
 	/**
-	 * Creates an unmodifiable list from the specified list.
-	 *
-	 * @param l The collection to copy from.
-	 * @return An unmodifiable view of the list, or a {@link Collections#emptyList()}
-	 * 	if the list was empty or <jk>null</jk>.
-	 */
-	public static <T> List<T> unmodifiableList(List<T> l) {
-		if (l == null || l.isEmpty())
-			return Collections.emptyList();
-		return Collections.unmodifiableList(l);
-	}
-
-	/**
-	 * Creates an unmodifiable list from the specified array.
-	 *
-	 * @param l The collection to copy from.
-	 * @return An unmodifiable view of the list, or a {@link Collections#emptyList()}
-	 * 	if the list was empty or <jk>null</jk>.
-	 */
-	public static <T> List<T> unmodifiableList(T[] l) {
-		if (l == null || l.length == 0)
-			return Collections.emptyList();
-		return Collections.unmodifiableList(Arrays.asList(l));
-	}
-
-	/**
-	 * Creates an immutable list from the specified collection.
-	 *
-	 * @param l The collection to copy from.
-	 * @return An unmodifiable {@link ArrayList} copy of the collection, or a {@link Collections#emptyList()}
-	 * 	if the collection was empty or <jk>null</jk>.
-	 */
-	public static <T> List<T> immutableList(Collection<T> l) {
-		if (l == null || l.isEmpty())
-			return Collections.emptyList();
-		return Collections.unmodifiableList(new ArrayList<>(l));
-	}
-
-	/**
-	 * Creates an immutable list from the specified array.
-	 *
-	 * @param l The array to copy from.
-	 * @return An unmodifiable {@link ArrayList} copy of the collection, or a {@link Collections#emptyList()}
-	 * 	if the collection was empty or <jk>null</jk>.
-	 */
-	public static <T> List<T> immutableList(T[] l) {
-		if (l == null || l.length == 0)
-			return Collections.emptyList();
-		return Collections.unmodifiableList(new ArrayList<>(Arrays.asList(l)));
-	}
-
-	/**
-	 * Creates an immutable map from the specified map.
-	 *
-	 * @param m The map to copy from.
-	 * @return An unmodifiable {@link LinkedHashMap} copy of the collection, or a {@link Collections#emptyMap()}
-	 * 	if the collection was empty or <jk>null</jk>.
-	 */
-	public static <K,V> Map<K,V> immutableMap(Map<K,V> m) {
-		if (m == null || m.isEmpty())
-			return Collections.emptyMap();
-		return Collections.unmodifiableMap(new LinkedHashMap<>(m));
-	}
-
-	/**
-	 * Creates an unmodifiable map from the specified map.
-	 *
-	 * @param m The map to copy from.
-	 * @return An unmodifiable view of the collection, or a {@link Collections#emptyMap()}
-	 * 	if the collection was empty or <jk>null</jk>.
-	 */
-	public static <K,V> Map<K,V> unmodifiableMap(Map<K,V> m) {
-		if (m == null || m.isEmpty())
-			return Collections.emptyMap();
-		return Collections.unmodifiableMap(m);
-	}
-
-	/**
 	 * Adds a set of values to an existing list.
 	 *
 	 * @param appendTo
@@ -464,50 +386,6 @@ public final class CollectionUtils {
 			m = new TreeMap<>(comparator);
 		m.put(key, value);
 		return m;
-	}
-
-	/**
-	 * Converts the specified arguments into an unmodifiable {@link HashSet}.
-	 *
-	 * @param values The entries to populate the hashset with.
-	 * @return A new {@link HashSet} populated with the specified arguments.
-	 */
-	@SafeVarargs
-	public static <T> Set<T> newUnmodifiableHashSet(T...values) {
-		return Collections.unmodifiableSet(newHashSet(values));
-	}
-
-	/**
-	 * Converts the specified arguments into a modifiable {@link HashSet}.
-	 *
-	 * @param values The entries to populate the hashset with.
-	 * @return A new {@link HashSet} populated with the specified arguments.
-	 */
-	@SafeVarargs
-	public static <T> Set<T> newHashSet(T...values) {
-		return new HashSet<>(Arrays.asList(values));
-	}
-
-	/**
-	 * Converts the specified arguments into an unmodifiable {@link LinkedHashSet}.
-	 *
-	 * @param values The entries to populate the hashset with.
-	 * @return A new {@link LinkedHashSet} populated with the specified arguments.
-	 */
-	@SafeVarargs
-	public static <T> Set<T> newUnmodifiableLinkedHashSet(T...values) {
-		return Collections.unmodifiableSet(newLinkedHashSet(values));
-	}
-
-	/**
-	 * Converts the specified arguments into a modifiable {@link LinkedHashSet}.
-	 *
-	 * @param values The entries to populate the hashset with.
-	 * @return A new {@link LinkedHashSet} populated with the specified arguments.
-	 */
-	@SafeVarargs
-	public static <T> Set<T> newLinkedHashSet(T...values) {
-		return new LinkedHashSet<>(Arrays.asList(values));
 	}
 
 	/**

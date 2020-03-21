@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -21,6 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -305,11 +304,11 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 		namespaces = getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
 		addBeanTypes = getBooleanProperty(RDF_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 
-		Map<String,Object> m = new TreeMap<>();
+		ASortedMap<String,Object> m = ASortedMap.create();
 		for (String k : getPropertyKeys("RdfCommon"))
 			if (k.startsWith("jena."))
 				m.put(k.substring(5), getProperty("RdfCommon." + k));
-		jenaProperties = unmodifiableMap(m);
+		jenaProperties = m.unmodifiable();
 	}
 
 	/**

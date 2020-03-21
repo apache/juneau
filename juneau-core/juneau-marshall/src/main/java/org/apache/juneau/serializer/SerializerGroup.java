@@ -12,14 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.
@@ -116,11 +115,11 @@ public final class SerializerGroup extends BeanTraverseContext {
 	 */
 	public SerializerGroup(PropertyStore ps, Serializer[] serializers) {
 		super(ps);
-		this.serializers = immutableList(serializers);
+		this.serializers = AList.createUnmodifiable(serializers);
 
-		List<MediaTypeRange> lmtr = new ArrayList<>();
-		LinkedHashSet<MediaType> lmt = new LinkedHashSet<>();
-		List<Serializer> l = new ArrayList<>();
+		AList<MediaTypeRange> lmtr = AList.create();
+		ASet<MediaType> lmt = ASet.create();
+		AList<Serializer> l = AList.create();
 		for (Serializer s : serializers) {
 			for (MediaTypeRange m: s.getMediaTypeRanges()) {
 				lmtr.add(m);
@@ -130,9 +129,9 @@ public final class SerializerGroup extends BeanTraverseContext {
 				lmt.add(mt);
 		}
 
-		this.mediaTypeRanges = lmtr.toArray(new MediaTypeRange[lmt.size()]);
-		this.mediaTypesList = unmodifiableList(new ArrayList<>(lmt));
-		this.mediaTypeRangeSerializers = l.toArray(new Serializer[l.size()]);
+		this.mediaTypeRanges = lmtr.asArrayOf(MediaTypeRange.class);
+		this.mediaTypesList = AList.<MediaType>create().appendAll(lmt).unmodifiable();
+		this.mediaTypeRangeSerializers = l.asArrayOf(Serializer.class);
 	}
 
 	/**

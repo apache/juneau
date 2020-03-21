@@ -21,6 +21,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents a set of logging rules for how to handle logging of HTTP requests/responses.
@@ -63,11 +64,11 @@ public class RestCallLoggerConfig {
 		this.stackTraceHashingTimeout = b.stackTraceHashingTimeout != null ? b.stackTraceHashingTimeout : p != null ? p.stackTraceHashingTimeout : Integer.MAX_VALUE;
 		this.level = b.level != null ? b.level : p != null ? p.level : Level.INFO;
 
-		ArrayList<RestCallLoggerRule> rules = new ArrayList<>();
+		AList<RestCallLoggerRule> rules = AList.create();
 		rules.addAll(b.rules);
 		if (p != null)
-			rules.addAll(Arrays.asList(p.rules));
-		this.rules = rules.toArray(new RestCallLoggerRule[rules.size()]);
+			rules.appendAll(p.rules);
+		this.rules = rules.asArrayOf(RestCallLoggerRule.class);
 	}
 
 	/**

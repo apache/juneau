@@ -581,9 +581,7 @@ public final class PojoQuery {
 				if (! startsWith(s2[i], '!'))
 					s2[i] = "^"+s2[i];
 
-			List<String> l = new LinkedList<>();
-			l.addAll(Arrays.asList(s2));
-			return l;
+			return AList.create(s2);
 		}
 
 		public boolean matches(Number number) {
