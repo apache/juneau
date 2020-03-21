@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.parser.InputStreamParser.*;
 import static org.apache.juneau.parser.ReaderParser.*;
 
@@ -26,19 +25,20 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for creating instances of {@link ParserGroup}.
  */
 public class ParserGroupBuilder extends BeanContextBuilder {
 
-	private final List<Object> parsers;
+	private final AList<Object> parsers;
 
 	/**
 	 * Create an empty parser group builder.
 	 */
 	public ParserGroupBuilder() {
-		this.parsers = new ArrayList<>();
+		this.parsers = AList.create();
 	}
 
 	/**
@@ -48,8 +48,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 */
 	public ParserGroupBuilder(ParserGroup copyFrom) {
 		super(copyFrom.getPropertyStore());
-		this.parsers = new ArrayList<>();
-		addReverse(parsers, copyFrom.getParsers());
+		this.parsers = AList.create().appendReverse(copyFrom.getParsers());
 	}
 
 	/**
@@ -59,7 +58,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(Class<?>...p) {
-		addReverse(parsers, p);
+		parsers.appendReverse(p);
 		return this;
 	}
 
@@ -74,7 +73,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(Parser...p) {
-		addReverse(parsers, p);
+		parsers.appendReverse(p);
 		return this;
 	}
 
@@ -88,7 +87,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(List<Object> p) {
-		addReverse(parsers, p);
+		parsers.appendReverse(p);
 		return this;
 	}
 
@@ -102,7 +101,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(Object...p) {
-		addReverse(parsers, p);
+		parsers.appendReverse(p);
 		return this;
 	}
 

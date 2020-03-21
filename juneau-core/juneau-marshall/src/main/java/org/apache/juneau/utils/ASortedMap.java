@@ -111,7 +111,8 @@ public final class ASortedMap<K,V> extends TreeMap<K,V> {
 	 * @return This object (for method chaining).
 	 */
 	public ASortedMap<K,V> appendAll(Map<K,V> c) {
-		super.putAll(c);
+		if (c != null)
+			super.putAll(c);
 		return this;
 	}
 

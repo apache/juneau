@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Utility methods for collections.
@@ -37,70 +38,6 @@ public final class CollectionUtils {
 		if (o != null)
 			l.add(o);
 		return l;
-	}
-
-	/**
-	 * Adds the contents of one list to the other in reverse order.
-	 *
-	 * <p>
-	 * i.e. add values from 2nd list from end-to-start order to the end of the 1st list.
-	 *
-	 * @param list The list to append to.
-	 * @param append Contains the values to append to the list.
-	 * @return The same list.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List<?> addReverse(List list, List append) {
-		for (ListIterator i = append.listIterator(append.size()); i.hasPrevious();)
-			list.add(i.previous());
-		return list;
-	}
-
-	/**
-	 * Adds the contents of the array to the list in reverse order.
-	 *
-	 * <p>
-	 * i.e. add values from the array from end-to-start order to the end of the list.
-	 *
-	 * @param list The list to append to.
-	 * @param append Contains the values to append to the list.
-	 * @return The same list.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List<?> addReverse(List list, Object[] append) {
-		for (int i = append.length - 1; i >= 0; i--)
-			list.add(append[i]);
-		return list;
-	}
-
-	/**
-	 * Returns an iterable over the specified collection in reverse order.
-	 *
-	 * @param c The collection to iterate over.
-	 * @return An iterable over the collection.
-	 */
-	public static <T> Iterable<T> riterable(final Collection<T> c) {
-		return new ReverseIterable<>(c instanceof List ? (List<T>)c : new ArrayList<>(c));
-	}
-
-	/**
-	 * Returns a reverse iterable over the specified list.
-	 *
-	 * @param c The collection to iterate over.
-	 * @return An iterable over the collection.
-	 */
-	public static <T> Iterable<T> riterable(final List<T> c) {
-		return new ReverseIterable<>(c);
-	}
-
-	/**
-	 * Returns a reverse iterable over the specified array.
-	 *
-	 * @param c The collection to iterate over.
-	 * @return An iterable over the collection.
-	 */
-	public static <T> Iterable<T> riterable(T[] c) {
-		return new ReverseIterable<>(Arrays.asList(c));
 	}
 
 	/**
@@ -218,10 +155,10 @@ public final class CollectionUtils {
 	 * @param val The value to copy from.
 	 * @return A new {@link ArrayList}, or <jk>null</jk> if the input was null.
 	 */
-	public static <T> List<T> newList(Collection<T> val) {
+	public static <T> AList<T> newList(Collection<T> val) {
 		if (val == null)
 			return null;
-		return new ArrayList<>(val);
+		return AList.create(val);
 	}
 
 	/**

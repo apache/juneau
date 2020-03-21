@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 
@@ -26,19 +25,20 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for creating instances of {@link SerializerGroup}.
  */
 public class SerializerGroupBuilder extends BeanTraverseBuilder {
 
-	private final List<Object> serializers;
+	private final AList<Object> serializers;
 
 	/**
 	 * Create an empty serializer group builder.
 	 */
 	public SerializerGroupBuilder() {
-		this.serializers = new ArrayList<>();
+		this.serializers = AList.create();
 	}
 
 	/**
@@ -48,8 +48,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	public SerializerGroupBuilder(SerializerGroup copyFrom) {
 		super(copyFrom.getPropertyStore());
-		this.serializers = new ArrayList<>();
-		addReverse(serializers, copyFrom.getSerializers());
+		this.serializers = AList.create().appendReverse(copyFrom.getSerializers());
 	}
 
 	/**
@@ -59,7 +58,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(Class<?>...s) {
-		addReverse(serializers, s);
+		serializers.appendReverse(s);
 		return this;
 	}
 
@@ -74,7 +73,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(Serializer...s) {
-		addReverse(serializers, s);
+		serializers.appendReverse(s);
 		return this;
 	}
 
@@ -88,7 +87,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(List<Object> s) {
-		addReverse(serializers, s);
+		serializers.appendReverse(s);
 		return this;
 	}
 
@@ -102,7 +101,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(Object...s) {
-		addReverse(serializers, s);
+		serializers.appendReverse(s);
 		return this;
 	}
 

@@ -13,7 +13,6 @@
 package org.apache.juneau.config.internal;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.config.event.ConfigEventType.*;
 
 import java.io.*;
@@ -25,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents the parsed contents of a configuration.
@@ -120,7 +120,7 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		List<Import> irl = new ArrayList<>(imports.size());
-		for (ConfigMap ic : riterable(imports.values()))
+		for (ConfigMap ic : AList.create(imports.values()).riterable())
 			irl.add(new Import(ic).register(listeners));
 		this.imports.addAll(irl);
 

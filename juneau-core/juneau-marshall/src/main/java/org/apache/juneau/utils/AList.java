@@ -17,6 +17,8 @@ import static java.util.Collections.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.internal.*;
+
 /**
  * An extension of {@link LinkedList} with a convenience {@link #append(Object)} method.
  *
@@ -77,6 +79,30 @@ public final class AList<T> extends ArrayList<T> {
 	@SafeVarargs
 	public static <T> AList<T> create(T...t) {
 		return new AList<T>(t.length).appendAll(t);
+	}
+
+	/**
+	 * Convenience method for creating a list of objects.
+	 *
+	 * <p>
+	 * Creates a list with the same capacity as the array.
+	 *
+	 * @param c The initial values.
+	 * @return A new list.
+	 */
+	public static <T> AList<T> create(Collection<T> c) {
+		c = c == null ? emptyList() : c;
+		return new AList<T>(c.size()).appendAll(c);
+	}
+
+	/**
+	 * Creates a list if the collection being added is not null.
+	 *
+	 * @param c The initial values.
+	 * @return A new list, or <jk>null</jk> if the collection is null.
+	 */
+	public static <T> AList<T> createOrNull(Collection<T> c) {
+		return c == null ? null : create(c);
 	}
 
 	/**
@@ -175,6 +201,33 @@ public final class AList<T> extends ArrayList<T> {
 	}
 
 	/**
+	 * Adds all the entries in the specified collection to this list in reverse order.
+	 *
+	 * @param c The collection to add to this list.
+	 * @return This object (for method chaining).
+	 */
+	public AList<T> appendReverse(List<? extends T> c) {
+		for (ListIterator<? extends T> i = c.listIterator(c.size()); i.hasPrevious();)
+			add(i.previous());
+		return this;
+	}
+
+	/**
+	 * Adds the contents of the array to the list in reverse order.
+	 *
+	 * <p>
+	 * i.e. add values from the array from end-to-start order to the end of the list.
+	 *
+	 * @param c The collection to add to this list.
+	 * @return This object (for method chaining).
+	 */
+	public AList<T> appendReverse(T[] c) {
+		for (int i = c.length - 1; i >= 0; i--)
+			add(c[i]);
+		return this;
+	}
+
+	/**
 	 * Convert the contents of this list into a new array.
 	 *
 	 * @param c The component type of the array.
@@ -182,5 +235,14 @@ public final class AList<T> extends ArrayList<T> {
 	 */
 	public <T2> T2[] asArrayOf(Class<T2> c) {
 		return toArray((T2[])Array.newInstance(c, size()));
+	}
+
+	/**
+	 * Returns a reverse iterable over this list.
+	 *
+	 * @return An iterable over the collection.
+	 */
+	public Iterable<T> riterable() {
+		return new ReverseIterable<>(this);
 	}
 }

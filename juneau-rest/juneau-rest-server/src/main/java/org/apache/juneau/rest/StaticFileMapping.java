@@ -112,11 +112,11 @@ public class StaticFileMapping {
 	 * @return A list of parsed mappings.  Never <jk>null</jk>.
 	 * @throws ParseException If mapping was malformed.
 	 */
-	public static List<StaticFileMapping> parse(Class<?> resourceClass, String mapping) throws ParseException {
+	public static AList<StaticFileMapping> parse(Class<?> resourceClass, String mapping) throws ParseException {
 
 		mapping = trim(mapping);
 		if (isEmpty(mapping))
-			return Collections.emptyList();
+			return new AList<>(0);
 
 		// States:
 		// S01 = In path, looking for :
@@ -130,7 +130,7 @@ public class StaticFileMapping {
 		int mark = 0;
 
 		String path = null, location = null;
-		List<StaticFileMapping> l = new ArrayList<>();
+		AList<StaticFileMapping> l = AList.create();
 		String s = mapping;
 		int jsonDepth = 0;
 		for (int i = 0; i < s.length(); i++) {

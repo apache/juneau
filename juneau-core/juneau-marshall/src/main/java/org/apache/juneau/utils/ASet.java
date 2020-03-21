@@ -46,6 +46,16 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	}
 
 	/**
+	 * Convenience method for creating a list of objects.
+	 *
+	 * @param c The initial values.
+	 * @return A new list.
+	 */
+	public static <T> ASet<T> create(Collection<T> c) {
+		return new ASet<T>().appendAll(c);
+	}
+
+	/**
 	 * Convenience method for creating an unmodifiable set of objects.
 	 *
 	 * @param t The initial values.
@@ -111,7 +121,8 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 * @return This object (for method chaining).
 	 */
 	public ASet<T> appendAll(Collection<T> c) {
-		addAll(c);
+		if (c != null)
+			addAll(c);
 		return this;
 	}
 

@@ -1,5 +1,3 @@
-// ***************************************************************************************************************************
-// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
 // * with the License.  You may obtain a copy of the License at                                                              *
@@ -33,6 +31,31 @@ import java.util.*;
 public final class ASortedSet<T> extends TreeSet<T> {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param c Comparator.
+	 */
+	public ASortedSet(Comparator<T> c) {
+		super(c);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param c Initial contents.
+	 */
+	public ASortedSet(Collection<T> c) {
+		super(c);
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public ASortedSet() {
+		super();
+	}
 
 	/**
 	 * Convenience method for creating a list of objects.
@@ -78,6 +101,18 @@ public final class ASortedSet<T> extends TreeSet<T> {
 	 */
 	public ASortedSet<T> appendAll(T...t) {
 		Collections.addAll(this, t);
+		return this;
+	}
+
+	/**
+	 * Adds multiple entries to this set.
+	 *
+	 * @param c The entries to add to this set.
+	 * @return This object (for method chaining).
+	 */
+	public ASortedSet<T> appendAll(Collection<T> c) {
+		if (c != null)
+			addAll(c);
 		return this;
 	}
 

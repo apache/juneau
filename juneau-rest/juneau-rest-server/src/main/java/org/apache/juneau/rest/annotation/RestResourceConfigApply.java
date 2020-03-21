@@ -14,7 +14,6 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.logging.*;
 
@@ -165,7 +164,7 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 
 		for (String mapping : a.staticFiles()) {
 			try {
-				for (StaticFileMapping sfm : riterable(StaticFileMapping.parse(c.inner(), string(mapping))))
+				for (StaticFileMapping sfm : StaticFileMapping.parse(c.inner(), string(mapping)).riterable())
 					psb.addTo(REST_staticFiles, sfm);
 			} catch (ParseException e) {
 				throw new ConfigException(e, "Invalid @Resource(staticFiles) value on class ''{0}''", c);

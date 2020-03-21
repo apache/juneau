@@ -17,7 +17,6 @@ import static org.apache.juneau.parser.Parser.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.serializer.Serializer.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
@@ -2093,7 +2092,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder staticFiles(String mappingString) throws ParseException{
-		for (StaticFileMapping sfm : riterable(StaticFileMapping.parse(resourceClass, mappingString)))
+		for (StaticFileMapping sfm : StaticFileMapping.parse(resourceClass, mappingString).riterable())
 			staticFiles(sfm);
 		return this;
 	}
@@ -2124,7 +2123,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder staticFiles(Class<?> baseClass, String mappingString) throws ParseException {
-		for (StaticFileMapping sfm : riterable(StaticFileMapping.parse(baseClass, mappingString)))
+		for (StaticFileMapping sfm : StaticFileMapping.parse(baseClass, mappingString).riterable())
 			staticFiles(sfm);
 		return this;
 	}
