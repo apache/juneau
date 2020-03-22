@@ -363,7 +363,7 @@ public class OpenApiPartSerializerTest {
 		assertEquals("foo,bar,null", s.serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo,bar,null,null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
 		assertEquals("foo,bar,null", s.serialize(ps, AList.of("foo","bar",null)));
-		assertEquals("foo,bar,null", s.serialize(ps, AList.<Object>of("foo","bar",null)));
+		assertEquals("foo,bar,null", s.serialize(ps, AList.of("foo","bar",null)));
 		assertEquals("foo,bar,null,null", s.serialize(ps, AList.of(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo,bar,null", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 
@@ -377,7 +377,7 @@ public class OpenApiPartSerializerTest {
 		assertEquals("foo|bar|null", s.serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo|bar|null|null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
 		assertEquals("foo|bar|null", s.serialize(ps, AList.of("foo","bar",null)));
-		assertEquals("foo|bar|null", s.serialize(ps, AList.<Object>of("foo","bar",null)));
+		assertEquals("foo|bar|null", s.serialize(ps, AList.of("foo","bar",null)));
 		assertEquals("foo|bar|null|null", s.serialize(ps, AList.of(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo|bar|null", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 	}
@@ -389,7 +389,7 @@ public class OpenApiPartSerializerTest {
 		assertEquals("foo bar null", s.serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo bar null null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
 		assertEquals("foo bar null", s.serialize(ps, AList.of("foo","bar",null)));
-		assertEquals("foo bar null", s.serialize(ps, AList.<Object>of("foo","bar",null)));
+		assertEquals("foo bar null", s.serialize(ps, AList.of("foo","bar",null)));
 		assertEquals("foo bar null null", s.serialize(ps, AList.of(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo bar null", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 	}
@@ -401,7 +401,7 @@ public class OpenApiPartSerializerTest {
 		assertEquals("foo\tbar\tnull", s.serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo\tbar\tnull\tnull", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
 		assertEquals("foo\tbar\tnull", s.serialize(ps, AList.of("foo","bar",null)));
-		assertEquals("foo\tbar\tnull", s.serialize(ps, AList.<Object>of("foo","bar",null)));
+		assertEquals("foo\tbar\tnull", s.serialize(ps, AList.of("foo","bar",null)));
 		assertEquals("foo\tbar\tnull\tnull", s.serialize(ps, AList.of(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo\tbar\tnull", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 	}
@@ -413,7 +413,7 @@ public class OpenApiPartSerializerTest {
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new Object[]{"foo","bar","null",null}));
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D("null"),null}));
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, AList.of("foo","bar","null",null)));
-		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, AList.<Object>of("foo","bar","null",null)));
+		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, AList.of("foo","bar","null",null)));
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, AList.of(new D("foo"),new D("bar"),new D("null"),null)));
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new ObjectList().append("foo","bar","null",null)));
 	}
@@ -425,7 +425,7 @@ public class OpenApiPartSerializerTest {
 		assertEquals("foo,bar,null", s.serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo,bar,null,null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
 		assertEquals("foo,bar,null", s.serialize(ps, AList.of("foo","bar",null)));
-		assertEquals("foo,bar,null", s.serialize(ps, AList.<Object>of("foo","bar",null)));
+		assertEquals("foo,bar,null", s.serialize(ps, AList.of("foo","bar",null)));
 		assertEquals("foo,bar,null,null", s.serialize(ps, AList.of(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo,bar,null", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 	}
@@ -438,7 +438,7 @@ public class OpenApiPartSerializerTest {
 		assertEquals("foo,bar,null", s.serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo,bar,null,null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
 		assertEquals("foo,bar,null", s.serialize(ps, AList.of("foo","bar",null)));
-		assertEquals("foo,bar,null", s.serialize(ps, AList.<Object>of("foo","bar",null)));
+		assertEquals("foo,bar,null", s.serialize(ps, AList.of("foo","bar",null)));
 		assertEquals("foo,bar,null,null", s.serialize(ps, AList.of(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo,bar,null", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 	}
@@ -450,7 +450,7 @@ public class OpenApiPartSerializerTest {
 		assertEquals("foo,bar|baz,null|null", s.serialize(ps, new Object[][]{{"foo","bar"},{"baz",null},null}));
 		assertEquals("foo,bar|baz,null,null|null", s.serialize(ps, new D[][]{{new D("foo"),new D("bar")},{new D("baz"),new D(null),null},null}));
 		assertEquals("foo,bar|baz,null|null", s.serialize(ps, AList.of(AList.of("foo","bar"),AList.of("baz",null),null)));
-		assertEquals("foo,bar|baz,null|null", s.serialize(ps, AList.of(AList.<Object>of("foo","bar"),AList.<Object>of("baz",null),null)));
+		assertEquals("foo,bar|baz,null|null", s.serialize(ps, AList.of(AList.of("foo","bar"),AList.of("baz",null),null)));
 		assertEquals("foo,bar|baz,null,null|null", s.serialize(ps, AList.of(AList.of(new D("foo"),new D("bar")),AList.of(new D("baz"),new D(null),null),null)));
 	}
 
@@ -533,7 +533,7 @@ public class OpenApiPartSerializerTest {
 		assertEquals("true,null", s.serialize(ps, new String[]{"true",null}));
 		assertEquals("true,null", s.serialize(ps, AList.of("true",null)));
 		assertEquals("true,null", s.serialize(ps, new Object[]{true,null}));
-		assertEquals("true,null", s.serialize(ps, AList.<Object>of(true,null)));
+		assertEquals("true,null", s.serialize(ps, AList.of(true,null)));
 		assertEquals("true,null,null", s.serialize(ps, new E1[]{new E1(true),new E1(null),null}));
 		assertEquals("true,null,null", s.serialize(ps, AList.of(new E1(true),new E1(null),null)));
 		assertEquals("true,null", s.serialize(ps, new E2(true,null)));
@@ -633,7 +633,7 @@ public class OpenApiPartSerializerTest {
 		assertEquals("1,2,null,null", s.serialize(ps, new String[]{"1","2","null",null}));
 		assertEquals("1,2,null,null", s.serialize(ps, AList.of("1","2","null",null)));
 		assertEquals("1,2,null", s.serialize(ps, new Object[]{1,2,null}));
-		assertEquals("1,2,null", s.serialize(ps, AList.<Object>of(1,2,null)));
+		assertEquals("1,2,null", s.serialize(ps, AList.of(1,2,null)));
 		assertEquals("1,2,null,null", s.serialize(ps, new F1[]{new F1(1),new F1(2),new F1(null),null}));
 		assertEquals("1,2,null,null", s.serialize(ps, AList.of(new F1(1),new F1(2),new F1(null),null)));
 		assertEquals("1,2,null", s.serialize(ps, new F2(1,2,null)));
@@ -662,7 +662,7 @@ public class OpenApiPartSerializerTest {
 		assertEquals("1,2|3,null,null|null", s.serialize(ps, AList.of(AList.of("1","2"),AList.of("3","null",null),null)));
 		assertEquals("1,2|3,null|null", s.serialize(ps, new Object[][]{{1,2},{3,null},null}));
 		assertEquals("1,2|3,null|null", s.serialize(ps, AList.of(new Object[]{1,2},new Object[]{3,null},null)));
-		assertEquals("1,2|3,null|null", s.serialize(ps, AList.of(AList.<Object>of(1,2),AList.<Object>of(3,null),null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.of(AList.of(1,2),AList.of(3,null),null)));
 		assertEquals("1,2|3,null,null|null", s.serialize(ps, new F1[][]{{new F1(1),new F1(2)},{new F1(3),new F1(null),null},null}));
 		assertEquals("1,2|3,null,null|null", s.serialize(ps, AList.of(new F1[]{new F1(1),new F1(2)},new F1[]{new F1(3),new F1(null),null},null)));
 		assertEquals("1,2|3,null,null|null", s.serialize(ps, AList.of(AList.of(new F1(1),new F1(2)),AList.of(new F1(3),new F1(null),null),null)));

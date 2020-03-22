@@ -130,7 +130,7 @@ public final class SerializerGroup extends BeanTraverseContext {
 		}
 
 		this.mediaTypeRanges = lmtr.asArrayOf(MediaTypeRange.class);
-		this.mediaTypesList = AList.<MediaType>of().appendAll(lmt).unmodifiable();
+		this.mediaTypesList = AList.of(lmt).unmodifiable();
 		this.mediaTypeRangeSerializers = l.asArrayOf(Serializer.class);
 	}
 

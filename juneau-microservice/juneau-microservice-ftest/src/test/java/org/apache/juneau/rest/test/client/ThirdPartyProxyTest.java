@@ -133,7 +133,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			new int[][][]{{{1,2},null},null},
 			new Integer[][][]{{{1,null},null},null},
 			new String[][][]{{{"foo",null},null},null},
-			AList.<Integer>of(1,null),
+			AList.of(1,null),
 			new AList<List<List<Integer>>>()
 				.append(
 					new AList<List<Integer>>()
