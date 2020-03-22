@@ -34,11 +34,7 @@ public class PojoQueryTest {
 		SearchArgs sa;
 		List results;
 
-		List<A> in = new AList<A>()
-			.append(new A("foo"))
-			.append(new A("bar"))
-			.append(new A("baz"))
-		;
+		List<A> in = AList.of(new A("foo"),new A("bar"),new A("baz"));
 
 		PojoQuery q = new PojoQuery(in, BeanContext.DEFAULT.createSession());
 
@@ -262,11 +258,7 @@ public class PojoQueryTest {
 		SearchArgs sa;
 		List results;
 
-		List<C> in = new AList<C>()
-			.append(new C(1))
-			.append(new C(2))
-			.append(new C(3))
-		;
+		List<C> in = AList.of(new C(1),new C(2),new C(3));
 
 		PojoQuery q = new PojoQuery(in, session);
 
@@ -314,11 +306,7 @@ public class PojoQueryTest {
 		SearchArgs sa;
 		List results;
 
-		List<E> in = new AList<E>()
-			.append(new E("foo", 1, true))
-			.append(new E("bar", 2, false))
-			.append(new E("baz", 3, true))
-		;
+		List<E> in = AList.of(new E("foo", 1, true),new E("bar", 2, false),new E("baz", 3, true));
 
 		PojoQuery q = new PojoQuery(in, session);
 

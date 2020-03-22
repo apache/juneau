@@ -294,7 +294,7 @@ public class XmlTest {
 
 	@Bean(typeName="foo")
 	public static class J1 {
-		@Beanp(properties="f2") public List<J2> f1 = new AList<J2>().append(new J2());
+		@Beanp(properties="f2") public List<J2> f1 = AList.of(new J2());
 	}
 
 	@Bean(typeName="bar")

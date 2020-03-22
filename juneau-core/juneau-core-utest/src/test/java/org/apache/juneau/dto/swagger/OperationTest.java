@@ -440,7 +440,7 @@ public class OperationTest {
 	public void testSetSecurity() {
 		Operation t = new Operation();
 
-		t.setSecurity(new ASet<Map<String, List<String>>>().append(new AMap<String,List<String>>().append("foo",new AList<String>().append("bar"))));
+		t.setSecurity(new ASet<Map<String, List<String>>>().append(new AMap<String,List<String>>().append("foo",AList.of("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
@@ -522,7 +522,7 @@ public class OperationTest {
 	public void testAddSecurity() {
 		Operation t = new Operation();
 
-		t.addSecurity(new ASet<Map<String, List<String>>>().append(new AMap<String,List<String>>().append("foo",new AList<String>().append("bar"))));
+		t.addSecurity(new ASet<Map<String, List<String>>>().append(new AMap<String,List<String>>().append("foo",AList.of("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
@@ -557,8 +557,8 @@ public class OperationTest {
 	public void testSecurities() {
 		Operation t = new Operation();
 
-		t.securities(new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("a1",new AList<String>().append("a2"))));
-		t.securities(new AMap<String,List<String>>().append("b1",new AList<String>().append("b2")));
+		t.securities(new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("a1",AList.of("a2"))));
+		t.securities(new AMap<String,List<String>>().append("b1",AList.of("b2")));
 		t.securities("{c1:['c2']}");
 		t.securities(new StringBuilder("{d1:['d2']}"));
 		t.securities((Object)new String[]{"{e1:['e2']}"});
@@ -587,7 +587,7 @@ public class OperationTest {
 			.set("produces", new ASet<MediaType>().appendAll(MediaType.forString("text/f")))
 			.set("responses", new AMap<Integer,ResponseInfo>().append(1,responseInfo("g")))
 			.set("schemes", new ASet<String>().appendAll("h"))
-			.set("security", new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("i1",new AList<String>().append("i2"))))
+			.set("security", new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("i1",AList.of("i2"))))
 			.set("summary", "j")
 			.set("tags", new ASet<String>().appendAll("k"))
 			.set("$ref", "ref");

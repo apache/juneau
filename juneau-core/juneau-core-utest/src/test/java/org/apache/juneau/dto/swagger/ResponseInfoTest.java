@@ -143,7 +143,7 @@ public class ResponseInfoTest {
 	public void testSetExamples() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.setExamples(new AMap<String,Object>().append("foo","bar").append("baz",new AList<String>().append("qux")));
+		t.setExamples(new AMap<String,Object>().append("foo","bar").append("baz",AList.of("qux")));
 		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
 		assertInstanceOf(Map.class, t.getExamples());
 
@@ -162,7 +162,7 @@ public class ResponseInfoTest {
 	public void testAddExamples() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.addExamples(new AMap<String,Object>().append("foo","bar").append("baz",new AList<String>().append("qux")));
+		t.addExamples(new AMap<String,Object>().append("foo","bar").append("baz",AList.of("qux")));
 		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
 		assertInstanceOf(Map.class, t.getExamples());
 
@@ -196,7 +196,7 @@ public class ResponseInfoTest {
 	public void testExamples() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.examples(new AMap<String,Object>().append("1",new AList<String>().append("a")));
+		t.examples(new AMap<String,Object>().append("1",AList.of("a")));
 		t.examples("{2:{c1:'c2'}}");
 		t.examples("{}");
 		t.examples((Object)null);
@@ -213,7 +213,7 @@ public class ResponseInfoTest {
 
 		t
 			.set("description", "a")
-			.set("examples", new AMap<String,Object>().append("foo","bar").append("baz",new AList<String>().append("qux")))
+			.set("examples", new AMap<String,Object>().append("foo","bar").append("baz",AList.of("qux")))
 			.set("headers", new AMap<String,HeaderInfo>().append("a", headerInfo("a1")))
 			.set("schema", schemaInfo().type("d"))
 			.set("$ref", "ref");

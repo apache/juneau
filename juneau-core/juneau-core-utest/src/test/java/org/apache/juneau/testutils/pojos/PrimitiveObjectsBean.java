@@ -126,17 +126,17 @@ public class PrimitiveObjectsBean {
 		poaBigDecimal = new BigDecimal[][]{{new BigDecimal("1")}, {new BigDecimal("2")}, null};
 
 		// Anonymous list of primitives
-		poalBoolean = new AList<Boolean[]>().append(new Boolean[]{Boolean.TRUE}).append(null);
-		poalByte = new AList<Byte[]>().append(new Byte[]{1}).append(null);
-		poalChar = new AList<Character[]>().append(new Character[]{'a'}).append(null);
-		poalShort = new AList<Short[]>().append(new Short[]{1}).append(null);
-		poalInt = new AList<Integer[]>().append(new Integer[]{1}).append(null);
-		poalLong = new AList<Long[]>().append(new Long[]{1l}).append(null);
-		poalFloat = new AList<Float[]>().append(new Float[]{1f}).append(null);
-		poalDouble = new AList<Double[]>().append(new Double[]{1d}).append(null);
-		poalNumber = new AList<Number[]>().append(new Integer[]{1}).append(null);
-		poalBigInteger = new AList<BigInteger[]>().append(new BigInteger[]{new BigInteger("1")}).append(null);
-		poalBigDecimal = new AList<BigDecimal[]>().append(new BigDecimal[]{new BigDecimal("1")}).append(null);
+		poalBoolean = AList.of(new Boolean[]{Boolean.TRUE},null);
+		poalByte = AList.of(new Byte[]{1},null);
+		poalChar = AList.of(new Character[]{'a'},null);
+		poalShort = AList.of(new Short[]{1},null);
+		poalInt = AList.of(new Integer[]{1},null);
+		poalLong = AList.of(new Long[]{1l},null);
+		poalFloat = AList.of(new Float[]{1f},null);
+		poalDouble = AList.of(new Double[]{1d},null);
+		poalNumber = AList.of(new Integer[]{1},null);
+		poalBigInteger = AList.of(new BigInteger[]{new BigInteger("1")},null);
+		poalBigDecimal = AList.of(new BigDecimal[]{new BigDecimal("1")},null);
 
 		// Regular list of primitives
 		polBoolean = new ArrayList<>();

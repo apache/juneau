@@ -312,25 +312,17 @@ public class InterfaceProxyTest {
 
 				@Override
 				public List<List<List<Integer>>> returnInteger3dList() {
-					return new AList<List<List<Integer>>>()
-					.append(
-						new AList<List<Integer>>()
-						.append(
-							new AList<Integer>().append(1).append(null)
-						)
-						.append(null)
-					)
-					.append(null);
+					return AList.of(AList.of(AList.of(1,null),null),null);
 				}
 
 				@Override
 				public List<Integer[][][]> returnInteger1d3dList() {
-					return new AList<Integer[][][]>().append(new Integer[][][]{{{1,null},null},null}).append(null);
+					return AList.of(new Integer[][][]{{{1,null},null},null},null);
 				}
 
 				@Override
 				public List<int[][][]> returnInt1d3dList() {
-					return new AList<int[][][]>().append(new int[][][]{{{1,2},null},null}).append(null);
+					return AList.of(new int[][][]{{{1,2},null},null},null);
 				}
 
 				@Override
@@ -357,7 +349,7 @@ public class InterfaceProxyTest {
 
 				@Override
 				public List<ABean[][][]> returnBean1d3dList() {
-					return new AList<ABean[][][]>().append(new ABean[][][]{{{new ABean().init(),null},null},null}).append(null);
+					return AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null);
 				}
 
 				@Override
@@ -372,7 +364,7 @@ public class InterfaceProxyTest {
 
 				@Override
 				public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-					return new AMap<String,List<ABean[][][]>>().append("foo", new AList<ABean[][][]>().append(new ABean[][][]{{{new ABean().init(),null},null},null}).append(null));
+					return new AMap<String,List<ABean[][][]>>().append("foo", AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
 				}
 
 				@Override
@@ -399,7 +391,7 @@ public class InterfaceProxyTest {
 
 				@Override
 				public List<TypedBean[][][]> returnTypedBean1d3dList() {
-					return new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null);
+					return AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null);
 				}
 
 				@Override
@@ -414,7 +406,7 @@ public class InterfaceProxyTest {
 
 				@Override
 				public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-					return new AMap<String,List<TypedBean[][][]>>().append("foo", new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null));
+					return new AMap<String,List<TypedBean[][][]>>().append("foo", AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null));
 				}
 
 				@Override
@@ -480,25 +472,17 @@ public class InterfaceProxyTest {
 
 				@Override
 				public List<TestEnum> returnEnumList() {
-					return new AList<TestEnum>().append(TestEnum.TWO).append(null);
+					return AList.of(TestEnum.TWO,null);
 				}
 
 				@Override
 				public List<List<List<TestEnum>>> returnEnum3dList() {
-					return new AList<List<List<TestEnum>>>()
-					.append(
-						new AList<List<TestEnum>>()
-						.append(
-							new AList<TestEnum>().append(TestEnum.TWO).append(null)
-						)
-						.append(null)
-					.append(null)
-					);
+					return AList.of(AList.of(AList.of(TestEnum.TWO,null),null),null);
 				}
 
 				@Override
 				public List<TestEnum[][][]> returnEnum1d3dList() {
-					return new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null);
+					return AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
 				}
 
 				@Override
@@ -513,7 +497,7 @@ public class InterfaceProxyTest {
 
 				@Override
 				public Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap() {
-					return new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null));
+					return new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 				}
 
 				//--------------------------------------------------------------------------------
@@ -791,7 +775,7 @@ public class InterfaceProxyTest {
 
 				@Override
 				public void setEnum3dList(List<List<List<TestEnum>>> x) {
-					assertObjectEquals("[[['TWO',null],null,null]]", x);
+					assertObjectEquals("[[['TWO',null],null],null]", x);
 					assertClass(TestEnum.class, x.get(0).get(0).get(0));
 				}
 
@@ -1255,7 +1239,7 @@ public class InterfaceProxyTest {
 	@Test
 	public void f04_returnEnum3dList() {
 		List<List<List<TestEnum>>> x = proxy.returnEnum3dList();
-		assertObjectEquals("[[['TWO',null],null,null]]", x);
+		assertObjectEquals("[[['TWO',null],null],null]", x);
 		assertClass(TestEnum.class, x.get(0).get(0).get(0));
 	}
 
@@ -1396,33 +1380,26 @@ public class InterfaceProxyTest {
 
 	@Test
 	public void h14_setIntegerList() {
-		proxy.setIntegerList(new AList<Integer>().append(1).append(null));
+		proxy.setIntegerList(AList.of(1,null));
 	}
 
 	@Test
 	public void h15_setInteger3dList() {
 		proxy.setInteger3dList(
-			new AList<List<List<Integer>>>()
-			.append(
-				new AList<List<Integer>>()
-				.append(new AList<Integer>().append(1).append(null))
-				.append(null)
-			)
-			.append(null)
-		);
+			AList.of(AList.of(AList.of(1,null),null),null));
 	}
 
 	@Test
 	public void h16_setInteger1d3dList() {
 		proxy.setInteger1d3dList(
-			new AList<Integer[][][]>().append(new Integer[][][]{{{1,null},null},null}).append(null)
+			AList.of(new Integer[][][]{{{1,null},null},null},null)
 		);
 	}
 
 	@Test
 	public void h17_setInt1d3dList() {
 		proxy.setInt1d3dList(
-			new AList<int[][][]>().append(new int[][][]{{{1,2},null},null}).append(null)
+			AList.of(new int[][][]{{{1,2},null},null},null)
 		);
 	}
 
@@ -1449,7 +1426,7 @@ public class InterfaceProxyTest {
 
 	@Test
 	public void h22_setBean1d3dList() {
-		proxy.setBean1d3dList(new AList<ABean[][][]>().append(new ABean[][][]{{{new ABean().init(),null},null},null}).append(null));
+		proxy.setBean1d3dList(AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
 	}
 
 	@Test
@@ -1464,7 +1441,7 @@ public class InterfaceProxyTest {
 
 	@Test
 	public void h25_setBean1d3dListMap() {
-		proxy.setBean1d3dListMap(new AMap<String,List<ABean[][][]>>().append("foo",new AList<ABean[][][]>().append(new ABean[][][]{{{new ABean().init(),null},null},null}).append(null)));
+		proxy.setBean1d3dListMap(new AMap<String,List<ABean[][][]>>().append("foo",AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null)));
 	}
 
 	@Test
@@ -1491,7 +1468,7 @@ public class InterfaceProxyTest {
 
 	@Test
 	public void i04_setTypedBean1d3dList() {
-		proxy.setTypedBean1d3dList(new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null));
+		proxy.setTypedBean1d3dList(AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null));
 	}
 
 	@Test
@@ -1506,7 +1483,7 @@ public class InterfaceProxyTest {
 
 	@Test
 	public void i07_setTypedBean1d3dListMap() {
-		proxy.setTypedBean1d3dListMap(new AMap<String,List<TypedBean[][][]>>().append("foo",new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null)));
+		proxy.setTypedBean1d3dListMap(new AMap<String,List<TypedBean[][][]>>().append("foo",AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null)));
 	}
 
 	@Test
@@ -1571,27 +1548,17 @@ public class InterfaceProxyTest {
 
 	@Test
 	public void l03_setEnumList() {
-		proxy.setEnumList(new AList<TestEnum>().append(TestEnum.TWO).append(null));
+		proxy.setEnumList(AList.of(TestEnum.TWO,null));
 	}
 
 	@Test
 	public void l04_setEnum3dList() {
-		proxy.setEnum3dList(
-			new AList<List<List<TestEnum>>>()
-			.append(
-				new AList<List<TestEnum>>()
-				.append(
-					new AList<TestEnum>().append(TestEnum.TWO).append(null)
-				)
-				.append(null)
-			.append(null)
-			)
-		);
+		proxy.setEnum3dList(AList.of(AList.of(AList.of(TestEnum.TWO,null),null),null));
 	}
 
 	@Test
 	public void l05_setEnum1d3dList() {
-		proxy.setEnum1d3dList(new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null));
+		proxy.setEnum1d3dList(AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 	}
 
 	@Test
@@ -1606,7 +1573,7 @@ public class InterfaceProxyTest {
 
 	@Test
 	public void l08_setEnum1d3dListMap() {
-		proxy.setEnum1d3dListMap(new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null)));
+		proxy.setEnum1d3dListMap(new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1618,7 +1585,7 @@ public class InterfaceProxyTest {
 		int x1 = 1;
 		int[][][] x2 = new int[][][]{{{1,2},null},null};
 		int[][][] x2n = null;
-		List<int[][][]> x3 = new AList<int[][][]>().append(x2).append(null);
+		List<int[][][]> x3 = AList.of(x2,null);
 		List<int[][][]> x3n = null;
 		proxy.setMultiParamsInts(x1, x2, x2n, x3, x3n);
 	}
@@ -1629,7 +1596,7 @@ public class InterfaceProxyTest {
 		Integer x1n = null;
 		Integer[][][] x2 = new Integer[][][]{{{1,null},null},null};
 		Integer[][][] x2n = null;
-		List<Integer[][][]> x3 = new AList<Integer[][][]>().append(x2).append(null);
+		List<Integer[][][]> x3 = AList.of(x2,null);
 		List<Integer[][][]> x3n = null;
 		proxy.setMultiParamsInteger(x1, x1n, x2, x2n, x3, x3n);
 	}
@@ -1639,7 +1606,7 @@ public class InterfaceProxyTest {
 		float x1 = 1;
 		float[][][] x2 = new float[][][]{{{1,2},null},null};
 		float[][][] x2n = null;
-		List<float[][][]> x3 = new AList<float[][][]>().append(x2).append(null);
+		List<float[][][]> x3 = AList.of(x2,null);
 		List<float[][][]> x3n = null;
 		proxy.setMultiParamsFloat(x1, x2, x2n, x3, x3n);
 	}
@@ -1650,7 +1617,7 @@ public class InterfaceProxyTest {
 		Float x1n = null;
 		Float[][][] x2 = new Float[][][]{{{1f,null},null},null};
 		Float[][][] x2n = null;
-		List<Float[][][]> x3 = new AList<Float[][][]>().append(x2).append(null);
+		List<Float[][][]> x3 = AList.of(x2,null);
 		List<Float[][][]> x3n = null;
 		proxy.setMultiParamsFloatObject(x1, x1n, x2, x2n, x3, x3n);
 	}
@@ -1660,7 +1627,7 @@ public class InterfaceProxyTest {
 		String x1 = "foo";
 		String[][][] x2 = new String[][][]{{{"foo",null},null},null};
 		String[][][] x2n = null;
-		List<String[][][]> x3 = new AList<String[][][]>().append(x2).append(null);
+		List<String[][][]> x3 = AList.of(x2,null);
 		List<String[][][]> x3n = null;
 		proxy.setMultiParamsString(x1, x2, x2n, x3, x3n);
 	}
@@ -1670,7 +1637,7 @@ public class InterfaceProxyTest {
 		ABean x1 = new ABean().init();
 		ABean[][][] x2 = new ABean[][][]{{{new ABean().init(),null},null},null};
 		ABean[][][] x2n = null;
-		List<ABean[][][]> x3 = new AList<ABean[][][]>().append(x2).append(null);
+		List<ABean[][][]> x3 = AList.of(x2,null);
 		List<ABean[][][]> x3n = null;
 		Map<String,ABean> x4 = new AMap<String,ABean>().append("foo",new ABean().init());
 		Map<String,ABean> x4n = null;
@@ -1684,7 +1651,7 @@ public class InterfaceProxyTest {
 		SwappedPojo x1 = new SwappedPojo();
 		SwappedPojo[][][] x2 = new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null};
 		SwappedPojo[][][] x2n = null;
-		List<SwappedPojo[][][]> x3 = new AList<SwappedPojo[][][]>().append(x2).append(null);
+		List<SwappedPojo[][][]> x3 = AList.of(x2,null);
 		List<SwappedPojo[][][]> x3n = null;
 		Map<SwappedPojo,SwappedPojo> x4 = new AMap<SwappedPojo,SwappedPojo>().append(new SwappedPojo(), new SwappedPojo());
 		Map<SwappedPojo,SwappedPojo> x4n = null;
@@ -1698,7 +1665,7 @@ public class InterfaceProxyTest {
 		ImplicitSwappedPojo x1 = new ImplicitSwappedPojo();
 		ImplicitSwappedPojo[][][] x2 = new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null};
 		ImplicitSwappedPojo[][][] x2n = null;
-		List<ImplicitSwappedPojo[][][]> x3 = new AList<ImplicitSwappedPojo[][][]>().append(x2).append(null);
+		List<ImplicitSwappedPojo[][][]> x3 = AList.of(x2,null);
 		List<ImplicitSwappedPojo[][][]> x3n = null;
 		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4 = new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo());
 		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n = null;
@@ -1712,7 +1679,7 @@ public class InterfaceProxyTest {
 		TestEnum x1 = TestEnum.TWO;
 		TestEnum[][][] x2 = new TestEnum[][][]{{{TestEnum.TWO,null},null},null};
 		TestEnum[][][] x2n = null;
-		List<TestEnum[][][]> x3 = new AList<TestEnum[][][]>().append(x2).append(null);
+		List<TestEnum[][][]> x3 = AList.of(x2,null);
 		List<TestEnum[][][]> x3n = null;
 		Map<TestEnum,TestEnum> x4 = new AMap<TestEnum,TestEnum>().append(TestEnum.ONE,TestEnum.TWO);
 		Map<TestEnum,TestEnum> x4n = null;

@@ -1257,25 +1257,17 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnInteger3dList")
 	public List<List<List<Integer>>> returnInteger3dList() {
-		return new AList<List<List<Integer>>>()
-		.append(
-			new AList<List<Integer>>()
-			.append(
-				new AList<Integer>().append(1).append(null)
-			)
-			.append(null)
-		)
-		.append(null);
+		return AList.of(AList.of(AList.of(1,null),null),null);
 	}
 
 	@RestMethod(name=GET, path="/returnInteger1d3dList")
 	public List<Integer[][][]> returnInteger1d3dList() {
-		return new AList<Integer[][][]>().append(new Integer[][][]{{{1,null},null},null}).append(null);
+		return AList.of(new Integer[][][]{{{1,null},null},null},null);
 	}
 
 	@RestMethod(name=GET, path="/returnInt1d3dList")
 	public List<int[][][]> returnInt1d3dList() {
-		return new AList<int[][][]>().append(new int[][][]{{{1,2},null},null}).append(null);
+		return AList.of(new int[][][]{{{1,2},null},null},null);
 	}
 
 	@RestMethod(name=GET, path="/returnStringList")
@@ -1302,7 +1294,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnBean1d3dList")
 	public List<ABean[][][]> returnBean1d3dList() {
-		return new AList<ABean[][][]>().append(new ABean[][][]{{{new ABean().init(),null},null},null}).append(null);
+		return AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null);
 	}
 
 	@RestMethod(name=GET, path="/returnBeanMap")
@@ -1317,7 +1309,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnBean1d3dListMap")
 	public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-		return new AMap<String,List<ABean[][][]>>().append("foo", new AList<ABean[][][]>().append(new ABean[][][]{{{new ABean().init(),null},null},null}).append(null));
+		return new AMap<String,List<ABean[][][]>>().append("foo", AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
 	}
 
 	@RestMethod(name=GET, path="/returnBeanListMapIntegerKeys")
@@ -1344,7 +1336,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnTypedBean1d3dList")
 	public List<TypedBean[][][]> returnTypedBean1d3dList() {
-		return new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null);
+		return AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null);
 	}
 
 	@RestMethod(name=GET, path="/returnTypedBeanMap")
@@ -1359,7 +1351,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnTypedBean1d3dListMap")
 	public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-		return new AMap<String,List<TypedBean[][][]>>().append("foo", new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null));
+		return new AMap<String,List<TypedBean[][][]>>().append("foo", AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null));
 	}
 
 	@RestMethod(name=GET, path="/returnTypedBeanListMapIntegerKeys")
@@ -1425,25 +1417,17 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnEnumList")
 	public List<TestEnum> returnEnumList() {
-		return new AList<TestEnum>().append(TestEnum.TWO).append(null);
+		return AList.of(TestEnum.TWO,null);
 	}
 
 	@RestMethod(name=GET, path="/returnEnum3dList")
 	public List<List<List<TestEnum>>> returnEnum3dList() {
-		return new AList<List<List<TestEnum>>>()
-		.append(
-			new AList<List<TestEnum>>()
-			.append(
-				new AList<TestEnum>().append(TestEnum.TWO).append(null)
-			)
-			.append(null)
-		.append(null)
-		);
+		return AList.of(AList.of(AList.of(TestEnum.TWO,null),null),null);
 	}
 
 	@RestMethod(name=GET, path="/returnEnum1d3dList")
 	public List<TestEnum[][][]> returnEnum1d3dList() {
-		return new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null);
+		return AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
 	}
 
 	@RestMethod(name=GET, path="/returnEnumMap")
@@ -1458,7 +1442,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnEnum1d3dListMap")
 	public Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap() {
-		return new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null));
+		return new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1718,7 +1702,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=POST, path="/setEnum3dList")
 	public void setEnum3dList(@Body List<List<List<TestEnum>>> x) {
-		assertObjectEquals("[[['TWO',null],null,null]]", x);
+		assertObjectEquals("[[['TWO',null],null],null]", x);
 		assertClass(TestEnum.class, x.get(0).get(0).get(0));
 	}
 

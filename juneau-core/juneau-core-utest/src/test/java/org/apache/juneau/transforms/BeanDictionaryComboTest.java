@@ -137,7 +137,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				new ComboInput<List<A[][][]>>(
 					"List<A[][][]>",
 					getType(List.class, A[][][].class),
-					new AList<A[][][]>().append(new A[][][]{{{new A().init(),null},null},null}).append(null),
+					AList.of(new A[][][]{{{new A().init(),null},null},null},null),
 					/* Json */		"[[[[{_type:'A',a:1},null],null],null],null]",
 					/* JsonT */		"[[[[{t:'A',a:1},null],null],null],null]",
 					/* JsonR */		"[\n\t[\n\t\t[\n\t\t\t[\n\t\t\t\t{\n\t\t\t\t\t_type: 'A',\n\t\t\t\t\ta: 1\n\t\t\t\t},\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t],\n\tnull\n]",
@@ -205,7 +205,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				new ComboInput<Map<String,List<A[][][]>>>(
 					"Map<String,List<A[][][]>>",
 					getType(Map.class,String.class,List.class,A[][][].class),
-					new AMap<String,List<A[][][]>>().append("x", new AList<A[][][]>().append(new A[][][]{{{new A().init(),null},null},null}).append(null)),
+					new AMap<String,List<A[][][]>>().append("x",AList.of(new A[][][]{{{new A().init(),null},null},null},null)),
 					/* Json */		"{x:[[[[{_type:'A',a:1},null],null],null],null]}",
 					/* JsonT */		"{x:[[[[{t:'A',a:1},null],null],null],null]}",
 					/* JsonR */		"{\n\tx: [\n\t\t[\n\t\t\t[\n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t_type: 'A',\n\t\t\t\t\t\ta: 1\n\t\t\t\t\t},\n\t\t\t\t\tnull\n\t\t\t\t],\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t]\n}",
@@ -341,7 +341,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				new ComboInput<List<IA[][][]>>(
 					"List<IA[][][]>",
 					getType(List.class,IA[][][].class),
-					new AList<IA[][][]>().append(new IA[][][]{{{new A().init(),null},null},null}).append(null),
+					AList.of(new IA[][][]{{{new A().init(),null},null},null},null),
 					/* Json */		"[[[[{_type:'A',a:1},null],null],null],null]",
 					/* JsonT */		"[[[[{t:'A',a:1},null],null],null],null]",
 					/* JsonR */		"[\n\t[\n\t\t[\n\t\t\t[\n\t\t\t\t{\n\t\t\t\t\t_type: 'A',\n\t\t\t\t\ta: 1\n\t\t\t\t},\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t],\n\tnull\n]",
@@ -409,7 +409,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				new ComboInput<Map<String,List<IA[][][]>>>(
 					"Map<String,List<IA[][][]>>",
 					getType(Map.class,String.class,List.class,IA[][][].class),
-					new AMap<String,List<IA[][][]>>().append("x", new AList<IA[][][]>().append(new IA[][][]{{{new A().init(),null},null},null}).append(null)),
+					new AMap<String,List<IA[][][]>>().append("x", AList.of(new IA[][][]{{{new A().init(),null},null},null},null)),
 					/* Json */		"{x:[[[[{_type:'A',a:1},null],null],null],null]}",
 					/* JsonT */		"{x:[[[[{t:'A',a:1},null],null],null],null]}",
 					/* JsonR */		"{\n\tx: [\n\t\t[\n\t\t\t[\n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t_type: 'A',\n\t\t\t\t\t\ta: 1\n\t\t\t\t\t},\n\t\t\t\t\tnull\n\t\t\t\t],\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t]\n}",
@@ -545,7 +545,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				new ComboInput<List<B[][][]>>(
 					"List<B[][][]>",
 					getType(List.class, B[][][].class),
-					new AList<B[][][]>().append(new B[][][]{{{new B().init(),null},null},null}).append(null),
+					AList.of(new B[][][]{{{new B().init(),null},null},null},null),
 					/* Json */		"[[[[{z:'B',b:1},null],null],null],null]",
 					/* JsonT */		"[[[[{z:'B',b:1},null],null],null],null]",
 					/* JsonR */		"[\n\t[\n\t\t[\n\t\t\t[\n\t\t\t\t{\n\t\t\t\t\tz: 'B',\n\t\t\t\t\tb: 1\n\t\t\t\t},\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t],\n\tnull\n]",
@@ -613,7 +613,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				new ComboInput<Map<String,List<B[][][]>>>(
 					"Map<String,List<B[][][]>>",
 					getType(Map.class,String.class,List.class,B[][][].class),
-					new AMap<String,List<B[][][]>>().append("x", new AList<B[][][]>().append(new B[][][]{{{new B().init(),null},null},null}).append(null)),
+					new AMap<String,List<B[][][]>>().append("x", AList.of(new B[][][]{{{new B().init(),null},null},null},null)),
 					/* Json */		"{x:[[[[{z:'B',b:1},null],null],null],null]}",
 					/* JsonT */		"{x:[[[[{z:'B',b:1},null],null],null],null]}",
 					/* JsonR */		"{\n\tx: [\n\t\t[\n\t\t\t[\n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\tz: 'B',\n\t\t\t\t\t\tb: 1\n\t\t\t\t\t},\n\t\t\t\t\tnull\n\t\t\t\t],\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t]\n}",
@@ -749,7 +749,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				new ComboInput<List<IB[][][]>>(
 					"List<IB[][][]>",
 					getType(List.class,IB[][][].class),
-					new AList<IB[][][]>().append(new IB[][][]{{{new B().init(),null},null},null}).append(null),
+					AList.of(new IB[][][]{{{new B().init(),null},null},null},null),
 					/* Json */		"[[[[{z:'B',b:1},null],null],null],null]",
 					/* JsonT */		"[[[[{z:'B',b:1},null],null],null],null]",
 					/* JsonR */		"[\n\t[\n\t\t[\n\t\t\t[\n\t\t\t\t{\n\t\t\t\t\tz: 'B',\n\t\t\t\t\tb: 1\n\t\t\t\t},\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t],\n\tnull\n]",
@@ -817,7 +817,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				new ComboInput<Map<String,List<IB[][][]>>>(
 					"Map<String,List<IB[][][]>>",
 					getType(Map.class,String.class,List.class,IB[][][].class),
-					new AMap<String,List<IB[][][]>>().append("x", new AList<IB[][][]>().append(new IB[][][]{{{new B().init(),null},null},null}).append(null)),
+					new AMap<String,List<IB[][][]>>().append("x", AList.of(new IB[][][]{{{new B().init(),null},null},null},null)),
 					/* Json */		"{x:[[[[{z:'B',b:1},null],null],null],null]}",
 					/* JsonT */		"{x:[[[[{z:'B',b:1},null],null],null],null]}",
 					/* JsonR */		"{\n\tx: [\n\t\t[\n\t\t\t[\n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\tz: 'B',\n\t\t\t\t\t\tb: 1\n\t\t\t\t\t},\n\t\t\t\t\tnull\n\t\t\t\t],\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t]\n}",

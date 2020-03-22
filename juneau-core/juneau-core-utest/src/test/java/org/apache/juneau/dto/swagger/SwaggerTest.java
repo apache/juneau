@@ -641,7 +641,7 @@ public class SwaggerTest {
 	public void testSetSecurity() {
 		Swagger t = new Swagger();
 
-		t.setSecurity(new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("foo",new AList<String>().append("bar"))));
+		t.setSecurity(new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("foo",AList.of("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
@@ -660,7 +660,7 @@ public class SwaggerTest {
 	public void testAddSecurity() {
 		Swagger t = new Swagger();
 
-		t.addSecurity(new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("foo",new AList<String>().append("bar"))));
+		t.addSecurity(new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("foo",AList.of("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
@@ -695,8 +695,8 @@ public class SwaggerTest {
 	public void testSecurities() {
 		Swagger t = new Swagger();
 		//Collection<Map<String,List<String>>>
-		t.securities(new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("a1",new AList<String>().append("a2"))));
-		t.securities(new AMap<String,List<String>>().append("b1",new AList<String>().append("b2")));
+		t.securities(new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("a1",AList.of("a2"))));
+		t.securities(new AMap<String,List<String>>().append("b1",AList.of("b2")));
 		t.securities("{c1:['c2']}");
 		t.securities(new StringBuilder("{d1:['d2']}"));
 		t.securities((Object)new String[]{"{e1:['e2']}"});
@@ -806,7 +806,7 @@ public class SwaggerTest {
 			.set("produces", new ASet<MediaType>().appendAll(MediaType.forString("text/i")))
 			.set("responses", new AMap<String,ResponseInfo>().append("j", responseInfo("j1")))
 			.set("schemes", new ASet<String>().appendAll("k1"))
-			.set("security", new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("l1",new AList<String>().append("l2"))))
+			.set("security", new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("l1",AList.of("l2"))))
 			.set("securityDefinitions", new AMap<String,SecurityScheme>().append("m", securityScheme("m1")))
 			.set("swagger", "n")
 			.set("tags", new ASet<Tag>().appendAll(tag("o")))

@@ -368,11 +368,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 	public static class BeanWithReaderListField {
 		public List<Reader> f;
 		public BeanWithReaderListField init() {
-			f = new AList<Reader>()
-				.append(new StringReader("fv1"))
-				.append(new StringReader("fv2"))
-				.append(null)
-			;
+			f = AList.of(new StringReader("fv1"),new StringReader("fv2"),null);
 			return this;
 		}
 	}
@@ -392,10 +388,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 	public static class BeanWithReaderBeanListField {
 		public List<B> f;
 		public BeanWithReaderBeanListField init() {
-			f = new AList<B>()
-				.append(new B().init())
-				.append(null)
-			;
+			f = AList.of(new B().init(),null);
 			return this;
 		}
 	}
@@ -423,10 +416,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 			f1 = new StringReader("f1v");
 			f2 = new Reader[]{new StringReader("f2v1"),new StringReader("f2v2"),null};
 			f3 = null;
-			f4 = new AList<Reader>()
-				.append(new StringReader("f4v1"))
-				.append(new StringReader("f4v2"))
-				.append(null)
+			f4 = AList.of(new StringReader("f4v1"),new StringReader("f4v2"),null)
 			;
 			f5 = new AMap<String,Reader>()
 				.append("foo", new StringReader("f5v1"))

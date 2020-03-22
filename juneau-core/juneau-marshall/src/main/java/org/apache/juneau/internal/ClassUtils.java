@@ -134,7 +134,7 @@ public final class ClassUtils {
 
 				// Next look for an exact match including the outer.
 				if (outer != null) {
-					args = new AList<>().append(outer).appendAll(args).toArray();
+					args = AList.of(outer).appendAll(args).toArray();
 					con = c3.getPublicConstructor(args);
 					if (con != null)
 						return con.<T>invoke(args);

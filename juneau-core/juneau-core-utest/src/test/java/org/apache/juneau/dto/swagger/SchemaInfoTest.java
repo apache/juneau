@@ -803,7 +803,7 @@ public class SchemaInfoTest {
 		t
 			.set("default", "a")
 			.set("enum", new ASet<>().appendAll("b"))
-			.set("additionalProperties", new AMap<String,Object>().append("c",new AList<String>().append("c1")))
+			.set("additionalProperties", new AMap<String,Object>().append("c",AList.of("c1")))
 			.set("allOf", new ASet<String>().appendAll("d"))
 			.set("description", "e")
 			.set("discriminator", "f")

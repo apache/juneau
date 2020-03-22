@@ -35,9 +35,9 @@ public class XmlCollapsedTest {
 		XmlParser p = XmlParser.DEFAULT;
 		A t = new A();
 
-		t.f1 = new AList<String>().append("f1a").append("f1b");
+		t.f1 = AList.of("f1a","f1b");
 		t.f2 = new String[]{"f2a","f2b"};
-		t.f3 = new AList<String>().append("f3a").append("f3b");
+		t.f3 = AList.of("f3a","f3b");
 		t.f4 = new String[]{"f4a","f4b"};
 
 		String xml = s.serialize(t);
@@ -75,9 +75,9 @@ public class XmlCollapsedTest {
 		XmlParser p = XmlParser.DEFAULT;
 		B t = new B();
 
-		t.f1 = new AList<String>().append("f1a").append("f1b");
+		t.f1 = AList.of("f1a","f1b");
 		t.f2 = new String[]{"f2a","f2b"};
-		t.f3 = new AList<String>().append("f3a").append("f3b");
+		t.f3 = AList.of("f3a","f3b");
 		t.f4 = new String[]{"f4a","f4b"};
 
 		String xml = s.serialize(t);
@@ -115,9 +115,9 @@ public class XmlCollapsedTest {
 		XmlParser p = XmlParser.DEFAULT;
 		C t = new C();
 
-		t.f1 = new AList<String>().append("f1b");
+		t.f1 = AList.of("f1b");
 		t.f2 = new String[]{"f2b"};
-		t.f3 = new AList<String>().append("f3b");
+		t.f3 = AList.of("f3b");
 		t.f4 = new String[]{"f4b"};
 
 		String xml = s.serialize(t);
@@ -140,13 +140,13 @@ public class XmlCollapsedTest {
 	public static class C {
 
 		@Xml(format=COLLAPSED)
-		public List<String> f1 = new AList<String>().append("f1a");
+		public List<String> f1 = AList.of("f1a");
 
 		@Xml(format=COLLAPSED)
 		public String[] f2 = {"f2a"};
 
 		@Xml(format=COLLAPSED,childName="xf3")
-		public List<String> f3 = new AList<String>().append("f3a");
+		public List<String> f3 = AList.of("f3a");
 
 		@Xml(format=COLLAPSED,childName="xf4")
 		public String[] f4 = {"f4a"};
@@ -161,9 +161,9 @@ public class XmlCollapsedTest {
 		XmlParser p = XmlParser.DEFAULT;
 		D t = new D();
 
-		t.f1 = new AList<String>().append("f1a");
+		t.f1 = AList.of("f1a");
 		t.f2 = new String[]{"f2a"};
-		t.f3 = new AList<String>().append("f3a");
+		t.f3 = AList.of("f3a");
 		t.f4 = new String[]{"f4a"};
 
 		String xml = s.serialize(t);
@@ -221,8 +221,8 @@ public class XmlCollapsedTest {
 		XmlParser p = XmlParser.DEFAULT;
 		E t = new E();
 
-		t.f1 = new AList<String>().append("f1a");
-		t.f2 = new AList<String>().append("f2a");
+		t.f1 = AList.of("f1a");
+		t.f2 = AList.of("f2a");
 
 		String xml = s.serialize(t);
 		assertEquals("<object><f1>f1a</f1><xf2>f2a</xf2></object>", xml);

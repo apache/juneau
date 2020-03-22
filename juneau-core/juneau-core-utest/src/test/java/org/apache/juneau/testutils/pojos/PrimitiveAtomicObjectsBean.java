@@ -58,8 +58,8 @@ public class PrimitiveAtomicObjectsBean {
 		poaAtomicLong = new AtomicLong[][]{{new AtomicLong(1)}, {new AtomicLong(2)}, null};
 
 		// Anonymous list of primitives
-		poalAtomicInteger = new AList<AtomicInteger[]>().append(new AtomicInteger[]{new AtomicInteger(1)}).append(null);
-		poalAtomicLong = new AList<AtomicLong[]>().append(new AtomicLong[]{new AtomicLong(1)}).append(null);
+		poalAtomicInteger = AList.of(new AtomicInteger[]{new AtomicInteger(1)},null);
+		poalAtomicLong = AList.of(new AtomicLong[]{new AtomicLong(1)},null);
 
 		// Regular list of primitives
 		polAtomicInteger = new ArrayList<>();

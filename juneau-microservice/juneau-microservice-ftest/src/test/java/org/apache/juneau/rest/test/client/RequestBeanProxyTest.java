@@ -274,19 +274,19 @@ public class RequestBeanProxyTest {
 	public static class A06_Bean {
 		@Query
 		public List<Object> getA() {
-			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return AList.of("foo","","true","123","null",true,123,null);
 		}
 		@Query("b")
 		public List<Object> getX1() {
-			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return AList.of("foo","","true","123","null",true,123,null);
 		}
 		@Query(name="c", serializer=ListSerializer.class)
 		public List<Object> getX2() {
-			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return AList.of("foo","","true","123","null",true,123,null);
 		}
 		@Query(name="d",allowEmptyValue=true)
 		public List<Object> getX3() {
-			return new AList<>();
+			return AList.of();
 		}
 		@Query("e")
 		public List<Object> getX4() {
@@ -576,19 +576,19 @@ public class RequestBeanProxyTest {
 	public static class C06_Bean {
 		@FormData
 		public List<Object> getA() {
-			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return AList.of("foo","","true","123","null",true,123,null);
 		}
 		@FormData("b")
 		public List<Object> getX1() {
-			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return AList.of("foo","","true","123","null",true,123,null);
 		}
 		@FormData(name="c", serializer=ListSerializer.class)
 		public List<Object> getX2() {
-			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return AList.of("foo","","true","123","null",true,123,null);
 		}
 		@FormData(name="d",allowEmptyValue=true)
 		public List<Object> getX3() {
-			return new AList<>();
+			return AList.of();
 		}
 		@FormData("e")
 		public List<Object> getX4() {
@@ -829,19 +829,19 @@ public class RequestBeanProxyTest {
 	public static class E04_Bean {
 		@Header
 		public List<Object> getA() {
-			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return AList.of("foo","","true","123","null",true,123,null);
 		}
 		@Header("b")
 		public List<Object> getX1() {
-			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return AList.of("foo","","true","123","null",true,123,null);
 		}
 		@Header(name="c", serializer=ListSerializer.class)
 		public List<Object> getX2() {
-			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return AList.of("foo","","true","123","null",true,123,null);
 		}
 		@Header(name="d",allowEmptyValue=true)
 		public List<Object> getX3() {
-			return new AList<>();
+			return AList.of();
 		}
 		@Header("e")
 		public List<Object> getX4() {
@@ -1077,19 +1077,19 @@ public class RequestBeanProxyTest {
 	public static class G04_Bean {
 		@Path
 		public List<Object> getA() {
-			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return AList.of("foo","","true","123","null",true,123,null);
 		}
 		@Path("b")
 		public List<Object> getX1() {
-			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return AList.of("foo","","true","123","null",true,123,null);
 		}
 		@Path(name="c", serializer=ListSerializer.class)
 		public List<Object> getX2() {
-			return new AList<>().append("foo").append("").append("true").append("123").append("null").append(true).append(123).append(null);
+			return AList.of("foo","","true","123","null",true,123,null);
 		}
 		@Path(name="d",allowEmptyValue=true)
 		public List<Object> getX3() {
-			return new AList<>();
+			return AList.of();
 		}
 		@Path("f")
 		public Object[] getX5() {
