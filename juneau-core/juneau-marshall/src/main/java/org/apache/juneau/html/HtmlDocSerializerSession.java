@@ -18,9 +18,9 @@ import java.io.IOException;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Context object that lives for the duration of a single serialization of {@link HtmlSerializer} and its subclasses.

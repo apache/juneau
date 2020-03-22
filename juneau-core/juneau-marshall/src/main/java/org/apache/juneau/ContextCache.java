@@ -17,8 +17,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Stores a cache of {@link Context} instances mapped by the property stores used to create them.
@@ -157,7 +157,7 @@ public class ContextCache {
 					if (cc.prefixes().length == 0)
 						ps.add(c2.getSimpleName());
 					else
-						ps.appendAll(cc.prefixes());
+						ps.a(cc.prefixes());
 				}
 			}
 			prefixes = ps.toArray(new String[ps.size()]);

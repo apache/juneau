@@ -15,7 +15,7 @@ package org.apache.juneau.testutils.pojos;
 import java.math.*;
 import java.util.*;
 
-import org.apache.juneau.utils.*;
+import org.apache.juneau.collections.*;
 
 @SuppressWarnings({})
 public class PrimitiveObjectsBean {

@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Allows arbitrary objects to be mapped to classes and methods base on class/method name keys.

@@ -21,8 +21,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Contact information for the exposed API.
@@ -270,9 +270,9 @@ public class Contact extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.appendIf(name != null, "name")
-			.appendIf(url != null, "url")
-			.appendIf(email != null, "email");
+			.aif(name != null, "name")
+			.aif(url != null, "url")
+			.aif(email != null, "email");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

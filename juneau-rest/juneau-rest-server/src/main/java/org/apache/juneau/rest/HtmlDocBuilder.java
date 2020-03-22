@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
@@ -476,7 +477,7 @@ public class HtmlDocBuilder {
 		for (Object v : value) {
 			String s = stringify(v);
 			if ("INHERIT".equals(s)) {
-				list.appendAll(prev);
+				list.a(prev);
 			} else if (s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches()) {
 				Matcher lm = INDEXED_LINK_PATTERN.matcher(s);
 				lm.matches();
@@ -497,7 +498,7 @@ public class HtmlDocBuilder {
 			String s = stringify(v);
 			if ("INHERIT".equals(s)) {
 				if (prev != null)
-					set.appendAll(prev);
+					set.a(prev);
 			} else if ("NONE".equals(s)) {
 				return new String[0];
 			} else {
@@ -513,7 +514,7 @@ public class HtmlDocBuilder {
 			String s = stringify(v);
 			if ("INHERIT".equals(s)) {
 				if (prev != null)
-					set.appendAll(prev);
+					set.a(prev);
 			} else if ("NONE".equals(s)) {
 				return new String[0];
 			} else {

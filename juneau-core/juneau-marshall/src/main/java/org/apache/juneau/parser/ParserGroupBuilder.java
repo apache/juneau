@@ -21,11 +21,11 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Builder class for creating instances of {@link ParserGroup}.
@@ -48,7 +48,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 */
 	public ParserGroupBuilder(ParserGroup copyFrom) {
 		super(copyFrom.getPropertyStore());
-		this.parsers = AList.of().appendReverse(copyFrom.getParsers());
+		this.parsers = AList.of().arev(copyFrom.getParsers());
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(Class<?>...p) {
-		parsers.appendReverse(p);
+		parsers.arev(p);
 		return this;
 	}
 
@@ -73,7 +73,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(Parser...p) {
-		parsers.appendReverse(p);
+		parsers.arev(p);
 		return this;
 	}
 
@@ -87,7 +87,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(List<Object> p) {
-		parsers.appendReverse(p);
+		parsers.arev(p);
 		return this;
 	}
 
@@ -101,7 +101,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(Object...p) {
-		parsers.appendReverse(p);
+		parsers.arev(p);
 		return this;
 	}
 

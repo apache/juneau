@@ -28,12 +28,12 @@ import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.utils.*;
 
 /**
  * A wrapper class around the {@link Class} object that provides cached information about that class.
@@ -543,7 +543,7 @@ public final class ClassMeta<T> implements Type {
 				beanFilter = findBeanFilter(bc);
 
 			if (pojoSwaps != null)
-				this.pojoSwaps.appendAll(pojoSwaps);
+				this.pojoSwaps.a(pojoSwaps);
 
 			if (bc != null)
 				this.builderSwap = BuilderSwap.findSwapFromPojoClass(bc, c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());

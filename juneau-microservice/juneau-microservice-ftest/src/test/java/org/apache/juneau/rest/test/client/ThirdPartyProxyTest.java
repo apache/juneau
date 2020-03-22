@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Request;
@@ -36,7 +37,6 @@ import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -1113,7 +1113,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void ef08_setEnum1d3dListMap() {
-		proxy.setEnum1d3dListMap(AMap.of(TestEnum.ONE,AList.<TestEnum[][][]>of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null)));
+		proxy.setEnum1d3dListMap(AMap.of(TestEnum.ONE,AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

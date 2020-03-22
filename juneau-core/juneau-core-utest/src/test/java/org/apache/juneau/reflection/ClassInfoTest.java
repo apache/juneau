@@ -26,11 +26,11 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.reflection.MethodInfoTest.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 public class ClassInfoTest {

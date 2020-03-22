@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.annotation.*;
@@ -28,7 +29,6 @@ import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.testutils.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 

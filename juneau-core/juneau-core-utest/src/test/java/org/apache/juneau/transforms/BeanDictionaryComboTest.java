@@ -18,9 +18,9 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 

@@ -25,11 +25,11 @@ import java.util.concurrent.atomic.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents an OpenAPI schema definition.
@@ -287,57 +287,57 @@ public class HttpPartSchema {
 		boolean invalidFormat = false;
 		switch (type) {
 			case STRING: {
-				notAllowed.appendIf(properties != null, "properties");
-				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
-				notAllowed.appendIf(exclusiveMaximum, "exclusiveMaximum");
-				notAllowed.appendIf(exclusiveMinimum, "exclusiveMinimum");
-				notAllowed.appendIf(uniqueItems, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.appendIf(items != null, "items");
-				notAllowed.appendIf(maximum != null, "maximum");
-				notAllowed.appendIf(minimum != null, "minimum");
-				notAllowed.appendIf(multipleOf != null, "multipleOf");
-				notAllowed.appendIf(maxItems != null, "maxItems");
-				notAllowed.appendIf(minItems != null, "minItems");
-				notAllowed.appendIf(minProperties != null, "minProperties");
+				notAllowed.aif(properties != null, "properties");
+				notAllowed.aif(additionalProperties != null, "additionalProperties");
+				notAllowed.aif(exclusiveMaximum, "exclusiveMaximum");
+				notAllowed.aif(exclusiveMinimum, "exclusiveMinimum");
+				notAllowed.aif(uniqueItems, "uniqueItems");
+				notAllowed.aif(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.aif(items != null, "items");
+				notAllowed.aif(maximum != null, "maximum");
+				notAllowed.aif(minimum != null, "minimum");
+				notAllowed.aif(multipleOf != null, "multipleOf");
+				notAllowed.aif(maxItems != null, "maxItems");
+				notAllowed.aif(minItems != null, "minItems");
+				notAllowed.aif(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(Format.BYTE, Format.BINARY, Format.BINARY_SPACED, Format.DATE, Format.DATE_TIME, Format.PASSWORD, Format.UON, Format.NO_FORMAT);
 				break;
 			}
 			case ARRAY: {
-				notAllowed.appendIf(properties != null, "properties");
-				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
-				notAllowed.appendIf(exclusiveMaximum, "exclusiveMaximum");
-				notAllowed.appendIf(exclusiveMinimum, "exclusiveMinimum");
-				notAllowed.appendIf(pattern != null, "pattern");
-				notAllowed.appendIf(maximum != null, "maximum");
-				notAllowed.appendIf(minimum != null, "minimum");
-				notAllowed.appendIf(multipleOf != null, "multipleOf");
-				notAllowed.appendIf(maxLength != null, "maxLength");
-				notAllowed.appendIf(minLength != null, "minLength");
-				notAllowed.appendIf(maxProperties != null, "maxProperties");
-				notAllowed.appendIf(minProperties != null, "minProperties");
+				notAllowed.aif(properties != null, "properties");
+				notAllowed.aif(additionalProperties != null, "additionalProperties");
+				notAllowed.aif(exclusiveMaximum, "exclusiveMaximum");
+				notAllowed.aif(exclusiveMinimum, "exclusiveMinimum");
+				notAllowed.aif(pattern != null, "pattern");
+				notAllowed.aif(maximum != null, "maximum");
+				notAllowed.aif(minimum != null, "minimum");
+				notAllowed.aif(multipleOf != null, "multipleOf");
+				notAllowed.aif(maxLength != null, "maxLength");
+				notAllowed.aif(minLength != null, "minLength");
+				notAllowed.aif(maxProperties != null, "maxProperties");
+				notAllowed.aif(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON);
 				break;
 			}
 			case BOOLEAN: {
-				notAllowed.appendIf(! _enum.isEmpty(), "_enum");
-				notAllowed.appendIf(properties != null, "properties");
-				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
-				notAllowed.appendIf(exclusiveMaximum, "exclusiveMaximum");
-				notAllowed.appendIf(exclusiveMinimum, "exclusiveMinimum");
-				notAllowed.appendIf(uniqueItems, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.appendIf(pattern != null, "pattern");
-				notAllowed.appendIf(items != null, "items");
-				notAllowed.appendIf(maximum != null, "maximum");
-				notAllowed.appendIf(minimum != null, "minimum");
-				notAllowed.appendIf(multipleOf != null, "multipleOf");
-				notAllowed.appendIf(maxItems != null, "maxItems");
-				notAllowed.appendIf(maxLength != null, "maxLength");
-				notAllowed.appendIf(maxProperties != null, "maxProperties");
-				notAllowed.appendIf(minItems != null, "minItems");
-				notAllowed.appendIf(minLength != null, "minLength");
-				notAllowed.appendIf(minProperties != null, "minProperties");
+				notAllowed.aif(! _enum.isEmpty(), "_enum");
+				notAllowed.aif(properties != null, "properties");
+				notAllowed.aif(additionalProperties != null, "additionalProperties");
+				notAllowed.aif(exclusiveMaximum, "exclusiveMaximum");
+				notAllowed.aif(exclusiveMinimum, "exclusiveMinimum");
+				notAllowed.aif(uniqueItems, "uniqueItems");
+				notAllowed.aif(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.aif(pattern != null, "pattern");
+				notAllowed.aif(items != null, "items");
+				notAllowed.aif(maximum != null, "maximum");
+				notAllowed.aif(minimum != null, "minimum");
+				notAllowed.aif(multipleOf != null, "multipleOf");
+				notAllowed.aif(maxItems != null, "maxItems");
+				notAllowed.aif(maxLength != null, "maxLength");
+				notAllowed.aif(maxProperties != null, "maxProperties");
+				notAllowed.aif(minItems != null, "minItems");
+				notAllowed.aif(minLength != null, "minLength");
+				notAllowed.aif(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON);
 				break;
 			}
@@ -345,51 +345,51 @@ public class HttpPartSchema {
 				break;
 			}
 			case INTEGER: {
-				notAllowed.appendIf(properties != null, "properties");
-				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
-				notAllowed.appendIf(uniqueItems, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.appendIf(pattern != null, "pattern");
-				notAllowed.appendIf(items != null, "items");
-				notAllowed.appendIf(maxItems != null, "maxItems");
-				notAllowed.appendIf(maxLength != null, "maxLength");
-				notAllowed.appendIf(maxProperties != null, "maxProperties");
-				notAllowed.appendIf(minItems != null, "minItems");
-				notAllowed.appendIf(minLength != null, "minLength");
-				notAllowed.appendIf(minProperties != null, "minProperties");
+				notAllowed.aif(properties != null, "properties");
+				notAllowed.aif(additionalProperties != null, "additionalProperties");
+				notAllowed.aif(uniqueItems, "uniqueItems");
+				notAllowed.aif(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.aif(pattern != null, "pattern");
+				notAllowed.aif(items != null, "items");
+				notAllowed.aif(maxItems != null, "maxItems");
+				notAllowed.aif(maxLength != null, "maxLength");
+				notAllowed.aif(maxProperties != null, "maxProperties");
+				notAllowed.aif(minItems != null, "minItems");
+				notAllowed.aif(minLength != null, "minLength");
+				notAllowed.aif(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON, Format.INT32, Format.INT64);
 				break;
 			}
 			case NUMBER: {
-				notAllowed.appendIf(properties != null, "properties");
-				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
-				notAllowed.appendIf(uniqueItems, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.appendIf(pattern != null, "pattern");
-				notAllowed.appendIf(items != null, "items");
-				notAllowed.appendIf(maxItems != null, "maxItems");
-				notAllowed.appendIf(maxLength != null, "maxLength");
-				notAllowed.appendIf(maxProperties != null, "maxProperties");
-				notAllowed.appendIf(minItems != null, "minItems");
-				notAllowed.appendIf(minLength != null, "minLength");
-				notAllowed.appendIf(minProperties != null, "minProperties");
+				notAllowed.aif(properties != null, "properties");
+				notAllowed.aif(additionalProperties != null, "additionalProperties");
+				notAllowed.aif(uniqueItems, "uniqueItems");
+				notAllowed.aif(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.aif(pattern != null, "pattern");
+				notAllowed.aif(items != null, "items");
+				notAllowed.aif(maxItems != null, "maxItems");
+				notAllowed.aif(maxLength != null, "maxLength");
+				notAllowed.aif(maxProperties != null, "maxProperties");
+				notAllowed.aif(minItems != null, "minItems");
+				notAllowed.aif(minLength != null, "minLength");
+				notAllowed.aif(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON, Format.FLOAT, Format.DOUBLE);
 				break;
 			}
 			case OBJECT: {
-				notAllowed.appendIf(exclusiveMaximum, "exclusiveMaximum");
-				notAllowed.appendIf(exclusiveMinimum, "exclusiveMinimum");
-				notAllowed.appendIf(uniqueItems, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.appendIf(pattern != null, "pattern");
-				notAllowed.appendIf(items != null, "items");
-				notAllowed.appendIf(maximum != null, "maximum");
-				notAllowed.appendIf(minimum != null, "minimum");
-				notAllowed.appendIf(multipleOf != null, "multipleOf");
-				notAllowed.appendIf(maxItems != null, "maxItems");
-				notAllowed.appendIf(maxLength != null, "maxLength");
-				notAllowed.appendIf(minItems != null, "minItems");
-				notAllowed.appendIf(minLength != null, "minLength");
+				notAllowed.aif(exclusiveMaximum, "exclusiveMaximum");
+				notAllowed.aif(exclusiveMinimum, "exclusiveMinimum");
+				notAllowed.aif(uniqueItems, "uniqueItems");
+				notAllowed.aif(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.aif(pattern != null, "pattern");
+				notAllowed.aif(items != null, "items");
+				notAllowed.aif(maximum != null, "maximum");
+				notAllowed.aif(minimum != null, "minimum");
+				notAllowed.aif(multipleOf != null, "multipleOf");
+				notAllowed.aif(maxItems != null, "maxItems");
+				notAllowed.aif(maxLength != null, "maxLength");
+				notAllowed.aif(minItems != null, "minItems");
+				notAllowed.aif(minLength != null, "minLength");
 				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON);
 				break;
 			}

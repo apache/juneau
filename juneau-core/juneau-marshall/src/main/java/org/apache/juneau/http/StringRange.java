@@ -16,8 +16,8 @@ import java.util.*;
 import java.util.Map.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for

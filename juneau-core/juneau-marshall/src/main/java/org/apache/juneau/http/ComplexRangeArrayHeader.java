@@ -14,8 +14,8 @@ package org.apache.juneau.http;
 
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Category of headers that consist of simple comma-delimited lists of strings with q-values.

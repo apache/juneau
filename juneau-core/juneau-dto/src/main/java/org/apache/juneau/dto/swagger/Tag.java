@@ -18,8 +18,8 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Allows adding meta data to a single tag that is used by the {@doc SwaggerOperationObject Operation Object}.
@@ -248,9 +248,9 @@ public class Tag extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.appendIf(name != null, "name")
-			.appendIf(description != null, "description")
-			.appendIf(externalDocs != null, "externalDocs");
+			.aif(name != null, "name")
+			.aif(description != null, "description")
+			.aif(externalDocs != null, "externalDocs");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

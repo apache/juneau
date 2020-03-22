@@ -22,6 +22,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.parser.*;
@@ -29,7 +30,6 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 

@@ -18,6 +18,7 @@ import java.util.*;
 import java.util.Map;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;

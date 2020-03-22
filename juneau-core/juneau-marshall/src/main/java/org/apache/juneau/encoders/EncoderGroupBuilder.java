@@ -16,8 +16,8 @@ import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Builder class for creating instances of {@link EncoderGroup}.
@@ -40,7 +40,7 @@ public class EncoderGroupBuilder {
 	 */
 	public EncoderGroupBuilder(EncoderGroup copyFrom) {
 		this.encoders = AList.of();
-		encoders.appendReverse(copyFrom.getEncoders());
+		encoders.arev(copyFrom.getEncoders());
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class EncoderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public EncoderGroupBuilder append(Encoder...e) {
-		encoders.appendReverse(e);
+		encoders.arev(e);
 		return this;
 	}
 
@@ -73,7 +73,7 @@ public class EncoderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public EncoderGroupBuilder append(List<Encoder> e) {
-		encoders.appendReverse(e);
+		encoders.arev(e);
 		return this;
 	}
 

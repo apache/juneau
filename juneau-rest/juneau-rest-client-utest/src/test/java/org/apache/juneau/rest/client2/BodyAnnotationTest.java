@@ -19,6 +19,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.entity.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.internal.*;
@@ -409,7 +410,7 @@ public class BodyAnnotationTest {
 	@Test
 	public void c06_MapOfBeans() throws Exception {
 		String o = c01.postC06(AMap.of("k1",Bean.create()));
-		assertEquals("{k1={f:1}}", o);
+		assertEquals("{k1:{f:1}}", o);
 	}
 	@Test
 	public void c07_Reader() throws Exception {

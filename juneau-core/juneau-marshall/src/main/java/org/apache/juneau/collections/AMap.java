@@ -10,21 +10,37 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.collections;
 
 import static java.util.Collections.*;
 
 import java.util.*;
 
+import org.apache.juneau.json.*;
+import org.apache.juneau.serializer.*;
+
 /**
- * An extension of {@link LinkedHashMap} with a convenience {@link #append(Object,Object)} method.
+ * A fluent {@link LinkedHashMap}.
  *
  * <p>
- * Primarily used for testing purposes for quickly creating populated maps.
+ * Provides various convenience methods for creating and populating a map with minimal code.
+ *
+ * <h5 class='figure'>Examples:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Example:</jc>
- * 	Map&lt;String,Integer&gt; m = <jk>new</jk> AMap&lt;String,Integer&gt;()
- * 		.append(<js>"foo"</js>,1).append(<js>"bar"</js>,2);
+ * 	<jc>// A map of string key/value pairs.</jc>
+ * 	AMap&lt;String,String&gt; m = AMap.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>);
+ *
+ * 	<jc>// Append to map.</jc>
+ * 	m.a(<js>"baz"</js>, <js>"qux"</js>);
+ *
+ * 	<jc>// Create an unmodifiable view of this list.</jc>
+ * 	Map&lt;String,String&gt; m2 = m.unmodifiable();
+ *
+ * 	<jc>// Convert to simplified JSON.</jc>
+ * 	String json = m.asString();
+ *
+ * 	<jc>// Convert to XML.</jc>
+ * 	String json = m.asString(XmlSerializer.<jsf>DEFAULT</jsm>);
  * </p>
  *
  * @param <K> The key type.
@@ -73,42 +89,42 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	 * @return A new map with one entry.
 	 */
 	public static <K,V> AMap<K,V> of(K key, V value) {
-		return new AMap<K,V>().append(key, value);
+		return new AMap<K,V>().a(key, value);
 	}
 
 	@SuppressWarnings("javadoc")
 	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2) {
-		return AMap.of(k1,v1).append(k2,v2);
+		return AMap.of(k1,v1).a(k2,v2);
 	}
 
 	@SuppressWarnings("javadoc")
 	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3) {
-		return AMap.of(k1,v1).append(k2,v2).append(k3,v3);
+		return AMap.of(k1,v1).a(k2,v2).a(k3,v3);
 	}
 
 	@SuppressWarnings("javadoc")
 	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-		return AMap.of(k1,v1).append(k2,v2).append(k3,v3).append(k4,v4);
+		return AMap.of(k1,v1).a(k2,v2).a(k3,v3).a(k4,v4);
 	}
 
 	@SuppressWarnings("javadoc")
 	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
-		return AMap.of(k1,v1).append(k2,v2).append(k3,v3).append(k4,v4).append(k5,v5);
+		return AMap.of(k1,v1).a(k2,v2).a(k3,v3).a(k4,v4).a(k5,v5);
 	}
 
 	@SuppressWarnings("javadoc")
 	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
-		return AMap.of(k1,v1).append(k2,v2).append(k3,v3).append(k4,v4).append(k5,v5).append(k6,v6);
+		return AMap.of(k1,v1).a(k2,v2).a(k3,v3).a(k4,v4).a(k5,v5).a(k6,v6);
 	}
 
 	@SuppressWarnings("javadoc")
 	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
-		return AMap.of(k1,v1).append(k2,v2).append(k3,v3).append(k4,v4).append(k5,v5).append(k6,v6).append(k7,v7);
+		return AMap.of(k1,v1).a(k2,v2).a(k3,v3).a(k4,v4).a(k5,v5).a(k6,v6).a(k7,v7);
 	}
 
 	@SuppressWarnings("javadoc")
 	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
-		return AMap.of(k1,v1).append(k2,v2).append(k3,v3).append(k4,v4).append(k5,v5).append(k6,v6).append(k7,v7).append(k8,v8);
+		return AMap.of(k1,v1).a(k2,v2).a(k3,v3).a(k4,v4).a(k5,v5).a(k6,v6).a(k7,v7).a(k8,v8);
 	}
 
 	/**
@@ -144,31 +160,41 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Methods.
+	// Appenders.
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Add.
+	 *
+	 * <p>
 	 * Adds an entry to this map.
 	 *
 	 * @param k The key.
 	 * @param v The value.
 	 * @return This object (for method chaining).
 	 */
-	public AMap<K,V> append(K k, V v) {
+	public AMap<K,V> a(K k, V v) {
 		put(k, v);
 		return this;
 	}
 
 	/**
+	 * Add all.
+	 *
+	 * <p>
 	 * Appends all the entries in the specified map to this map.
 	 *
 	 * @param c The map to copy.
 	 * @return This object (for method chaining).
 	 */
-	public AMap<K,V> appendAll(Map<K,V> c) {
+	public AMap<K,V> aa(Map<K,V> c) {
 		super.putAll(c);
 		return this;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns an unmodifiable view of this map.
@@ -177,5 +203,32 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	 */
 	public Map<K,V> unmodifiable() {
 		return this.isEmpty() ? emptyMap() : unmodifiableMap(this);
+	}
+
+	/**
+	 * Convert to a string using the specified serializer.
+	 *
+	 * @param ws The serializer to use to serialize this collection.
+	 * @return This collection serialized to a string.
+	 */
+	public String asString(WriterSerializer ws) {
+		return ws.toString(this);
+	}
+
+	/**
+	 * Convert to Simplified JSON.
+	 *
+	 * @return This collection serialized to a string.
+	 */
+	public String asString() {
+		return SimpleJsonSerializer.DEFAULT.toString(this);
+	}
+
+	/**
+	 * Convert to Simplified JSON.
+	 */
+	@Override /* Object */
+	public String toString() {
+		return asString(SimpleJsonSerializer.DEFAULT);
 	}
 }

@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.config.encode.*;
 import org.apache.juneau.config.encode.ConfigEncoder;
 import org.apache.juneau.config.event.*;
@@ -35,7 +36,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Main configuration API class.

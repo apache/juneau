@@ -16,7 +16,7 @@ import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 /**
@@ -111,35 +111,35 @@ public class PojoViewerTest {
 	@Test
 	public void simpleMap() {
 		ViewArgs sa = new ViewArgs("f1");
-		Object in = AMap.of().append("f1","x1").append("f2","x2");
+		Object in = AMap.of("f1","x1","f2","x2");
 		assertObjectEquals("{f1:'x1'}", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void simpleMap_reverseColumns() {
 		ViewArgs sa = new ViewArgs("f2","f1");
-		Object in = AMap.of().append("f1","x1").append("f2","x2");
+		Object in = AMap.of("f1","x1","f2","x2");
 		assertObjectEquals("{f2:'x2',f1:'x1'}", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void simpleMap_nonExistentColumns() {
 		ViewArgs sa = new ViewArgs("fx");
-		Object in = AMap.of().append("f1","x1").append("f2","x2");
+		Object in = AMap.of("f1","x1","f2","x2");
 		assertObjectEquals("{}", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void simpleMap_nullColumn() {
 		ViewArgs sa = new ViewArgs("f1",null);
-		Object in = AMap.of().append("f1","x1").append("f2","x2");
+		Object in = AMap.of("f1","x1","f2","x2");
 		assertObjectEquals("{f1:'x1'}", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void simpleMap_emptyView() {
 		ViewArgs sa = new ViewArgs();
-		Object in = AMap.of().append("f1","x1").append("f2","x2");
+		Object in = AMap.of("f1","x1","f2","x2");
 		assertObjectEquals("{}", p.run(bs, in, sa));
 	}
 
@@ -320,7 +320,7 @@ public class PojoViewerTest {
 	@Test
 	public void mapList() {
 		ViewArgs sa = new ViewArgs("f1");;
-		Object in = AList.of(AMap.of().append("f1","x1").append("f2","x2"));
+		Object in = AList.of(AMap.of("f1","x1","f2","x2"));
 		assertObjectEquals("[{f1:'x1'}]", p.run(bs, in, sa));
 	}
 

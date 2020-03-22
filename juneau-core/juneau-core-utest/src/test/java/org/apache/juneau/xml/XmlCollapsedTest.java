@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 

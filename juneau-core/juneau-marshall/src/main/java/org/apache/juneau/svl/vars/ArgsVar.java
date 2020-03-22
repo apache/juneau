@@ -14,8 +14,8 @@ package org.apache.juneau.svl.vars;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * JVM args variable resolver.
@@ -49,7 +49,7 @@ import org.apache.juneau.utils.*;
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
- * @see org.apache.juneau.utils.Args
+ * @see org.apache.juneau.collections.Args
  * @see org.apache.juneau.svl
  */
 public class ArgsVar extends DefaultingVar {

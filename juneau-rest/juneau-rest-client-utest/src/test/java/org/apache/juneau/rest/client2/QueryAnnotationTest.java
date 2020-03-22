@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.annotation.*;

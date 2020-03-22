@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.collections.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
@@ -216,7 +216,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				new ComboInput<java.util.Map<String,A>>(
 					"Map<String,A>",
 					getType(java.util.Map.class, String.class, A.class),
-					AMap.<String,A>of("a", a("http://b", "c")).append("d", a("http://e", "f")),
+					AMap.of("a", a("http://b", "c"), "d", a("http://e", "f")),
 					/* Json */		"{a:{_type:'a',a:{href:'http://b'},c:['c']},d:{_type:'a',a:{href:'http://e'},c:['f']}}",
 					/* JsonT */		"{a:{t:'a',a:{href:'http://b'},c:['c']},d:{t:'a',a:{href:'http://e'},c:['f']}}",
 					/* JsonR */		"{\n\ta: {\n\t\t_type: 'a',\n\t\ta: {\n\t\t\thref: 'http://b'\n\t\t},\n\t\tc: [\n\t\t\t'c'\n\t\t]\n\t},\n\td: {\n\t\t_type: 'a',\n\t\ta: {\n\t\t\thref: 'http://e'\n\t\t},\n\t\tc: [\n\t\t\t'f'\n\t\t]\n\t}\n}",
@@ -251,7 +251,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				new ComboInput<java.util.Map<String,A[][]>>(
 					"Map<String,A[][]>",
 					getType(java.util.Map.class, String.class, A[][].class),
-					AMap.<String,A[][]>of("a", new A[][]{{a("http://b", "c"),a("http://d", "e")},{}}).append("f", new A[][]{{a("http://g", "h")}}),
+					AMap.of("a", new A[][]{{a("http://b", "c"),a("http://d", "e")},{}}, "f", new A[][]{{a("http://g", "h")}}),
 					/* Json */		"{a:[[{_type:'a',a:{href:'http://b'},c:['c']},{_type:'a',a:{href:'http://d'},c:['e']}],[]],f:[[{_type:'a',a:{href:'http://g'},c:['h']}]]}",
 					/* JsonT */		"{a:[[{t:'a',a:{href:'http://b'},c:['c']},{t:'a',a:{href:'http://d'},c:['e']}],[]],f:[[{t:'a',a:{href:'http://g'},c:['h']}]]}",
 					/* JsonR */		"{\n\ta: [\n\t\t[\n\t\t\t{\n\t\t\t\t_type: 'a',\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\t_type: 'a',\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://d'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'e'\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t[\n\t\t]\n\t],\n\tf: [\n\t\t[\n\t\t\t{\n\t\t\t\t_type: 'a',\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://g'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'h'\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t]\n}",

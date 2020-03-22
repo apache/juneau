@@ -18,8 +18,8 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * The object provides metadata about the API.
@@ -447,12 +447,12 @@ public class Info extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.appendIf(title != null, "title")
-			.appendIf(description != null, "description")
-			.appendIf(termsOfService != null, "termsOfService")
-			.appendIf(contact != null, "contact")
-			.appendIf(license != null, "license")
-			.appendIf(version != null, "version");
+			.aif(title != null, "title")
+			.aif(description != null, "description")
+			.aif(termsOfService != null, "termsOfService")
+			.aif(contact != null, "contact")
+			.aif(license != null, "license")
+			.aif(version != null, "version");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

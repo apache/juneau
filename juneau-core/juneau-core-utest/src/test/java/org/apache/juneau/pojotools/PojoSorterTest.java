@@ -16,7 +16,7 @@ import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 /**

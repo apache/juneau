@@ -21,11 +21,11 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Builder class for creating instances of {@link SerializerGroup}.
@@ -48,7 +48,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	public SerializerGroupBuilder(SerializerGroup copyFrom) {
 		super(copyFrom.getPropertyStore());
-		this.serializers = AList.of().appendReverse(copyFrom.getSerializers());
+		this.serializers = AList.of().arev(copyFrom.getSerializers());
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(Class<?>...s) {
-		serializers.appendReverse(s);
+		serializers.arev(s);
 		return this;
 	}
 
@@ -73,7 +73,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(Serializer...s) {
-		serializers.appendReverse(s);
+		serializers.arev(s);
 		return this;
 	}
 
@@ -87,7 +87,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(List<Object> s) {
-		serializers.appendReverse(s);
+		serializers.arev(s);
 		return this;
 	}
 
@@ -101,7 +101,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(Object...s) {
-		serializers.appendReverse(s);
+		serializers.arev(s);
 		return this;
 	}
 

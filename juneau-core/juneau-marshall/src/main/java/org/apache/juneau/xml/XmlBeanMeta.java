@@ -17,7 +17,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**

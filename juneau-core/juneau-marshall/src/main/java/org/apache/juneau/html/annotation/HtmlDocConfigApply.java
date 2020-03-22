@@ -18,10 +18,10 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Applies {@link HtmlDocConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -86,7 +86,7 @@ public class HtmlDocConfigApply extends ConfigApply<HtmlDocConfig> {
 				return new String[0];
 			if ("INHERIT".equals(s)) {
 				if (prev != null)
-					list.appendAll(prev);
+					list.a(prev);
 			} else if (s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches()) {
 				Matcher lm = INDEXED_LINK_PATTERN.matcher(s);
 				lm.matches();
@@ -107,7 +107,7 @@ public class HtmlDocConfigApply extends ConfigApply<HtmlDocConfig> {
 			String s = string(stringify(v));
 			if ("INHERIT".equals(s)) {
 				if (prev != null)
-					set.appendAll(prev);
+					set.a(prev);
 			} else if ("NONE".equals(s)) {
 				return new String[0];
 			} else {

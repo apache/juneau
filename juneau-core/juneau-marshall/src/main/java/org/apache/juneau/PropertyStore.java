@@ -19,11 +19,11 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.PropertyStoreBuilder.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
 
 
 /**

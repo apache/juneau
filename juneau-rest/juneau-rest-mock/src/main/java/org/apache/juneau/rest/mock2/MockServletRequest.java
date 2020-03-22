@@ -21,12 +21,12 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpServletRequest} for mocking purposes.
@@ -1129,7 +1129,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 		if (existing == null)
 			existing = new String[]{s};
 		else
-			existing = AList.of(existing).append(s).asArrayOf(String.class);
+			existing = AList.of(existing).a(s).asArrayOf(String.class);
 		formDataMap.put(key, existing);
 		return this;
 	}
@@ -1148,7 +1148,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 		if (existing == null)
 			existing = new String[]{s};
 		else
-			existing = AList.of(existing).append(s).asArrayOf(String.class);
+			existing = AList.of(existing).a(s).asArrayOf(String.class);
 		queryDataMap.put(key, existing);
 		queryString = null;
 		return this;

@@ -16,7 +16,7 @@ import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 public class ResolvingObjectMapTest {
@@ -62,7 +62,7 @@ public class ResolvingObjectMapTest {
 		m.put("foo", new String[]{null});
 		assertObjectEquals("[null]", m.get("foo"));
 
-		m.put("foo", AList.<String>of().append(null));
+		m.put("foo", AList.<String>of().a((String)null));
 		assertObjectEquals("[null]", m.get("foo"));
 
 		m.put("foo", AMap.of("k1",null));

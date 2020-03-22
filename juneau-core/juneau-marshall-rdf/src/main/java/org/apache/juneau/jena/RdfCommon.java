@@ -14,8 +14,8 @@ package org.apache.juneau.jena;
 
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.jena.annotation.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**

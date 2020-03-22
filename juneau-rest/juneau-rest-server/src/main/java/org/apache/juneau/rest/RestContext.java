@@ -35,6 +35,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;

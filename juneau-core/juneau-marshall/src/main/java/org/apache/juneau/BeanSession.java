@@ -1070,7 +1070,7 @@ public class BeanSession extends Session {
 	 *
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
-	protected final BeanRegistry getBeanRegistry() {
+	public final BeanRegistry getBeanRegistry() {
 		return ctx.getBeanRegistry();
 	}
 

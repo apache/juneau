@@ -19,10 +19,10 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -31,7 +31,7 @@ import org.junit.runners.*;
 public class AutoObjectSwapTest {
 
 
-	private static final Map<String,String> STRINGMAP = AMap.<String,String>of().append("foo","bar");
+	private static final Map<String,String> STRINGMAP = AMap.of("foo","bar");
 	private static final ObjectMap OBJECTMAP = new ObjectMap().append("foo","bar");
 
 	private static PojoSwap find(Class<?> c) {

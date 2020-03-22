@@ -21,10 +21,10 @@ import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents the parsed contents of a configuration.

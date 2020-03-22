@@ -33,6 +33,7 @@ import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
@@ -46,7 +47,6 @@ import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Utility class for interfacing with remote REST interfaces.

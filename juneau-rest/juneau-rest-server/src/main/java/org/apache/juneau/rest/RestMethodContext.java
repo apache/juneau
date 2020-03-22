@@ -34,6 +34,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -704,7 +705,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.converters = getInstanceArrayProperty(REST_converters, RestConverter.class, new RestConverter[0], rr, r, this);
 
 		AList<RestGuard> _guards = AList.of();
-		_guards.appendAll(getInstanceArrayProperty(REST_guards, RestGuard.class, new RestGuard[0], rr, r, this));
+		_guards.a(getInstanceArrayProperty(REST_guards, RestGuard.class, new RestGuard[0], rr, r, this));
 		Set<String> rolesDeclared = getSetProperty(REST_rolesDeclared, String.class, null);
 		Set<String> roleGuard = getSetProperty(REST_roleGuard, String.class, Collections.emptySet());
 

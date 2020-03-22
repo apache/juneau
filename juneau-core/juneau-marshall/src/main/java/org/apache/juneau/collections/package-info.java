@@ -10,42 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.a.rttests;
-
-import static org.apache.juneau.testutils.TestUtils.*;
-import static org.junit.Assert.*;
-
-import org.apache.juneau.collections.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
 
 /**
- * Tests designed to serialize and parse objects to make sure we end up
- * with the same objects for all serializers and parsers.
+ * Collections classes
  */
-public class RoundTripClassesTest extends RoundTripTest {
+package org.apache.juneau.collections;
 
-	public RoundTripClassesTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
-		super(label, s, p, flags);
-	}
-
-	@Test
-	public void classObjects() throws Exception {
-		Object o = String.class;
-		o = roundTrip(o);
-		assertTrue(o == String.class);
-
-		o = new Class[]{String.class};
-		o = roundTrip(o);
-		assertObjectEquals("['java.lang.String']", o);
-
-		o = AList.of(String.class, Integer.class);
-		o = roundTrip(o);
-		assertObjectEquals("['java.lang.String','java.lang.Integer']", o);
-
-		o = AMap.of(String.class,String.class);
-		o = roundTrip(o);
-		assertObjectEquals("{'java.lang.String':'java.lang.String'}", o);
-	}
-}

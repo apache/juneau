@@ -19,8 +19,8 @@ import java.nio.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents the contents of a byte stream file with convenience methods for adding HTTP response headers.

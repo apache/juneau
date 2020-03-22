@@ -23,10 +23,10 @@ import java.util.*;
 import javax.xml.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**

@@ -10,29 +10,47 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.collections;
 
 import static java.util.Collections.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.serializer.*;
 
 /**
- * An extension of {@link LinkedList} with a convenience {@link #append(Object)} method.
+ * A fluent {@link LinkedHashSet}.
  *
  * <p>
- * Primarily used for testing purposes for quickly creating populated lists.
+ * Provides various convenience methods for creating and populating a set with minimal code.
+ *
+ * <h5 class='figure'>Examples:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Example:</jc>
- * 	List&lt;String&gt; l = <jk>new</jk> AList&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
+ * 	<jc>// A set of strings.</jc>
+ * 	ASet&lt;String&gt; s = ASet.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>);
+ *
+ * 	<jc>// Append to set.</jc>
+ * 	s.a(<js>"baz"</js>).a(<js>"qux"</js>);
+ *
+ * 	<jc>// Create an unmodifiable view of this set.</jc>
+ * 	Set&lt;String&gt; s2 = s.unmodifiable();
+ *
+ * 	<jc>// Convert it to an array.</jc>
+ * 	String[] array = s.asArrayOf(String.<jk>class</jk>);
+ *
+ * 	<jc>// Convert to simplified JSON.</jc>
+ * 	String json = s.asString();
+ *
+ * 	<jc>// Convert to XML.</jc>
+ * 	String json = s.asString(XmlSerializer.<jsf>DEFAULT</jsm>);
  * </p>
  *
  * @param <T> The entry type.
  */
 @SuppressWarnings({"unchecked"})
-public final class AList<T> extends ArrayList<T> {
+public final class ASet<T> extends LinkedHashSet<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,47 +60,21 @@ public final class AList<T> extends ArrayList<T> {
 
 	/**
 	 * Constructor.
-	 *
-	 * <p>
-	 * Creates an array list of default size.
 	 */
-	public AList() {}
-
-	/**
-	 * Constructor.
-	 *
-	 * <p>
-	 * Creates an array list of default size.
-	 * @param capacity Initial capacity.
-	 */
-	public AList(int capacity) {
-		super(capacity);
-	}
+	public ASet() {}
 
 	/**
 	 * Copy constructor.
 	 *
 	 * @param c Initial contents.  Can be <jk>null</jk>.
 	 */
-	public AList(Collection<T> c) {
-		super(c == null ? emptyList() : c);
+	public ASet(Collection<T> c) {
+		super(c == null ? emptySet() : c);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Creators.
 	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Convenience method for creating an empty list of objects.
-	 *
-	 * <p>
-	 * Creates an array list of default size.
-	 *
-	 * @return A new list.
-	 */
-	public static <T> AList<T> of() {
-		return new AList<>();
-	}
 
 	/**
 	 * Convenience method for creating a list of objects.
@@ -91,148 +83,137 @@ public final class AList<T> extends ArrayList<T> {
 	 * @return A new list.
 	 */
 	@SafeVarargs
-	public static <T> AList<T> of(T...t) {
-		return new AList<T>(t.length).appendAll(t);
+	public static <T> ASet<T> of(T...t) {
+		return new ASet<T>().a(t);
 	}
 
 	/**
 	 * Convenience method for creating a list of objects.
 	 *
-	 * <p>
-	 * Creates a list with the same capacity as the array.
-	 *
 	 * @param c The initial values.
 	 * @return A new list.
 	 */
-	public static <T> AList<T> of(Collection<T> c) {
-		c = c == null ? emptyList() : c;
-		return new AList<T>(c.size()).appendAll(c);
+	public static <T> ASet<T> of(Collection<T> c) {
+		return new ASet<T>().aa(c);
 	}
 
 	/**
-	 * Creates a copy of the collection if it's not <jk>null</jk>.
-	 *
-	 * @param c The initial values.
-	 * @return A new list, or <jk>null</jk> if the collection is <jk>null</jk>.
-	 */
-	public static <T> AList<T> nullable(Collection<T> c) {
-		return c == null ? null : of(c);
-	}
-
-	/**
-	 * Convenience method for creating an unmodifiable list of objects.
-	 *
-	 * <p>
-	 * Creates a list with the same capacity as the array.
+	 * Convenience method for creating an unmodifiable set of objects.
 	 *
 	 * @param t The initial values.
 	 * @return A new list.
 	 */
-	public static <T> List<T> unmodifiable(T...t) {
-		return t.length == 0 ? emptyList() : of(t).unmodifiable();
+	public static <T> Set<T> unmodifiable(T...t) {
+		return t.length == 0 ? emptySet() : of(t).unmodifiable();
 	}
 
 	/**
-	 * Convenience method for creating an unmodifiable list out of the specified collection.
+	 * Convenience method for creating an unmodifiable sert out of the specified collection.
 	 *
 	 * @param c The collection to add.
 	 * @param <T> The element type.
-	 * @return An unmodifiable list, never <jk>null</jk>.
+	 * @return An unmodifiable set, never <jk>null</jk>.
 	 */
-	public static <T> List<T> unmodifiable(Collection<T> c) {
+	public static <T> Set<T> unmodifiable(Collection<T> c) {
 		if (c == null || c.isEmpty())
-			return Collections.emptyList();
-		return new AList<T>(c.size()).appendAll(c).unmodifiable();
+			return Collections.emptySet();
+		return new ASet<T>().aa(c).unmodifiable();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Methods.
+	// Appenders.
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Adds an entry to this list.
+	 * Add.
 	 *
-	 * @param t The entry to add to this list.
+	 * <p>
+	 * Adds an entry to this set.
+	 *
+	 * @param t The entry to add to this set.
 	 * @return This object (for method chaining).
 	 */
-	public AList<T> append(T t) {
+	public ASet<T> a(T t) {
 		add(t);
 		return this;
 	}
 
 	/**
-	 * Adds multiple entries to this list.
+	 * Add.
 	 *
-	 * @param t The entries to add to this list.
+	 * <p>
+	 * Adds multiple entries to this set.
+	 *
+	 * @param t The entries to add to this set.
 	 * @return This object (for method chaining).
 	 */
-	public AList<T> appendAll(T...t) {
+	public ASet<T> a(T...t) {
 		Collections.addAll(this, t);
 		return this;
 	}
 
 	/**
-	 * Adds an entry to this list if the boolean flag is <jk>true</jk>.
-	 *
-	 * @param b The boolean flag.
-	 * @param val The value to add.
-	 * @return This object (for method chaining).
-	 */
-	public AList<T> appendIf(boolean b, T val) {
-		if (b)
-			append(val);
-		return this;
-	}
-
-	/**
-	 * Returns an unmodifiable view of this list.
-	 *
-	 * @return An unmodifiable view of this list.
-	 */
-	public List<T> unmodifiable() {
-		return isEmpty() ? emptyList() : unmodifiableList(this);
-	}
-
-	/**
-	 * Adds all the entries in the specified collection to this list.
-	 *
-	 * @param c The collection to add to this list.
-	 * @return This object (for method chaining).
-	 */
-	public AList<T> appendAll(Collection<T> c) {
-		addAll(c);
-		return this;
-	}
-
-	/**
-	 * Adds all the entries in the specified collection to this list in reverse order.
-	 *
-	 * @param c The collection to add to this list.
-	 * @return This object (for method chaining).
-	 */
-	public AList<T> appendReverse(List<? extends T> c) {
-		for (ListIterator<? extends T> i = c.listIterator(c.size()); i.hasPrevious();)
-			add(i.previous());
-		return this;
-	}
-
-	/**
-	 * Adds the contents of the array to the list in reverse order.
+	 * Add all.
 	 *
 	 * <p>
-	 * i.e. add values from the array from end-to-start order to the end of the list.
+	 * Adds multiple entries to this set.
 	 *
-	 * @param c The collection to add to this list.
+	 * @param c The entries to add to this set.
 	 * @return This object (for method chaining).
 	 */
-	public AList<T> appendReverse(T[] c) {
-		for (int i = c.length - 1; i >= 0; i--)
-			add(c[i]);
+	public ASet<T> aa(Collection<? extends T> c) {
+		if (c != null)
+			addAll(c);
 		return this;
 	}
 
 	/**
-	 * Convert the contents of this list into a new array.
+	 * Add if.
+	 *
+	 * <p>
+	 * Adds a value to this set if the boolean value is <jk>true</jk>
+	 *
+	 * @param b The boolean value.
+	 * @param t The value to add.
+	 * @return This object (for method chaining).
+	 */
+	public ASet<T> aif(boolean b, T t) {
+		if (b)
+			a(t);
+		return this;
+	}
+
+	/**
+	 * Add if not null.
+	 *
+	 * <p>
+	 * Adds entries to this set skipping <jk>null</jk> values.
+	 *
+	 * @param t The objects to add to the list.
+	 * @return This object (for method chaining).
+	 */
+	public ASet<T> aifnn(T...t) {
+		for (T o2 : t)
+			if (o2 != null)
+				a(o2);
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns an unmodifiable view of this set.
+	 *
+	 * @return An unmodifiable view of this set.
+	 */
+	public Set<T> unmodifiable() {
+		return isEmpty() ? emptySet() : unmodifiableSet(this);
+	}
+
+	/**
+	 * Convert the contents of this set into a new array.
 	 *
 	 * @param c The component type of the array.
 	 * @return A new array.
@@ -242,11 +223,29 @@ public final class AList<T> extends ArrayList<T> {
 	}
 
 	/**
-	 * Returns a reverse iterable over this list.
+	 * Convert to a string using the specified serializer.
 	 *
-	 * @return An iterable over the collection.
+	 * @param ws The serializer to use to serialize this collection.
+	 * @return This collection serialized to a string.
 	 */
-	public Iterable<T> riterable() {
-		return new ReverseIterable<>(this);
+	public String asString(WriterSerializer ws) {
+		return ws.toString(this);
+	}
+
+	/**
+	 * Convert to Simplified JSON.
+	 *
+	 * @return This collection serialized to a string.
+	 */
+	public String asString() {
+		return SimpleJsonSerializer.DEFAULT.toString(this);
+	}
+
+	/**
+	 * Convert to Simplified JSON.
+	 */
+	@Override /* Object */
+	public String toString() {
+		return asString(SimpleJsonSerializer.DEFAULT);
 	}
 }

@@ -17,9 +17,9 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 

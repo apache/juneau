@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.FormData;
 import org.apache.juneau.http.annotation.Header;
@@ -34,7 +35,6 @@ import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -152,7 +152,7 @@ public class RequestBeanProxyTest {
 	@Test
 	public void a02c_query_maps_x() throws Exception {
 		String r = a02b.serialized(new A02_Bean());
-		assertEquals("{a:'x{a1=v1, a2=123, a3=null, a4=}x',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}", r);
+		assertEquals("{a:'x{a1:\\'v1\\',a2:123,a3:null,a4:\\'\\'}x',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}", r);
 	}
 
 	//=================================================================================================================
@@ -454,7 +454,7 @@ public class RequestBeanProxyTest {
 	@Test
 	public void c02c_formData_maps_x() throws Exception {
 		String r = c02b.serialized(new C02_Bean());
-		assertEquals("{a:'x{a1=v1, a2=123, a3=null, a4=}x',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}", r);
+		assertEquals("{a:'x{a1:\\'v1\\',a2:123,a3:null,a4:\\'\\'}x',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}", r);
 	}
 
 	//=================================================================================================================
@@ -757,7 +757,7 @@ public class RequestBeanProxyTest {
 	@Test
 	public void e02c_header_maps_x() throws Exception {
 		String r = e02b.serialized(new E02_Bean());
-		assertEquals("{a:'x{a1=v1, a2=123, a3=null, a4=}x',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}", r);
+		assertEquals("{a:'x{a1:\\'v1\\',a2:123,a3:null,a4:\\'\\'}x',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}", r);
 	}
 
 	//=================================================================================================================

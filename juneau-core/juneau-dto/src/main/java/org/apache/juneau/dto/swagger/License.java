@@ -21,8 +21,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * License information for the exposed API.
@@ -217,8 +217,8 @@ public class License extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.appendIf(name != null, "name")
-			.appendIf(url != null, "url");
+			.aif(name != null, "name")
+			.aif(url != null, "url");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

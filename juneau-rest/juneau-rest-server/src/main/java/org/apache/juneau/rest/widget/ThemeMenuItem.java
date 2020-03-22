@@ -14,9 +14,9 @@ package org.apache.juneau.rest.widget;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Widget that returns back a list of hyperlinks for rendering the contents of a page in the various default styles.

@@ -17,8 +17,8 @@ import java.util.Map.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Describes a single type used in content negotiation between an HTTP client and server, as described in

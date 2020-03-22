@@ -16,8 +16,8 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Configurable properties on the {@link VarResolver} class.

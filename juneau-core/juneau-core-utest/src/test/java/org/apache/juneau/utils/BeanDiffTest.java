@@ -15,6 +15,7 @@ package org.apache.juneau.utils;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 public class BeanDiffTest {

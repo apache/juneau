@@ -19,8 +19,8 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Describes a single response from an API Operation.
@@ -476,11 +476,11 @@ public class ResponseInfo extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.appendIf(description != null, "description")
-			.appendIf(schema != null, "schema")
-			.appendIf(headers != null, "headers")
-			.appendIf(example != null, "example")
-			.appendIf(examples != null, "examples");
+			.aif(description != null, "description")
+			.aif(schema != null, "schema")
+			.aif(headers != null, "headers")
+			.aif(example != null, "example")
+			.aif(examples != null, "examples");
 		return new MultiSet<>(s, super.keySet());
 	}
 

@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
@@ -3345,7 +3346,7 @@ public class BeanContext extends Context implements MetaProvider {
 		if (aa == null) {
 			A x = c.getAnnotation(a);
 			AList<Annotation> l = new AList<>(x == null ? 0 : 1);
-			l.appendIf(x != null, x);
+			l.aifnn(x);
 			annotations.appendAll(c, a, l);
 			aa = l.unmodifiable();
 			classAnnotationCache.put(c, a, aa);
@@ -3405,7 +3406,7 @@ public class BeanContext extends Context implements MetaProvider {
 		if (aa == null) {
 			A x = c.getDeclaredAnnotation(a);
 			AList<Annotation> l = new AList<>(x == null ? 0 : 1);
-			l.appendIf(x != null, x);
+			l.aifnn(x);
 			annotations.appendAll(c, a, l);
 			aa = l.unmodifiable();
 			declaredClassAnnotationCache.put(c, a, aa);
@@ -3466,7 +3467,7 @@ public class BeanContext extends Context implements MetaProvider {
 		if (aa == null) {
 			A x = m.getAnnotation(a);
 			AList<Annotation> l = new AList<>(x == null ? 0 : 1);
-			l.appendIf(x != null, x);
+			l.aifnn(x);
 			annotations.appendAll(m, a, l);
 			aa = l.unmodifiable();
 			methodAnnotationCache.put(m, a, aa);
@@ -3526,7 +3527,7 @@ public class BeanContext extends Context implements MetaProvider {
 		if (aa == null) {
 			A x = f.getAnnotation(a);
 			AList<Annotation> l = new AList<>(x == null ? 0 : 1);
-			l.appendIf(x != null, x);
+			l.aifnn(x);
 			annotations.appendAll(f, a, l);
 			aa = l.unmodifiable();
 			fieldAnnotationCache.put(f, a, aa);
@@ -3586,7 +3587,7 @@ public class BeanContext extends Context implements MetaProvider {
 		if (aa == null) {
 			A x = c.getAnnotation(a);
 			AList<Annotation> l = new AList(x == null ? 0 : 1);
-			l.appendIf(x != null, x);
+			l.aifnn(x);
 			annotations.appendAll(c, a, l);
 			aa = l.unmodifiable();
 			constructorAnnotationCache.put(c, a, l);

@@ -18,8 +18,8 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents the contents of a text file with convenience methods for resolving SVL variables and adding

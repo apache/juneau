@@ -25,6 +25,7 @@ import org.apache.juneau.jsonschema.annotation.Schema;
 import org.apache.juneau.jsonschema.annotation.SubItems;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;

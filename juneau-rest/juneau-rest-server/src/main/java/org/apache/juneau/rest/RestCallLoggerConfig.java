@@ -20,8 +20,8 @@ import java.util.logging.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents a set of logging rules for how to handle logging of HTTP requests/responses.
@@ -67,7 +67,7 @@ public class RestCallLoggerConfig {
 		AList<RestCallLoggerRule> rules = AList.of();
 		rules.addAll(b.rules);
 		if (p != null)
-			rules.appendAll(p.rules);
+			rules.a(p.rules);
 		this.rules = rules.asArrayOf(RestCallLoggerRule.class);
 	}
 

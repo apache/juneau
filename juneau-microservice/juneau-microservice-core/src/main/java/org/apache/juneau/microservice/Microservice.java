@@ -28,6 +28,7 @@ import java.util.logging.*;
 import java.util.logging.Formatter;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;

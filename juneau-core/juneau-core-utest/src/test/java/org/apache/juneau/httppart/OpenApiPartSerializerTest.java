@@ -19,9 +19,9 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 

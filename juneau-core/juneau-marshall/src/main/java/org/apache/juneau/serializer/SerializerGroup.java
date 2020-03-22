@@ -17,8 +17,8 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.

@@ -21,8 +21,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Allows referencing an external resource for extended documentation.
@@ -219,8 +219,8 @@ public class ExternalDocumentation extends SwaggerElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		ASet<String> s = ASet.<String>of()
-			.appendIf(description != null, "description")
-			.appendIf(url != null, "url");
+			.aif(description != null, "description")
+			.aif(url != null, "url");
 		return new MultiSet<>(s, super.keySet());
 	}
 }

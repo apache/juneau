@@ -17,9 +17,9 @@ import static org.junit.Assert.*;
 import java.text.*;
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.guards.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 

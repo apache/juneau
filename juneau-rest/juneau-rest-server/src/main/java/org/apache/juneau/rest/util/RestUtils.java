@@ -22,13 +22,13 @@ import java.util.regex.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Various reusable utility methods.
@@ -46,46 +46,46 @@ public final class RestUtils {
 	}
 
 	private static Map<Integer,String> httpMsgs = AMap.<Integer,String>of()
-		.append(100, "Continue")
-		.append(101, "Switching Protocols")
-		.append(102, "Processing")
-		.append(103, "Early Hints")
-		.append(200, "OK")
-		.append(201, "Created")
-		.append(202, "Accepted")
-		.append(203, "Non-Authoritative Information")
-		.append(204, "No Content")
-		.append(205, "Reset Content")
-		.append(206, "Partial Content")
-		.append(300, "Multiple Choices")
-		.append(301, "Moved Permanently")
-		.append(302, "Temporary Redirect")
-		.append(303, "See Other")
-		.append(304, "Not Modified")
-		.append(305, "Use Proxy")
-		.append(307, "Temporary Redirect")
-		.append(400, "Bad Request")
-		.append(401, "Unauthorized")
-		.append(402, "Payment Required")
-		.append(403, "Forbidden")
-		.append(404, "Not Found")
-		.append(405, "Method Not Allowed")
-		.append(406, "Not Acceptable")
-		.append(407, "Proxy Authentication Required")
-		.append(408, "Request Time-Out")
-		.append(409, "Conflict")
-		.append(410, "Gone")
-		.append(411, "Length Required")
-		.append(412, "Precondition Failed")
-		.append(413, "Request Entity Too Large")
-		.append(414, "Request-URI Too Large")
-		.append(415, "Unsupported Media Type")
-		.append(500, "Internal Server Error")
-		.append(501, "Not Implemented")
-		.append(502, "Bad Gateway")
-		.append(503, "Service Unavailable")
-		.append(504, "Gateway Timeout")
-		.append(505, "HTTP Version Not Supported")
+		.a(100, "Continue")
+		.a(101, "Switching Protocols")
+		.a(102, "Processing")
+		.a(103, "Early Hints")
+		.a(200, "OK")
+		.a(201, "Created")
+		.a(202, "Accepted")
+		.a(203, "Non-Authoritative Information")
+		.a(204, "No Content")
+		.a(205, "Reset Content")
+		.a(206, "Partial Content")
+		.a(300, "Multiple Choices")
+		.a(301, "Moved Permanently")
+		.a(302, "Temporary Redirect")
+		.a(303, "See Other")
+		.a(304, "Not Modified")
+		.a(305, "Use Proxy")
+		.a(307, "Temporary Redirect")
+		.a(400, "Bad Request")
+		.a(401, "Unauthorized")
+		.a(402, "Payment Required")
+		.a(403, "Forbidden")
+		.a(404, "Not Found")
+		.a(405, "Method Not Allowed")
+		.a(406, "Not Acceptable")
+		.a(407, "Proxy Authentication Required")
+		.a(408, "Request Time-Out")
+		.a(409, "Conflict")
+		.a(410, "Gone")
+		.a(411, "Length Required")
+		.a(412, "Precondition Failed")
+		.a(413, "Request Entity Too Large")
+		.a(414, "Request-URI Too Large")
+		.a(415, "Unsupported Media Type")
+		.a(500, "Internal Server Error")
+		.a(501, "Not Implemented")
+		.a(502, "Bad Gateway")
+		.a(503, "Service Unavailable")
+		.a(504, "Gateway Timeout")
+		.a(505, "HTTP Version Not Supported")
 	;
 
 	/**
@@ -218,7 +218,7 @@ public final class RestUtils {
 			if (! "INHERIT".equals(v))
 				l.add(v);
 			else if (fromParent != null)
-				l.appendAll(fromParent);
+				l.a(fromParent);
 		}
 		return join(l, '\n');
 	}
@@ -232,7 +232,7 @@ public final class RestUtils {
 		AList<String> list = AList.of();
 		for (String l : links) {
 			if ("INHERIT".equals(l))
-				list.appendAll(parentLinks);
+				list.a(parentLinks);
 			else if (l.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(l).matches()) {
 				Matcher lm = INDEXED_LINK_PATTERN.matcher(l);
 				lm.matches();
@@ -254,7 +254,7 @@ public final class RestUtils {
 		AList<String> list = AList.of();
 		for (String l : content) {
 			if ("INHERIT".equals(l)) {
-				list.appendAll(parentContent);
+				list.a(parentContent);
 			} else if ("NONE".equals(l)) {
 				return new String[0];
 			} else {
@@ -415,7 +415,7 @@ public final class RestUtils {
 		AList<Object> l = AList.of();
 		for (Object o : fromChild) {
 			if (o == Inherit.class)
-				l.appendAll(fromParent);
+				l.a(fromParent);
 			else
 				l.add(o);
 		}

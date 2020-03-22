@@ -19,6 +19,7 @@ import java.util.jar.*;
 import java.util.logging.*;
 
 import org.apache.juneau.ExecutableException;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.vars.*;

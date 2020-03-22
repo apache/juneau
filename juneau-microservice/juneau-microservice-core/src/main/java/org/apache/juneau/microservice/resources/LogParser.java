@@ -18,7 +18,7 @@ import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.juneau.utils.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Utility class for reading log files.

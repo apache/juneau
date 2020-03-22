@@ -46,6 +46,7 @@ import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;

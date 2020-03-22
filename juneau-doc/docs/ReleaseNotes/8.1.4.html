@@ -151,6 +151,17 @@
 		Fixed a bug where a copy constructor can erroneously be recognised as a builder constructor if the class also
 		has a static <c>create</c> method.  Net effect was that the copy constructor would needlessly be called during parsing.
 	<li>
+		New {@link oaj.collections} package containing various convenience fluent-style collection classes:
+		<ul>
+			<li class='jc'>{@link oaj.collections.AList}
+			<li class='jc'>{@link oaj.collections.ASet}
+			<li class='jc'>{@link oaj.collections.ASortedSet}
+			<li class='jc'>{@link oaj.collections.AMap}
+			<li class='jc'>{@link oaj.collections.ASortedMap}
+			<li class='jc'>{@link oaj.collections.OMap}
+			<li class='jc'>{@link oaj.collections.OList}
+		</ul>
+	<li>
 		HTML-Schema support is being deprecated due to low-use and difficulty in maintaining.  It will be removed in 9.0.
 </ul>
 

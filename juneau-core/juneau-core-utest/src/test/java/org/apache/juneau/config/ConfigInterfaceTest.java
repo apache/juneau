@@ -17,9 +17,9 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.pojos.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 public class ConfigInterfaceTest {

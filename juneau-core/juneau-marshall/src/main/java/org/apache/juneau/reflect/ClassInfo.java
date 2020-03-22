@@ -24,8 +24,8 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Lightweight utility class for introspecting information about a class.
@@ -1772,22 +1772,22 @@ public final class ClassInfo {
 
 	private static final Map<Class<?>,Object> primitiveDefaultMap = Collections.unmodifiableMap(
 		AMap.<Class<?>,Object>of()
-			.append(Boolean.TYPE, false)
-			.append(Character.TYPE, (char)0)
-			.append(Short.TYPE, (short)0)
-			.append(Integer.TYPE, 0)
-			.append(Long.TYPE, 0l)
-			.append(Float.TYPE, 0f)
-			.append(Double.TYPE, 0d)
-			.append(Byte.TYPE, (byte)0)
-			.append(Boolean.class, false)
-			.append(Character.class, (char)0)
-			.append(Short.class, (short)0)
-			.append(Integer.class, 0)
-			.append(Long.class, 0l)
-			.append(Float.class, 0f)
-			.append(Double.class, 0d)
-			.append(Byte.class, (byte)0)
+			.a(Boolean.TYPE, false)
+			.a(Character.TYPE, (char)0)
+			.a(Short.TYPE, (short)0)
+			.a(Integer.TYPE, 0)
+			.a(Long.TYPE, 0l)
+			.a(Float.TYPE, 0f)
+			.a(Double.TYPE, 0d)
+			.a(Byte.TYPE, (byte)0)
+			.a(Boolean.class, false)
+			.a(Character.class, (char)0)
+			.a(Short.class, (short)0)
+			.a(Integer.class, 0)
+			.a(Long.class, 0l)
+			.a(Float.class, 0f)
+			.a(Double.class, 0d)
+			.a(Byte.class, (byte)0)
 	);
 
 	//-----------------------------------------------------------------------------------------------------------------

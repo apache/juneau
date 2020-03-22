@@ -22,13 +22,13 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.config.encode.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 public class ConfigTest {

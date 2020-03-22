@@ -24,9 +24,9 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).
@@ -177,7 +177,7 @@ public class BeanMeta<T> {
 
 				AList<Class<?>> bdClasses = AList.of();
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
-					bdClasses.appendAll(beanFilter.getBeanDictionary());
+					bdClasses.a(beanFilter.getBeanDictionary());
 
 				boolean hasTypeName = false;
 				for (Bean b : classMeta.getAnnotations(Bean.class))

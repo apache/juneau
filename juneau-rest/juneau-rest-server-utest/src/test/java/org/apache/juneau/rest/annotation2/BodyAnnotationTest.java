@@ -20,6 +20,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.HasQuery;
@@ -37,7 +38,6 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.urlencoding.annotation.UrlEncoding;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 

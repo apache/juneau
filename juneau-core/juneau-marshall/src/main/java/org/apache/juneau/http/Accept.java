@@ -17,9 +17,9 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents a parsed <l>Accept</l> HTTP request header.

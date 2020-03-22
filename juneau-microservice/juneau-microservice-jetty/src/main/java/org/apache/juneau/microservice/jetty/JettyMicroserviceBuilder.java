@@ -19,6 +19,7 @@ import java.util.logging.*;
 import javax.servlet.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.internal.*;
@@ -27,7 +28,6 @@ import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 import org.eclipse.jetty.server.*;
 
 /**

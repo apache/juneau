@@ -18,13 +18,13 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.test.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 /**

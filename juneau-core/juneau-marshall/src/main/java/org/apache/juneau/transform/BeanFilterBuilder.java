@@ -19,8 +19,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Builder class for {@link BeanFilter} objects.
@@ -139,7 +139,7 @@ public class BeanFilterBuilder<T> {
 	@Deprecated public BeanFilterBuilder<T> properties(String...value) {
 		this.bpi = ASet.of();
 		for (String v : value)
-			bpi.appendAll(split(v));
+			bpi.a(split(v));
 		return this;
 	}
 
@@ -154,7 +154,7 @@ public class BeanFilterBuilder<T> {
 	@Deprecated public BeanFilterBuilder<T> excludeProperties(String...value) {
 		this.bpx = ASet.of();
 		for (String v : value)
-			bpi.appendAll(split(v));
+			bpi.a(split(v));
 		return this;
 	}
 
@@ -519,7 +519,7 @@ public class BeanFilterBuilder<T> {
 	public BeanFilterBuilder<T> bpi(String...value) {
 		this.bpi = ASet.of();
 		for (String v : value)
-			bpi.appendAll(split(v));
+			bpi.a(split(v));
 		return this;
 	}
 
@@ -563,7 +563,7 @@ public class BeanFilterBuilder<T> {
 	public BeanFilterBuilder<T> bpx(String...value) {
 		this.bpx = ASet.of();
 		for (String v : value)
-			bpx.appendAll(split(v));
+			bpx.a(split(v));
 		return this;
 	}
 
@@ -609,7 +609,7 @@ public class BeanFilterBuilder<T> {
 	public BeanFilterBuilder<T> bpro(String...value) {
 		this.bpro = ASet.of();
 		for (String v : value)
-			bpro.appendAll(split(v));
+			bpro.a(split(v));
 		return this;
 	}
 
@@ -655,7 +655,7 @@ public class BeanFilterBuilder<T> {
 	public BeanFilterBuilder<T> bpwo(String...value) {
 		this.bpwo = ASet.of();
 		for (String v : value)
-			bpwo.appendAll(split(v));
+			bpwo.a(split(v));
 		return this;
 	}
 

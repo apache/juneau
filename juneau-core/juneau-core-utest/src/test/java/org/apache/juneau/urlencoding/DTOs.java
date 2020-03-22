@@ -15,8 +15,8 @@ package org.apache.juneau.urlencoding;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.urlencoding.annotation.*;
-import org.apache.juneau.utils.*;
 
 public class DTOs {
 

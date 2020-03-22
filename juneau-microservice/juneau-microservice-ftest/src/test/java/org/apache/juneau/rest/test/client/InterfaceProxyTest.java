@@ -21,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
@@ -35,7 +36,6 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 import org.junit.runner.*;

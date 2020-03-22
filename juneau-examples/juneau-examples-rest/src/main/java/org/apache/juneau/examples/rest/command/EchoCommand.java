@@ -15,8 +15,8 @@ package org.apache.juneau.examples.rest.command;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.microservice.console.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Implements an 'echo' console command that simply returns the command arguments as a comma-delimited list.
