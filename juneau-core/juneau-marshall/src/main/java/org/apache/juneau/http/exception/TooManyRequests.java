@@ -81,4 +81,18 @@ public class TooManyRequests extends HttpException {
 	public TooManyRequests(Throwable cause) {
 		this(cause, null);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Fluent setters.
+	//------------------------------------------------------------------------------------------------------------------
+
+	// <CONFIGURATION-PROPERTIES>
+
+	@Override /* GENERATED - HttpException */
+	public TooManyRequests header(String name, Object val) {
+		super.header(name, val);
+		return this;
+	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

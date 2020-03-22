@@ -81,4 +81,18 @@ public class UriTooLong extends HttpException {
 	public UriTooLong(Throwable cause) {
 		this(cause, null);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Fluent setters.
+	//------------------------------------------------------------------------------------------------------------------
+
+	// <CONFIGURATION-PROPERTIES>
+
+	@Override /* GENERATED - HttpException */
+	public UriTooLong header(String name, Object val) {
+		super.header(name, val);
+		return this;
+	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

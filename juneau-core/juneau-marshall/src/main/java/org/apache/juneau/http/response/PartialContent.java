@@ -49,4 +49,18 @@ public class PartialContent extends HttpResponse {
 	public PartialContent(String message) {
 		super(message);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Fluent setters.
+	//------------------------------------------------------------------------------------------------------------------
+
+	// <CONFIGURATION-PROPERTIES>
+
+	@Override /* GENERATED - HttpResponse */
+	public PartialContent header(String name, Object val) {
+		super.header(name, val);
+		return this;
+	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

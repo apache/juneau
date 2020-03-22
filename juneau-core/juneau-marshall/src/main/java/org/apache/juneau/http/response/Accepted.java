@@ -49,4 +49,18 @@ public class Accepted extends HttpResponse {
 	public Accepted(String message) {
 		super(message);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Fluent setters.
+	//------------------------------------------------------------------------------------------------------------------
+
+	// <CONFIGURATION-PROPERTIES>
+
+	@Override /* GENERATED - HttpResponse */
+	public Accepted header(String name, Object val) {
+		super.header(name, val);
+		return this;
+	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

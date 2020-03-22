@@ -81,4 +81,18 @@ public class PreconditionRequired extends HttpException {
 	public PreconditionRequired(Throwable cause) {
 		this(cause, null);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Fluent setters.
+	//------------------------------------------------------------------------------------------------------------------
+
+	// <CONFIGURATION-PROPERTIES>
+
+	@Override /* GENERATED - HttpException */
+	public PreconditionRequired header(String name, Object val) {
+		super.header(name, val);
+		return this;
+	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

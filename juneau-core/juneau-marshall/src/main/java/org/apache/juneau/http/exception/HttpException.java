@@ -16,6 +16,12 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.text.*;
+import java.util.*;
+
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception thrown to trigger an error HTTP status.
@@ -29,6 +35,7 @@ public class HttpException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	private int status;
+	private AMap<String,Object> headers = AMap.of();
 
 	/**
 	 * Constructor.
@@ -164,6 +171,30 @@ public class HttpException extends RuntimeException {
 	 */
 	public int getStatus() {
 		return status;
+	}
+
+	/**
+	 * Add an HTTP header to this exception.
+	 *
+	 * @param name The header name.
+	 * @param val The header value.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public HttpException header(String name, Object val) {
+		headers.a(name, val);
+		return this;
+	}
+
+	/**
+	 * Returns the headers associated with this exception.
+	 *
+	 * @return The headers associated with this exception.
+	 */
+	@ResponseHeader("*")
+	@BeanIgnore
+	public Map<String,Object> getHeaders() {
+		return headers;
 	}
 
 	// When serialized, just serialize the message itself.

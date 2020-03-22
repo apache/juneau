@@ -177,9 +177,9 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li class='jm'>{@link #asPojoRest(Mutable,Class) asPojoRest(Mutable,Class)}
 	 * 	<li class='jm'>{@link #assertValue(Predicate) assertValue(Predicate)}
 	 * 	<li class='jm'>{@link #assertValue(String) assertValue(String)}
-	 * 	<li class='jm'>{@link #assertValueContains(String...) assertValueContains(String...)}
-	 * 	<li class='jm'>{@link #assertValueMatches(Pattern) assertValueMatches(Pattern)}
-	 * 	<li class='jm'>{@link #assertValueMatches(String) assertValueMatches(String)}
+	 * 	<li class='jm'>{@link #assertContains(String...) assertContains(String...)}
+	 * 	<li class='jm'>{@link #assertMatches(Pattern) assertMatches(Pattern)}
+	 * 	<li class='jm'>{@link #assertMatches(String) assertMatches(String)}
 	 * 	<li class='jm'>{@link #asString() asString()}
 	 * 	<li class='jm'>{@link #asString(Mutable) asString(Mutable)}
 	 * 	<li class='jm'>{@link #asStringFuture() asStringFuture()}
@@ -1579,11 +1579,11 @@ public class RestResponseBody implements HttpEntity {
 	 * @return The response object (for method chaining).
 	 * @throws RestCallException If assertion fails.
 	 */
-	public RestResponse assertValueContains(String...values) throws RestCallException {
+	public RestResponse assertContains(String...values) throws RestCallException {
 		String text = asString();
 		for (String substring : values)
 			if (! StringUtils.contains(text, substring))
-				throw new RestCallException("Response did not have the expected substring for body.\n\tExpected=[{0}]\n\tHeader=[{1}]", substring, text);
+				throw new RestCallException("Response did not have the expected substring for body.\n\tExpected=[{0}]\n\tBody=[{1}]", substring, text);
 		return response;
 	}
 
@@ -1648,8 +1648,8 @@ public class RestResponseBody implements HttpEntity {
 	 * @return The response object (for method chaining).
 	 * @throws RestCallException If assertion fails.
 	 */
-	public RestResponse assertValueMatches(String regex) throws RestCallException {
-		return assertValueMatches(regex, 0);
+	public RestResponse assertMatches(String regex) throws RestCallException {
+		return assertMatches(regex, 0);
 	}
 
 	/**
@@ -1680,7 +1680,7 @@ public class RestResponseBody implements HttpEntity {
 	 * @return The response object (for method chaining).
 	 * @throws RestCallException If assertion fails.
 	 */
-	public RestResponse assertValueMatches(String regex, int flags) throws RestCallException {
+	public RestResponse assertMatches(String regex, int flags) throws RestCallException {
 		String text = asString();
 		Pattern p = Pattern.compile(regex, flags);
 		if (! p.matcher(text).matches())
@@ -1716,7 +1716,7 @@ public class RestResponseBody implements HttpEntity {
 	 * @return The response object (for method chaining).
 	 * @throws RestCallException If assertion fails.
 	 */
-	public RestResponse assertValueMatches(Pattern pattern) throws RestCallException {
+	public RestResponse assertMatches(Pattern pattern) throws RestCallException {
 		String text = asString();
 		if (! pattern.matcher(text).matches())
 			throw new RestCallException("Response did not match expected pattern.\n\tpattern=[{0}]\n\tBody=[{1}]", pattern.pattern(), text);

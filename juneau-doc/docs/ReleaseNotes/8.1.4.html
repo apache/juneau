@@ -162,6 +162,18 @@
 			<li class='jc'>{@link oaj.collections.OList}
 		</ul>
 	<li>
+		All classes in the {@link oaj.http.response} and {@link oaj.http.exception} now have <c>header(String,Object)</c>
+		methods for adding response headers.
+		<p class='bpcode w800'>
+	<jc>// Method that performs a BASIC Auth handshake.</jc>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> Ok checkBasicAuth(<ja>@Header</ja>(<js>"Authorization"</js>) String auth) <jk>throws</jk> Unauthorized {
+		<jk>if</jk> (auth == <jk>null</jk>) 
+			<jk>throw new</jk> Unauthorized().header(<js>"WWW-Authenticate"</js>, <js>"BASIC realm=\"foo\""</js>);
+		<jk>return</jk> Ok.<jsf>OK</jsf>;
+	}
+		</p>		
+	<li>
 		HTML-Schema support is being deprecated due to low-use and difficulty in maintaining.  It will be removed in 9.0.
 </ul>
 

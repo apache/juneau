@@ -80,4 +80,18 @@ public class UnavailableForLegalReasons extends HttpException {
 	public UnavailableForLegalReasons(Throwable cause) {
 		this(cause, null);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Fluent setters.
+	//------------------------------------------------------------------------------------------------------------------
+
+	// <CONFIGURATION-PROPERTIES>
+
+	@Override /* GENERATED - HttpException */
+	public UnavailableForLegalReasons header(String name, Object val) {
+		super.header(name, val);
+		return this;
+	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

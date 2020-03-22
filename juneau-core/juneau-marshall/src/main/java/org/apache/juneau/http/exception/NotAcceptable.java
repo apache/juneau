@@ -80,4 +80,18 @@ public class NotAcceptable extends HttpException {
 	public NotAcceptable(Throwable cause) {
 		this(cause, null);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Fluent setters.
+	//------------------------------------------------------------------------------------------------------------------
+
+	// <CONFIGURATION-PROPERTIES>
+
+	@Override /* GENERATED - HttpException */
+	public NotAcceptable header(String name, Object val) {
+		super.header(name, val);
+		return this;
+	}
+
+	// </CONFIGURATION-PROPERTIES>
 }

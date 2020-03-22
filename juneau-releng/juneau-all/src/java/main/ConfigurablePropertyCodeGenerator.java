@@ -21,6 +21,8 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.jso.*;
@@ -92,7 +94,64 @@ public class ConfigurablePropertyCodeGenerator {
 		UrlEncodingSerializerBuilder.class,
 		WriterSerializerBuilder.class,
 		XmlParserBuilder.class,
-		XmlSerializerBuilder.class
+		XmlSerializerBuilder.class,
+		BadRequest.class,
+		Conflict.class,
+		ExpectationFailed.class,
+		FailedDependency.class,
+		Forbidden.class,
+		Gone.class,
+		HttpException.class,
+		HttpVersionNotSupported.class,
+		InsufficientStorage.class,
+		InternalServerError.class,
+		LengthRequired.class,
+		Locked.class,
+		LoopDetected.class,
+		MethodNotAllowed.class,
+		MisdirectedRequest.class,
+		NetworkAuthenticationRequired.class,
+		NotAcceptable.class,
+		NotExtended.class,
+		NotFound.class,
+		NotImplemented.class,
+		PayloadTooLarge.class,
+		PreconditionFailed.class,
+		PreconditionRequired.class,
+		RangeNotSatisfiable.class,
+		RequestHeaderFieldsTooLarge.class,
+		ServiceUnavailable.class,
+		TooManyRequests.class,
+		Unauthorized.class,
+		UnavailableForLegalReasons.class,
+		UnprocessableEntity.class,
+		UnsupportedMediaType.class,
+		UpgradeRequired.class,
+		UriTooLong.class,
+		VariantAlsoNegotiates.class,
+		Accepted.class,
+		AlreadyReported.class,
+		Continue.class,
+		Created.class,
+		EarlyHints.class,
+		Found.class,
+		HttpResponse.class,
+		IMUsed.class,
+		MovedPermanently.class,
+		MultipleChoices.class,
+		MultiStatus.class,
+		NoContent.class,
+		NonAuthoritiveInformation.class,
+		NotModified.class,
+		Ok.class,
+		PartialContent.class,
+		PermanentRedirect.class,
+		Processing.class,
+		ResetContent.class,
+		SeeOther.class,
+		SwitchingProtocols.class,
+		TemporaryRedirect.class,
+		UseProxy.class
 	};
 
 	private static String[] SOURCE_PATHS = {
@@ -151,6 +210,8 @@ public class ConfigurablePropertyCodeGenerator {
 							sb.append("\n\t\treturn this;");
 							sb.append("\n\t}");
 						}
+					} else if (pc.isAny(Throwable.class, RuntimeException.class, Exception.class)) {
+						// Ignore
 					} else {
 						System.err.println(pc.inner().getSimpleName() + " not found.");
 					}

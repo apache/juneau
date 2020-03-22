@@ -651,10 +651,10 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'><c>{@link RestResponseHeader#assertExists() assertExists()} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#assertValue(String) assertValue(String)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#assertValue(Predicate) assertValue(Predicate&lt;String&gt;)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertValueContains(String...) assertValueContains(String...)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertValueMatches(String) assertValueMatches(String)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertValueMatches(String,int) assertValueMatches(String,int)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertValueMatches(Pattern) assertValueMatches(Pattern)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponseHeader#assertContains(String...) assertContains(String...)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponseHeader#assertMatches(String) assertMatches(String)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponseHeader#assertMatches(String,int) assertMatches(String,int)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponseHeader#assertMatches(Pattern) assertMatches(Pattern)} <jk>returns</jk> {@link RestResponse}</c>
  * 	</ul>
  * </ul>
  *
@@ -715,11 +715,11 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(String,int) asMatcher(String,int)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(Mutable,String,int) asMatcher(Mutable&lt;Matcher&gt;,String,int)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#assertValue(String) assertValue(String)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertValueContains(String...) assertValueContains(String...)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponseBody#assertContains(String...) assertContains(String...)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#assertValue(Predicate) assertValue(Predicate&lt;String&gt;)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertValueMatches(String) assertValueMatches(String)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertValueMatches(String,int) assertValueMatches(String,int)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertValueMatches(Pattern) assertValueMatches(Pattern)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponseBody#assertMatches(String) assertMatches(String)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponseBody#assertMatches(String,int) assertMatches(String,int)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponseBody#assertMatches(Pattern) assertMatches(Pattern)} <jk>returns</jk> {@link RestResponse}</c>
  * 	</ul>
  * </ul>
  *
@@ -1316,7 +1316,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * <p>
 	 * Interceptors that get called immediately after a connection is made.
 	 */
-	public static final String RESTCLIENT_interceptors = PREFIX + "interceptors.so";
+	public static final String RESTCLIENT_interceptors = PREFIX + "interceptors.lo";
 
 	/**
 	 * Add to the Call interceptors property.

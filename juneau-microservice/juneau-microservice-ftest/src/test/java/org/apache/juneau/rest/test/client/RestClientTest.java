@@ -36,12 +36,12 @@ public class RestClientTest extends RestTestcase {
 
 		Mutable<Integer> rc = new Mutable<>();
 		Mutable<String> r = new Mutable<>();
-		c.post(URL, new StringEntity("xxxSUCCESSxxx")).run().getStatusCode(rc).getBody().cache().assertValueContains("SUCCESS").getBody().asString(r);
+		c.post(URL, new StringEntity("xxxSUCCESSxxx")).run().getStatusCode(rc).getBody().cache().assertContains("SUCCESS").getBody().asString(r);
 		assertEquals("xxxSUCCESSxxx", r.get());
 		assertEquals(200, rc.get().intValue());
 
 		try {
-			c.post(URL, new StringEntity("xxxFAILURExxx")).run().getBody().assertValueContains("SUCCESS");
+			c.post(URL, new StringEntity("xxxFAILURExxx")).run().getBody().assertContains("SUCCESS");
 			fail();
 		} catch (RestCallException e) {
 			assertTrue(e.getLocalizedMessage().contains("Response did not have the expected substring for body."));

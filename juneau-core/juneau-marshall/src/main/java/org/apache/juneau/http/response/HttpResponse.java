@@ -12,7 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.response;
 
+import java.util.*;
+
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Superclass of all predefined responses in this package.
@@ -24,6 +29,7 @@ import org.apache.juneau.http.annotation.*;
 public abstract class HttpResponse {
 
 	private final String message;
+	private AMap<String,Object> headers = AMap.of();
 
 	/**
 	 * Constructor.
@@ -32,6 +38,30 @@ public abstract class HttpResponse {
 	 */
 	protected HttpResponse(String message) {
 		this.message = message;
+	}
+
+	/**
+	 * Add an HTTP header to this response.
+	 *
+	 * @param name The header name.
+	 * @param val The header value.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public HttpResponse header(String name, Object val) {
+		headers.a(name, val);
+		return this;
+	}
+
+	/**
+	 * Returns the headers associated with this exception.
+	 *
+	 * @return The headers associated with this exception.
+	 */
+	@ResponseHeader("*")
+	@BeanIgnore
+	public Map<String,Object> getHeaders() {
+		return headers;
 	}
 
 	@ResponseBody

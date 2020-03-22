@@ -589,7 +589,7 @@ public class RestResponseHeader implements Header {
 	 * @return The response object (for method chaining).
 	 * @throws RestCallException If assertion failed.
 	 */
-	public RestResponse assertValueContains(String...values) throws RestCallException {
+	public RestResponse assertContains(String...values) throws RestCallException {
 		String text = asString();
 		for (String substring : values)
 			if (! StringUtils.contains(text, substring))
@@ -613,8 +613,8 @@ public class RestResponseHeader implements Header {
 	 * @return The response object (for method chaining).
 	 * @throws RestCallException If assertion failed.
 	 */
-	public RestResponse assertValueMatches(String regex) throws RestCallException {
-		return assertValueMatches(regex, 0);
+	public RestResponse assertMatches(String regex) throws RestCallException {
+		return assertMatches(regex, 0);
 	}
 
 	/**
@@ -634,7 +634,7 @@ public class RestResponseHeader implements Header {
 	 * @return The response object (for method chaining).
 	 * @throws RestCallException If assertion failed.
 	 */
-	public RestResponse assertValueMatches(String regex, int flags) throws RestCallException {
+	public RestResponse assertMatches(String regex, int flags) throws RestCallException {
 		String text = asString();
 		if (! Pattern.compile(regex, flags).matcher(text).matches())
 			throw new RestCallException("Response did not match expected pattern in header {0}.\n\tpattern=[{1}]\n\tHeader=[{2}]", getName(), regex, text);
@@ -661,7 +661,7 @@ public class RestResponseHeader implements Header {
 	 * @return The response object (for method chaining).
 	 * @throws RestCallException If assertion failed.
 	 */
-	public RestResponse assertValueMatches(Pattern pattern) throws RestCallException {
+	public RestResponse assertMatches(Pattern pattern) throws RestCallException {
 		String text = asString();
 		if (! pattern.matcher(text).matches())
 			throw new RestCallException("Response did not match expected pattern in header {0}.\n\tpattern=[{1}]\n\tHeader=[{2}]", getName(), pattern.pattern(), text);

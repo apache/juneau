@@ -448,7 +448,7 @@ final class SwaggerGenerator {
 						ResponseHeader a = ecmi.getLastAnnotation(ResponseHeader.class);
 						if (a == null)
 							a = ecmi.getResolvedReturnType().getLastAnnotation(ResponseHeader.class);
-						if (a != null) {
+						if (a != null && ! isMulti(a)) {
 							String ha = a.name();
 							for (Integer code : codes) {
 								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
@@ -477,10 +477,12 @@ final class SwaggerGenerator {
 						if (ecmi.hasAnnotation(ResponseHeader.class)) {
 							ResponseHeader a = ecmi.getLastAnnotation(ResponseHeader.class);
 							String ha = a.name();
-							for (Integer code : codes) {
-								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
-								merge(header, a);
-								mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType(), bs));
+							if (! isMulti(a)) {
+								for (Integer code : codes) {
+									ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
+									merge(header, a);
+									mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType(), bs));
+								}
 							}
 						}
 					}
@@ -502,10 +504,12 @@ final class SwaggerGenerator {
 					List<ResponseHeader> la = mpi.getAnnotations(ResponseHeader.class);
 					Set<Integer> codes = getCodes2(la, 200);
 					for (ResponseHeader a : la) {
-						for (Integer code : codes) {
-							ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(mp.name, true);
-							merge(header, a);
-							mergePartSchema(header, getSchema(header, Value.getParameterType(mp.type), bs));
+						if (! isMulti(a)) {
+							for (Integer code : codes) {
+								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(mp.name, true);
+								merge(header, a);
+								mergePartSchema(header, getSchema(header, Value.getParameterType(mp.type), bs));
+							}
 						}
 					}
 
@@ -589,6 +593,12 @@ final class SwaggerGenerator {
 	//=================================================================================================================
 	// Utility methods
 	//=================================================================================================================
+
+	private boolean isMulti(ResponseHeader h) {
+		if ("*".equals(h.name()) || "*".equals(h.value()))
+			return true;
+		return false;
+	}
 
 	private ObjectMap resolve(ObjectMap om) throws ParseException {
 		ObjectMap om2 = null;

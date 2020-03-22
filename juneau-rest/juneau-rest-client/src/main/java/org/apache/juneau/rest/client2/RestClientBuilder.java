@@ -105,7 +105,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	protected RestClientBuilder(PropertyStore ps, HttpClientBuilder httpClientBuilder) {
 		super(ps);
-		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : createHttpClientBuilder();
+		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : getHttpClientBuilder();
 	}
 
 	@Override /* ContextBuilder */
@@ -345,9 +345,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * {@link #createHttpClientBuilder()}.
 	 *
 	 * @return The HTTP client to use.
-	 * @throws Exception Error occurred.
 	 */
-	protected CloseableHttpClient createHttpClient() throws Exception {
+	protected CloseableHttpClient createHttpClient() {
 		// Don't call createConnectionManager() if RestClient.setConnectionManager() was called.
 		if (httpClientConnectionManager == null)
 			httpClientBuilder.setConnectionManager(createConnectionManager());
@@ -362,11 +361,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return The {@link HttpClient} to be used to handle all HTTP communications with the target server.
 	 */
 	public CloseableHttpClient getHttpClient() {
-		try {
-			return httpClient != null ? httpClient : createHttpClient();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return httpClient != null ? httpClient : createHttpClient();
 	}
 
 	/**
