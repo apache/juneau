@@ -34,6 +34,29 @@ public final class ASet<T> extends LinkedHashSet<T> {
 
 	private static final long serialVersionUID = 1L;
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Constructors.
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Constructor.
+	 */
+	public ASet() {}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param c Initial contents.  Can be <jk>null</jk>.
+	 */
+	public ASet(Collection<T> c) {
+		super(c == null ? emptySet() : c);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Creators.
+	//------------------------------------------------------------------------------------------------------------------
+
+
 	/**
 	 * Convenience method for creating a list of objects.
 	 *
@@ -41,7 +64,7 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 * @return A new list.
 	 */
 	@SafeVarargs
-	public static <T> ASet<T> create(T...t) {
+	public static <T> ASet<T> of(T...t) {
 		return new ASet<T>().appendAll(t);
 	}
 
@@ -51,7 +74,7 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 * @param c The initial values.
 	 * @return A new list.
 	 */
-	public static <T> ASet<T> create(Collection<T> c) {
+	public static <T> ASet<T> of(Collection<T> c) {
 		return new ASet<T>().appendAll(c);
 	}
 
@@ -61,8 +84,8 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 * @param t The initial values.
 	 * @return A new list.
 	 */
-	public static <T> Set<T> createUnmodifiable(T...t) {
-		return t.length == 0 ? emptySet() : create(t).unmodifiable();
+	public static <T> Set<T> unmodifiable(T...t) {
+		return t.length == 0 ? emptySet() : of(t).unmodifiable();
 	}
 
 	/**
@@ -72,25 +95,15 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 * @param <T> The element type.
 	 * @return An unmodifiable set, never <jk>null</jk>.
 	 */
-	public static <T> Set<T> createUnmodifiable(Collection<T> c) {
+	public static <T> Set<T> unmodifiable(Collection<T> c) {
 		if (c == null || c.isEmpty())
 			return Collections.emptySet();
 		return new ASet<T>().appendAll(c).unmodifiable();
 	}
 
-	/**
-	 * Convenience method for creating a list of objects.
-	 *
-	 * <p>
-	 * Identical to {@link #create(Object...)}.
-	 *
-	 * @param t The initial values.
-	 * @return A new list.
-	 */
-	@SafeVarargs
-	public static <T> ASet<T> of(T...t) {
-		return new ASet<T>().appendAll(t);
-	}
+	//------------------------------------------------------------------------------------------------------------------
+	// Methods.
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Adds an entry to this set.

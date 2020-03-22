@@ -118,11 +118,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			fByte = new byte[]{0,1,2,3};
 			fnByte = null;
 			faByte = new byte[][]{{0,1},{2,3},{4,5}};
-			flByte = new AList<byte[]>()
-				.append(new byte[]{1,2,3})
-				.append(new byte[]{4,5,6})
-				.append(null)
-			;
+			flByte = AList.of(new byte[]{1,2,3},new byte[]{4,5,6},null);
 			fmByte = new AMap<String,byte[]>()
 				.append("foo", new byte[]{1,2,3})
 				.append("bar", new byte[]{4,5,6})
@@ -147,10 +143,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			faDate = new Date[]{
 				new Date(1000), new Date(2000), new Date(3000)
 			};
-			flDate = new AList<Date>()
-				.append(new Date(4000))
-				.append(null)
-			;
+			flDate = AList.of(new Date(4000),null);
 			fmDate = new AMap<String,Date>()
 				.append("foo", new Date(5000))
 				.append("bar", null)

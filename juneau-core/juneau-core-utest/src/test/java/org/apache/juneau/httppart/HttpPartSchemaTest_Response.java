@@ -1111,8 +1111,8 @@ public class HttpPartSchemaTest_Response {
 		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, D01.class).build();
 
 		AList<String>
-			good = new AList<String>().appendAll(split("a,b")),
-			bad = new AList<String>().appendAll(split("a,a"));
+			good = AList.of(split("a,b")),
+			bad = AList.of(split("a,a"));
 
 		s.getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);

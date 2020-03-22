@@ -62,9 +62,9 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		navlinks = getProperty(HTMLDOC_navlinks, String[].class, ctx.getNavlinks());
 
 		// These can contain dups after variable resolution, so de-dup them with hashsets.
-		style = ASet.create(getProperty(HTMLDOC_style, String[].class, ctx.getStyle()));
-		stylesheet = ASet.create(getProperty(HTMLDOC_stylesheet, String[].class, ctx.getStylesheet()));
-		script = ASet.create(getProperty(HTMLDOC_script, String[].class, ctx.getScript()));
+		style = ASet.of(getProperty(HTMLDOC_style, String[].class, ctx.getStyle()));
+		stylesheet = ASet.of(getProperty(HTMLDOC_stylesheet, String[].class, ctx.getStylesheet()));
+		script = ASet.of(getProperty(HTMLDOC_script, String[].class, ctx.getScript()));
 
 		head = getProperty(HTMLDOC_head, String[].class, ctx.getHead());
 		nowrap = getProperty(HTMLDOC_nowrap, boolean.class, ctx.isNowrap());

@@ -283,7 +283,7 @@ public class HttpPartSchema {
 
 		// Validation.
 		List<String> errors = new ArrayList<>();
-		AList<String> notAllowed = new AList<>();
+		AList<String> notAllowed = AList.of();
 		boolean invalidFormat = false;
 		switch (type) {
 			case STRING: {

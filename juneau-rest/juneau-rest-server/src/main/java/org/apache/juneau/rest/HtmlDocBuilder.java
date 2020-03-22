@@ -472,7 +472,7 @@ public class HtmlDocBuilder {
 	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
 
 	private static String[] resolveLinks(Object[] value, String[] prev) {
-		AList<String> list = AList.create();
+		AList<String> list = AList.of();
 		for (Object v : value) {
 			String s = stringify(v);
 			if ("INHERIT".equals(s)) {
@@ -492,7 +492,7 @@ public class HtmlDocBuilder {
 	}
 
 	private static String[] resolveSet(Object[] value, String[] prev) {
-		ASet<String> set = ASet.create();
+		ASet<String> set = ASet.of();
 		for (Object v : value) {
 			String s = stringify(v);
 			if ("INHERIT".equals(s)) {
@@ -508,7 +508,7 @@ public class HtmlDocBuilder {
 	}
 
 	private static String[] resolveList(Object[] value, String[] prev) {
-		ASet<String> set = ASet.create();
+		ASet<String> set = ASet.of();
 		for (Object v : value) {
 			String s = stringify(v);
 			if ("INHERIT".equals(s)) {

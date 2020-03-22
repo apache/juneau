@@ -187,7 +187,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBean1d3dList() throws Exception {
-		proxy.setBean1d3dList(new AList<ABean[][][]>().append(new ABean[][][]{{{new ABean().init(),null},null},null}).append(null));
+		proxy.setBean1d3dList(AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
 		assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", proxy.getBean1d3dList());
 		assertEquals("[[[[{a:1,b:'foo'},null],null],null],null]", cf.get("A/bean1d3dList"));
 		assertInstanceOf(ABean.class, proxy.getBean1d3dList().get(0)[0][0][0]);

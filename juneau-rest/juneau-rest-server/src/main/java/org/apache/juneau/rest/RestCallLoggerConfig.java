@@ -64,7 +64,7 @@ public class RestCallLoggerConfig {
 		this.stackTraceHashingTimeout = b.stackTraceHashingTimeout != null ? b.stackTraceHashingTimeout : p != null ? p.stackTraceHashingTimeout : Integer.MAX_VALUE;
 		this.level = b.level != null ? b.level : p != null ? p.level : Level.INFO;
 
-		AList<RestCallLoggerRule> rules = AList.create();
+		AList<RestCallLoggerRule> rules = AList.of();
 		rules.addAll(b.rules);
 		if (p != null)
 			rules.appendAll(p.rules);

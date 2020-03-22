@@ -99,8 +99,8 @@ import org.apache.juneau.utils.*;
 public class AutoNumberSwap<T> extends PojoSwap<T,Number> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = ASet.createUnmodifiable("toNumber", "toInteger", "toInt", "toLong", "toFloat", "toDouble", "toShort", "toByte"),
-		UNSWAP_METHOD_NAMES = ASet.createUnmodifiable("fromInteger", "fromInt", "fromLong", "fromFloat", "fromDouble", "fromShort", "fromByte", "create", "valueOf");
+		SWAP_METHOD_NAMES = ASet.unmodifiable("toNumber", "toInteger", "toInt", "toLong", "toFloat", "toDouble", "toShort", "toByte"),
+		UNSWAP_METHOD_NAMES = ASet.unmodifiable("fromInteger", "fromInt", "fromLong", "fromFloat", "fromDouble", "fromShort", "fromByte", "create", "valueOf");
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

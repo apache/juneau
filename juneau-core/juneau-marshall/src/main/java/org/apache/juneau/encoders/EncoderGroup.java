@@ -95,10 +95,10 @@ public final class EncoderGroup {
 	 * @param encoders The encoders to add to this group.
 	 */
 	public EncoderGroup(Encoder[] encoders) {
-		this.encoders = AList.createUnmodifiable(encoders);
+		this.encoders = AList.unmodifiable(encoders);
 
-		AList<String> lc = AList.create();
-		AList<Encoder> l = AList.create();
+		AList<String> lc = AList.of();
+		AList<Encoder> l = AList.of();
 		for (Encoder e : encoders) {
 			for (String c: e.getCodings()) {
 				lc.add(c);

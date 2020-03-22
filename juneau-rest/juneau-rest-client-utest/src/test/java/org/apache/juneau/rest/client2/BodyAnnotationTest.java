@@ -155,11 +155,11 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void a05_ListOfBeans() throws Exception {
-		assertEquals("[{f:1}]", a01.postA05(AList.create(Bean.create())));
+		assertEquals("[{f:1}]", a01.postA05(AList.of(Bean.create())));
 	}
 	@Test
 	public void a06_MapOfBeans() throws Exception {
-		assertEquals("{k1:{f:1}}", a01.postA06(AMap.create("k1",Bean.create())));
+		assertEquals("{k1:{f:1}}", a01.postA06(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a07_Reader() throws Exception {
@@ -283,12 +283,12 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void b05_ListOfBeans() throws Exception {
-		String o = b01.postB05(AList.create(Bean.create()));
+		String o = b01.postB05(AList.of(Bean.create()));
 		assertEquals("[{f:1}]", o);
 	}
 	@Test
 	public void b06_MapOfBeans() throws Exception {
-		String o = b01.postB06(AMap.create("k1",Bean.create()));
+		String o = b01.postB06(AMap.of("k1",Bean.create()));
 		assertEquals("{k1:{f:1}}", o);
 	}
 	@Test
@@ -403,12 +403,12 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void c05_ListOfBeans() throws Exception {
-		String o = c01.postC05(AList.create(Bean.create()));
+		String o = c01.postC05(AList.of(Bean.create()));
 		assertEquals("[{f:1}]", o);
 	}
 	@Test
 	public void c06_MapOfBeans() throws Exception {
-		String o = c01.postC06(AMap.create("k1",Bean.create()));
+		String o = c01.postC06(AMap.of("k1",Bean.create()));
 		assertEquals("{k1={f:1}}", o);
 	}
 	@Test

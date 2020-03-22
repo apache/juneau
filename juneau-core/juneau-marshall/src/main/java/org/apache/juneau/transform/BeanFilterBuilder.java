@@ -62,10 +62,10 @@ public class BeanFilterBuilder<T> {
 	Class<?> beanClass;
 	String typeName;
 	ASet<String>
-		bpi = ASet.create(),
-		bpx = ASet.create(),
-		bpro = ASet.create(),
-		bpwo = ASet.create();
+		bpi = ASet.of(),
+		bpx = ASet.of(),
+		bpro = ASet.of(),
+		bpwo = ASet.of();
 	Class<?> interfaceClass, stopClass;
 	boolean sortProperties, fluentSetters;
 	Object propertyNamer;
@@ -137,7 +137,7 @@ public class BeanFilterBuilder<T> {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanFilterBuilder<T> properties(String...value) {
-		this.bpi = ASet.create();
+		this.bpi = ASet.of();
 		for (String v : value)
 			bpi.appendAll(split(v));
 		return this;
@@ -152,7 +152,7 @@ public class BeanFilterBuilder<T> {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated public BeanFilterBuilder<T> excludeProperties(String...value) {
-		this.bpx = ASet.create();
+		this.bpx = ASet.of();
 		for (String v : value)
 			bpi.appendAll(split(v));
 		return this;
@@ -517,7 +517,7 @@ public class BeanFilterBuilder<T> {
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> bpi(String...value) {
-		this.bpi = ASet.create();
+		this.bpi = ASet.of();
 		for (String v : value)
 			bpi.appendAll(split(v));
 		return this;
@@ -561,7 +561,7 @@ public class BeanFilterBuilder<T> {
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> bpx(String...value) {
-		this.bpx = ASet.create();
+		this.bpx = ASet.of();
 		for (String v : value)
 			bpx.appendAll(split(v));
 		return this;
@@ -607,7 +607,7 @@ public class BeanFilterBuilder<T> {
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> bpro(String...value) {
-		this.bpro = ASet.create();
+		this.bpro = ASet.of();
 		for (String v : value)
 			bpro.appendAll(split(v));
 		return this;
@@ -653,7 +653,7 @@ public class BeanFilterBuilder<T> {
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder<T> bpwo(String...value) {
-		this.bpwo = ASet.create();
+		this.bpwo = ASet.of();
 		for (String v : value)
 			bpwo.appendAll(split(v));
 		return this;

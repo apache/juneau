@@ -39,7 +39,7 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class HtmlParserSession extends XmlParserSession {
 
-	private static final Set<String> whitespaceElements = ASet.create("br","bs","sp","ff");
+	private static final Set<String> whitespaceElements = ASet.of("br","bs","sp","ff");
 
 	private final HtmlParser ctx;
 

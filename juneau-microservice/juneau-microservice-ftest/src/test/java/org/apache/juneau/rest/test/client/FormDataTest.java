@@ -75,7 +75,7 @@ public class FormDataTest extends RestTestcase {
 			r = c.post("", m).run().getBody().asString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)]", r);
 
-			List<String> l = new AList<String>().appendAll("foo", "'foo'", "(foo)", "@(foo)");
+			List<String> l = AList.of("foo", "'foo'", "(foo)", "@(foo)");
 			r = c.post("", l).run().getBody().asString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[0=foo&1='foo'&2=(foo)&3=@(foo)]", r);
 

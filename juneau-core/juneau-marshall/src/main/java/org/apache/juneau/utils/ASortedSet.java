@@ -32,6 +32,15 @@ public final class ASortedSet<T> extends TreeSet<T> {
 
 	private static final long serialVersionUID = 1L;
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Constructors.
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Constructor.
+	 */
+	public ASortedSet() {}
+
 	/**
 	 * Constructor.
 	 *
@@ -42,37 +51,20 @@ public final class ASortedSet<T> extends TreeSet<T> {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param c Initial contents.
+	 * @param c Initial contents.  Can be <jk>null</jk>.
 	 */
 	public ASortedSet(Collection<T> c) {
-		super(c);
+		super(c == null ? emptySet() : c);
 	}
 
-	/**
-	 * Constructor.
-	 */
-	public ASortedSet() {
-		super();
-	}
+	//------------------------------------------------------------------------------------------------------------------
+	// Creators.
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Convenience method for creating a list of objects.
-	 *
-	 * @param t The initial values.
-	 * @return A new list.
-	 */
-	@SafeVarargs
-	public static <T> ASortedSet<T> create(T...t) {
-		return new ASortedSet<T>().appendAll(t);
-	}
-
-	/**
-	 * Convenience method for creating a list of objects.
-	 *
-	 * <p>
-	 * Identical to {@link #create(Object...)}.
 	 *
 	 * @param t The initial values.
 	 * @return A new list.
@@ -81,6 +73,10 @@ public final class ASortedSet<T> extends TreeSet<T> {
 	public static <T> ASortedSet<T> of(T...t) {
 		return new ASortedSet<T>().appendAll(t);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Methods.
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Adds an entry to this set.

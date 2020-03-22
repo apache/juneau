@@ -91,7 +91,7 @@ public class StaticFileMapping {
 		this.resourceClass = resourceClass;
 		this.path = trimSlashes(path);
 		this.location = trimTrailingSlashes(location);
-		this.responseHeaders = AMap.createUnmodifiable(responseHeaders);
+		this.responseHeaders = AMap.unmodifiable(responseHeaders);
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class StaticFileMapping {
 		int mark = 0;
 
 		String path = null, location = null;
-		AList<StaticFileMapping> l = AList.create();
+		AList<StaticFileMapping> l = AList.of();
 		String s = mapping;
 		int jsonDepth = 0;
 		for (int i = 0; i < s.length(); i++) {

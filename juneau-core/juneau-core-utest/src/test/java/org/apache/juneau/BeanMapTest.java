@@ -2097,7 +2097,7 @@ public class BeanMapTest {
 		AA aa = new AA();
 		BeanMap<AA> bm = BeanContext.DEFAULT.createSession().toBeanMap(aa);
 
-		bm.put("a", AList.create("x"));
+		bm.put("a", AList.of("x"));
 		assertObjectEquals("['x']", aa.a);
 	}
 

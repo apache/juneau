@@ -76,8 +76,8 @@ import org.apache.juneau.utils.*;
 public class AutoListSwap<T> extends PojoSwap<T,List<?>> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = ASet.createUnmodifiable("toList", "toObjectList"),
-		UNSWAP_METHOD_NAMES = ASet.createUnmodifiable("fromList", "fromObjectList", "create", "valueOf");
+		SWAP_METHOD_NAMES = ASet.unmodifiable("toList", "toObjectList"),
+		UNSWAP_METHOD_NAMES = ASet.unmodifiable("fromList", "fromObjectList", "create", "valueOf");
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

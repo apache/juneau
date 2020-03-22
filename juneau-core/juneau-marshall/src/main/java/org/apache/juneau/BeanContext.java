@@ -2557,29 +2557,29 @@ public class BeanContext extends Context implements MetaProvider {
 
 		examples = getMapProperty(BEAN_examples, Object.class);
 
-		AMap<String,ClassInfo> icm = AMap.create();
+		AMap<String,ClassInfo> icm = AMap.of();
 		for (Map.Entry<String,Class<?>> e : getClassMapProperty(BEAN_implClasses).entrySet())
 			icm.put(e.getKey(), ClassInfo.of(e.getValue()));
 		implClasses = icm.unmodifiable();
 
-		AMap<String,Set<String>> m2 = AMap.create();
+		AMap<String,Set<String>> m2 = AMap.of();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpi, String.class).entrySet())
-			m2.put(e.getKey(), ASet.create(split(e.getValue())).unmodifiable());
+			m2.put(e.getKey(), ASet.of(split(e.getValue())).unmodifiable());
 		bpi = m2.unmodifiable();
 
-		m2 = AMap.create();
+		m2 = AMap.of();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpx, String.class).entrySet())
-			m2.put(e.getKey(), ASet.create(split(e.getValue())).unmodifiable());
+			m2.put(e.getKey(), ASet.of(split(e.getValue())).unmodifiable());
 		bpx = m2.unmodifiable();
 
-		m2 = AMap.create();
+		m2 = AMap.of();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpro, String.class).entrySet())
-			m2.put(e.getKey(), ASet.create(split(e.getValue())).unmodifiable());
+			m2.put(e.getKey(), ASet.of(split(e.getValue())).unmodifiable());
 		bpro = m2.unmodifiable();
 
-		m2 = AMap.create();
+		m2 = AMap.of();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpwo, String.class).entrySet())
-			m2.put(e.getKey(), ASet.create(split(e.getValue())).unmodifiable());
+			m2.put(e.getKey(), ASet.of(split(e.getValue())).unmodifiable());
 		bpwo = m2.unmodifiable();
 
 		locale = getInstanceProperty(BEAN_locale, Locale.class, Locale.getDefault());
@@ -2597,7 +2597,7 @@ public class BeanContext extends Context implements MetaProvider {
 		cmObject = cmCache.get(Object.class);
 		cmClass = cmCache.get(Class.class);
 
-		beanDictionaryClasses = AList.createUnmodifiable(getClassArrayProperty(BEAN_beanDictionary));
+		beanDictionaryClasses = AList.unmodifiable(getClassArrayProperty(BEAN_beanDictionary));
 		beanRegistry = new BeanRegistry(this, null);
 	}
 

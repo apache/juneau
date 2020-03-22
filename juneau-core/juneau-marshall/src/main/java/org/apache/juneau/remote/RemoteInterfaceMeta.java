@@ -55,12 +55,12 @@ public class RemoteInterfaceMeta {
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 
-		AMap<Method,RemoteInterfaceMethod> methods = AMap.create();
+		AMap<Method,RemoteInterfaceMethod> methods = AMap.of();
 		for (MethodInfo m : ci.getPublicMethods())
 			if (m.isPublic())
 				methods.put(m.inner(), new RemoteInterfaceMethod(uri, m.inner()));
 
-		AMap<String,RemoteInterfaceMethod> methodsByPath = AMap.create();
+		AMap<String,RemoteInterfaceMethod> methodsByPath = AMap.of();
 		for (RemoteInterfaceMethod rmm : methods.values())
 			methodsByPath.put(rmm.getPath(), rmm);
 

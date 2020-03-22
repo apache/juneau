@@ -56,7 +56,7 @@ public class RemoteMeta {
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 
-		AMap<Method,RemoteMethodMeta> methods = AMap.create();
+		AMap<Method,RemoteMethodMeta> methods = AMap.of();
 		for (MethodInfo m : ci.getPublicMethods())
 			if (m.isPublic())
 				methods.put(m.inner(), new RemoteMethodMeta(path, m.inner(), false, "GET"));

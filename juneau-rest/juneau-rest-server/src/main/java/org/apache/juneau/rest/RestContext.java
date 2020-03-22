@@ -3774,14 +3774,14 @@ public final class RestContext extends BeanContext {
 
 			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], resourceResolver, this);
 
-			AMap<Class<?>,RestMethodParam> _paramResolvers = AMap.create();
+			AMap<Class<?>,RestMethodParam> _paramResolvers = AMap.of();
 			for (RestMethodParam rp : getInstanceArrayProperty(REST_paramResolvers, RestMethodParam.class, new RestMethodParam[0], resourceResolver, this))
 				_paramResolvers.put(rp.forClass(), rp);
 			paramResolvers = _paramResolvers.unmodifiable();
 
 			Map<String,Object> _reqHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 			_reqHeaders.putAll(getMapProperty(REST_reqHeaders, String.class));
-			reqHeaders = AMap.createUnmodifiable(_reqHeaders);
+			reqHeaders = AMap.unmodifiable(_reqHeaders);
 
 			reqAttrs = new ObjectMap(getMapProperty(REST_reqAttrs, Object.class)).unmodifiable();
 			resHeaders = getMapProperty(REST_resHeaders, Object.class);
@@ -3881,25 +3881,25 @@ public final class RestContext extends BeanContext {
 			// Done after initializing fields above since we pass this object to the child resources.
 			//----------------------------------------------------------------------------------------------------
 			List<String> methodsFound = new LinkedList<>();   // Temporary to help debug transient duplicate method issue.
-			AMap<String,RestCallRouter.Builder> routers = AMap.create();
-			AMap<String,RestMethodContext> _javaRestMethods = AMap.create();
+			AMap<String,RestCallRouter.Builder> routers = AMap.of();
+			AMap<String,RestMethodContext> _javaRestMethods = AMap.of();
 			AMap<String,Method>
-				_startCallMethods = AMap.create(),
-				_preCallMethods = AMap.create(),
-				_postCallMethods = AMap.create(),
-				_endCallMethods = AMap.create(),
-				_postInitMethods = AMap.create(),
-				_postInitChildFirstMethods = AMap.create(),
-				_destroyMethods = AMap.create();
+				_startCallMethods = AMap.of(),
+				_preCallMethods = AMap.of(),
+				_postCallMethods = AMap.of(),
+				_endCallMethods = AMap.of(),
+				_postInitMethods = AMap.of(),
+				_postInitChildFirstMethods = AMap.of(),
+				_destroyMethods = AMap.of();
 			AList<RestMethodParam[]>
-				_preCallMethodParams = AList.create(),
-				_postCallMethodParams = AList.create();
+				_preCallMethodParams = AList.of(),
+				_postCallMethodParams = AList.of();
 			AList<Class<?>[]>
-				_startCallMethodParams = AList.create(),
-				_endCallMethodParams = AList.create(),
-				_postInitMethodParams = AList.create(),
-				_postInitChildFirstMethodParams = AList.create(),
-				_destroyMethodParams = AList.create();
+				_startCallMethodParams = AList.of(),
+				_endCallMethodParams = AList.of(),
+				_postInitMethodParams = AList.of(),
+				_postInitChildFirstMethodParams = AList.of(),
+				_destroyMethodParams = AList.of();
 
 			for (MethodInfo mi : rci.getPublicMethods()) {
 				RestMethod a = mi.getLastAnnotation(RestMethod.class);
@@ -4072,7 +4072,7 @@ public final class RestContext extends BeanContext {
 			this.postInitChildFirstMethodParams = _postInitChildFirstMethodParams.toArray(new Class[_postInitChildFirstMethodParams.size()][]);
 			this.destroyMethodParams = _destroyMethodParams.toArray(new Class[_destroyMethodParams.size()][]);
 
-			AMap<String,RestCallRouter> _callRouters = AMap.create();
+			AMap<String,RestCallRouter> _callRouters = AMap.of();
 			for (RestCallRouter.Builder crb : routers.values())
 				_callRouters.put(crb.getHttpMethodName(), crb.build());
 			this.callRouters = _callRouters.unmodifiable();

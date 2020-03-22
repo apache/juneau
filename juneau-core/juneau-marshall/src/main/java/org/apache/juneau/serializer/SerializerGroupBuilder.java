@@ -38,7 +38,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * Create an empty serializer group builder.
 	 */
 	public SerializerGroupBuilder() {
-		this.serializers = AList.create();
+		this.serializers = AList.of();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	public SerializerGroupBuilder(SerializerGroup copyFrom) {
 		super(copyFrom.getPropertyStore());
-		this.serializers = AList.create().appendReverse(copyFrom.getSerializers());
+		this.serializers = AList.of().appendReverse(copyFrom.getSerializers());
 	}
 
 	/**

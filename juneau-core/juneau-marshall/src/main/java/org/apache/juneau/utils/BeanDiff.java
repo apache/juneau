@@ -148,7 +148,7 @@ public class BeanDiff {
 		 * @return This object (for method chaining).
 		 */
 		public Builder<T> include(String...properties) {
-			include = ASet.create(properties);
+			include = ASet.of(properties);
 			return this;
 		}
 
@@ -173,7 +173,7 @@ public class BeanDiff {
 		 * @return This object (for method chaining).
 		 */
 		public Builder<T> exclude(String...properties) {
-			exclude = ASet.create(properties);
+			exclude = ASet.of(properties);
 			return this;
 		}
 

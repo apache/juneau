@@ -123,7 +123,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 			l.add(cmd + ".cfg");
 		}
 
-		Set<File> files = ASortedSet.create(new File(".").listFiles());
+		Set<File> files = ASortedSet.of(new File(".").listFiles());
 		for (File f : files)
 			if (f.getName().endsWith(".cfg"))
 				l.add(f.getName());

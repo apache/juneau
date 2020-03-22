@@ -112,31 +112,31 @@ public class PathAnnotationTest {
 	}
 	@Test
 	public void a05a_ListOfBeans() throws Exception {
-		assertEquals("(x=1),(x=1)", a01.getA05a(AList.create(Bean.create(),Bean.create())));
+		assertEquals("(x=1),(x=1)", a01.getA05a(AList.of(Bean.create(),Bean.create())));
 	}
 	@Test
 	public void a05b_ListOfBeans() throws Exception {
-		assertEquals("@((x=1),(x=1))", a01.getA05b(AList.create(Bean.create(),Bean.create())));
+		assertEquals("@((x=1),(x=1))", a01.getA05b(AList.of(Bean.create(),Bean.create())));
 	}
 	@Test
 	public void a06a_MapOfBeans() throws Exception {
-		assertEquals("(x=(x=1))", a01.getA06a(AMap.create("x",Bean.create())));
+		assertEquals("(x=(x=1))", a01.getA06a(AMap.of("x",Bean.create())));
 	}
 	@Test
 	public void a06b_MapOfBeans() throws Exception {
-		assertEquals("(x=1)", a01.getA06b(AMap.create("x",Bean.create())));
+		assertEquals("(x=1)", a01.getA06b(AMap.of("x",Bean.create())));
 	}
 	@Test
 	public void a06c_MapOfBeans() throws Exception {
-		assertEquals("(x=1)", a01.getA06c(AMap.create("x",Bean.create())));
+		assertEquals("(x=1)", a01.getA06c(AMap.of("x",Bean.create())));
 	}
 	@Test
 	public void a06d_MapOfBeans() throws Exception {
-		assertEquals("(x=(x=1))", a01.getA06d(AMap.create("x",Bean.create())));
+		assertEquals("(x=(x=1))", a01.getA06d(AMap.of("x",Bean.create())));
 	}
 	@Test
 	public void a06e_MapOfBeans() throws Exception {
-		assertEquals("(x=1)", a01.getA06e(AMap.create("x",Bean.create())));
+		assertEquals("(x=1)", a01.getA06e(AMap.of("x",Bean.create())));
 	}
 	@Test
 	public void a09a_NameValuePairs() throws Exception {

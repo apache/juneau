@@ -142,7 +142,7 @@ public class DefaultSwapsTest {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(Iterator.class, new IteratorSwap());
 	//------------------------------------------------------------------------------------------------------------------
-	private static List<String> B = new AList<String>().appendAll("foo","bar");
+	private static List<String> B = AList.of("foo","bar");
 
 	public static class BSwap extends StringSwap<Iterator<?>> {
 		@Override /* PojoSwap */
@@ -172,7 +172,7 @@ public class DefaultSwapsTest {
 		test("{f1:['foo','bar'],f2:'FOO'}", new BBean());
 	}
 
-	private static List<String> Bc = new AList<String>().appendAll("foo","bar");
+	private static List<String> Bc = AList.of("foo","bar");
 
 	public static class BcSwap extends StringSwap<Iterator<?>> {
 		@Override /* PojoSwap */

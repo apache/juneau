@@ -878,7 +878,7 @@ public final class PropertyStore {
 			if (type == LIST_STRING && eType == String.class || type == LIST_INTEGER && eType == Integer.class || type == LIST_CLASS && eType == Class.class || type == LIST_OBJECT) {
 				return (List<T>)value;
 			} else if (type == PropertyType.LIST_STRING) {
-				AList<T> l = AList.create();
+				AList<T> l = AList.of();
 				for (Object o : (List<?>)value) {
 					T t = fromString(eType, o.toString());
 					if (t == null)
@@ -907,7 +907,7 @@ public final class PropertyStore {
 				|| (type == SORTED_MAP_OBJECT || type == ORDERED_MAP_OBJECT)) {
 				return (Map<String,T>)value;
 			} else if (type == SORTED_MAP_STRING || type == ORDERED_MAP_STRING) {
-				AMap<String,T> m = AMap.create();
+				AMap<String,T> m = AMap.of();
 				for (Map.Entry<String,String> e : ((Map<String,String>)value).entrySet()) {
 					T t = fromString(eType, e.getValue());
 					if (t == null)

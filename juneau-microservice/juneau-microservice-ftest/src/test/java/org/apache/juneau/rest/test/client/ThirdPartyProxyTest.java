@@ -133,7 +133,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			new int[][][]{{{1,2},null},null},
 			new Integer[][][]{{{1,null},null},null},
 			new String[][][]{{{"foo",null},null},null},
-			AList.<Integer>create(1,null),
+			AList.<Integer>of(1,null),
 			new AList<List<List<Integer>>>()
 				.append(
 					new AList<List<Integer>>()
@@ -1177,7 +1177,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void ef08_setEnum1d3dListMap() {
-		proxy.setEnum1d3dListMap(new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, AList.<TestEnum[][][]>create(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null)));
+		proxy.setEnum1d3dListMap(new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, AList.<TestEnum[][][]>of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -124,8 +124,8 @@ public class MediaType implements Comparable<MediaType>  {
 		this.subType = b.subType;
 		this.subTypes = b.subTypes;
 		this.subTypesSorted = b.subTypesSorted;
-		this.subTypesList = AList.createUnmodifiable(subTypes);
-		this.parameters = AMap.createUnmodifiable(b.parameters);
+		this.subTypesList = AList.unmodifiable(subTypes);
+		this.parameters = AMap.unmodifiable(b.parameters);
 		this.hasSubtypeMeta = b.hasSubtypeMeta;
 	}
 

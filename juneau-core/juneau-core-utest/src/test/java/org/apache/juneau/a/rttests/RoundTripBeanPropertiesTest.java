@@ -46,7 +46,7 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 	public void a01_arrayOfListOfLongs() throws Exception {
 		A01 o = new A01();
 		o.f1 = new List[1];
-		o.f1[0] = AList.create(123l);
+		o.f1[0] = AList.of(123l);
 		o = roundTrip(o);
 		assertEquals(123, o.f1[0].get(0).intValue());
 		assertTrue(o.f1[0].get(0) instanceof Long);
@@ -59,7 +59,7 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 	@Test
 	public void a02_ListOfArrayOfLongs() throws Exception {
 		A02 o = new A02();
-		o.f1 = AList.<Long[]>create(new Long[]{123l});
+		o.f1 = AList.<Long[]>of(new Long[]{123l});
 		o = roundTrip(o);
 		assertEquals(123, o.f1.get(0)[0].intValue());
 		assertTrue(o.f1.get(0)[0] instanceof Long);
@@ -73,7 +73,7 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 	public void a03_2dArrayOfListOfLongs() throws Exception {
 		A03 o = new A03();
 		o.f1 = new List[1][1];
-		o.f1[0] = new List[]{AList.create(123l)};
+		o.f1[0] = new List[]{AList.of(123l)};
 		o = roundTrip(o);
 		assertEquals(123, o.f1[0][0].get(0).intValue());
 		assertTrue(o.f1[0][0].get(0) instanceof Long);
@@ -86,7 +86,7 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 	@Test
 	public void a04_ListOf2dArrayOfLongs() throws Exception {
 		A04 o = new A04();
-		o.f1 = AList.<Long[][]>create(new Long[][]{new Long[]{123l}});
+		o.f1 = AList.<Long[][]>of(new Long[][]{new Long[]{123l}});
 		o = roundTrip(o);
 		assertEquals(123, o.f1.get(0)[0][0].intValue());
 		assertTrue(o.f1.get(0)[0][0] instanceof Long);

@@ -578,7 +578,7 @@ public class UrlEncodingSerializerTest {
 			.append("@(foo)", "@(foo)");
 		assertEquals("foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)", s.serialize(m));
 
-		List<String> l = new AList<String>().appendAll("foo", "'foo'", "(foo)", "@(foo)");
+		List<String> l = AList.of("foo", "'foo'", "(foo)", "@(foo)");
 		assertEquals("0=foo&1='foo'&2=(foo)&3=@(foo)", s.serialize(l));
 
 		A a = new A();

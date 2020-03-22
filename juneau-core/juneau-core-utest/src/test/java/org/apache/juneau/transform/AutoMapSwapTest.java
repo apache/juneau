@@ -30,7 +30,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 public class AutoMapSwapTest {
 
-	private static final Map<String,String> STRINGMAP = AMap.<String,String>create().append("foo","bar");
+	private static final Map<String,String> STRINGMAP = AMap.<String,String>of().append("foo","bar");
 	private static final ObjectMap OBJECTMAP = new ObjectMap().append("foo","bar");
 
 	private static PojoSwap find(Class<?> c) {

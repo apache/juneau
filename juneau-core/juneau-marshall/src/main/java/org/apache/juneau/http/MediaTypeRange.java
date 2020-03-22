@@ -100,7 +100,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 		Builder b = new Builder(token);
 		this.mediaType = b.mediaType;
 		this.qValue = b.qValue;
-		this.extensions = AMap.createUnmodifiable(b.extensions);
+		this.extensions = AMap.unmodifiable(b.extensions);
 	}
 
 	static final class Builder {

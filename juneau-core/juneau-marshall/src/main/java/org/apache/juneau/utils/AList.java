@@ -36,6 +36,18 @@ public final class AList<T> extends ArrayList<T> {
 
 	private static final long serialVersionUID = 1L;
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Constructors.
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * Creates an array list of default size.
+	 */
+	public AList() {}
+
 	/**
 	 * Constructor.
 	 *
@@ -48,12 +60,17 @@ public final class AList<T> extends ArrayList<T> {
 	}
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * <p>
-	 * Creates an array list of default size.
+	 * @param c Initial contents.  Can be <jk>null</jk>.
 	 */
-	public AList() {}
+	public AList(Collection<T> c) {
+		super(c == null ? emptyList() : c);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Creators.
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Convenience method for creating an empty list of objects.
@@ -63,21 +80,18 @@ public final class AList<T> extends ArrayList<T> {
 	 *
 	 * @return A new list.
 	 */
-	public static <T> AList<T> create() {
+	public static <T> AList<T> of() {
 		return new AList<>();
 	}
 
 	/**
 	 * Convenience method for creating a list of objects.
 	 *
-	 * <p>
-	 * Creates a list with the same capacity as the array.
-	 *
 	 * @param t The initial values.
 	 * @return A new list.
 	 */
 	@SafeVarargs
-	public static <T> AList<T> create(T...t) {
+	public static <T> AList<T> of(T...t) {
 		return new AList<T>(t.length).appendAll(t);
 	}
 
@@ -90,19 +104,19 @@ public final class AList<T> extends ArrayList<T> {
 	 * @param c The initial values.
 	 * @return A new list.
 	 */
-	public static <T> AList<T> create(Collection<T> c) {
+	public static <T> AList<T> of(Collection<T> c) {
 		c = c == null ? emptyList() : c;
 		return new AList<T>(c.size()).appendAll(c);
 	}
 
 	/**
-	 * Creates a list if the collection being added is not null.
+	 * Creates a copy of the collection if it's not <jk>null</jk>.
 	 *
 	 * @param c The initial values.
-	 * @return A new list, or <jk>null</jk> if the collection is null.
+	 * @return A new list, or <jk>null</jk> if the collection is <jk>null</jk>.
 	 */
-	public static <T> AList<T> createOrNull(Collection<T> c) {
-		return c == null ? null : create(c);
+	public static <T> AList<T> nullable(Collection<T> c) {
+		return c == null ? null : of(c);
 	}
 
 	/**
@@ -114,8 +128,8 @@ public final class AList<T> extends ArrayList<T> {
 	 * @param t The initial values.
 	 * @return A new list.
 	 */
-	public static <T> List<T> createUnmodifiable(T...t) {
-		return t.length == 0 ? emptyList() : create(t).unmodifiable();
+	public static <T> List<T> unmodifiable(T...t) {
+		return t.length == 0 ? emptyList() : of(t).unmodifiable();
 	}
 
 	/**
@@ -125,25 +139,15 @@ public final class AList<T> extends ArrayList<T> {
 	 * @param <T> The element type.
 	 * @return An unmodifiable list, never <jk>null</jk>.
 	 */
-	public static <T> List<T> createUnmodifiable(Collection<T> c) {
+	public static <T> List<T> unmodifiable(Collection<T> c) {
 		if (c == null || c.isEmpty())
 			return Collections.emptyList();
 		return new AList<T>(c.size()).appendAll(c).unmodifiable();
 	}
 
-	/**
-	 * Convenience method for creating a list of objects.
-	 *
-	 * <p>
-	 * Identical to {@link #create(Object...)}.
-	 *
-	 * @param t The initial values.
-	 * @return A new list.
-	 */
-	@SafeVarargs
-	public static <T> AList<T> of(T...t) {
-		return new AList<T>(t.length).appendAll(t);
-	}
+	//------------------------------------------------------------------------------------------------------------------
+	// M.
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Adds an entry to this list.

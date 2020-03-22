@@ -82,7 +82,7 @@ public class BeanDiffTest {
 
 	@Test
 	public void testIncludesSet() throws Exception {
-		BeanDiff bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).include(ASet.<String>create("f1")).build();
+		BeanDiff bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).include(ASet.of("f1")).build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1},v2:{f1:2}}", bd.toString());
 	}
@@ -96,7 +96,7 @@ public class BeanDiffTest {
 
 	@Test
 	public void testExcludesSet() throws Exception {
-		BeanDiff bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).exclude(ASet.<String>create("f2")).build();
+		BeanDiff bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).exclude(ASet.of("f2")).build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1},v2:{f1:2}}", bd.toString());
 	}

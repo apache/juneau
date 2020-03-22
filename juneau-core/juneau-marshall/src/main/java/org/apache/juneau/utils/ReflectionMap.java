@@ -304,7 +304,7 @@ public class ReflectionMap<V> {
 	 */
 	public List<V> appendAll(Class<?> c, Class<? extends V> ofType, List<V> l) {
 		if (l == null)
-			l = AList.create();
+			l = AList.of();
 		if (! noClassEntries)
 			for (ClassEntry<V> e : classEntries)
 				if (e.matches(c) && e.value != null)
@@ -370,7 +370,7 @@ public class ReflectionMap<V> {
 	 */
 	public List<V> appendAll(Method m, Class<? extends V> ofType, List<V> l) {
 		if (l == null)
-			l = AList.create();
+			l = AList.of();
 		if (! noMethodEntries)
 			for (MethodEntry<V> e : methodEntries)
 				if (e.matches(m) && e.value != null)
@@ -436,7 +436,7 @@ public class ReflectionMap<V> {
 	 */
 	public List<V> appendAll(Field f, Class<? extends V> ofType, List<V> l) {
 		if (l == null)
-			l = AList.create();
+			l = AList.of();
 		if (! noFieldEntries)
 			for (FieldEntry<V> e : fieldEntries)
 				if (e.matches(f) && e.value != null)
@@ -502,7 +502,7 @@ public class ReflectionMap<V> {
 	 */
 	public List<V> appendAll(Constructor<?> c, Class<? extends V> ofType, List<V> l) {
 		if (l == null)
-			l = AList.create();
+			l = AList.of();
 		if (! noConstructorEntries)
 			for (ConstructorEntry<V> e : constructorEntries)
 				if (e.matches(c) && e.value != null)

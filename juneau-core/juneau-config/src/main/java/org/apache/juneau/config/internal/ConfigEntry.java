@@ -64,7 +64,7 @@ public class ConfigEntry {
 
 		this.value = StringUtils.replaceUnicodeSequences(line.trim());
 
-		this.preLines = AList.createUnmodifiable(preLines);
+		this.preLines = AList.unmodifiable(preLines);
 	}
 
 	ConfigEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
@@ -73,7 +73,7 @@ public class ConfigEntry {
 		this.value = value;
 		this.comment = comment;
 		this.modifiers = modifiers;
-		this.preLines = AList.createUnmodifiable(preLines);
+		this.preLines = AList.unmodifiable(preLines);
 	}
 
 	/**

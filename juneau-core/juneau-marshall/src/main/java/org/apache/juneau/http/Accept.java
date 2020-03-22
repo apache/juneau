@@ -175,7 +175,7 @@ public final class Accept extends ComplexHeader {
 	public Accept(String value) {
 		super("Accept");
 		this.mediaRanges = MediaTypeRange.parse(value);
-		this.mediaRangesList = AList.createUnmodifiable(mediaRanges);
+		this.mediaRangesList = AList.unmodifiable(mediaRanges);
 	}
 
 	/**

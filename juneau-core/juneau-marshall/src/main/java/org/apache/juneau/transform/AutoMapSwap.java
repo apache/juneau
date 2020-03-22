@@ -75,8 +75,8 @@ import org.apache.juneau.utils.*;
 public class AutoMapSwap<T> extends PojoSwap<T,Map<?,?>> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = ASet.createUnmodifiable("toMap", "toObjectMap"),
-		UNSWAP_METHOD_NAMES = ASet.createUnmodifiable("fromMap", "fromObjectMap", "create", "valueOf");
+		SWAP_METHOD_NAMES = ASet.unmodifiable("toMap", "toObjectMap"),
+		UNSWAP_METHOD_NAMES = ASet.unmodifiable("fromMap", "fromObjectMap", "create", "valueOf");
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

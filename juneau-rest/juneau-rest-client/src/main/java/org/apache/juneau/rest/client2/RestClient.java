@@ -1555,7 +1555,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 */
 	public static final String RESTCLIENT_serializers = PREFIX + "serializers.lo";
 
-	private static final Set<String> NO_BODY_METHODS = Collections.unmodifiableSet(ASet.<String>create("GET","HEAD","DELETE","CONNECT","OPTIONS","TRACE"));
+	private static final Set<String> NO_BODY_METHODS = ASet.unmodifiable("GET","HEAD","DELETE","CONNECT","OPTIONS","TRACE");
 
 	private final List<Object> headers, query, formData;
 	private final HttpClientBuilder httpClientBuilder;

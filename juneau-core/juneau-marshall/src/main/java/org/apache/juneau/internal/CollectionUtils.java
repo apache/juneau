@@ -156,9 +156,7 @@ public final class CollectionUtils {
 	 * @return A new {@link ArrayList}, or <jk>null</jk> if the input was null.
 	 */
 	public static <T> AList<T> newList(Collection<T> val) {
-		if (val == null)
-			return null;
-		return AList.create(val);
+		return AList.nullable(val);
 	}
 
 	/**

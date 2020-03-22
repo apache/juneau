@@ -38,7 +38,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * Create an empty parser group builder.
 	 */
 	public ParserGroupBuilder() {
-		this.parsers = AList.create();
+		this.parsers = AList.of();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 */
 	public ParserGroupBuilder(ParserGroup copyFrom) {
 		super(copyFrom.getPropertyStore());
-		this.parsers = AList.create().appendReverse(copyFrom.getParsers());
+		this.parsers = AList.of().appendReverse(copyFrom.getParsers());
 	}
 
 	/**

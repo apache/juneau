@@ -209,14 +209,14 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 			paDouble = new double[][]{{1},{2},null};
 
 			// Regular lists of primitives
-			plBoolean = new AList<boolean[]>().append(new boolean[]{true}).append(null);
-			plByte = new AList<byte[]>().append(new byte[]{1}).append(null);
-			plChar = new AList<char[]>().append(new char[]{'a'}).append(null);
-			plShort = new AList<short[]>().append(new short[]{1}).append(null);
-			plInt = new AList<int[]>().append(new int[]{1}).append(null);
-			plLong = new AList<long[]>().append(new long[]{1}).append(null);
-			plFloat = new AList<float[]>().append(new float[]{1}).append(null);
-			plDouble = new AList<double[]>().append(new double[]{1}).append(null);
+			plBoolean = AList.of(new boolean[]{true}, null);
+			plByte = AList.of(new byte[]{1}, null);
+			plChar = AList.of(new char[]{'a'}, null);
+			plShort = AList.of(new short[]{1}, null);
+			plInt =AList.of(new int[]{1}, null);
+			plLong = AList.of(new long[]{1}, null);
+			plFloat = AList.of(new float[]{1}, null);
+			plDouble = AList.of(new double[]{1}, null);
 
 			// Anonymous list of primitives
 			palBoolean = new ArrayList<>();
@@ -252,11 +252,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPrimitivesBeanList() throws Exception {
-		List<PrimitivesBean> t = new AList<PrimitivesBean>()
-			.append(new PrimitivesBean().init())
-			.append(null)
-			.append(new PrimitivesBean().init())
-		;
+		List<PrimitivesBean> t = AList.of(new PrimitivesBean().init(), null, new PrimitivesBean().init());
 		if (p == null)
 			return;
 		t = roundTrip(t, List.class, PrimitivesBean.class);

@@ -304,7 +304,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 		namespaces = getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
 		addBeanTypes = getBooleanProperty(RDF_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 
-		ASortedMap<String,Object> m = ASortedMap.create();
+		ASortedMap<String,Object> m = ASortedMap.of();
 		for (String k : getPropertyKeys("RdfCommon"))
 			if (k.startsWith("jena."))
 				m.put(k.substring(5), getProperty("RdfCommon." + k));

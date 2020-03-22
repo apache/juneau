@@ -1505,9 +1505,9 @@ public class ClassInfoTest {
 	// Primitive wrappers
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static List<Class<?>> primitives = AList.create(boolean.class,byte.class,short.class,char.class,int.class,long.class,float.class,double.class);
-	static List<Class<?>> primitiveWrappers = AList.create(Boolean.class,Byte.class,Short.class,Character.class,Integer.class,Long.class,Float.class,Double.class);
-	static List<Object> primitiveDefaults = AList.create(false,(byte)0,(short)0,(char)0,0,0l,0f,0d);
+	static List<Class<?>> primitives = AList.of(boolean.class,byte.class,short.class,char.class,int.class,long.class,float.class,double.class);
+	static List<Class<?>> primitiveWrappers = AList.of(Boolean.class,Byte.class,Short.class,Character.class,Integer.class,Long.class,Float.class,Double.class);
+	static List<Object> primitiveDefaults = AList.of(false,(byte)0,(short)0,(char)0,0,0l,0f,0d);
 
 	@Test
 	public void hasPrimitiveWrapper() {

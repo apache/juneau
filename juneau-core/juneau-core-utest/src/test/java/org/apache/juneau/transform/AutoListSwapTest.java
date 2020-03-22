@@ -30,7 +30,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 public class AutoListSwapTest {
 
-	private static final List<String> STRINGLIST = AList.create("foo");
+	private static final List<String> STRINGLIST = AList.of("foo");
 	private static final ObjectList OBJECTLIST = new ObjectList().append("foo");
 
 	private static PojoSwap find(Class<?> c) {

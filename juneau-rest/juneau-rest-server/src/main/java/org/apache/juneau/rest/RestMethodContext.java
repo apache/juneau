@@ -703,7 +703,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.converters = getInstanceArrayProperty(REST_converters, RestConverter.class, new RestConverter[0], rr, r, this);
 
-		AList<RestGuard> _guards = AList.create();
+		AList<RestGuard> _guards = AList.of();
 		_guards.appendAll(getInstanceArrayProperty(REST_guards, RestGuard.class, new RestGuard[0], rr, r, this));
 		Set<String> rolesDeclared = getSetProperty(REST_rolesDeclared, String.class, null);
 		Set<String> roleGuard = getSetProperty(REST_roleGuard, String.class, Collections.emptySet());
@@ -790,7 +790,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.priority = getIntegerProperty(RESTMETHOD_priority, 0);
 
-		AMap<String,Widget> _widgets = AMap.create();
+		AMap<String,Widget> _widgets = AMap.of();
 		for (Widget w : getInstanceArrayProperty(REST_widgets, Widget.class, new Widget[0]))
 			_widgets.put(w.getName(), w);
 		this.widgets = _widgets.unmodifiable();

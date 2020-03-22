@@ -119,31 +119,31 @@ public class QueryAnnotationTest {
 	}
 	@Test
 	public void a05a_ListOfBeans() throws Exception {
-		assertEquals("{x:'(f=1),(f=1)'}", a01.getA05a(AList.create(Bean.create(),Bean.create())));
+		assertEquals("{x:'(f=1),(f=1)'}", a01.getA05a(AList.of(Bean.create(),Bean.create())));
 	}
 	@Test
 	public void a05b_ListOfBeans() throws Exception {
-		assertEquals("{x:'@((f=1),(f=1))'}", a01.getA05b(AList.create(Bean.create(),Bean.create())));
+		assertEquals("{x:'@((f=1),(f=1))'}", a01.getA05b(AList.of(Bean.create(),Bean.create())));
 	}
 	@Test
 	public void a06a_MapOfBeans() throws Exception {
-		assertEquals("{x:'(k1=(f=1))'}", a01.getA06a(AMap.create("k1",Bean.create())));
+		assertEquals("{x:'(k1=(f=1))'}", a01.getA06a(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06b_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", a01.getA06b(AMap.create("k1",Bean.create())));
+		assertEquals("{k1:'(f=1)'}", a01.getA06b(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06c_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", a01.getA06c(AMap.create("k1",Bean.create())));
+		assertEquals("{k1:'(f=1)'}", a01.getA06c(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06d_MapOfBeans() throws Exception {
-		assertEquals("{x:'(k1=(f=1))'}", a01.getA06d(AMap.create("k1",Bean.create())));
+		assertEquals("{x:'(k1=(f=1))'}", a01.getA06d(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06e_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", a01.getA06e(AMap.create("k1",Bean.create())));
+		assertEquals("{k1:'(f=1)'}", a01.getA06e(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a07a_Reader() throws Exception {

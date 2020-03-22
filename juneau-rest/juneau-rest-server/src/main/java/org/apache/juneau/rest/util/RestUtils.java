@@ -213,7 +213,7 @@ public final class RestUtils {
 		if (value.length == 0)
 			return fromParent;
 
-		AList<String> l = AList.create();
+		AList<String> l = AList.of();
 		for (String v : value) {
 			if (! "INHERIT".equals(v))
 				l.add(v);
@@ -229,7 +229,7 @@ public final class RestUtils {
 		if (links.length == 0)
 			return parentLinks;
 
-		AList<String> list = AList.create();
+		AList<String> list = AList.of();
 		for (String l : links) {
 			if ("INHERIT".equals(l))
 				list.appendAll(parentLinks);
@@ -251,7 +251,7 @@ public final class RestUtils {
 		if (content.length == 0)
 			return parentContent;
 
-		AList<String> list = AList.create();
+		AList<String> list = AList.of();
 		for (String l : content) {
 			if ("INHERIT".equals(l)) {
 				list.appendAll(parentContent);
@@ -412,7 +412,7 @@ public final class RestUtils {
 		if (! ArrayUtils.contains(Inherit.class, fromChild))
 			return fromChild;
 
-		AList<Object> l = AList.create();
+		AList<Object> l = AList.of();
 		for (Object o : fromChild) {
 			if (o == Inherit.class)
 				l.appendAll(fromParent);

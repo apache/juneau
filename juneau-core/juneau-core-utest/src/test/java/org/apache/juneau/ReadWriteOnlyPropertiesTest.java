@@ -159,14 +159,14 @@ public class ReadWriteOnlyPropertiesTest {
 		assertEquals("{f1:1}", sw.toString(C.create()));
 
 		sw = SimpleJsonSerializer.DEFAULT.builder()
-			.bpro(AMap.create(C.class.getName(), "f1"))
-			.bpwo(AMap.create(C.class.getName(), "f2"))
+			.bpro(AMap.of(C.class.getName(), "f1"))
+			.bpwo(AMap.of(C.class.getName(), "f2"))
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 
 		sw = SimpleJsonSerializer.DEFAULT.builder()
-			.bpro(AMap.create("ReadWriteOnlyPropertiesTest$C", "f1"))
-			.bpwo(AMap.create("ReadWriteOnlyPropertiesTest$C", "f2"))
+			.bpro(AMap.of("ReadWriteOnlyPropertiesTest$C", "f1"))
+			.bpwo(AMap.of("ReadWriteOnlyPropertiesTest$C", "f2"))
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 	}
@@ -201,16 +201,16 @@ public class ReadWriteOnlyPropertiesTest {
 		assertEquals(2, x.f2);
 
 		rp = JsonParser.DEFAULT.builder()
-			.bpro(AMap.create(C.class.getName(), "f1"))
-			.bpwo(AMap.create(C.class.getName(), "f2"))
+			.bpro(AMap.of(C.class.getName(), "f1"))
+			.bpwo(AMap.of(C.class.getName(), "f2"))
 			.build();
 		x = rp.parse("{f1:1,f2:2}", C.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 
 		rp = JsonParser.DEFAULT.builder()
-			.bpro(AMap.create("ReadWriteOnlyPropertiesTest$C", "f1"))
-			.bpwo(AMap.create("ReadWriteOnlyPropertiesTest$C", "f2"))
+			.bpro(AMap.of("ReadWriteOnlyPropertiesTest$C", "f1"))
+			.bpwo(AMap.of("ReadWriteOnlyPropertiesTest$C", "f2"))
 			.build();
 		x = rp.parse("{f1:1,f2:2}", C.class);
 		assertEquals(0, x.f1);

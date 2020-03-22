@@ -179,7 +179,7 @@ public class LogEntryFormatter extends Formatter {
 		sre = sre.replaceAll("\\\\%n", "\\\\n");
 
 		rePattern = Pattern.compile(sre);
-		fieldIndexes = AMap.createUnmodifiable(fieldIndexes);
+		fieldIndexes = AMap.unmodifiable(fieldIndexes);
 	}
 
 	/**

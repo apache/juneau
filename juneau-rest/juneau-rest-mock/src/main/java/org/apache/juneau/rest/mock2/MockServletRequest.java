@@ -253,7 +253,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest roles(String...roles) {
-		this.roles = ASet.create(roles);
+		this.roles = ASet.of(roles);
 		return this;
 	}
 
@@ -267,7 +267,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest role(String role) {
-		this.roles = ASet.create(role);
+		this.roles = ASet.of(role);
 		return this;
 	}
 
@@ -1129,7 +1129,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 		if (existing == null)
 			existing = new String[]{s};
 		else
-			existing = AList.create(existing).append(s).asArrayOf(String.class);
+			existing = AList.of(existing).append(s).asArrayOf(String.class);
 		formDataMap.put(key, existing);
 		return this;
 	}
@@ -1148,7 +1148,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 		if (existing == null)
 			existing = new String[]{s};
 		else
-			existing = AList.create(existing).append(s).asArrayOf(String.class);
+			existing = AList.of(existing).append(s).asArrayOf(String.class);
 		queryDataMap.put(key, existing);
 		queryString = null;
 		return this;

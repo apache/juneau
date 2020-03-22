@@ -312,7 +312,7 @@ public class ResponseAnnotationTest {
 	public static class F {
 		@RestMethod
 		public void f01(@Response(schema=@Schema(description="f01", collectionFormat="pipes")) Value<List<Integer>> body) {
-			body.set(AList.create(1,2));
+			body.set(AList.of(1,2));
 		}
 		@RestMethod
 		public void f02(Value<F01> body) {
@@ -321,7 +321,7 @@ public class ResponseAnnotationTest {
 		@RestMethod
 		@Response(schema=@Schema(description="f03", collectionFormat="pipes"))
 		public List<Integer> f03() {
-			return AList.create(1,2);
+			return AList.of(1,2);
 		}
 		@RestMethod
 		public F01 f04() {
@@ -385,7 +385,7 @@ public class ResponseAnnotationTest {
 	public static class G {
 		@RestMethod
 		public void g01(@Response Value<List<Integer>> body) {
-			body.set(AList.create(1,2));
+			body.set(AList.of(1,2));
 		}
 		@RestMethod
 		public void g02(Value<G01> body) {
@@ -394,7 +394,7 @@ public class ResponseAnnotationTest {
 		@RestMethod
 		@Response
 		public List<Integer> g03() {
-			return AList.create(1,2);
+			return AList.of(1,2);
 		}
 		@RestMethod
 		public G01 g04() {

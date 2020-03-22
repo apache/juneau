@@ -54,9 +54,9 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 		this.end = end;
 		this.threadFilter = thread;
 		if (loggers != null)
-			this.loggerFilter = ASet.create(loggers);
+			this.loggerFilter = ASet.of(loggers);
 		if (severity != null)
-			this.severityFilter = ASet.create(severity);
+			this.severityFilter = ASet.of(severity);
 
 		// Find the first line.
 		String line;

@@ -99,7 +99,7 @@ public final class StringRange implements Comparable<StringRange>  {
 		Builder b = new Builder(token);
 		this.type = b.type;
 		this.qValue = b.qValue;
-		this.extensions = AMap.createUnmodifiable(b.extensions);
+		this.extensions = AMap.unmodifiable(b.extensions);
 	}
 
 	static final class Builder {

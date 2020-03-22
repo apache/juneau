@@ -46,7 +46,7 @@ public class RoleMatcherTest {
 			return Collections.singleton(input);
 		if (input.isEmpty())
 			return Collections.emptySet();
-		return ASortedSet.create(StringUtils.split(input, ','));
+		return ASortedSet.of(StringUtils.split(input, ','));
 	}
 
 	private RoleMatcher create(String expression, String toString, String expressionRoles) throws Exception {

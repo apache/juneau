@@ -193,10 +193,10 @@ public class RoundTripEnumTest extends RoundTripTest {
 			f2 = AEnum.BAR;
 			f3 = new AEnum[]{AEnum.FOO,null};
 			f4 = new AEnum[][]{{AEnum.FOO,null},null};
-			f5 = new AList<AEnum>().append(AEnum.FOO);
-			f6 = new AList<AEnum>().append(AEnum.FOO);
-			f7 = new ASet<AEnum>().append(AEnum.FOO);
-			f8 = new ASet<AEnum>().append(AEnum.FOO);
+			f5 = AList.of(AEnum.FOO);
+			f6 = AList.of(AEnum.FOO);
+			f7 = ASet.of(AEnum.FOO);
+			f8 = ASet.of(AEnum.FOO);
 
 			return this;
 		}
@@ -235,7 +235,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 			f2 = BEnum.BAR;
 			f3 = new BEnum[]{BEnum.FOO,null};
 			f4 = new BEnum[][]{{BEnum.FOO,null},null};
-			f5 = new AList<BEnum>().append(BEnum.FOO);
+			f5 = AList.of(BEnum.FOO);
 			f6 = new AList<BEnum>().append(BEnum.FOO);
 			f7 = new ASet<BEnum>().append(BEnum.FOO);
 			f8 = new ASet<BEnum>().append(BEnum.FOO);

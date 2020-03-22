@@ -69,9 +69,9 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 
 	private static class XmlBeanMetaBuilder {
 		AMap<String,BeanPropertyMeta>
-			attrs = AMap.create(),
-			elements = AMap.create(),
-			collapsedProperties = AMap.create();
+			attrs = AMap.of(),
+			elements = AMap.of(),
+			collapsedProperties = AMap.of();
 		BeanPropertyMeta
 			attrsProperty,
 			contentProperty;

@@ -34,6 +34,17 @@ public final class ASortedMap<K,V> extends TreeMap<K,V> {
 
 	private static final long serialVersionUID = 1L;
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Constructors.
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Constructor.
+	 */
+	public ASortedMap() {
+		super();
+	}
+
 	/**
 	 * Constructor.
 	 *
@@ -44,27 +55,24 @@ public final class ASortedMap<K,V> extends TreeMap<K,V> {
 	}
 
 	/**
-	 * Constructor.
-	 */
-	public ASortedMap() {
-		super();
-	}
-
-	/**
 	 * Copy constructor.
 	 *
 	 * @param copy The map to copy.
 	 */
 	public ASortedMap(Map<K,V> copy) {
-		super(copy);
+		super(copy == null ? emptyMap() : copy);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Creators.
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Creates an empty map.
 	 *
 	 * @return A new empty map.
 	 */
-	public static <K,V> ASortedMap<K,V> create() {
+	public static <K,V> ASortedMap<K,V> of() {
 		return new ASortedMap<>();
 	}
 
@@ -75,8 +83,18 @@ public final class ASortedMap<K,V> extends TreeMap<K,V> {
 	 * @param value Entry value.
 	 * @return A new map with one entry.
 	 */
-	public static <K,V> ASortedMap<K,V> create(K key, V value) {
+	public static <K,V> ASortedMap<K,V> of(K key, V value) {
 		return new ASortedMap<K,V>().append(key, value);
+	}
+
+	/**
+	 * Creates a new map initialized with the specified contents.
+	 *
+	 * @param copy Initialize with these contents.  Can be <jk>null</jk>.
+	 * @return A new map.  Never <jk>null</jk>.
+	 */
+	public static <K,V> ASortedMap<K,V> of(Map<K,V> copy) {
+		return new ASortedMap<>(copy);
 	}
 
 	/**
@@ -85,11 +103,25 @@ public final class ASortedMap<K,V> extends TreeMap<K,V> {
 	 * @param c The collection to add.
 	 * @return An unmodifiable list, never <jk>null</jk>.
 	 */
-	public static <K,V> SortedMap<K,V> createUnmodifiable(Map<K,V> c) {
+	public static <K,V> SortedMap<K,V> unmodifiable(Map<K,V> c) {
 		if (c == null || c.isEmpty())
 			return Collections.emptySortedMap();
 		return new ASortedMap<>(c).unmodifiable();
 	}
+
+	/**
+	 * Creates a copy of the collection if it's not <jk>null</jk>.
+	 *
+	 * @param c The initial values.
+	 * @return A new list, or <jk>null</jk> if the collection is <jk>null</jk>.
+	 */
+	public static <K,V> ASortedMap<K,V> nullable(Map<K,V> c) {
+		return c == null ? null : of(c);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Methods.
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Adds an entry to this map.

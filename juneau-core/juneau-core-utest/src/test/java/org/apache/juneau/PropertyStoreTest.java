@@ -222,9 +222,9 @@ public class PropertyStoreTest {
 	public void testSetString() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.ss", new AList<String>().appendAll("foo", "bar", "bar", null));
-		b.set("A.f2.ss", new AList<>().appendAll(123, true, TestEnum.ONE, TestEnum.ONE, null));
-		b.set("A.f3.ss", new AList<StringBuilder>().appendAll(new StringBuilder("foo"), null));
+		b.set("A.f1.ss", AList.of("foo", "bar", "bar", null));
+		b.set("A.f2.ss", AList.of(123, true, TestEnum.ONE, TestEnum.ONE, null));
+		b.set("A.f3.ss", AList.of(new StringBuilder("foo"), null));
 		b.set("A.f4.ss", "['foo',123,true]");
 		b.set("A.f5.ss", null);
 		ps = b.build();
@@ -251,13 +251,13 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.ss':['baz']}}", b.build());
 
 		b.clear();
-		b.set("A.f1.ss/add", new AList<String>().appendAll("foo", "bar", "baz"));
-		b.set("A.f1.ss/add", new AList<String>().appendAll("qux"));
-		b.addTo("A.f1.ss", new AList<String>().appendAll("quux"));
+		b.set("A.f1.ss/add", AList.of("foo", "bar", "baz"));
+		b.set("A.f1.ss/add", AList.of("qux"));
+		b.addTo("A.f1.ss", AList.of("quux"));
 		assertObjectEquals("{A:{'f1.ss':['bar','baz','foo','quux','qux']}}", b.build());
-		b.set("A.f1.ss/remove", new AList<String>().appendAll("foo", "bar"));
-		b.set("A.f1.ss/remove", new AList<String>().appendAll("qux"));
-		b.removeFrom("A.f1.ss", new AList<String>().appendAll("quux"));
+		b.set("A.f1.ss/remove", AList.of("foo", "bar"));
+		b.set("A.f1.ss/remove", AList.of("qux"));
+		b.removeFrom("A.f1.ss", AList.of("quux"));
 		assertObjectEquals("{A:{'f1.ss':['baz']}}", b.build());
 
 		b.clear();
@@ -286,9 +286,9 @@ public class PropertyStoreTest {
 	public void testSetInteger() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.si", new AList<Integer>().appendAll(3, 2, 1, null));
-		b.set("A.f2.si", new AList<>().appendAll(123, "456", null));
-		b.set("A.f3.si", new AList<StringBuilder>().appendAll(new StringBuilder("123"), null));
+		b.set("A.f1.si", AList.of(3, 2, 1, null));
+		b.set("A.f2.si", AList.of(123, "456", null));
+		b.set("A.f3.si", AList.of(new StringBuilder("123"), null));
 		b.set("A.f4.si", "[1,2,3]");
 		b.set("A.f5.si", null);
 		ps = b.build();
@@ -315,23 +315,23 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.si':[5]}}", b.build());
 
 		b.clear();
-		b.set("A.f1.si/add", new AList<String>().appendAll("3", "2", "1"));
-		b.set("A.f1.si/add", new AList<String>().appendAll("4"));
-		b.addTo("A.f1.si", new AList<String>().appendAll("5"));
+		b.set("A.f1.si/add", AList.of("3", "2", "1"));
+		b.set("A.f1.si/add", AList.of("4"));
+		b.addTo("A.f1.si", AList.of("5"));
 		assertObjectEquals("{A:{'f1.si':[1,2,3,4,5]}}", b.build());
-		b.set("A.f1.si/remove", new AList<String>().appendAll("1", "2"));
-		b.set("A.f1.si/remove", new AList<String>().appendAll("3"));
-		b.removeFrom("A.f1.si", new AList<String>().appendAll("4"));
+		b.set("A.f1.si/remove", AList.of("1", "2"));
+		b.set("A.f1.si/remove", AList.of("3"));
+		b.removeFrom("A.f1.si", AList.of("4"));
 		assertObjectEquals("{A:{'f1.si':[5]}}", b.build());
 
 		b.clear();
-		b.set("A.f1.si/add", new AList<Integer>().appendAll(1, 2, 3));
-		b.set("A.f1.si/add", new AList<Integer>().appendAll(4));
-		b.addTo("A.f1.si", new AList<Integer>().appendAll(5));
+		b.set("A.f1.si/add", AList.of(1, 2, 3));
+		b.set("A.f1.si/add", AList.of(4));
+		b.addTo("A.f1.si", AList.of(5));
 		assertObjectEquals("{A:{'f1.si':[1,2,3,4,5]}}", b.build());
-		b.set("A.f1.si/remove", new AList<Integer>().appendAll(1, 2));
-		b.set("A.f1.si/remove", new AList<Integer>().appendAll(3));
-		b.removeFrom("A.f1.si", new AList<Integer>().appendAll(4));
+		b.set("A.f1.si/remove", AList.of(1, 2));
+		b.set("A.f1.si/remove", AList.of(3));
+		b.removeFrom("A.f1.si", AList.of(4));
 		assertObjectEquals("{A:{'f1.si':[5]}}", b.build());
 
 		b.clear();
@@ -380,8 +380,8 @@ public class PropertyStoreTest {
 	public void testSetClass() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.sc", new AList<Class<?>>().appendAll(String.class, Integer.class, null));
-		b.set("A.f2.sc", new AList<>().appendAll(String.class, Integer.class, null));
+		b.set("A.f1.sc", AList.of(String.class, Integer.class, null));
+		b.set("A.f2.sc", AList.of(String.class, Integer.class, null));
 		b.set("A.f3.sc", null);
 		ps = b.build();
 		assertObjectEquals("{A:{'f1.sc':['java.lang.Integer','java.lang.String'],'f2.sc':['java.lang.Integer','java.lang.String']}}", ps);
@@ -401,23 +401,23 @@ public class PropertyStoreTest {
 		testError(b, "A.f1.sc/add", "java.lang.Integer", "Cannot add value 'java.lang.Integer' (String) to property 'f1.sc' (Set<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");
 
 		b.clear();
-		b.set("A.f1.sc/add", new AList<Class<?>>().appendAll(Integer.class, String.class));
-		b.set("A.f1.sc/add", new AList<Class<?>>().appendAll(Map.class));
-		b.addTo("A.f1.sc", new AList<Class<?>>().appendAll(List.class));
+		b.set("A.f1.sc/add", AList.of(Integer.class, String.class));
+		b.set("A.f1.sc/add", AList.of(Map.class));
+		b.addTo("A.f1.sc", AList.of(List.class));
 		assertObjectEquals("{A:{'f1.sc':['java.lang.Integer','java.lang.String','java.util.List','java.util.Map']}}", b.build());
-		b.set("A.f1.sc/remove", new AList<Class<?>>().appendAll(Integer.class, String.class));
-		b.removeFrom("A.f1.sc", new AList<Class<?>>().appendAll());
-		b.removeFrom("A.f1.sc", new AList<Class<?>>().appendAll(List.class));
+		b.set("A.f1.sc/remove", AList.of(Integer.class, String.class));
+		b.removeFrom("A.f1.sc", AList.of());
+		b.removeFrom("A.f1.sc", AList.of(List.class));
 		assertObjectEquals("{A:{'f1.sc':['java.util.Map']}}", b.build());
 
 		b.clear();
-		b.set("A.f1.sc/add", new AList<>().appendAll(Integer.class, String.class));
-		b.set("A.f1.sc/add", new AList<>().appendAll(Map.class));
-		b.addTo("A.f1.sc", new AList<>().appendAll(List.class));
+		b.set("A.f1.sc/add", AList.of(Integer.class, String.class));
+		b.set("A.f1.sc/add", AList.of(Map.class));
+		b.addTo("A.f1.sc", AList.of(List.class));
 		assertObjectEquals("{A:{'f1.sc':['java.lang.Integer','java.lang.String','java.util.List','java.util.Map']}}", b.build());
-		b.set("A.f1.sc/remove", new AList<>().appendAll(Integer.class, String.class));
-		b.set("A.f1.sc/remove", new AList<>().appendAll());
-		b.removeFrom("A.f1.sc", new AList<>().appendAll(List.class));
+		b.set("A.f1.sc/remove", AList.of(Integer.class, String.class));
+		b.set("A.f1.sc/remove", AList.of());
+		b.removeFrom("A.f1.sc", AList.of(List.class));
 		assertObjectEquals("{A:{'f1.sc':['java.util.Map']}}", b.build());
 
 		b.clear();
@@ -446,9 +446,9 @@ public class PropertyStoreTest {
 	public void testListString() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.ls", new AList<String>().appendAll("foo", "bar", "bar", null));
-		b.set("A.f2.ls", new AList<>().appendAll(123, true, TestEnum.ONE, TestEnum.ONE, null));
-		b.set("A.f3.ls", new AList<StringBuilder>().appendAll(new StringBuilder("foo"), null));
+		b.set("A.f1.ls", AList.of("foo", "bar", "bar", null));
+		b.set("A.f2.ls", AList.of(123, true, TestEnum.ONE, TestEnum.ONE, null));
+		b.set("A.f3.ls", AList.of(new StringBuilder("foo"), null));
 		b.set("A.f4.ls", "['foo',123,true]");
 		b.set("A.f5.ls", null);
 		ps = b.build();
@@ -475,13 +475,13 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.ls':['baz']}}", b.build());
 
 		b.clear();
-		b.set("A.f1.ls/add", new AList<String>().appendAll("foo", "bar", "baz"));
-		b.set("A.f1.ls/add", new AList<String>().appendAll("qux"));
-		b.addTo("A.f1.ls", new AList<String>().appendAll("quux"));
+		b.set("A.f1.ls/add", AList.of("foo", "bar", "baz"));
+		b.set("A.f1.ls/add", AList.of("qux"));
+		b.addTo("A.f1.ls", AList.of("quux"));
 		assertObjectEquals("{A:{'f1.ls':['quux','qux','foo','bar','baz']}}", b.build());
-		b.set("A.f1.ls/remove", new AList<String>().appendAll("foo", "bar"));
-		b.set("A.f1.ls/remove", new AList<String>().appendAll("qux"));
-		b.removeFrom("A.f1.ls", new AList<String>().appendAll("quux"));
+		b.set("A.f1.ls/remove", AList.of("foo", "bar"));
+		b.set("A.f1.ls/remove", AList.of("qux"));
+		b.removeFrom("A.f1.ls", AList.of("quux"));
 		assertObjectEquals("{A:{'f1.ls':['baz']}}", b.build());
 
 		b.clear();
@@ -520,9 +520,9 @@ public class PropertyStoreTest {
 	public void testListInteger() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.li", new AList<Integer>().appendAll(1, 2, 3, null));
-		b.set("A.f2.li", new AList<>().appendAll(123, "456", null));
-		b.set("A.f3.li", new AList<StringBuilder>().appendAll(new StringBuilder("123"), null));
+		b.set("A.f1.li", AList.of(1, 2, 3, null));
+		b.set("A.f2.li", AList.of(123, "456", null));
+		b.set("A.f3.li", AList.of(new StringBuilder("123"), null));
 		b.set("A.f4.li", "[1,2,3]");
 		b.set("A.f5.li", null);
 		ps = b.build();
@@ -549,23 +549,23 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
 
 		b.clear();
-		b.set("A.f1.li/add", new AList<String>().appendAll("1", "2", "3"));
-		b.set("A.f1.li/add", new AList<String>().appendAll("4"));
-		b.addTo("A.f1.li", new AList<String>().appendAll("5"));
+		b.set("A.f1.li/add", AList.of("1", "2", "3"));
+		b.set("A.f1.li/add", AList.of("4"));
+		b.addTo("A.f1.li", AList.of("5"));
 		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
-		b.set("A.f1.li/remove", new AList<String>().appendAll("1", "2"));
-		b.set("A.f1.li/remove", new AList<String>().appendAll("3"));
-		b.removeFrom("A.f1.li", new AList<String>().appendAll("4"));
+		b.set("A.f1.li/remove", AList.of("1", "2"));
+		b.set("A.f1.li/remove", AList.of("3"));
+		b.removeFrom("A.f1.li", AList.of("4"));
 		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
 
 		b.clear();
-		b.set("A.f1.li/add", new AList<Integer>().appendAll(1, 2, 3));
-		b.set("A.f1.li/add", new AList<Integer>().appendAll(4));
-		b.addTo("A.f1.li", new AList<Integer>().appendAll(5));
+		b.set("A.f1.li/add", AList.of(1, 2, 3));
+		b.set("A.f1.li/add", AList.of(4));
+		b.addTo("A.f1.li", AList.of(5));
 		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
-		b.set("A.f1.li/remove", new AList<Integer>().appendAll(1, 2));
-		b.set("A.f1.li/remove", new AList<Integer>().appendAll(3));
-		b.removeFrom("A.f1.li", new AList<Integer>().appendAll(4));
+		b.set("A.f1.li/remove", AList.of(1, 2));
+		b.set("A.f1.li/remove", AList.of(3));
+		b.removeFrom("A.f1.li", AList.of(4));
 		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
 
 		b.clear();
@@ -624,8 +624,8 @@ public class PropertyStoreTest {
 	public void testListClass() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.lc", new AList<Class<?>>().appendAll(String.class, Integer.class, null));
-		b.set("A.f2.lc", new AList<>().appendAll(String.class, Integer.class, null));
+		b.set("A.f1.lc", AList.of(String.class, Integer.class, null));
+		b.set("A.f2.lc", AList.of(String.class, Integer.class, null));
 		b.set("A.f3.lc", null);
 		ps = b.build();
 		assertObjectEquals("{A:{'f1.lc':['java.lang.String','java.lang.Integer'],'f2.lc':['java.lang.String','java.lang.Integer']}}", ps);
@@ -644,23 +644,23 @@ public class PropertyStoreTest {
 		testError(b, "A.f1.lc/add", "java.lang.Integer", "Cannot add value 'java.lang.Integer' (String) to property 'f1.lc' (List<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");
 
 		b.clear();
-		b.set("A.f1.lc/add", AList.<Class<?>>create(Integer.class, String.class));
-		b.set("A.f1.lc/add", new AList<Class<?>>().appendAll(Map.class));
-		b.addTo("A.f1.lc", new AList<Class<?>>().appendAll(List.class));
+		b.set("A.f1.lc/add", AList.of(Integer.class, String.class));
+		b.set("A.f1.lc/add", AList.of(Map.class));
+		b.addTo("A.f1.lc", AList.of(List.class));
 		assertObjectEquals("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}", b.build());
-		b.set("A.f1.lc/remove", new AList<Class<?>>().appendAll(Integer.class, String.class));
-		b.removeFrom("A.f1.lc", new AList<Class<?>>().appendAll());
-		b.removeFrom("A.f1.lc", new AList<Class<?>>().appendAll(List.class));
+		b.set("A.f1.lc/remove", AList.of(Integer.class, String.class));
+		b.removeFrom("A.f1.lc", AList.of());
+		b.removeFrom("A.f1.lc", AList.of(List.class));
 		assertObjectEquals("{A:{'f1.lc':['java.util.Map']}}", b.build());
 
 		b.clear();
-		b.set("A.f1.lc/add", new AList<>().appendAll(Integer.class, String.class));
-		b.set("A.f1.lc/add", new AList<>().appendAll(Map.class));
-		b.addTo("A.f1.lc", new AList<>().appendAll(List.class));
+		b.set("A.f1.lc/add", AList.of(Integer.class, String.class));
+		b.set("A.f1.lc/add", AList.of(Map.class));
+		b.addTo("A.f1.lc", AList.of(List.class));
 		assertObjectEquals("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}", b.build());
-		b.set("A.f1.lc/remove", new AList<>().appendAll(Integer.class, String.class));
-		b.set("A.f1.lc/remove", new AList<>().appendAll());
-		b.removeFrom("A.f1.lc", new AList<>().appendAll(List.class));
+		b.set("A.f1.lc/remove", AList.of(Integer.class, String.class));
+		b.set("A.f1.lc/remove", AList.of());
+		b.removeFrom("A.f1.lc", AList.of(List.class));
 		assertObjectEquals("{A:{'f1.lc':['java.util.Map']}}", b.build());
 
 		b.clear();
@@ -697,8 +697,8 @@ public class PropertyStoreTest {
 	public void testListObject() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.lo", new AList<Class<?>>().appendAll(StringBuilder.class, null));
-		b.set("A.f2.lo", new AList<>().appendAll(123, true, new StringBuilder(123), StringBuilder.class, null));
+		b.set("A.f1.lo", AList.of(StringBuilder.class, null));
+		b.set("A.f2.lo", AList.of(123, true, new StringBuilder(123), StringBuilder.class, null));
 		b.set("A.f3.lo", null);
 		ps = b.build();
 		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder'],'f2.lo':[123,true,'','java.lang.StringBuilder']}}", ps);
@@ -718,23 +718,23 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.lo':[2]}}", b.build());
 
 		b.clear();
-		b.set("A.f1.lo/add", new AList<Class<?>>().appendAll(StringBuilder.class));
-		b.set("A.f1.lo/add", new AList<Class<?>>().appendAll(HashMap.class));
-		b.addTo("A.f1.lo", new AList<Class<?>>().appendAll(LinkedList.class));
+		b.set("A.f1.lo/add", AList.of(StringBuilder.class));
+		b.set("A.f1.lo/add", AList.of(HashMap.class));
+		b.addTo("A.f1.lo", AList.of(LinkedList.class));
 		assertObjectEquals("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}", b.build());
-		b.set("A.f1.lo/remove", new AList<Class<?>>().appendAll(HashMap.class));
-		b.removeFrom("A.f1.lo", new AList<Class<?>>().appendAll());
-		b.removeFrom("A.f1.lo", new AList<Class<?>>().appendAll(LinkedList.class));
+		b.set("A.f1.lo/remove", AList.of(HashMap.class));
+		b.removeFrom("A.f1.lo", AList.of());
+		b.removeFrom("A.f1.lo", AList.of(LinkedList.class));
 		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder']}}", b.build());
 
 		b.clear();
-		b.set("A.f1.lo/add", new AList<>().appendAll(StringBuilder.class));
-		b.set("A.f1.lo/add", new AList<>().appendAll(HashMap.class));
-		b.addTo("A.f1.lo", new AList<>().appendAll(LinkedList.class));
+		b.set("A.f1.lo/add", AList.of(StringBuilder.class));
+		b.set("A.f1.lo/add", AList.of(HashMap.class));
+		b.addTo("A.f1.lo", AList.of(LinkedList.class));
 		assertObjectEquals("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}", b.build());
-		b.set("A.f1.lo/remove", new AList<>().appendAll(HashMap.class));
-		b.set("A.f1.lo/remove", new AList<>().appendAll());
-		b.removeFrom("A.f1.lo", new AList<>().appendAll(LinkedList.class));
+		b.set("A.f1.lo/remove", AList.of(HashMap.class));
+		b.set("A.f1.lo/remove", AList.of());
+		b.removeFrom("A.f1.lo", AList.of(LinkedList.class));
 		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder']}}", b.build());
 
 		b.clear();
@@ -1072,11 +1072,11 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 
-		b1.set("A.f1.ss", new AList<String>().appendAll("foo", "bar"));
+		b1.set("A.f1.ss", AList.of("foo", "bar"));
 		b2.set("A.f1.ss", new String[]{"foo","bar"});
 		testEquals(b1, b2);
 
-		b2.set("A.f1.ss", new AList<>().appendAll(new StringBuilder("bar"), new StringBuilder("foo")));
+		b2.set("A.f1.ss", AList.of(new StringBuilder("bar"), new StringBuilder("foo")));
 		testEquals(b1, b2);
 
 		b2.set("A.f1.ss", new Object[]{new StringBuilder("bar"), new StringBuilder("foo")});
@@ -1103,11 +1103,11 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 
-		b1.set("A.f1.si", new AList<String>().appendAll("1", "2"));
+		b1.set("A.f1.si", AList.of("1", "2"));
 		b2.set("A.f1.si", new String[]{"1","2"});
 		testEquals(b1, b2);
 
-		b2.set("A.f1.si", new AList<>().appendAll(new StringBuilder("2"), 1));
+		b2.set("A.f1.si", AList.of(new StringBuilder("2"), 1));
 		testEquals(b1, b2);
 
 		b2.set("A.f1.si", new Object[]{new StringBuilder("2"), 1});
@@ -1134,11 +1134,11 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 
-		b1.set("A.f1.sc", new AList<Class<?>>().appendAll(String.class, Integer.class));
+		b1.set("A.f1.sc", AList.of(String.class, Integer.class));
 		b2.set("A.f1.sc", new Class<?>[]{Integer.class,String.class});
 		testEquals(b1, b2);
 
-		b2.set("A.f1.sc", new AList<>().appendAll(Integer.class, String.class));
+		b2.set("A.f1.sc", AList.of(Integer.class, String.class));
 		testEquals(b1, b2);
 
 		b2.set("A.f1.sc", new Object[]{String.class, Integer.class});
@@ -1165,14 +1165,14 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 
-		b1.set("A.f1.ls", new AList<String>().appendAll("foo", "bar"));
+		b1.set("A.f1.ls", AList.of("foo", "bar"));
 		b2.set("A.f1.ls", new String[]{"foo","bar"});
 		testEquals(b1, b2);
 
-		b2.set("A.f1.ls", new AList<>().appendAll(new StringBuilder("foo"), new StringBuilder("bar")));
+		b2.set("A.f1.ls", AList.of(new StringBuilder("foo"), new StringBuilder("bar")));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.ls", new AList<>().appendAll(new StringBuilder("bar"), new StringBuilder("foo")));
+		b2.set("A.f1.ls", AList.of(new StringBuilder("bar"), new StringBuilder("foo")));
 		testNotEquals(b1, b2);
 
 		b2.set("A.f1.ls", new Object[]{new StringBuilder("foo"), new StringBuilder("bar")});
@@ -1202,7 +1202,7 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 
-		b1.set("A.f1.li", new AList<String>().appendAll("1", "2"));
+		b1.set("A.f1.li", AList.of("1", "2"));
 		b2.set("A.f1.li", new String[]{"1","2"});
 		testEquals(b1, b2);
 
@@ -1212,7 +1212,7 @@ public class PropertyStoreTest {
 		b2.set("A.f1.li", new int[]{1,2});
 		testEquals(b1, b2);
 
-		b2.set("A.f1.li", new AList<>().appendAll(new StringBuilder("2"), 1));
+		b2.set("A.f1.li", AList.of(new StringBuilder("2"), 1));
 		testNotEquals(b1, b2);
 
 		b2.set("A.f1.li", new Object[]{new StringBuilder("1"), 2});
@@ -1239,7 +1239,7 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 
-		b1.set("A.f1.lc", new AList<Class<?>>().appendAll(String.class, Integer.class));
+		b1.set("A.f1.lc", AList.of(String.class, Integer.class));
 
 		b2.set("A.f1.lc", new Class<?>[]{String.class,Integer.class});
 		testEquals(b1, b2);
@@ -1247,7 +1247,7 @@ public class PropertyStoreTest {
 		b2.set("A.f1.lc", new Class<?>[]{Integer.class,String.class});
 		testNotEquals(b1, b2);
 
-		b2.set("A.f1.lc", new AList<>().appendAll(String.class, Integer.class));
+		b2.set("A.f1.lc", AList.of(String.class, Integer.class));
 		testEquals(b1, b2);
 
 		b2.set("A.f1.lc", new Object[]{String.class, Integer.class});
@@ -1274,12 +1274,12 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 
-		b1.set("A.f1.lo", new AList<>().appendAll("foo", 123, true, TestEnum.ONE));
+		b1.set("A.f1.lo", AList.of("foo", 123, true, TestEnum.ONE));
 
-		b2.set("A.f1.lo", new AList<>().appendAll("foo", 123, true, TestEnum.ONE));
+		b2.set("A.f1.lo", AList.of("foo", 123, true, TestEnum.ONE));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.lo", new AList<>().appendAll(123, true, TestEnum.ONE, "foo"));
+		b2.set("A.f1.lo", AList.of(123, true, TestEnum.ONE, "foo"));
 		testNotEquals(b1, b2);
 
 		b2.set("A.f1.lo", new Object[]{"foo", 123, true, TestEnum.ONE});
@@ -1838,11 +1838,11 @@ public class PropertyStoreTest {
 		Json json4 = A4.class.getAnnotation(Json.class);
 
 		PropertyStore
-			ps1 = PropertyStore.create().set("xxx", AList.create(html1)).build(),
-			ps1a = PropertyStore.create().set("xxx", AList.create(html1a)).build(),
-			ps2 = PropertyStore.create().set("xxx", AList.create(html2)).build(),
-			ps3 = PropertyStore.create().set("xxx", AList.create(html3)).build(),
-			ps4 = PropertyStore.create().set("xxx", AList.create(json4)).build();
+			ps1 = PropertyStore.create().set("xxx", AList.of(html1)).build(),
+			ps1a = PropertyStore.create().set("xxx", AList.of(html1a)).build(),
+			ps2 = PropertyStore.create().set("xxx", AList.of(html2)).build(),
+			ps3 = PropertyStore.create().set("xxx", AList.of(html3)).build(),
+			ps4 = PropertyStore.create().set("xxx", AList.of(json4)).build();
 
 		assertTrue(ps1.equals(ps1a));
 		assertTrue(ps1.equals(ps2));

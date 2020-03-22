@@ -122,12 +122,12 @@ public class BeanMeta<T> {
 
 		this.beanFilter = beanFilter;
 		this.dictionaryName = b.dictionaryName;
-		this.properties = AMap.createUnmodifiable(b.properties);
+		this.properties = AMap.unmodifiable(b.properties);
 		this.hiddenProperties = b.hiddenProperties.unmodifiable();
 		this.getterProps = b.getterProps.unmodifiable();
 		this.setterProps = b.setterProps.unmodifiable();
 		this.dynaProperty = b.dynaProperty;
-		this.typeVarImpls = AMap.createUnmodifiable(b.typeVarImpls);
+		this.typeVarImpls = AMap.unmodifiable(b.typeVarImpls);
 		this.constructor = b.constructor;
 		this.constructorArgs = b.constructorArgs;
 		this.beanRegistry = b.beanRegistry;
@@ -143,9 +143,9 @@ public class BeanMeta<T> {
 		BeanFilter beanFilter;
 		String[] pNames;
 		Map<String,BeanPropertyMeta> properties;
-		AMap<String,BeanPropertyMeta> hiddenProperties = AMap.create();
-		AMap<Method,String> getterProps = AMap.create();
-		AMap<Method,String> setterProps = AMap.create();
+		AMap<String,BeanPropertyMeta> hiddenProperties = AMap.of();
+		AMap<Method,String> getterProps = AMap.of();
+		AMap<Method,String> setterProps = AMap.of();
 		BeanPropertyMeta dynaProperty;
 
 		AMap<Class<?>,Class<?>[]> typeVarImpls;
@@ -175,7 +175,7 @@ public class BeanMeta<T> {
 					mVis = ctx.getBeanMethodVisibility(),
 					fVis = ctx.getBeanFieldVisibility();
 
-				AList<Class<?>> bdClasses = AList.create();
+				AList<Class<?>> bdClasses = AList.of();
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
 					bdClasses.appendAll(beanFilter.getBeanDictionary());
 
@@ -416,7 +416,7 @@ public class BeanMeta<T> {
 					}
 				}
 
-				typeVarImpls = AMap.create();
+				typeVarImpls = AMap.of();
 				findTypeVarImpls(c, typeVarImpls);
 				if (typeVarImpls.isEmpty())
 					typeVarImpls = null;

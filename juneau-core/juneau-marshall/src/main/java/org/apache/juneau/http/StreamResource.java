@@ -73,7 +73,7 @@ public class StreamResource implements Streamable {
 	 */
 	public StreamResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object...contents) throws IOException {
 		this.mediaType = mediaType;
-		this.headers = AMap.createUnmodifiable(headers);
+		this.headers = AMap.unmodifiable(headers);
 		this.contents = cached ? new Object[]{readBytes(contents)} : contents;
 	}
 

@@ -54,8 +54,8 @@ public class VarResolverContext {
 			m.put(v.getName(), v);
 		}
 
-		this.varMap = AMap.createUnmodifiable(m);
-		this.contextObjects = AMap.createUnmodifiable(contextObjects);
+		this.varMap = AMap.unmodifiable(m);
+		this.contextObjects = AMap.unmodifiable(contextObjects);
 	}
 
 	/**

@@ -79,7 +79,7 @@ public class HtmlDocConfigApply extends ConfigApply<HtmlDocConfig> {
 	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
 
 	private String[] resolveLinks(Object[] value, String[] prev) {
-		AList<String> list = new AList<>();
+		AList<String> list = AList.of();
 		for (Object v : value) {
 			String s = string(stringify(v));
 			if (s == null)
@@ -102,7 +102,7 @@ public class HtmlDocConfigApply extends ConfigApply<HtmlDocConfig> {
 	}
 
 	private String[] resolveList(Object[] value, String[] prev) {
-		ASet<String> set = ASet.create();
+		ASet<String> set = ASet.of();
 		for (Object v : value) {
 			String s = string(stringify(v));
 			if ("INHERIT".equals(s)) {

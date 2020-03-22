@@ -335,7 +335,7 @@ public final class ClassMeta<T> implements Type {
 			dictionaryName = null;
 		Throwable initException = null;
 		BeanMeta beanMeta = null;
-		AList<PojoSwap> pojoSwaps = AList.create();
+		AList<PojoSwap> pojoSwaps = AList.of();
 		BuilderSwap builderSwap;
 		InvocationHandler invocationHandler = null;
 		BeanRegistry beanRegistry = null;

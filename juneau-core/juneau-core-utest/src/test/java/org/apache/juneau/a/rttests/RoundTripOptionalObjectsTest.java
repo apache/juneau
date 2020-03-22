@@ -342,7 +342,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	public void b07a_arrayOfOptionalIntegers() throws Exception {
 		B07 x = new B07();
 		x.f1 = new Optional[]{Optional.of(123)};
-		x.f2 = new List[]{AList.create(123)};
+		x.f2 = new List[]{AList.of(123)};
 		x = roundTrip(x);
 		assertEquals(123, x.f1[0].get().intValue());
 	}

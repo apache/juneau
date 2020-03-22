@@ -30,7 +30,7 @@ public class EncoderGroupBuilder {
 	 * Create an empty encoder group builder.
 	 */
 	public EncoderGroupBuilder() {
-		this.encoders = AList.create();
+		this.encoders = AList.of();
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class EncoderGroupBuilder {
 	 * @param copyFrom The encoder group that we're copying settings and encoders from.
 	 */
 	public EncoderGroupBuilder(EncoderGroup copyFrom) {
-		this.encoders = AList.create();
+		this.encoders = AList.of();
 		encoders.appendReverse(copyFrom.getEncoders());
 	}
 

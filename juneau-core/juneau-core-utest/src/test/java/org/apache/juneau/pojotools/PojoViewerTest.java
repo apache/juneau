@@ -111,35 +111,35 @@ public class PojoViewerTest {
 	@Test
 	public void simpleMap() {
 		ViewArgs sa = new ViewArgs("f1");
-		Object in = AMap.create().append("f1","x1").append("f2","x2");
+		Object in = AMap.of().append("f1","x1").append("f2","x2");
 		assertObjectEquals("{f1:'x1'}", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void simpleMap_reverseColumns() {
 		ViewArgs sa = new ViewArgs("f2","f1");
-		Object in = AMap.create().append("f1","x1").append("f2","x2");
+		Object in = AMap.of().append("f1","x1").append("f2","x2");
 		assertObjectEquals("{f2:'x2',f1:'x1'}", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void simpleMap_nonExistentColumns() {
 		ViewArgs sa = new ViewArgs("fx");
-		Object in = AMap.create().append("f1","x1").append("f2","x2");
+		Object in = AMap.of().append("f1","x1").append("f2","x2");
 		assertObjectEquals("{}", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void simpleMap_nullColumn() {
 		ViewArgs sa = new ViewArgs("f1",null);
-		Object in = AMap.create().append("f1","x1").append("f2","x2");
+		Object in = AMap.of().append("f1","x1").append("f2","x2");
 		assertObjectEquals("{f1:'x1'}", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void simpleMap_emptyView() {
 		ViewArgs sa = new ViewArgs();
-		Object in = AMap.create().append("f1","x1").append("f2","x2");
+		Object in = AMap.of().append("f1","x1").append("f2","x2");
 		assertObjectEquals("{}", p.run(bs, in, sa));
 	}
 
@@ -203,49 +203,49 @@ public class PojoViewerTest {
 	@Test
 	public void beanList() {
 		ViewArgs sa = new ViewArgs("f1");;
-		Object in = AList.create(A.create("x1","x2"));
+		Object in = AList.of(A.create("x1","x2"));
 		assertObjectEquals("[{f1:'x1'}]", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void beanList_reverseColumns() {
 		ViewArgs sa = new ViewArgs("f2","f1");
-		Object in = AList.create(A.create("x1","x2"));
+		Object in = AList.of(A.create("x1","x2"));
 		assertObjectEquals("[{f2:'x2',f1:'x1'}]", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void beanList_dupColumns() {
 		ViewArgs sa = new ViewArgs("f1","f1");
-		Object in = AList.create(A.create("x1","x2"));
+		Object in = AList.of(A.create("x1","x2"));
 		assertObjectEquals("[{f1:'x1'}]", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void beanList_nonExistentColumns() {
 		ViewArgs sa = new ViewArgs("fx");
-		Object in = AList.create(A.create("x1","x2"));
+		Object in = AList.of(A.create("x1","x2"));
 		assertObjectEquals("[{}]", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void beanList_nullColumn() {
 		ViewArgs sa = new ViewArgs("f1",null);
-		Object in = AList.create(A.create("x1","x2"));
+		Object in = AList.of(A.create("x1","x2"));
 		assertObjectEquals("[{f1:'x1'}]", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void beanList_emptyArgs() {
 		ViewArgs sa = new ViewArgs();
-		Object in = AList.create(A.create("x1","x2"));
+		Object in = AList.of(A.create("x1","x2"));
 		assertObjectEquals("[{}]", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void beanList_withNull() {
 		ViewArgs sa = new ViewArgs("f1");;
-		Object in = AList.create(A.create("x1","x2"),null);
+		Object in = AList.of(A.create("x1","x2"),null);
 		assertObjectEquals("[{f1:'x1'},null]", p.run(bs, in, sa));
 	}
 
@@ -256,49 +256,49 @@ public class PojoViewerTest {
 	@Test
 	public void beanSet() {
 		ViewArgs sa = new ViewArgs("f1");;
-		Object in = ASet.create(A.create("x1","x2"));
+		Object in = ASet.of(A.create("x1","x2"));
 		assertObjectEquals("[{f1:'x1'}]", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void beanSet_reverseColumns() {
 		ViewArgs sa = new ViewArgs("f2","f1");
-		Object in = ASet.create(A.create("x1","x2"));
+		Object in = ASet.of(A.create("x1","x2"));
 		assertObjectEquals("[{f2:'x2',f1:'x1'}]", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void beanSet_dupColumns() {
 		ViewArgs sa = new ViewArgs("f1","f1");
-		Object in = ASet.create(A.create("x1","x2"));
+		Object in = ASet.of(A.create("x1","x2"));
 		assertObjectEquals("[{f1:'x1'}]", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void beanSet_nonExistentColumns() {
 		ViewArgs sa = new ViewArgs("fx");
-		Object in = ASet.create(A.create("x1","x2"));
+		Object in = ASet.of(A.create("x1","x2"));
 		assertObjectEquals("[{}]", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void beanSet_nullColumn() {
 		ViewArgs sa = new ViewArgs("f1",null);
-		Object in = ASet.create(A.create("x1","x2"));
+		Object in = ASet.of(A.create("x1","x2"));
 		assertObjectEquals("[{f1:'x1'}]", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void beanSet_emptyArgs() {
 		ViewArgs sa = new ViewArgs();
-		Object in = ASet.create(A.create("x1","x2"));
+		Object in = ASet.of(A.create("x1","x2"));
 		assertObjectEquals("[{}]", p.run(bs, in, sa));
 	}
 
 	@Test
 	public void beanSet_withNull() {
 		ViewArgs sa = new ViewArgs("f1");;
-		Object in = ASet.create(A.create("x1","x2"),null);
+		Object in = ASet.of(A.create("x1","x2"),null);
 		assertObjectEquals("[{f1:'x1'},null]", p.run(bs, in, sa));
 	}
 
@@ -320,7 +320,7 @@ public class PojoViewerTest {
 	@Test
 	public void mapList() {
 		ViewArgs sa = new ViewArgs("f1");;
-		Object in = AList.create(AMap.create().append("f1","x1").append("f2","x2"));
+		Object in = AList.of(AMap.of().append("f1","x1").append("f2","x2"));
 		assertObjectEquals("[{f1:'x1'}]", p.run(bs, in, sa));
 	}
 
@@ -331,7 +331,7 @@ public class PojoViewerTest {
 	@Test
 	public void beanMapList() {
 		ViewArgs sa = new ViewArgs("f1");;
-		Object in = AList.create(bs.toBeanMap(A.create("x1","x2")));
+		Object in = AList.of(bs.toBeanMap(A.create("x1","x2")));
 		assertObjectEquals("[{f1:'x1'}]", p.run(bs, in, sa));
 	}
 
@@ -342,7 +342,7 @@ public class PojoViewerTest {
 	@Test
 	public void otherObjectList() {
 		ViewArgs sa = new ViewArgs("f1");;
-		Object in = AList.create("foobar");
+		Object in = AList.of("foobar");
 		assertObjectEquals("['foobar']", p.run(bs, in, sa));
 	}
 
