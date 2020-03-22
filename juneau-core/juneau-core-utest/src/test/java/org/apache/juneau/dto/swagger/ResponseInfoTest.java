@@ -70,12 +70,12 @@ public class ResponseInfoTest {
 	public void testSetHeaders() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.setHeaders(new AMap<String,HeaderInfo>().append("foo",headerInfo("bar")));
+		t.setHeaders(AMap.of("foo",headerInfo("bar")));
 		assertObjectEquals("{foo:{type:'bar'}}", t.getHeaders());
 		assertInstanceOf(Map.class, t.getHeaders());
 		assertInstanceOf(HeaderInfo.class, t.getHeaders().get("foo"));
 
-		t.setHeaders(new AMap<String,HeaderInfo>());
+		t.setHeaders(AMap.of());
 		assertObjectEquals("{}", t.getHeaders());
 		assertInstanceOf(Map.class, t.getHeaders());
 
@@ -90,12 +90,12 @@ public class ResponseInfoTest {
 	public void testAddHeaders() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.addHeaders(new AMap<String,HeaderInfo>().append("foo",headerInfo("bar")));
+		t.addHeaders(AMap.of("foo",headerInfo("bar")));
 		assertObjectEquals("{foo:{type:'bar'}}", t.getHeaders());
 		assertInstanceOf(Map.class, t.getHeaders());
 		assertInstanceOf(HeaderInfo.class, t.getHeaders().get("foo"));
 
-		t.addHeaders(new AMap<String,HeaderInfo>());
+		t.addHeaders(AMap.of());
 		assertObjectEquals("{foo:{type:'bar'}}", t.getHeaders());
 		assertInstanceOf(Map.class, t.getHeaders());
 		assertInstanceOf(HeaderInfo.class, t.getHeaders().get("foo"));
@@ -127,8 +127,8 @@ public class ResponseInfoTest {
 	public void testHeaders() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.headers(new AMap<String,HeaderInfo>().append("a", headerInfo("a1")));
-		t.headers(new AMap<String,String>().append("b", "{type:'b1'}"));
+		t.headers(AMap.of("a", headerInfo("a1")));
+		t.headers(AMap.of("b", "{type:'b1'}"));
 		t.headers("{c:{type:'c1'}}");
 		t.headers("{}");
 		t.headers((Object[])null);
@@ -143,11 +143,11 @@ public class ResponseInfoTest {
 	public void testSetExamples() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.setExamples(new AMap<String,Object>().append("foo","bar").append("baz",AList.of("qux")));
+		t.setExamples(AMap.of("foo","bar","baz",AList.of("qux")));
 		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
 		assertInstanceOf(Map.class, t.getExamples());
 
-		t.setExamples(new AMap<String,Object>());
+		t.setExamples(AMap.of());
 		assertObjectEquals("{}", t.getExamples());
 		assertInstanceOf(Map.class, t.getExamples());
 
@@ -162,11 +162,11 @@ public class ResponseInfoTest {
 	public void testAddExamples() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.addExamples(new AMap<String,Object>().append("foo","bar").append("baz",AList.of("qux")));
+		t.addExamples(AMap.of("foo","bar","baz",AList.of("qux")));
 		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
 		assertInstanceOf(Map.class, t.getExamples());
 
-		t.addExamples(new AMap<String,Object>());
+		t.addExamples(AMap.of());
 		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
 		assertInstanceOf(Map.class, t.getExamples());
 
@@ -196,7 +196,7 @@ public class ResponseInfoTest {
 	public void testExamples() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.examples(new AMap<String,Object>().append("1",AList.of("a")));
+		t.examples(AMap.of("1",AList.of("a")));
 		t.examples("{2:{c1:'c2'}}");
 		t.examples("{}");
 		t.examples((Object)null);
@@ -213,8 +213,8 @@ public class ResponseInfoTest {
 
 		t
 			.set("description", "a")
-			.set("examples", new AMap<String,Object>().append("foo","bar").append("baz",AList.of("qux")))
-			.set("headers", new AMap<String,HeaderInfo>().append("a", headerInfo("a1")))
+			.set("examples", AMap.of("foo","bar","baz",AList.of("qux")))
+			.set("headers", AMap.of("a", headerInfo("a1")))
 			.set("schema", schemaInfo().type("d"))
 			.set("$ref", "ref");
 

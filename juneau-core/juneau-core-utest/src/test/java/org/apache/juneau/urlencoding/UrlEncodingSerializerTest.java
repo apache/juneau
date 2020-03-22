@@ -571,11 +571,7 @@ public class UrlEncodingSerializerTest {
 		assertEquals("_value=(foo)", s.serialize("(foo)"));
 		assertEquals("_value=@(foo)", s.serialize("@(foo)"));
 
-		Map<String,Object> m = new AMap<String,Object>()
-			.append("foo", "foo")
-			.append("'foo'", "'foo'")
-			.append("(foo)", "(foo)")
-			.append("@(foo)", "@(foo)");
+		Map<String,Object> m = AMap.of("foo","foo","'foo'","'foo'","(foo)","(foo)","@(foo)","@(foo)");
 		assertEquals("foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)", s.serialize(m));
 
 		List<String> l = AList.of("foo", "'foo'", "(foo)", "@(foo)");

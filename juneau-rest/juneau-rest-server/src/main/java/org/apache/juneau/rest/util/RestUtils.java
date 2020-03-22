@@ -45,7 +45,7 @@ public final class RestUtils {
 		return httpMsgs.get(rc);
 	}
 
-	private static Map<Integer,String> httpMsgs = new AMap<Integer,String>()
+	private static Map<Integer,String> httpMsgs = AMap.<Integer,String>of()
 		.append(100, "Continue")
 		.append(101, "Switching Protocols")
 		.append(102, "Processing")

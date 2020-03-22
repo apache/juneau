@@ -1299,22 +1299,22 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnBeanMap")
 	public Map<String,ABean> returnBeanMap() {
-		return new AMap<String,ABean>().append("foo",new ABean().init());
+		return AMap.of("foo",new ABean().init());
 	}
 
 	@RestMethod(name=GET, path="/returnBeanListMap")
 	public Map<String,List<ABean>> returnBeanListMap() {
-		return new AMap<String,List<ABean>>().append("foo",asList(new ABean().init()));
+		return AMap.of("foo",asList(new ABean().init()));
 	}
 
 	@RestMethod(name=GET, path="/returnBean1d3dListMap")
 	public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-		return new AMap<String,List<ABean[][][]>>().append("foo", AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
+		return AMap.of("foo", AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
 	}
 
 	@RestMethod(name=GET, path="/returnBeanListMapIntegerKeys")
 	public Map<Integer,List<ABean>> returnBeanListMapIntegerKeys() {
-		return new AMap<Integer,List<ABean>>().append(1,asList(new ABean().init()));
+		return AMap.of(1,asList(new ABean().init()));
 	}
 
 	// Typed beans
@@ -1341,22 +1341,22 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnTypedBeanMap")
 	public Map<String,TypedBean> returnTypedBeanMap() {
-		return new AMap<String,TypedBean>().append("foo",new TypedBeanImpl().init());
+		return AMap.of("foo",new TypedBeanImpl().init());
 	}
 
 	@RestMethod(name=GET, path="/returnTypedBeanListMap")
 	public Map<String,List<TypedBean>> returnTypedBeanListMap() {
-		return new AMap<String,List<TypedBean>>().append("foo",asList((TypedBean)new TypedBeanImpl().init()));
+		return AMap.of("foo",asList((TypedBean)new TypedBeanImpl().init()));
 	}
 
 	@RestMethod(name=GET, path="/returnTypedBean1d3dListMap")
 	public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-		return new AMap<String,List<TypedBean[][][]>>().append("foo", AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null));
+		return AMap.of("foo", AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null));
 	}
 
 	@RestMethod(name=GET, path="/returnTypedBeanListMapIntegerKeys")
 	public Map<Integer,List<TypedBean>> returnTypedBeanListMapIntegerKeys() {
-		return new AMap<Integer,List<TypedBean>>().append(1,asList((TypedBean)new TypedBeanImpl().init()));
+		return AMap.of(1,asList((TypedBean)new TypedBeanImpl().init()));
 	}
 
 	// Swapped POJOs
@@ -1373,12 +1373,12 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnSwappedPojoMap")
 	public Map<SwappedPojo,SwappedPojo> returnSwappedPojoMap() {
-		return new AMap<SwappedPojo,SwappedPojo>().append(new SwappedPojo(), new SwappedPojo());
+		return AMap.of(new SwappedPojo(),new SwappedPojo());
 	}
 
 	@RestMethod(name=GET, path="/returnSwappedPojo3dMap")
 	public Map<SwappedPojo,SwappedPojo[][][]> returnSwappedPojo3dMap() {
-		return new AMap<SwappedPojo,SwappedPojo[][][]>().append(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
+		return AMap.of(new SwappedPojo(),new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
 	}
 
 	// Implicit swapped POJOs
@@ -1395,12 +1395,12 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnImplicitSwappedPojoMap")
 	public Map<ImplicitSwappedPojo,ImplicitSwappedPojo> returnImplicitSwappedPojoMap() {
-		return new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo());
+		return AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo());
 	}
 
 	@RestMethod(name=GET, path="/returnImplicitSwappedPojo3dMap")
 	public Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> returnImplicitSwappedPojo3dMap() {
-		return new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
+		return AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
 	}
 
 	// Enums
@@ -1432,17 +1432,17 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnEnumMap")
 	public Map<TestEnum,TestEnum> returnEnumMap() {
-		return new AMap<TestEnum,TestEnum>().append(TestEnum.ONE,TestEnum.TWO);
+		return AMap.of(TestEnum.ONE,TestEnum.TWO);
 	}
 
 	@RestMethod(name=GET, path="/returnEnum3dArrayMap")
 	public Map<TestEnum,TestEnum[][][]> returnEnum3dArrayMap() {
-		return new AMap<TestEnum,TestEnum[][][]>().append(TestEnum.ONE, new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
+		return AMap.of(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
 	}
 
 	@RestMethod(name=GET, path="/returnEnum1d3dListMap")
 	public Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap() {
-		return new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+		return AMap.of(TestEnum.ONE,AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -187,7 +187,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBeanMap() throws Exception {
-		proxy.setBeanMap(new AMap<String,ABean>().append("foo",new ABean().init()));
+		proxy.setBeanMap(AMap.of("foo",new ABean().init()));
 		assertObjectEquals("{foo:{a:1,b:'foo'}}", proxy.getBeanMap());
 		assertEquals("{foo:{a:1,b:'foo'}}", cf.get("A/beanMap"));
 		assertInstanceOf(ABean.class, proxy.getBeanMap().get("foo"));
@@ -195,7 +195,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBeanListMap() throws Exception {
-		proxy.setBeanListMap(new AMap<String,List<ABean>>().append("foo",Arrays.asList(new ABean().init())));
+		proxy.setBeanListMap(AMap.of("foo",Arrays.asList(new ABean().init())));
 		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", proxy.getBeanListMap());
 		assertEquals("{foo:[{a:1,b:'foo'}]}", cf.get("A/beanListMap"));
 		assertInstanceOf(ABean.class, proxy.getBeanListMap().get("foo").get(0));
@@ -203,7 +203,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBean1d3dListMap() throws Exception {
-		proxy.setBean1d3dListMap(new AMap<String,List<ABean[][][]>>().append("foo",AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null)));
+		proxy.setBean1d3dListMap(AMap.of("foo",AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null)));
 		assertObjectEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", proxy.getBean1d3dListMap());
 		assertEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", cf.get("A/bean1d3dListMap"));
 		assertInstanceOf(ABean.class, proxy.getBean1d3dListMap().get("foo").get(0)[0][0][0]);
@@ -211,7 +211,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBeanListMapIntegerKeys() throws Exception {
-		proxy.setBeanListMapIntegerKeys(new AMap<Integer,List<ABean>>().append(1,Arrays.asList(new ABean().init())));
+		proxy.setBeanListMapIntegerKeys(AMap.of(1,Arrays.asList(new ABean().init())));
 		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", proxy.getBeanListMapIntegerKeys());
 		assertEquals("{'1':[{a:1,b:'foo'}]}", cf.get("A/beanListMapIntegerKeys"));
 		assertInstanceOf(ABean.class, proxy.getBeanListMapIntegerKeys().get(1).get(0));
@@ -253,7 +253,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testTypedBeanMap() throws Exception {
-		proxy.setTypedBeanMap(new AMap<String,TypedBean>().append("foo",new TypedBeanImpl().init()));
+		proxy.setTypedBeanMap(AMap.of("foo",new TypedBeanImpl().init()));
 		assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", proxy.getTypedBeanMap());
 		assertEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", cf.get("A/typedBeanMap"));
 		assertInstanceOf(TypedBeanImpl.class, proxy.getTypedBeanMap().get("foo"));
@@ -261,7 +261,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testTypedBeanListMap() throws Exception {
-		proxy.setTypedBeanListMap(new AMap<String,List<TypedBean>>().append("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+		proxy.setTypedBeanListMap(AMap.of("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())));
 		assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", proxy.getTypedBeanListMap());
 		assertEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", cf.get("A/typedBeanListMap"));
 		assertInstanceOf(TypedBeanImpl.class, proxy.getTypedBeanListMap().get("foo").get(0));
@@ -269,7 +269,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testTypedBean1d3dListMap() throws Exception {
-		proxy.setTypedBean1d3dListMap(new AMap<String,List<TypedBean[][][]>>().append("foo",AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null)));
+		proxy.setTypedBean1d3dListMap(AMap.of("foo",AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null)));
 		assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", proxy.getTypedBean1d3dListMap());
 		assertEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", cf.get("A/typedBean1d3dListMap"));
 		assertInstanceOf(TypedBeanImpl.class, proxy.getTypedBean1d3dListMap().get("foo").get(0)[0][0][0]);
@@ -277,7 +277,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testTypedBeanListMapIntegerKeys() throws Exception {
-		proxy.setTypedBeanListMapIntegerKeys(new AMap<Integer,List<TypedBean>>().append(1,Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+		proxy.setTypedBeanListMapIntegerKeys(AMap.of(1,Arrays.asList((TypedBean)new TypedBeanImpl().init())));
 		assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", proxy.getTypedBeanListMapIntegerKeys());
 		assertEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", cf.get("A/typedBeanListMapIntegerKeys"));
 		assertInstanceOf(TypedBeanImpl.class, proxy.getTypedBeanListMapIntegerKeys().get(1).get(0));
@@ -303,7 +303,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testSwappedPojoMap() throws Exception {
-		proxy.setSwappedPojoMap(new AMap<SwappedPojo,SwappedPojo>().append(new SwappedPojo(), new SwappedPojo()));
+		proxy.setSwappedPojoMap(AMap.of(new SwappedPojo(), new SwappedPojo()));
 		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", proxy.getSwappedPojoMap());
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", cf.get("A/swappedPojoMap"));
 		assertInstanceOf(SwappedPojo.class, proxy.getSwappedPojoMap().keySet().iterator().next());
@@ -312,7 +312,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testSwappedPojo3dMap() throws Exception {
-		proxy.setSwappedPojo3dMap(new AMap<SwappedPojo,SwappedPojo[][][]>().append(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
+		proxy.setSwappedPojo3dMap(AMap.of(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
 		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", proxy.getSwappedPojo3dMap());
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", cf.get("A/swappedPojo3dMap"));
 		assertInstanceOf(SwappedPojo.class, proxy.getSwappedPojo3dMap().keySet().iterator().next());
@@ -339,7 +339,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testImplicitSwappedPojoMap() throws Exception {
-		proxy.setImplicitSwappedPojoMap(new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo()));
+		proxy.setImplicitSwappedPojoMap(AMap.of(new ImplicitSwappedPojo(), new ImplicitSwappedPojo()));
 		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", proxy.getImplicitSwappedPojoMap());
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", cf.get("A/implicitSwappedPojoMap"));
 		assertInstanceOf(ImplicitSwappedPojo.class, proxy.getImplicitSwappedPojoMap().keySet().iterator().next());
@@ -348,7 +348,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testImplicitSwappedPojo3dMap() throws Exception {
-		proxy.setImplicitSwappedPojo3dMap(new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null}));
+		proxy.setImplicitSwappedPojo3dMap(AMap.of(new ImplicitSwappedPojo(), new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null}));
 		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", proxy.getImplicitSwappedPojo3dMap());
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", cf.get("A/implicitSwappedPojo3dMap"));
 		assertInstanceOf(ImplicitSwappedPojo.class, proxy.getImplicitSwappedPojo3dMap().keySet().iterator().next());
@@ -399,7 +399,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testEnumMap() throws Exception {
-		proxy.setEnumMap(new AMap<TestEnum,TestEnum>().append(TestEnum.ONE,TestEnum.TWO));
+		proxy.setEnumMap(AMap.of(TestEnum.ONE,TestEnum.TWO));
 		assertObjectEquals("{ONE:'TWO'}", proxy.getEnumMap());
 		assertEquals("{ONE:'TWO'}", cf.get("A/enumMap"));
 		assertInstanceOf(TestEnum.class, proxy.getEnumMap().keySet().iterator().next());
@@ -408,7 +408,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testEnum3dArrayMap() throws Exception {
-		proxy.setEnum3dArrayMap(new AMap<TestEnum,TestEnum[][][]>().append(TestEnum.ONE, new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
+		proxy.setEnum3dArrayMap(AMap.of(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
 		assertObjectEquals("{ONE:[[['TWO',null],null],null]}", proxy.getEnum3dArrayMap());
 		assertEquals("{ONE:[[['TWO',null],null],null]}", cf.get("A/enum3dArrayMap"));
 		assertInstanceOf(TestEnum.class, proxy.getEnum3dArrayMap().keySet().iterator().next());
@@ -417,7 +417,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testEnum1d3dListMap() throws Exception {
-		proxy.setEnum1d3dListMap(new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+		proxy.setEnum1d3dListMap(AMap.of(TestEnum.ONE,AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 		assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", proxy.getEnum1d3dListMap());
 		assertEquals("{ONE:[[[['TWO',null],null],null],null]}", cf.get("A/enum1d3dListMap"));
 		assertInstanceOf(TestEnum.class, proxy.getEnum1d3dListMap().keySet().iterator().next());

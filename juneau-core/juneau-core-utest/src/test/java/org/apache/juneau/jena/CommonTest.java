@@ -223,7 +223,7 @@ public class CommonTest {
 		public static E1 create() {
 			E1 t = new E1();
 			t.x1 = new E2();
-			t.x2 = new AMap<String,Integer>().append("f1",1).append("f2",2);
+			t.x2 = AMap.of("f1",1,"f2",2);
 			t.x3 = new E2[] {new E2()};
 			t.x4 = AList.of(new E2());
 			t.x5 = new ObjectMap[] {new ObjectMap().append("f1","1").append("f2","2")};

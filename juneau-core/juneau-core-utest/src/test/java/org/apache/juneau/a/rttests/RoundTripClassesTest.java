@@ -44,7 +44,7 @@ public class RoundTripClassesTest extends RoundTripTest {
 		o = roundTrip(o);
 		assertObjectEquals("['java.lang.String','java.lang.Integer']", o);
 
-		o = new AMap<Class<?>,Class<?>>().append(String.class,String.class);
+		o = AMap.of(String.class,String.class);
 		o = roundTrip(o);
 		assertObjectEquals("{'java.lang.String':'java.lang.String'}", o);
 	}

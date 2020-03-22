@@ -354,22 +354,22 @@ public class InterfaceProxyTest {
 
 				@Override
 				public Map<String,ABean> returnBeanMap() {
-					return new AMap<String,ABean>().append("foo",new ABean().init());
+					return AMap.of("foo",new ABean().init());
 				}
 
 				@Override
 				public Map<String,List<ABean>> returnBeanListMap() {
-					return new AMap<String,List<ABean>>().append("foo",asList(new ABean().init()));
+					return AMap.of("foo",asList(new ABean().init()));
 				}
 
 				@Override
 				public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-					return new AMap<String,List<ABean[][][]>>().append("foo", AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
+					return AMap.of("foo", AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
 				}
 
 				@Override
 				public Map<Integer,List<ABean>> returnBeanListMapIntegerKeys() {
-					return new AMap<Integer,List<ABean>>().append(1,asList(new ABean().init()));
+					return AMap.of(1,asList(new ABean().init()));
 				}
 
 				// Typed beans
@@ -396,22 +396,22 @@ public class InterfaceProxyTest {
 
 				@Override
 				public Map<String,TypedBean> returnTypedBeanMap() {
-					return new AMap<String,TypedBean>().append("foo",new TypedBeanImpl().init());
+					return AMap.of("foo",new TypedBeanImpl().init());
 				}
 
 				@Override
 				public Map<String,List<TypedBean>> returnTypedBeanListMap() {
-					return new AMap<String,List<TypedBean>>().append("foo",asList((TypedBean)new TypedBeanImpl().init()));
+					return AMap.of("foo",asList((TypedBean)new TypedBeanImpl().init()));
 				}
 
 				@Override
 				public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-					return new AMap<String,List<TypedBean[][][]>>().append("foo", AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null));
+					return AMap.of("foo", AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null));
 				}
 
 				@Override
 				public Map<Integer,List<TypedBean>> returnTypedBeanListMapIntegerKeys() {
-					return new AMap<Integer,List<TypedBean>>().append(1,asList((TypedBean)new TypedBeanImpl().init()));
+					return AMap.of(1,asList((TypedBean)new TypedBeanImpl().init()));
 				}
 
 				// Swapped POJOs
@@ -428,12 +428,12 @@ public class InterfaceProxyTest {
 
 				@Override
 				public Map<SwappedPojo,SwappedPojo> returnSwappedPojoMap() {
-					return new AMap<SwappedPojo,SwappedPojo>().append(new SwappedPojo(), new SwappedPojo());
+					return AMap.of(new SwappedPojo(), new SwappedPojo());
 				}
 
 				@Override
 				public Map<SwappedPojo,SwappedPojo[][][]> returnSwappedPojo3dMap() {
-					return new AMap<SwappedPojo,SwappedPojo[][][]>().append(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
+					return AMap.of(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
 				}
 
 				// Implicit swapped POJOs
@@ -450,12 +450,12 @@ public class InterfaceProxyTest {
 
 				@Override
 				public Map<ImplicitSwappedPojo,ImplicitSwappedPojo> returnImplicitSwappedPojoMap() {
-					return new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo());
+					return AMap.of(new ImplicitSwappedPojo(), new ImplicitSwappedPojo());
 				}
 
 				@Override
 				public Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> returnImplicitSwappedPojo3dMap() {
-					return new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
+					return AMap.of(new ImplicitSwappedPojo(), new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
 				}
 
 				// Enums
@@ -487,17 +487,17 @@ public class InterfaceProxyTest {
 
 				@Override
 				public Map<TestEnum,TestEnum> returnEnumMap() {
-					return new AMap<TestEnum,TestEnum>().append(TestEnum.ONE,TestEnum.TWO);
+					return AMap.of(TestEnum.ONE,TestEnum.TWO);
 				}
 
 				@Override
 				public Map<TestEnum,TestEnum[][][]> returnEnum3dArrayMap() {
-					return new AMap<TestEnum,TestEnum[][][]>().append(TestEnum.ONE, new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
+					return AMap.of(TestEnum.ONE, new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
 				}
 
 				@Override
 				public Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap() {
-					return new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+					return AMap.of(TestEnum.ONE, AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 				}
 
 				//--------------------------------------------------------------------------------
@@ -1431,22 +1431,22 @@ public class InterfaceProxyTest {
 
 	@Test
 	public void h23_setBeanMap() {
-		proxy.setBeanMap(new AMap<String,ABean>().append("foo",new ABean().init()));
+		proxy.setBeanMap(AMap.of("foo",new ABean().init()));
 	}
 
 	@Test
 	public void h24_setBeanListMap() {
-		proxy.setBeanListMap(new AMap<String,List<ABean>>().append("foo",Arrays.asList(new ABean().init())));
+		proxy.setBeanListMap(AMap.of("foo",Arrays.asList(new ABean().init())));
 	}
 
 	@Test
 	public void h25_setBean1d3dListMap() {
-		proxy.setBean1d3dListMap(new AMap<String,List<ABean[][][]>>().append("foo",AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null)));
+		proxy.setBean1d3dListMap(AMap.of("foo",AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null)));
 	}
 
 	@Test
 	public void h26_setBeanListMapIntegerKeys() {
-		proxy.setBeanListMapIntegerKeys(new AMap<Integer,List<ABean>>().append(1,Arrays.asList(new ABean().init())));
+		proxy.setBeanListMapIntegerKeys(AMap.of(1,Arrays.asList(new ABean().init())));
 	}
 
 	// Typed beans
@@ -1473,22 +1473,22 @@ public class InterfaceProxyTest {
 
 	@Test
 	public void i05_setTypedBeanMap() {
-		proxy.setTypedBeanMap(new AMap<String,TypedBean>().append("foo",new TypedBeanImpl().init()));
+		proxy.setTypedBeanMap(AMap.of("foo",new TypedBeanImpl().init()));
 	}
 
 	@Test
 	public void i06_setTypedBeanListMap() {
-		proxy.setTypedBeanListMap(new AMap<String,List<TypedBean>>().append("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+		proxy.setTypedBeanListMap(AMap.of("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())));
 	}
 
 	@Test
 	public void i07_setTypedBean1d3dListMap() {
-		proxy.setTypedBean1d3dListMap(new AMap<String,List<TypedBean[][][]>>().append("foo",AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null)));
+		proxy.setTypedBean1d3dListMap(AMap.of("foo",AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null)));
 	}
 
 	@Test
 	public void i08_setTypedBeanListMapIntegerKeys() {
-		proxy.setTypedBeanListMapIntegerKeys(new AMap<Integer,List<TypedBean>>().append(1,Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+		proxy.setTypedBeanListMapIntegerKeys(AMap.of(1,Arrays.asList((TypedBean)new TypedBeanImpl().init())));
 	}
 
 	// Swapped POJOs
@@ -1505,12 +1505,12 @@ public class InterfaceProxyTest {
 
 	@Test
 	public void j03_setSwappedPojoMap() {
-		proxy.setSwappedPojoMap(new AMap<SwappedPojo,SwappedPojo>().append(new SwappedPojo(), new SwappedPojo()));
+		proxy.setSwappedPojoMap(AMap.of(new SwappedPojo(),new SwappedPojo()));
 	}
 
 	@Test
 	public void j04_setSwappedPojo3dMap() {
-		proxy.setSwappedPojo3dMap(new AMap<SwappedPojo,SwappedPojo[][][]>().append(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
+		proxy.setSwappedPojo3dMap(AMap.of(new SwappedPojo(),new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
 	}
 
 	// Implicit swapped POJOs
@@ -1526,12 +1526,12 @@ public class InterfaceProxyTest {
 
 	@Test
 	public void k03_setImplicitSwappedPojoMap() {
-		proxy.setImplicitSwappedPojoMap(new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo()));
+		proxy.setImplicitSwappedPojoMap(AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo()));
 	}
 
 	@Test
 	public void k04_setImplicitSwappedPojo3dMap() {
-		proxy.setImplicitSwappedPojo3dMap(new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null}));
+		proxy.setImplicitSwappedPojo3dMap(AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null}));
 	}
 
 	// Enums
@@ -1563,17 +1563,17 @@ public class InterfaceProxyTest {
 
 	@Test
 	public void l06_setEnumMap() {
-		proxy.setEnumMap(new AMap<TestEnum,TestEnum>().append(TestEnum.ONE,TestEnum.TWO));
+		proxy.setEnumMap(AMap.of(TestEnum.ONE,TestEnum.TWO));
 	}
 
 	@Test
 	public void l07_setEnum3dArrayMap() {
-		proxy.setEnum3dArrayMap(new AMap<TestEnum,TestEnum[][][]>().append(TestEnum.ONE, new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
+		proxy.setEnum3dArrayMap(AMap.of(TestEnum.ONE, new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
 	}
 
 	@Test
 	public void l08_setEnum1d3dListMap() {
-		proxy.setEnum1d3dListMap(new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+		proxy.setEnum1d3dListMap(AMap.of(TestEnum.ONE, AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1639,9 +1639,9 @@ public class InterfaceProxyTest {
 		ABean[][][] x2n = null;
 		List<ABean[][][]> x3 = AList.of(x2,null);
 		List<ABean[][][]> x3n = null;
-		Map<String,ABean> x4 = new AMap<String,ABean>().append("foo",new ABean().init());
+		Map<String,ABean> x4 = AMap.of("foo",new ABean().init());
 		Map<String,ABean> x4n = null;
-		Map<String,List<ABean[][][]>> x5 = new AMap<String,List<ABean[][][]>>().append("foo", x3);
+		Map<String,List<ABean[][][]>> x5 = AMap.of("foo",x3);
 		Map<String,List<ABean[][][]>> x5n = null;
 		proxy.setMultiParamsBean(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
 	}
@@ -1653,9 +1653,9 @@ public class InterfaceProxyTest {
 		SwappedPojo[][][] x2n = null;
 		List<SwappedPojo[][][]> x3 = AList.of(x2,null);
 		List<SwappedPojo[][][]> x3n = null;
-		Map<SwappedPojo,SwappedPojo> x4 = new AMap<SwappedPojo,SwappedPojo>().append(new SwappedPojo(), new SwappedPojo());
+		Map<SwappedPojo,SwappedPojo> x4 = AMap.of(new SwappedPojo(),new SwappedPojo());
 		Map<SwappedPojo,SwappedPojo> x4n = null;
-		Map<SwappedPojo,List<SwappedPojo[][][]>> x5 = new AMap<SwappedPojo,List<SwappedPojo[][][]>>().append(new SwappedPojo(), x3);
+		Map<SwappedPojo,List<SwappedPojo[][][]>> x5 = AMap.of(new SwappedPojo(),x3);
 		Map<SwappedPojo,List<SwappedPojo[][][]>> x5n = null;
 		proxy.setMultiParamsSwappedPojo(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
 	}
@@ -1667,9 +1667,9 @@ public class InterfaceProxyTest {
 		ImplicitSwappedPojo[][][] x2n = null;
 		List<ImplicitSwappedPojo[][][]> x3 = AList.of(x2,null);
 		List<ImplicitSwappedPojo[][][]> x3n = null;
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4 = new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo());
+		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4 = AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo());
 		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n = null;
-		Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5 = new AMap<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>>().append(new ImplicitSwappedPojo(), x3);
+		Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5 = AMap.of(new ImplicitSwappedPojo(),x3);
 		Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n = null;
 		proxy.setMultiParamsImplicitSwappedPojo(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
 	}
@@ -1681,9 +1681,9 @@ public class InterfaceProxyTest {
 		TestEnum[][][] x2n = null;
 		List<TestEnum[][][]> x3 = AList.of(x2,null);
 		List<TestEnum[][][]> x3n = null;
-		Map<TestEnum,TestEnum> x4 = new AMap<TestEnum,TestEnum>().append(TestEnum.ONE,TestEnum.TWO);
+		Map<TestEnum,TestEnum> x4 = AMap.of(TestEnum.ONE,TestEnum.TWO);
 		Map<TestEnum,TestEnum> x4n = null;
-		Map<TestEnum,List<TestEnum[][][]>> x5 = new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, x3);
+		Map<TestEnum,List<TestEnum[][][]>> x5 = AMap.of(TestEnum.ONE,x3);
 		Map<TestEnum,List<TestEnum[][][]>> x5n = null;
 		proxy.setMultiParamsEnum(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
 	}

@@ -616,11 +616,11 @@ public class SchemaInfoTest {
 	public void testSetProperties() {
 		SchemaInfo t = new SchemaInfo();
 
-		t.setProperties(new AMap<String,SchemaInfo>().append("foo",new SchemaInfo().type("foo")));
+		t.setProperties(AMap.of("foo",new SchemaInfo().type("foo")));
 		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
 		assertInstanceOf(Map.class, t.getProperties());
 
-		t.setProperties(new AMap<String,SchemaInfo>());
+		t.setProperties(AMap.of());
 		assertObjectEquals("{}", t.getProperties());
 		assertInstanceOf(Map.class, t.getProperties());
 
@@ -635,11 +635,11 @@ public class SchemaInfoTest {
 	public void testAddProperties() {
 		SchemaInfo t = new SchemaInfo();
 
-		t.addProperties(new AMap<String,SchemaInfo>().append("foo", new SchemaInfo().type("foo")));
+		t.addProperties(AMap.of("foo", new SchemaInfo().type("foo")));
 		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
 		assertInstanceOf(Map.class, t.getProperties());
 
-		t.addProperties(new AMap<String,SchemaInfo>());
+		t.addProperties(AMap.of());
 		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
 		assertInstanceOf(Map.class, t.getProperties());
 
@@ -655,8 +655,8 @@ public class SchemaInfoTest {
 	public void testProperties() {
 		SchemaInfo t = new SchemaInfo();
 
-		t.properties(new AMap<String,Map<String,Object>>().append("a", new AMap<String,Object>().append("type", "foo")));
-		t.properties(new AMap<String,String>().append("b", "{type:'bar'}"));
+		t.properties(AMap.of("a",AMap.of("type","foo")));
+		t.properties(AMap.of("b","{type:'bar'}"));
 		t.properties("{c:{type:'baz'}}");
 		t.properties("{}");
 		t.properties((Object[])null);
@@ -693,7 +693,7 @@ public class SchemaInfoTest {
 	public void testAdditionalProperties() {
 		SchemaInfo t = new SchemaInfo();
 
-		t.additionalProperties(new AMap<String,Object>().append("type","foo"));
+		t.additionalProperties(AMap.of("type","foo"));
 
 		assertObjectEquals("{type:'foo'}", t.getAdditionalProperties());
 		assertInstanceOf(SchemaInfo.class, t.getAdditionalProperties());
@@ -803,7 +803,7 @@ public class SchemaInfoTest {
 		t
 			.set("default", "a")
 			.set("enum", new ASet<>().appendAll("b"))
-			.set("additionalProperties", new AMap<String,Object>().append("c",AList.of("c1")))
+			.set("additionalProperties", AMap.of("c",AList.of("c1")))
 			.set("allOf", new ASet<String>().appendAll("d"))
 			.set("description", "e")
 			.set("discriminator", "f")
@@ -823,7 +823,7 @@ public class SchemaInfoTest {
 			.set("minProperties", 123)
 			.set("multipleOf", 123f)
 			.set("pattern", "k")
-			.set("properties", new AMap<String,Map<String,Object>>().append("l", new AMap<String,Object>().append("l1", 1)))
+			.set("properties", AMap.of("l",AMap.of("l1", 1)))
 			.set("readOnly", true)
 			.set("required", new ASet<String>().appendAll("x"))
 			.set("title", "m")

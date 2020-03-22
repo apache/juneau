@@ -71,7 +71,7 @@ public class ContentTypeMenuItem extends MenuItemWidget {
 		for (Serializer s : req.getSerializers().getSerializers())
 			l.add(s.getPrimaryMediaType());
 		for (MediaType mt : l) {
-			URI uri = req.getUri(true, new AMap<String,String>().append("plainText","true").append("Accept",mt.toString()));
+			URI uri = req.getUri(true, AMap.of("plainText","true","Accept",mt.toString()));
 			div.children(a(uri, mt), br());
 		}
 		return div;

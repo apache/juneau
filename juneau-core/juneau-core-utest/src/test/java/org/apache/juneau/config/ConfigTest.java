@@ -1505,7 +1505,7 @@ public class ConfigTest {
 
 		// Add section with contents
 		changes.clear();
-		cf.setSection("E", null, new AMap<String,Object>().append("e1", "1").append("e2", "2"));
+		cf.setSection("E", null, AMap.of("e1","1","e2","2"));
 		cf.commit();
 		assertObjectEquals("['E/e1=1','E/e2=2']", changes);
 

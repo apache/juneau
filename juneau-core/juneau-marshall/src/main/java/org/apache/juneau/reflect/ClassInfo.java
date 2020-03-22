@@ -1771,7 +1771,7 @@ public final class ClassInfo {
 	}
 
 	private static final Map<Class<?>,Object> primitiveDefaultMap = Collections.unmodifiableMap(
-		new AMap<Class<?>,Object>()
+		AMap.<Class<?>,Object>of()
 			.append(Boolean.TYPE, false)
 			.append(Character.TYPE, (char)0)
 			.append(Short.TYPE, (short)0)

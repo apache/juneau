@@ -305,7 +305,7 @@ public class CommonTest {
 
 	public static class E1 {
 		@Beanp(properties="f1") public E2 x1 = new E2();
-		@Beanp(properties="f1") public Map<String,Integer> x2 = new AMap<String,Integer>().append("f1",3).append("f2",4);
+		@Beanp(properties="f1") public Map<String,Integer> x2 = AMap.of("f1",3,"f2",4);
 		@Beanp(properties="f1") public E2[] x3 = {new E2()};
 		@Beanp(properties="f1") public List<E2> x4 = AList.of(new E2());
 		@Beanp(properties="f1") public ObjectMap[] x5 = {new ObjectMap().append("f1",5).append("f2",6)};

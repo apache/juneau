@@ -76,7 +76,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 
 	@Override /* Serializer */
 	public Map<String,String> getResponseHeaders() {
-		return new AMap<String,String>().append("SOAPAction", soapAction);
+		return AMap.of("SOAPAction",soapAction);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

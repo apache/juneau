@@ -31,15 +31,7 @@ public interface RdfCommon {
 	/**
 	 * Maps RDF writer names to property prefixes that apply to them.
 	 */
-	static final Map<String,String> LANG_PROP_MAP = new AMap<String,String>()
-		.append("RDF/XML","rdfXml.")
-		.append("RDF/XML-ABBREV","rdfXml.")
-		.append("N3","n3.")
-		.append("N3-PP","n3.")
-		.append("N3-PLAIN","n3.")
-		.append("N3-TRIPLES","n3.")
-		.append("TURTLE","n3.")
-		.append("N-TRIPLE","ntriple.");
+	static final Map<String,String> LANG_PROP_MAP = AMap.of("RDF/XML","rdfXml.","RDF/XML-ABBREV","rdfXml.","N3","n3.","N3-PP","n3.","N3-PLAIN","n3.","N3-TRIPLES","n3.","TURTLE","n3.","N-TRIPLE","ntriple.");
 
 	/**
 	 * Configuration property:  RDF language.

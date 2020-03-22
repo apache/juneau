@@ -38,7 +38,7 @@ public class ResolvingObjectMapTest {
 		m.put("foo", AList.of("$X{a}"));
 		assertObjectEquals("['1']", m.get("foo"));
 
-		m.put("foo", new AMap<String,String>().append("k1","$X{a}"));
+		m.put("foo", AMap.of("k1","$X{a}"));
 		assertObjectEquals("{k1:'1'}", m.get("foo"));
 	}
 
@@ -65,7 +65,7 @@ public class ResolvingObjectMapTest {
 		m.put("foo", AList.<String>of().append(null));
 		assertObjectEquals("[null]", m.get("foo"));
 
-		m.put("foo", new AMap<String,String>().append("k1",null));
+		m.put("foo", AMap.of("k1",null));
 		assertObjectEquals("{k1:null}", m.get("foo"));
 	}
 
@@ -86,7 +86,7 @@ public class ResolvingObjectMapTest {
 		m.put("foo", AList.of(FooEnum.ONE));
 		assertObjectEquals("['ONE']", m.get("foo"));
 
-		m.put("foo", new AMap<FooEnum,FooEnum>().append(FooEnum.ONE,FooEnum.ONE));
+		m.put("foo", AMap.of(FooEnum.ONE,FooEnum.ONE));
 		assertObjectEquals("{ONE:'ONE'}", m.get("foo"));
 	}
 
@@ -115,7 +115,7 @@ public class ResolvingObjectMapTest {
 		m3.put("foo", AList.of("$X{a}"));
 		assertObjectEquals("['1']", m.get("foo"));
 
-		m3.put("foo", new AMap<String,String>().append("k1","$X{a}"));
+		m3.put("foo", AMap.of("k1","$X{a}"));
 		assertObjectEquals("{k1:'1'}", m.get("foo"));
 	}
 }

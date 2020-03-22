@@ -349,11 +349,11 @@ public class OperationTest {
 	public void testSetResponses() {
 		Operation t = new Operation();
 
-		t.setResponses(new AMap<String,ResponseInfo>().append("123",responseInfo("bar")));
+		t.setResponses(AMap.of("123",responseInfo("bar")));
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
 		assertInstanceOf(Map.class, t.getResponses());
 
-		t.setResponses(new AMap<String,ResponseInfo>());
+		t.setResponses(AMap.of());
 		assertObjectEquals("{}", t.getResponses());
 		assertInstanceOf(Map.class, t.getResponses());
 
@@ -368,11 +368,11 @@ public class OperationTest {
 	public void testAddResponses() {
 		Operation t = new Operation();
 
-		t.addResponses(new AMap<String,ResponseInfo>().append("123",responseInfo("bar")));
+		t.addResponses(AMap.of("123",responseInfo("bar")));
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
 		assertInstanceOf(Map.class, t.getResponses());
 
-		t.addResponses(new AMap<String,ResponseInfo>());
+		t.addResponses(AMap.of());
 		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
 		assertInstanceOf(Map.class, t.getResponses());
 
@@ -401,8 +401,8 @@ public class OperationTest {
 	public void testResponses() {
 		Operation t = new Operation();
 
-		t.responses(new AMap<Integer,ResponseInfo>().append(1,responseInfo("a")));
-		t.responses(new AMap<String,String>().append("2","{description:'b'}"));
+		t.responses(AMap.of(1,responseInfo("a")));
+		t.responses(AMap.of("2","{description:'b'}"));
 		t.responses("{3:{description:'c'}}");
 		t.responses("{}");
 		t.responses((Object)null);
@@ -440,7 +440,7 @@ public class OperationTest {
 	public void testSetSecurity() {
 		Operation t = new Operation();
 
-		t.setSecurity(new ASet<Map<String, List<String>>>().append(new AMap<String,List<String>>().append("foo",AList.of("bar"))));
+		t.setSecurity(new ASet<Map<String, List<String>>>().append(AMap.of("foo",AList.of("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
@@ -522,7 +522,7 @@ public class OperationTest {
 	public void testAddSecurity() {
 		Operation t = new Operation();
 
-		t.addSecurity(new ASet<Map<String, List<String>>>().append(new AMap<String,List<String>>().append("foo",AList.of("bar"))));
+		t.addSecurity(new ASet<Map<String, List<String>>>().append(AMap.of("foo",AList.of("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
@@ -557,8 +557,8 @@ public class OperationTest {
 	public void testSecurities() {
 		Operation t = new Operation();
 
-		t.securities(new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("a1",AList.of("a2"))));
-		t.securities(new AMap<String,List<String>>().append("b1",AList.of("b2")));
+		t.securities(new ASet<Map<String,List<String>>>().append(AMap.of("a1",AList.of("a2"))));
+		t.securities(AMap.of("b1",AList.of("b2")));
 		t.securities("{c1:['c2']}");
 		t.securities(new StringBuilder("{d1:['d2']}"));
 		t.securities((Object)new String[]{"{e1:['e2']}"});
@@ -585,9 +585,9 @@ public class OperationTest {
 			.set("operationId", "d")
 			.set("parameters", new ASet<ParameterInfo>().appendAll(parameterInfo("e1","e2")))
 			.set("produces", new ASet<MediaType>().appendAll(MediaType.forString("text/f")))
-			.set("responses", new AMap<Integer,ResponseInfo>().append(1,responseInfo("g")))
+			.set("responses", AMap.of(1,responseInfo("g")))
 			.set("schemes", new ASet<String>().appendAll("h"))
-			.set("security", new ASet<Map<String,List<String>>>().append(new AMap<String,List<String>>().append("i1",AList.of("i2"))))
+			.set("security", new ASet<Map<String,List<String>>>().append(AMap.of("i1",AList.of("i2"))))
 			.set("summary", "j")
 			.set("tags", new ASet<String>().appendAll("k"))
 			.set("$ref", "ref");

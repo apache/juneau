@@ -137,11 +137,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				new ComboInput<Map<String,byte[]>>(
 					"MapOfByteArrays",
 					getType(Map.class,String.class,byte[].class),
-					new AMap<String,byte[]>()
-						.append("foo", new byte[]{1,2,3})
-						.append("bar", null)
-						.append(null, new byte[]{4,5,6})
-						.append("null", new byte[]{7,8,9})
+					AMap.of("foo",new byte[]{1,2,3},"bar",null,null,new byte[]{4,5,6},"null",new byte[]{7,8,9})
 					,
 					/* Json */		"{foo:'AQID',bar:null,null:'BAUG','null':'BwgJ'}",
 					/* JsonT */		"{foo:'AQID',bar:null,null:'BAUG','null':'BwgJ'}",
@@ -464,11 +460,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 	public static class BeanWithByteArrayMapField {
 		public Map<String,byte[]> f;
 		public BeanWithByteArrayMapField init() {
-			f = new AMap<String,byte[]>()
-				.append("foo", new byte[]{1,2,3})
-				.append("bar", null)
-				.append(null, new byte[]{4,5,6})
-			;
+			f = AMap.of("foo",new byte[]{1,2,3},"bar",null,null,new byte[]{4,5,6});
 			return this;
 		}
 	}
@@ -484,11 +476,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 	public static class BeanWithByteArrayBeanMapField {
 		public Map<String,B> f;
 		public BeanWithByteArrayBeanMapField init() {
-			f = new AMap<String,B>()
-				.append("foo", new B().init())
-				.append("bar", null)
-				.append(null, new B().init())
-			;
+			f = AMap.of("foo",new B().init(),"bar",null,null,new B().init());
 			return this;
 		}
 	}
@@ -505,11 +493,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 			f2 = new byte[][]{{1,2,3},{4,5,6},null};
 			f3 = null;
 			f4 = AList.of(new byte[]{1,2,3},new byte[]{4,5,6},null);
-			f5 = new AMap<String,byte[]>()
-				.append("foo", new byte[]{1,2,3})
-				.append("bar", null)
-				.append(null, new byte[]{4,5,6})
-			;
+			f5 = AMap.of("foo",new byte[]{1,2,3},"bar",null,null,new byte[]{4,5,6});
 			return this;
 		}
 	}

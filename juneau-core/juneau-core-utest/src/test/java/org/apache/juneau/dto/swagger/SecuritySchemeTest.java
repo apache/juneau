@@ -159,11 +159,11 @@ public class SecuritySchemeTest {
 	public void testSetScopes() {
 		SecurityScheme t = new SecurityScheme();
 
-		t.setScopes(new AMap<String,String>().append("foo","bar"));
+		t.setScopes(AMap.of("foo","bar"));
 		assertObjectEquals("{foo:'bar'}", t.getScopes());
 		assertInstanceOf(Map.class, t.getScopes());
 
-		t.setScopes(new AMap<String,String>());
+		t.setScopes(AMap.of());
 		assertObjectEquals("{}", t.getScopes());
 		assertInstanceOf(Map.class, t.getScopes());
 
@@ -178,11 +178,11 @@ public class SecuritySchemeTest {
 	public void testAddScopes() {
 		SecurityScheme t = new SecurityScheme();
 
-		t.addScopes(new AMap<String,String>().append("foo","bar"));
+		t.addScopes(AMap.of("foo","bar"));
 		assertObjectEquals("{foo:'bar'}", t.getScopes());
 		assertInstanceOf(Map.class, t.getScopes());
 
-		t.addScopes(new AMap<String,String>());
+		t.addScopes(AMap.of());
 		assertObjectEquals("{foo:'bar'}", t.getScopes());
 		assertInstanceOf(Map.class, t.getScopes());
 
@@ -198,7 +198,7 @@ public class SecuritySchemeTest {
 	public void testScopes() {
 		SecurityScheme t = new SecurityScheme();
 
-		t.scopes(new AMap<String,String>().append("a", "a1"));
+		t.scopes(AMap.of("a","a1"));
 		t.scopes("{b:'b1'}");
 		t.scopes("{}");
 		t.scopes((Object[])null);
@@ -219,7 +219,7 @@ public class SecuritySchemeTest {
 			.set("flow", "c")
 			.set("in", "d")
 			.set("name", "e")
-			.set("scopes", new AMap<String,String>().append("foo","bar"))
+			.set("scopes", AMap.of("foo","bar"))
 			.set("tokenUrl", "f")
 			.set("type", "g")
 			.set("$ref", "ref");

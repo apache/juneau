@@ -66,11 +66,7 @@ public class FormDataTest extends RestTestcase {
 		try {
 			String r;
 
-			Map<String,Object> m = new AMap<String,Object>()
-				.append("foo", "foo")
-				.append("'foo'", "'foo'")
-				.append("(foo)", "(foo)")
-				.append("@(foo)", "@(foo)");
+			Map<String,Object> m = AMap.of("foo","foo","'foo'","'foo'","(foo)","(foo)","@(foo)","@(foo)");
 
 			r = c.post("", m).run().getBody().asString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)]", r);

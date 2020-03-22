@@ -770,9 +770,9 @@ public class PropertyStoreTest {
 	public void testMapString() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.sms", new AMap<String,String>().append("foo", "bar").append("baz", "qux").append("quux", null).append(null, null));
-		b.set("A.f2.sms", new AMap<String,Object>().append("foo", 123).append("bar", true).append("baz", TestEnum.ONE).append("qux", null));
-		b.set("A.f3.sms", new AMap<String,StringBuilder>().append("foo", new StringBuilder("bar")).append("baz", null));
+		b.set("A.f1.sms", AMap.of("foo","bar","baz","qux","quux",null,null,null));
+		b.set("A.f2.sms", AMap.of("foo",(Object)123,"bar",true,"baz",TestEnum.ONE,"qux",null));
+		b.set("A.f3.sms", AMap.of("foo",new StringBuilder("bar"),"baz",null));
 		b.set("A.f4.sms", "{foo:'bar',baz:123,qux:true}");
 		b.set("A.f5.sms", null);
 		ps = b.build();
@@ -811,9 +811,9 @@ public class PropertyStoreTest {
 	public void testMapInteger() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.smi", new AMap<String,String>().append("foo", "1").append("baz", "2").append("quux", null).append(null, null));
-		b.set("A.f2.smi", new AMap<String,Object>().append("foo", 123).append("bar", "456").append("baz", null));
-		b.set("A.f3.smi", new AMap<String,StringBuilder>().append("foo", new StringBuilder("123")).append("baz", null));
+		b.set("A.f1.smi", AMap.of("foo","1","baz","2","quux",null,null,null));
+		b.set("A.f2.smi", AMap.of("foo",123,"bar","456","baz",null));
+		b.set("A.f3.smi", AMap.of("foo",new StringBuilder("123"),"baz",null));
 		b.set("A.f4.smi", "{foo:'123',baz:456,qux:null}");
 		b.set("A.f5.smi", null);
 		ps = b.build();
@@ -852,8 +852,8 @@ public class PropertyStoreTest {
 	public void testMapClass() throws Exception {
 		PropertyStoreBuilder b = PropertyStore.create();
 		PropertyStore ps = null;
-		b.set("A.f1.smc", new AMap<String,Class<?>>().append("foo", String.class).append("baz", Integer.class).append("quux", null).append(null, null));
-		b.set("A.f2.smc", new AMap<String,Object>().append("foo", String.class).append("bar", Integer.class).append("baz", null));
+		b.set("A.f1.smc", AMap.of("foo",String.class,"baz",Integer.class,"quux",null,null,null));
+		b.set("A.f2.smc", AMap.of("foo",String.class,"bar",Integer.class,"baz",null));
 		b.set("A.f3.smc", null);
 		ps = b.build();
 		assertObjectEquals("{A:{'f1.smc':{baz:'java.lang.Integer',foo:'java.lang.String'},'f2.smc':{bar:'java.lang.Integer',foo:'java.lang.String'}}}", ps);
@@ -888,9 +888,9 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b = PropertyStore.create();
 
 		PropertyStore ps = null;
-		b.set("A.f1.smo", new AMap<String,String>().append("foo", "1").append("baz", "2").append("quux", null).append(null, null));
-		b.set("A.f2.smo", new AMap<String,Object>().append("foo", 123).append("bar", StringBuilder.class).append("qux", null));
-		b.set("A.f3.smo", new AMap<String,StringBuilder>().append("foo", new StringBuilder("123")).append("baz", null));
+		b.set("A.f1.smo", AMap.of("foo","1","baz","2","quux",null,null,null));
+		b.set("A.f2.smo", AMap.of("foo",123,"bar",StringBuilder.class,"qux",null));
+		b.set("A.f3.smo", AMap.of("foo",new StringBuilder("123"),"baz",null));
 		b.set("A.f4.smo", "{foo:'123',baz:456,qux:null}");
 		b.set("A.f5.smo", null);
 		ps = b.build();
@@ -1307,17 +1307,17 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 
-		b1.set("A.f1.sms", new AMap<String,String>().append("foo", "123").append("bar", "true").append("baz", null).append(null, null));
-		b2.set("A.f1.sms", new AMap<String,Object>().append("foo", 123).append("bar", true).append("baz", null).append(null, null));
+		b1.set("A.f1.sms", AMap.of("foo","123","bar","true","baz",null,null,null));
+		b2.set("A.f1.sms", AMap.of("foo",123,"bar",true,"baz",null,null,null));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.sms", new AMap<String,Object>().append("foo", new StringBuilder("123")).append("bar", new StringBuilder("true")));
+		b2.set("A.f1.sms", AMap.of("foo",new StringBuilder("123"),"bar",new StringBuilder("true")));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.sms", new AMap<String,Object>().append("bar", new StringBuilder("true")).append("foo", new StringBuilder("123")));
+		b2.set("A.f1.sms", AMap.of("bar",new StringBuilder("true"),"foo",new StringBuilder("123")));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.sms", new AMap<String,Object>().append("bar", false).append("foo", new StringBuilder("123")));
+		b2.set("A.f1.sms", AMap.of("bar",false,"foo",new StringBuilder("123")));
 		testNotEquals(b1, b2);
 
 		b1.set("A.f1.sms", "{foo:'bar'}");
@@ -1338,17 +1338,17 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 
-		b1.set("A.f1.smi", new AMap<String,Integer>().append("foo", 123).append("bar", 456).append("baz", null).append(null, null));
-		b2.set("A.f1.smi", new AMap<String,Object>().append("foo", 123).append("bar", "456").append("baz", null).append(null, null));
+		b1.set("A.f1.smi", AMap.of("foo",123,"bar",456,"baz",null,null,null));
+		b2.set("A.f1.smi", AMap.of("foo",123,"bar","456","baz",null,null,null));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.smi", new AMap<String,Object>().append("foo", new StringBuilder("123")).append("bar", new StringBuilder("456")));
+		b2.set("A.f1.smi", AMap.of("foo",new StringBuilder("123"),"bar",new StringBuilder("456")));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.smi", new AMap<String,Object>().append("bar", new StringBuilder("456")).append("foo", new StringBuilder("123")));
+		b2.set("A.f1.smi", AMap.of("bar",new StringBuilder("456"),"foo",new StringBuilder("123")));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.smi", new AMap<String,Object>().append("bar", "457").append("foo", new StringBuilder("123")));
+		b2.set("A.f1.smi", AMap.of("bar","457","foo",new StringBuilder("123")));
 		testNotEquals(b1, b2);
 
 		b1.set("A.f1.smi", "{foo:'123'}");
@@ -1369,17 +1369,17 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 
-		b1.set("A.f1.smc", new AMap<String,Class<?>>().append("foo", String.class).append("bar", Integer.class).append("baz", null).append(null, null));
-		b2.set("A.f1.smc", new AMap<String,Object>().append("foo", String.class).append("bar", Integer.class).append("baz", null).append(null, null));
+		b1.set("A.f1.smc", AMap.of("foo",String.class,"bar",Integer.class,"baz",null,null,null));
+		b2.set("A.f1.smc", AMap.of("foo",String.class,"bar",Integer.class,"baz",null,null,null));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.smc", new AMap<String,Object>().append("foo", String.class).append("bar", Integer.class));
+		b2.set("A.f1.smc", AMap.of("foo",String.class,"bar",Integer.class));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.smc", new AMap<String,Object>().append("bar", Integer.class).append("foo", String.class));
+		b2.set("A.f1.smc", AMap.of("bar",Integer.class,"foo",String.class));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.smc", new AMap<String,Object>().append("bar", Integer.class).append("foo", StringBuilder.class));
+		b2.set("A.f1.smc", AMap.of("bar",Integer.class,"foo",StringBuilder.class));
 		testNotEquals(b1, b2);
 
 		b1.clear();
@@ -1401,17 +1401,17 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 
-		b1.set("A.f1.smo", new AMap<String,TestEnum>().append("foo", TestEnum.ONE).append("bar", TestEnum.TWO).append("baz", null).append(null, null));
-		b2.set("A.f1.smo", new AMap<String,Object>().append("foo", TestEnum.ONE).append("bar", TestEnum.TWO).append("baz", null).append(null, null));
+		b1.set("A.f1.smo", AMap.of("foo",TestEnum.ONE,"bar",TestEnum.TWO,"baz",null,null,null));
+		b2.set("A.f1.smo", AMap.of("foo",TestEnum.ONE,"bar",TestEnum.TWO,"baz",null,null,null));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.smo", new AMap<String,Object>().append("foo", TestEnum.ONE).append("bar", TestEnum.TWO));
+		b2.set("A.f1.smo", AMap.of("foo",TestEnum.ONE,"bar",TestEnum.TWO));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.smo", new AMap<String,Object>().append("bar", TestEnum.TWO).append("foo", TestEnum.ONE));
+		b2.set("A.f1.smo", AMap.of("bar",TestEnum.TWO,"foo",TestEnum.ONE));
 		testEquals(b1, b2);
 
-		b2.set("A.f1.smo", new AMap<String,Object>().append("bar", TestEnum.ONE).append("foo", TestEnum.TWO));
+		b2.set("A.f1.smo", AMap.of("bar",TestEnum.ONE,"foo",TestEnum.TWO));
 		testNotEquals(b1, b2);
 
 		b1.clear();

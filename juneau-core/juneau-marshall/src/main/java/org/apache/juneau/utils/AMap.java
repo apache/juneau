@@ -41,9 +41,7 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	/**
 	 * Constructor.
 	 */
-	public AMap() {
-		super();
-	}
+	public AMap() {}
 
 	/**
 	 * Copy constructor.
@@ -76,6 +74,41 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	 */
 	public static <K,V> AMap<K,V> of(K key, V value) {
 		return new AMap<K,V>().append(key, value);
+	}
+
+	@SuppressWarnings("javadoc")
+	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2) {
+		return AMap.of(k1,v1).append(k2,v2);
+	}
+
+	@SuppressWarnings("javadoc")
+	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3) {
+		return AMap.of(k1,v1).append(k2,v2).append(k3,v3);
+	}
+
+	@SuppressWarnings("javadoc")
+	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+		return AMap.of(k1,v1).append(k2,v2).append(k3,v3).append(k4,v4);
+	}
+
+	@SuppressWarnings("javadoc")
+	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
+		return AMap.of(k1,v1).append(k2,v2).append(k3,v3).append(k4,v4).append(k5,v5);
+	}
+
+	@SuppressWarnings("javadoc")
+	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
+		return AMap.of(k1,v1).append(k2,v2).append(k3,v3).append(k4,v4).append(k5,v5).append(k6,v6);
+	}
+
+	@SuppressWarnings("javadoc")
+	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
+		return AMap.of(k1,v1).append(k2,v2).append(k3,v3).append(k4,v4).append(k5,v5).append(k6,v6).append(k7,v7);
+	}
+
+	@SuppressWarnings("javadoc")
+	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
+		return AMap.of(k1,v1).append(k2,v2).append(k3,v3).append(k4,v4).append(k5,v5).append(k6,v6).append(k7,v7).append(k8,v8);
 	}
 
 	/**

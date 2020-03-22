@@ -119,11 +119,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			fnByte = null;
 			faByte = new byte[][]{{0,1},{2,3},{4,5}};
 			flByte = AList.of(new byte[]{1,2,3},new byte[]{4,5,6},null);
-			fmByte = new AMap<String,byte[]>()
-				.append("foo", new byte[]{1,2,3})
-				.append("bar", new byte[]{4,5,6})
-				.append("baz", null)
-			;
+			fmByte = AMap.of("foo",new byte[]{1,2,3},"bar",new byte[]{4,5,6},"baz",null);
 
 			fCalendar = new GregorianCalendar() {{
 				set(2001, 01, 02, 03, 04, 05);
@@ -144,10 +140,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 				new Date(1000), new Date(2000), new Date(3000)
 			};
 			flDate = AList.of(new Date(4000),null);
-			fmDate = new AMap<String,Date>()
-				.append("foo", new Date(5000))
-				.append("bar", null)
-			;
+			fmDate = AMap.of("foo",new Date(5000),"bar",null);
 			return this;
 		}
 	}

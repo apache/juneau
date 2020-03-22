@@ -122,7 +122,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testImplMap() throws Exception {
-		Map<String,IBean> l = new AMap<String,IBean>().append("foo", new CBean());
+		Map<String,IBean> l = AMap.of("foo",new CBean());
 
 		l.get("foo").setF1("bar");
 		l = roundTrip(l, Map.class, String.class, IBean.class);

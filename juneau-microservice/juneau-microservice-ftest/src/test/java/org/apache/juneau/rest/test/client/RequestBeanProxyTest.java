@@ -120,15 +120,15 @@ public class RequestBeanProxyTest {
 	public static class A02_Bean {
 		@Query
 		public Map<String,Object> getA() {
-			return new AMap<String,Object>().append("a1","v1").append("a2", 123).append("a3", null).append("a4", "");
+			return AMap.of("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Query("*")
 		public Map<String,Object> getB() {
-			return new AMap<String,Object>().append("b1","true").append("b2", "123").append("b3", "null");
+			return AMap.of("b1","true","b2","123","b3","null");
 		}
 		@Query(name="*",allowEmptyValue=true)
 		public Map<String,Object> getC() {
-			return new AMap<String,Object>().append("c1","v1").append("c2", 123).append("c3", null).append("c4", "");
+			return AMap.of("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@Query("*")
 		public Map<String,Object> getD() {
@@ -422,15 +422,15 @@ public class RequestBeanProxyTest {
 	public static class C02_Bean {
 		@FormData
 		public Map<String,Object> getA() {
-			return new AMap<String,Object>().append("a1","v1").append("a2", 123).append("a3", null).append("a4", "");
+			return AMap.of("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@FormData("*")
 		public Map<String,Object> getB() {
-			return new AMap<String,Object>().append("b1","true").append("b2", "123").append("b3", "null");
+			return AMap.of("b1","true","b2","123","b3","null");
 		}
 		@FormData(name="*",allowEmptyValue=true)
 		public Map<String,Object> getC() {
-			return new AMap<String,Object>().append("c1","v1").append("c2", 123).append("c3", null).append("c4", "");
+			return AMap.of("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@FormData("*")
 		public Map<String,Object> getD() {
@@ -725,15 +725,15 @@ public class RequestBeanProxyTest {
 	public static class E02_Bean {
 		@Header
 		public Map<String,Object> getA() {
-			return new AMap<String,Object>().append("a1","v1").append("a2", 123).append("a3", null).append("a4", "");
+			return AMap.of("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Header("*")
 		public Map<String,Object> getB() {
-			return new AMap<String,Object>().append("b1","true").append("b2", "123").append("b3", "null");
+			return AMap.of("b1","true","b2","123","b3","null");
 		}
 		@Header(name="*",allowEmptyValue=true)
 		public Map<String,Object> getC() {
-			return new AMap<String,Object>().append("c1","v1").append("c2", 123).append("c3", null).append("c4", "");
+			return AMap.of("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@Header("*")
 		public Map<String,Object> getD() {
@@ -973,15 +973,15 @@ public class RequestBeanProxyTest {
 	public static class G02_Bean {
 		@Path(name="*",allowEmptyValue=true)
 		public Map<String,Object> getA() {
-			return new AMap<String,Object>().append("a1","v1").append("a2", 123).append("a3", null).append("a4", "");
+			return AMap.of("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Path("*")
 		public Map<String,Object> getB() {
-			return new AMap<String,Object>().append("b1","true").append("b2", "123").append("b3", "null");
+			return AMap.of("b1","true","b2","123","b3","null");
 		}
 		@Path(name="*",allowEmptyValue=true)
 		public Map<String,Object> getC() {
-			return new AMap<String,Object>().append("c1","v1").append("c2", 123).append("c3", null).append("c4", "");
+			return AMap.of("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@Path("*")
 		public Map<String,Object> getD() {

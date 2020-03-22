@@ -180,7 +180,7 @@ public class RestHookTest {
 				public Map<String,String> getResponseHeaders() {
 					ObjectMap p = getProperties();
 					if (p.containsKey("Override-Content-Type"))
-						return new AMap<String,String>().append("Content-Type", p.getString("Override-Content-Type"));
+						return AMap.of("Content-Type",p.getString("Override-Content-Type"));
 					return Collections.emptyMap();
 				}
 			};

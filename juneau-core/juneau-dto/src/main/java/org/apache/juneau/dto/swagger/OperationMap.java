@@ -39,14 +39,7 @@ public class OperationMap extends TreeMap<String,Operation> {
 	private static final long serialVersionUID = 1L;
 
 	private static final Comparator<String> OP_SORTER = new Comparator<String>() {
-		private final Map<String,String> methods = new AMap<String,String>()
-			.append("get","0")
-			.append("put","1")
-			.append("post","2")
-			.append("delete","3")
-			.append("options","4")
-			.append("head","5")
-			.append("patch","6");
+		private final Map<String,String> methods = AMap.of("get","0","put","1","post","2","delete","3","options","4","head","5","patch","6");
 
 		@Override
 		public int compare(String o1, String o2) {
