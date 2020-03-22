@@ -71,7 +71,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
 	static final ClasspathResourceManager RESOURCES = new ClasspathResourceManager(SwaggerUI.class, ClasspathResourceFinderBasic.INSTANCE, Boolean.getBoolean("RestContext.useClasspathResourceCaching.b"));
 
-	private static final Set<String> STANDARD_METHODS = new ASet<String>().appendAll("get", "put", "post", "delete", "options");
+	private static final Set<String> STANDARD_METHODS = ASet.of("get", "put", "post", "delete", "options");
 
 	/**
 	 * This UI applies to HTML requests only.

@@ -35,11 +35,11 @@ public class OperationTest {
 	public void testSetTags() {
 		Operation t = new Operation();
 
-		t.setTags(new ASet<String>().appendAll("foo","bar"));
+		t.setTags(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getTags());
 		assertInstanceOf(List.class, t.getTags());
 
-		t.setTags(new ASet<String>());
+		t.setTags(ASet.of());
 		assertObjectEquals("[]", t.getTags());
 		assertInstanceOf(List.class, t.getTags());
 
@@ -54,11 +54,11 @@ public class OperationTest {
 	public void testAddTags() {
 		Operation t = new Operation();
 
-		t.addTags(new ASet<String>().appendAll("foo","bar"));
+		t.addTags(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getTags());
 		assertInstanceOf(List.class, t.getTags());
 
-		t.addTags(new ASet<String>());
+		t.addTags(ASet.of());
 		assertObjectEquals("['foo','bar']", t.getTags());
 		assertInstanceOf(List.class, t.getTags());
 
@@ -74,8 +74,8 @@ public class OperationTest {
 	public void testTags() {
 		Operation t = new Operation();
 
-		t.tags(new ASet<String>().appendAll("a"));
-		t.tags(new ASet<>().appendAll(new StringBuilder("b")));
+		t.tags(ASet.of("a"));
+		t.tags(ASet.of(new StringBuilder("b")));
 		t.tags((Object)new String[] {"c"});
 		t.tags((Object)new Object[] {new StringBuilder("d")});
 		t.tags("e");
@@ -166,11 +166,11 @@ public class OperationTest {
 	public void testSetConsumes() {
 		Operation t = new Operation();
 
-		t.setConsumes(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
+		t.setConsumes(ASet.of(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getConsumes());
 		assertInstanceOf(List.class, t.getConsumes());
 
-		t.setConsumes(new ASet<MediaType>());
+		t.setConsumes(ASet.of());
 		assertObjectEquals("[]", t.getConsumes());
 		assertInstanceOf(List.class, t.getConsumes());
 
@@ -185,11 +185,11 @@ public class OperationTest {
 	public void testAddConsumes() {
 		Operation t = new Operation();
 
-		t.addConsumes(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
+		t.addConsumes(ASet.of(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getConsumes());
 		assertInstanceOf(List.class, t.getConsumes());
 
-		t.addConsumes(new ASet<MediaType>());
+		t.addConsumes(ASet.of());
 		assertObjectEquals("['text/foo']", t.getConsumes());
 		assertInstanceOf(List.class, t.getConsumes());
 
@@ -205,12 +205,12 @@ public class OperationTest {
 	public void testConsumes() {
 		Operation t = new Operation();
 
-		t.consumes(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
+		t.consumes(ASet.of(MediaType.forString("text/foo")));
 		t.consumes(MediaType.forString("text/bar"));
 		t.consumes("text/baz");
 		t.consumes(new StringBuilder("text/qux"));
 		t.consumes((Object)new String[]{"text/quux"});
-		t.consumes((Object)new ASet<String>().append("text/quuux"));
+		t.consumes((Object)ASet.of("text/quuux"));
 		t.consumes("['text/quuuux']");
 		t.consumes("[]");
 		t.consumes((Object)null);
@@ -227,11 +227,11 @@ public class OperationTest {
 	public void testSetProduces() {
 		Operation t = new Operation();
 
-		t.setProduces(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
+		t.setProduces(ASet.of(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getProduces());
 		assertInstanceOf(List.class, t.getProduces());
 
-		t.setProduces(new ASet<MediaType>());
+		t.setProduces(ASet.of());
 		assertObjectEquals("[]", t.getProduces());
 		assertInstanceOf(List.class, t.getProduces());
 
@@ -246,11 +246,11 @@ public class OperationTest {
 	public void testAddProduces() {
 		Operation t = new Operation();
 
-		t.addProduces(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
+		t.addProduces(ASet.of(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getProduces());
 		assertInstanceOf(List.class, t.getProduces());
 
-		t.addProduces(new ASet<MediaType>());
+		t.addProduces(ASet.of());
 		assertObjectEquals("['text/foo']", t.getProduces());
 		assertInstanceOf(List.class, t.getProduces());
 
@@ -266,12 +266,12 @@ public class OperationTest {
 	public void testProduces() {
 		Operation t = new Operation();
 
-		t.produces(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
+		t.produces(ASet.of(MediaType.forString("text/foo")));
 		t.produces(MediaType.forString("text/bar"));
 		t.produces("text/baz");
 		t.produces(new StringBuilder("text/qux"));
 		t.produces((Object)new String[]{"text/quux"});
-		t.produces((Object)new ASet<String>().append("text/quuux"));
+		t.produces((Object)ASet.of("text/quuux"));
 		t.produces("['text/quuuux']");
 		t.produces("[]");
 		t.produces((Object)null);
@@ -288,11 +288,11 @@ public class OperationTest {
 	public void testSetParameters() {
 		Operation t = new Operation();
 
-		t.setParameters(new ASet<ParameterInfo>().appendAll(parameterInfo("foo","bar")));
+		t.setParameters(ASet.of(parameterInfo("foo","bar")));
 		assertObjectEquals("[{'in':'foo',name:'bar'}]", t.getParameters());
 		assertInstanceOf(List.class, t.getParameters());
 
-		t.setParameters(new ASet<ParameterInfo>());
+		t.setParameters(ASet.of());
 		assertObjectEquals("[]", t.getParameters());
 		assertInstanceOf(List.class, t.getParameters());
 
@@ -307,11 +307,11 @@ public class OperationTest {
 	public void testAddParameters() {
 		Operation t = new Operation();
 
-		t.addParameters(new ASet<ParameterInfo>().appendAll(parameterInfo("foo","bar")));
+		t.addParameters(ASet.of(parameterInfo("foo","bar")));
 		assertObjectEquals("[{'in':'foo',name:'bar'}]", t.getParameters());
 		assertInstanceOf(List.class, t.getParameters());
 
-		t.addParameters(new ASet<ParameterInfo>());
+		t.addParameters(ASet.of());
 		assertObjectEquals("[{'in':'foo',name:'bar'}]", t.getParameters());
 		assertInstanceOf(List.class, t.getParameters());
 
@@ -327,12 +327,12 @@ public class OperationTest {
 	public void testParameters() {
 		Operation t = new Operation();
 
-		t.parameters(new ASet<ParameterInfo>().appendAll(parameterInfo("a1","a2")));
+		t.parameters(ASet.of(parameterInfo("a1","a2")));
 		t.parameters(parameterInfo("b1","b2"));
 		t.parameters("{in:'c1',name:'c2'}");
 		t.parameters(new StringBuilder("{in:'d1',name:'d2'}"));
 		t.parameters((Object)new String[]{"{in:'e1',name:'e2'}"});
-		t.parameters((Object)new ASet<String>().append("{in:'f1',name:'f2'}"));
+		t.parameters((Object)ASet.of("{in:'f1',name:'f2'}"));
 		t.parameters("[{in:'g1',name:'g2'}]");
 		t.parameters("[]");
 		t.parameters((Object)null);
@@ -421,11 +421,11 @@ public class OperationTest {
 	public void testSetSchemes() {
 		Operation t = new Operation();
 
-		t.setSchemes(new ASet<String>().appendAll("foo"));
+		t.setSchemes(ASet.of("foo"));
 		assertObjectEquals("['foo']", t.getSchemes());
 		assertInstanceOf(List.class, t.getSchemes());
 
-		t.setSchemes(new ASet<String>());
+		t.setSchemes(ASet.of());
 		assertObjectEquals("[]", t.getSchemes());
 		assertInstanceOf(List.class, t.getSchemes());
 
@@ -440,11 +440,11 @@ public class OperationTest {
 	public void testSetSecurity() {
 		Operation t = new Operation();
 
-		t.setSecurity(new ASet<Map<String, List<String>>>().append(AMap.of("foo",AList.of("bar"))));
+		t.setSecurity(ASet.of(AMap.of("foo",AList.of("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
-		t.setSecurity(new ASet<Map<String, List<String>>>());
+		t.setSecurity(ASet.of());
 		assertObjectEquals("[]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
@@ -459,11 +459,11 @@ public class OperationTest {
 	public void testAddSchemes() {
 		Operation t = new Operation();
 
-		t.addSchemes(new ASet<String>().appendAll("foo"));
+		t.addSchemes(ASet.of("foo"));
 		assertObjectEquals("['foo']", t.getSchemes());
 		assertInstanceOf(List.class, t.getSchemes());
 
-		t.addSchemes(new ASet<String>());
+		t.addSchemes(ASet.of());
 		assertObjectEquals("['foo']", t.getSchemes());
 		assertInstanceOf(List.class, t.getSchemes());
 
@@ -479,8 +479,8 @@ public class OperationTest {
 	public void testSchemes() {
 		Operation t = new Operation();
 
-		t.schemes(new ASet<String>().appendAll("a"));
-		t.schemes(new ASet<>().appendAll(new StringBuilder("b")));
+		t.schemes(ASet.of("a"));
+		t.schemes(ASet.of(new StringBuilder("b")));
 		t.schemes((Object)new String[] {"c"});
 		t.schemes((Object)new Object[] {new StringBuilder("d")});
 		t.schemes("e");
@@ -522,11 +522,11 @@ public class OperationTest {
 	public void testAddSecurity() {
 		Operation t = new Operation();
 
-		t.addSecurity(new ASet<Map<String, List<String>>>().append(AMap.of("foo",AList.of("bar"))));
+		t.addSecurity(ASet.of(AMap.of("foo",AList.of("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
-		t.addSecurity(new ASet<Map<String, List<String>>>());
+		t.addSecurity(ASet.of());
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
@@ -557,12 +557,12 @@ public class OperationTest {
 	public void testSecurities() {
 		Operation t = new Operation();
 
-		t.securities(new ASet<Map<String,List<String>>>().append(AMap.of("a1",AList.of("a2"))));
+		t.securities(ASet.of(AMap.of("a1",AList.of("a2"))));
 		t.securities(AMap.of("b1",AList.of("b2")));
 		t.securities("{c1:['c2']}");
 		t.securities(new StringBuilder("{d1:['d2']}"));
 		t.securities((Object)new String[]{"{e1:['e2']}"});
-		t.securities((Object)new ASet<String>().append("{f1:['f2']}"));
+		t.securities((Object)ASet.of("{f1:['f2']}"));
 		t.securities("[{g1:['g2']}]");
 		t.securities("[]");
 		t.securities((Object)null);
@@ -578,18 +578,18 @@ public class OperationTest {
 		Operation t = new Operation();
 
 		t
-			.set("consumes", new ASet<MediaType>().appendAll(MediaType.forString("text/a")))
+			.set("consumes", ASet.of(MediaType.forString("text/a")))
 			.set("deprecated", true)
 			.set("description", "b")
 			.set("externalDocs", externalDocumentation("c"))
 			.set("operationId", "d")
-			.set("parameters", new ASet<ParameterInfo>().appendAll(parameterInfo("e1","e2")))
-			.set("produces", new ASet<MediaType>().appendAll(MediaType.forString("text/f")))
+			.set("parameters", ASet.of(parameterInfo("e1","e2")))
+			.set("produces", ASet.of(MediaType.forString("text/f")))
 			.set("responses", AMap.of(1,responseInfo("g")))
-			.set("schemes", new ASet<String>().appendAll("h"))
-			.set("security", new ASet<Map<String,List<String>>>().append(AMap.of("i1",AList.of("i2"))))
+			.set("schemes", ASet.of("h"))
+			.set("security", ASet.of(AMap.of("i1",AList.of("i2"))))
 			.set("summary", "j")
-			.set("tags", new ASet<String>().appendAll("k"))
+			.set("tags", ASet.of("k"))
 			.set("$ref", "ref");
 
 		assertObjectEquals("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}", t);

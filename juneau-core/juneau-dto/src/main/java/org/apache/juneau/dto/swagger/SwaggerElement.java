@@ -152,7 +152,7 @@ public abstract class SwaggerElement {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
+		ASet<String> s = ASet.<String>of()
 			.appendIf(strict, "strict");
 		s.addAll(extraKeys());
 		return s;

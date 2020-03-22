@@ -117,7 +117,7 @@ public class SchemaUtils {
 		String s = joinnl(ss);
 		if (s.isEmpty())
 			return null;
-		Set<String> set = new ASet<>();
+		Set<String> set = ASet.of();
 		for (Object o : StringUtils.parseListOrCdl(s))
 			set.add(o.toString());
 		return set;

@@ -373,11 +373,11 @@ public class ItemsTest {
 	public void testSetEnum() {
 		Items t = new Items();
 
-		t.setEnum(new ASet<>().appendAll("foo","bar"));
+		t.setEnum(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
-		t.setEnum(new ASet<>());
+		t.setEnum(ASet.of());
 		assertObjectEquals("[]", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -392,11 +392,11 @@ public class ItemsTest {
 	public void testAddEnum() {
 		Items t = new Items();
 
-		t.addEnum(new ASet<>().appendAll("foo","bar"));
+		t.addEnum(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
-		t.addEnum(new ASet<>().appendAll("baz"));
+		t.addEnum(ASet.of("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -412,11 +412,11 @@ public class ItemsTest {
 	public void test_enum() {
 		Items t = new Items();
 
-		t._enum(new ASet<>().appendAll("foo","bar"));
+		t._enum(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
-		t._enum(new ASet<>().appendAll("baz"));
+		t._enum(ASet.of("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -466,7 +466,7 @@ public class ItemsTest {
 
 		t
 			.set("default", "a")
-			.set("enum", new ASet<String>().append("b"))
+			.set("enum", ASet.of("b"))
 			.set("collectionFormat", "c")
 			.set("exclusiveMaximum", true)
 			.set("exclusiveMinimum", true)

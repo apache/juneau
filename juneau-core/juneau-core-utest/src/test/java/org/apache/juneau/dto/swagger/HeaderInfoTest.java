@@ -391,11 +391,11 @@ public class HeaderInfoTest {
 	public void testSetEnum() {
 		HeaderInfo t = new HeaderInfo();
 
-		t.setEnum(new ASet<>().appendAll("foo","bar"));
+		t.setEnum(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
-		t.setEnum(new ASet<>());
+		t.setEnum(ASet.of());
 		assertObjectEquals("[]", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -410,11 +410,11 @@ public class HeaderInfoTest {
 	public void testAddEnum() {
 		HeaderInfo t = new HeaderInfo();
 
-		t.addEnum(new ASet<>().appendAll("foo","bar"));
+		t.addEnum(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
-		t.addEnum(new ASet<>().appendAll("baz"));
+		t.addEnum(ASet.of("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -430,11 +430,11 @@ public class HeaderInfoTest {
 	public void test_enum() {
 		HeaderInfo t = new HeaderInfo();
 
-		t._enum(new ASet<>().appendAll("foo","bar"));
+		t._enum(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
-		t._enum(new ASet<>().appendAll("baz"));
+		t._enum(ASet.of("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -484,7 +484,7 @@ public class HeaderInfoTest {
 
 		t
 			.set("default", "a")
-			.set("enum", new ASet<String>().append("b"))
+			.set("enum", ASet.of("b"))
 			.set("collectionFormat", "c")
 			.set("description", "d")
 			.set("exclusiveMaximum", true)

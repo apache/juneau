@@ -1491,7 +1491,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
+		ASet<String> s = ASet.<String>of()
 			.appendIf(format != null, "format")
 			.appendIf(title != null, "title")
 			.appendIf(description != null, "description")

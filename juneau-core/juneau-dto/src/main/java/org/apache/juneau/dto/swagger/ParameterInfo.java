@@ -1569,7 +1569,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
+		ASet<String> s = ASet.<String>of()
 			.appendIf(name != null, "name")
 			.appendIf(in != null, "in")
 			.appendIf(description != null, "description")

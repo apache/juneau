@@ -1360,7 +1360,7 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder _enum(String...values) {
-		return _enum(new ASet<String>().appendAll(values));
+		return _enum(ASet.of(values));
 	}
 
 	/**

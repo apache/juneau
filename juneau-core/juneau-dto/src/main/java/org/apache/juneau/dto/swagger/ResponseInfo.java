@@ -475,7 +475,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
+		ASet<String> s = ASet.<String>of()
 			.appendIf(description != null, "description")
 			.appendIf(schema != null, "schema")
 			.appendIf(headers != null, "headers")

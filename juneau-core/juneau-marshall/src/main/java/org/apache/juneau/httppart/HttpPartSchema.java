@@ -1276,7 +1276,7 @@ public class HttpPartSchema {
 	final static Set<String> toSet(String s) {
 		if (isEmpty(s))
 			return null;
-		Set<String> set = new ASet<>();
+		Set<String> set = ASet.of();
 		try {
 			for (Object o : StringUtils.parseListOrCdl(s))
 				set.add(o.toString());

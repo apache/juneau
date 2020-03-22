@@ -491,11 +491,11 @@ public class ParameterInfoTest {
 	public void testSetEnum() {
 		ParameterInfo t = new ParameterInfo();
 
-		t.setEnum(new ASet<>().appendAll("foo","bar"));
+		t.setEnum(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
-		t.setEnum(new ASet<>());
+		t.setEnum(ASet.of());
 		assertObjectEquals("[]", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -510,11 +510,11 @@ public class ParameterInfoTest {
 	public void testAddEnum() {
 		ParameterInfo t = new ParameterInfo();
 
-		t.addEnum(new ASet<>().appendAll("foo","bar"));
+		t.addEnum(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
-		t.addEnum(new ASet<>().appendAll("baz"));
+		t.addEnum(ASet.of("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -530,11 +530,11 @@ public class ParameterInfoTest {
 	public void test_enum() {
 		ParameterInfo t = new ParameterInfo();
 
-		t._enum(new ASet<>().appendAll("foo","bar"));
+		t._enum(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
-		t._enum(new ASet<>().appendAll("baz"));
+		t._enum(ASet.of("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -584,7 +584,7 @@ public class ParameterInfoTest {
 
 		t
 			.set("default", "a")
-			.set("enum", new ASet<>().appendAll("b"))
+			.set("enum", ASet.of("b"))
 			.set("allowEmptyValue", true)
 			.set("collectionFormat", "c")
 			.set("description", "d")

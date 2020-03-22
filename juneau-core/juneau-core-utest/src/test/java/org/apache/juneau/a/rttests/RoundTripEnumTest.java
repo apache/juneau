@@ -237,8 +237,8 @@ public class RoundTripEnumTest extends RoundTripTest {
 			f4 = new BEnum[][]{{BEnum.FOO,null},null};
 			f5 = AList.of(BEnum.FOO);
 			f6 = AList.of(BEnum.FOO);
-			f7 = new ASet<BEnum>().append(BEnum.FOO);
-			f8 = new ASet<BEnum>().append(BEnum.FOO);
+			f7 = ASet.of(BEnum.FOO);
+			f8 = ASet.of(BEnum.FOO);
 
 			return this;
 		}

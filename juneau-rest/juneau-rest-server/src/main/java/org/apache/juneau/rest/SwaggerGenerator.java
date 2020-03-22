@@ -1295,7 +1295,7 @@ final class SwaggerGenerator {
 		if (s.isEmpty())
 			return null;
 		s = resolve(s);
-		Set<String> set = new ASet<>();
+		Set<String> set = ASet.of();
 		for (Object o : StringUtils.parseListOrCdl(s))
 			set.add(o.toString());
 		return set;

@@ -459,11 +459,11 @@ public class SchemaInfoTest {
 	public void testSetEnum() {
 		SchemaInfo t = new SchemaInfo();
 
-		t.setEnum(new ASet<>().appendAll("foo","bar"));
+		t.setEnum(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
-		t.setEnum(new ASet<>());
+		t.setEnum(ASet.of());
 		assertObjectEquals("[]", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -478,11 +478,11 @@ public class SchemaInfoTest {
 	public void testAddEnum() {
 		SchemaInfo t = new SchemaInfo();
 
-		t.addEnum(new ASet<>().appendAll("foo","bar"));
+		t.addEnum(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
-		t.addEnum(new ASet<>().appendAll("baz"));
+		t.addEnum(ASet.of("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -498,11 +498,11 @@ public class SchemaInfoTest {
 	public void test_enum() {
 		SchemaInfo t = new SchemaInfo();
 
-		t._enum(new ASet<>().appendAll("foo","bar"));
+		t._enum(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
-		t._enum(new ASet<>().appendAll("baz"));
+		t._enum(ASet.of("baz"));
 		assertObjectEquals("['foo','bar','baz']", t.getEnum());
 		assertInstanceOf(List.class, t.getEnum());
 
@@ -559,11 +559,11 @@ public class SchemaInfoTest {
 	public void testSetAllOf() {
 		SchemaInfo t = new SchemaInfo();
 
-		t.setAllOf(new ASet<>().appendAll("foo","bar"));
+		t.setAllOf(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getAllOf());
 		assertInstanceOf(List.class, t.getAllOf());
 
-		t.setAllOf(new ASet<>());
+		t.setAllOf(ASet.of());
 		assertObjectEquals("[]", t.getAllOf());
 		assertInstanceOf(List.class, t.getAllOf());
 
@@ -578,11 +578,11 @@ public class SchemaInfoTest {
 	public void testAddAllOf() {
 		SchemaInfo t = new SchemaInfo();
 
-		t.addAllOf(new ASet<>().appendAll("foo","bar"));
+		t.addAllOf(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getAllOf());
 		assertInstanceOf(List.class, t.getAllOf());
 
-		t.addAllOf(new ASet<>());
+		t.addAllOf(ASet.of());
 		assertObjectEquals("['foo','bar']", t.getAllOf());
 		assertInstanceOf(List.class, t.getAllOf());
 
@@ -598,8 +598,8 @@ public class SchemaInfoTest {
 	public void testAllOf() {
 		SchemaInfo t = new SchemaInfo();
 
-		t.allOf(new ASet<String>().appendAll("a"));
-		t.allOf(new ASet<>().appendAll(new StringBuilder("b")));
+		t.allOf(ASet.of("a"));
+		t.allOf(ASet.of(new StringBuilder("b")));
 		t.allOf((Object)new String[] {"c"});
 		t.allOf((Object)new Object[] {new StringBuilder("d")});
 		t.allOf("e");
@@ -802,9 +802,9 @@ public class SchemaInfoTest {
 
 		t
 			.set("default", "a")
-			.set("enum", new ASet<>().appendAll("b"))
+			.set("enum", ASet.of("b"))
 			.set("additionalProperties", AMap.of("c",AList.of("c1")))
-			.set("allOf", new ASet<String>().appendAll("d"))
+			.set("allOf", ASet.of("d"))
 			.set("description", "e")
 			.set("discriminator", "f")
 			.set("example", "g")
@@ -825,7 +825,7 @@ public class SchemaInfoTest {
 			.set("pattern", "k")
 			.set("properties", AMap.of("l",AMap.of("l1", 1)))
 			.set("readOnly", true)
-			.set("required", new ASet<String>().appendAll("x"))
+			.set("required", ASet.of("x"))
 			.set("title", "m")
 			.set("type", "n")
 			.set("uniqueItems", true)

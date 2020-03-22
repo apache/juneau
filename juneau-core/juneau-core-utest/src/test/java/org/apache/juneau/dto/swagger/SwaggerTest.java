@@ -108,11 +108,11 @@ public class SwaggerTest {
 	public void testSetSchemes() {
 		Swagger t = new Swagger();
 
-		t.setSchemes(new ASet<String>().appendAll("foo","bar"));
+		t.setSchemes(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getSchemes());
 		assertInstanceOf(List.class, t.getSchemes());
 
-		t.setSchemes(new ASet<String>());
+		t.setSchemes(ASet.of());
 		assertObjectEquals("[]", t.getSchemes());
 		assertInstanceOf(List.class, t.getSchemes());
 
@@ -127,11 +127,11 @@ public class SwaggerTest {
 	public void testAddSchemes() {
 		Swagger t = new Swagger();
 
-		t.addSchemes(new ASet<String>().appendAll("foo","bar"));
+		t.addSchemes(ASet.of("foo","bar"));
 		assertObjectEquals("['foo','bar']", t.getSchemes());
 		assertInstanceOf(List.class, t.getSchemes());
 
-		t.addSchemes(new ASet<String>());
+		t.addSchemes(ASet.of());
 		assertObjectEquals("['foo','bar']", t.getSchemes());
 		assertInstanceOf(List.class, t.getSchemes());
 
@@ -147,8 +147,8 @@ public class SwaggerTest {
 	public void testSchemes() {
 		Swagger t = new Swagger();
 
-		t.schemes(new ASet<String>().appendAll("foo"));
-		t.schemes(new ASet<>().appendAll(new StringBuilder("bar")));
+		t.schemes(ASet.of("foo"));
+		t.schemes(ASet.of(new StringBuilder("bar")));
 		t.schemes((Object)new String[] {"baz"});
 		t.schemes("['qux']");
 		t.schemes("quux");
@@ -165,11 +165,11 @@ public class SwaggerTest {
 	public void testSetConsumes() {
 		Swagger t = new Swagger();
 
-		t.setConsumes(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
+		t.setConsumes(ASet.of(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getConsumes());
 		assertInstanceOf(List.class, t.getConsumes());
 
-		t.setConsumes(new ASet<MediaType>());
+		t.setConsumes(ASet.of());
 		assertObjectEquals("[]", t.getConsumes());
 		assertInstanceOf(List.class, t.getConsumes());
 
@@ -184,11 +184,11 @@ public class SwaggerTest {
 	public void testAddConsumes() {
 		Swagger t = new Swagger();
 
-		t.addConsumes(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
+		t.addConsumes(ASet.of(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getConsumes());
 		assertInstanceOf(List.class, t.getConsumes());
 
-		t.addConsumes(new ASet<MediaType>());
+		t.addConsumes(ASet.of());
 		assertObjectEquals("['text/foo']", t.getConsumes());
 		assertInstanceOf(List.class, t.getConsumes());
 
@@ -204,12 +204,12 @@ public class SwaggerTest {
 	public void testConsumes() {
 		Swagger t = new Swagger();
 
-		t.consumes(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
+		t.consumes(ASet.of(MediaType.forString("text/foo")));
 		t.consumes(MediaType.forString("text/bar"));
 		t.consumes("text/baz");
 		t.consumes(new StringBuilder("text/qux"));
 		t.consumes((Object)new String[]{"text/quux"});
-		t.consumes((Object)new ASet<String>().append("text/quuux"));
+		t.consumes((Object)ASet.of("text/quuux"));
 		t.consumes("['text/quuuux']");
 		t.consumes("[]");
 		t.consumes((Object)null);
@@ -226,11 +226,11 @@ public class SwaggerTest {
 	public void testSetProduces() {
 		Swagger t = new Swagger();
 
-		t.setProduces(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
+		t.setProduces(ASet.of(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getProduces());
 		assertInstanceOf(List.class, t.getProduces());
 
-		t.setProduces(new ASet<MediaType>());
+		t.setProduces(ASet.of());
 		assertObjectEquals("[]", t.getProduces());
 		assertInstanceOf(List.class, t.getProduces());
 
@@ -245,11 +245,11 @@ public class SwaggerTest {
 	public void testAddProduces() {
 		Swagger t = new Swagger();
 
-		t.addProduces(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
+		t.addProduces(ASet.of(MediaType.forString("text/foo")));
 		assertObjectEquals("['text/foo']", t.getProduces());
 		assertInstanceOf(List.class, t.getProduces());
 
-		t.addProduces(new ASet<MediaType>());
+		t.addProduces(ASet.of());
 		assertObjectEquals("['text/foo']", t.getProduces());
 		assertInstanceOf(List.class, t.getProduces());
 
@@ -265,12 +265,12 @@ public class SwaggerTest {
 	public void testProduces() {
 		Swagger t = new Swagger();
 
-		t.produces(new ASet<MediaType>().appendAll(MediaType.forString("text/foo")));
+		t.produces(ASet.of(MediaType.forString("text/foo")));
 		t.produces(MediaType.forString("text/bar"));
 		t.produces("text/baz");
 		t.produces(new StringBuilder("text/qux"));
 		t.produces((Object)new String[]{"text/quux"});
-		t.produces((Object)new ASet<String>().append("text/quuux"));
+		t.produces((Object)ASet.of("text/quuux"));
 		t.produces("['text/quuuux']");
 		t.produces("[]");
 		t.produces((Object)null);
@@ -641,11 +641,11 @@ public class SwaggerTest {
 	public void testSetSecurity() {
 		Swagger t = new Swagger();
 
-		t.setSecurity(new ASet<Map<String,List<String>>>().append(AMap.of("foo",AList.of("bar"))));
+		t.setSecurity(ASet.of(AMap.of("foo",AList.of("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
-		t.setSecurity(new ASet<Map<String,List<String>>>());
+		t.setSecurity(ASet.of());
 		assertObjectEquals("[]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
@@ -660,11 +660,11 @@ public class SwaggerTest {
 	public void testAddSecurity() {
 		Swagger t = new Swagger();
 
-		t.addSecurity(new ASet<Map<String,List<String>>>().append(AMap.of("foo",AList.of("bar"))));
+		t.addSecurity(ASet.of(AMap.of("foo",AList.of("bar"))));
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
-		t.addSecurity(new ASet<Map<String,List<String>>>());
+		t.addSecurity(ASet.of());
 		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
 		assertInstanceOf(List.class, t.getSecurity());
 
@@ -695,12 +695,12 @@ public class SwaggerTest {
 	public void testSecurities() {
 		Swagger t = new Swagger();
 		//Collection<Map<String,List<String>>>
-		t.securities(new ASet<Map<String,List<String>>>().append(AMap.of("a1",AList.of("a2"))));
+		t.securities(ASet.of(AMap.of("a1",AList.of("a2"))));
 		t.securities(AMap.of("b1",AList.of("b2")));
 		t.securities("{c1:['c2']}");
 		t.securities(new StringBuilder("{d1:['d2']}"));
 		t.securities((Object)new String[]{"{e1:['e2']}"});
-		t.securities((Object)new ASet<String>().append("{f1:['f2']}"));
+		t.securities((Object)ASet.of("{f1:['f2']}"));
 		t.securities("[{g1:['g2']}]");
 		t.securities("[]");
 		t.securities((Object)null);
@@ -715,11 +715,11 @@ public class SwaggerTest {
 	public void testSetTags() {
 		Swagger t = new Swagger();
 
-		t.setTags(new ASet<Tag>().appendAll(tag("foo")));
+		t.setTags(ASet.of(tag("foo")));
 		assertObjectEquals("[{name:'foo'}]", t.getTags());
 		assertInstanceOf(List.class, t.getTags());
 
-		t.setTags(new ASet<Tag>());
+		t.setTags(ASet.of());
 		assertObjectEquals("[]", t.getTags());
 		assertInstanceOf(List.class, t.getTags());
 
@@ -734,11 +734,11 @@ public class SwaggerTest {
 	public void testAddTags() {
 		Swagger t = new Swagger();
 
-		t.addTags(new ASet<Tag>().appendAll(tag("foo")));
+		t.addTags(ASet.of(tag("foo")));
 		assertObjectEquals("[{name:'foo'}]", t.getTags());
 		assertInstanceOf(List.class, t.getTags());
 
-		t.addTags(new ASet<Tag>());
+		t.addTags(ASet.of());
 		assertObjectEquals("[{name:'foo'}]", t.getTags());
 		assertInstanceOf(List.class, t.getTags());
 
@@ -754,8 +754,8 @@ public class SwaggerTest {
 	public void testTags() {
 		Swagger t = new Swagger();
 
-		t.tags(new ASet<Tag>().appendAll(tag("a")));
-		t.tags(new ASet<String>().appendAll("{name:'b'}"));
+		t.tags(ASet.of(tag("a")));
+		t.tags(ASet.of("{name:'b'}"));
 		t.tags((Object)new Tag[] {tag("c")});
 		t.tags((Object)new String[] {"{name:'d'}"});
 		t.tags("{name:'e'}");
@@ -796,20 +796,20 @@ public class SwaggerTest {
 
 		t
 			.set("basePath", "a")
-			.set("consumes", new ASet<MediaType>().appendAll(MediaType.forString("text/b")))
+			.set("consumes", ASet.of(MediaType.forString("text/b")))
 			.set("definitions", AMap.of("c",schemaInfo().type("c1")))
 			.set("externalDocs", externalDocumentation("d"))
 			.set("host", "e")
 			.set("info", info("f1", "f2"))
 			.set("parameters", AMap.of("g",parameterInfo("g1", "g2")))
 			.set("paths", AMap.of("h",AMap.of("h1",operation().operationId("h2"))))
-			.set("produces", new ASet<MediaType>().appendAll(MediaType.forString("text/i")))
+			.set("produces", ASet.of(MediaType.forString("text/i")))
 			.set("responses", AMap.of("j",responseInfo("j1")))
-			.set("schemes", new ASet<String>().appendAll("k1"))
-			.set("security", new ASet<Map<String,List<String>>>().append(AMap.of("l1",AList.of("l2"))))
+			.set("schemes", ASet.of("k1"))
+			.set("security", ASet.of(AMap.of("l1",AList.of("l2"))))
 			.set("securityDefinitions", AMap.of("m",securityScheme("m1")))
 			.set("swagger", "n")
-			.set("tags", new ASet<Tag>().appendAll(tag("o")))
+			.set("tags", ASet.of(tag("o")))
 			.set("$ref", "ref");
 
 		assertObjectEquals("{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}", t);

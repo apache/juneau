@@ -446,7 +446,7 @@ public class Info extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
+		ASet<String> s = ASet.<String>of()
 			.appendIf(title != null, "title")
 			.appendIf(description != null, "description")
 			.appendIf(termsOfService != null, "termsOfService")
