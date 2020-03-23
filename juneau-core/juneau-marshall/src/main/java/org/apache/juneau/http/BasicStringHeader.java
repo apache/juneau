@@ -25,7 +25,7 @@ package org.apache.juneau.http;
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
-public abstract class BasicStringHeader extends BasicHeader {
+public class BasicStringHeader extends BasicHeader {
 
 	/**
 	 * Constructor.
@@ -33,7 +33,7 @@ public abstract class BasicStringHeader extends BasicHeader {
 	 * @param name The HTTP header name.
 	 * @param value The HTTP header value.
 	 */
-	protected BasicStringHeader(String name, Object value) {
+	public BasicStringHeader(String name, Object value) {
 		super(name, value);
 	}
 

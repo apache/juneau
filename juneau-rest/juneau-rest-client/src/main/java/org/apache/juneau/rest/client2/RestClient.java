@@ -1179,7 +1179,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * <p>
 	 * Query parameters to add to every request.
 	 */
-	public static final String RESTCLIENT_formData = PREFIX + "formData.smo";
+	public static final String RESTCLIENT_formData = PREFIX + "formData.lo";
 
 	/**
 	 * Configuration property:  Request headers.
@@ -1294,7 +1294,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * <p>
 	 * Headers to add to every request.
 	 */
-	public static final String RESTCLIENT_headers = PREFIX + "headers.smo";
+	public static final String RESTCLIENT_headers = PREFIX + "headers.lo";
 
 	/**
 	 * Configuration property:  Call interceptors.
@@ -1500,7 +1500,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * <p>
 	 * Query parameters to add to every request.
 	 */
-	public static final String RESTCLIENT_query = PREFIX + "query.smo";
+	public static final String RESTCLIENT_query = PREFIX + "query.lo";
 
 	/**
 	 * Configuration property:  Root URI.
@@ -1645,24 +1645,21 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		Function<Object,Object> f = x -> x instanceof SerializedNameValuePair.Builder ? ((SerializedNameValuePair.Builder)x).serializer(partSerializer, false).build() : x;
 
 		this.headers = Collections.unmodifiableList(
-			getMapProperty(RESTCLIENT_headers, Object.class)
-				.values()
+			getListProperty(RESTCLIENT_headers, Object.class)
 				.stream()
 				.map(f)
 				.collect(Collectors.toList())
 		);
 
 		this.query = Collections.unmodifiableList(
-			getMapProperty(RESTCLIENT_query, Object.class)
-				.values()
+			getListProperty(RESTCLIENT_query, Object.class)
 				.stream()
 				.map(f)
 				.collect(Collectors.toList())
 		);
 
 		this.formData = Collections.unmodifiableList(
-			getMapProperty(RESTCLIENT_formData, Object.class)
-				.values()
+			getListProperty(RESTCLIENT_formData, Object.class)
 				.stream()
 				.map(f)
 				.collect(Collectors.toList())

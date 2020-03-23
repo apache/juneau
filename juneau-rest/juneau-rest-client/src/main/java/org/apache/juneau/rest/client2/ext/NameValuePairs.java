@@ -41,6 +41,10 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 
 	private static final long serialVersionUID = 1L;
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Empty constructor.
 	 */
@@ -60,7 +64,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 *
 	 * @param parameters Initial list of parameters.
 	 */
-	public NameValuePairs(List<NameValuePair> parameters) {
+	public NameValuePairs(Collection<? extends NameValuePair> parameters) {
 		addAll(parameters);
 	}
 
@@ -81,6 +85,56 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 		for (int i = 0; i < parameters.length; i+=2)
 			add(new SimpleNameValuePair(stringify(parameters[i]), parameters[i+1]));
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Creators
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates an empty instance.
+	 *
+	 * @return A new empty instance.
+	 */
+	public static NameValuePairs of() {
+		return new NameValuePairs();
+	}
+
+	/**
+	 * Creates an instance initialized with the specified pairs.
+	 *
+	 * @param pairs The pairs to add to this list.
+	 * @return A new instance.
+	 */
+	public static NameValuePairs of(NameValuePair...pairs) {
+		return new NameValuePairs(pairs);
+	}
+
+	/**
+	 * Creates an instance initialized with the specified pairs.
+	 *
+	 * @param pairs The pairs to add to this list.
+	 * @return A new instance.
+	 */
+	public static NameValuePairs of(Collection<? extends NameValuePair> pairs) {
+		return new NameValuePairs(pairs);
+	}
+
+	/**
+	 * Creates an instance initialized with the specified pairs.
+	 *
+	 * @param parameters
+	 * 	Initial list of parameters.
+	 * 	<br>Must be an even number of parameters representing key/value pairs.
+	 * @throws RestCallException If odd number of parameters were specified.
+	 * @return A new instance.
+	 */
+	public static NameValuePairs of(Object...parameters) throws RestCallException {
+		return new NameValuePairs(parameters);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Appenders
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Appends the specified pair to the end of this list.

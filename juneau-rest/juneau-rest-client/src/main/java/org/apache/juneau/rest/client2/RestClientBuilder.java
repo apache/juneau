@@ -502,7 +502,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder header(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return addTo(RESTCLIENT_headers, name, SerializedNameValuePair.create().name(name).value(value).type(HEADER).serializer(serializer).schema(schema));
+		return addTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).serializer(serializer).schema(schema));
 	}
 
 	/**
@@ -550,7 +550,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder header(Header header) {
-		return addTo(RESTCLIENT_headers, header.getName(), header);
+		return addTo(RESTCLIENT_headers, header);
 	}
 
 	/**
@@ -569,7 +569,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder header(NameValuePair header) {
-		return addTo(RESTCLIENT_headers, header.getName(), header);
+		return addTo(RESTCLIENT_headers, header);
 	}
 
 	/**
@@ -588,7 +588,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder header(HttpHeader header) {
-		return addTo(RESTCLIENT_headers, header.getName(), header);
+		return addTo(RESTCLIENT_headers, header);
 	}
 
 	/**
@@ -754,7 +754,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@ConfigurationProperty
 	public RestClientBuilder headers(HttpHeader...headers) {
 		for (HttpHeader h : headers)
-			header(h.getName(), h.getValue());
+			header(h);
 		return this;
 	}
 
@@ -1048,7 +1048,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder maxForwards(Object value) {
-		return header("If-Unmodified-Since", value);
+		return header("Max-Forwards", value);
 	}
 
 	/**
@@ -1077,7 +1077,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder origin(Object value) {
-		return header("If-Unmodified-Since", value);
+		return header("Origin", value);
 	}
 
 	/**
@@ -1233,7 +1233,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder query(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return addTo(RESTCLIENT_query, name, SerializedNameValuePair.create().name(name).value(value).type(QUERY).serializer(serializer).schema(schema));
+		return addTo(RESTCLIENT_query, SerializedNameValuePair.create().name(name).value(value).type(QUERY).serializer(serializer).schema(schema));
 	}
 
 	/**
@@ -1277,7 +1277,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder query(NameValuePair param) {
-		return addTo(RESTCLIENT_query, param.getName(), param);
+		return addTo(RESTCLIENT_query, param);
 	}
 
 	/**
@@ -1427,7 +1427,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder formData(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return addTo(RESTCLIENT_formData, name, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).serializer(serializer).schema(schema));
+		return addTo(RESTCLIENT_formData, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).serializer(serializer).schema(schema));
 	}
 
 	/**
@@ -1471,7 +1471,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder formData(NameValuePair param) {
-		return addTo(RESTCLIENT_formData, param.getName(), param);
+		return addTo(RESTCLIENT_formData, param);
 	}
 
 	/**

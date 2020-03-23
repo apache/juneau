@@ -21,15 +21,20 @@ import java.util.logging.*;
 
 import org.apache.http.*;
 import org.apache.http.HttpException;
+import org.apache.http.HttpResponse;
 import org.apache.http.auth.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
@@ -282,7 +287,7 @@ public class RestClientBuilderTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class B extends BasicRest {
+	public static class E extends BasicRest {
 		@RestMethod
 		public String getEcho(@org.apache.juneau.http.annotation.Header("Authorization") String auth, org.apache.juneau.rest.RestResponse res) throws IOException {
 			if (auth == null) {
@@ -298,7 +303,7 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void e01_basicAuth() throws RestCallException {
-		RestClient rc = MockRestClient.create(B.class).simpleJson()
+		RestClient rc = MockRestClient.create(E.class).simpleJson()
 			.basicAuth(AuthScope.ANY_HOST, AuthScope.ANY_PORT, "user", "pw")
 			.build();
 		rc.get("/echo")
@@ -307,739 +312,476 @@ public class RestClientBuilderTest {
 		;
 	}
 
-//	/**
-//	 * Sets a header on all requests.
-//	 *
-//	 * <p class='bcode w800'>
-//	 * 	RestClient c = RestClient
-//	 * 		.<jsm>create</jsm>()
-//	 * 		.header(<js>"Foo"</js>, <js>"bar"</js>, myPartSerializer, headerSchema);
-//	 * 		.build();
-//	 * </p>
-//	 *
-//	 * @param name The header name.
-//	 * @param value The header value.
-//	 * 	<ul>
-//	 * 		<li>Can be any POJO.
-//	 * 		<li>Converted to a string using the specified part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @param serializer The serializer to use for serializing the value to a string.
-//	 * 	<ul>
-//	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
-//	 * 	</ul>
-//	 * @param schema The schema object that defines the format of the output.
-//	 * 	<ul>
-//	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-//	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder header(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-//		return addTo(RESTCLIENT_headers, name, SerializedNameValuePair.create().name(name).value(value).type(HEADER).serializer(serializer).schema(schema));
-//	}
-//
-//	/**
-//	 * Sets a header on all requests.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	RestClient c = RestClient
-//	 * 		.<jsm>create</jsm>()
-//	 * 		.header(<js>"Foo"</js>, <js>"bar"</js>);
-//	 * 		.build();
-//	 * </p>
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_headers}
-//	 * </ul>
-//	 *
-//	 * @param name The header name.
-//	 * @param value The header value.
-//	 * 	<ul>
-//	 * 		<li>Can be any POJO.
-//	 * 		<li>Converted to a string using the specified part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder header(String name, Object value) {
-//		return header(name, value, null, null);
-//	}
-//
-//	/**
-//	 * Sets a header on all requests.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	RestClient c = RestClient
-//	 * 		.<jsm>create</jsm>()
-//	 * 		.header(<jk>new</jk> BasicHeader(<js>"Foo"</js>, <js>"bar"</js>))
-//	 * 		.build();
-//	 * </p>
-//	 *
-//	 * @param header The header to set.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder header(Header header) {
-//		return addTo(RESTCLIENT_headers, header.getName(), header);
-//	}
-//
-//	/**
-//	 * Sets a header on all requests.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	RestClient c = RestClient
-//	 * 		.<jsm>create</jsm>()
-//	 * 		.header(<jk>new</jk> NameValuePair(<js>"Foo"</js>, <js>"bar"</js>))
-//	 * 		.build();
-//	 * </p>
-//	 *
-//	 * @param header The header to set.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder header(NameValuePair header) {
-//		return addTo(RESTCLIENT_headers, header.getName(), header);
-//	}
-//
-//	/**
-//	 * Sets a header on all requests.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	RestClient c = RestClient
-//	 * 		.<jsm>create</jsm>()
-//	 * 		.header(<jk>new</jk> Accept(<js>"Content-Type"</js>, <js>"application/json"</js>)
-//	 * 		.build();
-//	 * </p>
-//	 *
-//	 * @param header The header to set.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder header(HttpHeader header) {
-//		return addTo(RESTCLIENT_headers, header.getName(), header);
-//	}
-//
-//	/**
-//	 * Sets multiple headers on all requests.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	RestClient c = RestClient
-//	 * 		.<jsm>create</jsm>()
-//	 * 		.headers(<jk>new</jk> BasicHeader(<js>"Foo"</js>, <js>"bar"</js>))
-//	 * 		.build();
-//	 * </p>
-//	 *
-//	 * @param headers The header to set.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder headers(Header...headers) {
-//		for (Header h : headers)
-//			header(h);
-//		return this;
-//	}
-//
-//	/**
-//	 * Sets multiple headers on all requests.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	RestClient c = RestClient
-//	 * 		.<jsm>create</jsm>()
-//	 * 		.headers(<jk>new</jk> ObjectMap(<js>"Foo"</js>, <js>"bar"</js>))
-//	 * 		.build();
-//	 * </p>
-//	 *
-//	 * @param headers The header pairs.
-//	 * 	<ul>
-//	 * 		<li>Values can be any POJO.
-//	 * 		<li>Values converted to a string using the configured part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder headers(ObjectMap headers) {
-//		return headers((Map<String,Object>)headers);
-//	}
-//
-//	/**
-//	 * Sets multiple headers on all requests.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	RestClient c = RestClient
-//	 * 		.<jsm>create</jsm>()
-//	 * 		.headers(AMap.<jsm>create</jsm>().append(<js>"Foo"</js>, <js>"bar"</js>))
-//	 * 		.build();
-//	 * </p>
-//	 *
-//	 * @param headers The header pairs.
-//	 * 	<ul>
-//	 * 		<li>Values can be any POJO.
-//	 * 		<li>Values converted to a string using the configured part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder headers(Map<String,Object> headers) {
-//		for (Map.Entry<String,Object> e : headers.entrySet())
-//			header(e.getKey(), e.getValue(), null, null);
-//		return this;
-//	}
-//
-//	/**
-//	 * Sets multiple headers on all requests.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	RestClient c = RestClient
-//	 * 		.<jsm>create</jsm>()
-//	 * 		.headers(<jk>new</jk> NameValuePairs(<js>"Foo"</js>, <js>"bar"</js>))
-//	 * 		.build();
-//	 * </p>
-//	 *
-//	 * @param headers The header pairs.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder headers(NameValuePairs headers) {
-//		for (NameValuePair p : headers)
-//			header(p);
-//		return this;
-//	}
-//
-//	/**
-//	 * Sets multiple headers on all requests.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	RestClient c = RestClient
-//	 * 		.<jsm>create</jsm>()
-//	 * 		.headers(<jk>new</jk> NameValuePair(<js>"Foo"</js>, <js>"bar"</js>))
-//	 * 		.build();
-//	 * </p>
-//	 *
-//	 * @param headers The header pairs.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder headers(NameValuePair...headers) {
-//		for (NameValuePair p : headers)
-//			header(p);
-//		return this;
-//	}
-//
-//	/**
-//	 * Sets multiple headers on all requests using freeform key/value pairs.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	RestClient c = RestClient
-//	 * 		.<jsm>create</jsm>()
-//	 * 		.headers(<js>"Header1"</js>,<js>"val1"</js>,<js>"Header2"</js>,<js>"val2"</js>)
-//	 * 		.build();
-//	 * </p>
-//	 *
-//	 * @param pairs The header key/value pairs.
-//	 * 	<ul>
-//	 * 		<li>Values can be any POJO.
-//	 * 		<li>Values converted to a string using the configured part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder headers(Object...pairs) {
-//		if (pairs.length % 2 != 0)
-//			throw new RuntimeException("Odd number of parameters passed into headers(Object...)");
-//		for (int i = 0; i < pairs.length; i+=2)
-//			header(stringify(pairs[i]), pairs[i+1]);
-//		return this;
-//	}
-//
-//	/**
-//	 * Sets multiple headers on all requests using header beans.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	RestClient c = RestClient
-//	 * 		.<jsm>create</jsm>()
-//	 * 		.headers(
-//	 * 			<jk>new</jk> AcceptEncoding(<js>"gzip"</js>),
-//	 * 			<jk>new</jk> AcceptLanguage(<js>"da, en-gb;q=0.8, en;q=0.7"</js>)
-//	 * 		)
-//	 * 		.build();
-//	 * </p>
-//	 *
-//	 * @param headers
-//	 * 	The headers.
-//	 * 	The header values are converted to strings using the configured {@link HttpPartSerializer}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder headers(HttpHeader...headers) {
-//		for (HttpHeader h : headers)
-//			header(h.getName(), h.getValue());
-//		return this;
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Accept</c> request header.
-//	 *
-//	 * <p>
-//	 * This overrides the media type specified on the parser, but is overridden by calling
-//	 * <code>header(<js>"Accept"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder accept(Object value) {
-//		return header("Accept", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Accept-Charset</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Accept-Charset"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder acceptCharset(Object value) {
-//		return header("Accept-Charset", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Accept-Encoding</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Accept-Encoding"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder acceptEncoding(Object value) {
-//		return header("Accept-Encoding", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Accept-Language</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Accept-Language"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder acceptLanguage(Object value) {
-//		return header("Accept-Language", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Authorization</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Authorization"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder authorization(Object value) {
-//		return header("Authorization", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Cache-Control</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Cache-Control"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder cacheControl(Object value) {
-//		return header("Cache-Control", value);
-//	}
-//
-//	/**
-//	 * Sets the client version by setting the value for the <js>"X-Client-Version"</js> header.
-//	 *
-//	 * @param value The version string (e.g. <js>"1.2.3"</js>)
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder clientVersion(Object value) {
-//		return header("X-Client-Version", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Connection</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Connection"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder connection(Object value) {
-//		return header("Connection", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Content-Length</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Content-Length"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder contentLength(Object value) {
-//		return header("Content-Length", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Content-Type</c> request header.
-//	 *
-//	 * <p>
-//	 * This overrides the media type specified on the serializer, but is overridden by calling
-//	 * <code>header(<js>"Content-Type"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder contentType(Object value) {
-//		return header("Content-Type", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Date</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Date"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder date(Object value) {
-//		return header("Date", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Expect</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Expect"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder expect(Object value) {
-//		return header("Expect", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Forwarded</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Forwarded"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder forwarded(Object value) {
-//		return header("Forwarded", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>From</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"From"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder from(Object value) {
-//		return header("From", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Host</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Host"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder host(Object value) {
-//		return header("Host", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>If-Match</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"If-Match"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder ifMatch(Object value) {
-//		return header("If-Match", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>If-Modified-Since</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"If-Modified-Since"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder ifModifiedSince(Object value) {
-//		return header("If-Modified-Since", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>If-None-Match</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"If-None-Match"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder ifNoneMatch(Object value) {
-//		return header("If-None-Match", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>If-Range</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"If-Range"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder ifRange(Object value) {
-//		return header("If-Range", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>If-Unmodified-Since</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"If-Unmodified-Since"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder ifUnmodifiedSince(Object value) {
-//		return header("If-Unmodified-Since", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Max-Forwards</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Max-Forwards"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder maxForwards(Object value) {
-//		return header("If-Unmodified-Since", value);
-//	}
-//
-//	/**
-//	 * When called, <c>No-Trace: true</c> is added to requests.
-//	 *
-//	 * <p>
-//	 * This gives the opportunity for the servlet to not log errors on invalid requests.
-//	 * This is useful for testing purposes when you don't want your log file to show lots of errors that are simply the
-//	 * results of testing.
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder noTrace() {
-//		return header("No-Trace", true);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Origin</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Origin"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder origin(Object value) {
-//		return header("If-Unmodified-Since", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Pragma</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Pragma"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder pragma(Object value) {
-//		return header("Pragma", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Proxy-Authorization</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Proxy-Authorization"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder proxyAuthorization(Object value) {
-//		return header("Proxy-Authorization", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Range</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Range"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder range(Object value) {
-//		return header("Range", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Referer</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Referer"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder referer(Object value) {
-//		return header("Referer", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>TE</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"TE"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder te(Object value) {
-//		return header("TE", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>User-Agent</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"User-Agent"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder userAgent(Object value) {
-//		return header("User-Agent", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Upgrade</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Upgrade"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder upgrade(Object value) {
-//		return header("Upgrade", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Via</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Via"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder via(Object value) {
-//		return header("Via", value);
-//	}
-//
-//	/**
-//	 * Sets the value for the <c>Warning</c> request header.
-//	 *
-//	 * <p>
-//	 * This is a shortcut for calling <code>header(<js>"Warning"</js>, value);</code>
-//	 *
-//	 * @param value The new header value.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder warning(Object value) {
-//		return header("Warning", value);
-//	}
+	//------------------------------------------------------------------------------------------------------------------
+	// Headers
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest
+	public static class F extends BasicRest {
+		@RestMethod
+		public Ok get(org.apache.juneau.rest.RestRequest req) {
+			String name = req.getHeader("X-Name"), expected = req.getHeader("X-Expect");
+			String actual = req.getHeader(name);
+			if (actual == null)
+				actual = "nil";
+			if (! expected.equals(actual))
+				throw new BadRequest("Check failed, name=["+name+"], value=["+expected+"], actual=["+actual+"]");
+			return Ok.OK;
+		}
+	}
+
+	@Test
+	public void f01_basicHeader() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header("Foo","bar")
+			.header("X-Name", "Foo")
+			.header("X-Expect", "bar")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f02_beanHeader() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header("Foo",bean)
+			.header("X-Name", "Foo")
+			.header("X-Expect", "(f=1)")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f03_nullHeaders() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header("Foo",null)
+			.header("X-Name", "Foo")
+			.header("X-Expect", "nil")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f04_header_Header() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new org.apache.http.message.BasicHeader("Foo", "bar"))
+			.header("X-Name", "Foo")
+			.header("X-Expect", "bar")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f05_header_NameValuePair() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new SimpleNameValuePair("Foo", "bar"))
+			.header("X-Name", "Foo")
+			.header("X-Expect", "bar")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f06_header_HttpHeader() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new BasicStringHeader("Foo", "bar"))
+			.header("X-Name", "Foo")
+			.header("X-Expect", "bar")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f07_headers_Header() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.headers(new org.apache.http.message.BasicHeader("Foo", "bar"),new org.apache.http.message.BasicHeader("Baz", "qux"))
+			.header("X-Name", "Foo")
+			.header("X-Expect", "bar")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f08_headers_ObjectMap() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.headers(new ObjectMap().append("Foo", "bar"))
+			.header("X-Name", "Foo")
+			.header("X-Expect", "bar")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f09_headers_Map() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.headers(AMap.of("Foo", "bar"))
+			.header("X-Name", "Foo")
+			.header("X-Expect", "bar")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f10_headers_NameValuePairs() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.headers(NameValuePairs.of("Foo","bar"))
+			.header("X-Name", "Foo")
+			.header("X-Expect", "bar")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f11_headers_NameValuePair() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.headers(new SimpleNameValuePair("Foo","bar"))
+			.header("X-Name", "Foo")
+			.header("X-Expect", "bar")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f12_headers_pairs() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.headers("Foo", "bar")
+			.header("X-Name", "Foo")
+			.header("X-Expect", "bar")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f13_headers_HttpHeader() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.headers(new BasicStringHeader("Foo", "bar"))
+			.header("X-Name", "Foo")
+			.header("X-Expect", "bar")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f14_headers_accept() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.accept("text/plain")
+			.header("X-Name", "Accept")
+			.header("X-Expect", "text/plain")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f15_headers_acceptCharset() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.acceptCharset("UTF-8")
+			.header("X-Name", "Accept-Charset")
+			.header("X-Expect", "UTF-8")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f16_headers_acceptEncoding() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.acceptEncoding("identity")
+			.header("X-Name", "Accept-Encoding")
+			.header("X-Expect", "identity")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f17_headers_acceptLanguage() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.acceptLanguage("en")
+			.header("X-Name", "Accept-Language")
+			.header("X-Expect", "en")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f18_headers_authorization() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.authorization("foo")
+			.header("X-Name", "Authorization")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f19_headers_cacheControl() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.cacheControl("none")
+			.header("X-Name", "Cache-Control")
+			.header("X-Expect", "none")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f20_headers_clientVersion() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.clientVersion("1")
+			.header("X-Name", "X-Client-Version")
+			.header("X-Expect", "1")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f21_headers_connection() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.connection("foo")
+			.header("X-Name", "Connection")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f22_headers_contentLength() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.contentLength("123")
+			.header("X-Name", "Content-Length")
+			.header("X-Expect", "123")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f23_headers_contentType() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.contentType("foo")
+			.header("X-Name", "Content-Type")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f24_headers_date() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.date("123")
+			.header("X-Name", "Date")
+			.header("X-Expect", "123")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f25_headers_expect() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.expect("foo")
+			.header("X-Name", "Expect")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f26_headers_forwarded() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.forwarded("foo")
+			.header("X-Name", "Forwarded")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f27_headers_from() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.from("foo")
+			.header("X-Name", "From")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f28_headers_host() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.host("foo")
+			.header("X-Name", "Host")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f29_headers_ifMatch() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.ifMatch("foo")
+			.header("X-Name", "If-Match")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f30_headers_ifModifiedSince() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.ifModifiedSince("foo")
+			.header("X-Name", "If-Modified-Since")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f31_headers_ifNoneMatch() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.ifNoneMatch("foo")
+			.header("X-Name", "If-None-Match")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f32_headers_ifRange() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.ifRange("foo")
+			.header("X-Name", "If-Range")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f33_headers_ifUnmodifiedSince() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.ifUnmodifiedSince("foo")
+			.header("X-Name", "If-Unmodified-Since")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f34_headers_maxForwards() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.maxForwards("10")
+			.header("X-Name", "Max-Forwards")
+			.header("X-Expect", "10")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f35_headers_noTrace() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.noTrace()
+			.header("X-Name", "No-Trace")
+			.header("X-Expect", "true")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f36_headers_origin() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.origin("foo")
+			.header("X-Name", "Origin")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f37_headers_pragma() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.pragma("foo")
+			.header("X-Name", "Pragma")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f38_headers_proxyAuthorization() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.proxyAuthorization("foo")
+			.header("X-Name", "Proxy-Authorization")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f39_headers_range() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.range("foo")
+			.header("X-Name", "Range")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f40_headers_referer() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.referer("foo")
+			.header("X-Name", "Referer")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f41_headers_te() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.te("foo")
+			.header("X-Name", "TE")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f42_headers_userAgent() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.userAgent("foo")
+			.header("X-Name", "User-Agent")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f43_headers_upgrade() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.upgrade("foo")
+			.header("X-Name", "Upgrade")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f44_headers_via() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.via("foo")
+			.header("X-Name", "Via")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void f45_headers_warning() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.warning("foo")
+			.header("X-Name", "Warning")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+
+
 //
 //	//-----------------------------------------------------------------------------------------------------------------
 //	// Query
