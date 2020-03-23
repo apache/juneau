@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import java.time.*;
+import java.util.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -85,9 +88,27 @@ public final class LastModified extends BasicDateHeader {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The value for this header.
+	 * @param value Header value in RFC1123 format.
 	 */
 	public LastModified(String value) {
+		super("Last-Modified", value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value Header value.
+	 */
+	public LastModified(Calendar value) {
+		super("Last-Modified", value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value Header value.
+	 */
+	public LastModified(ZonedDateTime value) {
 		super("Last-Modified", value);
 	}
 }

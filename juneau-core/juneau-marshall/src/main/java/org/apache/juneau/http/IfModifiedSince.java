@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import java.time.*;
+import java.util.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -106,9 +109,27 @@ public final class IfModifiedSince extends BasicDateHeader {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The value for this header.
+	 * @param value Header value in RFC1123 format.
 	 */
 	public IfModifiedSince(String value) {
+		super("If-Modified-Since", value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value Header value.
+	 */
+	public IfModifiedSince(Calendar value) {
+		super("If-Modified-Since", value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value Header value.
+	 */
+	public IfModifiedSince(ZonedDateTime value) {
 		super("If-Modified-Since", value);
 	}
 }

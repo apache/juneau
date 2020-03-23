@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import java.time.*;
+import java.util.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -91,7 +94,30 @@ public final class Date extends BasicDateHeader {
 		return new Date(value);
 	}
 
-	private Date(String value) {
+	/**
+	 * Constructor.
+	 *
+	 * @param value Header value in RFC1123 format.
+	 */
+	public Date(String value) {
+		super("Date", value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value Header value.
+	 */
+	public Date(Calendar value) {
+		super("Date", value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value Header value.
+	 */
+	public Date(ZonedDateTime value) {
 		super("Date", value);
 	}
 }

@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import java.time.*;
+import java.util.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -78,9 +81,27 @@ public final class IfUnmodifiedSince extends BasicDateHeader {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The value for this header.
+	 * @param value Header value in RFC1123 format.
 	 */
 	public IfUnmodifiedSince(String value) {
+		super("If-Unmodified-Since", value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value Header value.
+	 */
+	public IfUnmodifiedSince(Calendar value) {
+		super("If-Unmodified-Since", value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value Header value.
+	 */
+	public IfUnmodifiedSince(ZonedDateTime value) {
 		super("If-Unmodified-Since", value);
 	}
 }

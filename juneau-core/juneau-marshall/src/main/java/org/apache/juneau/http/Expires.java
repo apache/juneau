@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import java.time.*;
+import java.util.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -95,9 +98,27 @@ public final class Expires extends BasicDateHeader {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The value for this header.
+	 * @param value Header value in RFC1123 format.
 	 */
 	public Expires(String value) {
+		super("Expires", value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value Header value.
+	 */
+	public Expires(Calendar value) {
+		super("Expires", value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value Header value.
+	 */
+	public Expires(ZonedDateTime value) {
 		super("Expires", value);
 	}
 }

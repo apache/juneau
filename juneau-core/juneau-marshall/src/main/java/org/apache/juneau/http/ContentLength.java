@@ -71,6 +71,15 @@ public final class ContentLength extends BasicLongHeader {
 	}
 
 	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public ContentLength(Integer value) {
+		this(value == null ? null : value.longValue());
+	}
+
+	/**
 	 * Returns a parsed <c>Content-Length</c> header.
 	 *
 	 * @param value The <c>Content-Length</c> header string.

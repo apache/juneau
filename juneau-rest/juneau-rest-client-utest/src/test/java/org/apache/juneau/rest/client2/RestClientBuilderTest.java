@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client2;
 import static org.junit.Assert.*;
 
 import java.io.*;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.logging.*;
@@ -37,7 +38,9 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
+import org.junit.runners.*;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestClientBuilderTest {
 
 	public static class Bean {
@@ -71,6 +74,11 @@ public class RestClientBuilderTest {
 		public String getEcho(org.apache.juneau.rest.RestRequest req) {
 			return req.toString();
 		}
+	}
+
+	private static final Calendar CALENDAR = new GregorianCalendar(TimeZone.getTimeZone("Z"));
+	static {
+		CALENDAR.set(2000, 11, 31, 12, 34, 56);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -779,6 +787,363 @@ public class RestClientBuilderTest {
 			.build();
 		rc.get("").run().assertStatusCode(200);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Header Beans
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test
+	public void g01_headers_accept() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Accept("text/plain"))
+			.header("X-Name", "Accept")
+			.header("X-Expect", "text/plain")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g02_headers_acceptCharset() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new AcceptCharset("UTF-8"))
+			.header("X-Name", "Accept-Charset")
+			.header("X-Expect", "UTF-8")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g03_headers_acceptEncoding() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new AcceptEncoding("identity"))
+			.header("X-Name", "Accept-Encoding")
+			.header("X-Expect", "identity")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g04_headers_acceptLanguage() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new AcceptLanguage("en"))
+			.header("X-Name", "Accept-Language")
+			.header("X-Expect", "en")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g05_headers_authorization() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Authorization("foo"))
+			.header("X-Name", "Authorization")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g06_headers_cacheControl() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new CacheControl("none"))
+			.header("X-Name", "Cache-Control")
+			.header("X-Expect", "none")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g07_headers_clientVersion() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new ClientVersion("1"))
+			.header("X-Name", "X-Client-Version")
+			.header("X-Expect", "1")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g08_headers_connection() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Connection("foo"))
+			.header("X-Name", "Connection")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g09_headers_contentLength() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new ContentLength(123))
+			.header("X-Name", "Content-Length")
+			.header("X-Expect", "123")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g10_headers_contentType() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new ContentType("foo"))
+			.header("X-Name", "Content-Type")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g11a_headers_date() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new org.apache.juneau.http.Date("Sun, 31 Dec 2000 12:34:56 GMT"))
+			.header("X-Name", "Date")
+			.header("X-Expect", "Sun, 31 Dec 2000 12:34:56 GMT")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g11b_headers_date() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new org.apache.juneau.http.Date(CALENDAR))
+			.header("X-Name", "Date")
+			.header("X-Expect", "Sun, 31 Dec 2000 12:34:56 GMT")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g12_headers_expect() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Expect("foo"))
+			.header("X-Name", "Expect")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g13_headers_forwarded() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Forwarded("foo"))
+			.header("X-Name", "Forwarded")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g14_headers_from() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new From("foo"))
+			.header("X-Name", "From")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g15_headers_host() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Host("foo"))
+			.header("X-Name", "Host")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g16_headers_ifMatch() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new IfMatch("foo"))
+			.header("X-Name", "If-Match")
+			.header("X-Expect", "\"foo\"")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g17a_headers_ifModifiedSince() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new IfModifiedSince(CALENDAR))
+			.header("X-Name", "If-Modified-Since")
+			.header("X-Expect", "Sun, 31 Dec 2000 12:34:56 GMT")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g17b_headers_ifModifiedSince() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new IfModifiedSince("Sun, 31 Dec 2000 12:34:56 GMT"))
+			.header("X-Name", "If-Modified-Since")
+			.header("X-Expect", "Sun, 31 Dec 2000 12:34:56 GMT")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g18_headers_ifNoneMatch() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new IfNoneMatch("foo"))
+			.header("X-Name", "If-None-Match")
+			.header("X-Expect", "\"foo\"")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g19_headers_ifRange() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new IfRange("foo"))
+			.header("X-Name", "If-Range")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g20a_headers_ifUnmodifiedSince() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new IfUnmodifiedSince(CALENDAR))
+			.header("X-Name", "If-Unmodified-Since")
+			.header("X-Expect", "Sun, 31 Dec 2000 12:34:56 GMT")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g20b_headers_ifUnmodifiedSince() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new IfUnmodifiedSince("Sun, 31 Dec 2000 12:34:56 GMT"))
+			.header("X-Name", "If-Unmodified-Since")
+			.header("X-Expect", "Sun, 31 Dec 2000 12:34:56 GMT")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g21_headers_maxForwards() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new MaxForwards(10))
+			.header("X-Name", "Max-Forwards")
+			.header("X-Expect", "10")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g22_headers_noTrace() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new NoTrace("true"))
+			.header("X-Name", "No-Trace")
+			.header("X-Expect", "true")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g23_headers_origin() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Origin("foo"))
+			.header("X-Name", "Origin")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g24_headers_pragma() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Pragma("foo"))
+			.header("X-Name", "Pragma")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g25_headers_proxyAuthorization() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new ProxyAuthorization("foo"))
+			.header("X-Name", "Proxy-Authorization")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g26_headers_range() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Range("foo"))
+			.header("X-Name", "Range")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g27_headers_referer() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Referer("foo"))
+			.header("X-Name", "Referer")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g28_headers_te() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new TE("foo"))
+			.header("X-Name", "TE")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g29_headers_userAgent() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new UserAgent("foo"))
+			.header("X-Name", "User-Agent")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g30_headers_upgrade() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Upgrade("foo"))
+			.header("X-Name", "Upgrade")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g31_headers_via() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Via("foo"))
+			.header("X-Name", "Via")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	@Test
+	public void g32_headers_warning() throws Exception {
+		RestClient rc = MockRestClient.create(F.class).simpleJson()
+			.header(new Warning("foo"))
+			.header("X-Name", "Warning")
+			.header("X-Expect", "foo")
+			.build();
+		rc.get("").run().assertStatusCode(200);
+	}
+
+	// TODO - Multiple headers
+	// TODO - Headers overridden on request.
 
 
 

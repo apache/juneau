@@ -12,7 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import org.apache.juneau.internal.*;
+import static java.time.format.DateTimeFormatter.*;
+
+import java.time.*;
+import java.util.*;
+
+import org.apache.juneau.annotation.*;
 
 /**
  * Category of headers that consist of a single HTTP-date.
@@ -27,34 +32,62 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
+@BeanIgnore
 public class BasicDateHeader extends BasicHeader {
 
-	private final java.util.Date date;
-	private final String raw;
+	private final ZonedDateTime zdt;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param name The HTTP header name.
-	 * @param raw The raw header value.
+	 * @param value The raw header value.
 	 */
-	protected BasicDateHeader(String name, String raw) {
-		super(name, raw);
-		this.raw = raw;
-		this.date = DateUtils.parseDate(raw);
+	public BasicDateHeader(String name, String value) {
+		super(name, value);
+		this.zdt = ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value));
 	}
 
 	/**
-	 * Returns this header value as a {@link java.util.Date}.
+	 * Constructor.
 	 *
-	 * @return This header value as a {@link java.util.Date}, or <jk>null</jk> if the header could not be parsed.
+	 * @param name The HTTP header name.
+	 * @param value The header value.
 	 */
-	public java.util.Date asDate() {
-		return date;
+	public BasicDateHeader(String name, Calendar value) {
+		this(name, asZdt(value));
 	}
 
-	@Override /* Object */
-	public String toString() {
-		return raw;
+	/**
+	 * Constructor.
+	 *
+	 * @param name The HTTP header name.
+	 * @param value The header value.
+	 */
+	public BasicDateHeader(String name, ZonedDateTime value) {
+		super(name, RFC_1123_DATE_TIME.format(value));
+		this.zdt = value;
+	}
+
+	/**
+	 * Returns this header value as a {@link java.util.Calendar}.
+	 *
+	 * @return This header value as a {@link java.util.Calendar}, or <jk>null</jk> if the header could not be parsed.
+	 */
+	public Calendar asCalendar() {
+		return GregorianCalendar.from(zdt);
+	}
+
+	/**
+	 * Returns this header value as a {@link java.util.Calendar}.
+	 *
+	 * @return This header value as a {@link java.util.Calendar}, or <jk>null</jk> if the header could not be parsed.
+	 */
+	public ZonedDateTime asZonedDateTime() {
+		return zdt;
+	}
+
+	private static ZonedDateTime asZdt(Calendar o) {
+		return o instanceof GregorianCalendar ? ((GregorianCalendar)o).toZonedDateTime() : o.toInstant().atZone(ZoneId.systemDefault());
 	}
 }

@@ -848,7 +848,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	@Override /* HttpServletRequest */
 	public long getDateHeader(String name) {
 		String s = getHeader(name);
-		return s == null ? 0 : org.apache.juneau.http.Date.forString(s).asDate().getTime();
+		return s == null ? 0 : org.apache.juneau.http.Date.forString(s).asZonedDateTime().toInstant().toEpochMilli();
 	}
 
 	@Override /* HttpServletRequest */

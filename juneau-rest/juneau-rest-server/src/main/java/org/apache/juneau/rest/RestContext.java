@@ -4872,12 +4872,12 @@ public final class RestContext extends BeanContext {
 	 * Returns the debug setting on this context for the specified method.
 	 *
 	 * @param method The java method.
-	 * @return The debug setting on this context or <jk>null</jk> not specified for this method.
+	 * @return The debug setting on this context or the debug value of the servlet context if not specified for this method.
 	 */
 	public Enablement getDebug(Method method) {
 		if (method == null)
 			return null;
-		return debugEnablement.find(method).orElse(null);
+		return debugEnablement.find(method).orElse(debug);
 	}
 
 	/**
