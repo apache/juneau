@@ -1142,6 +1142,25 @@ public class RestClientBuilderTest {
 		rc.get("").run().assertStatusCode(200);
 	}
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Other Header tests
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test
+	public void h01_multipleHeaders() throws Exception {
+		MockLogger ml = new MockLogger();
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logTo(Level.SEVERE, ml)
+			.headers("Foo","bar","Foo","baz")
+			.header("Foo","qux")
+			.build();
+		rc.post("/bean", bean).complete();
+		ml.assertLevel(Level.SEVERE);
+		ml.assertMessageContains("\tFoo: bar\n\tFoo: baz\n\tFoo: qux");
+	}
+
 	// TODO - Multiple headers
 	// TODO - Headers overridden on request.
 

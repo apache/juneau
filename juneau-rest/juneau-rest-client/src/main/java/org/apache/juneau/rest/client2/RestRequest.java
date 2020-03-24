@@ -1537,7 +1537,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	public RestRequest header(NameValuePair header, boolean skipIfEmpty) {
 		String v = header.getValue();
 		if (canAdd(v, skipIfEmpty))
-			setHeader(header.getName(), v);
+			addHeader(header.getName(), v);
 		return this;
 	}
 
@@ -1782,7 +1782,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 */
 	public RestRequest headers(HttpHeader...headers) throws RestCallException {
 		for (HttpHeader h : headers)
-			setHeader(h.getName(), stringify(h.getValue()));
+			addHeader(h.getName(), stringify(h.getValue()));
 		return this;
 	}
 
@@ -2257,7 +2257,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 			request.setURI(uriBuilder.build());
 
 			// Pick the serializer if it hasn't been overridden.
-			Header h = getFirstHeader("Content-Type");
+			Header h = getLastHeader("Content-Type");
 			String contentType = h == null ? null : h.getValue();
 			Serializer serializer = this.serializer;
 			if (serializer == null)
@@ -2266,7 +2266,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 				contentType = serializer.getPrimaryMediaType().toString();
 
 			// Pick the parser if it hasn't been overridden.
-			h = getFirstHeader("Accept");
+			h = getLastHeader("Accept");
 			String accept = h == null ? null : h.getValue();
 			Parser parser = this.parser;
 			if (parser == null)

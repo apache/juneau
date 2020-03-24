@@ -309,6 +309,34 @@ public abstract class ContextBuilder {
 	}
 
 	/**
+	 * Adds a value to the end of a SET or LIST property.
+	 *
+	 * @param name The property name.
+	 * @param value The new value to add to the SET property.
+	 * @return This object (for method chaining).
+	 * @throws ConfigException If property is not a SET property.
+	 */
+	@ConfigurationProperty
+	public ContextBuilder appendTo(String name, Object value) {
+		psb.appendTo(name, value);
+		return this;
+	}
+
+	/**
+	 * Adds a value to the beginning of a SET or LIST property.
+	 *
+	 * @param name The property name.
+	 * @param value The new value to add to the SET property.
+	 * @return This object (for method chaining).
+	 * @throws ConfigException If property is not a SET property.
+	 */
+	@ConfigurationProperty
+	public ContextBuilder prependTo(String name, Object value) {
+		psb.prependTo(name, value);
+		return this;
+	}
+
+	/**
 	 * Adds or overwrites a value to a SET, LIST, or MAP property.
 	 *
 	 * @param name The property name.

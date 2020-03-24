@@ -294,6 +294,72 @@ public class PropertyStoreBuilder {
 	}
 
 	/**
+	 * Appends a value to the end of a SET or LIST property.
+	 *
+	 * <p>
+	 * NOTE:  When adding to a list, the value is inserted at the end of the list.
+	 *
+	 * @param key The property key.
+	 * @param value
+	 * 	The new value to add to the property.
+	 * 	<br>This can be a single value, Collection, array, or JSON array string.
+	 * 	<br><jk>null</jk> values have the effect of removing entries.
+	 * @return This object (for method chaining).
+	 * @throws ConfigException If property is not a SET/LIST property, or the argument is invalid.
+	 */
+	public synchronized PropertyStoreBuilder appendTo(String key, Object value) {
+		propertyStore = null;
+		String g = group(key);
+		String n = g.isEmpty() ? key : key.substring(g.length()+1);
+
+		PropertyGroupBuilder gb = groups.get(g);
+		if (gb == null) {
+			gb = new PropertyGroupBuilder();
+			groups.put(g, gb);
+		}
+
+		gb.appendTo(n, value);
+
+		if (gb.isEmpty())
+			groups.remove(g);
+
+		return this;
+	}
+
+	/**
+	 * Prepends a value to the beginning of a SET or LIST property.
+	 *
+	 * <p>
+	 * NOTE:  When adding to a list, the value is inserted at the beginning of the list.
+	 *
+	 * @param key The property key.
+	 * @param value
+	 * 	The new value to add to the property.
+	 * 	<br>This can be a single value, Collection, array, or JSON array string.
+	 * 	<br><jk>null</jk> values have the effect of removing entries.
+	 * @return This object (for method chaining).
+	 * @throws ConfigException If property is not a SET/LIST property, or the argument is invalid.
+	 */
+	public synchronized PropertyStoreBuilder prependTo(String key, Object value) {
+		propertyStore = null;
+		String g = group(key);
+		String n = g.isEmpty() ? key : key.substring(g.length()+1);
+
+		PropertyGroupBuilder gb = groups.get(g);
+		if (gb == null) {
+			gb = new PropertyGroupBuilder();
+			groups.put(g, gb);
+		}
+
+		gb.prependTo(n, value);
+
+		if (gb.isEmpty())
+			groups.remove(g);
+
+		return this;
+	}
+
+	/**
 	 * Removes a value from a SET or LIST property.
 	 *
 	 * @param key The property key.
@@ -428,6 +494,38 @@ public class PropertyStoreBuilder {
 			}
 		}
 
+		synchronized void appendTo(String key, Object value) {
+			MutableProperty p = properties.get(key);
+			if (p == null) {
+				p = MutableProperty.create(key, null);
+				p.append(value);
+				if (! p.isEmpty())
+					properties.put(key, p);
+			} else {
+				p.append(value);
+				if (p.isEmpty())
+					properties.remove(key);
+				else
+					properties.put(key, p);
+			}
+		}
+
+		synchronized void prependTo(String key, Object value) {
+			MutableProperty p = properties.get(key);
+			if (p == null) {
+				p = MutableProperty.create(key, null);
+				p.prepend(value);
+				if (! p.isEmpty())
+					properties.put(key, p);
+			} else {
+				p.prepend(value);
+				if (p.isEmpty())
+					properties.remove(key);
+				else
+					properties.put(key, p);
+			}
+		}
+
 		synchronized void removeFrom(String key, Object value) {
 			MutableProperty p = properties.get(key);
 			if (p == null) {
@@ -527,6 +625,14 @@ public class PropertyStoreBuilder {
 			throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(value), className(value), name, type);
 		}
 
+		void append(Object value) {
+			throw new ConfigException("Cannot append value {0} ({1}) to property ''{2}'' ({3}).", string(value), className(value), name, type);
+		}
+
+		void prepend(Object value) {
+			throw new ConfigException("Cannot prepend value {0} ({1}) to property ''{2}'' ({3}).", string(value), className(value), name, type);
+		}
+
 		void remove(Object value) {
 			throw new ConfigException("Cannot remove value {0} ({1}) from property ''{2}'' ({3}).", string(value), className(value), name, type);
 		}
@@ -584,7 +690,7 @@ public class PropertyStoreBuilder {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	static class MutableSetProperty extends MutableProperty {
-		private final Set<Object> set;
+		private final ConcurrentSkipListSet<Object> set;
 
 		MutableSetProperty(String name, PropertyType type, Object value) {
 			super(name, type);
@@ -621,6 +727,27 @@ public class PropertyStoreBuilder {
 				set.addAll(normalize(type.converter, o));
 			} catch (Exception e) {
 				throw new ConfigException(e, "Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
+			}
+		}
+
+		@Override /* MutableProperty */
+		synchronized void append(Object o) {
+			try {
+				set.addAll(normalize(type.converter, o));
+			} catch (Exception e) {
+				throw new ConfigException(e, "Cannot append value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
+			}
+		}
+
+		@Override /* MutableProperty */
+		synchronized void prepend(Object o) {
+			try {
+				Set<Object> s = new LinkedHashSet<>(set);
+				set.clear();
+				set.addAll(normalize(type.converter, o));
+				set.addAll(s);
+			} catch (Exception e) {
+				throw new ConfigException(e, "Cannot prepend value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 			}
 		}
 
@@ -694,6 +821,28 @@ public class PropertyStoreBuilder {
 				list.addAll(index, l);
 			} catch (Exception e) {
 				throw new ConfigException(e, "Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
+			}
+		}
+
+		@Override /* MutableProperty */
+		synchronized void append(Object o) {
+			try {
+				List<Object> l = normalize(type.converter, o);
+				list.removeAll(l);
+				list.addAll(l);
+			} catch (Exception e) {
+				throw new ConfigException(e, "Cannot append value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
+			}
+		}
+
+		@Override /* MutableProperty */
+		synchronized void prepend(Object o) {
+			try {
+				List<Object> l = normalize(type.converter, o);
+				list.removeAll(l);
+				list.addAll(0, l);
+			} catch (Exception e) {
+				throw new ConfigException(e, "Cannot prepend value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 			}
 		}
 

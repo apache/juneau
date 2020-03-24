@@ -502,7 +502,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder header(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return addTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).serializer(serializer).schema(schema));
+		return appendTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).serializer(serializer).schema(schema));
 	}
 
 	/**
@@ -550,7 +550,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder header(Header header) {
-		return addTo(RESTCLIENT_headers, header);
+		return appendTo(RESTCLIENT_headers, header);
 	}
 
 	/**
@@ -569,7 +569,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder header(NameValuePair header) {
-		return addTo(RESTCLIENT_headers, header);
+		return appendTo(RESTCLIENT_headers, header);
 	}
 
 	/**
@@ -588,7 +588,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder header(HttpHeader header) {
-		return addTo(RESTCLIENT_headers, header);
+		return appendTo(RESTCLIENT_headers, header);
 	}
 
 	/**
@@ -3029,6 +3029,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
 		return this;
 	}
 
