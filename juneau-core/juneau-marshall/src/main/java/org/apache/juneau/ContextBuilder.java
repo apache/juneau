@@ -295,7 +295,7 @@ public abstract class ContextBuilder {
 	}
 
 	/**
-	 * Adds a value to a SET or LIST property.
+	 * Adds a value to a SET property.
 	 *
 	 * @param name The property name.
 	 * @param value The new value to add to the SET property.
@@ -309,12 +309,12 @@ public abstract class ContextBuilder {
 	}
 
 	/**
-	 * Adds a value to the end of a SET or LIST property.
+	 * Adds a value to the end of a LIST property.
 	 *
 	 * @param name The property name.
-	 * @param value The new value to add to the SET property.
+	 * @param value The new value to add to the LIST property.
 	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a SET property.
+	 * @throws ConfigException If property is not a LIST property.
 	 */
 	@ConfigurationProperty
 	public ContextBuilder appendTo(String name, Object value) {
@@ -323,12 +323,12 @@ public abstract class ContextBuilder {
 	}
 
 	/**
-	 * Adds a value to the beginning of a SET or LIST property.
+	 * Adds a value to the beginning of a LIST property.
 	 *
 	 * @param name The property name.
-	 * @param value The new value to add to the SET property.
+	 * @param value The new value to add to the LIST property.
 	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a SET property.
+	 * @throws ConfigException If property is not a LIST property.
 	 */
 	@ConfigurationProperty
 	public ContextBuilder prependTo(String name, Object value) {
@@ -337,7 +337,7 @@ public abstract class ContextBuilder {
 	}
 
 	/**
-	 * Adds or overwrites a value to a SET, LIST, or MAP property.
+	 * Adds or overwrites an entry in a MAP property.
 	 *
 	 * @param name The property name.
 	 * @param key The property value map key.
@@ -346,8 +346,21 @@ public abstract class ContextBuilder {
 	 * @throws ConfigException If property is not a MAP property.
 	 */
 	@ConfigurationProperty
-	public ContextBuilder addTo(String name, String key, Object value) {
-		psb.addTo(name, key, value);
+	public ContextBuilder putTo(String name, String key, Object value) {
+		psb.putTo(name, key, value);
+		return this;
+	}
+
+	/**
+	 * Adds or overwrites multiple entries in a MAP property.
+	 *
+	 * @param name The property name.
+	 * @param value Either a {@link Map} or JSON string.
+	 * @return This object (for method chaining).
+	 * @throws ConfigException If property is not a MAP property.
+	 */
+	public ContextBuilder putTo(String name, Object value) {
+		psb.putTo(name, value);
 		return this;
 	}
 

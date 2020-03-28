@@ -48,13 +48,13 @@ public class JsonSchemaConfigApply extends ConfigApply<JsonSchemaConfig> {
 		if (a.beanDefMapper() != BeanDefMapper.Null.class)
 			psb.set(JSONSCHEMA_beanDefMapper, a.beanDefMapper());
 		for (CS e : a.defaultSchemas())
-			psb.addTo(JSONSCHEMA_defaultSchemas, e.k().getName(), objectMap(e.v(), "defaultSchemas"));
+			psb.putTo(JSONSCHEMA_defaultSchemas, e.k().getName(), objectMap(e.v(), "defaultSchemas"));
 		if (! a.ignoreTypes().isEmpty())
 			psb.set(JSONSCHEMA_ignoreTypes, string(a.ignoreTypes()));
 		if (! a.useBeanDefs().isEmpty())
 			psb.set(JSONSCHEMA_useBeanDefs, bool(a.useBeanDefs()));
 
 		if (a.applySchema().length > 0)
-			psb.addTo(BEAN_annotations, a.applySchema());
+			psb.prependTo(BEAN_annotations, a.applySchema());
 	}
 }

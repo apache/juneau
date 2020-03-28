@@ -93,7 +93,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * This class is not thread safe.
  */
-public class OMap extends LinkedHashMap<String,Object> {
+public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ {
 	private static final long serialVersionUID = 1L;
 
 	private transient BeanSession session;
@@ -615,6 +615,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param type The class type returned.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public <T> T get(String key, Class<T> type) {
 		return getWithDefault(key, (T)null, type);
 	}
@@ -668,6 +669,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param args The class type parameters.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public <T> T get(String key, Type type, Type...args) {
 		return getWithDefault(key, null, type, args);
 	}
@@ -679,6 +681,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param def The default value if the entry doesn't exist.
 	 * @return The value, or the default value if the entry doesn't exist.
 	 */
+	@Override
 	public Object getWithDefault(String key, Object def) {
 		Object o = get(key);
 		return (o == null ? def : o);
@@ -693,6 +696,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param type The class type returned.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public <T> T getWithDefault(String key, T def, Class<T> type) {
 		return getWithDefault(key, def, type, new Type[0]);
 	}
@@ -707,6 +711,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param args The class type parameters.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public <T> T getWithDefault(String key, T def, Type type, Type...args) {
 		Object o = get(key);
 		if (o == null)
@@ -723,6 +728,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * 	For performance reasons, it's preferable that the key be all lowercase.
 	 * @return The key, or <jk>null</jk> if map does not contain this key.
 	 */
+	@Override
 	public String findKeyIgnoreCase(String key) {
 		for (String k : keySet())
 			if (key.equalsIgnoreCase(k))
@@ -740,6 +746,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 * @throws ParseException Malformed input encountered.
 	 */
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public <T> T getSwapped(String key, PojoSwap<T,?> pojoSwap) throws ParseException {
 		try {
@@ -761,6 +768,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param keys The keys to look up in order.
 	 * @return The value of the first entry whose key exists, or <jk>null</jk> if none of the keys exist in this map.
 	 */
+	@Override
 	public Object find(String...keys) {
 		for (String key : keys)
 			if (containsKey(key))
@@ -782,6 +790,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param keys The keys to look up in order.
 	 * @return The value of the first entry whose key exists, or <jk>null</jk> if none of the keys exist in this map.
 	 */
+	@Override
 	public <T> T find(Class<T> type, String...keys) {
 		for (String key : keys)
 			if (containsKey(key))
@@ -798,6 +807,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 */
+	@Override
 	public String getString(String key) {
 		return get(key, String.class);
 	}
@@ -811,6 +821,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 */
+	@Override
 	public String[] getStringArray(String key) {
 		return getStringArray(key, null);
 	}
@@ -822,6 +833,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param def The default value if value is not found.
 	 * @return The value converted to a string array.
 	 */
+	@Override
 	public String[] getStringArray(String key, String[] def) {
 		Object s = get(key, Object.class);
 		if (s == null)
@@ -848,6 +860,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 */
+	@Override
 	public String getString(String key, String defVal) {
 		return getWithDefault(key, defVal, String.class);
 	}
@@ -862,6 +875,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Integer getInt(String key) {
 		return get(key, Integer.class);
 	}
@@ -877,6 +891,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Integer getInt(String key, Integer defVal) {
 		return getWithDefault(key, defVal, Integer.class);
 	}
@@ -891,6 +906,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Long getLong(String key) {
 		return get(key, Long.class);
 	}
@@ -906,6 +922,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Long getLong(String key, Long defVal) {
 		return getWithDefault(key, defVal, Long.class);
 	}
@@ -920,6 +937,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Boolean getBoolean(String key) {
 		return get(key, Boolean.class);
 	}
@@ -935,6 +953,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Boolean getBoolean(String key, Boolean defVal) {
 		return getWithDefault(key, defVal, Boolean.class);
 	}
@@ -949,6 +968,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public OMap getMap(String key) {
 		return get(key, OMap.class);
 	}
@@ -995,6 +1015,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public OList getList(String key) {
 		return get(key, OList.class);
 	}
@@ -1042,6 +1063,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
 	 * 	contains no mapping for any of the keys.
 	 */
+	@Override
 	public String findString(String... keys) {
 		return find(String.class, keys);
 	}
@@ -1058,6 +1080,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * 	contains no mapping for any of the keys.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Integer findInt(String... keys) {
 		return find(Integer.class, keys);
 	}
@@ -1074,6 +1097,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * 	contains no mapping for any of the keys.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Long findLong(String... keys) {
 		return find(Long.class, keys);
 	}
@@ -1090,6 +1114,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * 	contains no mapping for any of the keys.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Boolean findBoolean(String... keys) {
 		return find(Boolean.class, keys);
 	}
@@ -1106,6 +1131,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * 	contains no mapping for any of the keys.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public OMap findMap(String... keys) {
 		return find(OMap.class, keys);
 	}
@@ -1122,6 +1148,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * 	contains no mapping for any of the keys.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public OList findList(String... keys) {
 		return find(OList.class, keys);
 	}
@@ -1131,6 +1158,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @return The first key in the map, or <jk>null</jk> if the map is empty.
 	 */
+	@Override
 	public String getFirstKey() {
 		return isEmpty() ? null : keySet().iterator().next();
 	}
@@ -1142,6 +1170,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return
 	 * 	The data type of the object at the specified key, or <jk>null</jk> if the value is null or does not exist.
 	 */
+	@Override
 	public ClassMeta<?> getClassMeta(String key) {
 		return bs().getClassMetaForObject(get(key));
 	}
@@ -1156,6 +1185,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public <T> T removeWithDefault(String key, T defVal, Class<T> type) {
 		T t = getWithDefault(key, defVal, type);
 		remove(key);
@@ -1169,6 +1199,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public String removeString(String key) {
 		return removeString(key, null);
 	}
@@ -1181,6 +1212,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public String removeString(String key, String def) {
 		return removeWithDefault(key, def, String.class);
 	}
@@ -1192,6 +1224,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Integer removeInt(String key) {
 		return removeInt(key, null);
 	}
@@ -1204,6 +1237,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Integer removeInt(String key, Integer def) {
 		return removeWithDefault(key, def, Integer.class);
 	}
@@ -1215,6 +1249,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Boolean removeBoolean(String key) {
 		return removeBoolean(key, null);
 	}
@@ -1227,6 +1262,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Boolean removeBoolean(String key, Boolean def) {
 		return removeWithDefault(key, def, Boolean.class);
 	}
@@ -1236,6 +1272,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param keys The list of keys to remove.
 	 */
+	@Override
 	public void removeAll(Collection<String> keys) {
 		for (String k : keys)
 			remove(k);
@@ -1246,6 +1283,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param keys The list of keys to remove.
 	 */
+	@Override
 	public void removeAll(String... keys) {
 		for (String k : keys)
 			remove(k);
@@ -1260,6 +1298,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param keys The keys to keep.
 	 * @return This map.
 	 */
+	@Override
 	public OMap keepAll(String...keys) {
 		for (Iterator<String> i = keySet().iterator(); i.hasNext();) {
 			boolean remove = true;
@@ -1285,6 +1324,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param key The key.
 	 * @return <jk>true</jk> if the map contains the specified entry and the value is not null nor an empty string.
 	 */
+	@Override
 	public boolean containsKeyNotEmpty(String key) {
 		Object val = get(key);
 		if (val == null)
@@ -1300,6 +1340,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param key The key to look up.
 	 * @return <jk>true</jk> if this map contains the specified key.
 	 */
+	@Override
 	public boolean containsOuterKey(Object key) {
 		return super.containsKey(key);
 	}
@@ -1310,6 +1351,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param keys The keys of the entries to copy.
 	 * @return A new map with just the keys and values from this map.
 	 */
+	@Override
 	public OMap include(String...keys) {
 		OMap m2 = new OMap();
 		for (Map.Entry<String,Object> e : this.entrySet())
@@ -1325,6 +1367,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param keys The keys of the entries not to copy.
 	 * @return A new map without the keys and values from this map.
 	 */
+	@Override
 	public OMap exclude(String...keys) {
 		OMap m2 = new OMap();
 		for (Map.Entry<String,Object> e : this.entrySet()) {
@@ -1350,6 +1393,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @throws ClassCastException
 	 * 	If the <js>"_type"</js> entry is present and not assignable from <c>type</c>
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T cast(Class<T> type) {
 		BeanSession bs = bs();
@@ -1371,6 +1415,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @throws ClassCastException
 	 * 	If the <js>"_type"</js> entry is present and not assignable from <c>type</c>
 	 */
+	@Override
 	@SuppressWarnings({"unchecked"})
 	public <T> T cast(ClassMeta<T> cm) {
 		BeanSession bs = bs();
@@ -1410,6 +1455,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param <T> The class type.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public <T> T getAt(String path, Class<T> type) {
 		return getPojoRest().get(path, type);
 	}
@@ -1428,6 +1474,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param <T> The class type.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public <T> T getAt(String path, Type type, Type...args) {
 		return getPojoRest().get(path, type, args);
 	}
@@ -1457,6 +1504,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param o The new value.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public Object putAt(String path, Object o) {
 		return getPojoRest().put(path, o);
 	}
@@ -1485,6 +1533,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param o The new value.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public Object postAt(String path, Object o) {
 		return getPojoRest().post(path, o);
 	}
@@ -1513,6 +1562,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param path The path to the entry.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public Object deleteAt(String path) {
 		return getPojoRest().delete(path);
 	}
@@ -1526,6 +1576,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @return The {@link BeanSession} currently associated with this map.
 	 */
+	@Override
 	public BeanSession getBeanSession() {
 		return session;
 	}
@@ -1540,6 +1591,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param json The JSON text that will be parsed into an Object and then inserted into this map.
 	 * @throws ParseException Malformed input encountered.
 	 */
+	@Override
 	public void putJson(String key, String json) throws ParseException {
 		this.put(key, JsonParser.DEFAULT.parse(json, Object.class));
 	}
@@ -1582,6 +1634,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @return <jk>true</jk> if this map is unmodifiable.
 	 */
+	@Override
 	public boolean isUnmodifiable() {
 		return false;
 	}
@@ -1591,6 +1644,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @return A modifiable copy of this map if it's unmodifiable, or this map if it is already modifiable.
 	 */
+	@Override
 	public OMap modifiable() {
 		if (isUnmodifiable())
 			return new OMap(this);
@@ -1602,6 +1656,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @return An unmodifiable copy of this map if it's modifiable, or this map if it is already unmodifiable.
 	 */
+	@Override
 	public OMap unmodifiable() {
 		if (this instanceof UnmodifiableOMap)
 			return this;

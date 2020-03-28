@@ -69,7 +69,7 @@ public class HtmlDocConfigApply extends ConfigApply<HtmlDocConfig> {
 			psb.set(HTMLDOC_template, a.template());
 		for (Class<? extends HtmlWidget> w : a.widgets()) {
 			try {
-				psb.addTo(HTMLDOC_widgets, w.newInstance());
+				psb.prependTo(HTMLDOC_widgets, w.newInstance());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

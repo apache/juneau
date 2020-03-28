@@ -68,12 +68,6 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public PlainTextParserBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public PlainTextParserBuilder appendTo(String name, Object value) {
 		super.appendTo(name, value);
 		return this;

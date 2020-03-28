@@ -1223,7 +1223,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder header(String key, Object value) {
-		return addTo(RESTCLIENT_headers, key, value);
+		return putTo(RESTCLIENT_headers, key, value);
 	}
 
 	/**
@@ -1275,7 +1275,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder interceptors(RestCallInterceptor...value) {
-		return addTo(RESTCLIENT_interceptors, value);
+		return prependTo(RESTCLIENT_interceptors, value);
 	}
 
 	/**
@@ -1467,7 +1467,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder query(String key, Object value) {
-		return addTo(RESTCLIENT_query, key, value);
+		return putTo(RESTCLIENT_query, key, value);
 	}
 
 	/**
@@ -2908,8 +2908,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
+	public RestClientBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestClientBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
 		return this;
 	}
 

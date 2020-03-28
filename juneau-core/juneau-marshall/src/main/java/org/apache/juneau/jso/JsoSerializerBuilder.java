@@ -67,12 +67,6 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsoSerializerBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public JsoSerializerBuilder appendTo(String name, Object value) {
 		super.appendTo(name, value);
 		return this;

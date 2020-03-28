@@ -246,7 +246,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 */
 	@ConfigurationProperty
 	public JsonSchemaGeneratorBuilder defaultSchema(Class<?> c, ObjectMap schema) {
-		return addTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
+		return putTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
 	}
 
 	/**
@@ -342,8 +342,8 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
+	public JsonSchemaGeneratorBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
 		return this;
 	}
 

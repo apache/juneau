@@ -249,7 +249,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 */
 	@ConfigurationProperty
 	public HtmlSchemaSerializerBuilder defaultSchema(Class<?> c, ObjectMap schema) {
-		return addTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
+		return putTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
 	}
 
 	/**
@@ -308,8 +308,8 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlSchemaSerializerBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
+	public HtmlSchemaSerializerBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
 		return this;
 	}
 

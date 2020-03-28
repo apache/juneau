@@ -1118,7 +1118,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder query(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return addTo(RESTCLIENT_query, SerializedNameValuePair.create().name(name).value(value).type(QUERY).serializer(serializer).schema(schema));
+		return appendTo(RESTCLIENT_query, SerializedNameValuePair.create().name(name).value(value).type(QUERY).serializer(serializer).schema(schema));
 	}
 
 	/**
@@ -1183,7 +1183,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClientBuilder query(Object...params) {
 		for (Object p : params) {
 			if (p instanceof NameValuePair) {
-				addTo(RESTCLIENT_query, p);
+				appendTo(RESTCLIENT_query, p);
 			} else if (p instanceof Map) {
 				Map m = (Map)p;
 				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
@@ -1253,7 +1253,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder formData(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return addTo(RESTCLIENT_formData, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).serializer(serializer).schema(schema));
+		return appendTo(RESTCLIENT_formData, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).serializer(serializer).schema(schema));
 	}
 
 	/**
@@ -1318,7 +1318,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClientBuilder formData(Object...params) {
 		for (Object p : params) {
 			if (p instanceof NameValuePair) {
-				addTo(RESTCLIENT_formData, p);
+				appendTo(RESTCLIENT_formData, p);
 			} else if (p instanceof Map) {
 				Map m = (Map)p;
 				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
@@ -1512,7 +1512,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@SuppressWarnings("unchecked")
 	@ConfigurationProperty
 	public RestClientBuilder interceptors(Class<? extends RestCallInterceptor>...values) {
-		return addTo(RESTCLIENT_interceptors, values);
+		return prependTo(RESTCLIENT_interceptors, values);
 	}
 
 	/**
@@ -1530,7 +1530,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder interceptors(RestCallInterceptor...value) {
-		return addTo(RESTCLIENT_interceptors, value);
+		return prependTo(RESTCLIENT_interceptors, value);
 	}
 
 	/**
@@ -1682,7 +1682,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@SuppressWarnings("unchecked")
 	@ConfigurationProperty
 	public RestClientBuilder parsers(Class<? extends Parser>...value) {
-		return addTo(RESTCLIENT_parsers, value);
+		return prependTo(RESTCLIENT_parsers, value);
 	}
 
 	/**
@@ -1702,7 +1702,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder parsers(Parser...value) {
-		return addTo(RESTCLIENT_parsers, value);
+		return prependTo(RESTCLIENT_parsers, value);
 	}
 
 	/**
@@ -1871,7 +1871,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@SuppressWarnings("unchecked")
 	@ConfigurationProperty
 	public RestClientBuilder serializers(Class<? extends Serializer>...value) {
-		return addTo(RESTCLIENT_serializers, value);
+		return prependTo(RESTCLIENT_serializers, value);
 	}
 
 	/**
@@ -1891,7 +1891,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder serializers(Serializer...value) {
-		return addTo(RESTCLIENT_serializers, value);
+		return prependTo(RESTCLIENT_serializers, value);
 	}
 
 	/**
@@ -2796,12 +2796,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
 		return this;
 	}
 

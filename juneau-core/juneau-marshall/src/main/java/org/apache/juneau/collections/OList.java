@@ -97,7 +97,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * This class is not thread safe.
  */
-public class OList extends LinkedList<Object> {
+public class OList extends ObjectList /* In 9.0 - LinkedList<Object> */ {
 	private static final long serialVersionUID = 1L;
 
 	transient BeanSession session = null;
@@ -483,6 +483,7 @@ public class OList extends LinkedList<Object> {
 	 * @param <T> The type of object to convert the entry to.
 	 * @return The converted entry.
 	 */
+	@Override
 	public <T> T get(int index, Class<T> type) {
 		return bs().convertToType(get(index), type);
 	}
@@ -531,6 +532,7 @@ public class OList extends LinkedList<Object> {
 	 * @param <T> The type of object to convert the entry to.
 	 * @return The converted entry.
 	 */
+	@Override
 	public <T> T get(int index, Type type, Type...args) {
 		return bs().convertToType(get(index), type, args);
 	}
@@ -541,6 +543,7 @@ public class OList extends LinkedList<Object> {
 	 * @param index The index.
 	 * @return The converted value.
 	 */
+	@Override
 	public String getString(int index) {
 		return get(index, String.class);
 	}
@@ -552,6 +555,7 @@ public class OList extends LinkedList<Object> {
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Integer getInt(int index) {
 		return get(index, Integer.class);
 	}
@@ -563,6 +567,7 @@ public class OList extends LinkedList<Object> {
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Boolean getBoolean(int index) {
 		return get(index, Boolean.class);
 	}
@@ -574,6 +579,7 @@ public class OList extends LinkedList<Object> {
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public Long getLong(int index) {
 		return get(index, Long.class);
 	}
@@ -585,6 +591,7 @@ public class OList extends LinkedList<Object> {
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public OMap getMap(int index) {
 		return get(index, OMap.class);
 	}
@@ -596,6 +603,7 @@ public class OList extends LinkedList<Object> {
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
+	@Override
 	public OList getList(int index) {
 		return get(index, OList.class);
 	}
@@ -631,6 +639,7 @@ public class OList extends LinkedList<Object> {
 	 * @param <T> The class type.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public <T> T getAt(String path, Class<T> type) {
 		return getPojoRest().get(path, type);
 	}
@@ -645,6 +654,7 @@ public class OList extends LinkedList<Object> {
 	 * @param <T> The class type.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public <T> T getAt(String path, Type type, Type...args) {
 		return getPojoRest().get(path, type, args);
 	}
@@ -674,6 +684,7 @@ public class OList extends LinkedList<Object> {
 	 * @param o The new value.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public Object putAt(String path, Object o) {
 		return getPojoRest().put(path, o);
 	}
@@ -702,6 +713,7 @@ public class OList extends LinkedList<Object> {
 	 * @param o The new value.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public Object postAt(String path, Object o) {
 		return getPojoRest().post(path, o);
 	}
@@ -730,6 +742,7 @@ public class OList extends LinkedList<Object> {
 	 * @param path The path to the entry.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
+	@Override
 	public Object deleteAt(String path) {
 		return getPojoRest().delete(path);
 	}
@@ -743,6 +756,7 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * @return The {@link BeanSession} currently associated with this list.
 	 */
+	@Override
 	public BeanSession getBeanSession() {
 		return session;
 	}
@@ -786,6 +800,7 @@ public class OList extends LinkedList<Object> {
 	 * @param childType The child object type.
 	 * @return A new <c>Iterable</c> object over this list.
 	 */
+	@Override
 	public <E> Iterable<E> elements(final Class<E> childType) {
 		final Iterator<?> i = iterator();
 		return new Iterable<E>() {
@@ -820,6 +835,7 @@ public class OList extends LinkedList<Object> {
 	 * @param index An index into this list, zero-based.
 	 * @return The data type of the object at the specified index, or <jk>null</jk> if the value is null.
 	 */
+	@Override
 	public ClassMeta<?> getClassMeta(int index) {
 		return bs().getClassMetaForObject(get(index));
 	}
@@ -848,6 +864,7 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * @return <jk>true</jk> if this list is unmodifiable.
 	 */
+	@Override
 	public boolean isUnmodifiable() {
 		return false;
 	}
@@ -857,6 +874,7 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * @return A modifiable copy of this list if it's unmodifiable, or this list if it is already modifiable.
 	 */
+	@Override
 	public OList modifiable() {
 		if (isUnmodifiable())
 			return new OList(this);
@@ -868,6 +886,7 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * @return An unmodifiable copy of this list if it's modifiable, or this list if it is already unmodifiable.
 	 */
+	@Override
 	public OList unmodifiable() {
 		if (this instanceof UnmodifiableOList)
 			return this;
@@ -897,6 +916,7 @@ public class OList extends LinkedList<Object> {
 	 * @param cm The class type to convert this object to.
 	 * @return A converted object.
 	 */
+	@Override
 	public Object cast(ClassMeta<?> cm) {
 		try {
 			return JsonParser.DEFAULT.parse(SimpleJsonSerializer.DEFAULT.serialize(this), cm);

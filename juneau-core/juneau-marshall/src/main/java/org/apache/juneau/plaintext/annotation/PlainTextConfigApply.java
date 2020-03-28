@@ -38,6 +38,6 @@ public class PlainTextConfigApply extends ConfigApply<PlainTextConfig> {
 		PlainTextConfig a = ai.getAnnotation();
 
 		if (a.applyPlainText().length > 0)
-			psb.addTo(BEAN_annotations, a.applyPlainText());
+			psb.prependTo(BEAN_annotations, a.applyPlainText());
 	}
 }

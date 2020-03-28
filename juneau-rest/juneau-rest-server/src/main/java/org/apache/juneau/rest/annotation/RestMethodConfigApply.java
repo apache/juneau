@@ -57,12 +57,12 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 
 		for (Property p1 : a.properties()) {
 			psb.set(p1.name(), string(p1.value()));  // >>> DEPRECATED - Remove in 9.0 <<<
-			psb.addTo(REST_properties, string(p1.name()), string(p1.value()));
+			psb.putTo(REST_properties, string(p1.name()), string(p1.value()));
 		}
 
 		for (String p1 : a.flags()) {
 			psb.set(p1, true);  // >>> DEPRECATED - Remove in 9.0 <<<
-			psb.addTo(REST_properties, string(p1), true);
+			psb.putTo(REST_properties, string(p1), true);
 		}
 
 		if (a.serializers().length > 0)
@@ -85,7 +85,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			if (h == null)
 				throw new ConfigException("Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''Header-Name: header-value''", sig, header);
 			if (isNotEmpty(h[1]))
-				psb.addTo(REST_defaultRequestHeaders, h[0], h[1]);
+				psb.putTo(REST_defaultRequestHeaders, h[0], h[1]);
 		}
 
 		for (String header : strings(a.reqHeaders())) {
@@ -93,26 +93,26 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			if (h == null)
 				throw new ConfigException("Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''Header-Name: header-value''", sig, header);
 			if (isNotEmpty(h[1]))
-				psb.addTo(REST_reqHeaders, h[0], h[1]);
+				psb.putTo(REST_reqHeaders, h[0], h[1]);
 		}
 
 		if (a.defaultAccept().length() > 0) {
 			s = string(a.defaultAccept());
 			if (isNotEmpty(s))
-				psb.addTo(REST_reqHeaders, "Accept", s);
+				psb.putTo(REST_reqHeaders, "Accept", s);
 		}
 
 		if (a.defaultContentType().length() > 0) {
 			s = string(a.defaultContentType());
 			if (isNotEmpty(s))
-				psb.addTo(REST_reqHeaders, "Content-Type", s);
+				psb.putTo(REST_reqHeaders, "Content-Type", s);
 		}
 
-		psb.addTo(REST_converters, a.converters());
+		psb.prependTo(REST_converters, a.converters());
 
-		psb.addTo(REST_guards, reverse(a.guards()));
+		psb.prependTo(REST_guards, reverse(a.guards()));
 
-		psb.addTo(RESTMETHOD_matchers, a.matchers());
+		psb.prependTo(RESTMETHOD_matchers, a.matchers());
 
 		if (! a.clientVersion().isEmpty())
 			psb.set(RESTMETHOD_clientVersion, a.clientVersion());
@@ -132,7 +132,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 					bpiMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
 				}
 			}
-			psb.addTo(BEAN_bpi, bpiMap);
+			psb.putTo(BEAN_bpi, bpiMap);
 		}
 
 		if (a.bpx().length > 0) {
@@ -146,7 +146,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 					bpxMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
 				}
 			}
-			psb.addTo(BEAN_bpx, bpxMap);
+			psb.putTo(BEAN_bpx, bpxMap);
 		}
 
 		if (! a.defaultCharset().isEmpty())
@@ -159,9 +159,9 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			psb.set(REST_maxInput, string(a.maxInput()));
 
 		if (! a.path().isEmpty())
-			psb.addTo(RESTMETHOD_paths, string(a.path()));
+			psb.prependTo(RESTMETHOD_paths, string(a.path()));
 		for (String p : a.paths())
-			psb.addTo(RESTMETHOD_paths, string(p));
+			psb.prependTo(RESTMETHOD_paths, string(p));
 
 		if (! a.rolesDeclared().isEmpty())
 			psb.addTo(REST_rolesDeclared, strings(a.rolesDeclared()));
@@ -174,7 +174,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			if (h2 == null)
 				throw new ConfigException(
 					"Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-			psb.addTo(RESTMETHOD_defaultRequestHeaders, h2[0], h2[1]);
+			psb.putTo(RESTMETHOD_defaultRequestHeaders, h2[0], h2[1]);
 		}
 
 		for (String h : a.reqHeaders()) {
@@ -182,7 +182,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			if (h2 == null)
 				throw new ConfigException(
 					"Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-			psb.addTo(RESTMETHOD_reqHeaders, h2[0], h2[1]);
+			psb.putTo(RESTMETHOD_reqHeaders, h2[0], h2[1]);
 		}
 
 		for (String ra : a.attrs()) {
@@ -190,7 +190,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			if (ra2 == null)
 				throw new ConfigException(
 					"Invalid default request attribute specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-			psb.addTo(RESTMETHOD_attrs, ra2[0], ra2[1]);
+			psb.putTo(RESTMETHOD_attrs, ra2[0], ra2[1]);
 		}
 
 		for (String ra : a.reqAttrs()) {
@@ -198,21 +198,21 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			if (ra2 == null)
 				throw new ConfigException(
 					"Invalid default request attribute specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-			psb.addTo(RESTMETHOD_reqAttrs, ra2[0], ra2[1]);
+			psb.putTo(RESTMETHOD_reqAttrs, ra2[0], ra2[1]);
 		}
 
 		if (! a.defaultAccept().isEmpty())
-			psb.addTo(RESTMETHOD_reqHeaders, "Accept", string(a.defaultAccept()));
+			psb.putTo(RESTMETHOD_reqHeaders, "Accept", string(a.defaultAccept()));
 
 		if (! a.defaultContentType().isEmpty())
-			psb.addTo(RESTMETHOD_reqHeaders, string(a.defaultContentType()));
+			psb.putTo(RESTMETHOD_reqHeaders, string(a.defaultContentType()));
 
 		for (String h : a.defaultQuery()) {
 			String[] h2 = RestUtils.parseKeyValuePair(string(h));
 			if (h == null)
 				throw new ConfigException(
 					"Invalid default query parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-			psb.addTo(RESTMETHOD_defaultQuery, h2[0], h2[1]);
+			psb.putTo(RESTMETHOD_defaultQuery, h2[0], h2[1]);
 		}
 
 		for (String h : a.defaultFormData()) {
@@ -220,7 +220,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			if (h == null)
 				throw new ConfigException(
 					"Invalid default form data parameter specified on method ''{0}'': ''{1}''.  Must be in the format: ''name[:=]value''", sig, s);
-			psb.addTo(RESTMETHOD_defaultFormData, h2[0], h2[1]);
+			psb.putTo(RESTMETHOD_defaultFormData, h2[0], h2[1]);
 		}
 
 		if (! a.method().isEmpty())
@@ -292,9 +292,9 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		new HtmlDocBuilder(psb).process(hd);
 		for (Class<? extends Widget> wc : hd.widgets()) {
 			Widget w = castOrCreate(Widget.class, wc);
-			psb.addTo(REST_widgets, w);
-			psb.addTo(HTMLDOC_script, "$W{"+w.getName()+".script}");
-			psb.addTo(HTMLDOC_script, "$W{"+w.getName()+".style}");
+			psb.prependTo(REST_widgets, w);
+			psb.prependTo(HTMLDOC_script, "$W{"+w.getName()+".script}");
+			psb.prependTo(HTMLDOC_script, "$W{"+w.getName()+".style}");
 		}
 	}
 

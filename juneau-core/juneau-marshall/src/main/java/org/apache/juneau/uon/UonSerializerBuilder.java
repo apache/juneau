@@ -165,12 +165,6 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public UonSerializerBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public UonSerializerBuilder appendTo(String name, Object value) {
 		super.appendTo(name, value);
 		return this;

@@ -521,12 +521,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public SerializerBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public SerializerBuilder appendTo(String name, Object value) {
 		super.appendTo(name, value);
 		return this;

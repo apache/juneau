@@ -44,6 +44,6 @@ public class UrlEncodingConfigApply extends ConfigApply<UrlEncodingConfig> {
 		}
 
 		if (a.applyUrlEncoding().length > 0)
-			psb.addTo(BEAN_annotations, a.applyUrlEncoding());
+			psb.prependTo(BEAN_annotations, a.applyUrlEncoding());
 	}
 }

@@ -45,11 +45,11 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		BeanConfig a = ai.getAnnotation();
 
 		for (CS e : a.excludeProperties())
-			psb.addTo(BEAN_bpx, e.k().getName(), string(e.v()));
+			psb.putTo(BEAN_bpx, e.k().getName(), string(e.v()));
 		for (CS e : a.includeProperties())
-			psb.addTo(BEAN_bpi, e.k().getName(), string(e.v()));
+			psb.putTo(BEAN_bpi, e.k().getName(), string(e.v()));
 		if (a.beanDictionary().length != 0)
-			psb.addTo(BEAN_beanDictionary, a.beanDictionary());
+			psb.prependTo(BEAN_beanDictionary, a.beanDictionary());
 		if (a.beanDictionary_replace().length != 0)
 			psb.set(BEAN_beanDictionary, a.beanDictionary_replace());
 		if (a.beanDictionary_remove().length != 0)
@@ -60,7 +60,7 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		if (! a.beanConstructorVisibility().isEmpty())
 			psb.set(BEAN_beanConstructorVisibility, visibility(a.beanConstructorVisibility(), "beanConstructorVisibility"));
 		if (a.dictionary().length != 0)
-			psb.addTo(BEAN_beanDictionary, a.dictionary());
+			psb.prependTo(BEAN_beanDictionary, a.dictionary());
 		if (a.dictionary_replace().length != 0)
 			psb.set(BEAN_beanDictionary, a.dictionary_replace());
 		if (a.dictionary_remove().length != 0)
@@ -68,9 +68,9 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		if (! a.beanFieldVisibility().isEmpty())
 			psb.set(BEAN_beanFieldVisibility, visibility(a.beanFieldVisibility(), "beanFieldVisibility"));
 		if (a.beanFilters().length != 0)
-			psb.addTo(BEAN_beanFilters, a.beanFilters());
+			psb.prependTo(BEAN_beanFilters, a.beanFilters());
 		if (a.beanFilters_replace().length != 0)
-			psb.set(BEAN_beanFilters, a.beanFilters_replace());
+			psb.prependTo(BEAN_beanFilters, a.beanFilters_replace());
 		if (a.beanFilters_remove().length != 0)
 			psb.removeFrom(BEAN_beanFilters, a.beanFilters_remove());
 		if (! a.beanMapPutReturnsOldValue().isEmpty())
@@ -90,9 +90,9 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		if (! a.debug().isEmpty())
 			psb.set(BEAN_debug, bool(a.debug()));
 		for (CS e : a.example())
-			psb.addTo(BEAN_examples, e.k().getName(), parse(e.k(), e.v(), "example"));
+			psb.putTo(BEAN_examples, e.k().getName(), parse(e.k(), e.v(), "example"));
 		if (a.examples().length > 0)
-			psb.addTo(BEAN_examples, objectMap(a.examples(), "examples"));
+			psb.putTo(BEAN_examples, objectMap(a.examples(), "examples"));
 		if (! a.fluentSetters().isEmpty())
 			psb.set(BEAN_fluentSetters, bool(a.fluentSetters()));
 		if (! a.ignoreInvocationExceptionsOnGetters().isEmpty())
@@ -108,7 +108,7 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		if (! a.ignoreUnknownNullBeanProperties().isEmpty())
 			psb.set(BEAN_ignoreUnknownNullBeanProperties, bool(a.ignoreUnknownNullBeanProperties()));
 		for (CC e : a.implClasses())
-			psb.addTo(BEAN_implClasses, e.k().getName(), e.v());
+			psb.putTo(BEAN_implClasses, e.k().getName(), e.v());
 		if (! a.locale().isEmpty())
 			psb.set(BEAN_locale, locale(a.locale()));
 		if (! a.mediaType().isEmpty())
@@ -126,7 +126,7 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		if (a.notBeanPackages_remove().length != 0)
 			psb.removeFrom(BEAN_notBeanPackages, strings(a.notBeanPackages_remove()));
 		if (a.pojoSwaps().length != 0)
-			psb.addTo(BEAN_pojoSwaps, a.pojoSwaps());
+			psb.prependTo(BEAN_pojoSwaps, a.pojoSwaps());
 		if (a.pojoSwaps_replace().length != 0)
 			psb.set(BEAN_pojoSwaps, a.pojoSwaps_replace());
 		if (a.pojoSwaps_remove().length != 0)
@@ -153,47 +153,47 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.set(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));
 
 		if (a.applyBean().length > 0)
-			psb.addTo(BEAN_annotations, a.applyBean());
+			psb.prependTo(BEAN_annotations, a.applyBean());
 		if (a.applyBeanp().length > 0)
-			psb.addTo(BEAN_annotations, a.applyBeanp());
+			psb.prependTo(BEAN_annotations, a.applyBeanp());
 		if (a.applyBeanc().length > 0)
-			psb.addTo(BEAN_annotations, a.applyBeanc());
+			psb.prependTo(BEAN_annotations, a.applyBeanc());
 		if (a.applyBeanIgnore().length > 0)
-			psb.addTo(BEAN_annotations, a.applyBeanIgnore());
+			psb.prependTo(BEAN_annotations, a.applyBeanIgnore());
 		if (a.applyExample().length > 0)
-			psb.addTo(BEAN_annotations, a.applyExample());
+			psb.prependTo(BEAN_annotations, a.applyExample());
 		if (a.applyNameProperty().length > 0)
-			psb.addTo(BEAN_annotations, a.applyNameProperty());
+			psb.prependTo(BEAN_annotations, a.applyNameProperty());
 		if (a.applyParentProperty().length > 0)
-			psb.addTo(BEAN_annotations, a.applyParentProperty());
+			psb.prependTo(BEAN_annotations, a.applyParentProperty());
 		if (a.applyURI().length > 0)
-			psb.addTo(BEAN_annotations, a.applyURI());
+			psb.prependTo(BEAN_annotations, a.applyURI());
 		if (a.applySwap().length > 0)
-			psb.addTo(BEAN_annotations, a.applySwap());
+			psb.prependTo(BEAN_annotations, a.applySwap());
 
 		if (a.bpi().length > 0)
 			for (Map.Entry<String,String> e : stringsMap(a.bpi(), "bpi").entrySet())
-				psb.addTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(e.getValue()));
+				psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(e.getValue()));
 		for (CS e : a.bpiMap())
-			psb.addTo(BEAN_annotations, new BeanAnnotation(e.k().getName()).bpi(e.v()));
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.k().getName()).bpi(e.v()));
 
 		if (a.bpx().length > 0)
 			for (Map.Entry<String,String> e : stringsMap(a.bpx(), "bpx").entrySet())
-				psb.addTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(e.getValue()));
+				psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(e.getValue()));
 		for (CS e : a.bpxMap())
-			psb.addTo(BEAN_annotations, new BeanAnnotation(e.k().getName()).bpx(e.v()));
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.k().getName()).bpx(e.v()));
 
 		if (a.bpro().length > 0)
 			for (Map.Entry<String,String> e : stringsMap(a.bpro(), "bpro").entrySet())
-				psb.addTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(e.getValue()));
+				psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(e.getValue()));
 		for (CS e : a.bproMap())
-			psb.addTo(BEAN_annotations, new BeanAnnotation(e.k().getName()).bpro(e.v()));
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.k().getName()).bpro(e.v()));
 
 		if (a.bpwo().length > 0)
 			for (Map.Entry<String,String> e : stringsMap(a.bpwo(), "bpwo").entrySet())
-				psb.addTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(e.getValue()));
+				psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(e.getValue()));
 		for (CS e : a.bpwoMap())
-			psb.addTo(BEAN_annotations, new BeanAnnotation(e.k().getName()).bpwo(e.v()));
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.k().getName()).bpwo(e.v()));
 	}
 
 

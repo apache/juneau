@@ -157,7 +157,7 @@ public class ObjectList extends LinkedList<Object> {
 		if (p == null)
 			p = JsonParser.DEFAULT;
 		if (s != null)
-			p.parseIntoCollection(s, this, bs().object());
+			p.parseIntoCollection(s, this, bs2().object());
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class ObjectList extends LinkedList<Object> {
 	private void parseReader(Reader r, Parser p) throws ParseException {
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		p.parseIntoCollection(r, this, bs().object());
+		p.parseIntoCollection(r, this, bs2().object());
 	}
 
 	/**
@@ -358,7 +358,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @return The converted entry.
 	 */
 	public <T> T get(int index, Class<T> type) {
-		return bs().convertToType(get(index), type);
+		return bs2().convertToType(get(index), type);
 	}
 
 	/**
@@ -406,7 +406,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @return The converted entry.
 	 */
 	public <T> T get(int index, Type type, Type...args) {
-		return bs().convertToType(get(index), type, args);
+		return bs2().convertToType(get(index), type, args);
 	}
 
 	/**
@@ -473,7 +473,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public <K,V> Map<K,V> getMap(int index, Class<K> keyType, Class<V> valType) {
-		return bs().convertToType(get(index), Map.class, keyType, valType);
+		return bs2().convertToType(get(index), Map.class, keyType, valType);
 	}
 
 	/**
@@ -496,7 +496,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public <E> List<E> getList(int index, Class<E> elementType) {
-		return bs().convertToType(get(index), List.class, elementType);
+		return bs2().convertToType(get(index), List.class, elementType);
 	}
 
 	/**
@@ -705,7 +705,7 @@ public class ObjectList extends LinkedList<Object> {
 
 					@Override /* Iterator */
 					public E next() {
-						return bs().convertToType(i.next(), childType);
+						return bs2().convertToType(i.next(), childType);
 					}
 
 					@Override /* Iterator */
@@ -725,7 +725,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @return The data type of the object at the specified index, or <jk>null</jk> if the value is null.
 	 */
 	public ClassMeta<?> getClassMeta(int index) {
-		return bs().getClassMetaForObject(get(index));
+		return bs2().getClassMetaForObject(get(index));
 	}
 
 	private PojoRest getPojoRest() {
@@ -850,7 +850,7 @@ public class ObjectList extends LinkedList<Object> {
 		}
 	}
 
-	BeanSession bs() {
+	BeanSession bs2() {
 		if (session == null)
 			session = BeanContext.DEFAULT.createBeanSession();
 		return session;

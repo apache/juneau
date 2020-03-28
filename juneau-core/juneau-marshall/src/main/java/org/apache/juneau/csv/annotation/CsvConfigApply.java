@@ -38,6 +38,6 @@ public class CsvConfigApply extends ConfigApply<CsvConfig> {
 		CsvConfig a = ai.getAnnotation();
 
 		if (a.applyCsv().length > 0)
-			psb.addTo(BEAN_annotations, a.applyCsv());
+			psb.prependTo(BEAN_annotations, a.applyCsv());
 	}
 }

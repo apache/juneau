@@ -124,19 +124,19 @@ public class PropertyStoreBuilder {
 	/**
 	 * Sets a configuration property value on this object.
 	 *
-	 * @param key
-	 * 	The configuration property key.
-	 * 	<br>(e.g <js>"BeanContext.foo.ss/add.1"</js>)
-	 * 	<br>If name ends with <l>/add</l>, then the specified value is added to the existing property value as an entry
-	 * 	in a SET or LIST property.
-	 * 	<br>If name ends with <l>/add.{key}</l>, then the specified value is added to the existing property value as a
-	 * 	key/value pair in a MAP property.
-	 * 	<br>If name ends with <l>/remove</l>, then the specified value is removed from the existing property property
-	 * 	value in a SET or LIST property.
-	 * @param value
-	 * 	The new value.
-	 * 	If <jk>null</jk>, the property value is deleted.
-	 * 	In general, the value type can be anything.
+	 * @param key The configuration property key (e.g <js>"BeanContext.foo.ss/add.1"</js>).
+	 * 	<ul>
+	 * 		<li>If name ends with <l>/append</l>, then the specified value is appended to the existing property value as an entry in a LIST property.
+	 * 		<li>If name ends with <l>/prepend</l>, then the specified value is prepended to the existing property value as an entry in a LIST property.
+	 * 		<li>If name ends with <l>/add</l>, then the specified value is added to the existing property value as an entry in a SET property.
+	 * 		<li>If name ends with <l>/put.{key}</l>, then the specified value is added to the existing property value as a key/value pair in a MAP property.
+	 * 		<li>If name ends with <l>/remove</l>, then the specified value is removed from the existing property property value in a SET or LIST property.
+	 * 	</ul>
+	 * @param value The new value.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, the property value is deleted.
+	 * 		<li>In general, the value type can be anything.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	public synchronized PropertyStoreBuilder set(String key, Object value) {
@@ -154,15 +154,20 @@ public class PropertyStoreBuilder {
 				command = command.substring(0, j);
 			}
 
-			if ("add".equals(command)) {
-				return addTo(key2, arg, value);
-			} else if ("remove".equals(command)) {
+			if ("add".equals(command))
+				return addTo(key2, value);
+			if ("put".equals(command))
+				return putTo(key2, arg, value);
+			if ("append".equals(command))
+				return appendTo(key2, value);
+			if ("prepend".equals(command))
+				return prependTo(key2, value);
+			if ("remove".equals(command)) {
 				if (arg != null)
 					throw new ConfigException("Invalid key specified: ''{0}''", key);
 				return removeFrom(key2, value);
-			} else {
-				throw new ConfigException("Invalid key specified: ''{0}''", key);
 			}
+			throw new ConfigException("Invalid key specified: ''{0}''", key);
 		}
 
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
@@ -231,30 +236,28 @@ public class PropertyStoreBuilder {
 	}
 
 	/**
-	 * Adds one or more values to a SET, LIST, or MAP property.
+	 * Adds one or more values to a SET property.
 	 *
 	 * @param key The property key.
-	 * @param arg
-	 * 	The argument.
-	 * 	<br>For SETs, this must always be <jk>null</jk>.
-	 * 	<br>For LISTs, this can be <jk>null</jk> or a numeric index.
-	 * 		Out-of-range indexes are simply 'adjusted' to the beginning or the end of the list.
-	 * 		So, for example, a value of <js>"-100"</js> will always just cause the entry to be added to the beginning
-	 * 		of the list.
-	 * 		<br>NOTE:  If <jk>null</jk>, value will be inserted at position 0.
-	 * 	<br>For MAPs, this can be <jk>null</jk> if we're adding a map, or a string key if we're adding an entry.
-	 * @param value
-	 * 	The new value to add to the property.
-	 * 	<br>For SETs and LISTs, this can be a single value, Collection, array, or JSON array string.
-	 * 	<br>For MAPs, this can be a single value, Map, or JSON object string.
-	 * 	<br><jk>null</jk> values have the effect of removing entries.
+	 * @param value The new value to add to the property.
+	 * 	<ul>
+	 * 		<li>This can be a single value, Collection, array, or JSON array string.
+	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a SET/LIST/MAP property, or the argument is invalid.
+	 * @throws ConfigException If property is not a SET property, or the argument is invalid.
 	 */
-	public synchronized PropertyStoreBuilder addTo(String key, String arg, Object value) {
+	public synchronized PropertyStoreBuilder addTo(String key, Object value) {
 		propertyStore = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
+
+		// <TEMPORARY - Remove in 9.0>
+		if (isList(key))
+			return prependTo(key, value);
+		// </TEMPORARY>
+
+		if (! isSet(key))
+			throw new ConfigException("addTo() can only be used on properties of type Set on property ''{0}''.", key);
 
 		PropertyGroupBuilder gb = groups.get(g);
 		if (gb == null) {
@@ -262,7 +265,7 @@ public class PropertyStoreBuilder {
 			groups.put(g, gb);
 		}
 
-		gb.addTo(n, arg, value);
+		gb.addTo(n, value);
 
 		if (gb.isEmpty())
 			groups.remove(g);
@@ -271,39 +274,74 @@ public class PropertyStoreBuilder {
 	}
 
 	/**
-	 * Adds/prepends a value to a SET, LIST, or MAP property.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>addTo(key, <jk>null</jk>, value);</code>.
-	 *
-	 * <p>
-	 * NOTE:  When adding to a list, the value is inserted at the beginning of the list.
+	 * Adds an entry to a MAP property.
 	 *
 	 * @param key The property key.
-	 * @param value
-	 * 	The new value to add to the property.
-	 * 	<br>For SETs and LISTs, this can be a single value, Collection, array, or JSON array string.
-	 * 	<br>for MAPs, this can be a single value, Map, or JSON object string.
-	 * 	<br><jk>null</jk> values have the effect of removing entries.
+	 * @param mapKey The map key.
+	 * @param value The new value to add to the property.
 	 * @return This object (for method chaining).
-	 * @throws ConfigException If property is not a SET/LIST/MAP property, or the argument is invalid.
+	 * @throws ConfigException If property is not a SET property, or the argument is invalid.
 	 */
-	public synchronized PropertyStoreBuilder addTo(String key, Object value) {
+	public synchronized PropertyStoreBuilder putTo(String key, String mapKey, Object value) {
 		propertyStore = null;
-		return addTo(key, null, value);
+		String g = group(key);
+		String n = g.isEmpty() ? key : key.substring(g.length()+1);
+
+		if (! isMap(key))
+			throw new ConfigException("putTo() can only be used on properties of type Map on property ''{0}''.", key);
+
+		PropertyGroupBuilder gb = groups.get(g);
+		if (gb == null) {
+			gb = new PropertyGroupBuilder();
+			groups.put(g, gb);
+		}
+
+		gb.putTo(n, mapKey, value);
+
+		if (gb.isEmpty())
+			groups.remove(g);
+
+		return this;
 	}
 
 	/**
-	 * Appends a value to the end of a SET or LIST property.
-	 *
-	 * <p>
-	 * NOTE:  When adding to a list, the value is inserted at the end of the list.
+	 * Adds multiple entries to a MAP property.
 	 *
 	 * @param key The property key.
-	 * @param value
-	 * 	The new value to add to the property.
-	 * 	<br>This can be a single value, Collection, array, or JSON array string.
-	 * 	<br><jk>null</jk> values have the effect of removing entries.
+	 * @param value The new values to add to the property.  Can be a {@link Map} or JSON string.
+	 * @return This object (for method chaining).
+	 * @throws ConfigException If property is not a SET property, or the argument is invalid.
+	 */
+	public synchronized PropertyStoreBuilder putTo(String key, Object value) {
+		propertyStore = null;
+		String g = group(key);
+		String n = g.isEmpty() ? key : key.substring(g.length()+1);
+
+		if (! isMap(key))
+			throw new ConfigException("putTo() can only be used on properties of type Map on property ''{0}''.", key);
+
+		PropertyGroupBuilder gb = groups.get(g);
+		if (gb == null) {
+			gb = new PropertyGroupBuilder();
+			groups.put(g, gb);
+		}
+
+		gb.putTo(n, value);
+
+		if (gb.isEmpty())
+			groups.remove(g);
+
+		return this;
+	}
+
+	/**
+	 * Appends a value to the end of a LIST property.
+	 *
+	 * @param key The property key.
+	 * @param value The new value to add to the property.
+	 * 	<ul>
+	 * 		<li>This can be a single value, Collection, array, or JSON array string.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET/LIST property, or the argument is invalid.
 	 */
@@ -311,6 +349,9 @@ public class PropertyStoreBuilder {
 		propertyStore = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
+
+		if (! isList(key))
+			throw new ConfigException("appendTo() can only be used on properties of type List on property ''{0}''.", key);
 
 		PropertyGroupBuilder gb = groups.get(g);
 		if (gb == null) {
@@ -327,16 +368,13 @@ public class PropertyStoreBuilder {
 	}
 
 	/**
-	 * Prepends a value to the beginning of a SET or LIST property.
-	 *
-	 * <p>
-	 * NOTE:  When adding to a list, the value is inserted at the beginning of the list.
+	 * Prepends a value to the beginning of a LIST property.
 	 *
 	 * @param key The property key.
-	 * @param value
-	 * 	The new value to add to the property.
-	 * 	<br>This can be a single value, Collection, array, or JSON array string.
-	 * 	<br><jk>null</jk> values have the effect of removing entries.
+	 * @param value The new value to add to the property.
+	 * 	<ul>
+	 * 		<li>This can be a single value, Collection, array, or JSON array string.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET/LIST property, or the argument is invalid.
 	 */
@@ -344,6 +382,9 @@ public class PropertyStoreBuilder {
 		propertyStore = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
+
+		if (! isList(key))
+			throw new ConfigException("prependTo() can only be used on properties of type List on property ''{0}''.", key);
 
 		PropertyGroupBuilder gb = groups.get(g);
 		if (gb == null) {
@@ -435,6 +476,21 @@ public class PropertyStoreBuilder {
 		this.groups.clear();
 	}
 
+	private static boolean isSet(String key) {
+		String s = key.substring(key.lastIndexOf('.')+1);
+		return s.length() == 2 && s.charAt(0) == 's';
+	}
+
+	private static boolean isMap(String key) {
+		String s = key.substring(key.lastIndexOf('.')+1);
+		return s.length() == 3 && s.charAt(1) == 'm';
+	}
+
+	private static boolean isList(String key) {
+		String s = key.substring(key.lastIndexOf('.')+1);
+		return s.length() == 2 && s.charAt(0) == 'l';
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// PropertyGroupBuilder
 	//-------------------------------------------------------------------------------------------------------------------
@@ -478,7 +534,23 @@ public class PropertyStoreBuilder {
 			}
 		}
 
-		synchronized void addTo(String key, String arg, Object value) {
+		synchronized void addTo(String key, Object value) {
+			MutableProperty p = properties.get(key);
+			if (p == null) {
+				p = MutableProperty.create(key, null);
+				p.add(null, value);
+				if (! p.isEmpty())
+					properties.put(key, p);
+			} else {
+				p.add(null, value);
+				if (p.isEmpty())
+					properties.remove(key);
+				else
+					properties.put(key, p);
+			}
+		}
+
+		synchronized void putTo(String key, String arg, Object value) {
 			MutableProperty p = properties.get(key);
 			if (p == null) {
 				p = MutableProperty.create(key, null);
@@ -487,6 +559,22 @@ public class PropertyStoreBuilder {
 					properties.put(key, p);
 			} else {
 				p.add(arg, value);
+				if (p.isEmpty())
+					properties.remove(key);
+				else
+					properties.put(key, p);
+			}
+		}
+
+		synchronized void putTo(String key, Object value) {
+			MutableProperty p = properties.get(key);
+			if (p == null) {
+				p = MutableProperty.create(key, null);
+				p.set(value);
+				if (! p.isEmpty())
+					properties.put(key, p);
+			} else {
+				p.putAll(value);
 				if (p.isEmpty())
 					properties.remove(key);
 				else
@@ -623,6 +711,14 @@ public class PropertyStoreBuilder {
 
 		void add(String arg, Object value) {
 			throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(value), className(value), name, type);
+		}
+
+		void put(String arg, String key, Object value) {
+			throw new ConfigException("Cannot put all value {0} ({1}) to property ''{2}'' ({3}).", string(value), className(value), name, type);
+		}
+
+		void putAll(Object value) {
+			throw new ConfigException("Cannot put all value {0} ({1}) to property ''{2}'' ({3}).", string(value), className(value), name, type);
 		}
 
 		void append(Object value) {
@@ -926,6 +1022,24 @@ public class PropertyStoreBuilder {
 				} else {
 					throw new ConfigException("Cannot add {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 				}
+			}
+		}
+
+		@Override /* MutableProperty */
+		synchronized void putAll(Object o) {
+			if (o instanceof Map) {
+				Map m = (Map)o;
+				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
+					if (e.getKey() != null)
+						add(e.getKey().toString(), e.getValue());
+			} else if (isObjectMap(o)) {
+				try {
+					add(null, new ObjectMap(o.toString()));
+				} catch (Exception e) {
+					throw new ConfigException(e, "Cannot add {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
+				}
+			} else {
+				throw new ConfigException("Cannot add {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 			}
 		}
 

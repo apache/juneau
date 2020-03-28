@@ -40,6 +40,6 @@ public class MsgPackConfigApply extends ConfigApply<MsgPackConfig> {
 			psb.set(MSGPACK_addBeanTypes, bool(a.addBeanTypes()));
 
 		if (a.applyMsgPack().length > 0)
-			psb.addTo(BEAN_annotations, a.applyMsgPack());
+			psb.prependTo(BEAN_annotations, a.applyMsgPack());
 	}
 }

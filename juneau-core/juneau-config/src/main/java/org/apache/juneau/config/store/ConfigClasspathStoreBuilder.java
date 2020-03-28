@@ -64,12 +64,6 @@ public class ConfigClasspathStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public ConfigClasspathStoreBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public ConfigClasspathStoreBuilder appendTo(String name, Object value) {
 		super.appendTo(name, value);
 		return this;

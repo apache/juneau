@@ -65,6 +65,6 @@ public class XmlConfigApply extends ConfigApply<XmlConfig> {
 			psb.set(XML_validating, bool(a.validating()));
 
 		if (a.applyXml().length > 0)
-			psb.addTo(BEAN_annotations, a.applyXml());
+			psb.prependTo(BEAN_annotations, a.applyXml());
 	}
 }

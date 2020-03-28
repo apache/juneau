@@ -52,8 +52,8 @@ public class PropertyStoreTest {
 	@Test
 	public void testInvalidKeys() {
 		PropertyStoreBuilder b = PropertyStore.create();
-		testError(b, "A.f1/add", "foo", "Cannot add value 'foo' (String) to property 'f1' (String).");
-		testError(b, "A.f1/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1' (String).");
+		testError(b, "A.f1/add", "foo", "addTo() can only be used on properties of type Set on property 'A.f1'.");
+		testError(b, "A.f1/add.123", "foo", "addTo() can only be used on properties of type Set on property 'A.f1'.");
 		testError(b, "A.f1/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1' (String).");
 		testError(b, "A.f1/remove.123", "foo", "Invalid key specified: 'A.f1/remove.123'");
 		testError(b, "A.f1.s/addx", "foo", "Invalid key specified: 'A.f1.s/addx'");
@@ -105,8 +105,8 @@ public class PropertyStoreTest {
 
 		assertObjectEquals("{A:{f1:'x1'}}", b.build());
 
-		testError(b, "A.f1/add", "foo", "Cannot add value 'foo' (String) to property 'f1' (String).");
-		testError(b, "A.f1/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1' (String).");
+		testError(b, "A.f1/add", "foo", "addTo() can only be used on properties of type Set on property 'A.f1'.");
+		testError(b, "A.f1/add.123", "foo", "addTo() can only be used on properties of type Set on property 'A.f1'.");
 		testError(b, "A.f1/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1' (String).");
 	}
 
@@ -133,8 +133,8 @@ public class PropertyStoreTest {
 		b.remove("A.f5.b");
 		assertObjectEquals("{A:{'f1.b':true}}", b.build());
 
-		testError(b, "A.f1.b/add", "foo", "Cannot add value 'foo' (String) to property 'f1.b' (Boolean).");
-		testError(b, "A.f1.b/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1.b' (Boolean).");
+		testError(b, "A.f1.b/add", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.b'.");
+		testError(b, "A.f1.b/add.123", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.b'.");
 		testError(b, "A.f1.b/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.b' (Boolean).");
 	}
 
@@ -161,8 +161,8 @@ public class PropertyStoreTest {
 		b.remove("A.f5.i");
 		assertObjectEquals("{A:{'f1.i':123}}", b.build());
 
-		testError(b, "A.f1.i/add", "foo", "Cannot add value 'foo' (String) to property 'f1.i' (Integer).");
-		testError(b, "A.f1.i/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1.i' (Integer).");
+		testError(b, "A.f1.i/add", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.i'.");
+		testError(b, "A.f1.i/add.123", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.i'.");
 		testError(b, "A.f1.i/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.i' (Integer).");
 		testError(b, "A.f1.i", "foo", "Value 'foo' (String) cannot be converted to an Integer.");
 	}
@@ -182,8 +182,8 @@ public class PropertyStoreTest {
 		b.set("A.f2.c", null);
 		assertObjectEquals("{A:{'f1.c':'java.lang.String'}}", b.build());
 
-		testError(b, "A.f1.c/add", "foo", "Cannot add value 'foo' (String) to property 'f1.c' (Class).");
-		testError(b, "A.f1.c/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1.c' (Class).");
+		testError(b, "A.f1.c/add", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.c'.");
+		testError(b, "A.f1.c/add.123", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.c'.");
 		testError(b, "A.f1.c/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.c' (Class).");
 
 		// Do not allow this for security reasons.
@@ -213,8 +213,8 @@ public class PropertyStoreTest {
 		b.remove("A.f5.o");
 		assertObjectEquals("{A:{'f1.o':123}}", b.build());
 
-		testError(b, "A.f1.o/add", "foo", "Cannot add value 'foo' (String) to property 'f1.o' (Object).");
-		testError(b, "A.f1.o/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1.o' (Object).");
+		testError(b, "A.f1.o/add", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.o'.");
+		testError(b, "A.f1.o/add.123", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.o'.");
 		testError(b, "A.f1.o/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.o' (Object).");
 	}
 
@@ -266,8 +266,8 @@ public class PropertyStoreTest {
 		b.addTo("A.f1.ss", new String[]{"quux"});
 		assertObjectEquals("{A:{'f1.ss':['bar','baz','foo','quux','qux']}}", b.build());
 
-		b.appendTo("A.f1.ss", new String[]{"quuux"});
-		b.prependTo("A.f1.ss", new String[]{"quuuux"});
+		b.addTo("A.f1.ss", new String[]{"quuux"});
+		b.addTo("A.f1.ss", new String[]{"quuuux"});
 		assertObjectEquals("{A:{'f1.ss':['bar','baz','foo','quuuux','quuux','quux','qux']}}", b.build());
 		b.set("A.f1.ss/remove", new String[]{"quuux", "quuuux"});
 
@@ -278,14 +278,6 @@ public class PropertyStoreTest {
 
 		b.set("A.f1.ss", null);
 		assertObjectEquals("{}", b.build());
-
-		testError(b, "A.f1.ss/add.123", "foo", "Cannot use argument '123' on add command for property 'f1.ss' (Set<String>)");
-		try {
-			b.addTo("A.f1.ss", "foo", "bar");
-			fail("Exception expected.");
-		} catch (Exception e) {
-			assertEquals("Cannot use argument 'foo' on add command for property 'f1.ss' (Set<String>)", e.getMessage());
-		}
 	}
 
 	@Test
@@ -372,14 +364,6 @@ public class PropertyStoreTest {
 
 		b.set("A.f1.si", null);
 		assertObjectEquals("{}", b.build());
-
-		testError(b, "A.f1.si/add.123", "foo", "Cannot use argument '123' on add command for property 'f1.si' (Set<Integer>)");
-		try {
-			b.addTo("A.f1.si", "foo", "bar");
-			fail("Exception expected.");
-		} catch (Exception e) {
-			assertEquals("Cannot use argument 'foo' on add command for property 'f1.si' (Set<Integer>)", e.getMessage());
-		}
 	}
 
 	@Test
@@ -438,14 +422,6 @@ public class PropertyStoreTest {
 
 		b.set("A.f1.sc", null);
 		assertObjectEquals("{}", b.build());
-
-		testError(b, "A.f1.sc/add.123", String.class, "Cannot use argument '123' on add command for property 'f1.sc' (Set<Class>)");
-		try {
-			b.addTo("A.f1.sc", "foo", "bar");
-			fail("Exception expected.");
-		} catch (Exception e) {
-			assertEquals("Cannot use argument 'foo' on add command for property 'f1.sc' (Set<Class>)", e.getMessage());
-		}
 	}
 
 	@Test
@@ -465,15 +441,15 @@ public class PropertyStoreTest {
 		assertInstanceOf(List.class, ps.getProperty("A.f4.ls"));
 
 		b.clear();
-		b.set("A.f1.ls/add", "foo");
+		b.set("A.f1.ls/prepend", "foo");
 		assertObjectEquals("{A:{'f1.ls':['foo']}}", b.build());
 		b.set("A.f1.ls/remove", "foo");
 		assertObjectEquals("{}", b.build());
 
 		b.clear();
-		b.set("A.f1.ls/add", "['foo','bar','baz']");
-		b.set("A.f1.ls/add", "qux");
-		b.addTo("A.f1.ls","quux");
+		b.set("A.f1.ls/prepend", "['foo','bar','baz']");
+		b.set("A.f1.ls/prepend", "qux");
+		b.prependTo("A.f1.ls","quux");
 		assertObjectEquals("{A:{'f1.ls':['quux','qux','foo','bar','baz']}}", b.build());
 		b.set("A.f1.ls/remove", "['foo','bar']");
 		b.set("A.f1.ls/remove", "qux");
@@ -481,9 +457,9 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.ls':['baz']}}", b.build());
 
 		b.clear();
-		b.set("A.f1.ls/add", AList.of("foo", "bar", "baz"));
-		b.set("A.f1.ls/add", AList.of("qux"));
-		b.addTo("A.f1.ls", AList.of("quux"));
+		b.set("A.f1.ls/prepend", AList.of("foo", "bar", "baz"));
+		b.set("A.f1.ls/prepend", AList.of("qux"));
+		b.prependTo("A.f1.ls", AList.of("quux"));
 		assertObjectEquals("{A:{'f1.ls':['quux','qux','foo','bar','baz']}}", b.build());
 		b.set("A.f1.ls/remove", AList.of("foo", "bar"));
 		b.set("A.f1.ls/remove", AList.of("qux"));
@@ -491,9 +467,9 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.ls':['baz']}}", b.build());
 
 		b.clear();
-		b.set("A.f1.ls/add", new String[]{"foo", "bar", "baz"});
-		b.set("A.f1.ls/add", new String[]{"qux"});
-		b.addTo("A.f1.ls", new String[]{"quux"});
+		b.set("A.f1.ls/prepend", new String[]{"foo", "bar", "baz"});
+		b.set("A.f1.ls/prepend", new String[]{"qux"});
+		b.prependTo("A.f1.ls", new String[]{"quux"});
 		assertObjectEquals("{A:{'f1.ls':['quux','qux','foo','bar','baz']}}", b.build());
 
 		b.appendTo("A.f1.ls", new String[]{"q1x", "q2x"});
@@ -511,23 +487,23 @@ public class PropertyStoreTest {
 		b.set("A.f1.ls", null);
 		assertObjectEquals("{}", b.build());
 
-		b.clear();
-		b.set("A.f1.ls/add", "['foo','bar','baz']");
-		b.set("A.f1.ls/add.10", "qux");
-		b.set("A.f1.ls/add.1", "quux");
-		b.set("A.f1.ls/add.0", "quuux");
-		b.set("A.f1.ls/add.-10", "quuuux");
-		assertObjectEquals("{A:{'f1.ls':['quuuux','quuux','foo','quux','bar','baz','qux']}}", b.build());
-		b.set("A.f1.ls/add.1", "['1','2']");
-		assertObjectEquals("{A:{'f1.ls':['quuuux','1','2','quuux','foo','quux','bar','baz','qux']}}", b.build());
-
-		testError(b, "A.f1.ls/add.foo", "foo", "Invalid argument 'foo' on add command for property 'f1.ls' (List<String>)");
-		try {
-			b.addTo("A.f1.ls", "foo", "bar");
-			fail("Exception expected.");
-		} catch (Exception e) {
-			assertEquals("Invalid argument 'foo' on add command for property 'f1.ls' (List<String>)", e.getMessage());
-		}
+//		b.clear();
+//		b.set("A.f1.ls/add", "['foo','bar','baz']");
+//		b.set("A.f1.ls/add.10", "qux");
+//		b.set("A.f1.ls/add.1", "quux");
+//		b.set("A.f1.ls/add.0", "quuux");
+//		b.set("A.f1.ls/add.-10", "quuuux");
+//		assertObjectEquals("{A:{'f1.ls':['quuuux','quuux','foo','quux','bar','baz','qux']}}", b.build());
+//		b.set("A.f1.ls/add.1", "['1','2']");
+//		assertObjectEquals("{A:{'f1.ls':['quuuux','1','2','quuux','foo','quux','bar','baz','qux']}}", b.build());
+//
+//		testError(b, "A.f1.ls/add.foo", "foo", "Invalid argument 'foo' on add command for property 'f1.ls' (List<String>)");
+//		try {
+//			b.addTo("A.f1.ls", "foo", "bar");
+//			fail("Exception expected.");
+//		} catch (Exception e) {
+//			assertEquals("Invalid argument 'foo' on add command for property 'f1.ls' (List<String>)", e.getMessage());
+//		}
 	}
 
 	@Test
@@ -547,15 +523,15 @@ public class PropertyStoreTest {
 		assertInstanceOf(List.class, ps.getProperty("A.f4.li"));
 
 		b.clear();
-		b.set("A.f1.li/add", "123");
+		b.set("A.f1.li/prepend", "123");
 		assertObjectEquals("{A:{'f1.li':[123]}}", b.build());
 		b.set("A.f1.li/remove", "123");
 		assertObjectEquals("{}", b.build());
 
 		b.clear();
-		b.set("A.f1.li/add", "['1','2','3']");
-		b.set("A.f1.li/add", "4");
-		b.addTo("A.f1.li", "5");
+		b.set("A.f1.li/prepend", "['1','2','3']");
+		b.set("A.f1.li/prepend", "4");
+		b.prependTo("A.f1.li", "5");
 		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
 		b.set("A.f1.li/remove", "['1','2']");
 		b.set("A.f1.li/remove", "3");
@@ -563,9 +539,9 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
 
 		b.clear();
-		b.set("A.f1.li/add", AList.of("1", "2", "3"));
-		b.set("A.f1.li/add", AList.of("4"));
-		b.addTo("A.f1.li", AList.of("5"));
+		b.set("A.f1.li/prepend", AList.of("1", "2", "3"));
+		b.set("A.f1.li/prepend", AList.of("4"));
+		b.prependTo("A.f1.li", AList.of("5"));
 		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
 		b.set("A.f1.li/remove", AList.of("1", "2"));
 		b.set("A.f1.li/remove", AList.of("3"));
@@ -573,9 +549,9 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
 
 		b.clear();
-		b.set("A.f1.li/add", AList.of(1, 2, 3));
-		b.set("A.f1.li/add", AList.of(4));
-		b.addTo("A.f1.li", AList.of(5));
+		b.set("A.f1.li/prepend", AList.of(1, 2, 3));
+		b.set("A.f1.li/prepend", AList.of(4));
+		b.prependTo("A.f1.li", AList.of(5));
 		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
 		b.set("A.f1.li/remove", AList.of(1, 2));
 		b.set("A.f1.li/remove", AList.of(3));
@@ -583,9 +559,9 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
 
 		b.clear();
-		b.set("A.f1.li/add", new String[]{"1", "2", "3"});
-		b.set("A.f1.li/add", new String[]{"4"});
-		b.addTo("A.f1.li", new String[]{"5"});
+		b.set("A.f1.li/prepend", new String[]{"1", "2", "3"});
+		b.set("A.f1.li/prepend", new String[]{"4"});
+		b.prependTo("A.f1.li", new String[]{"5"});
 		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
 		b.set("A.f1.li/remove", new String[]{"1", "2"});
 		b.set("A.f1.li/remove", new String[]{"3"});
@@ -593,9 +569,9 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
 
 		b.clear();
-		b.set("A.f1.li/add", new Integer[]{1, 2, 3});
-		b.set("A.f1.li/add", new Integer[]{4});
-		b.addTo("A.f1.li", new Integer[]{5});
+		b.set("A.f1.li/prepend", new Integer[]{1, 2, 3});
+		b.set("A.f1.li/prepend", new Integer[]{4});
+		b.prependTo("A.f1.li", new Integer[]{5});
 		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
 		b.set("A.f1.li/remove", new Integer[]{1, 2});
 		b.set("A.f1.li/remove", new Integer[]{3});
@@ -603,9 +579,9 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
 
 		b.clear();
-		b.set("A.f1.li/add", new int[]{1, 2, 3});
-		b.set("A.f1.li/add", new int[]{4});
-		b.addTo("A.f1.li", new int[]{5});
+		b.set("A.f1.li/prepend", new int[]{1, 2, 3});
+		b.set("A.f1.li/prepend", new int[]{4});
+		b.prependTo("A.f1.li", new int[]{5});
 		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
 		b.set("A.f1.li/remove", new int[]{1, 2});
 		b.set("A.f1.li/remove", new int[]{3});
@@ -615,23 +591,23 @@ public class PropertyStoreTest {
 		b.set("A.f1.li", null);
 		assertObjectEquals("{}", b.build());
 
-		b.clear();
-		b.set("A.f1.ls/add", "['1','2','3']");
-		b.set("A.f1.ls/add.10", "4");
-		b.set("A.f1.ls/add.1", "5");
-		b.set("A.f1.ls/add.0", "6");
-		b.set("A.f1.ls/add.-10", "7");
-		assertObjectEquals("{A:{'f1.ls':['7','6','1','5','2','3','4']}}", b.build());
-		b.set("A.f1.ls/add.1", "['8','9']");
-		assertObjectEquals("{A:{'f1.ls':['7','8','9','6','1','5','2','3','4']}}", b.build());
-
-		testError(b, "A.f1.li/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1.li' (List<Integer>).  Value 'foo' (String) cannot be converted to an Integer.");
-		try {
-			b.addTo("A.f1.li", "foo", "bar");
-			fail("Exception expected.");
-		} catch (Exception e) {
-			assertEquals("Invalid argument 'foo' on add command for property 'f1.li' (List<Integer>)", e.getMessage());
-		}
+//		b.clear();
+//		b.set("A.f1.ls/add", "['1','2','3']");
+//		b.set("A.f1.ls/add.10", "4");
+//		b.set("A.f1.ls/add.1", "5");
+//		b.set("A.f1.ls/add.0", "6");
+//		b.set("A.f1.ls/add.-10", "7");
+//		assertObjectEquals("{A:{'f1.ls':['7','6','1','5','2','3','4']}}", b.build());
+//		b.set("A.f1.ls/add.1", "['8','9']");
+//		assertObjectEquals("{A:{'f1.ls':['7','8','9','6','1','5','2','3','4']}}", b.build());
+//
+//		testError(b, "A.f1.li/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1.li' (List<Integer>).  Value 'foo' (String) cannot be converted to an Integer.");
+//		try {
+//			b.addTo("A.f1.li", "foo", "bar");
+//			fail("Exception expected.");
+//		} catch (Exception e) {
+//			assertEquals("Invalid argument 'foo' on add command for property 'f1.li' (List<Integer>)", e.getMessage());
+//		}
 	}
 
 	@Test
@@ -647,20 +623,20 @@ public class PropertyStoreTest {
 		assertInstanceOf(List.class, ps.getProperty("A.f2.lc"));
 
 		b.clear();
-		b.set("A.f1.lc/add", Integer.class);
-		b.addTo("A.f1.lc", String.class);
+		b.set("A.f1.lc/prepend", Integer.class);
+		b.prependTo("A.f1.lc", String.class);
 		assertObjectEquals("{A:{'f1.lc':['java.lang.String','java.lang.Integer']}}", b.build());
 		b.set("A.f1.lc/remove", Integer.class);
 		assertObjectEquals("{A:{'f1.lc':['java.lang.String']}}", b.build());
 
 		b.clear();
-		testError(b, "A.f1.lc/add", "['java.lang.Integer']", "Cannot add value '[\\'java.lang.Integer\\']' (String) to property 'f1.lc' (List<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");
-		testError(b, "A.f1.lc/add", "java.lang.Integer", "Cannot add value 'java.lang.Integer' (String) to property 'f1.lc' (List<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");
+		testError(b, "A.f1.lc/prepend", "['java.lang.Integer']", "Cannot prepend value '[\\'java.lang.Integer\\']' (String) to property 'f1.lc' (List<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");
+		testError(b, "A.f1.lc/prepend", "java.lang.Integer", "Cannot prepend value 'java.lang.Integer' (String) to property 'f1.lc' (List<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");
 
 		b.clear();
-		b.set("A.f1.lc/add", AList.of(Integer.class, String.class));
-		b.set("A.f1.lc/add", AList.of(Map.class));
-		b.addTo("A.f1.lc", AList.of(List.class));
+		b.set("A.f1.lc/prepend", AList.of(Integer.class, String.class));
+		b.set("A.f1.lc/prepend", AList.of(Map.class));
+		b.prependTo("A.f1.lc", AList.of(List.class));
 		assertObjectEquals("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}", b.build());
 		b.set("A.f1.lc/remove", AList.of(Integer.class, String.class));
 		b.removeFrom("A.f1.lc", AList.of());
@@ -668,9 +644,9 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.lc':['java.util.Map']}}", b.build());
 
 		b.clear();
-		b.set("A.f1.lc/add", AList.of(Integer.class, String.class));
-		b.set("A.f1.lc/add", AList.of(Map.class));
-		b.addTo("A.f1.lc", AList.of(List.class));
+		b.set("A.f1.lc/prepend", AList.of(Integer.class, String.class));
+		b.set("A.f1.lc/prepend", AList.of(Map.class));
+		b.prependTo("A.f1.lc", AList.of(List.class));
 		assertObjectEquals("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}", b.build());
 		b.set("A.f1.lc/remove", AList.of(Integer.class, String.class));
 		b.set("A.f1.lc/remove", AList.of());
@@ -678,9 +654,9 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.lc':['java.util.Map']}}", b.build());
 
 		b.clear();
-		b.set("A.f1.lc/add", new Class<?>[]{Integer.class, String.class});
-		b.set("A.f1.lc/add", new Class<?>[]{Map.class});
-		b.addTo("A.f1.lc", new Class<?>[]{List.class});
+		b.set("A.f1.lc/prepend", new Class<?>[]{Integer.class, String.class});
+		b.set("A.f1.lc/prepend", new Class<?>[]{Map.class});
+		b.prependTo("A.f1.lc", new Class<?>[]{List.class});
 		assertObjectEquals("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}", b.build());
 		b.set("A.f1.lc/remove", new Class<?>[]{Integer.class, String.class});
 		b.set("A.f1.lc/remove", new Class<?>[]{});
@@ -691,20 +667,20 @@ public class PropertyStoreTest {
 		assertObjectEquals("{}", b.build());
 
 		b.clear();
-		b.set("A.f1.lc/add", String.class);
-		b.set("A.f1.lc/add.10", Integer.class);
-		b.set("A.f1.lc/add.1", Map.class);
-		b.set("A.f1.lc/add.0", List.class);
-		b.set("A.f1.lc/add.-10", Object.class);
-		assertObjectEquals("{A:{'f1.lc':['java.lang.Object','java.util.List','java.lang.String','java.util.Map','java.lang.Integer']}}", b.build());
+//		b.set("A.f1.lc/add", String.class);
+//		b.set("A.f1.lc/add.10", Integer.class);
+//		b.set("A.f1.lc/add.1", Map.class);
+//		b.set("A.f1.lc/add.0", List.class);
+//		b.set("A.f1.lc/add.-10", Object.class);
+//		assertObjectEquals("{A:{'f1.lc':['java.lang.Object','java.util.List','java.lang.String','java.util.Map','java.lang.Integer']}}", b.build());
 
-		testError(b, "A.f1.lc/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1.lc' (List<Class>).  Value 'foo' (String) cannot be converted to a Class.");
-		try {
-			b.addTo("A.f1.lc", "foo", "bar");
-			fail("Exception expected.");
-		} catch (Exception e) {
-			assertEquals("Invalid argument 'foo' on add command for property 'f1.lc' (List<Class>)", e.getMessage());
-		}
+		testError(b, "A.f1.lc/prepend.123", "foo", "Cannot prepend value 'foo' (String) to property 'f1.lc' (List<Class>).  Value 'foo' (String) cannot be converted to a Class.");
+//		try {
+//			b.prependTo("A.f1.lc", "foo", "bar");
+//			fail("Exception expected.");
+//		} catch (Exception e) {
+//			assertEquals("Invalid argument 'foo' on add command for property 'f1.lc' (List<Class>)", e.getMessage());
+//		}
 	}
 
 	@Test
@@ -725,16 +701,16 @@ public class PropertyStoreTest {
 		assertInstanceOf(Class.class, ((List<?>)ps.getProperty("A.f2.lo")).get(3));
 
 		b.clear();
-		b.set("A.f1.lo/add", 1);
-		b.addTo("A.f1.lo", 2);
+		b.set("A.f1.lo/prepend", 1);
+		b.prependTo("A.f1.lo", 2);
 		assertObjectEquals("{A:{'f1.lo':[2,1]}}", b.build());
 		b.set("A.f1.lo/remove", 1);
 		assertObjectEquals("{A:{'f1.lo':[2]}}", b.build());
 
 		b.clear();
-		b.set("A.f1.lo/add", AList.of(StringBuilder.class));
-		b.set("A.f1.lo/add", AList.of(HashMap.class));
-		b.addTo("A.f1.lo", AList.of(LinkedList.class));
+		b.set("A.f1.lo/prepend", AList.of(StringBuilder.class));
+		b.set("A.f1.lo/prepend", AList.of(HashMap.class));
+		b.prependTo("A.f1.lo", AList.of(LinkedList.class));
 		assertObjectEquals("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}", b.build());
 		b.set("A.f1.lo/remove", AList.of(HashMap.class));
 		b.removeFrom("A.f1.lo", AList.of());
@@ -742,9 +718,9 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder']}}", b.build());
 
 		b.clear();
-		b.set("A.f1.lo/add", AList.of(StringBuilder.class));
-		b.set("A.f1.lo/add", AList.of(HashMap.class));
-		b.addTo("A.f1.lo", AList.of(LinkedList.class));
+		b.set("A.f1.lo/prepend", AList.of(StringBuilder.class));
+		b.set("A.f1.lo/prepend", AList.of(HashMap.class));
+		b.prependTo("A.f1.lo", AList.of(LinkedList.class));
 		assertObjectEquals("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}", b.build());
 		b.set("A.f1.lo/remove", AList.of(HashMap.class));
 		b.set("A.f1.lo/remove", AList.of());
@@ -752,9 +728,9 @@ public class PropertyStoreTest {
 		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder']}}", b.build());
 
 		b.clear();
-		b.set("A.f1.lo/add", new Class<?>[]{StringBuilder.class});
-		b.set("A.f1.lo/add", new Class<?>[]{HashMap.class});
-		b.addTo("A.f1.lo", new Class<?>[]{LinkedList.class});
+		b.set("A.f1.lo/prepend", new Class<?>[]{StringBuilder.class});
+		b.set("A.f1.lo/prepend", new Class<?>[]{HashMap.class});
+		b.prependTo("A.f1.lo", new Class<?>[]{LinkedList.class});
 		assertObjectEquals("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}", b.build());
 		b.set("A.f1.lo/remove", new Class<?>[]{HashMap.class});
 		b.set("A.f1.lo/remove", new Class<?>[]{});
@@ -764,20 +740,20 @@ public class PropertyStoreTest {
 		b.set("A.f1.lo", null);
 		assertObjectEquals("{}", b.build());
 
-		b.clear();
-		b.set("A.f1.lo/add", StringBuilder.class);
-		b.set("A.f1.lo/add.10", HashMap.class);
-		b.set("A.f1.lo/add.1", LinkedList.class);
-		b.set("A.f1.lo/add.0", TestEnum.ONE);
-		b.set("A.f1.lo/add.-10", TestEnum.TWO);
-		assertObjectEquals("{A:{'f1.lo':['TWO','ONE','java.lang.StringBuilder','java.util.LinkedList','java.util.HashMap']}}", b.build());
-
-		try {
-			b.addTo("A.f1.lo", "foo", "bar");
-			fail("Exception expected.");
-		} catch (Exception e) {
-			assertEquals("Invalid argument 'foo' on add command for property 'f1.lo' (List<Object>)", e.getMessage());
-		}
+//		b.clear();
+//		b.set("A.f1.lo/add", StringBuilder.class);
+//		b.set("A.f1.lo/add.10", HashMap.class);
+//		b.set("A.f1.lo/add.1", LinkedList.class);
+//		b.set("A.f1.lo/add.0", TestEnum.ONE);
+//		b.set("A.f1.lo/add.-10", TestEnum.TWO);
+//		assertObjectEquals("{A:{'f1.lo':['TWO','ONE','java.lang.StringBuilder','java.util.LinkedList','java.util.HashMap']}}", b.build());
+//
+//		try {
+//			b.addTo("A.f1.lo", "foo", "bar");
+//			fail("Exception expected.");
+//		} catch (Exception e) {
+//			assertEquals("Invalid argument 'foo' on add command for property 'f1.lo' (List<Object>)", e.getMessage());
+//		}
 	}
 
 	@Test
@@ -797,13 +773,13 @@ public class PropertyStoreTest {
 		assertInstanceOf(Map.class, ps.getProperty("A.f4.sms"));
 
 		b.clear();
-		b.set("A.f1.sms/add", "{foo:'bar'}");
+		b.set("A.f1.sms/put", "{foo:'bar'}");
 		assertObjectEquals("{A:{'f1.sms':{foo:'bar'}}}", b.build());
 
 		b.clear();
-		b.set("A.f1.sms/add.foo", "bar");
+		b.set("A.f1.sms/put.foo", "bar");
 		assertObjectEquals("{A:{'f1.sms':{foo:'bar'}}}", b.build());
-		b.set("A.f1.sms/add.foo", null);
+		b.set("A.f1.sms/put.foo", null);
 		assertObjectEquals("{}", b.build());
 
 		b.clear();
@@ -838,13 +814,13 @@ public class PropertyStoreTest {
 		assertInstanceOf(Map.class, ps.getProperty("A.f4.smi"));
 
 		b.clear();
-		b.set("A.f1.smi/add", "{foo:'123'}");
+		b.set("A.f1.smi/put", "{foo:'123'}");
 		assertObjectEquals("{A:{'f1.smi':{foo:123}}}", b.build());
 
 		b.clear();
-		b.set("A.f1.smi/add.foo", "123");
+		b.set("A.f1.smi/put.foo", "123");
 		assertObjectEquals("{A:{'f1.smi':{foo:123}}}", b.build());
-		b.set("A.f1.smi/add.foo", null);
+		b.set("A.f1.smi/put.foo", null);
 		assertObjectEquals("{}", b.build());
 
 		b.clear();
@@ -877,9 +853,9 @@ public class PropertyStoreTest {
 		assertInstanceOf(Class.class, ((Map<?,?>)ps.getProperty("A.f2.smc")).values().iterator().next());
 
 		b.clear();
-		b.set("A.f1.smc/add.foo", String.class);
+		b.set("A.f1.smc/put.foo", String.class);
 		assertObjectEquals("{A:{'f1.smc':{foo:'java.lang.String'}}}", b.build());
-		b.set("A.f1.smc/add.foo", null);
+		b.set("A.f1.smc/put.foo", null);
 		assertObjectEquals("{}", b.build());
 
 		b.clear();
@@ -887,7 +863,7 @@ public class PropertyStoreTest {
 		assertObjectEquals("{}", b.build());
 
 		b.clear();
-		b.set("A.f1.smc/add.foo", String.class);
+		b.set("A.f1.smc/put.foo", String.class);
 		testError(b, "A.f1.smc/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smc' (Map<String,Class>).");
 		try {
 			b.removeFrom("A.f1.smc", "foo");
@@ -915,13 +891,13 @@ public class PropertyStoreTest {
 		assertInstanceOf(Map.class, ps.getProperty("A.f4.smo"));
 
 		b.clear();
-		b.set("A.f1.smo/add", "{foo:'123'}");
+		b.set("A.f1.smo/put", "{foo:'123'}");
 		assertObjectEquals("{A:{'f1.smo':{foo:'123'}}}", b.build());
 
 		b.clear();
-		b.set("A.f1.smo/add.foo", "123");
+		b.set("A.f1.smo/put.foo", "123");
 		assertObjectEquals("{A:{'f1.smo':{foo:'123'}}}", b.build());
-		b.set("A.f1.smo/add.foo", null);
+		b.set("A.f1.smo/put.foo", null);
 		assertObjectEquals("{}", b.build());
 
 		b.clear();
@@ -1397,12 +1373,12 @@ public class PropertyStoreTest {
 		testNotEquals(b1, b2);
 
 		b1.clear();
-		b1.set("A.f1.smc/add.foo", Integer.class);
+		b1.set("A.f1.smc/put.foo", Integer.class);
 		ps = b1.build();
-		b1.set("A.f1.smc/add.foo", Integer.class);
+		b1.set("A.f1.smc/put.foo", Integer.class);
 		assertTrue(ps == b1.build());
 
-		b1.set("A.f1.smc/add.foo", String.class);
+		b1.set("A.f1.smc/put.foo", String.class);
 		assertTrue(ps != b1.build());
 
 		b1.clear();
@@ -1429,12 +1405,12 @@ public class PropertyStoreTest {
 		testNotEquals(b1, b2);
 
 		b1.clear();
-		b1.set("A.f1.smo/add.foo", TestEnum.ONE);
+		b1.set("A.f1.smo/put.foo", TestEnum.ONE);
 		ps = b1.build();
-		b1.set("A.f1.smo/add.foo", TestEnum.ONE);
+		b1.set("A.f1.smo/put.foo", TestEnum.ONE);
 		assertTrue(ps == b1.build());
 
-		b1.set("A.f1.smo/add.foo", TestEnum.TWO);
+		b1.set("A.f1.smo/put.foo", TestEnum.TWO);
 		assertTrue(ps != b1.build());
 
 		b1.clear();
@@ -1648,7 +1624,8 @@ public class PropertyStoreTest {
 	@Test
 	public void testAddToNull() {
 		PropertyStoreBuilder b = PropertyStore.create();
-		b.addTo("A.foo.ls", null);
+		b.appendTo("A.foo.ls", null);
+		b.prependTo("A.foo.ls", null);
 		assertObjectEquals("{}", b.build());
 	}
 
@@ -1682,19 +1659,19 @@ public class PropertyStoreTest {
 	public void testAddToInvalidObjectMap() {
 		PropertyStoreBuilder b = PropertyStore.create();
 		try {
-			b.addTo("A.foo.sms", "{xxx}");
+			b.putTo("A.foo.sms", "{xxx}");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
 			assertTrue(e.getMessage().startsWith("Cannot add '{xxx}' (String) to property 'foo.sms' (Map<String,String>)."));
 		}
 		try {
-			b.addTo("A.foo.sms", "xxx");
+			b.putTo("A.foo.sms", "xxx");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
 			assertEquals("Cannot add 'xxx' (String) to property 'foo.sms' (Map<String,String>).", e.getMessage());
 		}
 		try {
-			b.addTo("A.foo.sms", new StringBuilder("foo"));
+			b.putTo("A.foo.sms", new StringBuilder("foo"));
 			fail("Exception expected.");
 		} catch (ConfigException e) {
 			assertEquals("Cannot add 'foo' (StringBuilder) to property 'foo.sms' (Map<String,String>).", e.getMessage());
@@ -1770,12 +1747,12 @@ public class PropertyStoreTest {
 		b.set("A.foo.sc/add", String.class);
 		b.set("A.foo.ls", "['bar']");
 		b.set("A.foo.li", "[123]");
-		b.set("A.foo.lc/add", String.class);
-		b.set("A.foo.lo/add", StringBuilder.class);
+		b.set("A.foo.lc/prepend", String.class);
+		b.set("A.foo.lo/prepend", StringBuilder.class);
 		b.set("A.foo.sms", "{foo:'bar'}");
 		b.set("A.foo.smi", "{foo:123}");
-		b.set("A.foo.smc/add.foo", String.class);
-		b.set("A.foo.smo/add.foo", StringBuilder.class);
+		b.set("A.foo.smc/put.foo", String.class);
+		b.set("A.foo.smo/put.foo", StringBuilder.class);
 		PropertyStore ps = b.build();
 
 		b = ps.builder();

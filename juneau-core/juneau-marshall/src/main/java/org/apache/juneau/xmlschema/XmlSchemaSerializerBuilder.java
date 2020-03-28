@@ -843,12 +843,6 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSchemaSerializerBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public XmlSchemaSerializerBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;

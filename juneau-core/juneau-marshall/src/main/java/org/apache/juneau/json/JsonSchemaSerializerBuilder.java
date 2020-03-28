@@ -239,7 +239,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchemaSerializerBuilder defaultSchema(Class<?> c, ObjectMap schema) {
-		return addTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
+		return putTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
 	}
 
 	/**
@@ -1061,8 +1061,8 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaSerializerBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
+	public JsonSchemaSerializerBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
 		return this;
 	}
 

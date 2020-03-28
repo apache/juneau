@@ -173,7 +173,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder annotations(Annotation...values) {
-		return addTo(BEAN_annotations, values);
+		return prependTo(BEAN_annotations, values);
 	}
 
 	/**
@@ -241,7 +241,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder beanDictionary(Object...values) {
-		return addTo(BEAN_beanDictionary, values);
+		return prependTo(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder beanDictionary(Class<?>...values) {
-		return addTo(BEAN_beanDictionary, values);
+		return prependTo(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -409,7 +409,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder beanFilters(Object...values) {
-		return addTo(BEAN_beanFilters, values);
+		return prependTo(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -428,7 +428,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder beanFilters(Class<?>...values) {
-		return addTo(BEAN_beanFilters, values);
+		return prependTo(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -783,7 +783,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder bpi(Class<?> beanClass, String properties) {
-		return addTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpi(properties));
+		return prependTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpi(properties));
 	}
 
 	/**
@@ -803,7 +803,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder bpi(Map<String,String> values) {
 		for (Map.Entry<String,String> e : values.entrySet())
-			psb.addTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(e.getValue()));
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(e.getValue()));
 		return this;
 	}
 
@@ -826,7 +826,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder bpi(String beanClassName, String properties) {
-		return addTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpi(properties));
+		return prependTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpi(properties));
 	}
 
 	/**
@@ -846,7 +846,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder bpx(Class<?> beanClass, String properties) {
-		return addTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpx(properties));
+		return prependTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpx(properties));
 	}
 
 	/**
@@ -867,7 +867,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder bpx(Map<String,String> values) {
 		for (Map.Entry<String,String> e : values.entrySet())
-			psb.addTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(e.getValue()));
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(e.getValue()));
 		return this;
 	}
 
@@ -887,7 +887,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder bpx(String beanClassName, String properties) {
-		return addTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpx(properties));
+		return prependTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpx(properties));
 	}
 
 	/**
@@ -907,7 +907,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder bpro(Class<?> beanClass, String properties) {
-		return addTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpro(properties));
+		return prependTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpro(properties));
 	}
 
 	/**
@@ -928,7 +928,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder bpro(Map<String,String> values) {
 		for (Map.Entry<String,String> e : values.entrySet())
-			psb.addTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(e.getValue()));
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(e.getValue()));
 		return this;
 	}
 
@@ -951,7 +951,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder bpro(String beanClassName, String properties) {
-		return addTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpro(properties));
+		return prependTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpro(properties));
 	}
 
 	/**
@@ -971,7 +971,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder bpwo(Class<?> beanClass, String properties) {
-		return addTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpwo(properties));
+		return prependTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpwo(properties));
 	}
 
 	/**
@@ -992,7 +992,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder bpwo(Map<String,String> values) {
 		for (Map.Entry<String,String> e : values.entrySet())
-			psb.addTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(e.getValue()));
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(e.getValue()));
 		return this;
 	}
 
@@ -1015,7 +1015,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder bpwo(String beanClassName, String properties) {
-		return addTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpwo(properties));
+		return prependTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpwo(properties));
 	}
 
 	/**
@@ -1078,7 +1078,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder dictionary(Object...values) {
-		return addTo(BEAN_beanDictionary, values);
+		return prependTo(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -1097,7 +1097,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder dictionary(Class<?>...values) {
-		return addTo(BEAN_beanDictionary, values);
+		return  prependTo(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -1192,7 +1192,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public <T> BeanContextBuilder example(Class<T> pojoClass, T o) {
-		return addTo(BEAN_examples, pojoClass.getName(), o);
+		return putTo(BEAN_examples, pojoClass.getName(), o);
 	}
 
 	/**
@@ -1213,7 +1213,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public <T> BeanContextBuilder exampleJson(Class<T> pojoClass, String json) {
 		try {
-			return addTo(BEAN_examples, pojoClass.getName(), SimpleJson.DEFAULT.read(json, pojoClass));
+			return putTo(BEAN_examples, pojoClass.getName(), SimpleJson.DEFAULT.read(json, pojoClass));
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
@@ -1239,7 +1239,7 @@ public class BeanContextBuilder extends ContextBuilder {
 		try {
 			ObjectMap m = new ObjectMap(json);
 			for (Map.Entry<String,Object> e : m.entrySet())
-				addTo(BEAN_examples, e.getKey(), e.getValue());
+				putTo(BEAN_examples, e.getKey(), e.getValue());
 			return this;
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
@@ -1256,7 +1256,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
 	@Deprecated public BeanContextBuilder excludeProperties(Class<?> beanClass, String properties) {
-		return addTo(BEAN_bpx, beanClass.getName(), properties);
+		return putTo(BEAN_bpx, beanClass.getName(), properties);
 	}
 
 	/**
@@ -1282,7 +1282,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
 	@Deprecated public BeanContextBuilder excludeProperties(String beanClassName, String value) {
-		return addTo(BEAN_bpx, beanClassName, value);
+		return putTo(BEAN_bpx, beanClassName, value);
 	}
 
 	/**
@@ -1567,7 +1567,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
-		return addTo(BEAN_implClasses, interfaceClass.getName(), implClass);
+		return putTo(BEAN_implClasses, interfaceClass.getName(), implClass);
 	}
 
 	/**
@@ -1600,7 +1600,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
 	@Deprecated public BeanContextBuilder includeProperties(Class<?> beanClass, String value) {
-		return addTo(BEAN_bpi, beanClass.getName(), value);
+		return putTo(BEAN_bpi, beanClass.getName(), value);
 	}
 
 	/**
@@ -1626,7 +1626,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
 	@Deprecated public BeanContextBuilder includeProperties(String beanClassName, String value) {
-		return addTo(BEAN_bpi, beanClassName, value);
+		return putTo(BEAN_bpi, beanClassName, value);
 	}
 
 	/**
@@ -1913,7 +1913,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder pojoSwaps(Class<?>...values) {
-		return addTo(BEAN_pojoSwaps, values);
+		return appendTo(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -1935,7 +1935,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder pojoSwaps(Object...values) {
-		return addTo(BEAN_pojoSwaps, values);
+		return appendTo(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -2230,8 +2230,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public BeanContextBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
+	public BeanContextBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
 		return this;
 	}
 

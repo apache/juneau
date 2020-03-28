@@ -38,6 +38,6 @@ public class OpenApiConfigApply extends ConfigApply<OpenApiConfig> {
 		OpenApiConfig a = ai.getAnnotation();
 
 		if (a.applyOpenApi().length > 0)
-			psb.addTo(BEAN_annotations, a.applyOpenApi());
+			psb.prependTo(BEAN_annotations, a.applyOpenApi());
 	}
 }

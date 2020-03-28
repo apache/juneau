@@ -690,7 +690,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder children(Class<?>...values) {
-		return addTo(REST_children, values);
+		return prependTo(REST_children, values);
 	}
 
 	/**
@@ -708,7 +708,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder children(Object...values) {
-		return addTo(REST_children, values);
+		return prependTo(REST_children, values);
 	}
 
 	/**
@@ -730,7 +730,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder child(String path, Object child) {
-		return addTo(REST_children, new RestChild(path, child));
+		return prependTo(REST_children, new RestChild(path, child));
 	}
 
 	/**
@@ -812,7 +812,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder converters(Class<?>...values) {
-		return addTo(REST_converters, values);
+		return prependTo(REST_converters, values);
 	}
 
 	/**
@@ -830,7 +830,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder converters(RestConverter...values) {
-		return addTo(REST_converters, values);
+		return prependTo(REST_converters, values);
 	}
 
 	/**
@@ -1045,7 +1045,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder encoders(Class<?>...values) {
-		return addTo(REST_encoders, values);
+		return prependTo(REST_encoders, values);
 	}
 
 	/**
@@ -1063,7 +1063,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder encoders(Encoder...values) {
-		return addTo(REST_encoders, values);
+		return prependTo(REST_encoders, values);
 	}
 
 	/**
@@ -1081,7 +1081,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder guards(Class<?>...values) {
-		return addTo(REST_guards, values);
+		return prependTo(REST_guards, values);
 	}
 
 	/**
@@ -1099,7 +1099,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder guards(RestGuard...values) {
-		return addTo(REST_guards, values);
+		return prependTo(REST_guards, values);
 	}
 
 	/**
@@ -1230,7 +1230,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder messages(MessageBundleLocation...values) {
-		return addTo(REST_messages, values);
+		return prependTo(REST_messages, values);
 	}
 
 	/**
@@ -1252,7 +1252,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder messages(Class<?> baseClass, String bundlePath) {
-		return addTo(REST_messages, new MessageBundleLocation(baseClass, bundlePath));
+		return prependTo(REST_messages, new MessageBundleLocation(baseClass, bundlePath));
 	}
 
 	/**
@@ -1270,7 +1270,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder messages(String bundlePath) {
-		return addTo(REST_messages, new MessageBundleLocation(null, bundlePath));
+		return prependTo(REST_messages, new MessageBundleLocation(null, bundlePath));
 	}
 
 	/**
@@ -1309,7 +1309,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@ConfigurationProperty
 	@SuppressWarnings("unchecked")
 	public RestContextBuilder paramResolvers(Class<? extends RestMethodParam>...values) {
-		return addTo(REST_paramResolvers, values);
+		return prependTo(REST_paramResolvers, values);
 	}
 
 	/**
@@ -1327,7 +1327,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder paramResolvers(RestMethodParam...values) {
-		return addTo(REST_paramResolvers, values);
+		return prependTo(REST_paramResolvers, values);
 	}
 
 	/**
@@ -1365,7 +1365,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder parsers(Class<?>...values) {
-		return addTo(REST_parsers, values);
+		return prependTo(REST_parsers, values);
 	}
 
 	/**
@@ -1387,7 +1387,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder parsers(Object...values) {
-		return addTo(REST_parsers, values);
+		return prependTo(REST_parsers, values);
 	}
 
 	/**
@@ -1566,7 +1566,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder reqAttr(String name, Object value) {
-		return addTo(REST_reqAttrs, name, value);
+		return putTo(REST_reqAttrs, name, value);
 	}
 
 	/**
@@ -1610,7 +1610,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder reqHeader(String name, Object value) {
-		return addTo(REST_reqHeaders, name, value);
+		return putTo(REST_reqHeaders, name, value);
 	}
 
 	/**
@@ -1679,7 +1679,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder resHeader(String name, Object value) {
-		return addTo(REST_resHeaders, name, value);
+		return putTo(REST_resHeaders, name, value);
 	}
 
 	/**
@@ -1741,7 +1741,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder responseHandlers(Class<?>...values) {
-		return addTo(REST_responseHandlers, values);
+		return prependTo(REST_responseHandlers, values);
 	}
 
 	/**
@@ -1759,7 +1759,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder responseHandlers(ResponseHandler...values) {
-		return addTo(REST_responseHandlers, values);
+		return prependTo(REST_responseHandlers, values);
 	}
 
 	/**
@@ -1879,7 +1879,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder serializers(Class<?>...values) {
-		return addTo(REST_serializers, values);
+		return prependTo(REST_serializers, values);
 	}
 
 	/**
@@ -1897,7 +1897,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder serializersReplace(Class<?>...values) {
-		return set(REST_serializers, values);
+		return prependTo(REST_serializers, values);
 	}
 
 	/**
@@ -1919,7 +1919,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder serializers(Object...values) {
-		return addTo(REST_serializers, values);
+		return prependTo(REST_serializers, values);
 	}
 
 	/**
@@ -1957,7 +1957,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder staticFileResponseHeaders(Map<String,String> headers) {
-		return addTo(REST_staticFileResponseHeaders, headers);
+		return putTo(REST_staticFileResponseHeaders, headers);
 	}
 
 	/**
@@ -2022,7 +2022,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder staticFileResponseHeader(String name, String value) {
-		return addTo(REST_staticFileResponseHeaders, name, value);
+		return putTo(REST_staticFileResponseHeaders, name, value);
 	}
 
 	/**
@@ -2040,7 +2040,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder staticFiles(StaticFileMapping...values) {
-		return addTo(REST_staticFiles, values);
+		return prependTo(REST_staticFiles, values);
 	}
 
 	/**
@@ -2166,7 +2166,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder produces(String...values) {
-		return addTo(REST_produces, values);
+		return prependTo(REST_produces, values);
 	}
 
 	/**
@@ -2202,7 +2202,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder produces(MediaType...values) {
-		return addTo(REST_produces, values);
+		return prependTo(REST_produces, values);
 	}
 
 	/**
@@ -2238,7 +2238,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder consumes(String...values) {
-		return addTo(REST_consumes, values);
+		return prependTo(REST_consumes, values);
 	}
 
 	/**
@@ -2274,7 +2274,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder consumes(MediaType...values) {
-		return addTo(REST_consumes, values);
+		return prependTo(REST_consumes, values);
 	}
 
 	/**
@@ -2316,7 +2316,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder properties(Map<String,Object> values) {
-		return addTo(REST_properties, values);
+		return putTo(REST_properties, values);
 	}
 
 	/**
@@ -2341,7 +2341,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder property(String name, Object value) {
-		return addTo(REST_properties, name, value);
+		return putTo(REST_properties, name, value);
 	}
 
 	/**
@@ -2507,7 +2507,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Deprecated
 	@ConfigurationProperty
 	public RestContextBuilder widgets(Class<? extends Widget>...values) {
-		return addTo(REST_widgets, values);
+		return prependTo(REST_widgets, values);
 	}
 
 	/**
@@ -2554,7 +2554,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Deprecated
 	@ConfigurationProperty
 	public RestContextBuilder widgets(Widget...values) {
-		return addTo(REST_widgets, values);
+		return prependTo(REST_widgets, values);
 	}
 
 	/**
@@ -2584,7 +2584,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public RestContextBuilder set(String name, Object value) {
 		super.set(name, value);
 		this.properties.put(name, value);
-		addTo(REST_properties, name, value);
+		putTo(REST_properties, name, value);
 		return this;
 	}
 
@@ -2593,7 +2593,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		super.set(properties);
 		this.properties.clear();
 		this.properties.putAll(properties);
-		addTo(REST_properties, properties);
+		putTo(REST_properties, properties);
 		return this;
 	}
 
@@ -2612,8 +2612,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
+	public RestContextBuilder putTo(String name, Object value) {
+		super.putTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestContextBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
 		return this;
 	}
 

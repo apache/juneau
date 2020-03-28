@@ -521,7 +521,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	@ConfigurationProperty
 	@SuppressWarnings("unchecked")
 	public HtmlDocSerializerBuilder widgets(Class<? extends HtmlWidget>...values) {
-		return addTo(HTMLDOC_widgets, values);
+		return prependTo(HTMLDOC_widgets, values);
 	}
 
 	/**
@@ -558,7 +558,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 */
 	@ConfigurationProperty
 	public HtmlDocSerializerBuilder widgets(HtmlWidget...values) {
-		return addTo(HTMLDOC_widgets, values);
+		return prependTo(HTMLDOC_widgets, values);
 	}
 
 	/**
@@ -590,12 +590,6 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlDocSerializerBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public HtmlDocSerializerBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
 		return this;
 	}
 

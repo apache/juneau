@@ -49,8 +49,8 @@ public class HtmlConfigApply extends ConfigApply<HtmlConfig> {
 			psb.set(HTML_uriAnchorText, string(a.uriAnchorText()));
 
 		if (a.applyHtml().length > 0)
-			psb.addTo(BEAN_annotations, a.applyHtml());
+			psb.prependTo(BEAN_annotations, a.applyHtml());
 		if (a.applyHtmlLink().length > 0)
-			psb.addTo(BEAN_annotations, a.applyHtmlLink());
+			psb.prependTo(BEAN_annotations, a.applyHtmlLink());
 	}
 }

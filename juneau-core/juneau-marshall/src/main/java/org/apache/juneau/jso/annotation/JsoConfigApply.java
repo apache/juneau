@@ -38,6 +38,6 @@ public class JsoConfigApply extends ConfigApply<JsoConfig> {
 		JsoConfig a = ai.getAnnotation();
 
 		if (a.applyJso().length > 0)
-			psb.addTo(BEAN_annotations, a.applyJso());
+			psb.prependTo(BEAN_annotations, a.applyJso());
 	}
 }
