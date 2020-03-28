@@ -14,6 +14,8 @@ package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.rest.client2.AddFlag.*;
+import static org.apache.juneau.rest.client2.RestClientUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -274,18 +276,11 @@ import org.apache.http.client.CookieStore;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#header(Header) header(Header)}
- * 		<li class='jm'>{@link RestClientBuilder#header(HttpHeader) header(HttpHeader)}
- * 		<li class='jm'>{@link RestClientBuilder#header(NameValuePair) header(NameValuePair)}
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Object) header(String,Object)}
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Object,HttpPartSerializer,HttpPartSchema) header(String,Object,HttpPartSerializer,HttpPartSchema)}
- * 		<li class='jm'>{@link RestClientBuilder#headers(Header...) headers(Header...)}
- * 		<li class='jm'>{@link RestClientBuilder#headers(HttpHeader...) headers(HttpHeader...)}
- * 		<li class='jm'>{@link RestClientBuilder#headers(Map) headers(Map&lt;String,Object>)}
- * 		<li class='jm'>{@link RestClientBuilder#headers(NameValuePair...) headers(NameValuePair...)}
- * 		<li class='jm'>{@link RestClientBuilder#headers(NameValuePairs) headers(NameValuePairs)}
+ * 		<li class='jm'>{@link RestClientBuilder#header(Object) header(Object)}
  * 		<li class='jm'>{@link RestClientBuilder#headers(Object...) headers(Object...)}
- * 		<li class='jm'>{@link RestClientBuilder#headers(ObjectMap) headers(ObjectMap)}
+ * 		<li class='jm'>{@link RestClientBuilder#headerPairs(Object...) headerPairs(Object...)}
  * 		<li class='jm'>{@link RestClientBuilder#accept(Object) accept(Object)}
  * 		<li class='jm'>{@link RestClientBuilder#acceptCharset(Object) acceptCharset(Object)}
  * 		<li class='jm'>{@link RestClientBuilder#acceptEncoding(Object) acceptEncoding(Object)}
@@ -320,21 +315,14 @@ import org.apache.http.client.CookieStore;
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
- * 		<li class='jm'>{@link RestRequest#header(Header) header(Header)}
- * 		<li class='jm'>{@link RestRequest#header(Header,boolean) header(Header,boolean)}
- * 		<li class='jm'>{@link RestRequest#header(HttpHeader) header(HttpHeader)}
- * 		<li class='jm'>{@link RestRequest#header(NameValuePair) header(NameValuePair)}
- * 		<li class='jm'>{@link RestRequest#header(NameValuePair,boolean) header(NameValuePair,boolean)}
  * 		<li class='jm'>{@link RestRequest#header(String,Object) header(String,Object)}
- * 		<li class='jm'>{@link RestRequest#header(String,Object,boolean,HttpPartSerializer,HttpPartSchema) header(String,Object,boolean,HttpPartSerializer,HttpPartSchema)}
- * 		<li class='jm'>{@link RestRequest#headers(Header...) headers(Header...)}
- * 		<li class='jm'>{@link RestRequest#headers(HttpHeader...) headers(HttpHeader...)}
- * 		<li class='jm'>{@link RestRequest#headers(Map) headers(Map&lt;String,Object>)}
- * 		<li class='jm'>{@link RestRequest#headers(NameValuePair...) headers(NameValuePair...)}
- * 		<li class='jm'>{@link RestRequest#headers(NameValuePairs) headers(NameValuePairs)}
- * 		<li class='jm'>{@link RestRequest#headers(Object) headers(Object)}
+ * 		<li class='jm'>{@link RestRequest#header(EnumSet,String,Object) header(EnumSet&gt;AddFlag&gt;,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#header(EnumSet,String,Object,HttpPartSerializer,HttpPartSchema) header(EnumSet&gt;AddFlag&gt;,String,Object,HttpPartSerializer,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestRequest#header(Object) header(Object)}
+ * 		<li class='jm'>{@link RestRequest#header(EnumSet,Object) header(EnumSet&gt;AddFlag&gt;,Object)}
  * 		<li class='jm'>{@link RestRequest#headers(Object...) headers(Object...)}
- * 		<li class='jm'>{@link RestRequest#headers(ObjectMap) headers(ObjectMap)}
+ * 		<li class='jm'>{@link RestRequest#headers(EnumSet,Object...) headers(EnumSet&gt;AddFlag&gt;Object...)}
+ * 		<li class='jm'>{@link RestRequest#headerPairs(Object...) headers(Object...)}
  *		<li class='jm'>{@link RestRequest#accept(Object) accept(Object)}
  * 		<li class='jm'>{@link RestRequest#acceptCharset(Object) acceptCharset(Object)}
  * 		<li class='jm'>{@link RestRequest#acceptEncoding(Object) acceptEncoding(Object)}
@@ -411,28 +399,20 @@ import org.apache.http.client.CookieStore;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#query(Map) query(Map&lt;String,Object>)}
- * 		<li class='jm'>{@link RestClientBuilder#query(NameValuePair) query(NameValuePair)}
- * 		<li class='jm'>{@link RestClientBuilder#query(NameValuePair...) query(NameValuePair...)}
- * 		<li class='jm'>{@link RestClientBuilder#query(NameValuePairs) query(NameValuePairs)}
- * 		<li class='jm'>{@link RestClientBuilder#query(Object...) query(Object...)}
- * 		<li class='jm'>{@link RestClientBuilder#query(ObjectMap) query(ObjectMap)}
  * 		<li class='jm'>{@link RestClientBuilder#query(String,Object) query(String,Object)}
  * 		<li class='jm'>{@link RestClientBuilder#query(String,Object,HttpPartSerializer,HttpPartSchema) query(String,Object,HttpPartSerializer,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestClientBuilder#query(Object...) query(Object...)}
+ * 		<li class='jm'>{@link RestClientBuilder#queryPairs(Object...) queryPairs(Object...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
- * 		<li class='jm'>{@link RestRequest#query(Map) query(Map&lt;String,Object>)}
- * 		<li class='jm'>{@link RestRequest#query(NameValuePair) query(NameValuePair)}
- * 		<li class='jm'>{@link RestRequest#query(NameValuePair,boolean) query(NameValuePair,boolean)}
- * 		<li class='jm'>{@link RestRequest#query(NameValuePair...) query(NameValuePair...)}
- * 		<li class='jm'>{@link RestRequest#query(NameValuePairs) query(NameValuePairs)}
- * 		<li class='jm'>{@link RestRequest#query(Object) query(Object)}
- * 		<li class='jm'>{@link RestRequest#query(Object...) query(Object...)}
- * 		<li class='jm'>{@link RestRequest#query(ObjectMap) query(ObjectMap)}
- * 		<li class='jm'>{@link RestRequest#query(String) query(String)}
  * 		<li class='jm'>{@link RestRequest#query(String,Object) query(String,Object)}
- * 		<li class='jm'>{@link RestRequest#query(String,Object,boolean,HttpPartSerializer,HttpPartSchema) query(String,Object,boolean,HttpPartSerializer,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestRequest#query(EnumSet,String,Object) query(EnumSet&lt;AddFlag&gt;,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#query(EnumSet,String,Object,HttpPartSerializer,HttpPartSchema) query(EnumSet&lt;AddFlag&gt;,String,Object,HttpPartSerializer,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestRequest#query(Object...) query(Object...)}
+ * 		<li class='jm'>{@link RestRequest#query(EnumSet,Object...) query(EnumSet&lt;AddFlag&gt;,Object...)}
+ * 		<li class='jm'>{@link RestRequest#queryPairs(Object...) queryPairs(Object...)}
+ * 		<li class='jm'>{@link RestRequest#queryCustom(Object) queryCustom(Object)}
  * 	</ul>
  * </ul>
  *
@@ -459,30 +439,20 @@ import org.apache.http.client.CookieStore;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#formData(Map) formData(Map&lt;String,Object>)}
- * 		<li class='jm'>{@link RestClientBuilder#formData(NameValuePair) formData(NameValuePair)}
- * 		<li class='jm'>{@link RestClientBuilder#formData(NameValuePair...) formData(NameValuePair...)}
- * 		<li class='jm'>{@link RestClientBuilder#formData(NameValuePairs) formData(NameValuePairs)}
- * 		<li class='jm'>{@link RestClientBuilder#formData(Object...) formData(Object...)}
- * 		<li class='jm'>{@link RestClientBuilder#formData(ObjectMap) formData(ObjectMap)}
  * 		<li class='jm'>{@link RestClientBuilder#formData(String,Object) formData(String,Object)}
  * 		<li class='jm'>{@link RestClientBuilder#formData(String,Object,HttpPartSerializer,HttpPartSchema) formData(String,Object,HttpPartSerializer,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestClientBuilder#formData(Object...) formData(Object...)}
+ * 		<li class='jm'>{@link RestClientBuilder#formDataPairs(Object...) formDataPairs(Object...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
- * 		<li class='jm'>{@link RestRequest#formData(CharSequence) formData(CharSequence)}
- * 		<li class='jm'>{@link RestRequest#formData(InputStream) formData(InputStream)}
- * 		<li class='jm'>{@link RestRequest#formData(Map) formData(Map&lt;String,Object>)}
- * 		<li class='jm'>{@link RestRequest#formData(NameValuePair) formData(NameValuePair)}
- * 		<li class='jm'>{@link RestRequest#formData(NameValuePair,boolean) formData(NameValuePair,boolean)}
- * 		<li class='jm'>{@link RestRequest#formData(NameValuePair...) formData(NameValuePair...)}
- * 		<li class='jm'>{@link RestRequest#formData(NameValuePairs) formData(NameValuePairs)}
- * 		<li class='jm'>{@link RestRequest#formData(Object) formData(Object)}
- * 		<li class='jm'>{@link RestRequest#formData(Object...) formData(Object...)}
- * 		<li class='jm'>{@link RestRequest#formData(ObjectMap) formData(ObjectMap)}
- * 		<li class='jm'>{@link RestRequest#formData(Reader) formData(Reader)}
  * 		<li class='jm'>{@link RestRequest#formData(String,Object) formData(String,Object)}
- * 		<li class='jm'>{@link RestRequest#formData(String,Object,boolean,HttpPartSerializer,HttpPartSchema) formData(String,Object,boolean,HttpPartSerializer,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestRequest#formData(EnumSet,String,Object) formData(EnumSet&lt;AddFlag&gt;,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#formData(EnumSet,String,Object,HttpPartSerializer,HttpPartSchema) formData(EnumSet&lt;AddFlag&gt;,String,Object,HttpPartSerializer,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestRequest#formData(Object...) formData(Object...)}
+ * 		<li class='jm'>{@link RestRequest#formData(EnumSet,Object...) formData(EnumSet&lt;AddFlag&gt;,Object...)}
+ * 		<li class='jm'>{@link RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
+ * 		<li class='jm'>{@link RestRequest#formDataCustom(Object) formDataCustom(Object)}
  * 	</ul>
  * </ul>
  *
@@ -1147,30 +1117,20 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * 		<ul>
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
 	 * 			<ul>
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(Map) formData(Map<String, Object>)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(NameValuePair) formData(NameValuePair)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(NameValuePair...) formData(NameValuePair...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(NameValuePairs) formData(NameValuePairs)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(Object...) formData(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(ObjectMap) formData(ObjectMap)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(String,Object) formData(String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(String,Object,HttpPartSerializer,HttpPartSchema) formData(String,Object,HttpPartSerializer,HttpPartSchema)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(Object...) formData(Map<String, Object>)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formDataPairs(Object...) formData(Map<String, Object>)}
 	 * 			</ul>
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest}
 	 * 			<ul>
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(CharSequence) formData(CharSequence)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(InputStream) formData(InputStream)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(Map) formData(Map<String,Object>)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(NameValuePair) formData(NameValuePair)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(NameValuePair,boolean) formData(NameValuePair,boolean)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(NameValuePair...) formData(NameValuePair...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(NameValuePairs) formData(NameValuePairs)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(Object) formData(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(Object...) formData(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(ObjectMap) formData(ObjectMap)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(Reader) formData(Reader)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(String,Object) formData(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(String,Object,boolean,HttpPartSerializer,HttpPartSchema) formData(String,Object,boolean,HttpPartSerializer,HttpPartSchema)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(EnumSet,String,Object) formData(EnumSet&lt;AddFlag&gt;,String,Object)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(EnumSet,String,Object,HttpPartSerializer,HttpPartSchema) formData(EnumSet&lt;AddFlag&gt;,String,Object,HttpPartSerializer,HttpPartSchema)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(Object...) formData(Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(EnumSet,Object...) formData(EnumSet&lt;AddFlag&gt;Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDataCustom(Object) customFormData(Object)}
 	 * 			</ul>
 	 * 		</ul>
 	 * </ul>
@@ -1194,18 +1154,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * 		<ul>
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
 	 * 			<ul>
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(Header) header(Header)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(HttpHeader) header(HttpHeader)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(NameValuePair) header(NameValuePair)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(String,Object) header(String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(String,Object,HttpPartSerializer,HttpPartSchema) header(String,Object,HttpPartSerializer,HttpPartSchema)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#headers(Header...) headers(Header...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#headers(HttpHeader...) headers(HttpHeader...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#headers(Map) headers(Map<String,Object>)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#headers(NameValuePair...) headers(NameValuePair...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#headers(NameValuePairs) headers(NameValuePairs)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(Object) header(Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#headers(Object...) headers(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#headers(ObjectMap) headers(ObjectMap)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#headerPairs(Object...) headerPairs(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#accept(Object) accept(Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#acceptCharset(Object) acceptCharset(Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#acceptEncoding(Object) acceptEncoding(Object)}
@@ -1240,21 +1193,14 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * 			</ul>
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest}
 	 * 			<ul>
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(Header) header(Header)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(Header,boolean) header(Header,boolean)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(HttpHeader) header(HttpHeader)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(NameValuePair) header(NameValuePair)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(NameValuePair,boolean) header(NameValuePair,boolean)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(String,Object) header(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(String,Object,boolean,HttpPartSerializer,HttpPartSchema) header(String,Object,boolean,HttpPartSerializer,HttpPartSchema)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(Header...) headers(Header...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(HttpHeader...) headers(HttpHeader...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(Map) headers(Map<String,Object>)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(NameValuePair...) headers(NameValuePair...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(NameValuePairs) headers(NameValuePairs)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(Object) headers(Object)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(EnumSet,String,Object) header(EnumSet&gt;AddFlag&gt;,String,Object)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(EnumSet,String,Object,HttpPartSerializer,HttpPartSchema) header(EnumSet&gt;AddFlag&gt;,String,Object,HttpPartSerializer,HttpPartSchema)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(Object) header(Object)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(EnumSet,Object) header(EnumSet&gt;AddFlag&gt;,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(Object...) headers(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(ObjectMap) headers(ObjectMap)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(EnumSet,Object...) headers(EnumSet&gt;AddFlag&gt;,Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headerPairs(Object...) headerPairs(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#accept(Object) accept(Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#acceptCharset(Object) acceptCharset(Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#acceptEncoding(Object) acceptEncoding(Object)}
@@ -1470,28 +1416,19 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * 		<ul>
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
 	 * 			<ul>
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#query(Map) query(Map<String,Object>)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#query(NameValuePair) query(NameValuePair)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#query(NameValuePair...) query(NameValuePair...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#query(NameValuePairs) query(NameValuePairs)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#query(Object...) query(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#query(ObjectMap) query(ObjectMap)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#query(String,Object) query(String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#query(String,Object,HttpPartSerializer,HttpPartSchema) query(String,Object,HttpPartSerializer,HttpPartSchema)}
 	 * 			</ul>
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest}
 	 * 			<ul>
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(Map) query(Map<String,Object>)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(NameValuePair) query(NameValuePair)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(NameValuePair,boolean) query(NameValuePair,boolean)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(NameValuePair...) query(NameValuePair...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(NameValuePairs) query(NameValuePairs)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(Object) query(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(Object...) query(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(ObjectMap) query(ObjectMap)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(String) query(String)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(String,Object) query(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(String,Object,boolean,HttpPartSerializer,HttpPartSchema) query(String,Object,boolean,HttpPartSerializer,HttpPartSchema)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(EnumSet,String,Object) query(EnumSet&lt;AddFlag&gt;,String,Object)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(EnumSet,String,Object,HttpPartSerializer,HttpPartSchema) query(EnumSet&lt;AddFlag&gt;,String,Object,HttpPartSerializer,HttpPartSchema)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(Object...) query(Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(EnumSet,Object...) query(EnumSet&lt;AddFlag&gt;,Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queryPairs(Object...) queryPairs(Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queryCustom(Object) queryCustom(Object)}
 	 * 			</ul>
 	 * 		</ul>
 	 * </ul>
@@ -1612,7 +1549,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		this.httpClient = builder.getHttpClient();
 		this.keepHttpClientOpen = getBooleanProperty(RESTCLIENT_keepHttpClientOpen, false);
 		this.errorCodes = getInstanceProperty(RESTCLIENT_errorCodes, Predicate.class, ERROR_CODES_DEFAULT);
-		this.debug = getBooleanProperty(RESTCLIENT_debug, false);
+		this.debug = getBooleanProperty(RESTCLIENT_debug, getBooleanProperty(BEAN_debug, false));
 		this.executorServiceShutdownOnClose = getBooleanProperty(RESTCLIENT_executorServiceShutdownOnClose, false);
 		this.rootUrl = StringUtils.nullIfEmpty(getStringProperty(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
 		this.leakDetection = getBooleanProperty(RESTCLIENT_leakDetection, debug);
@@ -2368,30 +2305,14 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 			throw new RestCallException(e1);
 		}
 
-		for (Object o : headers) {
-			if (o instanceof Header)
-				req.header((Header)o);
-			else if (o instanceof NameValuePair)
-				req.header((NameValuePair)o);
-			else if (o instanceof HttpHeader)
-				req.header((HttpHeader)o);
-			else
-				throw new RestCallException("Invalid type {0} for header.", o.getClass());
-		}
+		for (Object o : headers)
+			req.header(toHeader(o));
 
-		for (Object o : query) {
-			if (o instanceof NameValuePair)
-				req.query((NameValuePair)o);
-			else
-				throw new RestCallException("Invalid type {0} for query.", o.getClass());
-		}
+		for (Object o : query)
+			req.query(toQuery(o));
 
-		for (Object o : formData) {
-			if (o instanceof NameValuePair)
-				req.formData((NameValuePair)o);
-			else
-				throw new RestCallException("Invalid type {0} for form-data.", o.getClass());
-		}
+		for (Object o : formData)
+			req.formData(toFormData(o));
 
 		return req;
 	}
@@ -2539,13 +2460,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 								rc.path(a.getName(), args[a.getIndex()], a.getSerializer(s), a.getSchema());
 
 							for (RemoteMethodArg a : rmm.getQueryArgs())
-								rc.query(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(s), a.getSchema());
+								rc.query(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSerializer(s), a.getSchema());
 
 							for (RemoteMethodArg a : rmm.getFormDataArgs())
-								rc.formData(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(s), a.getSchema());
+								rc.formData(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSerializer(s), a.getSchema());
 
 							for (RemoteMethodArg a : rmm.getHeaderArgs())
-								rc.header(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(s), a.getSchema());
+								rc.header(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSerializer(s), a.getSchema());
 
 							RemoteMethodArg ba = rmm.getBodyArg();
 							if (ba != null)
@@ -2567,11 +2488,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 												rc.path(pn, val, p.getSerializer(s), schema);
 											else if (val != null) {
 												if (pt == QUERY)
-													rc.query(pn, val, sie, ps, schema);
+													rc.query(sie ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, pn, val, ps, schema);
 												else if (pt == FORMDATA)
-													rc.formData(pn, val, sie, ps, schema);
+													rc.formData(sie ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, pn, val, ps, schema);
 												else if (pt == HEADER)
-													rc.header(pn, val, sie, ps, schema);
+													rc.header(sie ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, pn, val, ps, schema);
 												else if (pt == HttpPartType.BODY)
 													rc.body(val, schema);
 											}

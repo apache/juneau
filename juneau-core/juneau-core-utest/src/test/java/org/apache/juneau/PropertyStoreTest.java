@@ -265,6 +265,12 @@ public class PropertyStoreTest {
 		b.set("A.f1.ss/add", new String[]{"qux"});
 		b.addTo("A.f1.ss", new String[]{"quux"});
 		assertObjectEquals("{A:{'f1.ss':['bar','baz','foo','quux','qux']}}", b.build());
+
+		b.appendTo("A.f1.ss", new String[]{"quuux"});
+		b.prependTo("A.f1.ss", new String[]{"quuuux"});
+		assertObjectEquals("{A:{'f1.ss':['bar','baz','foo','quuuux','quuux','quux','qux']}}", b.build());
+		b.set("A.f1.ss/remove", new String[]{"quuux", "quuuux"});
+
 		b.set("A.f1.ss/remove", new String[]{"foo", "bar"});
 		b.set("A.f1.ss/remove", new String[]{"qux"});
 		b.removeFrom("A.f1.ss", new String[]{"quux"});
@@ -489,6 +495,14 @@ public class PropertyStoreTest {
 		b.set("A.f1.ls/add", new String[]{"qux"});
 		b.addTo("A.f1.ls", new String[]{"quux"});
 		assertObjectEquals("{A:{'f1.ls':['quux','qux','foo','bar','baz']}}", b.build());
+
+		b.appendTo("A.f1.ls", new String[]{"q1x", "q2x"});
+		b.appendTo("A.f1.ls", "q3x");
+		b.prependTo("A.f1.ls", new String[]{"q4x", "q5x"});
+		b.prependTo("A.f1.ls", "q6x");
+		assertObjectEquals("{A:{'f1.ls':['q6x','q4x','q5x','quux','qux','foo','bar','baz','q1x','q2x','q3x']}}", b.build());
+		b.set("A.f1.ls/remove", new String[]{"q1x","q2x","q3x","q4x","q5x","q6x"});
+
 		b.set("A.f1.ls/remove", new String[]{"foo", "bar"});
 		b.set("A.f1.ls/remove", new String[]{"qux"});
 		b.removeFrom("A.f1.ls", new String[]{"quux"});

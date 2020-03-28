@@ -73,6 +73,12 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public SimpleJsonParserBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public SimpleJsonParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
@@ -93,6 +99,12 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public SimpleJsonParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SimpleJsonParserBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 

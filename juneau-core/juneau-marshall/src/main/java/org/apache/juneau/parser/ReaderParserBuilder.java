@@ -111,6 +111,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ReaderParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
@@ -131,6 +137,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ReaderParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 

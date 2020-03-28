@@ -348,6 +348,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaGeneratorBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaGeneratorBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
@@ -368,6 +374,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaGeneratorBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaGeneratorBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 

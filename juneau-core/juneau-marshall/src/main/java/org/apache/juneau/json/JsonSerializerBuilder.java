@@ -170,6 +170,12 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public JsonSerializerBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public JsonSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
@@ -190,6 +196,12 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSerializerBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 

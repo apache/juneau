@@ -74,6 +74,12 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public PlainTextSerializerBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public PlainTextSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
@@ -94,6 +100,12 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public PlainTextSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public PlainTextSerializerBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 

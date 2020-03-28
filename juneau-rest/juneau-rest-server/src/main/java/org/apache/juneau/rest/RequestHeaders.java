@@ -124,7 +124,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Returns the specified header value as a string.
+	 * Returns the specified header last value as a string.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -143,7 +143,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 			v = get(name);
 		if (v == null || v.length == 0)
 			return null;
-		return v[0];
+		return v[v.length-1];
 	}
 
 	/**

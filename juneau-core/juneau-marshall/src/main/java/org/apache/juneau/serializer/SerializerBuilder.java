@@ -527,6 +527,12 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public SerializerBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public SerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
@@ -547,6 +553,12 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public SerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SerializerBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 

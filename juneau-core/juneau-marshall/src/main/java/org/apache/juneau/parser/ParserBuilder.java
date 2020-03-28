@@ -259,6 +259,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ParserBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
@@ -279,6 +285,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ParserBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 

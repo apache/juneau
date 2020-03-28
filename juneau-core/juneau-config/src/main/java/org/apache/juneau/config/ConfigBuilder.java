@@ -315,6 +315,12 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ConfigBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
@@ -335,6 +341,12 @@ public class ConfigBuilder extends ContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ConfigBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 

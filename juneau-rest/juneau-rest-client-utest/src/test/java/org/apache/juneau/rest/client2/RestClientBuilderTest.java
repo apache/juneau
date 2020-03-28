@@ -31,7 +31,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.exception.*;
-import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -66,13 +65,25 @@ public class RestClientBuilderTest {
 
 	@Rest
 	public static class A extends BasicRest {
-		@RestMethod
+		@RestMethod(path="/bean")
 		public Bean postBean(@Body Bean b) {
 			return b;
 		}
-		@RestMethod
+		@RestMethod(path="/echo")
 		public String getEcho(org.apache.juneau.rest.RestRequest req) {
 			return req.toString();
+		}
+		@RestMethod(path="/checkHeader")
+		public String[] getHeader(org.apache.juneau.rest.RestRequest req) {
+			return req.getHeaders().get(req.getHeader("Check"));
+		}
+		@RestMethod(path="/checkQuery")
+		public String[] getQuery(org.apache.juneau.rest.RestRequest req) {
+			return req.getQuery().get(req.getHeader("Check"));
+		}
+		@RestMethod(path="/checkFormData")
+		public String[] getFormData(org.apache.juneau.rest.RestRequest req) {
+			return req.getFormData().get(req.getHeader("Check"));
 		}
 	}
 
@@ -324,468 +335,409 @@ public class RestClientBuilderTest {
 	// Headers
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest
-	public static class F extends BasicRest {
-		@RestMethod
-		public Ok get(org.apache.juneau.rest.RestRequest req) {
-			String name = req.getHeader("X-Name"), expected = req.getHeader("X-Expect");
-			String actual = req.getHeader(name);
-			if (actual == null)
-				actual = "nil";
-			if (! expected.equals(actual))
-				throw new BadRequest("Check failed, name=["+name+"], value=["+expected+"], actual=["+actual+"]");
-			return Ok.OK;
-		}
-	}
-
 	@Test
 	public void f01_basicHeader() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header("Foo","bar")
-			.header("X-Name", "Foo")
-			.header("X-Expect", "bar")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['bar']");
 	}
 
 	@Test
 	public void f02_beanHeader() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header("Foo",bean)
-			.header("X-Name", "Foo")
-			.header("X-Expect", "(f=1)")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['(f=1)']");
 	}
 
 	@Test
 	public void f03_nullHeaders() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header("Foo",null)
-			.header("X-Name", "Foo")
-			.header("X-Expect", "nil")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("null");
 	}
 
 	@Test
 	public void f04_header_Header() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new org.apache.http.message.BasicHeader("Foo", "bar"))
-			.header("X-Name", "Foo")
-			.header("X-Expect", "bar")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['bar']");
 	}
 
 	@Test
 	public void f05_header_NameValuePair() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new SimpleNameValuePair("Foo", "bar"))
-			.header("X-Name", "Foo")
-			.header("X-Expect", "bar")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['bar']");
 	}
 
 	@Test
 	public void f06_header_HttpHeader() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new BasicStringHeader("Foo", "bar"))
-			.header("X-Name", "Foo")
-			.header("X-Expect", "bar")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['bar']");
 	}
 
 	@Test
 	public void f07_headers_Header() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.headers(new org.apache.http.message.BasicHeader("Foo", "bar"),new org.apache.http.message.BasicHeader("Baz", "qux"))
-			.header("X-Name", "Foo")
-			.header("X-Expect", "bar")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['bar']");
 	}
 
 	@Test
 	public void f08_headers_ObjectMap() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.headers(new ObjectMap().append("Foo", "bar"))
-			.header("X-Name", "Foo")
-			.header("X-Expect", "bar")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['bar']");
 	}
 
 	@Test
 	public void f09_headers_Map() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.headers(AMap.of("Foo", "bar"))
-			.header("X-Name", "Foo")
-			.header("X-Expect", "bar")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['bar']");
 	}
 
 	@Test
 	public void f10_headers_NameValuePairs() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.headers(NameValuePairs.of("Foo","bar"))
-			.header("X-Name", "Foo")
-			.header("X-Expect", "bar")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['bar']");
 	}
 
 	@Test
 	public void f11_headers_NameValuePair() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.headers(new SimpleNameValuePair("Foo","bar"))
-			.header("X-Name", "Foo")
-			.header("X-Expect", "bar")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['bar']");
 	}
 
 	@Test
 	public void f12_headers_pairs() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
-			.headers("Foo", "bar")
-			.header("X-Name", "Foo")
-			.header("X-Expect", "bar")
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
+			.headerPairs("Foo", "bar")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['bar']");
 	}
 
 	@Test
 	public void f13_headers_HttpHeader() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.headers(new BasicStringHeader("Foo", "bar"))
-			.header("X-Name", "Foo")
-			.header("X-Expect", "bar")
+			.header("Check", "Foo")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['bar']");
 	}
 
 	@Test
 	public void f14_headers_accept() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.accept("text/plain")
-			.header("X-Name", "Accept")
-			.header("X-Expect", "text/plain")
+			.header("Check", "Accept")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['text/plain']");
 	}
 
 	@Test
 	public void f15_headers_acceptCharset() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.acceptCharset("UTF-8")
-			.header("X-Name", "Accept-Charset")
-			.header("X-Expect", "UTF-8")
+			.header("Check", "Accept-Charset")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['UTF-8']");
 	}
 
 	@Test
 	public void f16_headers_acceptEncoding() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.acceptEncoding("identity")
-			.header("X-Name", "Accept-Encoding")
-			.header("X-Expect", "identity")
+			.header("Check", "Accept-Encoding")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['identity']");
 	}
 
 	@Test
 	public void f17_headers_acceptLanguage() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.acceptLanguage("en")
-			.header("X-Name", "Accept-Language")
-			.header("X-Expect", "en")
+			.header("Check", "Accept-Language")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['en']");
 	}
 
 	@Test
 	public void f18_headers_authorization() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.authorization("foo")
-			.header("X-Name", "Authorization")
-			.header("X-Expect", "foo")
+			.header("Check", "Authorization")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f19_headers_cacheControl() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.cacheControl("none")
-			.header("X-Name", "Cache-Control")
-			.header("X-Expect", "none")
+			.header("Check", "Cache-Control")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['none']");
 	}
 
 	@Test
 	public void f20_headers_clientVersion() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.clientVersion("1")
-			.header("X-Name", "X-Client-Version")
-			.header("X-Expect", "1")
+			.header("Check", "X-Client-Version")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['1']");
 	}
 
 	@Test
 	public void f21_headers_connection() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.connection("foo")
-			.header("X-Name", "Connection")
-			.header("X-Expect", "foo")
+			.header("Check", "Connection")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f22_headers_contentLength() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.contentLength("123")
-			.header("X-Name", "Content-Length")
-			.header("X-Expect", "123")
+			.header("Check", "Content-Length")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['123']");
 	}
 
 	@Test
 	public void f23_headers_contentType() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.contentType("foo")
-			.header("X-Name", "Content-Type")
-			.header("X-Expect", "foo")
+			.header("Check", "Content-Type")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f24_headers_date() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.date("123")
-			.header("X-Name", "Date")
-			.header("X-Expect", "123")
+			.header("Check", "Date")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['123']");
 	}
 
 	@Test
 	public void f25_headers_expect() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.expect("foo")
-			.header("X-Name", "Expect")
-			.header("X-Expect", "foo")
+			.header("Check", "Expect")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f26_headers_forwarded() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.forwarded("foo")
-			.header("X-Name", "Forwarded")
-			.header("X-Expect", "foo")
+			.header("Check", "Forwarded")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f27_headers_from() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.from("foo")
-			.header("X-Name", "From")
-			.header("X-Expect", "foo")
+			.header("Check", "From")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f28_headers_host() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.host("foo")
-			.header("X-Name", "Host")
-			.header("X-Expect", "foo")
+			.header("Check", "Host")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f29_headers_ifMatch() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.ifMatch("foo")
-			.header("X-Name", "If-Match")
-			.header("X-Expect", "foo")
+			.header("Check", "If-Match")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f30_headers_ifModifiedSince() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.ifModifiedSince("foo")
-			.header("X-Name", "If-Modified-Since")
-			.header("X-Expect", "foo")
+			.header("Check", "If-Modified-Since")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f31_headers_ifNoneMatch() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.ifNoneMatch("foo")
-			.header("X-Name", "If-None-Match")
-			.header("X-Expect", "foo")
+			.header("Check", "If-None-Match")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f32_headers_ifRange() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.ifRange("foo")
-			.header("X-Name", "If-Range")
-			.header("X-Expect", "foo")
+			.header("Check", "If-Range")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f33_headers_ifUnmodifiedSince() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.ifUnmodifiedSince("foo")
-			.header("X-Name", "If-Unmodified-Since")
-			.header("X-Expect", "foo")
+			.header("Check", "If-Unmodified-Since")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f34_headers_maxForwards() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.maxForwards("10")
-			.header("X-Name", "Max-Forwards")
-			.header("X-Expect", "10")
+			.header("Check", "Max-Forwards")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['10']");
 	}
 
 	@Test
 	public void f35_headers_noTrace() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.noTrace()
-			.header("X-Name", "No-Trace")
-			.header("X-Expect", "true")
+			.header("Check", "No-Trace")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['true']");
 	}
 
 	@Test
 	public void f36_headers_origin() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.origin("foo")
-			.header("X-Name", "Origin")
-			.header("X-Expect", "foo")
+			.header("Check", "Origin")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f37_headers_pragma() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.pragma("foo")
-			.header("X-Name", "Pragma")
-			.header("X-Expect", "foo")
+			.header("Check", "Pragma")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f38_headers_proxyAuthorization() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.proxyAuthorization("foo")
-			.header("X-Name", "Proxy-Authorization")
-			.header("X-Expect", "foo")
+			.header("Check", "Proxy-Authorization")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f39_headers_range() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.range("foo")
-			.header("X-Name", "Range")
-			.header("X-Expect", "foo")
+			.header("Check", "Range")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f40_headers_referer() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.referer("foo")
-			.header("X-Name", "Referer")
-			.header("X-Expect", "foo")
+			.header("Check", "Referer")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f41_headers_te() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.te("foo")
-			.header("X-Name", "TE")
-			.header("X-Expect", "foo")
+			.header("Check", "TE")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f42_headers_userAgent() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.userAgent("foo")
-			.header("X-Name", "User-Agent")
-			.header("X-Expect", "foo")
+			.header("Check", "User-Agent")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f43_headers_upgrade() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.upgrade("foo")
-			.header("X-Name", "Upgrade")
-			.header("X-Expect", "foo")
+			.header("Check", "Upgrade")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f44_headers_via() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.via("foo")
-			.header("X-Name", "Via")
-			.header("X-Expect", "foo")
+			.header("Check", "Via")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f45_headers_warning() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.warning("foo")
-			.header("X-Name", "Warning")
-			.header("X-Expect", "foo")
+			.header("Check", "Warning")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -794,352 +746,318 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void g01_headers_accept() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Accept("text/plain"))
-			.header("X-Name", "Accept")
-			.header("X-Expect", "text/plain")
+			.header("Check", "Accept")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['text/plain']");
 	}
 
 	@Test
 	public void g02_headers_acceptCharset() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new AcceptCharset("UTF-8"))
-			.header("X-Name", "Accept-Charset")
-			.header("X-Expect", "UTF-8")
+			.header("Check", "Accept-Charset")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['UTF-8']");
 	}
 
 	@Test
 	public void g03_headers_acceptEncoding() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new AcceptEncoding("identity"))
-			.header("X-Name", "Accept-Encoding")
-			.header("X-Expect", "identity")
+			.header("Check", "Accept-Encoding")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['identity']");
 	}
 
 	@Test
 	public void g04_headers_acceptLanguage() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new AcceptLanguage("en"))
-			.header("X-Name", "Accept-Language")
-			.header("X-Expect", "en")
+			.header("Check", "Accept-Language")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['en']");
 	}
 
 	@Test
 	public void g05_headers_authorization() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Authorization("foo"))
-			.header("X-Name", "Authorization")
-			.header("X-Expect", "foo")
+			.header("Check", "Authorization")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g06_headers_cacheControl() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new CacheControl("none"))
-			.header("X-Name", "Cache-Control")
+			.header("Check", "Cache-Control")
 			.header("X-Expect", "none")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['none']");
 	}
 
 	@Test
 	public void g07_headers_clientVersion() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new ClientVersion("1"))
-			.header("X-Name", "X-Client-Version")
-			.header("X-Expect", "1")
+			.header("Check", "X-Client-Version")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['1']");
 	}
 
 	@Test
 	public void g08_headers_connection() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Connection("foo"))
-			.header("X-Name", "Connection")
-			.header("X-Expect", "foo")
+			.header("Check", "Connection")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g09_headers_contentLength() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new ContentLength(123))
-			.header("X-Name", "Content-Length")
-			.header("X-Expect", "123")
+			.header("Check", "Content-Length")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['123']");
 	}
 
 	@Test
 	public void g10_headers_contentType() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new ContentType("foo"))
-			.header("X-Name", "Content-Type")
-			.header("X-Expect", "foo")
+			.header("Check", "Content-Type")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g11a_headers_date() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new org.apache.juneau.http.Date("Sun, 31 Dec 2000 12:34:56 GMT"))
-			.header("X-Name", "Date")
-			.header("X-Expect", "Sun, 31 Dec 2000 12:34:56 GMT")
+			.header("Check", "Date")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
 	public void g11b_headers_date() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new org.apache.juneau.http.Date(CALENDAR))
-			.header("X-Name", "Date")
-			.header("X-Expect", "Sun, 31 Dec 2000 12:34:56 GMT")
+			.header("Check", "Date")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
 	public void g12_headers_expect() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Expect("foo"))
-			.header("X-Name", "Expect")
-			.header("X-Expect", "foo")
+			.header("Check", "Expect")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g13_headers_forwarded() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Forwarded("foo"))
-			.header("X-Name", "Forwarded")
-			.header("X-Expect", "foo")
+			.header("Check", "Forwarded")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g14_headers_from() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new From("foo"))
-			.header("X-Name", "From")
-			.header("X-Expect", "foo")
+			.header("Check", "From")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g15_headers_host() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Host("foo"))
-			.header("X-Name", "Host")
-			.header("X-Expect", "foo")
+			.header("Check", "Host")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g16_headers_ifMatch() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new IfMatch("foo"))
-			.header("X-Name", "If-Match")
-			.header("X-Expect", "\"foo\"")
+			.header("Check", "If-Match")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['\"foo\"']");
 	}
 
 	@Test
 	public void g17a_headers_ifModifiedSince() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new IfModifiedSince(CALENDAR))
-			.header("X-Name", "If-Modified-Since")
-			.header("X-Expect", "Sun, 31 Dec 2000 12:34:56 GMT")
+			.header("Check", "If-Modified-Since")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
 	public void g17b_headers_ifModifiedSince() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new IfModifiedSince("Sun, 31 Dec 2000 12:34:56 GMT"))
-			.header("X-Name", "If-Modified-Since")
-			.header("X-Expect", "Sun, 31 Dec 2000 12:34:56 GMT")
+			.header("Check", "If-Modified-Since")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
 	public void g18_headers_ifNoneMatch() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new IfNoneMatch("foo"))
-			.header("X-Name", "If-None-Match")
-			.header("X-Expect", "\"foo\"")
+			.header("Check", "If-None-Match")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['\"foo\"']");
 	}
 
 	@Test
 	public void g19_headers_ifRange() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new IfRange("foo"))
-			.header("X-Name", "If-Range")
-			.header("X-Expect", "foo")
+			.header("Check", "If-Range")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g20a_headers_ifUnmodifiedSince() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new IfUnmodifiedSince(CALENDAR))
-			.header("X-Name", "If-Unmodified-Since")
-			.header("X-Expect", "Sun, 31 Dec 2000 12:34:56 GMT")
+			.header("Check", "If-Unmodified-Since")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
 	public void g20b_headers_ifUnmodifiedSince() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new IfUnmodifiedSince("Sun, 31 Dec 2000 12:34:56 GMT"))
-			.header("X-Name", "If-Unmodified-Since")
-			.header("X-Expect", "Sun, 31 Dec 2000 12:34:56 GMT")
+			.header("Check", "If-Unmodified-Since")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
 	public void g21_headers_maxForwards() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new MaxForwards(10))
-			.header("X-Name", "Max-Forwards")
-			.header("X-Expect", "10")
+			.header("Check", "Max-Forwards")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['10']");
 	}
 
 	@Test
 	public void g22_headers_noTrace() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new NoTrace("true"))
-			.header("X-Name", "No-Trace")
-			.header("X-Expect", "true")
+			.header("Check", "No-Trace")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['true']");
 	}
 
 	@Test
 	public void g23_headers_origin() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Origin("foo"))
-			.header("X-Name", "Origin")
-			.header("X-Expect", "foo")
+			.header("Check", "Origin")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g24_headers_pragma() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Pragma("foo"))
-			.header("X-Name", "Pragma")
-			.header("X-Expect", "foo")
+			.header("Check", "Pragma")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g25_headers_proxyAuthorization() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new ProxyAuthorization("foo"))
-			.header("X-Name", "Proxy-Authorization")
-			.header("X-Expect", "foo")
+			.header("Check", "Proxy-Authorization")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g26_headers_range() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Range("foo"))
-			.header("X-Name", "Range")
-			.header("X-Expect", "foo")
+			.header("Check", "Range")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g27_headers_referer() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Referer("foo"))
-			.header("X-Name", "Referer")
-			.header("X-Expect", "foo")
+			.header("Check", "Referer")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g28_headers_te() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new TE("foo"))
-			.header("X-Name", "TE")
-			.header("X-Expect", "foo")
+			.header("Check", "TE")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g29_headers_userAgent() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new UserAgent("foo"))
-			.header("X-Name", "User-Agent")
-			.header("X-Expect", "foo")
+			.header("Check", "User-Agent")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g30_headers_upgrade() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Upgrade("foo"))
-			.header("X-Name", "Upgrade")
-			.header("X-Expect", "foo")
+			.header("Check", "Upgrade")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g31_headers_via() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Via("foo"))
-			.header("X-Name", "Via")
-			.header("X-Expect", "foo")
+			.header("Check", "Via")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g32_headers_warning() throws Exception {
-		RestClient rc = MockRestClient.create(F.class).simpleJson()
+		RestClient rc = MockRestClient.create(A.class).simpleJson()
 			.header(new Warning("foo"))
-			.header("X-Name", "Warning")
-			.header("X-Expect", "foo")
+			.header("Check", "Warning")
 			.build();
-		rc.get("").run().assertStatusCode(200);
+		rc.get("/checkHeader").run().getBody().assertValue("['foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1152,2513 +1070,939 @@ public class RestClientBuilderTest {
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
+			.debug()
 			.logTo(Level.SEVERE, ml)
-			.headers("Foo","bar","Foo","baz")
+			.header("Check", "Foo")
+			.headerPairs("Foo","bar","Foo","baz")
 			.header("Foo","qux")
 			.build();
-		rc.post("/bean", bean).complete();
-		ml.assertLevel(Level.SEVERE);
-		ml.assertMessageContains("\tFoo: bar\n\tFoo: baz\n\tFoo: qux");
+		rc.get("/checkHeader").run().getBody().assertValue("['bar','baz','qux']");
 	}
 
-	// TODO - Multiple headers
-	// TODO - Headers overridden on request.
+	@Test
+	public void h02_multipleHeaders_withRequest() throws Exception {
+		MockLogger ml = new MockLogger();
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logTo(Level.SEVERE, ml)
+			.header("Check", "Foo")
+			.headerPairs("Foo","bar","Foo","baz")
+			.build();
+		rc.get("/checkHeader").header("Foo","qux").run().getBody().assertValue("['bar','baz','qux']");
+	}
 
+	@Test
+	public void h03_dontOverrideAccept() throws Exception {
+		MockLogger ml = new MockLogger();
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logTo(Level.SEVERE, ml)
+			.header("Check", "Accept")
+			.header("Accept", "text/plain")
+			.build();
+		rc.get("/checkHeader").run().getBody().assertValue("['text/plain']");
+	}
 
+	@Test
+	public void h04_dontOverrideAccept_withRequest() throws Exception {
+		MockLogger ml = new MockLogger();
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logTo(Level.SEVERE, ml)
+			.header("Check", "Accept")
+			.header("Accept", "text/foo")
+			.build();
+		rc.get("/checkHeader").header("Accept","text/plain").run().getBody().assertValue("['text/foo','text/plain']");
+	}
 
+	@Test
+	public void h04b_dontOverrideAccept_withRequest() throws Exception {
+		MockLogger ml = new MockLogger();
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logTo(Level.SEVERE, ml)
+			.header("Check", "Accept")
+			.header("Accept", "text/foo")
+			.build();
+		RestRequest req = rc.get("/checkHeader");
+		req.setHeader("Accept","text/plain");
+		req.run().getBody().assertValue("['text/plain']");
+	}
+
+	@Test
+	public void h05_dontOverrideContentType() throws Exception {
+		MockLogger ml = new MockLogger();
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logTo(Level.SEVERE, ml)
+			.header("Check", "Content-Type")
+			.header("Content-Type", "text/plain")
+			.build();
+		rc.get("/checkHeader").run().getBody().assertValue("['text/plain']");
+	}
+
+	@Test
+	public void h06_dontOverrideAccept_withRequest() throws Exception {
+		MockLogger ml = new MockLogger();
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logTo(Level.SEVERE, ml)
+			.header("Check", "Content-Type")
+			.header("Content-Type", "text/foo")
+			.build();
+		rc.get("/checkHeader").header("Content-Type", "text/plain").complete();
+		ml.assertLevel(Level.SEVERE);
+		ml.assertMessageContains("Content-Type: text/plain").assertMessageContains("Content-Type: text/plain");
+	}
+
+//	@Test
+//	public void h07_header_HttpPartSerializer() throws Exception {
+//	//	public RestClientBuilder header(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
+//		fail();
+//	}
+//
+//	// TODO - Test Header[] on servlet side.
 //
 //	//-----------------------------------------------------------------------------------------------------------------
 //	// Query
 //	//-----------------------------------------------------------------------------------------------------------------
 //
-//	/**
-//	 * Adds a query parameter to the URI.
-//	 *
-//	 * @param name The parameter name.
-//	 * @param value The parameter value.
-//	 * 	<ul>
-//	 * 		<li>Can be any POJO.
-//	 * 		<li>Converted to a string using the specified part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @param serializer The serializer to use for serializing the value to a string.
-//	 * 	<ul>
-//	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
-//	 * 	</ul>
-//	 * @param schema The schema object that defines the format of the output.
-//	 * 	<ul>
-//	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-//	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder query(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-//		return addTo(RESTCLIENT_query, name, SerializedNameValuePair.create().name(name).value(value).type(QUERY).serializer(serializer).schema(schema));
-//	}
+//	@Test
+//	public void i01_query_StringObject() throws Exception { fail(); }
+////	public RestClientBuilder query(String name, Object value) {
 //
-//	/**
-//	 * Adds a query parameter to the URI.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.get(<jsf>URL</jsf>)
-//	 * 		.query(<js>"foo"</js>, <js>"bar"</js>)
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param name The parameter name.
-//	 * @param value The parameter value.
-//	 * 	<ul>
-//	 * 		<li>Can be any POJO.
-//	 * 		<li>Converted to a string using the specified part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder query(String name, Object value) {
-//		return query(name, value, null, null);
-//	}
+//	@Test
+//	public void i02_query_NameValuePair() throws Exception { fail(); }
+////	public RestClientBuilder query(NameValuePair param) {
 //
-//	/**
-//	 * Adds a query parameter to the URI.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.get(<jsf>URL</jsf>)
-//	 * 		.query(<jk>new</jk> NameValuePair(<js>"foo"</js>, <js>"bar"</js>))
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param param The query parameter.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder query(NameValuePair param) {
-//		return addTo(RESTCLIENT_query, param.getName(), param);
-//	}
+//	@Test
+//	public void i03_query_ObjectMap() throws Exception { fail(); }
+////	public RestClientBuilder query(ObjectMap params) {
 //
-//	/**
-//	 * Adds query parameters to the URI.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.get(<jsf>URL</jsf>)
-//	 * 		.query(<jk>new</jk> ObjectMap(<js>"foo"</js>, <js>"bar"</js>))
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param params The query parameters.
-//	 * 	<ul>
-//	 * 		<li>Values can be any POJO.
-//	 * 		<li>Values converted to a string using the configured part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder query(ObjectMap params) {
-//		return query((Map<String,Object>)params);
-//	}
+//	@Test
+//	public void i04_query_Map() throws Exception { fail(); }
+////	public RestClientBuilder query(Map<String,Object> params) {
 //
-//	/**
-//	 * Adds query parameters to the URI.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.get(<jsf>URL</jsf>)
-//	 * 		.query(AMap.<jsm>create</jsm>().append(<js>"foo"</js>, <js>"bar"</js>))
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param params The query parameters.
-//	 * 	<ul>
-//	 * 		<li>Values can be any POJO.
-//	 * 		<li>Values converted to a string using the configured part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder query(Map<String,Object> params) {
-//		for (Map.Entry<String,Object> e : params.entrySet())
-//			query(e.getKey(), e.getValue());
-//		return this;
-//	}
+//	@Test
+//	public void i05_query_NameValuePairs() throws Exception { fail(); }
+////	public RestClientBuilder query(NameValuePairs params) {
 //
-//	/**
-//	 * Adds query parameters to the URI.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.get(<jsf>URL</jsf>)
-//	 * 		.query(<jk>new</jk> NameValuePairs(<js>"foo"</js>, <js>"bar"</js>))
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param params The query parameters.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder query(NameValuePairs params) {
-//		for (NameValuePair p : params)
-//			query(p);
-//		return this;
-//	}
+//	@Test
+//	public void i06_query_NameValuePairArray() throws Exception { fail(); }
+////	public RestClientBuilder query(NameValuePair...params) {
 //
-//	/**
-//	 * Adds query parameters to the URI.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.get(<jsf>URL</jsf>)
-//	 * 		.query(<jk>new</jk> NameValuePair(<js>"foo"</js>, <js>"bar"</js>))
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param params The query parameters.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder query(NameValuePair...params) {
-//		for (NameValuePair p : params)
-//			query(p);
-//		return this;
-//	}
+//	@Test
+//	public void i07_query_Objects() throws Exception { fail(); }
+////	public RestClientBuilder query(Object...pairs) {
 //
-//	/**
-//	 * Adds query parameters to the URI query using free-form key/value pairs.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.get(<jsf>URL</jsf>)
-//	 * 		.query(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param pairs The query key/value pairs.
-//	 * 	<ul>
-//	 * 		<li>Values can be any POJO.
-//	 * 		<li>Values converted to a string using the configured part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder query(Object...pairs) {
-//		if (pairs.length % 2 != 0)
-//			throw new RuntimeException("Odd number of parameters passed into query(Object...)");
-//		for (int i = 0; i < pairs.length; i+=2)
-//			query(stringify(pairs[i]), pairs[i+1]);
-//		return this;
-//	}
+//	@Test
+//	public void i08_query_HttpPartSerializer() throws Exception { fail(); }
+////	public RestClientBuilder query(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
+//
 //
 //	//-----------------------------------------------------------------------------------------------------------------
 //	// Form data
 //	//-----------------------------------------------------------------------------------------------------------------
 //
-//	/**
-//	 * Adds a form-data parameter to all request bodies.
-//	 *
-//	 * @param name The parameter name.
-//	 * @param value The parameter value.
-//	 * 	<ul>
-//	 * 		<li>Can be any POJO.
-//	 * 		<li>Converted to a string using the specified part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @param serializer The serializer to use for serializing the value to a string.
-//	 * 	<ul>
-//	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
-//	 * 	</ul>
-//	 * @param schema The schema object that defines the format of the output.
-//	 * 	<ul>
-//	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-//	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder formData(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-//		return addTo(RESTCLIENT_formData, name, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).serializer(serializer).schema(schema));
-//	}
+//	@Test
+//	public void j01_formData_StringObject() throws Exception { fail(); }
+////	public RestClientBuilder formData(String name, Object value) {
 //
-//	/**
-//	 * Adds a form-data parameter to all request bodies.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.formPost(<jsf>URL</jsf>)
-//	 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param name The parameter name.
-//	 * @param value The parameter value.
-//	 * 	<ul>
-//	 * 		<li>Can be any POJO.
-//	 * 		<li>Converted to a string using the specified part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder formData(String name, Object value) {
-//		return formData(name, value, null, null);
-//	}
+//	@Test
+//	public void j02_formData_NameValuePair() throws Exception { fail(); }
+////	public RestClientBuilder formData(NameValuePair param) {
 //
-//	/**
-//	 * Adds a form-data parameter to all request bodies.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.formPost(<jsf>URL</jsf>)
-//	 * 		.formData(<jk>new</jk> NameValuePair(<js>"foo"</js>, <js>"bar"</js>))
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param param The form-data parameter.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder formData(NameValuePair param) {
-//		return addTo(RESTCLIENT_formData, param.getName(), param);
-//	}
+//	@Test
+//	public void j03_formData_ObjectMap() throws Exception { fail(); }
+////	public RestClientBuilder formData(ObjectMap params) {
 //
-//	/**
-//	 * Adds form-data parameters to all request bodies.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.formPost(<jsf>URL</jsf>)
-//	 * 		.formData(<jk>new</jk> ObjectMap(<js>"foo"</js>, <js>"bar"</js>))
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param params The form-data parameters.
-//	 * 	<ul>
-//	 * 		<li>Values can be any POJO.
-//	 * 		<li>Values converted to a string using the configured part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder formData(ObjectMap params) {
-//		return formData((Map<String,Object>)params);
-//	}
+//	@Test
+//	public void j04_formData_Map() throws Exception { fail(); }
+////	public RestClientBuilder formData(Map<String,Object> params) {
 //
-//	/**
-//	 * Adds form-data parameters to all request bodies.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.formPost(<jsf>URL</jsf>)
-//	 * 		.formData(AMap.<jsm>create</jsm>().append(<js>"foo"</js>, <js>"bar"</js>))
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param params The form-data parameters.
-//	 * 	<ul>
-//	 * 		<li>Values can be any POJO.
-//	 * 		<li>Values converted to a string using the configured part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder formData(Map<String,Object> params) {
-//		for (Map.Entry<String,Object> e : params.entrySet())
-//			formData(e.getKey(), e.getValue());
-//		return this;
-//	}
+//	@Test
+//	public void j05_formData_NameValuePairs() throws Exception { fail(); }
+////	public RestClientBuilder formData(NameValuePairs params) {
 //
-//	/**
-//	 * Adds form-data parameters to all request bodies.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.formPost(<jsf>URL</jsf>)
-//	 * 		.formData(<jk>new</jk> NameValuePairs(<js>"foo"</js>, <js>"bar"</js>))
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param params The form-data parameters.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder formData(NameValuePairs params) {
-//		for (NameValuePair p : params)
-//			formData(p);
-//		return this;
-//	}
+//	@Test
+//	public void j06_formData_NameValuePairArray() throws Exception { fail(); }
+////	public RestClientBuilder formData(NameValuePair...params) {
 //
-//	/**
-//	 * Adds form-data parameters to all request bodies.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.formPost(<jsf>URL</jsf>)
-//	 * 		.formData(<jk>new</jk> NameValuePair(<js>"foo"</js>, <js>"bar"</js>))
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param params The form-data parameters.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder formData(NameValuePair...params) {
-//		for (NameValuePair p : params)
-//			formData(p);
-//		return this;
-//	}
+//	@Test
+//	public void j07_formData_Objects() throws Exception { fail(); }
+////	public RestClientBuilder formData(Object...pairs) {
 //
-//	/**
-//	 * Adds form-data parameters to all request bodies using free-form key/value pairs.
-//	 *
-//	 * <h5 class='section'>Example:</h5>
-//	 * <p class='bcode w800'>
-//	 * 	client
-//	 * 		.formPost(<jsf>URL</jsf>)
-//	 * 		.formData(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
-//	 * 		.run();
-//	 * </p>
-//	 *
-//	 * @param pairs The form-data key/value pairs.
-//	 * 	<ul>
-//	 * 		<li>Values can be any POJO.
-//	 * 		<li>Values converted to a string using the configured part serializer.
-//	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-//	 * 	</ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder formData(Object...pairs) {
-//		if (pairs.length % 2 != 0)
-//			throw new RuntimeException("Odd number of parameters passed into formData(Object...)");
-//		for (int i = 0; i < pairs.length; i+=2)
-//			formData(stringify(pairs[i]), pairs[i+1]);
-//		return this;
-//	}
+//	@Test
+//	public void j08_formData_HttpPartSerializer() throws Exception { fail(); }
+////	public RestClientBuilder formData(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 //
 //	//-----------------------------------------------------------------------------------------------------------------
-//	// Properties
+//	// RestClient properties
 //	//-----------------------------------------------------------------------------------------------------------------
 //
-//	/**
-//	 * Configuration property:  REST call handler.
-//	 *
-//	 * <p>
-//	 * Allows you to provide a custom handler for making HTTP calls.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jic'>{@link RestCallHandler}
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_callHandler}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default value is <jk>null</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder callHandler(Class<? extends RestCallHandler> value) {
-//		return set(RESTCLIENT_callHandler, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  REST call handler.
-//	 *
-//	 * <p>
-//	 * Allows you to provide a custom handler for making HTTP calls.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jic'>{@link RestCallHandler}
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_callHandler}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default value is <jk>null</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder callHandler(RestCallHandler value) {
-//		return set(RESTCLIENT_callHandler, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Errors codes predicate.
-//	 *
-//	 * <p>
-//	 * Defines a predicate to test for error codes.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_errorCodes}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default value is <code>x -&gt; x &gt;= 400</code>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder errorCodes(Predicate<Integer> value) {
-//		return set(RESTCLIENT_errorCodes, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Executor service.
-//	 *
-//	 * <p>
-//	 * Defines the executor service to use when calling future methods on the {@link RestRequest} class.
-//	 *
-//	 * <p>
-//	 * This executor service is used to create {@link Future} objects on the following methods:
-//	 * <ul>
-//	 * 	<li class='jm'>{@link RestRequest#runFuture()}
-//	 * </ul>
-//	 *
-//	 * <p>
-//	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
-//	 * and a queue size of 10.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_executorService}
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_executorServiceShutdownOnClose}
-//	 * </ul>
-//	 *
-//	 * @param executorService The executor service.
-//	 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder executorService(ExecutorService executorService, boolean shutdownOnClose) {
-//		set(RESTCLIENT_executorService, executorService);
-//		set(RESTCLIENT_executorServiceShutdownOnClose, shutdownOnClose);
-//		return this;
-//	}
-//
-//	/**
-//	 * Configuration property:  Keep HttpClient open.
-//	 *
-//	 * <p>
-//	 * Don't close this client when the {@link RestClient#close()} method is called.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_keepHttpClientOpen}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default value is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder keepHttpClientOpen(boolean value) {
-//		return set(RESTCLIENT_keepHttpClientOpen, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Keep HttpClient open.
-//	 *
-//	 * <p>
-//	 * Don't close this client when the {@link RestClient#close()} method is called.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_keepHttpClientOpen}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder keepHttpClientOpen() {
-//		return keepHttpClientOpen(true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Call interceptors.
-//	 *
-//	 * <p>
-//	 * Adds an interceptor that gets called immediately after a connection is made.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
-//	 * </ul>
-//	 *
-//	 * @param values The values to add to this setting.
-//	 * @return This object (for method chaining).
-//	 */
-//	@SuppressWarnings("unchecked")
-//	@ConfigurationProperty
-//	public RestClientBuilder interceptors(Class<? extends RestCallInterceptor>...values) {
-//		return addTo(RESTCLIENT_interceptors, values);
-//	}
-//
-//	/**
-//	 * Configuration property:  Call interceptors.
-//	 *
-//	 * <p>
-//	 * Adds an interceptor that gets called immediately after a connection is made.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
-//	 * </ul>
-//	 *
-//	 * @param value The values to add to this setting.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder interceptors(RestCallInterceptor...value) {
-//		return addTo(RESTCLIENT_interceptors, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Enable leak detection.
-//	 *
-//	 * <p>
-//	 * Enable client and request/response leak detection.
-//	 *
-//	 * <p>
-//	 * Causes messages to be logged to the console if clients or request/response objects are not properly closed
-//	 * when the <c>finalize</c> methods are invoked.
-//	 *
-//	 * <p>
-//	 * Automatically enabled with {@link RestClient#RESTCLIENT_debug}.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_leakDetection}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder leakDetection() {
-//		return leakDetection(true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Enable leak detection.
-//	 *
-//	 * <p>
-//	 * Enable client and request/response leak detection.
-//	 *
-//	 * <p>
-//	 * Causes messages to be logged to the console if clients or request/response objects are not properly closed
-//	 * when the <c>finalize</c> methods are invoked.
-//	 *
-//	 * <p>
-//	 * Automatically enabled with {@link RestClient#RESTCLIENT_debug}.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_leakDetection}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder leakDetection(boolean value) {
-//		return set(RESTCLIENT_leakDetection, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Marshall
-//	 *
-//	 * <p>
-//	 * Shortcut for specifying the {@link RestClient#RESTCLIENT_serializers} and {@link RestClient#RESTCLIENT_parsers}
-//	 * using the serializer and parser defined in a marshall.
-//	 *
-//	 * @param value The values to add to this setting.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder marshall(Marshall value) {
-//		if (value != null)
-//			serializer(value.getSerializer()).parser(value.getParser());
-//		return this;
-//	}
-//
-//	/**
-//	 * Configuration property:  Marshalls
-//	 *
-//	 * <p>
-//	 * Shortcut for specifying the {@link RestClient#RESTCLIENT_serializers} and {@link RestClient#RESTCLIENT_parsers}
-//	 * using the serializer and parser defined in a marshall.
-//	 *
-//	 * @param value The values to add to this setting.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder marshalls(Marshall...value) {
-//		for (Marshall m : value) {
-//			if (m != null)
-//				serializer(m.getSerializer()).parser(m.getParser());
-//		}
-//		return this;
-//	}
-//
-//	/**
-//	 * Configuration property:  Parser.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling {@link #parsers(Class...)}.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@SuppressWarnings("unchecked")
-//	@ConfigurationProperty
-//	public RestClientBuilder parser(Class<? extends Parser> value) {
-//		return parsers(value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Parser.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling {@link #parsers(Parser...)}.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder parser(Parser value) {
-//		return parsers(value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Parsers.
-//	 *
-//	 * <p>
-//	 * Associates the specified {@link Parser Parsers} with the HTTP client.
-//	 *
-//	 * <p>
-//	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
-//	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@SuppressWarnings("unchecked")
-//	@ConfigurationProperty
-//	public RestClientBuilder parsers(Class<? extends Parser>...value) {
-//		return addTo(RESTCLIENT_parsers, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Parsers.
-//	 *
-//	 * <p>
-//	 * Same as {@link #parsers(Class...)} except takes in a parser instance.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder parsers(Parser...value) {
-//		return addTo(RESTCLIENT_parsers, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Part parser.
-//	 *
-//	 * <p>
-//	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partParser}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default value is {@link OpenApiParser}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder partParser(Class<? extends HttpPartParser> value) {
-//		return set(RESTCLIENT_partParser, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Part parser.
-//	 *
-//	 * <p>
-//	 * Same as {@link #partParser(Class)} but takes in a parser instance.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partParser}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default value is {@link OpenApiParser}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder partParser(HttpPartParser value) {
-//		return set(RESTCLIENT_partParser, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Part serializer.
-//	 *
-//	 * <p>
-//	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default value is {@link OpenApiSerializer}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
-//		return set(RESTCLIENT_partSerializer, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Part serializer.
-//	 *
-//	 * <p>
-//	 * Same as {@link #partSerializer(Class)} but takes in a parser instance.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default value is {@link OpenApiSerializer}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder partSerializer(HttpPartSerializer value) {
-//		return set(RESTCLIENT_partSerializer, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Root URI.
-//	 *
-//	 * <p>
-//	 * When set, relative URL strings passed in through the various rest call methods (e.g. {@link RestClient#get(Object)}
-//	 * will be prefixed with the specified root.
-//	 * <br>This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_rootUri}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The root URL to prefix to relative URL strings.
-//	 * 	<br>Trailing slashes are trimmed.
-//	 * 	<br>Usually a <c>String</c> but you can also pass in <c>URI</c> and <c>URL</c> objects as well.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder rootUrl(Object value) {
-//		return set(RESTCLIENT_rootUri, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Serializer.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling {@link #serializers(Class...)}.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default is {@link JsonSerializer}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@SuppressWarnings("unchecked")
-//	@ConfigurationProperty
-//	public RestClientBuilder serializer(Class<? extends Serializer> value) {
-//		return serializers(value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Serializer.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling {@link #serializers(Serializer...)}.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default is {@link JsonSerializer}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder serializer(Serializer value) {
-//		return serializers(value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Serializers.
-//	 *
-//	 * <p>
-//	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
-//	 *
-//	 * <p>
-//	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
-//	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default is {@link JsonSerializer}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@SuppressWarnings("unchecked")
-//	@ConfigurationProperty
-//	public RestClientBuilder serializers(Class<? extends Serializer>...value) {
-//		return addTo(RESTCLIENT_serializers, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Serializers.
-//	 *
-//	 * <p>
-//	 * Same as {@link #serializers(Class...)} but takes in serializer instances.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this setting.
-//	 * 	<br>The default is {@link JsonSerializer}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder serializers(Serializer...value) {
-//		return addTo(RESTCLIENT_serializers, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-//	 *
-//	 * <p>
-//	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-//	 * through reflection.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder addBeanTypes(boolean value) {
-//		return set(SERIALIZER_addBeanTypes, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>addBeanTypes(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder addBeanTypes() {
-//		return set(SERIALIZER_addBeanTypes, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Add type attribute to root nodes.
-//	 *
-//	 * <p>
-//	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
-//	 * type information that might normally be included to determine the data type will not be serialized.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder addRootType(boolean value) {
-//		return set(SERIALIZER_addRootType, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Add type attribute to root nodes.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>addRootType(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder addRootType() {
-//		return set(SERIALIZER_addRootType, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Automatically detect POJO recursions.
-//	 *
-//	 * <p>
-//	 * Specifies that recursions should be checked for during serialization.
-//	 *
-//	 * <ul class='notes'>
-//	 * 	<li>
-//	 * 		Checking for recursion can cause a small performance penalty.
-//	 * </ul>
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder detectRecursions(boolean value) {
-//		return set(BEANTRAVERSE_detectRecursions, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Automatically detect POJO recursions.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>detectRecursions(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder detectRecursions() {
-//		return set(BEANTRAVERSE_detectRecursions, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Ignore recursion errors.
-//	 *
-//	 * <p>
-//	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
-//	 * Otherwise, an exception is thrown.
-//	 *
-//	 * <ul class='notes'>
-//	 * 	<li>
-//	 * 		Checking for recursion can cause a small performance penalty.
-//	 * </ul>
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder ignoreRecursions(boolean value) {
-//		return set(BEANTRAVERSE_ignoreRecursions, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Ignore recursion errors.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>ignoreRecursions(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder ignoreRecursions() {
-//		return set(BEANTRAVERSE_ignoreRecursions, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Initial depth.
-//	 *
-//	 * <p>
-//	 * The initial indentation level at the root.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_initialDepth}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <c>0</c>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder initialDepth(int value) {
-//		return set(BEANTRAVERSE_initialDepth, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Serializer listener.
-//	 *
-//	 * <p>
-//	 * Class used to listen for errors and warnings that occur during serialization.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder listenerS(Class<? extends SerializerListener> value) {
-//		return set(SERIALIZER_listener, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Max serialization depth.
-//	 *
-//	 * <p>
-//	 * Abort serialization if specified depth is reached in the POJO tree.
-//	 * <br>If this depth is exceeded, an exception is thrown.
-//	 * <br>This prevents stack overflows from occurring when trying to serialize models with recursive references.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_maxDepth}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <c>100</c>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder maxDepth(int value) {
-//		return set(BEANTRAVERSE_maxDepth, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Sort arrays and collections alphabetically.
-//	 *
-//	 * <p>
-//	 * Copies and sorts the contents of arrays and collections before serializing them.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder sortCollections(boolean value) {
-//		return set(SERIALIZER_sortCollections, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Sort arrays and collections alphabetically.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>sortCollections(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder sortCollections() {
-//		return set(SERIALIZER_sortCollections, true);
-//	}
-//
-//	/**
-//	 * Sets the {@link Serializer#SERIALIZER_sortMaps} property on all serializers in this group.
-//	 *
-//	 * <p>
-//	 * Copies and sorts the contents of maps before serializing them.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
-//	 * </ul>
-//	 *
-//	 * @param value The new value for this property.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder sortMaps(boolean value) {
-//		return set(SERIALIZER_sortMaps, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Sort maps alphabetically.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>sortMaps(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder sortMaps() {
-//		return set(SERIALIZER_sortMaps, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Trim empty lists and arrays.
-//	 *
-//	 * <p>
-//	 * If <jk>true</jk>, empty list values will not be serialized to the output.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder trimEmptyCollections(boolean value) {
-//		return set(SERIALIZER_trimEmptyCollections, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Trim empty lists and arrays.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>trimEmptyCollections(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder trimEmptyCollections() {
-//		return set(SERIALIZER_trimEmptyCollections, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Trim empty maps.
-//	 *
-//	 * <p>
-//	 * If <jk>true</jk>, empty map values will not be serialized to the output.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder trimEmptyMaps(boolean value) {
-//		return set(SERIALIZER_trimEmptyMaps, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Trim empty maps.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>trimEmptyMaps(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder trimEmptyMaps() {
-//		return set(SERIALIZER_trimEmptyMaps, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Trim null bean property values.
-//	 *
-//	 * <p>
-//	 * If <jk>true</jk>, null bean values will not be serialized to the output.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <jk>true</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder trimNullProperties(boolean value) {
-//		return set(SERIALIZER_trimNullProperties, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Trim strings.
-//	 *
-//	 * <p>
-//	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder trimStringsS(boolean value) {
-//		return set(SERIALIZER_trimStrings, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Trim strings.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder trimStringsS() {
-//		return set(SERIALIZER_trimStrings, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  URI context bean.
-//	 *
-//	 * <p>
-//	 * Bean used for resolution of URIs to absolute or root-relative form.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
-//	 * </ul>
-//	 *
-//	 * @param value The new value for this property.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder uriContext(UriContext value) {
-//		return set(SERIALIZER_uriContext, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  URI relativity.
-//	 *
-//	 * <p>
-//	 * Defines what relative URIs are relative to when serializing URI/URL objects.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is {@link UriRelativity#RESOURCE}
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder uriRelativity(UriRelativity value) {
-//		return set(SERIALIZER_uriRelativity, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  URI resolution.
-//	 *
-//	 * <p>
-//	 * Defines the resolution level for URIs when serializing URI/URL objects.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is {@link UriResolution#NONE}
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder uriResolution(UriResolution value) {
-//		return set(SERIALIZER_uriResolution, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Maximum indentation.
-//	 *
-//	 * <p>
-//	 * Specifies the maximum indentation level in the serialized document.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <c>100</c>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder maxIndent(int value) {
-//		return set(WSERIALIZER_maxIndent, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Quote character.
-//	 *
-//	 * <p>
-//	 * This is the character used for quoting attributes and values.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <js>'"'</js>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder quoteChar(char value) {
-//		return set(WSERIALIZER_quoteChar, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Quote character.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder sq() {
-//		return set(WSERIALIZER_quoteChar, '\'');
-//	}
-//
-//	/**
-//	 * Configuration property:  Use whitespace.
-//	 *
-//	 * <p>
-//	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder useWhitespace(boolean value) {
-//		return set(WSERIALIZER_useWhitespace, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Use whitespace.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
-//	 * </ul>
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder useWhitespace() {
-//		return set(WSERIALIZER_useWhitespace, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Use whitespace.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder ws() {
-//		return set(WSERIALIZER_useWhitespace, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Binary string format.
-//	 *
-//	 * <p>
-//	 * When using the {@link Serializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
-//	 * when converting the resulting byte array to a string.
-//	 *
-//	 * <ul class='javatree'>
-//	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default is {@link BinaryFormat#HEX}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder binaryOutputFormat(BinaryFormat value) {
-//		return set(OSSERIALIZER_binaryFormat, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Auto-close streams.
-//	 *
-//	 * If <jk>true</jk>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
-//	 * after parsing is complete.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default value is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder autoCloseStreams(boolean value) {
-//		return set(PARSER_autoCloseStreams, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Auto-close streams.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>autoCloseStreams(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder autoCloseStreams() {
-//		return set(PARSER_autoCloseStreams, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Debug output lines.
-//	 *
-//	 * When parse errors occur, this specifies the number of lines of input before and after the
-//	 * error location to be printed as part of the exception message.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Parser#PARSER_debugOutputLines}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default value is <c>5</c>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder debugOutputLines(int value) {
-//		set(PARSER_debugOutputLines, value);
-//		return this;
-//	}
-//
-//	/**
-//	 * Configuration property:  Parser listener.
-//	 *
-//	 * <p>
-//	 * Class used to listen for errors and warnings that occur during parsing.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Parser#PARSER_listener}
-//	 * </ul>
-//	 *
-//	 * @param value The new value for this property.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder listenerP(Class<? extends ParserListener> value) {
-//		return set(PARSER_listener, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Strict mode.
-//	 *
-//	 * <p>
-//	 * If <jk>true</jk>, strict mode for the parser is enabled.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Parser#PARSER_strict}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default value is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder strict(boolean value) {
-//		return set(PARSER_strict, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Strict mode.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Parser#PARSER_strict}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder strict() {
-//		return set(PARSER_strict, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Trim parsed strings.
-//	 *
-//	 * <p>
-//	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-//	 * the POJO.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default value is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder trimStringsP(boolean value) {
-//		return set(PARSER_trimStrings, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Trim parsed strings.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder trimStringsP() {
-//		return set(PARSER_trimStrings, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  Unbuffered.
-//	 *
-//	 * If <jk>true</jk>, don't use internal buffering during parsing.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default value is <jk>false</jk>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder unbuffered(boolean value) {
-//		return set(PARSER_unbuffered, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Unbuffered.
-//	 *
-//	 * <p>
-//	 * Shortcut for calling <code>unbuffered(<jk>true</jk>)</code>.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder unbuffered() {
-//		return set(PARSER_unbuffered, true);
-//	}
-//
-//	/**
-//	 * Configuration property:  File charset.
-//	 *
-//	 * <p>
-//	 * The character set to use for reading <c>Files</c> from the file system.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder fileCharset(String value) {
-//		return set(RPARSER_fileCharset, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Input stream charset.
-//	 *
-//	 * <p>
-//	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link ReaderParser#RPARSER_streamCharset}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default value is <js>"UTF-8"</js>.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder inputStreamCharset(String value) {
-//		return set(RPARSER_streamCharset, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Binary input format.
-//	 *
-//	 * <p>
-//	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
-//	 * when converting the string into a byte array.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
-//	 * </ul>
-//	 *
-//	 * @param value
-//	 * 	The new value for this property.
-//	 * 	<br>The default value is {@link BinaryFormat#HEX}.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder binaryInputFormat(BinaryFormat value) {
-//		return set(ISPARSER_binaryFormat, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Parameter format.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
-//	 * </ul>
-//	 *
-//	 * @param value The new value for this property.
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder paramFormat(String value) {
-//		return set(UON_paramFormat, value);
-//	}
-//
-//	/**
-//	 * Configuration property:  Parameter format.
-//	 *
-//	 * <ul class='seealso'>
-//	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
-//	 * </ul>
-//	 *
-//	 * @return This object (for method chaining).
-//	 */
-//	@ConfigurationProperty
-//	public RestClientBuilder paramFormatPlain() {
-//		return set(UON_paramFormat, "PLAINTEXT");
-//	}
-//
-//	// <CONFIGURATION-PROPERTIES>
-//
-//	@Override /* GENERATED - ContextBuilder */
-//	public RestClientBuilder add(Map<String,Object> properties) {
-//		super.add(properties);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - ContextBuilder */
-//	public RestClientBuilder addTo(String name, Object value) {
-//		super.addTo(name, value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - ContextBuilder */
-//	public RestClientBuilder addTo(String name, String key, Object value) {
-//		super.addTo(name, key, value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - ContextBuilder */
-//	public RestClientBuilder apply(PropertyStore copyFrom) {
-//		super.apply(copyFrom);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - ContextBuilder */
-//	public RestClientBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
-//		super.applyAnnotations(fromClasses);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - ContextBuilder */
-//	public RestClientBuilder applyAnnotations(Method...fromMethods) {
-//		super.applyAnnotations(fromMethods);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - ContextBuilder */
-//	public RestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-//		super.applyAnnotations(al, r);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - ContextBuilder */
-//	public RestClientBuilder removeFrom(String name, Object value) {
-//		super.removeFrom(name, value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - ContextBuilder */
-//	public RestClientBuilder set(Map<String,Object> properties) {
-//		super.set(properties);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - ContextBuilder */
-//	public RestClientBuilder set(String name, Object value) {
-//		super.set(name, value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder annotations(Annotation...values) {
-//		super.annotations(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanClassVisibility(Visibility value) {
-//		super.beanClassVisibility(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanConstructorVisibility(Visibility value) {
-//		super.beanConstructorVisibility(value);
-//		return this;
-//	}
-//
-//	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanDictionary(java.lang.Class<?>...values) {
-//		super.beanDictionary(values);
-//		return this;
-//	}
-//
-//	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanDictionary(Object...values) {
-//		super.beanDictionary(values);
-//		return this;
-//	}
-//
-//	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
-//		super.beanDictionaryRemove(values);
-//		return this;
-//	}
-//
-//	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanDictionaryRemove(Object...values) {
-//		super.beanDictionaryRemove(values);
-//		return this;
-//	}
-//
-//	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
-//		super.beanDictionaryReplace(values);
-//		return this;
-//	}
-//
-//	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanDictionaryReplace(Object...values) {
-//		super.beanDictionaryReplace(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanFieldVisibility(Visibility value) {
-//		super.beanFieldVisibility(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanFilters(java.lang.Class<?>...values) {
-//		super.beanFilters(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanFilters(Object...values) {
-//		super.beanFilters(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanFiltersRemove(java.lang.Class<?>...values) {
-//		super.beanFiltersRemove(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanFiltersRemove(Object...values) {
-//		super.beanFiltersRemove(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanFiltersReplace(java.lang.Class<?>...values) {
-//		super.beanFiltersReplace(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanFiltersReplace(Object...values) {
-//		super.beanFiltersReplace(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanMapPutReturnsOldValue() {
-//		super.beanMapPutReturnsOldValue();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanMapPutReturnsOldValue(boolean value) {
-//		super.beanMapPutReturnsOldValue(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanMethodVisibility(Visibility value) {
-//		super.beanMethodVisibility(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beanTypePropertyName(String value) {
-//		super.beanTypePropertyName(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beansDontRequireSomeProperties() {
-//		super.beansDontRequireSomeProperties();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beansRequireDefaultConstructor() {
-//		super.beansRequireDefaultConstructor();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beansRequireDefaultConstructor(boolean value) {
-//		super.beansRequireDefaultConstructor(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beansRequireSerializable() {
-//		super.beansRequireSerializable();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beansRequireSerializable(boolean value) {
-//		super.beansRequireSerializable(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beansRequireSettersForGetters() {
-//		super.beansRequireSettersForGetters();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beansRequireSettersForGetters(boolean value) {
-//		super.beansRequireSettersForGetters(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder beansRequireSomeProperties(boolean value) {
-//		super.beansRequireSomeProperties(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder bpi(Map<String,String> values) {
-//		super.bpi(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder bpi(Class<?> beanClass, String properties) {
-//		super.bpi(beanClass, properties);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder bpi(String beanClassName, String properties) {
-//		super.bpi(beanClassName, properties);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder bpro(Map<String,String> values) {
-//		super.bpro(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder bpro(Class<?> beanClass, String properties) {
-//		super.bpro(beanClass, properties);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder bpro(String beanClassName, String properties) {
-//		super.bpro(beanClassName, properties);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder bpwo(Map<String,String> values) {
-//		super.bpwo(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder bpwo(Class<?> beanClass, String properties) {
-//		super.bpwo(beanClass, properties);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder bpwo(String beanClassName, String properties) {
-//		super.bpwo(beanClassName, properties);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder bpx(Map<String,String> values) {
-//		super.bpx(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder bpx(Class<?> beanClass, String properties) {
-//		super.bpx(beanClass, properties);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder bpx(String beanClassName, String properties) {
-//		super.bpx(beanClassName, properties);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder debug() {
-//		super.debug();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder debug(boolean value) {
-//		super.debug(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder dictionary(java.lang.Class<?>...values) {
-//		super.dictionary(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder dictionary(Object...values) {
-//		super.dictionary(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder dictionaryRemove(java.lang.Class<?>...values) {
-//		super.dictionaryRemove(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder dictionaryRemove(Object...values) {
-//		super.dictionaryRemove(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder dictionaryReplace(java.lang.Class<?>...values) {
-//		super.dictionaryReplace(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder dictionaryReplace(Object...values) {
-//		super.dictionaryReplace(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder dontIgnorePropertiesWithoutSetters() {
-//		super.dontIgnorePropertiesWithoutSetters();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder dontIgnoreTransientFields() {
-//		super.dontIgnoreTransientFields();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder dontIgnoreUnknownNullBeanProperties() {
-//		super.dontIgnoreUnknownNullBeanProperties();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder dontUseInterfaceProxies() {
-//		super.dontUseInterfaceProxies();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public <T> RestClientBuilder example(Class<T> pojoClass, T o) {
-//		super.example(pojoClass, o);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public <T> RestClientBuilder exampleJson(Class<T> pojoClass, String json) {
-//		super.exampleJson(pojoClass, json);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder examples(String json) {
-//		super.examples(json);
-//		return this;
-//	}
-//
-//	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder excludeProperties(Map<String,String> values) {
-//		super.excludeProperties(values);
-//		return this;
-//	}
-//
-//	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder excludeProperties(Class<?> beanClass, String properties) {
-//		super.excludeProperties(beanClass, properties);
-//		return this;
-//	}
-//
-//	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder excludeProperties(String beanClassName, String value) {
-//		super.excludeProperties(beanClassName, value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder fluentSetters() {
-//		super.fluentSetters();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder fluentSetters(boolean value) {
-//		super.fluentSetters(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder ignoreInvocationExceptionsOnGetters() {
-//		super.ignoreInvocationExceptionsOnGetters();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-//		super.ignoreInvocationExceptionsOnGetters(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder ignoreInvocationExceptionsOnSetters() {
-//		super.ignoreInvocationExceptionsOnSetters();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-//		super.ignoreInvocationExceptionsOnSetters(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder ignorePropertiesWithoutSetters(boolean value) {
-//		super.ignorePropertiesWithoutSetters(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder ignoreTransientFields(boolean value) {
-//		super.ignoreTransientFields(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder ignoreUnknownBeanProperties() {
-//		super.ignoreUnknownBeanProperties();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
-//		super.ignoreUnknownBeanProperties(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder ignoreUnknownNullBeanProperties(boolean value) {
-//		super.ignoreUnknownNullBeanProperties(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
-//		super.implClass(interfaceClass, implClass);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
-//		super.implClasses(values);
-//		return this;
-//	}
-//
-//	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder includeProperties(Map<String,String> values) {
-//		super.includeProperties(values);
-//		return this;
-//	}
-//
-//	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder includeProperties(Class<?> beanClass, String value) {
-//		super.includeProperties(beanClass, value);
-//		return this;
-//	}
-//
-//	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder includeProperties(String beanClassName, String value) {
-//		super.includeProperties(beanClassName, value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder locale(Locale value) {
-//		super.locale(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder mediaType(MediaType value) {
-//		super.mediaType(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder notBeanClasses(java.lang.Class<?>...values) {
-//		super.notBeanClasses(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder notBeanClasses(Object...values) {
-//		super.notBeanClasses(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
-//		super.notBeanClassesRemove(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder notBeanClassesRemove(Object...values) {
-//		super.notBeanClassesRemove(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
-//		super.notBeanClassesReplace(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder notBeanClassesReplace(Object...values) {
-//		super.notBeanClassesReplace(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder notBeanPackages(Object...values) {
-//		super.notBeanPackages(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder notBeanPackages(String...values) {
-//		super.notBeanPackages(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder notBeanPackagesRemove(Object...values) {
-//		super.notBeanPackagesRemove(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder notBeanPackagesRemove(String...values) {
-//		super.notBeanPackagesRemove(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder notBeanPackagesReplace(Object...values) {
-//		super.notBeanPackagesReplace(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder notBeanPackagesReplace(String...values) {
-//		super.notBeanPackagesReplace(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder pojoSwaps(java.lang.Class<?>...values) {
-//		super.pojoSwaps(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder pojoSwaps(Object...values) {
-//		super.pojoSwaps(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
-//		super.pojoSwapsRemove(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder pojoSwapsRemove(Object...values) {
-//		super.pojoSwapsRemove(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
-//		super.pojoSwapsReplace(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder pojoSwapsReplace(Object...values) {
-//		super.pojoSwapsReplace(values);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-//		super.propertyNamer(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder sortProperties() {
-//		super.sortProperties();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder sortProperties(boolean value) {
-//		super.sortProperties(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder timeZone(TimeZone value) {
-//		super.timeZone(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder useEnumNames() {
-//		super.useEnumNames();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder useEnumNames(boolean value) {
-//		super.useEnumNames(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder useInterfaceProxies(boolean value) {
-//		super.useInterfaceProxies(value);
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder useJavaBeanIntrospector() {
-//		super.useJavaBeanIntrospector();
-//		return this;
-//	}
-//
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
-//		super.useJavaBeanIntrospector(value);
-//		return this;
-//	}
-//
-
-
+//	@Test
+//	public void k01_restClient_CallHandlerClass() throws Exception { fail(); }
+////	public RestClientBuilder callHandler(Class<? extends RestCallHandler> value) {
+//
+//	@Test
+//	public void k02_restClient_CallHandlerObject() throws Exception { fail(); }
+////	public RestClientBuilder callHandler(RestCallHandler value) {
+//
+//	@Test
+//	public void k03_restClient_errorCodes() throws Exception { fail(); }
+////	public RestClientBuilder errorCodes(Predicate<Integer> value) {
+//
+//	@Test
+//	public void k04_restClient_executorService() throws Exception { fail(); }
+////	public RestClientBuilder executorService(ExecutorService executorService, boolean shutdownOnClose) {
+//
+//	@Test
+//	public void k05_restClient_keepHttpClientOpenBoolean() throws Exception { fail(); }
+////	public RestClientBuilder keepHttpClientOpen(boolean value) {
+//
+//	@Test
+//	public void k06_restClient_keepHttpClientOpen() throws Exception { fail(); }
+////	public RestClientBuilder keepHttpClientOpen() {
+//
+//	@Test
+//	public void k07_restClient_interceptorsClasses() throws Exception { fail(); }
+////	public RestClientBuilder interceptors(Class<? extends RestCallInterceptor>...values) {
+//
+//	@Test
+//	public void k08_restClient_interceptorsObjects() throws Exception { fail(); }
+////	public RestClientBuilder interceptors(RestCallInterceptor...value) {
+//
+//	@Test
+//	public void k09_restClient_leakDetection() throws Exception { fail(); }
+////	public RestClientBuilder leakDetection() {
+//
+//	@Test
+//	public void k10_restClient_leakDetectionBoolean() throws Exception { fail(); }
+////	public RestClientBuilder leakDetection(boolean value) {
+//
+//	@Test
+//	public void k11_restClient_marshallObject() throws Exception { fail(); }
+////	public RestClientBuilder marshall(Marshall value) {
+//
+//	@Test
+//	public void k12_restClient_marshallsObjects() throws Exception { fail(); }
+////	public RestClientBuilder marshalls(Marshall...value) {
+//
+//	@Test
+//	public void k13_restClient_parserClass() throws Exception { fail(); }
+////	public RestClientBuilder parser(Class<? extends Parser> value) {
+//
+//	@Test
+//	public void k14_restClient_parserObject() throws Exception { fail(); }
+////	public RestClientBuilder parser(Parser value) {
+//
+//	@Test
+//	public void k15_restClient_parsersClasses() throws Exception { fail(); }
+////	public RestClientBuilder parsers(Class<? extends Parser>...value) {
+//
+//	@Test
+//	public void k16_restClient_parsersObjects() throws Exception { fail(); }
+////	public RestClientBuilder parsers(Parser...value) {
+//
+//	@Test
+//	public void k17_restClient_partParserClass() throws Exception { fail(); }
+////	public RestClientBuilder partParser(Class<? extends HttpPartParser> value) {
+//
+//	@Test
+//	public void k18_restClient_partParserObject() throws Exception { fail(); }
+////	public RestClientBuilder partParser(HttpPartParser value) {
+//
+//	@Test
+//	public void k19_restClient_partSerializerClass() throws Exception { fail(); }
+////	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
+//
+//	@Test
+//	public void k20_restClient_partSerializerObject() throws Exception { fail(); }
+////	public RestClientBuilder partSerializer(HttpPartSerializer value) {
+//
+//	@Test
+//	public void k21_restClient_serializerClass() throws Exception { fail(); }
+////	public RestClientBuilder serializer(Class<? extends Serializer> value) {
+//
+//	@Test
+//	public void k22_restClient_serializerObject() throws Exception { fail(); }
+////	public RestClientBuilder serializer(Serializer value) {
+//
+//	@Test
+//	public void k23_restClient_serializersClasses() throws Exception { fail(); }
+////	public RestClientBuilder serializers(Class<? extends Serializer>...value) {
+//
+//	@Test
+//	public void k24_restClient_serializersObjects() throws Exception { fail(); }
+////	public RestClientBuilder serializers(Serializer...value) {
+//
+//	//-----------------------------------------------------------------------------------------------------------------
+//	// Serializer properties
+//	//-----------------------------------------------------------------------------------------------------------------
+//
+//	@Test
+//	public void l01_serializer_addBeanTypesBoolean() throws Exception { fail(); }
+////	public RestClientBuilder addBeanTypes(boolean value) {
+//
+//	@Test
+//	public void l02_serializer_addBeanTypes() throws Exception { fail(); }
+////	public RestClientBuilder addBeanTypes() {
+//
+//	@Test
+//	public void l03_serializer_addRootTypeBoolean() throws Exception { fail(); }
+////	public RestClientBuilder addRootType(boolean value) {
+//
+//	@Test
+//	public void l04_serializer_addRootType() throws Exception { fail(); }
+////	public RestClientBuilder addRootType() {
+//
+//	@Test
+//	public void l05_serializer_detectRecursionsBoolean() throws Exception { fail(); }
+////	public RestClientBuilder detectRecursions(boolean value) {
+//
+//	@Test
+//	public void l06_serializer_detectRecursions() throws Exception { fail(); }
+////	public RestClientBuilder detectRecursions() {
+//
+//	@Test
+//	public void l07_serializer_ignoreRecursionsBoolean() throws Exception { fail(); }
+////	public RestClientBuilder ignoreRecursions(boolean value) {
+//
+//	@Test
+//	public void l08_serializer_ignoreRecursions() throws Exception { fail(); }
+////	public RestClientBuilder ignoreRecursions() {
+//
+//	@Test
+//	public void l09_serializer_initialDepth() throws Exception { fail(); }
+////	public RestClientBuilder initialDepth(int value) {
+//
+//	@Test
+//	public void l10_serializer_listenerSClass() throws Exception { fail(); }
+////	public RestClientBuilder listenerS(Class<? extends SerializerListener> value) {
+//
+//	@Test
+//	public void l11_serializer_maxDepth() throws Exception { fail(); }
+////	public RestClientBuilder maxDepth(int value) {
+//
+//	@Test
+//	public void l12_serializer_sortCollectionsBoolean() throws Exception { fail(); }
+////	public RestClientBuilder sortCollections(boolean value) {
+//
+//	@Test
+//	public void l13_serializer_sortCollections() throws Exception { fail(); }
+////	public RestClientBuilder sortCollections() {
+//
+//	@Test
+//	public void l14_serializer_sortMapsBoolean() throws Exception { fail(); }
+////	public RestClientBuilder sortMaps(boolean value) {
+//
+//	@Test
+//	public void l15_serializer_sortMaps() throws Exception { fail(); }
+////	public RestClientBuilder sortMaps() {
+//
+//	@Test
+//	public void l16_serializer_trimEmptyCollectionsBoolean() throws Exception { fail(); }
+////	public RestClientBuilder trimEmptyCollections(boolean value) {
+//
+//	@Test
+//	public void l17_serializer_trimEmptyCollections() throws Exception { fail(); }
+////	public RestClientBuilder trimEmptyCollections() {
+//
+//	@Test
+//	public void l18_serializer_trimEmptyMapsBoolean() throws Exception { fail(); }
+////	public RestClientBuilder trimEmptyMaps(boolean value) {
+//
+//	@Test
+//	public void l19_serializer_trimEmptyMaps() throws Exception { fail(); }
+////	public RestClientBuilder trimEmptyMaps() {
+//
+//	@Test
+//	public void l20_serializer_trimNullPropertiesBoolean() throws Exception { fail(); }
+////	public RestClientBuilder trimNullProperties(boolean value) {
+//
+//	@Test
+//	public void l21_serializer_trimStringsSBoolean() throws Exception { fail(); }
+////	public RestClientBuilder trimStringsS(boolean value) {
+//
+//	@Test
+//	public void l22_serializer_trimStringsS() throws Exception { fail(); }
+////	public RestClientBuilder trimStringsS() {
+//
+//	@Test
+//	public void l23_serializer_uriContext() throws Exception { fail(); }
+////	public RestClientBuilder uriContext(UriContext value) {
+//
+//	@Test
+//	public void l24_serializer_uriRelativity() throws Exception { fail(); }
+////	public RestClientBuilder uriRelativity(UriRelativity value) {
+//
+//	@Test
+//	public void l25_serializer_uriResolution() throws Exception { fail(); }
+////	public RestClientBuilder uriResolution(UriResolution value) {
+//
+//	@Test
+//	public void l26_serializer_maxIndent() throws Exception { fail(); }
+////	public RestClientBuilder maxIndent(int value) {
+//
+//	@Test
+//	public void l27_serializer_quoteChar() throws Exception { fail(); }
+////	public RestClientBuilder quoteChar(char value) {
+//
+//	@Test
+//	public void l28_serializer_sq() throws Exception { fail(); }
+////	public RestClientBuilder sq() {
+//
+//	@Test
+//	public void l29_serializer_useWhitespaceBoolean() throws Exception { fail(); }
+////	public RestClientBuilder useWhitespace(boolean value) {
+//
+//	@Test
+//	public void l30_serializer_useWhitespace() throws Exception { fail(); }
+////	public RestClientBuilder useWhitespace() {
+//
+//	@Test
+//	public void l31_serializer_ws() throws Exception { fail(); }
+////	public RestClientBuilder ws() {
+//
+//	@Test
+//	public void l32_serializer_binaryOutputFormat() throws Exception { fail(); }
+////	public RestClientBuilder binaryOutputFormat(BinaryFormat value) {
+//
+//	//-----------------------------------------------------------------------------------------------------------------
+//	// Parser properties
+//	//-----------------------------------------------------------------------------------------------------------------
+//
+//	@Test
+//	public void m01_parser_autoCloseStreamsBoolean() throws Exception { fail(); }
+////	public RestClientBuilder autoCloseStreams(boolean value) {
+//
+//	@Test
+//	public void m02_parser_autoCloseStreams() throws Exception { fail(); }
+////	public RestClientBuilder autoCloseStreams() {
+//
+//	@Test
+//	public void m03_parser_debugOutputLines() throws Exception { fail(); }
+////	public RestClientBuilder debugOutputLines(int value) {
+//
+//	@Test
+//	public void m04_parser_listenerPClass() throws Exception { fail(); }
+////	public RestClientBuilder listenerP(Class<? extends ParserListener> value) {
+//
+//	@Test
+//	public void m05_parser_strictBoolean() throws Exception { fail(); }
+////	public RestClientBuilder strict(boolean value) {
+//
+//	@Test
+//	public void m06_parser_strict() throws Exception { fail(); }
+////	public RestClientBuilder strict() {
+//
+//	@Test
+//	public void m07_parser_trimStringsPBoolean() throws Exception { fail(); }
+////	public RestClientBuilder trimStringsP(boolean value) {
+//
+//	@Test
+//	public void m08_parser_trimStringsP() throws Exception { fail(); }
+////	public RestClientBuilder trimStringsP() {
+//
+//	@Test
+//	public void m09_parser_unbufferedBoolean() throws Exception { fail(); }
+////	public RestClientBuilder unbuffered(boolean value) {
+//
+//	@Test
+//	public void m10_parser_unbuffered() throws Exception { fail(); }
+////	public RestClientBuilder unbuffered() {
+//
+//	@Test
+//	public void m11_parser_fileCharset() throws Exception { fail(); }
+////	public RestClientBuilder fileCharset(String value) {
+//
+//	@Test
+//	public void m12_parser_inputStreamCharset() throws Exception { fail(); }
+////	public RestClientBuilder inputStreamCharset(String value) {
+//
+//	@Test
+//	public void m13_parser_binaryInputFormat() throws Exception { fail(); }
+////	public RestClientBuilder binaryInputFormat(BinaryFormat value) {
+//
+//	@Test
+//	public void m14_parser_paramFormat() throws Exception { fail(); }
+////	public RestClientBuilder paramFormat(String value) {
+//
+//	@Test
+//	public void m15_parser_paramFormatPlain() throws Exception { fail(); }
+////	public RestClientBuilder paramFormatPlain() {
+//
+//	//-----------------------------------------------------------------------------------------------------------------
+//	// Context properties
+//	//-----------------------------------------------------------------------------------------------------------------
+//
+//	@Test
+//	public void n01_context_addMap() throws Exception { fail(); }
+////	public RestClientBuilder add(Map<String,Object> properties) {
+//
+//	@Test
+//	public void n02_context_addToStringObject() throws Exception { fail(); }
+////	public RestClientBuilder addTo(String name, Object value) {
+//
+//	@Test
+//	public void n03_context_appendToStringObject() throws Exception { fail(); }
+////	public RestClientBuilder appendTo(String name, Object value) {
+//
+//	@Test
+//	public void n04_context_prependToStringObject() throws Exception { fail(); }
+////	public RestClientBuilder prependTo(String name, Object value) {
+//
+//	@Test
+//	public void n05_context_addToStringStringObject() throws Exception { fail(); }
+////	public RestClientBuilder addTo(String name, String key, Object value) {
+//
+//	@Test
+//	public void n06_context_apply() throws Exception { fail(); }
+////	public RestClientBuilder apply(PropertyStore copyFrom) {
+//
+//	@Test
+//	public void n07_context_applyAnnotationsClasses() throws Exception { fail(); }
+////	public RestClientBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
+//
+//	@Test
+//	public void n08_context_applyAnnotationsMethods() throws Exception { fail(); }
+////	public RestClientBuilder applyAnnotations(Method...fromMethods) {
+//
+//	@Test
+//	public void n09_context_applyAnnotationsAnnotationList() throws Exception { fail(); }
+////	public RestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+//
+//	@Test
+//	public void n10_context_removeFrom() throws Exception { fail(); }
+////	public RestClientBuilder removeFrom(String name, Object value) {
+//
+//	@Test
+//	public void n11_context_setMap() throws Exception { fail(); }
+////	public RestClientBuilder set(Map<String,Object> properties) {
+//
+//	@Test
+//	public void n12_context_setStringObject() throws Exception { fail(); }
+////	public RestClientBuilder set(String name, Object value) {
+//
+//	@Test
+//	public void n13_context_annotations() throws Exception { fail(); }
+////	public RestClientBuilder annotations(Annotation...values) {
+//
+//	//-----------------------------------------------------------------------------------------------------------------
+//	// BeanContext properties
+//	//-----------------------------------------------------------------------------------------------------------------
+//
+//	@Test
+//	public void o001_beanContext_beanClassVisibility() throws Exception { fail(); }
+////	public RestClientBuilder beanClassVisibility(Visibility value) {
+//
+//	@Test
+//	public void o002_beanContext_beanConstructorVisibility() throws Exception { fail(); }
+////	public RestClientBuilder beanConstructorVisibility(Visibility value) {
+//
+//	@Test
+//	public void o003_beanContext_beanDictionaryClasses() throws Exception { fail(); }
+////	public RestClientBuilder beanDictionary(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o004_beanContext_beanDictionaryObjects() throws Exception { fail(); }
+////	public RestClientBuilder beanDictionary(Object...values) {
+//
+//	@Test
+//	public void o005_beanContext_beanDictionaryRemoveClasses() throws Exception { fail(); }
+////	public RestClientBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o006_beanContext_beanDictionaryRemoveObjects() throws Exception { fail(); }
+////	public RestClientBuilder beanDictionaryRemove(Object...values) {
+//
+//	@Test
+//	public void o007_beanContext_beanDictionaryReplaceClasses() throws Exception { fail(); }
+////	public RestClientBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o008_beanContext_beanDictionaryReplaceObjects() throws Exception { fail(); }
+////	public RestClientBuilder beanDictionaryReplace(Object...values) {
+//
+//	@Test
+//	public void o009_beanContext_beanFieldVisibility() throws Exception { fail(); }
+////	public RestClientBuilder beanFieldVisibility(Visibility value) {
+//
+//	@Test
+//	public void o010_beanContext_beanFiltersClasses() throws Exception { fail(); }
+////	public RestClientBuilder beanFilters(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o011_beanContext_beanFiltersObjects() throws Exception { fail(); }
+////	public RestClientBuilder beanFilters(Object...values) {
+//
+//	@Test
+//	public void o012_beanContext_beanFiltersRemoveClasses() throws Exception { fail(); }
+////	public RestClientBuilder beanFiltersRemove(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o013_beanContext_beanFiltersRemoveObjects() throws Exception { fail(); }
+////	public RestClientBuilder beanFiltersRemove(Object...values) {
+//
+//	@Test
+//	public void o014_beanContext_beanFiltersReplaceClasses() throws Exception { fail(); }
+////	public RestClientBuilder beanFiltersReplace(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o015_beanContext_beanFiltersReplaceObjects() throws Exception { fail(); }
+////	public RestClientBuilder beanFiltersReplace(Object...values) {
+//
+//	@Test
+//	public void o016_beanContext_beanMapPutReturnsOldValue() throws Exception { fail(); }
+////	public RestClientBuilder beanMapPutReturnsOldValue() {
+//
+//	@Test
+//	public void o017_beanContext_beanMapPutReturnsOldValueBoolean() throws Exception { fail(); }
+////	public RestClientBuilder beanMapPutReturnsOldValue(boolean value) {
+//
+//	@Test
+//	public void o018_beanContext_beanMethodVisibility() throws Exception { fail(); }
+////	public RestClientBuilder beanMethodVisibility(Visibility value) {
+//
+//	@Test
+//	public void o019_beanContext_beanTypePropertyName() throws Exception { fail(); }
+////	public RestClientBuilder beanTypePropertyName(String value) {
+//
+//	@Test
+//	public void o020_beanContext_beansDontRequireSomeProperties() throws Exception { fail(); }
+////	public RestClientBuilder beansDontRequireSomeProperties() {
+//
+//	@Test
+//	public void o021_beanContext_beansRequireDefaultConstructor() throws Exception { fail(); }
+////	public RestClientBuilder beansRequireDefaultConstructor() {
+//
+//	@Test
+//	public void o022_beanContext_beansRequireDefaultConstructorBoolean() throws Exception { fail(); }
+////	public RestClientBuilder beansRequireDefaultConstructor(boolean value) {
+//
+//	@Test
+//	public void o023_beanContext_beansRequireSerializable() throws Exception { fail(); }
+////	public RestClientBuilder beansRequireSerializable() {
+//
+//	@Test
+//	public void o024_beanContext_beansRequireSerializableBoolean() throws Exception { fail(); }
+////	public RestClientBuilder beansRequireSerializable(boolean value) {
+//
+//	@Test
+//	public void o025_beanContext_beansRequireSettersForGetters() throws Exception { fail(); }
+////	public RestClientBuilder beansRequireSettersForGetters() {
+//
+//	@Test
+//	public void o026_beanContext_beansRequireSettersForGettersBoolean() throws Exception { fail(); }
+////	public RestClientBuilder beansRequireSettersForGetters(boolean value) {
+//
+//	@Test
+//	public void o027_beanContext_beansRequireSomePropertiesBoolean() throws Exception { fail(); }
+////	public RestClientBuilder beansRequireSomeProperties(boolean value) {
+//
+//	@Test
+//	public void o028_beanContext_bpiMap() throws Exception { fail(); }
+////	public RestClientBuilder bpi(Map<String,String> values) {
+//
+//	@Test
+//	public void o029_beanContext_bpiClassString() throws Exception { fail(); }
+////	public RestClientBuilder bpi(Class<?> beanClass, String properties) {
+//
+//	@Test
+//	public void o030_beanContext_bpiStringString() throws Exception { fail(); }
+////	public RestClientBuilder bpi(String beanClassName, String properties) {
+//
+//	@Test
+//	public void o031_beanContext_bproMap() throws Exception { fail(); }
+////	public RestClientBuilder bpro(Map<String,String> values) {
+//
+//	@Test
+//	public void o032_beanContext_bproClassString() throws Exception { fail(); }
+////	public RestClientBuilder bpro(Class<?> beanClass, String properties) {
+//
+//	@Test
+//	public void o033_beanContext_bproStringString() throws Exception { fail(); }
+////	public RestClientBuilder bpro(String beanClassName, String properties) {
+//
+//	@Test
+//	public void o034_beanContext_bpwoMap() throws Exception { fail(); }
+////	public RestClientBuilder bpwo(Map<String,String> values) {
+//
+//	@Test
+//	public void o035_beanContext_bpwoClassString() throws Exception { fail(); }
+////	public RestClientBuilder bpwo(Class<?> beanClass, String properties) {
+//
+//	@Test
+//	public void o036_beanContext_bpwoStringString() throws Exception { fail(); }
+////	public RestClientBuilder bpwo(String beanClassName, String properties) {
+//
+//	@Test
+//	public void o037_beanContext_bpxMap() throws Exception { fail(); }
+////	public RestClientBuilder bpx(Map<String,String> values) {
+//
+//	@Test
+//	public void o038_beanContext_bpxClassString() throws Exception { fail(); }
+////	public RestClientBuilder bpx(Class<?> beanClass, String properties) {
+//
+//	@Test
+//	public void o039_beanContext_bpxStringString() throws Exception { fail(); }
+////	public RestClientBuilder bpx(String beanClassName, String properties) {
+//
+//	@Test
+//	public void o040_beanContext_debug() throws Exception { fail(); }
+////	public RestClientBuilder debug() {
+//
+//	@Test
+//	public void o041_beanContext_debugBoolean() throws Exception { fail(); }
+////	public RestClientBuilder debug(boolean value) {
+//
+//	@Test
+//	public void o042_beanContext_dictionaryClasses() throws Exception { fail(); }
+////	public RestClientBuilder dictionary(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o043_beanContext_dictionaryObjects() throws Exception { fail(); }
+////	public RestClientBuilder dictionary(Object...values) {
+//
+//	@Test
+//	public void o044_beanContext_dictionaryRemoveClasses() throws Exception { fail(); }
+////	public RestClientBuilder dictionaryRemove(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o045_beanContext_dictionaryRemoveObjects() throws Exception { fail(); }
+////	public RestClientBuilder dictionaryRemove(Object...values) {
+//
+//	@Test
+//	public void o046_beanContext_dictionaryReplaceClasses() throws Exception { fail(); }
+////	public RestClientBuilder dictionaryReplace(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o047_beanContext_dictionaryReplaceObjects() throws Exception { fail(); }
+////	public RestClientBuilder dictionaryReplace(Object...values) {
+//
+//	@Test
+//	public void o048_beanContext_dontIgnorePropertiesWithoutSetters() throws Exception { fail(); }
+////	public RestClientBuilder dontIgnorePropertiesWithoutSetters() {
+//
+//	@Test
+//	public void o049_beanContext_dontIgnoreTransientFields() throws Exception { fail(); }
+////	public RestClientBuilder dontIgnoreTransientFields() {
+//
+//	@Test
+//	public void o050_beanContext_dontIgnoreUnknownNullBeanProperties() throws Exception { fail(); }
+////	public RestClientBuilder dontIgnoreUnknownNullBeanProperties() {
+//
+//	@Test
+//	public void o051_beanContext_dontUseInterfaceProxies() throws Exception { fail(); }
+////	public RestClientBuilder dontUseInterfaceProxies() {
+//
+//	@Test
+//	public void o052_beanContext_example() throws Exception { fail(); }
+////	public <T> RestClientBuilder example(Class<T> pojoClass, T o) {
+//
+//	@Test
+//	public void o053_beanContext_exampleJson() throws Exception { fail(); }
+////	public <T> RestClientBuilder exampleJson(Class<T> pojoClass, String json) {
+//
+//	@Test
+//	public void o054_beanContext_examples() throws Exception { fail(); }
+////	public RestClientBuilder examples(String json) {
+//
+//	@Test
+//	public void o055_beanContext_excludePropertiesMap() throws Exception { fail(); }
+////	public RestClientBuilder excludeProperties(Map<String,String> values) {
+//
+//	@Test
+//	public void o056_beanContext_excludePropertiesClassString() throws Exception { fail(); }
+////	public RestClientBuilder excludeProperties(Class<?> beanClass, String properties) {
+//
+//	@Test
+//	public void o057_beanContext_excludePropertiesStringString() throws Exception { fail(); }
+////	public RestClientBuilder excludeProperties(String beanClassName, String value) {
+//
+//	@Test
+//	public void o058_beanContext_fluentSetters() throws Exception { fail(); }
+////	public RestClientBuilder fluentSetters() {
+//
+//	@Test
+//	public void o059_beanContext_fluentSettersBoolean() throws Exception { fail(); }
+////	public RestClientBuilder fluentSetters(boolean value) {
+//
+//	@Test
+//	public void o060_beanContext_ignoreInvocationExceptionsOnGetters() throws Exception { fail(); }
+////	public RestClientBuilder ignoreInvocationExceptionsOnGetters() {
+//
+//	@Test
+//	public void o061_beanContext_ignoreInvocationExceptionsOnGettersBoolean() throws Exception { fail(); }
+////	public RestClientBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+//
+//	@Test
+//	public void o062_beanContext_ignoreInvocationExceptionsOnSetters() throws Exception { fail(); }
+////	public RestClientBuilder ignoreInvocationExceptionsOnSetters() {
+//
+//	@Test
+//	public void o063_beanContext_ignoreInvocationExceptionsOnSettersBoolean() throws Exception { fail(); }
+////	public RestClientBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+//
+//	@Test
+//	public void o064_beanContext_ignorePropertiesWithoutSettersBoolean() throws Exception { fail(); }
+////	public RestClientBuilder ignorePropertiesWithoutSetters(boolean value) {
+//
+//	@Test
+//	public void o065_beanContext_ignoreTransientFields() throws Exception { fail(); }
+////	public RestClientBuilder ignoreTransientFields(boolean value) {
+//
+//	@Test
+//	public void o066_beanContext_ignoreUnknownBeanProperties() throws Exception { fail(); }
+////	public RestClientBuilder ignoreUnknownBeanProperties() {
+//
+//	@Test
+//	public void o067_beanContext_ignoreUnknownBeanPropertiesBoolean() throws Exception { fail(); }
+////	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
+//
+//	@Test
+//	public void o068_beanContext_ignoreUnknownNullBeanPropertiesBoolean() throws Exception { fail(); }
+////	public RestClientBuilder ignoreUnknownNullBeanProperties(boolean value) {
+//
+//	@Test
+//	public void o069_beanContext_implClass() throws Exception { fail(); }
+////	public RestClientBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
+//
+//	@Test
+//	public void o070_beanContext_implClasses() throws Exception { fail(); }
+////	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
+//
+//	@Test
+//	public void o071_beanContext_includePropertiesMap() throws Exception { fail(); }
+////	public RestClientBuilder includeProperties(Map<String,String> values) {
+//
+//	@Test
+//	public void o072_beanContext_includePropertiesClassString() throws Exception { fail(); }
+////	public RestClientBuilder includeProperties(Class<?> beanClass, String value) {
+//
+//	@Test
+//	public void o073_beanContext_includePropertiesStringString() throws Exception { fail(); }
+////	public RestClientBuilder includeProperties(String beanClassName, String value) {
+//
+//	@Test
+//	public void o074_beanContext_locale() throws Exception { fail(); }
+////	public RestClientBuilder locale(Locale value) {
+//
+//	@Test
+//	public void o075_beanContext_mediaType() throws Exception { fail(); }
+////	public RestClientBuilder mediaType(MediaType value) {
+//
+//	@Test
+//	public void o076_beanContext_notBeanClassesClasses() throws Exception { fail(); }
+////	public RestClientBuilder notBeanClasses(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o077_beanContext_notBeanClassesObjects() throws Exception { fail(); }
+////	public RestClientBuilder notBeanClasses(Object...values) {
+//
+//	@Test
+//	public void o078_beanContext_notBeanClassesRemoveClasses() throws Exception { fail(); }
+////	public RestClientBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o079_beanContext_notBeanClassesRemoveObjects() throws Exception { fail(); }
+////	public RestClientBuilder notBeanClassesRemove(Object...values) {
+//
+//	@Test
+//	public void o080_beanContext_notBeanClassesReplaceClasses() throws Exception { fail(); }
+////	public RestClientBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o081_beanContext_notBeanClassesReplaceObjects() throws Exception { fail(); }
+////	public RestClientBuilder notBeanClassesReplace(Object...values) {
+//
+//	@Test
+//	public void o082_beanContext_notBeanPackagesObjects() throws Exception { fail(); }
+////	public RestClientBuilder notBeanPackages(Object...values) {
+//
+//	@Test
+//	public void o083_beanContext_notBeanPackagesStrings() throws Exception { fail(); }
+////	public RestClientBuilder notBeanPackages(String...values) {
+//
+//	@Test
+//	public void o084_beanContext_notBeanPackagesRemoveObjects() throws Exception { fail(); }
+////	public RestClientBuilder notBeanPackagesRemove(Object...values) {
+//
+//	@Test
+//	public void o085_beanContext_notBeanPackagesRemoveStrings() throws Exception { fail(); }
+////	public RestClientBuilder notBeanPackagesRemove(String...values) {
+//
+//	@Test
+//	public void o086_beanContext_notBeanPackagesReplaceObjects() throws Exception { fail(); }
+////	public RestClientBuilder notBeanPackagesReplace(Object...values) {
+//
+//	@Test
+//	public void o087_beanContext_notBeanPackagesReplaceStrings() throws Exception { fail(); }
+////	public RestClientBuilder notBeanPackagesReplace(String...values) {
+//
+//	@Test
+//	public void o088_beanContext_pojoSwapsClasses() throws Exception { fail(); }
+////	public RestClientBuilder pojoSwaps(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o089_beanContext_pojoSwapsObjects() throws Exception { fail(); }
+////	public RestClientBuilder pojoSwaps(Object...values) {
+//
+//	@Test
+//	public void o090_beanContext_pojoSwapsRemoveClasses() throws Exception { fail(); }
+////	public RestClientBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o091_beanContext_pojoSwapsRemoveObjects() throws Exception { fail(); }
+////	public RestClientBuilder pojoSwapsRemove(Object...values) {
+//
+//	@Test
+//	public void o092_beanContext_pojoSwapsReplaceClasses() throws Exception { fail(); }
+////	public RestClientBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
+//
+//	@Test
+//	public void o093_beanContextpojoSwapsReplaceObjects() throws Exception { fail(); }
+////	public RestClientBuilder pojoSwapsReplace(Object...values) {
+//
+//	@Test
+//	public void o094_beanContext_propertyNamer() throws Exception { fail(); }
+////	public RestClientBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+//
+//	@Test
+//	public void o095_beanContext_sortProperties() throws Exception { fail(); }
+////	public RestClientBuilder sortProperties() {
+//
+//	@Test
+//	public void o096_beanContext_sortPropertiesBoolean() throws Exception { fail(); }
+////	public RestClientBuilder sortProperties(boolean value) {
+//
+//	@Test
+//	public void o097_beanContext_timeZone() throws Exception { fail(); }
+////	public RestClientBuilder timeZone(TimeZone value) {
+//
+//	@Test
+//	public void o098_beanContext_useEnumNames() throws Exception { fail(); }
+////	public RestClientBuilder useEnumNames() {
+//
+//	@Test
+//	public void o099_beanContext_useEnumNamesBoolean() throws Exception { fail(); }
+////	public RestClientBuilder useEnumNames(boolean value) {
+//
+//	@Test
+//	public void o100_beanContext_useInterfaceProxies() throws Exception { fail(); }
+////	public RestClientBuilder useInterfaceProxies(boolean value) {
+//
+//	@Test
+//	public void o101_beanContext_useJavaBeanIntrospector() throws Exception { fail(); }
+////	public RestClientBuilder useJavaBeanIntrospector() {
+//
+//	@Test
+//	public void o102_beanContext_useJavaBeanIntrospectorBoolean() throws Exception { fail(); }
+////	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
 }

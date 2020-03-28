@@ -185,4 +185,23 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 		super.add(new SerializedNameValuePair(name, value, partType, serializer, schema, skipIfEmpty));
 		return this;
 	}
+
+	/**
+	 * Returns this list as a URL-encoded custom query.
+	 */
+	@Override /* Object */
+	public String toString() {
+		if (isEmpty())
+			return null;
+		StringBuilder sb = new StringBuilder();
+		for (NameValuePair p : this) {
+			String v = p.getValue();
+			if (v != null) {
+				if (sb.length() > 0)
+					sb.append("&");
+				sb.append(urlEncode(p.getName())).append('=').append(urlEncode(p.getValue()));
+			}
+		}
+		return sb.toString();
+	}
 }

@@ -1060,10 +1060,12 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 */
 	@Override /* MockHttpRequest */
 	public MockServletRequest header(String name, Object value) {
-		if (value == null)
-			headerMap.remove(name);
-		else
-			headerMap.put(name, new String[] {stringify(value)});
+		if (value != null) {
+			String[] v1 = (value instanceof String[]) ? (String[])value : new String[]{value.toString()};
+			String[] v2 = headerMap.get(name);
+			String[] v3 = ArrayUtils.combine(v2, v1);
+			headerMap.put(name, v3);
+		}
 		return this;
 	}
 

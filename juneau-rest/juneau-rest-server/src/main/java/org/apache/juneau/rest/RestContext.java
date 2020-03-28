@@ -3761,7 +3761,9 @@ public final class RestContext extends BeanContext {
 				}
 			}
 
-			Enablement de = getInstanceProperty(REST_debug, Enablement.class, Enablement.FALSE);
+			boolean debug = getBooleanProperty(BEAN_debug, false);
+
+			Enablement de = getInstanceProperty(REST_debug, Enablement.class, debug ? Enablement.TRUE : Enablement.FALSE);
 			if (de != null)
 				deb.append(rci.getFullName(), de);
 			for (MethodInfo mi : rci.getPublicMethods())

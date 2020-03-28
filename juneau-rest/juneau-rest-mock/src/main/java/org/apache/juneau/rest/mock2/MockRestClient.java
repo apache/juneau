@@ -127,20 +127,10 @@ public class MockRestClient extends RestClientBuilder {
 
 	@Override
 	public RestClient build() {
+		if (peek(BeanContext.BEAN_debug) == Boolean.TRUE)
+			mrb.debug();
 		httpClientConnectionManager(new MockHttpClientConnectionManager(mrb.build()));
 		return super.build();
-	}
-
-	/**
-	 * Enable debug mode.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@Override
-	public MockRestClient debug() {
-		mrb.debug();
-		super.debug();
-		return this;
 	}
 
 	// <CONFIGURATION-PROPERTIES>
@@ -160,6 +150,12 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public MockRestClient addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public MockRestClient appendTo(String name, Object value) {
+		super.appendTo(name, value);
 		return this;
 	}
 
@@ -184,6 +180,12 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public MockRestClient applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public MockRestClient prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 
@@ -442,6 +444,12 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClient debug() {
+		super.debug();
 		return this;
 	}
 
@@ -992,37 +1000,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient formData(Object...pairs) {
-		super.formData(pairs);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient formData(NameValuePair...params) {
-		super.formData(params);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient formData(Map<String,Object> params) {
-		super.formData(params);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient formData(NameValuePair param) {
-		super.formData(param);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient formData(ObjectMap params) {
-		super.formData(params);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient formData(NameValuePairs params) {
+	public MockRestClient formData(Object...params) {
 		super.formData(params);
 		return this;
 	}
@@ -1040,6 +1018,12 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient formDataPairs(Object...pairs) {
+		super.formDataPairs(pairs);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient forwarded(Object value) {
 		super.forwarded(value);
 		return this;
@@ -1052,19 +1036,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient header(Header header) {
-		super.header(header);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient header(NameValuePair header) {
-		super.header(header);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient header(HttpHeader header) {
+	public MockRestClient header(Object header) {
 		super.header(header);
 		return this;
 	}
@@ -1082,43 +1054,13 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient headers(Object...pairs) {
-		super.headers(pairs);
+	public MockRestClient headerPairs(Object...pairs) {
+		super.headerPairs(pairs);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient headers(Header...headers) {
-		super.headers(headers);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient headers(NameValuePair...headers) {
-		super.headers(headers);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient headers(HttpHeader...headers) {
-		super.headers(headers);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient headers(Map<String,Object> headers) {
-		super.headers(headers);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient headers(ObjectMap headers) {
-		super.headers(headers);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient headers(NameValuePairs headers) {
+	public MockRestClient headers(Object...headers) {
 		super.headers(headers);
 		return this;
 	}
@@ -1207,7 +1149,6 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient interceptors(java.lang.Class<? extends org.apache.juneau.rest.client2.RestCallInterceptor>...values) {
 		super.interceptors(values);
@@ -1352,7 +1293,6 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient parsers(java.lang.Class<? extends org.apache.juneau.parser.Parser>...value) {
 		super.parsers(value);
@@ -1414,37 +1354,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient query(Object...pairs) {
-		super.query(pairs);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient query(NameValuePair...params) {
-		super.query(params);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient query(Map<String,Object> params) {
-		super.query(params);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient query(NameValuePair param) {
-		super.query(param);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient query(ObjectMap params) {
-		super.query(params);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient query(NameValuePairs params) {
+	public MockRestClient query(Object...params) {
 		super.query(params);
 		return this;
 	}
@@ -1458,6 +1368,12 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient query(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 		super.query(name, value, serializer, schema);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient queryPairs(Object...pairs) {
+		super.queryPairs(pairs);
 		return this;
 	}
 
@@ -1497,7 +1413,6 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient serializers(java.lang.Class<? extends org.apache.juneau.serializer.Serializer>...value) {
 		super.serializers(value);

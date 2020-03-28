@@ -74,6 +74,12 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public OpenApiParserBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public OpenApiParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
@@ -94,6 +100,12 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public OpenApiParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public OpenApiParserBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 

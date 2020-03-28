@@ -196,6 +196,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public BeanTraverseBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public BeanTraverseBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
@@ -216,6 +222,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public BeanTraverseBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public BeanTraverseBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 

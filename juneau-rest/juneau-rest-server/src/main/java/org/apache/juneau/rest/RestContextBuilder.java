@@ -836,32 +836,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * Configuration property:  Debug mode.
 	 *
-	 * Enables the following:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * 	<li>
-	 * 		Request/response messages are automatically logged.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_debug}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_debug}
-	 * </ul>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	@Override
-	public RestContextBuilder debug(boolean value) {
-		super.debug(value);
-		return debug(Enablement.TRUE);
-	}
-
-	/**
-	 * Configuration property:  Debug mode.
-	 *
 	 * <p>
 	 * Enables the following:
 	 * <ul class='spaced-list'>
@@ -2606,13 +2580,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return set(REST_widgets, values);
 	}
 
-	@Override /* BeanContextBuilder */
-	public RestContextBuilder debug() {
-		debug(Enablement.TRUE);
-		super.debug();
-		return this;
-	}
-
 	@Override /* ContextBuilder */
 	public RestContextBuilder set(String name, Object value) {
 		super.set(name, value);
@@ -2651,6 +2618,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public RestContextBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public RestContextBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
@@ -2671,6 +2644,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* GENERATED - ContextBuilder */
 	public RestContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestContextBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 
@@ -2917,6 +2896,18 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder debug(boolean value) {
+		super.debug(value);
 		return this;
 	}
 

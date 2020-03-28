@@ -545,49 +545,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param header The header to set.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder header(Header header) {
-		return appendTo(RESTCLIENT_headers, header);
-	}
-
-	/**
-	 * Sets a header on all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.header(<jk>new</jk> NameValuePair(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
+	 * <p>
+	 * Can be any of the following types:
+	 * <ul>
+	 * 	<li>{@link Header}
+	 * 	<li>{@link NameValuePair}
+	 * 	<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
+	 * </ul>
 	 *
 	 * @param header The header to set.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public RestClientBuilder header(NameValuePair header) {
-		return appendTo(RESTCLIENT_headers, header);
-	}
-
-	/**
-	 * Sets a header on all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.header(<jk>new</jk> Accept(<js>"Content-Type"</js>, <js>"application/json"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param header The header to set.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder header(HttpHeader header) {
+	public RestClientBuilder header(Object header) {
 		return appendTo(RESTCLIENT_headers, header);
 	}
 
@@ -602,105 +572,46 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
+	 * <p>
+	 * Can be any of the following singleton types:
+	 * <ul>
+	 * 	<li>{@link Header}
+	 * 	<li>{@link NameValuePair}
+	 * 	<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
+	 * </ul>
+	 *
+	 * <p>
+	 * Can also be any of the following collection types:
+	 * <ul>
+	 * 	<li>{@link Map} / {@link ObjectMap}
+	 * 	<ul>
+	 * 		<li>Values can be any POJO.
+	 * 		<li>Values converted to a string using the configured part serializer.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * 	<li>{@link NameValuePairs}
+	 * </ul>
+	 *
 	 * @param headers The header to set.
 	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("rawtypes")
 	@ConfigurationProperty
-	public RestClientBuilder headers(Header...headers) {
-		for (Header h : headers)
-			header(h);
-		return this;
-	}
-
-	/**
-	 * Sets multiple headers on all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.headers(<jk>new</jk> ObjectMap(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param headers The header pairs.
-	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder headers(ObjectMap headers) {
-		return headers((Map<String,Object>)headers);
-	}
-
-	/**
-	 * Sets multiple headers on all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.headers(AMap.<jsm>create</jsm>().append(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param headers The header pairs.
-	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder headers(Map<String,Object> headers) {
-		for (Map.Entry<String,Object> e : headers.entrySet())
-			header(e.getKey(), e.getValue(), null, null);
-		return this;
-	}
-
-	/**
-	 * Sets multiple headers on all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.headers(<jk>new</jk> NameValuePairs(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param headers The header pairs.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder headers(NameValuePairs headers) {
-		for (NameValuePair p : headers)
-			header(p);
-		return this;
-	}
-
-	/**
-	 * Sets multiple headers on all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.headers(<jk>new</jk> NameValuePair(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param headers The header pairs.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder headers(NameValuePair...headers) {
-		for (NameValuePair p : headers)
-			header(p);
+	public RestClientBuilder headers(Object...headers) {
+		for (Object h : headers) {
+			if (h instanceof Header || h instanceof NameValuePair || h instanceof HttpHeader)
+				header(h);
+			else if (h instanceof Map) {
+				Map m = (Map)h;
+				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
+					header(stringify(e.getKey()), e.getValue(), null, null);
+			} else if (h instanceof NameValuePairs) {
+				for (NameValuePair p : (NameValuePairs)h)
+					header(p);
+			} else if (h != null) {
+				throw new RuntimeException("Invalid type passed to headers(Object...):  " + h.getClass().getName());
+			}
+		}
 		return this;
 	}
 
@@ -711,7 +622,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.headers(<js>"Header1"</js>,<js>"val1"</js>,<js>"Header2"</js>,<js>"val2"</js>)
+	 * 		.headerPairs(<js>"Header1"</js>,<js>"val1"</js>,<js>"Header2"</js>,<js>"val2"</js>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -724,37 +635,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public RestClientBuilder headers(Object...pairs) {
+	public RestClientBuilder headerPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into headers(Object...)");
+			throw new RuntimeException("Odd number of parameters passed into headerPairs(Object...)");
 		for (int i = 0; i < pairs.length; i+=2)
 			header(stringify(pairs[i]), pairs[i+1]);
-		return this;
-	}
-
-	/**
-	 * Sets multiple headers on all requests using header beans.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.headers(
-	 * 			<jk>new</jk> AcceptEncoding(<js>"gzip"</js>),
-	 * 			<jk>new</jk> AcceptLanguage(<js>"da, en-gb;q=0.8, en;q=0.7"</js>)
-	 * 		)
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param headers
-	 * 	The headers.
-	 * 	The header values are converted to strings using the configured {@link HttpPartSerializer}.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder headers(HttpHeader...headers) {
-		for (HttpHeader h : headers)
-			header(h);
 		return this;
 	}
 
@@ -1272,103 +1157,44 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param param The query parameter.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder query(NameValuePair param) {
-		return addTo(RESTCLIENT_query, param);
-	}
-
-	/**
-	 * Adds query parameters to the URI.
+	 * <p>
+	 * Can be any of the following singleton types:
+	 * <ul>
+	 * 	<li>{@link NameValuePair}
+	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<jk>new</jk> ObjectMap(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The query parameters.
+	 * <p>
+	 * Can be any of the following collection types:
+	 * <ul>
+	 * 	<li>{@link Map} / {@link ObjectMap}
 	 * 	<ul>
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
 	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder query(ObjectMap params) {
-		return query((Map<String,Object>)params);
-	}
+	 * 	<li>{@link NameValuePairs}
+	 * </ul>
 
-	/**
-	 * Adds query parameters to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(AMap.<jsm>create</jsm>().append(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The query parameters.
-	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder query(Map<String,Object> params) {
-		for (Map.Entry<String,Object> e : params.entrySet())
-			query(e.getKey(), e.getValue());
-		return this;
-	}
-
-	/**
-	 * Adds query parameters to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<jk>new</jk> NameValuePairs(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
 	 * @param params The query parameters.
 	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("rawtypes")
 	@ConfigurationProperty
-	public RestClientBuilder query(NameValuePairs params) {
-		for (NameValuePair p : params)
-			query(p);
-		return this;
-	}
-
-	/**
-	 * Adds query parameters to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<jk>new</jk> NameValuePair(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The query parameters.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder query(NameValuePair...params) {
-		for (NameValuePair p : params)
-			query(p);
+	public RestClientBuilder query(Object...params) {
+		for (Object p : params) {
+			if (p instanceof NameValuePair) {
+				addTo(RESTCLIENT_query, p);
+			} else if (p instanceof Map) {
+				Map m = (Map)p;
+				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
+					query(stringify(e.getKey()), e.getValue(), null, null);
+			} else if (p instanceof NameValuePairs) {
+				for (NameValuePair nvp : (NameValuePairs)p)
+					query(nvp);
+			} else if (p != null) {
+				throw new RuntimeException("Invalid type passed to query(Object...):  " + p.getClass().getName());
+			}
+		}
 		return this;
 	}
 
@@ -1392,9 +1218,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public RestClientBuilder query(Object...pairs) {
+	public RestClientBuilder queryPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into query(Object...)");
+			throw new RuntimeException("Odd number of parameters passed into queryPairs(Object...)");
 		for (int i = 0; i < pairs.length; i+=2)
 			query(stringify(pairs[i]), pairs[i+1]);
 		return this;
@@ -1466,103 +1292,44 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param param The form-data parameter.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder formData(NameValuePair param) {
-		return addTo(RESTCLIENT_formData, param);
-	}
-
-	/**
-	 * Adds form-data parameters to all request bodies.
+	 * <p>
+	 * Can be any of the following singleton types:
+	 * <ul>
+	 * 	<li>{@link NameValuePair}
+	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<jk>new</jk> ObjectMap(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The form-data parameters.
+	 * <p>
+	 * Can be any of the following collection types:
+	 * <ul>
+	 * 	<li>{@link Map} / {@link ObjectMap}
 	 * 	<ul>
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
 	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
+	 * 	<li>{@link NameValuePairs}
+	 * </ul>
+	 *
+	 * @param params The form-data parameter.
 	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("rawtypes")
 	@ConfigurationProperty
-	public RestClientBuilder formData(ObjectMap params) {
-		return formData((Map<String,Object>)params);
-	}
-
-	/**
-	 * Adds form-data parameters to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(AMap.<jsm>create</jsm>().append(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The form-data parameters.
-	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder formData(Map<String,Object> params) {
-		for (Map.Entry<String,Object> e : params.entrySet())
-			formData(e.getKey(), e.getValue());
-		return this;
-	}
-
-	/**
-	 * Adds form-data parameters to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<jk>new</jk> NameValuePairs(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The form-data parameters.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder formData(NameValuePairs params) {
-		for (NameValuePair p : params)
-			formData(p);
-		return this;
-	}
-
-	/**
-	 * Adds form-data parameters to all request bodies.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<jk>new</jk> NameValuePair(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The form-data parameters.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder formData(NameValuePair...params) {
-		for (NameValuePair p : params)
-			formData(p);
+	public RestClientBuilder formData(Object...params) {
+		for (Object p : params) {
+			if (p instanceof NameValuePair) {
+				addTo(RESTCLIENT_formData, p);
+			} else if (p instanceof Map) {
+				Map m = (Map)p;
+				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
+					formData(stringify(e.getKey()), e.getValue(), null, null);
+			} else if (p instanceof NameValuePairs) {
+				for (NameValuePair nvp : (NameValuePairs)p)
+					formData(nvp);
+			} else if (p != null) {
+				throw new RuntimeException("Invalid type passed to formData(Object...):  " + p.getClass().getName());
+			}
+		}
 		return this;
 	}
 
@@ -1586,9 +1353,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public RestClientBuilder formData(Object...pairs) {
+	public RestClientBuilder formDataPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into formData(Object...)");
+			throw new RuntimeException("Odd number of parameters passed into formDataPairs(Object...)");
 		for (int i = 0; i < pairs.length; i+=2)
 			formData(stringify(pairs[i]), pairs[i+1]);
 		return this;
@@ -3033,14 +2800,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder appendTo(String name, Object value) {
-		super.appendTo(name, value);
+	public RestClientBuilder addTo(String name, String key, Object value) {
+		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public RestClientBuilder addTo(String name, String key, Object value) {
-		super.addTo(name, key, value);
+	public RestClientBuilder appendTo(String name, Object value) {
+		super.appendTo(name, value);
 		return this;
 	}
 
@@ -3065,6 +2832,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder prependTo(String name, Object value) {
+		super.prependTo(name, value);
 		return this;
 	}
 

@@ -93,4 +93,18 @@ public class MockLogger extends Logger {
 				throw new AssertionError("Message did not contain [" + m + "].  Message=[" + logRecord.getMessage() + "]");
 		return this;
 	}
+
+	/**
+	 * Asserts that the last message doesn't contained the specified text.
+	 *
+	 * @param messages The messages to search for.
+	 * @return This object (for method chaining).
+	 */
+	public synchronized MockLogger assertMessageNotContains(String...messages) {
+		assertLogged();
+		for (String m : messages)
+			if (logRecord.getMessage().contains(m))
+				throw new AssertionError("Message contained [" + m + "].  Message=[" + logRecord.getMessage() + "]");
+		return this;
+	}
 }

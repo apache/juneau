@@ -14,6 +14,8 @@ package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.rest.client2.AddFlag.*;
+import static org.apache.juneau.rest.client2.RestClientUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -30,19 +32,16 @@ import org.apache.http.client.utils.*;
 import org.apache.http.concurrent.*;
 import org.apache.http.entity.*;
 import org.apache.http.entity.ContentType;
-import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.rest.client2.ext.NameValuePairs;
-import org.apache.juneau.rest.client2.ext.SerializedNameValuePair;
-import org.apache.juneau.rest.client2.RestCallException;
 import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.rest.client2.logging.*;
 import org.apache.juneau.serializer.*;
@@ -610,7 +609,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest path(Object...pairs) throws RestCallException {
+	public RestRequest pathPairs(Object...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw new RestCallException("Odd number of parameters passed into path(Object...)");
 		for (int i = 0; i < pairs.length; i+=2)
@@ -623,16 +622,45 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Adds a query parameter to the URI.
+	 * Sets a query parameter on the URI.
 	 *
+	 * @param flags Instructions on how to add this parameter.
+	 * 	<ul>
+	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
+	 * 	</ul>
 	 * @param name The parameter name.
+	 * 	<ul>
+	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
+	 * 	</ul>
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>For single value parameters:
+	 * 		<ul>
+	 * 			<li>Can be any POJO.
+	 * 			<li>Converted to a string using the specified part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>For multi-value parameters:
+	 * 		<ul>
+	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<ul>
+	 * 				<li>Values can be any POJO.
+	 * 				<li>Values converted to a string using the configured part serializer.
+	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 			</ul>
+	 * 			<li>{@link NameValuePairs}
+	 * 			<ul>
+	 * 				<li>Values converted directly to strings.
+	 * 			</ul>
+	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
+	 * 			<ul>
+	 * 				<li>Sets the entire query string to the contents of the input.
+	 * 			</ul>
+	 * 		</ul>
 	 * 	</ul>
-	 * @param skipIfEmpty Don't add the parameter if the value is empty.
 	 * @param serializer The serializer to use for serializing the value to a string.
 	 * 	<ul>
 	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
@@ -643,34 +671,25 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Error occurred.
+	 * @throws RestCallException Invalid input.
 	 */
 	@SuppressWarnings("unchecked")
-	public RestRequest query(String name, Object value, boolean skipIfEmpty, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
+	public RestRequest query(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
 		serializer = (serializer == null ? partSerializer : serializer);
+		flags = AddFlag.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
 		if (! isMulti) {
-			query(new SerializedNameValuePair(name, value, QUERY, serializer, schema, skipIfEmpty));
+			innerQuery(flags, toQuery(flags, name, value, serializer, schema));
 		} else if (value instanceof NameValuePairs) {
-			for (NameValuePair p : (NameValuePairs)value)
-				query(p, skipIfEmpty);
+			innerQuery(flags, AList.of((NameValuePairs)value));
 		} else if (value instanceof Map) {
-			for (Map.Entry<String,Object> p : ((Map<String,Object>)value).entrySet()) {
-				String n = p.getKey();
-				Object v = p.getValue();
-				HttpPartSchema s = schema == null ? null : schema.getProperty(n);
-				query(new SerializedNameValuePair(n, v, QUERY, serializer, s, skipIfEmpty));
-			}
+			innerQuery(flags, toQuery(flags, (Map<String,Object>)value, serializer, schema));
 		} else if (isBean(value)) {
-			query(name, toBeanMap(value), skipIfEmpty, serializer, schema);
-		} else if (value instanceof Reader) {
-			query((Reader)value);
-		} else if (value instanceof InputStream) {
-			query((InputStream)value);
-		} else if (value instanceof CharSequence) {
-			query(value.toString());
+			query(flags, name, toBeanMap(value), serializer, schema);
+		} else if (value instanceof Reader || value instanceof InputStream || value instanceof CharSequence) {
+			queryCustom(value);
 		} else {
-			throw new RestCallException("Invalid name ''{0}'' passed to query(name,value,skipIfEmpty) for data type ''{1}''", name, className(value));
+			throw new RestCallException("Invalid name ''{0}'' passed to query() for data type ''{1}''", name, className(value));
 		}
 		return this;
 	}
@@ -687,17 +706,40 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * </p>
 	 *
 	 * @param name The parameter name.
+	 * 	<ul>
+	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
+	 * 	</ul>
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>For single value parameters:
+	 * 		<ul>
+	 * 			<li>Can be any POJO.
+	 * 			<li>Converted to a string using the specified part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>For multi-value parameters:
+	 * 		<ul>
+	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<ul>
+	 * 				<li>Values can be any POJO.
+	 * 				<li>Values converted to a string using the configured part serializer.
+	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 			</ul>
+	 * 			<li>{@link NameValuePairs}
+	 * 			<ul>
+	 * 				<li>Values converted directly to strings.
+	 * 			</ul>
+	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
+	 * 			<ul>
+	 * 				<li>Sets the entire query string to the contents of the input.
+	 * 			</ul>
+	 * 		</ul>
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest query(String name, Object value) throws RestCallException {
-		return query(name, value, false, null, null);
+		return query(DEFAULT_FLAGS, name, value, partSerializer, null);
 	}
 
 	/**
@@ -707,114 +749,56 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<jk>new</jk> NameValuePair(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.query(<js>"foo"</js>, <js>"bar"</js>)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param param The query parameter.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest query(NameValuePair param) throws RestCallException {
-		return query(param, false);
-	}
-
-	/**
-	 * Adds a query parameter to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<jk>new</jk> NameValuePair(<js>"foo"</js>, <js>""</js>), <jk>true</jk>)  <jc>// Will be skipped</jc>
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param param The query parameter.
-	 * @param skipIfEmpty Don't add the parameter if the value is <jk>null</jk> or empty.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest query(NameValuePair param, boolean skipIfEmpty) throws RestCallException {
-		String v = param.getValue();
-		if (canAdd(v, skipIfEmpty))
-			uriBuilder.addParameter(param.getName(), v);
-		return this;
-	}
-
-	/**
-	 * Adds query parameters to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<jk>new</jk> ObjectMap(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The query parameters.
+	 * @param flags Instructions on how to add this parameter.
 	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
+	 * 	</ul>
+	 * @param name The parameter name.
+	 * 	<ul>
+	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
+	 * 	</ul>
+	 * @param value The parameter value.
+	 * 	<ul>
+	 * 		<li>For single value parameters:
+	 * 		<ul>
+	 * 			<li>Can be any POJO.
+	 * 			<li>Converted to a string using the specified part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>For multi-value parameters:
+	 * 		<ul>
+	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<ul>
+	 * 				<li>Values can be any POJO.
+	 * 				<li>Values converted to a string using the configured part serializer.
+	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 			</ul>
+	 * 			<li>{@link NameValuePairs}
+	 * 			<ul>
+	 * 				<li>Values converted directly to strings.
+	 * 			</ul>
+	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
+	 * 			<ul>
+	 * 				<li>Sets the entire query string to the contents of the input.
+	 * 			</ul>
+	 * 		</ul>
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest query(ObjectMap params) throws RestCallException {
-		return query((Map<String,Object>)params);
+	public RestRequest query(EnumSet<AddFlag> flags, String name, Object value) throws RestCallException {
+		return query(flags, name, value, partSerializer, null);
 	}
 
 	/**
-	 * Adds query parameters to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(AMap.<jsm>create</jsm>().append(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The query parameters.
-	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest query(Map<String,Object> params) throws RestCallException {
-		for (Map.Entry<String,Object> e : params.entrySet())
-			query(e.getKey(), e.getValue(), false, null, null);
-		return this;
-	}
-
-	/**
-	 * Adds query parameters to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<jk>new</jk> NameValuePairs(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The query parameters.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest query(NameValuePairs params) throws RestCallException {
-		for (NameValuePair p : params)
-			query(p);
-		return this;
-	}
-
-	/**
-	 * Adds query parameters to the URI.
+	 * Sets multiple parameters on the query string.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -824,38 +808,89 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param params The query parameters.
+	 * @param params The parameters to set.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link Map} / {@link ObjectMap} / bean
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>{@link NameValuePairs}
+	 * 		<ul>
+	 * 			<li>Values converted directly to strings.
+	 * 		</ul>
+	 * 		<li><jk>null</jk> - Will be a no-op.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest query(NameValuePair...params) throws RestCallException {
-		for (NameValuePair p : params)
-			query(p);
-		return this;
+	public RestRequest query(Object...params) throws RestCallException {
+		return query(DEFAULT_FLAGS, params);
 	}
 
 	/**
-	 * Adds query parameters to the URI using a bean with key/value properties.
+	 * Sets multiple parameters on the query string.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<jk>new</jk> MyBean())
+	 * 		.query(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),<jk>new</jk> NameValuePair(<js>"Foo"</js>, <js>"bar"</js>))
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param bean The query bean.
+	 * @param flags Instructions on how to add this parameter.
 	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
+	 * 	</ul>
+	 * @param params The parameters to set.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link Map} / {@link ObjectMap} / bean
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>{@link NameValuePairs}
+	 * 		<ul>
+	 * 			<li>Values converted directly to strings.
+	 * 		</ul>
+	 * 		<li><jk>null</jk> - Will be a no-op.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest query(Object bean) throws RestCallException {
-		return query(toBeanMap(bean));
+	@SuppressWarnings("rawtypes")
+	public RestRequest query(EnumSet<AddFlag> flags, Object...params) throws RestCallException {
+		List<NameValuePair> l = new ArrayList<>();
+		boolean skipIfEmpty = flags.contains(SKIP_IF_EMPTY);
+		for (Object o : params) {
+			if (o instanceof NameValuePair) {
+				l.add((NameValuePair)o);
+			} else if (o instanceof NameValuePairs) {
+				l.addAll((NameValuePairs)o);
+			} else if (o instanceof Map) {
+				Map m = (Map)o;
+				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
+					l.add(new SerializedNameValuePair(stringify(e.getKey()), e.getValue(), QUERY, partSerializer, null, skipIfEmpty));
+			} else if (isBean(o)) {
+				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
+					l.add(new SerializedNameValuePair(stringify(e.getKey()), e.getValue(), QUERY, partSerializer, null, skipIfEmpty));
+			} else if (o instanceof Reader || o instanceof InputStream  || o instanceof CharSequence) {
+				queryCustom(o);
+			} else {
+				throw new RestCallException("Invalid type passed to query(): " + o.getClass().getName());
+			}
+		}
+		return innerQuery(flags, l);
 	}
 
 	/**
@@ -865,7 +900,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
+	 * 		.queryPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
 	 * 		.run();
 	 * </p>
 	 *
@@ -878,7 +913,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest query(Object...pairs) throws RestCallException {
+	public RestRequest queryPairs(Object...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw new RestCallException("Odd number of parameters passed into query(Object...)");
 		for (int i = 0; i < pairs.length; i+=2)
@@ -887,60 +922,74 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	}
 
 	/**
-	 * Sets a custom URI query.
+	 * Adds form-data parameters as the entire body of the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<js>"foo=bar&amp;baz=qux"</js>)
+	 * 		.customQuery(<js>"key1=val1&key2=val2"</js>)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param query The new URI query string.
+	 * @param value The parameter value.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li class='jc'>
+	 * 			{@link CharSequence}
+	 * 		<li class='jc'>
+	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 		<li class='jc'>
+	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 		<li class='jc'>
+	 * 			{@link NameValuePairs} - Converted to a URL-encoded query.
+	 * 	</ul>
 	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest query(String query) {
-		uriBuilder.setCustomQuery(query);
-		return this;
-	}
-
-	/**
-	 * Sets a custom URI query from a reader.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<jk>new</jk> StringReader(<js>"foo=bar&amp;baz=qux"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param query The new URI query string.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException IO exception from reader occurred.
-	 */
-	public RestRequest query(Reader query) throws RestCallException {
+	public RestRequest queryCustom(Object value) throws RestCallException {
 		try {
-			uriBuilder.setCustomQuery(IOUtils.read(query));
+			String q = null;
+			if (value instanceof Reader)
+				q = IOUtils.read((Reader)value);
+			else if (value instanceof InputStream)
+				q = IOUtils.read((InputStream)value);
+			else
+				q = value.toString();  // Works for NameValuePairs.
+			uriBuilder.setCustomQuery(q);
 		} catch (IOException e) {
 			throw new RestCallException(e);
 		}
 		return this;
 	}
 
-	/**
-	 * Sets a custom URI query from an input stream.
-	 *
-	 * @param query The new URI query string.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException IO exception from stream occurred.
-	 */
-	public RestRequest query(InputStream query) throws RestCallException {
-		try {
-			uriBuilder.setCustomQuery(IOUtils.read(query));
-		} catch (IOException e) {
-			throw new RestCallException(e);
+	private RestRequest innerQuery(EnumSet<AddFlag> flags, NameValuePair param) {
+		return innerQuery(flags, AList.of(param));
+	}
+
+	private RestRequest innerQuery(EnumSet<AddFlag> flags, List<NameValuePair> params) {
+		flags = AddFlag.orDefault(flags);
+		params.removeIf(x -> x == null || x.getValue() == null);
+		if (flags.contains(REPLACE)) {
+			List<NameValuePair> l = uriBuilder.getQueryParams();
+			for (NameValuePair p : params)
+				for (Iterator<NameValuePair> i = l.iterator(); i.hasNext();)
+					if (i.next().getName().equals(p.getName()))
+						i.remove();
+			if (flags.contains(SKIP_IF_EMPTY))
+				params.removeIf(x -> isEmpty(x.getValue()));
+			l.addAll(params);
+			uriBuilder.setParameters(l);
+		} else if (flags.contains(PREPEND)) {
+			List<NameValuePair> l = uriBuilder.getQueryParams();
+			if (flags.contains(SKIP_IF_EMPTY))
+				params.removeIf(x -> isEmpty(x.getValue()));
+			l.addAll(0, params);
+			uriBuilder.setParameters(l);
+		} else {
+			if (flags.contains(SKIP_IF_EMPTY))
+				params.removeIf(x -> isEmpty(x.getValue()));
+			uriBuilder.addParameters(params);
 		}
 		return this;
 	}
@@ -952,14 +1001,43 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	/**
 	 * Adds a form-data parameter to the request body.
 	 *
+	 * @param flags Instructions on how to add this parameter.
+	 * 	<ul>
+	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
+	 * 	</ul>
 	 * @param name The parameter name.
+	 * 	<ul>
+	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
+	 * 	</ul>
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>For single value parameters:
+	 * 		<ul>
+	 * 			<li>Can be any POJO.
+	 * 			<li>Converted to a string using the specified part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>For multi-value parameters:
+	 * 		<ul>
+	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<ul>
+	 * 				<li>Values can be any POJO.
+	 * 				<li>Values converted to a string using the configured part serializer.
+	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 			</ul>
+	 * 			<li>{@link NameValuePairs}
+	 * 			<ul>
+	 * 				<li>Values converted directly to strings.
+	 * 			</ul>
+	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence} / {@link HttpEntity}
+	 * 			<ul>
+	 * 				<li>Sets the entire query string to the contents of the input.
+	 * 			</ul>
+	 * 		</ul>
 	 * 	</ul>
-	 * @param skipIfEmpty Don't add the parameter if the value is empty.
 	 * @param serializer The serializer to use for serializing the value to a string.
 	 * 	<ul>
 	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
@@ -970,34 +1048,25 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Error occurred.
+	 * @throws RestCallException Invalid input.
 	 */
 	@SuppressWarnings("unchecked")
-	public RestRequest formData(String name, Object value, boolean skipIfEmpty, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
+	public RestRequest formData(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
 		serializer = (serializer == null ? partSerializer : serializer);
+		flags = AddFlag.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
 		if (! isMulti) {
-			formData(new SerializedNameValuePair(name, value, FORMDATA, serializer, schema, skipIfEmpty));
+			innerFormData(flags, toQuery(flags, name, value, serializer, schema));
 		} else if (value instanceof NameValuePairs) {
-			for (NameValuePair p : (NameValuePairs)value)
-				formData(p, skipIfEmpty);
+			innerFormData(flags, AList.of((NameValuePairs)value));
 		} else if (value instanceof Map) {
-			for (Map.Entry<String,Object> p : ((Map<String,Object>)value).entrySet()) {
-				String n = p.getKey();
-				Object v = p.getValue();
-				HttpPartSchema s = schema == null ? null : schema.getProperty(n);
-				formData(new SerializedNameValuePair(n, v, FORMDATA, serializer, s, skipIfEmpty));
-			}
+			innerFormData(flags, toQuery(flags, (Map<String,Object>)value, serializer, schema));
 		} else if (isBean(value)) {
-			formData(name, toBeanMap(value), skipIfEmpty, serializer, schema);
-		} else if (value instanceof Reader) {
-			formData((Reader)value);
-		} else if (value instanceof InputStream) {
-			formData((InputStream)value);
-		} else if (value instanceof CharSequence) {
-			formData((CharSequence)value);
+			formData(flags, name, toBeanMap(value), serializer, schema);
+		} else if (value instanceof Reader || value instanceof InputStream || value instanceof CharSequence || value instanceof HttpEntity) {
+			formDataCustom(value);
 		} else {
-			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to formData(name,value,skipIfEmpty) for data type ''{1}''", name, className(value));
+			throw new RestCallException("Invalid name ''{0}'' passed to formData() for data type ''{1}''", name, className(value));
 		}
 		return this;
 	}
@@ -1014,17 +1083,95 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * </p>
 	 *
 	 * @param name The parameter name.
+	 * 	<ul>
+	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
+	 * 	</ul>
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>For single value parameters:
+	 * 		<ul>
+	 * 			<li>Can be any POJO.
+	 * 			<li>Converted to a string using the specified part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>For multi-value parameters:
+	 * 		<ul>
+	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<ul>
+	 * 				<li>Values can be any POJO.
+	 * 				<li>Values converted to a string using the configured part serializer.
+	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 			</ul>
+	 * 			<li>{@link NameValuePairs}
+	 * 			<ul>
+	 * 				<li>Values converted directly to strings.
+	 * 			</ul>
+	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
+	 * 			<ul>
+	 * 				<li>Sets the entire query string to the contents of the input.
+	 * 			</ul>
+	 * 		</ul>
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formData(String name, Object value) throws RestCallException {
-		return formData(name, value, false, null, null);
+		return formData(DEFAULT_FLAGS, name, value, partSerializer, null);
+	}
+
+	/**
+	 * Adds a form-data parameter to the request body.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	client
+	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formData(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>), <js>"foo"</js>, <js>"bar"</js>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param flags Instructions on how to add this parameter.
+	 * 	<ul>
+	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
+	 * 	</ul>
+	 * @param name The parameter name.
+	 * 	<ul>
+	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
+	 * 	</ul>
+	 * @param value The parameter value.
+	 * 	<ul>
+	 * 		<li>For single value parameters:
+	 * 		<ul>
+	 * 			<li>Can be any POJO.
+	 * 			<li>Converted to a string using the specified part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>For multi-value parameters:
+	 * 		<ul>
+	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<ul>
+	 * 				<li>Values can be any POJO.
+	 * 				<li>Values converted to a string using the configured part serializer.
+	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 			</ul>
+	 * 			<li>{@link NameValuePairs}
+	 * 			<ul>
+	 * 				<li>Values converted directly to strings.
+	 * 			</ul>
+	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
+	 * 			<ul>
+	 * 				<li>Sets the entire query string to the contents of the input.
+	 * 			</ul>
+	 * 		</ul>
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	public RestRequest formData(EnumSet<AddFlag> flags, String name, Object value) throws RestCallException {
+		return formData(flags, name, value, partSerializer, null);
 	}
 
 	/**
@@ -1038,12 +1185,27 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param param The form-data parameter.
+	 * @param params The parameters to set.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link Map} / {@link ObjectMap} / bean
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>{@link NameValuePairs}
+	 * 		<ul>
+	 * 			<li>Values converted directly to strings.
+	 * 		</ul>
+	 * 		<li><jk>null</jk> - Will be a no-op.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest formData(NameValuePair param) throws RestCallException {
-		return formData(param, false);
+	public RestRequest formData(Object...params) throws RestCallException {
+		return formData(DEFAULT_FLAGS, params);
 	}
 
 	/**
@@ -1053,139 +1215,59 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<jk>new</jk> NameValuePair(<js>"foo"</js>, <js>""</js>), <jk>true</jk>)  <jc>// Will be skipped</jc>
+	 * 		.formData(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>), <jk>new</jk> NameValuePair(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param param The form-data parameter.
-	 * @param skipIfEmpty Don't add the parameter if the value is <jk>null</jk> or empty.
+	 * @param flags Instructions on how to add this parameter.
+	 * 	<ul>
+	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
+	 * 	</ul>
+	 * @param params The parameters to set.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link Map} / {@link ObjectMap} / bean
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>{@link NameValuePairs}
+	 * 		<ul>
+	 * 			<li>Values converted directly to strings.
+	 * 		</ul>
+	 * 		<li><jk>null</jk> - Will be a no-op.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest formData(NameValuePair param, boolean skipIfEmpty) throws RestCallException {
-		String v = param.getValue();
-		if (canAdd(v, skipIfEmpty)) {
-			if (formData == null)
-				formData = new NameValuePairs();
-			formData.add(new BasicNameValuePair(param.getName(), v));
+	@SuppressWarnings("rawtypes")
+	public RestRequest formData(EnumSet<AddFlag> flags, Object...params) throws RestCallException {
+		List<NameValuePair> l = new ArrayList<>();
+		boolean skipIfEmpty = flags.contains(SKIP_IF_EMPTY);
+		for (Object o : params) {
+			if (o instanceof NameValuePair) {
+				l.add((NameValuePair)o);
+			} else if (o instanceof NameValuePairs) {
+				l.addAll((NameValuePairs)o);
+			} else if (o instanceof Map) {
+				Map m = (Map)o;
+				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
+					l.add(new SerializedNameValuePair(stringify(e.getKey()), e.getValue(), FORMDATA, partSerializer, null, skipIfEmpty));
+			} else if (isBean(o)) {
+				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
+					l.add(new SerializedNameValuePair(stringify(e.getKey()), e.getValue(), FORMDATA, partSerializer, null, skipIfEmpty));
+			} else if (o instanceof Reader || o instanceof InputStream  || o instanceof CharSequence || o instanceof HttpEntity) {
+				formDataCustom(o);
+			} else {
+				throw new RestCallException("Invalid type passed to formData(): " + o.getClass().getName());
+			}
 		}
-		return this;
-	}
-
-	/**
-	 * Adds form-data parameters to the request body.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<jk>new</jk> ObjectMap(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The form-data parameters.
-	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest formData(ObjectMap params) throws RestCallException {
-		return formData((Map<String,Object>)params);
-	}
-
-	/**
-	 * Adds form-data parameters to the request body.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(AMap.<jsm>create</jsm>().append(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The form-data parameters.
-	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest formData(Map<String,Object> params) throws RestCallException {
-		for (Map.Entry<String,Object> e : params.entrySet())
-			formData(e.getKey(), e.getValue());
-		return this;
-	}
-
-	/**
-	 * Adds form-data parameters to the request body.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<jk>new</jk> NameValuePairs(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The form-data parameters.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest formData(NameValuePairs params) throws RestCallException {
-		for (NameValuePair p : params)
-			formData(p);
-		return this;
-	}
-
-	/**
-	 * Adds form-data parameters to the request body.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<jk>new</jk> NameValuePair(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param params The form-data parameters.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest formData(NameValuePair...params) throws RestCallException {
-		for (NameValuePair p : params)
-			formData(p);
-		return this;
-	}
-
-	/**
-	 * Adds form-data parameters to the request body using a bean with key/value properties.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<jk>new</jk> MyBean())
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param bean The form-data bean.
-	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest formData(Object bean) throws RestCallException {
-		return formData(toBeanMap(bean));
+		return innerFormData(flags, l);
 	}
 
 	/**
@@ -1195,7 +1277,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
+	 * 		.formDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
 	 * 		.run();
 	 * </p>
 	 *
@@ -1208,7 +1290,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest formData(Object...pairs) throws RestCallException {
+	public RestRequest formDataPairs(Object...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw new RestCallException("Odd number of parameters passed into formData(Object...)");
 		for (int i = 0; i < pairs.length; i+=2)
@@ -1217,71 +1299,75 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	}
 
 	/**
-	 * Sets the body of a URL-encoded form post from a string.
+	 * Adds form-data parameters as the entire body of the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<js>"foo=bar&amp;baz=qux"</js>)
+	 * 		.customFormData(<js>"key1=val1&key2=val2"</js>)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param body The body of the request.
+	 * @param value The parameter value.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li class='jc'>
+	 * 			{@link CharSequence}
+	 * 		<li class='jc'>
+	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 		<li class='jc'>
+	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 		<li class='jc'>
+	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 		<li class='jc'>
+	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 		<li class='jc'>
+	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
+	 * 			{@link RestClient}.
+	 * 		<li class='jc'>
+	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 		<li class='jc'>
+	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Error occurred.
+	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest formData(CharSequence body) throws RestCallException {
+	public RestRequest formDataCustom(Object value) throws RestCallException {
 		contentType("application/x-www-form-urlencoded");
-		try {
-			body(new StringEntity(body.toString()));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
+		body(value instanceof CharSequence ? new StringReader(value.toString()) : value);
+		return this;
+	}
+
+	private RestRequest innerFormData(EnumSet<AddFlag> flags, NameValuePair param) {
+		return innerFormData(flags, AList.of(param));
+	}
+
+	private RestRequest innerFormData(EnumSet<AddFlag> flags, List<NameValuePair> params) {
+		flags = AddFlag.orDefault(flags);
+		params.removeIf(x -> x == null|| x.getValue() == null);
+		if (formData == null)
+			formData = new NameValuePairs();
+		if (flags.contains(REPLACE)) {
+			for (NameValuePair p : params)
+				for (Iterator<NameValuePair> i = formData.iterator(); i.hasNext();)
+					if (i.next().getName().equals(p.getName()))
+						i.remove();
+			if (flags.contains(SKIP_IF_EMPTY))
+				params.removeIf(x -> isEmpty(x.getValue()));
+			formData.addAll(params);
+		} else if (flags.contains(PREPEND)) {
+			if (flags.contains(SKIP_IF_EMPTY))
+				params.removeIf(x -> isEmpty(x.getValue()));
+			formData.addAll(0, params);
+		} else {
+			if (flags.contains(SKIP_IF_EMPTY))
+				params.removeIf(x -> isEmpty(x.getValue()));
+			formData.addAll(params);
 		}
 		return this;
 	}
 
-	/**
-	 * Sets the body of a URL-encoded form post from a reader.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<jk>new</jk> StringReader(<js>"foo=bar&amp;baz=qux"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param body The body of the request.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Error occurred.
-	 */
-	public RestRequest formData(Reader body) throws RestCallException {
-		contentType("application/x-www-form-urlencoded");
-		body(body);
-		return this;
-	}
-
-	/**
-	 * Sets the body of a URL-encoded form post from an input stream.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<jk>new</jk> FileInputStream(<jsf>PATH</jsf>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param body The body of the request.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Error occurred.
-	 */
-	public RestRequest formData(InputStream body) throws RestCallException {
-		contentType("application/x-www-form-urlencoded");
-		body(body);
-		return this;
-	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Request body
@@ -1366,18 +1452,39 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	/**
 	 * Sets a header on the request.
 	 *
-	 * <p>
-	 *	Overwrites the first header with the same name.
-	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
-	 *
+	 * @param flags Instructions on how to add this parameter.
+	 * 	<ul>
+	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
+	 * 	</ul>
 	 * @param name The header name.
+	 * 	<ul>
+	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of headers.
+	 * 	</ul>
 	 * @param value The header value.
 	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>For single value headers:
+	 * 		<ul>
+	 * 			<li>Can be any POJO.
+	 * 			<li>Converted to a string using the specified part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>For multi-value headers:
+	 * 		<ul>
+	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<ul>
+	 * 				<li>Values can be any POJO.
+	 * 				<li>Values converted to a string using the configured part serializer.
+	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 			</ul>
+	 * 			<li>{@link NameValuePairs}
+	 * 			<ul>
+	 * 				<li>Values converted directly to strings.
+	 * 			</ul>
+	 * 		</ul>
 	 * 	</ul>
-	 * @param skipIfEmpty Don't add the header if the value is empty.
 	 * @param serializer The serializer to use for serializing the value to a string.
 	 * 	<ul>
 	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
@@ -1388,26 +1495,21 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	</ul>
 	 * @return This object (for method chaining).
-	 * @throws RestCallException Error occurred.
+	 * @throws RestCallException Invalid input.
 	 */
 	@SuppressWarnings("unchecked")
-	public RestRequest header(String name, Object value, boolean skipIfEmpty, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
+	public RestRequest header(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
 		serializer = (serializer == null ? partSerializer : serializer);
+		flags = AddFlag.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
 		if (! isMulti) {
-			header(new SerializedNameValuePair(name, value, HEADER, serializer, schema, skipIfEmpty));
+			innerHeader(flags, toHeader(flags, name, value, serializer, schema));
 		} else if (value instanceof NameValuePairs) {
-			for (NameValuePair p : (NameValuePairs)value)
-				header(p, skipIfEmpty);
+			innerHeaders(flags, toHeaders((NameValuePairs)value));
 		} else if (value instanceof Map) {
-			for (Map.Entry<String,Object> p : ((Map<String,Object>)value).entrySet()) {
-				String n = p.getKey();
-				Object v = p.getValue();
-				HttpPartSchema s = schema == null ? null : schema.getProperty(n);
-				header(new SerializedNameValuePair(n, v, HEADER, serializer, s, skipIfEmpty));
-			}
+			innerHeaders(flags, toHeaders(flags, (Map<String,Object>)value, serializer, schema));
 		} else if (isBean(value)) {
-			return header(name, toBeanMap(value), skipIfEmpty, serializer, schema);
+			return header(flags, name, toBeanMap(value), serializer, schema);
 		} else {
 			throw new RestCallException("Invalid name ''{0}'' passed to header(name,value,skipIfEmpty) for data type ''{1}''", name, className(value));
 		}
@@ -1415,11 +1517,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	}
 
 	/**
-	 * Sets a header on the request.
-	 *
-	 * <p>
-	 *	Overwrites the first header with the same name.
-	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
+	 * Appends a header on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1430,25 +1528,91 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * </p>
 	 *
 	 * @param name The header name.
+	 * 	<ul>
+	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of headers.
+	 * 	</ul>
 	 * @param value The header value.
 	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>For single value headers:
+	 * 		<ul>
+	 * 			<li>Can be any POJO.
+	 * 			<li>Converted to a string using the specified part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>For multi-value headers:
+	 * 		<ul>
+	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<ul>
+	 * 				<li>Values can be any POJO.
+	 * 				<li>Values converted to a string using the configured part serializer.
+	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 			</ul>
+	 * 			<li>{@link NameValuePairs}
+	 * 			<ul>
+	 * 				<li>Values converted directly to strings.
+	 * 			</ul>
+	 * 		</ul>
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest header(String name, Object value) throws RestCallException {
-		return header(name, value, false, null, null);
+		return header(DEFAULT_FLAGS, name, value, partSerializer, null);
 	}
 
 	/**
 	 * Sets a header on the request.
 	 *
-	 * <p>
-	 *	Overwrites the first header with the same name.
-	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.header(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),<js>"Foo"</js>, <js>"bar"</js>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param flags Instructions on how to add this parameter.
+	 * 	<ul>
+	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
+	 *	 	<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
+	 * 	</ul>
+	 * @param name The header name.
+	 * 	<ul>
+	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of headers.
+	 * 	</ul>
+	 * @param value The header value.
+	 * 	<ul>
+	 * 		<li>For single value headers:
+	 * 		<ul>
+	 * 			<li>Can be any POJO.
+	 * 			<li>Converted to a string using the specified part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>For multi-value headers:
+	 * 		<ul>
+	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<ul>
+	 * 				<li>Values can be any POJO.
+	 * 				<li>Values converted to a string using the configured part serializer.
+	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 			</ul>
+	 * 			<li>{@link NameValuePairs}
+	 * 			<ul>
+	 * 				<li>Values converted directly to strings.
+	 * 			</ul>
+	 * 		</ul>
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	public RestRequest header(EnumSet<AddFlag> flags, String name, Object value) throws RestCallException {
+		return header(flags, name, value, partSerializer, null);
+	}
+
+	/**
+	 * Appends a header on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1459,117 +1623,60 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * </p>
 	 *
 	 * @param header The header to set.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link Header}
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
+	 * 		<li><jk>null</jk> - Will be a no-op.
+	 * 	</ul>
 	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest header(Header header) {
-		return header(header, false);
+	public RestRequest header(Object header) throws RestCallException {
+		return header(DEFAULT_FLAGS, header);
 	}
 
 	/**
 	 * Sets a header on the request.
 	 *
-	 * <p>
-	 *	Overwrites the first header with the same name.
-	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.header(<jk>new</jk> BasicHeader(<js>"Foo"</js>, <js>""</js>), <jk>true</jk>) <jc>// Will be skipped</jc>
+	 * 		.header(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),<jk>new</jk> BasicHeader(<js>"Foo"</js>, <js>"bar"</js>))
 	 * 		.run();
 	 * </p>
 	 *
+	 * @param flags Instructions on how to add this parameter.
+	 * 	<ul>
+	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
+	 * 	</ul>
 	 * @param header The header to set.
-	 * @param skipIfEmpty Don't add the header if the value is <jk>null</jk> or empty.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link Header}
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
+	 * 		<li><jk>null</jk> - Will be a no-op.
+	 * 	</ul>
 	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest header(Header header, boolean skipIfEmpty) {
-		String v = header.getValue();
-		if (! (skipIfEmpty && isEmpty(v)))
-			setHeader(header);
-		return this;
+	public RestRequest header(EnumSet<AddFlag> flags, Object header) throws RestCallException {
+		if (header == null)
+			return this;
+		Header h = toHeader(header);
+		if (h == null)
+			throw new RestCallException("Invalid type passed to header(): " + header.getClass().getName());
+		return innerHeader(flags, h);
 	}
 
 	/**
-	 * Sets a header on the request.
-	 *
-	 * <p>
-	 *	Overwrites the first header with the same name.
-	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.header(<jk>new</jk> NameValuePair(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param header The header to set.
-	 * @return This object (for method chaining).
-	 */
-	public RestRequest header(NameValuePair header) {
-		return header(header, false);
-	}
-
-	/**
-	 * Sets a header on the request.
-	 *
-	 * <p>
-	 *	Overwrites the first header with the same name.
-	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.header(<jk>new</jk> NameValuePair(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param header
-	 * 	The header to set.
-	 * @param skipIfEmpty
-	 * 	Don't add the header if the value is <jk>null</jk> or empty.
-	 * @return This object (for method chaining).
-	 */
-	public RestRequest header(NameValuePair header, boolean skipIfEmpty) {
-		String v = header.getValue();
-		if (canAdd(v, skipIfEmpty))
-			addHeader(header.getName(), v);
-		return this;
-	}
-
-	/**
-	 * Sets a header on the request.
-	 *
-	 * <p>
-	 *	Overwrites the first header with the same names.
-	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.header(<jk>new</jk> Accept(<js>"Content-Type"</js>, <js>"application/json"</js>)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param header The header to set.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Error occurred.
-	 */
-	public RestRequest header(HttpHeader header) throws RestCallException {
-		return header(header.getName(), header.getValue());
-	}
-
-	/**
-	 * Adds multiple headers to the request.
-	 *
-	 * <p>
-	 *	Overwrites the first headers with the same name.
-	 *	The new headers will be appended to the end of the list, if no headers with the given namess can be found.
+	 * Appends multiple headers to the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1580,156 +1687,94 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * </p>
 	 *
 	 * @param headers The header to set.
-	 * @return This object (for method chaining).
-	 */
-	public RestRequest headers(Header...headers) {
-		for (Header h : headers)
-			header(h);
-		return this;
-	}
-
-	/**
-	 * Sets multiple headers to the request.
-	 *
-	 * <p>
-	 *	Overwrites the first headers with the same names.
-	 *	The new headers will be appended to the end of the list, if no headers with the given names can be found.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.headers(<jk>new</jk> ObjectMap(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param headers The header pairs.
+	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>{@link Header}
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
+	 * 		<li>{@link Map} / {@link ObjectMap} / bean
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>{@link NameValuePairs}
+	 * 		<ul>
+	 * 			<li>Values converted directly to strings.
+	 * 		</ul>
+	 * 		<li><jk>null</jk> - Will be a no-op.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest headers(ObjectMap headers) throws RestCallException {
-		return headers((Map<String,Object>)headers);
+	public RestRequest headers(Object...headers) throws RestCallException {
+		return headers(DEFAULT_FLAGS, headers);
 	}
 
 	/**
 	 * Sets multiple headers on the request.
 	 *
-	 * <p>
-	 *	Overwrites the first header with the same name.
-	 *	The new header will be appended to the end of the list, if no header with the given name can be found.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.headers(AMap.<jsm>create</jsm>().append(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 		.headers(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),<jk>new</jk> BasicHeader(<js>"Foo"</js>, <js>"bar"</js>))
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param headers The header pairs.
+	 * @param flags Instructions on how to add this parameter.
 	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
+	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
+	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
+	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
+	 * 	</ul>
+	 * @param headers The header to set.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link Header}
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
+	 * 		<li>{@link Map} / {@link ObjectMap} / bean
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>{@link NameValuePairs}
+	 * 		<ul>
+	 * 			<li>Values converted directly to strings.
+	 * 		</ul>
+	 * 		<li><jk>null</jk> - Will be a no-op.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest headers(Map<String,Object> headers) throws RestCallException {
-		for (Map.Entry<String,Object> e : headers.entrySet())
-			header(e.getKey(), e.getValue(), false, null, null);
-		return this;
+	@SuppressWarnings("rawtypes")
+	public RestRequest headers(EnumSet<AddFlag> flags, Object...headers) throws RestCallException {
+		List<Header> l = new ArrayList<>();
+		for (Object o : headers) {
+			if (o instanceof Header || o instanceof NameValuePair || o instanceof HttpHeader) {
+				l.add(toHeader(o));
+			} else if (o instanceof NameValuePairs) {
+				for (NameValuePair p : (NameValuePairs)o)
+					l.add(toHeader(p));
+			} else if (o instanceof Map) {
+				Map m = (Map)o;
+				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
+					l.add(new SerializedHeader(stringify(e.getKey()), e.getValue(), partSerializer, null, flags.contains(SKIP_IF_EMPTY)));
+			} else if (isBean(o)) {
+				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
+					l.add(new SerializedHeader(stringify(e.getKey()), e.getValue(), partSerializer, null, flags.contains(SKIP_IF_EMPTY)));
+			} else {
+				throw new RestCallException("Invalid type passed to header(): " + headers.getClass().getName());
+			}
+		}
+		return innerHeaders(flags, l);
 	}
 
 	/**
-	 * Sets multiple headers on the request.
-	 *
-	 * <p>
-	 *	Overwrites the first headers with the same names.
-	 *	The new headers will be appended to the end of the list, if no headers with the given names can be found.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.headers(<jk>new</jk> NameValuePairs(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param headers The header pairs.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest headers(NameValuePairs headers) throws RestCallException {
-		for (NameValuePair p : headers)
-			header(p);
-		return this;
-	}
-
-	/**
-	 * Sets multiple headers on the request.
-	 *
-	 * <p>
-	 *	Overwrites the first headers with the same names.
-	 *	The new headers will be appended to the end of the list, if no headers with the given names can be found.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.headers(<jk>new</jk> NameValuePair(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param headers The header pairs.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest headers(NameValuePair...headers) throws RestCallException {
-		for (NameValuePair p : headers)
-			header(p);
-		return this;
-	}
-
-	/**
-	 * Sets multiple headers on the request using a bean with key/value properties.
-	 *
-	 * <p>
-	 *	Overwrites the first headers with the same names.
-	 *	The new headers will be appended to the end of the list, if no headers with the given names can be found.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.headers(<jk>new</jk> MyBean())
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param bean The header bean.
-	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest headers(Object bean) throws RestCallException {
-		return headers(toBeanMap(bean));
-	}
-
-	/**
-	 * Sets multiple headers on the request using freeform key/value pairs.
-	 *
-	 * <p>
-	 *	Overwrites the first headers with the same names.
-	 *	The new headers will be appended to the end of the list, if no headers with the given names can be found.
+	 * Appends multiple headers on the request using freeform key/value pairs.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1748,43 +1793,42 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest headers(Object...pairs) throws RestCallException {
+	public RestRequest headerPairs(Object...pairs) throws RestCallException {
+		List<Header> l = new ArrayList<>();
 		if (pairs.length % 2 != 0)
-			throw new RestCallException("Odd number of parameters passed into headers(Object...)");
+			throw new RestCallException("Odd number of parameters passed into headerPairs(Object...)");
 		for (int i = 0; i < pairs.length; i+=2)
-			header(new SerializedNameValuePair(stringify(pairs[i]), pairs[i+1], HEADER, partSerializer, null, false));
+			l.add(new SerializedHeader(stringify(pairs[i]), pairs[i+1], partSerializer, null, false));
+		return innerHeaders(DEFAULT_FLAGS, l);
+	}
+
+	private RestRequest innerHeader(EnumSet<AddFlag> flags, Header header) {
+		return innerHeaders(flags, AList.of(header));
+	}
+
+	private RestRequest innerHeaders(EnumSet<AddFlag> flags, Collection<Header> headers) {
+		flags = AddFlag.orDefault(flags);
+		headers.removeIf(x -> x == null || x.getValue() == null);
+		if (flags.contains(REPLACE)) {
+			for (Header h : headers)
+				removeHeaders(h.getName());
+		} else if (flags.contains(PREPEND)) {
+			for (Header h : headers) {
+				for (Header h2 : getHeaders(h.getName()))
+					headers.add(h2);
+				removeHeaders(h.getName());
+			}
+		}
+		for (Header h : headers) {
+			if ((! flags.contains(SKIP_IF_EMPTY)) || ! isEmpty(h.getValue()))
+				addHeader(h);
+		}
 		return this;
 	}
 
-	/**
-	 * Sets multiple headers on the request using header beans.
-	 *
-	 * <p>
-	 *	Overwrites the first headers with the same names.
-	 *	The new headers will be appended to the end of the list, if no headers with the given name can be found.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.headers(
-	 * 			<jk>new</jk> AcceptEncoding(<js>"gzip"</js>),
-	 * 			<jk>new</jk> AcceptLanguage(<js>"da, en-gb;q=0.8, en;q=0.7"</js>)
-	 * 		)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param headers
-	 * 	The headers.
-	 * 	The header values are converted to strings using the configured {@link HttpPartSerializer}.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest headers(HttpHeader...headers) throws RestCallException {
-		for (HttpHeader h : headers)
-			addHeader(h.getName(), stringify(h.getValue()));
-		return this;
-	}
+	//------------------------------------------------------------------------------------------------------------------
+	// Specialized headers.
+	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Sets the value for the <c>Accept</c> request header.
@@ -2635,7 +2679,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * The header will be appended to the end of the list.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>{@link #header(Header)} is an equivalent method and the preferred method for fluent-style coding.
+	 * 	<li>{@link #header(Object)} is an equivalent method and the preferred method for fluent-style coding.
 	 * </ul>
 	 *
 	 * @param header The header to append.
@@ -2796,17 +2840,6 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	@Override
 	public ObjectMap getProperties() {
 		return super.getProperties();
-	}
-
-	/**
-	 * Specifies that the following value can be added as an HTTP part.
-	 */
-	private boolean canAdd(Object value, boolean skipIfEmpty) {
-		if (value == null)
-			return false;
-		if (ObjectUtils.isEmpty(value) && skipIfEmpty)
-			return false;
-		return true;
 	}
 
 	private static String className(Object o) {
