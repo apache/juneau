@@ -20,7 +20,6 @@ import java.util.logging.*;
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 
-import org.apache.http.*;
 import org.apache.http.conn.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
@@ -31,7 +30,6 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.*;
-import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 
@@ -1150,6 +1148,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	@SuppressWarnings("unchecked")
 	public MockRestClient interceptors(java.lang.Class<? extends org.apache.juneau.rest.client2.RestCallInterceptor>...values) {
 		super.interceptors(values);
 		return this;
@@ -1294,6 +1293,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	@SuppressWarnings("unchecked")
 	public MockRestClient parsers(java.lang.Class<? extends org.apache.juneau.parser.Parser>...value) {
 		super.parsers(value);
 		return this;
@@ -1414,6 +1414,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	@SuppressWarnings("unchecked")
 	public MockRestClient serializers(java.lang.Class<? extends org.apache.juneau.serializer.Serializer>...value) {
 		super.serializers(value);
 		return this;
