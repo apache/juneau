@@ -104,6 +104,18 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public CsvParserBuilder putAllTo(String name, Object value) {
+		super.putAllTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public CsvParserBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public CsvParserBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;

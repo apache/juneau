@@ -308,12 +308,6 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public HtmlSchemaSerializerBuilder putTo(String name, String key, Object value) {
-		super.putTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public HtmlSchemaSerializerBuilder appendTo(String name, Object value) {
 		super.appendTo(name, value);
 		return this;
@@ -346,6 +340,18 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlSchemaSerializerBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlSchemaSerializerBuilder putAllTo(String name, Object value) {
+		super.putAllTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlSchemaSerializerBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
 		return this;
 	}
 

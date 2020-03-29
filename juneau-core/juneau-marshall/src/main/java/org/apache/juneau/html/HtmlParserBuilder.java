@@ -107,6 +107,18 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public HtmlParserBuilder putAllTo(String name, Object value) {
+		super.putAllTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlParserBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public HtmlParserBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;

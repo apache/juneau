@@ -359,8 +359,9 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a MAP property.
 	 */
-	public ContextBuilder putTo(String name, Object value) {
-		psb.putTo(name, value);
+	@ConfigurationProperty
+	public ContextBuilder putAllTo(String name, Object value) {
+		psb.putAllTo(name, value);
 		return this;
 	}
 

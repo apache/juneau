@@ -104,6 +104,18 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public OpenApiSerializerBuilder putAllTo(String name, Object value) {
+		super.putAllTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public OpenApiSerializerBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public OpenApiSerializerBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;

@@ -1659,22 +1659,22 @@ public class PropertyStoreTest {
 	public void testAddToInvalidObjectMap() {
 		PropertyStoreBuilder b = PropertyStore.create();
 		try {
-			b.putTo("A.foo.sms", "{xxx}");
+			b.putAllTo("A.foo.sms", "{xxx}");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertTrue(e.getMessage().startsWith("Cannot add '{xxx}' (String) to property 'foo.sms' (Map<String,String>)."));
+			assertTrue(e.getMessage().startsWith("Cannot put '{xxx}' (String) to property 'foo.sms' (Map<String,String>)."));
 		}
 		try {
-			b.putTo("A.foo.sms", "xxx");
+			b.putAllTo("A.foo.sms", "xxx");
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot add 'xxx' (String) to property 'foo.sms' (Map<String,String>).", e.getMessage());
+			assertEquals("Cannot put 'xxx' (String) to property 'foo.sms' (Map<String,String>).", e.getMessage());
 		}
 		try {
-			b.putTo("A.foo.sms", new StringBuilder("foo"));
+			b.putAllTo("A.foo.sms", new StringBuilder("foo"));
 			fail("Exception expected.");
 		} catch (ConfigException e) {
-			assertEquals("Cannot add 'foo' (StringBuilder) to property 'foo.sms' (Map<String,String>).", e.getMessage());
+			assertEquals("Cannot put 'foo' (StringBuilder) to property 'foo.sms' (Map<String,String>).", e.getMessage());
 		}
 	}
 

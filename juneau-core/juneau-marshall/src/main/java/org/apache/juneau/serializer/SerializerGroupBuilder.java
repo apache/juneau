@@ -690,6 +690,18 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public SerializerGroupBuilder putAllTo(String name, Object value) {
+		super.putAllTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SerializerGroupBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public SerializerGroupBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;

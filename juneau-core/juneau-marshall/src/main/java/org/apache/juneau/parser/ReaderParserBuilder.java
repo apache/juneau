@@ -141,6 +141,18 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder putAllTo(String name, Object value) {
+		super.putAllTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ReaderParserBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;

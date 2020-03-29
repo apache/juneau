@@ -342,12 +342,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
-	public JsonSchemaGeneratorBuilder putTo(String name, String key, Object value) {
-		super.putTo(name, key, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaGeneratorBuilder appendTo(String name, Object value) {
 		super.appendTo(name, value);
 		return this;
@@ -380,6 +374,18 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaGeneratorBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaGeneratorBuilder putAllTo(String name, Object value) {
+		super.putAllTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaGeneratorBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
 		return this;
 	}
 

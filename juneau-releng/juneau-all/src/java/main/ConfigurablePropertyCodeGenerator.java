@@ -196,6 +196,15 @@ public class ConfigurablePropertyCodeGenerator {
 								.append("@Override /* GENERATED - ").append(pcc.getSimpleName()).append(" */")
 							;
 
+							if (m.isVarArgs()) {
+								Type t = m.getParameters()[m.getParameterCount()-1].getParameterizedType();
+								if (t.toString().contains(" extends ")) {
+									sb.append("\n\t")
+										.append("@SuppressWarnings(\"unchecked\")");
+									;
+								}
+							}
+
 							// Line 2
 							sb.append("\n\tpublic ");
 							if (m.getTypeParameters().length > 0)

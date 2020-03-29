@@ -1957,7 +1957,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder staticFileResponseHeaders(Map<String,String> headers) {
-		return putTo(REST_staticFileResponseHeaders, headers);
+		return putAllTo(REST_staticFileResponseHeaders, headers);
 	}
 
 	/**
@@ -2316,7 +2316,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@ConfigurationProperty
 	public RestContextBuilder properties(Map<String,Object> values) {
-		return putTo(REST_properties, values);
+		return putAllTo(REST_properties, values);
 	}
 
 	/**
@@ -2593,7 +2593,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		super.set(properties);
 		this.properties.clear();
 		this.properties.putAll(properties);
-		putTo(REST_properties, properties);
+		putAllTo(REST_properties, properties);
 		return this;
 	}
 
@@ -2608,18 +2608,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* GENERATED - ContextBuilder */
 	public RestContextBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder putTo(String name, Object value) {
-		super.putTo(name, value);
-		return this;
-	}
-
-	@Override /* GENERATED - ContextBuilder */
-	public RestContextBuilder putTo(String name, String key, Object value) {
-		super.putTo(name, key, value);
 		return this;
 	}
 
@@ -2656,6 +2644,18 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* GENERATED - ContextBuilder */
 	public RestContextBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestContextBuilder putAllTo(String name, Object value) {
+		super.putAllTo(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestContextBuilder putTo(String name, String key, Object value) {
+		super.putTo(name, key, value);
 		return this;
 	}
 

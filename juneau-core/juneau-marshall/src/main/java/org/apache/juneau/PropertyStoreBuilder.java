@@ -156,8 +156,11 @@ public class PropertyStoreBuilder {
 
 			if ("add".equals(command))
 				return addTo(key2, value);
-			if ("put".equals(command))
+			if ("put".equals(command)) {
+				if (arg == null)
+					return putAllTo(key2, value);
 				return putTo(key2, arg, value);
+			}
 			if ("append".equals(command))
 				return appendTo(key2, value);
 			if ("prepend".equals(command))
@@ -265,7 +268,7 @@ public class PropertyStoreBuilder {
 			groups.put(g, gb);
 		}
 
-		gb.addTo(n, value);
+		gb.addToSet(n, value);
 
 		if (gb.isEmpty())
 			groups.remove(g);
@@ -296,7 +299,7 @@ public class PropertyStoreBuilder {
 			groups.put(g, gb);
 		}
 
-		gb.putTo(n, mapKey, value);
+		gb.putToMap(n, mapKey, value);
 
 		if (gb.isEmpty())
 			groups.remove(g);
@@ -312,7 +315,7 @@ public class PropertyStoreBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET property, or the argument is invalid.
 	 */
-	public synchronized PropertyStoreBuilder putTo(String key, Object value) {
+	public synchronized PropertyStoreBuilder putAllTo(String key, Object value) {
 		propertyStore = null;
 		String g = group(key);
 		String n = g.isEmpty() ? key : key.substring(g.length()+1);
@@ -326,7 +329,7 @@ public class PropertyStoreBuilder {
 			groups.put(g, gb);
 		}
 
-		gb.putTo(n, value);
+		gb.putAllToMap(n, value);
 
 		if (gb.isEmpty())
 			groups.remove(g);
@@ -359,7 +362,7 @@ public class PropertyStoreBuilder {
 			groups.put(g, gb);
 		}
 
-		gb.appendTo(n, value);
+		gb.appendToList(n, value);
 
 		if (gb.isEmpty())
 			groups.remove(g);
@@ -534,15 +537,15 @@ public class PropertyStoreBuilder {
 			}
 		}
 
-		synchronized void addTo(String key, Object value) {
+		synchronized void addToSet(String key, Object value) {
 			MutableProperty p = properties.get(key);
 			if (p == null) {
 				p = MutableProperty.create(key, null);
-				p.add(null, value);
+				p.add(value);
 				if (! p.isEmpty())
 					properties.put(key, p);
 			} else {
-				p.add(null, value);
+				p.add(value);
 				if (p.isEmpty())
 					properties.remove(key);
 				else
@@ -550,15 +553,15 @@ public class PropertyStoreBuilder {
 			}
 		}
 
-		synchronized void putTo(String key, String arg, Object value) {
+		synchronized void putToMap(String key, String arg, Object value) {
 			MutableProperty p = properties.get(key);
 			if (p == null) {
 				p = MutableProperty.create(key, null);
-				p.add(arg, value);
+				p.put(arg, value);
 				if (! p.isEmpty())
 					properties.put(key, p);
 			} else {
-				p.add(arg, value);
+				p.put(arg, value);
 				if (p.isEmpty())
 					properties.remove(key);
 				else
@@ -566,7 +569,7 @@ public class PropertyStoreBuilder {
 			}
 		}
 
-		synchronized void putTo(String key, Object value) {
+		synchronized void putAllToMap(String key, Object value) {
 			MutableProperty p = properties.get(key);
 			if (p == null) {
 				p = MutableProperty.create(key, null);
@@ -582,7 +585,7 @@ public class PropertyStoreBuilder {
 			}
 		}
 
-		synchronized void appendTo(String key, Object value) {
+		synchronized void appendToList(String key, Object value) {
 			MutableProperty p = properties.get(key);
 			if (p == null) {
 				p = MutableProperty.create(key, null);
@@ -709,11 +712,11 @@ public class PropertyStoreBuilder {
 
 		abstract Object peek();
 
-		void add(String arg, Object value) {
+		void add(Object value) {
 			throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(value), className(value), name, type);
 		}
 
-		void put(String arg, String key, Object value) {
+		void put(String key, Object value) {
 			throw new ConfigException("Cannot put all value {0} ({1}) to property ''{2}'' ({3}).", string(value), className(value), name, type);
 		}
 
@@ -816,34 +819,11 @@ public class PropertyStoreBuilder {
 		}
 
 		@Override /* MutableProperty */
-		synchronized void add(String arg, Object o) {
-			if (arg != null)
-				throw new ConfigException("Cannot use argument ''{0}'' on add command for property ''{1}'' ({2})", arg, name, type);
+		synchronized void add(Object o) {
 			try {
 				set.addAll(normalize(type.converter, o));
 			} catch (Exception e) {
 				throw new ConfigException(e, "Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
-			}
-		}
-
-		@Override /* MutableProperty */
-		synchronized void append(Object o) {
-			try {
-				set.addAll(normalize(type.converter, o));
-			} catch (Exception e) {
-				throw new ConfigException(e, "Cannot append value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
-			}
-		}
-
-		@Override /* MutableProperty */
-		synchronized void prepend(Object o) {
-			try {
-				Set<Object> s = new LinkedHashSet<>(set);
-				set.clear();
-				set.addAll(normalize(type.converter, o));
-				set.addAll(s);
-			} catch (Exception e) {
-				throw new ConfigException(e, "Cannot prepend value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 			}
 		}
 
@@ -898,26 +878,6 @@ public class PropertyStoreBuilder {
 		@Override /* MutableProperty */
 		synchronized void apply(Object values) {
 			list.addAll((List<?>)values);
-		}
-
-		@Override /* MutableProperty */
-		synchronized void add(String arg, Object o) {
-			if (arg != null && ! StringUtils.isNumeric(arg))
-				throw new ConfigException("Invalid argument ''{0}'' on add command for property ''{1}'' ({2})", arg, name, type);
-
-			int index = arg == null ? 0 : Integer.parseInt(arg);
-			if (index < 0)
-				index = 0;
-			else if (index > list.size())
-				index = list.size();
-
-			try {
-				List<Object> l = normalize(type.converter, o);
-				list.removeAll(l);
-				list.addAll(index, l);
-			} catch (Exception e) {
-				throw new ConfigException(e, "Cannot add value {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
-			}
 		}
 
 		@Override /* MutableProperty */
@@ -988,41 +948,25 @@ public class PropertyStoreBuilder {
 		@Override /* MutableProperty */
 		synchronized void set(Object value) {
 			this.map.clear();
-			add(null, value);
+			putAll(value);
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override /* MutableProperty */
 		synchronized void apply(Object values) {
 			for (Map.Entry<String,Object> e : ((Map<String,Object>)values).entrySet())
-				add(e.getKey(), e.getValue());
+				put(e.getKey(), e.getValue());
 		}
 
 		@Override /* MutableProperty */
-		synchronized void add(String arg, Object o) {
-			if (arg != null) {
-				o = convert(o);
-				if (o == null)
-					this.map.remove(arg);
-				else
-					this.map.put(arg, o);
-
-			} else if (o != null) {
-				if (o instanceof Map) {
-					Map m = (Map)o;
-					for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-						if (e.getKey() != null)
-							add(e.getKey().toString(), e.getValue());
-				} else if (isObjectMap(o)) {
-					try {
-						add(null, new ObjectMap(o.toString()));
-					} catch (Exception e) {
-						throw new ConfigException(e, "Cannot add {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
-					}
-				} else {
-					throw new ConfigException("Cannot add {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
-				}
-			}
+		synchronized void put(String key, Object o) {
+			if (key == null)
+				return;
+			o = convert(o);
+			if (o == null)
+				this.map.remove(key);
+			else
+				this.map.put(key, o);
 		}
 
 		@Override /* MutableProperty */
@@ -1031,15 +975,15 @@ public class PropertyStoreBuilder {
 				Map m = (Map)o;
 				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
 					if (e.getKey() != null)
-						add(e.getKey().toString(), e.getValue());
+						put(e.getKey().toString(), e.getValue());
 			} else if (isObjectMap(o)) {
 				try {
-					add(null, new ObjectMap(o.toString()));
+					putAll(new ObjectMap(o.toString()));
 				} catch (Exception e) {
-					throw new ConfigException(e, "Cannot add {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
+					throw new ConfigException(e, "Cannot put {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 				}
-			} else {
-				throw new ConfigException("Cannot add {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
+			} else if (o != null) {
+				throw new ConfigException("Cannot put {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 			}
 		}
 

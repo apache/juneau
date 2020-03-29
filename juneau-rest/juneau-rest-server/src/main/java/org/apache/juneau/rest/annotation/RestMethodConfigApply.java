@@ -132,7 +132,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 					bpiMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
 				}
 			}
-			psb.putTo(BEAN_bpi, bpiMap);
+			psb.putAllTo(BEAN_bpi, bpiMap);
 		}
 
 		if (a.bpx().length > 0) {
@@ -146,7 +146,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 					bpxMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
 				}
 			}
-			psb.putTo(BEAN_bpx, bpxMap);
+			psb.putAllTo(BEAN_bpx, bpxMap);
 		}
 
 		if (! a.defaultCharset().isEmpty())
@@ -205,7 +205,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			psb.putTo(RESTMETHOD_reqHeaders, "Accept", string(a.defaultAccept()));
 
 		if (! a.defaultContentType().isEmpty())
-			psb.putTo(RESTMETHOD_reqHeaders, string(a.defaultContentType()));
+			psb.putAllTo(RESTMETHOD_reqHeaders, string(a.defaultContentType()));
 
 		for (String h : a.defaultQuery()) {
 			String[] h2 = RestUtils.parseKeyValuePair(string(h));
