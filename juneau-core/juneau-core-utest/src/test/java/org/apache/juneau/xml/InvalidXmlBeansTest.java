@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -159,72 +159,72 @@ public class InvalidXmlBeansTest {
 
 	public static class BeanWithMultipleAttrs {
 		@Xml(format=XmlFormat.ATTRS)
-		public ObjectMap f1;
+		public OMap f1;
 		@Xml(format=XmlFormat.ATTRS)
-		public ObjectMap f2;
+		public OMap f2;
 	}
 
 	public static class BeanWithWrongAttrsType {
 		@Xml(format=XmlFormat.ATTRS)
-		public ObjectList f1;
+		public OList f1;
 	}
 
 	public static class BeanWithMulipleElements {
 		@Xml(format=XmlFormat.ELEMENTS)
-		public ObjectList f1;
+		public OList f1;
 		@Xml(format=XmlFormat.ELEMENTS)
-		public ObjectList f2;
+		public OList f2;
 	}
 
 	public static class BeanWithWrongElementsType {
 		@Xml(format=XmlFormat.ELEMENTS)
-		public ObjectMap f1;
+		public OMap f1;
 	}
 
 	public static class BeanWithMulipleMixed {
 		@Xml(format=XmlFormat.MIXED)
-		public ObjectList f1;
+		public OList f1;
 		@Xml(format=XmlFormat.MIXED)
-		public ObjectList f2;
+		public OList f2;
 	}
 
 	public static class BeanWithConflictingChildNames {
 		@Xml(format=XmlFormat.COLLAPSED, childName="X")
-		public ObjectList f1;
+		public OList f1;
 		@Xml(format=XmlFormat.COLLAPSED, childName="X")
-		public ObjectList f2;
+		public OList f2;
 	}
 
 	public static class BeanWithElementsAndMixed {
 		@Xml(format=XmlFormat.ELEMENTS)
-		public ObjectList f1;
+		public OList f1;
 		@Xml(format=XmlFormat.MIXED)
-		public ObjectList f2;
+		public OList f2;
 	}
 
 	public static class BeanWithElementsAndElement {
 		@Xml(format=XmlFormat.ELEMENTS)
-		public ObjectList f1;
+		public OList f1;
 		@Xml(format=XmlFormat.ELEMENT)
-		public ObjectList f2;
+		public OList f2;
 	}
 
 	public static class BeanWithElementsAndDefault {
 		@Xml(format=XmlFormat.ELEMENTS)
-		public ObjectList f1;
-		public ObjectList f2;
+		public OList f1;
+		public OList f2;
 	}
 
 	public static class BeanWithElementsAndCollapsed {
 		@Xml(format=XmlFormat.ELEMENTS)
-		public ObjectList f1;
+		public OList f1;
 		@Xml(format=XmlFormat.COLLAPSED)
-		public ObjectList f2;
+		public OList f2;
 	}
 
 	public static class BeanWithChildAndPropNameConflict {
 		@Xml(format=XmlFormat.COLLAPSED, childName="f2")
-		public ObjectList f1;
-		public ObjectList f2;
+		public OList f1;
+		public OList f2;
 	}
 }

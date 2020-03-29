@@ -19,6 +19,7 @@ import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
@@ -121,7 +122,7 @@ public class ParseException extends FormattedException {
 
 			msg += "\n\tAt: " + p;
 
-			ObjectMap lastLocation = session.getLastLocation();
+			OMap lastLocation = session.getLastLocation();
 			if (lastLocation != null) {
 				msg += "\n\tWhile parsing into: ";
 				for (Map.Entry<String,Object> e : lastLocation.entrySet())

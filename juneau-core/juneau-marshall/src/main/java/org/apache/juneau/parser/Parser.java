@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
@@ -108,8 +109,8 @@ import org.apache.juneau.xml.*;
  * data types and generates the following object types...
  * <table class='styled'>
  * 	<tr><th>JSON type</th><th>Class type</th></tr>
- * 	<tr><td>object</td><td>{@link ObjectMap}</td></tr>
- * 	<tr><td>array</td><td>{@link ObjectList}</td></tr>
+ * 	<tr><td>object</td><td>{@link OMap}</td></tr>
+ * 	<tr><td>array</td><td>{@link OList}</td></tr>
  * 	<tr><td>number</td><td>{@link Number}<br>(depending on length and format, could be {@link Integer},
  * 		{@link Double}, {@link Float}, etc...)</td></tr>
  * 	<tr><td>boolean</td><td>{@link Boolean}</td></tr>
@@ -806,8 +807,8 @@ public abstract class Parser extends BeanContext {
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The various character-based constructors in {@link ObjectMap} (e.g.
-	 * 		{@link ObjectMap#ObjectMap(CharSequence,Parser)}).
+	 * 		The various character-based constructors in {@link OMap} (e.g.
+	 * 		{@link OMap#OMap(CharSequence,Parser)}).
 	 * </ul>
 	 *
 	 * @param <K> The key class type.
@@ -831,8 +832,8 @@ public abstract class Parser extends BeanContext {
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The various character-based constructors in {@link ObjectList} (e.g.
-	 * 		{@link ObjectList#ObjectList(CharSequence,Parser)}.
+	 * 		The various character-based constructors in {@link OList} (e.g.
+	 * 		{@link OList#OList(CharSequence,Parser)}.
 	 * </ul>
 	 *
 	 * @param <E> The element class type.
@@ -987,15 +988,15 @@ public abstract class Parser extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("Parser", new DefaultFilteringObjectMap()
-				.append("autoCloseStreams", autoCloseStreams)
-				.append("debugOutputLines", debugOutputLines)
-				.append("listener", listener)
-				.append("strict", strict)
-				.append("trimStrings", trimStrings)
-				.append("unbuffered", unbuffered)
+			.a("Parser", new DefaultFilteringOMap()
+				.a("autoCloseStreams", autoCloseStreams)
+				.a("debugOutputLines", debugOutputLines)
+				.a("listener", listener)
+				.a("strict", strict)
+				.a("trimStrings", trimStrings)
+				.a("unbuffered", unbuffered)
 			);
 	}
 }

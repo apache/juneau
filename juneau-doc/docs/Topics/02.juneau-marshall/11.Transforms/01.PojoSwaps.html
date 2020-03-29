@@ -35,17 +35,17 @@ PojoSwaps
 </p>
 <p class='bpcode w800'>
 	<jc>// Sample swap for converting a bean to a specialized map of key-value pairs.</jc>
-	<jk>public class</jk> MyBeanSwap <jk>extends</jk> PojoSwap&lt;MyBean,ObjectMap&gt; {
+	<jk>public class</jk> MyBeanSwap <jk>extends</jk> PojoSwap&lt;MyBean,OMap&gt; {
 		
 		<jc>// Converts a bean to a generic map.</jc>
 		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-		<jk>public</jk> ObjectMap swap(BeanSession session, MyBean o) {
-			<jk>return new</jk> ObjectMap().append(<js>"foo"</js>, o.getBar());
+		<jk>public</jk> OMap swap(BeanSession session, MyBean o) {
+			<jk>return</jk> OMap.<jsm>of</jsm>(<js>"foo"</js>, o.getBar());
 		}
 		
 		<jc>// Converts the generic map back into a bean.</jc>
 		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-		<jk>public</jk> MyBean unswap(BeanSession session, ObjectMap o, ClassMeta hint) <jk>throws</jk> Exception {
+		<jk>public</jk> MyBean unswap(BeanSession session, OMap o, ClassMeta hint) <jk>throws</jk> Exception {
 			MyBean b = <jk>new</jk> MyBean();
 			b.setBar(o.getString(<js>"foo"</js>));
 			<jk>return</jk> b;

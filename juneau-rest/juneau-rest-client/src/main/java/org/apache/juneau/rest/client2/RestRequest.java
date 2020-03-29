@@ -480,7 +480,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.get(<js>"/{foo}"</js>)
-	 * 		.path(<jk>new</jk> ObjectMap(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.path(OMap.<jsm>of</js>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.run();
 	 * </p>
 	 *
@@ -493,7 +493,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest path(ObjectMap params) throws RestCallException {
+	public RestRequest path(OMap params) throws RestCallException {
 		return path((Map<String,Object>)params);
 	}
 
@@ -645,7 +645,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		</ul>
 	 * 		<li>For multi-value parameters:
 	 * 		<ul>
-	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<li>{@link Map} / {@link OMap} / bean
 	 * 			<ul>
 	 * 				<li>Values can be any POJO.
 	 * 				<li>Values converted to a string using the configured part serializer.
@@ -719,7 +719,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		</ul>
 	 * 		<li>For multi-value parameters:
 	 * 		<ul>
-	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<li>{@link Map} / {@link OMap} / bean
 	 * 			<ul>
 	 * 				<li>Values can be any POJO.
 	 * 				<li>Values converted to a string using the configured part serializer.
@@ -774,7 +774,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		</ul>
 	 * 		<li>For multi-value parameters:
 	 * 		<ul>
-	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<li>{@link Map} / {@link OMap} / bean
 	 * 			<ul>
 	 * 				<li>Values can be any POJO.
 	 * 				<li>Values converted to a string using the configured part serializer.
@@ -812,7 +812,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
 	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link Map} / {@link ObjectMap} / bean
+	 * 		<li>{@link Map} / {@link OMap} / bean
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
@@ -853,7 +853,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
 	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link Map} / {@link ObjectMap} / bean
+	 * 		<li>{@link Map} / {@link OMap} / bean
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
@@ -1022,7 +1022,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		</ul>
 	 * 		<li>For multi-value parameters:
 	 * 		<ul>
-	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<li>{@link Map} / {@link OMap} / bean
 	 * 			<ul>
 	 * 				<li>Values can be any POJO.
 	 * 				<li>Values converted to a string using the configured part serializer.
@@ -1096,7 +1096,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		</ul>
 	 * 		<li>For multi-value parameters:
 	 * 		<ul>
-	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<li>{@link Map} / {@link OMap} / bean
 	 * 			<ul>
 	 * 				<li>Values can be any POJO.
 	 * 				<li>Values converted to a string using the configured part serializer.
@@ -1151,7 +1151,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		</ul>
 	 * 		<li>For multi-value parameters:
 	 * 		<ul>
-	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<li>{@link Map} / {@link OMap} / bean
 	 * 			<ul>
 	 * 				<li>Values can be any POJO.
 	 * 				<li>Values converted to a string using the configured part serializer.
@@ -1189,7 +1189,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
 	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link Map} / {@link ObjectMap} / bean
+	 * 		<li>{@link Map} / {@link OMap} / bean
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
@@ -1230,7 +1230,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
 	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link Map} / {@link ObjectMap} / bean
+	 * 		<li>{@link Map} / {@link OMap} / bean
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
@@ -1473,7 +1473,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		</ul>
 	 * 		<li>For multi-value headers:
 	 * 		<ul>
-	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<li>{@link Map} / {@link OMap} / bean
 	 * 			<ul>
 	 * 				<li>Values can be any POJO.
 	 * 				<li>Values converted to a string using the configured part serializer.
@@ -1541,7 +1541,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		</ul>
 	 * 		<li>For multi-value headers:
 	 * 		<ul>
-	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<li>{@link Map} / {@link OMap} / bean
 	 * 			<ul>
 	 * 				<li>Values can be any POJO.
 	 * 				<li>Values converted to a string using the configured part serializer.
@@ -1592,7 +1592,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		</ul>
 	 * 		<li>For multi-value headers:
 	 * 		<ul>
-	 * 			<li>{@link Map} / {@link ObjectMap} / bean
+	 * 			<li>{@link Map} / {@link OMap} / bean
 	 * 			<ul>
 	 * 				<li>Values can be any POJO.
 	 * 				<li>Values converted to a string using the configured part serializer.
@@ -1692,7 +1692,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		<li>{@link Header}
 	 * 		<li>{@link NameValuePair}
 	 * 		<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
-	 * 		<li>{@link Map} / {@link ObjectMap} / bean
+	 * 		<li>{@link Map} / {@link OMap} / bean
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
@@ -1735,7 +1735,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * 		<li>{@link Header}
 	 * 		<li>{@link NameValuePair}
 	 * 		<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
-	 * 		<li>{@link Map} / {@link ObjectMap} / bean
+	 * 		<li>{@link Map} / {@link OMap} / bean
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
@@ -2838,7 +2838,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	}
 
 	@Override
-	public ObjectMap getProperties() {
+	public OMap getProperties() {
 		return super.getProperties();
 	}
 
@@ -2851,17 +2851,17 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("RestCall", new DefaultFilteringObjectMap()
-				.append("client", client)
-				.append("hasInput", hasInput)
-				.append("ignoreErrors", ignoreErrors)
-				.append("interceptors", interceptors)
-				.append("partSerializer", partSerializer)
-				.append("requestBodySchema", requestBodySchema)
-				.append("response", response)
-				.append("serializer", serializer)
+			.a("RestCall", new DefaultFilteringOMap()
+				.a("client", client)
+				.a("hasInput", hasInput)
+				.a("ignoreErrors", ignoreErrors)
+				.a("interceptors", interceptors)
+				.a("partSerializer", partSerializer)
+				.a("requestBodySchema", requestBodySchema)
+				.a("response", response)
+				.a("serializer", serializer)
 			);
 	}
 }

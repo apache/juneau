@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
@@ -105,7 +106,7 @@ import org.apache.juneau.oapi.*;
  * 	at runtime, and CGLIB was written before generics were introduced into Java and is a virtually-unsupported library.
  * 	Therefore, parameterized types will often be stripped from class definitions and replaced with unparameterized types
  *	(e.g. <code>List</code>).  Under these circumstances, you are likely to get <code>ClassCastExceptions</code>
- *	when trying to access generalized <code>ObjectMaps</code> as beans.  The best solution to this issue is to either
+ *	when trying to access generalized <code>OMaps</code> as beans.  The best solution to this issue is to either
  *	specify the parameter as a bean array (e.g. <code>MyBean[]</code>) or declare the method as final so that CGLIB
  *	will not try to recompile it.
  * </div>
@@ -170,7 +171,7 @@ public @interface FormData {
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a REST method</jc>
 	 * 	<ja>@RestMethod</ja>(path=<js>"/addPet"</js>)
-	 * 	<jk>public void</jk> addPet(<ja>@FormData</ja> ObjectMap allFormDataParameters) {...}
+	 * 	<jk>public void</jk> addPet(<ja>@FormData</ja> OMap allFormDataParameters) {...}
 	 * 		</p>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
@@ -308,11 +309,11 @@ public @interface FormData {
 	 * 		<js>"array"</js>
 	 * 		<br>Parameter must be an array or collection.
 	 * 		<br>Elements must be strings or POJOs convertible from strings.
-	 * 		<br>If parameter is <c>Object</c>, creates an {@link ObjectList}.
+	 * 		<br>If parameter is <c>Object</c>, creates an {@link OList}.
 	 * 	<li>
 	 * 		<js>"object"</js>
 	 * 		<br>Parameter must be a map or bean.
-	 * 		<br>If parameter is <c>Object</c>, creates an {@link ObjectMap}.
+	 * 		<br>If parameter is <c>Object</c>, creates an {@link OMap}.
 	 * 		<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
 	 * 	<li>
 	 * 		<js>"file"</js>

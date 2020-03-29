@@ -13,6 +13,7 @@
 package org.apache.juneau.transform;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Abstract subclass for POJO swaps that swap objects for object maps.
@@ -23,13 +24,13 @@ import org.apache.juneau.*;
  * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> MapSwap&lt;<jk>byte</jk>[]&gt; {
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> ObjectMap swap(BeanSession session, MyBean myBean) <jk>throws</jk> Exception {
- * 			<jk>return new</jk> ObjectMap().append(<js>"foo"</js>, myBean.getFoo());
+ * 		<jk>public</jk> OMap swap(BeanSession session, MyBean myBean) <jk>throws</jk> Exception {
+ * 			<jk>return</jk> OMap.<jsm>of<jsm>(<js>"foo"</js>, myBean.getFoo());
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> MyBean unswap(BeanSession session, ObjectMap m, ClassMeta&lt;?&gt; hint) <jk>throws</jk> Exception {
- * 			<jk>return new</jk> MyBean(m.get(<js>"foo"</js>));
+ * 		<jk>public</jk> MyBean unswap(BeanSession session, OMap m, ClassMeta&lt;?&gt; hint) <jk>throws</jk> Exception {
+ * 			<jk>return</jk> new</jk> MyBean(m.get(<js>"foo"</js>));
  * 		}
  * 	}
  *
@@ -40,15 +41,15 @@ import org.apache.juneau.*;
  *
  * @param <T> The normal form of the class.
  */
-public abstract class MapSwap<T> extends PojoSwap<T,ObjectMap> {
+public abstract class MapSwap<T> extends PojoSwap<T,OMap> {
 
 	@Override /* PojoSwap */
-	public ObjectMap swap(BeanSession session, T o) throws Exception {
+	public OMap swap(BeanSession session, T o) throws Exception {
 		return super.swap(session, o);
 	}
 
 	@Override /* PojoSwap */
-	public T unswap(BeanSession session, ObjectMap f, ClassMeta<?> hint) throws Exception {
+	public T unswap(BeanSession session, OMap f, ClassMeta<?> hint) throws Exception {
 		return super.unswap(session, f, hint);
 	}
 }

@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
@@ -201,10 +202,10 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("JsonSchemaSerializer", new DefaultFilteringObjectMap()
-				.append("generator", generator)
+			.a("JsonSchemaSerializer", new DefaultFilteringOMap()
+				.a("generator", generator)
 			);
 	}
 }

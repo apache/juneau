@@ -18,6 +18,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -123,9 +124,9 @@ public class JsoSerializer extends OutputStreamSerializer implements JsoMetaProv
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("JsoSerializer", new DefaultFilteringObjectMap()
+			.a("JsoSerializer", new DefaultFilteringOMap()
 			);
 	}
 }

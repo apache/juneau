@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.util.iterator.*;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
@@ -86,7 +87,7 @@ public class RdfParserSession extends ReaderParserSession {
 				c = (
 					type.canCreateNewInstance(getOuter())
 					? (Collection<?>)type.newInstance(getOuter())
-					: new ObjectList(this)
+					: new OList(this)
 				);
 
 			int argIndex = 0;
@@ -255,13 +256,13 @@ public class RdfParserSession extends ReaderParserSession {
 				else if (r.getProperty(pValue) != null) {
 					o = parseAnything(object(), n.asResource().getProperty(pValue).getObject(), outer, null);
 				} else if (isSeq(r)) {
-					o = new ObjectList(this);
+					o = new OList(this);
 					parseIntoCollection(r.as(Seq.class), (Collection)o, sType, pMeta);
 				} else if (isBag(r)) {
-					o = new ObjectList(this);
+					o = new OList(this);
 					parseIntoCollection(r.as(Bag.class), (Collection)o, sType, pMeta);
 				} else if (r.canAs(RDFList.class)) {
-					o = new ObjectList(this);
+					o = new OList(this);
 					parseIntoCollection(r.as(RDFList.class), (Collection)o, sType, pMeta);
 				} else {
 					// If it has a URI and no child properties, we interpret this as an
@@ -270,7 +271,7 @@ public class RdfParserSession extends ReaderParserSession {
 					if (uri != null && ! r.listProperties().hasNext()) {
 						o = r.getURI();
 					} else {
-						ObjectMap m2 = new ObjectMap(this);
+						OMap m2 = new OMap(this);
 						parseIntoMap(r, m2, null, null, pMeta);
 						o = cast(m2, pMeta, eType);
 					}
@@ -290,13 +291,13 @@ public class RdfParserSession extends ReaderParserSession {
 			Resource r = n.asResource();
 			if (! urisVisited.add(r))
 				return null;
-			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(this));
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new OMap(this));
 			o = parseIntoMap(r, m, eType.getKeyType(), eType.getValueType(), pMeta);
 		} else if (sType.isCollectionOrArray() || sType.isArgs()) {
 			if (sType.isArray() || sType.isArgs())
 				o = new ArrayList();
 			else
-				o = (sType.canCreateNewInstance(outer) ? (Collection<?>)sType.newInstance(outer) : new ObjectList(this));
+				o = (sType.canCreateNewInstance(outer) ? (Collection<?>)sType.newInstance(outer) : new OList(this));
 			Resource r = n.asResource();
 			if (! urisVisited.add(r))
 				return null;
@@ -329,10 +330,10 @@ public class RdfParserSession extends ReaderParserSession {
 			o = sType.newInstanceFromString(outer, decodeString(getValue(n, outer)));
 		} else if (n.isResource()) {
 			Resource r = n.asResource();
-			Map m = new ObjectMap(this);
+			Map m = new OMap(this);
 			parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
-				o = cast((ObjectMap)m, pMeta, eType);
+				o = cast((OMap)m, pMeta, eType);
 			else
 				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else {
@@ -564,9 +565,9 @@ public class RdfParserSession extends ReaderParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("RdfParserSession", new DefaultFilteringObjectMap()
+			.a("RdfParserSession", new DefaultFilteringOMap()
 			);
 	}
 }

@@ -25,7 +25,7 @@ import javax.ws.rs.core.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -42,14 +42,14 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 
 	private SerializerGroup serializers;
 	private ParserGroup parsers;
-	private ObjectMap properties = new ObjectMap();
+	private OMap properties = new OMap();
 
 	/**
 	 * Constructor.
 	 */
 	protected BaseProvider() {
 		try {
-			properties = new ObjectMap();
+			properties = new OMap();
 			JuneauProvider jp = getClass().getAnnotation(JuneauProvider.class);
 
 			for (Property p : jp.properties())
@@ -84,8 +84,8 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 	 * @param a All annotations defined on the method.
 	 * @return A map of all properties define on the method.
 	 */
-	protected ObjectMap getMethodProperties(Annotation[] a) {
-		ObjectMap m = new ObjectMap().setInner(properties);
+	protected OMap getMethodProperties(Annotation[] a) {
+		OMap m = new OMap().inner(properties);
 		for (Annotation aa : a) {
 			if (aa instanceof RestMethod) {
 				for (Property p : ((RestMethod)aa).properties())
@@ -115,7 +115,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			if (sm == null)
 				throw new WebApplicationException(SC_NOT_ACCEPTABLE);
 			Serializer s = sm.getSerializer();
-			ObjectMap mp = getMethodProperties(a);
+			OMap mp = getMethodProperties(a);
 			mp.append("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
@@ -151,7 +151,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			if (pm == null)
 				throw new WebApplicationException(SC_UNSUPPORTED_MEDIA_TYPE);
 			Parser p = pm.getParser();
-			ObjectMap mp = getMethodProperties(a);
+			OMap mp = getMethodProperties(a);
 			mp.put("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);

@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -208,10 +209,10 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("MsgPackSerializer", new DefaultFilteringObjectMap()
-				.append("addBeanTypes", addBeanTypes)
+			.a("MsgPackSerializer", new DefaultFilteringOMap()
+				.a("addBeanTypes", addBeanTypes)
 			);
 	}
 }

@@ -19,6 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
@@ -331,7 +332,7 @@ public class HtmlTest {
 
 		Map m = new MyMap();
 		m.put("foo", "bar");
-		o = new ObjectList().append(m);
+		o = OList.of(m);
 		r = s.serialize(o);
 		assertEquals("<ul><li><table><tr><td>foo</td><td>bar</td></tr></table></li></ul>", r);
 	}
@@ -347,7 +348,7 @@ public class HtmlTest {
 
 		Map m = new MyMap2();
 		m.put("foo", "bar");
-		o = new ObjectList().append(m);
+		o = OList.of(m);
 		r = s.serialize(o);
 		assertEquals("<ul><li><table><tr><td>foo</td><td>bar</td></tr></table></li></ul>", r);
 	}
@@ -365,7 +366,7 @@ public class HtmlTest {
 		String r;
 
 		MyBean b = new MyBean();
-		o = new ObjectList().append(b,b);
+		o = OList.of(b,b);
 		r = s.serialize(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
 	}
@@ -382,7 +383,7 @@ public class HtmlTest {
 		String r;
 
 		MyBean b = new MyBean();
-		o = new ObjectList().append(b,b);
+		o = OList.of(b,b);
 		r = s.serialize(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
 	}
@@ -399,7 +400,7 @@ public class HtmlTest {
 		String r;
 
 		MyBean b = new MyBean();
-		o = new ObjectList().append(b,b);
+		o = OList.of(b,b);
 		r = s.serialize(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
 	}

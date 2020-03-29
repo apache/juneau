@@ -277,19 +277,19 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("HtmlDocSerializerSession", new DefaultFilteringObjectMap()
-				.append("aside", aside)
-				.append("head", head)
-				.append("header", header)
-				.append("footer", footer)
-				.append("nav", nav)
-				.append("navlinks", navlinks)
-				.append("script", script)
-				.append("style", style)
-				.append("stylesheet", stylesheet)
-				.append("varResolver", getVarResolver())
+			.a("HtmlDocSerializerSession", new DefaultFilteringOMap()
+				.a("aside", aside)
+				.a("head", head)
+				.a("header", header)
+				.a("footer", footer)
+				.a("nav", nav)
+				.a("navlinks", navlinks)
+				.a("script", script)
+				.a("style", style)
+				.a("stylesheet", stylesheet)
+				.a("varResolver", getVarResolver())
 			);
 	}
 }

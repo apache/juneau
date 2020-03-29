@@ -178,7 +178,7 @@ public class RestHookTest {
 				}
 				@Override /* SerializerSession */
 				public Map<String,String> getResponseHeaders() {
-					ObjectMap p = getProperties();
+					OMap p = getProperties();
 					if (p.containsKey("Override-Content-Type"))
 						return AMap.of("Content-Type",p.getString("Override-Content-Type"));
 					return Collections.emptyMap();
@@ -222,7 +222,7 @@ public class RestHookTest {
 
 	@Rest(path="/super")
 	public static class C_Super {
-		protected ObjectList events = new ObjectList();
+		protected OList events = new OList();
 		@RestHook(INIT)
 		public void init1c(RestContextBuilder builder) {
 			events.add("super-1c");
@@ -240,7 +240,7 @@ public class RestHookTest {
 			events.add("super-2a");
 		}
 		@RestMethod
-		public ObjectList getEvents() {
+		public OList getEvents() {
 			return events;
 		}
 	}
@@ -297,7 +297,7 @@ public class RestHookTest {
 
 	@Rest(path="/super")
 	public static class D_Super {
-		protected ObjectList events = new ObjectList();
+		protected OList events = new OList();
 		@RestHook(POST_INIT)
 		public void postInit1c(RestContext context) {
 			events.add("super-1c");
@@ -315,7 +315,7 @@ public class RestHookTest {
 			events.add("super-2a");
 		}
 		@RestMethod
-		public ObjectList getEvents() {
+		public OList getEvents() {
 			return events;
 		}
 	}
@@ -395,7 +395,7 @@ public class RestHookTest {
 
 	@Rest(path="/super")
 	public static class E_Super {
-		protected ObjectList events = new ObjectList();
+		protected OList events = new OList();
 		@RestHook(POST_INIT_CHILD_FIRST)
 		public void postInitChildFirst1c(RestContext context) {
 			events.add("super-1c");
@@ -413,7 +413,7 @@ public class RestHookTest {
 			events.add("super-2a");
 		}
 		@RestMethod
-		public ObjectList getPostInitChildFirstEvents() {
+		public OList getPostInitChildFirstEvents() {
 			return events;
 		}
 	}
@@ -498,12 +498,12 @@ public class RestHookTest {
 			res.setHeader("start4-called", "true");
 		}
 		@RestMethod(path="/")
-		public ObjectMap getHeaders(RestRequest req, RestResponse res) {
-			return new ObjectMap()
-				.append("1", res.getHeader("start1-called"))
-				.append("2", res.getHeader("start2-called"))
-				.append("3", res.getHeader("start3-called"))
-				.append("4", res.getHeader("start4-called"));
+		public OMap getHeaders(RestRequest req, RestResponse res) {
+			return OMap.of()
+				.a("1", res.getHeader("start1-called"))
+				.a("2", res.getHeader("start2-called"))
+				.a("3", res.getHeader("start3-called"))
+				.a("4", res.getHeader("start4-called"));
 		}
 	}
 	static MockRest f = MockRest.build(F.class);
@@ -549,12 +549,12 @@ public class RestHookTest {
 			res.setHeader("pre4-called", "true");
 		}
 		@RestMethod(path="/")
-		public ObjectMap getHeaders(RestRequest req, RestResponse res) {
-			return new ObjectMap()
-				.append("1", res.getHeader("pre1-called"))
-				.append("2", res.getHeader("pre2-called"))
-				.append("3", res.getHeader("pre3-called"))
-				.append("4", res.getHeader("pre4-called"));
+		public OMap getHeaders(RestRequest req, RestResponse res) {
+			return OMap.of()
+				.a("1", res.getHeader("pre1-called"))
+				.a("2", res.getHeader("pre2-called"))
+				.a("3", res.getHeader("pre3-called"))
+				.a("4", res.getHeader("pre4-called"));
 		}
 	}
 	static MockRest g = MockRest.build(G.class);

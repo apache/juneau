@@ -1296,14 +1296,14 @@ public class HttpPartSchema {
 		}
 	}
 
-	final static ObjectMap toObjectMap(String[] ss) {
+	final static OMap toOMap(String[] ss) {
 		String s = joinnl(ss);
 		if (s.isEmpty())
 			return null;
-		if (! isObjectMap(s, true))
+		if (! isJsonObject(s, true))
 			s = "{" + s + "}";
 		try {
-			return new ObjectMap(s);
+			return OMap.ofJson(s);
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
@@ -1312,33 +1312,33 @@ public class HttpPartSchema {
 	@Override
 	public String toString() {
 		try {
-			ObjectMap m = new ObjectMap()
-				.appendSkipEmpty("name", name)
-				.appendSkipEmpty("type", type)
-				.appendSkipEmpty("format", format)
-				.appendSkipEmpty("codes", codes)
-				.appendSkipEmpty("default", _default)
-				.appendSkipEmpty("enum", _enum)
-				.appendSkipEmpty("properties", properties)
-				.appendSkipFalse("allowEmptyValue", allowEmptyValue)
-				.appendSkipFalse("exclusiveMaximum", exclusiveMaximum)
-				.appendSkipFalse("exclusiveMinimum", exclusiveMinimum)
-				.appendSkipFalse("required", required)
-				.appendSkipFalse("uniqueItems", uniqueItems)
-				.appendSkipFalse("skipIfEmpty", skipIfEmpty)
-				.appendIf(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
-				.appendSkipEmpty("pattern", pattern)
-				.appendSkipNull("items", items)
-				.appendSkipNull("additionalProperties", additionalProperties)
-				.appendSkipMinusOne("maximum", maximum)
-				.appendSkipMinusOne("minimum", minimum)
-				.appendSkipMinusOne("multipleOf", multipleOf)
-				.appendSkipMinusOne("maxLength", maxLength)
-				.appendSkipMinusOne("minLength", minLength)
-				.appendSkipMinusOne("maxItems", maxItems)
-				.appendSkipMinusOne("minItems", minItems)
-				.appendSkipMinusOne("maxProperties", maxProperties)
-				.appendSkipMinusOne("minProperties", minProperties)
+			OMap m = new OMap()
+				.ase("name", name)
+				.ase("type", type)
+				.ase("format", format)
+				.ase("codes", codes)
+				.ase("default", _default)
+				.ase("enum", _enum)
+				.ase("properties", properties)
+				.asf("allowEmptyValue", allowEmptyValue)
+				.asf("exclusiveMaximum", exclusiveMaximum)
+				.asf("exclusiveMinimum", exclusiveMinimum)
+				.asf("required", required)
+				.asf("uniqueItems", uniqueItems)
+				.asf("skipIfEmpty", skipIfEmpty)
+				.aif(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
+				.ase("pattern", pattern)
+				.asn("items", items)
+				.asn("additionalProperties", additionalProperties)
+				.asmo("maximum", maximum)
+				.asmo("minimum", minimum)
+				.asmo("multipleOf", multipleOf)
+				.asmo("maxLength", maxLength)
+				.asmo("minLength", minLength)
+				.asmo("maxItems", maxItems)
+				.asmo("minItems", minItems)
+				.asmo("maxProperties", maxProperties)
+				.asmo("minProperties", minProperties)
 				.append("parsedType", parsedType)
 			;
 			return m.toString();

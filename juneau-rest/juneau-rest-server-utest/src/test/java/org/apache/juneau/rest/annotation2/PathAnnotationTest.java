@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
@@ -293,23 +293,23 @@ public class PathAnnotationTest {
 	public static class E  {
 		@RestMethod(name=GET, path="/x/{foo}/{bar}")
 		public Object normal1(@Path String foo, @Path String bar) {
-			return new ObjectMap().append("m","normal1").append("foo", foo).append("bar", bar);
+			return OMap.of("m", "normal1", "foo", foo, "bar", bar);
 		}
 		@RestMethod(name=GET, path="/x/{foo}/x/{bar}/x")
 		public Object normal2(@Path String foo, @Path String bar) {
-			return new ObjectMap().append("m","normal2").append("foo", foo).append("bar", bar);
+			return OMap.of("m", "normal2", "foo", foo, "bar", bar);
 		}
 		@RestMethod(name=GET, path="/y/{0}/{1}")
 		public Object numbers1(@Path String foo, @Path String bar) {
-			return new ObjectMap().append("m","numbers1").append("0", foo).append("1", bar);
+			return OMap.of("m", "numbers1", "0", foo, "1", bar);
 		}
 		@RestMethod(name=GET, path="/y/{0}/y/{1}/y")
 		public Object numbers2(@Path String foo, @Path String bar) {
-			return new ObjectMap().append("m","numbers2").append("0", foo).append("1", bar);
+			return OMap.of("m", "numbers2", "0", foo, "1", bar);
 		}
 		@RestMethod(name=GET, path="/z/{1}/z/{0}/z")
 		public Object numbers3(@Path String foo, @Path String bar) {
-			return new ObjectMap().append("m","numbers3").append("0", foo).append("1", bar);
+			return OMap.of("m", "numbers3", "0", foo, "1", bar);
 		}
 	}
 	static MockRest e = MockRest.build(E.class);

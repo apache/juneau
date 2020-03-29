@@ -24,6 +24,7 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.http.conn.*;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -760,7 +761,7 @@ public class RestResponseBody implements HttpEntity {
 
 			if (type.isType(ReaderResource.class) || type.isType(StreamResource.class)) {
 				String mediaType = null;
-				ObjectMap headers = new ObjectMap();
+				OMap headers = new OMap();
 				for (Header h : response.getAllHeaders()) {
 					if (h.getName().equalsIgnoreCase("Content-Type"))
 						mediaType = h.getValue();
@@ -790,7 +791,7 @@ public class RestResponseBody implements HttpEntity {
 					ParserSessionArgs pArgs =
 						ParserSessionArgs
 							.create()
-							.properties(new ObjectMap().setInner(request.getProperties()))
+							.properties(new OMap().inner(request.getProperties()))
 							.locale(response.getLocale())
 							.mediaType(mt)
 							.schema(schema);
@@ -1249,7 +1250,7 @@ public class RestResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Converts the output from the connection into an {@link ObjectMap} and then wraps that in a {@link PojoRest}.
+	 * Converts the output from the connection into an {@link OMap} and then wraps that in a {@link PojoRest}.
 	 *
 	 * <p>
 	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
@@ -1262,7 +1263,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	</ul>
 	 */
 	public PojoRest asPojoRest() throws RestCallException {
-		return asPojoRest(ObjectMap.class);
+		return asPojoRest(OMap.class);
 	}
 
 	/**

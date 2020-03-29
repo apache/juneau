@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 import java.net.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.jena.annotation.*;
@@ -77,11 +76,11 @@ public class XmlTest {
 			+"	<fico_x0020_score>_x0020_&gt; 640</fico_x0020_score>\n"
 			+"</object>\n";
 
-		ObjectMap m = (ObjectMap) XmlParser.DEFAULT.parse(xml1, Object.class);
+		OMap m = (OMap) XmlParser.DEFAULT.parse(xml1, Object.class);
 		String json2 = JsonSerializer.create().simple().ws().trimNullProperties(false).build().serialize(m);
 		assertEquals(json1, json2);
 
-		m = (ObjectMap) JsonParser.DEFAULT.parse(json1, Object.class);
+		m = (OMap) JsonParser.DEFAULT.parse(json1, Object.class);
 		String xml2 = XmlSerializer.create().sq().ws()
 			.trimNullProperties(false)
 			.build()
@@ -133,7 +132,7 @@ public class XmlTest {
 			+"	<fico_x0020_score>_x0020_&gt; 640</fico_x0020_score>\n"
 			+"</object>\n";
 
-		ObjectMap m = (ObjectMap) JsonParser.DEFAULT.parse(json1, Object.class);
+		OMap m = (OMap) JsonParser.DEFAULT.parse(json1, Object.class);
 		String r = XmlSerializer.create().ns().sq().ws()
 			.addNamespaceUrisToRoot()
 			.defaultNamespace("http://www.apache.org")

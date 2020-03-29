@@ -71,8 +71,8 @@ public class PropertyStoreTest {
 		b.set("A.f1.s", "1");
 		b.set("A.f2.s", 2);
 		b.set("A.f3.s", true);
-		b.set("A.f4.s", new ObjectMap("{foo:'bar'}"));
-		b.set("A.f5.s", new ObjectList("[1,2]"));
+		b.set("A.f4.s", OMap.ofJson("{foo:'bar'}"));
+		b.set("A.f5.s", OList.ofJson("[1,2]"));
 		b.set("A.f6.s", null);
 		ps = b.build();
 		assertObjectEquals("{A:{'f1.s':'1','f2.s':'2','f3.s':'true','f4.s':'{foo:\\'bar\\'}','f5.s':'[1,2]'}}", ps);
@@ -86,8 +86,8 @@ public class PropertyStoreTest {
 		b.set("A.f1", "1");
 		b.set("A.f2", 2);
 		b.set("A.f3", true);
-		b.set("A.f4", new ObjectMap("{foo:'bar'}"));
-		b.set("A.f5", new ObjectList("[1,2]"));
+		b.set("A.f4", OMap.ofJson("{foo:'bar'}"));
+		b.set("A.f5", OList.ofJson("[1,2]"));
 		b.set("A.f6", null);
 		ps = b.build();
 		assertObjectEquals("{A:{f1:'1',f2:'2',f3:'true',f4:'{foo:\\'bar\\'}',f5:'[1,2]'}}", ps);
@@ -1598,8 +1598,8 @@ public class PropertyStoreTest {
 	@Test
 	public void testSet() {
 		PropertyStoreBuilder b = PropertyStore.create();
-		b.set(new ObjectMap().append("A.foo", "bar"));
-		b.set(new ObjectMap().append("A.baz", "qux"));
+		b.set(OMap.of("A.foo", "bar"));
+		b.set(OMap.of("A.baz", "qux"));
 		b.add(null);
 		assertObjectEquals("{A:{baz:'qux'}}", b.build());
 	}
@@ -1607,9 +1607,9 @@ public class PropertyStoreTest {
 	@Test
 	public void testAdd() {
 		PropertyStoreBuilder b = PropertyStore.create();
-		b.add(new ObjectMap().append("A.foo", "bar"));
-		b.add(new ObjectMap().append("A.baz", "qux"));
-		b.add(new ObjectMap().append("A.quux", null));
+		b.add(OMap.of("A.foo", "bar"));
+		b.add(OMap.of("A.baz", "qux"));
+		b.add(OMap.of("A.quux", null));
 		b.add(null);
 		assertObjectEquals("{A:{baz:'qux',foo:'bar'}}", b.build());
 	}
@@ -1639,7 +1639,7 @@ public class PropertyStoreTest {
 	}
 
 	@Test
-	public void testRemoveFromInvalidObjectList() {
+	public void testRemoveFromInvalidListOfObjects() {
 		PropertyStoreBuilder b = PropertyStore.create();
 		try {
 			b.removeFrom("A.foo.ss", "[xxx]");
@@ -1656,7 +1656,7 @@ public class PropertyStoreTest {
 	}
 
 	@Test
-	public void testAddToInvalidObjectMap() {
+	public void testAddToInvalidMapOfObjects() {
 		PropertyStoreBuilder b = PropertyStore.create();
 		try {
 			b.putAllTo("A.foo.sms", "{xxx}");

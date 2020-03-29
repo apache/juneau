@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 import java.io.IOException;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -51,9 +52,9 @@ public class PlainTextParserSession extends ReaderParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("PlainTextParserSession", new DefaultFilteringObjectMap()
+			.a("PlainTextParserSession", new DefaultFilteringOMap()
 			);
 	}
 }

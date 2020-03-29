@@ -124,7 +124,7 @@ import org.apache.juneau.jsonschema.*;
  * 	at runtime, and CGLIB was written before generics were introduced into Java and is a virtually-unsupported library.
  * 	Therefore, parameterized types will often be stripped from class definitions and replaced with unparameterized types
  *	(e.g. <code>List</code>).  Under these circumstances, you are likely to get <code>ClassCastExceptions</code>
- *	when trying to access generalized <code>ObjectMaps</code> as beans.  The best solution to this issue is to either
+ *	when trying to access generalized <code>OMaps</code> as beans.  The best solution to this issue is to either
  *	specify the parameter as a bean array (e.g. <code>MyBean[]</code>) or declare the method as final so that CGLIB
  *	will not try to recompile it.
  * </div>

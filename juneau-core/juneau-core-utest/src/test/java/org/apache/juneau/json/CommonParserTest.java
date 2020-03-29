@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
@@ -57,9 +57,9 @@ public class CommonParserTest {
 		assertEquals("street A", m.get("street"));
 		assertEquals(12345, m.get("zip"));
 
-		ObjectList jl = (ObjectList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
-		assertEquals("value", jl.getObjectMap(0).getString("attribute"));
-		assertEquals("value", jl.getObjectMap(1).getString("attribute"));
+		OList jl = (OList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
+		assertEquals("value", jl.getMap(0).getString("attribute"));
+		assertEquals("value", jl.getMap(1).getString("attribute"));
 
 		// Verify that all the following return null.
 		assertNull(p.parse((CharSequence)null, Object.class));
@@ -71,9 +71,9 @@ public class CommonParserTest {
 		assertNull(p.parse("   //foo   ", Object.class));
 
 		try {
-			jl = (ObjectList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
-			assertEquals("value", jl.getObjectMap(0).getString("attribute"));
-			assertEquals("value", jl.getObjectMap(1).getString("attribute"));
+			jl = (OList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
+			assertEquals("value", jl.getMap(0).getString("attribute"));
+			assertEquals("value", jl.getMap(1).getString("attribute"));
 		} catch (Exception e) {
 			fail(e.getLocalizedMessage());
 		}

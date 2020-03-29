@@ -17,6 +17,7 @@ import static org.apache.juneau.testutils.TestUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
@@ -267,7 +268,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 
 		public BeanWithDynaField init() {
 			this.f1 = 1;
-			this.f2 = new ObjectMap().append("f2a", "a").append("f2b", "b");
+			this.f2 = OMap.of("f2a", "a", "f2b", "b");
 			this.f3 = 3;
 			return this;
 		}
@@ -306,7 +307,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 
 		public BeanWithDynaMethods init() {
 			this.f1 = 1;
-			this.f2 = new ObjectMap().append("f2a", "a").append("f2b", "b");
+			this.f2 = OMap.of("f2a", "a", "f2b", "b");
 			this.f3 = 3;
 			return this;
 		}
@@ -350,7 +351,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 
 		public BeanWithDynaMethodsAndExtraKeys init() {
 			this.f1 = 1;
-			this.f2 = new ObjectMap().append("f2a", "a").append("f2b", "b");
+			this.f2 = OMap.of("f2a", "a", "f2b", "b");
 			this.f3 = 3;
 			return this;
 		}
@@ -382,7 +383,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 
 		public BeanWithDynaGetterOnly init() {
 			this.f1 = 1;
-			this.f2 = new ObjectMap().append("f2a", "a").append("f2b", "b");
+			this.f2 = OMap.of("f2a", "a", "f2b", "b");
 			this.f3 = 3;
 			return this;
 		}

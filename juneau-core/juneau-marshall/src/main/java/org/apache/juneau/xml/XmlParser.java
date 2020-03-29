@@ -20,6 +20,7 @@ import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -93,7 +94,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key
+	 * If <jk>true</jk>, when parsing into a generic {@link OMap}, the map will contain a single entry whose key
 	 * is the root element name.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -113,10 +114,10 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 * 	String xml = <js>"&lt;root&gt;&lt;a&gt;foobar&lt;/a&gt;&lt;/root&gt;"</js>;
 	 *
 	 * 	<jc>// Produces:  "{ root: { a:'foobar' }}"</jc>
-	 * 	ObjectMap m1 = p1.parse(xml, ObjectMap.<jk>class</jk>);
+	 * 	OMap m1 = p1.parse(xml, OMap.<jk>class</jk>);
 	 *
 	 * 	<jc>// Produces:  "{ a:'foobar' }"</jc>
-	 * 	ObjectMap m2 = p2.parse(xml, ObjectMap.<jk>class)</jk>;
+	 * 	OMap m2 = p2.parse(xml, OMap.<jk>class)</jk>;
 	 * </p>
 	 */
 	public static final String XML_preserveRootElement = PREFIX + ".preserveRootElement.b";
@@ -346,7 +347,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 *
 	 * @see #XML_preserveRootElement
 	 * @return
-	 * 	<jk>true</jk> if when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key
+	 * 	<jk>true</jk> if when parsing into a generic {@link OMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
 	 */
 	protected final boolean isPreserveRootElement() {
@@ -391,14 +392,14 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("XmlParser", new DefaultFilteringObjectMap()
-				.append("validating", validating)
-				.append("preserveRootElement", preserveRootElement)
-				.append("reporter", reporter)
-				.append("resolver", resolver)
-				.append("eventAllocator", eventAllocator)
+			.a("XmlParser", new DefaultFilteringOMap()
+				.a("validating", validating)
+				.a("preserveRootElement", preserveRootElement)
+				.a("reporter", reporter)
+				.a("resolver", resolver)
+				.a("eventAllocator", eventAllocator)
 			);
 	}
 }

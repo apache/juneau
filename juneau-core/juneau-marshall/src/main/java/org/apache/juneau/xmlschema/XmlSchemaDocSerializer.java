@@ -14,6 +14,7 @@ package org.apache.juneau.xmlschema;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -68,9 +69,9 @@ public class XmlSchemaDocSerializer extends XmlSchemaSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("XmlSchemaDocSerializer", new DefaultFilteringObjectMap()
+			.a("XmlSchemaDocSerializer", new DefaultFilteringOMap()
 			);
 	}
 }

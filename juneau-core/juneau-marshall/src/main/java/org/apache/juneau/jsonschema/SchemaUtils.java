@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.annotation.*;
@@ -35,63 +34,63 @@ public class SchemaUtils {
 	 * @return The schema converted to a map, or and empty map if the annotation was null.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static ObjectMap asMap(Schema a) throws ParseException {
+	public static OMap asMap(Schema a) throws ParseException {
 		if (a == null)
-			return ObjectMap.EMPTY_MAP;
-		ObjectMap om = new ObjectMap();
+			return OMap.EMPTY_MAP;
+		OMap om = new OMap();
 		if (empty(a))
 			return om;
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));
 	return om
-		.appendSkipEmpty("additionalProperties", toObjectMap(a.additionalProperties()))
-		.appendSkipEmpty("allOf", joinnl(a.allOf()))
-		.appendSkipEmpty("collectionFormat", a.collectionFormat())
-		.appendSkipEmpty("default", joinnl(a._default()))
-		.appendSkipEmpty("discriminator", a.discriminator())
-		.appendSkipEmpty("description", joinnl(a.description()))
-		.appendSkipEmpty("enum", toSet(a._enum()))
-		.appendSkipEmpty("examples", parseMap(a.examples()))
-		.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
-		.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
-		.appendSkipEmpty("externalDocs", merge(om.getObjectMap("externalDocs"), a.externalDocs()))
-		.appendSkipEmpty("format", a.format())
-		.appendSkipEmpty("ignore", a.ignore() ? "true" : null)
-		.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
-		.appendSkipEmpty("maximum", a.maximum())
-		.appendSkipMinusOne("maxItems", a.maxItems())
-		.appendSkipMinusOne("maxLength", a.maxLength())
-		.appendSkipMinusOne("maxProperties", a.maxProperties())
-		.appendSkipEmpty("minimum", a.minimum())
-		.appendSkipMinusOne("minItems", a.minItems())
-		.appendSkipMinusOne("minLength", a.minLength())
-		.appendSkipMinusOne("minProperties", a.minProperties())
-		.appendSkipEmpty("multipleOf", a.multipleOf())
-		.appendSkipEmpty("pattern", a.pattern())
-		.appendSkipEmpty("properties", toObjectMap(a.properties()))
-		.appendSkipFalse("readOnly", a.readOnly())
-		.appendSkipFalse("required", a.required())
-		.appendSkipEmpty("title", a.title())
-		.appendSkipEmpty("type", a.type())
-		.appendSkipFalse("uniqueItems", a.uniqueItems())
-		.appendSkipEmpty("xml", joinnl(a.xml()))
-		.appendSkipEmpty("x-example", joinnl(a.example()))
-		.appendSkipEmpty("$ref", a.$ref())
+		.ase("additionalProperties", toOMap(a.additionalProperties()))
+		.ase("allOf", joinnl(a.allOf()))
+		.ase("collectionFormat", a.collectionFormat())
+		.ase("default", joinnl(a._default()))
+		.ase("discriminator", a.discriminator())
+		.ase("description", joinnl(a.description()))
+		.ase("enum", toSet(a._enum()))
+		.ase("examples", parseMap(a.examples()))
+		.asf("exclusiveMaximum", a.exclusiveMaximum())
+		.asf("exclusiveMinimum", a.exclusiveMinimum())
+		.ase("externalDocs", merge(om.getMap("externalDocs"), a.externalDocs()))
+		.ase("format", a.format())
+		.ase("ignore", a.ignore() ? "true" : null)
+		.ase("items", merge(om.getMap("items"), a.items()))
+		.ase("maximum", a.maximum())
+		.asmo("maxItems", a.maxItems())
+		.asmo("maxLength", a.maxLength())
+		.asmo("maxProperties", a.maxProperties())
+		.ase("minimum", a.minimum())
+		.asmo("minItems", a.minItems())
+		.asmo("minLength", a.minLength())
+		.asmo("minProperties", a.minProperties())
+		.ase("multipleOf", a.multipleOf())
+		.ase("pattern", a.pattern())
+		.ase("properties", toOMap(a.properties()))
+		.asf("readOnly", a.readOnly())
+		.asf("required", a.required())
+		.ase("title", a.title())
+		.ase("type", a.type())
+		.asf("uniqueItems", a.uniqueItems())
+		.ase("xml", joinnl(a.xml()))
+		.ase("x-example", joinnl(a.example()))
+		.ase("$ref", a.$ref())
 	;
 	}
 
-	private static ObjectMap toObjectMap(String[] ss) throws ParseException {
+	private static OMap toOMap(String[] ss) throws ParseException {
 		if (ss.length == 0)
 			return null;
 		String s = joinnl(ss);
 		if (s.isEmpty())
 			return null;
-		if (! isObjectMap(s, true))
+		if (! isJsonObject(s, true))
 			s = "{" + s + "}";
-		return new ObjectMap(s);
+		return OMap.ofJson(s);
 	}
 
-	private static ObjectMap parseMap(Object o) throws ParseException {
+	private static OMap parseMap(Object o) throws ParseException {
 		if (o == null)
 			return null;
 		if (o instanceof String[])
@@ -101,14 +100,14 @@ public class SchemaUtils {
 			if (s.isEmpty())
 				return null;
 			if ("IGNORE".equalsIgnoreCase(s))
-				return new ObjectMap().append("ignore", true);
-			if (! isObjectMap(s, true))
+				return OMap.of("ignore", true);
+			if (! isJsonObject(s, true))
 				s = "{" + s + "}";
-			return new ObjectMap(s);
+			return OMap.ofJson(s);
 		}
-		if (o instanceof ObjectMap)
-			return (ObjectMap)o;
-		throw new ParseException("Unexpected data type ''{0}''.  Expected ObjectMap or String.", o.getClass().getName());
+		if (o instanceof OMap)
+			return (OMap)o;
+		throw new ParseException("Unexpected data type ''{0}''.  Expected OMap or String.", o.getClass().getName());
 	}
 
 	private static Set<String> toSet(String[] ss) throws ParseException {
@@ -123,68 +122,68 @@ public class SchemaUtils {
 		return set;
 	}
 
-	private static ObjectMap merge(ObjectMap om, Items a) throws ParseException {
+	private static OMap merge(OMap om, Items a) throws ParseException {
 		if (empty(a))
 			return om;
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));
 		return om
-			.appendSkipEmpty("collectionFormat", a.collectionFormat())
-			.appendSkipEmpty("default", joinnl(a._default()))
-			.appendSkipEmpty("enum", toSet(a._enum()))
-			.appendSkipEmpty("format", a.format())
-			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
-			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
-			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
-			.appendSkipEmpty("maximum", a.maximum())
-			.appendSkipMinusOne("maxItems", a.maxItems())
-			.appendSkipMinusOne("maxLength", a.maxLength())
-			.appendSkipEmpty("minimum", a.minimum())
-			.appendSkipMinusOne("minItems", a.minItems())
-			.appendSkipMinusOne("minLength", a.minLength())
-			.appendSkipEmpty("multipleOf", a.multipleOf())
-			.appendSkipEmpty("pattern", a.pattern())
-			.appendSkipFalse("uniqueItems", a.uniqueItems())
-			.appendSkipEmpty("type", a.type())
-			.appendSkipEmpty("$ref", a.$ref())
+			.ase("collectionFormat", a.collectionFormat())
+			.ase("default", joinnl(a._default()))
+			.ase("enum", toSet(a._enum()))
+			.ase("format", a.format())
+			.asf("exclusiveMaximum", a.exclusiveMaximum())
+			.asf("exclusiveMinimum", a.exclusiveMinimum())
+			.ase("items", merge(om.getMap("items"), a.items()))
+			.ase("maximum", a.maximum())
+			.asmo("maxItems", a.maxItems())
+			.asmo("maxLength", a.maxLength())
+			.ase("minimum", a.minimum())
+			.asmo("minItems", a.minItems())
+			.asmo("minLength", a.minLength())
+			.ase("multipleOf", a.multipleOf())
+			.ase("pattern", a.pattern())
+			.asf("uniqueItems", a.uniqueItems())
+			.ase("type", a.type())
+			.ase("$ref", a.$ref())
 		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, SubItems a) throws ParseException {
+	private static OMap merge(OMap om, SubItems a) throws ParseException {
 		if (empty(a))
 			return om;
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));
 		return om
-			.appendSkipEmpty("collectionFormat", a.collectionFormat())
-			.appendSkipEmpty("default", joinnl(a._default()))
-			.appendSkipEmpty("enum", toSet(a._enum()))
-			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
-			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
-			.appendSkipEmpty("format", a.format())
-			.appendSkipEmpty("items", toObjectMap(a.items()))
-			.appendSkipEmpty("maximum", a.maximum())
-			.appendSkipMinusOne("maxItems", a.maxItems())
-			.appendSkipMinusOne("maxLength", a.maxLength())
-			.appendSkipEmpty("minimum", a.minimum())
-			.appendSkipMinusOne("minItems", a.minItems())
-			.appendSkipMinusOne("minLength", a.minLength())
-			.appendSkipEmpty("multipleOf", a.multipleOf())
-			.appendSkipEmpty("pattern", a.pattern())
-			.appendSkipEmpty("type", a.type())
-			.appendSkipFalse("uniqueItems", a.uniqueItems())
-			.appendSkipEmpty("$ref", a.$ref())
+			.ase("collectionFormat", a.collectionFormat())
+			.ase("default", joinnl(a._default()))
+			.ase("enum", toSet(a._enum()))
+			.asf("exclusiveMaximum", a.exclusiveMaximum())
+			.asf("exclusiveMinimum", a.exclusiveMinimum())
+			.ase("format", a.format())
+			.ase("items", toOMap(a.items()))
+			.ase("maximum", a.maximum())
+			.asmo("maxItems", a.maxItems())
+			.asmo("maxLength", a.maxLength())
+			.ase("minimum", a.minimum())
+			.asmo("minItems", a.minItems())
+			.asmo("minLength", a.minLength())
+			.ase("multipleOf", a.multipleOf())
+			.ase("pattern", a.pattern())
+			.ase("type", a.type())
+			.asf("uniqueItems", a.uniqueItems())
+			.ase("$ref", a.$ref())
 		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, ExternalDocs a) throws ParseException {
+	private static OMap merge(OMap om, ExternalDocs a) throws ParseException {
 		if (empty(a))
 			return om;
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));
 		return om
-			.appendSkipEmpty("description", joinnl(a.description()))
-			.appendSkipEmpty("url", a.url())
+			.ase("description", joinnl(a.description()))
+			.ase("url", a.url())
 		;
 	}
 }

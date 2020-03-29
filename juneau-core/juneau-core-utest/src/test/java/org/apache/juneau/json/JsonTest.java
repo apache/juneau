@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -60,7 +60,7 @@ public class JsonTest {
 		r = "\\w[\\w\\-\\.]{3,}\\w";
 		m.put("x", r);
 		assertEquals("{x:\"\\\\w[\\\\w\\\\-\\\\.]{3,}\\\\w\"}", s2.serialize(m));
-		assertEquals(r, new ObjectMap(s2.serialize(m)).getString("x"));
+		assertEquals(r, OMap.ofJson(s2.serialize(m)).getString("x"));
 
 		// String = [foo\bar]
 		// JSON = {x:"foo\\bar"}
@@ -141,7 +141,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testIndentation() throws Exception {
-		ObjectMap m = new ObjectMap("{J:{B:['c',{D:'e'},['f',{G:'h'},1,false]]},I:'j'}");
+		OMap m = OMap.ofJson("{J:{B:['c',{D:'e'},['f',{G:'h'},1,false]]},I:'j'}");
 		String e = ""
 			+ "{"
 			+ "\n	J: {"
@@ -171,10 +171,10 @@ public class JsonTest {
 	@Test
 	public void testEscapingDoubleQuotes() throws Exception {
 		JsonSerializer s = JsonSerializer.DEFAULT;
-		String r = s.serialize(new ObjectMap().append("f1", "x'x\"x"));
+		String r = s.serialize(OMap.of("f1", "x'x\"x"));
 		assertEquals("{\"f1\":\"x'x\\\"x\"}", r);
 		JsonParser p = JsonParser.DEFAULT;
-		assertEquals("x'x\"x", p.parse(r, ObjectMap.class).getString("f1"));
+		assertEquals("x'x\"x", p.parse(r, OMap.class).getString("f1"));
 	}
 
 	//====================================================================================================
@@ -183,10 +183,10 @@ public class JsonTest {
 	@Test
 	public void testEscapingSingleQuotes() throws Exception {
 		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
-		String r = s.serialize(new ObjectMap().append("f1", "x'x\"x"));
+		String r = s.serialize(OMap.of("f1", "x'x\"x"));
 		assertEquals("{f1:'x\\'x\"x'}", r);
 		JsonParser p = JsonParser.DEFAULT;
-		assertEquals("x'x\"x", p.parse(r, ObjectMap.class).getString("f1"));
+		assertEquals("x'x\"x", p.parse(r, OMap.class).getString("f1"));
 	}
 
 	//====================================================================================================

@@ -16,6 +16,7 @@ import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 /**
@@ -143,8 +144,8 @@ public class ContextCacheTest {
 		}
 
 		@Override
-		public ObjectMap toMap() {
-			return new ObjectMap().append("f1", f1);
+		public OMap toMap() {
+			return OMap.of("f1", f1);
 		}
 	}
 
@@ -159,8 +160,8 @@ public class ContextCacheTest {
 		}
 
 		@Override
-		public ObjectMap toMap() {
-			return super.toMap().append("f2", f2);
+		public OMap toMap() {
+			return super.toMap().a("f2", f2);
 		}
 	}
 
@@ -173,8 +174,8 @@ public class ContextCacheTest {
 		}
 
 		@Override
-		public ObjectMap toMap() {
-			return super.toMap().append("f3", f3);
+		public OMap toMap() {
+			return super.toMap().a("f3", f3);
 		}
 	}
 

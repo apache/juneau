@@ -18,7 +18,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 import java.io.*;
 import java.util.Map;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.html.annotation.HtmlDocConfig;
 import org.apache.juneau.http.annotation.Body;
@@ -54,14 +54,14 @@ public class ConfigResource extends BasicRestServlet {
 		name=GET,
 		path="/",
 		summary="Get config file contents",
-		description="Show contents of config file as an ObjectMap.",
+		description="Show contents of config file as an OMap.",
 		swagger=@MethodSwagger(
 			responses={
 				"200:{ description:'Config file as a map of map of objects.', 'x-example':{'':{defaultKey:'defaultValue'},'Section1':{key1:'val1',key2:123}}}"
 			}
 		)
 	)
-	public ObjectMap getConfig() {
+	public OMap getConfig() {
 		return getServletConfig().getConfig().toMap();
 	}
 
@@ -90,14 +90,14 @@ public class ConfigResource extends BasicRestServlet {
 		name=GET,
 		path="/{section}",
 		summary="Get config file section contents",
-		description="Show contents of config file section as an ObjectMap.",
+		description="Show contents of config file section as an OMap.",
 		swagger=@MethodSwagger(
 			responses={
 				"200:{ description:'Config file section as a map of objects.', 'x-example':{key1:'val1',key2:123}}"
 			}
 		)
 	)
-	public ObjectMap getConfigSection(
+	public OMap getConfigSection(
 			@Path(name="section", description="Section name in config file.", example="REST") String section
 		) throws SectionNotFound, BadConfig {
 
@@ -134,7 +134,7 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
-	public ObjectMap setConfigContentsFormPost(
+	public OMap setConfigContentsFormPost(
 			@FormData(name="contents", description="New contents in INI file format.") String contents
 		) throws Exception {
 
@@ -152,7 +152,7 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
-	public ObjectMap setConfigContents(
+	public OMap setConfigContents(
 			@Body(description="New contents in INI file format.") Reader contents
 		) throws Exception {
 
@@ -170,7 +170,7 @@ public class ConfigResource extends BasicRestServlet {
 			}
 		)
 	)
-	public ObjectMap setConfigSection(
+	public OMap setConfigSection(
 			@Path(name="section", description="Section name in config file.", example="REST") String section,
 			@Body(
 				description="New contents of config section as a simple map of key/value pairs.",
@@ -229,8 +229,8 @@ public class ConfigResource extends BasicRestServlet {
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private ObjectMap getSection(String name) throws SectionNotFound, BadConfig {
-		ObjectMap m;
+	private OMap getSection(String name) throws SectionNotFound, BadConfig {
+		OMap m;
 		try {
 			m = getServletConfig().getConfig().getSectionAsMap(name);
 		} catch (ParseException e) {

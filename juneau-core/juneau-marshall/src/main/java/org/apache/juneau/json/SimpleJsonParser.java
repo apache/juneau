@@ -13,6 +13,7 @@
 package org.apache.juneau.json;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Parses any valid JSON text into a POJO model.
@@ -69,9 +70,9 @@ public class SimpleJsonParser extends JsonParser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("SimpleJsonSerializer", new DefaultFilteringObjectMap()
+			.a("SimpleJsonSerializer", new DefaultFilteringOMap()
 			);
 	}
 }

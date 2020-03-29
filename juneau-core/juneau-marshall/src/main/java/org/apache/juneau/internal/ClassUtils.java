@@ -30,8 +30,8 @@ public final class ClassUtils {
 	 * @param o The objects.
 	 * @return An array of readable class type strings.
 	 */
-	public static ObjectList getFullClassNames(Object[] o) {
-		ObjectList l = new ObjectList();
+	public static OList getFullClassNames(Object[] o) {
+		OList l = new OList();
 		for (int i = 0; i < o.length; i++)
 			l.add(o[i] == null ? "null" : ClassInfo.of((o[i].getClass())).getFullName());
 		return l;

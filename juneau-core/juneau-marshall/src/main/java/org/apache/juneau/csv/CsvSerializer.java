@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -117,8 +118,8 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("CsvSerializer", new DefaultFilteringObjectMap());
+			.a("CsvSerializer", new DefaultFilteringOMap());
 	}
 }

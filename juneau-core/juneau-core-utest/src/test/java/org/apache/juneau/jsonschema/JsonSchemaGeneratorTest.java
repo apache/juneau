@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.transform.*;
@@ -215,7 +216,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void beanDefsPreloaded() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().useBeanDefs().build().createSession();
-		s.addBeanDef("SimpleBean", new ObjectMap().append("test", 123));
+		s.addBeanDef("SimpleBean", new OMap().a("test", 123));
 		assertObjectEquals("{'$ref':'#/definitions/SimpleBean'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{SimpleBean:{test:123}}", s.getBeanDefs());
 	}
@@ -223,7 +224,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void useBeanDefsPreloaded_beanList() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().useBeanDefs().build().createSession();
-		s.addBeanDef("SimpleBean", new ObjectMap().append("test", 123));
+		s.addBeanDef("SimpleBean", new OMap().a("test", 123));
 		assertObjectEquals("{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}", s.getSchema(BeanList.class));
 		assertObjectEquals("{SimpleBean:{test:123}}", s.getBeanDefs());
 	}
@@ -231,7 +232,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void useBeanDefsPreloaded_beanList2d() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().useBeanDefs().build().createSession();
-		s.addBeanDef("SimpleBean", new ObjectMap().append("test", 123));
+		s.addBeanDef("SimpleBean", new OMap().a("test", 123));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}}", s.getSchema(BeanList2d.class));
 		assertObjectEquals("{SimpleBean:{test:123}}", s.getBeanDefs());
 	}
@@ -239,7 +240,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void useBeanDefsPreloaded_beanArray2d() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().useBeanDefs().build().createSession();
-		s.addBeanDef("SimpleBean", new ObjectMap().append("test", 123));
+		s.addBeanDef("SimpleBean", new OMap().a("test", 123));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}}", s.getSchema(SimpleBean[][].class));
 		assertObjectEquals("{SimpleBean:{test:123}}", s.getBeanDefs());
 	}
@@ -1194,27 +1195,27 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void defaultSchemas() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder()
-			.defaultSchema(SimpleBean.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(BeanMap.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(BeanList.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(BeanList[][].class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(boolean.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(Boolean.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(short.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(Short.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(int.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(Integer.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(long.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(Long.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(float.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(Float.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(double.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(Double.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(String.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(StringBuilder.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(Character.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(char.class, new ObjectMap().append("type", "bar"))
-			.defaultSchema(TestEnumToString.class, new ObjectMap().append("type", "bar"))
+			.defaultSchema(SimpleBean.class, OMap.of("type", "bar"))
+			.defaultSchema(BeanMap.class, OMap.of("type", "bar"))
+			.defaultSchema(BeanList.class, OMap.of("type", "bar"))
+			.defaultSchema(BeanList[][].class, OMap.of("type", "bar"))
+			.defaultSchema(boolean.class, OMap.of("type", "bar"))
+			.defaultSchema(Boolean.class, OMap.of("type", "bar"))
+			.defaultSchema(short.class, OMap.of("type", "bar"))
+			.defaultSchema(Short.class, OMap.of("type", "bar"))
+			.defaultSchema(int.class, OMap.of("type", "bar"))
+			.defaultSchema(Integer.class, OMap.of("type", "bar"))
+			.defaultSchema(long.class, OMap.of("type", "bar"))
+			.defaultSchema(Long.class, OMap.of("type", "bar"))
+			.defaultSchema(float.class, OMap.of("type", "bar"))
+			.defaultSchema(Float.class, OMap.of("type", "bar"))
+			.defaultSchema(double.class, OMap.of("type", "bar"))
+			.defaultSchema(Double.class, OMap.of("type", "bar"))
+			.defaultSchema(String.class, OMap.of("type", "bar"))
+			.defaultSchema(StringBuilder.class, OMap.of("type", "bar"))
+			.defaultSchema(Character.class, OMap.of("type", "bar"))
+			.defaultSchema(char.class, OMap.of("type", "bar"))
+			.defaultSchema(TestEnumToString.class, OMap.of("type", "bar"))
 			.build().createSession();
 		assertObjectEquals("{type:'bar'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{type:'bar'}", s.getSchema(BeanMap.class));
@@ -1243,27 +1244,27 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void defaultSchemasNoType() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder()
-			.defaultSchema(SimpleBean.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(BeanMap.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(BeanList.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(BeanList[][].class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(boolean.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(Boolean.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(short.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(Short.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(int.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(Integer.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(long.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(Long.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(float.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(Float.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(double.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(Double.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(String.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(StringBuilder.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(Character.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(char.class, new ObjectMap().append("foo", "bar"))
-			.defaultSchema(TestEnumToString.class, new ObjectMap().append("foo", "bar"))
+			.defaultSchema(SimpleBean.class, OMap.of("foo", "bar"))
+			.defaultSchema(BeanMap.class, OMap.of("foo", "bar"))
+			.defaultSchema(BeanList.class, OMap.of("foo", "bar"))
+			.defaultSchema(BeanList[][].class, OMap.of("foo", "bar"))
+			.defaultSchema(boolean.class, OMap.of("foo", "bar"))
+			.defaultSchema(Boolean.class, OMap.of("foo", "bar"))
+			.defaultSchema(short.class, OMap.of("foo", "bar"))
+			.defaultSchema(Short.class, OMap.of("foo", "bar"))
+			.defaultSchema(int.class, OMap.of("foo", "bar"))
+			.defaultSchema(Integer.class, OMap.of("foo", "bar"))
+			.defaultSchema(long.class, OMap.of("foo", "bar"))
+			.defaultSchema(Long.class, OMap.of("foo", "bar"))
+			.defaultSchema(float.class, OMap.of("foo", "bar"))
+			.defaultSchema(Float.class, OMap.of("foo", "bar"))
+			.defaultSchema(double.class, OMap.of("foo", "bar"))
+			.defaultSchema(Double.class, OMap.of("foo", "bar"))
+			.defaultSchema(String.class, OMap.of("foo", "bar"))
+			.defaultSchema(StringBuilder.class, OMap.of("foo", "bar"))
+			.defaultSchema(Character.class, OMap.of("foo", "bar"))
+			.defaultSchema(char.class, OMap.of("foo", "bar"))
+			.defaultSchema(TestEnumToString.class, OMap.of("foo", "bar"))
 			.build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string',foo:'bar'}},foo:'bar'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string',foo:'bar'}},foo:'bar'},foo:'bar'}", s.getSchema(BeanMap.class));

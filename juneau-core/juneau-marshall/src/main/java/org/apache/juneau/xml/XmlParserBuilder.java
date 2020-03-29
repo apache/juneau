@@ -23,6 +23,7 @@ import javax.xml.stream.*;
 import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -99,7 +100,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * Configuration property:  Preserve root element during generalized parsing.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key is
+	 * If <jk>true</jk>, when parsing into a generic {@link OMap}, the map will contain a single entry whose key is
 	 * the root element name.
 	 *
 	 * <ul class='seealso'>

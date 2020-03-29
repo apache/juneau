@@ -308,7 +308,7 @@ public class HttpPartSchemaBuilder {
 	HttpPartSchemaBuilder apply(SubItems a) {
 		type(a.type());
 		format(a.format());
-		items(HttpPartSchema.toObjectMap(a.items()));
+		items(HttpPartSchema.toOMap(a.items()));
 		collectionFormat(a.collectionFormat());
 		_default(a._default().length == 0 ? null : joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
@@ -346,8 +346,8 @@ public class HttpPartSchemaBuilder {
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
 		maxProperties(a.maxProperties());
 		minProperties(a.minProperties());
-		properties(HttpPartSchema.toObjectMap(a.properties()));
-		additionalProperties(HttpPartSchema.toObjectMap(a.additionalProperties()));
+		properties(HttpPartSchema.toOMap(a.properties()));
+		additionalProperties(HttpPartSchema.toOMap(a.additionalProperties()));
 		return this;
 	}
 
@@ -363,7 +363,7 @@ public class HttpPartSchemaBuilder {
 		return this;
 	}
 
-	HttpPartSchemaBuilder apply(ObjectMap m) {
+	HttpPartSchemaBuilder apply(OMap m) {
 		if (m != null && ! m.isEmpty()) {
 			_default(m.getString("default"));
 			_enum(HttpPartSchema.toSet(m.getString("enum")));
@@ -386,11 +386,11 @@ public class HttpPartSchemaBuilder {
 			minLength(m.get("minLength", Long.class));
 			minProperties(m.get("minProperties", Long.class));
 
-			items(m.getObjectMap("items"));
-			properties(m.getObjectMap("properties"));
-			additionalProperties(m.getObjectMap("additionalProperties"));
+			items(m.getMap("items"));
+			properties(m.getMap("properties"));
+			additionalProperties(m.getMap("additionalProperties"));
 
-			apply(m.getObjectMap("schema", null));
+			apply(m.getMap("schema", null));
 		}
 		return this;
 	}
@@ -540,11 +540,11 @@ public class HttpPartSchemaBuilder {
 	 * 		<js>"array"</js>
 	 * 		<br>Parameter must be an array or collection.
 	 * 		<br>Elements must be strings or POJOs convertible from strings.
-	 * 		<br>If parameter is <c>Object</c>, creates an {@link ObjectList}.
+	 * 		<br>If parameter is <c>Object</c>, creates an {@link OList}.
 	 * 	<li>
 	 * 		<js>"object"</js>
 	 * 		<br>Parameter must be a map or bean.
-	 * 		<br>If parameter is <c>Object</c>, creates an {@link ObjectMap}.
+	 * 		<br>If parameter is <c>Object</c>, creates an {@link OMap}.
 	 * 		<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
 	 * 	<li>
 	 * 		<js>"file"</js>
@@ -739,7 +739,7 @@ public class HttpPartSchemaBuilder {
 		return this;
 	}
 
-	HttpPartSchemaBuilder items(ObjectMap value) {
+	HttpPartSchemaBuilder items(OMap value) {
 		if (value != null && ! value.isEmpty())
 			items = HttpPartSchema.create().apply(value);
 		return this;
@@ -1487,10 +1487,10 @@ public class HttpPartSchemaBuilder {
 		return this;
 	}
 
-	private HttpPartSchemaBuilder properties(ObjectMap value) {
+	private HttpPartSchemaBuilder properties(OMap value) {
 		if (value != null && ! value.isEmpty())
 		for (Map.Entry<String,Object> e : value.entrySet())
-			property(e.getKey(), HttpPartSchema.create().apply((ObjectMap)e.getValue()));
+			property(e.getKey(), HttpPartSchema.create().apply((OMap)e.getValue()));
 		return this;
 	}
 
@@ -1514,7 +1514,7 @@ public class HttpPartSchemaBuilder {
 		return this;
 	}
 
-	private HttpPartSchemaBuilder additionalProperties(ObjectMap value) {
+	private HttpPartSchemaBuilder additionalProperties(OMap value) {
 		if (value != null && ! value.isEmpty())
 			additionalProperties = HttpPartSchema.create().apply(value);
 		return this;

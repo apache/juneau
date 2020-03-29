@@ -18,6 +18,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -362,7 +363,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public BeanMap<T> load(String input) throws ParseException {
-		putAll(new ObjectMap(input));
+		putAll(OMap.ofJson(input));
 		return this;
 	}
 
@@ -376,7 +377,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @throws IOException Thrown by <c>Reader</c>.
 	 */
 	public BeanMap<T> load(Reader r, ReaderParser p) throws ParseException, IOException {
-		putAll(new ObjectMap(r, p));
+		putAll(OMap.ofText(r, p));
 		return this;
 	}
 

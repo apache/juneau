@@ -20,7 +20,6 @@ import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.jsonschema.annotation.*;
@@ -55,7 +54,7 @@ public class HeaderAnnotationTest {
 	@Rest
 	public static class A {
 		@RestMethod
-		public String getA(@Header("*") ObjectMap m) {
+		public String getA(@Header("*") OMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -155,7 +154,7 @@ public class HeaderAnnotationTest {
 	@Rest
 	public static class B {
 		@RestMethod
-		public String get(@Header("*") ObjectMap m) {
+		public String get(@Header("*") OMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -219,7 +218,7 @@ public class HeaderAnnotationTest {
 	@Rest
 	public static class C {
 		@RestMethod
-		public String getA(@Header("*") ObjectMap m) {
+		public String getA(@Header("*") OMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -275,7 +274,7 @@ public class HeaderAnnotationTest {
 	@Rest
 	public static class D {
 		@RestMethod
-		public String get(@Header("*") ObjectMap m) {
+		public String get(@Header("*") OMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -649,7 +648,7 @@ public class HeaderAnnotationTest {
 	@Rest
 	public static class E {
 		@RestMethod
-		public String get(@Header("*") ObjectMap m) {
+		public String get(@Header("*") OMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -709,7 +708,7 @@ public class HeaderAnnotationTest {
 	@Rest
 	public static class F {
 		@RestMethod
-		public String get(@Header("*") ObjectMap m) {
+		public String get(@Header("*") OMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -775,7 +774,7 @@ public class HeaderAnnotationTest {
 	@Rest
 	public static class G {
 		@RestMethod
-		public String get(@Header("*") ObjectMap m) {
+		public String get(@Header("*") OMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -879,7 +878,7 @@ public class HeaderAnnotationTest {
 	@Rest
 	public static class H {
 		@RestMethod
-		public String get(@Header("*") ObjectMap m) {
+		public String get(@Header("*") OMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -915,7 +914,7 @@ public class HeaderAnnotationTest {
 	@Rest
 	public static class I {
 		@RestMethod
-		public String get(@Header("*") ObjectMap m) {
+		public String get(@Header("*") OMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -950,7 +949,7 @@ public class HeaderAnnotationTest {
 	@Rest
 	public static class J {
 		@RestMethod
-		public String get(@Header("*") ObjectMap m) {
+		public String get(@Header("*") OMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}

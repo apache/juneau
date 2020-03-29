@@ -651,8 +651,8 @@ public class ConfigMap implements ConfigStoreListener {
 	 *
 	 * @return A copy of this config as a map of maps.
 	 */
-	public ObjectMap asMap() {
-		ObjectMap m = new ObjectMap();
+	public OMap asMap() {
+		OMap m = new OMap();
 		readLock();
 		try {
 			for (Import i : imports)

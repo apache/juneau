@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -177,7 +178,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces: "{foo:'&lt;\/bar&gt;'"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> ObjectMap().append(<js>"foo"</js>, <js>"&lt;/bar&gt;"</js>);
+	 * 	String json = s.serialize(OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"&lt;/bar&gt;"</js>);
 	 * </p>
 	 */
 	public static final String JSON_escapeSolidus = PREFIX + ".escapeSolidus.b";
@@ -239,13 +240,14 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 		.simple()
 	 * 		.build();
 	 *
-	 * 	ObjectMap m = <jk>new</jk> ObjectMap()
-	 * 		.append(<js>"foo"</js>, <js>"x1"</js>)
-	 * 		.append(<js>"_bar"</js>, <js>"x2"</js>)
-	 * 		.append(<js>" baz "</js>, <js>"x3"</js>)
-	 * 		.append(<js>"123"</js>, <js>"x4"</js>)
-	 * 		.append(<js>"return"</js>, <js>"x5"</js>);
-	 * 		.append(<js>""</js>, <js>"x6"</js>);
+	 * 	OMap m = OMap.<jsm>of</jsm>(
+	 * 		<js>"foo"</js>, <js>"x1"</js>,
+	 * 		<js>"_bar"</js>, <js>"x2"</js>,
+	 * 		<js>" baz "</js>, <js>"x3"</js>,
+	 * 		<js>"123"</js>, <js>"x4"</js>,
+	 * 		<js>"return"</js>, <js>"x5"</js>,
+	 * 		<js>""</js>, <js>"x6"</js>
+	 *  );
 	 *
 	 * 	<jc>// Produces:</jc>
 	 * 	<jc>// {</jc>
@@ -500,12 +502,12 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("JsonSerializer", new DefaultFilteringObjectMap()
-				.append("simpleMode", simpleMode)
-				.append("escapeSolidus", escapeSolidus)
-				.append("addBeanTypes", addBeanTypes)
+			.a("JsonSerializer", new DefaultFilteringOMap()
+				.a("simpleMode", simpleMode)
+				.a("escapeSolidus", escapeSolidus)
+				.a("addBeanTypes", addBeanTypes)
 			);
 	}
 }

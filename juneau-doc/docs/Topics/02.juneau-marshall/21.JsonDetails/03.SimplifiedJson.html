@@ -28,13 +28,14 @@ Simplified JSON
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Some free-form JSON.</jc>
-	ObjectMap m = <jk>new</jk> ObjectMap()
-		.append(<js>"foo"</js>, <js>"x1"</js>)
-		.append(<js>"_bar"</js>, <js>"x2"</js>)
-		.append(<js>" baz "</js>, <js>"x3"</js>)
-	 	.append(<js>"123"</js>, <js>"x4"</js>)
-	 	.append(<js>"return"</js>, <js>"x5"</js>);
-	 	.append(<js>""</js>, <js>"x6"</js>);
+	OMap m = OMap.of(
+		<js>"foo"</js>, <js>"x1"</js>,
+		<js>"_bar"</js>, <js>"x2"</js>,
+		<js>" baz "</js>, <js>"x3"</js>,
+		<js>"123"</js>, <js>"x4"</js>,
+		<js>"return"</js>, <js>"x5"</js>,
+		<js>""</js>, <js>"x6"</js>
+	);
 </p>
 <p class='bpcode w800'>
 	<joc>// Serialized to standard JSON</joc>

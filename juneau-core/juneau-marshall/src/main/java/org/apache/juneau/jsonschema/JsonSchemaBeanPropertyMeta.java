@@ -13,6 +13,7 @@
 package org.apache.juneau.jsonschema;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.*;
 
@@ -27,7 +28,7 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 */
 	public static final JsonSchemaBeanPropertyMeta DEFAULT = new JsonSchemaBeanPropertyMeta();
 
-	private final ObjectMap schema;
+	private final OMap schema;
 
 	/**
 	 * Constructor.
@@ -38,7 +39,7 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	public JsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm, JsonSchemaMetaProvider mp) {
 		super(bpm);
 
-		this.schema = new ObjectMap();
+		this.schema = new OMap();
 
 		try {
 			for (Schema s : bpm.getAnnotations(Schema.class))
@@ -50,7 +51,7 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	private JsonSchemaBeanPropertyMeta() {
 		super(null);
-		this.schema = ObjectMap.EMPTY_MAP;
+		this.schema = OMap.EMPTY_MAP;
 	}
 
 	/**
@@ -58,7 +59,7 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 *
 	 * @return The schema information as a generic map.  Never <jk>null</jk>.
 	 */
-	protected ObjectMap getSchema() {
+	protected OMap getSchema() {
 		return schema;
 	}
 }

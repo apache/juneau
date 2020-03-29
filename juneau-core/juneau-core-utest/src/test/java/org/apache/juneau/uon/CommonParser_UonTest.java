@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
@@ -59,9 +59,9 @@ public class CommonParser_UonTest {
 		assertEquals("foo bar", m.get("b"));
 		assertEquals(false, m.get("c"));
 
-		ObjectList jl = (ObjectList)p.parse("@((attribute=value),(attribute=~'value~'))", Object.class);
-		assertEquals("value", jl.getObjectMap(0).getString("attribute"));
-		assertEquals("'value'", jl.getObjectMap(1).getString("attribute"));
+		OList jl = (OList)p.parse("@((attribute=value),(attribute=~'value~'))", Object.class);
+		assertEquals("value", jl.getMap(0).getString("attribute"));
+		assertEquals("'value'", jl.getMap(1).getString("attribute"));
 
 		A1 b = new A1();
 		A2 tl = new A2();

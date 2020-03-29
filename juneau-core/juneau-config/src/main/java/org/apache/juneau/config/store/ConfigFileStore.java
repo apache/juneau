@@ -25,6 +25,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -502,12 +503,12 @@ public class ConfigFileStore extends ConfigStore {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("ConfigFileStore", new DefaultFilteringObjectMap()
-				.append("charset", charset)
-				.append("extensions", extensions)
-				.append("updateOnWrite", updateOnWrite)
+			.a("ConfigFileStore", new DefaultFilteringOMap()
+				.a("charset", charset)
+				.a("extensions", extensions)
+				.a("updateOnWrite", updateOnWrite)
 			);
 	}
 }

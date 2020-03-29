@@ -24,6 +24,7 @@ import javax.xml.transform.stream.*;
 import javax.xml.validation.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
@@ -584,9 +585,9 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("XmlSchemaSerializerSession", new DefaultFilteringObjectMap()
+			.a("XmlSchemaSerializerSession", new DefaultFilteringOMap()
 		);
 	}
 }

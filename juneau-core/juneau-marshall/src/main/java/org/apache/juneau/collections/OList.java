@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
@@ -255,7 +256,7 @@ public class OList extends ObjectList /* In 9.0 - LinkedList<Object> */ {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new list or <jk>null</jk> if the list was <jk>null</jk>.
 	 */
-	public static OList of(Collection<?> in) {
+	public static OList ofAll(Collection<?> in) {
 		return in == null ? null : new OList(in);
 	}
 
@@ -268,7 +269,7 @@ public class OList extends ObjectList /* In 9.0 - LinkedList<Object> */ {
 	 * @return A new list or <jk>null</jk> if the string was null.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OList of(CharSequence json) throws ParseException {
+	public static OList ofJson(CharSequence json) throws ParseException {
 		return json == null ? null : new OList(json);
 	}
 
@@ -284,7 +285,7 @@ public class OList extends ObjectList /* In 9.0 - LinkedList<Object> */ {
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OList of(CharSequence in, Parser p) throws ParseException {
+	public static OList ofText(CharSequence in, Parser p) throws ParseException {
 		return in == null ? null : new OList(in, p);
 	}
 
@@ -297,7 +298,7 @@ public class OList extends ObjectList /* In 9.0 - LinkedList<Object> */ {
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OList of(Reader json) throws ParseException {
+	public static OList ofJson(Reader json) throws ParseException {
 		return json == null ? null : new OList(json);
 	}
 
@@ -313,7 +314,7 @@ public class OList extends ObjectList /* In 9.0 - LinkedList<Object> */ {
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OList of(Reader in, Parser p) throws ParseException {
+	public static OList ofText(Reader in, Parser p) throws ParseException {
 		return in == null ? null : new OList(in);
 	}
 
@@ -370,12 +371,42 @@ public class OList extends ObjectList /* In 9.0 - LinkedList<Object> */ {
 	 * Add.
 	 *
 	 * <p>
+	 * Same as {@link #a(Object)}
+	 *
+	 * @param o The entry to add to this list.
+	 * @return This object (for method chaining).
+	 */
+	public OList append(Object o) {
+		add(o);
+		return this;
+	}
+
+	/**
+	 * Add.
+	 *
+	 * <p>
 	 * Adds multiple entries to this list.
 	 *
 	 * @param o The entries to add to this list.
 	 * @return This object (for method chaining).
 	 */
 	public OList a(Object...o) {
+		for (Object o2 : o)
+			add(o2);
+		return this;
+	}
+
+	/**
+	 * Add.
+	 *
+	 * <p>
+	 * Same as {@link #a(Object...)}
+	 *
+	 * @param o The entries to add to this list.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public OList append(Object...o) {
 		for (Object o2 : o)
 			add(o2);
 		return this;
@@ -397,6 +428,21 @@ public class OList extends ObjectList /* In 9.0 - LinkedList<Object> */ {
 	}
 
 	/**
+	 * Add all.
+	 *
+	 * <p>
+	 * Same as {@link #aa(Collection)}.
+	 *
+	 * @param c The collection to add to this list.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public OList appendAll(Collection<?> c) {
+		if (c != null)
+			addAll(c);
+		return this;
+	}
+
+	/**
 	 * Add if.
 	 *
 	 * <p>
@@ -412,6 +458,19 @@ public class OList extends ObjectList /* In 9.0 - LinkedList<Object> */ {
 		return this;
 	}
 
+	/**
+	 * Add if.
+	 *
+	 * <p>
+	 * Same as {@link #aif(boolean, Object)}.
+	 *
+	 * @param b The boolean flag.
+	 * @param val The value to add.
+	 * @return This object (for method chaining).
+	 */
+	public OList appendIf(boolean b, Object val) {
+		return aif(b, val);
+	}
 
 	/**
 	 * Add if not empty.
@@ -430,6 +489,20 @@ public class OList extends ObjectList /* In 9.0 - LinkedList<Object> */ {
 	}
 
 	/**
+	 * Add if not empty.
+	 *
+	 * <p>
+	 * Same as {@link #aifne(String...)}.
+	 *
+	 * @param o The objects to add to the list.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public OList appendIfNotEmpty(String...o) {
+		return aifne(o);
+	}
+
+	/**
 	 * Add if not null.
 	 *
 	 * <p>
@@ -443,6 +516,46 @@ public class OList extends ObjectList /* In 9.0 - LinkedList<Object> */ {
 			if (o2 != null)
 				add(o2);
 		return this;
+	}
+	/**
+	 * Add if not null.
+	 *
+	 * <p>
+	 * Same as {@link #aifnn(Object...)}.
+	 *
+	 * @param o The objects to add to the list.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public OList appendIfNotNull(Object...o) {
+		return aifnn(o);
+	}
+
+	/**
+	 * Add if predicate matches.
+	 *
+	 * @param p The predicate to match against.
+	 * @param val The value to add if the predicate matches.
+	 * @return This object (for method chaining).
+	 */
+	public OList aif(Predicate<Object> p, Object val) {
+		if (p.test(val))
+			a(val);
+		return this;
+	}
+
+	/**
+	 * Add if predicate matches.
+	 *
+	 * <p>
+	 * Same as {@link #aif(Predicate, Object)}.
+	 *
+	 * @param p The predicate to match against.
+	 * @param val The value to add if the predicate matches.
+	 * @return This object (for method chaining).
+	 */
+	public OList appendIf(Predicate<Object> p, Object val) {
+		return aif(p, val);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -99,10 +99,10 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("SoapXmlSerializerSession", new DefaultFilteringObjectMap()
-				.append("soapAction", soapAction)
+			.a("SoapXmlSerializerSession", new DefaultFilteringOMap()
+				.a("soapAction", soapAction)
 			);
 	}
 }

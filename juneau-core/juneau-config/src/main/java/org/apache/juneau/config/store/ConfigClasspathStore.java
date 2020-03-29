@@ -19,6 +19,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -139,9 +140,9 @@ public class ConfigClasspathStore extends ConfigStore {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("ConfigClasspathStore", new DefaultFilteringObjectMap()
+			.a("ConfigClasspathStore", new DefaultFilteringOMap()
 			);
 	}
 }

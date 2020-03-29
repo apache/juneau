@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
@@ -164,10 +165,10 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("HtmlSchemaSerializer", new DefaultFilteringObjectMap()
-				.append("generator", generator)
+			.a("HtmlSchemaSerializer", new DefaultFilteringOMap()
+				.a("generator", generator)
 			);
 	}
 }

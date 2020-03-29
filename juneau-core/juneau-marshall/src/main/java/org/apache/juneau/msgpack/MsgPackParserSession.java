@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
@@ -68,7 +69,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 		else
 			sType = eType;
 
-		if (sType.isOptional()) 
+		if (sType.isOptional())
 			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), is, outer, pMeta));
 
 		setCurrentClass(sType);
@@ -93,12 +94,12 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 			else if (dt == BIN)
 				o = is.readBinary();
 			else if (dt == ARRAY && sType.isObject()) {
-				ObjectList ol = new ObjectList(this);
+				OList ol = new OList(this);
 				for (int i = 0; i < length; i++)
 					ol.add(parseAnything(object(), is, outer, pMeta));
 				o = ol;
 			} else if (dt == MAP && sType.isObject()) {
-				ObjectMap om = new ObjectMap(this);
+				OMap om = new OMap(this);
 				for (int i = 0; i < length; i++)
 					om.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, om, pMeta));
 				o = cast(om, pMeta, eType);
@@ -110,7 +111,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 				o = convertToType(o, sType);
 			} else if (sType.isMap()) {
 				if (dt == MAP) {
-					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(this));
+					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new OMap(this));
 					for (int i = 0; i < length; i++) {
 						Object key = parseAnything(sType.getKeyType(), is, outer, pMeta);
 						ClassMeta<?> vt = sType.getValueType();
@@ -148,7 +149,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 				o = sType.newInstanceFromString(outer, o == null ? "" : o.toString());
 			} else if (sType.isCollection()) {
 				if (dt == MAP) {
-					ObjectMap m = new ObjectMap(this);
+					OMap m = new OMap(this);
 					for (int i = 0; i < length; i++)
 						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
@@ -156,7 +157,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 					Collection l = (
 						sType.canCreateNewInstance(outer)
 						? (Collection)sType.newInstance()
-						: new ObjectList(this)
+						: new OList(this)
 					);
 					for (int i = 0; i < length; i++)
 						l.add(parseAnything(sType.getElementType(), is, l, pMeta));
@@ -166,7 +167,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 				}
 			} else if (sType.isArray() || sType.isArgs()) {
 				if (dt == MAP) {
-					ObjectMap m = new ObjectMap(this);
+					OMap m = new OMap(this);
 					for (int i = 0; i < length; i++)
 						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
@@ -174,7 +175,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 					Collection l = (
 						sType.isCollection() && sType.canCreateNewInstance(outer)
 						? (Collection)sType.newInstance()
-						: new ObjectList(this)
+						: new OList(this)
 					);
 					for (int i = 0; i < length; i++)
 						l.add(parseAnything(sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
@@ -183,7 +184,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
 			} else if (dt == MAP) {
-				ObjectMap m = new ObjectMap(this);
+				OMap m = new OMap(this);
 				for (int i = 0; i < length; i++)
 					m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 				if (m.containsKey(getBeanTypePropertyName(eType)))
@@ -210,9 +211,9 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("MsgPackParserSession", new DefaultFilteringObjectMap()
+			.a("MsgPackParserSession", new DefaultFilteringOMap()
 			);
 	}
 }

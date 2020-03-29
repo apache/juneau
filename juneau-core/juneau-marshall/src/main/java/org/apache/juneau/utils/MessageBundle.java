@@ -19,7 +19,7 @@ import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Wraps a {@link ResourceBundle} to provide some useful additional functionality.
@@ -350,7 +350,7 @@ public class MessageBundle extends ResourceBundle {
 	}
 
 	/**
-	 * Returns this resource bundle as an {@link ObjectMap}.
+	 * Returns this resource bundle as an {@link OMap}.
 	 *
 	 * <p>
 	 * Useful for debugging purposes.
@@ -358,12 +358,12 @@ public class MessageBundle extends ResourceBundle {
 	 * calling this method and serializing the result.
 	 *
 	 * <p>
-	 * This method always constructs a new {@link ObjectMap} on each call.
+	 * This method always constructs a new {@link OMap} on each call.
 	 *
 	 * @return A new map containing all the keys and values in this bundle.
 	 */
-	public ObjectMap swap() {
-		ObjectMap om = new ObjectMap();
+	public OMap swap() {
+		OMap om = new OMap();
 		for (String k : allKeys)
 			om.put(k, getString(k));
 		return om;

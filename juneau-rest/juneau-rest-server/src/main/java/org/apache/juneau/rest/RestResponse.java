@@ -22,6 +22,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
@@ -87,7 +88,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			String passThroughHeaders = req.getHeader("x-response-headers");
 			if (passThroughHeaders != null) {
 				HttpPartParser p = context.getPartParser();
-				ObjectMap m = p.createPartSession(req.getParserSessionArgs()).parse(HttpPartType.HEADER, null, passThroughHeaders, context.getClassMeta(ObjectMap.class));
+				OMap m = p.createPartSession(req.getParserSessionArgs()).parse(HttpPartType.HEADER, null, passThroughHeaders, context.getClassMeta(OMap.class));
 				for (Map.Entry<String,Object> e : m.entrySet())
 					setHeaderSafe(e.getKey(), e.getValue().toString());
 			}

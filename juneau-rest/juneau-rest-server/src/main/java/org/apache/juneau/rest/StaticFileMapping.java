@@ -170,7 +170,7 @@ public class StaticFileMapping {
 						jsonDepth--;
 					} else {
 						String json = s.substring(mark, i+1);
-						l.add(new StaticFileMapping(resourceClass, path, location, new ObjectMap(json)));
+						l.add(new StaticFileMapping(resourceClass, path, location, OMap.ofJson(json)));
 						state = S05;
 						path = null;
 						location = null;
@@ -218,8 +218,8 @@ public class StaticFileMapping {
 	 *
 	 * @return A new map containing the properties defined on this bean.
 	 */
-	public ObjectMap toMap() {
-		return new DefaultFilteringObjectMap()
+	public OMap toMap() {
+		return new DefaultFilteringOMap()
 			.append("resourceClass", resourceClass)
 			.append("path", path)
 			.append("location", location)

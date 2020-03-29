@@ -966,9 +966,9 @@ public final class ClassMeta<T> implements Type {
 					if (isCharSequence())
 						return (T)example;
 					String s = example.toString();
-					if (isMapOrBean() && StringUtils.isObjectMap(s, false))
+					if (isMapOrBean() && StringUtils.isJsonObject(s, false))
 						return JsonParser.DEFAULT.parse(s, this);
-					if (isCollectionOrArray() && StringUtils.isObjectList(s, false))
+					if (isCollectionOrArray() && StringUtils.isJsonArray(s, false))
 						return JsonParser.DEFAULT.parse(s, this);
 				}
 				if (example instanceof Map && isMapOrBean()) {

@@ -37,7 +37,7 @@ import org.apache.juneau.svl.*;
  */
 @SuppressWarnings("serial")
 @Deprecated
-public class RequestProperties extends ResolvingObjectMap {
+public class RequestProperties extends ResolvingOMap {
 
 	/**
 	 * Constructor

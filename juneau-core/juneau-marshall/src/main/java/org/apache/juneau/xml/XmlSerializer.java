@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xmlschema.*;
@@ -730,16 +731,16 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("XmlSerializer", new DefaultFilteringObjectMap()
-				.append("autoDetectNamespaces", autoDetectNamespaces)
-				.append("enableNamespaces", enableNamespaces)
-				.append("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
-				.append("defaultNamespace", defaultNamespace)
-				.append("xsNamespace", xsNamespace)
-				.append("namespaces", namespaces)
-				.append("addBeanTypes", addBeanTypes)
+			.a("XmlSerializer", new DefaultFilteringOMap()
+				.a("autoDetectNamespaces", autoDetectNamespaces)
+				.a("enableNamespaces", enableNamespaces)
+				.a("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
+				.a("defaultNamespace", defaultNamespace)
+				.a("xsNamespace", xsNamespace)
+				.a("namespaces", namespaces)
+				.a("addBeanTypes", addBeanTypes)
 			);
 	}
 }

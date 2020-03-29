@@ -17,6 +17,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.text.*;
 import java.util.*;
 
+import org.apache.juneau.collections.*;
+
 /**
  * Session that lives for the duration of a single use of {@link BeanTraverseContext}.
  *
@@ -261,15 +263,11 @@ public class BeanTraverseSession extends BeanSession {
 	 *
 	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
 	 */
-	public final ObjectMap getLastLocation() {
-		ObjectMap m = new ObjectMap();
-		if (currentClass != null)
-			m.put("currentClass", currentClass);
-		if (currentProperty != null)
-			m.put("currentProperty", currentProperty);
-		if (stack != null && ! stack.isEmpty())
-			m.put("stack", stack);
-		return m;
+	public final OMap getLastLocation() {
+		return OMap.of()
+			.asn("currentClass", currentClass)
+			.asn("currentProperty", currentProperty)
+			.ase("stack", stack);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -327,9 +325,9 @@ public class BeanTraverseSession extends BeanSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("BeanTraverseSession", new DefaultFilteringObjectMap()
+			.a("BeanTraverseSession", new DefaultFilteringOMap()
 			);
 	}
 }

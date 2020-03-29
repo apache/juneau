@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.*;
@@ -35,12 +35,12 @@ public class CallbackStringsTest {
 	@Rest
 	public static class A {
 		@RestMethod(name=GET,path="/*")
-		public ObjectMap get(RestRequest req) throws Exception {
-			return new ObjectMap().append("method","GET").append("headers", getFooHeaders(req)).append("content", req.getBody().asString());
+		public OMap get(RestRequest req) throws Exception {
+			return OMap.of("method","GET","headers",getFooHeaders(req),"content",req.getBody().asString());
 		}
 		@RestMethod(name=PUT,path="/*")
-		public ObjectMap put(RestRequest req) throws Exception {
-			return new ObjectMap().append("method","PUT").append("headers", getFooHeaders(req)).append("content", req.getBody().asString());
+		public OMap put(RestRequest req) throws Exception {
+			return OMap.of("method","PUT","headers",getFooHeaders(req),"content", req.getBody().asString());
 		}
 		private Map<String,Object> getFooHeaders(RestRequest req) {
 			Map<String,Object> m = new TreeMap<>();

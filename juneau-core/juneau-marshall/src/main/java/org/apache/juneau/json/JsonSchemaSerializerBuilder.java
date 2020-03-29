@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.reflect.*;
@@ -238,7 +239,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	The schema.
 	 * @return This object (for method chaining).
 	 */
-	public JsonSchemaSerializerBuilder defaultSchema(Class<?> c, ObjectMap schema) {
+	public JsonSchemaSerializerBuilder defaultSchema(Class<?> c, OMap schema) {
 		return putTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
 	}
 

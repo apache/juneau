@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 
@@ -86,7 +87,7 @@ import org.apache.juneau.uon.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Serialize a Map</jc>
- * 	Map m = <jk>new</jk> ObjectMap(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
+ * 	Map m = OMap.<jsm>ofJson</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
  *
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
  * 	<jc>// Produces "a=b&amp;c=1&amp;d=false&amp;e=@(f,1,false)&amp;g=(h=i)"</jc>
@@ -392,10 +393,10 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("UrlEncodingSerializer", new DefaultFilteringObjectMap()
-				.append("expandedParams", expandedParams)
+			.a("UrlEncodingSerializer", new DefaultFilteringOMap()
+				.a("expandedParams", expandedParams)
 			);
 	}
 }

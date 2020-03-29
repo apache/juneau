@@ -584,20 +584,20 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("RdfSerializer", new DefaultFilteringObjectMap()
-				.append("addLiteralTypes", addLiteralTypes)
-				.append("addRootProperty", addRootProperty)
-				.append("useXmlNamespaces", useXmlNamespaces)
-				.append("looseCollections", looseCollections)
-				.append("autoDetectNamespaces", autoDetectNamespaces)
-				.append("rdfLanguage", rdfLanguage)
-				.append("juneauNs", juneauNs)
-				.append("juneauBpNs", juneauBpNs)
-				.append("collectionFormat", collectionFormat)
-				.append("namespaces", namespaces)
-				.append("addBeanTypes", addBeanTypes)
+			.a("RdfSerializer", new DefaultFilteringOMap()
+				.a("addLiteralTypes", addLiteralTypes)
+				.a("addRootProperty", addRootProperty)
+				.a("useXmlNamespaces", useXmlNamespaces)
+				.a("looseCollections", looseCollections)
+				.a("autoDetectNamespaces", autoDetectNamespaces)
+				.a("rdfLanguage", rdfLanguage)
+				.a("juneauNs", juneauNs)
+				.a("juneauBpNs", juneauBpNs)
+				.a("collectionFormat", collectionFormat)
+				.a("namespaces", namespaces)
+				.a("addBeanTypes", addBeanTypes)
 			);
 	}
 }

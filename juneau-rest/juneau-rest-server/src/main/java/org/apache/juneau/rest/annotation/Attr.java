@@ -79,7 +79,7 @@ public @interface Attr {
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(path=<js>"/addPet"</js>)
-	 * 	<jk>public void</jk> addPet(<ja>@Attr</ja> ObjectMap allAttributes) {...}
+	 * 	<jk>public void</jk> addPet(<ja>@Attr</ja> OMap allAttributes) {...}
 	 * 		</p>
 	 * 	</li>
 	 * </ul>

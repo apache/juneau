@@ -20,8 +20,8 @@ import java.lang.annotation.*;
 import javax.xml.stream.*;
 import javax.xml.stream.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xmlschema.*;
@@ -84,7 +84,7 @@ public @interface XmlConfig {
 	 * Configuration property:  Preserve root element during generalized parsing.
 	 *
 	 * <p>
-	 * If <js>"true"</js>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key
+	 * If <js>"true"</js>, when parsing into a generic {@link OMap}, the map will contain a single entry whose key
 	 * is the root element name.
 	 *
 	 * <ul class='notes'>

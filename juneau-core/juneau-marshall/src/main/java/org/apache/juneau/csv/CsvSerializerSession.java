@@ -16,6 +16,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -107,9 +108,9 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("CsvSerializerSession", new DefaultFilteringObjectMap()
+			.a("CsvSerializerSession", new DefaultFilteringOMap()
 		);
 	}
 }

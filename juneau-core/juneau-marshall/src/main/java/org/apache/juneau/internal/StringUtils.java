@@ -29,6 +29,7 @@ import java.util.regex.*;
 import javax.xml.bind.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
@@ -2366,7 +2367,7 @@ public final class StringUtils {
 	 * @param ignoreWhitespaceAndComments If <jk>true</jk>, leading and trailing whitespace and comments will be ignored.
 	 * @return <jk>true</jk> if the specified string appears to be a JSON array.
 	 */
-	public static boolean isObjectList(Object o, boolean ignoreWhitespaceAndComments) {
+	public static boolean isJsonArray(Object o, boolean ignoreWhitespaceAndComments) {
 		if (o instanceof CharSequence) {
 			String s = o.toString();
 			if (! ignoreWhitespaceAndComments)
@@ -2394,12 +2395,12 @@ public final class StringUtils {
 	 * @return The parsed string.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static ObjectList parseListOrCdl(String s) throws ParseException {
+	public static OList parseListOrCdl(String s) throws ParseException {
 		if (isEmpty(s))
 			return null;
-		if (! isObjectList(s, true))
-			return new ObjectList((Object[])StringUtils.split(s.trim(), ','));
-		return new ObjectList(s);
+		if (! isJsonArray(s, true))
+			return new OList((Object[])StringUtils.split(s.trim(), ','));
+		return new OList(s);
 	}
 
 	/**
@@ -2432,7 +2433,7 @@ public final class StringUtils {
 	 * @param ignoreWhitespaceAndComments If <jk>true</jk>, leading and trailing whitespace and comments will be ignored.
 	 * @return <jk>true</jk> if the specified string appears to be a JSON object.
 	 */
-	public static boolean isObjectMap(Object o, boolean ignoreWhitespaceAndComments) {
+	public static boolean isJsonObject(Object o, boolean ignoreWhitespaceAndComments) {
 		if (o instanceof CharSequence) {
 			String s = o.toString();
 			if (! ignoreWhitespaceAndComments)

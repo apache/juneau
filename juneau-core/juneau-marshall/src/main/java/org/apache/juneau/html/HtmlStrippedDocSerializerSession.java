@@ -17,6 +17,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -57,9 +58,9 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("HtmlStrippedDocSerializerSession", new DefaultFilteringObjectMap()
+			.a("HtmlStrippedDocSerializerSession", new DefaultFilteringOMap()
 		);
 	}
 }

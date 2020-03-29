@@ -22,6 +22,7 @@ import java.util.*;
 import javax.servlet.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
@@ -107,13 +108,13 @@ public class RequestBody {
 	 * 		<td>object</td>
 	 * 		<td><js>"{...}"</js></td>
 	 * 		<td><code><xt>&lt;object&gt;</xt>...<xt>&lt;/object&gt;</xt></code><br><code><xt>&lt;x</xt> <xa>type</xa>=<xs>'object'</xs><xt>&gt;</xt>...<xt>&lt;/x&gt;</xt></code></td>
-	 * 		<td>{@link ObjectMap}</td>
+	 * 		<td>{@link OMap}</td>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>array</td>
 	 * 		<td><js>"[...]"</js></td>
 	 * 		<td><code><xt>&lt;array&gt;</xt>...<xt>&lt;/array&gt;</xt></code><br><code><xt>&lt;x</xt> <xa>type</xa>=<xs>'array'</xs><xt>&gt;</xt>...<xt>&lt;/x&gt;</xt></code></td>
-	 * 		<td>{@link ObjectList}</td>
+	 * 		<td>{@link OList}</td>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>string</td>

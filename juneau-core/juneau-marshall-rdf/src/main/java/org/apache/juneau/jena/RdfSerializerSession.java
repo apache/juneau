@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -386,7 +387,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		}
 	}
 
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Common properties
 	//-----------------------------------------------------------------------------------------------------------------
@@ -584,9 +585,9 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("RdfSerializerSession", new DefaultFilteringObjectMap()
+			.a("RdfSerializerSession", new DefaultFilteringOMap()
 			);
 	}
 }

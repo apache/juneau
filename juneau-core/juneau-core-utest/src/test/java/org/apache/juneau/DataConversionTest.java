@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
 
@@ -37,7 +38,7 @@ public class DataConversionTest {
 	//====================================================================================================
 	@Test
 	public void testBasic() throws Exception {
-		ObjectMap m = new ObjectMap();
+		OMap m = new OMap();
 
 		// *** Number ***
 		m.put("x", 123);
@@ -55,16 +56,14 @@ public class DataConversionTest {
 		assertNull(m.getLong("x"));
 		assertNull(m.getBoolean("x"));
 		assertNull(m.getMap("x"));
-		assertNull(m.getObjectMap("x"));
 		assertNull(m.getList("x"));
-		assertNull(m.getObjectList("x"));
 
 		// *** Map ***
 		m.put("x", new HashMap());
 		assertEquals(m.getString("x"), "{}");
 
-		// *** ObjectMap ***
-		m.put("x", new ObjectMap("{foo:123}"));
+		// *** OMap ***
+		m.put("x", OMap.ofJson("{foo:123}"));
 		assertEquals(m.getString("x"), "{foo:123}");
 
 		// *** Collection ***
@@ -73,17 +72,15 @@ public class DataConversionTest {
 		m.put("x", s);
 		assertEquals(m.getString("x"), "[123]");
 
-		// *** ObjectList ***
-		m.put("x", new ObjectList("[123]"));
+		// *** OList ***
+		m.put("x", OList.ofJson("[123]"));
 		assertEquals(m.getString("x"), "[123]");
 		assertEquals(m.getList("x").size(), 1);
-		assertEquals(m.getObjectList("x").size(), 1);
 
 		// *** Array ***
 		m.put("x", new Integer[]{123});
 		assertEquals(m.getString("x"), "[123]");
 		assertEquals(m.getList("x").size(), 1);
-		assertEquals(m.getObjectList("x").size(), 1);
 
 		// *** Enum ***
 		m.put("x", TestEnum.ENUM2);
@@ -91,11 +88,7 @@ public class DataConversionTest {
 		assertFalse(m.getBoolean("x"));
 		try {
 			m.getMap("x");
-			fail("Invalid conversion from Enum to Map");
-		} catch (InvalidDataConversionException e) {}
-		try {
-			m.getObjectMap("x");
-			fail("Invalid conversion from Enum to ObjectMap");
+			fail("Invalid conversion from Enum to OMap");
 		} catch (InvalidDataConversionException e) {}
 
 		// *** Not a bean ***
@@ -112,11 +105,7 @@ public class DataConversionTest {
 		assertFalse(m.getBoolean("x"));
 		try {
 			m.getMap("x");
-			fail("Invalid conversion from NotABean to Map");
-		} catch (InvalidDataConversionException e) {}
-		try {
-			m.getObjectMap("x");
-			fail("Invalid conversion from NotABean to ObjectMap");
+			fail("Invalid conversion from NotABean to OMap");
 		} catch (InvalidDataConversionException e) {}
 
 	}

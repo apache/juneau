@@ -20,6 +20,7 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -223,7 +224,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_defaultSchemas JSONSCHEMA_defaultSchemas}
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.defaultSchema.smo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,{@link org.apache.juneau.ObjectMap}&gt;</c>
+	 * 	<li><b>Data type:</b>  <c>Map&lt;String,{@link org.apache.juneau.collections.OMap}&gt;</c>
 	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.defaultSchema</c>
 	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_DEFAULTSCHEMA</c>
 	 * 	<li><b>Default:</b>  Empty map.
@@ -234,7 +235,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#defaultSchema(Class,ObjectMap)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#defaultSchema(Class,OMap)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -316,7 +317,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * <p>
 	 * The definitions can then be retrieved from the session using {@link JsonSchemaGeneratorSession#getBeanDefs()}.
 	 * <p>
-	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, ObjectMap)}.
+	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, OMap)}.
 	 */
 	public static final String JSONSCHEMA_useBeanDefs = PREFIX + ".useBeanDefs.b";
 
@@ -336,7 +337,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	private final boolean useBeanDefs, allowNestedExamples, allowNestedDescriptions;
 	private final BeanDefMapper beanDefMapper;
 	private final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
-	private final Map<String,ObjectMap> defaultSchemas;
+	private final Map<String,OMap> defaultSchemas;
 	private final JsonSerializer jsonSerializer;
 	private final Set<Pattern> ignoreTypes;
 	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
@@ -356,7 +357,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		beanDefMapper = getInstanceProperty(JSONSCHEMA_beanDefMapper, BeanDefMapper.class, BasicBeanDefMapper.class);
 		addExamplesTo = TypeCategory.parse(getStringProperty(JSONSCHEMA_addExamplesTo, null));
 		addDescriptionsTo = TypeCategory.parse(getStringProperty(JSONSCHEMA_addDescriptionsTo, null));
-		defaultSchemas = getMapProperty(JSONSCHEMA_defaultSchemas, ObjectMap.class);
+		defaultSchemas = getMapProperty(JSONSCHEMA_defaultSchemas, OMap.class);
 
 		Set<Pattern> ignoreTypes = new LinkedHashSet<>();
 		for (String s : split(ps.getProperty(JSONSCHEMA_ignoreTypes, String.class, "")))
@@ -463,7 +464,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @return
 	 * 	Custom schema information for particular class types.
 	 */
-	protected final Map<String,ObjectMap> getDefaultSchemas() {
+	protected final Map<String,OMap> getDefaultSchemas() {
 		return defaultSchemas;
 	}
 
@@ -539,17 +540,17 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("JsonSchemaGenerator", new DefaultFilteringObjectMap()
-				.append("useBeanDefs", useBeanDefs)
-				.append("allowNestedExamples", allowNestedExamples)
-				.append("allowNestedDescriptions", allowNestedDescriptions)
-				.append("beanDefMapper", beanDefMapper)
-				.append("addExamplesTo", addExamplesTo)
-				.append("addDescriptionsTo", addDescriptionsTo)
-				.append("defaultSchemas", defaultSchemas)
-				.append("ignoreTypes", ignoreTypes)
+			.a("JsonSchemaGenerator", new DefaultFilteringOMap()
+				.a("useBeanDefs", useBeanDefs)
+				.a("allowNestedExamples", allowNestedExamples)
+				.a("allowNestedDescriptions", allowNestedDescriptions)
+				.a("beanDefMapper", beanDefMapper)
+				.a("addExamplesTo", addExamplesTo)
+				.a("addDescriptionsTo", addDescriptionsTo)
+				.a("defaultSchemas", defaultSchemas)
+				.a("ignoreTypes", ignoreTypes)
 			);
 	}
 }

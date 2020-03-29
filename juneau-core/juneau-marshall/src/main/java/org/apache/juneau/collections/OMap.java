@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
@@ -264,7 +265,7 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 * 	<br>Keys will be converted to strings using {@link Object#toString()}.
 	 * @return A new map or <jk>null</jk> if the map was <jk>null</jk>.
 	 */
-	public static OMap of(Map<?,?> in) {
+	public static OMap ofAll(Map<?,?> in) {
 		return in == null ? null : new OMap(in);
 	}
 
@@ -293,7 +294,7 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OMap of(CharSequence in, Parser p) throws ParseException {
+	public static OMap ofText(CharSequence in, Parser p) throws ParseException {
 		return in == null ? null : new OMap(in, p);
 	}
 
@@ -306,7 +307,7 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OMap of(Reader json) throws ParseException {
+	public static OMap ofJson(Reader json) throws ParseException {
 		return json == null ? null : new OMap(json);
 	}
 
@@ -322,7 +323,7 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OMap of(Reader in, Parser p) throws ParseException {
+	public static OMap ofText(Reader in, Parser p) throws ParseException {
 		return in == null ? null : new OMap(in);
 	}
 
@@ -410,6 +411,21 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	}
 
 	/**
+	 * Add.
+	 *
+	 * <p>
+	 * Same as {@link #a(String, Object)}
+	 *
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public OMap append(String key, Object value) {
+		return a(key,value);
+	}
+
+	/**
 	 * Add if.
 	 *
 	 * <p>
@@ -437,6 +453,24 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 * Add if.
 	 *
 	 * <p>
+	 * Same as {@link #aif(boolean, boolean, boolean, String, Object)}.
+	 *
+	 * @param overwrite Overwrite the previous value if there was one.
+	 * @param skipNullValue Skip adding the value if the value is <jk>null</jk>.
+	 * @param skipEmptyValue Skip adding the value if the value is an empty string.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public OMap appendIf(boolean overwrite, boolean skipNullValue, boolean skipEmptyValue, String key, Object value) {
+		return aif(overwrite, skipNullValue, skipEmptyValue, key, value);
+	}
+
+	/**
+	 * Add if.
+	 *
+	 * <p>
 	 * Conditionally adds an entry to this map.
 	 *
 	 * @param flag The boolean value that must be <jk>true</jk> in order to add this entry..
@@ -451,6 +485,22 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	}
 
 	/**
+	 * Add if.
+	 *
+	 * <p>
+	 * Same as {@link #aif(boolean,String,Object)}.
+	 *
+	 * @param flag The boolean value that must be <jk>true</jk> in order to add this entry..
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public OMap appendIf(boolean flag, String key, Object value) {
+		return aif(flag, key, value);
+	}
+
+	/**
 	 * Add skip empty.
 	 *
 	 * <p>
@@ -462,6 +512,21 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 */
 	public OMap ase(String key, Object value) {
 		return aif(true, true, true, key, value);
+	}
+
+	/**
+	 * Add skip empty.
+	 *
+	 * <p>
+	 * Same as {@link #ase(String, Object)}.
+	 *
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public OMap appendSkipEmpty(String key, Object value) {
+		return ase(key, value);
 	}
 
 	/**
@@ -481,6 +546,21 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	}
 
 	/**
+	 * Add skip false.
+	 *
+	 * <p>
+	 * Same as {@link #asf(String, boolean)}.
+	 *
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public OMap appendSkipFalse(String key, boolean value) {
+		return asf(key, value);
+	}
+
+	/**
 	 * Add skip minus one.
 	 *
 	 * <p>
@@ -494,6 +574,21 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 		if (value != null && value.intValue() != -1)
 			a(key, value);
 		return this;
+	}
+
+	/**
+	 * Add skip minus one.
+	 *
+	 * <p>
+	 * Same as {@link #asmo(String, Number)}.
+	 *
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public OMap appendSkipMinusOne(String key, Number value) {
+		return asmo(key, value);
 	}
 
 	/**
@@ -513,6 +608,21 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	}
 
 	/**
+	 * Add skip null.
+	 *
+	 * <p>
+	 * Same as {@link #asn(String, Object)}.
+	 *
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public OMap appendSkipNull(String key, Object value) {
+		return asn(key, value);
+	}
+
+	/**
 	 * Add all.
 	 *
 	 * <p>
@@ -522,6 +632,22 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 * @return This object (for method chaining).
 	 */
 	public OMap aa(Map<String,Object> m) {
+		if (m != null)
+			putAll(m);
+		return this;
+	}
+
+	/**
+	 * Add all.
+	 *
+	 * <p>
+	 * Same as {@link #aa(Map)}.
+	 *
+	 * @param m The map whose contents should be added to this map.
+	 * @return This object (for method chaining).
+	 */
+	@Override
+	public OMap appendAll(Map<String,Object> m) {
 		if (m != null)
 			putAll(m);
 		return this;
@@ -545,6 +671,20 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	}
 
 	/**
+	 * Add if null.
+	 *
+	 * <p>
+	 * Same as {@link #aifn(String, Object)}.
+	 *
+	 * @param key The map key.
+	 * @param val The value to set if the current value does not exist or is <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public OMap appendIfNull(String key, Object val) {
+		return aifn(key, val);
+	}
+
+	/**
 	 * Add if empty.
 	 *
 	 * <p>
@@ -562,6 +702,20 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	}
 
 	/**
+	 * Add if empty.
+	 *
+	 * <p>
+	 * Same as {@link #aife(String, Object)}.
+	 *
+	 * @param key The map key.
+	 * @param val The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
+	 * @return This object (for method chaining).
+	 */
+	public OMap appendIfEmpty(String key, Object val) {
+		return aife(key, val);
+	}
+
+	/**
 	 * Add if not empty.
 	 *
 	 * <p>
@@ -575,6 +729,49 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 		if (! containsKey(key))
 			put(key, val);
 		return this;
+	}
+
+	/**
+	 * Add if not empty.
+	 *
+	 * <p>
+	 * Same as {@link #aifne(String, Object)}.
+	 *
+	 * @param key The map key.
+	 * @param val The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
+	 * @return This object (for method chaining).
+	 */
+	public OMap appendIfNotEmpty(String key, Object val) {
+		return aifne(key, val);
+	}
+
+	/**
+	 * Add if predicate matches.
+	 *
+	 * @param p The predicate to match against.
+	 * @param key The map key.
+	 * @param val The value to add if the predicate matches.
+	 * @return This object (for method chaining).
+	 */
+	public OMap aif(Predicate<Object> p, String key, Object val) {
+		if (p.test(val))
+			a(key, val);
+		return this;
+	}
+
+	/**
+	 * Add if predicate matches.
+	 *
+	 * <p>
+	 * Same as {@link #aif(Predicate, String, Object)}.
+	 *
+	 * @param p The predicate to match against.
+	 * @param key The map key.
+	 * @param val The value to add if the predicate matches.
+	 * @return This object (for method chaining).
+	 */
+	public OMap appendIf(Predicate<Object> p, String key, Object val) {
+		return aif(p, key, val);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1009,7 +1206,7 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 * Returns the specified entry value converted to a {@link OList}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(key, ObjectList.<jk>class</jk>)</code>.
+	 * Shortcut for <code>get(key, OList.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
@@ -1024,7 +1221,7 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 * Returns the specified entry value converted to a {@link OList}.
 	 *
 	 * <p>
-	 * Shortcut for <code>getWithDefault(key, defVal, ObjectList.<jk>class</jk>)</code>.
+	 * Shortcut for <code>getWithDefault(key, defVal, OList.<jk>class</jk>)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -1140,7 +1337,7 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 * Returns the first entry that exists converted to a {@link OList}.
 	 *
 	 * <p>
-	 * Shortcut for <code>find(ObjectList.<jk>class</jk>, keys)</code>.
+	 * Shortcut for <code>find(OList.<jk>class</jk>, keys)</code>.
 	 *
 	 * @param keys The list of keys to look for.
 	 * @return

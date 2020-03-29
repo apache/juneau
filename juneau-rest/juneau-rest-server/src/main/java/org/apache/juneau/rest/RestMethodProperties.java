@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -35,7 +35,7 @@ import org.apache.juneau.rest.annotation.*;
  */
 @SuppressWarnings("serial")
 @Deprecated
-public class RestMethodProperties extends ObjectMap {
+public class RestMethodProperties extends OMap {
 
 	/**
 	 * Constructor
@@ -43,7 +43,7 @@ public class RestMethodProperties extends ObjectMap {
 	 * @param inner The inner properties.
 	 */
 	public RestMethodProperties(RestContextProperties inner) {
-		setInner(inner);
+		inner(inner);
 	}
 
 	/**

@@ -21,7 +21,6 @@ import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.jsonschema.annotation.*;
@@ -59,7 +58,7 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class A {
 		@RestMethod
-		public String getA(@Query("*") ObjectMap m) {
+		public String getA(@Query("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -178,7 +177,7 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class B {
 		@RestMethod
-		public String get(@Query("*") ObjectMap m) {
+		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -241,7 +240,7 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class C {
 		@RestMethod
-		public String getA(@Query("*") ObjectMap m) {
+		public String getA(@Query("*") OMap m) {
 			return m.toString();
 		}
 		@RestMethod
@@ -336,7 +335,7 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class D {
 		@RestMethod
-		public String get(@Query("*") ObjectMap m) {
+		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -709,7 +708,7 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class E {
 		@RestMethod
-		public String get(@Query("*") ObjectMap m) {
+		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -768,7 +767,7 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class F {
 		@RestMethod
-		public String get(@Query("*") ObjectMap m) {
+		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -833,7 +832,7 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class G {
 		@RestMethod
-		public String get(@Query("*") ObjectMap m) {
+		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -936,7 +935,7 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class H {
 		@RestMethod
-		public String get(@Query("*") ObjectMap m) {
+		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -971,7 +970,7 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class I {
 		@RestMethod
-		public String get(@Query("*") ObjectMap m) {
+		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -1005,7 +1004,7 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class J {
 		@RestMethod
-		public String get(@Query("*") ObjectMap m) {
+		public String get(@Query("*") OMap m) {
 			return m.toString();
 		}
 	}

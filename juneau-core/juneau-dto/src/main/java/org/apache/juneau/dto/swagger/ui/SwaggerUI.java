@@ -314,7 +314,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	private Div examples(Session s, ParameterInfo pi) {
 		boolean isBody = "body".equals(pi.getIn());
 
-		ObjectMap m = new ObjectMap();
+		OMap m = new OMap();
 
 		try {
 			if (isBody) {
@@ -322,7 +322,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				if (si != null)
 					m.put("model", si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth));
 			} else {
-				ObjectMap om = pi
+				OMap om = pi
 					.copy()
 					.resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth)
 					.asMap()
@@ -347,7 +347,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	private Div examples(Session s, ResponseInfo ri) {
 		SchemaInfo si = ri.getSchema();
 
-		ObjectMap m = new ObjectMap();
+		OMap m = new OMap();
 		try {
 			if (si != null) {
 				si = si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth);
@@ -368,7 +368,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		return examplesDiv(m);
 	}
 
-	private Div examplesDiv(ObjectMap m) {
+	private Div examplesDiv(OMap m) {
 		if (m.isEmpty())
 			return null;
 
@@ -400,19 +400,19 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	// Creates the contents under the "Model" header.
 	private Div modelsBlockContents(Session s) {
 		Div modelBlockContents = div()._class("tag-block-contents");
-		for (Map.Entry<String,ObjectMap> e : s.swagger.getDefinitions().entrySet())
+		for (Map.Entry<String,OMap> e : s.swagger.getDefinitions().entrySet())
 			modelBlockContents.child(modelBlock(e.getKey(), e.getValue()));
 		return modelBlockContents;
 	}
 
-	private Div modelBlock(String modelName, ObjectMap model) {
+	private Div modelBlock(String modelName, OMap model) {
 		return div()._class("op-block op-block-closed model").children(
 			modelBlockSummary(modelName, model),
 			div(model)._class("op-block-contents")
 		);
 	}
 
-	private HtmlElement modelBlockSummary(String modelName, ObjectMap model) {
+	private HtmlElement modelBlockSummary(String modelName, OMap model) {
 		return div()._class("op-block-summary").children(
 			span(modelName)._class("method-button"),
 			model.containsKey("description") ? span(toBRL(model.remove("description").toString()))._class("summary") : null

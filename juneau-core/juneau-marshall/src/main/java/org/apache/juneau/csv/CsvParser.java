@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -114,8 +115,8 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider, CsvCommo
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("CsvParser", new DefaultFilteringObjectMap());
+			.a("CsvParser", new DefaultFilteringOMap());
 	}
 }

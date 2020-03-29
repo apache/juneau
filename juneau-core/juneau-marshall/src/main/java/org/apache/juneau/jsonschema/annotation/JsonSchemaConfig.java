@@ -19,6 +19,7 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.*;
 
 /**
@@ -251,7 +252,7 @@ public @interface JsonSchemaConfig {
 	 * The definitions can then be retrieved from the session using {@link JsonSchemaGeneratorSession#getBeanDefs()}.
 	 *
 	 * <p>
-	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, ObjectMap)}.
+	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, OMap)}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>

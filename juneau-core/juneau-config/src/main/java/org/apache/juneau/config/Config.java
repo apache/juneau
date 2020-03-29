@@ -1265,9 +1265,22 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 * @throws ParseException Malformed input encountered.
+	 * @deprecated Use {@link #getMap(String)}
 	 */
+	@Deprecated
 	public ObjectMap getObjectMap(String key) throws ParseException {
 		return getObject(key, ObjectMap.class);
+	}
+
+	/**
+	 * Convenience method for returning a config entry as an {@link OMap}.
+	 *
+	 * @param key The key.
+	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public OMap getMap(String key) throws ParseException {
+		return getObject(key, OMap.class);
 	}
 
 	/**
@@ -1277,9 +1290,23 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param def The default value.
 	 * @return The value, or the default value if the section or key does not exist.
 	 * @throws ParseException Malformed input encountered.
+	 * @deprecated Use {@link #getMap(String,OMap)}
 	 */
+	@Deprecated
 	public ObjectMap getObjectMap(String key, ObjectMap def) throws ParseException {
 		return getObjectWithDefault(key, def, ObjectMap.class);
+	}
+
+	/**
+	 * Convenience method for returning a config entry as an {@link OMap}.
+	 *
+	 * @param key The key.
+	 * @param def The default value.
+	 * @return The value, or the default value if the section or key does not exist.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public OMap getMap(String key, OMap def) throws ParseException {
+		return getObjectWithDefault(key, def, OMap.class);
 	}
 
 	/**
@@ -1288,9 +1315,22 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 * @throws ParseException Malformed input encountered.
+	 * @deprecated Use {@link #getList(String)}.
 	 */
+	@Deprecated
 	public ObjectList getObjectList(String key) throws ParseException {
-		return getObject(key, ObjectList.class);
+		return getList(key);
+	}
+
+	/**
+	 * Convenience method for returning a config entry as an {@link OList}.
+	 *
+	 * @param key The key.
+	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public OList getList(String key) throws ParseException {
+		return getObject(key, OList.class);
 	}
 
 	/**
@@ -1300,9 +1340,23 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param def The default value.
 	 * @return The value, or the default value if the section or key does not exist.
 	 * @throws ParseException Malformed input encountered.
+	 * @deprecated Use {@link #getList(String, OList)}.
 	 */
+	@Deprecated
 	public ObjectList getObjectList(String key, ObjectList def) throws ParseException {
 		return getObjectWithDefault(key, def, ObjectList.class);
+	}
+
+	/**
+	 * Convenience method for returning a config entry as an {@link OList}.
+	 *
+	 * @param key The key.
+	 * @param def The default value.
+	 * @return The value, or the default value if the section or key does not exist.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public OList getList(String key, OList def) throws ParseException {
+		return getObjectWithDefault(key, def, OList.class);
 	}
 
 	/**
@@ -1438,16 +1492,16 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	/**
-	 * Returns a section of this config copied into an {@link ObjectMap}.
+	 * Returns a section of this config copied into an {@link OMap}.
 	 *
 	 * @param section
 	 * 	The section name to write from.
 	 * 	<br>If empty, refers to the default section.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * @return A new {@link ObjectMap}, or <jk>null</jk> if the section doesn't exist.
+	 * @return A new {@link OMap}, or <jk>null</jk> if the section doesn't exist.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public ObjectMap getSectionAsMap(String section) throws ParseException {
+	public OMap getSectionAsMap(String section) throws ParseException {
 		section = section(section);
 
 		if (! configMap.hasSection(section))
@@ -1455,7 +1509,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 		Set<String> keys = configMap.getKeys(section);
 
-		ObjectMap om = new ObjectMap();
+		OMap om = new OMap();
 		for (String k : keys)
 			om.put(k, getObject(section + '/' + k, Object.class));
 		return om;
@@ -1809,7 +1863,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @return A copy of this config as a map of maps.
 	 */
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return configMap.asMap();
 	}
 

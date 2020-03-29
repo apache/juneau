@@ -90,7 +90,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * Main arguments are available through numeric string keys (e.g. <js>"0"</js>, <js>"1"</js>, ...).
- * So you could use the {@link ObjectMap} API to convert main arguments directly to POJOs, such as an <c>Enum</c>
+ * So you could use the {@link OMap} API to convert main arguments directly to POJOs, such as an <c>Enum</c>
  * <p class='bcode w800'>
  * 	<jc>// Get 1st main argument as an Enum</jc>
  * 	MyEnum e = a.get(MyEnum.<jk>class</jk>, <js>"0"</js>);
@@ -102,7 +102,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * Equivalent operations are available on optional arguments through the {@link #getArg(Class, String)} method.
  */
-public final class Args extends ObjectMap {
+public final class Args extends OMap {
 
 	private static final long serialVersionUID = 1L;
 
@@ -133,9 +133,9 @@ public final class Args extends ObjectMap {
 				if (key.matches("\\d*"))
 					throw new FormattedRuntimeException("Invalid optional key name ''{0}''", key);
 				if (! containsKey(key))
-					put(key, new ObjectList());
+					put(key, new OList());
 			} else {
-				((ObjectList)get(key)).add(s);
+				((OList)get(key)).add(s);
 			}
 		}
 	}
@@ -198,7 +198,7 @@ public final class Args extends ObjectMap {
 	 * @return <jk>true</jk> if the named argument exists.
 	 */
 	public boolean hasArg(String name) {
-		ObjectList l = (ObjectList)get(name);
+		OList l = (OList)get(name);
 		return l != null;
 	}
 
@@ -212,7 +212,7 @@ public final class Args extends ObjectMap {
 	 * @return The optional argument value, or blank if the optional argument was not specified.
 	 */
 	public String getArg(String name) {
-		ObjectList l = (ObjectList)get(name);
+		OList l = (OList)get(name);
 		if (l == null || l.size() == 0)
 			return null;
 		if (l.size() == 1)
@@ -239,7 +239,7 @@ public final class Args extends ObjectMap {
 	 * @return The optional argument value, or blank if the optional argument was not specified.
 	 */
 	public <T> T getArg(Class<T> c, String name) {
-		ObjectList l = (ObjectList)get(name);
+		OList l = (OList)get(name);
 		if (l == null || l.size() == 0)
 			return null;
 		return l.get(0, c);
@@ -260,7 +260,7 @@ public final class Args extends ObjectMap {
 	 */
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public List<String> getArgs(String name) {
-		List l = (ObjectList)get(name);
+		List l = (OList)get(name);
 		if (l == null)
 			return Collections.emptyList();
 		return l;

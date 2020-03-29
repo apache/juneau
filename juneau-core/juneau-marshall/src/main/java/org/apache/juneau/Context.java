@@ -15,6 +15,7 @@ package org.apache.juneau;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
@@ -551,11 +552,11 @@ public abstract class Context {
 	 *
 	 * @return A new map containing the properties defined on this context.
 	 */
-	public ObjectMap toMap() {
-		return new DefaultFilteringObjectMap()
-			.append("Context", new DefaultFilteringObjectMap()
-				.append("identityCode", identityCode)
-				.append("propertyStore", propertyStore)
+	public OMap toMap() {
+		return new DefaultFilteringOMap()
+			.a("Context", new DefaultFilteringOMap()
+				.a("identityCode", identityCode)
+				.a("propertyStore", propertyStore)
 			);
 	}
 }

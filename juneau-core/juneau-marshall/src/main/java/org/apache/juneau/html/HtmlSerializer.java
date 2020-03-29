@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
@@ -79,7 +80,7 @@ import org.apache.juneau.xml.*;
  *
  * 	<jc>// Produces: </jc>
  * 	<jc>// &lt;ul&gt;&lt;li&gt;1&lt;li&gt;2&lt;li&gt;3&lt;/ul&gt;</jc>
- * 	List l = new ObjectList(1, 2, 3);
+ * 	List l = OList.<jsm>of</jsm>(1, 2, 3);
  * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(l);
  *
  * 	<jc>// Produces: </jc>
@@ -89,10 +90,11 @@ import org.apache.juneau.xml.*;
  * 	<jc>//       &lt;tr&gt;&lt;td&gt;Billy&lt;/td&gt;&lt;td&gt;TheKid&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//       &lt;tr&gt;&lt;td&gt;Barney&lt;/td&gt;&lt;td&gt;Miller&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//    &lt;/table&gt; </jc>
- * 	l = <jk>new</jk> ObjectList();
- * 	l.add(<jk>new</jk> ObjectMap(<js>"{firstName:'Bob',lastName:'Costas'}"</js>));
- * 	l.add(<jk>new</jk> ObjectMap(<js>"{firstName:'Billy',lastName:'TheKid'}"</js>));
- * 	l.add(<jk>new</jk> ObjectMap(<js>"{firstName:'Barney',lastName:'Miller'}"</js>));
+ * 	l = OList.<jsm>of</jsm>(
+ * 		OMap.<jsm>ofJson</jsm>(<js>"{firstName:'Bob',lastName:'Costas'}"</js>),
+ * 		OMap.<jsm>ofJson</jsm>(<js>"{firstName:'Billy',lastName:'TheKid'}"</js>),
+ * 		OMap.<jsm>ofJson</jsm>(<js>"{firstName:'Barney',lastName:'Miller'}"</js>)
+ * 	);
  * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(l);
  *
  * 	<jc>// Produces: </jc>
@@ -101,7 +103,7 @@ import org.apache.juneau.xml.*;
  * 	<jc>//       &lt;tr&gt;&lt;td&gt;foo&lt;/td&gt;&lt;td&gt;bar&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//       &lt;tr&gt;&lt;td&gt;baz&lt;/td&gt;&lt;td&gt;123&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//    &lt;/table&gt; </jc>
- * 	Map m = <jk>new</jk> ObjectMap(<js>"{foo:'bar',baz:123}"</js>);
+ * 	Map m = OMap.<jsm>ofJson</jsm>(<js>"{foo:'bar',baz:123}"</js>);
  * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
  *
  * 	<jc>// HTML elements can be nested arbitrarily deep</jc>
@@ -118,9 +120,9 @@ import org.apache.juneau.xml.*;
  * 	<jc>//			&lt;/table&gt; </jc>
  * 	<jc>//		&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//	&lt;/table&gt; </jc>
- * 	Map m = <jk>new</jk> ObjectMap(<js>"{foo:'bar',baz:123}"</js>);
- * 	m.put(<js>"someNumbers"</js>, <jk>new</jk> ObjectList(1, 2, 3));
- * 	m.put(<js>"someSubMap"</js>, <jk>new</jk> ObjectMap(<js>"{a:'b'}"</js>));
+ * 	Map m = OMap.<jsm>ofJson</jsm>(<js>"{foo:'bar',baz:123}"</js>);
+ * 	m.put(<js>"someNumbers"</js>, OList.<jsm>of</jsm>(1, 2, 3));
+ * 	m.put(<js>"someSubMap"</js>, OMap.<jsm>ofJson</jsm>(<js>"{a:'b'}"</js>));
  * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
  * </p>
  */
@@ -867,15 +869,15 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("HtmlSerializer", new DefaultFilteringObjectMap()
-				.append("uriAnchorText", uriAnchorText)
-				.append("detectLabelParameters", detectLabelParameters)
-				.append("detectLinksInStrings", detectLinksInStrings)
-				.append("labelParameter", labelParameter)
-				.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
-				.append("addBeanTypes", addBeanTypes)
+			.a("HtmlSerializer", new DefaultFilteringOMap()
+				.a("uriAnchorText", uriAnchorText)
+				.a("detectLabelParameters", detectLabelParameters)
+				.a("detectLinksInStrings", detectLinksInStrings)
+				.a("labelParameter", labelParameter)
+				.a("addKeyValueTableHeaders", addKeyValueTableHeaders)
+				.a("addBeanTypes", addBeanTypes)
 			);
 	}
 }

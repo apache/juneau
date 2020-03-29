@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.junit.*;
 
@@ -30,9 +30,9 @@ public class MultiIterableTest {
 	@Test
 	public void test() throws Exception {
 		List
-			l1 = new ObjectList(),
-			l2 = new ObjectList("['a','b']"),
-			l3 = new ObjectList("['c']");
+			l1 = new OList(),
+			l2 = new OList("['a','b']"),
+			l3 = new OList("['c']");
 
 		MultiIterable mi = new MultiIterable(l1.iterator(),l2.iterator());
 		mi.append(l3.iterator());

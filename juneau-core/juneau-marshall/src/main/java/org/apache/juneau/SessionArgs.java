@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -24,7 +25,7 @@ public class SessionArgs {
 	 */
 	public static final SessionArgs DEFAULT = new SessionArgs();
 
-	ObjectMap properties;
+	OMap properties;
 
 	/**
 	 * Constructor.
@@ -46,7 +47,7 @@ public class SessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SessionArgs properties(ObjectMap value) {
+	public SessionArgs properties(OMap value) {
 		this.properties = value;
 		return this;
 	}
@@ -64,7 +65,7 @@ public class SessionArgs {
 				properties.remove(key);
 		} else {
 			if (properties == null)
-				properties = new ObjectMap();
+				properties = new OMap();
 			properties.put(key, value);
 		}
 		return this;
@@ -91,9 +92,9 @@ public class SessionArgs {
 	 *
 	 * @return A new map containing the properties defined on this object.
 	 */
-	public ObjectMap toMap() {
-		return new DefaultFilteringObjectMap()
-			.append("SessionArgs", new DefaultFilteringObjectMap()
+	public OMap toMap() {
+		return new DefaultFilteringOMap()
+			.append("SessionArgs", new DefaultFilteringOMap()
 				.append("properties", properties)
 			);
 	}

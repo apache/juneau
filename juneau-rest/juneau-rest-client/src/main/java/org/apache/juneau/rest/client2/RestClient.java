@@ -2160,7 +2160,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		try {
 			RestRequest rc = null;
 			String method = null, uri = null, content = null;
-			ObjectMap h = null;
+			OMap h = null;
 			int i = s.indexOf(' ');
 			if (i != -1) {
 				method = s.substring(0, i).trim();
@@ -2170,7 +2170,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 						i = s.indexOf('}');
 						if (i != -1) {
 							String json = s.substring(0, i+1);
-							h = JsonParser.DEFAULT.parse(json, ObjectMap.class);
+							h = JsonParser.DEFAULT.parse(json, OMap.class);
 							s = s.substring(i+1).trim();
 						}
 					}
@@ -3017,20 +3017,20 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	}
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("RestClient", new DefaultFilteringObjectMap()
-				.append("debug", debug)
-				.append("errorCodes", errorCodes)
-				.append("executorService", executorService)
-				.append("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
-				.append("headers", headers)
-				.append("interceptors", interceptors)
-				.append("keepHttpClientOpen", keepHttpClientOpen)
-				.append("partParser", partParser)
-				.append("partSerializer", partSerializer)
-				.append("query", query)
-				.append("rootUri", rootUrl)
+			.a("RestClient", new DefaultFilteringOMap()
+				.a("debug", debug)
+				.a("errorCodes", errorCodes)
+				.a("executorService", executorService)
+				.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
+				.a("headers", headers)
+				.a("interceptors", interceptors)
+				.a("keepHttpClientOpen", keepHttpClientOpen)
+				.a("partParser", partParser)
+				.a("partSerializer", partSerializer)
+				.a("query", query)
+				.a("rootUri", rootUrl)
 			);
 	}
 }

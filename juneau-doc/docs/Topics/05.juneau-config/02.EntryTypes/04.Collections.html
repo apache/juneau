@@ -74,10 +74,10 @@ Collections
 	List&lt;Address&gt; addresses = c.getObject(<js>"addresses"</js>, ArrayList.<jk>class</jk>, Address.<jk>class</jk>);
 </p>
 <p>
-	Oftentimes, it might be useful to parse into the {@link oaj.ObjectList} and {@link oaj.ObjectMap}
+	Oftentimes, it might be useful to parse into the {@link oaj.collections.OList} and {@link oaj.collections.OMap}
 	classes that provide the various convenience methods for working with JSON-like data structures:
 </p>
 <p class='bpcode w800'>
-	ObjectMap m = c.getObject(<js>"key1"</js>, ObjectMap.<jk>class</jk>);
-	ObjectList l = c.getObject(<js>"key2"</js>, ObjectList.<jk>class</jk>);
+	OMap m = c.getObject(<js>"key1"</js>, OMap.<jk>class</jk>);
+	OList l = c.getObject(<js>"key2"</js>, OList.<jk>class</jk>);
 </p>

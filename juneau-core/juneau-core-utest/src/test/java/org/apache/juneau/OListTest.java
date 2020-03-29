@@ -18,9 +18,10 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
-public class ObjectListTest {
+public class OListTest {
 
 	//====================================================================================================
 	// testBasic
@@ -30,17 +31,17 @@ public class ObjectListTest {
 
 		assertEquals(
 			"['A','B','C']",
-			new ObjectList((Object[])new String[]{"A","B","C"}).toString()
+			new OList((Object[])new String[]{"A","B","C"}).toString()
 		);
 
 		assertEquals(
 			"['A','B','C']",
-			new ObjectList("A","B","C").toString()
+			new OList("A","B","C").toString()
 		);
 
 		assertEquals(
 			"['A','B','C']",
-			new ObjectList(Arrays.asList(new String[]{"A","B","C"})).toString()
+			new OList(Arrays.asList(new String[]{"A","B","C"})).toString()
 		);
 	}
 
@@ -50,14 +51,14 @@ public class ObjectListTest {
 	@Test
 	public void testIterateAs() throws Exception {
 
-		// Iterate over a list of ObjectMaps.
-		ObjectList l = new ObjectList("[{foo:'bar'},{baz:123}]");
-		Iterator<ObjectMap> i1 = l.elements(ObjectMap.class).iterator();
+		// Iterate over a list of OMaps.
+		OList l = new OList("[{foo:'bar'},{baz:123}]");
+		Iterator<OMap> i1 = l.elements(OMap.class).iterator();
 		assertEquals("bar", i1.next().getString("foo"));
 		assertEquals(123, (int)i1.next().getInt("baz"));
 
 		// Iterate over a list of ints.
-		l = new ObjectList("[1,2,3]");
+		l = new OList("[1,2,3]");
 		Iterator<Integer> i2 = l.elements(Integer.class).iterator();
 		assertEquals(1, (int)i2.next());
 		assertEquals(2, (int)i2.next());
@@ -65,7 +66,7 @@ public class ObjectListTest {
 
 		// Iterate over a list of beans.
 		// Automatically converts to beans.
-		l = new ObjectList("[{name:'John Smith',age:45}]");
+		l = new OList("[{name:'John Smith',age:45}]");
 		Iterator<Person> i3 = l.elements(Person.class).iterator();
 		assertEquals("John Smith", i3.next().name);
 	}
@@ -80,7 +81,7 @@ public class ObjectListTest {
 	//====================================================================================================
 	@Test
 	public void testAtMethods() throws Exception {
-		ObjectList l = new ObjectList("[{foo:'bar'},{baz:123}]");
+		OList l = new OList("[{foo:'bar'},{baz:123}]");
 		String r;
 
 		r = l.getAt("0/foo", String.class);
@@ -90,7 +91,7 @@ public class ObjectListTest {
 		r = l.getAt("0/foo", String.class);
 		assertEquals("bing", r);
 
-		l.postAt("", new ObjectMap("{a:'b'}"));
+		l.postAt("", OMap.ofJson("{a:'b'}"));
 		r = l.getAt("2/a", String.class);
 		assertEquals("b", r);
 
@@ -99,11 +100,11 @@ public class ObjectListTest {
 	}
 
 	//====================================================================================================
-	// ObjectList(Reader)
+	// OList(Reader)
 	//====================================================================================================
 	@Test
 	public void testFromReader() throws Exception {
-		assertObjectEquals("[1,2,3]", new ObjectList(new StringReader("[1,2,3]")));
+		assertObjectEquals("[1,2,3]", new OList(new StringReader("[1,2,3]")));
 	}
 
 	//====================================================================================================
@@ -111,7 +112,7 @@ public class ObjectListTest {
 	//====================================================================================================
 	@Test
 	public void testGetMap() throws Exception {
-		ObjectList l = new ObjectList("[{1:'true',2:'false'}]");
+		OList l = new OList("[{1:'true',2:'false'}]");
 		Map<Integer,Boolean> m2 = l.getMap(0, Integer.class, Boolean.class);
 		assertObjectEquals("{'1':true,'2':false}", m2);
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
@@ -128,7 +129,7 @@ public class ObjectListTest {
 	//====================================================================================================
 	@Test
 	public void testGetList() throws Exception {
-		ObjectList l = new ObjectList("[['123','456']]");
+		OList l = new OList("[['123','456']]");
 		List<Integer> l2 = l.getList(0, Integer.class);
 		assertObjectEquals("[123,456]", l2);
 		assertEquals(Integer.class, l2.iterator().next().getClass());

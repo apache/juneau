@@ -686,31 +686,31 @@ public class ConfigTest {
 			"\t}"
 		);
 
-		Map a1 = c.getObjectWithDefault("a1", new ObjectMap(), Map.class);
+		Map a1 = c.getObjectWithDefault("a1", new OMap(), Map.class);
 		assertObjectEquals("{foo:123}", a1);
 		assertInstanceOf(String.class, a1.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a1.values().iterator().next());
 
-		Map a1b = c.getObjectWithDefault("a1b", new ObjectMap(), Map.class);
+		Map a1b = c.getObjectWithDefault("a1b", new OMap(), Map.class);
 		assertObjectEquals("{}", a1b);
 
-		List a2a = c.getObjectWithDefault("a2", new ObjectList(), List.class);
+		List a2a = c.getObjectWithDefault("a2", new OList(), List.class);
 		assertObjectEquals("[{foo:123}]", a2a);
 		assertInstanceOf(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
 		assertInstanceOf(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
 
-		List a2b = c.getObjectWithDefault("a2b", new ObjectList(), List.class);
+		List a2b = c.getObjectWithDefault("a2b", new OList(), List.class);
 		assertObjectEquals("[]", a2b);
 
-		Map a3 = c.getObjectWithDefault("a3", new ObjectMap(), Map.class);
+		Map a3 = c.getObjectWithDefault("a3", new OMap(), Map.class);
 		assertObjectEquals("{}", a3);
 
-		Map a4a = c.getObjectWithDefault("a4", new ObjectMap(), Map.class);
+		Map a4a = c.getObjectWithDefault("a4", new OMap(), Map.class);
 		assertObjectEquals("{foo:123}", a4a);
 		assertInstanceOf(String.class, a4a.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 
-		Map a4b = c.getObjectWithDefault("a4b", new ObjectMap(), Map.class);
+		Map a4b = c.getObjectWithDefault("a4b", new OMap(), Map.class);
 		assertObjectEquals("{}", a4b);
 
 		ABean a4c = c.getObjectWithDefault("a4c", new ABean().init(), ABean.class);
@@ -733,31 +733,31 @@ public class ConfigTest {
 			"\t)"
 		);
 
-		Map a1 = c.getObjectWithDefault("a1", UonParser.DEFAULT, new ObjectMap(), Map.class);
+		Map a1 = c.getObjectWithDefault("a1", UonParser.DEFAULT, new OMap(), Map.class);
 		assertObjectEquals("{foo:123}", a1);
 		assertInstanceOf(String.class, a1.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a1.values().iterator().next());
 
-		Map a1b = c.getObjectWithDefault("a1b", UonParser.DEFAULT, new ObjectMap(), Map.class);
+		Map a1b = c.getObjectWithDefault("a1b", UonParser.DEFAULT, new OMap(), Map.class);
 		assertObjectEquals("{}", a1b);
 
-		List a2a = c.getObjectWithDefault("a2", UonParser.DEFAULT, new ObjectList(), List.class);
+		List a2a = c.getObjectWithDefault("a2", UonParser.DEFAULT, new OList(), List.class);
 		assertObjectEquals("[{foo:123}]", a2a);
 		assertInstanceOf(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
 		assertInstanceOf(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
 
-		List a2b = c.getObjectWithDefault("a2b", UonParser.DEFAULT, new ObjectList(), List.class);
+		List a2b = c.getObjectWithDefault("a2b", UonParser.DEFAULT, new OList(), List.class);
 		assertObjectEquals("[]", a2b);
 
-		Map a3 = c.getObjectWithDefault("a3", UonParser.DEFAULT, new ObjectMap(), Map.class);
+		Map a3 = c.getObjectWithDefault("a3", UonParser.DEFAULT, new OMap(), Map.class);
 		assertObjectEquals("{}", a3);
 
-		Map a4a = c.getObjectWithDefault("a4", UonParser.DEFAULT, new ObjectMap(), Map.class);
+		Map a4a = c.getObjectWithDefault("a4", UonParser.DEFAULT, new OMap(), Map.class);
 		assertObjectEquals("{foo:123}", a4a);
 		assertInstanceOf(String.class, a4a.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 
-		Map a4b = c.getObjectWithDefault("a4b", UonParser.DEFAULT, new ObjectMap(), Map.class);
+		Map a4b = c.getObjectWithDefault("a4b", UonParser.DEFAULT, new OMap(), Map.class);
 		assertObjectEquals("{}", a4b);
 
 		ABean a4c = c.getObjectWithDefault("a4c", UonParser.DEFAULT, new ABean().init(), ABean.class);
@@ -795,7 +795,7 @@ public class ConfigTest {
 		List<ABean> a2b = c.getObjectWithDefault("a2b", new ArrayList<ABean>(), List.class, ABean.class);
 		assertObjectEquals("[]", a2b);
 
-		Map<String,Object> a3 = c.getObjectWithDefault("a3", new ObjectMap(), Map.class, String.class, Object.class);
+		Map<String,Object> a3 = c.getObjectWithDefault("a3", new OMap(), Map.class, String.class, Object.class);
 		assertObjectEquals("{}", a3);
 
 		Map<String,Integer> a4a = c.getObjectWithDefault("a4", new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
@@ -841,7 +841,7 @@ public class ConfigTest {
 		List<ABean> a2b = c.getObjectWithDefault("a2b", UonParser.DEFAULT, new ArrayList<ABean>(), List.class, ABean.class);
 		assertObjectEquals("[]", a2b);
 
-		Map<String,Object> a3 = c.getObjectWithDefault("a3", UonParser.DEFAULT, new ObjectMap(), Map.class, String.class, Object.class);
+		Map<String,Object> a3 = c.getObjectWithDefault("a3", UonParser.DEFAULT, new OMap(), Map.class, String.class, Object.class);
 		assertObjectEquals("{}", a3);
 
 		Map<String,Integer> a4a = c.getObjectWithDefault("a4", UonParser.DEFAULT, new HashMap<String,Integer>(), Map.class, String.class, Integer.class);
@@ -1018,7 +1018,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public ObjectMap getSectionAsMap(String section) throws ParseException {
+	//	public OMap getSectionAsMap(String section) throws ParseException {
 	//====================================================================================================
 	@Test
 	public void getSectionAsMap() throws Exception {
@@ -1126,7 +1126,7 @@ public class ConfigTest {
 	@Test
 	public void setSection2() throws Exception {
 		Config c = init();
-		ObjectMap m = new ObjectMap().append("a", "b");
+		OMap m = OMap.of("a", "b");
 
 		c.setSection("", Arrays.asList("#C1", "#C2"), m);
 		assertTextEquals("#C1|#C2||a = b|", c);
@@ -1595,7 +1595,7 @@ public class ConfigTest {
 		assertNull(cf.getSectionAsMap("B"));
 		assertObjectEquals("null", cf.getSectionAsMap("C"));
 
-		ObjectMap m = cf.getSectionAsMap("A");
+		OMap m = cf.getSectionAsMap("A");
 		assertObjectEquals("{a1:'1'}", m);
 
 		System.setProperty("X", "x");

@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
@@ -294,9 +295,9 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("UrlEncodingSerializerSession", new DefaultFilteringObjectMap()
+			.a("UrlEncodingSerializerSession", new DefaultFilteringOMap()
 			);
 	}
 }

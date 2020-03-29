@@ -955,7 +955,7 @@ public class RestClient extends BeanContext implements Closeable {
 		try {
 			RestCall rc = null;
 			String method = null, uri = null, content = null;
-			ObjectMap h = null;
+			OMap h = null;
 			int i = s.indexOf(' ');
 			if (i != -1) {
 				method = s.substring(0, i).trim();
@@ -965,7 +965,7 @@ public class RestClient extends BeanContext implements Closeable {
 						i = s.indexOf('}');
 						if (i != -1) {
 							String json = s.substring(0, i+1);
-							h = JsonParser.DEFAULT.parse(json, ObjectMap.class);
+							h = JsonParser.DEFAULT.parse(json, OMap.class);
 							s = s.substring(i+1).trim();
 						}
 					}
@@ -1529,24 +1529,24 @@ public class RestClient extends BeanContext implements Closeable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("RestClient", new DefaultFilteringObjectMap()
-				.append("debug", debug)
-				.append("executorService", executorService)
-				.append("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
-				.append("headers", headers)
-				.append("interceptors", interceptors)
-				.append("keepHttpClientOpen", keepHttpClientOpen)
-				.append("parser", parser)
-				.append("partParser", partParser)
-				.append("partSerializer", partSerializer)
-				.append("query", query)
-				.append("retries", retries)
-				.append("retryInterval", retryInterval)
-				.append("retryOn", retryOn)
-				.append("rootUri", rootUrl)
-				.append("serializer", serializer)
+			.a("RestClient", new DefaultFilteringOMap()
+				.a("debug", debug)
+				.a("executorService", executorService)
+				.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
+				.a("headers", headers)
+				.a("interceptors", interceptors)
+				.a("keepHttpClientOpen", keepHttpClientOpen)
+				.a("parser", parser)
+				.a("partParser", partParser)
+				.a("partSerializer", partSerializer)
+				.a("query", query)
+				.a("retries", retries)
+				.a("retryInterval", retryInterval)
+				.a("retryOn", retryOn)
+				.a("rootUri", rootUrl)
+				.a("serializer", serializer)
 			);
 	}
 }

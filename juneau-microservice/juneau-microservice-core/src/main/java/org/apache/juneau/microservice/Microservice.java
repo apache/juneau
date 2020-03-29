@@ -27,7 +27,6 @@ import java.util.jar.*;
 import java.util.logging.*;
 import java.util.logging.Formatter;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.event.*;
@@ -385,7 +384,7 @@ public class Microservice implements ConfigEventListener {
 			}
 		}
 
-		ObjectMap loggerLevels = config.getObject("Logging/levels", ObjectMap.class);
+		OMap loggerLevels = config.getObject("Logging/levels", OMap.class);
 		if (loggerLevels != null)
 			for (String l : loggerLevels.keySet())
 				Logger.getLogger(l).setLevel(loggerLevels.get(l, Level.class));
@@ -571,7 +570,7 @@ public class Microservice implements ConfigEventListener {
 	}
 
 	/**
-	 * Returns the main jar manifest file contents as a simple {@link ObjectMap}.
+	 * Returns the main jar manifest file contents as a simple {@link OMap}.
 	 *
 	 * <p>
 	 * This map consists of the contents of {@link Manifest#getMainAttributes()} with the keys and entries converted to

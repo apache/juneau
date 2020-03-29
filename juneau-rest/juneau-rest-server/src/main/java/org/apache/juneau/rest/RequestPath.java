@@ -20,6 +20,7 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
@@ -255,7 +256,7 @@ public class RequestPath extends TreeMap<String,String> {
 	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		try {
 			if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
-				ObjectMap m = new ObjectMap();
+				OMap m = new OMap();
 				for (Map.Entry<String,String> e : this.entrySet()) {
 					String k = e.getKey();
 					HttpPartSchema pschema = schema == null ? null : schema.getProperty(k);

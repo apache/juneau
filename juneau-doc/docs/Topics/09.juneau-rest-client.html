@@ -51,8 +51,8 @@ juneau-rest-client
 		String url = <js>"http://localhost:10000/addressBook"</js>;
 		
 		<jc>// Do a REST GET against a remote REST interface and convert
-		// the response to an unstructured ObjectMap object.</jc>
-		ObjectMap m1 = client.get(url).run().getBody().as(ObjectMap.<jk>class</jk>);
+		// the response to an unstructured OMap object.</jc>
+		OMap m1 = client.get(url).run().getBody().as(OMap.<jk>class</jk>);
 		
 		<jc>// Same as above, except parse the JSON as a bean.</jc>
 		AddressBook a2 = client.get(url).run().getBody().as(AddressBook.<jk>class</jk>);
@@ -139,17 +139,17 @@ juneau-rest-client
 				
 		<jc>// GET request, getting output as an untyped map</jc>
 		<jc>// Input must be an object (e.g. "{...}")</jc>
-		ObjectMap m = client
+		OMap m = client
 			.get(<js>"http://localhost:10000/addressBook/0"</js>)
 			.run()
-			.getBody().as(ObjectMap.<jk>class</jk>);
+			.getBody().as(OMap.<jk>class</jk>);
 				
 		<jc>// GET request, getting output as an untyped list</jc>
 		<jc>// Input must be an array (e.g. "[...]")</jc>
-		ObjectList l = client
+		OList l = client
 			.get(<js>"http://localhost:10000/addressBook"</js>)
 			.run()
-			.getBody().as(ObjectList.<jk>class</jk>);
+			.getBody().as(OList.<jk>class</jk>);
 				
 		<jc>// GET request, getting output as a parsed bean</jc>
 		<jc>// Input must be an object (e.g. "{...}")</jc>

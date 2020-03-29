@@ -3603,7 +3603,7 @@ public final class RestContext extends BeanContext {
 		reqHeaders,
 		resHeaders,
 		staticFileResponseHeaders;
-	private final ObjectMap reqAttrs;
+	private final OMap reqAttrs;
 	private final ResponseHandler[] responseHandlers;
 	private final MimetypesFileTypeMap mimetypesFileTypeMap;
 	private final StaticFiles[] staticFiles;
@@ -3786,7 +3786,7 @@ public final class RestContext extends BeanContext {
 			_reqHeaders.putAll(getMapProperty(REST_reqHeaders, String.class));
 			reqHeaders = AMap.unmodifiable(_reqHeaders);
 
-			reqAttrs = new ObjectMap(getMapProperty(REST_reqAttrs, Object.class)).unmodifiable();
+			reqAttrs = new OMap(getMapProperty(REST_reqAttrs, Object.class)).unmodifiable();
 			resHeaders = getMapProperty(REST_resHeaders, Object.class);
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);
 
@@ -3795,8 +3795,8 @@ public final class RestContext extends BeanContext {
 			Object clc = getProperty(REST_callLoggerConfig);
 			if (clc instanceof RestCallLoggerConfig)
 				this.callLoggerConfig = (RestCallLoggerConfig)clc;
-			else if (clc instanceof ObjectMap)
-				this.callLoggerConfig = RestCallLoggerConfig.create().apply((ObjectMap)clc).build();
+			else if (clc instanceof OMap)
+				this.callLoggerConfig = RestCallLoggerConfig.create().apply((OMap)clc).build();
 			else
 				this.callLoggerConfig = RestCallLoggerConfig.DEFAULT_NOOP;
 
@@ -4996,7 +4996,7 @@ public final class RestContext extends BeanContext {
 	 * 	The default request headers for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public ObjectMap getReqAttrs() {
+	public OMap getReqAttrs() {
 		return reqAttrs;
 	}
 
@@ -5472,37 +5472,37 @@ public final class RestContext extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("RestContext", new DefaultFilteringObjectMap()
-				.append("allowBodyParam", allowBodyParam)
-				.append("allowedMethodHeader", allowedMethodHeaders)
-				.append("allowedMethodParams", allowedMethodParams)
-				.append("allowedHeaderParams", allowedHeaderParams)
-				.append("callHandler", callHandler)
-				.append("clientVersionHeader", clientVersionHeader)
-				.append("consumes", consumes)
-				.append("infoProvider", infoProvider)
-				.append("logger", logger)
-				.append("paramResolvers", paramResolvers)
-				.append("parsers", parsers)
-				.append("partParser", partParser)
-				.append("partSerializer", partSerializer)
-				.append("produces", produces)
-				.append("properties", properties)
-				.append("renderResponseStackTraces", renderResponseStackTraces)
-				.append("reqHeaders", reqHeaders)
-				.append("resHeaders", resHeaders)
-				.append("resourceResolver", resourceResolver)
-				.append("responseHandlers", responseHandlers)
-				.append("serializers", serializers)
-				.append("staticFileResponseHeaders", staticFileResponseHeaders)
-				.append("staticFiles", staticFiles)
-				.append("uriAuthority", uriAuthority)
-				.append("uriContext", uriContext)
-				.append("uriRelativity", uriRelativity)
-				.append("uriResolution", uriResolution)
-				.append("useClasspathResourceCaching", useClasspathResourceCaching)
+			.a("RestContext", new DefaultFilteringOMap()
+				.a("allowBodyParam", allowBodyParam)
+				.a("allowedMethodHeader", allowedMethodHeaders)
+				.a("allowedMethodParams", allowedMethodParams)
+				.a("allowedHeaderParams", allowedHeaderParams)
+				.a("callHandler", callHandler)
+				.a("clientVersionHeader", clientVersionHeader)
+				.a("consumes", consumes)
+				.a("infoProvider", infoProvider)
+				.a("logger", logger)
+				.a("paramResolvers", paramResolvers)
+				.a("parsers", parsers)
+				.a("partParser", partParser)
+				.a("partSerializer", partSerializer)
+				.a("produces", produces)
+				.a("properties", properties)
+				.a("renderResponseStackTraces", renderResponseStackTraces)
+				.a("reqHeaders", reqHeaders)
+				.a("resHeaders", resHeaders)
+				.a("resourceResolver", resourceResolver)
+				.a("responseHandlers", responseHandlers)
+				.a("serializers", serializers)
+				.a("staticFileResponseHeaders", staticFileResponseHeaders)
+				.a("staticFiles", staticFiles)
+				.a("uriAuthority", uriAuthority)
+				.a("uriContext", uriContext)
+				.a("uriRelativity", uriRelativity)
+				.a("uriResolution", uriResolution)
+				.a("useClasspathResourceCaching", useClasspathResourceCaching)
 			);
 	}
 }

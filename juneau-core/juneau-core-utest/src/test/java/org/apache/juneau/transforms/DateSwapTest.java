@@ -15,6 +15,7 @@ package org.apache.juneau.transforms;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
@@ -42,10 +43,10 @@ public class DateSwapTest {
 			.pojoSwaps(DateSwap.ISO8601DT.class)
 			.build()
 			.serialize(testBeanA);
-		final ObjectMap data = JsonParser.create()
+		final OMap data = JsonParser.create()
 			.pojoSwaps(DateSwap.ISO8601DT.class)
 			.build()
-			.parse(jsonData, ObjectMap.class);
+			.parse(jsonData, OMap.class);
 
 		final DateSwap.ISO8601DT dateSwap = new DateSwap.ISO8601DT();
 		// this works

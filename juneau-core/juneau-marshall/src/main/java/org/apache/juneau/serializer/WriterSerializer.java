@@ -16,6 +16,7 @@ import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
@@ -461,14 +462,14 @@ public abstract class WriterSerializer extends Serializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("WriterSerializer", new DefaultFilteringObjectMap()
-				.append("fileCharset", fileCharset)
-				.append("maxIndent", maxIndent)
-				.append("quoteChar", quoteChar)
-				.append("streamCharset", streamCharset)
-				.append("useWhitespace", useWhitespace)
+			.a("WriterSerializer", new DefaultFilteringOMap()
+				.a("fileCharset", fileCharset)
+				.a("maxIndent", maxIndent)
+				.a("quoteChar", quoteChar)
+				.a("streamCharset", streamCharset)
+				.a("useWhitespace", useWhitespace)
 			);
 	}
 }

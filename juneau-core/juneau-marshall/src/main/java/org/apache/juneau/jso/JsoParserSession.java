@@ -15,6 +15,7 @@ package org.apache.juneau.jso;
 import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -52,9 +53,9 @@ public class JsoParserSession extends InputStreamParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("JsoParserSession", new DefaultFilteringObjectMap()
+			.a("JsoParserSession", new DefaultFilteringOMap()
 			);
 	}
 }

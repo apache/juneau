@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;
@@ -272,10 +273,10 @@ public class UonPartParserTest {
 	}
 
 	@Test
-	public void testParseParameterObjectMap() throws Exception {
+	public void testParseParameterOMap() throws Exception {
 		String in = "(name='foo bar')";
 
-		ObjectMap r =  UonParser.DEFAULT.createSession().parse(null, in, BeanContext.DEFAULT.createSession().getClassMeta(ObjectMap.class));
+		OMap r =  UonParser.DEFAULT.createSession().parse(null, in, BeanContext.DEFAULT.createSession().getClassMeta(OMap.class));
 
 		assertEquals("{name:'foo bar'}", SimpleJsonSerializer.DEFAULT.toString(r));
 	}

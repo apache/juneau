@@ -18,7 +18,6 @@ import static java.lang.Character.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -528,11 +527,12 @@ public class ReflectionMap<V> {
 			return classMatches(simpleName, fullName, c);
 		}
 
-		public ObjectMap asMap() {
-			return new ObjectMap()
-				.append("simpleName", simpleName)
-				.append("fullName", fullName)
-				.append("value", value);
+		public OMap asMap() {
+			return OMap.of(
+				"simpleName", simpleName,
+				"fullName", fullName,
+				"value", value
+			);
 		}
 
 		@Override
@@ -567,13 +567,14 @@ public class ReflectionMap<V> {
 				&& (argsMatch(args, m.getParameterTypes()));
 		}
 
-		public ObjectMap asMap() {
-			return new ObjectMap()
-				.append("simpleClassName", simpleClassName)
-				.append("fullClassName", fullClassName)
-				.append("methodName", methodName)
-				.append("args", args)
-				.append("value", value);
+		public OMap asMap() {
+			return OMap.of(
+				"simpleClassName", simpleClassName,
+				"fullClassName", fullClassName,
+				"methodName", methodName,
+				"args", args,
+				"value", value
+			);
 		}
 
 		@Override
@@ -604,12 +605,13 @@ public class ReflectionMap<V> {
 				&& (argsMatch(args, m.getParameterTypes()));
 		}
 
-		public ObjectMap asMap() {
-			return new ObjectMap()
-				.append("simpleClassName", simpleClassName)
-				.append("fullClassName", fullClassName)
-				.append("args", args)
-				.append("value", value);
+		public OMap asMap() {
+			return OMap.of(
+				"simpleClassName", simpleClassName,
+				"fullClassName", fullClassName,
+				"args", args,
+				"value", value
+			);
 		}
 
 		@Override
@@ -640,12 +642,13 @@ public class ReflectionMap<V> {
 				&& (isEquals(f.getName(), fieldName));
 		}
 
-		public ObjectMap asMap() {
-			return new ObjectMap()
-				.append("simpleClassName", simpleClassName)
-				.append("fullClassName", fullClassName)
-				.append("fieldName", fieldName)
-				.append("value", value);
+		public OMap asMap() {
+			return OMap.of(
+				"simpleClassName", simpleClassName,
+				"fullClassName", fullClassName,
+				"fieldName", fieldName,
+				"value", value
+			);
 		}
 
 		@Override
@@ -704,11 +707,11 @@ public class ReflectionMap<V> {
 
 	@Override /* Object */
 	public String toString() {
-		return new ObjectMap()
-			.append("classEntries", classEntries)
-			.append("methodEntries", methodEntries)
-			.append("fieldEntries", fieldEntries)
-			.append("constructorEntries", constructorEntries)
-			.toString();
+		return OMap.of(
+			"classEntries", classEntries,
+			"methodEntries", methodEntries,
+			"fieldEntries", fieldEntries,
+			"constructorEntries", constructorEntries
+		).toString();
 	}
 }

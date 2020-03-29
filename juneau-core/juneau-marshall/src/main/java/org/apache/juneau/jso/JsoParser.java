@@ -18,6 +18,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -121,9 +122,9 @@ public final class JsoParser extends InputStreamParser implements JsoMetaProvide
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("JsoParser", new DefaultFilteringObjectMap()
+			.a("JsoParser", new DefaultFilteringOMap()
 			);
 	}
 }

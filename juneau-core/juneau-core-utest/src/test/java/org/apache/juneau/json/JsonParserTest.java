@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -43,7 +44,7 @@ public class JsonParserTest {
 	@Test
 	public void testNonExistentAttribute() throws Exception {
 		String json = "{foo:,bar:}";
-		ObjectMap m = p.parse(json, ObjectMap.class);
+		OMap m = p.parse(json, OMap.class);
 		assertEquals("{foo:null,bar:null}", m.toString());
 	}
 
@@ -117,7 +118,7 @@ public class JsonParserTest {
 		// Missing attribute values.
 		String json = "{\"foo\":,\"bar\":}";
 		try {
-			p.parse(json, ObjectMap.class);
+			p.parse(json, OMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("Missing value detected."));
@@ -126,7 +127,7 @@ public class JsonParserTest {
 		// Single quoted values.
 		json = "{\"foo\":'bar'}";
 		try {
-			p.parse(json, ObjectMap.class);
+			p.parse(json, OMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("Invalid quote character"));
@@ -135,7 +136,7 @@ public class JsonParserTest {
 		// Single quoted attribute name.
 		json = "{'foo':\"bar\"}";
 		try {
-			p.parse(json, ObjectMap.class);
+			p.parse(json, OMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("Invalid quote character"));
@@ -144,7 +145,7 @@ public class JsonParserTest {
 		// Unquoted attribute name.
 		json = "{foo:\"bar\"}";
 		try {
-			p.parse(json, ObjectMap.class);
+			p.parse(json, OMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("Unquoted attribute detected."));
@@ -153,7 +154,7 @@ public class JsonParserTest {
 		// Concatenated string
 		json = "{\"foo\":\"bar\"+\"baz\"}";
 		try {
-			p.parse(json, ObjectMap.class);
+			p.parse(json, OMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("String concatenation detected."));
@@ -162,7 +163,7 @@ public class JsonParserTest {
 		// Concatenated string 2
 		json = "{\"foo\":\"bar\" + \"baz\"}";
 		try {
-			p.parse(json, ObjectMap.class);
+			p.parse(json, OMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("String concatenation detected."));
@@ -170,7 +171,7 @@ public class JsonParserTest {
 
 		json = "{\"foo\":/*comment*/\"bar\"}";
 		try {
-			p.parse(json, ObjectMap.class);
+			p.parse(json, OMap.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("Javascript comment detected."));
@@ -337,10 +338,10 @@ public class JsonParserTest {
 		Reader r;
 
 		r = reader("{foo:'bar'}{baz:'qux'}");
-		x = p.parse(r, ObjectMap.class);
+		x = p.parse(r, OMap.class);
 		assertObjectEquals("{foo:'bar'}", x);
 		try {
-			x = p.parse(r, ObjectMap.class);
+			x = p.parse(r, OMap.class);
 			fail("Exception expected");
 		} catch (Exception e) {
 			assertTrue(e.getMessage().contains("Reader is closed"));
@@ -358,15 +359,15 @@ public class JsonParserTest {
 		Reader r;
 
 		r = reader("{foo:'bar'}{baz:'qux'}");
-		x = p.parse(r, ObjectMap.class);
+		x = p.parse(r, OMap.class);
 		assertObjectEquals("{foo:'bar'}", x);
-		x = p.parse(r, ObjectMap.class);
+		x = p.parse(r, OMap.class);
 		assertObjectEquals("{baz:'qux'}", x);
 
 		r = reader("[123][456]");
-		x = p.parse(r, ObjectList.class);
+		x = p.parse(r, OList.class);
 		assertObjectEquals("[123]", x);
-		x = p.parse(r, ObjectList.class);
+		x = p.parse(r, OList.class);
 		assertObjectEquals("[456]", x);
 	}
 

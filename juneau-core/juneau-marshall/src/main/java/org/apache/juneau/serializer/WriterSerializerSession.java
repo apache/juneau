@@ -18,6 +18,7 @@ import java.io.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Subclass of {@link SerializerSession} for character-based serializers.
@@ -146,9 +147,9 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("WriterSerializerSession", new DefaultFilteringObjectMap()
+			.a("WriterSerializerSession", new DefaultFilteringOMap()
 			);
 	}
 }

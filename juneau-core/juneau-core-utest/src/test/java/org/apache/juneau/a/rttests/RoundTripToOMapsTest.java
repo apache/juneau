@@ -26,18 +26,18 @@ import org.junit.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-public class RoundTripToObjectMapsTest extends RoundTripTest {
+public class RoundTripToOMapsTest extends RoundTripTest {
 
-	public RoundTripToObjectMapsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
+	public RoundTripToOMapsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 
 	//====================================================================================================
-	// Class with X(ObjectMap) constructor and toObjectMap() method.
+	// Class with X(OMap) constructor and toOMap() method.
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		A a = new A(new ObjectMap("{f1:'a',f2:2}"));
+		A a = new A(OMap.ofJson("{f1:'a',f2:2}"));
 		a = roundTrip(a, A.class);
 		assertEquals("a", a.f1);
 		assertEquals(2, a.f2);
@@ -48,13 +48,13 @@ public class RoundTripToObjectMapsTest extends RoundTripTest {
 		assertEquals("a", aa[0].f1);
 		assertEquals(2, aa[0].f2);
 
-		List<A> a2 = AList.of(new A(new ObjectMap("{f1:'a',f2:2}")));
+		List<A> a2 = AList.of(new A(OMap.ofJson("{f1:'a',f2:2}")));
 		a2 = roundTrip(a2, List.class, A.class);
 		assertEquals(1, a2.size());
 		assertEquals("a", a2.get(0).f1);
 		assertEquals(2, a2.get(0).f2);
 
-		Map<String,A> a3 = AMap.of("a",new A(new ObjectMap("{f1:'a',f2:2}")));
+		Map<String,A> a3 = AMap.of("a",new A(OMap.ofJson("{f1:'a',f2:2}")));
 		a3 = roundTrip(a3, Map.class, String.class, A.class);
 		assertEquals(1, a3.size());
 		assertEquals("a", a3.get("a").f1);
@@ -64,12 +64,12 @@ public class RoundTripToObjectMapsTest extends RoundTripTest {
 	public static class A {
 		private String f1;
 		private int f2;
-		public A(ObjectMap m) {
+		public A(OMap m) {
 			this.f1 = m.getString("f1");
 			this.f2 = m.getInt("f2");
 		}
-		public ObjectMap swap(BeanSession session) {
-			return new ObjectMap().append("f1",f1).append("f2",f2);
+		public OMap swap(BeanSession session) {
+			return OMap.of("f1",f1,"f2",f2);
 		}
 	}
 

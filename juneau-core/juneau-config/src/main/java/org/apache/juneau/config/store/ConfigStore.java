@@ -18,6 +18,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.config.internal.*;
 
 /**
@@ -212,9 +213,9 @@ public abstract class ConfigStore extends Context implements Closeable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("ConfigStore", new DefaultFilteringObjectMap()
+			.a("ConfigStore", new DefaultFilteringOMap()
 			);
 	}
 }

@@ -17,6 +17,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.HasQuery;
 import org.apache.juneau.json.*;
@@ -139,19 +140,19 @@ public class RestMethodInheritTest {
 	@Rest
 	public static class A02 extends A01 {
 		@RestMethod(path="/default")
-		public ObjectList a01(RestResponse res) {
+		public OList a01(RestResponse res) {
 			// Should show ['text/s3','text/s4','text/s1','text/s2']
-			return new ObjectList(res.getSupportedMediaTypes());
+			return OList.ofAll(res.getSupportedMediaTypes());
 		}
 		@RestMethod(path="/onMethod", serializers=S5.class)
-		public ObjectList a02(RestResponse res) {
+		public OList a02(RestResponse res) {
 			// Should show ['text/s5']
-			return new ObjectList(res.getSupportedMediaTypes());
+			return OList.ofAll(res.getSupportedMediaTypes());
 		}
 		@RestMethod(path="/onMethodInherit", serializers={S5.class,Inherit.class})
-		public ObjectList a03(RestResponse res) {
+		public OList a03(RestResponse res) {
 			// Should show ['text/s5','text/s3','text/s4','text/s1','text/s2']
-			return new ObjectList(res.getSupportedMediaTypes());
+			return OList.ofAll(res.getSupportedMediaTypes());
 		}
 	}
 	static MockRest a = MockRest.build(A02.class);
@@ -182,19 +183,19 @@ public class RestMethodInheritTest {
 	@Rest
 	public static class B02 extends B01 {
 		@RestMethod(path="/default")
-		public ObjectList b01(RestRequest req) {
+		public OList b01(RestRequest req) {
 			// Should show ['text/p3','text/p4','text/p1','text/p2']
-			return new ObjectList(req.getConsumes());
+			return OList.ofAll(req.getConsumes());
 		}
 		@RestMethod(path="/onMethod", parsers=P5.class)
-		public ObjectList b02(RestRequest req) {
+		public OList b02(RestRequest req) {
 			// Should show ['text/p5']
-			return new ObjectList(req.getConsumes());
+			return OList.ofAll(req.getConsumes());
 		}
 		@RestMethod(path="/onMethodInherit", parsers={P5.class,Inherit.class})
-		public ObjectList bo3(RestRequest req) {
+		public OList bo3(RestRequest req) {
 			// Should show ['text/p5','text/p3','text/p4','text/p1','text/p2']
-			return new ObjectList(req.getConsumes());
+			return OList.ofAll(req.getConsumes());
 		}
 	}
 	static MockRest b = MockRest.build(B02.class);
@@ -280,12 +281,12 @@ public class RestMethodInheritTest {
 	@Rest
 	public static class E02 extends E01 {
 		@RestMethod
-		public ObjectMap e01(RequestAttributes attrs) {
+		public OMap e01(RequestAttributes attrs) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
 			return transform(attrs);
 		}
 		@RestMethod(reqAttrs={"p4:v4a","p5:v5"})
-		public ObjectMap e02(RequestAttributes attrs, @HasQuery("override") boolean override) {
+		public OMap e02(RequestAttributes attrs, @HasQuery("override") boolean override) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
@@ -298,8 +299,8 @@ public class RestMethodInheritTest {
 			return transform(attrs);
 		}
 
-		private ObjectMap transform(RequestAttributes attrs) {
-			ObjectMap m = new ObjectMap();
+		private OMap transform(RequestAttributes attrs) {
+			OMap m = new OMap();
 			for (Map.Entry<String,Object> e : attrs.entrySet()) {
 				if (e.getKey().startsWith("p"))
 					m.put(e.getKey(), e.getValue());

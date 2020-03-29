@@ -14,7 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
@@ -32,17 +32,17 @@ public class PathsTest {
 	// Setup
 	//=================================================================================================================
 
-	static ObjectMap getPaths(RestRequest req) {
-		return new ObjectMap()
-			.append("pathInfo", req.getPathInfo())
-			.append("pathRemainder", req.getPathMatch().getRemainder())
-			.append("pathRemainderUndecoded", req.getPathMatch().getRemainderUndecoded())
-			.append("requestURI", req.getRequestURI())
-			.append("requestParentURI", req.getUriContext().getRootRelativePathInfoParent())
-			.append("requestURL", req.getRequestURL())
-			.append("servletPath", req.getServletPath())
-			.append("servletURI", req.getUriContext().getRootRelativeServletPath())
-			.append("servletParentURI", req.getUriContext().getRootRelativeServletPathParent());
+	static OMap getPaths(RestRequest req) {
+		return OMap.of()
+			.a("pathInfo", req.getPathInfo())
+			.a("pathRemainder", req.getPathMatch().getRemainder())
+			.a("pathRemainderUndecoded", req.getPathMatch().getRemainderUndecoded())
+			.a("requestURI", req.getRequestURI())
+			.a("requestParentURI", req.getUriContext().getRootRelativePathInfoParent())
+			.a("requestURL", req.getRequestURL())
+			.a("servletPath", req.getServletPath())
+			.a("servletURI", req.getUriContext().getRootRelativeServletPath())
+			.a("servletParentURI", req.getUriContext().getRootRelativeServletPathParent());
 	}
 
 	//=================================================================================================================
@@ -52,7 +52,7 @@ public class PathsTest {
 	@Rest
 	public static class A {
 		@RestMethod(name=GET,path="/*")
-		public ObjectMap get(RestRequest req, @Path("/*") String r) {
+		public OMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",1);
 		}
 	}
@@ -200,7 +200,7 @@ public class PathsTest {
 
 	public static class B {
 		@RestMethod(name=GET, path="/subpath/*")
-		public ObjectMap get(RestRequest req, @Path("/*") String r) {
+		public OMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",2);
 		}
 	}
@@ -352,7 +352,7 @@ public class PathsTest {
 	@Rest(path="/a")
 	public static class C01 {
 		@RestMethod(name=GET,path="/*")
-		public ObjectMap get(RestRequest req, @Path("/*") String r) {
+		public OMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",3);
 		}
 	}
@@ -504,7 +504,7 @@ public class PathsTest {
 	@Rest(path="/a")
 	public static class D01 {
 		@RestMethod(name=GET, path="/subpath/*")
-		public ObjectMap get(RestRequest req, @Path("/*") String r) {
+		public OMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",4);
 		}
 	}

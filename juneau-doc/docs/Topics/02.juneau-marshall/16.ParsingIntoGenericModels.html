@@ -13,6 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
+{updated-8.1.4}
 Parsing into Generic Models
 
 <p>
@@ -23,15 +24,15 @@ Parsing into Generic Models
 </p>
 <p>
 	You can parse into any <c>Map</c> type (e.g. <c>HashMap</c>, <c>TreeMap</c>), but
-	using {@link oaj.ObjectMap} is recommended since it has many convenience methods
+	using {@link oaj.collections.OMap} is recommended since it has many convenience methods
 	for converting values to various types.
 	The same is true when parsing collections.  You can use any Collection (e.g. <c>HashSet</c>, 
 	<c>LinkedList</c>) or array (e.g. <c>Object[]</c>, <c>String[]</c>, 
-	<c>String[][]</c>), but using {@link oaj.ObjectList} is recommended.
+	<c>String[][]</c>), but using {@link oaj.collections.OList} is recommended.
 </p>
 <p>
 	When the map or list type is not specified, or is the abstract <c>Map</c>, <c>Collection</c>, 
-	or <c>List</c> types, the parser will use <c>ObjectMap</c> and <c>ObjectList</c> by 
+	or <c>List</c> types, the parser will use <c>OMap</c> and <c>OList</c> by 
 	default.
 </p>
 <p>
@@ -59,11 +60,11 @@ Parsing into Generic Models
 	}
 </p>
 <p>
-	We can parse this into a generic <c>ObjectMap</c>:
+	We can parse this into a generic <c>OMap</c>:
 </p>
 <p class='bpcode w800'>	
 	<jc>// Parse JSON into a generic POJO model.</jc>
-	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
+	OMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, OMap.<jk>class</jk>);
 
 	<jc>// Convert it back to JSON.</jc>
 	String json = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(m);
@@ -95,12 +96,12 @@ Parsing into Generic Models
 	}
 </p>
 <p>
-	Once parsed into a generic model, various convenience methods are provided on the <c>ObjectMap</c>
-		and <c>ObjectList</c> classes to retrieve values:
+	Once parsed into a generic model, various convenience methods are provided on the <c>OMap</c>
+		and <c>OList</c> classes to retrieve values:
 </p>
 <p class='bpcode w800'>
 	<jc>// Parse JSON into a generic POJO model.</jc>
-	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
+	OMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, OMap.<jk>class</jk>);
 
 	<jc>// Get some simple values.</jc>
 	String name = m.getString(<js>"name"</js>);
@@ -114,7 +115,7 @@ Parsing into Generic Models
 	Calendar birthDate = m.get(swap, <js>"birthDate"</js>);
 
 	<jc>// Get the addresses.</jc>
-	ObjectList addresses = m.getObjectList(<js>"addresses"</js>);
+	OList addresses = m.getList(<js>"addresses"</js>);
 
 	<jc>// Get the first address and convert it to a bean.</jc>
 	Address address = addresses.get(Address.<jk>class</jk>, 0);

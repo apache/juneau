@@ -20,7 +20,6 @@ import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.jsonschema.annotation.*;
@@ -210,7 +209,7 @@ public class PathAnnotationTest {
 	@Rest
 	public static class D {
 		@RestMethod(path="/a/{x}")
-		public String get(@Path("*") ObjectMap m) {
+		public String get(@Path("*") OMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -566,7 +565,7 @@ public class PathAnnotationTest {
 	@Rest
 	public static class E {
 		@RestMethod(path="/{x}")
-		public String get(@Path("*") ObjectMap m) {
+		public String get(@Path("*") OMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -626,7 +625,7 @@ public class PathAnnotationTest {
 	@Rest
 	public static class F {
 		@RestMethod(path="/{x}")
-		public String get(@Path("*") ObjectMap m) {
+		public String get(@Path("*") OMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -689,7 +688,7 @@ public class PathAnnotationTest {
 	@Rest
 	public static class G {
 		@RestMethod(path="/{x}")
-		public String get(@Path("*") ObjectMap m) {
+		public String get(@Path("*") OMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -793,7 +792,7 @@ public class PathAnnotationTest {
 	@Rest
 	public static class H {
 		@RestMethod(path="/{x}")
-		public String get(@Path("*") ObjectMap m) {
+		public String get(@Path("*") OMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -818,7 +817,7 @@ public class PathAnnotationTest {
 	@Rest
 	public static class J {
 		@RestMethod(path="/{x}")
-		public String get(@Path("*") ObjectMap m) {
+		public String get(@Path("*") OMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}

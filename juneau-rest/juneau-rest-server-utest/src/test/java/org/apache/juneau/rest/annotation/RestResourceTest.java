@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock2.*;
@@ -33,14 +33,14 @@ public class RestResourceTest {
 	@Rest(allowBodyParam="true")
 	public static class A1 {
 		@RestMethod
-		public ObjectMap put(@Body ObjectMap body) {
+		public OMap put(@Body OMap body) {
 			return body;
 		}
 	}
 	@Rest(allowBodyParam="false")
 	public static class A2 {
 		@RestMethod
-		public ObjectMap put(@Body ObjectMap body) {
+		public OMap put(@Body OMap body) {
 			return body;
 		}
 	}

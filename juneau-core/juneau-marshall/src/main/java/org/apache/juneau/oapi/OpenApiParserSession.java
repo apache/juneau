@@ -20,6 +20,7 @@ import static org.apache.juneau.httppart.HttpPartSchema.CollectionFormat.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -41,8 +42,8 @@ public class OpenApiParserSession extends UonParserSession {
 	private static final ClassMeta<Double> CM_Double = BC.getClassMeta(Double.class);
 	private static final ClassMeta<Float> CM_Float = BC.getClassMeta(Float.class);
 	private static final ClassMeta<Boolean> CM_Boolean = BC.getClassMeta(Boolean.class);
-	private static final ClassMeta<ObjectList> CM_ObjectList = BC.getClassMeta(ObjectList.class);
-	private static final ClassMeta<ObjectMap> CM_ObjectMap = BC.getClassMeta(ObjectMap.class);
+	private static final ClassMeta<OList> CM_OList = BC.getClassMeta(OList.class);
+	private static final ClassMeta<OMap> CM_OMap = BC.getClassMeta(OMap.class);
 
 	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
 
@@ -130,7 +131,7 @@ public class OpenApiParserSession extends UonParserSession {
 
 			} else if (t == ARRAY) {
 				if (type.isObject())
-					type = (ClassMeta<T>)CM_ObjectList;
+					type = (ClassMeta<T>)CM_OList;
 
 				ClassMeta<?> eType = type.isObject() ? string() : type.getElementType();
 				if (eType == null)
@@ -198,12 +199,12 @@ public class OpenApiParserSession extends UonParserSession {
 
 			} else if (t == OBJECT) {
 				if (type.isObject())
-					type = (ClassMeta<T>)CM_ObjectMap;
+					type = (ClassMeta<T>)CM_OMap;
 				if (schema.hasProperties() && type.isMapOrBean()) {
 					try {
 						if (type.isBean()) {
 							BeanMap<T> m = BC.createBeanSession().newBeanMap(type.getInnerClass());
-							for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
+							for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_OMap).entrySet()) {
 								String key = e.getKey();
 								BeanPropertyMeta bpm = m.getPropertyMeta(key);
 								m.put(key, parse(partType, schema.getProperty(key), stringify(e.getValue()), bpm == null ? object() : bpm.getClassMeta()));
@@ -211,7 +212,7 @@ public class OpenApiParserSession extends UonParserSession {
 							return m.getBean();
 						}
 						Map<String,Object> m = (Map<String,Object>)type.newInstance();
-						for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
+						for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_OMap).entrySet()) {
 							String key = e.getKey();
 							m.put(key, parse(partType, schema.getProperty(key), stringify(e.getValue()), object()));
 						}
@@ -247,9 +248,9 @@ public class OpenApiParserSession extends UonParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("OpenApiParserSession", new DefaultFilteringObjectMap()
+			.a("OpenApiParserSession", new DefaultFilteringOMap()
 			);
 	}
 }

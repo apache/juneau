@@ -14,7 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -49,18 +49,18 @@ public class RoundTripTrimStringsTest extends RoundTripTest {
 		a = p2.parse(s.serialize(in), String.class);
 		assertEqualObjects(e, a);
 
-		in = new ObjectMap("{' foo ': ' bar '}");
-		e = new ObjectMap("{foo:'bar'}");
-		a = p.parse(s2.serialize(in), ObjectMap.class);
+		in = OMap.ofJson("{' foo ': ' bar '}");
+		e = OMap.ofJson("{foo:'bar'}");
+		a = p.parse(s2.serialize(in), OMap.class);
 		assertEqualObjects(e, a);
-		a = p2.parse(s.serialize(in), ObjectMap.class);
+		a = p2.parse(s.serialize(in), OMap.class);
 		assertEqualObjects(e, a);
 
-		in = new ObjectList("[' foo ', {' foo ': ' bar '}]");
-		e = new ObjectList("['foo',{foo:'bar'}]");
-		a = p.parse(s2.serialize(in), ObjectList.class);
+		in = new OList("[' foo ', {' foo ': ' bar '}]");
+		e = new OList("['foo',{foo:'bar'}]");
+		a = p.parse(s2.serialize(in), OList.class);
 		assertEqualObjects(e, a);
-		a = p2.parse(s.serialize(in), ObjectList.class);
+		a = p2.parse(s.serialize(in), OList.class);
 		assertEqualObjects(e, a);
 
 		in = new A().init1();
@@ -74,22 +74,22 @@ public class RoundTripTrimStringsTest extends RoundTripTest {
 	public static class A {
 		public String f1;
 		public String[] f2;
-		public ObjectList f3;
-		public ObjectMap f4;
+		public OList f3;
+		public OMap f4;
 
 		public A init1() throws Exception {
 			f1 = " f1 ";
 			f2 = new String[]{" f2a ", " f2b "};
-			f3 = new ObjectList("[' f3a ',' f3b ']");
-			f4 = new ObjectMap("{' foo ':' bar '}");
+			f3 = OList.ofJson("[' f3a ',' f3b ']");
+			f4 = OMap.ofJson("{' foo ':' bar '}");
 			return this;
 		}
 
 		public A init2() throws Exception {
 			f1 = "f1";
 			f2 = new String[]{"f2a", "f2b"};
-			f3 = new ObjectList("['f3a','f3b']");
-			f4 = new ObjectMap("{'foo':'bar'}");
+			f3 = OList.ofJson("['f3a','f3b']");
+			f4 = OMap.ofJson("{'foo':'bar'}");
 			return this;
 		}
 	}

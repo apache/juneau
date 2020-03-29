@@ -19,6 +19,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
@@ -51,8 +52,8 @@ public class BeanConfigAnnotationTest {
 					.collect(Collectors.joining(","));
 			if (t.getClass().isArray())
 				return apply(ArrayUtils.toList(t, Object.class));
-			if (t instanceof ObjectMap)
-				return ((ObjectMap)t).toString();
+			if (t instanceof OMap)
+				return ((OMap)t).toString();
 			if (t instanceof Map)
 				return ((Map<?,?>)t)
 					.entrySet()

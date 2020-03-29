@@ -229,7 +229,7 @@ public class RestCallLoggerConfig {
 		 * @param m The map containing properties to apply.
 		 * @return This object (for method chaining).
 		 */
-		public Builder apply(ObjectMap m) {
+		public Builder apply(OMap m) {
 			for (String key : m.keySet()) {
 				if ("useStackTraceHashing".equals(key))
 					useStackTraceHashing(m.getBoolean("useStackTraceHashing"));
@@ -373,8 +373,8 @@ public class RestCallLoggerConfig {
 	 *
 	 * @return A new map containing the properties defined on this context.
 	 */
-	public ObjectMap toMap() {
-		return new DefaultFilteringObjectMap()
+	public OMap toMap() {
+		return new DefaultFilteringOMap()
 			.append("useStackTraceHashing", useStackTraceHashing)
 			.append("disabled", disabled == FALSE ? null : disabled)
 			.append("stackTraceHashingTimeout", stackTraceHashingTimeout == Integer.MAX_VALUE ? null : stackTraceHashingTimeout)

@@ -18,7 +18,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
@@ -218,8 +218,8 @@ public abstract class RoundTripTest {
 		return new Class<?>[0];
 	}
 
-	public ObjectMap getProperties() {
-		return ObjectMap.EMPTY_MAP;
+	public OMap getProperties() {
+		return OMap.EMPTY_MAP;
 	}
 
 	public <T> Map<Class<T>,Class<? extends T>> getImplClasses() {

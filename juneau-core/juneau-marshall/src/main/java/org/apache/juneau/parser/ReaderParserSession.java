@@ -19,6 +19,7 @@ import java.io.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Subclass of parser session objects for character-based parsers.
@@ -117,11 +118,11 @@ public abstract class ReaderParserSession extends ParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("ReaderParserSession", new DefaultFilteringObjectMap()
-				.append("fileCharset", fileCharset)
-				.append("streamCharset", streamCharset)
+			.a("ReaderParserSession", new DefaultFilteringOMap()
+				.a("fileCharset", fileCharset)
+				.a("streamCharset", streamCharset)
 			);
 	}
 }

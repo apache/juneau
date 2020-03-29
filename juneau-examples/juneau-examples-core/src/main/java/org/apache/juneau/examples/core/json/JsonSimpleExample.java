@@ -67,7 +67,7 @@ public class JsonSimpleExample {
 		String simpleJson = SimpleJsonSerializer.DEFAULT.serialize(pojo);
 		System.out.println(simpleJson);
 
-		// Parse a JSON object (creates a generic ObjectMap).
+		// Parse a JSON object (creates a generic OMap).
 		String json = "{name:'John Smith',age:21}";
 		Map m1 = jsonParser.parse(json, Map.class);
 

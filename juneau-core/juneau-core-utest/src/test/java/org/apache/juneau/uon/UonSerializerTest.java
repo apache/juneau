@@ -14,7 +14,7 @@ package org.apache.juneau.uon;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 public class UonSerializerTest {
@@ -40,26 +40,26 @@ public class UonSerializerTest {
 		assertEquals("a", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{a:'a'}");
+		t = OMap.ofJson("{a:'a'}");
 		assertEquals("(a=a)", s.serialize(t));
 		assertEquals("(a=a)", su.serialize(t));
 		assertEquals("(\n\ta=a\n)", sr.serialize(t));
 
 		// Simple map
 		// Top level
-		t = new ObjectMap("{a:'b',c:123,d:false,e:true,f:null}");
+		t = OMap.ofJson("{a:'b',c:123,d:false,e:true,f:null}");
 		assertEquals("(a=b,c=123,d=false,e=true,f=null)", s.serialize(t));
 		assertEquals("(a=b,c=123,d=false,e=true,f=null)", su.serialize(t));
 		assertEquals("(\n\ta=b,\n\tc=123,\n\td=false,\n\te=true,\n\tf=null\n)", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{a:{a:'b',c:123,d:false,e:true,f:null}}");
+		t = OMap.ofJson("{a:{a:'b',c:123,d:false,e:true,f:null}}");
 		assertEquals("(a=(a=b,c=123,d=false,e=true,f=null))", s.serialize(t));
 		assertEquals("(a=(a=b,c=123,d=false,e=true,f=null))", su.serialize(t));
 		assertEquals("(\n\ta=(\n\t\ta=b,\n\t\tc=123,\n\t\td=false,\n\t\te=true,\n\t\tf=null\n\t)\n)", sr.serialize(t));
 
 		// Simple map with primitives as literals
-		t = new ObjectMap("{a:'b',c:'123',d:'false',e:'true',f:'null'}");
+		t = OMap.ofJson("{a:'b',c:'123',d:'false',e:'true',f:'null'}");
 		assertEquals("(a=b,c='123',d='false',e='true',f='null')", s.serialize(t));
 		assertEquals("(a=b,c='123',d='false',e='true',f='null')", su.serialize(t));
 		assertEquals("(\n\ta=b,\n\tc='123',\n\td='false',\n\te='true',\n\tf='null'\n)", sr.serialize(t));
@@ -73,13 +73,13 @@ public class UonSerializerTest {
 		assertEquals("null", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{null:null}");
+		t = OMap.ofJson("{null:null}");
 		assertEquals("(null=null)", s.serialize(t));
 		assertEquals("(null=null)", su.serialize(t));
 		assertEquals("(\n\tnull=null\n)", sr.serialize(t));
 
 		// 3rd level
-		t = new ObjectMap("{null:{null:null}}");
+		t = OMap.ofJson("{null:{null:null}}");
 		assertEquals("(null=(null=null))", s.serialize(t));
 		assertEquals("(null=(null=null))", su.serialize(t));
 		assertEquals("(\n\tnull=(\n\t\tnull=null\n\t)\n)", sr.serialize(t));
@@ -92,7 +92,7 @@ public class UonSerializerTest {
 		assertEquals("@()", sr.serialize(t));
 
 		// 2nd level in map
-		t = new ObjectMap("{x:[]}");
+		t = OMap.ofJson("{x:[]}");
 		assertEquals("(x=@())", s.serialize(t));
 		assertEquals("(x=@())", su.serialize(t));
 		assertEquals("(\n\tx=@()\n)", sr.serialize(t));
@@ -111,7 +111,7 @@ public class UonSerializerTest {
 		assertEquals("@(\n\t''\n)", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{x:['']}");
+		t = OMap.ofJson("{x:['']}");
 		assertEquals("(x=@(''))", s.serialize(t));
 		assertEquals("(x=@(''))", su.serialize(t));
 		assertEquals("(\n\tx=@(\n\t\t''\n\t)\n)", sr.serialize(t));
@@ -130,7 +130,7 @@ public class UonSerializerTest {
 		assertEquals("\u0000", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{'\u0000':'\u0000'}");
+		t = OMap.ofJson("{'\u0000':'\u0000'}");
 		assertEquals("(%00=%00)", s.serialize(t));
 		assertEquals("(\u0000=\u0000)", su.serialize(t));
 		assertEquals("(\n\t\u0000=\u0000\n)", sr.serialize(t));
@@ -143,7 +143,7 @@ public class UonSerializerTest {
 		assertEquals("false", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{x:false}");
+		t = OMap.ofJson("{x:false}");
 		assertEquals("(x=false)", s.serialize(t));
 		assertEquals("(x=false)", su.serialize(t));
 		assertEquals("(\n\tx=false\n)", sr.serialize(t));
@@ -156,7 +156,7 @@ public class UonSerializerTest {
 		assertEquals("123", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{x:123}");
+		t = OMap.ofJson("{x:123}");
 		assertEquals("(x=123)", s.serialize(t));
 		assertEquals("(x=123)", su.serialize(t));
 		assertEquals("(\n\tx=123\n)", sr.serialize(t));
@@ -169,7 +169,7 @@ public class UonSerializerTest {
 		assertEquals("x;/?:@-_.!*~'", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{x:'x;/?:@-_.!*\\''}");
+		t = OMap.ofJson("{x:'x;/?:@-_.!*\\''}");
 		assertEquals("(x=x;/?:@-_.!*~')", s.serialize(t));
 		assertEquals("(x=x;/?:@-_.!*~')", su.serialize(t));
 		assertEquals("(\n\tx=x;/?:@-_.!*~'\n)", sr.serialize(t));
@@ -182,7 +182,7 @@ public class UonSerializerTest {
 		assertEquals("x{}|\\^[]`<>#%\"&+", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{'x{}|\\\\^[]`<>#%\"&+':'x{}|\\\\^[]`<>#%\"&+'}");
+		t = OMap.ofJson("{'x{}|\\\\^[]`<>#%\"&+':'x{}|\\\\^[]`<>#%\"&+'}");
 		assertEquals("(x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B=x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B)", s.serialize(t));
 		assertEquals("(x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+)", su.serialize(t));
 		assertEquals("(\n\tx{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+\n)", sr.serialize(t));
@@ -196,14 +196,14 @@ public class UonSerializerTest {
 
 		// 2nd level
 		// Note behavior on serializeParams() is different since 2nd-level is top level.
-		t = new ObjectMap("{'x$,()~':'x$,()~'}");
+		t = OMap.ofJson("{'x$,()~':'x$,()~'}");
 		assertEquals("('x$,()~~'='x$,()~~')", s.serialize(t));
 		assertEquals("('x$,()~~'='x$,()~~')", su.serialize(t));
 		assertEquals("(\n\t'x$,()~~'='x$,()~~'\n)", sr.serialize(t));
 
 		// 3rd level
 		// Note behavior on serializeParams().
-		t = new ObjectMap("{'x$,()~':{'x$,()~':'x$,()~'}}");
+		t = OMap.ofJson("{'x$,()~':{'x$,()~':'x$,()~'}}");
 		assertEquals("('x$,()~~'=('x$,()~~'='x$,()~~'))", s.serialize(t));
 		assertEquals("('x$,()~~'=('x$,()~~'='x$,()~~'))", su.serialize(t));
 		assertEquals("(\n\t'x$,()~~'=(\n\t\t'x$,()~~'='x$,()~~'\n\t)\n)", sr.serialize(t));
@@ -217,13 +217,13 @@ public class UonSerializerTest {
 		assertEquals("'x='", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{'x=':'x='}");
+		t = OMap.ofJson("{'x=':'x='}");
 		assertEquals("('x='='x=')", s.serialize(t));
 		assertEquals("('x='='x=')", su.serialize(t));
 		assertEquals("(\n\t'x='='x='\n)", sr.serialize(t));
 
 		// 3rd level
-		t = new ObjectMap("{'x=':{'x=':'x='}}");
+		t = OMap.ofJson("{'x=':{'x=':'x='}}");
 		assertEquals("('x='=('x='='x='))", s.serialize(t));
 		assertEquals("('x='=('x='='x='))", su.serialize(t));
 		assertEquals("(\n\t'x='=(\n\t\t'x='='x='\n\t)\n)", sr.serialize(t));
@@ -236,7 +236,7 @@ public class UonSerializerTest {
 		assertEquals("'()'", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{'()':'()'}");
+		t = OMap.ofJson("{'()':'()'}");
 		assertEquals("('()'='()')", s.serialize(t));
 		assertEquals("('()'='()')", su.serialize(t));
 		assertEquals("(\n\t'()'='()'\n)", sr.serialize(t));
@@ -249,7 +249,7 @@ public class UonSerializerTest {
 		assertEquals("$a", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{$a:'$a'}");
+		t = OMap.ofJson("{$a:'$a'}");
 		assertEquals("($a=$a)", s.serialize(t));
 		assertEquals("($a=$a)", su.serialize(t));
 		assertEquals("(\n\t$a=$a\n)", sr.serialize(t));
@@ -262,13 +262,13 @@ public class UonSerializerTest {
 		assertEquals("''", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{'':''}");
+		t = OMap.ofJson("{'':''}");
 		assertEquals("(''='')", s.serialize(t));
 		assertEquals("(''='')", su.serialize(t));
 		assertEquals("(\n\t''=''\n)", sr.serialize(t));
 
 		// 3rd level
-		t = new ObjectMap("{'':{'':''}}");
+		t = OMap.ofJson("{'':{'':''}}");
 		assertEquals("(''=(''=''))", s.serialize(t));
 		assertEquals("(''=(''=''))", su.serialize(t));
 		assertEquals("(\n\t''=(\n\t\t''=''\n\t)\n)", sr.serialize(t));
@@ -281,13 +281,13 @@ public class UonSerializerTest {
 		assertEquals("'\n'", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{'\n':'\n'}");
+		t = OMap.ofJson("{'\n':'\n'}");
 		assertEquals("('%0A'='%0A')", s.serialize(t));
 		assertEquals("('\n'='\n')", su.serialize(t));
 		assertEquals("(\n\t'\n'='\n'\n)", sr.serialize(t));
 
 		// 3rd level
-		t = new ObjectMap("{'\n':{'\n':'\n'}}");
+		t = OMap.ofJson("{'\n':{'\n':'\n'}}");
 		assertEquals("('%0A'=('%0A'='%0A'))", s.serialize(t));
 		assertEquals("('\n'=('\n'='\n'))", su.serialize(t));
 		assertEquals("(\n\t'\n'=(\n\t\t'\n'='\n'\n\t)\n)", sr.serialize(t));
@@ -308,13 +308,13 @@ public class UonSerializerTest {
 		assertEquals("¢", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{'¢':'¢'}");
+		t = OMap.ofJson("{'¢':'¢'}");
 		assertEquals("(%C2%A2=%C2%A2)", s.serialize(t));
 		assertEquals("(¢=¢)", su.serialize(t));
 		assertEquals("(\n\t¢=¢\n)", sr.serialize(t));
 
 		// 3rd level
-		t = new ObjectMap("{'¢':{'¢':'¢'}}");
+		t = OMap.ofJson("{'¢':{'¢':'¢'}}");
 		assertEquals("(%C2%A2=(%C2%A2=%C2%A2))", s.serialize(t));
 		assertEquals("(¢=(¢=¢))", su.serialize(t));
 		assertEquals("(\n\t¢=(\n\t\t¢=¢\n\t)\n)", sr.serialize(t));
@@ -327,13 +327,13 @@ public class UonSerializerTest {
 		assertEquals("€", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{'€':'€'}");
+		t = OMap.ofJson("{'€':'€'}");
 		assertEquals("(%E2%82%AC=%E2%82%AC)", s.serialize(t));
 		assertEquals("(€=€)", su.serialize(t));
 		assertEquals("(\n\t€=€\n)", sr.serialize(t));
 
 		// 3rd level
-		t = new ObjectMap("{'€':{'€':'€'}}");
+		t = OMap.ofJson("{'€':{'€':'€'}}");
 		assertEquals("(%E2%82%AC=(%E2%82%AC=%E2%82%AC))", s.serialize(t));
 		assertEquals("(€=(€=€))", su.serialize(t));
 		assertEquals("(\n\t€=(\n\t\t€=€\n\t)\n)", sr.serialize(t));
@@ -346,13 +346,13 @@ public class UonSerializerTest {
 		assertEquals("𤭢", sr.serialize(t));
 
 		// 2nd level
-		t = new ObjectMap("{'𤭢':'𤭢'}");
+		t = OMap.ofJson("{'𤭢':'𤭢'}");
 		assertEquals("(%F0%A4%AD%A2=%F0%A4%AD%A2)", s.serialize(t));
 		assertEquals("(𤭢=𤭢)", su.serialize(t));
 		assertEquals("(\n\t𤭢=𤭢\n)", sr.serialize(t));
 
 		// 3rd level
-		t = new ObjectMap("{'𤭢':{'𤭢':'𤭢'}}");
+		t = OMap.ofJson("{'𤭢':{'𤭢':'𤭢'}}");
 		assertEquals("(%F0%A4%AD%A2=(%F0%A4%AD%A2=%F0%A4%AD%A2))", s.serialize(t));
 		assertEquals("(𤭢=(𤭢=𤭢))", su.serialize(t));
 		assertEquals("(\n\t𤭢=(\n\t\t𤭢=𤭢\n\t)\n)", sr.serialize(t));

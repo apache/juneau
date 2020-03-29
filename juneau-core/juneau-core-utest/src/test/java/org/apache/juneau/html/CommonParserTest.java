@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
@@ -54,9 +54,9 @@ public class CommonParserTest {
 		assertEquals(false, m.get("c"));
 
 		in = "<table _type='array'><tr><th>attribute</th></tr><tr><td><string>value</string></td></tr><tr><td><string>value</string></td></tr></table>";
-		ObjectList jl = (ObjectList)p.parse(in, Object.class);
-		assertEquals("value", jl.getObjectMap(0).getString("attribute"));
-		assertEquals("value", jl.getObjectMap(1).getString("attribute"));
+		OList jl = (OList)p.parse(in, Object.class);
+		assertEquals("value", jl.getMap(0).getString("attribute"));
+		assertEquals("value", jl.getMap(1).getString("attribute"));
 
 		A1 t1 = new A1();
 		A2 t2 = new A2();

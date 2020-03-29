@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.*;
@@ -36,8 +36,8 @@ public class ClientFuturesTest {
 	@Rest
 	public static class A {
 		@RestMethod
-		public ObjectMap get(RestRequest req) throws Exception {
-			return new ObjectMap().append("foo","bar");
+		public OMap get(RestRequest req) throws Exception {
+			return OMap.of("foo","bar");
 		}
 	}
 	static RestClient a = MockRestClient.build(A.class);
@@ -48,7 +48,7 @@ public class ClientFuturesTest {
 		assertEquals(200, f.get().getStatusCode());
 
 		Future<RestResponse> f2 = a.get("").runFuture();
-		Future<ObjectMap> m = f2.get().getBody().asFuture(ObjectMap.class);
+		Future<OMap> m = f2.get().getBody().asFuture(OMap.class);
 		assertObjectEquals("{foo:'bar'}", m.get());
 
 		Future<RestResponse> f3 = a.get("").runFuture();

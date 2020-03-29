@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.rest.client2.*;
 import org.junit.*;
@@ -34,7 +34,7 @@ public class ConfigTest extends RestTestcase {
 	public void test() throws Exception {
 		RestClient c = TestMicroservice.client().accept("text/json+simple").build();
 
-		Map<String,Map<String,Object>> m = c.get(URL).run().getBody().as(Map.class, String.class, ObjectMap.class);
+		Map<String,Map<String,Object>> m = c.get(URL).run().getBody().as(Map.class, String.class, OMap.class);
 
 		Config cf = Config.create().memStore().build().load(m);
 

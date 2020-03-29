@@ -15,6 +15,7 @@ package org.apache.juneau.internal;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Represents a wrapped {@link Map} where entries in the map can be removed without affecting the underlying map.
@@ -22,7 +23,7 @@ import org.apache.juneau.*;
  * @param <T> The class type of the wrapped bean.
  */
 @SuppressWarnings("rawtypes")
-public class DelegateMap<T extends Map> extends ObjectMap implements Delegate<T> {
+public class DelegateMap<T extends Map> extends OMap implements Delegate<T> {
 	private static final long serialVersionUID = 1L;
 
 	private transient ClassMeta<T> classMeta;
@@ -54,7 +55,7 @@ public class DelegateMap<T extends Map> extends ObjectMap implements Delegate<T>
 	 * @return This object (for method chaining).
 	 */
 	public DelegateMap<T> filterKeys(List<String> keys) {
-		ObjectMap m2 = new ObjectMap();
+		OMap m2 = new OMap();
 		for (String k : keys)
 			if (containsKey(k))
 				m2.put(k, get(k));

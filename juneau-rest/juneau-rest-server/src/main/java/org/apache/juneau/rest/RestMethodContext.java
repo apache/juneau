@@ -615,7 +615,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		reqHeaders,
 		defaultQuery,
 		defaultFormData;
-	final ObjectMap reqAttrs;
+	final OMap reqAttrs;
 	final String defaultCharset;
 	final long maxInput;
 	final Map<String,Widget> widgets;
@@ -743,7 +743,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		Map<String,Object> _reqHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 		_reqHeaders.putAll(getMapProperty(RESTMETHOD_reqHeaders, Object.class));
 
-		ObjectMap _reqAttrs = new ObjectMap(context.getReqAttrs()).appendAll(getMapProperty(RESTMETHOD_reqAttrs, Object.class));
+		OMap _reqAttrs = new OMap(context.getReqAttrs()).appendAll(getMapProperty(RESTMETHOD_reqAttrs, Object.class));
 
 		Map<String,Object> _defaultQuery = new LinkedHashMap<>(getMapProperty(RESTMETHOD_defaultQuery, Object.class));
 
@@ -806,8 +806,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		Object clc = getProperty(RESTMETHOD_callLoggerConfig);
 		if (clc instanceof RestCallLoggerConfig)
 			this.callLoggerConfig = (RestCallLoggerConfig)clc;
-		else if (clc instanceof ObjectMap)
-			this.callLoggerConfig = RestCallLoggerConfig.create().parent(context.getCallLoggerConfig()).apply((ObjectMap)clc).build();
+		else if (clc instanceof OMap)
+			this.callLoggerConfig = RestCallLoggerConfig.create().parent(context.getCallLoggerConfig()).apply((OMap)clc).build();
 		else
 			this.callLoggerConfig = context.getCallLoggerConfig();
 	}
@@ -1189,14 +1189,14 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("RestMethodContext", new DefaultFilteringObjectMap()
-				.append("defaultFormData", defaultFormData)
-				.append("defaultQuery", defaultQuery)
-				.append("reqHeaders", reqHeaders)
-				.append("httpMethod", httpMethod)
-				.append("priority", priority)
+			.a("RestMethodContext", new DefaultFilteringOMap()
+				.a("defaultFormData", defaultFormData)
+				.a("defaultQuery", defaultQuery)
+				.a("reqHeaders", reqHeaders)
+				.a("httpMethod", httpMethod)
+				.a("priority", priority)
 			);
 	}
 }

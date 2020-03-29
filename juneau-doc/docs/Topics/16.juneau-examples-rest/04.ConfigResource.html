@@ -58,7 +58,7 @@ ConfigResource
 	<jk>public class</jk> ConfigResource <jk>extends</jk> BasicRestServlet { 
 		
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
-		<jk>public</jk> ObjectMap getConfig() <jk>throws</jk> Exception {
+		<jk>public</jk> OMap getConfig() <jk>throws</jk> Exception {
 			<jk>return</jk> getServletConfig().getConfig().asMap();
 		}
 		
@@ -86,7 +86,7 @@ ConfigResource
 				<js>"]"</js>
 			}
 		) 
-		<jk>public</jk> ObjectMap getConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section) <jk>throws</jk> Exception { 
+		<jk>public</jk> OMap getConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section) <jk>throws</jk> Exception { 
 			<jk>return</jk> getSection(section); 
 		} 
 		
@@ -136,7 +136,7 @@ ConfigResource
 				<js>"]"</js>
 			}
 		) 
-		<jk>public</jk> ObjectMap setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Body</ja> Map&lt;String,String&gt; contents) <jk>throws</jk> Exception { 
+		<jk>public</jk> OMap setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Body</ja> Map&lt;String,String&gt; contents) <jk>throws</jk> Exception { 
 			getServletConfig().getConfig().setSection(section, contents); 
 			<jk>return</jk> getSection(section); 
 		} 
@@ -156,8 +156,8 @@ ConfigResource
 			<jk>return</jk> getSection(section).getString(key); 
 		} 
 		
-		<jk>private</jk> ObjectMap getSection(String name) { 
-			ObjectMap m = getServletConfig().getConfig().getSectionMap(name); 
+		<jk>private</jk> OMap getSection(String name) { 
+			OMap m = getServletConfig().getConfig().getSectionMap(name); 
 			<jk>if</jk> (m == <jk>null</jk>) 
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Section not found."</js>); 
 			<jk>return</jk> m; 

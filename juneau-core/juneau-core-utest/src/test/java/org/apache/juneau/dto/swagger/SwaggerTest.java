@@ -18,7 +18,6 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
@@ -361,7 +360,7 @@ public class SwaggerTest {
 	public void testSetDefinitions() {
 		Swagger t = new Swagger();
 
-		t.setDefinitions(AMap.of("foo",new ObjectMap().append("type","bar")));
+		t.setDefinitions(AMap.of("foo",OMap.of("type","bar")));
 		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
 		assertInstanceOf(Map.class, t.getDefinitions());
 
@@ -380,7 +379,7 @@ public class SwaggerTest {
 	public void testAddDefinitions() {
 		Swagger t = new Swagger();
 
-		t.addDefinitions(AMap.of("foo",new ObjectMap().append("type", "bar")));
+		t.addDefinitions(AMap.of("foo",OMap.of("type", "bar")));
 		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
 		assertInstanceOf(Map.class, t.getDefinitions());
 
@@ -400,9 +399,9 @@ public class SwaggerTest {
 	public void testDefinition() {
 		Swagger t = new Swagger();
 
-		t.definition("a", new ObjectMap().append("type","a1"));
-		t.definition("b", (ObjectMap)null);
-		t.definition(null, new ObjectMap().append("type", "c1"));
+		t.definition("a", OMap.of("type","a1"));
+		t.definition("b", (OMap)null);
+		t.definition(null, OMap.of("type", "c1"));
 
 		assertObjectEquals("{a:{type:'a1'},b:null,null:{type:'c1'}}", t.getDefinitions());
 	}
@@ -875,7 +874,7 @@ public class SwaggerTest {
 		assertInstanceOf(List.class, t.get("consumes", Object.class));
 		assertInstanceOf(MediaType.class, t.get("consumes", List.class).get(0));
 		assertInstanceOf(Map.class, t.get("definitions", Object.class));
-		assertInstanceOf(ObjectMap.class, t.get("definitions", Map.class).values().iterator().next());
+		assertInstanceOf(OMap.class, t.get("definitions", Map.class).values().iterator().next());
 		assertInstanceOf(ExternalDocumentation.class, t.get("externalDocs", Object.class));
 		assertInstanceOf(String.class, t.get("host", Object.class));
 		assertInstanceOf(Info.class, t.get("info", Object.class));

@@ -17,6 +17,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
@@ -974,7 +975,7 @@ public class XmlIgnoreCommentsTest {
 		@Xml(format=XmlFormat.ATTR)
 		public int b;
 		BeanWithXmlFormatAttrsProperty init() {
-			a = new ObjectMap().append("k1", "foo").append("k2", "123");
+			a = OMap.of("k1", "foo", "k2", "123");
 			b = 456;
 			return this;
 		}

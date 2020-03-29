@@ -38,8 +38,8 @@ Reading Continuous Streams
 	Reader r;
 
 	r = new StringReader(<js>"{foo:'bar'}{baz:'qux'}"</js>);
-	x = p.parse(r, ObjectMap.<jk>class</jk>);  <jc>// {foo:'bar'}</jc>
-	x = p.parse(r, ObjectMap.<jk>class</jk>);  <jc>// {baz:'qux'}</jc>
+	x = p.parse(r, OMap.<jk>class</jk>);  <jc>// {foo:'bar'}</jc>
+	x = p.parse(r, OMap.<jk>class</jk>);  <jc>// {baz:'qux'}</jc>
 
 	r = reader(<js>"[123][456]"</js>);
 	x = p.parse(r, <jk>int</jk>[].<jk>class</jk>);  <jc>// [123]</jc>

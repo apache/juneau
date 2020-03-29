@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -77,9 +78,9 @@ public class XmlDocSerializer extends XmlSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("XmlDocSerializer", new DefaultFilteringObjectMap()
+			.a("XmlDocSerializer", new DefaultFilteringOMap()
 			);
 	}
 }

@@ -39,6 +39,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -2228,7 +2229,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * Converts the output from the connection into an {@link ObjectMap} and then wraps that in a {@link PojoRest}.
+	 * Converts the output from the connection into an {@link OMap} and then wraps that in a {@link PojoRest}.
 	 *
 	 * <p>
 	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
@@ -2239,7 +2240,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	If the input contains a syntax error or is malformed for the <c>Content-Type</c> header.
 	 */
 	public PojoRest getResponsePojoRest() throws IOException, ParseException {
-		return getResponsePojoRest(ObjectMap.class);
+		return getResponsePojoRest(OMap.class);
 	}
 
 	<T> T getResponseInner(ClassMeta<T> type) throws IOException, ParseException {
@@ -2259,7 +2260,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				return (T)getInputStream();
 			if (type.isType(ReaderResource.class) || type.isType(StreamResource.class)) {
 				String mediaType = null;
-				ObjectMap headers = new ObjectMap();
+				OMap headers = new OMap();
 				for (Header h : response.getAllHeaders()) {
 					if (h.getName().equalsIgnoreCase("Content-Type"))
 						mediaType = h.getValue();
@@ -2303,7 +2304,7 @@ public final class RestCall extends BeanSession implements Closeable {
 					ParserSessionArgs pArgs =
 						ParserSessionArgs
 							.create()
-							.properties(new ObjectMap().setInner(getProperties()))
+							.properties(new OMap().inner(getProperties()))
 							.locale(response.getLocale())
 							.mediaType(mt)
 							.schema(responseBodySchema);
@@ -2505,32 +2506,32 @@ public final class RestCall extends BeanSession implements Closeable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("RestCall", new DefaultFilteringObjectMap()
-				.append("allowRedirectsOnPosts", allowRedirectsOnPosts)
-				.append("byLines", byLines)
-				.append("capturedResponse", capturedResponse)
-				.append("client", client)
-				.append("hasInput", hasInput)
-				.append("ignoreErrors", ignoreErrors)
-				.append("interceptors", interceptors)
-				.append("isClosed", isClosed)
-				.append("isConnected", isConnected)
-				.append("isFailed", isFailed)
-				.append("parser", parser)
-				.append("partParser", partParser)
-				.append("partSerializer", partSerializer)
-				.append("redirectOnPostsTries", redirectOnPostsTries)
-				.append("requestBodySchema", requestBodySchema)
-				.append("response", response)
-				.append("responseBodySchema", responseBodySchema)
-				.append("retries", retries)
-				.append("retryInterval", retryInterval)
-				.append("retryOn", retryOn)
-				.append("serializer", serializer)
-				.append("softClose", softClose)
-				.append("uriBuilder", uriBuilder)
+			.a("RestCall", new DefaultFilteringOMap()
+				.a("allowRedirectsOnPosts", allowRedirectsOnPosts)
+				.a("byLines", byLines)
+				.a("capturedResponse", capturedResponse)
+				.a("client", client)
+				.a("hasInput", hasInput)
+				.a("ignoreErrors", ignoreErrors)
+				.a("interceptors", interceptors)
+				.a("isClosed", isClosed)
+				.a("isConnected", isConnected)
+				.a("isFailed", isFailed)
+				.a("parser", parser)
+				.a("partParser", partParser)
+				.a("partSerializer", partSerializer)
+				.a("redirectOnPostsTries", redirectOnPostsTries)
+				.a("requestBodySchema", requestBodySchema)
+				.a("response", response)
+				.a("responseBodySchema", responseBodySchema)
+				.a("retries", retries)
+				.a("retryInterval", retryInterval)
+				.a("retryOn", retryOn)
+				.a("serializer", serializer)
+				.a("softClose", softClose)
+				.a("uriBuilder", uriBuilder)
 			);
 	}
 }

@@ -19,6 +19,7 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.pojotools.*;
 
@@ -294,8 +295,8 @@ public class RestCallLoggerRule {
 		return disabled;
 	}
 
-	private ObjectMap toMap() {
-		return new DefaultFilteringObjectMap()
+	private OMap toMap() {
+		return new DefaultFilteringOMap()
 			.append("codes", codeMatcher)
 			.append("exceptions", exceptionMatcher)
 			.append("debugOnly", debugOnly)

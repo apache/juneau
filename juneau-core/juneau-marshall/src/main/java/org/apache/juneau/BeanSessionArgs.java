@@ -16,6 +16,7 @@ import static org.apache.juneau.BeanContext.*;
 
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 
@@ -145,7 +146,7 @@ public class BeanSessionArgs extends SessionArgs {
 	}
 
 	@Override /* SessionArgs */
-	public BeanSessionArgs properties(ObjectMap value) {
+	public BeanSessionArgs properties(OMap value) {
 		super.properties(value);
 		return this;
 	}
@@ -157,10 +158,10 @@ public class BeanSessionArgs extends SessionArgs {
 	}
 
 	@Override /* SessionArgs */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("BeanSessionArgs", new DefaultFilteringObjectMap()
-				.append("schema", schema)
+			.a("BeanSessionArgs", new DefaultFilteringOMap()
+				.a("schema", schema)
 			);
 	}
 }

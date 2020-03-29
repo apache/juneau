@@ -14,7 +14,7 @@ package org.apache.juneau.rest.annotation;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -30,8 +30,8 @@ public class RestResourceMessagesTest {
 	// Setup
 	//====================================================================================================
 
-	static ObjectMap convertToMap(ResourceBundle rb) {
-		ObjectMap m = new ObjectMap();
+	static OMap convertToMap(ResourceBundle rb) {
+		OMap m = new OMap();
 		for (String k : rb.keySet())
 			m.put(k, rb.getString(k));
 		return m;
@@ -44,7 +44,7 @@ public class RestResourceMessagesTest {
 	@Rest(messages="RestResourceMessagesTest1")
 	public static class A {
 		@RestMethod
-		public ObjectMap a01(ResourceBundle rb) {
+		public OMap a01(ResourceBundle rb) {
 			return convertToMap(rb);
 		}
 	}

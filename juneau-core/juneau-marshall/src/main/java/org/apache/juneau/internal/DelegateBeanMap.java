@@ -15,6 +15,7 @@ package org.apache.juneau.internal;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Represents a wrapped {@link BeanMap} where property values can be overridden, removed, or reordered without
@@ -29,7 +30,7 @@ import org.apache.juneau.*;
 public class DelegateBeanMap<T> extends BeanMap<T> {
 
 	private Set<String> keys = new LinkedHashSet<>();
-	private ObjectMap overrideValues = new ObjectMap();
+	private OMap overrideValues = new OMap();
 
 	/**
 	 * Constructor.

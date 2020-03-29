@@ -13,6 +13,7 @@
 package org.apache.juneau.json;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Serializes POJO models to Simplified JSON.
@@ -107,9 +108,9 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("SimpleJsonSerializer", new DefaultFilteringObjectMap()
+			.a("SimpleJsonSerializer", new DefaultFilteringOMap()
 			);
 	}
 }

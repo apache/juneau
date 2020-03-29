@@ -130,8 +130,6 @@
 		Several bug fixes in the {@link HtmlSerializer} and {@link HtmlParser} classes around the handling of 
 		collections and arrays of beans with <c><ja>@Bean</ja>(typeName)</c> annotations.
 	<li>
-		New {@link oaj.ObjectMap(Object...)} constructor.
-	<li>
 		New swaps auto-added to all serializers/parsers:
 		<ul>
 			<li class='jc'>{@link oaj.transforms.MatchResultSwap} 
@@ -161,6 +159,10 @@
 			<li class='jc'>{@link oaj.collections.OMap}
 			<li class='jc'>{@link oaj.collections.OList}
 		</ul>
+	<li>
+		{@link oaj.ObjectMap} is being deprecated and replaced with {@link oaj.collections.OMap}.
+	<li>
+		{@link oaj.ObjectList} is being deprecated and replaced with {@link oaj.collections.OList}.
 	<li>
 		All classes in the {@link oaj.http.response} and {@link oaj.http.exception} now have <c>header(String,Object)</c>
 		methods for adding response headers.

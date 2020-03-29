@@ -14,6 +14,7 @@ package org.apache.juneau.serializer;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
@@ -177,10 +178,10 @@ public abstract class OutputStreamSerializer extends Serializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("OutputStreamSerializer", new DefaultFilteringObjectMap()
-				.append("binaryFormat", binaryFormat)
+			.a("OutputStreamSerializer", new DefaultFilteringOMap()
+				.a("binaryFormat", binaryFormat)
 			);
 	}
 }

@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -160,8 +161,8 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("MsgPackParser", new DefaultFilteringObjectMap());
+			.a("MsgPackParser", new DefaultFilteringOMap());
 	}
 }

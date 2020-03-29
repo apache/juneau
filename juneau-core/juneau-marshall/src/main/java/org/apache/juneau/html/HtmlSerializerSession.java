@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -773,7 +774,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					return null;
 			}
 		}
-		
+
 		BeanMap<?> bm = toBeanMap(o1);
 		return bm.keySet().toArray(new String[bm.size()]);
 	}
@@ -880,9 +881,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("HtmlSerializerSession", new DefaultFilteringObjectMap()
+			.a("HtmlSerializerSession", new DefaultFilteringOMap()
 		);
 	}
 }

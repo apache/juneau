@@ -18,6 +18,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 
@@ -333,11 +334,11 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("UonParser", new DefaultFilteringObjectMap()
-				.append("decoding", decoding)
-				.append("validateEnd", validateEnd)
+			.a("UonParser", new DefaultFilteringOMap()
+				.a("decoding", decoding)
+				.a("validateEnd", validateEnd)
 			);
 	}
 }

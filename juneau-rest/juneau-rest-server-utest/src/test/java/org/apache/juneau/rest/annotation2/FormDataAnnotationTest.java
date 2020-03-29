@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
@@ -103,32 +103,32 @@ public class FormDataAnnotationTest {
 	@Rest
 	public static class C {
 		@RestMethod(name=POST, path="/defaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
-		public ObjectMap c01(RequestFormData formData) {
-			return new ObjectMap()
-				.append("f1", formData.getString("f1"))
-				.append("f2", formData.getString("f2"))
-				.append("f3", formData.getString("f3"));
+		public OMap c01(RequestFormData formData) {
+			return OMap.of()
+				.a("f1", formData.getString("f1"))
+				.a("f2", formData.getString("f2"))
+				.a("f3", formData.getString("f3"));
 		}
 		@RestMethod(name=POST, path="/annotatedFormData")
-		public ObjectMap c02(@FormData("f1") String f1, @FormData("f2") String f2, @FormData("f3") String f3) {
-			return new ObjectMap()
-				.append("f1", f1)
-				.append("f2", f2)
-				.append("f3", f3);
+		public OMap c02(@FormData("f1") String f1, @FormData("f2") String f2, @FormData("f3") String f3) {
+			return OMap.of()
+				.a("f1", f1)
+				.a("f2", f2)
+				.a("f3", f3);
 		}
 		@RestMethod(name=POST, path="/annotatedFormDataDefault")
-		public ObjectMap c03(@FormData(value="f1",_default="1") String f1, @FormData(value="f2",_default="2") String f2, @FormData(value="f3",_default="3") String f3) {
-			return new ObjectMap()
-				.append("f1", f1)
-				.append("f2", f2)
-				.append("f3", f3);
+		public OMap c03(@FormData(value="f1",_default="1") String f1, @FormData(value="f2",_default="2") String f2, @FormData(value="f3",_default="3") String f3) {
+			return OMap.of()
+				.a("f1", f1)
+				.a("f2", f2)
+				.a("f3", f3);
 		}
 		@RestMethod(name=POST, path="/annotatedAndDefaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
-		public ObjectMap c04(@FormData(value="f1",_default="4") String f1, @FormData(value="f2",_default="5") String f2, @FormData(value="f3",_default="6") String f3) {
-			return new ObjectMap()
-				.append("f1", f1)
-				.append("f2", f2)
-				.append("f3", f3);
+		public OMap c04(@FormData(value="f1",_default="4") String f1, @FormData(value="f2",_default="5") String f2, @FormData(value="f3",_default="6") String f3) {
+			return OMap.of()
+				.a("f1", f1)
+				.a("f2", f2)
+				.a("f3", f3);
 		}
 	}
 	static MockRest c = MockRest.build(C.class);

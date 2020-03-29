@@ -52,7 +52,7 @@ One-way PojoSwaps
 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
 	
 	<jc>// Construct an iterator we want to serialize.</jc>
-	Iterator i = <jk>new</jk> ObjectList(1,2,3).iterator();
+	Iterator i = OList.<jsm>of</jsm>(1,2,3).iterator();
 	
 	<jc>// Serialize our Iterator</jc>
 	String json = s.serialize(i);		<jc>// Produces "[1,2,3]"</jc>

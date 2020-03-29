@@ -32,7 +32,7 @@ Section Maps
 	<jc>// Example usage</jc>
 	Config c = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
 	
-	ObjectMap m = c.getSectionAsMap(<js>"MyAddress"</js>);
+	OMap m = c.getSectionAsMap(<js>"MyAddress"</js>);
 	
 	String street = m.getString(<js>"street"</js>);
 	String city = m.getString(<js>"city"</js>);

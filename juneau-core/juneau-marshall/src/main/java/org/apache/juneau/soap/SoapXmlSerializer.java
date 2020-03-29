@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
@@ -161,10 +162,10 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMet
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("SoapXmlSerializer", new DefaultFilteringObjectMap()
-				.append("soapAction", soapAction)
+			.a("SoapXmlSerializer", new DefaultFilteringOMap()
+				.a("soapAction", soapAction)
 			);
 	}
 }

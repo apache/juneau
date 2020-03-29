@@ -16,6 +16,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -1013,22 +1014,22 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("HtmlDocSerializer", new DefaultFilteringObjectMap()
-				.append("header", header)
-				.append("nav", nav)
-				.append("navlinks", navlinks)
-				.append("aside", aside)
-				.append("asideFloat", asideFloat)
-				.append("footer", footer)
-				.append("style", style)
-				.append("head", head)
-				.append("stylesheet", stylesheet)
-				.append("nowrap", nowrap)
-				.append("template", template)
-				.append("noResultsMessage", noResultsMessage)
-				.append("widgets", widgets.keySet())
+			.a("HtmlDocSerializer", new DefaultFilteringOMap()
+				.a("header", header)
+				.a("nav", nav)
+				.a("navlinks", navlinks)
+				.a("aside", aside)
+				.a("asideFloat", asideFloat)
+				.a("footer", footer)
+				.a("style", style)
+				.a("head", head)
+				.a("stylesheet", stylesheet)
+				.a("nowrap", nowrap)
+				.a("template", template)
+				.a("noResultsMessage", noResultsMessage)
+				.a("widgets", widgets.keySet())
 			);
 	}
 }

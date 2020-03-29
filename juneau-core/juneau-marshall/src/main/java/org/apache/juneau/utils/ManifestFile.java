@@ -19,17 +19,17 @@ import java.net.*;
 import java.util.*;
 import java.util.jar.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Utility class for working with Jar manifest files.
  *
  * <p>
- * Copies the contents of a {@link Manifest} into an {@link ObjectMap} so that the various convenience methods on that
+ * Copies the contents of a {@link Manifest} into an {@link OMap} so that the various convenience methods on that
  * class can be used to retrieve values.
  */
-public class ManifestFile extends ObjectMap {
+public class ManifestFile extends OMap {
 
 	private static final long serialVersionUID = 1L;
 

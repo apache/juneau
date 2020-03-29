@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 
@@ -88,7 +89,7 @@ import org.apache.juneau.serializer.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Serialize a Map</jc>
- * 	Map m = <jk>new</jk> ObjectMap(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
+ * 	Map m = OMap.<jsm>ofJson</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
  *
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
  * 	<jc>// Produces "(a=b,c=1,d=false,e=@(f,1,false),g=(h=i))"</jc>
@@ -204,7 +205,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 		.encoding()
 	 * 		.build();
 	 *
-	 * 	ObjectMap m = <jk>new</jk> ObjectMap().append("foo", "foo bar");
+	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"foo bar"</js>);
 	 *
 	 * 	<jc>// Produces: "(foo=foo bar)"</jc>
 	 * 	String uon1 = s1.serialize(m)
@@ -262,9 +263,10 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 		.paramFormat(<jsf>PLAIN_TEXT</jsf>)
 	 * 		.build();
 	 *
-	 * 	ObjectMap m = <jk>new</jk> ObjectMap()
-	 * 		.append(<js>"foo"</js>, <js>"bar"</js>);
-	 * 		.append(<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>});
+	 * 	OMap m = OMap.<jsm>of</jsm>(
+	 * 		<js>"foo"</js>, <js>"bar"</js>,
+	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
+	 *  );
 	 *
 	 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
 	 * 	String uon1 = s1.serialize(m)
@@ -508,12 +510,12 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("UonSerializer", new DefaultFilteringObjectMap()
-				.append("encoding", encoding)
-				.append("addBeanTypes", addBeanTypes)
-				.append("paramFormat", paramFormat)
+			.a("UonSerializer", new DefaultFilteringOMap()
+				.a("encoding", encoding)
+				.a("addBeanTypes", addBeanTypes)
+				.a("paramFormat", paramFormat)
 			);
 	}
 }

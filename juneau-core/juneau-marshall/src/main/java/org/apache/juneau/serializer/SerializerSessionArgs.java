@@ -19,6 +19,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.svl.*;
@@ -191,7 +192,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	}
 
 	@Override /* SessionArgs */
-	public SerializerSessionArgs properties(ObjectMap value) {
+	public SerializerSessionArgs properties(OMap value) {
 		super.properties(value);
 		return this;
 	}
@@ -205,13 +206,13 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@Override /* SessionArgs */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("SerializerSessionArgs", new DefaultFilteringObjectMap()
-				.append("javaMethod", javaMethod)
-				.append("resolver", resolver)
+			.a("SerializerSessionArgs", new DefaultFilteringOMap()
+				.a("javaMethod", javaMethod)
+				.a("resolver", resolver)
 			);
 	}
 }

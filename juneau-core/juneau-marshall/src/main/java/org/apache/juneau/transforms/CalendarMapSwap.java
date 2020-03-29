@@ -15,6 +15,7 @@ package org.apache.juneau.transforms;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -33,9 +34,10 @@ public class CalendarMapSwap extends PojoSwap<Calendar,Map> {
 	 */
 	@Override /* PojoSwap */
 	public Map swap(BeanSession session, Calendar o) {
-		ObjectMap m = new ObjectMap();
-		m.put("time", o.getTime().getTime());
-		m.put("timeZone", o.getTimeZone().getID());
+		OMap m = OMap.of(
+			"time", o.getTime().getTime(),
+			"timeZone", o.getTimeZone().getID()
+		);
 		return m;
 	}
 

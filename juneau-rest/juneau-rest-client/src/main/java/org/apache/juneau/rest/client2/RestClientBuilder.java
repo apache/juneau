@@ -49,6 +49,7 @@ import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
@@ -583,7 +584,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Can also be any of the following collection types:
 	 * <ul>
-	 * 	<li>{@link Map} / {@link ObjectMap}
+	 * 	<li>{@link Map} / {@link OMap}
 	 * 	<ul>
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
@@ -1166,7 +1167,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Can be any of the following collection types:
 	 * <ul>
-	 * 	<li>{@link Map} / {@link ObjectMap}
+	 * 	<li>{@link Map} / {@link OMap}
 	 * 	<ul>
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
@@ -1301,7 +1302,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Can be any of the following collection types:
 	 * <ul>
-	 * 	<li>{@link Map} / {@link ObjectMap}
+	 * 	<li>{@link Map} / {@link OMap}
 	 * 	<ul>
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.

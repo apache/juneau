@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -29,15 +29,15 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestAttributes}
  * </ul>
  */
-public class RequestAttributes extends ObjectMap {
+public class RequestAttributes extends OMap {
 
 	private static final long serialVersionUID = 1L;
 
 	final RestRequest req;
-	final ObjectMap defaultEntries;
+	final OMap defaultEntries;
 	final VarResolverSession vs;
 
-	RequestAttributes(RestRequest req, ObjectMap defaultEntries) {
+	RequestAttributes(RestRequest req, OMap defaultEntries) {
 		super();
 		this.req = req;
 		this.defaultEntries = defaultEntries;

@@ -253,45 +253,45 @@ public class BeanMapTest {
 		Map m = session.toBeanMap(t);
 
 		// Non-initialized list fields.
-		m.put("l1", new ObjectList("[1,2,3]"));
-		m.put("al1", new ObjectList("[1,2,3]"));
-		m.put("ll1", new ObjectList("[1,2,3]"));
-		m.put("c1", new ObjectList("[1,2,3]"));
-		m.put("jl1", new ObjectList("[1,2,3]"));
+		m.put("l1", OList.ofJson("[1,2,3]"));
+		m.put("al1", OList.ofJson("[1,2,3]"));
+		m.put("ll1", OList.ofJson("[1,2,3]"));
+		m.put("c1", OList.ofJson("[1,2,3]"));
+		m.put("jl1", OList.ofJson("[1,2,3]"));
 
-		// al1 should be initialized with an ArrayList, since it's not a superclass of ObjectList.
+		// al1 should be initialized with an ArrayList, since it's not a superclass of OList.
 		assertEquals(ArrayList.class.getName(), m.get("al1").getClass().getName());
 
-		// The rest are proper superclasses of ObjectList.
-		assertEquals(ObjectList.class.getName(), m.get("l1").getClass().getName());
+		// The rest are proper superclasses of OList.
+		assertEquals(OList.class.getName(), m.get("l1").getClass().getName());
 		assertEquals(LinkedList.class.getName(), m.get("ll1").getClass().getName());
-		assertEquals(ObjectList.class.getName(), m.get("c1").getClass().getName());
-		assertEquals(ObjectList.class.getName(), m.get("jl1").getClass().getName());
+		assertEquals(OList.class.getName(), m.get("c1").getClass().getName());
+		assertEquals(OList.class.getName(), m.get("jl1").getClass().getName());
 
 		// Non-initialized map fields.
-		m.put("m1", new ObjectMap("{foo:'bar'}"));
-		m.put("hm1", new ObjectMap("{foo:'bar'}"));
-		m.put("jm1", new ObjectMap("{foo:'bar'}"));
-		m.put("tm1", new ObjectMap("{foo:'bar'}"));
+		m.put("m1", OMap.ofJson("{foo:'bar'}"));
+		m.put("hm1", OMap.ofJson("{foo:'bar'}"));
+		m.put("jm1", OMap.ofJson("{foo:'bar'}"));
+		m.put("tm1", OMap.ofJson("{foo:'bar'}"));
 
-		// tm1 should be initialized with TreeMap, since it's not a superclass of ObjectMap.
+		// tm1 should be initialized with TreeMap, since it's not a superclass of OMap.
 		assertEquals(TreeMap.class.getName(), m.get("tm1").getClass().getName());
 
-		// The rest are propert superclasses of ObjectMap
-		assertEquals(ObjectMap.class.getName(), m.get("m1").getClass().getName());
+		// The rest are propert superclasses of OMap
+		assertEquals(OMap.class.getName(), m.get("m1").getClass().getName());
 		assertEquals(HashMap.class.getName(), m.get("hm1").getClass().getName());
-		assertEquals(ObjectMap.class.getName(), m.get("jm1").getClass().getName());
+		assertEquals(OMap.class.getName(), m.get("jm1").getClass().getName());
 
 		// Initialized fields should reuse existing field value.
-		m.put("l2", new ObjectList("[1,2,3]"));
-		m.put("al2", new ObjectList("[1,2,3]"));
-		m.put("ll2", new ObjectList("[1,2,3]"));
-		m.put("c2", new ObjectList("[1,2,3]"));
-		m.put("m2", new ObjectMap("{foo:'bar'}"));
-		m.put("hm2", new ObjectMap("{foo:'bar'}"));
-		m.put("tm2", new ObjectMap("{foo:'bar'}"));
-		m.put("jm2", new ObjectMap("{foo:'bar'}"));
-		m.put("jl2", new ObjectList("[1,2,3]"));
+		m.put("l2", OList.ofJson("[1,2,3]"));
+		m.put("al2", OList.ofJson("[1,2,3]"));
+		m.put("ll2", OList.ofJson("[1,2,3]"));
+		m.put("c2", OList.ofJson("[1,2,3]"));
+		m.put("m2", OMap.ofJson("{foo:'bar'}"));
+		m.put("hm2", OMap.ofJson("{foo:'bar'}"));
+		m.put("tm2", OMap.ofJson("{foo:'bar'}"));
+		m.put("jm2", OMap.ofJson("{foo:'bar'}"));
+		m.put("jl2", OList.ofJson("[1,2,3]"));
 
 		assertEquals(ArrayList.class.getName(), m.get("l2").getClass().getName());
 		assertEquals(ArrayList.class.getName(), m.get("al2").getClass().getName());
@@ -300,8 +300,8 @@ public class BeanMapTest {
 		assertEquals(HashMap.class.getName(), m.get("m2").getClass().getName());
 		assertEquals(HashMap.class.getName(), m.get("hm2").getClass().getName());
 		assertEquals(TreeMap.class.getName(), m.get("tm2").getClass().getName());
-		assertEquals(ObjectMap.class.getName(), m.get("jm2").getClass().getName());
-		assertEquals(ObjectList.class.getName(), m.get("jl2").getClass().getName());
+		assertEquals(OMap.class.getName(), m.get("jm2").getClass().getName());
+		assertEquals(OList.class.getName(), m.get("jl2").getClass().getName());
 	}
 
 	public static class C {
@@ -311,9 +311,9 @@ public class BeanMapTest {
 		public Collection c1;
 		public Map m1;
 		public HashMap hm1;
-		public ObjectMap jm1;
+		public OMap jm1;
 		public TreeMap tm1;
-		public ObjectList jl1;
+		public OList jl1;
 		public List l2 = new ArrayList();
 		public ArrayList al2 = new ArrayList();
 		public LinkedList ll2 = new LinkedList();
@@ -321,8 +321,8 @@ public class BeanMapTest {
 		public Map m2 = new HashMap();
 		public HashMap hm2 = new HashMap();
 		public TreeMap tm2 = new TreeMap();
-		public ObjectMap jm2 = new ObjectMap();
-		public ObjectList jl2 = new ObjectList();
+		public OMap jm2 = new OMap();
+		public OList jl2 = new OList();
 	}
 
 	//====================================================================================================
@@ -334,55 +334,55 @@ public class BeanMapTest {
 		Map m = session.toBeanMap(t);
 
 		// Non-initialized list fields.
-		m.put("l1", new ObjectList("[1,2,3]"));
-		m.put("al1", new ObjectList("[1,2,3]"));
-		m.put("ll1", new ObjectList("[1,2,3]"));
-		m.put("c1", new ObjectList("[1,2,3]"));
-		m.put("jl1", new ObjectList("[1,2,3]"));
+		m.put("l1", OList.ofJson("[1,2,3]"));
+		m.put("al1", OList.ofJson("[1,2,3]"));
+		m.put("ll1", OList.ofJson("[1,2,3]"));
+		m.put("c1", OList.ofJson("[1,2,3]"));
+		m.put("jl1", OList.ofJson("[1,2,3]"));
 
-		// al1 should be initialized with an ArrayList, since it's not a superclass of ObjectList.
+		// al1 should be initialized with an ArrayList, since it's not a superclass of OList.
 		assertEquals(ArrayList.class.getName(), m.get("al1").getClass().getName());
 
-		// The rest are proper superclasses of ObjectList.
-		assertEquals(ObjectList.class.getName(), m.get("l1").getClass().getName());
-		assertEquals(ObjectList.class.getName(), m.get("ll1").getClass().getName());
-		assertEquals(ObjectList.class.getName(), m.get("c1").getClass().getName());
-		assertEquals(ObjectList.class.getName(), m.get("jl1").getClass().getName());
+		// The rest are proper superclasses of OList.
+		assertEquals(OList.class.getName(), m.get("l1").getClass().getName());
+		assertEquals(OList.class.getName(), m.get("ll1").getClass().getName());
+		assertEquals(OList.class.getName(), m.get("c1").getClass().getName());
+		assertEquals(OList.class.getName(), m.get("jl1").getClass().getName());
 
 		// Non-initialized map fields.
-		m.put("m1", new ObjectMap("{foo:'bar'}"));
-		m.put("hm1", new ObjectMap("{foo:'bar'}"));
-		m.put("jm1", new ObjectMap("{foo:'bar'}"));
-		m.put("tm1", new ObjectMap("{foo:'bar'}"));
+		m.put("m1", OMap.ofJson("{foo:'bar'}"));
+		m.put("hm1", OMap.ofJson("{foo:'bar'}"));
+		m.put("jm1", OMap.ofJson("{foo:'bar'}"));
+		m.put("tm1", OMap.ofJson("{foo:'bar'}"));
 
-		// tm1 should be initialized with TreeMap, since it's not a superclass of ObjectMap.
+		// tm1 should be initialized with TreeMap, since it's not a superclass of OMap.
 		assertEquals(TreeMap.class.getName(), m.get("tm1").getClass().getName());
 
-		// The rest are propert superclasses of ObjectMap
-		assertEquals(ObjectMap.class.getName(), m.get("m1").getClass().getName());
-		assertEquals(ObjectMap.class.getName(), m.get("hm1").getClass().getName());
-		assertEquals(ObjectMap.class.getName(), m.get("jm1").getClass().getName());
+		// The rest are propert superclasses of OMap
+		assertEquals(OMap.class.getName(), m.get("m1").getClass().getName());
+		assertEquals(OMap.class.getName(), m.get("hm1").getClass().getName());
+		assertEquals(OMap.class.getName(), m.get("jm1").getClass().getName());
 
 		// Initialized fields should reuse existing field value.
-		m.put("l2", new ObjectList("[1,2,3]"));
-		m.put("al2", new ObjectList("[1,2,3]"));
-		m.put("ll2", new ObjectList("[1,2,3]"));
-		m.put("c2", new ObjectList("[1,2,3]"));
-		m.put("m2", new ObjectMap("{foo:'bar'}"));
-		m.put("hm2", new ObjectMap("{foo:'bar'}"));
-		m.put("tm2", new ObjectMap("{foo:'bar'}"));
-		m.put("jm2", new ObjectMap("{foo:'bar'}"));
-		m.put("jl2", new ObjectList("[1,2,3]"));
+		m.put("l2", OList.ofJson("[1,2,3]"));
+		m.put("al2", OList.ofJson("[1,2,3]"));
+		m.put("ll2", OList.ofJson("[1,2,3]"));
+		m.put("c2", OList.ofJson("[1,2,3]"));
+		m.put("m2", OMap.ofJson("{foo:'bar'}"));
+		m.put("hm2", OMap.ofJson("{foo:'bar'}"));
+		m.put("tm2", OMap.ofJson("{foo:'bar'}"));
+		m.put("jm2", OMap.ofJson("{foo:'bar'}"));
+		m.put("jl2", OList.ofJson("[1,2,3]"));
 
-		assertEquals(ObjectList.class.getName(), m.get("l2").getClass().getName());
+		assertEquals(OList.class.getName(), m.get("l2").getClass().getName());
 		assertEquals(ArrayList.class.getName(), m.get("al2").getClass().getName());
-		assertEquals(ObjectList.class.getName(), m.get("ll2").getClass().getName());
-		assertEquals(ObjectList.class.getName(), m.get("c2").getClass().getName());
-		assertEquals(ObjectMap.class.getName(), m.get("m2").getClass().getName());
-		assertEquals(ObjectMap.class.getName(), m.get("hm2").getClass().getName());
+		assertEquals(OList.class.getName(), m.get("ll2").getClass().getName());
+		assertEquals(OList.class.getName(), m.get("c2").getClass().getName());
+		assertEquals(OMap.class.getName(), m.get("m2").getClass().getName());
+		assertEquals(OMap.class.getName(), m.get("hm2").getClass().getName());
 		assertEquals(TreeMap.class.getName(), m.get("tm2").getClass().getName());
-		assertEquals(ObjectMap.class.getName(), m.get("jm2").getClass().getName());
-		assertEquals(ObjectList.class.getName(), m.get("jl2").getClass().getName());
+		assertEquals(OMap.class.getName(), m.get("jm2").getClass().getName());
+		assertEquals(OList.class.getName(), m.get("jl2").getClass().getName());
 	}
 
 	public static class D {
@@ -410,17 +410,17 @@ public class BeanMapTest {
 		public HashMap getHm1() {return hm1;}
 		public void setHm1(HashMap hm1) {this.hm1 = hm1;}
 
-		private ObjectMap jm1;
-		public ObjectMap getJm1() {return jm1;}
-		public void setJm1(ObjectMap jm1) {this.jm1 = jm1;}
+		private OMap jm1;
+		public OMap getJm1() {return jm1;}
+		public void setJm1(OMap jm1) {this.jm1 = jm1;}
 
 		private TreeMap tm1;
 		public TreeMap getTm1() {return tm1;}
 		public void setTm1(TreeMap tm1) {this.tm1 = tm1;}
 
-		private ObjectList jl1;
-		public ObjectList getJl1() {return jl1;}
-		public void setJl1(ObjectList jl1) {this.jl1 = jl1;}
+		private OList jl1;
+		public OList getJl1() {return jl1;}
+		public void setJl1(OList jl1) {this.jl1 = jl1;}
 
 		private List l2 = new ArrayList();
 		public List getL2() {return l2;}
@@ -450,13 +450,13 @@ public class BeanMapTest {
 		public TreeMap getTm2() {return tm2;}
 		public void setTm2(TreeMap tm2) {this.tm2 = tm2;}
 
-		private ObjectMap jm2 = new ObjectMap();
-		public ObjectMap getJm2() {return jm2;}
-		public void setJm2(ObjectMap jm2) {this.jm2 = jm2;}
+		private OMap jm2 = new OMap();
+		public OMap getJm2() {return jm2;}
+		public void setJm2(OMap jm2) {this.jm2 = jm2;}
 
-		private ObjectList jl2 = new ObjectList();
-		public ObjectList getJl2() {return jl2;}
-		public void setJl2(ObjectList jl2) {this.jl2 = jl2;}
+		private OList jl2 = new OList();
+		public OList getJl2() {return jl2;}
+		public void setJl2(OList jl2) {this.jl2 = jl2;}
 	}
 
 	//====================================================================================================
@@ -466,7 +466,7 @@ public class BeanMapTest {
 	public void testArrayProperties() throws Exception {
 		D1 t = new D1();
 		Map m = session.toBeanMap(t);
-		m.put("b", new ObjectMap("{s:'foo'}"));
+		m.put("b", OMap.ofJson("{s:'foo'}"));
 		assertNotNull(t.b);
 		assertEquals("foo", t.b.s);
 
@@ -480,22 +480,22 @@ public class BeanMapTest {
 		assertEquals("default", t.b.s);
 
 		JsonParser p = JsonParser.create().dictionary(D2.class).build();
-		m.put("lb1", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
-		assertEquals(ObjectList.class.getName(), t.lb1.getClass().getName());
+		m.put("lb1", OList.ofText("[{_type:'D2',s:'foobar'}]", p));
+		assertEquals(OList.class.getName(), t.lb1.getClass().getName());
 		assertEquals(D2.class.getName(), t.lb1.get(0).getClass().getName());
 		assertEquals("foobar", (t.lb1.get(0)).s);
 
-		m.put("lb2", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
+		m.put("lb2", OList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals(ArrayList.class.getName(), t.lb2.getClass().getName());
 		assertEquals(D2.class.getName(), t.lb2.get(0).getClass().getName());
 		assertEquals("foobar", (t.lb2.get(0)).s);
 
-		m.put("ab1", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
+		m.put("ab1", OList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals("[L"+D2.class.getName()+";", t.ab1.getClass().getName());
 		assertEquals(D2.class.getName(), t.ab1[0].getClass().getName());
 		assertEquals("foobar", t.ab1[0].s);
 
-		m.put("ab2", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
+		m.put("ab2", OList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals("[L"+D2.class.getName()+";", t.ab2.getClass().getName());
 		assertEquals(D2.class.getName(), t.ab2[0].getClass().getName());
 		assertEquals("foobar", t.ab2[0].s);
@@ -518,7 +518,7 @@ public class BeanMapTest {
 	public void testArrayProperties_usingConfig() throws Exception {
 		D1c t = new D1c();
 		Map m = session.toBeanMap(t);
-		m.put("b", new ObjectMap("{s:'foo'}"));
+		m.put("b", OMap.ofJson("{s:'foo'}"));
 		assertNotNull(t.b);
 		assertEquals("foo", t.b.s);
 
@@ -532,22 +532,22 @@ public class BeanMapTest {
 		assertEquals("default", t.b.s);
 
 		JsonParser p = JsonParser.create().dictionary(D2c.class).applyAnnotations(D1c.class).build();
-		m.put("lb1", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
-		assertEquals(ObjectList.class.getName(), t.lb1.getClass().getName());
+		m.put("lb1", OList.ofText("[{_type:'D2',s:'foobar'}]", p));
+		assertEquals(OList.class.getName(), t.lb1.getClass().getName());
 		assertEquals(D2c.class.getName(), t.lb1.get(0).getClass().getName());
 		assertEquals("foobar", (t.lb1.get(0)).s);
 
-		m.put("lb2", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
+		m.put("lb2", OList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals(ArrayList.class.getName(), t.lb2.getClass().getName());
 		assertEquals(D2c.class.getName(), t.lb2.get(0).getClass().getName());
 		assertEquals("foobar", (t.lb2.get(0)).s);
 
-		m.put("ab1", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
+		m.put("ab1", OList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals("[L"+D2c.class.getName()+";", t.ab1.getClass().getName());
 		assertEquals(D2c.class.getName(), t.ab1[0].getClass().getName());
 		assertEquals("foobar", t.ab1[0].s);
 
-		m.put("ab2", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
+		m.put("ab2", OList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals("[L"+D2c.class.getName()+";", t.ab2.getClass().getName());
 		assertEquals(D2c.class.getName(), t.ab2[0].getClass().getName());
 		assertEquals("foobar", t.ab2[0].s);
@@ -571,19 +571,19 @@ public class BeanMapTest {
 	}
 
 	//====================================================================================================
-	// testArrayPropertiesInObjectList
+	// testArrayPropertiesInOList
 	//====================================================================================================
 	@Test
-	public void testArrayPropertiesInObjectList() throws Exception {
+	public void testArrayPropertiesInOList() throws Exception {
 		E t = new E();
 		Map m = session.toBeanMap(t);
-		m.put("s", new ObjectList("['foo']"));
-		m.put("s2", new ObjectList("[['foo']]"));
-		m.put("i", new ObjectList("[1,2,3]"));
-		m.put("i2", new ObjectList("[[1,2,3],[4,5,6]]"));
+		m.put("s", OList.ofJson("['foo']"));
+		m.put("s2", OList.ofJson("[['foo']]"));
+		m.put("i", OList.ofJson("[1,2,3]"));
+		m.put("i2", OList.ofJson("[[1,2,3],[4,5,6]]"));
 		assertEquals("{s:['foo'],s2:[['foo']],i:[1,2,3],i2:[[1,2,3],[4,5,6]]}", SimpleJsonSerializer.DEFAULT.serialize(t));
-		m.put("i", new ObjectList("[null,null,null]"));
-		m.put("i2", new ObjectList("[[null,null,null],[null,null,null]]"));
+		m.put("i", OList.ofJson("[null,null,null]"));
+		m.put("i2", OList.ofJson("[[null,null,null],[null,null,null]]"));
 		assertEquals("{s:['foo'],s2:[['foo']],i:[0,0,0],i2:[[0,0,0],[0,0,0]]}", SimpleJsonSerializer.DEFAULT.serialize(t));
 	}
 
@@ -636,7 +636,7 @@ public class BeanMapTest {
 		assertEquals("org.apache.juneau.BeanMapTest$G", ((List)m.get("l2")).get(0).getClass().getName());
 
 		m.put("l3", "[{a:'a',i:1}]");
-		assertEquals("org.apache.juneau.ObjectList", m.get("l3").getClass().getName());
+		assertEquals("org.apache.juneau.collections.OList", m.get("l3").getClass().getName());
 		assertEquals("org.apache.juneau.BeanMapTest$G", ((List)m.get("l3")).get(0).getClass().getName());
 
 		m.put("l4", "[{a:'a',i:1}]");
@@ -655,7 +655,7 @@ public class BeanMapTest {
 		assertEquals("org.apache.juneau.BeanMapTest$G", ((List)m.get("m2")).get(0).getClass().getName());
 
 		m.put("m3", "[{a:'a',i:1}]");
-		assertEquals("org.apache.juneau.ObjectList", m.get("m3").getClass().getName());
+		assertEquals("org.apache.juneau.collections.OList", m.get("m3").getClass().getName());
 		assertEquals("org.apache.juneau.BeanMapTest$G", ((List)m.get("m3")).get(0).getClass().getName());
 
 		m.put("m4", "[{a:'a',i:1}]");
@@ -1229,7 +1229,7 @@ public class BeanMapTest {
 	public void testCastWithNormalBean() throws Exception {
 
 		// With _type
-		ObjectMap m = new ObjectMap(session);
+		OMap m = new OMap(session);
 		m.put("_type", "R2");
 		m.put("f1", 1);
 		m.put("f2", "2");
@@ -1246,11 +1246,11 @@ public class BeanMapTest {
 		assertEquals(2, t.f2);
 
 		// Without _type
-		m = new ObjectMap(session);
+		m = new OMap(session);
 		m.put("f1", 1);
 		m.put("f2", "2");
 
-		m = (ObjectMap)m.cast(Object.class);
+		m = (OMap)m.cast(Object.class);
 		assertEquals(1, t.f1);
 		assertEquals(2, t.f2);
 
@@ -1279,9 +1279,9 @@ public class BeanMapTest {
 	public void testCastWithNestedBean() throws Exception {
 
 		// With _type
-		ObjectMap m = new ObjectMap(session);
+		OMap m = new OMap(session);
 		m.put("_type", "S");
-		m.put("f1", new ObjectMap(session).append("_type", "R1").append("f1", 1));
+		m.put("f1", new OMap(session).a("_type", "R1").a("f1", 1));
 
 		S t = (S)m.cast(Object.class);
 		assertEquals(1, t.f1.f1);
@@ -1293,10 +1293,10 @@ public class BeanMapTest {
 		assertEquals(1, t.f1.f1);
 
 		// Without _type
-		m = new ObjectMap(session);
-		m.put("f1", new ObjectMap(session).append("_type", R1.class.getName()).append("f1", 1));
+		m = new OMap(session);
+		m.put("f1", new OMap(session).a("_type", R1.class.getName()).a("f1", 1));
 
-		m = (ObjectMap)m.cast(Object.class);
+		m = (OMap)m.cast(Object.class);
 		assertEquals(1, t.f1.f1);
 
 		t = m.cast(S.class);
@@ -1318,7 +1318,7 @@ public class BeanMapTest {
 		Map m2;
 
 		// With _type
-		ObjectMap m = new ObjectMap(session);
+		OMap m = new OMap(session);
 		m.put("_type", "TreeMap");
 		m.put("1", "ONE");
 
@@ -1356,15 +1356,15 @@ public class BeanMapTest {
 		assertEquals(TEnum.ONE, m2.get(1));
 
 		// Without _type
-		m = new ObjectMap();
+		m = new OMap();
 		m.put("1", "ONE");
 
-		m2 = (ObjectMap)m.cast(Object.class);
-		assertTrue(m2 instanceof ObjectMap);
+		m2 = (OMap)m.cast(Object.class);
+		assertTrue(m2 instanceof OMap);
 		assertEquals("ONE", m2.get("1"));
 
 		m2 = m.cast(Map.class);
-		assertTrue(m2 instanceof ObjectMap);
+		assertTrue(m2 instanceof OMap);
 		assertEquals("ONE", m2.get("1"));
 
 		m2 = m.cast(bc.getClassMeta(TreeMap.class));
@@ -1397,9 +1397,9 @@ public class BeanMapTest {
 	public void testCastToLinkedList() throws Exception {
 
 		// With _type
-		ObjectMap m = new ObjectMap(session);
+		OMap m = new OMap(session);
 		m.put("_type", "LinkedList");
-		m.put("items", new ObjectList().append("1").append("2"));
+		m.put("items", OList.of("1","2"));
 
 		List l = (List)m.cast(Object.class);
 		assertTrue(l instanceof LinkedList);
@@ -1418,11 +1418,11 @@ public class BeanMapTest {
 		assertEquals("1", l.get(0));
 
 		// Without _type
-		m = new ObjectMap();
-		m.put("items", new ObjectList().append("1").append("2"));
+		m = new OMap();
+		m.put("items", OList.of("1","2"));
 
 		l = m.cast(List.class);
-		assertTrue(l instanceof ObjectList);
+		assertTrue(l instanceof OList);
 		assertEquals("1", l.get(0));
 
 		l = m.cast(LinkedList.class);
@@ -1430,7 +1430,7 @@ public class BeanMapTest {
 		assertEquals("1", l.get(0));
 
 		l = m.cast(bc.getClassMeta(List.class));
-		assertTrue(l instanceof ObjectList);
+		assertTrue(l instanceof OList);
 		assertEquals("1", l.get(0));
 
 		l = m.cast(bc.getClassMeta(ArrayList.class));
@@ -1450,9 +1450,9 @@ public class BeanMapTest {
 	public void testToLinkedListInteger() throws Exception {
 
 		// With _type
-		ObjectMap m = new ObjectMap(session);
+		OMap m = new OMap(session);
 		m.put("_type", "LinkedListOfInts");
-		m.put("items", new ObjectList().append("1").append("2"));
+		m.put("items", OList.of("1","2"));
 
 		List l = (List)m.cast(Object.class);
 		assertTrue(l instanceof LinkedList);
@@ -1480,11 +1480,11 @@ public class BeanMapTest {
 		assertEquals("1", l.get(0));
 
 		// Without _type
-		m = new ObjectMap();
-		m.put("items", new ObjectList().append("1").append("2"));
+		m = new OMap();
+		m.put("items", OList.of("1", "2"));
 
 		l = m.cast(List.class);
-		assertTrue(l instanceof ObjectList);
+		assertTrue(l instanceof OList);
 		assertEquals("1", l.get(0));
 
 		l = m.cast(ArrayList.class);
@@ -1492,7 +1492,7 @@ public class BeanMapTest {
 		assertEquals("1", l.get(0));
 
 		l = m.cast(bc.getClassMeta(List.class));
-		assertTrue(l instanceof ObjectList);
+		assertTrue(l instanceof OList);
 		assertEquals("1", l.get(0));
 
 		l = m.cast(bc.getClassMeta(ArrayList.class));
@@ -1500,7 +1500,7 @@ public class BeanMapTest {
 		assertEquals("1", l.get(0));
 
 		l = (List)m.cast(bc.getClassMeta(List.class, Integer.class));
-		assertTrue(l instanceof ObjectList);
+		assertTrue(l instanceof OList);
 		assertTrue(l.get(0) instanceof Integer);
 		assertEquals(1, l.get(0));
 	}
@@ -1512,9 +1512,9 @@ public class BeanMapTest {
 	public void testCastToLinkedListBean() throws Exception {
 
 		// With _type
-		ObjectMap m = new ObjectMap(session);
+		OMap m = new OMap(session);
 		m.put("_type", "LinkedListOfR1");
-		m.put("items", new ObjectList(session).append("{f1:1}"));
+		m.put("items", new OList(session).a("{f1:1}"));
 
 		List l = (List)m.cast(Object.class);
 		assertTrue(l instanceof LinkedList);
@@ -1547,11 +1547,11 @@ public class BeanMapTest {
 		assertEquals(1, ((Map)l.get(0)).get("f1"));
 
 		// Without _type
-		m = new ObjectMap(session);
-		m.put("items", new ObjectList(session).append("{f1:1}"));
+		m = new OMap(session);
+		m.put("items", new OList(session).a("{f1:1}"));
 
 		l = m.cast(List.class);
-		assertTrue(l instanceof ObjectList);
+		assertTrue(l instanceof OList);
 		assertTrue(l.get(0) instanceof String);
 		assertEquals("{f1:1}", l.get(0));
 
@@ -1561,7 +1561,7 @@ public class BeanMapTest {
 		assertEquals("{f1:1}", l.get(0));
 
 		l = m.cast(session.getClassMeta(List.class));
-		assertTrue(l instanceof ObjectList);
+		assertTrue(l instanceof OList);
 		assertTrue(l.get(0) instanceof String);
 		assertEquals("{f1:1}", l.get(0));
 
@@ -1582,7 +1582,8 @@ public class BeanMapTest {
 
 		l = (List)m.cast(session.getClassMeta(List.class, Map.class));
 		assertTrue(l instanceof LinkedList);
-		assertTrue(l.get(0) instanceof ObjectMap);
+		System.err.println(l.get(0).getClass().getName());
+		assertTrue(l.get(0) instanceof OMap);
 		assertEquals(1, ((Map)l.get(0)).get("f1"));
 	}
 
@@ -1593,9 +1594,9 @@ public class BeanMapTest {
 	public void testCastToLinkedListUsingSwap() throws Exception {
 
 		// With _type
-		ObjectMap m = new ObjectMap(session);
+		OMap m = new OMap(session);
 		m.put("_type", "LinkedListOfCalendar");
-		m.put("items", new ObjectList().append("2001-07-04T15:30:45Z"));
+		m.put("items", OList.of("2001-07-04T15:30:45Z"));
 
 		List l = (List)m.cast(Object.class);
 		assertTrue(l instanceof LinkedList);
@@ -1625,8 +1626,8 @@ public class BeanMapTest {
 		assertEquals("2001-07-04T15:30:45Z", l.get(0));
 
 		// Without _type
-		m = new ObjectMap().setBeanSession(session);
-		m.put("items", new ObjectList().append("2001-07-04T15:30:45Z"));
+		m = new OMap().session(session);
+		m.put("items", OList.of("2001-07-04T15:30:45Z"));
 
 		l = m.cast(List.class);
 		assertTrue(l instanceof LinkedList);
@@ -1655,9 +1656,9 @@ public class BeanMapTest {
 	public void testCastToStringArray() throws Exception {
 
 		// With _type
-		ObjectMap m = new ObjectMap(session);
+		OMap m = new OMap(session);
 		m.put("_type", "StringArray");
-		m.put("items", new ObjectList().append("1").append("2"));
+		m.put("items", OList.of("1","2"));
 
 		String[] l = (String[])m.cast(Object.class);
 		assertEquals("1", l[0]);
@@ -1681,8 +1682,8 @@ public class BeanMapTest {
 		assertEquals("1", l2[0].toString());
 
 		// Without _type
-		m = new ObjectMap();
-		m.put("items", new ObjectList().append("1").append("2"));
+		m = new OMap();
+		m.put("items", OList.of("1","2"));
 
 		l = m.cast(String[].class);
 		assertEquals("1", l[0]);
@@ -1701,9 +1702,9 @@ public class BeanMapTest {
 	public void testCastToIntArray() throws Exception {
 
 		// With _type
-		ObjectMap m = new ObjectMap(session);
+		OMap m = new OMap(session);
 		m.put("_type", "IntArray");
-		m.put("items", new ObjectList().append("1").append("2"));
+		m.put("items", OList.of("1","2"));
 
 		int[] l = (int[])m.cast(Object.class);
 		assertEquals(1, l[0]);
@@ -1723,8 +1724,8 @@ public class BeanMapTest {
 		assertEquals(1, l2[0]);
 
 		// Without _type
-		m = new ObjectMap();
-		m.put("items", new ObjectList().append("1").append("2"));
+		m = new OMap();
+		m.put("items", OList.of("1","2"));
 
 		l = m.cast(int[].class);
 		assertEquals(1, l[0]);
@@ -1746,9 +1747,9 @@ public class BeanMapTest {
 	public void testCastToString2dArray() throws Exception {
 
 		// With _type
-		ObjectMap m = new ObjectMap(session);
+		OMap m = new OMap(session);
 		m.put("_type", "String2dArray");
-		m.put("items", new ObjectList().append(new ObjectList().append("1")).append(new ObjectList().append("2")));
+		m.put("items", OList.of(OList.of("1"),OList.of("2")));
 
 		String[][] l = (String[][])m.cast(Object.class);
 		assertEquals("1", l[0][0]);
@@ -1761,8 +1762,8 @@ public class BeanMapTest {
 		assertEquals("2", l[1][0]);
 
 		// Without _type
-		m = new ObjectMap();
-		m.put("items", new ObjectList().append(new ObjectList().append("1")).append(new ObjectList().append("2")));
+		m = new OMap();
+		m.put("items", OList.of(OList.of("1"),OList.of("2")));
 
 		l = m.cast(String[][].class);
 		assertEquals("1", l[0][0]);
@@ -1778,9 +1779,9 @@ public class BeanMapTest {
 	public void testCastToInt2dArray() throws Exception {
 
 		// With _type
-		ObjectMap m = new ObjectMap(session);
+		OMap m = new OMap(session);
 		m.put("_type", "Int2dArray");
-		m.put("items", new ObjectList().append(new ObjectList().append("1")).append(new ObjectList().append("2")));
+		m.put("items", OList.of(OList.of("1"),OList.of("2")));
 
 		int[][] l = (int[][])m.cast(Object.class);
 		assertEquals(1, l[0][0]);
@@ -1793,8 +1794,8 @@ public class BeanMapTest {
 		assertEquals(2, l[1][0]);
 
 		// Without _type
-		m = new ObjectMap();
-		m.put("items", new ObjectList().append(new ObjectList().append("1")).append(new ObjectList().append("2")));
+		m = new OMap();
+		m.put("items", OList.of(OList.of("1"),OList.of("2")));
 
 		l = m.cast(int[][].class);
 		assertEquals(1, l[0][0]);
@@ -2050,8 +2051,8 @@ public class BeanMapTest {
 	public void testSettingCollectionPropertyMultipleTimes() throws Exception {
 
 		BeanMap m = BeanContext.DEFAULT.createSession().newBeanMap(Y.class);
-		m.put("f1", new ObjectList().append("a"));
-		m.put("f1",  new ObjectList().append("b"));
+		m.put("f1", OList.of("a"));
+		m.put("f1",  OList.of("b"));
 		assertEquals("{f1=[b]}", m.toString());
 	}
 

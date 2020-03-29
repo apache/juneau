@@ -22,6 +22,7 @@ import java.util.logging.*;
 import javax.servlet.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
@@ -316,7 +317,7 @@ public class JettyMicroservice extends Microservice {
 		listener.onCreateServer(this);
 
 		Config cf = getConfig();
-		ObjectMap mf = getManifest();
+		OMap mf = getManifest();
 		VarResolver vr = getVarResolver();
 
 		int[] ports = ObjectUtils.firstNonNull(builder.ports, cf.getObjectWithDefault("Jetty/port", mf.getWithDefault("Jetty-Port", new int[]{8000}, int[].class), int[].class));
@@ -357,7 +358,7 @@ public class JettyMicroservice extends Microservice {
 			}
 		}
 
-		for (Map.Entry<String,Object> e : cf.getObjectMap("Jetty/servletMap", ObjectMap.EMPTY_MAP).entrySet()) {
+		for (Map.Entry<String,Object> e : cf.getMap("Jetty/servletMap", OMap.EMPTY_MAP).entrySet()) {
 			try {
 				ClassInfo c = ClassInfo.of(Class.forName(e.getValue().toString()));
 				if (c.isChildOf(Servlet.class)) {
@@ -371,7 +372,7 @@ public class JettyMicroservice extends Microservice {
 			}
 		}
 
-		for (Map.Entry<String,Object> e : cf.getObjectMap("Jetty/servletAttributes", ObjectMap.EMPTY_MAP).entrySet())
+		for (Map.Entry<String,Object> e : cf.getMap("Jetty/servletAttributes", OMap.EMPTY_MAP).entrySet())
 			addServletAttribute(e.getKey(), e.getValue());
 
 		for (Map.Entry<String,Servlet> e : builder.servlets.entrySet())

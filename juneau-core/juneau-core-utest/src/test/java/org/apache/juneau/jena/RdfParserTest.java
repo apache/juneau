@@ -21,7 +21,7 @@ import java.time.*;
 import java.time.format.*;
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.*;
@@ -82,7 +82,7 @@ public class RdfParserTest {
 
 		assertEqualObjects(a, a2);
 
-		ObjectMap m = RdfXmlParser.DEFAULT.parse(rdfXml, ObjectMap.class);
+		OMap m = RdfXmlParser.DEFAULT.parse(rdfXml, OMap.class);
 		String json = SimpleJsonSerializer.DEFAULT_READABLE.serialize(m);
 
 		String e = ""

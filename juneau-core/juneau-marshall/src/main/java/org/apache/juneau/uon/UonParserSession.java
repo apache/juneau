@@ -20,6 +20,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -185,10 +186,10 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
-		
-		if (sType.isOptional()) 
+
+		if (sType.isOptional())
 			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), r, outer, isUrlParamValue, pMeta));
-		
+
 		setCurrentClass(sType);
 
 		Object o = null;
@@ -210,11 +211,11 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				throw new ParseException(this, "Expected ''null'' for void value, but was ''{0}''.", s);
 		} else if (sType.isObject()) {
 			if (c == '(') {
-				ObjectMap m = new ObjectMap(this);
+				OMap m = new OMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else if (c == '@') {
-				Collection l = new ObjectList(this);
+				Collection l = new OList(this);
 				o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);
 			} else {
 				String s = parseString(r, isUrlParamValue);
@@ -240,11 +241,11 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		} else if (sType.isNumber()) {
 			o = parseNumber(r, (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(this));
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new OMap(this));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '(') {
-				ObjectMap m = new ObjectMap(this);
+				OMap m = new OMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
 				// Handle case where it's a collection, but serialized as a map with a _type or _value key.
 				if (m.containsKey(getBeanTypePropertyName(sType)))
@@ -254,7 +255,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					Collection l = (
 						sType.canCreateNewInstance(outer)
 						? (Collection)sType.newInstance(outer)
-						: new ObjectList(this)
+						: new OList(this)
 					);
 					l.add(m.cast(sType.getElementType()));
 					o = l;
@@ -263,7 +264,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				Collection l = (
 					sType.canCreateNewInstance(outer)
 					? (Collection)sType.newInstance(outer)
-					: new ObjectList(this)
+					: new OList(this)
 				);
 				o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);
 			}
@@ -281,7 +282,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				o = sType.newInstanceFromString(outer, s);
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '(') {
-				ObjectMap m = new ObjectMap(this);
+				OMap m = new OMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
 				// Handle case where it's an array, but serialized as a map with a _type or _value key.
 				if (m.containsKey(getBeanTypePropertyName(sType)))
@@ -298,7 +299,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			}
 		} else if (c == '(') {
 			// It could be a non-bean with _type attribute.
-			ObjectMap m = new ObjectMap(this);
+			OMap m = new OMap(this);
 			parseIntoMap(r, m, string(), object(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(sType)))
 				o = cast(m, pMeta, eType);
@@ -870,10 +871,10 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("UonParserSession", new DefaultFilteringObjectMap()
-				.append("decoding", decoding)
+			.a("UonParserSession", new DefaultFilteringOMap()
+				.a("decoding", decoding)
 			);
 	}
 }

@@ -16,6 +16,7 @@ import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -201,11 +202,11 @@ public abstract class ReaderParser extends Parser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("ReaderParser", new DefaultFilteringObjectMap()
-				.append("fileCharset", fileCharset)
-				.append("streamCharset", streamCharset)
+			.a("ReaderParser", new DefaultFilteringOMap()
+				.a("fileCharset", fileCharset)
+				.a("streamCharset", streamCharset)
 			);
 	}
 }

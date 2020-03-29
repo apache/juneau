@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 
@@ -133,8 +134,8 @@ public class UrlPathPatternMatch {
 	 *
 	 * @return This object converted to a map.
 	 */
-	public ObjectMap toMap() {
-		return new DefaultFilteringObjectMap().append("v", getVars()).append("r", getRemainder());
+	public OMap toMap() {
+		return new DefaultFilteringOMap().append("v", getVars()).append("r", getRemainder());
 	}
 
 	@Override /* Object */

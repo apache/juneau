@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.svl.*;
@@ -138,15 +139,15 @@ public class AnnotationInfo<T extends Annotation> {
 	 *
 	 * @return A new map showing the attributes of this object as a JSON object.
 	 */
-	public ObjectMap toObjectMap() {
-		ObjectMap om = new ObjectMap();
+	public OMap toOMap() {
+		OMap om = new OMap();
 		if (c != null)
 			om.put("class", c.getSimpleName());
 		if (m != null)
 			om.put("method", m.getShortName());
 		if (p != null)
 			om.put("package", p.getName());
-		ObjectMap oa = new ObjectMap();
+		OMap oa = new OMap();
 		Class<?> ca = a.annotationType();
 		for (Method m : ca.getDeclaredMethods()) {
 			try {
@@ -228,6 +229,6 @@ public class AnnotationInfo<T extends Annotation> {
 
 	@Override
 	public String toString() {
-		return SimpleJson.DEFAULT_READABLE.toString(toObjectMap());
+		return SimpleJson.DEFAULT_READABLE.toString(toOMap());
 	}
 }

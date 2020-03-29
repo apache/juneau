@@ -22,6 +22,7 @@ import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.soap.*;
@@ -811,10 +812,10 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("SerializerSession", new DefaultFilteringObjectMap()
-				.append("uriResolver", uriResolver)
+			.a("SerializerSession", new DefaultFilteringOMap()
+				.a("uriResolver", uriResolver)
 			);
 	}
 }

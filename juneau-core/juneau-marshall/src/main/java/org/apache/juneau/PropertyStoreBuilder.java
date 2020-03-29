@@ -21,6 +21,7 @@ import java.util.concurrent.*;
 import java.util.regex.*;
 
 import org.apache.juneau.PropertyStore.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
@@ -976,9 +977,9 @@ public class PropertyStoreBuilder {
 				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
 					if (e.getKey() != null)
 						put(e.getKey().toString(), e.getValue());
-			} else if (isObjectMap(o)) {
+			} else if (isJsonObject(o)) {
 				try {
-					putAll(new ObjectMap(o.toString()));
+					putAll(OMap.ofJson(o.toString()));
 				} catch (Exception e) {
 					throw new ConfigException(e, "Cannot put {0} ({1}) to property ''{2}'' ({3}).", string(o), className(o), name, type);
 				}
@@ -1082,8 +1083,8 @@ public class PropertyStoreBuilder {
 			} else if (o instanceof Collection) {
 				for (Object o2 : (Collection<Object>)o)
 					normalize(l, pc, o2);
-			} else if (isObjectList(o)) {
-				normalize(l, pc, new ObjectList(o.toString()));
+			} else if (isJsonArray(o)) {
+				normalize(l, pc, new OList(o.toString()));
 			} else {
 				l.add(pc == null ? o : pc.convert(o));
 			}
@@ -1099,7 +1100,7 @@ public class PropertyStoreBuilder {
 		return value.getClass().getSimpleName();
 	}
 
-	static boolean isObjectMap(Object o) {
+	static boolean isJsonObject(Object o) {
 		if (o instanceof CharSequence) {
 			String s = o.toString();
 			return (s.startsWith("{") && s.endsWith("}") && BeanContext.DEFAULT != null);
@@ -1113,7 +1114,7 @@ public class PropertyStoreBuilder {
 		return key.substring(0, key.indexOf('.'));
 	}
 
-	static boolean isObjectList(Object o) {
+	static boolean isJsonArray(Object o) {
 		if (o instanceof CharSequence) {
 			String s = o.toString();
 			return (s.startsWith("[") && s.endsWith("]") && BeanContext.DEFAULT != null);

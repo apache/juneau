@@ -26,7 +26,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -399,9 +398,9 @@ public class RestClientBuilderTest {
 	}
 
 	@Test
-	public void f08_headers_ObjectMap() throws Exception {
+	public void f08_headers_OMap() throws Exception {
 		RestClient rc = MockRestClient.create(A.class).simpleJson()
-			.headers(new ObjectMap().append("Foo", "bar"))
+			.headers(OMap.of("Foo", "bar"))
 			.header("Check", "Foo")
 			.build();
 		rc.get("/checkHeader").run().getBody().assertValue("['bar']");
@@ -1182,8 +1181,8 @@ public class RestClientBuilderTest {
 ////	public RestClientBuilder query(NameValuePair param) {
 //
 //	@Test
-//	public void i03_query_ObjectMap() throws Exception { fail(); }
-////	public RestClientBuilder query(ObjectMap params) {
+//	public void i03_query_OMap() throws Exception { fail(); }
+////	public RestClientBuilder query(OMap params) {
 //
 //	@Test
 //	public void i04_query_Map() throws Exception { fail(); }
@@ -1219,8 +1218,8 @@ public class RestClientBuilderTest {
 ////	public RestClientBuilder formData(NameValuePair param) {
 //
 //	@Test
-//	public void j03_formData_ObjectMap() throws Exception { fail(); }
-////	public RestClientBuilder formData(ObjectMap params) {
+//	public void j03_formData_OMap() throws Exception { fail(); }
+////	public RestClientBuilder formData(OMap params) {
 //
 //	@Test
 //	public void j04_formData_Map() throws Exception { fail(); }

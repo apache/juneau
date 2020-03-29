@@ -19,7 +19,6 @@ import java.net.*;
 import java.net.URI;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
@@ -308,8 +307,8 @@ public class CommonTest {
 		@Beanp(properties="f1") public Map<String,Integer> x2 = AMap.of("f1",3,"f2",4);
 		@Beanp(properties="f1") public E2[] x3 = {new E2()};
 		@Beanp(properties="f1") public List<E2> x4 = AList.of(new E2());
-		@Beanp(properties="f1") public ObjectMap[] x5 = {new ObjectMap().append("f1",5).append("f2",6)};
-		@Beanp(properties="f1") public List<ObjectMap> x6 = AList.of(new ObjectMap().append("f1",7).append("f2",8));
+		@Beanp(properties="f1") public OMap[] x5 = {OMap.of("f1",5,"f2",6)};
+		@Beanp(properties="f1") public List<OMap> x6 = AList.of(OMap.of("f1",7,"f2",8));
 	}
 
 	public static class E2 {

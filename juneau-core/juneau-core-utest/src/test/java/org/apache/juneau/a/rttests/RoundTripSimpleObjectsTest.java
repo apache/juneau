@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -599,11 +599,11 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	}
 
 	//====================================================================================================
-	// testObjectMap
+	// testOMap
 	//====================================================================================================
 	@Test
-	public void testObjectMap() throws Exception {
-		ObjectMap t = new ObjectMap("{a:'b',c:123,d:false,e:null,f:[123,'abc',true,false,null]}");
+	public void testOMap() throws Exception {
+		OMap t = OMap.ofJson("{a:'b',c:123,d:false,e:null,f:[123,'abc',true,false,null]}");
 		t = roundTrip(t);
 		assertEquals("b", t.get("a"));
 		assertEquals(123, t.get("c"));
@@ -618,11 +618,11 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	}
 
 	//====================================================================================================
-	// testObjectList
+	// testOList
 	//====================================================================================================
 	@Test
-	public void testObjectList() throws Exception {
-		ObjectList t = new ObjectList("['abc',123,true,false,null,{a:'b'}]");
+	public void testOList() throws Exception {
+		OList t = new OList("['abc',123,true,false,null,{a:'b'}]");
 		t = roundTrip(t);
 		assertEquals("abc", t.get(0));
 		assertEquals(123, t.get(1));

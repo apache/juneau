@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
@@ -142,7 +143,7 @@ public @interface Header {
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a REST method</jc>
 	 * 	<ja>@RestMethod</ja>(path=<js>"/addPet"</js>)
-	 * 	<jk>public void</jk> addPet(<ja>@Header</ja> ObjectMap allHeaderParameters) {...}
+	 * 	<jk>public void</jk> addPet(<ja>@Header</ja> OMap allHeaderParameters) {...}
 	 * 		</p>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
@@ -276,11 +277,11 @@ public @interface Header {
 	 * 		<js>"array"</js>
 	 * 		<br>Parameter must be an array or collection.
 	 * 		<br>Elements must be strings or POJOs convertible from strings.
-	 * 		<br>If parameter is <c>Object</c>, creates an {@link ObjectList}.
+	 * 		<br>If parameter is <c>Object</c>, creates an {@link OList}.
 	 * 	<li>
 	 * 		<js>"object"</js>
 	 * 		<br>Parameter must be a map or bean.
-	 * 		<br>If parameter is <c>Object</c>, creates an {@link ObjectMap}.
+	 * 		<br>If parameter is <c>Object</c>, creates an {@link OMap}.
 	 * 		<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
 	 * 	<li>
 	 * 		<js>"file"</js>

@@ -13,6 +13,7 @@
 package org.apache.juneau.jsonschema;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.*;
 
@@ -22,7 +23,7 @@ import org.apache.juneau.parser.*;
  */
 public class JsonSchemaClassMeta extends ExtendedClassMeta {
 
-	private final ObjectMap schema = new ObjectMap();
+	private final OMap schema = new OMap();
 
 	/**
 	 * Constructor.
@@ -45,7 +46,7 @@ public class JsonSchemaClassMeta extends ExtendedClassMeta {
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
-	protected ObjectMap getSchema() {
+	protected OMap getSchema() {
 		return schema;
 	}
 }

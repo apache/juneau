@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 
@@ -220,10 +221,10 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("UrlEncodingParser", new DefaultFilteringObjectMap()
-				.append("expandedParams", expandedParams)
+			.a("UrlEncodingParser", new DefaultFilteringOMap()
+				.a("expandedParams", expandedParams)
 			);
 	}
 }

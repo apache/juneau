@@ -15,6 +15,7 @@ package org.apache.juneau.transforms;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
 
@@ -49,12 +50,12 @@ public class BeanMapTest {
 	public void testFilteredEntryWithMultipleMatchingFilters() throws Exception {
 		BeanSession session = BeanContext.create().pojoSwaps(B2Swap.class, B1Swap.class).build().createSession();
 		BeanMap<B> bm = session.toBeanMap(B.create());
-		ObjectMap om = (ObjectMap)bm.get("b1");
+		OMap om = (OMap)bm.get("b1");
 		assertEquals("b2", om.getString("type"));
 
 		session = BeanContext.create().pojoSwaps(B1Swap.class, B2Swap.class).build().createSession();
 		bm = session.toBeanMap(B.create());
-		om = (ObjectMap)bm.get("b1");
+		om = (OMap)bm.get("b1");
 		assertEquals("b1", om.getString("type"));
 	}
 
@@ -82,15 +83,15 @@ public class BeanMapTest {
 
 	public static class B1Swap extends MapSwap<B1> {
 		@Override /* PojoSwap */
-		public ObjectMap swap(BeanSession session, B1 b1) {
-			return new ObjectMap().append("type", "b1").append("f1", b1.f1);
+		public OMap swap(BeanSession session, B1 b1) {
+			return OMap.of("type", "b1", "f1", b1.f1);
 		}
 	}
 
 	public static class B2Swap extends MapSwap<B2> {
 		@Override /* PojoSwap */
-		public ObjectMap swap(BeanSession session, B2 b2) {
-			return new ObjectMap().append("type", "b2").append("f1", b2.f1);
+		public OMap swap(BeanSession session, B2 b2) {
+			return OMap.of("type", "b2", "f1", b2.f1);
 		}
 	}
 }

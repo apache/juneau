@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -116,9 +117,9 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("HtmlStrippedDocSerializer", new DefaultFilteringObjectMap()
+			.a("HtmlStrippedDocSerializer", new DefaultFilteringOMap()
 			);
 	}
 }

@@ -228,8 +228,8 @@ public final class PojoQuery {
 		if (! type.isCollectionOrArray())
 			throw new FormattedRuntimeException("Cannot call filterCollection() on class type ''{0}''", type);
 
-		// Create a new ObjectList
-		ObjectList l = (ObjectList)replaceWithMutables(input);
+		// Create a new OList
+		OList l = (OList)replaceWithMutables(input);
 
 		// Do the search
 		CollectionFilter filter = new CollectionFilter(args.getSearch(), args.isIgnoreCase());
@@ -253,7 +253,7 @@ public final class PojoQuery {
 		if (pos != 0 || limit != 0) {
 			int end = (limit == 0 || limit+pos >= l.size()) ? l.size() : limit + pos;
 			pos = Math.min(pos, l.size());
-			ObjectList l2 = new DelegateList(((DelegateList)l).getClassMeta());
+			OList l2 = new DelegateList(((DelegateList)l).getClassMeta());
 			l2.addAll(l.subList(pos, end));
 			l = l2;
 		}
@@ -269,7 +269,7 @@ public final class PojoQuery {
 			return null;
 		ClassMeta cm = session.getClassMetaForObject(o);
 		if (cm.isCollection()) {
-			ObjectList l = new DelegateList(session.getClassMetaForObject(o));
+			OList l = new DelegateList(session.getClassMetaForObject(o));
 			for (Object o2 : (Collection)o)
 				l.add(replaceWithMutables(o2));
 			return l;

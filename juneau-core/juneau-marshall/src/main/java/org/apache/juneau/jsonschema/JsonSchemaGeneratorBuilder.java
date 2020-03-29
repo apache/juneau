@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -245,7 +246,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public JsonSchemaGeneratorBuilder defaultSchema(Class<?> c, ObjectMap schema) {
+	public JsonSchemaGeneratorBuilder defaultSchema(Class<?> c, OMap schema) {
 		return putTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
 	}
 
@@ -291,7 +292,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * The definitions can then be retrieved from the session using {@link JsonSchemaGeneratorSession#getBeanDefs()}.
 	 * <p>
-	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, ObjectMap)}.
+	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, OMap)}.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -318,7 +319,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * The definitions can then be retrieved from the session using {@link JsonSchemaGeneratorSession#getBeanDefs()}.
 	 * <p>
-	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, ObjectMap)}.
+	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, OMap)}.
 	 *
 	 * @return This object (for method chaining).
 	 */

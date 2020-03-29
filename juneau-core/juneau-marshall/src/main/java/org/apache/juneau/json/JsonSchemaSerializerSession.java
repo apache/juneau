@@ -15,6 +15,7 @@ package org.apache.juneau.json;
 import java.io.IOException;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
@@ -86,9 +87,9 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("JsonSchemaSerializerSession", new DefaultFilteringObjectMap()
+			.a("JsonSchemaSerializerSession", new DefaultFilteringOMap()
 		);
 	}
 }

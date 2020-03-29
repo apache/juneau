@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -1424,7 +1424,7 @@ public class BasicXmlTest {
 		@Xml(format=XmlFormat.ATTR)
 		public int b;
 		BeanWithXmlFormatAttrsProperty init() {
-			a = new ObjectMap().append("k1", "foo").append("k2", 123);
+			a = OMap.of("k1", "foo", "k2", 123);
 			b = 456;
 			return this;
 		}

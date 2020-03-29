@@ -92,7 +92,7 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		for (CS e : a.example())
 			psb.putTo(BEAN_examples, e.k().getName(), parse(e.k(), e.v(), "example"));
 		if (a.examples().length > 0)
-			psb.putAllTo(BEAN_examples, objectMap(a.examples(), "examples"));
+			psb.putAllTo(BEAN_examples, omap(a.examples(), "examples"));
 		if (! a.fluentSetters().isEmpty())
 			psb.set(BEAN_fluentSetters, bool(a.fluentSetters()));
 		if (! a.ignoreInvocationExceptionsOnGetters().isEmpty())

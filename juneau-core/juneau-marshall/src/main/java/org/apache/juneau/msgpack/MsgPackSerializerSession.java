@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
@@ -89,7 +90,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 			o = null;
 			aType = object();
 		}
-		
+
 		// Handle Optional<X>
 		if (isOptional(aType)) {
 			o = getOptionalValue(o);
@@ -236,9 +237,9 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("MsgPackSerializerSession", new DefaultFilteringObjectMap()
+			.a("MsgPackSerializerSession", new DefaultFilteringOMap()
 			);
 	}
 }

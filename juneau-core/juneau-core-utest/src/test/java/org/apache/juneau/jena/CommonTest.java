@@ -20,7 +20,6 @@ import java.net.*;
 import java.net.URI;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.jena.annotation.*;
@@ -217,8 +216,8 @@ public class CommonTest {
 		@Beanp(properties="f1") public Map<String,Integer> x2;
 		@Beanp(properties="f1") public E2[] x3;
 		@Beanp(properties="f1") public List<E2> x4;
-		@Beanp(properties="f1") public ObjectMap[] x5;
-		@Beanp(properties="f1") public List<ObjectMap> x6;
+		@Beanp(properties="f1") public OMap[] x5;
+		@Beanp(properties="f1") public List<OMap> x6;
 
 		public static E1 create() {
 			E1 t = new E1();
@@ -226,8 +225,8 @@ public class CommonTest {
 			t.x2 = AMap.of("f1",1,"f2",2);
 			t.x3 = new E2[] {new E2()};
 			t.x4 = AList.of(new E2());
-			t.x5 = new ObjectMap[] {new ObjectMap().append("f1","1").append("f2","2")};
-			t.x6 = AList.of(new ObjectMap().append("f1","1").append("f2","2"));
+			t.x5 = new OMap[] {OMap.of("f1","1","f2","2")};
+			t.x6 = AList.of(OMap.of("f1","1","f2","2"));
 			return t;
 		}
 	}

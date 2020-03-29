@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
@@ -59,7 +60,7 @@ public class CognosXmlTest {
 			+ "</dataset>\n";
 
 		List<Object> rows = new LinkedList<>();
-		rows.add(new ObjectMap("{asOfDate:'Apr 26, 2002',rateOfReturn:0.21006642,famAcctIndex:'JA1',rowID:'F',brM:'B',productLineCode:1}"));
+		rows.add(OMap.ofJson("{asOfDate:'Apr 26, 2002',rateOfReturn:0.21006642,famAcctIndex:'JA1',rowID:'F',brM:'B',productLineCode:1}"));
 		rows.add(new Item("Apr 27, 2002", 0.1111111, "BBB", "G", "B", 2));
 
 		Column[] c = {

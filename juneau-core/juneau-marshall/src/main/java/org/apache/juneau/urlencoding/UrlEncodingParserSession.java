@@ -17,6 +17,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
@@ -106,14 +107,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 		Object o;
 
 		if (sType.isObject()) {
-			ObjectMap m = new ObjectMap(this);
+			OMap m = new OMap(this);
 			parseIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey("_value"))
 				o = m.get("_value");
 			else
 				o = cast(m, null, eType);
 		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new ObjectMap(this));
+			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new OMap(this));
 			o = parseIntoMap2(r, m, sType, m);
 		} else if (builder != null) {
 			BeanMap m = toBeanMap(builder.create(this, eType));
@@ -125,7 +126,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			o = m == null ? null : m.getBean();
 		} else if (sType.isCollection() || sType.isArray() || sType.isArgs()) {
 			// ?1=foo&2=bar...
-			Collection c2 = ((sType.isArray() || sType.isArgs()) || ! sType.canCreateNewInstance(outer)) ? new ObjectList(this) : (Collection)sType.newInstance();
+			Collection c2 = ((sType.isArray() || sType.isArgs()) || ! sType.canCreateNewInstance(outer)) ? new OList(this) : (Collection)sType.newInstance();
 			Map<Integer,Object> m = new TreeMap<>();
 			parseIntoMap2(r, m, sType, c2);
 			c2.addAll(m.values());
@@ -137,7 +138,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 				o = c2;
 		} else {
 			// It could be a non-bean with _type attribute.
-			ObjectMap m = new ObjectMap(this);
+			OMap m = new OMap(this);
 			parseIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast(m, null, eType);
@@ -212,11 +213,11 @@ public class UrlEncodingParserSession extends UonParserSession {
 						// If we already encountered this parameter, turn it into a list.
 						if (m.containsKey(currAttr) && valueType.isObject()) {
 							Object v2 = m.get(currAttr);
-							if (! (v2 instanceof ObjectList)) {
-								v2 = new ObjectList(v2).setBeanSession(this);
+							if (! (v2 instanceof OList)) {
+								v2 = new OList(v2).setBeanSession(this);
 								m.put(currAttr, (V)v2);
 							}
-							((ObjectList)v2).add(value);
+							((OList)v2).add(value);
 						} else {
 							m.put(currAttr, value);
 						}
@@ -390,9 +391,9 @@ public class UrlEncodingParserSession extends UonParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("UrlEncodingParserSession", new DefaultFilteringObjectMap()
+			.a("UrlEncodingParserSession", new DefaultFilteringOMap()
 			);
 	}
 }

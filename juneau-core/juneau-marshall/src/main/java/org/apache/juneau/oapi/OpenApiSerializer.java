@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -181,9 +182,9 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("OpenApiSerializer", new DefaultFilteringObjectMap()
+			.a("OpenApiSerializer", new DefaultFilteringOMap()
 			);
 	}
 }

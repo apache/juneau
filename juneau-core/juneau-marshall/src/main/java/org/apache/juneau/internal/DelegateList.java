@@ -15,6 +15,7 @@ package org.apache.juneau.internal;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Represents a wrapped {@link Collection} where entries in the list can be removed or reordered without affecting the
@@ -22,7 +23,7 @@ import org.apache.juneau.*;
  *
  * @param <T> The class type of the wrapped bean.
  */
-public class DelegateList<T extends Collection<?>> extends ObjectList implements Delegate<T> {
+public class DelegateList<T extends Collection<?>> extends OList implements Delegate<T> {
 	private static final long serialVersionUID = 1L;
 
 	private final ClassMeta<T> classMeta;

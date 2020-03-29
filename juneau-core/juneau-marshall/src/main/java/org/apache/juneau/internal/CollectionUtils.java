@@ -90,8 +90,8 @@ public final class CollectionUtils {
 				l = new ArrayList<>();
 			for (Object o : values) {
 				if (o != null) {
-					if (isObjectList(o, false)) {
-						for (Object o2 : new ObjectList(o.toString()))
+					if (isJsonArray(o, false)) {
+						for (Object o2 : new OList(o.toString()))
 							l.add(toType(o2, type, args));
 					} else if (o instanceof Collection) {
 						for (Object o2 : (Collection<?>)o)
@@ -132,8 +132,8 @@ public final class CollectionUtils {
 				m = new LinkedHashMap<>();
 			for (Object o : values) {
 				if (o != null) {
-					if (isObjectMap(o, false)) {
-						for (Map.Entry<String,Object> e : new ObjectMap(o.toString()).entrySet())
+					if (isJsonObject(o, false)) {
+						for (Map.Entry<String,Object> e : OMap.ofJson(o.toString()).entrySet())
 							m.put(toType(e.getKey(), keyType), toType(e.getValue(), valueType, valueTypeArgs));
 					} else if (o instanceof Map) {
 						for (Map.Entry<Object,Object> e : ((Map<Object,Object>)o).entrySet())

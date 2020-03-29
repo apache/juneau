@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
@@ -89,7 +90,7 @@ public abstract class ParserSession extends BeanSession {
 	 * 	The class type of the object to create.
 	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
 	 * 	For example, when parsing JSON text, it may return a <c>String</c>, <c>Number</c>,
-	 * 	<c>ObjectMap</c>, etc...
+	 * 	<c>OMap</c>, etc...
 	 * @param <T> The class type of the object to create.
 	 * @return The parsed object.
 	 * @throws IOException Thrown by underlying stream.
@@ -148,8 +149,8 @@ public abstract class ParserSession extends BeanSession {
 	 *
 	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
 	 */
-	public final ObjectMap getLastLocation() {
-		ObjectMap m = new ObjectMap();
+	public final OMap getLastLocation() {
+		OMap m = new OMap();
 		if (currentClass != null)
 			m.put("currentClass", currentClass.toString(true));
 		if (currentProperty != null)
@@ -227,7 +228,7 @@ public abstract class ParserSession extends BeanSession {
 	}
 
 	/**
-	 * Converts the specified <c>ObjectMap</c> into a bean identified by the <js>"_type"</js> property in the map.
+	 * Converts the specified <c>OMap</c> into a bean identified by the <js>"_type"</js> property in the map.
 	 *
 	 * @param m The map to convert to a bean.
 	 * @param pMeta The current bean property being parsed.
@@ -235,7 +236,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @return
 	 * 	The converted bean, or the same map if the <js>"_type"</js> entry wasn't found or didn't resolve to a bean.
 	 */
-	protected final Object cast(ObjectMap m, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
+	protected final Object cast(OMap m, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
 
 		String btpn = getBeanTypePropertyName(eType);
 
@@ -255,8 +256,8 @@ public abstract class ParserSession extends BeanSession {
 				Object v = e.getValue();
 				if (! k.equals(btpn)) {
 					// Attempt to recursively cast child maps.
-					if (v instanceof ObjectMap)
-						v = cast((ObjectMap)v, pMeta, eType);
+					if (v instanceof OMap)
+						v = cast((OMap)v, pMeta, eType);
 					bm.put(k, v);
 				}
 			}
@@ -611,8 +612,8 @@ public abstract class ParserSession extends BeanSession {
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The various character-based constructors in {@link ObjectMap} (e.g.
-	 * 		{@link ObjectMap#ObjectMap(CharSequence,Parser)}).
+	 * 		The various character-based constructors in {@link OMap} (e.g.
+	 * 		{@link OMap#OMap(CharSequence,Parser)}).
 	 * </ul>
 	 *
 	 * @param <K> The key class type.
@@ -661,8 +662,8 @@ public abstract class ParserSession extends BeanSession {
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The various character-based constructors in {@link ObjectList} (e.g.
-	 * 		{@link ObjectList#ObjectList(CharSequence,Parser)}.
+	 * 		The various character-based constructors in {@link OList} (e.g.
+	 * 		{@link OList#OList(CharSequence,Parser)}.
 	 * </ul>
 	 *
 	 * @param <E> The element class type.
@@ -996,12 +997,12 @@ public abstract class ParserSession extends BeanSession {
 	}
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("ParserSession", new DefaultFilteringObjectMap()
-				.append("javaMethod", javaMethod)
-				.append("listener", listener)
-				.append("outer", outer)
+			.a("ParserSession", new DefaultFilteringOMap()
+				.a("javaMethod", javaMethod)
+				.a("listener", listener)
+				.a("outer", outer)
 			);
 	}
 }

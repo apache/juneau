@@ -19,6 +19,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
@@ -525,10 +526,10 @@ public class UonParserTest {
 		Reader r;
 
 		r = reader("(foo=bar)(foo=bar)");
-		x = p.parse(r, ObjectMap.class);
+		x = p.parse(r, OMap.class);
 		assertObjectEquals("{foo:'bar'}", x);
 		try {
-			x = p.parse(r, ObjectMap.class);
+			x = p.parse(r, OMap.class);
 			fail("Exception expected");
 		} catch (Exception e) {
 			assertTrue(e.getMessage().contains("Reader is closed"));
@@ -546,15 +547,15 @@ public class UonParserTest {
 		Reader r;
 
 		r = reader("(foo=bar)(baz=qux)");
-		x = p.parse(r, ObjectMap.class);
+		x = p.parse(r, OMap.class);
 		assertObjectEquals("{foo:'bar'}", x);
-		x = p.parse(r, ObjectMap.class);
+		x = p.parse(r, OMap.class);
 		assertObjectEquals("{baz:'qux'}", x);
 
 		r = reader("@(123)@(456)");
-		x = p.parse(r, ObjectList.class);
+		x = p.parse(r, OList.class);
 		assertObjectEquals("[123]", x);
-		x = p.parse(r, ObjectList.class);
+		x = p.parse(r, OList.class);
 		assertObjectEquals("[456]", x);
 	}
 

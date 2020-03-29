@@ -32,7 +32,7 @@ public class AutoObjectSwapTest {
 
 
 	private static final Map<String,String> STRINGMAP = AMap.of("foo","bar");
-	private static final ObjectMap OBJECTMAP = new ObjectMap().append("foo","bar");
+	private static final OMap OMAP = OMap.of("foo","bar");
 
 	private static PojoSwap find(Class<?> c) {
 		return AutoObjectSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));
@@ -57,17 +57,17 @@ public class AutoObjectSwapTest {
 		}
 	}
 	public static class A02 {
-		public ObjectMap toObject() {
-			return OBJECTMAP;
+		public OMap toObject() {
+			return OMAP;
 		}
 	}
 	public static class A03 {
-		public ObjectMap toObject() throws SerializeException {
+		public OMap toObject() throws SerializeException {
 			throw new SerializeException("foo");
 		}
 	}
 	public static class A04 {
-		public ObjectMap toObject() {
+		public OMap toObject() {
 			throw new RuntimeException("foo");
 		}
 	}
@@ -107,10 +107,10 @@ public class AutoObjectSwapTest {
 		}
 	}
 	public static class B02 {
-		public ObjectMap swap() {
-			return OBJECTMAP;
+		public OMap swap() {
+			return OMAP;
 		}
-		public static B02 create(ObjectMap o) {
+		public static B02 create(OMap o) {
 			assertObjectEquals("{foo:'bar'}", o);
 			return new B02();
 		}
@@ -137,7 +137,7 @@ public class AutoObjectSwapTest {
 
 	@Test
 	public void b02_unswap_create() throws Exception {
-		assertNotNull(find(B02.class).unswap(null, OBJECTMAP, null));
+		assertNotNull(find(B02.class).unswap(null, OMAP, null));
 	}
 
 	@Test

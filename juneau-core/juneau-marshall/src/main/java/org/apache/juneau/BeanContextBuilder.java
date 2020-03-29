@@ -21,6 +21,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
@@ -1234,10 +1235,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder examples(String json) {
-		if (! isObjectMap(json, true))
+		if (! isJsonObject(json, true))
 			json = "{" + json + "}";
 		try {
-			ObjectMap m = new ObjectMap(json);
+			OMap m = OMap.ofJson(json);
 			for (Map.Entry<String,Object> e : m.entrySet())
 				putTo(BEAN_examples, e.getKey(), e.getValue());
 			return this;

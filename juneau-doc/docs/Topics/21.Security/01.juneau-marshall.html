@@ -56,8 +56,8 @@ juneau-marshall
 </p>
 <p class='bpcode w800'>
 	<jc>// Don't do this!</jc>
-	<jk>public class</jk> MyInsecureSwap <jk>extends</jk> PojoSwap&lt;ObjectMap,Object&gt; {
-		<jk>public</jk> Object swap(BeanSession session, ObjectMap input) <jk>throws</jk> Exception {
+	<jk>public class</jk> MyInsecureSwap <jk>extends</jk> PojoSwap&lt;OMap,Object&gt; {
+		<jk>public</jk> Object swap(BeanSession session, OMap input) <jk>throws</jk> Exception {
 			<jc>// Security hole!</jc>
 			<jk>return</jk> Class.<jsf>forName</jsf>(input.getString(<js>"class"</js>)).newInstance();
 		}

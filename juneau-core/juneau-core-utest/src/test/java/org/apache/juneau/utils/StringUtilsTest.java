@@ -20,7 +20,7 @@ import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -297,7 +297,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testReplaceVars() throws Exception {
-		ObjectMap m = new ObjectMap("{a:'A',b:1,c:true,d:'{e}',e:'E{f}E',f:'F',g:'{a}',h:'a',i:null}");
+		OMap m = OMap.ofJson("{a:'A',b:1,c:true,d:'{e}',e:'E{f}E',f:'F',g:'{a}',h:'a',i:null}");
 
 		String s = "xxx";
 		assertEquals("xxx", replaceVars(s, m));
@@ -845,27 +845,27 @@ public class StringUtilsTest {
 	}
 
 	//====================================================================================================
-	// testIsObjectMap(Object)
+	// testIsJsonObject(Object)
 	//====================================================================================================
 	@Test
-	public void testIsObjectMap() {
-		assertTrue(isObjectMap("{foo:'bar'}", true));
-		assertTrue(isObjectMap(" { foo:'bar' } ", true));
-		assertFalse(isObjectMap(" { foo:'bar'  ", true));
-		assertFalse(isObjectMap("  foo:'bar' } ", true));
-		assertTrue(isObjectMap("/*foo*/ { foo:'bar' } /*foo*/", true));
+	public void testIsJsonObject() {
+		assertTrue(isJsonObject("{foo:'bar'}", true));
+		assertTrue(isJsonObject(" { foo:'bar' } ", true));
+		assertFalse(isJsonObject(" { foo:'bar'  ", true));
+		assertFalse(isJsonObject("  foo:'bar' } ", true));
+		assertTrue(isJsonObject("/*foo*/ { foo:'bar' } /*foo*/", true));
 	}
 
 	//====================================================================================================
-	// testIsObjectMap(Object)
+	// isJsonArray(Object)
 	//====================================================================================================
 	@Test
-	public void testIsObjectList() {
-		assertTrue(isObjectList("[123,'bar']", true));
-		assertTrue(isObjectList(" [ 123,'bar' ] ", true));
-		assertFalse(isObjectList(" [ 123,'bar'  ", true));
-		assertFalse(isObjectList("  123,'bar' ] ", true));
-		assertTrue(isObjectList("/*foo*/ [ 123,'bar' ] /*foo*/", true));
+	public void testIsJsonArray() {
+		assertTrue(isJsonArray("[123,'bar']", true));
+		assertTrue(isJsonArray(" [ 123,'bar' ] ", true));
+		assertFalse(isJsonArray(" [ 123,'bar'  ", true));
+		assertFalse(isJsonArray("  123,'bar' ] ", true));
+		assertTrue(isJsonArray("/*foo*/ [ 123,'bar' ] /*foo*/", true));
 	}
 
 	//====================================================================================================

@@ -510,7 +510,7 @@ public class BasicRestInfoProviderTest {
 		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]", x.getTags());
 	}
 
-	// ObjectList
+	// OList
 	@Rest
 	public static class C10 {
 		@RestMethod(swagger=@MethodSwagger(tags="['foo', 'bar']"))
@@ -518,17 +518,17 @@ public class BasicRestInfoProviderTest {
 	}
 
 	@Test
-	public void c10a_tags_ResourceSwagger_tags_loose_objectlist() throws Exception {
+	public void c10a_tags_ResourceSwagger_tags_loose_olist() throws Exception {
 		Swagger x = getSwagger(new C10());
 		assertObjectEquals("[{name:'foo'},{name:'bar'}]", x.getTags());
 	}
 	@Test
-	public void c10b_tags_ResourceSwagger_tags_loose_objectlist_withFile() throws Exception {
+	public void c10b_tags_ResourceSwagger_tags_loose_olist_withFile() throws Exception {
 		Swagger x = getSwaggerWithFile(new C10());
 		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]", x.getTags());
 	}
 
-	// ObjectList localized
+	// OList localized
 	@Rest(messages="BasicRestInfoProviderTest")
 	public static class C11 {
 		@RestMethod(swagger=@MethodSwagger(tags="['$L{foo}', '$L{bar}']"))
@@ -536,12 +536,12 @@ public class BasicRestInfoProviderTest {
 	}
 
 	@Test
-	public void c11a_tags_ResourceSwagger_tags_loose_objectlist_localized() throws Exception {
+	public void c11a_tags_ResourceSwagger_tags_loose_olist_localized() throws Exception {
 		Swagger x = getSwagger(new C11());
 		assertObjectEquals("[{name:'l-foo'},{name:'l-bar'}]", x.getTags());
 	}
 	@Test
-	public void c11b_tags_ResourceSwagger_tags_loose_objectlist_localized_withFile() throws Exception {
+	public void c11b_tags_ResourceSwagger_tags_loose_olist_localized_withFile() throws Exception {
 		Swagger x = getSwaggerWithFile(new C11());
 		assertObjectEquals("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]", x.getTags());
 	}

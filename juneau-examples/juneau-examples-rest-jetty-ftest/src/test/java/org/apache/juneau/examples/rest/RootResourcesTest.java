@@ -14,7 +14,7 @@ package org.apache.juneau.examples.rest;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
@@ -40,8 +40,8 @@ public class RootResourcesTest extends RestTestcase {
 		assertEquals("helloWorld", x[0].getName());
 		assertEquals("Hello World", x[0].getDescription());
 
-		ObjectMap x2 = jsonClient.options("").run().getBody().as(ObjectMap.class);
-		String s = x2.getObjectMap("info").getString("description");
+		OMap x2 = jsonClient.options("").run().getBody().as(OMap.class);
+		String s = x2.getMap("info").getString("description");
 		if (debug) System.err.println(s);
 		assertTrue(s, s.startsWith("Example of a router resource page"));
 	}
@@ -57,8 +57,8 @@ public class RootResourcesTest extends RestTestcase {
 			assertEquals("helloWorld", x[0].getName());
 			assertEquals("Hello World", x[0].getDescription());
 
-			ObjectMap x2 = jsonClient.options("").run().getBody().as(ObjectMap.class);
-			String s = x2.getObjectMap("info").getString("description");
+			OMap x2 = jsonClient.options("").run().getBody().as(OMap.class);
+			String s = x2.getMap("info").getString("description");
 			if (debug) System.err.println(s);
 			assertTrue(s, s.startsWith("Example of a router resource page"));
 		}
@@ -75,8 +75,8 @@ public class RootResourcesTest extends RestTestcase {
 			assertEquals("helloWorld", x[0].getName());
 			assertEquals("Hello World", x[0].getDescription());
 
-			ObjectMap x2 = jsonClient.options("").run().getBody().as(ObjectMap.class);
-			String s = x2.getObjectMap("info").getString("description");
+			OMap x2 = jsonClient.options("").run().getBody().as(OMap.class);
+			String s = x2.getMap("info").getString("description");
 			if (debug) System.err.println(s);
 			assertTrue(s, s.startsWith("Example of a router resource page"));
 		}
@@ -88,7 +88,7 @@ public class RootResourcesTest extends RestTestcase {
 	@Test
 	public void testJsonSchema() throws Exception {
 		try (RestClient client = SamplesMicroservice.client().parsers(JsonParser.DEFAULT).accept("text/json+schema").build()) {
-			ObjectMap m = client.get("").run().getBody().as(ObjectMap.class);
+			OMap m = client.get("").run().getBody().as(OMap.class);
 			if (debug) System.err.println(m);
 			client.closeQuietly();
 		}

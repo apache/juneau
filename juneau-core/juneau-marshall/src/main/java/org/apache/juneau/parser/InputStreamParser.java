@@ -14,6 +14,7 @@ package org.apache.juneau.parser;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Subclass of {@link Parser} for byte-based parsers.
@@ -129,10 +130,10 @@ public abstract class InputStreamParser extends Parser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("InputStreamParser", new DefaultFilteringObjectMap()
-				.append("binaryFormat", binaryFormat)
+			.a("InputStreamParser", new DefaultFilteringOMap()
+				.a("binaryFormat", binaryFormat)
 			);
 	}
 }

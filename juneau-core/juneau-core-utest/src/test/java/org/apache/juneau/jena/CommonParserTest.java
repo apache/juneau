@@ -17,8 +17,8 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -89,9 +89,9 @@ public class CommonParserTest {
 		assertEquals(12345, m.get("zip"));
 
 		in = wrap("<rdf:Seq><rdf:li rdf:parseType='Resource'><jp:attribute>value</jp:attribute></rdf:li><rdf:li rdf:parseType='Resource'><jp:attribute>value</jp:attribute></rdf:li></rdf:Seq>");
-		ObjectList jl = (ObjectList)p.parse(in, Object.class);
-		assertEquals("value", jl.getObjectMap(0).getString("attribute"));
-		assertEquals("value", jl.getObjectMap(1).getString("attribute"));
+		OList jl = (OList)p.parse(in, Object.class);
+		assertEquals("value", jl.getMap(0).getString("attribute"));
+		assertEquals("value", jl.getMap(1).getString("attribute"));
 
 		// Verify that all the following return null.
 		assertNull(p.parse((CharSequence)null, Object.class));

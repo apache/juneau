@@ -19,7 +19,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
@@ -362,7 +362,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", List.class, Object.class));
 		Object o = p.parse(s, "foo,bar", Object.class);
 		assertObjectEquals("['foo','bar']", o);
-		assertClass(ObjectList.class, o);
+		assertClass(OList.class, o);
 		assertObjectEquals("['C2-foo','C2-bar']", p.parse(s, "foo,bar", C2[].class));
 		assertObjectEquals("['C2-foo','C2-bar']", p.parse(s, "foo,bar", List.class, C2.class));
 		assertEquals("C3-['foo','bar']", p.parse(s, "foo,bar", C3.class).toString());
@@ -379,7 +379,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("[['foo','bar'],['baz']]", p.parse(s, "foo,bar|baz", List.class, List.class, Object.class));
 		Object o = p.parse(s, "foo,bar|baz", Object.class);
 		assertObjectEquals("[['foo','bar'],['baz']]", o);
-		assertClass(ObjectList.class, o);
+		assertClass(OList.class, o);
 		assertObjectEquals("[['C2-foo','C2-bar'],['C2-baz']]", p.parse(s, "foo,bar|baz", C2[][].class));
 		assertObjectEquals("[['C2-foo','C2-bar'],['C2-baz']]", p.parse(s, "foo,bar|baz", List.class, C2[].class));
 		assertObjectEquals("[['C2-foo','C2-bar'],['C2-baz']]", p.parse(s, "foo,bar|baz", List.class, List.class, C2.class));
@@ -442,7 +442,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", List.class, Object.class));
 		assertObjectEquals("['D-foo','D-bar']", p.parse(s, "foo,bar", List.class, D.class));
 		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", Object.class));
-		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", ObjectList.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo,bar", OList.class));
 	}
 
 	@Test
@@ -455,7 +455,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("['foo','bar']", p.parse(s, "foo|bar", List.class, Object.class));
 		assertObjectEquals("['D-foo','D-bar']", p.parse(s, "foo|bar", List.class, D.class));
 		assertObjectEquals("['foo','bar']", p.parse(s, "foo|bar", Object.class));
-		assertObjectEquals("['foo','bar']", p.parse(s, "foo|bar", ObjectList.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo|bar", OList.class));
 	}
 
 	@Test
@@ -468,7 +468,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("['foo','bar']", p.parse(s, "foo bar", List.class, Object.class));
 		assertObjectEquals("['D-foo','D-bar']", p.parse(s, "foo bar", List.class, D.class));
 		assertObjectEquals("['foo','bar']", p.parse(s, "foo bar", Object.class));
-		assertObjectEquals("['foo','bar']", p.parse(s, "foo bar", ObjectList.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo bar", OList.class));
 	}
 
 	@Test
@@ -481,7 +481,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("['foo','bar']", p.parse(s, "foo\tbar", List.class, Object.class));
 		assertObjectEquals("['D-foo','D-bar']", p.parse(s, "foo\tbar", List.class, D.class));
 		assertObjectEquals("['foo','bar']", p.parse(s, "foo\tbar", Object.class));
-		assertObjectEquals("['foo','bar']", p.parse(s, "foo\tbar", ObjectList.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "foo\tbar", OList.class));
 	}
 
 	@Test
@@ -494,7 +494,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", List.class, Object.class));
 		assertObjectEquals("['D-foo','D-bar']", p.parse(s, "@(foo,bar)", List.class, D.class));
 		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", Object.class));
-		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", ObjectList.class));
+		assertObjectEquals("['foo','bar']", p.parse(s, "@(foo,bar)", OList.class));
 	}
 
 	@Test
@@ -1022,10 +1022,10 @@ public class OpenApiPartParserTest {
 	public void h01_objectType() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().type("object").build();
 		assertObjectEquals("{f:1}", p.parse(s, "(f=1)", H1.class));
-		assertObjectEquals("{f:1}", p.parse(s, "(f=1)", ObjectMap.class));
+		assertObjectEquals("{f:1}", p.parse(s, "(f=1)", OMap.class));
 		Object o = p.parse(s, "(f=1)", Object.class);
 		assertObjectEquals("{f:1}", o);
-		assertClass(ObjectMap.class, o);
+		assertClass(OMap.class, o);
 	}
 
 	@Test
@@ -1033,13 +1033,13 @@ public class OpenApiPartParserTest {
 		HttpPartSchema s = schema("array").format("uon").items(schema("object")).build();
 		assertObjectEquals("[{f:1},{f:2}]", p.parse(s, "@((f=1),(f=2))", H1[].class));
 		assertObjectEquals("[{f:1},{f:2}]", p.parse(s, "@((f=1),(f=2))", List.class, H1.class));
-		assertObjectEquals("[{f:1},{f:2}]", p.parse(s, "@((f=1),(f=2))", ObjectMap[].class));
-		assertObjectEquals("[{f:1},{f:2}]", p.parse(s, "@((f=1),(f=2))", List.class, ObjectMap.class));
+		assertObjectEquals("[{f:1},{f:2}]", p.parse(s, "@((f=1),(f=2))", OMap[].class));
+		assertObjectEquals("[{f:1},{f:2}]", p.parse(s, "@((f=1),(f=2))", List.class, OMap.class));
 		assertObjectEquals("[{f:1},{f:2}]", p.parse(s, "@((f=1),(f=2))", Object[].class));
 		assertObjectEquals("[{f:1},{f:2}]", p.parse(s, "@((f=1),(f=2))", List.class, Object.class));
 		Object o = p.parse(s, "@((f=1),(f=2))", Object.class);
 		assertObjectEquals("[{f:1},{f:2}]", o);
-		assertClass(ObjectList.class, o);
+		assertClass(OList.class, o);
 	}
 
 	@Test
@@ -1048,15 +1048,15 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", H1[][].class));
 		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, H1[].class));
 		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, H1.class));
-		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", ObjectMap[][].class));
-		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, ObjectMap[].class));
-		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, ObjectMap.class));
+		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", OMap[][].class));
+		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, OMap[].class));
+		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, OMap.class));
 		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object[][].class));
 		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, Object[].class));
 		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, Object.class));
 		Object o =  p.parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object.class);
 		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", o);
-		assertClass(ObjectList.class, o);
+		assertClass(OList.class, o);
 	}
 
 	public static class H2 {
@@ -1098,7 +1098,7 @@ public class OpenApiPartParserTest {
 		assertClass(Boolean.class, h2.f12);
 		assertClass(Integer.class, h2.f99);
 
-		ObjectMap om = p.parse(s, in, ObjectMap.class);
+		OMap om = p.parse(s, in, OMap.class);
 		assertObjectEquals("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
 		assertClass(String.class, om.get("f01"));
 		assertClass(byte[].class, om.get("f02"));
@@ -1113,7 +1113,7 @@ public class OpenApiPartParserTest {
 		assertClass(Boolean.class, om.get("f12"));
 		assertClass(Integer.class, om.get("f99"));
 
-		om = (ObjectMap)p.parse(s, in, Object.class);
+		om = (OMap)p.parse(s, in, Object.class);
 		assertObjectEquals("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
 		assertClass(String.class, om.get("f01"));
 		assertClass(byte[].class, om.get("f02"));
@@ -1152,10 +1152,10 @@ public class OpenApiPartParserTest {
 		H2 h2 = p.parse(s, in, H2.class);
 		assertObjectEquals("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", h2);
 
-		ObjectMap om = p.parse(s, in, ObjectMap.class);
+		OMap om = p.parse(s, in, OMap.class);
 		assertObjectEquals("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", om);
 
-		om = (ObjectMap)p.parse(s, in, Object.class);
+		om = (OMap)p.parse(s, in, Object.class);
 		assertObjectEquals("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", om);
 	}
 
@@ -1182,10 +1182,10 @@ public class OpenApiPartParserTest {
 		H2 h2 = p.parse(s, in, H2.class);
 		assertObjectEquals("{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", h2);
 
-		ObjectMap om = p.parse(s, in, ObjectMap.class);
+		OMap om = p.parse(s, in, OMap.class);
 		assertObjectEquals("{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", om);
 
-		om = (ObjectMap)p.parse(s, in, Object.class);
+		om = (OMap)p.parse(s, in, Object.class);
 		assertObjectEquals("{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", om);
 	}
 

@@ -17,8 +17,8 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -58,13 +58,13 @@ public class CommonParser_UrlEncodingTest {
 		assertEquals("foo bar", m.get("b"));
 		assertEquals(false, m.get("c"));
 
-		ObjectMap jm = (ObjectMap)p.parse("x=@((attribute=value),(attribute=~'value~'))", Object.class);
-		assertEquals("value", jm.getObjectList("x").getObjectMap(0).getString("attribute"));
-		assertEquals("'value'", jm.getObjectList("x").getObjectMap(1).getString("attribute"));
+		OMap jm = (OMap)p.parse("x=@((attribute=value),(attribute=~'value~'))", Object.class);
+		assertEquals("value", jm.getList("x").getMap(0).getString("attribute"));
+		assertEquals("'value'", jm.getList("x").getMap(1).getString("attribute"));
 
-		ObjectList jl = (ObjectList)p.parse("_value=@((attribute=value),(attribute=~'value~'))", Object.class);
-		assertEquals("value", jl.getObjectMap(0).getString("attribute"));
-		assertEquals("'value'", jl.getObjectMap(1).getString("attribute"));
+		OList jl = (OList)p.parse("_value=@((attribute=value),(attribute=~'value~'))", Object.class);
+		assertEquals("value", jl.getMap(0).getString("attribute"));
+		assertEquals("'value'", jl.getMap(1).getString("attribute"));
 
 		A1 b = new A1();
 		A2 tl = new A2();
@@ -174,7 +174,7 @@ public class CommonParser_UrlEncodingTest {
 		WriterSerializer s = UrlEncodingSerializer.DEFAULT;
 		ReaderParser p = UrlEncodingParser.DEFAULT;
 
-		List l = new ObjectList("foo","bar");
+		List l = OList.of("foo","bar");
 		assertEquals("0=foo&1=bar", s.serialize(l));
 
 		String in =  "0=foo&1=bar";

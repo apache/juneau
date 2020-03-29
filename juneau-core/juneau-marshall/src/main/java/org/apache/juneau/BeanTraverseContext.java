@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -331,13 +332,13 @@ public abstract class BeanTraverseContext extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("BeanTraverseContext", new DefaultFilteringObjectMap()
-				.append("detectRecursions", detectRecursions)
-				.append("maxDepth", maxDepth)
-				.append("ignoreRecursions", ignoreRecursions)
-				.append("initialDepth", initialDepth)
+			.a("BeanTraverseContext", new DefaultFilteringOMap()
+				.a("detectRecursions", detectRecursions)
+				.a("maxDepth", maxDepth)
+				.a("ignoreRecursions", ignoreRecursions)
+				.a("initialDepth", initialDepth)
 			);
 	}
 }

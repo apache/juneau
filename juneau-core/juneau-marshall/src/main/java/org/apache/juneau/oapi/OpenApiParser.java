@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 
@@ -138,9 +139,9 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("OpenApiParser", new DefaultFilteringObjectMap()
+			.a("OpenApiParser", new DefaultFilteringOMap()
 			);
 	}
 }

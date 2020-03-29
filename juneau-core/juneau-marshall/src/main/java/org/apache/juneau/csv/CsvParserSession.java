@@ -15,6 +15,7 @@ package org.apache.juneau.csv;
 import java.io.IOException;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -58,9 +59,9 @@ public final class CsvParserSession extends ReaderParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("CsvParserSession", new DefaultFilteringObjectMap()
+			.a("CsvParserSession", new DefaultFilteringOMap()
 			);
 	}
 }

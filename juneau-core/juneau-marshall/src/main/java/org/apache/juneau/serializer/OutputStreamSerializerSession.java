@@ -15,6 +15,7 @@ package org.apache.juneau.serializer;
 import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -118,9 +119,9 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("OutputStreamSerializerSession", new DefaultFilteringObjectMap()
+			.a("OutputStreamSerializerSession", new DefaultFilteringOMap()
 			);
 	}
 }

@@ -22,6 +22,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -223,7 +224,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	private Map toMap(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
-		ObjectMap m = new ObjectMap();
+		OMap m = new OMap();
 		if (type.isBean()) {
 			for (BeanPropertyValue p : toBeanMap(o).getValues(isTrimNullProperties())) {
 				if (p.getMeta().canRead()) {
@@ -245,7 +246,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	private Collection toList(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
-		ObjectList l = new ObjectList();
+		OList l = new OList();
 		HttpPartSchema items = s.getItems();
 		if (type.isArray()) {
 			for (int i = 0; i < Array.getLength(o); i++)
@@ -315,9 +316,9 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("OpenApiSerializerSession", new DefaultFilteringObjectMap()
+			.a("OpenApiSerializerSession", new DefaultFilteringOMap()
 		);
 	}
 }

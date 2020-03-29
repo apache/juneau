@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
@@ -166,8 +165,8 @@ public abstract class SwaggerElement {
 	 *
 	 * @return A map containing all the values in this swagger element.
 	 */
-	public ObjectMap asMap() {
-		ObjectMap m = new ObjectMap();
+	public OMap asMap() {
+		OMap m = new OMap();
 		for (String s : keySet())
 			m.put(s, get(s, Object.class));
 		return m;

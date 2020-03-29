@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
@@ -148,9 +149,9 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("PlainTextParser", new DefaultFilteringObjectMap()
-			);
+			.a("PlainTextParser", new DefaultFilteringOMap()
+		);
 	}
 }

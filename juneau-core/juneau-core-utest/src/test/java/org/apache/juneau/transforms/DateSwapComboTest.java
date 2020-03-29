@@ -18,6 +18,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
@@ -36,7 +37,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 
 	private static Date[] dateArray = new Date[]{singleDate};
 
-	private static ObjectMap dateMap = new ObjectMap().append("foo", singleDate);
+	private static OMap dateMap = OMap.of("foo", singleDate);
 
 
 	@Parameterized.Parameters
@@ -113,7 +114,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				}
 			},
 			{	/* 2 */
-				new ComboInput2<ObjectMap>(
+				new ComboInput2<OMap>(
 					"DateSwap.ToString",
 					getType(Map.class,String.class,Date.class),
 					dateMap,
@@ -142,7 +143,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				)
 				{
 					@Override
-					public void verify(ObjectMap o) {
+					public void verify(OMap o) {
 						assertInstanceOf(Date.class, o.get("foo"));
 					}
 				}
@@ -218,7 +219,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				}
 			},
 			{	/* 5 */
-				new ComboInput2<ObjectMap>(
+				new ComboInput2<OMap>(
 					"DateSwap.ISO8601DT/dateMap",
 					getType(Map.class,String.class,Date.class),
 					dateMap,
@@ -247,7 +248,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				)
 				{
 					@Override
-					public void verify(ObjectMap o) {
+					public void verify(OMap o) {
 						assertInstanceOf(Date.class, o.get("foo"));
 					}
 				}
@@ -323,7 +324,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				}
 			},
 			{	/* 8 */
-				new ComboInput2<ObjectMap>(
+				new ComboInput2<OMap>(
 					"DateSwap.RFC2822DTZ/dateMap",
 					getType(Map.class,String.class,Date.class),
 					dateMap,
@@ -352,7 +353,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				)
 				{
 					@Override
-					public void verify(ObjectMap o) {
+					public void verify(OMap o) {
 						assertInstanceOf(Date.class, o.get("foo"));
 					}
 				}
@@ -428,7 +429,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				}
 			},
 			{	/* 11 */
-				new ComboInput2<ObjectMap>(
+				new ComboInput2<OMap>(
 					"DateLongSwap/dateMap",
 					getType(Map.class,String.class,Date.class),
 					dateMap,
@@ -457,7 +458,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				)
 				{
 					@Override
-					public void verify(ObjectMap o) {
+					public void verify(OMap o) {
 						assertInstanceOf(Date.class, o.get("foo"));
 					}
 				}
@@ -533,7 +534,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				}
 			},
 			{	/* 14 */
-				new ComboInput2<ObjectMap>(
+				new ComboInput2<OMap>(
 					"DateMapSwap/dateMap",
 					getType(Map.class,String.class,Date.class),
 					dateMap,
@@ -562,7 +563,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				)
 				{
 					@Override
-					public void verify(ObjectMap o) {
+					public void verify(OMap o) {
 						assertInstanceOf(Date.class, o.get("foo"));
 					}
 				}
@@ -638,7 +639,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				}
 			},
 			{	/* 17 */
-				new ComboInput2<ObjectMap>(
+				new ComboInput2<OMap>(
 					"DateSwap.DateMedium/dateMap",
 					getType(Map.class,String.class,Date.class),
 					dateMap,
@@ -667,7 +668,7 @@ public class DateSwapComboTest extends ComboRoundTripTest {
 				)
 				{
 					@Override
-					public void verify(ObjectMap o) {
+					public void verify(OMap o) {
 						assertInstanceOf(Date.class, o.get("foo"));
 					}
 				}

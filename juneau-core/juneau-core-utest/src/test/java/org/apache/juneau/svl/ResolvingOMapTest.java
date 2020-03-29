@@ -15,11 +15,10 @@ package org.apache.juneau.svl;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.*;
 
-public class ResolvingObjectMapTest {
+public class ResolvingOMapTest {
 
 	//====================================================================================================
 	// test - Basic tests
@@ -27,7 +26,7 @@ public class ResolvingObjectMapTest {
 	@Test
 	public void testBasic() throws Exception {
 		VarResolver vr = new VarResolverBuilder().defaultVars().vars(XVar.class).build();
-		ObjectMap m = new ResolvingObjectMap(vr.createSession());
+		OMap m = new ResolvingOMap(vr.createSession());
 
 		m.put("foo", "$X{a}");
 		assertEquals(m.get("foo"), "1");
@@ -44,7 +43,7 @@ public class ResolvingObjectMapTest {
 
 	public static class XVar extends MapVar {
 		public XVar() {
-			super("X", new ObjectMap().append("a", 1).append("b", 2).append("c", 3));
+			super("X", OMap.of("a", 1, "b", 2, "c", 3));
 		}
 	}
 
@@ -54,7 +53,7 @@ public class ResolvingObjectMapTest {
 	@Test
 	public void testNulls() throws Exception {
 		VarResolver vr = new VarResolverBuilder().defaultVars().vars(XVar.class).build();
-		ObjectMap m = new ResolvingObjectMap(vr.createSession());
+		OMap m = new ResolvingOMap(vr.createSession());
 
 		m.put("foo", null);
 		assertNull(m.get("foo"));
@@ -75,7 +74,7 @@ public class ResolvingObjectMapTest {
 	@Test
 	public void testNonStrings() throws Exception {
 		VarResolver vr = new VarResolverBuilder().defaultVars().vars(XVar.class).build();
-		ObjectMap m = new ResolvingObjectMap(vr.createSession());
+		OMap m = new ResolvingOMap(vr.createSession());
 
 		m.put("foo", FooEnum.ONE);
 		assertObjectEquals("'ONE'", m.get("foo"));
@@ -100,11 +99,11 @@ public class ResolvingObjectMapTest {
 	@Test
 	public void testInner() throws Exception {
 		VarResolver vr = new VarResolverBuilder().defaultVars().vars(XVar.class).build();
-		ObjectMap m = new ResolvingObjectMap(vr.createSession());
-		ObjectMap m2 = new ObjectMap();
-		ObjectMap m3 = new ObjectMap();
-		m.setInner(m2);
-		m2.setInner(m3);
+		OMap m = new ResolvingOMap(vr.createSession());
+		OMap m2 = new OMap();
+		OMap m3 = new OMap();
+		m.inner(m2);
+		m2.inner(m3);
 
 		m3.put("foo", "$X{a}");
 		assertEquals(m.get("foo"), "1");

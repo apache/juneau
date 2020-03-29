@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 
@@ -102,7 +103,7 @@ public class UriContext {
 	 * 	If input string is not a valid JSON object.
 	 */
 	public UriContext(String s) throws ParseException {
-		ObjectMap m = new ObjectMap(s);
+		OMap m = OMap.ofJson(s);
 		this.authority = nullIfEmpty(trimSlashes(m.getString("authority")));
 		this.contextRoot = nullIfEmpty(trimSlashes(m.getString("contextRoot")));
 		this.servletPath = nullIfEmpty(trimSlashes(m.getString("servletPath")));

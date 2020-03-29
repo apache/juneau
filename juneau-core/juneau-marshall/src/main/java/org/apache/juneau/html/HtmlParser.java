@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
 
@@ -128,8 +129,8 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider, HtmlCommo
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("HtmlParser", new DefaultFilteringObjectMap());
+			.a("HtmlParser", new DefaultFilteringOMap());
 	}
 }

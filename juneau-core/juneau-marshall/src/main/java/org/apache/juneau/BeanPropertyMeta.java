@@ -725,7 +725,7 @@ public final class BeanPropertyMeta {
 
 					if (! (value instanceof Map)) {
 						if (value instanceof CharSequence)
-							value = new ObjectMap((CharSequence)value).setBeanSession(session);
+							value = OMap.ofJson((CharSequence)value).session(session);
 						else
 							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 					}
@@ -782,7 +782,7 @@ public final class BeanPropertyMeta {
 
 					if (! (value instanceof Collection)) {
 						if (value instanceof CharSequence)
-							value = new ObjectList((CharSequence)value).setBeanSession(session);
+							value = new OList((CharSequence)value).setBeanSession(session);
 						else
 							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 					}
@@ -800,7 +800,7 @@ public final class BeanPropertyMeta {
 
 							if (propertyClass.isInstance(valueList)) {
 								if (! elementType.isObject()) {
-										List l = new ObjectList(valueList);
+										List l = new OList(valueList);
 										for (ListIterator<Object> i = l.listIterator(); i.hasNext(); ) {
 											Object v = i.next();
 											if (v != null && (! elementType.getInnerClass().isInstance(v))) {
@@ -969,8 +969,8 @@ public final class BeanPropertyMeta {
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
 			if (! m.propertyCache.containsKey(name))
-				m.propertyCache.put(name, new ObjectList(m.getBeanSession()));
-			((ObjectList)m.propertyCache.get(name)).add(value);
+				m.propertyCache.put(name, new OList(m.getBeanSession()));
+			((OList)m.propertyCache.get(name)).add(value);
 			return;
 		}
 
@@ -1000,7 +1000,7 @@ public final class BeanPropertyMeta {
 				if (rawTypeMeta.canCreateNewInstance())
 					c = (Collection)rawTypeMeta.newInstance();
 				else
-					c = new ObjectList(session);
+					c = new OList(session);
 
 				c.add(v);
 
@@ -1048,8 +1048,8 @@ public final class BeanPropertyMeta {
  		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
 			if (! m.propertyCache.containsKey(name))
-				m.propertyCache.put(name, new ObjectMap(m.getBeanSession()));
-			((ObjectMap)m.propertyCache.get(name)).append(key.toString(), value);
+				m.propertyCache.put(name, new OMap(m.getBeanSession()));
+			((OMap)m.propertyCache.get(name)).append(key.toString(), value);
 			return;
 		}
 
@@ -1079,7 +1079,7 @@ public final class BeanPropertyMeta {
 				if (rawTypeMeta.canCreateNewInstance())
 					map = (Map)rawTypeMeta.newInstance();
 				else
-					map = new ObjectMap(session);
+					map = new OMap(session);
 
 				map.put(key, v);
 

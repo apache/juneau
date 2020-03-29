@@ -35,8 +35,8 @@ import org.apache.juneau.marshall.SimpleJson;
  * 	<jc>// Check for differences.</jc>
  * 	<jk>boolean</jk> b = bf.hasDiffs();
  *
- * 	ObjectMap v1 = bf.getV1();  <jc>// Get version 1 differences.</jc>
- * 	ObjectMap v2 = bf.getV2();  <jc>// Get version 2 differences.</jc>
+ * 	OMap v1 = bf.getV1();  <jc>// Get version 1 differences.</jc>
+ * 	OMap v2 = bf.getV2();  <jc>// Get version 2 differences.</jc>
  *
  * 	<jc>// Display differences.</jc>
  * 	System.<jsf>err</jsf>.println(bf);
@@ -45,7 +45,7 @@ import org.apache.juneau.marshall.SimpleJson;
 @Bean(bpi="v1,v2")
 public class BeanDiff {
 
-	private ObjectMap v1 = new ObjectMap(), v2 = new ObjectMap();
+	private OMap v1 = new OMap(), v2 = new OMap();
 
 	/**
 	 * Constructor.
@@ -214,7 +214,7 @@ public class BeanDiff {
 	 *
 	 * @return The differences in the first bean.
 	 */
-	public ObjectMap getV1() {
+	public OMap getV1() {
 		return v1;
 	}
 
@@ -223,7 +223,7 @@ public class BeanDiff {
 	 *
 	 * @return The differences in the second bean.
 	 */
-	public ObjectMap getV2() {
+	public OMap getV2() {
 		return v2;
 	}
 

@@ -15,6 +15,7 @@ package org.apache.juneau.rest.headers;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
@@ -460,11 +461,11 @@ public class HeadersTest {
 	@Rest
 	public static class C {
 		@RestMethod(reqHeaders={"H1:1","H2=2"," H3 : 3 "})
-		public ObjectMap c(RequestHeaders headers) {
-			return new ObjectMap()
-				.append("h1", headers.getString("H1"))
-				.append("h2", headers.getString("H2"))
-				.append("h3", headers.getString("H3"));
+		public OMap c(RequestHeaders headers) {
+			return OMap.of()
+				.a("h1", headers.getString("H1"))
+				.a("h2", headers.getString("H2"))
+				.a("h3", headers.getString("H3"));
 		}
 	}
 	static MockRest c = MockRest.build(C.class);
@@ -489,11 +490,11 @@ public class HeadersTest {
 	@Rest
 	public static class D {
 		@RestMethod(reqHeaders={"H1:1","H2=2"," H3 : 3 "})
-		public ObjectMap d(RequestHeaders headers) {
-			return new ObjectMap()
-				.append("h1", headers.getString("h1"))
-				.append("h2", headers.getString("h2"))
-				.append("h3", headers.getString("h3"));
+		public OMap d(RequestHeaders headers) {
+			return OMap.of()
+				.a("h1", headers.getString("h1"))
+				.a("h2", headers.getString("h2"))
+				.a("h3", headers.getString("h3"));
 		}
 	}
 	static MockRest d = MockRest.build(D.class);
@@ -518,11 +519,11 @@ public class HeadersTest {
 	@Rest
 	public static class E {
 		@RestMethod
-		public ObjectMap e(@Header(name="H1") String h1, @Header("H2") String h2, @Header("H3") String h3) {
-			return new ObjectMap()
-				.append("h1", h1)
-				.append("h2", h2)
-				.append("h3", h3);
+		public OMap e(@Header(name="H1") String h1, @Header("H2") String h2, @Header("H3") String h3) {
+			return OMap.of()
+				.a("h1", h1)
+				.a("h2", h2)
+				.a("h3", h3);
 		}
 	}
 	static MockRest e = MockRest.build(E.class);
@@ -547,11 +548,11 @@ public class HeadersTest {
 	@Rest
 	public static class F {
 		@RestMethod
-		public ObjectMap f(@Header("h1") String h1, @Header("h2") String h2, @Header("h3") String h3) {
-			return new ObjectMap()
-				.append("h1", h1)
-				.append("h2", h2)
-				.append("h3", h3);
+		public OMap f(@Header("h1") String h1, @Header("h2") String h2, @Header("h3") String h3) {
+			return OMap.of()
+				.a("h1", h1)
+				.a("h2", h2)
+				.a("h3", h3);
 		}
 	}
 	static MockRest f = MockRest.build(F.class);
@@ -576,11 +577,11 @@ public class HeadersTest {
 	@Rest
 	public static class G {
 		@RestMethod
-		public ObjectMap g(@Header(name="h1",_default="1") String h1, @Header(name="h2",_default="2") String h2, @Header(name="h3",_default="3") String h3) {
-			return new ObjectMap()
-				.append("h1", h1)
-				.append("h2", h2)
-				.append("h3", h3);
+		public OMap g(@Header(name="h1",_default="1") String h1, @Header(name="h2",_default="2") String h2, @Header(name="h3",_default="3") String h3) {
+			return OMap.of()
+				.a("h1", h1)
+				.a("h2", h2)
+				.a("h3", h3);
 		}
 	}
 	static MockRest g = MockRest.build(G.class);
@@ -601,11 +602,11 @@ public class HeadersTest {
 	@Rest
 	public static class GB {
 		@RestMethod
-		public ObjectMap g(@Header(value="h1",_default="1") String h1, @Header(value="h2",_default="2") String h2, @Header(value="h3",_default="3") String h3) {
-			return new ObjectMap()
-				.append("h1", h1)
-				.append("h2", h2)
-				.append("h3", h3);
+		public OMap g(@Header(value="h1",_default="1") String h1, @Header(value="h2",_default="2") String h2, @Header(value="h3",_default="3") String h3) {
+			return OMap.of()
+				.a("h1", h1)
+				.a("h2", h2)
+				.a("h3", h3);
 		}
 	}
 	static MockRest gb = MockRest.build(GB.class);
@@ -630,11 +631,11 @@ public class HeadersTest {
 	@Rest
 	public static class H {
 		@RestMethod(reqHeaders={"H1:1","H2=2"," H3 : 3 "})
-		public ObjectMap h(@Header(value="h1",_default="4") String h1, @Header(value="h2",_default="5") String h2, @Header(value="h3",_default="6") String h3) {
-			return new ObjectMap()
-				.append("h1", h1)
-				.append("h2", h2)
-				.append("h3", h3);
+		public OMap h(@Header(value="h1",_default="4") String h1, @Header(value="h2",_default="5") String h2, @Header(value="h3",_default="6") String h3) {
+			return OMap.of()
+				.a("h1", h1)
+				.a("h2", h2)
+				.a("h3", h3);
 		}
 	}
 	static MockRest h = MockRest.build(H.class);

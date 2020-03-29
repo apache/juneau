@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
@@ -213,32 +213,32 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class D {
 		@RestMethod(defaultQuery={"f1:1","f2=2"," f3 : 3 "})
-		public ObjectMap d01(RequestQuery query) {
-			return new ObjectMap()
-				.append("f1", query.getString("f1"))
-				.append("f2", query.getString("f2"))
-				.append("f3", query.getString("f3"));
+		public OMap d01(RequestQuery query) {
+			return OMap.of()
+				.a("f1", query.getString("f1"))
+				.a("f2", query.getString("f2"))
+				.a("f3", query.getString("f3"));
 		}
 		@RestMethod
-		public ObjectMap d02(@Query("f1") String f1, @Query("f2") String f2, @Query("f3") String f3) {
-			return new ObjectMap()
-				.append("f1", f1)
-				.append("f2", f2)
-				.append("f3", f3);
+		public OMap d02(@Query("f1") String f1, @Query("f2") String f2, @Query("f3") String f3) {
+			return OMap.of()
+				.a("f1", f1)
+				.a("f2", f2)
+				.a("f3", f3);
 		}
 		@RestMethod
-		public ObjectMap d03(@Query(value="f1",_default="1") String f1, @Query(value="f2",_default="2") String f2, @Query(value="f3",_default="3") String f3) {
-			return new ObjectMap()
-				.append("f1", f1)
-				.append("f2", f2)
-				.append("f3", f3);
+		public OMap d03(@Query(value="f1",_default="1") String f1, @Query(value="f2",_default="2") String f2, @Query(value="f3",_default="3") String f3) {
+			return OMap.of()
+				.a("f1", f1)
+				.a("f2", f2)
+				.a("f3", f3);
 		}
 		@RestMethod(defaultQuery={"f1:1","f2=2"," f3 : 3 "})
-		public ObjectMap d04(@Query(value="f1",_default="4") String f1, @Query(value="f2",_default="5") String f2, @Query(value="f3",_default="6") String f3) {
-			return new ObjectMap()
-				.append("f1", f1)
-				.append("f2", f2)
-				.append("f3", f3);
+		public OMap d04(@Query(value="f1",_default="4") String f1, @Query(value="f2",_default="5") String f2, @Query(value="f3",_default="6") String f3) {
+			return OMap.of()
+				.a("f1", f1)
+				.a("f2", f2)
+				.a("f3", f3);
 		}
 	}
 	static MockRest d = MockRest.build(D.class);

@@ -18,6 +18,7 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -147,28 +148,28 @@ public abstract class ConfigApply<T extends Annotation> {
 	}
 
 	/**
-	 * Resolves the specified strings and converts it to an ObjectMap.
+	 * Resolves the specified strings and converts it to an OMap.
 	 *
-	 * @param in The strings to be concatenated and parsed into an ObjectMapl.
+	 * @param in The strings to be concatenated and parsed into an OMap.
 	 * @param loc The annotation field name.
-	 * @return The resolved ObjectMap.
+	 * @return The resolved OMap.
 	 */
-	protected ObjectMap objectMap(String[] in, String loc) {
-		return objectMap(joinnl(strings(in)), loc);
+	protected OMap omap(String[] in, String loc) {
+		return omap(joinnl(strings(in)), loc);
 	}
 
 	/**
-	 * Resolves the specified string and converts it to an ObjectMap.
+	 * Resolves the specified string and converts it to an OMap.
 	 *
-	 * @param in The string to be parsed into an ObjectMapl.
+	 * @param in The string to be parsed into an OMap.
 	 * @param loc The annotation field name.
-	 * @return The resolved ObjectMap.
+	 * @return The resolved OMap.
 	 */
-	protected ObjectMap objectMap(String in, String loc) {
+	protected OMap omap(String in, String loc) {
 		try {
-			if (! isObjectMap(in, true))
+			if (! isJsonObject(in, true))
 				in = "{" + in + "}";
-			return new ObjectMap(in);
+			return OMap.ofJson(in);
 		} catch (Exception e) {
 			throw new ConfigException("Invalid syntax for Simple-JSON on annotation @{0}({1}): {2}", c.getSimpleName(), loc, in);
 		}

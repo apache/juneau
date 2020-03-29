@@ -15,6 +15,7 @@ package org.apache.juneau.rest.util;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.marshall.*;
 
 /**
@@ -71,8 +72,8 @@ public class UrlPathInfo {
 	 *
 	 * @return This object converted to a map.
 	 */
-	public ObjectMap toMap() {
-		return new DefaultFilteringObjectMap().append("raw", path).append("parts", parts);
+	public OMap toMap() {
+		return new DefaultFilteringOMap().append("raw", path).append("parts", parts);
 	}
 
 	@Override /* Object */

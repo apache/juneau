@@ -330,7 +330,7 @@ OpenAPI Parsers
 		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
 	
 	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
-	ObjectMap m = p.parse(schema, input, ObjectMap.<jk>class</jk>);
+	OMap m = p.parse(schema, input, OMap.<jk>class</jk>);
 </p>
 <ul class='notes'>
 	<li>

@@ -10,46 +10,67 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.svl;
+package org.apache.juneau;
 
-import org.apache.juneau.*;
+import java.lang.reflect.*;
+import java.util.*;
+
+import org.apache.juneau.collections.*;
 
 /**
- * Subclass of an {@link ObjectMap} that automatically resolves any SVL variables in values.
- *
- * <p>
- * Resolves variables in the following values:
- * <ul>
- * 	<li>Values of type {@link CharSequence}.
- * 	<li>Arrays containing values of type {@link CharSequence}.
- * 	<li>Collections containing values of type {@link CharSequence}.
- * 	<li>Maps containing values of type {@link CharSequence}.
- * </ul>
- *
- * <p>
- * All other data types are left as-is.
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.SimpleVariableLanguage.SvlVariables}
- * </ul>
+ * Subclass of {@link OMap} that avoids adding common default values.
  */
-@SuppressWarnings({"serial"})
-public class ResolvingObjectMap extends ObjectMap {
+public class DefaultFilteringOMap extends OMap {
 
-	private final VarResolverSession varResolver;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param varResolver The var resolver session to use for resolving SVL variables.
+	 * @param m
+	 * 	The object map to copy from.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ResolvingObjectMap(VarResolverSession varResolver) {
+	public DefaultFilteringOMap(OMap m) {
 		super();
-		this.varResolver = varResolver;
+		appendAll(m);
 	}
 
-	@Override /* Map */
-	public Object get(Object key) {
-		return varResolver.resolve(super.get(key));
+	/**
+	 * Constructor.
+	 */
+	public DefaultFilteringOMap() {
+		super();
+	}
+
+	@Override /* OMap */
+	public OMap append(String key, Object value) {
+		if (! shouldSkip(value))
+			super.append(key, value);
+		return this;
+	}
+
+	@Override /* OMap */
+	public OMap a(String key, Object value) {
+		if (! shouldSkip(value))
+			super.a(key, value);
+		return this;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified value should be skipped.
+	 *
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if the specified value should be skipped.
+	 */
+	protected boolean shouldSkip(Object value) {
+		return
+			value == null
+			|| (value instanceof Boolean && value.equals(false))
+			|| (value instanceof Number && ((Number)value).intValue() == -1)
+			|| (value.getClass().isArray() && Array.getLength(value) == 0)
+			|| (value instanceof Map && ((Map<?,?>)value).isEmpty())
+			|| (value instanceof Collection && ((Collection<?>)value).isEmpty());
+
 	}
 }

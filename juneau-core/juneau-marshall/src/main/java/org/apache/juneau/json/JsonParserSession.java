@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
@@ -150,11 +151,11 @@ public final class JsonParserSession extends ReaderParserSession {
 			parseKeyword("null", r);
 		} else if (sType.isObject()) {
 			if (c == '{') {
-				ObjectMap m2 = new ObjectMap(this);
+				OMap m2 = new OMap(this);
 				parseIntoMap2(r, m2, string(), object(), pMeta);
 				o = cast(m2, pMeta, eType);
 			} else if (c == '[') {
-				o = parseIntoCollection2(r, new ObjectList(this), object(), pMeta);
+				o = parseIntoCollection2(r, new OList(this), object(), pMeta);
 			} else if (c == '\'' || c == '"') {
 				o = parseString(r);
 				if (sType.isChar())
@@ -177,15 +178,15 @@ public final class JsonParserSession extends ReaderParserSession {
 		} else if (sType.isNumber()) {
 			o = parseNumber(r, (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(this));
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new OMap(this));
 			o = parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '{') {
-				ObjectMap m = new ObjectMap(this);
+				OMap m = new OMap(this);
 				parseIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
-				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(this));
+				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new OList(this));
 				o = parseIntoCollection2(r, l, sType, pMeta);
 			}
 		} else if (builder != null) {
@@ -198,7 +199,7 @@ public final class JsonParserSession extends ReaderParserSession {
 			o = sType.newInstanceFromString(outer, parseString(r));
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '{') {
-				ObjectMap m = new ObjectMap(this);
+				OMap m = new OMap(this);
 				parseIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
@@ -206,10 +207,10 @@ public final class JsonParserSession extends ReaderParserSession {
 				o = toArray(sType, l);
 			}
 		} else if (c == '{') {
-			Map m = new ObjectMap(this);
+			Map m = new OMap(this);
 			parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
-				o = cast((ObjectMap)m, pMeta, eType);
+				o = cast((OMap)m, pMeta, eType);
 			else
 				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
 						sType.getInnerClass().getName(), sType.getNotABeanReason());
@@ -819,9 +820,9 @@ public final class JsonParserSession extends ReaderParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("JsonParserSession", new DefaultFilteringObjectMap()
+			.a("JsonParserSession", new DefaultFilteringOMap()
 			);
 	}
 }

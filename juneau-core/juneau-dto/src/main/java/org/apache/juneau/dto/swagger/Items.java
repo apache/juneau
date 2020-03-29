@@ -1127,8 +1127,8 @@ public class Items extends SwaggerElement {
 
 	/* Resolve references in extra attributes */
 	private Object resolveRefs(Object o, Swagger swagger, Deque<String> refStack, int maxDepth) {
-		if (o instanceof ObjectMap) {
-			ObjectMap om = (ObjectMap)o;
+		if (o instanceof OMap) {
+			OMap om = (OMap)o;
 			Object ref = om.get("$ref");
 			if (ref instanceof CharSequence) {
 				String sref = ref.toString();
@@ -1143,8 +1143,8 @@ public class Items extends SwaggerElement {
 			for (Map.Entry<String,Object> e : om.entrySet())
 				e.setValue(resolveRefs(e.getValue(), swagger, refStack, maxDepth));
 		}
-		if (o instanceof ObjectList)
-			for (ListIterator<Object> li = ((ObjectList)o).listIterator(); li.hasNext();)
+		if (o instanceof OList)
+			for (ListIterator<Object> li = ((OList)o).listIterator(); li.hasNext();)
 				li.set(resolveRefs(li.next(), swagger, refStack, maxDepth));
 		return o;
 	}

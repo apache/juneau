@@ -15,6 +15,7 @@ package org.apache.juneau.parser;
 import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Subclass of parser session objects for byte-based parsers.
@@ -98,9 +99,9 @@ public abstract class InputStreamParserSession extends ParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("InputStreamParserSession", new DefaultFilteringObjectMap()
+			.a("InputStreamParserSession", new DefaultFilteringOMap()
 			);
 	}
 }

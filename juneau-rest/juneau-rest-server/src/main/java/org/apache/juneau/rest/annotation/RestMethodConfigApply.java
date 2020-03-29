@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
@@ -237,7 +238,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 
 		if (! AnnotationUtils.empty(a.logging())) {
 			Logging al = a.logging();
-			ObjectMap m = new ObjectMap(psb.peek(ObjectMap.class, RESTMETHOD_callLoggerConfig));
+			OMap m = new OMap(psb.peek(OMap.class, RESTMETHOD_callLoggerConfig));
 
 			if (! al.useStackTraceHashing().isEmpty())
 				m.append("useStackTraceHashing", bool(al.useStackTraceHashing()));
@@ -252,9 +253,9 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 				m.append("level", level(al.level(), "@Logging(level)"));
 
 			if (al.rules().length > 0) {
-				ObjectList ol = new ObjectList();
+				OList ol = new OList();
 				for (LoggingRule a2 : al.rules()) {
-					ObjectMap m2 = new ObjectMap();
+					OMap m2 = new OMap();
 
 					if (! a2.codes().isEmpty())
 						m2.append("codes", string(a2.codes()));
@@ -282,7 +283,7 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 
 					ol.add(m2);
 				}
-				m.put("rules", ol.appendAll(m.getObjectList("rules")));
+				m.put("rules", ol.appendAll(m.getList("rules")));
 			}
 
 			psb.set(RESTMETHOD_callLoggerConfig, m);

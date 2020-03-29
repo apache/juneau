@@ -17,6 +17,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 
@@ -147,7 +148,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	}
 
 	@Override /* SessionArgs */
-	public ParserSessionArgs properties(ObjectMap value) {
+	public ParserSessionArgs properties(OMap value) {
 		super.properties(value);
 		return this;
 	}
@@ -161,13 +162,13 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
-	
+
 	@Override /* SessionArgs */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("ParserSessionArgs", new DefaultFilteringObjectMap()
-				.append("javaMethod", javaMethod)
-				.append("outer", outer)
+			.a("ParserSessionArgs", new DefaultFilteringOMap()
+				.a("javaMethod", javaMethod)
+				.a("outer", outer)
 			);
 	}
 }

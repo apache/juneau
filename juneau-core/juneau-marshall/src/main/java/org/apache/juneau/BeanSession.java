@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.Date;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -146,25 +147,25 @@ public class BeanSession extends Session {
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>
-	 * 			{@code Map} (e.g. {@code Map}, {@code HashMap}, {@code TreeMap}, {@code ObjectMap})
+	 * 			{@code Map} (e.g. {@code Map}, {@code HashMap}, {@code TreeMap}, {@code OMap})
 	 * 		</td>
 	 * 		<td>
 	 * 			{@code Map}
 	 * 		</td>
 	 * 		<td>
-	 * 			If {@code Map} is not constructible, a {@code ObjectMap} is created.
+	 * 			If {@code Map} is not constructible, an {@code OMap} is created.
 	 * 		</td>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>
-	 * 		{@code Collection} (e.g. {@code List}, {@code LinkedList}, {@code HashSet}, {@code ObjectList})
+	 * 		{@code Collection} (e.g. {@code List}, {@code LinkedList}, {@code HashSet}, {@code OList})
 	 * 		</td>
 	 * 		<td>
 	 * 			{@code Collection<Object>}
 	 * 			<br>{@code Object[]}
 	 * 		</td>
 	 * 		<td>
-	 * 			If {@code Collection} is not constructible, a {@code ObjectList} is created.
+	 * 			If {@code Collection} is not constructible, an {@code OList} is created.
 	 * 		</td>
 	 * 	</tr>
 	 * 	<tr>
@@ -488,20 +489,20 @@ public class BeanSession extends Session {
 				else if (from.isArray())
 					return (T)toArray(to, Arrays.asList((Object[])value));
 				else if (startsWith(value.toString(), '['))
-					return (T)toArray(to, new ObjectList(value.toString()).setBeanSession(this));
+					return (T)toArray(to, OList.ofJson(value.toString()).setBeanSession(this));
 				else if (to.hasMutaterFrom(from))
 					return to.mutateFrom(value);
 				else if (from.hasMutaterTo(to))
 					return from.mutateTo(value, to);
 				else
-					return (T)toArray(to, new ObjectList((Object[])StringUtils.split(value.toString())).setBeanSession(this));
+					return (T)toArray(to, new OList((Object[])StringUtils.split(value.toString())).setBeanSession(this));
 			}
 
 			// Target type is some sort of Map that needs to be converted.
 			if (to.isMap()) {
 				try {
 					if (from.isMap()) {
-						Map m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : new ObjectMap(this);
+						Map m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : new OMap(this);
 						ClassMeta keyType = to.getKeyType(), valueType = to.getValueType();
 						for (Map.Entry e : (Set<Map.Entry>)((Map)value).entrySet()) {
 							Object k = e.getKey();
@@ -518,7 +519,7 @@ public class BeanSession extends Session {
 						}
 						return (T)m;
 					} else if (!to.canCreateNewInstanceFromString(outer)) {
-						ObjectMap m = new ObjectMap(value.toString());
+						OMap m = OMap.ofJson(value.toString());
 						m.setBeanSession(this);
 						return convertToMemberType(outer, m, to);
 					}
@@ -530,7 +531,7 @@ public class BeanSession extends Session {
 			// Target type is some sort of Collection
 			if (to.isCollection()) {
 				try {
-					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? new LinkedHashSet<>() : new ObjectList(this);
+					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? new LinkedHashSet<>() : new OList(this);
 					ClassMeta elementType = to.getElementType();
 
 					if (from.isArray())
@@ -545,8 +546,8 @@ public class BeanSession extends Session {
 						return null;
 					else if (from.isString()) {
 						String s = value.toString();
-						if (isObjectList(s, false)) {
-							ObjectList l2 = new ObjectList(s);
+						if (isJsonArray(s, false)) {
+							OList l2 = OList.ofJson(s);
 							l2.setBeanSession(this);
 							for (Object o : l2)
 								l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
@@ -589,13 +590,13 @@ public class BeanSession extends Session {
 				Class<?> c = value.getClass();
 				if (c.isArray()) {
 					if (c.getComponentType().isPrimitive()) {
-						ObjectList l = new ObjectList(this);
+						OList l = new OList(this);
 						int size = Array.getLength(value);
 						for (int i = 0; i < size; i++)
 							l.add(Array.get(value, i));
 						value = l;
 					}
-					value = new ObjectList((Object[])value).setBeanSession(this);
+					value = new OList((Object[])value).setBeanSession(this);
 				}
 
 				return to.newInstanceFromString(outer, value.toString());
@@ -614,6 +615,15 @@ public class BeanSession extends Session {
 			if (to.isBean() && value instanceof Map) {
 				BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)to.getBuilderSwap(this);
 
+				if (value instanceof OMap && builder == null) {
+					OMap m2 = (OMap)value;
+					String typeName = m2.getString(getBeanTypePropertyName(to));
+					if (typeName != null) {
+						ClassMeta cm = to.getBeanRegistry().getClassMeta(typeName);
+						if (cm != null && to.info.isParentOf(cm.innerClass))
+							return (T)m2.cast(cm);
+					}
+				}
 				if (value instanceof ObjectMap && builder == null) {
 					ObjectMap m2 = (ObjectMap)value;
 					String typeName = m2.getString(getBeanTypePropertyName(to));
@@ -1584,15 +1594,15 @@ public class BeanSession extends Session {
 	}
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("Context", ctx.toMap())
-			.append("BeanSession", new DefaultFilteringObjectMap()
-				.append("debug", debug)
-				.append("locale", locale)
-				.append("mediaType", mediaType)
-				.append("schema", schema)
-				.append("timeZone", timeZone)
+			.a("Context", ctx.toMap())
+			.a("BeanSession", new DefaultFilteringOMap()
+				.a("debug", debug)
+				.a("locale", locale)
+				.a("mediaType", mediaType)
+				.a("schema", schema)
+				.a("timeZone", timeZone)
 			);
 	}
 }

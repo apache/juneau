@@ -17,6 +17,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -52,13 +53,13 @@ import org.apache.juneau.parser.*;
  * This parser handles the following input, and automatically returns the corresponding Java class.
  * <ul class='spaced-list'>
  * 	<li>
- * 		JSON objects (<js>"{...}"</js>) are converted to {@link ObjectMap ObjectMaps}.
+ * 		JSON objects (<js>"{...}"</js>) are converted to {@link OMap OMaps}.
  * 		<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an
  * 		attempt is made to convert the object to an instance of the specified Java bean class.
  * 		See the <c>beanTypeName</c> setting on the {@link PropertyStore} for more information about parsing
  * 		beans from JSON.
  * 	<li>
- * 		JSON arrays (<js>"[...]"</js>) are converted to {@link ObjectList ObjectLists}.
+ * 		JSON arrays (<js>"[...]"</js>) are converted to {@link OList OLists}.
  * 	<li>
  * 		JSON string literals (<js>"'xyz'"</js>) are converted to {@link String Strings}.
  * 	<li>
@@ -77,10 +78,10 @@ import org.apache.juneau.parser.*;
  * Input can be any of the following:
  * <ul class='spaced-list'>
  * 	<li>
- * 		<js>"{...}"</js> - Converted to a {@link ObjectMap} or an instance of a Java bean if a <xa>_type</xa>
+ * 		<js>"{...}"</js> - Converted to an {@link OMap} or an instance of a Java bean if a <xa>_type</xa>
  * 		attribute is present.
  * 	<li>
- * 		<js>"[...]"</js> - Converted to a {@link ObjectList}.
+ * 		<js>"[...]"</js> - Converted to an {@link OList}.
  * 	<li>
  * 		<js>"123..."</js> - Converted to a {@link Number} (either {@link Integer}, {@link Long}, {@link Float},
  * 		or {@link Double}).
@@ -98,8 +99,8 @@ import org.apache.juneau.parser.*;
  *
  * <p>
  * TIP:  If you know you're parsing a JSON object or array, it can be easier to parse it using the
- * {@link ObjectMap#ObjectMap(CharSequence) ObjectMap(CharSequence)} or {@link ObjectList#ObjectList(CharSequence)
- * ObjectList(CharSequence)} constructors instead of using this class.
+ * {@link OMap#OMap(CharSequence) OMap(CharSequence)} or {@link OList#OList(CharSequence)
+ * OList(CharSequence)} constructors instead of using this class.
  * The end result should be the same.
  */
 @ConfigurableContext
@@ -296,8 +297,8 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("JsonParser", new DefaultFilteringObjectMap());
+			.a("JsonParser", new DefaultFilteringOMap());
 	}
 }

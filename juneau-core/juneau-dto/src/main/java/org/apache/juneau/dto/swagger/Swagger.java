@@ -58,7 +58,7 @@ public class Swagger extends SwaggerElement {
 		produces;
 	private List<Tag> tags;
 	private List<Map<String,List<String>>> security;
-	private Map<String,ObjectMap> definitions;
+	private Map<String,OMap> definitions;
 	private Map<String,ParameterInfo> parameters;
 	private Map<String,ResponseInfo> responses;
 	private Map<String,SecurityScheme> securityDefinitions;
@@ -111,8 +111,8 @@ public class Swagger extends SwaggerElement {
 			this.definitions = null;
 		} else {
 			this.definitions = new LinkedHashMap<>();
-			for (Map.Entry<String,ObjectMap> e : copyFrom.definitions.entrySet())
-				this.definitions.put(e.getKey(), new ObjectMap(e.getValue()));
+			for (Map.Entry<String,OMap> e : copyFrom.definitions.entrySet())
+				this.definitions.put(e.getKey(), new OMap(e.getValue()));
 		}
 
 		if (copyFrom.parameters == null) {
@@ -764,7 +764,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ObjectMap> getDefinitions() {
+	public Map<String,OMap> getDefinitions() {
 		return definitions;
 	}
 
@@ -779,7 +779,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger setDefinitions(Map<String,ObjectMap> value) {
+	public Swagger setDefinitions(Map<String,OMap> value) {
 		definitions = newMap(value);
 		return this;
 	}
@@ -795,7 +795,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger addDefinitions(Map<String,ObjectMap> values) {
+	public Swagger addDefinitions(Map<String,OMap> values) {
 		definitions = addToMap(definitions, values);
 		return this;
 	}
@@ -807,7 +807,7 @@ public class Swagger extends SwaggerElement {
 	 * @param schema The schema that the name defines.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger definition(String name, ObjectMap schema) {
+	public Swagger definition(String name, OMap schema) {
 		definitions = addToMap(definitions, name, schema);
 		return this;
 	}
@@ -830,7 +830,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger definitions(Object...values) {
-		definitions = addToMap(definitions, values, String.class, ObjectMap.class);
+		definitions = addToMap(definitions, values, String.class, OMap.class);
 		return this;
 	}
 

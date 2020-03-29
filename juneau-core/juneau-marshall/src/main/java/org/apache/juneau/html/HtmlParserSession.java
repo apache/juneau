@@ -213,11 +213,11 @@ public final class HtmlParserSession extends XmlParserSession {
 
 			if (typeName.equals("object")) {
 				if (sType.isObject()) {
-					o = parseIntoMap(r, (Map)new ObjectMap(this), sType.getKeyType(), sType.getValueType(),
+					o = parseIntoMap(r, (Map)new OMap(this), sType.getKeyType(), sType.getValueType(),
 						pMeta);
 				} else if (sType.isMap()) {
 					o = parseIntoMap(r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer)
-						: new ObjectMap(this)), sType.getKeyType(), sType.getValueType(), pMeta);
+						: new OMap(this)), sType.getKeyType(), sType.getValueType(), pMeta);
 				} else if (builder != null) {
 					BeanMap m = toBeanMap(builder.create(this, eType));
 					o = builder.build(this, parseIntoBean(r, m).getBean(), eType);
@@ -231,10 +231,10 @@ public final class HtmlParserSession extends XmlParserSession {
 
 			} else if (typeName.equals("array")) {
 				if (sType.isObject())
-					o = parseTableIntoCollection(r, (Collection)new ObjectList(this), sType, pMeta);
+					o = parseTableIntoCollection(r, (Collection)new OList(this), sType, pMeta);
 				else if (sType.isCollection())
 					o = parseTableIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer)
-						? sType.newInstance(outer) : new ObjectList(this)), sType, pMeta);
+						? sType.newInstance(outer) : new OList(this)), sType, pMeta);
 				else if (sType.isArray() || sType.isArgs()) {
 					ArrayList l = (ArrayList)parseTableIntoCollection(r, new ArrayList(), sType, pMeta);
 					o = toArray(sType, l);
@@ -254,10 +254,10 @@ public final class HtmlParserSession extends XmlParserSession {
 				sType = eType = cm;
 
 			if (sType.isObject())
-				o = parseIntoCollection(r, new ObjectList(this), sType, pMeta);
+				o = parseIntoCollection(r, new OList(this), sType, pMeta);
 			else if (sType.isCollection() || sType.isObject())
 				o = parseIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer)
-					? sType.newInstance(outer) : new ObjectList(this)), sType, pMeta);
+					? sType.newInstance(outer) : new OList(this)), sType, pMeta);
 			else if (sType.isArray() || sType.isArgs())
 				o = toArray(sType, parseIntoCollection(r, new ArrayList(), sType, pMeta));
 			else
@@ -462,7 +462,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			} else {
 				String c = getAttributes(r).get(getBeanTypePropertyName(type.getElementType()));
 				Map m = (Map)(elementType.isMap() && elementType.canCreateNewInstance(l) ? elementType.newInstance(l)
-					: new ObjectMap(this));
+					: new OMap(this));
 				for (int i = 0; i < keys.size(); i++) {
 					tag = nextTag(r, TD, NULL);
 					if (tag == NULL) {
@@ -479,11 +479,11 @@ public final class HtmlParserSession extends XmlParserSession {
 					}
 				}
 				if (m != null && c != null) {
-					ObjectMap m2 = (m instanceof ObjectMap ? (ObjectMap)m : new ObjectMap(m).setBeanSession(this));
+					OMap m2 = (m instanceof OMap ? (OMap)m : new OMap(m).session(this));
 					m2.put(getBeanTypePropertyName(type.getElementType()), c);
 					l.add((E)cast(m2, pMeta, elementType));
 				} else {
-					if (m instanceof ObjectMap)
+					if (m instanceof OMap)
 						l.add((E)convertToType(m, elementType));
 					else
 						l.add((E)m);
@@ -779,9 +779,9 @@ public final class HtmlParserSession extends XmlParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("HtmlParserSession", new DefaultFilteringObjectMap()
+			.a("HtmlParserSession", new DefaultFilteringOMap()
 			);
 	}
 }

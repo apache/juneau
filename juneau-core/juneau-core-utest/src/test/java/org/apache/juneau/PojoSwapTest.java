@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.junit.Assert.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -37,7 +38,7 @@ public class PojoSwapTest {
 		r = p.parse(r, String.class);
 		assertEquals("foobar", r);
 
-		ObjectMap m = new ObjectMap("{foo:'bar'}");
+		OMap m = OMap.ofJson("{foo:'bar'}");
 		r = s.serialize(m);
 		assertEquals("{xfoox:'xbarx'}", r);
 	}

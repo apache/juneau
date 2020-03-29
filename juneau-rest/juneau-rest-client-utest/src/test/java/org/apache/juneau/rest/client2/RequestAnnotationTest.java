@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 
 import java.io.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
@@ -44,12 +44,12 @@ public class RequestAnnotationTest {
 	public static class A {
 		@RestMethod(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			ObjectMap m = new ObjectMap()
-				.append("body", IOUtils.read(r))
-				.append("header", h)
-				.append("query", q)
-				.append("path", p);
-			return m.toString();
+			return OMap.of(
+				"body", IOUtils.read(r),
+				"header", h,
+				"query", q,
+				"path", p
+			).toString();
 		}
 	}
 	@Request
@@ -96,12 +96,12 @@ public class RequestAnnotationTest {
 	public static class B {
 		@RestMethod(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			ObjectMap m = new ObjectMap()
-				.append("body", IOUtils.read(r))
-				.append("header", h)
-				.append("query", q)
-				.append("path", p);
-			return m.toString();
+			return OMap.of(
+				"body", IOUtils.read(r),
+				"header", h,
+				"query", q,
+				"path", p
+			).toString();
 		}
 	}
 
@@ -160,12 +160,12 @@ public class RequestAnnotationTest {
 	public static class C {
 		@RestMethod(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			ObjectMap m = new ObjectMap()
-				.append("body", IOUtils.read(r))
-				.append("header", h)
-				.append("query", q)
-				.append("path", p);
-			return m.toString();
+			return OMap.of(
+				"body", IOUtils.read(r),
+				"header", h,
+				"query", q,
+				"path", p
+			).toString();
 		}
 	}
 
@@ -224,12 +224,12 @@ public class RequestAnnotationTest {
 	public static class D {
 		@RestMethod(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			ObjectMap m = new ObjectMap()
-				.append("body", IOUtils.read(r))
-				.append("header", h)
-				.append("query", q)
-				.append("path", p);
-			return m.toString();
+			return OMap.of(
+				"body", IOUtils.read(r),
+				"header", h,
+				"query", q,
+				"path", p
+			).toString();
 		}
 	}
 
@@ -276,12 +276,12 @@ public class RequestAnnotationTest {
 	public static class E {
 		@RestMethod(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			ObjectMap m = new ObjectMap()
-				.append("body", IOUtils.read(r))
-				.append("header", h)
-				.append("query", q)
-				.append("path", p);
-			return m.toString();
+			return OMap.of(
+				"body", IOUtils.read(r),
+				"header", h,
+				"query", q,
+				"path", p
+			).toString();
 		}
 	}
 

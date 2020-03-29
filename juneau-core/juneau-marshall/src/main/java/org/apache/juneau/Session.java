@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
@@ -34,7 +35,7 @@ public abstract class Session {
 
 	private JuneauLogger logger;
 
-	private final ObjectMap properties;
+	private final OMap properties;
 	private Map<String,Object> cache;
 	private List<String> warnings;                 // Any warnings encountered.
 
@@ -46,7 +47,7 @@ public abstract class Session {
 	 * 	Runtime arguments.
 	 */
 	protected Session(SessionArgs args) {
-		this.properties = args.properties == null ? ObjectMap.EMPTY_MAP : args.properties;
+		this.properties = args.properties == null ? OMap.EMPTY_MAP : args.properties;
 	}
 
 	/**
@@ -174,7 +175,7 @@ public abstract class Session {
 	 *
 	 * @return The session properties passed in through the constructor.
 	 */
-	protected ObjectMap getProperties() {
+	protected OMap getProperties() {
 		return properties;
 	}
 
@@ -313,8 +314,8 @@ public abstract class Session {
 	 *
 	 * @return A new map containing the properties defined on this context.
 	 */
-	public ObjectMap toMap() {
-		return new DefaultFilteringObjectMap();
+	public OMap toMap() {
+		return new DefaultFilteringOMap();
 	}
 
 	@Override /* Object */

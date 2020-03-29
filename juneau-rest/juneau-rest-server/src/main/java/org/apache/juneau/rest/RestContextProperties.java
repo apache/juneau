@@ -14,7 +14,7 @@ package org.apache.juneau.rest;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -33,4 +33,4 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  */
 @SuppressWarnings("serial")
-public class RestContextProperties extends ObjectMap {}
+public class RestContextProperties extends OMap {}

@@ -15,6 +15,7 @@ package org.apache.juneau.transforms;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
@@ -36,8 +37,7 @@ public class DateMapSwap extends PojoSwap<Date,Map> {
 	public Map swap(BeanSession session, Date o) {
 		if (o == null)
 			return null;
-		ObjectMap m = new ObjectMap();
-		m.put("time", o.getTime());
+		OMap m = OMap.of("time", o.getTime());
 		return m;
 	}
 

@@ -20,7 +20,6 @@ import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.FormData;
@@ -58,7 +57,7 @@ public class FormDataAnnotationTest {
 	@Rest
 	public static class A {
 		@RestMethod
-		public String postA(@FormData("*") ObjectMap m, @Header("Content-Type") String ct) {
+		public String postA(@FormData("*") OMap m, @Header("Content-Type") String ct) {
 			assertEquals(ct, "application/x-www-form-urlencoded");
 			return m.toString();
 		}
@@ -178,7 +177,7 @@ public class FormDataAnnotationTest {
 	@Rest
 	public static class B {
 		@RestMethod
-		public String post(@FormData("*") ObjectMap m) {
+		public String post(@FormData("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -241,7 +240,7 @@ public class FormDataAnnotationTest {
 	@Rest
 	public static class C {
 		@RestMethod
-		public String postA(@FormData("*") ObjectMap m) {
+		public String postA(@FormData("*") OMap m) {
 			return m.toString();
 		}
 		@RestMethod
@@ -336,7 +335,7 @@ public class FormDataAnnotationTest {
 	@Rest
 	public static class D {
 		@RestMethod
-		public String post(@FormData("*") ObjectMap m) {
+		public String post(@FormData("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -710,7 +709,7 @@ public class FormDataAnnotationTest {
 	@Rest
 	public static class E {
 		@RestMethod
-		public String post(@FormData("*") ObjectMap m) {
+		public String post(@FormData("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -769,7 +768,7 @@ public class FormDataAnnotationTest {
 	@Rest
 	public static class F {
 		@RestMethod
-		public String post(@FormData("*") ObjectMap m) {
+		public String post(@FormData("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -834,7 +833,7 @@ public class FormDataAnnotationTest {
 	@Rest
 	public static class G {
 		@RestMethod
-		public String post(@FormData("*") ObjectMap m) {
+		public String post(@FormData("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -937,7 +936,7 @@ public class FormDataAnnotationTest {
 	@Rest
 	public static class H {
 		@RestMethod
-		public String post(@FormData("*") ObjectMap m) {
+		public String post(@FormData("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -972,7 +971,7 @@ public class FormDataAnnotationTest {
 	@Rest
 	public static class I {
 		@RestMethod
-		public String post(@FormData("*") ObjectMap m) {
+		public String post(@FormData("*") OMap m) {
 			return m.toString();
 		}
 	}
@@ -1006,7 +1005,7 @@ public class FormDataAnnotationTest {
 	@Rest
 	public static class J {
 		@RestMethod
-		public String post(@FormData("*") ObjectMap m) {
+		public String post(@FormData("*") OMap m) {
 			return m.toString();
 		}
 	}

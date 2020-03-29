@@ -19,6 +19,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 
 /**
  * Filesystem-based storage location for configuration files.
@@ -122,9 +123,9 @@ public class ConfigMemoryStore extends ConfigStore {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("ConfigMemoryStore", new DefaultFilteringObjectMap()
+			.a("ConfigMemoryStore", new DefaultFilteringOMap()
 			);
 	}
 }

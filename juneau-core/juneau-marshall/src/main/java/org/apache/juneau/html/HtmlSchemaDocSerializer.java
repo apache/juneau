@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
@@ -109,9 +110,9 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	public ObjectMap toMap() {
+	public OMap toMap() {
 		return super.toMap()
-			.append("HtmlSchemaDocSerializer", new DefaultFilteringObjectMap()
+			.a("HtmlSchemaDocSerializer", new DefaultFilteringOMap()
 			);
 	}
 }
