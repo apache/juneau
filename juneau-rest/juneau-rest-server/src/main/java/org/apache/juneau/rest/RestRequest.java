@@ -924,7 +924,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				for (Map.Entry<String,?> e : addQueryParams.entrySet())
 					rq.put(e.getKey(), e.getValue());
 			if (! rq.isEmpty())
-				sb.append('?').append(rq.toQueryString());
+				sb.append('?').append(rq.asQueryString());
 			uri = sb.toString();
 		}
 		try {

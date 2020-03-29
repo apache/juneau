@@ -604,6 +604,27 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 		return SimpleJsonSerializer.DEFAULT.toString(m);
 	}
 
+	/**
+	 * Converts this object to a query string.
+	 *
+	 * <p>
+	 * Returned query string does not start with <js>'?'</js>.
+	 *
+	 * @return A new query string, or an empty string if this object is empty.
+	 */
+	public String asQueryString() {
+		StringBuilder sb = new StringBuilder();
+		for (Map.Entry<String,String[]> e : this.entrySet()) {
+			for (int i = 0; i < e.getValue().length; i++) {
+				if (sb.length() > 0)
+					sb.append("&");
+				sb.append(urlEncode(e.getKey())).append('=').append(urlEncode(e.getValue()[i]));
+			}
+		}
+		return sb.toString();
+	}
+
+
 	@Override /* Object */
 	public String toString() {
 		return toString(false);

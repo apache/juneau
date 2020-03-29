@@ -704,7 +704,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 *
 	 * @return A new query string, or an empty string if this object is empty.
 	 */
-	public String toQueryString() {
+	public String asQueryString() {
 		StringBuilder sb = new StringBuilder();
 		for (Map.Entry<String,String[]> e : this.entrySet()) {
 			for (int i = 0; i < e.getValue().length; i++) {

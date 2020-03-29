@@ -35,6 +35,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.testutils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -77,12 +78,12 @@ public class RestClientBuilderTest {
 			return req.getHeaders().get(req.getHeader("Check"));
 		}
 		@RestMethod(path="/checkQuery")
-		public String[] getQuery(org.apache.juneau.rest.RestRequest req) {
-			return req.getQuery().get(req.getHeader("Check"));
+		public Reader getQuery(org.apache.juneau.rest.RestRequest req) {
+			return new StringReader(req.getQuery().asQueryString());
 		}
 		@RestMethod(path="/checkFormData")
-		public String[] getFormData(org.apache.juneau.rest.RestRequest req) {
-			return req.getFormData().get(req.getHeader("Check"));
+		public Reader postFormData(org.apache.juneau.rest.RestRequest req) {
+			return new StringReader(req.getFormData().asQueryString());
 		}
 	}
 
@@ -1065,12 +1066,10 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void h01_multipleHeaders() throws Exception {
-		MockLogger ml = new MockLogger();
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.debug()
-			.logTo(Level.SEVERE, ml)
 			.header("Check", "Foo")
 			.headerPairs("Foo","bar","Foo","baz")
 			.header("Foo","qux")
@@ -1080,11 +1079,9 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void h02_multipleHeaders_withRequest() throws Exception {
-		MockLogger ml = new MockLogger();
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.logTo(Level.SEVERE, ml)
 			.header("Check", "Foo")
 			.headerPairs("Foo","bar","Foo","baz")
 			.build();
@@ -1093,11 +1090,9 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void h03_dontOverrideAccept() throws Exception {
-		MockLogger ml = new MockLogger();
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.logTo(Level.SEVERE, ml)
 			.header("Check", "Accept")
 			.header("Accept", "text/plain")
 			.build();
@@ -1106,11 +1101,9 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void h04_dontOverrideAccept_withRequest() throws Exception {
-		MockLogger ml = new MockLogger();
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.logTo(Level.SEVERE, ml)
 			.header("Check", "Accept")
 			.header("Accept", "text/foo")
 			.build();
@@ -1119,11 +1112,9 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void h04b_dontOverrideAccept_withRequest() throws Exception {
-		MockLogger ml = new MockLogger();
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.logTo(Level.SEVERE, ml)
 			.header("Check", "Accept")
 			.header("Accept", "text/foo")
 			.build();
@@ -1134,11 +1125,9 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void h05_dontOverrideContentType() throws Exception {
-		MockLogger ml = new MockLogger();
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.logTo(Level.SEVERE, ml)
 			.header("Check", "Content-Type")
 			.header("Content-Type", "text/plain")
 			.build();
@@ -1147,100 +1136,83 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void h06_dontOverrideAccept_withRequest() throws Exception {
-		MockLogger ml = new MockLogger();
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.logTo(Level.SEVERE, ml)
 			.header("Check", "Content-Type")
 			.header("Content-Type", "text/foo")
 			.build();
-		rc.get("/checkHeader").header("Content-Type", "text/plain").complete();
-		ml.assertLevel(Level.SEVERE);
-		ml.assertMessageContains("Content-Type: text/plain").assertMessageContains("Content-Type: text/plain");
+		rc.get("/checkHeader").header("Content-Type", "text/plain").run().getBody().assertValue("['text/foo','text/plain']");
 	}
 
-//	@Test
-//	public void h07_header_HttpPartSerializer() throws Exception {
-//	//	public RestClientBuilder header(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-//		fail();
-//	}
-//
-//	// TODO - Test Header[] on servlet side.
-//
-//	//-----------------------------------------------------------------------------------------------------------------
-//	// Query
-//	//-----------------------------------------------------------------------------------------------------------------
-//
-//	@Test
-//	public void i01_query_StringObject() throws Exception { fail(); }
-////	public RestClientBuilder query(String name, Object value) {
-//
-//	@Test
-//	public void i02_query_NameValuePair() throws Exception { fail(); }
-////	public RestClientBuilder query(NameValuePair param) {
-//
-//	@Test
-//	public void i03_query_OMap() throws Exception { fail(); }
-////	public RestClientBuilder query(OMap params) {
-//
-//	@Test
-//	public void i04_query_Map() throws Exception { fail(); }
-////	public RestClientBuilder query(Map<String,Object> params) {
-//
-//	@Test
-//	public void i05_query_NameValuePairs() throws Exception { fail(); }
-////	public RestClientBuilder query(NameValuePairs params) {
-//
-//	@Test
-//	public void i06_query_NameValuePairArray() throws Exception { fail(); }
-////	public RestClientBuilder query(NameValuePair...params) {
-//
-//	@Test
-//	public void i07_query_Objects() throws Exception { fail(); }
-////	public RestClientBuilder query(Object...pairs) {
-//
-//	@Test
-//	public void i08_query_HttpPartSerializer() throws Exception { fail(); }
-////	public RestClientBuilder query(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-//
-//
-//	//-----------------------------------------------------------------------------------------------------------------
-//	// Form data
-//	//-----------------------------------------------------------------------------------------------------------------
-//
-//	@Test
-//	public void j01_formData_StringObject() throws Exception { fail(); }
-////	public RestClientBuilder formData(String name, Object value) {
-//
-//	@Test
-//	public void j02_formData_NameValuePair() throws Exception { fail(); }
-////	public RestClientBuilder formData(NameValuePair param) {
-//
-//	@Test
-//	public void j03_formData_OMap() throws Exception { fail(); }
-////	public RestClientBuilder formData(OMap params) {
-//
-//	@Test
-//	public void j04_formData_Map() throws Exception { fail(); }
-////	public RestClientBuilder formData(Map<String,Object> params) {
-//
-//	@Test
-//	public void j05_formData_NameValuePairs() throws Exception { fail(); }
-////	public RestClientBuilder formData(NameValuePairs params) {
-//
-//	@Test
-//	public void j06_formData_NameValuePairArray() throws Exception { fail(); }
-////	public RestClientBuilder formData(NameValuePair...params) {
-//
-//	@Test
-//	public void j07_formData_Objects() throws Exception { fail(); }
-////	public RestClientBuilder formData(Object...pairs) {
-//
-//	@Test
-//	public void j08_formData_HttpPartSerializer() throws Exception { fail(); }
-////	public RestClientBuilder formData(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-//
+	@Test
+	public void h07_header_HttpPartSerializer() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.header("Check", "Foo")
+			.header("Foo", "foo1", new XPartSerializer(), null)
+			.build();
+		rc.get("/checkHeader").header(AddFlag.DEFAULT_FLAGS,"Foo","foo2",new XPartSerializer(),null).run().getBody().assertValue("['xfoo1x','xfoo2x']");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Query
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	public void i01_query_basic() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.query("Foo","bar")
+			.query("Foo",new StringBuilder("baz"))
+			.build();
+		rc.get("/checkQuery").run().getBody().assertValue("Foo=bar&Foo=baz");
+	}
+
+	@Test
+	public void i02_query_objects() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.query(new SimpleNameValuePair("Foo","f1"))
+			.query(OMap.of("Foo","f2"))
+			.query(AMap.of("Foo","f3"))
+			.query(NameValuePairs.of("Foo","f4","Foo","f5"))
+			.query(new SimpleNameValuePair("Foo","f6"), new SimpleNameValuePair("Foo","f7"))
+			.build();
+		rc.get("/checkQuery").run().getBody().assertValue("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Form data
+	//-----------------------------------------------------------------------------------------------------------------
+	@Test
+	public void j01_formData_basic() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.formData("Foo","bar")
+			.formData("Foo",new StringBuilder("baz"))
+			.build();
+		rc.post("/checkFormData").run().getBody().assertValue("Foo=bar&Foo=baz");
+	}
+
+	@Test
+	public void j02_formData_objects() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.formData(new SimpleNameValuePair("Foo","f1"))
+			.formData(OMap.of("Foo","f2"))
+			.formData(AMap.of("Foo","f3"))
+			.formData(NameValuePairs.of("Foo","f4","Foo","f5"))
+			.formData(new SimpleNameValuePair("Foo","f6"), new SimpleNameValuePair("Foo","f7"))
+			.build();
+		rc.post("/checkFormData").run().getBody().assertValue("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
+	}
+
 //	//-----------------------------------------------------------------------------------------------------------------
 //	// RestClient properties
 //	//-----------------------------------------------------------------------------------------------------------------
