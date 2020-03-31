@@ -1493,11 +1493,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 */
 	public static final String RESTCLIENT_serializers = PREFIX + "serializers.lo";
 
+	static final String RESTCLIENT_httpClient = PREFIX + "httpClient.o";
+	static final String RESTCLIENT_httpClientBuilder= PREFIX + "httpClientBuilder.o";
+
 	private static final Set<String> NO_BODY_METHODS = ASet.unmodifiable("GET","HEAD","DELETE","CONNECT","OPTIONS","TRACE");
 
 	private final List<Object> headers, query, formData;
-	private final HttpClientBuilder httpClientBuilder;
-	private final CloseableHttpClient httpClient;
+	final CloseableHttpClient httpClient;
 	private final boolean keepHttpClientOpen, debug, leakDetection;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	private final HttpPartSerializer partSerializer;
@@ -1525,12 +1527,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * @return A new {@link RestClientBuilder} object.
 	 */
 	public static RestClientBuilder create() {
-		return new RestClientBuilder(PropertyStore.DEFAULT, null);
+		return new RestClientBuilder(PropertyStore.DEFAULT);
 	}
 
 	@Override /* Context */
 	public RestClientBuilder builder() {
-		return new RestClientBuilder(getPropertyStore(), httpClientBuilder);
+		return new RestClientBuilder(getPropertyStore());
 	}
 
 	private static final
@@ -1539,14 +1541,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The REST client builder.
+	 * @param ps The property store containing the unmodifiable configuration for this client.
 	 */
 	@SuppressWarnings("unchecked")
-	protected RestClient(RestClientBuilder builder) {
-		super(builder.getPropertyStore());
-		PropertyStore ps = getPropertyStore();
-		this.httpClientBuilder = builder.getHttpClientBuilder();
-		this.httpClient = builder.getHttpClient();
+	protected RestClient(PropertyStore ps) {
+		super(ps);
+		this.httpClient = getInstanceProperty(RESTCLIENT_httpClient, CloseableHttpClient.class, null);
 		this.keepHttpClientOpen = getBooleanProperty(RESTCLIENT_keepHttpClientOpen, false);
 		this.errorCodes = getInstanceProperty(RESTCLIENT_errorCodes, Predicate.class, ERROR_CODES_DEFAULT);
 		this.debug = getBooleanProperty(RESTCLIENT_debug, getBooleanProperty(BEAN_debug, false));
@@ -1602,21 +1602,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 				.collect(Collectors.toList())
 		);
 
-		RestCallHandler callHandler = getInstanceProperty(RESTCLIENT_callHandler, RestCallHandler.class, null);
-		if (callHandler == null) {
-			callHandler = new RestCallHandler() {
-				@Override
-				public HttpResponse execute(HttpHost target, HttpEntityEnclosingRequestBase request, HttpContext context) throws ClientProtocolException, IOException {
-					return target == null ? RestClient.this.execute(request, context) : RestClient.this.execute(target, (HttpRequest)request, context);
-				}
-
-				@Override
-				public HttpResponse execute(HttpHost target, HttpRequestBase request, HttpContext context) throws ClientProtocolException, IOException {
-					return target == null ? RestClient.this.execute(request, context) : RestClient.this.execute(target, (HttpRequest)request, context);
-				}
-			};
-		}
-		this.callHandler = callHandler;
+		this.callHandler = getInstanceProperty(RESTCLIENT_callHandler, RestCallHandler.class, BasicRestCallHandler.class, ResourceResolver.FUZZY, ps, this);
 
 		RestCallInterceptor[] rci = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class, new RestCallInterceptor[0]);
 		if (debug)
@@ -2314,6 +2300,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		for (Object o : formData)
 			req.formData(toFormData(o));
 
+		req.interceptors(interceptors);
+
 		return req;
 	}
 
@@ -2700,13 +2688,26 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	@Override
 	protected void finalize() throws Throwable {
 		if (leakDetection && ! isClosed && ! keepHttpClientOpen) {
-			System.err.println("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG
+			StringBuilder sb = new StringBuilder("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG
 			if (creationStack != null) {
-				System.err.println("Creation Stack:");  // NOT DEBUG
+				sb.append("\nCreation Stack:");  // NOT DEBUG
 				for (StackTraceElement e : creationStack)
-					System.err.println(e);  // NOT DEBUG
+					sb.append("\n\t" + e);  // NOT DEBUG
 			}
+			log(sb.toString());
 		}
+	}
+
+	/**
+	 * Captures log messages produced by this class.
+	 *
+	 * <p>
+	 * Default behavior is just to print to STDERR.
+	 *
+	 * @param msg The message to log.
+	 */
+	protected void log(String msg) {
+		System.err.println(msg);
 	}
 
 	//------------------------------------------------------------------------------------------------

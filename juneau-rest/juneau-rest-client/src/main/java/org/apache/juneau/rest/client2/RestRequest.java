@@ -92,7 +92,6 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 		super(client, BeanSessionArgs.DEFAULT);
 		this.client = client;
 		this.request = request;
-		interceptors(this.client.interceptors);
 		this.errorCodes = client.errorCodes;
 		this.partSerializer = client.getPartSerializer();
 		this.uriBuilder = new URIBuilder(uri);

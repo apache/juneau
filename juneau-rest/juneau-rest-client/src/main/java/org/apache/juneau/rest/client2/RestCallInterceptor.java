@@ -28,12 +28,13 @@ package org.apache.juneau.rest.client2;
 public interface RestCallInterceptor {
 
 	/**
-	 * Called when {@link RestRequest} object is created.
+	 * Called immediately after {@link RestRequest} object is created and all headers/query/form-data has been
+	 * set on the request from the client.
 	 *
-	 * @param restCall The restCall object invoking this method.
+	 * @param req The HTTP request object.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void onInit(RestRequest restCall) throws Exception;
+	public void onInit(RestRequest req) throws Exception;
 
 	/**
 	 * Called immediately after an HTTP response has been received.

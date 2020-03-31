@@ -52,7 +52,7 @@ public class MockRestClient extends RestClientBuilder {
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 */
 	protected MockRestClient(Object impl) {
-		super(null, null);
+		super(null);
 		mrb = MockRest.create(impl);
 		rootUrl("http://localhost");
 	}

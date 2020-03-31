@@ -137,7 +137,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	public <T> T invoke(Object...args) throws ExecutableException {
 		try {
 			return (T)c.newInstance(args);
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+		} catch (Exception e) {
 			throw new ExecutableException(e);
 		}
 	}
