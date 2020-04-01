@@ -12,6 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2;
 
+import java.io.*;
+
+import org.apache.http.*;
+import org.apache.http.protocol.*;
+
 /**
  * A default implementation of a {@link RestCallInterceptor}.
  *
@@ -21,6 +26,12 @@ public abstract class BasicRestCallInterceptor implements RestCallInterceptor {
 
 	@Override /* RestCallInterceptor */
 	public void onInit(RestRequest req) throws Exception {}
+
+	@Override /* HttpRequestInterceptor */
+	public void process(HttpRequest request, HttpContext context) {}
+
+	@Override /* HttpResponseInterceptor */
+	public void process(HttpResponse response, HttpContext context) throws HttpException, IOException {}
 
 	@Override /* RestCallInterceptor */
 	public void onConnect(RestRequest req, RestResponse res) throws Exception {}

@@ -225,9 +225,9 @@ public class RestResponseBody implements HttpEntity {
 	 * @return
 	 * 	The HTTP response message body input stream, never <jk>null</jk>.
 	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty stream.
-	 * @throws RestCallException If a stream or illegal state exception was thrown.
+	 * @throws IOException If a stream or illegal state exception was thrown.
 	 */
-	public InputStream asInputStream() throws RestCallException {
+	public InputStream asInputStream() throws IOException {
 		try {
 			if (cache != null)
 				return new ByteArrayInputStream(cache);
@@ -247,17 +247,23 @@ public class RestResponseBody implements HttpEntity {
 			is = new EofSensorInputStream(is, new EofSensorWatcher() {
 				@Override
 				public boolean eofDetected(InputStream wrapped) throws IOException {
-					response.close();
+					try {
+						response.close();
+					} catch (RestCallException e) {}
 					return true;
 				}
 				@Override
 				public boolean streamClosed(InputStream wrapped) throws IOException {
-					response.close();
+					try {
+						response.close();
+					} catch (RestCallException e) {}
 					return true;
 				}
 				@Override
 				public boolean streamAbort(InputStream wrapped) throws IOException {
-					response.close();
+					try {
+						response.close();
+					} catch (RestCallException e) {}
 					return true;
 				}
 			});
@@ -265,8 +271,8 @@ public class RestResponseBody implements HttpEntity {
 			isConsumed = true;
 
 			return is;
-		} catch (UnsupportedOperationException | IOException e) {
-			throw new RestCallException(e);
+		} catch (UnsupportedOperationException | RestCallException e) {
+			throw new IOException(e);
 		}
 	}
 
@@ -288,9 +294,9 @@ public class RestResponseBody implements HttpEntity {
 	 * @return
 	 * 	The HTTP response message body reader, never <jk>null</jk>.
 	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty reader.
-	 * @throws RestCallException If an exception occurred.
+	 * @throws IOException If an exception occurred.
 	 */
-	public Reader asReader() throws RestCallException {
+	public Reader asReader() throws IOException {
 
 		// Figure out what the charset of the response is.
 		String cs = null;
@@ -322,13 +328,13 @@ public class RestResponseBody implements HttpEntity {
 	 * @return
 	 * 	The HTTP response message body reader, never <jk>null</jk>.
 	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty reader.
-	 * @throws RestCallException If an exception occurred.
+	 * @throws IOException If an exception occurred.
 	 */
-	public Reader asReader(String charset) throws RestCallException {
+	public Reader asReader(String charset) throws IOException {
 		try {
 			return new InputStreamReader(asInputStream(), charset == null ? "UTF-8" : charset);
 		} catch (UnsupportedEncodingException e) {
-			throw new RestCallException(e);
+			throw new IOException(e);
 		}
 	}
 
@@ -349,14 +355,10 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * @param os The output stream to pipe the output to.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If an IO exception occurred.
+	 * @throws IOException If an IO exception occurred.
 	 */
-	public RestResponse pipeTo(OutputStream os) throws RestCallException {
-		try {
-			IOPipe.create(asInputStream(), os).run();
-		} catch (IOException e) {
-			throw new RestCallException(e);
-		}
+	public RestResponse pipeTo(OutputStream os) throws IOException {
+		IOPipe.create(asInputStream(), os).run();
 		return response;
 	}
 
@@ -379,9 +381,9 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * @param w The writer to pipe the output to.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If an IO exception occurred.
+	 * @throws IOException If an IO exception occurred.
 	 */
-	public RestResponse pipeTo(Writer w) throws RestCallException {
+	public RestResponse pipeTo(Writer w) throws IOException {
 		return pipeTo(w, false);
 	}
 
@@ -405,9 +407,9 @@ public class RestResponseBody implements HttpEntity {
 	 * 	The charset to use for the reader.
 	 * 	<br>If <jk>null</jk>, <js>"UTF-8"</js> is used.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If an IO exception occurred.
+	 * @throws IOException If an IO exception occurred.
 	 */
-	public RestResponse pipeTo(Writer w, String charset) throws RestCallException {
+	public RestResponse pipeTo(Writer w, String charset) throws IOException {
 		return pipeTo(w, charset, false);
 	}
 
@@ -431,9 +433,9 @@ public class RestResponseBody implements HttpEntity {
 	 * @param w The writer to write the output to.
 	 * @param byLines Flush the writers after every line of output.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If an IO exception occurred.
+	 * @throws IOException If an IO exception occurred.
 	 */
-	public RestResponse pipeTo(Writer w, boolean byLines) throws RestCallException {
+	public RestResponse pipeTo(Writer w, boolean byLines) throws IOException {
 		return pipeTo(w, null, byLines);
 	}
 
@@ -458,14 +460,10 @@ public class RestResponseBody implements HttpEntity {
 	 * 	The charset to use for the reader.
 	 * 	<br>If <jk>null</jk>, <js>"UTF-8"</js> is used.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If an IO exception occurred.
+	 * @throws IOException If an IO exception occurred.
 	 */
-	public RestResponse pipeTo(Writer w, String charset, boolean byLines) throws RestCallException {
-		try {
-			IOPipe.create(asReader(charset), w).byLines(byLines).run();
-		} catch (IOException e) {
-			throw new RestCallException(e);
-		}
+	public RestResponse pipeTo(Writer w, String charset, boolean byLines) throws IOException {
+		IOPipe.create(asReader(charset), w).byLines(byLines).run();
 		return response;
 	}
 

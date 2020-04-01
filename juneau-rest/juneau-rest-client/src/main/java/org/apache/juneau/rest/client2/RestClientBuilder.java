@@ -1508,11 +1508,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
+	 * @throws Exception If one or more interceptors could not be created.
 	 */
 	@SuppressWarnings("unchecked")
 	@ConfigurationProperty
-	public RestClientBuilder interceptors(Class<? extends RestCallInterceptor>...values) {
-		return prependTo(RESTCLIENT_interceptors, values);
+	public RestClientBuilder interceptors(Class<? extends RestCallInterceptor>...values) throws Exception {
+		RestCallInterceptor[] x = new RestCallInterceptor[values.length];
+		for (int i = 0; i < values.length; i++)
+			x[i] = values[i].newInstance();
+		return interceptors(x);
 	}
 
 	/**
@@ -1530,6 +1534,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder interceptors(RestCallInterceptor...value) {
+		for (RestCallInterceptor r : value) {
+			addInterceptorLast((HttpRequestInterceptor)r);
+			addInterceptorLast((HttpResponseInterceptor)r);
+		}
 		return prependTo(RESTCLIENT_interceptors, value);
 	}
 

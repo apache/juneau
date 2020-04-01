@@ -30,7 +30,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Exception representing a <c>400+</c> HTTP response code against a remote resource or other exception.
  */
-public final class RestCallException extends IOException {
+public final class RestCallException extends HttpException {
 
 	private static final long serialVersionUID = 1L;
 

@@ -23,7 +23,7 @@ import org.apache.juneau.rest.client2.*;
 /**
  * Specialized intercepter for logging calls to a log file.
  */
-public abstract class RestCallLogger implements RestCallInterceptor {
+public abstract class RestCallLogger extends BasicRestCallInterceptor {
 
 	/**
 	 * Returns <jk>true</jk> if the specified request/response should be logged.
@@ -61,10 +61,6 @@ public abstract class RestCallLogger implements RestCallInterceptor {
 	 */
 	protected final void log(Throwable t, String msg, Object...args) {
 		log(t, format(msg, args));
-	}
-
-	@Override /* RestCallInterceptor */
-	public void onInit(RestRequest req) {
 	}
 
 	@Override /* RestCallInterceptor */

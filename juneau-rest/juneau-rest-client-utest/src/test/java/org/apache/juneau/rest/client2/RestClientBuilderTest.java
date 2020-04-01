@@ -1871,7 +1871,7 @@ public class RestClientBuilderTest {
 			.assertContains("OK");
 	}
 
-	public static class XRestCallInterceptor implements RestCallInterceptor {
+	public static class XRestCallInterceptor extends BasicRestCallInterceptor {
 		public static int x;
 		@Override
 		public void onInit(RestRequest req) throws Exception {

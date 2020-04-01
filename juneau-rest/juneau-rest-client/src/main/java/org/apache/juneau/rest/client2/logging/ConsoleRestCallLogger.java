@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2.logging;
 
+import java.io.*;
+
+import org.apache.http.*;
+import org.apache.http.protocol.*;
 import org.apache.juneau.rest.client2.*;
 
 /**

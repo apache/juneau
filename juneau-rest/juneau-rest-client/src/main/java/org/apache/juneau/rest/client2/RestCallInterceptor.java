@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2;
 
+import org.apache.http.*;
+
 /**
  * Used to intercept http connection responses to allow modification of that response before processing and for
  * listening for call lifecycle events.
@@ -25,7 +27,7 @@ package org.apache.juneau.rest.client2;
  * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
  * </ul>
  */
-public interface RestCallInterceptor {
+public interface RestCallInterceptor extends HttpRequestInterceptor, HttpResponseInterceptor {
 
 	/**
 	 * Called immediately after {@link RestRequest} object is created and all headers/query/form-data has been

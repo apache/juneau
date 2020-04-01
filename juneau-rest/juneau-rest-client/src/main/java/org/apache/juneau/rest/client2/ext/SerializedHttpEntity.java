@@ -70,7 +70,7 @@ public final class SerializedHttpEntity extends BasicHttpEntity {
 					}
 				}
 			} catch (SerializeException e) {
-				throw new org.apache.juneau.rest.client2.RestCallException(e);
+				throw new IOException(e);
 			}
 		}
 	}
