@@ -12,15 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import org.apache.juneau.serializer.*;
-
 /**
  * Base class for implementations of {@link HttpPartSerializerSession}
  */
-public abstract class BaseHttpPartSerializerSession implements HttpPartSerializerSession {
-
-	@Override /* HttpPartSerializerSession */
-	public String serialize(HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-		return serialize(null, schema, value);
-	}
-}
+public abstract class BaseHttpPartSerializerSession implements HttpPartSerializerSession {}

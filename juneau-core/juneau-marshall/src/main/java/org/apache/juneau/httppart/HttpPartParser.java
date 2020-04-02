@@ -51,73 +51,21 @@ public interface HttpPartParser {
 	public HttpPartParserSession createPartSession(ParserSessionArgs args);
 
 	/**
-	 * Creates a new no-argument parser session.
+	 * Returns metadata about the specified class.
 	 *
-	 * @return A new parser session.
+	 * @param <T> The class type.
+	 * @param c The class type.
+	 * @return Metadata about the specified class.
 	 */
-	public HttpPartParserSession createPartSession();
+	public <T> ClassMeta<T> getClassMeta(Class<T> c);
 
 	/**
-	 * Convenience method for creating a no-arg session and parsing a part.
+	 * Returns metadata about the specified class.
 	 *
-	 * @param partType The category of value being parsed.
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part parsers use the schema information.
-	 * @param in The value being parsed.
-	 * @param toType The POJO type to transform the input into.
-	 * @return The parsed value.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws SchemaValidationException If the input fails schema validation.
+	 * @param <T> The class type.
+	 * @param t The class type.
+	 * @param args The class type args.
+	 * @return Metadata about the specified class.
 	 */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException;
-
-	/**
-	 * Convenience method for creating a no-arg session and parsing a part.
-	 *
-	 * @param partType The category of value being parsed.
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part parsers use the schema information.
-	 * @param in The value being parsed.
-	 * @param toType The POJO type to transform the input into.
-	 * @param toTypeArgs The POJO type arguments for Collections and Maps.
-	 * @return The parsed value.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws SchemaValidationException If the input fails schema validation.
-	 */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException;
-
-	/**
-	 * Convenience method for creating a no-arg session and parsing a part of an unspecified part type.
-	 *
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part parsers use the schema information.
-	 * @param in The value being parsed.
-	 * @param toType The POJO type to transform the input into.
-	 * @return The parsed value.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws SchemaValidationException If the input fails schema validation.
-	 */
-	public <T> T parse(HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException;
-
-	/**
-	 * Convenience method for creating a no-arg session and parsing a part of an unspecified part type.
-	 *
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part parsers use the schema information.
-	 * @param in The value being parsed.
-	 * @param toType The POJO type to transform the input into.
-	 * @param toTypeArgs The POJO type arguments for Collections and Maps.
-	 * @return The parsed value.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws SchemaValidationException If the input fails schema validation.
-	 */
-	public <T> T parse(HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException;
+	public <T> ClassMeta<T> getClassMeta(Type t, Type...args);
 }

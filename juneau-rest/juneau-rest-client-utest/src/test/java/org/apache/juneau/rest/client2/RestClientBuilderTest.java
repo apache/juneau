@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client2;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -34,14 +35,19 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.RestRequest;
 import org.apache.juneau.rest.client2.RestResponse;
 import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.rest.mock2.*;
-import org.apache.juneau.rest.testutils.*;
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.xml.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -82,6 +88,10 @@ public class RestClientBuilderTest {
 		@RestMethod(path="/echo")
 		public String postEcho(org.apache.juneau.rest.RestRequest req) {
 			return req.toString();
+		}
+		@RestMethod(path="/echoBody")
+		public Reader postEchoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
+			return req.getBody().getReader();
 		}
 		@RestMethod(path="/ok")
 		public Ok getOk() {
@@ -1691,9 +1701,9 @@ public class RestClientBuilderTest {
 			.create(A.class)
 			.simpleJson()
 			.header("Check", "Foo")
-			.header("Foo", "foo1", new XPartSerializer(), null)
+			.header("Foo", bean, new XPartSerializer(), null)
 			.build();
-		rc.get("/checkHeader").header(AddFlag.DEFAULT_FLAGS,"Foo","foo2",new XPartSerializer(),null).run().getBody().assertValue("['xfoo1x','xfoo2x']");
+		rc.get("/checkHeader").header(AddFlag.DEFAULT_FLAGS,"Foo",bean,new XPartSerializer(),null).run().getBody().assertValue("['x{f:1}','x{f:1}']");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1986,32 +1996,202 @@ public class RestClientBuilderTest {
 
 	}
 
+	@Test
+	public void k11_restClient_marshallObject() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.marshall(Xml.DEFAULT)
+			.build();
+
+		Bean b = rc
+			.post("/echoBody", bean)
+			.run()
+			.getBody().cache()
+			.assertValue("<object><f>1</f></object>")
+			.getBody().as(Bean.class);
+
+		assertEqualObjects(b, bean);
+	}
+
+	@Test
+	public void k12_restClient_marshallsObjects() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.marshalls(Xml.DEFAULT,Json.DEFAULT)
+			.build();
+
+		rc
+			.post("/echoBody", bean)
+			.run()
+			.getBody().cache()
+			.assertValue("{f:1}");
+
+		Bean b = rc
+			.post("/echoBody", bean)
+			.accept("text/xml")
+			.contentType("text/xml")
+			.run()
+			.getBody().cache()
+			.assertValue("<object><f>1</f></object>")
+			.getBody().as(Bean.class);
+		assertEqualObjects(b, bean);
+
+		b = rc
+			.post("/echoBody", bean)
+			.accept("text/json")
+			.contentType("text/json")
+			.run()
+			.getBody().cache()
+			.assertValue("{\"f\":1}")
+			.getBody().as(Bean.class);
+		assertEqualObjects(b, bean);
+	}
+
+	@Test
+	public void k13_restClient_serializerClass_parserClass() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.serializer(XmlSerializer.class)
+			.parser(XmlParser.class)
+			.build();
+
+		Bean b = rc
+			.post("/echoBody", bean)
+			.run()
+			.getBody().cache()
+			.assertValue("<object><f>1</f></object>")
+			.getBody().as(Bean.class);
+
+		assertEqualObjects(b, bean);
+	}
+
+	@Test
+	public void k14_restClient_serializerObject_parserObject() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.serializer(XmlSerializer.DEFAULT)
+			.parser(XmlParser.DEFAULT)
+			.build();
+
+		Bean b = rc
+			.post("/echoBody", bean)
+			.run()
+			.getBody().cache()
+			.assertValue("<object><f>1</f></object>")
+			.getBody().as(Bean.class);
+
+		assertEqualObjects(b, bean);
+	}
+
+	@Test
+	public void k15_restClient_serializersClasses_parsersClasses() throws Exception {
+		@SuppressWarnings("unchecked")
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.serializers(XmlSerializer.class,JsonSerializer.class)
+			.parsers(XmlParser.class,JsonParser.class)
+			.build();
+
+		rc
+			.post("/echoBody", bean)
+			.run()
+			.getBody().cache()
+			.assertValue("{f:1}");
+
+		Bean b = rc
+			.post("/echoBody", bean)
+			.accept("text/xml")
+			.contentType("text/xml")
+			.run()
+			.getBody().cache()
+			.assertValue("<object><f>1</f></object>")
+			.getBody().as(Bean.class);
+		assertEqualObjects(b, bean);
+
+		b = rc
+			.post("/echoBody", bean)
+			.accept("text/json")
+			.contentType("text/json")
+			.run()
+			.getBody().cache()
+			.assertValue("{\"f\":1}")
+			.getBody().as(Bean.class);
+		assertEqualObjects(b, bean);
+	}
+
+	@Test
+	public void k16_restClient_serializersObjects_parsersObjects() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.serializers(XmlSerializer.DEFAULT,JsonSerializer.DEFAULT)
+			.parsers(XmlParser.DEFAULT,JsonParser.DEFAULT)
+			.build();
+
+		rc
+			.post("/echoBody", bean)
+			.run()
+			.getBody().cache()
+			.assertValue("{f:1}");
+
+		Bean b = rc
+			.post("/echoBody", bean)
+			.accept("text/xml")
+			.contentType("text/xml")
+			.run()
+			.getBody().cache()
+			.assertValue("<object><f>1</f></object>")
+			.getBody().as(Bean.class);
+		assertEqualObjects(b, bean);
+
+		b = rc
+			.post("/echoBody", bean)
+			.accept("text/json")
+			.contentType("text/json")
+			.run()
+			.getBody().cache()
+			.assertValue("{\"f\":1}")
+			.getBody().as(Bean.class);
+		assertEqualObjects(b, bean);
+	}
+
+	public static class XPartSerializer extends SimplePartSerializer {
+		@Override
+		public SimplePartSerializerSession createPartSession(SerializerSessionArgs args) {
+			return new SimplePartSerializerSession() {
+				@Override
+				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
+					if (value instanceof Bean)
+						return "x" + SimpleJson.DEFAULT.toString(value);
+					return "x" + super.serialize(type, schema, value);
+				}
+			};
+		}
+	}
+
+	public static class XPartParser extends SimplePartParser {
+		@Override
+		public SimplePartParserSession createPartSession(ParserSessionArgs args) {
+			return new SimplePartParserSession() {
+				@Override
+				public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
+					if (toType.isInstanceOf(Bean.class))
+						return SimpleJson.DEFAULT.read(in.substring(1), toType);
+					return super.parse(null, schema, in, toType);
+				}
+			};
+		}
+	}
+
 //	@Test
-//	public void k11_restClient_marshallObject() throws Exception { fail(); }
-////	public RestClientBuilder marshall(Marshall value) {
+//	public void k17_restClient_partParserClass() throws Exception {
+//		RestClient rc = MockRestClient
+//			.create(A.class)
+//			.simpleJson()
+//			.serializers(XmlSerializer.DEFAULT,JsonSerializer.DEFAULT)
+//			.parsers(XmlParser.DEFAULT,JsonParser.DEFAULT)
+//			.build();
 //
-//	@Test
-//	public void k12_restClient_marshallsObjects() throws Exception { fail(); }
-////	public RestClientBuilder marshalls(Marshall...value) {
-//
-//	@Test
-//	public void k13_restClient_parserClass() throws Exception { fail(); }
-////	public RestClientBuilder parser(Class<? extends Parser> value) {
-//
-//	@Test
-//	public void k14_restClient_parserObject() throws Exception { fail(); }
-////	public RestClientBuilder parser(Parser value) {
-//
-//	@Test
-//	public void k15_restClient_parsersClasses() throws Exception { fail(); }
-////	public RestClientBuilder parsers(Class<? extends Parser>...value) {
-//
-//	@Test
-//	public void k16_restClient_parsersObjects() throws Exception { fail(); }
-////	public RestClientBuilder parsers(Parser...value) {
-//
-//	@Test
-//	public void k17_restClient_partParserClass() throws Exception { fail(); }
+//	}
 ////	public RestClientBuilder partParser(Class<? extends HttpPartParser> value) {
 //
 //	@Test

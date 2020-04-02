@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2;
 
+import static org.apache.juneau.httppart.HttpPartType.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
@@ -58,6 +59,7 @@ public class RestResponseHeader implements Header {
 	};
 
 	private final Header header;
+	private final RestRequest request;
 	private final RestResponse response;
 	private HttpPartParser parser;
 	private HttpPartSchema schema;
@@ -65,10 +67,12 @@ public class RestResponseHeader implements Header {
 	/**
 	 * Constructor.
 	 *
+	 * @param request The request object.
 	 * @param response The response object.
 	 * @param header The wrapped header.  Can be <jk>null</jk>.
 	 */
-	public RestResponseHeader(RestResponse response, Header header) {
+	public RestResponseHeader(RestRequest request, RestResponse response, Header header) {
+		this.request = request;
 		this.response = response;
 		this.header = header == null ? NULL_HEADER : header;
 		parser(null);
@@ -183,11 +187,7 @@ public class RestResponseHeader implements Header {
 	 * @throws RestCallException If value could not be parsed.
 	 */
 	public <T> T as(Type type, Type...args) throws RestCallException {
-		try {
-			return parser.parse(schema, asString(), type, args);
-		} catch (ParseException e) {
-			throw new RestCallException(e);
-		}
+		return as(request.getClassMeta(type, args));
 	}
 
 	/**
@@ -214,11 +214,7 @@ public class RestResponseHeader implements Header {
 	 * @throws RestCallException If value could not be parsed.
 	 */
 	public <T> T as(Class<T> type) throws RestCallException {
-		try {
-			return parser.parse(schema, asString(), type);
-		} catch (ParseException e) {
-			throw new RestCallException(e);
-		}
+		return as(request.getClassMeta(type));
 	}
 
 	/**
@@ -245,7 +241,7 @@ public class RestResponseHeader implements Header {
 	 */
 	public <T> T as(ClassMeta<T> type) throws RestCallException {
 		try {
-			return parser.parse(schema, asString(), type);
+			return parser.createPartSession(null).parse(HEADER, schema, asString(), type);
 		} catch (ParseException e) {
 			throw new RestCallException(e);
 		}

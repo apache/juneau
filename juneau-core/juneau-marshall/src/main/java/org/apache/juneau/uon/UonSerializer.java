@@ -326,6 +326,26 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		}
 	}
 
+	/**
+	 * Converts the specified value to a string that can be used as an HTTP header value, query parameter value,
+	 * form-data parameter, or URI path variable.
+	 *
+	 * <p>
+	 * Returned values should NOT be URL-encoded.
+	 *
+	 * @param partType The category of value being serialized.
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Not all part serializers use the schema information.
+	 * @param value The value being serialized.
+	 * @return The serialized value.
+	 * @throws SerializeException If a problem occurred while trying to parse the input.
+	 * @throws SchemaValidationException If the output fails schema validation.
+	 */
+	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return createPartSession(null).serialize(partType, schema, value);
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -423,21 +443,6 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	@Override /* HttpPartSerializer */
 	public UonSerializerSession createPartSession(SerializerSessionArgs args) {
 		return new UonSerializerSession(this, null, args);
-	}
-
-	@Override /* HttpPartSerializer */
-	public UonSerializerSession createPartSession() {
-		return createPartSession(null);
-	}
-
-	@Override /* HttpPartSerializer */
-	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-		return createPartSession().serialize(partType, schema, value);
-	}
-
-	@Override /* HttpPartSerializer */
-	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-		return createPartSession().serialize(null, schema, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

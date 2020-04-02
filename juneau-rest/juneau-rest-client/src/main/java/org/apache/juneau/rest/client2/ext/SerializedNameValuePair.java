@@ -185,7 +185,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 			}
 			if (isEmpty(value) && skipIfEmpty && schema.getDefault() == null)
 				return null;
-			return serializer.serialize(type, schema, value);
+			return serializer.createPartSession(null).serialize(type, schema, value);
 		} catch (SchemaValidationException e) {
 			throw new FormattedRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", type, name, value);
 		} catch (SerializeException e) {

@@ -215,7 +215,7 @@ public final class RestResponse implements HttpResponse {
 	 * @return The header.  Never <jk>null</jk>.
 	 */
 	public RestResponseHeader getHeader(String name) {
-		return new RestResponseHeader(this, getLastHeader(name)).parser(partParser);
+		return new RestResponseHeader(request, this, getLastHeader(name)).parser(partParser);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -438,7 +438,7 @@ public final class RestResponse implements HttpResponse {
 		Header[] a = response.getHeaders(name);
 		RestResponseHeader[] b = new RestResponseHeader[a.length];
 		for (int i = 0; i < a.length; i++)
-			b[i] = new RestResponseHeader(this, a[i]).parser(partParser);
+			b[i] = new RestResponseHeader(request, this, a[i]).parser(partParser);
 		return b;
 	}
 
@@ -454,7 +454,7 @@ public final class RestResponse implements HttpResponse {
 	@Override /* HttpMessage */
 	public RestResponseHeader getFirstHeader(String name) {
 		Header h = response.getFirstHeader(name);
-		return h == null ? null : new RestResponseHeader(this, h).parser(partParser);
+		return h == null ? null : new RestResponseHeader(request, this, h).parser(partParser);
 	}
 
 	/**
@@ -469,7 +469,7 @@ public final class RestResponse implements HttpResponse {
 	@Override /* HttpMessage */
 	public RestResponseHeader getLastHeader(String name) {
 		Header h = response.getLastHeader(name);
-		return new RestResponseHeader(this, h).parser(partParser);
+		return new RestResponseHeader(request, this, h).parser(partParser);
 	}
 
 	/**
@@ -484,7 +484,7 @@ public final class RestResponse implements HttpResponse {
 		Header[] a = response.getAllHeaders();
 		RestResponseHeader[] b = new RestResponseHeader[a.length];
 		for (int i = 0; i < a.length; i++)
-			b[i] = new RestResponseHeader(this, a[i]).parser(partParser);
+			b[i] = new RestResponseHeader(request, this, a[i]).parser(partParser);
 		return b;
 	}
 

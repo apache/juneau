@@ -166,7 +166,7 @@ public final class SerializedHeader extends BasicHeader {
 			}
 			if (isEmpty(value) && skipIfEmpty && schema.getDefault() == null)
 				return null;
-			return serializer.serialize(HttpPartType.HEADER, schema, value);
+			return serializer.createPartSession(null).serialize(HttpPartType.HEADER, schema, value);
 		} catch (SchemaValidationException e) {
 			throw new FormattedRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
 		} catch (SerializeException e) {

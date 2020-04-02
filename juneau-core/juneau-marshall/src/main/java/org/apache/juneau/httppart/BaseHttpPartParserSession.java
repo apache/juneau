@@ -12,28 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import java.lang.reflect.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
-
 /**
  * Base class for implementations of {@link HttpPartParserSession}
  */
-public abstract class BaseHttpPartParserSession implements HttpPartParserSession {
-
-	@Override /* HttpPartParserSession */
-	public <T> T parse(HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-		return parse(null, in, toType);
-	}
-
-	@Override /* HttpPartParserSession */
-	public <T> T parse(HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return parse(null, in, toType);
-	}
-
-	@Override /* HttpPartParserSession */
-	public <T> T parse(HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
-		return parse(null, in, toType, toTypeArgs);
-	}
-}
+public abstract class BaseHttpPartParserSession implements HttpPartParserSession {}

@@ -38,9 +38,4 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	public SimplePartSerializerSession createPartSession(SerializerSessionArgs args) {
 		return new SimplePartSerializerSession();
 	}
-
-	@Override /* HttpPartSerializer */
-	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-		return createPartSession().serialize(partType, schema, value);
-	}
 }

@@ -41,18 +41,4 @@ public interface HttpPartSerializerSession {
 	 * @throws SchemaValidationException If the output fails schema validation.
 	 */
 	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException;
-
-	/**
-	 * Same as {@link #serialize(HttpPartType, HttpPartSchema, Object)} but defaults to a <jk>null</jk> part type.
-	 *
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part serializers use the schema information.
-	 * @param value The value being serialized.
-	 * @return The serialized value.
-	 * @throws SerializeException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationException If the output fails schema validation.
-	 */
-	public String serialize(HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException;
 }

@@ -113,6 +113,6 @@ public class HttpPart {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public <T> T asType(Class<T> c) throws SchemaValidationException, ParseException {
-		return parser.createPartSession(pargs).parse(partType, schema, spart, c);
+		return parser.createPartSession(pargs).parse(partType, schema, spart, parser.getClassMeta(c));
 	}
 }

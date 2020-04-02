@@ -88,11 +88,6 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	}
 
 	@Override /* PartSerializer */
-	public String serialize(HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-		return serialize(null, schema, value);
-	}
-
-	@Override /* PartSerializer */
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 
 		schema = ObjectUtils.firstNonNull(schema, DEFAULT_SCHEMA);

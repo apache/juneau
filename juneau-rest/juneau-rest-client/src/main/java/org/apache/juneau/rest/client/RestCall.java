@@ -233,7 +233,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		if (! isMulti) {
 			if (canAdd(value, schema, skipIfEmpty))
 				try {
-					uriBuilder.addParameter(name, serializer.serialize(QUERY, schema, value));
+					uriBuilder.addParameter(name, serializer.createPartSession(null).serialize(QUERY, schema, value));
 				} catch (SchemaValidationException e) {
 					throw new RestCallException(e, "Validation error on request query parameter ''{0}''=''{1}''", name, value);
 				} catch (SerializeException e) {
@@ -497,9 +497,9 @@ public final class RestCall extends BeanSession implements Closeable {
 			try {
 				String p = null;
 				if (name.equals("/*"))
-					p = path.replaceAll("\\/\\*$", serializer.serialize(PATH, schema, value));
+					p = path.replaceAll("\\/\\*$", serializer.createPartSession(null).serialize(PATH, schema, value));
 				else
-					p = path.replace(var, serializer.serialize(PATH, schema, value));
+					p = path.replace(var, serializer.createPartSession(null).serialize(PATH, schema, value));
 				uriBuilder.setPath(p);
 			} catch (SchemaValidationException e) {
 				throw new RestCallException(e, "Validation error on request path parameter ''{0}''=''{1}''", name, value);
@@ -684,7 +684,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		if (! isMulti) {
 			if (canAdd(value, schema, skipIfEmpty))
 				try {
-					request.setHeader(name, serializer.serialize(HEADER, schema, value));
+					request.setHeader(name, serializer.createPartSession(null).serialize(HEADER, schema, value));
 				} catch (SchemaValidationException e) {
 					throw new RestCallException(e, "Validation error on request header parameter ''{0}''=''{1}''", name, value);
 				} catch (SerializeException e) {
@@ -1639,7 +1639,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				else if (serializer != null)
 					entity = new RestRequestEntity(input, serializer, requestBodySchema);
 				else if (partSerializer != null)
-					entity = new StringEntity(partSerializer.serialize((HttpPartSchema)null, input), getRequestContentType(TEXT_PLAIN));
+					entity = new StringEntity(partSerializer.createPartSession(null).serialize(BODY, (HttpPartSchema)null, input), getRequestContentType(TEXT_PLAIN));
 				else
 					entity = new StringEntity(getBeanContext().getClassMetaForObject(input).toString(input), getRequestContentType(TEXT_PLAIN));
 
@@ -1972,7 +1972,7 @@ public final class RestCall extends BeanSession implements Closeable {
 			String hs = h.getValue();
 			if (partParser == null)
 				partParser = client.getPartParser();
-			return partParser.parse(schema, hs, type, args);
+			return partParser.createPartSession(null).parse(HEADER, schema, hs, partParser.getClassMeta(type, args));
 		} catch (IOException e) {
 			isFailed = true;
 			close();

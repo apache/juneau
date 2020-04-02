@@ -291,11 +291,6 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		}
 	}
 
-	@Override /* HttpPartSerializer */
-	public String serialize(HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-		return serialize(null, schema, value);
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------

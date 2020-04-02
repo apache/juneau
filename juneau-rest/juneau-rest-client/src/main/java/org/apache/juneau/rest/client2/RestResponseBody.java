@@ -1784,7 +1784,7 @@ public class RestResponseBody implements HttpEntity {
 	 */
 	@Override /* HttpEntity */
 	public RestResponseHeader getContentType() {
-		return new RestResponseHeader(response, entity.getContentType());
+		return new RestResponseHeader(request, response, entity.getContentType());
 	}
 
 	/**
@@ -1798,7 +1798,7 @@ public class RestResponseBody implements HttpEntity {
 	 */
 	@Override /* HttpEntity */
 	public RestResponseHeader getContentEncoding() {
-		return new RestResponseHeader(response, entity.getContentEncoding());
+		return new RestResponseHeader(request, response, entity.getContentEncoding());
 	}
 
 	/**

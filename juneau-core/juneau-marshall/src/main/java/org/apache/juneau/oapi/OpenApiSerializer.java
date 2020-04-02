@@ -18,7 +18,6 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 
@@ -132,23 +131,8 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	}
 
 	@Override /* HttpPartSerializer */
-	public OpenApiSerializerSession createPartSession() {
-		return createPartSession(null);
-	}
-
-	@Override /* HttpPartSerializer */
 	public OpenApiSerializerSession createPartSession(SerializerSessionArgs args) {
 		return new OpenApiSerializerSession(this, args);
-	}
-
-	@Override /* HttpPartSerializer */
-	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-		return createPartSession().serialize(partType, schema, value);
-	}
-
-	@Override /* HttpPartSerializer */
-	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-		return createPartSession().serialize(null, schema, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

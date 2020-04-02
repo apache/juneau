@@ -12,13 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.oapi;
 
-import org.apache.juneau.examples.core.pojo.Pojo;
-import org.apache.juneau.httppart.HttpPartParser;
-import org.apache.juneau.httppart.HttpPartSchema;
-import org.apache.juneau.httppart.HttpPartSerializer;
-import org.apache.juneau.httppart.HttpPartType;
-import org.apache.juneau.oapi.OpenApiParser;
-import org.apache.juneau.oapi.OpenApiSerializer;
+import static org.apache.juneau.httppart.HttpPartType.*;
+
+import org.apache.juneau.examples.core.pojo.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.oapi.*;
 
 /**
  * Sample class which shows the simple usage of OpenApiSerializer.
@@ -67,17 +65,17 @@ public class OapiExample {
 			)
 			.build();
 		Object value = new long[][]{{1,2,3},{4,5,6},{7,8,9}};
-		String output = OpenApiSerializer.DEFAULT.serialize(HttpPartType.HEADER, schema, value);
+		String output = OpenApiSerializer.DEFAULT.serialize(HEADER, schema, value);
 
 		HttpPartSchema schemab = HttpPartSchema.create().type("string").build();
 		// Convert POJO to BASE64-encoded string.
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
-		String httpPart = s.serialize(schemab, pojo);
+		String httpPart = s.createPartSession(null).serialize(HEADER, schemab, pojo);
 		System.out.println(httpPart);
 
 		// Convert BASE64-encoded string back into a POJO.
 		HttpPartParser p = OpenApiParser.DEFAULT;
-		pojo = p.parse(schemab, httpPart, Pojo.class);
+		pojo = p.createPartSession(null).parse(HEADER, schemab, httpPart, Pojo.class);
 
 		// The object above can be parsed thanks to the @Beanc(properties = id,name) annotation on Pojo
 		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
