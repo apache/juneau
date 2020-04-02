@@ -47,13 +47,13 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	private static final long serialVersionUID = 1L;
 
 	private final RestRequest req;
-	private HttpPartParser parser;
+	private HttpPartParserSession parser;
 
 	RequestQuery(RestRequest req) {
 		this.req = req;
 	}
 
-	RequestQuery parser(HttpPartParser parser) {
+	RequestQuery parser(HttpPartParserSession parser) {
 		this.parser = parser;
 		return this;
 	}
@@ -298,7 +298,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
+	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, null, getClassMeta(type));
 	}
 
@@ -336,7 +336,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Class<T> type) throws BadRequest, InternalServerError {
+	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, def, getClassMeta(type));
 	}
 
@@ -413,7 +413,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
+	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, null, (ClassMeta<T>)getClassMeta(type, args));
 	}
 
@@ -463,7 +463,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Type type, Type...args) throws BadRequest, InternalServerError {
+	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, def, (ClassMeta<T>)getClassMeta(type, args));
 	}
 
@@ -533,7 +533,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T getAll(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
+	public <T> T getAll(HttpPartParserSession parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getAllInner(parser, schema, name, null, (ClassMeta<T>)getClassMeta(type, args));
 	}
 
@@ -615,7 +615,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	}
 
 	/* Workhorse method */
-	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+	private <T> T getInner(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		try {
 			if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 				OMap m = new OMap();
@@ -643,7 +643,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 
 	/* Workhorse method */
 	@SuppressWarnings("rawtypes")
-	private <T> T getAllInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+	private <T> T getAllInner(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		String[] p = get(name);
 		if (p == null)
 			return def;
@@ -671,10 +671,10 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 		throw new InternalServerError("Invalid call to getParameters(String, ClassMeta).  Class type must be a Collection or array.");
 	}
 
-	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> c) throws SchemaValidationException, ParseException {
+	private <T> T parse(HttpPartParserSession parser, HttpPartSchema schema, String val, ClassMeta<T> c) throws SchemaValidationException, ParseException {
 		if (parser == null)
 			parser = this.parser;
-		return parser.createPartSession(req.getParserSessionArgs()).parse(HttpPartType.QUERY, schema, val, c);
+		return parser.parse(HttpPartType.QUERY, schema, val, c);
 	}
 
 	/**

@@ -43,7 +43,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	private static final long serialVersionUID = 1L;
 
 	private final RestRequest req;
-	private HttpPartParser parser;
+	private HttpPartParserSession parser;
 	private RequestQuery queryParams;
 	private Set<String> allowedQueryParams;
 
@@ -52,7 +52,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 		this.req = req;
 	}
 
-	RequestHeaders parser(HttpPartParser parser) {
+	RequestHeaders parser(HttpPartParserSession parser) {
 		this.parser = parser;
 		return this;
 	}
@@ -271,7 +271,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
+	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, null, getClassMeta(type));
 	}
 
@@ -309,7 +309,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, T def, Class<T> type) throws BadRequest, InternalServerError {
+	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, def, getClassMeta(type));
 	}
 
@@ -380,12 +380,12 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
-	public <T> T get(HttpPartParser parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
+	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, null, this.<T>getClassMeta(type, args));
 	}
 
 	/* Workhorse method */
-	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+	private <T> T getInner(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		try {
 			if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 				OMap m = new OMap();
@@ -409,10 +409,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/* Workhorse method */
-	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws SchemaValidationException, ParseException {
+	private <T> T parse(HttpPartParserSession parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws SchemaValidationException, ParseException {
 		if (parser == null)
 			parser = this.parser;
-		return parser.createPartSession(req.getParserSessionArgs()).parse(HttpPartType.HEADER, schema, val, cm);
+		return parser.parse(HttpPartType.HEADER, schema, val, cm);
 	}
 
 	/**

@@ -37,7 +37,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 	private String name;
 	private Object value;
 	private HttpPartType type;
-	private HttpPartSerializer serializer;
+	private HttpPartSerializerSession serializer;
 	private HttpPartSchema schema;
 	private boolean skipIfEmpty;
 
@@ -65,7 +65,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
 	 */
-	public SerializedNameValuePair(String name, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema, boolean skipIfEmpty) {
+	public SerializedNameValuePair(String name, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		this.name = name;
 		this.value = value;
 		this.type = type;
@@ -89,7 +89,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 		String name;
 		Object value;
 		HttpPartType type;
-		HttpPartSerializer serializer;
+		HttpPartSerializerSession serializer;
 		HttpPartSchema schema;
 
 		/**
@@ -132,6 +132,18 @@ public final class SerializedNameValuePair implements NameValuePair {
 		 * @return This object (for method chaining).
 		 */
 		public Builder serializer(HttpPartSerializer value) {
+			if (value != null)
+				return serializer(value.createPartSession(null));
+			return this;
+		}
+
+		/**
+		 * Sets the serializer to use for serializing the value to a string value.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder serializer(HttpPartSerializerSession value) {
 			return serializer(value, true);
 		}
 
@@ -142,7 +154,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 		 * @param overwrite If <jk>true</jk>, overwrites the existing value if the old value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
-		public Builder serializer(HttpPartSerializer value, boolean overwrite) {
+		public Builder serializer(HttpPartSerializerSession value, boolean overwrite) {
 			if (overwrite || serializer == null)
 				this.serializer = value;
 			return this;
@@ -185,7 +197,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 			}
 			if (isEmpty(value) && skipIfEmpty && schema.getDefault() == null)
 				return null;
-			return serializer.createPartSession(null).serialize(type, schema, value);
+			return serializer.serialize(type, schema, value);
 		} catch (SchemaValidationException e) {
 			throw new FormattedRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", type, name, value);
 		} catch (SerializeException e) {

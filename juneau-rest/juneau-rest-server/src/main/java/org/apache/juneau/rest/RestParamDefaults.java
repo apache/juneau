@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
 
@@ -237,7 +236,8 @@ class RestParamDefaults {
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getPathMatch().get(partParser, schema, name, type);
+			HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
+			return req.getPathMatch().get(ps, schema, name, type);
 		}
 	}
 
@@ -280,7 +280,8 @@ class RestParamDefaults {
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getHeaders().get(partParser, schema, name, type);
+			HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
+			return req.getHeaders().get(ps, schema, name, type);
 		}
 	}
 
@@ -359,7 +360,8 @@ class RestParamDefaults {
 						ResponsePartMeta rpm = req.getResponseHeaderMeta(o);
 						if (rpm == null)
 							rpm = ResponseHeaderObject.this.meta;
-						res.setHeader(new HttpPart(name, HttpPartType.HEADER, rpm.getSchema(), firstNonNull(rpm.getSerializer(), req.getPartSerializer()), req.getSerializerSessionArgs(), o));
+						HttpPartSerializerSession pss = rpm.getSerializer() == null ? req.getPartSerializer() : rpm.getSerializer().createPartSession(req.getSerializerSessionArgs());
+						res.setHeader(new HttpPart(name, HttpPartType.HEADER, rpm.getSchema(), pss, o));
 					} catch (SerializeException | SchemaValidationException e) {
 						throw new RuntimeException(e);
 					}
@@ -463,9 +465,10 @@ class RestParamDefaults {
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
 			if (multiPart)
-				return req.getFormData().getAll(partParser, schema, name, type);
-			return req.getFormData().get(partParser, schema, name, type);
+				return req.getFormData().getAll(ps, schema, name, type);
+			return req.getFormData().get(ps, schema, name, type);
 		}
 	}
 
@@ -499,9 +502,10 @@ class RestParamDefaults {
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
 			if (multiPart)
-				return req.getQuery().getAll(partParser, schema, name, type);
-			return req.getQuery().get(partParser, schema, name, type);
+				return req.getQuery().getAll(ps, schema, name, type);
+			return req.getQuery().get(ps, schema, name, type);
 		}
 	}
 

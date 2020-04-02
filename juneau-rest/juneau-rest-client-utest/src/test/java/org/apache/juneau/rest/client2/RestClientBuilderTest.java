@@ -1703,7 +1703,7 @@ public class RestClientBuilderTest {
 			.header("Check", "Foo")
 			.header("Foo", bean, new XPartSerializer(), null)
 			.build();
-		rc.get("/checkHeader").header(AddFlag.DEFAULT_FLAGS,"Foo",bean,new XPartSerializer(),null).run().getBody().assertValue("['x{f:1}','x{f:1}']");
+		rc.get("/checkHeader").header(AddFlag.DEFAULT_FLAGS,"Foo",bean,new XPartSerializer().createPartSession(null),null).run().getBody().assertValue("['x{f:1}','x{f:1}']");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

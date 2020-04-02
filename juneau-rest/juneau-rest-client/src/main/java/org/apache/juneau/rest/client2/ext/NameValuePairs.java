@@ -181,7 +181,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public NameValuePairs append(String name, Object value, HttpPartType partType, HttpPartSerializer serializer, HttpPartSchema schema, boolean skipIfEmpty) {
+	public NameValuePairs append(String name, Object value, HttpPartType partType, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		super.add(new SerializedNameValuePair(name, value, partType, serializer, schema, skipIfEmpty));
 		return this;
 	}

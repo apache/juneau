@@ -27,10 +27,8 @@ public class HttpPart {
 	private final String spart;
 	private final HttpPartType partType;
 	private final HttpPartSchema schema;
-	private final HttpPartSerializer serializer;
-	private final HttpPartParser parser;
-	private final SerializerSessionArgs sargs;
-	private final ParserSessionArgs pargs;
+	private final HttpPartSerializerSession serializer;
+	private final HttpPartParserSession parser;
 
 	/**
 	 * Constructor.
@@ -42,19 +40,16 @@ public class HttpPart {
 	 * @param partType The HTTP part type.
 	 * @param schema Schema information about the part.
 	 * @param serializer The part serializer to use to serialize the part.
-	 * @param args Session arguments to pass to the serializer.
 	 * @param part The part POJO being serialized.
 	 */
-	public HttpPart(String name, HttpPartType partType, HttpPartSchema schema, HttpPartSerializer serializer, SerializerSessionArgs args, Object part) {
+	public HttpPart(String name, HttpPartType partType, HttpPartSchema schema, HttpPartSerializerSession serializer, Object part) {
 		this.name = name;
 		this.partType = partType;
 		this.schema = schema;
 		this.serializer = serializer;
-		this.sargs = args;
 		this.opart = part;
 		this.spart = null;
 		this.parser = null;
-		this.pargs = null;
 	}
 
 	/**
@@ -67,18 +62,15 @@ public class HttpPart {
 	 * @param partType The HTTP part type.
 	 * @param schema Schema information about the part.
 	 * @param parser The part parser to use to parse the part.
-	 * @param args Session arguments to pass to the parser.
 	 * @param part The part string being parsed.
 	 */
-	public HttpPart(String name, HttpPartType partType, HttpPartSchema schema, HttpPartParser parser, ParserSessionArgs args, String part) {
+	public HttpPart(String name, HttpPartType partType, HttpPartSchema schema, HttpPartParserSession parser, String part) {
 		this.name = name;
 		this.partType = partType;
 		this.schema = schema;
 		this.parser = parser;
-		this.pargs = args;
 		this.spart = part;
 		this.serializer = null;
-		this.sargs = null;
 		this.opart = null;
 	}
 
@@ -101,7 +93,7 @@ public class HttpPart {
 	public String asString() throws SchemaValidationException, SerializeException {
 		if (spart != null)
 			return spart;
-		return serializer.createPartSession(sargs).serialize(partType, schema, opart);
+		return serializer.serialize(partType, schema, opart);
 	}
 
 	/**
@@ -113,6 +105,6 @@ public class HttpPart {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public <T> T asType(Class<T> c) throws SchemaValidationException, ParseException {
-		return parser.createPartSession(pargs).parse(partType, schema, spart, parser.getClassMeta(c));
+		return parser.parse(partType, schema, spart, c);
 	}
 }

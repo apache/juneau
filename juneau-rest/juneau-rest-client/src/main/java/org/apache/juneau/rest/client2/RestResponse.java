@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -47,7 +46,7 @@ public final class RestResponse implements HttpResponse {
 	private final RestRequest request;
 	private final HttpResponse response;
 	private final Parser parser;
-	private HttpPartParser partParser;
+	private HttpPartParserSession partParser;
 	private RestResponseBody responseBody;
 	private boolean isClosed;
 
@@ -64,7 +63,7 @@ public final class RestResponse implements HttpResponse {
 		this.parser = parser;
 		this.response = response == null ? new BasicHttpResponse(null, 0, null) : response;
 		this.responseBody = new RestResponseBody(client, request, this, parser);
-		this.partParser = client.getPartParser();
+		this.partParser = client.getPartParserSession();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -238,7 +237,7 @@ public final class RestResponse implements HttpResponse {
 		try {
 			Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
 			final RestClient rc = this.client;
-			final HttpPartParser p = ObjectUtils.firstNonNull(partParser, rc.getPartParser());
+			final HttpPartParserSession p = partParser == null ? rc.getPartParserSession() : partParser;
 			return (T)Proxy.newProxyInstance(
 				c.getClassLoader(),
 				new Class[] { c },
@@ -247,7 +246,7 @@ public final class RestResponse implements HttpResponse {
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 						ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
 						if (pm != null) {
-							HttpPartParser pp = pm.getParser(p);
+							HttpPartParserSession pp = pm.getParser(p);
 							HttpPartSchema schema = pm.getSchema();
 							String name = pm.getPartName();
 							ClassMeta<?> type = rc.getClassMeta(method.getGenericReturnType());

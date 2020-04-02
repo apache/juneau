@@ -61,7 +61,7 @@ public class RestResponseHeader implements Header {
 	private final Header header;
 	private final RestRequest request;
 	private final RestResponse response;
-	private HttpPartParser parser;
+	private HttpPartParserSession parser;
 	private HttpPartSchema schema;
 
 	/**
@@ -108,8 +108,8 @@ public class RestResponseHeader implements Header {
 	 * 	<br>If <jk>null</jk>, {@link SimplePartParser#DEFAULT} will be used.
 	 * @return This object (for method chaining).
 	 */
-	public RestResponseHeader parser(HttpPartParser value) {
-		this.parser = value == null ? SimplePartParser.DEFAULT : value;
+	public RestResponseHeader parser(HttpPartParserSession value) {
+		this.parser = value == null ? SimplePartParser.DEFAULT_SESSION : value;
 		return this;
 	}
 
@@ -241,7 +241,7 @@ public class RestResponseHeader implements Header {
 	 */
 	public <T> T as(ClassMeta<T> type) throws RestCallException {
 		try {
-			return parser.createPartSession(null).parse(HEADER, schema, asString(), type);
+			return parser.parse(HEADER, schema, asString(), type);
 		} catch (ParseException e) {
 			throw new RestCallException(e);
 		}

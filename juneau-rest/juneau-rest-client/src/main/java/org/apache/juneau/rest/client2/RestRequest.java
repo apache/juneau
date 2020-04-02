@@ -72,7 +72,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	private boolean hasInput;                              // input() was called, even if it's setting 'null'.
 	private Serializer serializer;
 	private Parser parser;
-	private HttpPartSerializer partSerializer;
+	private HttpPartSerializerSession partSerializer;
 	private HttpPartSchema requestBodySchema;
 	private URIBuilder uriBuilder;
 	private NameValuePairs formData;
@@ -93,7 +93,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 		this.client = client;
 		this.request = request;
 		this.errorCodes = client.errorCodes;
-		this.partSerializer = client.getPartSerializer();
+		this.partSerializer = client.getPartSerializerSession();
 		this.uriBuilder = new URIBuilder(uri);
 	}
 
@@ -394,7 +394,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @throws RestCallException Error occurred.
 	 */
 	@SuppressWarnings("unchecked")
-	public RestRequest path(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
+	public RestRequest path(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema) throws RestCallException {
 		serializer = (serializer == null ? partSerializer : serializer);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
 		if (! isMulti) {
@@ -673,7 +673,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @throws RestCallException Invalid input.
 	 */
 	@SuppressWarnings("unchecked")
-	public RestRequest query(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
+	public RestRequest query(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema) throws RestCallException {
 		serializer = (serializer == null ? partSerializer : serializer);
 		flags = AddFlag.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
@@ -1050,7 +1050,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @throws RestCallException Invalid input.
 	 */
 	@SuppressWarnings("unchecked")
-	public RestRequest formData(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
+	public RestRequest formData(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema) throws RestCallException {
 		serializer = (serializer == null ? partSerializer : serializer);
 		flags = AddFlag.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
@@ -1497,7 +1497,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @throws RestCallException Invalid input.
 	 */
 	@SuppressWarnings("unchecked")
-	public RestRequest header(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
+	public RestRequest header(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema) throws RestCallException {
 		serializer = (serializer == null ? partSerializer : serializer);
 		flags = AddFlag.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;

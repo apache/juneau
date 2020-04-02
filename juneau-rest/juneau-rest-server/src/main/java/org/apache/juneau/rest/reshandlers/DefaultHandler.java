@@ -92,10 +92,10 @@ public class DefaultHandler implements ResponseHandler {
 							String k = stringify(key);
 							Object v = m.get(key);
 							HttpPartSchema s = hm.getSchema().getProperty(k);
-							res.setHeader(new HttpPart(k, RESPONSE_HEADER, s, hm.getSerializer(req.getPartSerializer()), req.getSerializerSessionArgs(), v));
+							res.setHeader(new HttpPart(k, RESPONSE_HEADER, s, hm.getSerializer(req.getPartSerializer()), v));
 						}
 					} else {
-						res.setHeader(new HttpPart(n, RESPONSE_HEADER, hm.getSchema(), hm.getSerializer(req.getPartSerializer()), req.getSerializerSessionArgs(), ho));
+						res.setHeader(new HttpPart(n, RESPONSE_HEADER, hm.getSchema(), hm.getSerializer(req.getPartSerializer()), ho));
 					}
 				} catch (Exception e) {
 					throw new InternalServerError(e, "Could not set header ''{0}''", hm.getPartName());

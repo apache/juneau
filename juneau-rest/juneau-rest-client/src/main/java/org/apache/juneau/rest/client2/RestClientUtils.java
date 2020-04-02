@@ -76,20 +76,20 @@ class RestClientUtils {
 		return l;
 	}
 
-	static Header toHeader(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
+	static Header toHeader(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema) {
 		return new SerializedHeader(name, value, serializer, schema, flags.contains(SKIP_IF_EMPTY));
 	}
 
-	static NameValuePair toQuery(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
+	static NameValuePair toQuery(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema) {
 		return new SerializedNameValuePair(name, value, QUERY,  serializer, schema, flags.contains(SKIP_IF_EMPTY));
 	}
 
-	static NameValuePair toFormData(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
+	static NameValuePair toFormData(EnumSet<AddFlag> flags, String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema) {
 		return new SerializedNameValuePair(name, value, FORMDATA,  serializer, schema, flags.contains(SKIP_IF_EMPTY));
 	}
 
 	@SuppressWarnings("rawtypes")
-	static List<Header> toHeaders(EnumSet<AddFlag> flags, Map headers, HttpPartSerializer serializer, HttpPartSchema schema) {
+	static List<Header> toHeaders(EnumSet<AddFlag> flags, Map headers, HttpPartSerializerSession serializer, HttpPartSchema schema) {
 		List<Header> l = new ArrayList<>();
 		for (Map.Entry e : (Set<Map.Entry>)headers.entrySet())
 			l.add(new SerializedHeader(stringify(e.getKey()), e.getValue(), serializer, null, flags.contains(SKIP_IF_EMPTY)));
@@ -97,7 +97,7 @@ class RestClientUtils {
 	}
 
 	@SuppressWarnings("rawtypes")
-	static List<NameValuePair> toQuery(EnumSet<AddFlag> flags, Map params, HttpPartSerializer serializer, HttpPartSchema schema) {
+	static List<NameValuePair> toQuery(EnumSet<AddFlag> flags, Map params, HttpPartSerializerSession serializer, HttpPartSchema schema) {
 		List<NameValuePair> l = new ArrayList<>();
 		for (Map.Entry e : (Set<Map.Entry>)params.entrySet())
 			l.add(new SerializedNameValuePair(stringify(e.getKey()), e.getValue(), QUERY, serializer, null, flags.contains(SKIP_IF_EMPTY)));
@@ -105,7 +105,7 @@ class RestClientUtils {
 	}
 
 	@SuppressWarnings("rawtypes")
-	static List<NameValuePair> toFormData(EnumSet<AddFlag> flags, Map params, HttpPartSerializer serializer, HttpPartSchema schema) {
+	static List<NameValuePair> toFormData(EnumSet<AddFlag> flags, Map params, HttpPartSerializerSession serializer, HttpPartSchema schema) {
 		List<NameValuePair> l = new ArrayList<>();
 		for (Map.Entry e : (Set<Map.Entry>)params.entrySet())
 			l.add(new SerializedNameValuePair(stringify(e.getKey()), e.getValue(), FORMDATA, serializer, null, flags.contains(SKIP_IF_EMPTY)));

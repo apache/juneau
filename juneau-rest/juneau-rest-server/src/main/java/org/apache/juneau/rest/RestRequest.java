@@ -117,6 +117,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private SerializerSessionArgs serializerSessionArgs;
 	private ParserSessionArgs parserSessionArgs;
 	private RestResponse res;
+	private HttpPartSerializerSession partSerializerSession;
+	private HttpPartParserSession partParserSession;
 
 	/**
 	 * Constructor.
@@ -192,15 +194,17 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.javaMethod = rjm.method;
 		this.properties = properties;
 		this.beanSession = rjm.createSession();
+		this.partParserSession = rjm.partParser.createPartSession(getParserSessionArgs());
+		this.partSerializerSession = rjm.partSerializer.createPartSession(getSerializerSessionArgs());
 		this.pathParams
-			.parser(rjm.partParser);
+			.parser(partParserSession);
 		this.queryParams
 			.addDefault(rjm.defaultQuery)
-			.parser(rjm.partParser);
+			.parser(partParserSession);
 		this.headers
 			.addDefault(rjm.reqHeaders)
 			.addDefault(context.getReqHeaders())
-			.parser(rjm.partParser);
+			.parser(partParserSession);
 		this.attrs = new RequestAttributes(this, rjm.reqAttrs);
 		this.body
 			.encoders(rjm.encoders)
@@ -659,7 +663,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public RequestFormData getFormData() throws InternalServerError {
 		try {
 			if (formData == null) {
-				formData = new RequestFormData(this, restJavaMethod == null ? OpenApiParser.DEFAULT : restJavaMethod.partParser);
+				formData = new RequestFormData(this, getPartParser());
 				if (! body.isLoaded()) {
 					formData.putAll(getParameterMap());
 				} else {
@@ -1156,8 +1160,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The part serializer associated with this request.
 	 */
-	public HttpPartParser getPartParser() {
-		return restJavaMethod == null ? OpenApiParser.DEFAULT : restJavaMethod.partParser;
+	public HttpPartParserSession getPartParser() {
+		return partParserSession == null ? OpenApiParser.DEFAULT.createPartSession(null) : partParserSession;
 	}
 
 	/**
@@ -1165,8 +1169,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The part serializer associated with this request.
 	 */
-	public HttpPartSerializer getPartSerializer() {
-		return restJavaMethod == null ? OpenApiSerializer.DEFAULT : restJavaMethod.partSerializer;
+	public HttpPartSerializerSession getPartSerializer() {
+		return partSerializerSession == null ? OpenApiSerializer.DEFAULT.createPartSession(null) : partSerializerSession;
 	}
 
 	/**
@@ -1656,7 +1660,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 						RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
 						if (pm != null) {
-							HttpPartParser pp = pm.getParser(getPartParser());
+							HttpPartParserSession pp = pm.getParser(getPartParser());
 							HttpPartSchema schema = pm.getSchema();
 							String name = pm.getPartName();
 							ClassMeta<?> type = getContext().getClassMeta(method.getGenericReturnType());

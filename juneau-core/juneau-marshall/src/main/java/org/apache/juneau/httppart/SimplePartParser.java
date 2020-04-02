@@ -47,6 +47,10 @@ public class SimplePartParser extends BaseHttpPartParser {
 	/** Reusable instance of {@link SimplePartParser}, all default settings. */
 	public static final SimplePartParser DEFAULT = new SimplePartParser();
 
+	/** Reusable instance of {@link SimplePartParser}, all default settings. */
+	public static final SimplePartParserSession DEFAULT_SESSION = DEFAULT.createPartSession(null);
+
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------

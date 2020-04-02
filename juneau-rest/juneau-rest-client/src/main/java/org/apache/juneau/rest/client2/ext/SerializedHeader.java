@@ -38,7 +38,7 @@ public final class SerializedHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 
 	private Object value;
-	private HttpPartSerializer serializer;
+	private HttpPartSerializerSession serializer;
 	private HttpPartSchema schema;
 	private boolean skipIfEmpty;
 
@@ -65,7 +65,7 @@ public final class SerializedHeader extends BasicHeader {
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
 	 */
-	public SerializedHeader(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema, boolean skipIfEmpty) {
+	public SerializedHeader(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		super(name, null);
 		this.value = value;
 		this.serializer = serializer;
@@ -86,7 +86,7 @@ public final class SerializedHeader extends BasicHeader {
 	public static class Builder {
 		String name;
 		Object value;
-		HttpPartSerializer serializer;
+		HttpPartSerializerSession serializer;
 		HttpPartSchema schema;
 
 		/**
@@ -117,7 +117,7 @@ public final class SerializedHeader extends BasicHeader {
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder serializer(HttpPartSerializer value) {
+		public Builder serializer(HttpPartSerializerSession value) {
 			return serializer(value, true);
 		}
 
@@ -128,7 +128,7 @@ public final class SerializedHeader extends BasicHeader {
 		 * @param overwrite If <jk>true</jk>, overwrites the existing value if the old value is <jk>null</jk>.
 		 * @return This object (for method chaining).
 		 */
-		public Builder serializer(HttpPartSerializer value, boolean overwrite) {
+		public Builder serializer(HttpPartSerializerSession value, boolean overwrite) {
 			if (overwrite || serializer == null)
 				this.serializer = value;
 			return this;
@@ -166,7 +166,7 @@ public final class SerializedHeader extends BasicHeader {
 			}
 			if (isEmpty(value) && skipIfEmpty && schema.getDefault() == null)
 				return null;
-			return serializer.createPartSession(null).serialize(HttpPartType.HEADER, schema, value);
+			return serializer.serialize(HttpPartType.HEADER, schema, value);
 		} catch (SchemaValidationException e) {
 			throw new FormattedRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
 		} catch (SerializeException e) {
