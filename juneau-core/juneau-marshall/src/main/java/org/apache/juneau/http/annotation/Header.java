@@ -120,6 +120,23 @@ public @interface Header {
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
+	/**
+	 * Denotes a multi-part parameter (e.g. multiple entries with the same name).
+	 *
+	 * <h5 class='figure'>Example</h5>
+	 * 	<jk>public void</jk> doPost(
+	 * 		<ja>@Header</ja>(name=<js>"Beans"</js>, multi=<jk>true</jk>) MyBean[] beans
+	 * 	) {
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Meant to be used on multi-part parameters (e.g. <js>"Header: h1"</js>, <js>"Header: h2"</js> instead of <js>"Header: @(h1,h2)"</js>)
+	 * 	<li>
+	 * 		The data type must be a collection or array type.
+	 * </ul>
+	 */
+	boolean multi() default false;
+
 	//=================================================================================================================
 	// Attributes common to all Swagger Parameter objects
 	//=================================================================================================================

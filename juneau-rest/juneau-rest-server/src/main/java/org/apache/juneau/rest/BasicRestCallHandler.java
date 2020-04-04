@@ -344,6 +344,9 @@ public class BasicRestCallHandler implements RestCallHandler {
 
 		call.exception(e);
 
+		if (call.isDebug())
+			e.printStackTrace();
+
 		int occurrence = context == null ? 0 : context.getStackTraceOccurrence(e);
 
 		int code = 500;

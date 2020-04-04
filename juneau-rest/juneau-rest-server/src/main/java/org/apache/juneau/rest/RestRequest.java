@@ -1860,6 +1860,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return inner;
 	}
 
+	<T> ClassMeta<T> getClassMeta(Type type, Type[] args) {
+		return beanSession.getClassMeta(type, args);
+	}
+
+	<T> ClassMeta<T> getClassMeta(Class<T> type) {
+		return beanSession.getClassMeta(type);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------

@@ -154,14 +154,15 @@ public final class RestResponse implements HttpResponse {
 	 *
 	 * @param validCodes The list of valid codes.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException If assertion fails.
+	 * @throws RestCallException If REST call failed.
+	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertStatusCode(int...validCodes) throws RestCallException {
+	public RestResponse assertStatusCode(int...validCodes) throws RestCallException, AssertionError {
 		int sc = getStatusCode();
 		for (int c : validCodes)
 			if (c == sc)
 				return this;
-		throw new RestCallException("Response did not have the expected status code.\n\tExpected=[{0}]\n\tActual=[{1}]", validCodes, sc);
+		throw new BasicAssertionError("Response did not have the expected status code.\n\tExpected=[{0}]\n\tActual=[{1}]", validCodes, sc);
 	}
 
 	/**
@@ -169,13 +170,14 @@ public final class RestResponse implements HttpResponse {
 	 *
 	 * @param test The test.
 	 * @return This object (for method chaining).
-	 * @throws RestCallException If assertion fails.
+	 * @throws RestCallException If REST call failed.
+	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertStatusCode(Predicate<Integer> test) throws RestCallException {
+	public RestResponse assertStatusCode(Predicate<Integer> test) throws RestCallException, AssertionError {
 		int sc = getStatusCode();
 		if (test.test(sc))
 			return this;
-		throw new RestCallException("Response did not have the expected status code.\n\tActual=[{0}]", sc);
+		throw new BasicAssertionError("Response did not have the expected status code.\n\tActual=[{0}]", sc);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

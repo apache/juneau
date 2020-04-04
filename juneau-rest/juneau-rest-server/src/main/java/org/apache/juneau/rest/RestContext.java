@@ -3816,22 +3816,8 @@ public final class RestContext extends BeanContext {
 				.create()
 				.append(getInstanceArrayProperty(REST_parsers, Parser.class, new Parser[0], resourceResolver, resource, ps))
 				.build();
-			partSerializer =
-				(HttpPartSerializer)
-				SerializerGroup
-				.create()
-				.append(getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, OpenApiSerializer.class, resourceResolver, resource, ps))
-				.build()
-				.getSerializers()
-				.get(0);
-			partParser =
-				(HttpPartParser)
-				ParserGroup
-				.create()
-				.append(getInstanceProperty(REST_partParser, HttpPartParser.class, OpenApiParser.class, resourceResolver, resource, ps))
-				.build()
-				.getParsers()
-				.get(0);
+			partSerializer = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, OpenApiSerializer.class, resourceResolver, resource, ps);
+			partParser = getInstanceProperty(REST_partParser, HttpPartParser.class, OpenApiParser.class, resourceResolver, resource, ps);
 			jsonSchemaGenerator =
 				JsonSchemaGenerator
 				.create()

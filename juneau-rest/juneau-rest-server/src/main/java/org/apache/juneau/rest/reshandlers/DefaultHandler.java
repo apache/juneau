@@ -69,6 +69,8 @@ public class DefaultHandler implements ResponseHandler {
 			if (isThrowable) {
 				res.setHeaderSafe("Exception-Name", rm.getClassMeta().getName());
 				res.setHeaderSafe("Exception-Message", ((Throwable)o).getMessage());
+				if (req.isDebug())
+					((Throwable)o).printStackTrace();
 			}
 
 			ResponseBeanPropertyMeta stm = rm.getStatusMethod();

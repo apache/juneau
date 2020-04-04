@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
+import java.lang.reflect.Type;
 import java.util.*;
 
 import javax.servlet.http.*;
@@ -120,20 +121,12 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	/**
 	 * Returns a form-data parameter value.
 	 *
-	 * <p>
-	 * Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
-	 *
 	 * <ul class='notes'>
 	 * 	<li>
+	 * 		Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
+	 * 	<li>
 	 * 		This method returns the raw unparsed value, and differs from calling
-	 * 		<code>get(name, String.<jk>class</jk>)</code> which will convert the value from UON
-	 * 		notation:
-	 * 		<ul>
-	 * 			<li><js>"null"</js> =&gt; <jk>null</jk>
-	 * 			<li><js>"'null'"</js> =&gt; <js>"null"</js>
-	 * 			<li><js>"'foo bar'"</js> =&gt; <js>"foo bar"</js>
-	 * 			<li><js>"foo~~bar"</js> =&gt; <js>"foo~bar"</js>
-	 * 		</ul>
+	 * 		<code>get(name, String.<jk>class</jk>)</code> which uses the {@link HttpPartParser} for parsing the value.
 	 * </ul>
 	 *
 	 * @param name The form-data parameter name.
@@ -154,7 +147,15 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #getString(String)} except returns a default value if <jk>null</jk> or empty.
+	 * Returns a form-data parameter value.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
+	 * 	<li>
+	 * 		This method returns the raw unparsed value, and differs from calling
+	 * 		<code>get(name, String.<jk>class</jk>)</code> which uses the {@link HttpPartParser} for parsing the value.
+	 * </ul>
 	 *
 	 * @param name The form-data parameter name.
 	 * @param def The default value.
@@ -166,7 +167,15 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #getString(String)} but converts the value to an integer.
+	 * Returns a form-data parameter value as an integer.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
+	 * 	<li>
+	 * 		This method returns the raw unparsed value, and differs from calling
+	 * 		<code>get(name, Integer.<jk>class</jk>)</code> which uses the {@link HttpPartParser} for parsing the value.
+	 * </ul>
 	 *
 	 * @param name The form-data parameter name.
 	 * @return The parameter value, or <c>0</c> if parameter does not exist or is <jk>null</jk> or empty.
@@ -176,7 +185,15 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #getString(String,String)} but converts the value to an integer.
+	 * Returns a form-data parameter value as an integer.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
+	 * 	<li>
+	 * 		This method returns the raw unparsed value, and differs from calling
+	 * 		<code>get(name, Integer.<jk>class</jk>)</code> which uses the {@link HttpPartParser} for parsing the value.
+	 * </ul>
 	 *
 	 * @param name The form-data parameter name.
 	 * @param def The default value.
@@ -188,7 +205,15 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #getString(String)} but converts the value to a boolean.
+	 * Returns a form-data parameter value as a boolean.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
+	 * 	<li>
+	 * 		This method returns the raw unparsed value, and differs from calling
+	 * 		<code>get(name, Boolean.<jk>class</jk>)</code> which uses the {@link HttpPartParser} for parsing the value.
+	 * </ul>
 	 *
 	 * @param name The form-data parameter name.
 	 * @return The parameter value, or <jk>false</jk> if parameter does not exist or is <jk>null</jk> or empty.
@@ -198,7 +223,15 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #getString(String,String)} but converts the value to a boolean.
+	 * Returns a form-data parameter value as a boolean.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
+	 * 	<li>
+	 * 		This method returns the raw unparsed value, and differs from calling
+	 * 		<code>get(name, Boolean.<jk>class</jk>)</code> which uses the {@link HttpPartParser} for parsing the value.
+	 * </ul>
 	 *
 	 * @param name The form-data parameter name.
 	 * @param def The default value.
@@ -246,7 +279,84 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #get(String, Object, Class)} but allows you to override the part parser.
+	 * Returns the specified form-data parameter value converted to a POJO using the {@link HttpPartParser} registered with the resource.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Pipe-delimited list of comma-delimited numbers</jc>
+	 * 	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>()
+	 * 		.items(
+	 * 			HttpPartSchema.<jsm>create</jsm>()
+	 * 			.collectionFormat(<js>"pipes"</js>)
+	 * 			.items(
+	 * 				HttpPartSchema.<jsm>create</jsm>()
+	 * 				.collectionFormat(<js>"csv"</js>)
+	 * 				.type(<js>"integer"</js>)
+	 * 				.format(<js>"int64"</js>)
+	 * 				.minimum(<js>"0"</js>)
+	 * 				.maximum(<js>"100"</js>)
+	 * 				.minLength(1)
+	 * 				.maxLength=(10)
+	 * 			)
+	 * 		)
+	 * 		.build();
+	 *
+	 * 	<jc>// Parse into a 2d long array.</jc>
+	 * 	<jk>long</jk>[][] myparams = formData.get(schema, <js>"myparam"</js>, <jk>long</jk>[][].<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
+	 *
+	 * @param schema
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 	<br>Only used if parser is schema-aware (e.g. {@link OpenApiParser}).
+	 * @param name The parameter name.
+	 * @param type The class type to convert the parameter value to.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
+	 */
+	public <T> T get(HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
+		return getInner(null, schema, name, null, getClassMeta(type));
+	}
+
+	/**
+	 * Returns the specified form-data parameter value converted to a POJO using the specified {@link HttpPartParser}.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Pipe-delimited list of comma-delimited numbers</jc>
+	 * 	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>()
+	 * 		.items(
+	 * 			HttpPartSchema.<jsm>create</jsm>()
+	 * 			.collectionFormat(<js>"pipes"</js>)
+	 * 			.items(
+	 * 				HttpPartSchema.<jsm>create</jsm>()
+	 * 				.collectionFormat(<js>"csv"</js>)
+	 * 				.type(<js>"integer"</js>)
+	 * 				.format(<js>"int64"</js>)
+	 * 				.minimum(<js>"0"</js>)
+	 * 				.maximum(<js>"100"</js>)
+	 * 				.minLength(1)
+	 * 				.maxLength=(10)
+	 * 			)
+	 * 		)
+	 * 		.build();
+	 *
+	 *  HttpPartParserSession parser = OpenApiParser.<jsf>DEFAULT</jsf>.createSession();
+	 *
+	 * 	<jc>// Parse into a 2d long array.</jc>
+	 * 	<jk>long</jk>[][] myparams = formData.get(parser, schema, <js>"myparam"</js>, <jk>long</jk>[][].<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
 	 *
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
@@ -268,7 +378,29 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #get(String, Class)} except returns a default value if not specified.
+	 * Returns the specified form-data parameter value converted to a POJO using the {@link HttpPartParser} registered with the resource.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Parse into an integer.</jc>
+	 * 	<jk>int</jk> myparam = formData.get(<js>"myparam"</js>, -1, <jk>int</jk>.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into an int array.</jc>
+	 * 	<jk>int</jk>[] myparam = formData.get(<js>"myparam"</js>, <jk>new int</jk>[0], <jk>int</jk>[].<jk>class</jk>);
+
+	 * 	<jc>// Parse into a bean.</jc>
+	 * 	MyBean myparam = formData.get(<js>"myparam"</js>, <jk>new</jk> MyBean(), MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of objects.</jc>
+	 * 	List myparam = formData.get(<js>"myparam"</js>, Collections.<jsm>emptyList</jsm>(), LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of object keys/values.</jc>
+	 * 	Map myparam = formData.get(<js>"myparam"</js>, Collections.<jsm>emptyMap</jsm>(), TreeMap.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
 	 *
 	 * @param name The parameter name.
 	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
@@ -283,7 +415,85 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #get(String, Object, Class)} but allows you to override the part parser.
+	 * Returns the specified form-data parameter value converted to a POJO using the {@link HttpPartParser} registered with the resource.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Pipe-delimited list of comma-delimited numbers</jc>
+	 * 	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>()
+	 * 		.items(
+	 * 			HttpPartSchema.<jsm>create</jsm>()
+	 * 			.collectionFormat(<js>"pipes"</js>)
+	 * 			.items(
+	 * 				HttpPartSchema.<jsm>create</jsm>()
+	 * 				.collectionFormat(<js>"csv"</js>)
+	 * 				.type(<js>"integer"</js>)
+	 * 				.format(<js>"int64"</js>)
+	 * 				.minimum(<js>"0"</js>)
+	 * 				.maximum(<js>"100"</js>)
+	 * 				.minLength(1)
+	 * 				.maxLength=(10)
+	 * 			)
+	 * 		)
+	 * 		.build();
+	 *
+	 * 	<jc>// Parse into a 2d long array.</jc>
+	 * 	<jk>long</jk>[][] myparams = formData.get(schema, <js>"myparam"</js>, <jk>new long</jk>[][0], <jk>long</jk>[][].<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
+	 *
+	 * @param schema
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 	<br>Only used if parser is schema-aware (e.g. {@link OpenApiParser}).
+	 * @param name The parameter name.
+	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
+	 * @param type The class type to convert the parameter value to.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
+	 */
+	public <T> T get(HttpPartSchema schema, String name, T def, Class<T> type) throws BadRequest, InternalServerError {
+		return getInner(null, schema, name, def, getClassMeta(type));
+	}
+
+	/**
+	 * Returns the specified form-data parameter value converted to a POJO using the specified {@link HttpPartParser}.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Pipe-delimited list of comma-delimited numbers</jc>
+	 * 	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>()
+	 * 		.items(
+	 * 			HttpPartSchema.<jsm>create</jsm>()
+	 * 			.collectionFormat(<js>"pipes"</js>)
+	 * 			.items(
+	 * 				HttpPartSchema.<jsm>create</jsm>()
+	 * 				.collectionFormat(<js>"csv"</js>)
+	 * 				.type(<js>"integer"</js>)
+	 * 				.format(<js>"int64"</js>)
+	 * 				.minimum(<js>"0"</js>)
+	 * 				.maximum(<js>"100"</js>)
+	 * 				.minLength(1)
+	 * 				.maxLength=(10)
+	 * 			)
+	 * 		)
+	 * 		.build();
+	 *
+	 *  HttpPartParserSession parser = OpenApiParser.<jsf>DEFAULT</jsf>.createSession();
+	 *
+	 * 	<jc>// Parse into a 2d long array.</jc>
+	 * 	<jk>long</jk>[][] myparams = formData.get(parser, schema, <js>"myparam"</js>, <jk>new long</jk>[][0], <jk>long</jk>[][].<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
 	 *
 	 * @param parser
 	 * 	The parser to use for parsing the string value.
@@ -303,47 +513,6 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 */
 	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, Class<T> type) throws BadRequest, InternalServerError {
 		return getInner(parser, schema, name, def, getClassMeta(type));
-	}
-
-	/**
-	 * Same as {@link #get(String, Class)} except for use on multi-part parameters
-	 * (e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=@(1,2,3)"</js>)
-	 *
-	 * <p>
-	 * This method must only be called when parsing into classes of type Collection or array.
-	 *
-	 * @param name The parameter name.
-	 * @param type The class type to convert the parameter value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws BadRequest Thrown if input could not be parsed.
-	 * @throws InternalServerError Thrown if any other exception occurs.
-	 */
-	public <T> T getAll(String name, Class<T> type) throws BadRequest, InternalServerError {
-		return getAllInner(null, null, name, null, getClassMeta(type));
-	}
-
-	/**
-	 * Same as {@link #getAll(String, Class)} but allows you to override the part parser.
-	 *
-	 * <p>
-	 * This method must only be called when parsing into classes of type Collection or array.
-	 *
-	 * @param parser
-	 * 	The parser to use for parsing the string value.
-	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method.
-	 * @param schema
-	 * 	The schema object that defines the format of the input.
-	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
-	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Only used if parser is schema-aware (e.g. {@link OpenApiParser}).
-	 * @param name The parameter name.
-	 * @param type The class type to convert the parameter value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
-	 * @throws InternalServerError Thrown if any other exception occurs.
-	 */
-	public <T> T getAll(HttpPartParserSession parser, HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
-		return getAllInner(parser, schema, name, null, getClassMeta(type));
 	}
 
 	/**
@@ -393,7 +562,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	public <T> T get(String name, Type type, Type...args) throws BadRequest, InternalServerError {
 		return getInner(null, null, name, null, this.<T>getClassMeta(type, args));
 	}
-
+	
 	/**
 	 * Same as {@link #get(String, Type, Type...)} but allows you to override the part parser.
 	 *
@@ -472,6 +641,148 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
+	 * Returns the specified form-data parameter values converted POJO using the {@link HttpPartParser} registered with the resource.
+	 *
+	 * <p>
+	 * Meant to be used on multi-part parameters (e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=@(1,2,3)"</js>)
+	 *
+	 * <p>
+	 * This method must only be called when parsing into classes of type Collection or array.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Parse into multiple integers.</jc>
+	 * 	<jk>int</jk>[] myparam = formData.getAll(<js>"myparam"</js>, <jk>int</jk>[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into multiple int arrays.</jc>
+	 * 	<jk>int</jk>[][] myparam = formData.getAll(<js>"myparam"</js>, <jk>int</jk>[][].<jk>class</jk>);
+
+	 * 	<jc>// Parse into multiple beans.</jc>
+	 * 	MyBean[] myparam = formData.getAll(<js>"myparam"</js>, MyBean[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into multiple linked-lists of objects.</jc>
+	 * 	List[] myparam = formData.getAll(<js>"myparam"</js>, LinkedList[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into multiple maps of object keys/values.</jc>
+	 * 	Map[] myparam = formData.getAll(<js>"myparam"</js>, TreeMap[].<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
+	 *
+	 * @param name The parameter name.
+	 * @param type The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
+	 */
+	public <T> T getAll(String name, Class<T> type) throws BadRequest, InternalServerError {
+		return getAllInner(null, null, name, getClassMeta(type));
+	}
+
+	/**
+	 * Returns the specified form-data parameter values converted to POJOs using the {@link HttpPartParser} registered with the resource.
+	 *
+	 * <p>
+	 * Meant to be used on multi-part parameters (e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=@(1,2,3)"</js>)
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Pipe-delimited list of comma-delimited numbers</jc>
+	 * 	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>()
+	 * 		.items(
+	 * 			HttpPartSchema.<jsm>create</jsm>()
+	 * 			.collectionFormat(<js>"pipes"</js>)
+	 * 			.items(
+	 * 				HttpPartSchema.<jsm>create</jsm>()
+	 * 				.collectionFormat(<js>"csv"</js>)
+	 * 				.type(<js>"integer"</js>)
+	 * 				.format(<js>"int64"</js>)
+	 * 				.minimum(<js>"0"</js>)
+	 * 				.maximum(<js>"100"</js>)
+	 * 				.minLength(1)
+	 * 				.maxLength=(10)
+	 * 			)
+	 * 		)
+	 * 		.build();
+	 *
+	 * 	<jc>// Parse into multiple 2d long arrays.</jc>
+	 * 	<jk>long</jk>[][][] myparams = formData.getAll(schema, <js>"myparam"</js>, <jk>long</jk>[][][].<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
+	 *
+	 * @param schema
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 	<br>Only used if parser is schema-aware (e.g. {@link OpenApiParser}).
+	 * @param name The parameter name.
+	 * @param type The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
+	 */
+	public <T> T getAll(HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
+		return getAllInner(null, schema, name, getClassMeta(type));
+	}
+
+	/**
+	 * Returns the specified form-data parameter values converted to POJOs using the specified {@link HttpPartParser}.
+	 *
+	 * <p>
+	 * Meant to be used on multi-part parameters (e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=@(1,2,3)"</js>)
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Pipe-delimited list of comma-delimited numbers</jc>
+	 * 	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>()
+	 * 		.items(
+	 * 			HttpPartSchema.<jsm>create</jsm>()
+	 * 			.collectionFormat(<js>"pipes"</js>)
+	 * 			.items(
+	 * 				HttpPartSchema.<jsm>create</jsm>()
+	 * 				.collectionFormat(<js>"csv"</js>)
+	 * 				.type(<js>"integer"</js>)
+	 * 				.format(<js>"int64"</js>)
+	 * 				.minimum(<js>"0"</js>)
+	 * 				.maximum(<js>"100"</js>)
+	 * 				.minLength(1)
+	 * 				.maxLength=(10)
+	 * 			)
+	 * 		)
+	 * 		.build();
+	 *
+	 * 	<jc>// Parse into multiple 2d long arrays.</jc>
+	 * 	<jk>long</jk>[][][] myparams = formData.getAll(schema, <js>"myparam"</js>, <jk>long</jk>[][][].<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
+	 *
+	 * @param parser
+	 * 	The parser to use for parsing the string value.
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method.
+	 * @param schema
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 	<br>Only used if parser is schema-aware (e.g. {@link OpenApiParser}).
+	 * @param name The parameter name.
+	 * @param type The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
+	 */
+	public <T> T getAll(HttpPartParserSession parser, HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
+		return getAllInner(parser, schema, name, getClassMeta(type));
+	}
+
+	/**
 	 * Same as {@link #get(String, Type, Type...)} except for use on multi-part parameters
 	 * (e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=@(1,2,3)"</js>)
 	 *
@@ -491,7 +802,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
 	public <T> T getAll(String name, Type type, Type...args) throws BadRequest, InternalServerError {
-		return getAllInner(null, null, name, null, this.<T>getClassMeta(type, args));
+		return getAllInner(null, null, name, this.<T>getClassMeta(type, args));
 	}
 
 	/**
@@ -518,11 +829,13 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
 	public <T> T getAll(HttpPartParserSession parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
-		return getAllInner(parser, schema, name, null, this.<T>getClassMeta(type, args));
+		return getAllInner(parser, schema, name, this.<T>getClassMeta(type, args));
 	}
 
 	/* Workhorse method */
 	private <T> T getInner(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+		if (parser == null)
+			parser = req.getPartParser();
 		try {
 			if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 				OMap m = new OMap();
@@ -531,7 +844,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 					HttpPartSchema pschema = schema == null ? null : schema.getProperty(k);
 					ClassMeta<?> cm2 = cm.getValueType();
 					if (cm.getValueType().isCollectionOrArray())
-						m.put(k, getAllInner(parser, pschema, k, null, cm2));
+						m.put(k, getAllInner(parser, pschema, k, cm2));
 					else
 						m.put(k, getInner(parser, pschema, k, null, cm2));
 				}
@@ -550,10 +863,8 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 
 	/* Workhorse method */
 	@SuppressWarnings("rawtypes")
-	<T> T getAllInner(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+	<T> T getAllInner(HttpPartParserSession parser, HttpPartSchema schema, String name, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		String[] p = get(name);
-		if (p == null)
-			return def;
 		if (schema == null)
 			schema = HttpPartSchema.DEFAULT;
 		try {
@@ -575,7 +886,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 		} catch (Exception e) {
 			throw new InternalServerError(e, "Could not parse form-data parameter ''{0}''.", name) ;
 		}
-		throw new InternalServerError("Invalid call to getParameters(String, ClassMeta).  Class type must be a Collection or array.");
+		throw new InternalServerError("Invalid call to getAll(String, ClassMeta).  Class type must be a Collection or array.");
 	}
 
 	private <T> T parse(HttpPartParserSession parser, HttpPartSchema schema, String val, ClassMeta<T> c) throws SchemaValidationException, ParseException {

@@ -33,6 +33,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
@@ -2182,30 +2183,57 @@ public class RestClientBuilderTest {
 		}
 	}
 
-//	@Test
-//	public void k17_restClient_partParserClass() throws Exception {
-//		RestClient rc = MockRestClient
-//			.create(A.class)
-//			.simpleJson()
-//			.serializers(XmlSerializer.DEFAULT,JsonSerializer.DEFAULT)
-//			.parsers(XmlParser.DEFAULT,JsonParser.DEFAULT)
-//			.build();
-//
-//	}
-////	public RestClientBuilder partParser(Class<? extends HttpPartParser> value) {
-//
-//	@Test
-//	public void k18_restClient_partParserObject() throws Exception { fail(); }
-////	public RestClientBuilder partParser(HttpPartParser value) {
-//
-//	@Test
-//	public void k19_restClient_partSerializerClass() throws Exception { fail(); }
-////	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
-//
-//	@Test
-//	public void k20_restClient_partSerializerObject() throws Exception { fail(); }
-////	public RestClientBuilder partSerializer(HttpPartSerializer value) {
-//
+	@Rest(partSerializer=XPartSerializer.class, partParser=XPartParser.class,debug="true")
+	public static class K extends BasicRest {
+		@RestMethod(path="/")
+		public Ok get(@Header(name="Foo",multi=true) Bean[] foo, org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) throws Exception {
+			assertEquals(2, foo.length);
+			assertObjectEquals("['x{f:1}','x{f:1}']", req.getHeaders().getAll("Foo", String[].class));
+			assertEquals("{f:1}", foo[0].toString());
+			assertEquals("{f:1}", foo[1].toString());
+			res.header("Foo", bean);
+			return Ok.OK;
+		}
+	}
+
+	@Test
+	public void k17_restClient_partSerializer_partParser_Class() throws Exception {
+		RestClient rc = MockRestClient
+			.create(K.class)
+			.simpleJson()
+			.header("Foo",bean)
+			.partSerializer(XPartSerializer.class)
+			.partParser(XPartParser.class)
+			.header("")
+			.build();
+		Bean b = rc
+			.get("/")
+			.header("Foo",bean)
+			.run()
+			.getHeader("Foo").assertValue("x{f:1}")
+			.getHeader("Foo").as(Bean.class);
+		assertEquals("{f:1}", b.toString());
+	}
+
+	@Test
+	public void k18_restClient_partSerializer_partParser_Object() throws Exception {
+		RestClient rc = MockRestClient
+			.create(K.class)
+			.simpleJson()
+			.header("Foo",bean)
+			.partSerializer(new XPartSerializer())
+			.partParser(new XPartParser())
+			.header("")
+			.build();
+		Bean b = rc
+			.get("/")
+			.header("Foo",bean)
+			.run()
+			.getHeader("Foo").assertValue("x{f:1}")
+			.getHeader("Foo").as(Bean.class);
+		assertEquals("{f:1}", b.toString());
+	}
+
 //	@Test
 //	public void k21_restClient_serializerClass() throws Exception { fail(); }
 ////	public RestClientBuilder serializer(Class<? extends Serializer> value) {

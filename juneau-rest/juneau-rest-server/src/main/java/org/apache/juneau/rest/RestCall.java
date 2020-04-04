@@ -366,4 +366,15 @@ public class RestCall {
 			return rres.getOutput();
 		return null;
 	}
+
+	/**
+	 * Shortcut for calling <c>getRestRequest().isDebug()</c>.
+	 *
+	 * @return <jk>true</jk> if debug is enabled for this request.
+	 */
+	public boolean isDebug() {
+		if (rreq != null)
+			return rreq.isDebug();
+		return false;
+	}
 }

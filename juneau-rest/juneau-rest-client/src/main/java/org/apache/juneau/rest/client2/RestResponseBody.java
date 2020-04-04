@@ -1542,12 +1542,13 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * @param value The value to check against.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If assertion fails.
+	 * @throws RestCallException If REST call failed.
+	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertValue(String value) throws RestCallException {
+	public RestResponse assertValue(String value) throws RestCallException, AssertionError {
 		String text = asString();
 		if (! StringUtils.isEquals(value, text))
-			throw new RestCallException("Response did not have the expected value for body.\n\tExpected=[{0}]\n\tActual=[{1}]", value, text);
+			throw new BasicAssertionError("Response did not have the expected value for body.\n\tExpected=[{0}]\n\tActual=[{1}]", value, text);
 		return response;
 	}
 
@@ -1576,13 +1577,14 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * @param values The values to check against.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If assertion fails.
+	 * @throws AssertionError If assertion failed.
+	 * @throws RestCallException If REST call failed.
 	 */
-	public RestResponse assertContains(String...values) throws RestCallException {
+	public RestResponse assertContains(String...values) throws RestCallException, AssertionError {
 		String text = asString();
 		for (String substring : values)
 			if (! StringUtils.contains(text, substring))
-				throw new RestCallException("Response did not have the expected substring for body.\n\tExpected=[{0}]\n\tBody=[{1}]", substring, text);
+				throw new BasicAssertionError("Response did not have the expected substring for body.\n\tExpected=[{0}]\n\tBody=[{1}]", substring, text);
 		return response;
 	}
 
@@ -1611,12 +1613,13 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * @param test The predicate to use to test the body context.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If assertion fails.
+	 * @throws RestCallException If REST call failed.
+	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertValue(Predicate<String> test) throws RestCallException {
+	public RestResponse assertValue(Predicate<String> test) throws RestCallException, AssertionError {
 		String text = asString();
 		if (! test.test(text))
-			throw new RestCallException("Response did not have the expected value for body.\n\tActual=[{0}]", text);
+			throw new BasicAssertionError("Response did not have the expected value for body.\n\tActual=[{0}]", text);
 		return response;
 	}
 
@@ -1645,9 +1648,10 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * @param regex The pattern to test for.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If assertion fails.
+	 * @throws RestCallException If REST call failed.
+	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertMatches(String regex) throws RestCallException {
+	public RestResponse assertMatches(String regex) throws RestCallException, AssertionError {
 		return assertMatches(regex, 0);
 	}
 
@@ -1677,13 +1681,14 @@ public class RestResponseBody implements HttpEntity {
 	 * @param regex The pattern to test for.
 	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If assertion fails.
+	 * @throws RestCallException If REST call failed.
+	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertMatches(String regex, int flags) throws RestCallException {
+	public RestResponse assertMatches(String regex, int flags) throws RestCallException, AssertionError {
 		String text = asString();
 		Pattern p = Pattern.compile(regex, flags);
 		if (! p.matcher(text).matches())
-			throw new RestCallException("Response did not match expected pattern.\n\tpattern=[{0}]\n\tBody=[{1}]", regex, text);
+			throw new BasicAssertionError("Response did not match expected pattern.\n\tpattern=[{0}]\n\tBody=[{1}]", regex, text);
 		return response;
 	}
 
@@ -1713,12 +1718,13 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * @param pattern The pattern to test for.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If assertion fails.
+	 * @throws RestCallException If REST call failed.
+	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertMatches(Pattern pattern) throws RestCallException {
+	public RestResponse assertMatches(Pattern pattern) throws RestCallException, AssertionError {
 		String text = asString();
 		if (! pattern.matcher(text).matches())
-			throw new RestCallException("Response did not match expected pattern.\n\tpattern=[{0}]\n\tBody=[{1}]", pattern.pattern(), text);
+			throw new BasicAssertionError("Response did not match expected pattern.\n\tpattern=[{0}]\n\tBody=[{1}]", pattern.pattern(), text);
 		return response;
 	}
 

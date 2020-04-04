@@ -482,7 +482,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
 	public <T> T getAll(String name, Class<T> c) throws BadRequest, InternalServerError {
-		return getAllInner(null, null, name, null, getClassMeta(c));
+		return getAllInner(null, null, name, getClassMeta(c));
 	}
 
 	/**
@@ -506,7 +506,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
 	public <T> T getAll(String name, Type type, Type...args) throws BadRequest, InternalServerError {
-		return getAllInner(null, null, name, null, (ClassMeta<T>)getClassMeta(type, args));
+		return getAllInner(null, null, name, (ClassMeta<T>)getClassMeta(type, args));
 	}
 
 	/**
@@ -534,7 +534,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
 	public <T> T getAll(HttpPartParserSession parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
-		return getAllInner(parser, schema, name, null, (ClassMeta<T>)getClassMeta(type, args));
+		return getAllInner(parser, schema, name, getClassMeta(type, args));
 	}
 
 	/**
@@ -616,6 +616,8 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 
 	/* Workhorse method */
 	private <T> T getInner(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+		if (parser == null)
+			parser = req.getPartParser();
 		try {
 			if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 				OMap m = new OMap();
@@ -624,7 +626,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 					HttpPartSchema pschema = schema == null ? null : schema.getProperty(k);
 					ClassMeta<?> cm2 = cm.getValueType();
 					if (cm.getValueType().isCollectionOrArray())
-						m.put(k, getAllInner(parser, pschema, k, null, cm2));
+						m.put(k, getAllInner(parser, pschema, k, cm2));
 					else
 						m.put(k, getInner(parser, pschema, k, null, cm2));
 				}
@@ -643,10 +645,8 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 
 	/* Workhorse method */
 	@SuppressWarnings("rawtypes")
-	private <T> T getAllInner(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+	private <T> T getAllInner(HttpPartParserSession parser, HttpPartSchema schema, String name, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		String[] p = get(name);
-		if (p == null)
-			return def;
 		if (schema == null)
 			schema = HttpPartSchema.DEFAULT;
 		try {

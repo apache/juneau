@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -88,7 +89,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			String passThroughHeaders = req.getHeader("x-response-headers");
 			if (passThroughHeaders != null) {
 				HttpPartParser p = context.getPartParser();
-				OMap m = p.createPartSession(req.getParserSessionArgs()).parse(HttpPartType.HEADER, null, passThroughHeaders, context.getClassMeta(OMap.class));
+				OMap m = p.createPartSession(req.getParserSessionArgs()).parse(HEADER, null, passThroughHeaders, context.getClassMeta(OMap.class));
 				for (Map.Entry<String,Object> e : m.entrySet())
 					setHeaderSafe(e.getKey(), e.getValue().toString());
 			}
@@ -584,6 +585,65 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			super.setContentType(value);
 		else
 			super.setHeader(name, abbreviate(stripInvalidHttpHeaderChars(value), maxLength));
+	}
+
+	/**
+	 * Sets a header on the request.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 * @throws SchemaValidationException Header failed schema validation.
+	 * @throws SerializeException Header could not be serialized.
+	 */
+	public RestResponse header(String name, Object value) throws SchemaValidationException, SerializeException {
+		return header(null, null, name, value);
+	}
+
+	/**
+	 * Sets a header on the request.
+	 *
+	 * @param schema
+	 * 	The schema to use to serialize the header, or <jk>null</jk> to use the default schema.
+	 * @param name The header name.
+	 * @param value The header value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 * @throws SchemaValidationException Header failed schema validation.
+	 * @throws SerializeException Header could not be serialized.
+	 */
+	public RestResponse header(HttpPartSchema schema, String name, Object value) throws SchemaValidationException, SerializeException {
+		return header(null, schema, name, value);
+	}
+
+	/**
+	 * Sets a header on the request.
+	 * @param serializer
+	 * 	The serializer to use to serialize the header, or <jk>null</jk> to use the part serializer on the request.
+	 * @param schema
+	 * 	The schema to use to serialize the header, or <jk>null</jk> to use the default schema.
+	 * @param name The header name.
+	 * @param value The header value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 * @throws SchemaValidationException Header failed schema validation.
+	 * @throws SerializeException Header could not be serialized.
+	 */
+	public RestResponse header(HttpPartSerializerSession serializer, HttpPartSchema schema, String name, Object value) throws SchemaValidationException, SerializeException {
+		if (serializer == null)
+			serializer = request.getPartSerializer();
+		setHeader(name, serializer.serialize(HEADER, schema, value));
+		return this;
 	}
 
 	/**

@@ -147,7 +147,7 @@ public class RequestPath extends TreeMap<String,String> {
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
 	public <T> T get(String name, Class<T> type) throws BadRequest, InternalServerError {
-		return getInner(null, null, name, null, this.<T>getClassMeta(type));
+		return getInner(null, null, name, null, getClassMeta(type));
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class RequestPath extends TreeMap<String,String> {
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
 	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, Class<T> type) throws BadRequest, InternalServerError {
-		return getInner(parser, schema, name, null, this.<T>getClassMeta(type));
+		return getInner(parser, schema, name, null, getClassMeta(type));
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class RequestPath extends TreeMap<String,String> {
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
 	public <T> T get(String name, Type type, Type...args) throws BadRequest, InternalServerError {
-		return getInner(null, null, name, null, this.<T>getClassMeta(type, args));
+		return getInner(null, null, name, null, getClassMeta(type, args));
 	}
 
 	/**
@@ -249,11 +249,13 @@ public class RequestPath extends TreeMap<String,String> {
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
 	public <T> T get(HttpPartParserSession parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
-		return getInner(parser, schema, name, null, this.<T>getClassMeta(type, args));
+		return getInner(parser, schema, name, null, getClassMeta(type, args));
 	}
 
 	/* Workhorse method */
 	private <T> T getInner(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+		if (parser == null)
+			parser = req.getPartParser();
 		try {
 			if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 				OMap m = new OMap();

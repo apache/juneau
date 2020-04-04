@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.client2;
+package org.apache.juneau.rest;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 import java.lang.reflect.*;
@@ -28,17 +28,8 @@ import org.apache.juneau.utils.*;
 
 /**
  * Represents a single header on an HTTP response.
- *
- * <p>
- * An extension of an HttpClient {@link Header} that provides various support for converting the header to POJOs and
- * other convenience methods.
- *
- * <ul class='seealso'>
- * 	<li class='jc'>{@link RestClient}
- * 	<li class='link'>{@doc juneau-rest-client}
- * </ul>
  */
-public class RestResponseHeader implements Header {
+public class RequestHeader implements Header {
 
 	static final Header NULL_HEADER = new Header() {
 
@@ -71,7 +62,7 @@ public class RestResponseHeader implements Header {
 	 * @param response The response object.
 	 * @param header The wrapped header.  Can be <jk>null</jk>.
 	 */
-	public RestResponseHeader(RestRequest request, RestResponse response, Header header) {
+	public RequestHeader(RestRequest request, RestResponse response, Header header) {
 		this.request = request;
 		this.response = response;
 		this.header = header == null ? NULL_HEADER : header;
@@ -92,7 +83,7 @@ public class RestResponseHeader implements Header {
 	 * 	The part schema.
 	 * @return This object (for method chaining).
 	 */
-	public RestResponseHeader schema(HttpPartSchema value) {
+	public RequestHeader schema(HttpPartSchema value) {
 		this.schema = value;
 		return this;
 	}
@@ -101,14 +92,14 @@ public class RestResponseHeader implements Header {
 	 * Specifies the part parser to use for this header.
 	 *
 	 * <p>
-	 * If not specified, uses the part parser defined on the client by calling {@link RestClientBuilder#partParser(Class)}.
+	 * If not specified, uses the part parser defined on the client by calling {@link RestContextBuilder#partParser(Class)}.
 	 *
 	 * @param value
 	 * 	The new part parser to use for this header.
 	 * 	<br>If <jk>null</jk>, {@link SimplePartParser#DEFAULT} will be used.
 	 * @return This object (for method chaining).
 	 */
-	public RestResponseHeader parser(HttpPartParserSession value) {
+	public RequestHeader parser(HttpPartParserSession value) {
 		this.parser = value == null ? SimplePartParser.DEFAULT_SESSION : value;
 		return this;
 	}
@@ -184,9 +175,9 @@ public class RestResponseHeader implements Header {
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
 	 * @return The converted type, or <jk>null</jk> if header is not present.
-	 * @throws RestCallException If value could not be parsed.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public <T> T as(Type type, Type...args) throws RestCallException {
+	public <T> T as(Type type, Type...args) throws ParseException {
 		return as(request.getClassMeta(type, args));
 	}
 
@@ -198,9 +189,9 @@ public class RestResponseHeader implements Header {
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If value could not be parsed.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public <T> RestResponse as(Mutable<T> m, Type type, Type...args) throws RestCallException {
+	public <T> RestResponse as(Mutable<T> m, Type type, Type...args) throws ParseException {
 		m.set(as(type, args));
 		return response;
 	}
@@ -211,9 +202,9 @@ public class RestResponseHeader implements Header {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The converted type, or <jk>null</jk> if header is not present.
-	 * @throws RestCallException If value could not be parsed.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public <T> T as(Class<T> type) throws RestCallException {
+	public <T> T as(Class<T> type) throws ParseException {
 		return as(request.getClassMeta(type));
 	}
 
@@ -224,9 +215,9 @@ public class RestResponseHeader implements Header {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If value could not be parsed.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public <T> RestResponse as(Mutable<T> m, Class<T> type) throws RestCallException {
+	public <T> RestResponse as(Mutable<T> m, Class<T> type) throws ParseException {
 		m.set(as(type));
 		return response;
 	}
@@ -237,14 +228,10 @@ public class RestResponseHeader implements Header {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The converted type, or <jk>null</jk> if header is not present.
-	 * @throws RestCallException If value could not be parsed.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public <T> T as(ClassMeta<T> type) throws RestCallException {
-		try {
-			return parser.parse(HEADER, schema, asString(), type);
-		} catch (ParseException e) {
-			throw new RestCallException(e);
-		}
+	public <T> T as(ClassMeta<T> type) throws ParseException {
+		return parser.parse(HEADER, schema, asString(), type);
 	}
 
 	/**
@@ -254,9 +241,9 @@ public class RestResponseHeader implements Header {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If value could not be parsed.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public <T> RestResponse as(Mutable<T> m, ClassMeta<T> type) throws RestCallException {
+	public <T> RestResponse as(Mutable<T> m, ClassMeta<T> type) throws ParseException {
 		m.set(as(type));
 		return response;
 	}
@@ -268,9 +255,9 @@ public class RestResponseHeader implements Header {
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
 	 * @return The parsed value as an {@link Optional}, or an empty optional if header was not present.
-	 * @throws RestCallException If value could not be parsed.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public <T> Optional<T> asOptional(Type type, Type...args) throws RestCallException {
+	public <T> Optional<T> asOptional(Type type, Type...args) throws ParseException {
 		return Optional.ofNullable(as(type, args));
 	}
 
@@ -282,9 +269,9 @@ public class RestResponseHeader implements Header {
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If value could not be parsed.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public <T> RestResponse asOptional(Mutable<Optional<T>> m, Type type, Type...args) throws RestCallException {
+	public <T> RestResponse asOptional(Mutable<Optional<T>> m, Type type, Type...args) throws ParseException {
 		m.set(asOptional(type, args));
 		return response;
 	}
@@ -295,9 +282,9 @@ public class RestResponseHeader implements Header {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The parsed value as an {@link Optional}, or an empty optional if header was not present.
-	 * @throws RestCallException If value could not be parsed.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public <T> Optional<T> asOptional(Class<T> type) throws RestCallException {
+	public <T> Optional<T> asOptional(Class<T> type) throws ParseException {
 		return Optional.ofNullable(as(type));
 	}
 
@@ -308,9 +295,9 @@ public class RestResponseHeader implements Header {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If value could not be parsed.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public <T> RestResponse asOptional(Mutable<Optional<T>> m, Class<T> type) throws RestCallException {
+	public <T> RestResponse asOptional(Mutable<Optional<T>> m, Class<T> type) throws ParseException {
 		m.set(asOptional(type));
 		return response;
 	}
@@ -321,9 +308,9 @@ public class RestResponseHeader implements Header {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The parsed value as an {@link Optional}, or an empty optional if header was not present.
-	 * @throws RestCallException If value could not be parsed.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public <T> Optional<T> asOptional(ClassMeta<T> type) throws RestCallException {
+	public <T> Optional<T> asOptional(ClassMeta<T> type) throws ParseException {
 		return Optional.ofNullable(as(type));
 	}
 
@@ -334,9 +321,9 @@ public class RestResponseHeader implements Header {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If value could not be parsed.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public <T> RestResponse asOptional(Mutable<Optional<T>> m, ClassMeta<T> type) throws RestCallException {
+	public <T> RestResponse asOptional(Mutable<Optional<T>> m, ClassMeta<T> type) throws ParseException {
 		m.set(asOptional(type));
 		return response;
 	}
@@ -358,9 +345,8 @@ public class RestResponseHeader implements Header {
 	 *
 	 * @param pattern The regular expression pattern to match.
 	 * @return The matcher.
-	 * @throws RestCallException If a connection error occurred.
 	 */
-	public Matcher asMatcher(Pattern pattern) throws RestCallException {
+	public Matcher asMatcher(Pattern pattern) {
 		return pattern.matcher(asString());
 	}
 
@@ -383,9 +369,8 @@ public class RestResponseHeader implements Header {
 	 * @param m The mutable to set the value in.
 	 * @param pattern The regular expression pattern to match.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If a connection error occurred.
 	 */
-	public RestResponse asMatcher(Mutable<Matcher> m, Pattern pattern) throws RestCallException {
+	public RestResponse asMatcher(Mutable<Matcher> m, Pattern pattern) {
 		m.set(pattern.matcher(asString()));
 		return response;
 	}
@@ -407,9 +392,8 @@ public class RestResponseHeader implements Header {
 	 *
 	 * @param regex The regular expression pattern to match.
 	 * @return The matcher.
-	 * @throws RestCallException If a connection error occurred.
 	 */
-	public Matcher asMatcher(String regex) throws RestCallException {
+	public Matcher asMatcher(String regex) {
 		return asMatcher(regex, 0);
 	}
 
@@ -432,9 +416,8 @@ public class RestResponseHeader implements Header {
 	 * @param m The mutable to set the value in.
 	 * @param regex The regular expression pattern to match.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If a connection error occurred.
 	 */
-	public RestResponse asMatcher(Mutable<Matcher> m, String regex) throws RestCallException {
+	public RestResponse asMatcher(Mutable<Matcher> m, String regex) {
 		asMatcher(regex, 0);
 		return response;
 	}
@@ -457,9 +440,8 @@ public class RestResponseHeader implements Header {
 	 * @param regex The regular expression pattern to match.
 	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
 	 * @return The matcher.
-	 * @throws RestCallException If a connection error occurred.
 	 */
-	public Matcher asMatcher(String regex, int flags) throws RestCallException {
+	public Matcher asMatcher(String regex, int flags) {
 		return asMatcher(Pattern.compile(regex, flags));
 	}
 
@@ -483,9 +465,8 @@ public class RestResponseHeader implements Header {
 	 * @param regex The regular expression pattern to match.
 	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If a connection error occurred.
 	 */
-	public RestResponse asMatcher(Mutable<Matcher> m, String regex, int flags) throws RestCallException {
+	public RestResponse asMatcher(Mutable<Matcher> m, String regex, int flags) {
 		asMatcher(Pattern.compile(regex, flags));
 		return response;
 	}
@@ -516,10 +497,9 @@ public class RestResponseHeader implements Header {
 	 * </p>
 	 *
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertExists() throws RestCallException, AssertionError {
+	public RestResponse assertExists() throws AssertionError {
 		if (! exists())
 			throw new BasicAssertionError("Response did not have the expected header {0}.", getName());
 		return response;
@@ -539,10 +519,9 @@ public class RestResponseHeader implements Header {
 	 *
 	 * @param value The value to test for.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertValue(String value) throws RestCallException, AssertionError {
+	public RestResponse assertValue(String value) throws AssertionError {
 		if (! StringUtils.isEquals(value, asString()))
 			throw new BasicAssertionError("Response did not have the expected value for header {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", getName(), value, asString());
 		return response;
@@ -562,10 +541,9 @@ public class RestResponseHeader implements Header {
 	 *
 	 * @param test The predicate to test for.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertValue(Predicate<String> test) throws RestCallException, AssertionError {
+	public RestResponse assertValue(Predicate<String> test) throws AssertionError {
 		String text = asString();
 		if (! test.test(text))
 			throw new BasicAssertionError("Response did not have the expected value for header {0}.\n\tActual=[{1}]", getName(), text);
@@ -586,10 +564,9 @@ public class RestResponseHeader implements Header {
 	 *
 	 * @param values The substrings to test for.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertContains(String...values) throws RestCallException, AssertionError {
+	public RestResponse assertContains(String...values) throws AssertionError {
 		String text = asString();
 		for (String substring : values)
 			if (! StringUtils.contains(text, substring))
@@ -611,10 +588,9 @@ public class RestResponseHeader implements Header {
 	 *
 	 * @param regex The pattern to test for.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertMatches(String regex) throws RestCallException, AssertionError {
+	public RestResponse assertMatches(String regex) throws AssertionError {
 		return assertMatches(regex, 0);
 	}
 
@@ -633,10 +609,9 @@ public class RestResponseHeader implements Header {
 	 * @param regex The pattern to test for.
 	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertMatches(String regex, int flags) throws RestCallException, AssertionError {
+	public RestResponse assertMatches(String regex, int flags) throws AssertionError {
 		String text = asString();
 		if (! Pattern.compile(regex, flags).matcher(text).matches())
 			throw new BasicAssertionError("Response did not match expected pattern in header {0}.\n\tpattern=[{1}]\n\tHeader=[{2}]", getName(), regex, text);
@@ -661,10 +636,9 @@ public class RestResponseHeader implements Header {
 	 *
 	 * @param pattern The pattern to test for.
 	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertMatches(Pattern pattern) throws RestCallException, AssertionError {
+	public RestResponse assertMatches(Pattern pattern) throws AssertionError {
 		String text = asString();
 		if (! pattern.matcher(text).matches())
 			throw new BasicAssertionError("Response did not match expected pattern in header {0}.\n\tpattern=[{1}]\n\tHeader=[{2}]", getName(), pattern.pattern(), text);

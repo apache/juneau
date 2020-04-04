@@ -258,11 +258,16 @@ class RestParamDefaults {
 	static final class HeaderObject extends RestMethodParam {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
+		private final boolean multi;
 
 		protected HeaderObject(ParamInfo mpi, PropertyStore ps) {
 			super(HEADER, mpi, getName(mpi));
 			this.schema = HttpPartSchema.create(Header.class, mpi);
 			this.partParser = createPartParser(schema.getParser(), ps);
+			this.multi = getMulti(mpi);
+
+			if (multi && ! isCollection(type))
+				throw new InternalServerError("Use of multipart flag on @Header parameter that's not an array or Collection on method ''{0}''", mpi.getMethod());
 		}
 
 		private static String getName(ParamInfo mpi) {
@@ -278,10 +283,18 @@ class RestParamDefaults {
 			return n;
 		}
 
+		private static boolean getMulti(ParamInfo mpi) {
+			for (Header h : mpi.getAnnotations(Header.class))
+				if (h.multi())
+					return true;
+			return false;
+		}
+
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
-			return req.getHeaders().get(ps, schema, name, type);
+			RequestHeaders rh = req.getHeaders();
+			return multi ? rh.getAll(ps, schema, name, type) : rh.get(ps, schema, name, type);
 		}
 	}
 
@@ -436,7 +449,7 @@ class RestParamDefaults {
 	}
 
 	static final class FormDataObject extends RestMethodParam {
-		private final boolean multiPart;
+		private final boolean multi;
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
@@ -444,9 +457,9 @@ class RestParamDefaults {
 			super(FORM_DATA, mpi, getName(mpi));
 			this.schema = HttpPartSchema.create(FormData.class, mpi);
 			this.partParser = createPartParser(schema.getParser(), ps);
-			this.multiPart = schema.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
+			this.multi = getMulti(mpi) || schema.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
 
-			if (multiPart && ! isCollection(type))
+			if (multi && ! isCollection(type))
 				throw new InternalServerError("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", mpi.getMethod());
 		}
 
@@ -463,17 +476,23 @@ class RestParamDefaults {
 			return n;
 		}
 
+		private static boolean getMulti(ParamInfo mpi) {
+			for (FormData f : mpi.getAnnotations(FormData.class))
+				if (f.multi())
+					return true;
+			return false;
+		}
+
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
-			if (multiPart)
-				return req.getFormData().getAll(ps, schema, name, type);
-			return req.getFormData().get(ps, schema, name, type);
+			RequestFormData fd = req.getFormData();
+			return multi ? fd.getAll(ps, schema, name, type) : fd.get(ps, schema, name, type);
 		}
 	}
 
 	static final class QueryObject extends RestMethodParam {
-		private final boolean multiPart;
+		private final boolean multi;
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
@@ -481,9 +500,9 @@ class RestParamDefaults {
 			super(QUERY, mpi, getName(mpi));
 			this.schema = HttpPartSchema.create(Query.class, mpi);
 			this.partParser = createPartParser(schema.getParser(), ps);
-			this.multiPart = schema.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
+			this.multi = getMulti(mpi) || schema.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
 
-			if (multiPart && ! isCollection(type))
+			if (multi && ! isCollection(type))
 				throw new InternalServerError("Use of multipart flag on @Query parameter that's not an array or Collection on method ''{0}''", mpi.getMethod());
 		}
 
@@ -500,12 +519,18 @@ class RestParamDefaults {
 			return n;
 		}
 
+		private static boolean getMulti(ParamInfo mpi) {
+			for (Query q : mpi.getAnnotations(Query.class))
+				if (q.multi())
+					return true;
+			return false;
+		}
+
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			HttpPartParserSession ps = partParser == null ? req.getPartParser() : partParser.createPartSession(req.getParserSessionArgs());
-			if (multiPart)
-				return req.getQuery().getAll(ps, schema, name, type);
-			return req.getQuery().get(ps, schema, name, type);
+			RequestQuery rq = req.getQuery();
+			return multi ? rq.getAll(ps, schema, name, type) : rq.get(ps, schema, name, type);
 		}
 	}
 

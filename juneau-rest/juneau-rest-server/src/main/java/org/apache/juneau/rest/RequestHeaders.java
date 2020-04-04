@@ -165,17 +165,27 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #getString(String)} but converts the value to an integer.
+	 * Returns the specified header value as an integer.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
+	 * </ul>
 	 *
 	 * @param name The HTTP header name.
-	 * @return The header value, or the default value if the header isn't present.
+	 * @return The header value, or <code>0</code> value if the header isn't present.
 	 */
 	public int getInt(String name) {
 		return getInt(name, 0);
 	}
 
 	/**
-	 * Same as {@link #getString(String,String)} but converts the value to an integer.
+	 * Returns the specified header value as an integer.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
+	 * </ul>
 	 *
 	 * @param name The HTTP header name.
 	 * @param def The default value to return if the header value isn't found.
@@ -187,7 +197,12 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #getString(String)} but converts the value to a boolean.
+	 * Returns the specified header value as a boolean.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
+	 * </ul>
 	 *
 	 * @param name The HTTP header name.
 	 * @return The header value, or the default value if the header isn't present.
@@ -197,7 +212,12 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #getString(String,String)} but converts the value to a boolean.
+	 * Returns the specified header value as a boolean.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
+	 * </ul>
 	 *
 	 * @param name The HTTP header name.
 	 * @param def The default value to return if the header value isn't found.
@@ -227,10 +247,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into an integer.</jc>
-	 * 	<jk>int</jk> myheader = req.getHeader(<js>"My-Header"</js>, <jk>int</jk>.<jk>class</jk>);
+	 * 	<jk>int</jk> myheader = req.getHeaders().get(<js>"My-Header"</js>, <jk>int</jk>.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse a UUID.</jc>
-	 * 	UUID myheader = req.getHeader(<js>"My-Header"</js>, UUID.<jk>class</jk>);
+	 * 	UUID myheader = req.getHeaders().get(<js>"My-Header"</js>, UUID.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -254,7 +274,59 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	}
 
 	/**
-	 * Same as {@link #get(String, Class)} but allows you to override the part parser used.
+	 * Returns all headers with the specified name converted to a POJO using the {@link HttpPartParser} registered with the resource.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Parse into an integer.</jc>
+	 * 	<jk>int</jk>[] myheaders = req.getHeaders().getAll(<js>"My-Header"</js>, <jk>int</jk>[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse a UUID.</jc>
+	 * 	UUID[] myheaders = req.getHeaders().getAll(<js>"My-Header"</js>, UUID[].<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
+	 * 	<li>
+	 * 		The class must be an array or collection type.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
+	 *
+	 * @param name The HTTP header name.
+	 * @param type The class type to convert the header value to.
+	 * @param <T> The class type to convert the header value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws BadRequest Thrown if input could not be parsed.
+	 * @throws InternalServerError Thrown if any other exception occurs.
+	 */
+	public <T> T getAll(String name, Class<T> type) throws BadRequest, InternalServerError {
+		return getAllInner(null, null, name, getClassMeta(type));
+	}
+
+	/**
+	 * Returns the specified header value converted to a POJO using the specified part parser.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Parse into an integer.</jc>
+	 * 	<jk>int</jk> myheader = req.getHeaders().get(<js>"My-Header"</js>, <jk>int</jk>.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse a UUID.</jc>
+	 * 	UUID myheader = req.getHeaders().get(<js>"My-Header"</js>, UUID.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks for {@code &HeaderName=x} in the URL query string.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_partParser}
+	 * </ul>
 	 *
 	 * @param parser
 	 * 	The parser to use for parsing the string header.
@@ -384,8 +456,39 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 		return getInner(parser, schema, name, null, this.<T>getClassMeta(type, args));
 	}
 
+	/**
+	 * Converts all the headers with the specified name to the specified type.
+	 *
+	 * @param parser
+	 * 	The parser to use for parsing the string header.
+	 * 	<br>If <jk>null</jk>, uses the part parser defined on the resource/method.
+	 * @param schema
+	 * 	The schema object that defines the format of the input.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 	<br>Only used if parser is schema-aware (e.g. {@link OpenApiParser}).
+	 * @param name
+	 * 	The HTTP header name.
+	 * @param type
+	 * 	The type of object to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @param <T> The class type to convert the header value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
+	 * @throws InternalServerError Thrown if any other exception occurs.
+	 */
+	public <T> T getAll(HttpPartParserSession parser, HttpPartSchema schema, String name, Type type, Type...args) throws BadRequest, InternalServerError {
+		return getAllInner(parser, schema, name, this.<T>getClassMeta(type, args));
+	}
+
 	/* Workhorse method */
 	private <T> T getInner(HttpPartParserSession parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+		if (parser == null)
+			parser = req.getPartParser();
 		try {
 			if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 				OMap m = new OMap();
@@ -406,6 +509,34 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 		} catch (Exception e) {
 			throw new InternalServerError(e, "Could not parse header ''{0}''.", name);
 		}
+	}
+
+	/* Workhorse method */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	<T> T getAllInner(HttpPartParserSession parser, HttpPartSchema schema, String name, ClassMeta<T> cm) throws BadRequest, InternalServerError {
+		String[] p = get(name);
+		if (schema == null)
+			schema = HttpPartSchema.DEFAULT;
+		try {
+			if (cm.isArray()) {
+				List c = new ArrayList();
+				for (int i = 0; i < p.length; i++)
+					c.add(parse(parser, schema.getItems(), p[i], cm.getElementType()));
+				return (T)toArray(c, cm.getElementType().getInnerClass());
+			} else if (cm.isCollection()) {
+				Collection c = (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new OList());
+				for (int i = 0; i < p.length; i++)
+					c.add(parse(parser, schema.getItems(), p[i], cm.getElementType()));
+				return (T)c;
+			}
+		} catch (SchemaValidationException e) {
+			throw new BadRequest(e, "Validation failed on header ''{0}''. ", name);
+		} catch (ParseException e) {
+			throw new BadRequest(e, "Could not parse header ''{0}''.", name) ;
+		} catch (Exception e) {
+			throw new InternalServerError(e, "Could not parse header ''{0}''.", name);
+		}
+		throw new InternalServerError("Invalid call to getAll(String, ClassMeta).  Class type must be a Collection or array.");
 	}
 
 	/* Workhorse method */

@@ -51,14 +51,12 @@ OpenAPI Serializers
 	Under-the-covers, this gets converted to the following schema object:
 </p>
 <p class='bpcode w800'>
-	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
-
-	HttpPartSchema schema = <jsm>create</jsm>()
+	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>()
 		.items(
-			<jsm>create</jsm>()
+			HttpPartSchema.<jsm>create</jsm>()
 				.collectionFormat(<js>"pipes"</js>)
 				.items(
-					<jsm>create</jsm>()
+					HttpPartSchema.<jsm>create</jsm>()
 						.collectionFormat(<js>"csv"</js>)
 						.type(<js>"integer"</js>) 
 						.format(<js>"int64"</js>)
