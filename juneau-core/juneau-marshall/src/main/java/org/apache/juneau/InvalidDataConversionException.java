@@ -26,7 +26,7 @@ import org.apache.juneau.reflect.*;
  * Exception that gets thrown if you try to perform an invalid conversion, such as when calling
  * {@code OMap.getInt(...)} on a non-numeric <c>String</c>.
  */
-public final class InvalidDataConversionException extends FormattedRuntimeException {
+public final class InvalidDataConversionException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

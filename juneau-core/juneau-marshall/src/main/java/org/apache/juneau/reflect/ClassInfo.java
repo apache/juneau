@@ -2251,7 +2251,7 @@ public final class ClassInfo {
 	 */
 	public Class<?> getParameterType(int index, Class<?> pt) {
 		if (pt == null)
-			throw new FormattedIllegalArgumentException("Parameterized type cannot be null");
+			throw new BasicIllegalArgumentException("Parameterized type cannot be null");
 
 		// We need to make up a mapping of type names.
 		Map<Type,Type> typeMap = new HashMap<>();
@@ -2260,18 +2260,18 @@ public final class ClassInfo {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
 			if (cc == null)
-				throw new FormattedIllegalArgumentException("Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
+				throw new BasicIllegalArgumentException("Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
 		}
 
 		Type gsc = cc.getGenericSuperclass();
 
 		if (! (gsc instanceof ParameterizedType))
-			throw new FormattedIllegalArgumentException("Class ''{0}'' is not a parameterized type", pt.getSimpleName());
+			throw new BasicIllegalArgumentException("Class ''{0}'' is not a parameterized type", pt.getSimpleName());
 
 		ParameterizedType cpt = (ParameterizedType)gsc;
 		Type[] atArgs = cpt.getActualTypeArguments();
 		if (index >= atArgs.length)
-			throw new FormattedIllegalArgumentException("Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
+			throw new BasicIllegalArgumentException("Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
 		Type actualType = cpt.getActualTypeArguments()[index];
 
 		if (typeMap.containsKey(actualType))
@@ -2307,7 +2307,7 @@ public final class ClassInfo {
 		} else if (actualType instanceof ParameterizedType) {
 			return (Class<?>)((ParameterizedType)actualType).getRawType();
 		}
-		throw new FormattedIllegalArgumentException("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
+		throw new BasicIllegalArgumentException("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
 	}
 
 	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {

@@ -92,7 +92,7 @@ public class SearchArgs {
 				for (String s : StringUtils.split(searchTerms)) {
 					int i = StringUtils.indexOf(s, '=', '>', '<');
 					if (i == -1)
-						throw new FormattedRuntimeException("Invalid search terms: ''{0}''", searchTerms);
+						throw new BasicRuntimeException("Invalid search terms: ''{0}''", searchTerms);
 					char c = s.charAt(i);
 					search(s.substring(0, i).trim(), s.substring(c == '=' ? i+1 : i).trim());
 				}

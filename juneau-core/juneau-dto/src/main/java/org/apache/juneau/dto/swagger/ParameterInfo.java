@@ -354,7 +354,7 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo setIn(String value) {
 		if (isStrict() && ! contains(value, VALID_IN))
-			throw new FormattedRuntimeException(
+			throw new BasicRuntimeException(
 				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
 				value, VALID_IN
 			);
@@ -566,7 +566,7 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new FormattedRuntimeException(
+			throw new BasicRuntimeException(
 				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
 				value, VALID_TYPES
 			);
@@ -782,7 +782,7 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo setCollectionFormat(String value) {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
-			throw new FormattedRuntimeException(
+			throw new BasicRuntimeException(
 				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
 				value, VALID_COLLECTION_FORMATS
 			);

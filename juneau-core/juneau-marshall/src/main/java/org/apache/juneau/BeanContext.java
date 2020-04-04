@@ -2549,7 +2549,7 @@ public class BeanContext extends Context implements MetaProvider {
 				else if (ci.isChildOf(Surrogate.class))
 					lpf.addAll(SurrogateSwap.findPojoSwaps(ci.inner(), this));
 				else
-					throw new FormattedRuntimeException("Invalid class {0} specified in BeanContext.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.inner());
+					throw new BasicRuntimeException("Invalid class {0} specified in BeanContext.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.inner());
 			} else if (o instanceof PojoSwap) {
 				lpf.add((PojoSwap)o);
 			}
@@ -3077,7 +3077,7 @@ public class BeanContext extends Context implements MetaProvider {
 			if (cm2.isMap()) {
 				Class<?>[] pParams = (px.params().length == 0 ? new Class[]{Object.class, Object.class} : px.params());
 				if (pParams.length != 2)
-					throw new FormattedRuntimeException("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
+					throw new BasicRuntimeException("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
 				ClassMeta<?> keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
 				ClassMeta<?> valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
 				if (keyType.isObject() && valueType.isObject())
@@ -3088,7 +3088,7 @@ public class BeanContext extends Context implements MetaProvider {
 			if (cm2.isCollection() || cm2.isOptional()) {
 				Class<?>[] pParams = (px.params().length == 0 ? new Class[]{Object.class} : px.params());
 				if (pParams.length != 1)
-					throw new FormattedRuntimeException("Invalid number of parameters specified for "+(cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array")+" (must be 1): {0}", pParams.length);
+					throw new BasicRuntimeException("Invalid number of parameters specified for "+(cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array")+" (must be 1): {0}", pParams.length);
 				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
 				if (elementType.isObject())
 					return cm2;
@@ -3106,7 +3106,7 @@ public class BeanContext extends Context implements MetaProvider {
 			if (cm2.isMap()) {
 				Class<?>[] pParams = (p.params().length == 0 ? new Class[]{Object.class, Object.class} : p.params());
 				if (pParams.length != 2)
-					throw new FormattedRuntimeException("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
+					throw new BasicRuntimeException("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
 				ClassMeta<?> keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
 				ClassMeta<?> valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
 				if (keyType.isObject() && valueType.isObject())
@@ -3117,7 +3117,7 @@ public class BeanContext extends Context implements MetaProvider {
 			if (cm2.isCollection() || cm2.isOptional()) {
 				Class<?>[] pParams = (p.params().length == 0 ? new Class[]{Object.class} : p.params());
 				if (pParams.length != 1)
-					throw new FormattedRuntimeException("Invalid number of parameters specified for "+(cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array")+" (must be 1): {0}", pParams.length);
+					throw new BasicRuntimeException("Invalid number of parameters specified for "+(cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array")+" (must be 1): {0}", pParams.length);
 				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
 				if (elementType.isObject())
 					return cm2;

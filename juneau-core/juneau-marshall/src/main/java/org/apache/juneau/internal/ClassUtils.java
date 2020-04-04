@@ -151,14 +151,14 @@ public final class ClassUtils {
 						return con.<T>invoke(getMatchingArgs(con.getParamTypes(), args));
 				}
 
-				throw new FormattedRuntimeException("Could not instantiate class {0}/{1}.  Constructor not found.", c.getName(), c2);
+				throw new BasicRuntimeException("Could not instantiate class {0}/{1}.  Constructor not found.", c.getName(), c2);
 			} catch (Exception e) {
-				throw new FormattedRuntimeException(e, "Could not instantiate class {0}", c.getName());
+				throw new BasicRuntimeException(e, "Could not instantiate class {0}", c.getName());
 			}
 		} else if (ClassInfo.of(c).isParentOf(c2.getClass())) {
 			return (T)c2;
 		} else {
-			throw new FormattedRuntimeException("Object of type {0} found but was expecting {1}.", c2.getClass(), c.getClass());
+			throw new BasicRuntimeException("Object of type {0} found but was expecting {1}.", c2.getClass(), c.getClass());
 		}
 	}
 

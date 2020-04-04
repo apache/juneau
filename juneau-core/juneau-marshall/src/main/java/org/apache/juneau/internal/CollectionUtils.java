@@ -139,7 +139,7 @@ public final class CollectionUtils {
 						for (Map.Entry<Object,Object> e : ((Map<Object,Object>)o).entrySet())
 							m.put(toType(e.getKey(), keyType), toType(e.getValue(), valueType, valueTypeArgs));
 					} else {
-						throw new FormattedRuntimeException("Invalid object type {0} passed to addToMap()", o.getClass().getName());
+						throw new BasicRuntimeException("Invalid object type {0} passed to addToMap()", o.getClass().getName());
 					}
 				}
 			}

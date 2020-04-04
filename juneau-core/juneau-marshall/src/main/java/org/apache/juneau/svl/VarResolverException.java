@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 /**
  * Exception that occurs during a var resolver session.
  */
-public class VarResolverException extends FormattedRuntimeException {
+public class VarResolverException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**

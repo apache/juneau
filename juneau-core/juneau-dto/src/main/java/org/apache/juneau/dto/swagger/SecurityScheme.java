@@ -150,7 +150,7 @@ public class SecurityScheme extends SwaggerElement {
 	 */
 	public SecurityScheme setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new FormattedRuntimeException(
+			throw new BasicRuntimeException(
 				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
 				value, VALID_TYPES
 			);

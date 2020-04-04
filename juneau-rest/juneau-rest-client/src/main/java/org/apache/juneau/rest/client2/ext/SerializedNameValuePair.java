@@ -199,9 +199,9 @@ public final class SerializedNameValuePair implements NameValuePair {
 				return null;
 			return serializer.serialize(type, schema, value);
 		} catch (SchemaValidationException e) {
-			throw new FormattedRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", type, name, value);
+			throw new BasicRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", type, name, value);
 		} catch (SerializeException e) {
-			throw new FormattedRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", type, name);
+			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", type, name);
 		}
 	}
 

@@ -331,7 +331,7 @@ public class JettyMicroservice extends Microservice {
 		if (jettyXml == null)
 			jettyXml = IOUtils.loadSystemResourceAsString("jetty.xml", ".", "files");
 		if (jettyXml == null)
-			throw new FormattedRuntimeException("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);
+			throw new BasicRuntimeException("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);
 
 		if (resolveVars)
 			jettyXml = vr.resolve(jettyXml);
@@ -351,7 +351,7 @@ public class JettyMicroservice extends Microservice {
 					RestServlet rs = (RestServlet)c.newInstance();
 					addServlet(rs, rs.getPath());
 				} else {
-					throw new FormattedRuntimeException("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet.", s);
+					throw new BasicRuntimeException("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet.", s);
 				}
 			} catch (ClassNotFoundException e1) {
 				throw new ExecutableException(e1);
@@ -365,7 +365,7 @@ public class JettyMicroservice extends Microservice {
 					Servlet rs = (Servlet)c.newInstance();
 					addServlet(rs, e.getKey());
 				} else {
-					throw new FormattedRuntimeException("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet.", e.getValue());
+					throw new BasicRuntimeException("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet.", e.getValue());
 				}
 			} catch (ClassNotFoundException e1) {
 				throw new ExecutableException(e1);

@@ -18,7 +18,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
-import static org.apache.juneau.FormattedIllegalArgumentException.*;
+import static org.apache.juneau.BasicIllegalArgumentException.*;
 
 import java.io.*;
 import java.lang.reflect.Method;

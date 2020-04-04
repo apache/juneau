@@ -88,7 +88,7 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		for (String ra : strings(a.attrs())) {
 			String[] ra2 = RestUtils.parseKeyValuePair(ra);
 			if (ra2 == null)
-				throw new FormattedRuntimeException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", ra);
+				throw new BasicRuntimeException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", ra);
 			if (isNotEmpty(ra2[1]))
 				psb.putTo(REST_attrs, ra2[0], ra2[1]);
 		}
@@ -96,7 +96,7 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		for (String ra : strings(a.reqAttrs())) {
 			String[] ra2 = RestUtils.parseKeyValuePair(ra);
 			if (ra2 == null)
-				throw new FormattedRuntimeException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", ra);
+				throw new BasicRuntimeException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", ra);
 			if (isNotEmpty(ra2[1]))
 				psb.putTo(REST_reqAttrs, ra2[0], ra2[1]);
 		}
@@ -104,7 +104,7 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		for (String header : strings(a.defaultRequestHeaders())) {
 			String[] h = RestUtils.parseHeader(header);
 			if (h == null)
-				throw new FormattedRuntimeException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
+				throw new BasicRuntimeException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
 			if (isNotEmpty(h[1]))
 				psb.putTo(REST_defaultRequestHeaders, h[0], h[1]);
 		}
@@ -112,7 +112,7 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		for (String header : strings(a.reqHeaders())) {
 			String[] h = RestUtils.parseHeader(header);
 			if (h == null)
-				throw new FormattedRuntimeException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
+				throw new BasicRuntimeException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
 			if (isNotEmpty(h[1]))
 				psb.putTo(REST_reqHeaders, h[0], h[1]);
 		}
@@ -133,7 +133,7 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		for (String header : strings(a.defaultResponseHeaders())) {
 			String[] h = parseHeader(header);
 			if (h == null)
-				throw new FormattedRuntimeException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
+				throw new BasicRuntimeException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
 			if (isNotEmpty(h[1]))
 				psb.putTo(REST_defaultResponseHeaders, h[0], h[1]);
 		}
@@ -141,7 +141,7 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		for (String header : strings(a.resHeaders())) {
 			String[] h = parseHeader(header);
 			if (h == null)
-				throw new FormattedRuntimeException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
+				throw new BasicRuntimeException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
 			if (isNotEmpty(h[1]))
 				psb.putTo(REST_resHeaders, h[0], h[1]);
 		}
@@ -187,7 +187,7 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		for (String header : strings(a.staticFileResponseHeaders())) {
 			String[] h = RestUtils.parseHeader(header);
 			if (h == null)
-				throw new FormattedRuntimeException("Invalid static file response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
+				throw new BasicRuntimeException("Invalid static file response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
 			if (isNotEmpty(h[1]))
 				psb.putTo(REST_staticFileResponseHeaders, h[0], h[1]);
 		}

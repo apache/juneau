@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 /**
  * Exceptions caused by invalid REST proxy classes.
  */
-public class RemoteMetadataException extends FormattedRuntimeException {
+public class RemoteMetadataException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

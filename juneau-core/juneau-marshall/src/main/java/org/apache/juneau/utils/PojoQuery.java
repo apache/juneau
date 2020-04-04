@@ -226,7 +226,7 @@ public final class PojoQuery {
 			return null;
 
 		if (! type.isCollectionOrArray())
-			throw new FormattedRuntimeException("Cannot call filterCollection() on class type ''{0}''", type);
+			throw new BasicRuntimeException("Cannot call filterCollection() on class type ''{0}''", type);
 
 		// Create a new OList
 		OList l = (OList)replaceWithMutables(input);
@@ -550,7 +550,7 @@ public final class PojoQuery {
 				// If a non-numeric value was passed in for a numeric value, just set the value to '0'.
 				// (I think this might resolve a workaround in custom queries).
 				if (! m.matches())
-					throw new FormattedRuntimeException("Numeric value didn't match pattern:  ''{0}''", token);
+					throw new BasicRuntimeException("Numeric value didn't match pattern:  ''{0}''", token);
 					//m = numericPattern.matcher("0");
 
 				String arg1 = m.group(1);
@@ -871,7 +871,7 @@ public final class PojoQuery {
 		}
 
 		if (cal == null)
-			throw new FormattedRuntimeException("Invalid date encountered:  ''{0}''", seg);
+			throw new BasicRuntimeException("Invalid date encountered:  ''{0}''", seg);
 
 		return cal;
 	}

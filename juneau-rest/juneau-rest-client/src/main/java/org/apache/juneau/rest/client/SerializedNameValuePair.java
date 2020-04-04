@@ -72,9 +72,9 @@ public final class SerializedNameValuePair implements NameValuePair {
 		try {
 			return serializer.createPartSession(null).serialize(FORMDATA, schema, value);
 		} catch (SchemaValidationException e) {
-			throw new FormattedRuntimeException(e, "Validation error on request form-data parameter ''{0}''=''{1}''", name, value);
+			throw new BasicRuntimeException(e, "Validation error on request form-data parameter ''{0}''=''{1}''", name, value);
 		} catch (SerializeException e) {
-			throw new FormattedRuntimeException(e, "Serialization error on request form-data parameter ''{0}''", name);
+			throw new BasicRuntimeException(e, "Serialization error on request form-data parameter ''{0}''", name);
 		}
 	}
 }

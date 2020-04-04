@@ -91,7 +91,7 @@ public final class SimpleMap<K,V> extends AbstractMap<K,V> {
 				return v;
 			}
 		}
-		throw new FormattedIllegalArgumentException("No key ''{0}'' defined in map", key);
+		throw new BasicIllegalArgumentException("No key ''{0}'' defined in map", key);
 	}
 
 	final class SimpleMapEntry implements Map.Entry<K,V> {

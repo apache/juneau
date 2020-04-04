@@ -37,7 +37,7 @@ import org.apache.juneau.*;
  * 		- Attempting to overwrite the root object.
  * </ul>
  */
-public final class PojoRestException extends FormattedRuntimeException {
+public final class PojoRestException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

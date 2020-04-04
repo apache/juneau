@@ -17,7 +17,7 @@ import java.text.*;
 /**
  * Exception that indicates that a recursion was detected while traversing a POJO model.
  */
-public class BeanRecursionException extends FormattedException {
+public class BeanRecursionException extends BasicException {
 
 	private static final long serialVersionUID = 1L;
 

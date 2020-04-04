@@ -47,7 +47,7 @@ public final class BeanDescription {
 		type = c.getName();
 		BeanMeta<?> bm = BeanContext.DEFAULT.getBeanMeta(c);
 		if (bm == null)
-			throw new FormattedRuntimeException("Class ''{0}'' is not a valid bean.", c);
+			throw new BasicRuntimeException("Class ''{0}'' is not a valid bean.", c);
 		properties = new BeanPropertyDescription[bm.getPropertyMetas().size()];
 		int i = 0;
 		for (BeanPropertyMeta pm : bm.getPropertyMetas())

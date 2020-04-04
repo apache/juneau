@@ -106,7 +106,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 
 						String schema = schemas.get(namespaceURI);
 						if (schema == null)
-							throw new FormattedRuntimeException("No schema found for namespaceURI ''{0}''", namespaceURI);
+							throw new BasicRuntimeException("No schema found for namespaceURI ''{0}''", namespaceURI);
 
 						try {
 							DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
@@ -165,7 +165,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 				ns = defaultNs;
 			Schema s = get(ns);
 			if (s == null)
-				throw new FormattedRuntimeException("No schema defined for namespace ''{0}''", ns);
+				throw new BasicRuntimeException("No schema defined for namespace ''{0}''", ns);
 			return s;
 		}
 

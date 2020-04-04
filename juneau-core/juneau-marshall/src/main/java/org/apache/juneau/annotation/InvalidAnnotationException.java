@@ -21,7 +21,7 @@ import org.apache.juneau.reflect.*;
  * Defines an invalid usage of an annotation.
  *
  */
-public class InvalidAnnotationException extends FormattedRuntimeException {
+public class InvalidAnnotationException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

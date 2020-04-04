@@ -17,7 +17,7 @@ import java.text.*;
 /**
  * General class metadata runtime operation exception.
  */
-public final class ClassMetaRuntimeException extends FormattedRuntimeException {
+public final class ClassMetaRuntimeException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

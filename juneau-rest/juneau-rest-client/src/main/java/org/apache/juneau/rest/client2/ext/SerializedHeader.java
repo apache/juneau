@@ -168,9 +168,9 @@ public final class SerializedHeader extends BasicHeader {
 				return null;
 			return serializer.serialize(HttpPartType.HEADER, schema, value);
 		} catch (SchemaValidationException e) {
-			throw new FormattedRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
+			throw new BasicRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
 		} catch (SerializeException e) {
-			throw new FormattedRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
+			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
 		}
 	}
 }

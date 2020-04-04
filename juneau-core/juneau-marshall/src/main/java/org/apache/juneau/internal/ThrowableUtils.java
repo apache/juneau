@@ -31,7 +31,7 @@ public class ThrowableUtils {
 	 */
 	public static void assertNotNull(Object o, String msg, Object...args) throws IllegalArgumentException {
 		if (o == null)
-			throw new FormattedIllegalArgumentException(msg, args);
+			throw new BasicIllegalArgumentException(msg, args);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class ThrowableUtils {
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
 	public static void illegalArg(String msg, Object...args) throws IllegalArgumentException {
-		throw new FormattedIllegalArgumentException(msg, args);
+		throw new BasicIllegalArgumentException(msg, args);
 	}
 
 	/**
@@ -79,6 +79,6 @@ public class ThrowableUtils {
 	 */
 	public static void assertSameThread(long threadId, String msg, Object...args) throws IllegalStateException {
 		if (Thread.currentThread().getId() != threadId)
-			throw new FormattedIllegalArgumentException(msg, args);
+			throw new BasicIllegalArgumentException(msg, args);
 	}
 }

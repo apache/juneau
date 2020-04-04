@@ -17,7 +17,7 @@ import java.text.*;
 /**
  * General bean runtime operation exception.
  */
-public final class BeanRuntimeException extends FormattedRuntimeException {
+public final class BeanRuntimeException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

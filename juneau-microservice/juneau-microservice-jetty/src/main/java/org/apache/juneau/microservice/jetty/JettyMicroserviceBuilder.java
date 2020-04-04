@@ -116,7 +116,7 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 		else if (jettyXml instanceof Reader)
 			this.jettyXml = IOUtils.read((Reader)jettyXml);
 		else
-			throw new FormattedRuntimeException("Invalid object type passed to jettyXml(Object)", jettyXml == null ? null : jettyXml.getClass().getName());
+			throw new BasicRuntimeException("Invalid object type passed to jettyXml(Object)", jettyXml == null ? null : jettyXml.getClass().getName());
 		this.jettyXmlResolveVars = resolveVars;
 		return this;
 	}

@@ -17,9 +17,9 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.text.*;
 
 /**
- * Subclass of non-runtime exceptions that take in a message and zero or more arguments.
+ * Subclass of runtime exceptions that take in a message and zero or more arguments.
  */
-public class FormattedException extends Exception {
+public class BasicRuntimeException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,28 +29,35 @@ public class FormattedException extends Exception {
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public FormattedException(String message, Object...args) {
+	public BasicRuntimeException(String message, Object...args) {
 		super(format(message, args));
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param causedBy The cause of this exception.
+	 * @param cause The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public FormattedException(Throwable causedBy, String message, Object...args) {
-		this(message, args);
-		initCause(causedBy);
+	public BasicRuntimeException(Throwable cause, String message, Object...args) {
+		this(getMessage(cause, message, null), args);
+		initCause(cause);
 	}
 
 	/**
-	 * Constructor.
+	 * Finds the message.
 	 *
-	 * @param causedBy The cause of this exception.
+	 * @param cause The cause.
+	 * @param msg The message.
+	 * @param def The default value if both above are <jk>null</jk>.
+	 * @return The resolved message.
 	 */
-	public FormattedException(Throwable causedBy) {
-		this(causedBy, causedBy.getLocalizedMessage());
+	protected static final String getMessage(Throwable cause, String msg, String def) {
+		if (msg != null)
+			return msg;
+		if (cause != null)
+			return cause.getMessage();
+		return def;
 	}
 }

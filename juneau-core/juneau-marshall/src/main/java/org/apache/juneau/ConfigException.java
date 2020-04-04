@@ -17,7 +17,7 @@ import java.text.*;
 /**
  * An exception that typically occurs when trying to perform an invalid operation on a configuration property.
  */
-public class ConfigException extends FormattedRuntimeException {
+public class ConfigException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**

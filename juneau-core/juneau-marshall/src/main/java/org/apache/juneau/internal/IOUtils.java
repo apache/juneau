@@ -625,7 +625,7 @@ public final class IOUtils {
 			return new InputStreamReader((InputStream)o, "UTF-8");
 		if (o instanceof byte[])
 			return new InputStreamReader(new ByteArrayInputStream((byte[])o), "UTF-8");
-		throw new FormattedIllegalArgumentException("Invalid object of type {0} passed to IOUtils.toReader(Object)", o.getClass());
+		throw new BasicIllegalArgumentException("Invalid object of type {0} passed to IOUtils.toReader(Object)", o.getClass());
 	}
 
 	/**
@@ -659,7 +659,7 @@ public final class IOUtils {
 			return new ByteArrayInputStream(((CharSequence)o).toString().getBytes(UTF8));
 		if (o instanceof Reader)
 			return new ByteArrayInputStream(IOUtils.read((Reader)o).getBytes(UTF8));
-		throw new FormattedIllegalArgumentException("Invalid object of type {0} passed to IOUtils.toInputStream(Object)", o.getClass());
+		throw new BasicIllegalArgumentException("Invalid object of type {0} passed to IOUtils.toInputStream(Object)", o.getClass());
 	}
 
 	/**

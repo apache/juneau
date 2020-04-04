@@ -26,7 +26,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Exception that indicates invalid syntax encountered during parsing.
  */
-public class ParseException extends FormattedException {
+public class ParseException extends BasicException {
 
 	private static final long serialVersionUID = 1L;
 

@@ -424,7 +424,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 			}
 		}
 
-		throw new FormattedRuntimeException("Invalid date encountered:  ''{0}''", seg);
+		throw new BasicRuntimeException("Invalid date encountered:  ''{0}''", seg);
 	}
 
 	/**

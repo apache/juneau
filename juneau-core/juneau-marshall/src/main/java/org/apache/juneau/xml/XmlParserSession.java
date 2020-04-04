@@ -168,7 +168,7 @@ public class XmlParserSession extends ReaderParserSession {
 	private String getElementAsString(XmlReader r) {
 		int t = r.getEventType();
 		if (t > 2)
-			throw new FormattedRuntimeException("Invalid event type on stream reader for elementToString() method: ''{0}''", XmlUtils.toReadableEvent(r));
+			throw new BasicRuntimeException("Invalid event type on stream reader for elementToString() method: ''{0}''", XmlUtils.toReadableEvent(r));
 		rsb.setLength(0);
 		rsb.append("<").append(t == 1 ? "" : "/").append(r.getLocalName());
 		if (t == 1)

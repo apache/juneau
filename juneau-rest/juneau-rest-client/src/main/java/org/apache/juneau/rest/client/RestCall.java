@@ -395,7 +395,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				body(new StringEntity(value.toString()));
 			} catch (UnsupportedEncodingException e) {}
 		} else {
-			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to formData(name,value,skipIfEmpty) for data type ''{1}''", name, className(value));
+			throw new BasicRuntimeException("Invalid name ''{0}'' passed to formData(name,value,skipIfEmpty) for data type ''{1}''", name, className(value));
 		}
 		return this;
 	}

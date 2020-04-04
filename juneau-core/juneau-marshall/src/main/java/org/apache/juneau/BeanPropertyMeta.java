@@ -361,7 +361,7 @@ public final class BeanPropertyMeta {
 			}
 			if (ci.isChildOf(Surrogate.class))
 				throw new RuntimeException("TODO - Surrogate swaps not yet supported on bean properties.");
-			throw new FormattedRuntimeException("Invalid class used in @Swap annotation.  Must be a subclass of PojoSwap or Surrogate.", c);
+			throw new BasicRuntimeException("Invalid class used in @Swap annotation.  Must be a subclass of PojoSwap or Surrogate.", c);
 		}
 
 		BeanPropertyMeta.Builder setGetter(Method getter) {

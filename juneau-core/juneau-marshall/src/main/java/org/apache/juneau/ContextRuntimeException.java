@@ -17,7 +17,7 @@ import java.text.*;
 /**
  * General runtime operation exception that can occur in any of the context classes.
  */
-public final class ContextRuntimeException extends FormattedRuntimeException {
+public final class ContextRuntimeException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

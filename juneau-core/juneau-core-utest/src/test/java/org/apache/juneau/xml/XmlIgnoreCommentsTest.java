@@ -696,7 +696,7 @@ public class XmlIgnoreCommentsTest {
 		} catch (ComparisonFailure e) {
 			throw new ComparisonFailure(MessageFormat.format("Test ''{0}'' failed with comparison error", label), e.getExpected(), e.getActual());
 		} catch (Exception e) {
-			throw new FormattedRuntimeException(e, "Test ''{0}'' failed with error ''{1}''", label, e.getMessage());
+			throw new BasicRuntimeException(e, "Test ''{0}'' failed with error ''{1}''", label, e.getMessage());
 		}
 	}
 
@@ -708,7 +708,7 @@ public class XmlIgnoreCommentsTest {
 		} catch (ComparisonFailure e) {
 			throw new ComparisonFailure(MessageFormat.format("Test ''{0}'' failed with comparison error", label), e.getExpected(), e.getActual());
 		} catch (Exception e) {
-			throw new FormattedRuntimeException(e, "Test ''{0}'' failed with error ''{1}''", label, e.getMessage());
+			throw new BasicRuntimeException(e, "Test ''{0}'' failed with error ''{1}''", label, e.getMessage());
 		}
 	}
 
@@ -721,7 +721,7 @@ public class XmlIgnoreCommentsTest {
 		} catch (ComparisonFailure e) {
 			throw new ComparisonFailure(MessageFormat.format("Test ''{0}'' failed with comparison error", label), e.getExpected(), e.getActual());
 		} catch (Exception e) {
-			throw new FormattedRuntimeException(e, "Test ''{0}'' failed with error ''{1}''", label, e.getMessage());
+			throw new BasicRuntimeException(e, "Test ''{0}'' failed with error ''{1}''", label, e.getMessage());
 		}
 	}
 
@@ -734,7 +734,7 @@ public class XmlIgnoreCommentsTest {
 		} catch (ComparisonFailure e) {
 			throw new ComparisonFailure(MessageFormat.format("Test ''{0}'' failed with comparison error", label), e.getExpected(), e.getActual());
 		} catch (Exception e) {
-			throw new FormattedRuntimeException(e, "Test ''{0}'' failed with error ''{1}''", label, e.getMessage());
+			throw new BasicRuntimeException(e, "Test ''{0}'' failed with error ''{1}''", label, e.getMessage());
 		}
 	}
 

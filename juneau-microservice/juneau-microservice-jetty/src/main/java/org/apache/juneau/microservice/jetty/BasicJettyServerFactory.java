@@ -26,7 +26,7 @@ public class BasicJettyServerFactory implements JettyServerFactory {
 	@Override
 	public Server create(String jettyXml) throws Exception {
 		if (jettyXml == null)
-			throw new FormattedRuntimeException("jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath.");
+			throw new BasicRuntimeException("jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath.");
 		XmlConfiguration xmlConfiguration = new XmlConfiguration(new ByteArrayInputStream(jettyXml.getBytes()));
 		return (Server)xmlConfiguration.configure();
 	}

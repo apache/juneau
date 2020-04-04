@@ -168,7 +168,7 @@ public final class RestUtils {
 				return requestURI;
 			throw new Exception("case=6");
 		} catch (Exception e) {
-			throw new FormattedRuntimeException(e, "Could not find servlet path in request URI.  URI=''{0}'', servletPath=''{1}''", requestURI, servletPath);
+			throw new BasicRuntimeException(e, "Could not find servlet path in request URI.  URI=''{0}'', servletPath=''{1}''", requestURI, servletPath);
 		}
 	}
 

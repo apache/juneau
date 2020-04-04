@@ -21,7 +21,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Subclass of illegal-argument exceptions that take in a message and zero or more arguments.
  */
-public class FormattedIllegalArgumentException extends IllegalArgumentException {
+public class BasicIllegalArgumentException extends IllegalArgumentException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class FormattedIllegalArgumentException extends IllegalArgumentException 
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public FormattedIllegalArgumentException(String message, Object...args) {
+	public BasicIllegalArgumentException(String message, Object...args) {
 		super(format(message, args));
 	}
 
@@ -42,19 +42,19 @@ public class FormattedIllegalArgumentException extends IllegalArgumentException 
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public FormattedIllegalArgumentException(Throwable causedBy, String message, Object...args) {
+	public BasicIllegalArgumentException(Throwable causedBy, String message, Object...args) {
 		this(message, args);
 		initCause(causedBy);
 	}
 
 	/**
-	 * Throws a {@link FormattedIllegalArgumentException} if the specified method does not only contain args of the specified types.
+	 * Throws a {@link BasicIllegalArgumentException} if the specified method does not only contain args of the specified types.
 	 *
 	 * @param m The method to check.
 	 * @param args The allowed args.
 	 */
 	public static void assertArgsOnlyOfType(MethodInfo m, Class<?>...args) {
 		if (! m.argsOnlyOfType(args))
-			throw new FormattedIllegalArgumentException("Invalid arguments passed to method {0}.  Only arguments of type {1} are allowed.", m, args);
+			throw new BasicIllegalArgumentException("Invalid arguments passed to method {0}.  Only arguments of type {1} are allowed.", m, args);
 	}
 }

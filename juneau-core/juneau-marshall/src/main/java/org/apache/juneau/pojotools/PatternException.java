@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 /**
  * Indicates an invalid search pattern was specified.
  */
-public class PatternException extends FormattedRuntimeException {
+public class PatternException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
