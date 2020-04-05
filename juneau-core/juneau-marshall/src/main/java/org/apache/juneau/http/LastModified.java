@@ -71,7 +71,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Last-Modified")
-public final class LastModified extends BasicDateHeader {
+public class LastModified extends BasicDateHeader {
 
 	private static final long serialVersionUID = 1L;
 

@@ -15,7 +15,7 @@ package org.apache.juneau.http.annotation;
 /**
  * Static strings used for Swagger parameter format types.
  */
-public final class FormatType {
+public class FormatType {
 
 	@SuppressWarnings("javadoc")
 	public static final String

@@ -71,7 +71,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Content-Language")
-public final class ContentLanguage extends BasicCsvArrayHeader {
+public class ContentLanguage extends BasicCsvArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 

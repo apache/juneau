@@ -124,7 +124,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Warning")
-public final class Warning extends BasicHeader {
+public class Warning extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

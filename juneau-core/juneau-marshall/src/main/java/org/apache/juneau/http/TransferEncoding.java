@@ -57,7 +57,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Transfer-Encoding")
-public final class TransferEncoding extends BasicHeader {
+public class TransferEncoding extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

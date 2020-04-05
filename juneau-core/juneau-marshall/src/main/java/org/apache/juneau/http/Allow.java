@@ -69,7 +69,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Allow")
-public final class Allow extends BasicCsvArrayHeader {
+public class Allow extends BasicCsvArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 

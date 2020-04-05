@@ -92,7 +92,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("If-Modified-Since")
-public final class IfModifiedSince extends BasicDateHeader {
+public class IfModifiedSince extends BasicDateHeader {
 
 	private static final long serialVersionUID = 1L;
 

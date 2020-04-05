@@ -80,7 +80,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Upgrade")
-public final class Upgrade extends BasicCsvArrayHeader {
+public class Upgrade extends BasicCsvArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 

@@ -88,7 +88,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("TE")
-public final class TE extends BasicRangeArrayHeader {
+public class TE extends BasicRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 

@@ -94,7 +94,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Cache-Control")
-public final class CacheControl extends BasicHeader {
+public class CacheControl extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

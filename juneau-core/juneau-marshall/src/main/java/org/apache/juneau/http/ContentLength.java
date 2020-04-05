@@ -59,7 +59,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Content-Length")
-public final class ContentLength extends BasicLongHeader {
+public class ContentLength extends BasicLongHeader {
 
 	private static final long serialVersionUID = 1L;
 

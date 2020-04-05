@@ -65,7 +65,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Pragma")
-public final class Pragma extends BasicHeader {
+public class Pragma extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

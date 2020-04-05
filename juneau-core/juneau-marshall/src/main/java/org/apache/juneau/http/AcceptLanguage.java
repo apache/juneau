@@ -103,7 +103,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept-Language")
-public final class AcceptLanguage extends BasicRangeArrayHeader {
+public class AcceptLanguage extends BasicRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 

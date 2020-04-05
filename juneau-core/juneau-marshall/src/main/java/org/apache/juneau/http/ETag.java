@@ -48,7 +48,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("ETag")
-public final class ETag extends BasicHeader {
+public class ETag extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

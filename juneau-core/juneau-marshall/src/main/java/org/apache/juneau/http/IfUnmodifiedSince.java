@@ -64,7 +64,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("If-Unmodified-Since")
-public final class IfUnmodifiedSince extends BasicDateHeader {
+public class IfUnmodifiedSince extends BasicDateHeader {
 
 	private static final long serialVersionUID = 1L;
 

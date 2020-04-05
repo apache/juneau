@@ -81,7 +81,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Expires")
-public final class Expires extends BasicDateHeader {
+public class Expires extends BasicDateHeader {
 
 	private static final long serialVersionUID = 1L;
 

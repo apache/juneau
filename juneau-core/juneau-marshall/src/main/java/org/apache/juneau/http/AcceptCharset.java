@@ -71,7 +71,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept-Charset")
-public final class AcceptCharset extends BasicRangeArrayHeader {
+public class AcceptCharset extends BasicRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 

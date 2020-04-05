@@ -56,7 +56,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Referer")
-public final class Referer extends BasicUriHeader {
+public class Referer extends BasicUriHeader {
 
 	private static final long serialVersionUID = 1L;
 

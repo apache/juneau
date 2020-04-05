@@ -56,7 +56,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Age")
-public final class Age extends BasicIntegerHeader {
+public class Age extends BasicIntegerHeader {
 
 	private static final long serialVersionUID = 1L;
 

@@ -70,7 +70,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Vary")
-public final class Vary extends BasicHeader {
+public class Vary extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

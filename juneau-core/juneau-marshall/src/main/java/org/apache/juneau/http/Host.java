@@ -67,7 +67,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Host")
-public final class Host extends BasicHeader {
+public class Host extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

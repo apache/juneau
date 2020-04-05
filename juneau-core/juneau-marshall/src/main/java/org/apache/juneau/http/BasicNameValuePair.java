@@ -22,7 +22,7 @@ import org.apache.http.*;
  * The value is serialized using {@link Object#toString()} at the point of reading.  This allows the value to be modified
  * periodically by overriding the method to return different values.
  */
-public final class SimpleNameValuePair implements NameValuePair {
+public class BasicNameValuePair implements NameValuePair {
 	private String name;
 	private Object value;
 
@@ -32,7 +32,7 @@ public final class SimpleNameValuePair implements NameValuePair {
 	 * @param name The parameter name.
 	 * @param value The POJO to serialize to the parameter value.
 	 */
-	public SimpleNameValuePair(String name, Object value) {
+	public BasicNameValuePair(String name, Object value) {
 		this.name = name;
 		this.value = value;
 	}

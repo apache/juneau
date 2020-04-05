@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
-public final class HttpMethodName {
+public class HttpMethodName {
 
 	/** {@doc RFC2616.section9#sec9.2 OPTIONS} */
 	public static final String OPTIONS = "OPTIONS";

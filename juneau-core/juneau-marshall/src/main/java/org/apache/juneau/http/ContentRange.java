@@ -127,7 +127,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Content-Range")
-public final class ContentRange extends BasicHeader {
+public class ContentRange extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

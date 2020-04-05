@@ -54,7 +54,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Location")
-public final class Location extends BasicUriHeader {
+public class Location extends BasicUriHeader {
 
 	private static final long serialVersionUID = 1L;
 

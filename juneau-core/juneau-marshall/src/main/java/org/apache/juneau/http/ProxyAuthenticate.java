@@ -48,7 +48,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Proxy-Authenticate")
-public final class ProxyAuthenticate extends BasicHeader {
+public class ProxyAuthenticate extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

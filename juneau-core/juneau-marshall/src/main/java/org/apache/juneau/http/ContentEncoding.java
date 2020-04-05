@@ -67,7 +67,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header(name="Content-Encoding",_enum={"gzip","compress","deflate","identity","other"})
-public final class ContentEncoding extends BasicEnumHeader<ContentEncodingEnum> {
+public class ContentEncoding extends BasicEnumHeader<ContentEncodingEnum> {
 
 	private static final long serialVersionUID = 1L;
 

@@ -33,7 +33,7 @@ import org.apache.juneau.urlencoding.*;
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
  */
-public final class SerializedNameValuePair implements NameValuePair {
+public class SerializedNameValuePair implements NameValuePair {
 	private String name;
 	private Object value;
 	private HttpPartType type;

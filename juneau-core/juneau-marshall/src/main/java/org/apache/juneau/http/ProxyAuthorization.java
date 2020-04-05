@@ -50,7 +50,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Proxy-Authorization")
-public final class ProxyAuthorization extends BasicHeader {
+public class ProxyAuthorization extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

@@ -67,7 +67,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Expect")
-public final class Expect extends BasicHeader {
+public class Expect extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

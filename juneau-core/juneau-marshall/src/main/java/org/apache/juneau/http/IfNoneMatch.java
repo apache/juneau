@@ -92,7 +92,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("If-None-Match")
-public final class IfNoneMatch extends BasicEntityValidatorArrayHeader {
+public class IfNoneMatch extends BasicEntityValidatorArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 

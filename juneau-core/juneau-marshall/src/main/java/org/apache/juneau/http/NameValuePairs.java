@@ -35,7 +35,7 @@ import org.apache.juneau.urlencoding.*;
  * 	client.post(<jsf>URL</jsf>, params).execute();
  * </p>
  */
-public final class NameValuePairs extends LinkedList<NameValuePair> {
+public class NameValuePairs extends LinkedList<NameValuePair> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -70,7 +70,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 * Constructor.
 	 *
 	 * <p>
-	 * Constructs a set of {@link SimpleNameValuePair} objects from a list of key/value pairs.
+	 * Constructs a set of {@link BasicNameValuePair} objects from a list of key/value pairs.
 	 *
 	 * @param parameters
 	 * 	Initial list of parameters.
@@ -81,7 +81,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 		if (parameters.length % 2 != 0)
 			throw new BasicRuntimeException("Odd number of parameters passed into NameValuePairs(Object...)");
 		for (int i = 0; i < parameters.length; i+=2)
-			add(new SimpleNameValuePair(stringify(parameters[i]), parameters[i+1]));
+			add(new BasicNameValuePair(stringify(parameters[i]), parameters[i+1]));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -149,14 +149,14 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 * Appends the specified name/value pair to the end of this list.
 	 *
 	 * <p>
-	 * The pair is added as a {@link SimpleNameValuePair}.
+	 * The pair is added as a {@link BasicNameValuePair}.
 	 *
 	 * @param name The pair name.
 	 * @param value The pair value.
 	 * @return This object (for method chaining).
 	 */
 	public NameValuePairs append(String name, Object value) {
-		super.add(new SimpleNameValuePair(name, value));
+		super.add(new BasicNameValuePair(name, value));
 		return this;
 	}
 

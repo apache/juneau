@@ -46,7 +46,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("WWW-Authenticate")
-public final class WwwAuthenticate extends BasicHeader {
+public class WwwAuthenticate extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

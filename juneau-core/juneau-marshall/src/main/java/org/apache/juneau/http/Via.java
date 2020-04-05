@@ -116,7 +116,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Via")
-public final class Via extends BasicCsvArrayHeader {
+public class Via extends BasicCsvArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 

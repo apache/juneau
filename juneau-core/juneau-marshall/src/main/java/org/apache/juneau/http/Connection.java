@@ -78,7 +78,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Connection")
-public final class Connection extends BasicHeader {
+public class Connection extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

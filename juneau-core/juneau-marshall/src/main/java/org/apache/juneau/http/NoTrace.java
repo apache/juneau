@@ -18,7 +18,7 @@ import org.apache.juneau.http.annotation.*;
  * Represents a parsed <l>No-Trace</l> HTTP request header.
  */
 @Header("No-Trace")
-public final class NoTrace extends BasicHeader {
+public class NoTrace extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

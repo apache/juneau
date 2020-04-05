@@ -428,12 +428,12 @@ public class RestClientBuilderTest {
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.header(new SimpleNameValuePair("Foo", "bar"))
+			.header(new BasicNameValuePair("Foo", "bar"))
 			.header("Check", "Foo")
 			.build();
 		rc
 			.get("/checkHeader")
-			.header(new SimpleNameValuePair("Foo", "baz"))
+			.header(new BasicNameValuePair("Foo", "baz"))
 			.run()
 			.getBody()
 			.assertValue("['bar','baz']");
@@ -524,12 +524,12 @@ public class RestClientBuilderTest {
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.headers(new SimpleNameValuePair("Foo","bar"))
+			.headers(new BasicNameValuePair("Foo","bar"))
 			.header("Check", "Foo")
 			.build();
 		rc
 			.get("/checkHeader")
-			.headers(new SimpleNameValuePair("Foo","baz"))
+			.headers(new BasicNameValuePair("Foo","baz"))
 			.run()
 			.getBody()
 			.assertValue("['bar','baz']");
@@ -1726,11 +1726,11 @@ public class RestClientBuilderTest {
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.query(new SimpleNameValuePair("Foo","f1"))
+			.query(new BasicNameValuePair("Foo","f1"))
 			.query(OMap.of("Foo","f2"))
 			.query(AMap.of("Foo","f3"))
 			.query(NameValuePairs.of("Foo","f4","Foo","f5"))
-			.query(new SimpleNameValuePair("Foo","f6"), new SimpleNameValuePair("Foo","f7"))
+			.query(new BasicNameValuePair("Foo","f6"), new BasicNameValuePair("Foo","f7"))
 			.build();
 		rc.get("/checkQuery").run().getBody().assertValue("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
 	}
@@ -1754,11 +1754,11 @@ public class RestClientBuilderTest {
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.formData(new SimpleNameValuePair("Foo","f1"))
+			.formData(new BasicNameValuePair("Foo","f1"))
 			.formData(OMap.of("Foo","f2"))
 			.formData(AMap.of("Foo","f3"))
 			.formData(NameValuePairs.of("Foo","f4","Foo","f5"))
-			.formData(new SimpleNameValuePair("Foo","f6"), new SimpleNameValuePair("Foo","f7"))
+			.formData(new BasicNameValuePair("Foo","f6"), new BasicNameValuePair("Foo","f7"))
 			.build();
 		rc.post("/checkFormData").run().getBody().assertValue("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
 	}

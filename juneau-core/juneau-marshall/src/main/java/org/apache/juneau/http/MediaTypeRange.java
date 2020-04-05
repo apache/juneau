@@ -29,7 +29,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @BeanIgnore
-public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
+public class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	private static final MediaTypeRange[] DEFAULT = new MediaTypeRange[]{new MediaTypeRange("*/*")};
 	private static final boolean NOCACHE = Boolean.getBoolean("juneau.nocache");

@@ -35,7 +35,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @BeanIgnore
-public final class StringRange implements Comparable<StringRange>  {
+public class StringRange implements Comparable<StringRange>  {
 
 	private static final StringRange[] DEFAULT = new StringRange[]{new StringRange("*")};
 

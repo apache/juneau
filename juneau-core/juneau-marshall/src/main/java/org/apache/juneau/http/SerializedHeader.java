@@ -33,7 +33,7 @@ import org.apache.juneau.urlencoding.*;
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
  */
-public final class SerializedHeader extends BasicHeader {
+public class SerializedHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 
 	private Object value;

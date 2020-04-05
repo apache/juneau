@@ -57,7 +57,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Trailer")
-public final class Trailer extends BasicHeader {
+public class Trailer extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 

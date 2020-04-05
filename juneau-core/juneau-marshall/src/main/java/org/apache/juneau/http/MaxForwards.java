@@ -57,7 +57,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Max-Forwards")
-public final class MaxForwards extends BasicIntegerHeader {
+public class MaxForwards extends BasicIntegerHeader {
 
 	private static final long serialVersionUID = 1L;
 

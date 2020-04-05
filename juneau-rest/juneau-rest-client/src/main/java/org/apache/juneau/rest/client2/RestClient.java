@@ -2038,7 +2038,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * @param parameters
 	 * 	The parameters of the form post.
 	 * 	<br>The parameters represent name/value pairs and must be an even number of arguments.
-	 * 	<br>Parameters are converted to {@link SimpleNameValuePair} objects.
+	 * 	<br>Parameters are converted to {@link BasicNameValuePair} objects.
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
 	 * 	as a parsed object.

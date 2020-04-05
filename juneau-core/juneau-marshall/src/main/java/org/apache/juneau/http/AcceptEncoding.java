@@ -91,7 +91,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept-Encoding")
-public final class AcceptEncoding extends BasicRangeArrayHeader {
+public class AcceptEncoding extends BasicRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 

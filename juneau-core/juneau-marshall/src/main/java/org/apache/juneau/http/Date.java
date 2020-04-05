@@ -80,7 +80,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Date")
-public final class Date extends BasicDateHeader {
+public class Date extends BasicDateHeader {
 
 	private static final long serialVersionUID = 1L;
 
