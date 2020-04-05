@@ -192,8 +192,8 @@ public class ReaderResource implements Writable {
 		 * 	<br>Values will be converted to <c>Strings</c> using {@link Object#toString()}.
 		 * @return This object (for method chaining).
 		 */
-		public Builder headers(HttpHeader...headers) {
-			for (HttpHeader h : headers)
+		public Builder headers(org.apache.http.Header...headers) {
+			for (org.apache.http.Header h : headers)
 				this.headers.put(h.getName(), h.getValue());
 			return this;
 		}

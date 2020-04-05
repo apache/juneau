@@ -21,6 +21,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.FormData;
 import org.apache.juneau.http.annotation.Header;
@@ -29,7 +30,6 @@ import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;

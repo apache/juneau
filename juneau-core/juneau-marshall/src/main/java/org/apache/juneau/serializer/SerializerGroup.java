@@ -164,7 +164,7 @@ public final class SerializerGroup extends BeanTraverseContext {
 		if (sm != null)
 			return sm;
 
-		Accept a = Accept.forString(acceptHeader);
+		Accept a = Accept.of(acceptHeader);
 		int match = a.findMatch(mediaTypeRanges);
 		if (match >= 0) {
 			sm = new SerializerMatch(mediaTypeRanges[match].getMediaType(), mediaTypeRangeSerializers[match]);

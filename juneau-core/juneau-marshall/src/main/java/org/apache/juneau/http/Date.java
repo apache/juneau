@@ -82,13 +82,15 @@ import org.apache.juneau.http.annotation.*;
 @Header("Date")
 public final class Date extends BasicDateHeader {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Returns a parsed <c>Date</c> header.
 	 *
 	 * @param value The <c>Date</c> header string.
 	 * @return The parsed <c>Date</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Date forString(String value) {
+	public static Date of(String value) {
 		if (value == null)
 			return null;
 		return new Date(value);

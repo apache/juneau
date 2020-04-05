@@ -103,23 +103,25 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept-Language")
-public final class AcceptLanguage extends ComplexRangeArrayHeader {
+public final class AcceptLanguage extends BasicRangeArrayHeader {
 
-	private static final Cache<String,AcceptLanguage> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final long serialVersionUID = 1L;
+
+	private static final Cache<String,AcceptLanguage> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <c>Accept-Language</c> header.
+	 * Returns a parsed and cached <c>Accept-Language</c> header.
 	 *
 	 * @param value The <c>Accept-Language</c> header string.
 	 * @return The parsed <c>Accept-Language</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static AcceptLanguage forString(String value) {
+	public static AcceptLanguage of(String value) {
 		if (value == null)
 			return null;
-		AcceptLanguage a = cache.get(value);
-		if (a == null)
-			a = cache.put(value, new AcceptLanguage(value));
-		return a;
+		AcceptLanguage x = CACHE.get(value);
+		if (x == null)
+			x = CACHE.put(value, new AcceptLanguage(value));
+		return x;
 	}
 
 	/**

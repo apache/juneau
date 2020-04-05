@@ -70,7 +70,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Vary")
-public final class Vary extends BasicStringHeader {
+public final class Vary extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Vary</c> header.
@@ -78,7 +80,7 @@ public final class Vary extends BasicStringHeader {
 	 * @param value The <c>Vary</c> header string.
 	 * @return The parsed <c>Vary</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Vary forString(String value) {
+	public static Vary of(String value) {
 		if (value == null)
 			return null;
 		return new Vary(value);

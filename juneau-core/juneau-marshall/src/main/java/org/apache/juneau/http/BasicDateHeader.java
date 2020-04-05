@@ -35,6 +35,8 @@ import org.apache.juneau.annotation.*;
 @BeanIgnore
 public class BasicDateHeader extends BasicHeader {
 
+	private static final long serialVersionUID = 1L;
+
 	private final ZonedDateTime zdt;
 
 	/**

@@ -10,26 +10,24 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.client2.ext;
+package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.http.client.entity.*;
+import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * Convenience class for constructing instances of <c>List&lt;NameValuePair&gt;</c> for the
- * {@link UrlEncodedFormEntity} class.
+ * Convenience class for constructing instances of <c>List&lt;NameValuePair&gt;</c>.
  *
  * <p>
- * Instances of this method can be passed directly to the {@link RestClient#post(Object, Object)} method or
- * {@link RestRequest#body(Object)} methods to perform URL-encoded form posts.
+ * Instances of this method can be passed directly to the <c>RestClient.post(Object, Object)</c> method or
+ * <c>RestRequest.body(Object)</c> methods to perform URL-encoded form posts.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -77,11 +75,11 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 * @param parameters
 	 * 	Initial list of parameters.
 	 * 	<br>Must be an even number of parameters representing key/value pairs.
-	 * @throws RestCallException If odd number of parameters were specified.
+	 * @throws RuntimeException If odd number of parameters were specified.
 	 */
-	public NameValuePairs(Object...parameters) throws RestCallException {
+	public NameValuePairs(Object...parameters) {
 		if (parameters.length % 2 != 0)
-			throw new RestCallException("Odd number of parameters passed into NameValuePairs(Object...)");
+			throw new BasicRuntimeException("Odd number of parameters passed into NameValuePairs(Object...)");
 		for (int i = 0; i < parameters.length; i+=2)
 			add(new SimpleNameValuePair(stringify(parameters[i]), parameters[i+1]));
 	}
@@ -125,10 +123,10 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 * @param parameters
 	 * 	Initial list of parameters.
 	 * 	<br>Must be an even number of parameters representing key/value pairs.
-	 * @throws RestCallException If odd number of parameters were specified.
+	 * @throws RuntimeException If odd number of parameters were specified.
 	 * @return A new instance.
 	 */
-	public static NameValuePairs of(Object...parameters) throws RestCallException {
+	public static NameValuePairs of(Object...parameters) {
 		return new NameValuePairs(parameters);
 	}
 

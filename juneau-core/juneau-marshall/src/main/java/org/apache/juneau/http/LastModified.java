@@ -73,13 +73,15 @@ import org.apache.juneau.http.annotation.*;
 @Header("Last-Modified")
 public final class LastModified extends BasicDateHeader {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Returns a parsed <c>Last-Modified</c> header.
 	 *
 	 * @param value The <c>Last-Modified</c> header string.
 	 * @return The parsed <c>Last-Modified</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static LastModified forString(String value) {
+	public static LastModified of(String value) {
 		if (value == null)
 			return null;
 		return new LastModified(value);

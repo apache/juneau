@@ -160,7 +160,7 @@ public class AcceptTest {
 
 	@Test
 	public void test() throws Exception {
-		Accept accept = Accept.forString(this.accept);
+		Accept accept = Accept.of(this.accept);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
 		int r = accept.findMatch(mt);
 		TestUtils.assertEquals(expected, r, "{0} failed", label);
@@ -168,7 +168,7 @@ public class AcceptTest {
 
 	@Test
 	public void testReversed() throws Exception {
-		Accept accept = Accept.forString(this.accept);
+		Accept accept = Accept.of(this.accept);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
 		Collections.reverse(Arrays.asList(mt));
 		int r = accept.findMatch(mt);

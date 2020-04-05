@@ -12,24 +12,34 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.http.Constants.*;
+
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>X-Client-Version</l> HTTP request header.
  */
 @Header("X-Client-Version")
-public final class ClientVersion extends BasicStringHeader {
+public final class ClientVersion extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
+
+	private static final Cache<String,ClientVersion> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <c>X-Client-Version</c> header.
+	 * Returns a parsed and cached <c>X-Client-Version</c> header.
 	 *
 	 * @param value The <c>X-Client-Version</c> header string.
 	 * @return The parsed <c>X-Client-Version</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static ClientVersion forString(String value) {
+	public static ClientVersion of(String value) {
 		if (value == null)
 			return null;
-		return new ClientVersion(value);
+		ClientVersion x = CACHE.get(value);
+		if (x == null)
+			x = CACHE.put(value, new ClientVersion(value));
+		return x;
 	}
 
 	/**

@@ -2754,4 +2754,14 @@ public final class StringUtils {
 			return in;
 		return in.substring(0, length);
 	}
+
+	/**
+	 * Converts the value to a string if it's not <jk>null</jk>.
+	 *
+	 * @param value The value to convert to a string.
+	 * @return The value converted to a string or <jk>null</jk> if the value was <jk>null</jk>.
+	 */
+	public static String asString(Object value) {
+		return value == null ? null : value.toString();
+	}
 }

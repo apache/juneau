@@ -12,31 +12,33 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-/**
- * Category of headers that consist of complex parsed values.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
- * </ul>
- */
-public abstract class ComplexHeader implements HttpHeader {
+import org.apache.http.message.BasicHeader;
+import org.apache.juneau.internal.*;
 
-	private final String name;
+/**
+ * An extension of a {@link BasicHeader} with an Object value that can be used to return different future values.
+ */
+public class BasicObjectHeader extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
+
+	private final Object value;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param name The HTTP header name.
+	 * @param value The HTTP header value.
 	 */
-	public ComplexHeader(String name) {
-		this.name = name;
+	public BasicObjectHeader(String name, Object value) {
+		super(name, null);
+		this.value = value;
 	}
 
-	@Override /* HttpHeader */
-	public String getName() {
-		return name;
+	@Override /* Header */
+	public String getValue() {
+		return StringUtils.asString(value);
 	}
-
-	@Override /* HttpHeader */
-	public abstract Object getValue();
 }
+
+

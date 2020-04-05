@@ -13,6 +13,7 @@
 package org.apache.juneau.http;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of a single long value.
@@ -30,6 +31,8 @@ import org.apache.juneau.http.annotation.*;
 @Header(type="integer",format="int64")
 public class BasicLongHeader extends BasicHeader {
 
+	private static final long serialVersionUID = 1L;
+
 	private final Long value;
 
 	/**
@@ -39,8 +42,8 @@ public class BasicLongHeader extends BasicHeader {
 	 * @param value The raw header value.
 	 */
 	protected BasicLongHeader(String name, Object value) {
-		super(name, toLong(value));
-		this.value = (Long)(super.value);
+		super(name, StringUtils.asString(value));
+		this.value = toLong(value);
 	}
 
 	private static Long toLong(Object value) {
@@ -63,10 +66,5 @@ public class BasicLongHeader extends BasicHeader {
 	 */
 	public long asLong() {
 		return value;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return String.valueOf(value);
 	}
 }

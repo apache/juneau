@@ -62,7 +62,6 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.client.remote.*;
-import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.rest.client2.logging.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
@@ -1148,7 +1147,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_headers RESTCLIENT_headers}
 	 * 	<li><b>Name:</b>  <js>"RestClient.headers.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.http.Header} | {@link org.apache.juneau.http.HttpHeader} | {@link org.apache.http.NameValuePair}&gt;</c>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.http.Header} | {@link org.apache.http.NameValuePair}&gt;</c>
 	 * 	<li><b>Default:</b>  empty map
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>

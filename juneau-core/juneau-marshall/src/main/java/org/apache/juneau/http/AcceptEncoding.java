@@ -91,23 +91,25 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept-Encoding")
-public final class AcceptEncoding extends ComplexRangeArrayHeader {
+public final class AcceptEncoding extends BasicRangeArrayHeader {
 
-	private static final Cache<String,AcceptEncoding> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final long serialVersionUID = 1L;
+
+	private static final Cache<String,AcceptEncoding> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <c>Accept-Encoding</c> header.
+	 * Returns a parsed and cached <c>Accept-Encoding</c> header.
 	 *
 	 * @param value The <c>Accept-Encoding</c> header string.
 	 * @return The parsed <c>Accept-Encoding</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static AcceptEncoding forString(String value) {
+	public static AcceptEncoding of(String value) {
 		if (value == null)
 			return null;
-		AcceptEncoding a = cache.get(value);
-		if (a == null)
-			a = cache.put(value, new AcceptEncoding(value));
-		return a;
+		AcceptEncoding x = CACHE.get(value);
+		if (x == null)
+			x = CACHE.put(value, new AcceptEncoding(value));
+		return x;
 	}
 
 	/**

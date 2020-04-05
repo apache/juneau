@@ -67,7 +67,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Expect")
-public final class Expect extends BasicStringHeader {
+public final class Expect extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Expect</c> header.
@@ -75,7 +77,7 @@ public final class Expect extends BasicStringHeader {
 	 * @param value The <c>Expect</c> header string.
 	 * @return The parsed <c>Expect</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Expect forString(String value) {
+	public static Expect of(String value) {
 		if (value == null)
 			return null;
 		return new Expect(value);

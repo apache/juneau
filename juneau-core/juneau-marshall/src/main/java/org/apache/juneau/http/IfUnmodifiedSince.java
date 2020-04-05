@@ -66,13 +66,15 @@ import org.apache.juneau.http.annotation.*;
 @Header("If-Unmodified-Since")
 public final class IfUnmodifiedSince extends BasicDateHeader {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Returns a parsed <c>If-Unmodified-Since</c> header.
 	 *
 	 * @param value The <c>If-Unmodified-Since</c> header string.
 	 * @return The parsed <c>If-Unmodified-Since</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static IfUnmodifiedSince forString(String value) {
+	public static IfUnmodifiedSince of(String value) {
 		if (value == null)
 			return null;
 		return new IfUnmodifiedSince(value);

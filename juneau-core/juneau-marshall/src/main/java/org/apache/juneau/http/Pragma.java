@@ -65,7 +65,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Pragma")
-public final class Pragma extends BasicStringHeader {
+public final class Pragma extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Pragma</c> header.
@@ -73,7 +75,7 @@ public final class Pragma extends BasicStringHeader {
 	 * @param value The <c>Pragma</c> header string.
 	 * @return The parsed <c>Pragma</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Pragma forString(String value) {
+	public static Pragma of(String value) {
 		if (value == null)
 			return null;
 		return new Pragma(value);

@@ -124,7 +124,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Warning")
-public final class Warning extends BasicStringHeader {
+public final class Warning extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Warning</c> header.
@@ -132,7 +134,7 @@ public final class Warning extends BasicStringHeader {
 	 * @param value The <c>Warning</c> header string.
 	 * @return The parsed <c>Warning</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Warning forString(String value) {
+	public static Warning of(String value) {
 		if (value == null)
 			return null;
 		return new Warning(value);

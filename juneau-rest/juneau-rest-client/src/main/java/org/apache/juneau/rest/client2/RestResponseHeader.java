@@ -504,7 +504,7 @@ public class RestResponseHeader implements Header {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Asserts that the header equals the specified value.
+	 * Asserts that the header exists.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

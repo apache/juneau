@@ -140,7 +140,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Range")
-public final class Range extends BasicStringHeader {
+public final class Range extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Range</c> header.
@@ -148,7 +150,7 @@ public final class Range extends BasicStringHeader {
 	 * @param value The <c>Range</c> header string.
 	 * @return The parsed <c>Range</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Range forString(String value) {
+	public static Range of(String value) {
 		if (value == null)
 			return null;
 		return new Range(value);

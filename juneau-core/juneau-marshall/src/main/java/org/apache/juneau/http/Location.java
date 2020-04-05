@@ -54,7 +54,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Location")
-public final class Location extends HeaderUri {
+public final class Location extends BasicUriHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Location</c> header.
@@ -62,7 +64,7 @@ public final class Location extends HeaderUri {
 	 * @param value The <c>Location</c> header string.
 	 * @return The parsed <c>Location</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Location forString(String value) {
+	public static Location of(String value) {
 		if (value == null)
 			return null;
 		return new Location(value);

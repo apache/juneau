@@ -94,15 +94,17 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Cache-Control")
-public final class CacheControl extends BasicStringHeader {
+public final class CacheControl extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Returns a parsed <c>Cache-Control</c> header.
+	 * Returns a parsed and cached <c>Cache-Control</c> header.
 	 *
 	 * @param value The <c>Cache-Control</c> header string.
 	 * @return The parsed <c>Cache-Control</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static CacheControl forString(String value) {
+	public static CacheControl of(String value) {
 		if (value == null)
 			return null;
 		return new CacheControl(value);

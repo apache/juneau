@@ -61,6 +61,20 @@ import org.apache.juneau.http.annotation.*;
 @Header("Content-Length")
 public final class ContentLength extends BasicLongHeader {
 
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Returns a parsed <c>Content-Length</c> header.
+	 *
+	 * @param value The <c>Content-Length</c> header string.
+	 * @return The parsed <c>Content-Length</c> header, or <jk>null</jk> if the string was null.
+	 */
+	public static ContentLength of(String value) {
+		if (value == null)
+			return null;
+		return new ContentLength(value);
+	}
+
 	/**
 	 * Constructor.
 	 *
@@ -77,18 +91,6 @@ public final class ContentLength extends BasicLongHeader {
 	 */
 	public ContentLength(Integer value) {
 		this(value == null ? null : value.longValue());
-	}
-
-	/**
-	 * Returns a parsed <c>Content-Length</c> header.
-	 *
-	 * @param value The <c>Content-Length</c> header string.
-	 * @return The parsed <c>Content-Length</c> header, or <jk>null</jk> if the string was null.
-	 */
-	public static ContentLength forString(String value) {
-		if (value == null)
-			return null;
-		return new ContentLength(value);
 	}
 
 	/**

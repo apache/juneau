@@ -69,13 +69,15 @@ import org.apache.juneau.http.annotation.*;
 @Header(name="Content-Encoding",_enum={"gzip","compress","deflate","identity","other"})
 public final class ContentEncoding extends BasicEnumHeader<ContentEncodingEnum> {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Returns a parsed <c>Content-Encoding</c> header.
 	 *
 	 * @param value The <c>Content-Encoding</c> header string.
 	 * @return The parsed <c>Content-Encoding</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static ContentEncoding forString(String value) {
+	public static ContentEncoding of(String value) {
 		if (value == null)
 			return null;
 		return new ContentEncoding(value);

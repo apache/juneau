@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.http.Constants.*;
+
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>Allow</l> HTTP response header.
@@ -68,6 +71,25 @@ import org.apache.juneau.http.annotation.*;
 @Header("Allow")
 public final class Allow extends BasicCsvArrayHeader {
 
+	private static final long serialVersionUID = 1L;
+
+	private static final Cache<String,Allow> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+
+	/**
+	 * Returns a parsed and cached <c>Allow</c> header.
+	 *
+	 * @param value The <c>Allow</c> header string.
+	 * @return The parsed <c>Allow</c> header, or <jk>null</jk> if the string was null.
+	 */
+	public static Allow of(String value) {
+		if (value == null)
+			return null;
+		Allow x = CACHE.get(value);
+		if (x == null)
+			x = CACHE.put(value, new Allow(value));
+		return x;
+	}
+
 	/**
 	 * Constructor.
 	 *
@@ -75,18 +97,6 @@ public final class Allow extends BasicCsvArrayHeader {
 	 */
 	public Allow(String[] value) {
 		super("Allow", value);
-	}
-
-	/**
-	 * Returns a parsed <c>Allow</c> header.
-	 *
-	 * @param value The <c>Allow</c> header string.
-	 * @return The parsed <c>Allow</c> header, or <jk>null</jk> if the string was null.
-	 */
-	public static Allow forString(String value) {
-		if (value == null)
-			return null;
-		return new Allow(value);
 	}
 
 	/**

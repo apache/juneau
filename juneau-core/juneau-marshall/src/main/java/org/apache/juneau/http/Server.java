@@ -57,7 +57,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Server")
-public final class Server extends BasicStringHeader {
+public final class Server extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Server</c> header.
@@ -65,7 +67,7 @@ public final class Server extends BasicStringHeader {
 	 * @param value The <c>Server</c> header string.
 	 * @return The parsed <c>Server</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Server forString(String value) {
+	public static Server of(String value) {
 		if (value == null)
 			return null;
 		return new Server(value);

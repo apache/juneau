@@ -10,14 +10,13 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.client2.ext;
+package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
 import org.apache.http.entity.*;
-import org.apache.http.message.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;

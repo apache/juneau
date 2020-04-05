@@ -13,6 +13,7 @@
 package org.apache.juneau.http;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of a single integer value.
@@ -30,6 +31,8 @@ import org.apache.juneau.http.annotation.*;
 @Header(type="integer",format="int32")
 public class BasicIntegerHeader extends BasicHeader {
 
+	private static final long serialVersionUID = 1L;
+
 	private final Integer value;
 
 	/**
@@ -39,8 +42,8 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @param value The raw header value.
 	 */
 	protected BasicIntegerHeader(String name, Object value) {
-		super(name, toInt(value));
-		this.value = (Integer)(super.value);
+		super(name, StringUtils.asString(value));
+		this.value = toInt(value);
 	}
 
 	private static Integer toInt(Object value) {
@@ -68,10 +71,5 @@ public class BasicIntegerHeader extends BasicHeader {
 	 */
 	public int asInt() {
 		return value;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return String.valueOf(value);
 	}
 }

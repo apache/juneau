@@ -62,7 +62,9 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("If-Range")
-public final class IfRange extends BasicStringHeader {
+public final class IfRange extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>If-Range</c> header.
@@ -70,7 +72,7 @@ public final class IfRange extends BasicStringHeader {
 	 * @param value The <c>If-Range</c> header string.
 	 * @return The parsed <c>If-Range</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static IfRange forString(String value) {
+	public static IfRange of(String value) {
 		if (value == null)
 			return null;
 		return new IfRange(value);

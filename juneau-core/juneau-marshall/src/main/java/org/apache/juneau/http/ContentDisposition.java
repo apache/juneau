@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.http.Constants.*;
+
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>Content-Disposition</l> HTTP request header.
@@ -45,18 +48,25 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Content-Disposition")
-public final class ContentDisposition extends BasicStringHeader {
+public final class ContentDisposition extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
+
+	private static final Cache<String,ContentDisposition> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <c>Content-Disposition</c> header.
+	 * Returns a parsed and cached <c>Content-Disposition</c> header.
 	 *
 	 * @param value The <c>Content-Disposition</c> header string.
 	 * @return The parsed <c>Content-Disposition</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static ContentDisposition forString(String value) {
+	public static ContentDisposition of(String value) {
 		if (value == null)
 			return null;
-		return new ContentDisposition(value);
+		ContentDisposition x = CACHE.get(value);
+		if (x == null)
+			x = CACHE.put(value, new ContentDisposition(value));
+		return x;
 	}
 
 	/**

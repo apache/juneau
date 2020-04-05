@@ -129,7 +129,7 @@ public final class EncoderGroup {
 		if (em != null)
 			return em;
 
-		AcceptEncoding ae = AcceptEncoding.forString(acceptEncoding);
+		AcceptEncoding ae = AcceptEncoding.of(acceptEncoding);
 		int match = ae.findMatch(encodings);
 
 		if (match >= 0) {

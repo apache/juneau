@@ -21,10 +21,10 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.testutils.*;

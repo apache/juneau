@@ -152,7 +152,7 @@ public final class ParserGroup extends BeanContext {
 		if (pm != null)
 			return pm;
 
-		ContentType ct = ContentType.forString(contentTypeHeader);
+		ContentType ct = ContentType.of(contentTypeHeader);
 		int match = ct.findMatch(mediaTypes);
 
 		if (match >= 0) {

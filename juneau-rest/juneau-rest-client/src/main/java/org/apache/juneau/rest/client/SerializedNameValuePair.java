@@ -33,7 +33,7 @@ import org.apache.juneau.urlencoding.*;
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
  *
- * @deprecated Use {@link org.apache.juneau.rest.client2.ext.SerializedNameValuePair}.
+ * @deprecated Use {@link org.apache.juneau.http.SerializedNameValuePair}.
  */
 @Deprecated
 public final class SerializedNameValuePair implements NameValuePair {

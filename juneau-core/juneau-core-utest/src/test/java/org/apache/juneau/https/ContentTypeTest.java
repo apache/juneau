@@ -82,7 +82,7 @@ public class ContentTypeTest {
 
 	@Test
 	public void test() throws Exception {
-		ContentType ct = ContentType.forString(this.contentType);
+		ContentType ct = ContentType.of(this.contentType);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
 		int r = ct.findMatch(mt);
 		TestUtils.assertEquals(expected, r, "{0} failed", label);

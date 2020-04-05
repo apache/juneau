@@ -83,13 +83,15 @@ import org.apache.juneau.http.annotation.*;
 @Header("Expires")
 public final class Expires extends BasicDateHeader {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Returns a parsed <c>Expires</c> header.
 	 *
 	 * @param value The <c>Expires</c> header string.
 	 * @return The parsed <c>Expires</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Expires forString(String value) {
+	public static Expires of(String value) {
 		if (value == null)
 			return null;
 		return new Expires(value);

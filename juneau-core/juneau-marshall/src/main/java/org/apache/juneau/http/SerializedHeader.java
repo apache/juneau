@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.client2.ext;
+package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -33,10 +33,10 @@ import org.apache.juneau.urlencoding.*;
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
  */
-public final class SerializedNameValuePair implements NameValuePair {
-	private String name;
+public final class SerializedHeader extends BasicHeader {
+	private static final long serialVersionUID = 1L;
+
 	private Object value;
-	private HttpPartType type;
 	private HttpPartSerializerSession serializer;
 	private HttpPartSchema schema;
 	private boolean skipIfEmpty;
@@ -53,9 +53,8 @@ public final class SerializedNameValuePair implements NameValuePair {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
+	 * @param name The HTTP header name name.
 	 * @param value The POJO to serialize to the parameter value.
-	 * @param type The HTTP part type.
 	 * @param serializer
 	 * 	The serializer to use for serializing the value to a string value.
 	 * @param schema
@@ -65,30 +64,27 @@ public final class SerializedNameValuePair implements NameValuePair {
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
 	 */
-	public SerializedNameValuePair(String name, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		this.name = name;
+	public SerializedHeader(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
+		super(name, null);
 		this.value = value;
-		this.type = type;
 		this.serializer = serializer;
 		this.schema = schema == null ? HttpPartSchema.DEFAULT : schema;
 		this.skipIfEmpty = skipIfEmpty;
 	}
 
-	SerializedNameValuePair(Builder b) {
-		this.name = b.name;
+	SerializedHeader(Builder b) {
+		super(b.name, null);
 		this.value = b.value;
-		this.type = b.type;
 		this.serializer = b.serializer;
 		this.schema = b.schema == null ? HttpPartSchema.DEFAULT : b.schema;
 	}
 
 	/**
-	 * Builder for {@link SerializedNameValuePair} objects.
+	 * Builder for {@link SerializedHeader} objects.
 	 */
 	public static class Builder {
 		String name;
 		Object value;
-		HttpPartType type;
 		HttpPartSerializerSession serializer;
 		HttpPartSchema schema;
 
@@ -111,29 +107,6 @@ public final class SerializedNameValuePair implements NameValuePair {
 		 */
 		public Builder value(Object value) {
 			this.value = value;
-			return this;
-		}
-
-		/**
-		 * Sets the HTTP part type.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder type(HttpPartType value) {
-			this.type = value;
-			return this;
-		}
-
-		/**
-		 * Sets the serializer to use for serializing the value to a string value.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder serializer(HttpPartSerializer value) {
-			if (value != null)
-				return serializer(value.createPartSession(null));
 			return this;
 		}
 
@@ -172,18 +145,13 @@ public final class SerializedNameValuePair implements NameValuePair {
 		}
 
 		/**
-		 * Creates the new {@link SerializedNameValuePair}
+		 * Creates the new {@link SerializedHeader}
 		 *
-		 * @return The new {@link SerializedNameValuePair}
+		 * @return The new {@link SerializedHeader}
 		 */
-		public SerializedNameValuePair build() {
-			return new SerializedNameValuePair(this);
+		public SerializedHeader build() {
+			return new SerializedHeader(this);
 		}
-	}
-
-	@Override /* NameValuePair */
-	public String getName() {
-		return name;
 	}
 
 	@Override /* NameValuePair */
@@ -197,16 +165,11 @@ public final class SerializedNameValuePair implements NameValuePair {
 			}
 			if (isEmpty(value) && skipIfEmpty && schema.getDefault() == null)
 				return null;
-			return serializer.serialize(type, schema, value);
+			return serializer.serialize(HttpPartType.HEADER, schema, value);
 		} catch (SchemaValidationException e) {
-			throw new BasicRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", type, name, value);
+			throw new BasicRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
 		} catch (SerializeException e) {
-			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", type, name);
+			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
 		}
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return name + "=" + getValue();
 	}
 }

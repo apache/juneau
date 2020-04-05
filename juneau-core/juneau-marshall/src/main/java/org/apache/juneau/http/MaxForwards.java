@@ -59,14 +59,7 @@ import org.apache.juneau.http.annotation.*;
 @Header("Max-Forwards")
 public final class MaxForwards extends BasicIntegerHeader {
 
-	/**
-	 * Constructor.
-	 *
-	 * @param value The value for this header.
-	 */
-	public MaxForwards(Integer value) {
-		super("Max-Forwards", value);
-	}
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Max-Forwards</c> header.
@@ -74,10 +67,19 @@ public final class MaxForwards extends BasicIntegerHeader {
 	 * @param value The <c>Max-Forwards</c> header string.
 	 * @return The parsed <c>Max-Forwards</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static MaxForwards forString(String value) {
+	public static MaxForwards of(String value) {
 		if (value == null)
 			return null;
 		return new MaxForwards(value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public MaxForwards(Integer value) {
+		super("Max-Forwards", value);
 	}
 
 	/**

@@ -20,6 +20,7 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.entity.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.internal.*;
@@ -27,7 +28,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.utils.*;
@@ -305,7 +305,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void b09_HttpEntity() throws Exception {
-		String o = b01.postB09(new StringEntity("xxx", ContentType.create("text/plain")));
+		String o = b01.postB09(new StringEntity("xxx", org.apache.http.entity.ContentType.create("text/plain")));
 		assertEquals("xxx", o);
 	}
 	@Test
@@ -425,7 +425,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void c09_HttpEntity() throws Exception {
-		String o = c01.postC09(new StringEntity("xxx", ContentType.create("text/plain")));
+		String o = c01.postC09(new StringEntity("xxx", org.apache.http.entity.ContentType.create("text/plain")));
 		assertEquals("xxx", o);
 	}
 	@Test

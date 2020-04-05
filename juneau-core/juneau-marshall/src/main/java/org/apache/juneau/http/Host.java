@@ -67,7 +67,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Host")
-public final class Host extends BasicStringHeader {
+public final class Host extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Host</c> header.
@@ -75,7 +77,7 @@ public final class Host extends BasicStringHeader {
 	 * @param value The <c>Host</c> header string.
 	 * @return The parsed <c>Host</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Host forString(String value) {
+	public static Host of(String value) {
 		if (value == null)
 			return null;
 		return new Host(value);

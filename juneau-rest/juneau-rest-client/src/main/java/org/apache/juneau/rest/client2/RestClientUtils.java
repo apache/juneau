@@ -22,7 +22,6 @@ import org.apache.http.*;
 import org.apache.http.message.BasicHeader;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.rest.client2.ext.*;
 
 /**
  * Static utility methods shared by mutiple classes.
@@ -35,10 +34,6 @@ class RestClientUtils {
 		if (o instanceof NameValuePair) {
 			NameValuePair p = (NameValuePair)o;
 			return new BasicHeader(p.getName(), p.getValue());
-		}
-		if (o instanceof HttpHeader) {
-			HttpHeader h = (HttpHeader)o;
-			return new BasicObjectHeader(h.getName(), h.getValue());
 		}
 		return null;
 	}
@@ -58,13 +53,6 @@ class RestClientUtils {
 	static List<Header> toHeaders(NameValuePair...pairs) {
 		List<Header> l = new ArrayList<>();
 		for (NameValuePair p : pairs)
-			l.add(toHeader(p));
-		return l;
-	}
-
-	static List<Header> toHeaders(HttpHeader...headers) {
-		List<Header> l = new ArrayList<>();
-		for (HttpHeader p : headers)
 			l.add(toHeader(p));
 		return l;
 	}

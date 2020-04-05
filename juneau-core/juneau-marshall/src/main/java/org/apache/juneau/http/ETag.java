@@ -48,7 +48,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("ETag")
-public final class ETag extends BasicStringHeader {
+public final class ETag extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>ETag</c> header.
@@ -56,7 +58,7 @@ public final class ETag extends BasicStringHeader {
 	 * @param value The <c>ETag</c> header string.
 	 * @return The parsed <c>ETag</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static ETag forString(String value) {
+	public static ETag of(String value) {
 		if (value == null)
 			return null;
 		return new ETag(value);

@@ -39,7 +39,7 @@ import org.apache.juneau.urlencoding.*;
  * 	restClient.doPost(url, params).run();
  * </p>
  *
- * @deprecated Use {@link org.apache.juneau.rest.client2.ext.NameValuePairs}
+ * @deprecated Use {@link org.apache.juneau.http.NameValuePairs}
  */
 @Deprecated
 public final class NameValuePairs extends LinkedList<NameValuePair> {

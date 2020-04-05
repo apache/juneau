@@ -45,7 +45,6 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.RestRequest;
 import org.apache.juneau.rest.client2.RestResponse;
-import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
@@ -151,7 +150,7 @@ public class RestClientBuilderTest {
 			"---request headers---",
 			"	Accept: application/json+simple",
 			"---request entity---",
-			"Content-Type: application/json+simple",
+			"application/json+simple",
 			"---request content---",
 			"{f:1}",
 			"=== RESPONSE ===",
@@ -445,12 +444,12 @@ public class RestClientBuilderTest {
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.header(new BasicStringHeader("Foo", "bar"))
+			.header(new BasicObjectHeader("Foo", "bar"))
 			.header("Check", "Foo")
 			.build();
 		rc
 			.get("/checkHeader")
-			.header(new BasicStringHeader("Foo", "baz"))
+			.header(new BasicObjectHeader("Foo", "baz"))
 			.run()
 			.getBody()
 			.assertValue("['bar','baz']");
@@ -557,12 +556,12 @@ public class RestClientBuilderTest {
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.headers(new BasicStringHeader("Foo", "bar"))
+			.headers(new BasicObjectHeader("Foo", "bar"))
 			.header("Check", "Foo")
 			.build();
 		rc
 			.get("/checkHeader")
-			.headers(new BasicStringHeader("Foo", "baz"))
+			.headers(new BasicObjectHeader("Foo", "baz"))
 			.run()
 			.getBody()
 			.assertValue("['bar','baz']");
@@ -1300,7 +1299,7 @@ public class RestClientBuilderTest {
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.header(new IfMatch("foo"))
+			.header(new IfMatch("\"foo\""))
 			.header("Check", "If-Match")
 			.build();
 		rc
@@ -1345,7 +1344,7 @@ public class RestClientBuilderTest {
 		RestClient rc = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.header(new IfNoneMatch("foo"))
+			.header(new IfNoneMatch("\"foo\""))
 			.header("Check", "If-None-Match")
 			.build();
 		rc

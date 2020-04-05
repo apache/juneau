@@ -58,14 +58,7 @@ import org.apache.juneau.http.annotation.*;
 @Header("Age")
 public final class Age extends BasicIntegerHeader {
 
-	/**
-	 * Constructor.
-	 *
-	 * @param value The value for this header.
-	 */
-	public Age(Integer value) {
-		super("Age", value);
-	}
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Age</c> header.
@@ -73,10 +66,19 @@ public final class Age extends BasicIntegerHeader {
 	 * @param value The <c>Age</c> header string.
 	 * @return The parsed <c>Age</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Age forString(String value) {
+	public static Age of(String value) {
 		if (value == null)
 			return null;
 		return new Age(value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Age(Integer value) {
+		super("Age", value);
 	}
 
 	/**

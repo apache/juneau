@@ -73,6 +73,20 @@ import org.apache.juneau.http.annotation.*;
 @Header("Content-Language")
 public final class ContentLanguage extends BasicCsvArrayHeader {
 
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Returns a parsed and cached <c>Content-Language</c> header.
+	 *
+	 * @param value The <c>Content-Language</c> header string.
+	 * @return The parsed <c>Content-Language</c> header, or <jk>null</jk> if the string was null.
+	 */
+	public static ContentLanguage of(String value) {
+		if (value == null)
+			return null;
+		return new ContentLanguage(value);
+	}
+
 	/**
 	 * Constructor.
 	 *
@@ -80,18 +94,6 @@ public final class ContentLanguage extends BasicCsvArrayHeader {
 	 */
 	public ContentLanguage(String[] value) {
 		super("Allow", value);
-	}
-
-	/**
-	 * Returns a parsed <c>Content-Language</c> header.
-	 *
-	 * @param value The <c>Content-Language</c> header string.
-	 * @return The parsed <c>Content-Language</c> header, or <jk>null</jk> if the string was null.
-	 */
-	public static ContentLanguage forString(String value) {
-		if (value == null)
-			return null;
-		return new ContentLanguage(value);
 	}
 
 	/**

@@ -18,7 +18,9 @@ import org.apache.juneau.http.annotation.*;
  * Represents a parsed <l>Origin</l> HTTP request header.
  */
 @Header("Origin")
-public final class Origin extends BasicStringHeader {
+public final class Origin extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Origin</c> header.
@@ -26,7 +28,7 @@ public final class Origin extends BasicStringHeader {
 	 * @param value The <c>Origin</c> header string.
 	 * @return The parsed <c>Origin</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Origin forString(String value) {
+	public static Origin of(String value) {
 		if (value == null)
 			return null;
 		return new Origin(value);

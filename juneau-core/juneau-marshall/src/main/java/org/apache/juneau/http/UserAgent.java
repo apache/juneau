@@ -50,7 +50,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("User-Agent")
-public final class UserAgent extends BasicStringHeader {
+public final class UserAgent extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>User-Agent</c> header.
@@ -58,7 +60,7 @@ public final class UserAgent extends BasicStringHeader {
 	 * @param value The <c>User-Agent</c> header string.
 	 * @return The parsed <c>User-Agent</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static UserAgent forString(String value) {
+	public static UserAgent of(String value) {
 		if (value == null)
 			return null;
 		return new UserAgent(value);

@@ -89,7 +89,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("If-Match")
-public final class IfMatch extends ComplexEntityValidatorArrayHeader {
+public final class IfMatch extends BasicEntityValidatorArrayHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>If-Match</c> header.
@@ -97,7 +99,7 @@ public final class IfMatch extends ComplexEntityValidatorArrayHeader {
 	 * @param value The <c>If-Match</c> header string.
 	 * @return The parsed <c>If-Match</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static IfMatch forString(String value) {
+	public static IfMatch of(String value) {
 		if (value == null)
 			return null;
 		return new IfMatch(value);

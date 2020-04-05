@@ -314,12 +314,12 @@ public class EndToEndInterfaceTest {
 
 		@Override
 		public StreamResource streamResource() throws IOException {
-			return StreamResource.create().mediaType("text/foo").contents("foo".getBytes()).header("Foo", "foo").headers(ETag.forString("bar")).build();
+			return StreamResource.create().mediaType("text/foo").contents("foo".getBytes()).header("Foo", "foo").headers(ETag.of("bar")).build();
 		}
 
 		@Override
 		public ReaderResource readerResource() throws IOException {
-			return ReaderResource.create().mediaType("text/foo").contents("foo").header("Foo", "foo").headers(ETag.forString("bar")).build();
+			return ReaderResource.create().mediaType("text/foo").contents("foo").header("Foo", "foo").headers(ETag.of("bar")).build();
 		}
 	}
 

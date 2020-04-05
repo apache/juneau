@@ -65,7 +65,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Content-Location")
-public final class ContentLocation extends HeaderUri {
+public final class ContentLocation extends BasicUriHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Content-Location</c> header.
@@ -73,7 +75,7 @@ public final class ContentLocation extends HeaderUri {
 	 * @param value The <c>Content-Location</c> header string.
 	 * @return The parsed <c>Content-Location</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static ContentLocation forString(String value) {
+	public static ContentLocation of(String value) {
 		if (value == null)
 			return null;
 		return new ContentLocation(value);

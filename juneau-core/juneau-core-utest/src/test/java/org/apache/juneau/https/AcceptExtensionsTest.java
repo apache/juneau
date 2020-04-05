@@ -31,7 +31,7 @@ public class AcceptExtensionsTest {
 		Accept accept;
 		MediaTypeRange mr;
 
-		accept = Accept.forString("text/json");
+		accept = Accept.of("text/json");
 		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json", mr);
 		assertTextEquals("text/json", mr.getMediaType());
@@ -39,7 +39,7 @@ public class AcceptExtensionsTest {
 		assertTextEquals("1.0", mr.getQValue());
 		assertObjectEquals("{}", mr.getExtensions());
 
-		accept = Accept.forString("foo,bar");
+		accept = Accept.of("foo,bar");
 		mr = accept.asRanges().get(0);
 		assertTextEquals("foo", mr);
 		assertTextEquals("foo", mr.getMediaType());
@@ -47,7 +47,7 @@ public class AcceptExtensionsTest {
 		assertTextEquals("1.0", mr.getQValue());
 		assertObjectEquals("{}", mr.getExtensions());
 
-		accept = Accept.forString(" foo , bar ");
+		accept = Accept.of(" foo , bar ");
 		mr = accept.asRanges().get(0);
 		assertTextEquals("foo", mr);
 		assertTextEquals("foo", mr.getMediaType());
@@ -55,7 +55,7 @@ public class AcceptExtensionsTest {
 		assertTextEquals("1.0", mr.getQValue());
 		assertObjectEquals("{}", mr.getExtensions());
 
-		accept = Accept.forString("text/json;a=1;q=0.9;b=2");
+		accept = Accept.of("text/json;a=1;q=0.9;b=2");
 		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;a=1;q=0.9;b=2", mr);
 		assertTextEquals("text/json;a=1", mr.getMediaType());
@@ -63,7 +63,7 @@ public class AcceptExtensionsTest {
 		assertTextEquals("0.9", mr.getQValue());
 		assertObjectEquals("{b:['2']}", mr.getExtensions());
 
-		accept = Accept.forString("text/json;a=1;a=2;q=0.9;b=3;b=4");
+		accept = Accept.of("text/json;a=1;a=2;q=0.9;b=3;b=4");
 		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;a=1;a=2;q=0.9;b=3;b=4", mr);
 		assertTextEquals("text/json;a=1;a=2", mr.getMediaType());
@@ -71,7 +71,7 @@ public class AcceptExtensionsTest {
 		assertTextEquals("0.9", mr.getQValue());
 		assertObjectEquals("{b:['3','4']}", mr.getExtensions());
 
-		accept = Accept.forString("text/json;a=1");
+		accept = Accept.of("text/json;a=1");
 		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;a=1", mr);
 		assertTextEquals("text/json;a=1", mr.getMediaType());
@@ -79,7 +79,7 @@ public class AcceptExtensionsTest {
 		assertTextEquals("1.0", mr.getQValue());
 		assertObjectEquals("{}", mr.getExtensions());
 
-		accept = Accept.forString("text/json;a=1;");
+		accept = Accept.of("text/json;a=1;");
 		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;a=1", mr);
 		assertTextEquals("text/json;a=1", mr.getMediaType());
@@ -87,7 +87,7 @@ public class AcceptExtensionsTest {
 		assertTextEquals("1.0", mr.getQValue());
 		assertObjectEquals("{}", mr.getExtensions());
 
-		accept = Accept.forString("text/json;q=0.9");
+		accept = Accept.of("text/json;q=0.9");
 		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;q=0.9", mr);
 		assertTextEquals("text/json", mr.getMediaType());
@@ -95,7 +95,7 @@ public class AcceptExtensionsTest {
 		assertTextEquals("0.9", mr.getQValue());
 		assertObjectEquals("{}", mr.getExtensions());
 
-		accept = Accept.forString("text/json;q=0.9;");
+		accept = Accept.of("text/json;q=0.9;");
 		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;q=0.9", mr);
 		assertTextEquals("text/json", mr.getMediaType());
@@ -109,7 +109,7 @@ public class AcceptExtensionsTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void testHasSubtypePart() {
-		Accept accept = Accept.forString("text/json+x,text/foo+y;q=0.0");
+		Accept accept = Accept.of("text/json+x,text/foo+y;q=0.0");
 		assertTrue(accept.hasSubtypePart("json"));
 		assertTrue(accept.hasSubtypePart("x"));
 		assertFalse(accept.hasSubtypePart("foo"));

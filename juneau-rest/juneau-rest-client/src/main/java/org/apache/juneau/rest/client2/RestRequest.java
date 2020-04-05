@@ -42,7 +42,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.rest.client2.logging.*;
 import org.apache.juneau.serializer.*;
 
@@ -1624,9 +1623,8 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @param header The header to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Header}
+	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
 	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
 	 * 		<li><jk>null</jk> - Will be a no-op.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -1657,9 +1655,8 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @param header The header to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Header}
+	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
 	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
 	 * 		<li><jk>null</jk> - Will be a no-op.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -1688,9 +1685,8 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @param headers The header to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Header}
+	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
 	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
 	 * 		<li>{@link Map} / {@link OMap} / bean
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -1731,9 +1727,8 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @param headers The header to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Header}
+	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
 	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
 	 * 		<li>{@link Map} / {@link OMap} / bean
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -1753,7 +1748,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	public RestRequest headers(EnumSet<AddFlag> flags, Object...headers) throws RestCallException {
 		List<Header> l = new ArrayList<>();
 		for (Object o : headers) {
-			if (o instanceof Header || o instanceof NameValuePair || o instanceof HttpHeader) {
+			if (o instanceof Header || o instanceof NameValuePair) {
 				l.add(toHeader(o));
 			} else if (o instanceof NameValuePairs) {
 				for (NameValuePair p : (NameValuePairs)o)

@@ -94,13 +94,15 @@ import org.apache.juneau.http.annotation.*;
 @Header("If-Modified-Since")
 public final class IfModifiedSince extends BasicDateHeader {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Returns a parsed <c>If-Modified-Since</c> header.
 	 *
 	 * @param value The <c>If-Modified-Since</c> header string.
 	 * @return The parsed <c>If-Modified-Since</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static IfModifiedSince forString(String value) {
+	public static IfModifiedSince of(String value) {
 		if (value == null)
 			return null;
 		return new IfModifiedSince(value);

@@ -65,7 +65,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("From")
-public final class From extends BasicStringHeader {
+public final class From extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>From</c> header.
@@ -73,7 +75,7 @@ public final class From extends BasicStringHeader {
 	 * @param value The <c>From</c> header string.
 	 * @return The parsed <c>From</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static From forString(String value) {
+	public static From of(String value) {
 		if (value == null)
 			return null;
 		return new From(value);

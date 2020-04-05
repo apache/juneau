@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.http.Constants.*;
+
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>Connection</l> HTTP request header.
@@ -75,18 +78,25 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Connection")
-public final class Connection extends BasicStringHeader {
+public final class Connection extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
+
+	private static final Cache<String,Connection> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <c>Connection</c> header.
+	 * Returns a parsed and cached <c>Connection</c> header.
 	 *
 	 * @param value The <c>Connection</c> header string.
 	 * @return The parsed <c>Connection</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Connection forString(String value) {
+	public static Connection of(String value) {
 		if (value == null)
 			return null;
-		return new Connection(value);
+		Connection x = CACHE.get(value);
+		if (x == null)
+			x = CACHE.put(value, new Connection(value));
+		return x;
 	}
 
 	/**

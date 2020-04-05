@@ -13,7 +13,6 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.http.Constants.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -144,23 +143,25 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept")
-public final class Accept extends ComplexHeader {
+public final class Accept extends BasicHeader {
 
-	private static final Cache<String,Accept> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final long serialVersionUID = 1L;
+
+	private static final Cache<String,Accept> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <c>Accept</c> header.
+	 * Returns a parsed and cached <c>Accept</c> header.
 	 *
 	 * @param value The <c>Accept</c> header string.
 	 * @return The parsed <c>Accept</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Accept forString(String value) {
+	public static Accept of(String value) {
 		if (value == null)
 			return null;
-		Accept a = cache.get(value);
-		if (a == null)
-			a = cache.put(value, new Accept(value));
-		return a;
+		Accept x = CACHE.get(value);
+		if (x == null)
+			x = CACHE.put(value, new Accept(value));
+		return x;
 	}
 
 
@@ -173,7 +174,7 @@ public final class Accept extends ComplexHeader {
 	 * @param value HTTP header value.
 	 */
 	public Accept(String value) {
-		super("Accept");
+		super("Accept", value);
 		this.mediaRanges = MediaTypeRange.parse(value);
 		this.mediaRangesList = AList.unmodifiable(mediaRanges);
 	}
@@ -294,15 +295,5 @@ public final class Accept extends ComplexHeader {
 				return true;
 
 		return false;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return join(mediaRanges, ',');
-	}
-
-	@Override /* HttpHeader */
-	public Object getValue() {
-		return toString();
 	}
 }

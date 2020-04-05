@@ -12,26 +12,29 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import java.net.*;
+import java.util.*;
 
-import org.apache.juneau.internal.*;
+import org.apache.juneau.collections.*;
 
 /**
- * Category of headers that consist of a single URL value.
+ * Category of headers that consist of simple comma-delimited lists of strings with q-values.
  *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode w800'>
- * 	Location: http://www.w3.org/pub/WWW/People.html
+ * 	Accept-Encoding: compress;q=0.5, gzip;q=1.0
  * </p>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
-public class HeaderUri extends BasicHeader {
+public class BasicRangeArrayHeader extends BasicHeader {
 
-	final String value;
+	private static final long serialVersionUID = 1L;
+
+	final StringRange[] typeRanges;
+	private final List<StringRange> typeRangesList;
 
 	/**
 	 * Constructor.
@@ -39,35 +42,39 @@ public class HeaderUri extends BasicHeader {
 	 * @param name The HTTP header name.
 	 * @param value The raw header value.
 	 */
-	protected HeaderUri(String name, String value) {
+	protected BasicRangeArrayHeader(String name, String value) {
 		super(name, value);
-		this.value = StringUtils.trim(value);
+		this.typeRanges = StringRange.parse(value);
+		this.typeRangesList = AList.unmodifiable(typeRanges);
 	}
 
 	/**
-	 * Returns this header as a {@link URI}.
+	 * Given a list of type values, returns the best match for this header.
 	 *
-	 * @return This header as a {@link URI}.
+	 * @param types The types to match against.
+	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
-	public URI asURI() {
-		return URI.create(toString());
+	public int findMatch(String[] types) {
+
+		// Type ranges are ordered by 'q'.
+		// So we only need to search until we've found a match.
+		for (StringRange mr : typeRanges)
+			for (int i = 0; i < types.length; i++)
+				if (mr.matches(types[i]))
+					return i;
+
+		return -1;
 	}
 
 	/**
-	 * Returns this header as a simple string value.
+	 * Returns the list of the types ranges that make up this header.
 	 *
 	 * <p>
-	 * Functionally equivalent to calling {@link #toString()}.
+	 * The types ranges in the list are sorted by their q-value in descending order.
 	 *
-	 * @return This header as a simple string.
+	 * @return An unmodifiable list of type ranges.
 	 */
-	@Override
-	public String asString() {
-		return value;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return value == null ? "" : value;
+	public List<StringRange> asSimpleRanges() {
+		return typeRangesList;
 	}
 }

@@ -12,28 +12,28 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import java.util.*;
-
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Category of headers that consist of simple comma-delimited lists of strings with q-values.
+ * Category of headers that consist of a comma-delimited list of entity validator values.
  *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode w800'>
- * 	Accept-Encoding: compress;q=0.5, gzip;q=1.0
+ * 	If-Match: "xyzzy"
+ * 	If-Match: "xyzzy", "r2d2xxxx", "c3piozzzz"
+ * 	If-Match: *
  * </p>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
-public class ComplexRangeArrayHeader extends ComplexHeader {
+public class BasicEntityValidatorArrayHeader extends BasicHeader {
 
-	final StringRange[] typeRanges;
-	private final List<StringRange> typeRangesList;
+	private static final long serialVersionUID = 1L;
+
+	private final EntityValidator[] value;
 
 	/**
 	 * Constructor.
@@ -41,49 +41,21 @@ public class ComplexRangeArrayHeader extends ComplexHeader {
 	 * @param name The HTTP header name.
 	 * @param value The raw header value.
 	 */
-	protected ComplexRangeArrayHeader(String name, String value) {
-		super(name);
-		this.typeRanges = StringRange.parse(value);
-		this.typeRangesList = AList.unmodifiable(typeRanges);
+	protected BasicEntityValidatorArrayHeader(String name, String value) {
+		super(name, value);
+		String[] s = StringUtils.split(value);
+		this.value = new EntityValidator[s.length];
+		for (int i = 0; i < s.length; i++) {
+			this.value[i] = new EntityValidator(s[i]);
+		}
 	}
 
 	/**
-	 * Given a list of type values, returns the best match for this header.
+	 * Returns this header value as an array of {@link EntityValidator} objects.
 	 *
-	 * @param types The types to match against.
-	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
+	 * @return this header value as an array of {@link EntityValidator} objects.
 	 */
-	public int findMatch(String[] types) {
-
-		// Type ranges are ordered by 'q'.
-		// So we only need to search until we've found a match.
-		for (StringRange mr : typeRanges)
-			for (int i = 0; i < types.length; i++)
-				if (mr.matches(types[i]))
-					return i;
-
-		return -1;
-	}
-
-	/**
-	 * Returns the list of the types ranges that make up this header.
-	 *
-	 * <p>
-	 * The types ranges in the list are sorted by their q-value in descending order.
-	 *
-	 * @return An unmodifiable list of type ranges.
-	 */
-	public List<StringRange> asSimpleRanges() {
-		return typeRangesList;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return StringUtils.join(typeRanges, ',');
-	}
-
-	@Override /* HttpHeader */
-	public Object getValue() {
-		return toString();
+	public EntityValidator[] asValidators() {
+		return value;
 	}
 }

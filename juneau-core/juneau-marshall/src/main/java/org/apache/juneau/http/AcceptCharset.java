@@ -71,23 +71,25 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept-Charset")
-public final class AcceptCharset extends ComplexRangeArrayHeader {
+public final class AcceptCharset extends BasicRangeArrayHeader {
 
-	private static final Cache<String,AcceptCharset> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final long serialVersionUID = 1L;
+
+	private static final Cache<String,AcceptCharset> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <c>Accept-Charset</c> header.
+	 * Returns a parsed and cached <c>Accept-Charset</c> header.
 	 *
 	 * @param value The <c>Accept-Charset</c> header string.
 	 * @return The parsed <c>Accept-Charset</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static AcceptCharset forString(String value) {
+	public static AcceptCharset of(String value) {
 		if (value == null)
 			return null;
-		AcceptCharset a = cache.get(value);
-		if (a == null)
-			a = cache.put(value, new AcceptCharset(value));
-		return a;
+		AcceptCharset x = CACHE.get(value);
+		if (x == null)
+			x = CACHE.put(value, new AcceptCharset(value));
+		return x;
 	}
 
 	/**

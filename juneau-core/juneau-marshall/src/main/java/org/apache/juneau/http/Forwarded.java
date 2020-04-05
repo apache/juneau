@@ -18,7 +18,9 @@ import org.apache.juneau.http.annotation.*;
  * Represents a parsed <l>Forwarded</l> HTTP request header.
  */
 @Header("Forwarded")
-public final class Forwarded extends BasicStringHeader {
+public final class Forwarded extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Forwarded</c> header.
@@ -26,7 +28,7 @@ public final class Forwarded extends BasicStringHeader {
 	 * @param value The <c>Forwarded</c> header string.
 	 * @return The parsed <c>Forwarded</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Forwarded forString(String value) {
+	public static Forwarded of(String value) {
 		if (value == null)
 			return null;
 		return new Forwarded(value);

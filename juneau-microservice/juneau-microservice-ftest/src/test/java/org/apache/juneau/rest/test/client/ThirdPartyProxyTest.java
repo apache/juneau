@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Request;
 import org.apache.juneau.httppart.*;
@@ -29,7 +30,6 @@ import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.test.*;
 import org.apache.juneau.rest.test.client.ThirdPartyProxyTest.ThirdPartyProxy.*;

@@ -16,7 +16,6 @@ import java.util.Date;
 
 import org.apache.http.client.utils.*;
 import org.apache.http.message.BasicHeader;
-import org.apache.juneau.http.*;
 
 /**
  * Convenience class for setting date headers in RFC2616 format.
@@ -27,7 +26,7 @@ import org.apache.juneau.http.*;
  * 	Header h = <jk>new</jk> Header(name, DateUtils.<jsm>formatDate</jsm>(value));
  * </p>
  *
- * @deprecated Use {@link HttpHeader HttpHeaders}
+ * @deprecated Use {@link org.apache.juneau.http.Date}
  */
 @Deprecated
 public final class DateHeader extends BasicHeader {

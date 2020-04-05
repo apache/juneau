@@ -88,9 +88,11 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("TE")
-public final class TE extends ComplexRangeArrayHeader {
+public final class TE extends BasicRangeArrayHeader {
 
-	private static final Cache<String,TE> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final long serialVersionUID = 1L;
+
+	private static final Cache<String,TE> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
 	 * Returns a parsed <c>TE</c> header.
@@ -98,12 +100,12 @@ public final class TE extends ComplexRangeArrayHeader {
 	 * @param value The <c>TE</c> header string.
 	 * @return The parsed <c>TE</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static TE forString(String value) {
+	public static TE of(String value) {
 		if (value == null)
 			return null;
-		TE te = cache.get(value);
+		TE te = CACHE.get(value);
 		if (te == null)
-			te = cache.put(value, new TE(value));
+			te = CACHE.put(value, new TE(value));
 		return te;
 	}
 

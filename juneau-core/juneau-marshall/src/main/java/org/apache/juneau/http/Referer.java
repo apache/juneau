@@ -56,7 +56,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Referer")
-public final class Referer extends HeaderUri {
+public final class Referer extends BasicUriHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Referer</c> header.
@@ -64,7 +66,7 @@ public final class Referer extends HeaderUri {
 	 * @param value The <c>Referer</c> header string.
 	 * @return The parsed <c>Referer</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Referer forString(String value) {
+	public static Referer of(String value) {
 		if (value == null)
 			return null;
 		return new Referer(value);

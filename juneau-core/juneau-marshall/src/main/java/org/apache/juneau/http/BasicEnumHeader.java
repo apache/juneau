@@ -29,7 +29,8 @@ package org.apache.juneau.http;
  */
 public class BasicEnumHeader<E extends Enum<E>> extends BasicHeader {
 
-	private final String value;
+	private static final long serialVersionUID = 1L;
+
 	private final E enumValue;
 
 	/**
@@ -42,7 +43,6 @@ public class BasicEnumHeader<E extends Enum<E>> extends BasicHeader {
 	 */
 	protected BasicEnumHeader(String name, String value, Class<E> enumClass, E def) {
 		super(name, value);
-		this.value = value;
 		E _enumValue = def;
 		try {
 			_enumValue = Enum.valueOf(enumClass, value.toUpperCase());
@@ -59,23 +59,5 @@ public class BasicEnumHeader<E extends Enum<E>> extends BasicHeader {
 	 */
 	public E asEnum() {
 		return enumValue;
-	}
-
-	/**
-	 * Returns this header as a simple string value.
-	 *
-	 * <p>
-	 * Functionally equivalent to calling {@link #toString()}.
-	 *
-	 * @return This header as a simple string.
-	 */
-	@Override
-	public String asString() {
-		return value;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return value == null ? "" : value;
 	}
 }

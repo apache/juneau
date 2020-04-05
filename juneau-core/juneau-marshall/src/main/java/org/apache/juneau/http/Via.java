@@ -118,14 +118,7 @@ import org.apache.juneau.http.annotation.*;
 @Header("Via")
 public final class Via extends BasicCsvArrayHeader {
 
-	/**
-	 * Constructor.
-	 *
-	 * @param value The value for this header.
-	 */
-	public Via(String[] value) {
-		super("Via", value);
-	}
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Via</c> header.
@@ -133,10 +126,19 @@ public final class Via extends BasicCsvArrayHeader {
 	 * @param value The <c>Via</c> header string.
 	 * @return The parsed <c>Via</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Via forString(String value) {
+	public static Via of(String value) {
 		if (value == null)
 			return null;
 		return new Via(value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Via(String[] value) {
+		super("Via", value);
 	}
 
 	/**

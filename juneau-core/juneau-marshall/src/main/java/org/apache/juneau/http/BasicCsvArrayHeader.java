@@ -32,6 +32,8 @@ import org.apache.juneau.jsonschema.annotation.Items;
 @Header(type="array",collectionFormat="csv",items=@Items(type="string"))
 public class BasicCsvArrayHeader extends BasicHeader {
 
+	private static final long serialVersionUID = 1L;
+
 	private final String[] value;
 
 	/**
@@ -58,19 +60,6 @@ public class BasicCsvArrayHeader extends BasicHeader {
 
 	private static String[] split(String value) {
 		return StringUtils.split(value);
-	}
-
-	/**
-	 * Returns this header as a simple string value.
-	 *
-	 * <p>
-	 * Functionally equivalent to calling {@link #toString()}.
-	 *
-	 * @return This header as a simple string.
-	 */
-	@Override
-	public String asString() {
-		return StringUtils.joine(value, ',');
 	}
 
 	/**

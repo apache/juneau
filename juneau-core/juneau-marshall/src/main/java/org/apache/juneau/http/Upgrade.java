@@ -82,14 +82,7 @@ import org.apache.juneau.http.annotation.*;
 @Header("Upgrade")
 public final class Upgrade extends BasicCsvArrayHeader {
 
-	/**
-	 * Constructor.
-	 *
-	 * @param value The value for this header.
-	 */
-	public Upgrade(String[] value) {
-		super("Upgrade", value);
-	}
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Upgrade</c> header.
@@ -97,10 +90,19 @@ public final class Upgrade extends BasicCsvArrayHeader {
 	 * @param value The <c>Upgrade</c> header string.
 	 * @return The parsed <c>Upgrade</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Upgrade forString(String value) {
+	public static Upgrade of(String value) {
 		if (value == null)
 			return null;
 		return new Upgrade(value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public Upgrade(String[] value) {
+		super("Upgrade", value);
 	}
 
 	/**

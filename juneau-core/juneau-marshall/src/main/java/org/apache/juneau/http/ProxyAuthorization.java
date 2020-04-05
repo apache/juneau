@@ -50,7 +50,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Proxy-Authorization")
-public final class ProxyAuthorization extends BasicStringHeader {
+public final class ProxyAuthorization extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Proxy-Authorization</c> header.
@@ -58,7 +60,7 @@ public final class ProxyAuthorization extends BasicStringHeader {
 	 * @param value The <c>Proxy-Authorization</c> header string.
 	 * @return The parsed <c>Proxy-Authorization</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static ProxyAuthorization forString(String value) {
+	public static ProxyAuthorization of(String value) {
 		if (value == null)
 			return null;
 		return new ProxyAuthorization(value);

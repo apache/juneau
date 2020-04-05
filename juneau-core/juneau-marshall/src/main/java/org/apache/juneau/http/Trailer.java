@@ -57,7 +57,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Trailer")
-public final class Trailer extends BasicStringHeader {
+public final class Trailer extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Trailer</c> header.
@@ -65,7 +67,7 @@ public final class Trailer extends BasicStringHeader {
 	 * @param value The <c>Trailer</c> header string.
 	 * @return The parsed <c>Trailer</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static Trailer forString(String value) {
+	public static Trailer of(String value) {
 		if (value == null)
 			return null;
 		return new Trailer(value);

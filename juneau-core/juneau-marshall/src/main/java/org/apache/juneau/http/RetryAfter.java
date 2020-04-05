@@ -58,7 +58,9 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Retry-After")
-public final class RetryAfter extends BasicStringHeader {
+public final class RetryAfter extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Retry-After</c> header.
@@ -66,7 +68,7 @@ public final class RetryAfter extends BasicStringHeader {
 	 * @param value The <c>Retry-After</c> header string.
 	 * @return The parsed <c>Retry-After</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static RetryAfter forString(String value) {
+	public static RetryAfter of(String value) {
 		if (value == null)
 			return null;
 		return new RetryAfter(value);

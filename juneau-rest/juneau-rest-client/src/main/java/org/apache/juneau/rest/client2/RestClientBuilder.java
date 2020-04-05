@@ -548,9 +548,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Can be any of the following types:
 	 * <ul>
-	 * 	<li>{@link Header}
+	 * 	<li>{@link Header} (including any subclasses such as {@link Accept})
 	 * 	<li>{@link NameValuePair}
-	 * 	<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
 	 * </ul>
 	 *
 	 * @param header The header to set.
@@ -575,9 +574,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Can be any of the following singleton types:
 	 * <ul>
-	 * 	<li>{@link Header}
+	 * 	<li>{@link Header} (including any subclasses such as {@link Accept})
 	 * 	<li>{@link NameValuePair}
-	 * 	<li>{@link HttpHeader} (including any subclasses such as {@link Accept})
 	 * </ul>
 	 *
 	 * <p>
@@ -599,7 +597,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@ConfigurationProperty
 	public RestClientBuilder headers(Object...headers) {
 		for (Object h : headers) {
-			if (h instanceof Header || h instanceof NameValuePair || h instanceof HttpHeader)
+			if (h instanceof Header || h instanceof NameValuePair)
 				header(h);
 			else if (h instanceof Map) {
 				Map m = (Map)h;

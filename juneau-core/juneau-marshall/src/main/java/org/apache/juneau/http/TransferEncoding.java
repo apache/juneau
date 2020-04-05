@@ -57,7 +57,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Transfer-Encoding")
-public final class TransferEncoding extends BasicStringHeader {
+public final class TransferEncoding extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Transfer-Encoding</c> header.
@@ -65,7 +67,7 @@ public final class TransferEncoding extends BasicStringHeader {
 	 * @param value The <c>Transfer-Encoding</c> header string.
 	 * @return The parsed <c>Transfer-Encoding</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static TransferEncoding forString(String value) {
+	public static TransferEncoding of(String value) {
 		if (value == null)
 			return null;
 		return new TransferEncoding(value);

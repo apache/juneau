@@ -14,7 +14,9 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.http.Constants.*;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.http.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.internal.*;
 
 /**
@@ -48,22 +50,23 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Content-Type")
-public class ContentType extends MediaType implements HttpHeader {
+@BeanIgnore
+public class ContentType extends MediaType implements org.apache.http.Header {
 
-	private static Cache<String,ContentType> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static Cache<String,ContentType> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <c>Content-Type</c> header.
+	 * Returns a parsed and cached <c>Content-Type</c> header.
 	 *
 	 * @param value The <c>Content-Type</c> header string.
 	 * @return The parsed <c>Content-Type</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static ContentType forString(String value) {
+	public static ContentType of(String value) {
 		if (value == null)
 			return null;
-		ContentType ct = cache.get(value);
+		ContentType ct = CACHE.get(value);
 		if (ct == null)
-			ct = cache.put(value, new ContentType(value));
+			ct = CACHE.put(value, new ContentType(value));
 		return ct;
 	}
 
@@ -106,14 +109,19 @@ public class ContentType extends MediaType implements HttpHeader {
 		return matchIndex;
 	}
 
-	@Override /* HttpHeader */
+	@Override /* Header */
 	public String getName() {
 		return "Content-Type";
 	}
 
 
-	@Override /* HttpHeader */
-	public Object getValue() {
+	@Override /* Header */
+	public String getValue() {
 		return toString();
+	}
+
+	@Override /* Header */
+	public HeaderElement[] getElements() throws ParseException {
+		return null;
 	}
 }

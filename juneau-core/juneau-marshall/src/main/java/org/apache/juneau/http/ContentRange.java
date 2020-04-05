@@ -127,7 +127,9 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Content-Range")
-public final class ContentRange extends BasicStringHeader {
+public final class ContentRange extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns a parsed <c>Content-Range</c> header.
@@ -135,7 +137,7 @@ public final class ContentRange extends BasicStringHeader {
 	 * @param value The <c>Content-Range</c> header string.
 	 * @return The parsed <c>Content-Range</c> header, or <jk>null</jk> if the string was null.
 	 */
-	public static ContentRange forString(String value) {
+	public static ContentRange of(String value) {
 		if (value == null)
 			return null;
 		return new ContentRange(value);
