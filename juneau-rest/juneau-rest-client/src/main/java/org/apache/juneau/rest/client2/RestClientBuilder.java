@@ -1151,7 +1151,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<jk>new</jk> NameValuePair(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.query(<jk>new</jk> BasicNameValuePair(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.run();
 	 * </p>
 	 *
@@ -1286,7 +1286,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<jk>new</jk> NameValuePair(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.formData(<jk>new</jk> BasicNameValuePair(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.run();
 	 * </p>
 	 *
