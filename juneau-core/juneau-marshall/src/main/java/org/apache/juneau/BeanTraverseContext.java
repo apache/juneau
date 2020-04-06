@@ -15,7 +15,6 @@ package org.apache.juneau;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.parser.*;
 
 /**
  * Parent class for all classes that traverse POJOs.
@@ -63,18 +62,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * <p>
 	 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
 	 * <br>In general, unchecked recursions cause stack-overflow-errors.
-	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
-	 *
-	 * <p>
-	 * The behavior when recursions are detected depends on the value for {@link #BEANTRAVERSE_ignoreRecursions}.
-	 *
-	 * <p>
-	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
-	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
-	 *
-	 * <p class='bcode w800'>
-	 * 	{A:{B:{C:<jk>null</jk>}}}
-	 * </p>
+	 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -86,15 +74,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	<jc>// Create a serializer that never adds _type to nodes.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.detectRecursions()
-	 * 		.ignoreRecursions()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEANTRAVERSE_detectRecursions</jsf>, <jk>true</jk>)
-	 * 		.set(<jsf>BEANTRAVERSE_ignoreRecursions</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
@@ -104,7 +84,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	A a = <jk>new</jk> A();
 	 * 	a.<jf>f</jf> = a;
 	 *
-	 * 	<jc>// Produces "{f:null}"</jc>
+	 * 	<jc>// Throws a SerializeException</jc>
 	 * 	String json = s.serialize(a);
 	 * </p>
 	 */
@@ -135,12 +115,34 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Used in conjunction with {@link #BEANTRAVERSE_detectRecursions}.
-	 * <br>Setting is ignored if <jsf>BEANTRAVERSE_detectRecursions</jsf> is <jk>false</jk>.
+	 * If <jk>true</jk>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-	 * <br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
+	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
+	 *
+	 * <p class='bcode w800'>
+	 * 	{A:{B:{C:<jk>null</jk>}}}
+	 * </p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that never adds _type to nodes.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEANTRAVERSE_ignoreRecursions</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> Object <jf>f</jf>;
+	 * 	}
+	 * 	A a = <jk>new</jk> A();
+	 * 	a.<jf>f</jf> = a;
+	 *
+	 * 	<jc>// Produces "{f:null}"</jc>
+	 * 	String json = s.serialize(a);
+	 * </p>
 	 */
 	public static final String BEANTRAVERSE_ignoreRecursions = PREFIX + ".ignoreRecursions.b";
 
@@ -257,8 +259,8 @@ public abstract class BeanTraverseContext extends BeanContext {
 
 		maxDepth = getIntegerProperty(BEANTRAVERSE_maxDepth, 100);
 		initialDepth = getIntegerProperty(BEANTRAVERSE_initialDepth, 0);
-		detectRecursions = getBooleanProperty(BEANTRAVERSE_detectRecursions, false);
 		ignoreRecursions = getBooleanProperty(BEANTRAVERSE_ignoreRecursions, false);
+		detectRecursions = getBooleanProperty(BEANTRAVERSE_detectRecursions, ignoreRecursions);
 	}
 
 	@Override /* Context */

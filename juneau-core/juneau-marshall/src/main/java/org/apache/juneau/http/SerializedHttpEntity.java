@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 import java.io.*;
 
 import org.apache.http.entity.*;
+import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -69,7 +70,7 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 					}
 				}
 			} catch (SerializeException e) {
-				throw new IOException(e);
+				throw new BasicRuntimeException(e, "Serialization error on request body.");
 			}
 		}
 	}

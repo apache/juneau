@@ -54,10 +54,34 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Specifies that recursions should be checked for during traversal.
 	 *
+	 * <p>
+	 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
+	 * <br>In general, unchecked recursions cause stack-overflow-errors.
+	 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
+	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that never adds _type to nodes.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.detectRecursions(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> Object <jf>f</jf>;
+	 * 	}
+	 * 	A a = <jk>new</jk> A();
+	 * 	a.<jf>f</jf> = a;
+	 *
+	 * 	<jc>// Throws a SerializeException</jc>
+	 * 	String json = s.serialize(a);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
@@ -77,7 +101,36 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * Configuration property:  Automatically detect POJO recursions.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>detectRecursions(<jk>true</jk>)</code>.
+	 * Specifies that recursions should be checked for during traversal.
+	 *
+	 * <p>
+	 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
+	 * <br>In general, unchecked recursions cause stack-overflow-errors.
+	 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Checking for recursion can cause a small performance penalty.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that never adds _type to nodes.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.detectRecursions()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> Object <jf>f</jf>;
+	 * 	}
+	 * 	A a = <jk>new</jk> A();
+	 * 	a.<jf>f</jf> = a;
+	 *
+	 * 	<jc>// Throws a SerializeException</jc>
+	 * 	String json = s.serialize(a);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
@@ -95,12 +148,33 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 *
 	 * <p>
 	 * If <jk>true</jk>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-	 * Otherwise, an exception is thrown.
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Checking for recursion can cause a small performance penalty.
-	 * </ul>
+	 * <p>
+	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
+	 *
+	 * <p class='bcode w800'>
+	 * 	{A:{B:{C:<jk>null</jk>}}}
+	 * </p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that never adds _type to nodes.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.ignoreRecursions(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> Object <jf>f</jf>;
+	 * 	}
+	 * 	A a = <jk>new</jk> A();
+	 * 	a.<jf>f</jf> = a;
+	 *
+	 * 	<jc>// Produces "{f:null}"</jc>
+	 * 	String json = s.serialize(a);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
@@ -120,7 +194,34 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * Configuration property:  Ignore recursion errors.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>ignoreRecursions(<jk>true</jk>)</code>.
+	 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
+	 *
+	 * <p>
+	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
+	 *
+	 * <p class='bcode w800'>
+	 * 	{A:{B:{C:<jk>null</jk>}}}
+	 * </p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that never adds _type to nodes.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.ignoreRecursions()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> Object <jf>f</jf>;
+	 * 	}
+	 * 	A a = <jk>new</jk> A();
+	 * 	a.<jf>f</jf> = a;
+	 *
+	 * 	<jc>// Produces "{f:null}"</jc>
+	 * 	String json = s.serialize(a);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}

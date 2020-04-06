@@ -2378,7 +2378,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 		} catch (Exception e) {
 			if (response != null)
 				response.close();
-			throw e instanceof RestCallException ? (RestCallException)e : new RestCallException(e).setRestResponse(response);
+			throw RestCallException.create(e).setRestResponse(response);
 		}
 
 		return this.response;

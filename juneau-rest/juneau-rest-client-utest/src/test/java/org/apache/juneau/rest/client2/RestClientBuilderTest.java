@@ -2233,58 +2233,145 @@ public class RestClientBuilderTest {
 		assertEquals("{f:1}", b.toString());
 	}
 
-//	@Test
-//	public void k21_restClient_serializerClass() throws Exception { fail(); }
-////	public RestClientBuilder serializer(Class<? extends Serializer> value) {
-//
-//	@Test
-//	public void k22_restClient_serializerObject() throws Exception { fail(); }
-////	public RestClientBuilder serializer(Serializer value) {
-//
-//	@Test
-//	public void k23_restClient_serializersClasses() throws Exception { fail(); }
-////	public RestClientBuilder serializers(Class<? extends Serializer>...value) {
-//
-//	@Test
-//	public void k24_restClient_serializersObjects() throws Exception { fail(); }
-////	public RestClientBuilder serializers(Serializer...value) {
-//
-//	//-----------------------------------------------------------------------------------------------------------------
-//	// Serializer properties
-//	//-----------------------------------------------------------------------------------------------------------------
-//
-//	@Test
-//	public void l01_serializer_addBeanTypesBoolean() throws Exception { fail(); }
-////	public RestClientBuilder addBeanTypes(boolean value) {
-//
-//	@Test
-//	public void l02_serializer_addBeanTypes() throws Exception { fail(); }
-////	public RestClientBuilder addBeanTypes() {
-//
-//	@Test
-//	public void l03_serializer_addRootTypeBoolean() throws Exception { fail(); }
-////	public RestClientBuilder addRootType(boolean value) {
-//
-//	@Test
-//	public void l04_serializer_addRootType() throws Exception { fail(); }
-////	public RestClientBuilder addRootType() {
-//
-//	@Test
-//	public void l05_serializer_detectRecursionsBoolean() throws Exception { fail(); }
-////	public RestClientBuilder detectRecursions(boolean value) {
-//
-//	@Test
-//	public void l06_serializer_detectRecursions() throws Exception { fail(); }
-////	public RestClientBuilder detectRecursions() {
-//
-//	@Test
-//	public void l07_serializer_ignoreRecursionsBoolean() throws Exception { fail(); }
-////	public RestClientBuilder ignoreRecursions(boolean value) {
-//
-//	@Test
-//	public void l08_serializer_ignoreRecursions() throws Exception { fail(); }
-////	public RestClientBuilder ignoreRecursions() {
-//
+	//-----------------------------------------------------------------------------------------------------------------
+	// Serializer properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Rest
+	public static class L extends BasicRest {
+		@RestMethod(path="/")
+		public Reader post(org.apache.juneau.rest.RestRequest req) throws IOException {
+			return req.getBody().getReader();
+		}
+	}
+
+	public static class L1 {
+		public Object f1;
+
+		public static L1 create() {
+			L1 l = new L1();
+			l.f1 = L2.create();
+			return l;
+		}
+	}
+
+	@org.apache.juneau.annotation.Bean(typeName="L")
+	public static class L2 {
+		public int f2;
+
+		public static L2 create() {
+			L2 l = new L2();
+			l.f2 = 1;
+			return l;
+		}
+	}
+
+	@Test
+	public void l01a_serializer_addBeanTypes() throws Exception {
+		RestClient rc = MockRestClient
+			.create(L.class)
+			.simpleJson()
+			.addBeanTypes(true)
+			.build();
+		rc.post("", L1.create()).run().getBody().assertValue("{f1:{_type:'L',f2:1}}");
+
+		rc = MockRestClient
+			.create(L.class)
+			.simpleJson()
+			.addBeanTypes(false)
+			.build();
+		rc.post("", L1.create()).run().getBody().assertValue("{f1:{f2:1}}");
+
+		rc = MockRestClient
+			.create(L.class)
+			.simpleJson()
+			.addBeanTypes()
+			.build();
+		rc.post("", L1.create()).run().getBody().assertValue("{f1:{_type:'L',f2:1}}");
+	}
+
+	@Test
+	public void l03_serializer_addRootType() throws Exception {
+		RestClient rc = MockRestClient
+			.create(L.class)
+			.simpleJson()
+			.addRootType(true)
+			.build();
+		rc.post("", L2.create()).run().getBody().assertValue("{f2:1}");
+
+		rc = MockRestClient
+			.create(L.class)
+			.simpleJson()
+			.addBeanTypes()
+			.addRootType(false)
+			.build();
+		rc.post("", L2.create()).run().getBody().assertValue("{f2:1}");
+
+		rc = MockRestClient
+			.create(L.class)
+			.simpleJson()
+			.addBeanTypes()
+			.addRootType(true)
+			.build();
+		rc.post("", L2.create()).run().getBody().assertValue("{_type:'L',f2:1}");
+
+		rc = MockRestClient
+			.create(L.class)
+			.simpleJson()
+			.addBeanTypes()
+			.addRootType()
+			.build();
+		rc.post("", L2.create()).run().getBody().assertValue("{_type:'L',f2:1}");
+	}
+
+	@Test
+	public void l05_serializer_detectRecursions() throws Exception {
+		L1 l1 = new L1();
+		l1.f1 = l1;
+
+		RestClient rc = MockRestClient
+			.create(L.class)
+			.simpleJson()
+			.detectRecursions()
+			.build();
+		try {
+			rc.post("", l1).run();
+		} catch (RestCallException e) {
+			assertTrue(e.getCause().getCause().getMessage().startsWith("Recursion occurred"));
+		}
+
+		rc = MockRestClient
+			.create(L.class)
+			.simpleJson()
+			.detectRecursions(true)
+			.build();
+		try {
+			rc.post("", l1).run();
+		} catch (RestCallException e) {
+			assertTrue(e.getCause().getCause().getMessage().startsWith("Recursion occurred"));
+		}
+	}
+
+	@Test
+	public void l07_serializer_ignoreRecursions() throws Exception {
+		L1 l1 = new L1();
+		l1.f1 = l1;
+
+		RestClient rc = MockRestClient
+			.create(L.class)
+			.simpleJson()
+			.ignoreRecursions()
+			.build();
+		rc.post("", l1).run().getBody().assertValue("{}");
+
+		rc = MockRestClient
+			.create(L.class)
+			.simpleJson()
+			.ignoreRecursions(true)
+			.build();
+		rc.post("", l1).run().getBody().assertValue("{}");
+	}
+
 //	@Test
 //	public void l09_serializer_initialDepth() throws Exception { fail(); }
 ////	public RestClientBuilder initialDepth(int value) {
