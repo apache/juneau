@@ -81,4 +81,20 @@ public class ThrowableUtils {
 		if (Thread.currentThread().getId() != threadId)
 			throw new BasicIllegalArgumentException(msg, args);
 	}
+
+	/**
+	 * Throws an assertion error if the specified throwable or throwable causes do not contain the specified message string.
+	 *
+	 * @param t The throwable to check.
+	 * @param msg The message text to check for.
+	 * @throws AssertionError Assertion failed.
+	 */
+	public static void assertExceptionContainsMessage(Throwable t, String msg) throws AssertionError {
+		while (t != null) {
+			if (t.getMessage() != null && t.getMessage().contains(msg))
+				return;
+			t = t.getCause();
+		}
+		throw new BasicAssertionError(t, "Throwable did not contain the expected message.  Message=[{0}]", msg);
+	}
 }

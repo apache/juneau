@@ -51,7 +51,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 	@Override /* SerializerSesssion */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		serializeAnything(getJsonWriter(out), o, getExpectedRootType(o), "root", null);
+		serializeAnything(getJsonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 */
 	protected String serializeJson(Object o) throws Exception {
 		StringWriter sw = new StringWriter();
-		serializeAnything(getJsonWriter(createPipe(sw)), o, getExpectedRootType(o), "root", null);
+		serializeAnything(getJsonWriter(createPipe(sw)).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
 		return sw.toString();
 	}
 

@@ -1547,8 +1547,16 @@ public class RestResponseBody implements HttpEntity {
 	 */
 	public RestResponse assertValue(String value) throws RestCallException, AssertionError {
 		String text = asString();
-		if (! StringUtils.isEquals(value, text))
+		if (! StringUtils.isEquals(value, text)) {
+			if (value != null && value.startsWith("x")) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("Response did not have the expected value for body.");
+				sb.append("\nExpected: [").append(value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
+				sb.append("\nActual  : [").append(text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
+				System.err.println(sb);
+			}
 			throw new BasicAssertionError("Response did not have the expected value for body.\n\tExpected=[{0}]\n\tActual=[{1}]", value, text);
+		}
 		return response;
 	}
 

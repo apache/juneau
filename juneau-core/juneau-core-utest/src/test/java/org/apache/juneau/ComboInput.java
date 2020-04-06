@@ -14,6 +14,8 @@ package org.apache.juneau;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.collections.*;
+
 /**
  * Represents the input to a ComboTest.
  * @param <T>
@@ -22,9 +24,21 @@ public class ComboInput<T> {
 
 	final String label;
 	private final T in;
+	private OMap properties;
+	private String exceptionMsg;
 	final Type type;
 	final String json, jsonT, jsonR, xml, xmlT, xmlR, xmlNs, html, htmlT, htmlR, uon, uonT, uonR, urlEncoding,
 		urlEncodingT, urlEncodingR, msgPack, msgPackT, rdfXml, rdfXmlT, rdfXmlR;
+
+	public ComboInput<T> properties(OMap properties) {
+		this.properties = properties;
+		return this;
+	}
+
+	public ComboInput<T> exceptionMsg(String exceptionMsg) {
+		this.exceptionMsg = exceptionMsg;
+		return this;
+	}
 
 	public ComboInput(
 			String label,
@@ -55,6 +69,7 @@ public class ComboInput<T> {
 		this.label = label;
 		this.type = type;
 		this.in = in;
+		this.properties = null;
 		this.json = json;
 		this.jsonT = jsonT;
 		this.jsonR = jsonR;
@@ -88,6 +103,20 @@ public class ComboInput<T> {
 	}
 
 	/**
+	 * Returns the serializer or parser properties.
+	 */
+	public OMap getProperties() throws Exception {
+		return properties;
+	}
+
+	/**
+	 * Returns the expected exception message if an exception occurs.
+	 */
+	public String exceptionMsg() throws Exception {
+		return exceptionMsg;
+	}
+
+	/**
 	 * Override this method if you want to do a post-parse verification on the object.
 	 * <p>
 	 * Note that a Function would be preferred here, but it's not available in Java 6.
@@ -95,4 +124,11 @@ public class ComboInput<T> {
 	 * @param o The object returned by the parser.
 	 */
 	public void verify(T o) {}
+
+	/**
+	 * Returns the expected exception message if an exception occurs.
+	 */
+	public String getExceptionMsg() {
+		return exceptionMsg;
+	}
 }

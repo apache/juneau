@@ -12,8 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ThrowableUtils.*;
+
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
@@ -112,6 +115,11 @@ public abstract class ComboSerializeTest {
 		try {
 			s = getSerializer(s);
 
+			OMap properties = comboInput.getProperties();
+			if (properties != null) {
+				s = s.builder().add(properties).build();
+			}
+
 			boolean isRdf = s instanceof RdfSerializer;
 
 			if ((isRdf && SKIP_RDF_TESTS) || expected.equals("SKIP") || ! runTestsSet.contains(testName) ) {
@@ -143,10 +151,15 @@ public abstract class ComboSerializeTest {
 				TestUtils.assertEquals(expected, r, "{0}/{1} serialize-normal failed", comboInput.label, testName);
 
 		} catch (AssertionError e) {
-			throw e;
+			if (comboInput.getExceptionMsg() == null)
+				throw e;
+			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
+			if (comboInput.getExceptionMsg() == null) {
+				e.printStackTrace();
+				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
+			}
+			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
 		}
 	}
 

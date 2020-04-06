@@ -85,7 +85,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		serializeAnything(getUonWriter(out), o);
+		serializeAnything(getUonWriter(out).i(getInitialDepth()), o);
 	}
 
 	/*

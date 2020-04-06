@@ -13,9 +13,11 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
@@ -147,6 +149,11 @@ public abstract class ComboRoundTripTest {
 		try {
 			s = getSerializer(s);
 
+			OMap properties = comboInput.getProperties();
+			if (properties != null) {
+				s = s.builder().add(properties).build();
+			}
+
 			boolean isRdf = s instanceof RdfSerializer;
 
 			if ((isRdf && SKIP_RDF_TESTS) || expected.isEmpty() || ! runTestsSet.contains(testName) ) {
@@ -175,10 +182,16 @@ public abstract class ComboRoundTripTest {
 				TestUtils.assertEquals(expected, r, "{0}/{1} parse-normal failed", comboInput.label, testName);
 
 		} catch (AssertionError e) {
-			throw e;
+			if (comboInput.getExceptionMsg() == null)
+				throw e;
+			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
+			if (comboInput.getExceptionMsg() == null) {
+				e.printStackTrace();
+				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
+
+			}
+			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
 		}
 	}
 
@@ -186,6 +199,12 @@ public abstract class ComboRoundTripTest {
 		try {
 			s = getSerializer(s);
 			p = getParser(p);
+
+			OMap properties = comboInput.getProperties();
+			if (properties != null) {
+				s = s.builder().add(properties).build();
+				p = p.builder().add(properties).build();
+			}
 
 			boolean isRdf = s instanceof RdfSerializer;
 
@@ -207,9 +226,15 @@ public abstract class ComboRoundTripTest {
 				TestUtils.assertEquals(expected, r, "{0}/{1} parse-normal failed", comboInput.label, testName);
 
 		} catch (AssertionError e) {
-			throw e;
-		} catch (Exception e) {
-			throw new Exception(comboInput.label + "/" + testName + " failed.", e);
+			if (comboInput.getExceptionMsg() == null)
+				throw e;
+			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
+		} catch (Throwable e) {
+			if (comboInput.getExceptionMsg() == null) {
+				e.printStackTrace();
+				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
+			}
+			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
 		}
 	}
 
@@ -223,9 +248,15 @@ public abstract class ComboRoundTripTest {
 
 			comboInput.verify(o);
 		} catch (AssertionError e) {
-			throw e;
+			if (comboInput.getExceptionMsg() == null)
+				throw e;
+			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
 		} catch (Exception e) {
-			throw new Exception(comboInput.label + "/" + testName + " failed.", e);
+			if (comboInput.getExceptionMsg() == null) {
+				e.printStackTrace();
+				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
+			}
+			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
 		}
 	}
 
@@ -241,9 +272,15 @@ public abstract class ComboRoundTripTest {
 			r = sJson.serialize(o);
 			assertEquals(comboInput.label + "/" + testName + " parse-normal failed on JSON equivalency", expected, r);
 		} catch (AssertionError e) {
-			throw e;
+			if (comboInput.getExceptionMsg() == null)
+				throw e;
+			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
 		} catch (Exception e) {
-			throw new Exception(comboInput.label + "/" + testName + " failed.", e);
+			if (comboInput.getExceptionMsg() == null) {
+				e.printStackTrace();
+				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
+			}
+			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
 		}
 	}
 

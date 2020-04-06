@@ -73,7 +73,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 
 	@Override /* Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		serializeAnything(getUonWriter(out), o, getExpectedRootType(o), "root", null);
+		serializeAnything(getUonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
 	}
 
 	/**
@@ -284,7 +284,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 				}
 			}
 			StringWriter w = new StringWriter();
-			serializeAnything(getUonWriter(w), value, getExpectedRootType(value), "root", null);
+			serializeAnything(getUonWriter(w).i(getInitialDepth()), value, getExpectedRootType(value), "root", null);
 			return w.toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

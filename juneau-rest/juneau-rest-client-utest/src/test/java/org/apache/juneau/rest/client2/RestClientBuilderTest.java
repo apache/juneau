@@ -2237,14 +2237,6 @@ public class RestClientBuilderTest {
 	// Serializer properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Rest
-	public static class L extends BasicRest {
-		@RestMethod(path="/")
-		public Reader post(org.apache.juneau.rest.RestRequest req) throws IOException {
-			return req.getBody().getReader();
-		}
-	}
-
 	public static class L1 {
 		public Object f1;
 
@@ -2269,59 +2261,59 @@ public class RestClientBuilderTest {
 	@Test
 	public void l01a_serializer_addBeanTypes() throws Exception {
 		RestClient rc = MockRestClient
-			.create(L.class)
+			.create(A.class)
 			.simpleJson()
 			.addBeanTypes(true)
 			.build();
-		rc.post("", L1.create()).run().getBody().assertValue("{f1:{_type:'L',f2:1}}");
+		rc.post("/echoBody", L1.create()).run().getBody().assertValue("{f1:{_type:'L',f2:1}}");
 
 		rc = MockRestClient
-			.create(L.class)
+			.create(A.class)
 			.simpleJson()
 			.addBeanTypes(false)
 			.build();
-		rc.post("", L1.create()).run().getBody().assertValue("{f1:{f2:1}}");
+		rc.post("/echoBody", L1.create()).run().getBody().assertValue("{f1:{f2:1}}");
 
 		rc = MockRestClient
-			.create(L.class)
+			.create(A.class)
 			.simpleJson()
 			.addBeanTypes()
 			.build();
-		rc.post("", L1.create()).run().getBody().assertValue("{f1:{_type:'L',f2:1}}");
+		rc.post("/echoBody", L1.create()).run().getBody().assertValue("{f1:{_type:'L',f2:1}}");
 	}
 
 	@Test
 	public void l03_serializer_addRootType() throws Exception {
 		RestClient rc = MockRestClient
-			.create(L.class)
+			.create(A.class)
 			.simpleJson()
 			.addRootType(true)
 			.build();
-		rc.post("", L2.create()).run().getBody().assertValue("{f2:1}");
+		rc.post("/echoBody", L2.create()).run().getBody().assertValue("{f2:1}");
 
 		rc = MockRestClient
-			.create(L.class)
+			.create(A.class)
 			.simpleJson()
 			.addBeanTypes()
 			.addRootType(false)
 			.build();
-		rc.post("", L2.create()).run().getBody().assertValue("{f2:1}");
+		rc.post("/echoBody", L2.create()).run().getBody().assertValue("{f2:1}");
 
 		rc = MockRestClient
-			.create(L.class)
+			.create(A.class)
 			.simpleJson()
 			.addBeanTypes()
 			.addRootType(true)
 			.build();
-		rc.post("", L2.create()).run().getBody().assertValue("{_type:'L',f2:1}");
+		rc.post("/echoBody", L2.create()).run().getBody().assertValue("{_type:'L',f2:1}");
 
 		rc = MockRestClient
-			.create(L.class)
+			.create(A.class)
 			.simpleJson()
 			.addBeanTypes()
 			.addRootType()
 			.build();
-		rc.post("", L2.create()).run().getBody().assertValue("{_type:'L',f2:1}");
+		rc.post("/echoBody", L2.create()).run().getBody().assertValue("{_type:'L',f2:1}");
 	}
 
 	@Test
@@ -2330,23 +2322,23 @@ public class RestClientBuilderTest {
 		l1.f1 = l1;
 
 		RestClient rc = MockRestClient
-			.create(L.class)
+			.create(A.class)
 			.simpleJson()
 			.detectRecursions()
 			.build();
 		try {
-			rc.post("", l1).run();
+			rc.post("/echoBody", l1).run();
 		} catch (RestCallException e) {
 			assertTrue(e.getCause().getCause().getMessage().startsWith("Recursion occurred"));
 		}
 
 		rc = MockRestClient
-			.create(L.class)
+			.create(A.class)
 			.simpleJson()
 			.detectRecursions(true)
 			.build();
 		try {
-			rc.post("", l1).run();
+			rc.post("/echoBody", l1).run();
 		} catch (RestCallException e) {
 			assertTrue(e.getCause().getCause().getMessage().startsWith("Recursion occurred"));
 		}
@@ -2358,24 +2350,33 @@ public class RestClientBuilderTest {
 		l1.f1 = l1;
 
 		RestClient rc = MockRestClient
-			.create(L.class)
+			.create(A.class)
 			.simpleJson()
 			.ignoreRecursions()
 			.build();
-		rc.post("", l1).run().getBody().assertValue("{}");
+		rc.post("/echoBody", l1).run().getBody().assertValue("{}");
 
 		rc = MockRestClient
-			.create(L.class)
+			.create(A.class)
 			.simpleJson()
 			.ignoreRecursions(true)
 			.build();
-		rc.post("", l1).run().getBody().assertValue("{}");
+		rc.post("/echoBody", l1).run().getBody().assertValue("{}");
 	}
 
-//	@Test
-//	public void l09_serializer_initialDepth() throws Exception { fail(); }
-////	public RestClientBuilder initialDepth(int value) {
-//
+	@Test
+	public void l09_serializer_initialDepth() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.initialDepth(2)
+			.ws()
+			.build();
+		rc.post("/echoBody", bean).run().getBody().assertValue("\t\t{\n\t\t\tf: 1\n\t\t}");
+	}
+
+//	public RestClientBuilder initialDepth(int value) {
+
 //	@Test
 //	public void l10_serializer_listenerSClass() throws Exception { fail(); }
 ////	public RestClientBuilder listenerS(Class<? extends SerializerListener> value) {
