@@ -133,15 +133,25 @@ public class RestClientBuilderTest {
 	//------------------------------------------------------------------------------------------------------------------
 	@Test
 	public void b01_logToConsole() throws Exception {
-		RestClient rc = MockRestClient.create(A.class).simpleJson().logToConsole().build();
-		rc.post("/bean", bean).complete();
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logToConsole()
+			.build()
+			.post("/bean", bean)
+			.complete();
 	}
 
 	@Test
 	public void b02_logTo() throws Exception {
 		MockLogger ml = new MockLogger();
-		RestClient rc = MockRestClient.create(A.class).simpleJson().logTo(Level.SEVERE, ml).build();
-		rc.post("/bean", bean).complete();
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logTo(Level.SEVERE, ml)
+			.build()
+			.post("/bean", bean)
+			.complete();
 		ml.assertLevel(Level.SEVERE);
 		ml.assertMessageContains(
 			"=== HTTP Call (outgoing) ======================================================",
@@ -169,7 +179,9 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void c01_interceptors() throws RestCallException {
-		RestClient rc = MockRestClient.create(A.class).simpleJson()
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
 			.addInterceptorFirst(
 				new HttpRequestInterceptor() {
 					@Override public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
@@ -198,9 +210,8 @@ public class RestClientBuilderTest {
 					}
 				}
 			)
-			.build();
-
-		rc.get("/echo")
+			.build()
+			.get("/echo")
 			.run()
 			.getBody().assertContains("A1: 1", "A2: 2")
 			.getHeader("B1").assertValue("1")
@@ -210,7 +221,9 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void c02_httpProcessor() throws RestCallException {
-		RestClient rc = MockRestClient.create(A.class).simpleJson()
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
 			.httpProcessor(new HttpProcessor() {
 				@Override
 				public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
@@ -222,19 +235,19 @@ public class RestClientBuilderTest {
 					response.setHeader("B1", "1");
 				}
 			})
-			.build();
-
-		rc.get("/echo")
+			.build()
+			.get("/echo")
 			.run()
 			.getBody().assertContains("A1: 1")
-			.getHeader("B1").assertValue("1")
-		;
+			.getHeader("B1").assertValue("1");
 	}
 
 	@Test
 	public void c03_requestExecutor() throws RestCallException {
 		AtomicBoolean b1 = new AtomicBoolean();
-		RestClient rc = MockRestClient.create(A.class).simpleJson()
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
 			.requestExecutor(new HttpRequestExecutor() {
 				@Override
 				public HttpResponse execute(HttpRequest request, HttpClientConnection conn, HttpContext context) throws HttpException, IOException {
@@ -242,25 +255,23 @@ public class RestClientBuilderTest {
 					return super.execute(request, conn, context);
 				}
 			})
-			.build();
-
-		rc.get("/echo")
+			.build()
+			.get("/echo")
 			.run()
-			.getBody().assertContains("HTTP GET /echo")
-		;
+			.getBody().assertContains("HTTP GET /echo");
 		assertTrue(b1.get());
 	}
 
 	@Test
 	public void c04_defaultHeaders() throws RestCallException {
-		RestClient rc = MockRestClient.create(A.class).simpleJson()
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
 			.defaultHeaders(AList.of(new org.apache.http.message.BasicHeader("Foo", "bar")))
-			.build();
-
-		rc.get("/echo")
+			.build()
+			.get("/echo")
 			.run()
-			.getBody().assertContains("HTTP GET /echo","Foo: bar")
-		;
+			.getBody().assertContains("HTTP GET /echo","Foo: bar");
 	}
 
 	@Test
@@ -314,15 +325,14 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void d01_pooled() throws RestCallException {
-		RestClient rc = MockRestClient.create(A.class).simpleJson()
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
 			.pooled()
-			.build();
-
-		rc.get("/echo")
+			.build()
+			.get("/echo")
 			.run()
-			.getBody().assertContains("HTTP GET /echo")
-		;
-
+			.getBody().assertContains("HTTP GET /echo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -346,13 +356,14 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void e01_basicAuth() throws RestCallException {
-		RestClient rc = MockRestClient.create(E.class).simpleJson()
+		MockRestClient
+			.create(E.class)
+			.simpleJson()
 			.basicAuth(AuthScope.ANY_HOST, AuthScope.ANY_PORT, "user", "pw")
-			.build();
-		rc.get("/echo")
+			.build()
+			.get("/echo")
 			.run()
-			.getBody().assertContains("OK")
-		;
+			.getBody().assertContains("OK");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -361,691 +372,601 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void f01_basicHeader() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header("Check", "Foo")
 			.header("Foo","bar")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header("Foo","baz")
 			.run()
-			.getBody()
-			.assertValue("['bar','baz']");
+			.getBody().assertValue("['bar','baz']");
 	}
 
 	@Test
 	public void f02_beanHeader() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header("Foo", bean)
 			.header("Check", "Foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header("Foo", bean)
 			.run()
-			.getBody()
-			.assertValue("['(f=1)','(f=1)']");
+			.getBody().assertValue("['(f=1)','(f=1)']");
 	}
 
 	@Test
 	public void f03_nullHeaders() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header("Foo", null)
 			.header("Check", "Foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header("Foo", null)
 			.run()
-			.getBody()
-			.assertValue("null");
+			.getBody().assertValue("null");
 	}
 
 	@Test
 	public void f04_header_Header() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new org.apache.http.message.BasicHeader("Foo", "bar"))
 			.header("Check", "Foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header(new org.apache.http.message.BasicHeader("Foo", "baz"))
 			.run()
-			.getBody()
-			.assertValue("['bar','baz']");
+			.getBody().assertValue("['bar','baz']");
 	}
 
 	@Test
 	public void f05_header_NameValuePair() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new BasicNameValuePair("Foo", "bar"))
 			.header("Check", "Foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header(new BasicNameValuePair("Foo", "baz"))
 			.run()
-			.getBody()
-			.assertValue("['bar','baz']");
+			.getBody().assertValue("['bar','baz']");
 	}
 
 	@Test
 	public void f06_header_HttpHeader() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new BasicObjectHeader("Foo", "bar"))
 			.header("Check", "Foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header(new BasicObjectHeader("Foo", "baz"))
 			.run()
-			.getBody()
-			.assertValue("['bar','baz']");
+			.getBody().assertValue("['bar','baz']");
 	}
 
 	@Test
 	public void f07_headers_Header() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.headers(new org.apache.http.message.BasicHeader("Foo", "bar"),new org.apache.http.message.BasicHeader("Baz", "baz"))
 			.header("Check", "Foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.headers(new org.apache.http.message.BasicHeader("Foo", "baz"),new org.apache.http.message.BasicHeader("Baz", "quux"))
 			.run()
-			.getBody()
-			.assertValue("['bar','baz']");
+			.getBody().assertValue("['bar','baz']");
 	}
 
 	@Test
 	public void f08_headers_OMap() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.headers(OMap.of("Foo", "bar"))
 			.header("Check", "Foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.headers(OMap.of("Foo", "baz"))
 			.run()
-			.getBody()
-			.assertValue("['bar','baz']");
+			.getBody().assertValue("['bar','baz']");
 	}
 
 	@Test
 	public void f09_headers_Map() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.headers(AMap.of("Foo", "bar"))
 			.header("Check", "Foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.headers(AMap.of("Foo", "baz"))
 			.run()
-			.getBody()
-			.assertValue("['bar','baz']");
+			.getBody().assertValue("['bar','baz']");
 	}
 
 	@Test
 	public void f10_headers_NameValuePairs() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.headers(NameValuePairs.of("Foo","bar"))
 			.header("Check", "Foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.headers(NameValuePairs.of("Foo","baz"))
 			.run()
-			.getBody()
-			.assertValue("['bar','baz']");
+			.getBody().assertValue("['bar','baz']");
 	}
 
 	@Test
 	public void f11_headers_NameValuePair() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.headers(new BasicNameValuePair("Foo","bar"))
 			.header("Check", "Foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.headers(new BasicNameValuePair("Foo","baz"))
 			.run()
-			.getBody()
-			.assertValue("['bar','baz']");
+			.getBody().assertValue("['bar','baz']");
 	}
 
 	@Test
 	public void f12_headers_pairs() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.headerPairs("Foo", "bar")
 			.header("Check", "Foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.headerPairs("Foo", "baz")
 			.run()
-			.getBody()
-			.assertValue("['bar','baz']");
+			.getBody().assertValue("['bar','baz']");
 	}
 
 	@Test
 	public void f13_headers_HttpHeader() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.headers(new BasicObjectHeader("Foo", "bar"))
 			.header("Check", "Foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.headers(new BasicObjectHeader("Foo", "baz"))
 			.run()
-			.getBody()
-			.assertValue("['bar','baz']");
+			.getBody().assertValue("['bar','baz']");
 	}
 
 	@Test
 	public void f14_headers_accept() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.accept("text/foo")
 			.header("Check", "Accept")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.accept("text/plain")
 			.run()
-			.getBody()
-			.assertValue("['text/foo','text/plain']");
+			.getBody().assertValue("['text/foo','text/plain']");
 	}
 
 	@Test
 	public void f15_headers_acceptCharset() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.acceptCharset("UTF-8")
 			.header("Check", "Accept-Charset")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['UTF-8']");
+			.getBody().assertValue("['UTF-8']");
 	}
 
 	@Test
 	public void f16_headers_acceptEncoding() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.acceptEncoding("identity")
 			.header("Check", "Accept-Encoding")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['identity']");
+			.getBody().assertValue("['identity']");
 	}
 
 	@Test
 	public void f17_headers_acceptLanguage() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.acceptLanguage("en")
 			.header("Check", "Accept-Language")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['en']");
+			.getBody().assertValue("['en']");
 	}
 
 	@Test
 	public void f18_headers_authorization() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.authorization("foo")
 			.header("Check", "Authorization")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f19_headers_cacheControl() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.cacheControl("none")
 			.header("Check", "Cache-Control")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['none']");
+			.getBody().assertValue("['none']");
 	}
 
 	@Test
 	public void f20_headers_clientVersion() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.clientVersion("1")
 			.header("Check", "X-Client-Version")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['1']");
+			.getBody().assertValue("['1']");
 	}
 
 	@Test
 	public void f21_headers_connection() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.connection("foo")
 			.header("Check", "Connection")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f22_headers_contentLength() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.contentLength("123")
 			.header("Check", "Content-Length")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['123']");
+			.getBody().assertValue("['123']");
 	}
 
 	@Test
 	public void f23_headers_contentType() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.contentType("foo")
 			.header("Check", "Content-Type")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f24_headers_date() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.date("123")
 			.header("Check", "Date")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['123']");
+			.getBody().assertValue("['123']");
 	}
 
 	@Test
 	public void f25_headers_expect() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.expect("foo")
 			.header("Check", "Expect")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f26_headers_forwarded() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.forwarded("foo")
 			.header("Check", "Forwarded")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f27_headers_from() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.from("foo")
 			.header("Check", "From")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f28_headers_host() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.host("foo")
 			.header("Check", "Host")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f29_headers_ifMatch() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.ifMatch("foo")
 			.header("Check", "If-Match")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f30_headers_ifModifiedSince() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.ifModifiedSince("foo")
 			.header("Check", "If-Modified-Since")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f31_headers_ifNoneMatch() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.ifNoneMatch("foo")
 			.header("Check", "If-None-Match")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f32_headers_ifRange() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.ifRange("foo")
 			.header("Check", "If-Range")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f33_headers_ifUnmodifiedSince() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.ifUnmodifiedSince("foo")
 			.header("Check", "If-Unmodified-Since")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f34_headers_maxForwards() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.maxForwards("10")
 			.header("Check", "Max-Forwards")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['10']");
+			.getBody().assertValue("['10']");
 	}
 
 	@Test
 	public void f35_headers_noTrace() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.noTrace()
 			.header("Check", "No-Trace")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['true']");
+			.getBody().assertValue("['true']");
 	}
 
 	@Test
 	public void f36_headers_origin() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.origin("foo")
 			.header("Check", "Origin")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f37_headers_pragma() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.pragma("foo")
 			.header("Check", "Pragma")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f38_headers_proxyAuthorization() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.proxyAuthorization("foo")
 			.header("Check", "Proxy-Authorization")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f39_headers_range() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.range("foo")
 			.header("Check", "Range")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f40_headers_referer() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.referer("foo")
 			.header("Check", "Referer")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f41_headers_te() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.te("foo")
 			.header("Check", "TE")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f42_headers_userAgent() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.userAgent("foo")
 			.header("Check", "User-Agent")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f43_headers_upgrade() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.upgrade("foo")
 			.header("Check", "Upgrade")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f44_headers_via() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.via("foo")
 			.header("Check", "Via")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void f45_headers_warning() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.warning("foo")
 			.header("Check", "Warning")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1054,529 +975,459 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void g01_headers_accept() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Accept("text/foo"))
 			.header("Check", "Accept")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header(new Accept("text/plain"))
 			.run()
-			.getBody()
-			.assertValue("['text/foo','text/plain']");
+			.getBody().assertValue("['text/foo','text/plain']");
 	}
 
 	@Test
 	public void g02_headers_acceptCharset() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new AcceptCharset("UTF-8"))
 			.header("Check", "Accept-Charset")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['UTF-8']");
+			.getBody().assertValue("['UTF-8']");
 	}
 
 	@Test
 	public void g03_headers_acceptEncoding() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new AcceptEncoding("identity"))
 			.header("Check", "Accept-Encoding")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['identity']");
+			.getBody().assertValue("['identity']");
 	}
 
 	@Test
 	public void g04_headers_acceptLanguage() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new AcceptLanguage("en"))
 			.header("Check", "Accept-Language")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['en']");
+			.getBody().assertValue("['en']");
 	}
 
 	@Test
 	public void g05_headers_authorization() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Authorization("foo"))
 			.header("Check", "Authorization")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g06_headers_cacheControl() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new CacheControl("none"))
 			.header("Check", "Cache-Control")
 			.header("X-Expect", "none")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['none']");
+			.getBody().assertValue("['none']");
 	}
 
 	@Test
 	public void g07_headers_clientVersion() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new ClientVersion("1"))
 			.header("Check", "X-Client-Version")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['1']");
+			.getBody().assertValue("['1']");
 	}
 
 	@Test
 	public void g08_headers_connection() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Connection("foo"))
 			.header("Check", "Connection")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g09_headers_contentLength() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new ContentLength(123))
 			.header("Check", "Content-Length")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['123']");
+			.getBody().assertValue("['123']");
 	}
 
 	@Test
 	public void g10_headers_contentType() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new ContentType("foo"))
 			.header("Check", "Content-Type")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g11a_headers_date() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new org.apache.juneau.http.Date("Sun, 31 Dec 2000 12:34:56 GMT"))
 			.header("Check", "Date")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
+			.getBody().assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
 	public void g11b_headers_date() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new org.apache.juneau.http.Date(CALENDAR))
 			.header("Check", "Date")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
+			.getBody().assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
 	public void g12_headers_expect() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Expect("foo"))
 			.header("Check", "Expect")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g13_headers_forwarded() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Forwarded("foo"))
 			.header("Check", "Forwarded")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g14_headers_from() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new From("foo"))
 			.header("Check", "From")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g15_headers_host() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Host("foo"))
 			.header("Check", "Host")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g16_headers_ifMatch() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new IfMatch("\"foo\""))
 			.header("Check", "If-Match")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['\"foo\"']");
+			.getBody().assertValue("['\"foo\"']");
 	}
 
 	@Test
 	public void g17a_headers_ifModifiedSince() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new IfModifiedSince(CALENDAR))
 			.header("Check", "If-Modified-Since")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
+			.getBody().assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
 	public void g17b_headers_ifModifiedSince() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new IfModifiedSince("Sun, 31 Dec 2000 12:34:56 GMT"))
 			.header("Check", "If-Modified-Since")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
+			.getBody().assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
 	public void g18_headers_ifNoneMatch() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new IfNoneMatch("\"foo\""))
 			.header("Check", "If-None-Match")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['\"foo\"']");
+			.getBody().assertValue("['\"foo\"']");
 	}
 
 	@Test
 	public void g19_headers_ifRange() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new IfRange("foo"))
 			.header("Check", "If-Range")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g20a_headers_ifUnmodifiedSince() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new IfUnmodifiedSince(CALENDAR))
 			.header("Check", "If-Unmodified-Since")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
+			.getBody().assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
 	public void g20b_headers_ifUnmodifiedSince() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new IfUnmodifiedSince("Sun, 31 Dec 2000 12:34:56 GMT"))
 			.header("Check", "If-Unmodified-Since")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
+			.getBody().assertValue("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
 	public void g21_headers_maxForwards() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new MaxForwards(10))
 			.header("Check", "Max-Forwards")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['10']");
+			.getBody().assertValue("['10']");
 	}
 
 	@Test
 	public void g22_headers_noTrace() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new NoTrace("true"))
 			.header("Check", "No-Trace")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['true']");
+			.getBody().assertValue("['true']");
 	}
 
 	@Test
 	public void g23_headers_origin() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Origin("foo"))
 			.header("Check", "Origin")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g24_headers_pragma() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Pragma("foo"))
 			.header("Check", "Pragma")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g25_headers_proxyAuthorization() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new ProxyAuthorization("foo"))
 			.header("Check", "Proxy-Authorization")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g26_headers_range() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Range("foo"))
 			.header("Check", "Range")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g27_headers_referer() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Referer("foo"))
 			.header("Check", "Referer")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g28_headers_te() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new TE("foo"))
 			.header("Check", "TE")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g29_headers_userAgent() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new UserAgent("foo"))
 			.header("Check", "User-Agent")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g30_headers_upgrade() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Upgrade("foo"))
 			.header("Check", "Upgrade")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g31_headers_via() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Via("foo"))
 			.header("Check", "Via")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	@Test
 	public void g32_headers_warning() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header(new Warning("foo"))
 			.header("Check", "Warning")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['foo']");
+			.getBody().assertValue("['foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1585,67 +1436,58 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void h01_multipleHeaders() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.debug()
 			.header("Check", "Foo")
 			.headerPairs("Foo","bar","Foo","baz")
 			.header("Foo","qux")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.headerPairs("Foo","q1x","Foo","q2x")
 			.run()
-			.getBody()
-			.assertValue("['bar','baz','qux','q1x','q2x']");
+			.getBody().assertValue("['bar','baz','qux','q1x','q2x']");
 	}
 
 	@Test
 	public void h02_multipleHeaders_withRequest() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header("Check", "Foo")
 			.headerPairs("Foo","bar","Foo","baz")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header("Foo","qux")
 			.run()
-			.getBody()
-			.assertValue("['bar','baz','qux']");
+			.getBody().assertValue("['bar','baz','qux']");
 	}
 
 	@Test
 	public void h03_dontOverrideAccept() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header("Check", "Accept")
 			.header("Accept", "text/plain")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['text/plain']");
+			.getBody().assertValue("['text/plain']");
 	}
 
 	@Test
 	public void h04_dontOverrideAccept_withRequest() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header("Check", "Accept")
 			.header("Accept", "text/foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header("Accept","text/plain")
 			.run()
-			.getBody()
-			.assertValue("['text/foo','text/plain']");
+			.getBody().assertValue("['text/foo','text/plain']");
 	}
 
 	@Test
@@ -1660,50 +1502,48 @@ public class RestClientBuilderTest {
 		req.setHeader("Accept","text/plain");
 		req
 			.run()
-			.getBody()
-			.assertValue("['text/plain']");
+			.getBody().assertValue("['text/plain']");
 	}
 
 	@Test
 	public void h05_dontOverrideContentType() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header("Check", "Content-Type")
 			.header("Content-Type", "text/plain")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.run()
-			.getBody()
-			.assertValue("['text/plain']");
+			.getBody().assertValue("['text/plain']");
 	}
 
 	@Test
 	public void h06_dontOverrideAccept_withRequest() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header("Check", "Content-Type")
 			.header("Content-Type", "text/foo")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header("Content-Type", "text/plain")
 			.run()
-			.getBody()
-			.assertValue("['text/foo','text/plain']");
+			.getBody().assertValue("['text/foo','text/plain']");
 	}
 
 	@Test
 	public void h07_header_HttpPartSerializer() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header("Check", "Foo")
 			.header("Foo", bean, new XPartSerializer(), null)
-			.build();
-		rc.get("/checkHeader").header(AddFlag.DEFAULT_FLAGS,"Foo",bean,new XPartSerializer().createPartSession(null),null).run().getBody().assertValue("['x{f:1}','x{f:1}']");
+			.build()
+			.get("/checkHeader")
+			.header(AddFlag.DEFAULT_FLAGS,"Foo",bean,new XPartSerializer().createPartSession(null),null)
+			.run()
+			.getBody().assertValue("['x{f:1}','x{f:1}']");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1712,18 +1552,20 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void i01_query_basic() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.query("Foo","bar")
 			.query("Foo",new StringBuilder("baz"))
-			.build();
-		rc.get("/checkQuery").run().getBody().assertValue("Foo=bar&Foo=baz");
+			.build()
+			.get("/checkQuery")
+			.run()
+			.getBody().assertValue("Foo=bar&Foo=baz");
 	}
 
 	@Test
 	public void i02_query_objects() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.query(new BasicNameValuePair("Foo","f1"))
@@ -1731,8 +1573,10 @@ public class RestClientBuilderTest {
 			.query(AMap.of("Foo","f3"))
 			.query(NameValuePairs.of("Foo","f4","Foo","f5"))
 			.query(new BasicNameValuePair("Foo","f6"), new BasicNameValuePair("Foo","f7"))
-			.build();
-		rc.get("/checkQuery").run().getBody().assertValue("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
+			.build()
+			.get("/checkQuery")
+			.run()
+			.getBody().assertValue("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1740,18 +1584,20 @@ public class RestClientBuilderTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void j01_formData_basic() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.formData("Foo","bar")
 			.formData("Foo",new StringBuilder("baz"))
-			.build();
-		rc.post("/checkFormData").run().getBody().assertValue("Foo=bar&Foo=baz");
+			.build()
+			.post("/checkFormData")
+			.run()
+			.getBody().assertValue("Foo=bar&Foo=baz");
 	}
 
 	@Test
 	public void j02_formData_objects() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.formData(new BasicNameValuePair("Foo","f1"))
@@ -1759,8 +1605,10 @@ public class RestClientBuilderTest {
 			.formData(AMap.of("Foo","f3"))
 			.formData(NameValuePairs.of("Foo","f4","Foo","f5"))
 			.formData(new BasicNameValuePair("Foo","f6"), new BasicNameValuePair("Foo","f7"))
-			.build();
-		rc.post("/checkFormData").run().getBody().assertValue("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
+			.build()
+			.post("/checkFormData")
+			.run()
+			.getBody().assertValue("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1789,29 +1637,26 @@ public class RestClientBuilderTest {
 	}
 	@Test
 	public void k01_restClient_CallHandlerClass() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.callHandler(XCallHandler.class)
 			.header("Foo", "f1")
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header("Foo","f2")
 			.run()
-			.getBody()
-			.assertValue("['f1','f2','baz']");
+			.getBody().assertValue("['f1','f2','baz']");
 	}
 
 	@Test
 	public void k03_restClient_errorCodes() throws Exception {
-		RestClient rc = MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.errorCodes(x -> x == 200)
-			.build();
 		try {
-			rc
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.errorCodes(x -> x == 200)
+				.build()
 				.get("/echo")
 				.run();
 			fail("Exception expected.");
@@ -1846,17 +1691,15 @@ public class RestClientBuilderTest {
 			.build();
 		CloseableHttpClient c = rc.httpClient;
 		rc.close();
-		rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.httpClient(c)
-			.build();
-		rc
+			.build()
 			.get("/ok")
 			.runFuture()
 			.get()
-			.getBody()
-			.assertContains("OK");
+			.getBody().assertContains("OK");
 	}
 
 	@Test
@@ -1868,17 +1711,15 @@ public class RestClientBuilderTest {
 			.build();
 		CloseableHttpClient c = rc.httpClient;
 		rc.close();
-		rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.httpClient(c)
-			.build();
-		rc
+			.build()
 			.get("/ok")
 			.runFuture()
 			.get()
-			.getBody()
-			.assertContains("OK");
+			.getBody().assertContains("OK");
 	}
 
 	public static class XRestCallInterceptor extends BasicRestCallInterceptor {
@@ -1904,38 +1745,34 @@ public class RestClientBuilderTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void k07_restClient_interceptorsClasses() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header("Foo","f1")
 			.interceptors(XRestCallInterceptor.class)
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header("Check","foo")
 			.header("Foo","f3")
 			.run()
-			.getBody()
-			.assertValue("['f1','f2','f3']")
+			.getBody().assertValue("['f1','f2','f3']")
 			.getHeader("Bar").assertValue("b1");
 		assertEquals(111, XRestCallInterceptor.x);
 	}
 
 	@Test
 	public void k08_restClient_interceptorsObjects() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.header("Foo","f1")
 			.interceptors(new XRestCallInterceptor())
-			.build();
-		rc
+			.build()
 			.get("/checkHeader")
 			.header("Check","foo")
 			.header("Foo","f3")
 			.run()
-			.getBody()
-			.assertValue("['f1','f2','f3']")
+			.getBody().assertValue("['f1','f2','f3']")
 			.getHeader("Bar").assertValue("b1");
 		assertEquals(111, XRestCallInterceptor.x);
 	}
@@ -1955,45 +1792,44 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void k09a_restClient_leakDetection() throws Throwable {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.leakDetection()
-			.build(K09RestClient.class);
-		rc.finalize();
+			.build(K09RestClient.class)
+			.finalize();
 		assertEquals("WARNING:  RestClient garbage collected before it was finalized.", K09RestClient.lastMessage);
 	}
 
 	@Test
 	public void k09b_restClient_leakDetection_withThreadCreationStack() throws Throwable {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.debug()
-			.build(K09RestClient.class);
-		rc.finalize();
+			.build(K09RestClient.class)
+			.finalize();
 		assertTrue(K09RestClient.lastMessage.startsWith("WARNING:  RestClient garbage collected before it was finalized.\nCreation Stack:\n\t"));
 	}
 
 	@Test
 	public void k10_restClient_leakDetectionBoolean() throws Throwable {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.leakDetection(true)
-			.build(K09RestClient.class);
-		rc.finalize();
+			.build(K09RestClient.class)
+			.finalize();
 		assertEquals("WARNING:  RestClient garbage collected before it was finalized.", K09RestClient.lastMessage);
 
 		K09RestClient.lastMessage = null;
-		rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.leakDetection(false)
-			.build(K09RestClient.class);
-		rc.finalize();
+			.build(K09RestClient.class)
+			.finalize();
 		assertNull(K09RestClient.lastMessage);
-
 	}
 
 	@Test
@@ -2023,8 +1859,7 @@ public class RestClientBuilderTest {
 		rc
 			.post("/echoBody", bean)
 			.run()
-			.getBody().cache()
-			.assertValue("{f:1}");
+			.getBody().cache().assertValue("{f:1}");
 
 		Bean b = rc
 			.post("/echoBody", bean)
@@ -2041,8 +1876,7 @@ public class RestClientBuilderTest {
 			.accept("text/json")
 			.contentType("text/json")
 			.run()
-			.getBody().cache()
-			.assertValue("{\"f\":1}")
+			.getBody().cache().assertValue("{\"f\":1}")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 	}
@@ -2058,8 +1892,7 @@ public class RestClientBuilderTest {
 		Bean b = rc
 			.post("/echoBody", bean)
 			.run()
-			.getBody().cache()
-			.assertValue("<object><f>1</f></object>")
+			.getBody().cache().assertValue("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 
 		assertEqualObjects(b, bean);
@@ -2076,8 +1909,7 @@ public class RestClientBuilderTest {
 		Bean b = rc
 			.post("/echoBody", bean)
 			.run()
-			.getBody().cache()
-			.assertValue("<object><f>1</f></object>")
+			.getBody().cache().assertValue("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 
 		assertEqualObjects(b, bean);
@@ -2095,16 +1927,14 @@ public class RestClientBuilderTest {
 		rc
 			.post("/echoBody", bean)
 			.run()
-			.getBody().cache()
-			.assertValue("{f:1}");
+			.getBody().cache().assertValue("{f:1}");
 
 		Bean b = rc
 			.post("/echoBody", bean)
 			.accept("text/xml")
 			.contentType("text/xml")
 			.run()
-			.getBody().cache()
-			.assertValue("<object><f>1</f></object>")
+			.getBody().cache().assertValue("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 
@@ -2113,8 +1943,7 @@ public class RestClientBuilderTest {
 			.accept("text/json")
 			.contentType("text/json")
 			.run()
-			.getBody().cache()
-			.assertValue("{\"f\":1}")
+			.getBody().cache().assertValue("{\"f\":1}")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 	}
@@ -2130,16 +1959,14 @@ public class RestClientBuilderTest {
 		rc
 			.post("/echoBody", bean)
 			.run()
-			.getBody().cache()
-			.assertValue("{f:1}");
+			.getBody().cache().assertValue("{f:1}");
 
 		Bean b = rc
 			.post("/echoBody", bean)
 			.accept("text/xml")
 			.contentType("text/xml")
 			.run()
-			.getBody().cache()
-			.assertValue("<object><f>1</f></object>")
+			.getBody().cache().assertValue("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 
@@ -2148,8 +1975,7 @@ public class RestClientBuilderTest {
 			.accept("text/json")
 			.contentType("text/json")
 			.run()
-			.getBody().cache()
-			.assertValue("{\"f\":1}")
+			.getBody().cache().assertValue("{\"f\":1}")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 	}
@@ -2260,60 +2086,74 @@ public class RestClientBuilderTest {
 
 	@Test
 	public void l01a_serializer_addBeanTypes() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.addBeanTypes(true)
-			.build();
-		rc.post("/echoBody", L1.create()).run().getBody().assertValue("{f1:{_type:'L',f2:1}}");
+			.build()
+			.post("/echoBody", L1.create())
+			.run()
+			.getBody().assertValue("{f1:{_type:'L',f2:1}}");
 
-		rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.addBeanTypes(false)
-			.build();
-		rc.post("/echoBody", L1.create()).run().getBody().assertValue("{f1:{f2:1}}");
+			.build()
+			.post("/echoBody", L1.create())
+			.run()
+			.getBody().assertValue("{f1:{f2:1}}");
 
-		rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.addBeanTypes()
-			.build();
-		rc.post("/echoBody", L1.create()).run().getBody().assertValue("{f1:{_type:'L',f2:1}}");
+			.build()
+			.post("/echoBody", L1.create())
+			.run()
+			.getBody().assertValue("{f1:{_type:'L',f2:1}}");
 	}
 
 	@Test
 	public void l03_serializer_addRootType() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.addRootType(true)
-			.build();
-		rc.post("/echoBody", L2.create()).run().getBody().assertValue("{f2:1}");
+			.build()
+			.post("/echoBody", L2.create())
+			.run()
+			.getBody().assertValue("{f2:1}");
 
-		rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.addBeanTypes()
 			.addRootType(false)
-			.build();
-		rc.post("/echoBody", L2.create()).run().getBody().assertValue("{f2:1}");
+			.build()
+			.post("/echoBody", L2.create())
+			.run()
+			.getBody().assertValue("{f2:1}");
 
-		rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.addBeanTypes()
 			.addRootType(true)
-			.build();
-		rc.post("/echoBody", L2.create()).run().getBody().assertValue("{_type:'L',f2:1}");
+			.build()
+			.post("/echoBody", L2.create())
+			.run()
+			.getBody().assertValue("{_type:'L',f2:1}");
 
-		rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.addBeanTypes()
 			.addRootType()
-			.build();
-		rc.post("/echoBody", L2.create()).run().getBody().assertValue("{_type:'L',f2:1}");
+			.build()
+			.post("/echoBody", L2.create())
+			.run()
+			.getBody().assertValue("{_type:'L',f2:1}");
 	}
 
 	@Test
@@ -2321,24 +2161,26 @@ public class RestClientBuilderTest {
 		L1 l1 = new L1();
 		l1.f1 = l1;
 
-		RestClient rc = MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.detectRecursions()
-			.build();
 		try {
-			rc.post("/echoBody", l1).run();
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.detectRecursions()
+				.build()
+				.post("/echoBody", l1)
+				.run();
 		} catch (RestCallException e) {
 			assertTrue(e.getCause().getCause().getMessage().startsWith("Recursion occurred"));
 		}
 
-		rc = MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.detectRecursions(true)
-			.build();
 		try {
-			rc.post("/echoBody", l1).run();
+			 MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.detectRecursions(true)
+				.build()
+			 	.post("/echoBody", l1)
+				.run();
 		} catch (RestCallException e) {
 			assertTrue(e.getCause().getCause().getMessage().startsWith("Recursion occurred"));
 		}
@@ -2349,30 +2191,36 @@ public class RestClientBuilderTest {
 		L1 l1 = new L1();
 		l1.f1 = l1;
 
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.ignoreRecursions()
-			.build();
-		rc.post("/echoBody", l1).run().getBody().assertValue("{}");
+			.build()
+			.post("/echoBody", l1)
+			.run()
+			.getBody().assertValue("{}");
 
-		rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.ignoreRecursions(true)
-			.build();
-		rc.post("/echoBody", l1).run().getBody().assertValue("{}");
+			.build()
+			.post("/echoBody", l1)
+			.run()
+			.getBody().assertValue("{}");
 	}
 
 	@Test
 	public void l09_serializer_initialDepth() throws Exception {
-		RestClient rc = MockRestClient
+		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.initialDepth(2)
 			.ws()
-			.build();
-		rc.post("/echoBody", bean).run().getBody().assertValue("\t\t{\n\t\t\tf: 1\n\t\t}");
+			.build()
+			.post("/echoBody", bean)
+			.run()
+			.getBody().assertValue("\t\t{\n\t\t\tf: 1\n\t\t}");
 	}
 
 //	public RestClientBuilder initialDepth(int value) {
