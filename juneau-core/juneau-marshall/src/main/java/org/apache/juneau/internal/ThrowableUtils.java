@@ -90,11 +90,13 @@ public class ThrowableUtils {
 	 * @throws AssertionError Assertion failed.
 	 */
 	public static void assertExceptionContainsMessage(Throwable t, String msg) throws AssertionError {
-		while (t != null) {
-			if (t.getMessage() != null && t.getMessage().contains(msg))
+		Throwable t2 = t;
+		while (t2 != null) {
+			if (t2.getMessage() != null && t2.getMessage().contains(msg))
 				return;
-			t = t.getCause();
+			t2 = t2.getCause();
 		}
+		t.printStackTrace();
 		throw new BasicAssertionError(t, "Throwable did not contain the expected message.  Message=[{0}]", msg);
 	}
 }

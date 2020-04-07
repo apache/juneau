@@ -156,7 +156,7 @@ public abstract class ComboRoundTripTest {
 
 			boolean isRdf = s instanceof RdfSerializer;
 
-			if ((isRdf && SKIP_RDF_TESTS) || expected.isEmpty() || ! runTestsSet.contains(testName) ) {
+			if ((isRdf && SKIP_RDF_TESTS) || "SKIP".equals(expected) || ! runTestsSet.contains(testName) ) {
 				System.err.println(comboInput.label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");  // NOT DEBUG
 				return;
 			}
@@ -243,6 +243,12 @@ public abstract class ComboRoundTripTest {
 			s = getSerializer(s);
 			p = getParser(p);
 
+			OMap properties = comboInput.getProperties();
+			if (properties != null) {
+				s = s.builder().add(properties).build();
+				p = p.builder().add(properties).build();
+			}
+
 			String r = s.serializeToString(comboInput.getInput());
 			Object o = p.parse(r, comboInput.type);
 
@@ -266,6 +272,12 @@ public abstract class ComboRoundTripTest {
 			s = (OutputStreamSerializer)getSerializer(s);
 			p = (InputStreamParser)getParser(p);
 			WriterSerializer sJson = (WriterSerializer)getSerializer(this.sJson);
+
+			if (comboInput.getProperties() != null) {
+				s = (OutputStreamSerializer)s.builder().add(comboInput.getProperties()).build();
+				p = (InputStreamParser)p.builder().add(comboInput.getProperties()).build();
+				sJson = (WriterSerializer)sJson.builder().add(comboInput.getProperties()).build();
+			}
 
 			String r = s.serializeToString(comboInput.getInput());
 			Object o = p.parse(r, comboInput.type);

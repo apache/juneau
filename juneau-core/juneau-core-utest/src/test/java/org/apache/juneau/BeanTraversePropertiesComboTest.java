@@ -10,12 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.serializer;
+package org.apache.juneau;
 
 import static org.apache.juneau.BeanTraverseContext.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -25,14 +24,24 @@ import org.junit.runners.*;
  */
 @RunWith(Parameterized.class)
 @SuppressWarnings({})
-public class BeanTraverseComboTest extends ComboRoundTripTest {
+public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 
-	public static class Bean {
+	public static class A {
 		public int f;
 
-		public static Bean create() {
-			Bean b = new Bean();
+		public static A create() {
+			A b = new A();
 			b.f = 1;
+			return b;
+		}
+	}
+
+	public static class B {
+		public Object f;
+
+		public static B create() {
+			B b = new B();
+			b.f = b;
 			return b;
 		}
 	}
@@ -42,9 +51,9 @@ public class BeanTraverseComboTest extends ComboRoundTripTest {
 		return Arrays.asList(new Object[][] {
 			{ 	/* 0 */
 				new ComboInput<>(
-					"TestInitialDepth",
-					Bean.class,
-					Bean.create(),
+					"BEANTRAVERSE_initialDepth",
+					A.class,
+					A.create(),
 					/* Json */		"{f:1}",
 					/* JsonT */		"{f:1}",
 					/* JsonR */		"\t\t{\n\t\t\tf: 1\n\t\t}",
@@ -69,10 +78,69 @@ public class BeanTraverseComboTest extends ComboRoundTripTest {
 				)
 				.properties(OMap.of(BEANTRAVERSE_initialDepth, 2))
 			},
+			{ 	/* 1 */
+				new ComboInput<>(
+					"BEANTRAVERSE_detectRecursions",
+					B.class,
+					B.create(),
+					/* Json */		"x",
+					/* JsonT */		"x",
+					/* JsonR */		"x",
+					/* Xml */		"x",
+					/* XmlT */		"x",
+					/* XmlR */		"x",
+					/* XmlNs */		"x",
+					/* Html */		"x",
+					/* HtmlT */		"x",
+					/* HtmlR */		"x",
+					/* Uon */		"x",
+					/* UonT */		"x",
+					/* UonR */		"x",
+					/* UrlEnc */	"x",
+					/* UrlEncT */	"x",
+					/* UrlEncR */	"x",
+					/* MsgPack */	"x",
+					/* MsgPackT */	"x",
+					/* RdfXml */	"x",
+					/* RdfXmlT */	"x",
+					/* RdfXmlR */	"x"
+				)
+				.properties(OMap.of(BEANTRAVERSE_detectRecursions, true))
+				.exceptionMsg("Recursion occurred")
+			},
+			{ 	/* 2 */
+				new ComboInput<>(
+					"BEANTRAVERSE_ignoreRecursions",
+					B.class,
+					B.create(),
+					/* Json */		"{}",
+					/* JsonT */		"{}",
+					/* JsonR */		"{\n}",
+					/* Xml */		"<object/>",
+					/* XmlT */		"<object/>",
+					/* XmlR */		"<object/>\n",
+					/* XmlNs */		"<object/>",
+					/* Html */		"<table></table>",
+					/* HtmlT */		"<table></table>",
+					/* HtmlR */		"<table>\n</table>\n",
+					/* Uon */		"()",
+					/* UonT */		"()",
+					/* UonR */		"(\n)",
+					/* UrlEnc */	"",
+					/* UrlEncT */	"",
+					/* UrlEncR */	"",
+					/* MsgPack */	"80",
+					/* MsgPackT */	"80",
+					/* RdfXml */	"<rdf:RDF>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n</rdf:RDF>\n"
+				)
+				.properties(OMap.of(BEANTRAVERSE_ignoreRecursions, true))
+			},
 		});
 	}
 
-	public BeanTraverseComboTest(ComboInput<?> comboInput) {
+	public BeanTraversePropertiesComboTest(ComboInput<?> comboInput) {
 		super(comboInput);
 	}
 }
