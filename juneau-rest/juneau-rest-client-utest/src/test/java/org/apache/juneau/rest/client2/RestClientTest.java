@@ -2450,12 +2450,44 @@ public class RestClientTest {
 			.run()
 			.getBody().assertValue("{}");
 	}
-//	public RestClientBuilder trimNullProperties(boolean value) {
 
-//	@Test
-//	public void l21_serializer_trimStringsSBoolean() throws Exception { fail(); }
-////	public RestClientBuilder trimStringsS(boolean value) {
-//
+	public static class L21 {
+		public String f = " foo ";
+	}
+
+	@Test
+	public void l21_serializer_trimStringsS() throws Exception {
+		L21 x = new L21();
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.trimStringsS()
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{f:'foo'}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.trimStringsS(true)
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{f:'foo'}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.trimStringsS(false)
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{f:' foo '}");
+	}
+//	public RestClientBuilder trimStringsS(boolean value) {
+
 //	@Test
 //	public void l22_serializer_trimStringsS() throws Exception { fail(); }
 ////	public RestClientBuilder trimStringsS() {

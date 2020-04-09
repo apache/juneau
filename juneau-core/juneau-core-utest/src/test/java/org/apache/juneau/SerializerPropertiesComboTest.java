@@ -52,6 +52,10 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 		public String f;
 	}
 
+	public static class T8 {
+		public String f = " foo ";
+	}
+
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
@@ -286,6 +290,35 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				.properties(OMap.of(SERIALIZER_keepNullProperties, true))
+			},
+			{ 	/* 8 */
+				new ComboInput<>(
+					"SERIALIZER_trimStrings",
+					T8.class,
+					new T8(),
+					/* Json */		"{f:'foo'}",
+					/* JsonT */		"{f:'foo'}",
+					/* JsonR */		"{\n\tf: 'foo'\n}",
+					/* Xml */		"<object><f>foo</f></object>",
+					/* XmlT */		"<object><f>foo</f></object>",
+					/* XmlR */		"<object>\n\t<f>foo</f>\n</object>\n",
+					/* XmlNs */		"<object><f>foo</f></object>",
+					/* Html */		"<table><tr><td>f</td><td>foo</td></tr></table>",
+					/* HtmlT */		"<table><tr><td>f</td><td>foo</td></tr></table>",
+					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>f</td>\n\t\t<td>foo</td>\n\t</tr>\n</table>\n",
+					/* Uon */		"(f=foo)",
+					/* UonT */		"(f=foo)",
+					/* UonR */		"(\n\tf=foo\n)",
+					/* UrlEnc */	"f=foo",
+					/* UrlEncT */	"f=foo",
+					/* UrlEncR */	"f=foo",
+					/* MsgPack */	"81A166A3666F6F",
+					/* MsgPackT */	"81A166A3666F6F",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>foo</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>foo</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>foo</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+				.properties(OMap.of(SERIALIZER_trimStrings, true))
 			},
 		});
 	}

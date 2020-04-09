@@ -128,12 +128,16 @@ public final class JsonWriter extends SerializerWriter {
 	 * @throws IOException Should never happen.
 	 */
 	public JsonWriter attr(String s) throws IOException {
+
+		if (trimStrings)
+			s = StringUtils.trim(s);
+
 		/*
 		 * Converts a Java string to an acceptable JSON attribute name. If
 		 * simpleMode is true, then quotes will only be used if the attribute
 		 * name consists of only alphanumeric characters.
 		 */
-		boolean doConvert = trimStrings || ! simpleMode;		// Always convert when not in lax mode.
+		boolean doConvert = ! simpleMode;		// Always convert when not in lax mode.
 
 		// If the attribute is null, it must always be printed as null without quotes.
 		// Technically, this isn't part of the JSON spec, but it does allow for null key values.
