@@ -126,6 +126,43 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
+	 * Configuration property:  Don't trim null bean property values.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, null bean values will be serialized to the output.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_keepNullProperties}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public SerializerBuilder keepNullProperties(boolean value) {
+		return set(SERIALIZER_keepNullProperties, value);
+	}
+
+	/**
+	 * Configuration property:  Don't trim null bean property values.
+	 *
+	 * <p>
+	 * When enabled, null bean values will be serialized to the output.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_keepNullProperties}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public SerializerBuilder keepNullProperties() {
+		return set(SERIALIZER_keepNullProperties, true);
+	}
+
+	/**
 	 * Configuration property:  Serializer listener.
 	 *
 	 * <p>
@@ -306,7 +343,9 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	The new value for this property.
 	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #keepNullProperties(boolean)}
 	 */
+	@Deprecated
 	@ConfigurationProperty
 	public SerializerBuilder trimNullProperties(boolean value) {
 		return set(SERIALIZER_trimNullProperties, value);
@@ -323,7 +362,9 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
+	 * @deprecated Use {@link #keepNullProperties()}
 	 */
+	@Deprecated
 	@ConfigurationProperty
 	public SerializerBuilder dontTrimNullProperties() {
 		return set(SERIALIZER_trimNullProperties, false);

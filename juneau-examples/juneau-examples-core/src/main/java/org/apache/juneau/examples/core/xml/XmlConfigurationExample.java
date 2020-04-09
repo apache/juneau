@@ -70,7 +70,7 @@ public class XmlConfigurationExample {
 
 		//Produces
 		//<object><id>a</id></object>
-		String nullescaped = XmlSerializer.create().trimNullProperties(true).build().serialize(nPojo);
+		String nullescaped = XmlSerializer.create().keepNullProperties(false).build().serialize(nPojo);
 		// the output will have trimmed null properties.
 		System.out.println(nullescaped);
 

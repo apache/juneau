@@ -35,13 +35,13 @@ public class CommonTest {
 		JsonParser p = JsonParser.DEFAULT;
 		A t1 = A.create(), t2;
 
-		s.trimNullProperties(false);
+		s.keepNullProperties();
 		String r = s.build().serialize(t1);
 		assertEquals("{s1:null,s2:'s2'}", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.trimNullProperties(true);
+		s.keepNullProperties(false);
 		r = s.build().serialize(t1);
 		assertEquals("{s2:'s2'}", r);
 		t2 = p.parse(r, A.class);
@@ -316,7 +316,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBasicBean() throws Exception {
-		JsonSerializer s = JsonSerializer.create().ssq().trimNullProperties(false).sortProperties().build();
+		JsonSerializer s = JsonSerializer.create().ssq().keepNullProperties().sortProperties().build();
 
 		J a = new J();
 		a.setF1("J");

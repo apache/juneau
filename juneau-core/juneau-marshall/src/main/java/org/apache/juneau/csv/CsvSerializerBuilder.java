@@ -811,9 +811,21 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public CsvSerializerBuilder dontTrimNullProperties() {
 		super.dontTrimNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public CsvSerializerBuilder keepNullProperties() {
+		super.keepNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public CsvSerializerBuilder keepNullProperties(boolean value) {
+		super.keepNullProperties(value);
 		return this;
 	}
 
@@ -871,7 +883,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public CsvSerializerBuilder trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
 		return this;

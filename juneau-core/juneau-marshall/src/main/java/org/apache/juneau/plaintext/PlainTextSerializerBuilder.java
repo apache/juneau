@@ -811,9 +811,21 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public PlainTextSerializerBuilder dontTrimNullProperties() {
 		super.dontTrimNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public PlainTextSerializerBuilder keepNullProperties() {
+		super.keepNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public PlainTextSerializerBuilder keepNullProperties(boolean value) {
+		super.keepNullProperties(value);
 		return this;
 	}
 
@@ -871,7 +883,7 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public PlainTextSerializerBuilder trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
 		return this;

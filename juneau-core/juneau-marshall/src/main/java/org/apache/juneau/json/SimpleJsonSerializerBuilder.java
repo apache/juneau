@@ -810,9 +810,21 @@ public class SimpleJsonSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public SimpleJsonSerializerBuilder dontTrimNullProperties() {
 		super.dontTrimNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public SimpleJsonSerializerBuilder keepNullProperties() {
+		super.keepNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public SimpleJsonSerializerBuilder keepNullProperties(boolean value) {
+		super.keepNullProperties(value);
 		return this;
 	}
 
@@ -870,7 +882,7 @@ public class SimpleJsonSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public SimpleJsonSerializerBuilder trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
 		return this;

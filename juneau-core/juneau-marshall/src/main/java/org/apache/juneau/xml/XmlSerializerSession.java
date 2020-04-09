@@ -207,7 +207,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					findNsfMappings(o2);
 			}
 			if (bm != null) {
-				for (BeanPropertyValue p : bm.getValues(isTrimNullProperties())) {
+				for (BeanPropertyValue p : bm.getValues(isKeepNullProperties())) {
 
 					Namespace ns = getXmlBeanPropertyMeta(p.getMeta()).getNamespace();
 					if (ns != null && ns.uri != null)
@@ -547,7 +547,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		boolean hasChildren = false;
 		BeanMeta<?> bm = m.getMeta();
 
-		List<BeanPropertyValue> lp = m.getValues(isTrimNullProperties());
+		List<BeanPropertyValue> lp = m.getValues(isKeepNullProperties());
 
 		XmlBeanMeta xbm = getXmlBeanMeta(bm);
 
@@ -587,7 +587,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					} else if (n.equals(attrsProperty)) {
 						if (value instanceof BeanMap) {
 							BeanMap<?> bm2 = (BeanMap)value;
-							for (BeanPropertyValue p2 : bm2.getValues(true)) {
+							for (BeanPropertyValue p2 : bm2.getValues(false)) {
 								String key2 = p2.getName();
 								Object value2 = p2.getValue();
 								Throwable t2 = p2.getThrown();

@@ -464,16 +464,16 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * <p>
 	 * This allows a snapshot of all values to be grabbed from a bean in one call.
 	 *
-	 * @param ignoreNulls
-	 * 	Don't return properties whose values are null.
+	 * @param keepNulls
+	 * 	Also return properties whose values are null.
 	 * @param prependVals
 	 * 	Additional bean property values to prepended to this list.
 	 * 	Any <jk>null</jk> values in this list will be ignored.
 	 * @return The list of all bean property values.
 	 */
-	public List<BeanPropertyValue> getValues(final boolean ignoreNulls, BeanPropertyValue...prependVals) {
+	public List<BeanPropertyValue> getValues(boolean keepNulls, BeanPropertyValue...prependVals) {
 		Collection<BeanPropertyMeta> properties = getProperties();
-		int capacity = (ignoreNulls && properties.size() > 10) ? 10 : properties.size() + prependVals.length;
+		int capacity = ((! keepNulls) && properties.size() > 10) ? 10 : properties.size() + prependVals.length;
 		List<BeanPropertyValue> l = new ArrayList<>(capacity);
 		for (BeanPropertyValue v : prependVals)
 			if (v != null)
@@ -486,13 +486,13 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 						if (dynaMap != null) {
 							for (String pName : bpm.getDynaMap(bean).keySet()) {
 								Object val = bpm.get(this, pName);
-								if (val != null || ! ignoreNulls)
+								if (val != null || keepNulls)
 									l.add(new BeanPropertyValue(bpm, pName, val, null));
 							}
 						}
 					} else {
 						Object val = bpm.get(this, null);
-						if (val != null || ! ignoreNulls)
+						if (val != null || keepNulls)
 							l.add(new BeanPropertyValue(bpm, bpm.getName(), val, null));
 					}
 				} catch (Error e) {

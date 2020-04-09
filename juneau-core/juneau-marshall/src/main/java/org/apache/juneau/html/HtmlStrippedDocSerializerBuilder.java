@@ -811,9 +811,21 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder dontTrimNullProperties() {
 		super.dontTrimNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public HtmlStrippedDocSerializerBuilder keepNullProperties() {
+		super.keepNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public HtmlStrippedDocSerializerBuilder keepNullProperties(boolean value) {
+		super.keepNullProperties(value);
 		return this;
 	}
 
@@ -871,7 +883,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
 		return this;

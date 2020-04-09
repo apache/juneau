@@ -831,9 +831,21 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public SoapXmlSerializerBuilder dontTrimNullProperties() {
 		super.dontTrimNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public SoapXmlSerializerBuilder keepNullProperties() {
+		super.keepNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - SerializerBuilder */
+	public SoapXmlSerializerBuilder keepNullProperties(boolean value) {
+		super.keepNullProperties(value);
 		return this;
 	}
 
@@ -891,7 +903,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public SoapXmlSerializerBuilder trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
 		return this;

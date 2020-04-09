@@ -147,6 +147,36 @@ public @interface SerializerConfig {
 	String addRootType() default "";
 
 	/**
+	 * Configuration property:  Don't trim null bean property values.
+	 *
+	 * <p>
+	 * If <js>"true"</js>, null bean values will be serialized to the output.
+	 *
+	 * <p>
+	 * Note that not enabling this setting has the following effects on parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Map entries with <jk>null</jk> values will be lost.
+	 * </ul>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_keepNullProperties}
+	 * </ul>
+	 */
+	String keepNullProperties() default "";
+
+	/**
 	 * Configuration property:  Serializer listener.
 	 *
 	 * <p>
@@ -299,7 +329,9 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
 	 * </ul>
+	 * @deprecated Use {@link #keepNullProperties()}
 	 */
+	@Deprecated
 	String trimNullProperties() default "";
 
 	/**

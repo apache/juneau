@@ -1155,7 +1155,7 @@ public class MockRestClient extends RestClientBuilder {
 
 	@Override /* GENERATED - RestClientBuilder */
 	@SuppressWarnings("unchecked")
-	public MockRestClient interceptors(java.lang.Class<? extends org.apache.juneau.rest.client2.RestCallInterceptor>...values) throws Exception {
+	public MockRestClient interceptors(java.lang.Class<? extends org.apache.juneau.rest.client2.RestCallInterceptor>...values) throws Exception{
 		super.interceptors(values);
 		return this;
 	}
@@ -1181,6 +1181,18 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient keepHttpClientOpen(boolean value) {
 		super.keepHttpClientOpen(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient keepNullProperties() {
+		super.keepNullProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient keepNullProperties(boolean value) {
+		super.keepNullProperties(value);
 		return this;
 	}
 
@@ -1510,7 +1522,7 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - RestClientBuilder */
+	@Deprecated @Override /* GENERATED - RestClientBuilder */
 	public MockRestClient trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
 		return this;

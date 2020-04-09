@@ -37,7 +37,7 @@ public class TestUtils {
 
 	private static JsonSerializer js = JsonSerializer.create()
 		.ssq()
-		.trimNullProperties(false)
+		.keepNullProperties()
 		.addBeanTypes().addRootType()
 		.build();
 
@@ -45,7 +45,7 @@ public class TestUtils {
 		.ssq()
 		.sortCollections()
 		.sortMaps()
-		.trimNullProperties(false)
+		.keepNullProperties()
 		.addBeanTypes().addRootType()
 		.build();
 

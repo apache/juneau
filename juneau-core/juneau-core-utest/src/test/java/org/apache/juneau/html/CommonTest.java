@@ -36,13 +36,13 @@ public class CommonTest {
 		HtmlParser p = HtmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 
-		s.trimNullProperties(false);
+		s.keepNullProperties();
 		String r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>s1</td><td><null/></td></tr><tr><td>s2</td><td>s2</td></tr></table>", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.trimNullProperties(true);
+		s.keepNullProperties(false);
 		r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>s2</td><td>s2</td></tr></table>", r);
 		t2 = p.parse(r, A.class);
@@ -439,7 +439,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBasicBean() throws Exception {
-		WriterSerializer s = HtmlSerializer.create().sq().trimNullProperties(false).sortProperties().addKeyValueTableHeaders().build();
+		WriterSerializer s = HtmlSerializer.create().sq().keepNullProperties().sortProperties().addKeyValueTableHeaders().build();
 
 		J a = new J();
 		a.setF1("J");

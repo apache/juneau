@@ -171,14 +171,14 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 
 	private void serializeBeanMap(MsgPackOutputStream out, final BeanMap<?> m, String typeName) throws IOException, SerializeException {
 
-		List<BeanPropertyValue> values = m.getValues(isTrimNullProperties(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null);
+		List<BeanPropertyValue> values = m.getValues(isKeepNullProperties(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null);
 
 		int size = values.size();
 		for (BeanPropertyValue p : values) {
 			if (p.getThrown() != null)
 				size--;
 			// Must handle the case where recursion occurs and property is not serialized.
-			if (isTrimNullProperties() && willRecurse(p))
+			if ((! isKeepNullProperties()) && willRecurse(p))
 				size--;
 		}
 
@@ -193,7 +193,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 				Throwable t = p.getThrown();
 				if (t != null) {
 					onBeanGetterException(pMeta, t);
-				} else if (isTrimNullProperties() && willRecurse(p)) {
+				} else if ((! isKeepNullProperties()) && willRecurse(p)) {
 					/* Ignored */
 				} else {
 					serializeAnything(out, key, null, null, null);
@@ -202,7 +202,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 			}
 		}
 	}
-	
+
 	private boolean willRecurse(BeanPropertyValue v) throws SerializeException {
 		ClassMeta<?> aType = push2(v.getName(), v.getValue(), v.getClassMeta());
 		 if (aType != null)

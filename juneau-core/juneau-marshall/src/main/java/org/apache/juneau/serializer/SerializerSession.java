@@ -327,7 +327,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 */
 	public final boolean canIgnoreValue(ClassMeta<?> cm, String attrName, Object value) throws SerializeException {
 
-		if (isTrimNullProperties() && value == null)
+		if (value == null && ! isKeepNullProperties())
 			return true;
 
 		if (value == null)
@@ -355,7 +355,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		}
 
 		try {
-			if (isTrimNullProperties() && (willRecurse(attrName, value, cm) || willExceedDepth()))
+			if ((! isKeepNullProperties()) && (willRecurse(attrName, value, cm) || willExceedDepth()))
 				return true;
 		} catch (BeanRecursionException e) {
 			throw new SerializeException(e);
@@ -753,14 +753,14 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Trim null bean property values.
+	 * Configuration property:  Don't trim null bean property values.
 	 *
-	 * @see Serializer#SERIALIZER_trimNullProperties
+	 * @see Serializer#SERIALIZER_keepNullProperties
 	 * @return
-	 * 	<jk>true</jk> if null bean values are not serialized to the output.
+	 * 	<jk>true</jk> if null bean values are serialized to the output.
 	 */
-	protected final boolean isTrimNullProperties() {
-		return ctx.isTrimNullProperties();
+	protected final boolean isKeepNullProperties() {
+		return ctx.isKeepNullProperties();
 	}
 
 	/**

@@ -36,14 +36,14 @@ public class TestUtils {
 
 	private static JsonSerializer js = JsonSerializer.create()
 		.ssq()
-		.trimNullProperties(false)
+		.keepNullProperties()
 		.build();
 
 	private static JsonSerializer jsSorted = JsonSerializer.create()
 		.ssq()
 		.sortCollections()
 		.sortMaps()
-		.trimNullProperties(false)
+		.keepNullProperties()
 		.build();
 
 

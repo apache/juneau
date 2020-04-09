@@ -473,7 +473,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* SerializerBuilder */
+	@Deprecated @Override /* SerializerBuilder */
 	public JsonSchemaSerializerBuilder trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
 		return this;

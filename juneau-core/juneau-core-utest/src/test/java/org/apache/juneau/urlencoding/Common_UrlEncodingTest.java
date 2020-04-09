@@ -35,13 +35,13 @@ public class Common_UrlEncodingTest {
 		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create();
 		A t1 = A.create(), t2;
 
-		s.trimNullProperties(false);
+		s.keepNullProperties();
 		String r = s.build().serialize(t1);
 		assertEquals("s1=null&s2=s2", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.trimNullProperties(true);
+		s.keepNullProperties(false);
 		r = s.build().serialize(t1);
 		assertEquals("s2=s2", r);
 		t2 = p.parse(r, A.class);

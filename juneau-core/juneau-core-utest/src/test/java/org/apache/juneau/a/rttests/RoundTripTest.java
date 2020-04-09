@@ -50,43 +50,43 @@ public abstract class RoundTripTest {
 			// Full round-trip testing
 			{ /* 0 */
 				"Json - default",
-				JsonSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
+				JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType(),
 				JsonParser.create(),
 				0
 			},
 			{ /* 1 */
 				"Json - lax",
-				JsonSerializer.create().ssq().trimNullProperties(false).addBeanTypes().addRootType(),
+				JsonSerializer.create().ssq().keepNullProperties().addBeanTypes().addRootType(),
 				JsonParser.create(),
 				0
 			},
 			{ /* 2 */
 				"Json - lax, readable",
-				JsonSerializer.create().ssq().ws().trimNullProperties(false).addBeanTypes().addRootType(),
+				JsonSerializer.create().ssq().ws().keepNullProperties().addBeanTypes().addRootType(),
 				JsonParser.create(),
 				0
 			},
 			{ /* 3 */
 				"Xml - namespaces, validation, readable",
-				XmlSerializer.create().ns().sq().trimNullProperties(false).addNamespaceUrisToRoot().useWhitespace().addBeanTypes().addRootType(),
+				XmlSerializer.create().ns().sq().keepNullProperties().addNamespaceUrisToRoot().useWhitespace().addBeanTypes().addRootType(),
 				XmlParser.create(),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"Xml - no namespaces, validation",
-				XmlSerializer.create().sq().trimNullProperties(false).addBeanTypes().addRootType(),
+				XmlSerializer.create().sq().keepNullProperties().addBeanTypes().addRootType(),
 				XmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"Html - default",
-				HtmlSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
+				HtmlSerializer.create().keepNullProperties().addBeanTypes().addRootType(),
 				HtmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 6 */
 				"Html - readable",
-				HtmlSerializer.create().sq().ws().trimNullProperties(false).addBeanTypes().addRootType(),
+				HtmlSerializer.create().sq().ws().keepNullProperties().addBeanTypes().addRootType(),
 				HtmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
@@ -98,31 +98,31 @@ public abstract class RoundTripTest {
 			},
 			{ /* 8 */
 				"Uon - default",
-				UonSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
+				UonSerializer.create().keepNullProperties().addBeanTypes().addRootType(),
 				UonParser.create(),
 				0
 			},
 			{ /* 9 */
 				"Uon - readable",
-				UonSerializer.create().ws().trimNullProperties(false).addBeanTypes().addRootType(),
+				UonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType(),
 				UonParser.create(),
 				0
 			},
 			{ /* 10 */
 				"Uon - encoded",
-				UonSerializer.create().encoding().trimNullProperties(false).addBeanTypes().addRootType(),
+				UonSerializer.create().encoding().keepNullProperties().addBeanTypes().addRootType(),
 				UonParser.create().decoding(),
 				0
 			},
 			{ /* 11 */
 				"UrlEncoding - default",
-				UrlEncodingSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
+				UrlEncodingSerializer.create().keepNullProperties().addBeanTypes().addRootType(),
 				UrlEncodingParser.create(),
 				0
 			},
 			{ /* 12 */
 				"UrlEncoding - readable",
-				UrlEncodingSerializer.create().ws().trimNullProperties(false).addBeanTypes().addRootType(),
+				UrlEncodingSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType(),
 				UrlEncodingParser.create(),
 				0
 			},
@@ -134,37 +134,37 @@ public abstract class RoundTripTest {
 			},
 			{ /* 14 */
 				"Rdf.Xml",
-				RdfXmlSerializer.create().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
+				RdfXmlSerializer.create().keepNullProperties().addLiteralTypes().addBeanTypes().addRootType(),
 				RdfXmlParser.create(),
 				0
 			},
 			{ /* 15 */
 				"Rdf.XmlAbbrev",
-				RdfXmlAbbrevSerializer.create().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
+				RdfXmlAbbrevSerializer.create().keepNullProperties().addLiteralTypes().addBeanTypes().addRootType(),
 				RdfXmlParser.create(),
 				0
 			},
 			{ /* 16 */
 				"Rdf.Turtle",
-				TurtleSerializer.create().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
+				TurtleSerializer.create().keepNullProperties().addLiteralTypes().addBeanTypes().addRootType(),
 				TurtleParser.create(),
 				0
 			},
 			{ /* 17 */
 				"Rdf.NTriple",
-				NTripleSerializer.create().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
+				NTripleSerializer.create().keepNullProperties().addLiteralTypes().addBeanTypes().addRootType(),
 				NTripleParser.create(),
 				0
 			},
 			{ /* 18 */
 				"Rdf.N3",
-				N3Serializer.create().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
+				N3Serializer.create().keepNullProperties().addLiteralTypes().addBeanTypes().addRootType(),
 				N3Parser.create(),
 				0
 			},
 			{ /* 19 */
 				"MsgPack",
-				MsgPackSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
+				MsgPackSerializer.create().keepNullProperties().addBeanTypes().addRootType(),
 				MsgPackParser.create(),
 				0
 			},
@@ -172,7 +172,7 @@ public abstract class RoundTripTest {
 			// Validation testing only
 			{ /* 20 */
 				"Json schema",
-				JsonSchemaSerializer.create().trimNullProperties(false).addBeanTypes().addRootType(),
+				JsonSchemaSerializer.create().keepNullProperties().addBeanTypes().addRootType(),
 				null,
 				RETURN_ORIGINAL_OBJECT
 			},

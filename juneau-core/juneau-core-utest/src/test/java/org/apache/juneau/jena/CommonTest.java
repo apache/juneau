@@ -50,13 +50,13 @@ public class CommonTest {
 		RdfParser p = RdfXmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 
-		s.trimNullProperties(false);
+		s.keepNullProperties();
 		String r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:s1 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:s2>s2</jp:s2></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.trimNullProperties(true);
+		s.keepNullProperties(false);
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:s2>s2</jp:s2></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);

@@ -476,7 +476,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.ie(i+1).eTag("tr").nl(i+1);
 		}
 
-		for (BeanPropertyValue p : m.getValues(isTrimNullProperties())) {
+		for (BeanPropertyValue p : m.getValues(isKeepNullProperties())) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			ClassMeta<?> cMeta = p.getClassMeta();
 

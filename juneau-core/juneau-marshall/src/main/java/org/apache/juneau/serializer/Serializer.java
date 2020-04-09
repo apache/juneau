@@ -247,6 +247,57 @@ public abstract class Serializer extends BeanTraverseContext {
 	public static final String SERIALIZER_listener = PREFIX + ".listener.c";
 
 	/**
+	 * Configuration property:  Don't trim null bean property values.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_keepNullProperties SERIALIZER_keepNullProperties}
+	 * 	<li><b>Name:</b>  <js>"Serializer.keepNullProperties.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Serializer.keepNullProperties</c>
+	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_KEEPNULLPROPERTIES</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#keepNullProperties()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#keepNullProperties()}
+	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#keepNullProperties(boolean)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * If <jk>true</jk>, null bean values will be serialized to the output.
+	 *
+	 * <p>
+	 * Note that not enabling this setting has the following effects on parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Map entries with <jk>null</jk> values will be lost.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that serializes null properties.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.keepNullProperties(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>SERIALIZER_keepNullProperties</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 * </p>
+	 */
+	public static final String SERIALIZER_keepNullProperties = PREFIX + ".keepNullProperties.b";
+
+	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -495,7 +546,9 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.set(<jsf>SERIALIZER_trimNullProperties</jsf>, <jk>false</jk>)
 	 * 		.build();
 	 * </p>
+	 * @deprecated Use {@link #SERIALIZER_keepNullProperties}
 	 */
+	@Deprecated
 	public static final String SERIALIZER_trimNullProperties = PREFIX + ".trimNullProperties.b";
 
 	/**
@@ -744,7 +797,7 @@ public abstract class Serializer extends BeanTraverseContext {
 
 	private final boolean
 		addBeanTypes,
-		trimNullProperties,
+		keepNullProperties,
 		trimEmptyCollections,
 		trimEmptyMaps,
 		trimStrings,
@@ -790,7 +843,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		super(ps);
 
 		addBeanTypes = getBooleanProperty(SERIALIZER_addBeanTypes, false);
-		trimNullProperties = getBooleanProperty(SERIALIZER_trimNullProperties, true);
+		keepNullProperties = getBooleanProperty(SERIALIZER_keepNullProperties, ! getBooleanProperty(SERIALIZER_trimNullProperties, true));
 		trimEmptyCollections = getBooleanProperty(SERIALIZER_trimEmptyCollections, false);
 		trimEmptyMaps = getBooleanProperty(SERIALIZER_trimEmptyMaps, false);
 		trimStrings = getBooleanProperty(SERIALIZER_trimStrings, false);
@@ -1055,14 +1108,14 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  Trim null bean property values.
+	 * Configuration property:  Don't trim null bean property values.
 	 *
-	 * @see #SERIALIZER_trimNullProperties
+	 * @see #SERIALIZER_keepNullProperties
 	 * @return
-	 * 	<jk>true</jk> if null bean values are not serialized to the output.
+	 * 	<jk>true</jk> if null bean values are serialized to the output.
 	 */
-	protected final boolean isTrimNullProperties() {
-		return trimNullProperties;
+	protected final boolean isKeepNullProperties() {
+		return keepNullProperties;
 	}
 
 	/**
@@ -1118,7 +1171,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		return super.toMap()
 			.a("Serializer", new DefaultFilteringOMap()
 				.a("addBeanTypes", addBeanTypes)
-				.a("trimNullProperties", trimNullProperties)
+				.a("keepNullProperties", keepNullProperties)
 				.a("trimEmptyCollections", trimEmptyCollections)
 				.a("trimEmptyMaps", trimEmptyMaps)
 				.a("trimStrings", trimStrings)

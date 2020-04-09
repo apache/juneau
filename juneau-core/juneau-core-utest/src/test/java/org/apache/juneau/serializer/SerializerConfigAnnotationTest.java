@@ -86,7 +86,7 @@ public class SerializerConfigAnnotationTest {
 		check("true", x.isSortMaps());
 		check("true", x.isTrimEmptyCollections());
 		check("true", x.isTrimEmptyMaps());
-		check("true", x.isTrimNullProperties());
+		check("false", x.isKeepNullProperties());
 		check("true", x.isTrimStrings());
 		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
@@ -106,7 +106,7 @@ public class SerializerConfigAnnotationTest {
 		check("true", x.isSortMaps());
 		check("true", x.isTrimEmptyCollections());
 		check("true", x.isTrimEmptyMaps());
-		check("true", x.isTrimNullProperties());
+		check("false", x.isKeepNullProperties());
 		check("true", x.isTrimStrings());
 		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
@@ -134,7 +134,7 @@ public class SerializerConfigAnnotationTest {
 		check("false", x.isSortMaps());
 		check("false", x.isTrimEmptyCollections());
 		check("false", x.isTrimEmptyMaps());
-		check("true", x.isTrimNullProperties());
+		check("false", x.isKeepNullProperties());
 		check("false", x.isTrimStrings());
 		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
@@ -154,7 +154,7 @@ public class SerializerConfigAnnotationTest {
 		check("false", x.isSortMaps());
 		check("false", x.isTrimEmptyCollections());
 		check("false", x.isTrimEmptyMaps());
-		check("true", x.isTrimNullProperties());
+		check("false", x.isKeepNullProperties());
 		check("false", x.isTrimStrings());
 		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
@@ -181,7 +181,7 @@ public class SerializerConfigAnnotationTest {
 		check("false", x.isSortMaps());
 		check("false", x.isTrimEmptyCollections());
 		check("false", x.isTrimEmptyMaps());
-		check("true", x.isTrimNullProperties());
+		check("false", x.isKeepNullProperties());
 		check("false", x.isTrimStrings());
 		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());
@@ -201,7 +201,7 @@ public class SerializerConfigAnnotationTest {
 		check("false", x.isSortMaps());
 		check("false", x.isTrimEmptyCollections());
 		check("false", x.isTrimEmptyMaps());
-		check("true", x.isTrimNullProperties());
+		check("false", x.isKeepNullProperties());
 		check("false", x.isTrimStrings());
 		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
 		check("RESOURCE", x.getUriRelativity());

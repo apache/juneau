@@ -417,7 +417,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 
 	@Override
 	protected Serializer applySettings(Serializer s) throws Exception {
-		return s.builder().pojoSwaps(ByteArraySwap.Base64.class).trimNullProperties(false).build();
+		return s.builder().pojoSwaps(ByteArraySwap.Base64.class).keepNullProperties().build();
 	}
 
 	@Override

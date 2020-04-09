@@ -856,7 +856,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 
 	@Override
 	protected Serializer applySettings(Serializer s) throws Exception {
-		return s.builder().trimNullProperties(false).build();
+		return s.builder().keepNullProperties().build();
 	}
 
 	@Override

@@ -49,55 +49,55 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 			// Full round-trip testing
 			{ /* 0 */
 				"Json DEFAULT",
-				JsonSerializer.create().trimNullProperties(false),
+				JsonSerializer.create().keepNullProperties(),
 				JsonParser.create(),
 				0
 			},
 			{ /* 1 */
 				"SimpleJson DEFAULT",
-				JsonSerializer.create().ssq().trimNullProperties(false),
+				JsonSerializer.create().ssq().keepNullProperties(),
 				JsonParser.create(),
 				0
 			},
 			{ /* 2 */
 				"Json DEFAULT_SQ",
-				JsonSerializer.create().ssq().trimNullProperties(false),
+				JsonSerializer.create().ssq().keepNullProperties(),
 				JsonParser.create(),
 				0
 			},
 			{ /* 3 */
 				"Xml DEFAULT w/namespaces,validation",
-				XmlSerializer.create().sq().ns().trimNullProperties(false).addNamespaceUrisToRoot().useWhitespace(),
+				XmlSerializer.create().sq().ns().keepNullProperties().addNamespaceUrisToRoot().useWhitespace(),
 				XmlParser.create(),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"Xml DEFAULT wo/namespaces,validation",
-				XmlSerializer.create().sq().trimNullProperties(false),
+				XmlSerializer.create().sq().keepNullProperties(),
 				XmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"Html",
-				HtmlSerializer.create().trimNullProperties(false),
+				HtmlSerializer.create().keepNullProperties(),
 				HtmlParser.create(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 6 */
 				"UrlEncoding",
-				UrlEncodingSerializer.create().trimNullProperties(false),
+				UrlEncodingSerializer.create().keepNullProperties(),
 				UrlEncodingParser.create(),
 				0
 			},
 			{ /* 7 */
 				"Uon",
-				UonSerializer.create().trimNullProperties(false),
+				UonSerializer.create().keepNullProperties(),
 				UonParser.create(),
 				0
 			},
 			{ /* 8 */
 				"MsgPack",
-				MsgPackSerializer.create().trimNullProperties(false),
+				MsgPackSerializer.create().keepNullProperties(),
 				MsgPackParser.create(),
 				0
 			},

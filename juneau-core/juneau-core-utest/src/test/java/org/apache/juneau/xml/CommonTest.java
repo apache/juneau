@@ -39,13 +39,13 @@ public class CommonTest {
 		XmlParser p = XmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 
-		s.trimNullProperties(false);
+		s.keepNullProperties();
 		String r = s.build().serialize(t1);
 		assertEquals("<object><s1 _type='null'/><s2>s2</s2></object>", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.trimNullProperties(true);
+		s.keepNullProperties(false);
 		r = s.build().serialize(t1);
 		assertEquals("<object><s2>s2</s2></object>", r);
 		t2 = p.parse(r, A.class);

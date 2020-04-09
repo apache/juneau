@@ -48,6 +48,10 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 		public OMap f2 = OMap.of();
 	}
 
+	public static class T7 {
+		public String f;
+	}
+
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
@@ -253,6 +257,35 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 					/* RdfXmlR */	"<rdf:RDF>\n</rdf:RDF>\n"
 				)
 				.properties(OMap.of(SERIALIZER_trimEmptyMaps, true))
+			},
+			{ 	/* 7 */
+				new ComboInput<>(
+					"SERIALIZER_keepNullProperties",
+					T7.class,
+					new T7(),
+					/* Json */		"{f:null}",
+					/* JsonT */		"{f:null}",
+					/* JsonR */		"{\n\tf: null\n}",
+					/* Xml */		"<object><f _type='null'/></object>",
+					/* XmlT */		"<object><f t='null'/></object>",
+					/* XmlR */		"<object>\n\t<f _type='null'/>\n</object>\n",
+					/* XmlNs */		"<object><f _type='null'/></object>",
+					/* Html */		"<table><tr><td>f</td><td><null/></td></tr></table>",
+					/* HtmlT */		"<table><tr><td>f</td><td><null/></td></tr></table>",
+					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>f</td>\n\t\t<td><null/></td>\n\t</tr>\n</table>\n",
+					/* Uon */		"(f=null)",
+					/* UonT */		"(f=null)",
+					/* UonR */		"(\n\tf=null\n)",
+					/* UrlEnc */	"f=null",
+					/* UrlEncT */	"f=null",
+					/* UrlEncR */	"f=null",
+					/* MsgPack */	"81A166C0",
+					/* MsgPackT */	"81A166C0",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+				.properties(OMap.of(SERIALIZER_keepNullProperties, true))
 			},
 		});
 	}

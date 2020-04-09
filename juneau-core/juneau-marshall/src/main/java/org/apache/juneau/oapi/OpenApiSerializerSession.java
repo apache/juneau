@@ -221,7 +221,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			s = DEFAULT_SCHEMA;
 		OMap m = new OMap();
 		if (type.isBean()) {
-			for (BeanPropertyValue p : toBeanMap(o).getValues(isTrimNullProperties())) {
+			for (BeanPropertyValue p : toBeanMap(o).getValues(isKeepNullProperties())) {
 				if (p.getMeta().canRead()) {
 					Throwable t = p.getThrown();
 					if (t == null)

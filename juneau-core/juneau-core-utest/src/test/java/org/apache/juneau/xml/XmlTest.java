@@ -77,12 +77,12 @@ public class XmlTest {
 			+"</object>\n";
 
 		OMap m = (OMap) XmlParser.DEFAULT.parse(xml1, Object.class);
-		String json2 = JsonSerializer.create().simple().ws().trimNullProperties(false).build().serialize(m);
+		String json2 = JsonSerializer.create().simple().ws().keepNullProperties().build().serialize(m);
 		assertEquals(json1, json2);
 
 		m = (OMap) JsonParser.DEFAULT.parse(json1, Object.class);
 		String xml2 = XmlSerializer.create().sq().ws()
-			.trimNullProperties(false)
+			.keepNullProperties()
 			.build()
 			.serialize(m);
 		assertEquals(xml1, xml2);
@@ -136,7 +136,7 @@ public class XmlTest {
 		String r = XmlSerializer.create().ns().sq().ws()
 			.addNamespaceUrisToRoot()
 			.defaultNamespace("http://www.apache.org")
-			.trimNullProperties(false)
+			.keepNullProperties()
 			.build()
 			.serialize(m);
 		assertEquals(xml1, r);
@@ -358,7 +358,7 @@ public class XmlTest {
 		String r = null;
 		r = s.build().serialize(t);
 		assertEquals("<object f1='1' f2='2' f3='3'/>", r);
-		s.enableNamespaces(true).addNamespaceUrisToRoot().autoDetectNamespaces(true).trimNullProperties(false);
+		s.enableNamespaces(true).addNamespaceUrisToRoot().autoDetectNamespaces(true).keepNullProperties();
 		t.f1 = 4; t.f2 = 5; t.f3 = 6;
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:bar='http://bar' xmlns:foo='http://foo' xmlns:baz='http://baz' bar:f1='4' foo:f2='5' baz:f3='6'/>", r);
