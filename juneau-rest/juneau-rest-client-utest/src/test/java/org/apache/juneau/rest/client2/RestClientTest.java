@@ -2278,14 +2278,14 @@ public class RestClientTest {
 
 	@Test
 	public void l12_serializer_sortCollections() throws Exception {
-		String[] s = new String[]{"c","a","b"};
+		String[] x = new String[]{"c","a","b"};
 
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.sortCollections(true)
 			.build()
-			.post("/echoBody", s)
+			.post("/echoBody", x)
 			.run()
 			.getBody().assertValue("['a','b','c']");
 
@@ -2294,7 +2294,7 @@ public class RestClientTest {
 			.simpleJson()
 			.sortCollections()
 			.build()
-			.post("/echoBody", s)
+			.post("/echoBody", x)
 			.run()
 			.getBody().assertValue("['a','b','c']");
 
@@ -2303,21 +2303,21 @@ public class RestClientTest {
 			.simpleJson()
 			.sortCollections(false)
 			.build()
-			.post("/echoBody", s)
+			.post("/echoBody", x)
 			.run()
 			.getBody().assertValue("['c','a','b']");
 	}
 
 	@Test
 	public void l14_serializer_sortMapsBoolean() throws Exception {
-		AMap<String,Integer> m = AMap.of("c", 3, "a", 1, "b", 2);
+		AMap<String,Integer> x = AMap.of("c", 3, "a", 1, "b", 2);
 
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.sortMaps(true)
 			.build()
-			.post("/echoBody", m)
+			.post("/echoBody", x)
 			.run()
 			.getBody().assertValue("{a:1,b:2,c:3}");
 
@@ -2326,7 +2326,7 @@ public class RestClientTest {
 			.simpleJson()
 			.sortMaps()
 			.build()
-			.post("/echoBody", m)
+			.post("/echoBody", x)
 			.run()
 			.getBody().assertValue("{a:1,b:2,c:3}");
 
@@ -2335,32 +2335,86 @@ public class RestClientTest {
 			.simpleJson()
 			.sortMaps(false)
 			.build()
-			.post("/echoBody", m)
+			.post("/echoBody", x)
 			.run()
 			.getBody().assertValue("{c:3,a:1,b:2}");
 	}
-//	public RestClientBuilder sortMaps(boolean value) {
 
-//	@Test
-//	public void l15_serializer_sortMaps() throws Exception { fail(); }
-////	public RestClientBuilder sortMaps() {
-//
-//	@Test
-//	public void l16_serializer_trimEmptyCollectionsBoolean() throws Exception { fail(); }
-////	public RestClientBuilder trimEmptyCollections(boolean value) {
-//
-//	@Test
-//	public void l17_serializer_trimEmptyCollections() throws Exception { fail(); }
-////	public RestClientBuilder trimEmptyCollections() {
-//
-//	@Test
-//	public void l18_serializer_trimEmptyMapsBoolean() throws Exception { fail(); }
-////	public RestClientBuilder trimEmptyMaps(boolean value) {
-//
-//	@Test
-//	public void l19_serializer_trimEmptyMaps() throws Exception { fail(); }
-////	public RestClientBuilder trimEmptyMaps() {
-//
+	public static class L16 {
+		public List<String> f1 = AList.of();
+		public String[] f2 = new String[0];
+	}
+
+	@Test
+	public void l16_serializer_trimEmptyCollections() throws Exception {
+		L16 x = new L16();
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.trimEmptyCollections(true)
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.trimEmptyCollections()
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.trimEmptyCollections(false)
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{f1:[],f2:[]}");
+	}
+
+	public static class L18 {
+		public Map<String,String> f1 = AMap.of();
+		public OMap f2 = OMap.of();
+	}
+
+	@Test
+	public void l18_serializer_trimEmptyMaps() throws Exception {
+		L18 x = new L18();
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.trimEmptyMaps(true)
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.trimEmptyMaps()
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.trimEmptyMaps(false)
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{f1:{},f2:{}}");
+
+	}
+
 //	@Test
 //	public void l20_serializer_trimNullPropertiesBoolean() throws Exception { fail(); }
 ////	public RestClientBuilder trimNullProperties(boolean value) {

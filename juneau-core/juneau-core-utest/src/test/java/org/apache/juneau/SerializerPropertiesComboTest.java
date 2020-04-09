@@ -28,14 +28,24 @@ import org.junit.runners.*;
 public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 
 	@Bean(typeName="BwT")
-	public static class BeanWithType {
+	public static class T0 {
 		public int f;
 
-		public static BeanWithType create() {
-			BeanWithType l = new BeanWithType();
+		public static T0 create() {
+			T0 l = new T0();
 			l.f = 1;
 			return l;
 		}
+	}
+
+	public static class T5 {
+		public List<String> f1 = AList.of();
+		public String[] f2 = new String[0];
+	}
+
+	public static class T6 {
+		public Map<String,String> f1 = AMap.of();
+		public OMap f2 = OMap.of();
 	}
 
 	@Parameterized.Parameters
@@ -45,7 +55,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				new ComboInput<>(
 					"SERIALIZER_addBeanTypes",
 					OMap.class,
-					OMap.of("a", BeanWithType.create()),
+					OMap.of("a", T0.create()),
 					/* Json */		"{a:{_type:'BwT',f:1}}",
 					/* JsonT */		"{a:{t:'BwT',f:1}}",
 					/* JsonR */		"{\n\ta: {\n\t\t_type: 'BwT',\n\t\tf: 1\n\t}\n}",
@@ -68,13 +78,13 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:a rdf:parseType='Resource'>\n<jp:t>BwT</jp:t>\n<jp:f>1</jp:f>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:a rdf:parseType='Resource'>\n      <jp:_type>BwT</jp:_type>\n      <jp:f>1</jp:f>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
-				.properties(OMap.of(SERIALIZER_addBeanTypes, true, BEAN_beanDictionary, BeanWithType.class))
+				.properties(OMap.of(SERIALIZER_addBeanTypes, true, BEAN_beanDictionary, T0.class))
 			},
 			{ 	/* 1 */
 				new ComboInput<>(
 					"SERIALIZER_addRootType",
-					BeanWithType.class,
-					BeanWithType.create(),
+					T0.class,
+					T0.create(),
 					/* Json */		"{_type:'BwT',f:1}",
 					/* JsonT */		"{t:'BwT',f:1}",
 					/* JsonR */		"{\n\t_type: 'BwT',\n\tf: 1\n}",
@@ -97,7 +107,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:t>BwT</jp:t>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>BwT</jp:_type>\n    <jp:f>1</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
-				.properties(OMap.of(SERIALIZER_addRootType, true, BEAN_beanDictionary, BeanWithType.class))
+				.properties(OMap.of(SERIALIZER_addRootType, true, BEAN_beanDictionary, T0.class))
 			},
 			{ 	/* 2 */
 				new ComboInput<>(
@@ -185,6 +195,64 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n    <jp:b>2</jp:b>\n    <jp:c>3</jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
 				)
 				.properties(OMap.of(SERIALIZER_sortMaps, true))
+			},
+			{ 	/* 5 */
+				new ComboInput<>(
+					"SERIALIZER_trimEmptyCollections",
+					T5.class,
+					new T5(),
+					/* Json */		"{}",
+					/* JsonT */		"{}",
+					/* JsonR */		"{\n}",
+					/* Xml */		"<object/>",
+					/* XmlT */		"<object/>",
+					/* XmlR */		"<object/>\n",
+					/* XmlNs */		"<object/>",
+					/* Html */		"<table></table>",
+					/* HtmlT */		"<table></table>",
+					/* HtmlR */		"<table>\n</table>\n",
+					/* Uon */		"()",
+					/* UonT */		"()",
+					/* UonR */		"(\n)",
+					/* UrlEnc */	"",
+					/* UrlEncT */	"",
+					/* UrlEncR */	"",
+					/* MsgPack */	"82A2663190A2663290",
+					/* MsgPackT */	"82A2663190A2663290",
+					/* RdfXml */	"<rdf:RDF>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n</rdf:RDF>\n"
+				)
+				.properties(OMap.of(SERIALIZER_trimEmptyCollections, true))
+			},
+			{ 	/* 6 */
+				new ComboInput<>(
+					"SERIALIZER_trimEmptyMaps",
+					T6.class,
+					new T6(),
+					/* Json */		"{}",
+					/* JsonT */		"{}",
+					/* JsonR */		"{\n}",
+					/* Xml */		"<object/>",
+					/* XmlT */		"<object/>",
+					/* XmlR */		"<object/>\n",
+					/* XmlNs */		"<object/>",
+					/* Html */		"<table></table>",
+					/* HtmlT */		"<table></table>",
+					/* HtmlR */		"<table>\n</table>\n",
+					/* Uon */		"()",
+					/* UonT */		"()",
+					/* UonR */		"(\n)",
+					/* UrlEnc */	"",
+					/* UrlEncT */	"",
+					/* UrlEncR */	"",
+					/* MsgPack */	"82A2663180A2663280",
+					/* MsgPackT */	"82A2663180A2663280",
+					/* RdfXml */	"<rdf:RDF>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n</rdf:RDF>\n"
+				)
+				.properties(OMap.of(SERIALIZER_trimEmptyMaps, true))
 			},
 		});
 	}
