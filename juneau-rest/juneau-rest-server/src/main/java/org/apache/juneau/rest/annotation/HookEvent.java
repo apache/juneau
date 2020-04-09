@@ -24,7 +24,6 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.exception.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
 
@@ -158,7 +157,6 @@ public enum HookEvent {
 	 * 			<li>{@link RequestFormData}
 	 * 			<li>{@link HttpMethod}
 	 * 			<li>{@link Logger}
-	 * 			<li>{@link JuneauLogger}
 	 * 			<li>{@link RestContext}
 	 * 			<li>{@link org.apache.juneau.parser.Parser}
 	 * 			<li>{@link Locale}

@@ -18,6 +18,7 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.text.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.logging.*;
 
 import javax.servlet.*;
@@ -51,7 +52,7 @@ import org.apache.juneau.http.exception.*;
 )
 public abstract class BasicRest implements BasicRestConfig, BasicRestMethods, RestCallHandler, RestInfoProvider, RestCallLogger, RestResourceResolver, ClasspathResourceFinder {
 
-	private JuneauLogger logger = JuneauLogger.getLogger(getClass());
+	private Logger logger = Logger.getLogger(getClass().getName());
 	private volatile RestContext context;
 	private RestCallHandler callHandler;
 	private RestInfoProvider infoProvider;
@@ -130,48 +131,49 @@ public abstract class BasicRest implements BasicRestConfig, BasicRestMethods, Re
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Log a message.
+	 * Log a message at {@link Level#INFO} level.
+	 *
+	 * <p>
+	 * Subclasses can intercept the handling of these messages by overriding {@link #doLog(Level, Throwable, Supplier)}.
 	 *
 	 * @param msg The message to log.
 	 */
 	public void log(String msg) {
-		logger.info(msg);
+		doLog(Level.INFO, null, () -> msg);
 	}
 
 	/**
 	 * Log a message.
+	 *
+	 * <p>
+	 * Subclasses can intercept the handling of these messages by overriding {@link #doLog(Level, Throwable, Supplier)}.
 	 *
 	 * @param msg The message to log.
 	 * @param cause The cause.
 	 */
 	public void log(String msg, Throwable cause) {
-		logger.info(cause, msg);
+		doLog(Level.INFO, null, () -> msg);
 	}
 
 	/**
 	 * Log a message.
+	 *
+	 * <p>
+	 * Subclasses can intercept the handling of these messages by overriding {@link #doLog(Level, Throwable, Supplier)}.
 	 *
 	 * @param level The log level.
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void log(Level level, String msg, Object...args) {
-		logger.log(level, msg, args);
+		doLog(level, null, () -> StringUtils.format(msg, args));
 	}
 
 	/**
 	 * Log a message.
 	 *
-	 * @param level The log level.
-	 * @param msg The message to log.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public void logObjects(Level level, String msg, Object...args) {
-		logger.logObjects(level, msg, args);
-	}
-
-	/**
-	 * Log a message.
+	 * <p>
+	 * Subclasses can intercept the handling of these messages by overriding {@link #doLog(Level, Throwable, Supplier)}.
 	 *
 	 * @param level The log level.
 	 * @param cause The cause.
@@ -179,7 +181,24 @@ public abstract class BasicRest implements BasicRestConfig, BasicRestMethods, Re
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void log(Level level, Throwable cause, String msg, Object...args) {
-		logger.log(level, cause, msg, args);
+		doLog(level, cause, () -> StringUtils.format(msg, args));
+	}
+
+	/**
+	 * Main logger method.
+	 *
+	 * <p>
+	 * The default behavior logs a message to the Java logger of the class name.
+	 *
+	 * <p>
+	 * Subclasses can override this method to implement their own logger handling.
+	 *
+	 * @param level The log level.
+	 * @param cause Optional throwable.
+	 * @param msg The message to log.
+	 */
+	protected void doLog(Level level, Throwable cause, Supplier<String> msg) {
+		logger.log(level, cause, msg);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -22,6 +22,7 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.text.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.logging.*;
 
 import javax.servlet.*;
@@ -50,7 +51,7 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 	private volatile Exception initException;
 	private boolean isInitialized = false;  // Should not be volatile.
 	private volatile RestResourceResolver resourceResolver = new BasicRestResourceResolver();
-	private JuneauLogger logger = JuneauLogger.getLogger(getClass());
+	private Logger logger = Logger.getLogger(getClass().getName());
 	private RestCallHandler callHandler;
 	private RestInfoProvider infoProvider;
 	private RestCallLogger callLogger;
@@ -186,61 +187,52 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 	// Convenience logger methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Log a message at {@link Level#INFO} level.
+	 *
+	 * <p>
+	 * Subclasses can intercept the handling of these messages by overriding {@link #doLog(Level, Throwable, Supplier)}.
+	 *
+	 * @param msg The message to log.
+	 */
 	@Override /* GenericServlet */
 	public void log(String msg) {
-		super.log(msg);
-	}
-
-	@Override /* GenericServlet */
-	public void log(String msg, Throwable cause) {
-		super.log(msg, cause);
-	}
-
-	/**
-	 * Convenience method for calling {@link #log(String)} with message arguments.
-	 *
-	 * @param msg The message containing {@link MessageFormat}-style arguments.
-	 * @param args The arguments.
-	 */
-	public void log(String msg, Object...args) {
-		super.log(args.length == 0 ? msg : MessageFormat.format(msg, args));
-	}
-
-	/**
-	 * Convenience method for calling {@link #log(String)} with message arguments.
-	 *
-	 * @param msg The message containing {@link MessageFormat}-style arguments.
-	 * @param cause The cause.
-	 * @param args The arguments.
-	 */
-	public void log(String msg, Throwable cause, Object...args) {
-		super.log(args.length == 0 ? msg : MessageFormat.format(msg, args), cause);
+		doLog(Level.INFO, null, () -> msg);
 	}
 
 	/**
 	 * Log a message.
+	 *
+	 * <p>
+	 * Subclasses can intercept the handling of these messages by overriding {@link #doLog(Level, Throwable, Supplier)}.
+	 *
+	 * @param msg The message to log.
+	 * @param cause The cause.
+	 */
+	@Override /* GenericServlet */
+	public void log(String msg, Throwable cause) {
+		doLog(Level.INFO, null, () -> msg);
+	}
+
+	/**
+	 * Log a message.
+	 *
+	 * <p>
+	 * Subclasses can intercept the handling of these messages by overriding {@link #doLog(Level, Throwable, Supplier)}.
 	 *
 	 * @param level The log level.
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void log(Level level, String msg, Object...args) {
-		logger.log(level, msg, args);
+		doLog(level, null, () -> StringUtils.format(msg, args));
 	}
 
 	/**
 	 * Log a message.
 	 *
-	 * @param level The log level.
-	 * @param msg The message to log.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public void logObjects(Level level, String msg, Object...args) {
-		logger.logObjects(level, msg, args);
-	}
-
-	/**
-	 * Log a message.
+	 * <p>
+	 * Subclasses can intercept the handling of these messages by overriding {@link #doLog(Level, Throwable, Supplier)}.
 	 *
 	 * @param level The log level.
 	 * @param cause The cause.
@@ -248,7 +240,24 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void log(Level level, Throwable cause, String msg, Object...args) {
-		logger.log(level, cause, msg, args);
+		doLog(level, cause, () -> StringUtils.format(msg, args));
+	}
+
+	/**
+	 * Main logger method.
+	 *
+	 * <p>
+	 * The default behavior logs a message to the Java logger of the class name.
+	 *
+	 * <p>
+	 * Subclasses can override this method to implement their own logger handling.
+	 *
+	 * @param level The log level.
+	 * @param cause Optional throwable.
+	 * @param msg The message to log.
+	 */
+	protected void doLog(Level level, Throwable cause, Supplier<String> msg) {
+		logger.log(level, cause, msg);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

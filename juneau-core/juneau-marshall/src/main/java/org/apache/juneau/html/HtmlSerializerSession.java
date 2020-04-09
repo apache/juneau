@@ -389,7 +389,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		return cr;
 	}
 
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeMap(XmlWriter out, Map m, ClassMeta<?> sType,
 			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws IOException, SerializeException {
 
@@ -413,6 +413,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.sTag(i+2, "th").append("value").eTag("th").nl(i+3);
 			out.ie(i+1).eTag("tr").nl(i+2);
 		}
+
+		if (isSortMaps())
+			m = sort(m);
+
 		for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
 
 			Object key = generalize(e.getKey(), keyType);

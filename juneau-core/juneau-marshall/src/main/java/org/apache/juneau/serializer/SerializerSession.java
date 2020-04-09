@@ -355,7 +355,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		}
 
 		try {
-			if (isTrimNullProperties() && willRecurse(attrName, value, cm))
+			if (isTrimNullProperties() && (willRecurse(attrName, value, cm) || willExceedDepth()))
 				return true;
 		} catch (BeanRecursionException e) {
 			throw new SerializeException(e);

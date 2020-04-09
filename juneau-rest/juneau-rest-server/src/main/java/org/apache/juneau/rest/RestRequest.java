@@ -1778,7 +1778,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_logger}
 	 * 	<li class='jac'>{@link org.apache.juneau.rest.RestLogger}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level, String, Object...)}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#logObjects(Level, String, Object...)}
 	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
 	 * </ul>
 	 *

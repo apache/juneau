@@ -380,7 +380,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
+		HtmlSerializerBuilder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

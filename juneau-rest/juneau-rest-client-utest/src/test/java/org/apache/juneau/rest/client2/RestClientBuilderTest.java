@@ -57,10 +57,9 @@ public class RestClientBuilderTest {
 	public static class Bean {
 		public int f;
 
-		public static Bean create() {
-			Bean b = new Bean();
-			b.f = 1;
-			return b;
+		public Bean init() {
+			f = 1;
+			return this;
 		}
 
 		public void check() {
@@ -73,7 +72,7 @@ public class RestClientBuilderTest {
 		}
 	}
 
-	public static Bean bean = Bean.create();
+	public static Bean bean = new Bean().init();
 
 	@Rest
 	public static class A extends BasicRest {
@@ -2066,10 +2065,9 @@ public class RestClientBuilderTest {
 	public static class L1 {
 		public Object f1;
 
-		public static L1 create() {
-			L1 l = new L1();
-			l.f1 = L2.create();
-			return l;
+		public L1 init() {
+			f1 = new L2().init();
+			return this;
 		}
 	}
 
@@ -2077,21 +2075,22 @@ public class RestClientBuilderTest {
 	public static class L2 {
 		public int f2;
 
-		public static L2 create() {
-			L2 l = new L2();
-			l.f2 = 1;
-			return l;
+		public L2 init() {
+			f2 = 1;
+			return this;
 		}
 	}
 
 	@Test
 	public void l01a_serializer_addBeanTypes() throws Exception {
+		L1 l1 = new L1().init();
+
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.addBeanTypes(true)
 			.build()
-			.post("/echoBody", L1.create())
+			.post("/echoBody", l1)
 			.run()
 			.getBody().assertValue("{f1:{_type:'L',f2:1}}");
 
@@ -2100,7 +2099,7 @@ public class RestClientBuilderTest {
 			.simpleJson()
 			.addBeanTypes(false)
 			.build()
-			.post("/echoBody", L1.create())
+			.post("/echoBody", l1)
 			.run()
 			.getBody().assertValue("{f1:{f2:1}}");
 
@@ -2109,19 +2108,21 @@ public class RestClientBuilderTest {
 			.simpleJson()
 			.addBeanTypes()
 			.build()
-			.post("/echoBody", L1.create())
+			.post("/echoBody", l1)
 			.run()
 			.getBody().assertValue("{f1:{_type:'L',f2:1}}");
 	}
 
 	@Test
 	public void l03_serializer_addRootType() throws Exception {
+		L2 l2 = new L2().init();
+
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.addRootType(true)
 			.build()
-			.post("/echoBody", L2.create())
+			.post("/echoBody", l2)
 			.run()
 			.getBody().assertValue("{f2:1}");
 
@@ -2131,7 +2132,7 @@ public class RestClientBuilderTest {
 			.addBeanTypes()
 			.addRootType(false)
 			.build()
-			.post("/echoBody", L2.create())
+			.post("/echoBody", l2)
 			.run()
 			.getBody().assertValue("{f2:1}");
 
@@ -2141,7 +2142,7 @@ public class RestClientBuilderTest {
 			.addBeanTypes()
 			.addRootType(true)
 			.build()
-			.post("/echoBody", L2.create())
+			.post("/echoBody", l2)
 			.run()
 			.getBody().assertValue("{_type:'L',f2:1}");
 
@@ -2151,7 +2152,7 @@ public class RestClientBuilderTest {
 			.addBeanTypes()
 			.addRootType()
 			.build()
-			.post("/echoBody", L2.create())
+			.post("/echoBody", l2)
 			.run()
 			.getBody().assertValue("{_type:'L',f2:1}");
 	}
@@ -2223,28 +2224,123 @@ public class RestClientBuilderTest {
 			.getBody().assertValue("\t\t{\n\t\t\tf: 1\n\t\t}");
 	}
 
-//	public RestClientBuilder initialDepth(int value) {
+	public static class L10 extends SerializerListener {
+		public static volatile Throwable T;
+		public static volatile String MSG;
 
-//	@Test
-//	public void l10_serializer_listenerSClass() throws Exception { fail(); }
-////	public RestClientBuilder listenerS(Class<? extends SerializerListener> value) {
-//
-//	@Test
-//	public void l11_serializer_maxDepth() throws Exception { fail(); }
-////	public RestClientBuilder maxDepth(int value) {
-//
-//	@Test
-//	public void l12_serializer_sortCollectionsBoolean() throws Exception { fail(); }
-////	public RestClientBuilder sortCollections(boolean value) {
-//
-//	@Test
-//	public void l13_serializer_sortCollections() throws Exception { fail(); }
-////	public RestClientBuilder sortCollections() {
-//
-//	@Test
-//	public void l14_serializer_sortMapsBoolean() throws Exception { fail(); }
-////	public RestClientBuilder sortMaps(boolean value) {
-//
+		@Override
+		public void onError(SerializerSession session, Throwable t, String msg) {
+			T = t;
+			MSG = msg;
+		}
+	}
+
+	public static class L10a {
+		public int getFoo() {
+			throw new RuntimeException("Foo!");
+		}
+	}
+
+	@Test
+	public void l10_serializer_listenerSClass() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.listenerS(L10.class)
+			.ws()
+			.build()
+			.post("/echoBody", new L10a())
+			.run();
+		assertTrue(L10.T.getLocalizedMessage().contains("Exception occurred while getting property 'foo'"));
+		assertTrue(L10.MSG.contains("Exception occurred while getting property 'foo'"));
+	}
+
+	public static class L11 {
+		public Bean f;
+
+		public L11 init() {
+			f = bean;
+			return this;
+		}
+	}
+
+	@Test
+	public void l11_serializer_maxDepth() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.maxDepth(1)
+			.build()
+			.post("/echoBody", new L11().init())
+			.run()
+			.getBody().assertValue("{}");
+	}
+
+	@Test
+	public void l12_serializer_sortCollections() throws Exception {
+		String[] s = new String[]{"c","a","b"};
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.sortCollections(true)
+			.build()
+			.post("/echoBody", s)
+			.run()
+			.getBody().assertValue("['a','b','c']");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.sortCollections()
+			.build()
+			.post("/echoBody", s)
+			.run()
+			.getBody().assertValue("['a','b','c']");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.sortCollections(false)
+			.build()
+			.post("/echoBody", s)
+			.run()
+			.getBody().assertValue("['c','a','b']");
+	}
+
+	@Test
+	public void l14_serializer_sortMapsBoolean() throws Exception {
+		AMap<String,Integer> m = AMap.of("c", 3, "a", 1, "b", 2);
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.sortMaps(true)
+			.build()
+			.post("/echoBody", m)
+			.run()
+			.getBody().assertValue("{a:1,b:2,c:3}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.sortMaps()
+			.build()
+			.post("/echoBody", m)
+			.run()
+			.getBody().assertValue("{a:1,b:2,c:3}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.sortMaps(false)
+			.build()
+			.post("/echoBody", m)
+			.run()
+			.getBody().assertValue("{c:3,a:1,b:2}");
+	}
+//	public RestClientBuilder sortMaps(boolean value) {
+
 //	@Test
 //	public void l15_serializer_sortMaps() throws Exception { fail(); }
 ////	public RestClientBuilder sortMaps() {

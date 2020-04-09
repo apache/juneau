@@ -18,10 +18,12 @@ import static org.apache.juneau.BeanContext.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.text.*;
 import java.time.*;
 import java.util.*;
 import java.util.Date;
 import java.util.concurrent.atomic.*;
+import java.util.logging.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
@@ -40,6 +42,8 @@ import org.apache.juneau.transform.*;
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class BeanSession extends Session {
+
+	private static Logger LOG = Logger.getLogger(BeanSession.class.getName());
 
 	private final BeanContext ctx;
 	private final Locale locale;
@@ -1156,6 +1160,19 @@ public class BeanSession extends Session {
 	 */
 	public final ClassMeta<Class> _class() {
 		return ctx._class();
+	}
+
+	/**
+	 * Logs a warning message.
+	 *
+	 * @param msg The warning message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	@Override
+	public void addWarning(String msg, Object... args) {
+		if (debug)
+			LOG.log(Level.WARNING, msg, args);
+		super.addWarning(msg, args);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

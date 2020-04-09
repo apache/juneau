@@ -99,6 +99,93 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				)
 				.properties(OMap.of(SERIALIZER_addRootType, true, BEAN_beanDictionary, BeanWithType.class))
 			},
+			{ 	/* 2 */
+				new ComboInput<>(
+					"SERIALIZER_sortCollections",
+					String[].class,
+					new String[]{"c","a","b"},
+					/* Json */		"['a','b','c']",
+					/* JsonT */		"['a','b','c']",
+					/* JsonR */		"[\n\t'a',\n\t'b',\n\t'c'\n]",
+					/* Xml */		"<array><string>a</string><string>b</string><string>c</string></array>",
+					/* XmlT */		"<array><string>a</string><string>b</string><string>c</string></array>",
+					/* XmlR */		"<array>\n\t<string>a</string>\n\t<string>b</string>\n\t<string>c</string>\n</array>\n",
+					/* XmlNs */		"<array><string>a</string><string>b</string><string>c</string></array>",
+					/* Html */		"<ul><li>a</li><li>b</li><li>c</li></ul>",
+					/* HtmlT */		"<ul><li>a</li><li>b</li><li>c</li></ul>",
+					/* HtmlR */		"<ul>\n\t<li>a</li>\n\t<li>b</li>\n\t<li>c</li>\n</ul>\n",
+					/* Uon */		"@(a,b,c)",
+					/* UonT */		"@(a,b,c)",
+					/* UonR */		"@(\n\ta,\n\tb,\n\tc\n)",
+					/* UrlEnc */	"0=c&1=a&2=b",
+					/* UrlEncT */	"0=c&1=a&2=b",
+					/* UrlEncR */	"0=c\n&1=a\n&2=b",
+					/* MsgPack */	"93A161A162A163",
+					/* MsgPackT */	"93A161A162A163",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n<rdf:li>b</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n<rdf:li>b</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>a</rdf:li>\n    <rdf:li>b</rdf:li>\n    <rdf:li>c</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
+				)
+				.properties(OMap.of(SERIALIZER_sortCollections, true))
+			},
+			{ 	/* 3 */
+				new ComboInput<>(
+					"SERIALIZER_sortCollections",
+					List.class,
+					Collections.unmodifiableList(AList.of("c","a","b")),
+					/* Json */		"['a','b','c']",
+					/* JsonT */		"['a','b','c']",
+					/* JsonR */		"[\n\t'a',\n\t'b',\n\t'c'\n]",
+					/* Xml */		"<array><string>a</string><string>b</string><string>c</string></array>",
+					/* XmlT */		"<array><string>a</string><string>b</string><string>c</string></array>",
+					/* XmlR */		"<array>\n\t<string>a</string>\n\t<string>b</string>\n\t<string>c</string>\n</array>\n",
+					/* XmlNs */		"<array><string>a</string><string>b</string><string>c</string></array>",
+					/* Html */		"<ul><li>a</li><li>b</li><li>c</li></ul>",
+					/* HtmlT */		"<ul><li>a</li><li>b</li><li>c</li></ul>",
+					/* HtmlR */		"<ul>\n\t<li>a</li>\n\t<li>b</li>\n\t<li>c</li>\n</ul>\n",
+					/* Uon */		"@(a,b,c)",
+					/* UonT */		"@(a,b,c)",
+					/* UonR */		"@(\n\ta,\n\tb,\n\tc\n)",
+					/* UrlEnc */	"0=c&1=a&2=b",
+					/* UrlEncT */	"0=c&1=a&2=b",
+					/* UrlEncR */	"0=c\n&1=a\n&2=b",
+					/* MsgPack */	"93A161A162A163",
+					/* MsgPackT */	"93A161A162A163",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n<rdf:li>b</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n<rdf:li>b</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>a</rdf:li>\n    <rdf:li>b</rdf:li>\n    <rdf:li>c</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n"
+				)
+				.properties(OMap.of(SERIALIZER_sortCollections, true))
+			},
+			{ 	/* 4 */
+				new ComboInput<>(
+					"SERIALIZER_sortMaps",
+					Map.class,
+					Collections.unmodifiableMap(AMap.<String,String>of("c","3","a","1","b","2")),
+					/* Json */		"{a:'1',b:'2',c:'3'}",
+					/* JsonT */		"{a:'1',b:'2',c:'3'}",
+					/* JsonR */		"{\n\ta: '1',\n\tb: '2',\n\tc: '3'\n}",
+					/* Xml */		"<object><a>1</a><b>2</b><c>3</c></object>",
+					/* XmlT */		"<object><a>1</a><b>2</b><c>3</c></object>",
+					/* XmlR */		"<object>\n\t<a>1</a>\n\t<b>2</b>\n\t<c>3</c>\n</object>\n",
+					/* XmlNs */		"<object><a>1</a><b>2</b><c>3</c></object>",
+					/* Html */		"<table><tr><td>a</td><td>1</td></tr><tr><td>b</td><td>2</td></tr><tr><td>c</td><td>3</td></tr></table>",
+					/* HtmlT */		"<table><tr><td>a</td><td>1</td></tr><tr><td>b</td><td>2</td></tr><tr><td>c</td><td>3</td></tr></table>",
+					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>1</td>\n\t</tr>\n\t<tr>\n\t\t<td>b</td>\n\t\t<td>2</td>\n\t</tr>\n\t<tr>\n\t\t<td>c</td>\n\t\t<td>3</td>\n\t</tr>\n</table>\n",
+					/* Uon */		"(a='1',b='2',c='3')",
+					/* UonT */		"(a='1',b='2',c='3')",
+					/* UonR */		"(\n\ta='1',\n\tb='2',\n\tc='3'\n)",
+					/* UrlEnc */	"a='1'&b='2'&c='3'",
+					/* UrlEncT */	"a='1'&b='2'&c='3'",
+					/* UrlEncR */	"a='1'\n&b='2'\n&c='3'",
+					/* MsgPack */	"83A161A131A162A132A163A133",
+					/* MsgPackT */	"83A161A131A162A132A163A133",
+					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n<jp:b>2</jp:b>\n<jp:c>3</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n<jp:b>2</jp:b>\n<jp:c>3</jp:c>\n</rdf:Description>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n    <jp:b>2</jp:b>\n    <jp:c>3</jp:c>\n  </rdf:Description>\n</rdf:RDF>\n"
+				)
+				.properties(OMap.of(SERIALIZER_sortMaps, true))
+			},
 		});
 	}
 

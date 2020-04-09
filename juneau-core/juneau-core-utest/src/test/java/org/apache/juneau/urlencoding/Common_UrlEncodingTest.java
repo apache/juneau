@@ -252,7 +252,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create();
+		UrlEncodingSerializerBuilder s = UrlEncodingSerializer.create().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

@@ -51,6 +51,8 @@ public class BeanTraverseSession extends BeanSession {
 	/** The current indentation depth into the model. */
 	public int indent;
 
+	private int depth;
+
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -108,6 +110,7 @@ public class BeanTraverseSession extends BeanSession {
 	 */
 	protected final ClassMeta<?> push(String attrName, Object o, ClassMeta<?> eType) throws BeanRecursionException {
 		indent++;
+		depth++;
 		isBottom = true;
 		if (o == null)
 			return null;
@@ -115,9 +118,9 @@ public class BeanTraverseSession extends BeanSession {
 		ClassMeta<?> cm = (eType != null && c == eType.getInnerClass()) ? eType : ((o instanceof ClassMeta) ? (ClassMeta<?>)o : getClassMeta(c));
 		if (cm.isCharSequence() || cm.isNumber() || cm.isBoolean())
 			return cm;
+		if (depth > getMaxDepth())
+			return null;
 		if (isDetectRecursions() || isDebug()) {
-			if (stack.size() > getMaxDepth())
-				return null;
 			if (willRecurse(attrName, o, cm))
 				return null;
 			isBottom = false;
@@ -150,10 +153,20 @@ public class BeanTraverseSession extends BeanSession {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if we're about to exceed the max depth for the document.
+	 * 
+	 * @return <jk>true</jk> if we're about to exceed the max depth for the document.
+	 */
+	protected final boolean willExceedDepth() {
+		return (depth >= getMaxDepth());
+	}
+
+	/**
 	 * Pop an object off the stack.
 	 */
 	protected final void pop() {
 		indent--;
+		depth--;
 		if ((isDetectRecursions() || isDebug()) && ! isBottom)  {
 			Object o = stack.removeLast().o;
 			Object o2 = set.remove(o);

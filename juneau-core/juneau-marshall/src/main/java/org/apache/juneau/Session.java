@@ -33,8 +33,6 @@ import org.apache.juneau.reflect.*;
  */
 public abstract class Session {
 
-	private JuneauLogger logger;
-
 	private final OMap properties;
 	private Map<String,Object> cache;
 	private List<String> warnings;                 // Any warnings encountered.
@@ -258,10 +256,9 @@ public abstract class Session {
 	 * @param msg The warning message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public final void addWarning(String msg, Object... args) {
+	public void addWarning(String msg, Object... args) {
 		if (warnings == null)
 			warnings = new LinkedList<>();
-		getLogger().warning(msg, args);
 		warnings.add((warnings.size() + 1) + ": " + format(msg, args));
 	}
 
@@ -281,20 +278,6 @@ public abstract class Session {
 	 */
 	public final List<String> getWarnings() {
 		return warnings;
-	}
-
-	/**
-	 * Returns the logger associated with this session.
-	 *
-	 * <p>
-	 * Subclasses can override this method to provide their own logger.
-	 *
-	 * @return The logger associated with this session.
-	 */
-	protected final JuneauLogger getLogger() {
-		if (logger == null)
-			logger = JuneauLogger.getLogger(getClass());
-		return logger;
 	}
 
 	/**

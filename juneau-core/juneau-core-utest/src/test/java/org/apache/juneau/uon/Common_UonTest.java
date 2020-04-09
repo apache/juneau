@@ -250,7 +250,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		UonSerializerBuilder s = UonSerializer.create();
+		UonSerializerBuilder s = UonSerializer.create().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

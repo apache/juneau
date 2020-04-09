@@ -258,7 +258,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		JsonSerializerBuilder s = JsonSerializer.create().ssq();
+		JsonSerializerBuilder s = JsonSerializer.create().ssq().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

@@ -298,7 +298,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev().sq();
+		RdfSerializerBuilder s = RdfSerializer.create().xmlabbrev().sq().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();

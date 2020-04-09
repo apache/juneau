@@ -25,7 +25,10 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Wraps and extends the {@link java.util.logging.Logger} class to provide some additional convenience methods.
+ *
+ * @deprecated Methods introduced in Java 8 Logging API renders this class obsolete.
  */
+@Deprecated
 public class JuneauLogger extends java.util.logging.Logger {
 
 	private static final WriterSerializer serializer = JsonSerializer.create().ssq().build();
@@ -39,7 +42,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 	 * Get logger for specified class.
 	 *
 	 * @param forClass The class to create a logger for.
-	 * @return A new <l>Logger</l>.
+	 * @return A new <l>BasicLogger</l>.
 	 */
 	public static JuneauLogger getLogger(Class<?> forClass) {
 		return getLogger(forClass.getName());
@@ -49,7 +52,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 	 * Get logger for specified class.
 	 *
 	 * @param loggerName The logger name.
-	 * @return A new <l>Logger</l>.
+	 * @return A new <l>BasicLogger</l>.
 	 */
 	public static JuneauLogger getLogger(String loggerName) {
 		return new JuneauLogger(java.util.logging.Logger.getLogger(loggerName));
@@ -67,7 +70,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 	 * 		<li>A path relative to the package of the class.  E.g. <js>"nls/Messages"</js>.
 	 * 	</ol>
 	 * 	Both <js>'.'</js> and <js>'/'</js> can be used as path delimiters.
-	 * @return A new <l>Logger</l>.
+	 * @return A new <l>BasicLogger</l>.
 	 */
 	public static JuneauLogger getLogger(Class<?> forClass, String resourceBundleName) {
 		return new JuneauLogger(java.util.logging.Logger.getLogger(forClass.getName(), resolveResourceBundleName(forClass, resourceBundleName)));
@@ -85,10 +88,20 @@ public class JuneauLogger extends java.util.logging.Logger {
 	 * 		<li>A path relative to the package of the class.  E.g. <js>"nls/Messages"</js>.
 	 * 	</ol>
 	 * 	Both <js>'.'</js> and <js>'/'</js> can be used as path delimiters.
-	 * @return A new <l>Logger</l>.
+	 * @return A new <l>BasicLogger</l>.
 	 */
 	public static synchronized JuneauLogger getLogger(String name, String resourceBundleName) {
 		return new JuneauLogger(java.util.logging.Logger.getLogger(name, resourceBundleName));
+	}
+
+	/**
+	 * Wrap the specified logger
+	 *
+	 * @param logger The java logger to use for logging.
+	 * @return A new <l>BasicLogger</l>.
+	 */
+	public static synchronized JuneauLogger getLogger(java.util.logging.Logger logger) {
+		return new JuneauLogger(logger);
 	}
 
 	/**
@@ -96,7 +109,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 	 *
 	 * @param innerLogger The wrapped logger.
 	 */
-	protected JuneauLogger(java.util.logging.Logger innerLogger) {
+	public JuneauLogger(java.util.logging.Logger innerLogger) {
 		super(innerLogger.getName(), innerLogger.getResourceBundleName());
 		this.innerLogger = innerLogger;
 		this.rb = getResourceBundle();

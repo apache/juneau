@@ -29,20 +29,23 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 	public static class A {
 		public int f;
 
-		public static A create() {
-			A b = new A();
-			b.f = 1;
-			return b;
+		public A init() {
+			f = 1;
+			return this;
 		}
 	}
 
 	public static class B {
 		public Object f;
 
-		public static B create() {
-			B b = new B();
-			b.f = b;
-			return b;
+		public B initRecursion() {
+			f = this;
+			return this;
+		}
+
+		public B initA() {
+			f = new A().init();
+			return this;
 		}
 	}
 
@@ -53,7 +56,7 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 				new ComboInput<>(
 					"BEANTRAVERSE_initialDepth",
 					A.class,
-					A.create(),
+					new A().init(),
 					/* Json */		"{f:1}",
 					/* JsonT */		"{f:1}",
 					/* JsonR */		"\t\t{\n\t\t\tf: 1\n\t\t}",
@@ -82,7 +85,7 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 				new ComboInput<>(
 					"BEANTRAVERSE_detectRecursions",
 					B.class,
-					B.create(),
+					new B().initRecursion(),
 					/* Json */		"x",
 					/* JsonT */		"x",
 					/* JsonR */		"x",
@@ -112,7 +115,7 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 				new ComboInput<>(
 					"BEANTRAVERSE_ignoreRecursions",
 					B.class,
-					B.create(),
+					new B().initRecursion(),
 					/* Json */		"{}",
 					/* JsonT */		"{}",
 					/* JsonR */		"{\n}",
@@ -136,6 +139,35 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 					/* RdfXmlR */	"<rdf:RDF>\n</rdf:RDF>\n"
 				)
 				.properties(OMap.of(BEANTRAVERSE_ignoreRecursions, true))
+			},
+			{ 	/* 3 */
+				new ComboInput<>(
+					"BEANTRAVERSE_maxDepth",
+					B.class,
+					new B().initA(),
+					/* Json */		"{}",
+					/* JsonT */		"{}",
+					/* JsonR */		"{\n}",
+					/* Xml */		"<object/>",
+					/* XmlT */		"<object/>",
+					/* XmlR */		"<object/>\n",
+					/* XmlNs */		"<object/>",
+					/* Html */		"<table></table>",
+					/* HtmlT */		"<table></table>",
+					/* HtmlR */		"<table>\n</table>\n",
+					/* Uon */		"()",
+					/* UonT */		"()",
+					/* UonR */		"(\n)",
+					/* UrlEnc */	"",
+					/* UrlEncT */	"",
+					/* UrlEncR */	"",
+					/* MsgPack */	"80",
+					/* MsgPackT */	"80",
+					/* RdfXml */	"<rdf:RDF>\n</rdf:RDF>\n",
+					/* RdfXmlT */	"<rdf:RDF>\n</rdf:RDF>\n",
+					/* RdfXmlR */	"<rdf:RDF>\n</rdf:RDF>\n"
+				)
+				.properties(OMap.of(BEANTRAVERSE_maxDepth, 1))
 			},
 		});
 	}
