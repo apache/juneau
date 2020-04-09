@@ -52,7 +52,7 @@ import org.junit.*;
 import org.junit.runners.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class RestClientBuilderTest {
+public class RestClientTest {
 
 	public static class Bean {
 		public int f;
